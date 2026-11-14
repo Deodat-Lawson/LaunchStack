@@ -1,16 +1,136 @@
 {
   "programId": "usc-startup-garage",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://viterbiinnovation.usc.edu/"
+    "https://viterbiinnovation.usc.edu/",
+    "https://viterbiinnovation.usc.edu/competitions-and-programs/mepc/mepc-faq-2/",
+    "https://viterbiinnovation.usc.edu/about/",
+    "https://viterbiinnovation.usc.edu/about/maseeh-entrepreneurship-prize-competition/",
+    "https://viterbiinnovation.usc.edu/about/mentors/",
+    "https://viterbiinnovation.usc.edu/about/mission-2-2-2-2-2/",
+    "https://viterbiinnovation.usc.edu/about/mission-2-2-2-2/",
+    "https://viterbiinnovation.usc.edu/about/mission-2-3-2-2/",
+    "https://viterbiinnovation.usc.edu/about/mission-2-3-2/",
+    "https://viterbiinnovation.usc.edu/about/mission-2-3-3/",
+    "https://viterbiinnovation.usc.edu/about/mission/",
+    "https://viterbiinnovation.usc.edu/about/team/",
+    "https://viterbiinnovation.usc.edu/about/tie-hub-contact/",
+    "https://viterbiinnovation.usc.edu/about/tie-hub-impact-2/",
+    "https://viterbiinnovation.usc.edu/about/tie-hub-impact/"
   ],
   "evidence": [
     {
+      "id": "check-deal-01a5e5db02",
+      "url": "https://viterbiinnovation.usc.edu/about/maseeh-entrepreneurship-prize-competition/",
+      "title": "USC Viterbi Startup Garage — program page",
+      "excerpt": "viable business ventures. The MEPC, now offering a grand prize of $100,000, stands as the largest non-dilutive prize available at USC, supporting",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-0d0e3c4151",
+      "url": "https://viterbiinnovation.usc.edu/about/maseeh-entrepreneurship-prize-competition/",
+      "title": "USC Viterbi Startup Garage — program page",
+      "excerpt": "Finals. ▸ Customer Discovery Grants All admitted teams will receive $250 per team to conduct customer discovery interviews. These mini-grants",
+      "page": "details"
+    },
+    {
       "id": "check-route-9e7b97e357",
       "url": "https://viterbiinnovation.usc.edu/",
-      "title": "USC Viterbi Startup Garage — homepage checked by scrape.py",
+      "title": "USC Viterbi Startup Garage — homepage",
       "excerpt": "William W. Wang Technology Innovation and Entrepreneurship Hub → https://viterbiinnovation.usc.edu/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-df4c8c1842",
+      "url": "https://viterbiinnovation.usc.edu/",
+      "page": "details",
+      "excerpt": "USC Viterbi | Technology Innovation and Entrepreneurship Skip to content (opens in a new tab) (opens in a new tab) William W. Wang Technology Innovation and Entrepreneurship Hub Menu LAUNCHING VISIONS, BUILDING VENTURES. From Robotron to $2.3 Billion: How William Wang Is Paying It Forward at USC Viterbi A transformational $10 million gift from the Vizio founder and his wife creates the William Wang Technology Innovation and Entrepreneurship Hub - and may establish a new model for engineering entrepreneurship nationwide. Learn More (opens in a new tab) Who we are WE ARE THE William W. Wang TECHNOLOGY INNOVATION AND ENTREPRENEURSHIP hub. OUR MISSION IS TO EMPOWER USC STUDENTS, FACULTY, AND STAFF TO TRANSFORM INNOVATIVE IDEAS INTO IMPACTFUL TECH-DRIVEN VENTURES. Subscribe To Our Newsletter (opens in a new tab) $ 0 AWARDED ANNUALLY 0 + FOUNDERS SUPPORTED ANNUALLY 0 STARTUPS LAUNCHED $ 0 B VENTURE FUNDING RAISED Explore Our COMPETITIONS PROGRAMS COURSES EVENTS & ACTIVITIES Ready to jump in? Browse our event calendar to see upcoming competitions, workshops, networking events, and more. See What's Happening This Week View Event Calendar (opens in a new tab) \"This [workshop] has been the single, most valuable hour I've ever spent at USC. I've learned so much about what it takes to launch a company [...]\" \"As an undergrad, I actually did a business degree with an entrepreneurship"
+    },
+    {
+      "id": "check-page-0058cb33d0",
+      "url": "https://viterbiinnovation.usc.edu/competitions-and-programs/mepc/mepc-faq-2/",
+      "page": "terms",
+      "excerpt": "MEPC FAQ - USC Viterbi | Technology Innovation and Entrepreneurship Skip to content (opens in a new tab) (opens in a new tab) William W. Wang Technology Innovation and Entrepreneurship Hub Menu Page Under Construction. Please Check Back Soon. Published on August 27th, 2021 Last updated on August 27th, 2021 Contact Us Visit Us (opens in a new tab) Other USC Links University of Southern California Viterbi School of Engineering © USC Viterbi Privacy Notice | Notice of Non-Discrimination | Digital Accessibility | Smoke-Free Policy Home Page Contact Us Visit Us Contact us Visit us (opens in a new tab)"
+    },
+    {
+      "id": "check-page-feae702f93",
+      "url": "https://viterbiinnovation.usc.edu/about/",
+      "page": "details",
+      "excerpt": "About - USC Viterbi | Technology Innovation and Entrepreneurship Skip to content (opens in a new tab) (opens in a new tab) William W. Wang Technology Innovation and Entrepreneurship Hub Menu Mission The mission of the Viterbi School Office of Technology Innovation and Entrepreneurship is to launch ventures with significant social and economic impact based on USC faculty, students, and technologies. Teach Education for all levels: freshman to faculty Business model development and customer discover Integration with curriculum Learn More Think Research in entrepreneurial team development, economics, and public policy Speakers from academia and the business community Learn More Launch Connect university teams with financial support Assist corporate innovation teams Learn More Link Connect students across the university Connect innovators with mentors and investors Learn More Published on September 1st, 2021 Last updated on July 4th, 2025 Contact Us Visit Us (opens in a new tab) Other USC Links University of Southern California Viterbi School of Engineering © USC Viterbi Privacy Notice | Notice of Non-Discrimination | Digital Accessibility | Smoke-Free Policy Home Page Contact Us Visit Us Contact us Visit us (opens in a new tab)"
+    },
+    {
+      "id": "check-page-aa6ae82901",
+      "url": "https://viterbiinnovation.usc.edu/about/maseeh-entrepreneurship-prize-competition/",
+      "page": "details",
+      "excerpt": "Maseeh Entrepreneurship Prize Competition (MEPC) | TIE Hub USC Viterbi - USC Viterbi | Technology Innovation and Entrepreneurship Skip to content (opens in a new tab) (opens in a new tab) William W. Wang Technology Innovation and Entrepreneurship Hub Menu ready to win the largest non-dilutive Entreprenuship prize at USC? Maseeh Entrepreneurship Prize Competition The Maseeh Entrepreneurship Prize Competition (MEPC) was established through a generous gift from Fariborz Maseeh to inspire our innovators and turn their concepts and technologies into companies and solutions. Throughout its history, MEPC participants have gone on to secure capital from government grants, raise hundreds of millions of dollars from top-tier venture capitalists, and experience successful exits (often starting another company after the acquisition). The MEPC prize is the largest non-dilutive prize available at USC. MEPC selects concepts that are rooted in deep technology, have market viability, and have the highest potential for growth and impact. Beyond acting as a seed fund, MEPC places a strong priority on teaching entrepreneurial education and instilling the entrepreneurial spirit in our founders. Admitted teams will be paired with mentors to provide guidance in their MEPC journey, will be required to attend a series of workshops that will explore your market, customers, the commercial readiness of"
+    },
+    {
+      "id": "check-page-2c2639a9c3",
+      "url": "https://viterbiinnovation.usc.edu/about/mentors/",
+      "page": "details",
+      "excerpt": "Mentors - USC Viterbi | Technology Innovation and Entrepreneurship Skip to content (opens in a new tab) (opens in a new tab) William W. Wang Technology Innovation and Entrepreneurship Hub Menu Mentors Join the Trojan Family! From our world-class research laboratories to the Silicon Beach Viterbi Startup Garage incubator , USC Viterbi teams are forming businesses that are shaping the world around us. We are particularly interested in alumni willing to come support the next generation. Want to participate? See below for some some options or email us at vitinno@usc.edu for more information. Interested in public speaking? Join us on a panel at the Viterbi Student Innovation Institute (VSi2) or drop in on a class . Want to mentor a team for a few months? Sign up as a mentor for one of our competitions . Do you enjoy replicating the investor pitch experience? Become a judge for our competitions . Itching to dig in? We are always looking for qualified mentors to support the National Science Foundation Innovation Corps (“I-Corps”) program. Published on December 21st, 2022 Last updated on August 5th, 2024 Contact Us Visit Us (opens in a new tab) Other USC Links University of Southern California Viterbi School of Engineering © USC Viterbi Privacy Notice | Notice of Non-Discrimination | Digital Accessibility | Smoke-Free Policy Home Page Contact Us Visit Us Contact us Visit us (opens in"
+    },
+    {
+      "id": "check-page-3fbb18c741",
+      "url": "https://viterbiinnovation.usc.edu/about/mission-2-2-2-2-2/",
+      "page": "details",
+      "excerpt": "MEPC (A) - USC Viterbi | Technology Innovation and Entrepreneurship Skip to content (opens in a new tab) (opens in a new tab) William W. Wang Technology Innovation and Entrepreneurship Hub Menu Published on February 26th, 2025 Last updated on February 26th, 2025 Contact Us Visit Us (opens in a new tab) Other USC Links University of Southern California Viterbi School of Engineering © USC Viterbi Privacy Notice | Notice of Non-Discrimination | Digital Accessibility | Smoke-Free Policy Home Page Contact Us Visit Us Contact us Visit us (opens in a new tab)"
+    },
+    {
+      "id": "check-page-048ec117b7",
+      "url": "https://viterbiinnovation.usc.edu/about/mission-2-2-2-2/",
+      "page": "details",
+      "excerpt": "MFC (A) - USC Viterbi | Technology Innovation and Entrepreneurship Skip to content (opens in a new tab) (opens in a new tab) William W. Wang Technology Innovation and Entrepreneurship Hub Menu Published on February 26th, 2025 Last updated on February 26th, 2025 Contact Us Visit Us (opens in a new tab) Other USC Links University of Southern California Viterbi School of Engineering © USC Viterbi Privacy Notice | Notice of Non-Discrimination | Digital Accessibility | Smoke-Free Policy Home Page Contact Us Visit Us Contact us Visit us (opens in a new tab)"
+    },
+    {
+      "id": "check-page-06c9803c5e",
+      "url": "https://viterbiinnovation.usc.edu/about/mission-2-3-2-2/",
+      "page": "details",
+      "excerpt": "Offerings-late (A) - USC Viterbi | Technology Innovation and Entrepreneurship Skip to content (opens in a new tab) (opens in a new tab) William W. Wang Technology Innovation and Entrepreneurship Hub Menu Early Stage Mid-Stage Late Stage Innovation Challenge We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More ventureSPARK We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More Tech innovation Fellowship We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More Mentorship program We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More Viterbi Start-up garage We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More Viterbi Venture Fund We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More i-corps We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More (opens in a new tab) Office Hours We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More Published on February 25th, 2025 Last updated on February 25th, 2025 Contact Us"
+    },
+    {
+      "id": "check-page-740525e034",
+      "url": "https://viterbiinnovation.usc.edu/about/mission-2-3-2/",
+      "page": "details",
+      "excerpt": "Offerings-mid (A) - USC Viterbi | Technology Innovation and Entrepreneurship Skip to content (opens in a new tab) (opens in a new tab) William W. Wang Technology Innovation and Entrepreneurship Hub Menu Early Stage Mid-Stage Late Stage Innovation Challenge We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More ventureSPARK We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More Tech innovation Fellowship We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More Mentorship program We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More Viterbi Start-up garage We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More Viterbi Venture Fund We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More i-corps We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More (opens in a new tab) Office Hours We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More Published on February 25th, 2025 Last updated on February 25th, 2025 Contact Us"
+    },
+    {
+      "id": "check-page-86c278736c",
+      "url": "https://viterbiinnovation.usc.edu/about/mission-2-3-3/",
+      "page": "details",
+      "excerpt": "Offerings-early (A) - USC Viterbi | Technology Innovation and Entrepreneurship Skip to content (opens in a new tab) (opens in a new tab) William W. Wang Technology Innovation and Entrepreneurship Hub Menu Early Stage Mid-Stage Late Stage Innovation Challenge We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More ventureSPARK We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More Tech innovation Fellowship We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More Mentorship program We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More Viterbi Start-up garage We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More Viterbi Venture Fund We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More i-corps We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More (opens in a new tab) Office Hours We're eager to work with like-minded individuals and organizations to bring exciting projects to life. Learn More Published on February 25th, 2025 Last updated on February 25th, 2025 Contact Us"
+    },
+    {
+      "id": "check-page-6d8a276e37",
+      "url": "https://viterbiinnovation.usc.edu/about/mission/",
+      "page": "details",
+      "excerpt": "Mission - USC Viterbi | Technology Innovation and Entrepreneurship Skip to content (opens in a new tab) (opens in a new tab) William W. Wang Technology Innovation and Entrepreneurship Hub Menu Mission The mission of the Viterbi School Office of Technology Innovation and Entrepreneurship is to launch ventures with significant social and economic impact based on USC faculty, students, and technologies. Teach Education for all levels: freshman to faculty Business model development and customer discover Integration with curriculum Learn More Think Research in entrepreneurial team development, economics, and public policy Speakers from academia and the business community Learn More Launch Connect university teams with financial support Assist corporate innovation teams Learn More Link Connect students across the university Connect innovators with mentors and investors Learn More Published on July 1st, 2021 Last updated on August 9th, 2024 Contact Us Visit Us (opens in a new tab) Other USC Links University of Southern California Viterbi School of Engineering © USC Viterbi Privacy Notice | Notice of Non-Discrimination | Digital Accessibility | Smoke-Free Policy Home Page Contact Us Visit Us Contact us Visit us (opens in a new tab)"
+    },
+    {
+      "id": "check-page-bb825f5a1b",
+      "url": "https://viterbiinnovation.usc.edu/about/team/",
+      "page": "details",
+      "excerpt": "Team - USC Viterbi | Technology Innovation and Entrepreneurship Skip to content (opens in a new tab) (opens in a new tab) William W. Wang Technology Innovation and Entrepreneurship Hub Menu Ellis Meng Viterbi Vice Dean TIE Hub ellismen@usc.edu ralph lin Managing Director TIE Hub ralphlin@usc.edu jason ordonez Finance and Research Administrator TIE Hub jordonez@usc.edu david gerber MFC Co-Lead Instructor TIE Hub dgerber@usc.edu trina gregory MFC Co-Lead Instructor and ABC, VSEE Lead Instructor TIE Hub trinagre@usc.edu denise mckenzie MEPC Lead Instructor TIE Hub denisemc@usc.edu arcelia navarro Program Coordinator TIE Hub arcelian@usc.edu dave eastman Director VSG and NSF I-CORP davideas@usc.edu brienne moore Program Coordinator NSF I-CORP briennem@usc.edu farzin samadani NSF I-Corps Lead Instructor NSF I-CORP fsamadani@usc.edu stacyann russell Hub Director NSF I-CORP stacyann@usc.edu Oscar Neyra Partner Manager NSF I-CORP neyranaz@usc.edu Published on November 9th, 2021 Last updated on July 4th, 2025 Contact Us Visit Us (opens in a new tab) Other USC Links University of Southern California Viterbi School of Engineering © USC Viterbi Privacy Notice | Notice of Non-Discrimination | Digital Accessibility | Smoke-Free Policy Home Page Contact Us Visit Us Contact us Visit us (opens in a new tab)"
+    },
+    {
+      "id": "check-page-adf088cad6",
+      "url": "https://viterbiinnovation.usc.edu/about/tie-hub-contact/",
+      "page": "details",
+      "excerpt": "Contact Us | TIE Hub USC Viterbi Technology Innovation & Entrepreneurship Hub - USC Viterbi | Technology Innovation and Entrepreneurship Skip to content (opens in a new tab) (opens in a new tab) William W. Wang Technology Innovation and Entrepreneurship Hub Menu Contact Us. We'd love to hear from you! Whether you have a question, feedback, or an exciting new opportunity in mind, we're here to connect with you. Collab Have an idea or project that aligns with our mission? We’re always looking to work with passionate individuals and teams. COLLAB Partner Whether you're an organization, educator, or investor, your support can help shape the future of student innovation. PARTNER Published on February 23rd, 2025 Last updated on March 9th, 2025 Contact Us Visit Us (opens in a new tab) Other USC Links University of Southern California Viterbi School of Engineering © USC Viterbi Privacy Notice | Notice of Non-Discrimination | Digital Accessibility | Smoke-Free Policy Home Page Contact Us Visit Us Contact us Visit us (opens in a new tab)"
+    },
+    {
+      "id": "check-page-f88a2232f5",
+      "url": "https://viterbiinnovation.usc.edu/about/tie-hub-impact-2/",
+      "page": "details",
+      "excerpt": "Impact | TIE Hub USC Viterbi Technology Innovation & Entrepreneurship Hub (Copy) - USC Viterbi | Technology Innovation and Entrepreneurship Skip to content (opens in a new tab) (opens in a new tab) William W. Wang Technology Innovation and Entrepreneurship Hub Menu We empower the next generation of entrepreneurs, providing the resources, mentorship, and community they need to launch and grow game-changing ventures. one one one Launched ventures that transform healthcare, mobility, energy, cybersecurity, space launch, and more. two two two Earned placement in prestigious accelerators such as Y Combinator, Techstars, and The Engine. three three three Raised over $580M in venture funding from top-tier firms including Kleiner Perkins, Upfront Ventures, and NEA. ...By fostering innovation and collaboration across our university community, we equip student, faculty, and alumni startups with the tools to redefine industries and shape a more sustainable, inclusive future. Published on March 9th, 2025 Last updated on March 9th, 2025 Contact Us Visit Us (opens in a new tab) Other USC Links University of Southern California Viterbi School of Engineering © USC Viterbi Privacy Notice | Notice of Non-Discrimination | Digital Accessibility | Smoke-Free Policy Home Page Contact Us Visit Us Contact us Visit us (opens in a new tab)"
+    },
+    {
+      "id": "check-page-a27315f79a",
+      "url": "https://viterbiinnovation.usc.edu/about/tie-hub-impact/",
+      "page": "details",
+      "excerpt": "Impact | TIE Hub USC Viterbi Technology Innovation & Entrepreneurship Hub - USC Viterbi | Technology Innovation and Entrepreneurship Skip to content (opens in a new tab) (opens in a new tab) William W. Wang Technology Innovation and Entrepreneurship Hub Menu We empower the next generation of entrepreneurs, providing the resources, mentorship, and community they need to launch and grow game-changing ventures. one one one Launched ventures that transform healthcare, mobility, energy, cybersecurity, space launch, and more. two two two Earned placement in prestigious accelerators such as Y Combinator, Techstars, and The Engine. three three three Raised over $580M in venture funding from top-tier firms including Kleiner Perkins, Upfront Ventures, and NEA. ...By fostering innovation and collaboration across our university community, we equip student, faculty, and alumni startups with the tools to redefine industries and shape a more sustainable, inclusive future. Published on February 23rd, 2025 Last updated on March 10th, 2025 Contact Us Visit Us (opens in a new tab) Other USC Links University of Southern California Viterbi School of Engineering © USC Viterbi Privacy Notice | Notice of Non-Discrimination | Digital Accessibility | Smoke-Free Policy Home Page Contact Us Visit Us Contact us Visit us (opens in a new tab)"
     }
   ],
   "findings": {
@@ -26,8 +146,49 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "Finals. ▸ Customer Discovery Grants All admitted teams will receive $250 per team to conduct customer discovery interviews. These mini-grants",
+        "evidenceId": "check-deal-0d0e3c4151"
+      },
+      {
+        "value": "viable business ventures. The MEPC, now offering a grand prize of $100,000, stands as the largest non-dilutive prize available at USC, supporting",
+        "evidenceId": "check-deal-01a5e5db02"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "250",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-0d0e3c4151"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-01a5e5db02"
+      }
+    ],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

@@ -1,11 +1,35 @@
 {
   "programId": "cchub",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://cchub.africa/about/",
       "page": "details",
       "anchor": "Meet the team",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/applications-open-for-africa4future-aerospace-acceleration-programme/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/applications-open-for-africa4future-aerospace-acceleration-programme/twitter/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/artisans-and-makers-access-to-market-program-now-open-for-applications/",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -14,6 +38,110 @@
       "url": "https://cchub.africa/blog/",
       "page": "batches",
       "anchor": "News & Updates",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/call-for-applications-lets-build-africa/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/call-for-applications-mastercard-foundation-edtech-fellowship-in-nigeria/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/call-for-expressions-of-interest-short-term-data-analysis-data-systems-consultant-gateway-program/",
+      "page": "batches",
+      "anchor": "Nigeria GATEWAY Program Call for Expressions of Interest: Short-Term Data Analysis & Data Systems Consultant, GATEWAY Program Duration: 6 weeksDeadline: 9th October 2026, 5:00 PM W",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/cchub-cybersecurity-academy-call-for-application/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/cchub-cybersecurity-academy-call-for-application/cyber-security-01/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/cchub-cybersecurity-academy-call-for-application/cyber-security/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/co-creation-hub-launches-efiko-mobile-application-for-personalized-learning-in-secondary-schools/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/expression-of-interest-eoi-pre-qualification-of-device-vendors-for-the-gateway-program/",
+      "page": "details",
+      "anchor": "Nigeria GATEWAY Program Expression of interest (EOI): pre-qualification of device vendors for the gateway program About the Program The Nigeria GATEWAY Program is a five-year initi",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/fbstart-accelerator-by-facebook-and-cchub-opens-applications-for-season-2-and-extends-to-ghana/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/fbstart-accelerator-by-facebook-and-cchub-opens-applications-for-season-2-and-extends-to-ghana/2019-fbstart-accelerator-website/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/global-cleantech-innovation-programme-gcip-nigeria-cycle-2-applications-are-open/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/global-cleantech-innovation-programme-gcip-nigeria-cycle-2-applications-are-open/artboard-3-1/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/google-for-startups-black-founders-fund-africa-apply-now/",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -27,17 +155,9 @@
       "origin": "official"
     },
     {
-      "url": "https://cchub.africa/expression-of-interest-eoi-pre-qualification-of-device-vendors-for-the-gateway-program/",
-      "page": "details",
-      "anchor": "Nigeria GATEWAY Program Expression of interest (EOI): pre-qualification of device vendors for the gateway program About the Program The Nigeria GATEWAY Program is a five-year initi",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://cchub.africa/call-for-expressions-of-interest-short-term-data-analysis-data-systems-consultant-gateway-program/",
+      "url": "https://cchub.africa/the-mastercard-foundation-edtech-fellowship-backs-12-early-stage-nigerian-startups-advancing-inclusive-education-through-innovation-and-evidence/",
       "page": "batches",
-      "anchor": "Nigeria GATEWAY Program Call for Expressions of Interest: Short-Term Data Analysis & Data Systems Consultant, GATEWAY Program Duration: 6 weeksDeadline: 9th October 2026, 5:00 PM W",
+      "anchor": "Mastercard Foundation The Mastercard Foundation EdTech Fellowship Backs 12 Early-Stage Nigerian Startups Advancing Inclusive Education Through Innovation and Evidence Lagos, Nigeri",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -46,14 +166,6 @@
       "url": "https://cchub.africa/turn-your-creative-talent-into-a-paying-business/",
       "page": "details",
       "anchor": "Creative Skills Turn your creative talent into a paying business The Creative Skills Exchange & Industry Development Program The Creative Skills Exchange is five days of hands-on t",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://cchub.africa/the-mastercard-foundation-edtech-fellowship-backs-12-early-stage-nigerian-startups-advancing-inclusive-education-through-innovation-and-evidence/",
-      "page": "batches",
-      "anchor": "Mastercard Foundation The Mastercard Foundation EdTech Fellowship Backs 12 Early-Stage Nigerian Startups Advancing Inclusive Education Through Innovation and Evidence Lagos, Nigeri",
       "fetched": false,
       "blocked": null,
       "origin": "official"

@@ -1,19 +1,51 @@
 {
   "programId": "connect-ventures",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.connectventures.co/companies",
-      "page": "portfolio",
-      "anchor": "Companies",
-      "fetched": false,
+      "url": "http://www.connectventures.co/opinions/the-connect-ventures-thesis",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.connectventures.co/team-members/sai-tatireddy",
-      "page": "terms",
-      "anchor": "Sai Tatireddy Dealflow Ops Analyst",
+      "url": "http://www.connectventures.co/opinions/the-connect-ventures-thesis-part-2",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/companies",
+      "page": "portfolio",
+      "anchor": "Companies",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/companies/accelerated-dynamics",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/companies/accountable",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/companies/ai-coustics",
+      "page": "portfolio",
+      "anchor": "ai-coustics ∙ Deep Tech ∙ Germany ∙ ∙ Active Active AI-driven speech enhancement.",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -22,22 +54,22 @@
       "url": "https://www.connectventures.co/companies/aikido",
       "page": "portfolio",
       "anchor": "Aikido ∙ AI ∙ Belgium ∙ ∙ Active Active Software security platform.",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.connectventures.co/companies/ai-coustics",
+      "url": "https://www.connectventures.co/companies/ambient",
       "page": "portfolio",
-      "anchor": "ai-coustics ∙ Deep Tech ∙ Germany ∙ ∙ Active Active AI-driven speech enhancement.",
-      "fetched": false,
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.connectventures.co/companies/mosaico",
+      "url": "https://www.connectventures.co/companies/dessn",
       "page": "portfolio",
-      "anchor": "Mosaico ∙ Robotics ∙ Italy ∙ ∙ Active Active Open-Source Data Infrastructure for Physical AI and Robotics",
+      "anchor": "Dessn ∙ AI ∙ UK ∙ ∙ Active Active An AI-native app enabling designers & product managers to contribute to product building, without coding.",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -59,6 +91,22 @@
       "origin": "official"
     },
     {
+      "url": "https://www.connectventures.co/companies/mosaico",
+      "page": "portfolio",
+      "anchor": "Mosaico ∙ Robotics ∙ Italy ∙ ∙ Active Active Open-Source Data Infrastructure for Physical AI and Robotics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/companies/nexcade-oii7a",
+      "page": "portfolio",
+      "anchor": "Nexcade ∙ AI ∙ UK ∙ ∙ Building AI for Logistics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.connectventures.co/companies/truelayer",
       "page": "portfolio",
       "anchor": "TrueLayer ∙ FinTech ∙ UK ∙ ∙ Active Active The European leader in open banking.",
@@ -75,18 +123,50 @@
       "origin": "official"
     },
     {
-      "url": "https://www.connectventures.co/companies/nexcade-oii7a",
-      "page": "portfolio",
-      "anchor": "Nexcade ∙ AI ∙ UK ∙ ∙ Building AI for Logistics",
-      "fetched": false,
+      "url": "https://www.connectventures.co/opinions/great-venture-investing-isnt-about-frameworks-you-are-spending-real-time-with-the-people-not-the-decks",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.connectventures.co/companies/dessn",
-      "page": "portfolio",
-      "anchor": "Dessn ∙ AI ∙ UK ∙ ∙ Active Active An AI-native app enabling designers & product managers to contribute to product building, without coding.",
-      "fetched": false,
+      "url": "https://www.connectventures.co/opinions/investment-decisions-at-connect",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/opinions/new-year-new-unicorn-new-product-updates",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/opinions/opinionated-about-the-problem",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/opinions/venture-is-about-velocity",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/team-members/sai-tatireddy",
+      "page": "terms",
+      "anchor": "Sai Tatireddy Dealflow Ops Analyst",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

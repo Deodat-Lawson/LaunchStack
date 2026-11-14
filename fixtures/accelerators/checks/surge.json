@@ -1,108 +1,941 @@
 {
   "programId": "surge",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://surge.peakxv.com/",
-    "https://surge.peakxv.com/apply"
+    "https://surge.peakxv.com/apply",
+    "https://surge.peakxv.com/reach-out",
+    "https://surge.peakxv.com/faqs",
+    "https://surge.peakxv.com/cohorts/surge-01",
+    "https://surge.peakxv.com/cohorts/surge-02",
+    "https://surge.peakxv.com/cohorts/surge-03",
+    "https://surge.peakxv.com/cohorts/surge-04",
+    "https://surge.peakxv.com/cohorts/surge-05",
+    "https://surge.peakxv.com/cohorts/surge-06",
+    "https://surge.peakxv.com/cohorts/surge-07",
+    "https://surge.peakxv.com/cohorts/surge-08",
+    "https://surge.peakxv.com/cohorts/surge-09",
+    "https://surge.peakxv.com/cohorts/surge-10",
+    "https://surge.peakxv.com/cohorts/surge-11"
   ],
   "evidence": [
     {
-      "id": "check-deal-48c23485dd",
+      "id": "check-announced-4281ce4bd7",
+      "url": "https://surge.peakxv.com/cohorts/surge-11",
+      "title": "Surge — batches page",
+      "excerpt": "future they see. That journey continues with Surge 11, our newest cohort. On September 25, founders from 23 startups came together in Mumbai to kick off",
+      "page": "batches"
+    },
+    {
+      "id": "check-deal-265f1515ce",
       "url": "https://surge.peakxv.com/",
-      "title": "Surge — homepage checked by scrape.py",
-      "excerpt": "top 10 Surge companies $ 3 B+ Raised in follow-on funding 95 Net Promoter Score 17 + Nationalities in the founder community The Peak XV stack from day zero. $0.5M Meaningful capital at the earliest stage. We invest from $500k up to $5M in seed capital from Peak XV, with an open architecture that welcomes co-investors.",
+      "title": "Surge — homepage",
+      "excerpt": "Meaningful capital at the earliest stage. We invest from $500k up to $5M in seed capital from Peak XV, with an open architecture that",
       "page": "details"
+    },
+    {
+      "id": "check-deal-83dd21dbfa",
+      "url": "https://surge.peakxv.com/faqs",
+      "title": "Surge — terms page",
+      "excerpt": "life. How much funding will my startup receive? Surge invests up to $5 million in seed capital in each company through an equity investment. Our",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-943f75a115",
+      "url": "https://surge.peakxv.com/",
+      "title": "Surge — homepage",
+      "excerpt": "zero. $0.5M Meaningful capital at the earliest stage. We invest from $500k up to $5M in seed capital from Peak XV, with an open architecture",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-9b330b9dfe",
+      "url": "https://surge.peakxv.com/faqs",
+      "title": "Surge — terms page",
+      "excerpt": "Surge is the way Peak XV does seed investing. Founders receive up to $5M in seed capital, along with access to Peak XV’s network, operating",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-d5c0b93a6b",
+      "url": "https://surge.peakxv.com/",
+      "title": "Surge — homepage",
+      "excerpt": "in the founder community The Peak XV stack from day zero. $0.5M Meaningful capital at the earliest stage. We invest from $500k up to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-02dc6a2465",
+      "url": "https://surge.peakxv.com/faqs",
+      "title": "Surge — terms page",
+      "excerpt": "The standard accelerator model is often 12–24 week building window with support ending at demo day.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-5bfc183685",
+      "url": "https://surge.peakxv.com/faqs",
+      "title": "Surge — terms page",
+      "excerpt": "who will work with you to define actionable 16-week goals. The team will guide you to lay down the",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-94fc668bf5",
+      "url": "https://surge.peakxv.com/faqs",
+      "title": "Surge — terms page",
+      "excerpt": "GTM and building enduring companies. This 8-week journey wraps with an Immersion in San Francisco",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-c61e4912a4",
+      "url": "https://surge.peakxv.com/apply",
+      "title": "Surge — application page",
+      "excerpt": "carefully and get back to you within 2-3 weeks. In the meantime, keep building! We couldn't",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-dfbe1f2656",
+      "url": "https://surge.peakxv.com/faqs",
+      "title": "Surge — terms page",
+      "excerpt": "a year, we also bring the cohort together for an 8-week Immersion - time with the world's most iconic",
+      "page": "terms"
     },
     {
       "id": "check-email-01dc3e02bc",
       "url": "https://surge.peakxv.com/apply",
-      "title": "Surge — application page checked by scrape.py",
+      "title": "Surge — application page",
       "excerpt": "your connection and try again. If it keeps failing, email contactus@peakxv.com and we'll take it from there. *Clearing your cache will",
       "page": "application"
     },
     {
+      "id": "check-email-0468941147",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "title": "Surge — batches page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "batches"
+    },
+    {
       "id": "check-email-068fe17065",
       "url": "https://surge.peakxv.com/",
-      "title": "Surge — homepage checked by scrape.py",
+      "title": "Surge — homepage",
       "excerpt": "\"email\": \"contactus@peakxv.com\"",
       "page": "details"
     },
     {
+      "id": "check-email-08fbd29567",
+      "url": "https://surge.peakxv.com/cohorts/surge-11",
+      "title": "Surge — batches page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "batches"
+    },
+    {
       "id": "check-email-1e238b760f",
       "url": "https://surge.peakxv.com/apply",
-      "title": "Surge — application page checked by scrape.py",
+      "title": "Surge — application page",
       "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
       "page": "application"
+    },
+    {
+      "id": "check-email-2c6e5c21d1",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "title": "Surge — batches page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-3792eebd31",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "title": "Surge — batches page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-4a8a781787",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "title": "Surge — batches page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-5156d76244",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "title": "Surge — batches page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-54285a4ad0",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "title": "Surge — batches page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-55f99fa71f",
+      "url": "https://surge.peakxv.com/faqs",
+      "title": "Surge — terms page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-63a51bfbe5",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "title": "Surge — batches page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-71a620b892",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "title": "Surge — batches page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-794de613c9",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "title": "Surge — batches page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-8053ca980b",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "title": "Surge — batches page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "batches"
     },
     {
       "id": "check-email-84feeae319",
       "url": "https://surge.peakxv.com/apply",
-      "title": "Surge — application page checked by scrape.py",
+      "title": "Surge — application page",
       "excerpt": "contactus@peakxv.com",
       "page": "application"
+    },
+    {
+      "id": "check-email-889cc7a680",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "title": "Surge — batches page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-92f0068e17",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "title": "Surge — batches page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-9abbcadec3",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "title": "Surge — batches page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-9abca62b5b",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "title": "Surge — batches page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-9b7064d3dc",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "title": "Surge — batches page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-9d74f18d2e",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "title": "Surge — batches page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-9db6fc0728",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "title": "Surge — batches page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-a0effb2443",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "title": "Surge — batches page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "batches"
     },
     {
       "id": "check-email-a9d2a4c1dc",
       "url": "https://surge.peakxv.com/",
-      "title": "Surge — homepage checked by scrape.py",
+      "title": "Surge — homepage",
       "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
       "page": "details"
     },
     {
+      "id": "check-email-adb28d59a2",
+      "url": "https://surge.peakxv.com/cohorts/surge-11",
+      "title": "Surge — batches page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-b28cff2331",
+      "url": "https://surge.peakxv.com/reach-out",
+      "title": "Surge — application page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "application"
+    },
+    {
+      "id": "check-email-c26329ac64",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "title": "Surge — batches page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-d8dbc29257",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "title": "Surge — batches page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-dce38b78bd",
+      "url": "https://surge.peakxv.com/reach-out",
+      "title": "Surge — application page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "application"
+    },
+    {
       "id": "check-email-eb90010f28",
       "url": "https://surge.peakxv.com/",
-      "title": "Surge — homepage checked by scrape.py",
+      "title": "Surge — homepage",
       "excerpt": "contactus@peakxv.com",
       "page": "details"
     },
     {
+      "id": "check-email-f16091c139",
+      "url": "https://surge.peakxv.com/faqs",
+      "title": "Surge — terms page",
+      "excerpt": "us during the application process? You can write to us at contactus@peakxv.com, or find one of us from the Surge team on LinkedIn and hit",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-f835e1bb46",
+      "url": "https://surge.peakxv.com/faqs",
+      "title": "Surge — terms page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-2e44c61471",
+      "url": "https://surge.peakxv.com/apply",
+      "title": "Surge — application page",
+      "excerpt": "best applies to your company? AI/ML Augmented Reality/Virtual Reality B2B Biotech Blockchain Community Consumer Crypto",
+      "page": "application"
+    },
+    {
+      "id": "check-format-2f69342e40",
+      "url": "https://surge.peakxv.com/faqs",
+      "title": "Surge — terms page",
+      "excerpt": "point. Connect with founders from prior cohorts through in-person city and sector meetups, Surge reunions, our app, and",
+      "page": "terms"
+    },
+    {
       "id": "check-name-9043404b13",
       "url": "https://surge.peakxv.com/",
-      "title": "Surge — homepage checked by scrape.py",
+      "title": "Surge — homepage",
       "excerpt": "Surge by Peak XV | Seed Funding for Day-Zero Founders Startups",
       "page": "details"
     },
     {
+      "id": "check-portfolio-02ba7ff56a",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "title": "Surge — batches page",
+      "excerpt": "← Back → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-0528cd386c",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "title": "Surge — batches page",
+      "excerpt": "← Back → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-07c2a69371",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "title": "Surge — batches page",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-09ac81f937",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "title": "Surge — batches page",
+      "excerpt": "← Back → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-0afe659a68",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "title": "Surge — batches page",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-1214d1cbef",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "title": "Surge — batches page",
+      "excerpt": "See our companies → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-14c1e200c2",
       "url": "https://surge.peakxv.com/",
-      "title": "Surge — homepage checked by scrape.py",
+      "title": "Surge — homepage",
       "excerpt": "See our companies → https://surge.peakxv.com/companies",
       "page": "details"
     },
     {
-      "id": "check-portfolio-339693f912",
-      "url": "https://surge.peakxv.com/apply",
-      "title": "Surge — application page checked by scrape.py",
+      "id": "check-portfolio-16bcfa3f77",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "title": "Surge — batches page",
+      "excerpt": "See our companies → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-1ddf1180cb",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "title": "Surge — batches page",
+      "excerpt": "← Back → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-257c237ddc",
+      "url": "https://surge.peakxv.com/reach-out",
+      "title": "Surge — application page",
       "excerpt": "Startups → https://surge.peakxv.com/companies",
       "page": "application"
     },
     {
+      "id": "check-portfolio-294357674a",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "title": "Surge — batches page",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-2cf3c9f726",
+      "url": "https://surge.peakxv.com/faqs",
+      "title": "Surge — terms page",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2d69d00d2f",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "title": "Surge — batches page",
+      "excerpt": "See our companies → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-30ea0f0fce",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "title": "Surge — batches page",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-339693f912",
+      "url": "https://surge.peakxv.com/apply",
+      "title": "Surge — application page",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3c8fc76850",
+      "url": "https://surge.peakxv.com/cohorts/surge-11",
+      "title": "Surge — batches page",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-44e46afe33",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "title": "Surge — batches page",
+      "excerpt": "See our companies → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-4713dea152",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "title": "Surge — batches page",
+      "excerpt": "See our companies → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-4dbe30675b",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "title": "Surge — batches page",
+      "excerpt": "See our companies → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-553928656a",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "title": "Surge — batches page",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-5731c600fe",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "title": "Surge — batches page",
+      "excerpt": "See our companies → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-61eee33d23",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "title": "Surge — batches page",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-6683e8d244",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "title": "Surge — batches page",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-8e3a961b47",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "title": "Surge — batches page",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-9ce6f5985d",
+      "url": "https://surge.peakxv.com/cohorts/surge-11",
+      "title": "Surge — batches page",
+      "excerpt": "← Back → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-a536046f09",
+      "url": "https://surge.peakxv.com/cohorts/surge-11",
+      "title": "Surge — batches page",
+      "excerpt": "See our companies → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-b3327c2001",
       "url": "https://surge.peakxv.com/",
-      "title": "Surge — homepage checked by scrape.py",
+      "title": "Surge — homepage",
       "excerpt": "Startups → https://surge.peakxv.com/companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-b6bebf89c7",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "title": "Surge — batches page",
+      "excerpt": "← Back → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-c1485c09d0",
       "url": "https://surge.peakxv.com/",
-      "title": "Surge — homepage checked by scrape.py",
+      "title": "Surge — homepage",
       "excerpt": "See more → https://surge.peakxv.com/companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-c945754b3d",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "title": "Surge — batches page",
+      "excerpt": "See our companies → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-d30e3f2c46",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "title": "Surge — batches page",
+      "excerpt": "← Back → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-d998b83f83",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "title": "Surge — batches page",
+      "excerpt": "← Back → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-e4cca2ff20",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "title": "Surge — batches page",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-e9bc2f60ef",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "title": "Surge — batches page",
+      "excerpt": "← Back → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-ec072b1dd8",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "title": "Surge — batches page",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-ed2c1135ca",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "title": "Surge — batches page",
+      "excerpt": "See our companies → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-ed6af85d61",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "title": "Surge — batches page",
+      "excerpt": "See our companies → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-ff7d9ca142",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "title": "Surge — batches page",
+      "excerpt": "← Back → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-ffef3e220e",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "title": "Surge — batches page",
+      "excerpt": "← Back → https://surge.peakxv.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-rolling-6a08ef5f48",
+      "url": "https://surge.peakxv.com/reach-out",
+      "title": "Surge — application page",
+      "excerpt": "Resources Apply Apply to Surge Step 1 Fill & review your application Surge applications are open on a rolling basis. Step 2 Submit your application Fill up the questions, review and submit your",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-ad83f1a02a",
+      "url": "https://surge.peakxv.com/faqs",
+      "title": "Surge — terms page",
+      "excerpt": "can apply at any stage of their journey. The team reviews applications on a rolling basis. How does Surge pick which startups to partner with? Surge looks for founders",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-0719bfd60b",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-2832b11340",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/reach-out",
+      "page": "batches"
+    },
+    {
       "id": "check-route-37fb0ab406",
       "url": "https://surge.peakxv.com/",
-      "title": "Surge — homepage checked by scrape.py",
+      "title": "Surge — homepage",
       "excerpt": "Apply → https://surge.peakxv.com/reach-out",
       "page": "details"
     },
     {
+      "id": "check-route-3c4fdf9b79",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-3ce700f30e",
+      "url": "https://surge.peakxv.com/faqs",
+      "title": "Surge — terms page",
+      "excerpt": "Apply → https://surge.peakxv.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-4d72e93e23",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/reach-out",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-50a2064e47",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-60b1b2562d",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-6148f14a72",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/reach-out",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-64a54f267f",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-662f99a3c8",
+      "url": "https://surge.peakxv.com/reach-out",
+      "title": "Surge — application page",
+      "excerpt": "Resume your application → https://surge.peakxv.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-66314a3ef2",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-672ba20e87",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/reach-out",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-83d208cbb2",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/reach-out",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-9175bc7195",
+      "url": "https://surge.peakxv.com/reach-out",
+      "title": "Surge — application page",
+      "excerpt": "Apply → https://surge.peakxv.com/apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-92dde0a676",
       "url": "https://surge.peakxv.com/",
-      "title": "Surge — homepage checked by scrape.py",
+      "title": "Surge — homepage",
       "excerpt": "Apply → https://surge.peakxv.com/apply",
       "page": "details"
+    },
+    {
+      "id": "check-route-932641cf3b",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/reach-out",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-aca336a08a",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-ba6ab9dcec",
+      "url": "https://surge.peakxv.com/reach-out",
+      "title": "Surge — application page",
+      "excerpt": "Begin application → https://surge.peakxv.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bcb0d3664e",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-cd94dfb961",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/reach-out",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-dc318f69f4",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/reach-out",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-e882fda32f",
+      "url": "https://surge.peakxv.com/cohorts/surge-11",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-ebead42ea3",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/reach-out",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-ecd25355a4",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-ee17d11c65",
+      "url": "https://surge.peakxv.com/cohorts/surge-11",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/reach-out",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-f0aa1a2702",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/reach-out",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-f0c3a66019",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "title": "Surge — batches page",
+      "excerpt": "Apply → https://surge.peakxv.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-start-971ab45587",
+      "url": "https://surge.peakxv.com/faqs",
+      "title": "Surge — terms page",
+      "excerpt": "is the next cohort? What is the time commitment? The next cohort kicks off in September 2026. Over the following months, Surge runs focused sessions",
+      "page": "terms"
+    },
+    {
+      "id": "check-status-8d6b967aad",
+      "url": "https://surge.peakxv.com/reach-out",
+      "title": "Surge — application page",
+      "excerpt": "XV Startups How we partner People Resources Apply Apply to Surge Step 1 Fill & review your application Surge applications are open on a rolling basis. Step 2 Submit your application Fill up the questions, review and submit your",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-fe22a43d14",
+      "url": "https://surge.peakxv.com/",
+      "page": "details",
+      "excerpt": "Surge by Peak XV | Seed Funding for Day-Zero Founders Startups How we partner People Resources Apply Where audacious founders find their Surge . Capital, full-stack support, and a community that builds with you. Apply Where early belief compounds. $ 1 B+ Annual revenue across top 10 Surge companies $ 3 B+ Raised in follow-on funding 95 Net Promoter Score 17 + Nationalities in the founder community The Peak XV stack from day zero. $0.5M Meaningful capital at the earliest stage. We invest from $500k up to $5M in seed capital from Peak XV, with an open architecture that welcomes co-investors. Hiring Product Policy Comms & PR Engineering GTM Global Expansion Operators embedded and in your corner. Hands-on, full-stack support across every function that matters for going from zero to one. 170 + Companies 400 + Founders A network that grows with you. Sector-specific communities, always-on learning, and access to the global leaders shaping the future of technology. Surge startups. Airalo is the world’s first eSIM store that solves the pain of high roaming bills by giving you access to eSIMs (digital SIM cards). Read more Atlan is a modern data collaboration workspace, enabling teams to create a single source of truth for all their data assets, and collaborate across the modern data stack. Read more Global HR platform for hiring, managing, and paying employees worldwide. Read more"
+    },
+    {
+      "id": "check-page-a1c0e37c38",
+      "url": "https://surge.peakxv.com/apply",
+      "page": "application",
+      "excerpt": "Apply to Surge by Peak XV | Startup Funding Application Startups How we partner People Resources Apply Fill in your application . Company About the Founders Description & Metrics Final step question 1 Company Name * Error: Fill in the company name to proceed question 2 Link to your company website Please double-check to ensure this is the correct URL. If you don't have a website yet, please leave this blank. Error: Fill in the company website to proceed question 3 In which country is your company registered? * Country Name Error: Select the country where the company is registered question 4 Which category best applies to your company? AI/ML Augmented Reality/Virtual Reality B2B Biotech Blockchain Community Consumer Crypto DeepTech Developer Tools D2C Brands E-Commerce EdTech Energy Enterprise Tech FinTech Gaming/Entertainment Government Hardware HealthTech/MedTech/Healthcare Life Sciences Marketplaces Media Mobility/Transportation Robotics SaaS Security SpaceTech Other Error: Select the option before proceeding question 5 Where are your customers/users located? * If you have customers in multiple locations, pick the country where you've seen/expect to see most traction Worldwide Country Name Error: Select the customer location before proceeding question 6 Has your company raised any funding already? * Yes No If yes, how much was the total investment? (In USD)* Error: Add the"
+    },
+    {
+      "id": "check-page-86154123d8",
+      "url": "https://surge.peakxv.com/reach-out",
+      "page": "application",
+      "excerpt": "How to Apply to Surge | Surge by Peak XV Startups How we partner People Resources Apply Apply to Surge Step 1 Fill & review your application Surge applications are open on a rolling basis. Step 2 Submit your application Fill up the questions, review and submit your application. Post this our team will look into your submissions. Step 3 Hear back from us Watch out for an email from our end and you will be updated on the status of your application. Fill your application It takes 25 mins to complete the form. Submission of a deck via Dropbox or Google Slides or a Loom product demo + pitch video. Begin application Resume your application For media inquiries, please email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we partner People Resources Apply Future Founders Fellowship Follow Us X LinkedIn YouTube © 2026 Peak XV. All rights reserved. Legal Cookies Settings"
+    },
+    {
+      "id": "check-page-c126152b94",
+      "url": "https://surge.peakxv.com/faqs",
+      "page": "terms",
+      "excerpt": "Surge by Peak XV FAQs | Funding, Eligibility, Applications & Evaluation Startups How we partner People Resources Apply FAQs About Surge What is Surge? Surge is how Peak XV backs founders from day zero. We started Surge in 2019 with a simple goal: help early-stage founders build strong foundations for an enduring company. Since then, we've partnered with 400+ founders building in diverse sectors across the globe, from first check through their scale. Alongside capital, you get hands-on support from the Surge team across hiring, GTM, product, fundraising and more - with operators who've seen the playbook and are in your corner to run it with you. Once a year, we also bring the cohort together for an 8-week Immersion - time with the world's most iconic founders and operators, focused sector tracks, and a founder community that sticks around for life. How much funding will my startup receive? Surge invests up to $5 million in seed capital in each company through an equity investment. Our investments range from $500-$5M. How will the Surge team and community help me build my company? Founders will work with Surge team members, mentors, and experts to make tangible progress towards launching or accelerating their companies. Each company has a dedicated investment advisor who will work with you to define actionable 16-week goals. The team will guide you to lay down the overall"
+    },
+    {
+      "id": "check-page-effcf8bdee",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "page": "batches",
+      "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
+    },
+    {
+      "id": "check-page-9c497c1a73",
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "page": "batches",
+      "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
+    },
+    {
+      "id": "check-page-b2a24e3dda",
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "page": "batches",
+      "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
+    },
+    {
+      "id": "check-page-aee1c7e63d",
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "page": "batches",
+      "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
+    },
+    {
+      "id": "check-page-db14c330a5",
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "page": "batches",
+      "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
+    },
+    {
+      "id": "check-page-e92bcaebc1",
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "page": "batches",
+      "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
+    },
+    {
+      "id": "check-page-f5a90d1700",
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "page": "batches",
+      "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
+    },
+    {
+      "id": "check-page-68d4f19b4b",
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "page": "batches",
+      "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
+    },
+    {
+      "id": "check-page-b83fa910af",
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "page": "batches",
+      "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
+    },
+    {
+      "id": "check-page-1068713ba8",
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "page": "batches",
+      "excerpt": "Surge 12 | Building the next era of AI, deeptech, consumer and fintech Startups How we partner People Resources Apply ← Back Surge 12 Building the next era of AI, deeptech, consumer and fintech Social media copy AUTHOR Surge Team We’re excited to welcome 18 new companies to Surge 12 , building across AI, robotics, space, consumer, healthcare, music and fintech. Every Surge cohort gives us a window into what ambitious early-stage founders are choosing to build right now. With Surge 12, three shifts stood out to us. Familiar consumer behaviours are being rebuilt around new expectations. AI is moving from a feature to the underlying architecture of products. And technology is increasingly leaving the screen to tackle physical infrastructure and the real world. Across all three, there’s a common instinct: start from first principles. Our Surge founders are asking whether the products and systems we’ve grown accustomed to should work the way they do at all, and what they might look like if they were being built from scratch today. Rebuilding familiar behaviours Some of the companies in Surge 12 are taking experiences we already know well and rethinking how they should work. August AI is building autonomous clinical intelligence for primary care, combining AI with physician-led care. The company has already grown to nine million users across 160 countries. Ditto is moving dating"
+    },
+    {
+      "id": "check-page-8d80226f30",
+      "url": "https://surge.peakxv.com/cohorts/surge-11",
+      "page": "batches",
+      "excerpt": "Surge 11 Startups How we partner People Resources Apply ← Back Surge 11 Reimagining the Future with Peak XV Social media copy AUTHOR Surge Team With Surge, we’ve always aspired to support outlier founders in building the future they see. That journey continues with Surge 11, our newest cohort. On September 25, founders from 23 startups came together in Mumbai to kick off the program This group of ambitious doers and dreamers showcases a remarkable range of sectors: 12 AI startups across consumer, enterprise, and vertical markets; four fintech innovators; four consumer brands; and three infrastructure and developer tools companies. What unites these founders is grit, the courage to tackle tough challenges, and a first-principles mindset. Surge 11 is also special for its eclectic mix, including many second-time founders, a legendary cricketer, and an Olympic swimming medallist. Together, this cohort is reinventing what’s next for consumers, developers, and enterprises across India, APAC, and global markets. Our three-day kickoff included Fireside Chats where leaders like Amrish Rau, Ronnie Screwvala, Adwaita Nayar, and Dheeraj Pandey spoke about what it takes to build an enduring company. Surge founders also heard from legends Sachin Tendulkar and Usain Bolt about the great rewards that come from resilience and discipline. The event brought together founders from past cohorts"
     }
   ],
   "findings": {
@@ -129,14 +962,120 @@
         "evidenceId": "check-route-92dde0a676"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-8d6b967aad"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-6a08ef5f48"
+      }
+    ],
+    "announcedIntake": [
+      {
+        "value": "September",
+        "evidenceId": "check-announced-4281ce4bd7"
+      }
+    ],
+    "cohortStarts": [
+      {
+        "value": "September 2026",
+        "evidenceId": "check-start-971ab45587"
+      }
+    ],
+    "durationWeeks": [
+      {
+        "value": "3",
+        "evidenceId": "check-duration-c61e4912a4"
+      },
+      {
+        "value": "8",
+        "evidenceId": "check-duration-dfbe1f2656"
+      },
+      {
+        "value": "16",
+        "evidenceId": "check-duration-5bfc183685"
+      },
+      {
+        "value": "24",
+        "evidenceId": "check-duration-02dc6a2465"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-2e44c61471"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-2f69342e40"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "top 10 Surge companies $ 3 B+ Raised in follow-on funding 95 Net Promoter Score 17 + Nationalities in the founder community The Peak XV stack from day zero. $0.5M Meaningful capital at the earliest stage. We invest from $500k up to $5M in seed capital from Peak XV, with an open architecture that welcomes co-investors.",
-        "evidenceId": "check-deal-48c23485dd"
+        "value": "in the founder community The Peak XV stack from day zero. $0.5M Meaningful capital at the earliest stage. We invest from $500k up to",
+        "evidenceId": "check-deal-d5c0b93a6b"
+      },
+      {
+        "value": "zero. $0.5M Meaningful capital at the earliest stage. We invest from $500k up to $5M in seed capital from Peak XV, with an open architecture",
+        "evidenceId": "check-deal-943f75a115"
+      },
+      {
+        "value": "Meaningful capital at the earliest stage. We invest from $500k up to $5M in seed capital from Peak XV, with an open architecture that",
+        "evidenceId": "check-deal-265f1515ce"
+      },
+      {
+        "value": "life. How much funding will my startup receive? Surge invests up to $5 million in seed capital in each company through an equity investment. Our",
+        "evidenceId": "check-deal-83dd21dbfa"
+      },
+      {
+        "value": "Surge is the way Peak XV does seed investing. Founders receive up to $5M in seed capital, along with access to Peak XV’s network, operating",
+        "evidenceId": "check-deal-9b330b9dfe"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "500000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-d5c0b93a6b"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "5000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-265f1515ce"
+      },
+      {
+        "value": {
+          "kind": "equity",
+          "amount": "5000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Equity",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-83dd21dbfa"
       }
     ],
     "portfolioPages": [

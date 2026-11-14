@@ -1,12 +1,124 @@
 {
   "programId": "esa-space-solutions",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-1",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-2",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://business.esa.int/esa-space-applications",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://business.esa.int/funding/big-data-applications-to-boost-preparedness-and-response-to-migration",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://business.esa.int/funding/call-for-ideas/call-for-ideas-artes-satcom-applications",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://business.esa.int/funding/call-for-proposals-competitive/radio-frequency-analytics-applications",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-agriculture",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-energy-and-utilities",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-health-and-safety",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-maritime-and-marine",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-smart-cities-and",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-transport-and-logistics",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://business.esa.int/funding/case-commercial-applications-enabled-space-environments",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://business.esa.int/about-us",
       "page": "details",
       "anchor": "About us",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -14,7 +126,7 @@
       "url": "https://business.esa.int/how-to-apply",
       "page": "application",
       "anchor": "How to apply",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -38,6 +150,14 @@
       "url": "https://business.esa.int/projects",
       "page": "portfolio",
       "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://business.esa.int/projects/theme/finance-investment-insurance",
+      "page": "terms",
+      "anchor": "Fintech View filtered projects",
       "fetched": false,
       "blocked": null,
       "origin": "official"

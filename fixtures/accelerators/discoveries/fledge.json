@@ -1,20 +1,60 @@
 {
   "programId": "fledge",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.fledge.co/about/",
-      "page": "details",
-      "anchor": "About",
+      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.fledge.co/apply/",
+      "url": "https://www.fledge.co/2012/applications-are-in/",
       "page": "application",
-      "anchor": "Startups",
+      "anchor": "",
       "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/2014/spring2014-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/2023/the-land-accelerator-and-terrafund/",
+      "page": "details",
+      "anchor": "The Land Accelerator and TerraFund",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/500x90-fledge-tag-line-apply-today-fledge6/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/800x550-applications-via-gust/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/about/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -27,10 +67,10 @@
       "origin": "official"
     },
     {
-      "url": "https://www.fledge.co/about/startups/",
-      "page": "details",
-      "anchor": "Startup Accelerator",
-      "fetched": false,
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "page": "application",
+      "anchor": "Annotated Application",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -54,14 +94,6 @@
       "url": "https://www.fledge.co/about/faq/",
       "page": "terms",
       "anchor": "FAQ",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.fledge.co/about/annotated-application/",
-      "page": "application",
-      "anchor": "Annotated Application",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -70,6 +102,86 @@
       "url": "https://www.fledge.co/about/recommendations/",
       "page": "details",
       "anchor": "Recommendations",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/about/startups/",
+      "page": "details",
+      "anchor": "Startup Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/apply-2/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/apply-via-gust/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/apply/",
+      "page": "application",
+      "anchor": "Startups",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/banner_apply/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/banner_apply_14s/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/banner_apply_1day/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/banner_apply_2days/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/banner_apply_3days/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/category/investment/",
+      "page": "terms",
+      "anchor": "Investment",
       "fetched": false,
       "blocked": null,
       "origin": "official"

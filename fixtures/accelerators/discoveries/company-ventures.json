@@ -1,6 +1,6 @@
 {
   "programId": "company-ventures",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://www.companyventures.com/portfolio",
@@ -11,10 +11,122 @@
       "origin": "official"
     },
     {
+      "url": "https://www.companyventures.com/post/applications-are-open-for-our-third-cohort-of-boost",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.companyventures.com/post/company-ventures-welcomes-summer-2024-internship-cohort",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.companyventures.com/post/demo-day---our-2024-boost-cohort-takes-the-stage",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.companyventures.com/post/fall-2025-gct-cohort",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.companyventures.com/post/introducing-our-spring-2025-grand-central-tech-residency-cohort",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.companyventures.com/post/introducing-the-2025-boost-founder-fellowship-cohort",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.companyventures.com/post/introducing-the-grand-central-tech-residency-fall-2024-cohort",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.companyventures.com/post/introducing-the-grand-central-tech-residency-spring-2024-fall-2023-cohorts",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.companyventures.com/post/introducing-the-grand-central-tech-spring-2023-residence-cohort",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.companyventures.com/post/investing-in-noetica-building-the-source-of-truth-for-corporate-transaction-terms",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.companyventures.com/post/looking-back-on-the-inaugural-cohort-of-the-boost-founder-fellowship",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.companyventures.com/post/meet-the-gct-startup-in-residence-2020-cohort",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.companyventures.com/post/meet-the-gct-startup-in-residence-2021-cohort",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.companyventures.com/post/revisiting-maven-clinics-2015-grand-central-tech-application",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.companyventures.com/programs",
       "page": "details",
       "anchor": "",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     }

@@ -1,7 +1,151 @@
 {
   "programId": "microsoft-for-startups",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://azure.microsoft.com/en-us/solutions/migration/web-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://azure.microsoft.com/resources/developers/",
+      "page": "application",
+      "anchor": "Build applications with Azure",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://choice.microsoft.com",
+      "page": "details",
+      "anchor": "About our ads",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://go.microsoft.com/fwlink/?LinkId=2387502&clcid=0x409&culture=en-us&country=us",
+      "page": "application",
+      "anchor": "Apply today",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.microsoft.com/about",
+      "page": "details",
+      "anchor": "About Microsoft",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_AllDealsTab_R2_CP3_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/d/surface-laptop-for-business-copilot-pc-intel/93dzmw6q4w2b?icid=deals-page_SurfaceTab_R2_CP2_SurfaceLaptop-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_AllDealsTab_R3_CP1_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/d/surface-pro-for-business-copilot-pc/8nl1w61jw8zm?icid=deals-page_SurfaceTab_R2_CP3_SurfacePro13-inch-Intel-ForBusiness_HOLFY27",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/d/xbox-series-s/942j774tp9jn?icid=deals-page_XBOXTab_R1_CP3_XBOX-SeriesS_HOLFY27",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/education/devices/overview",
+      "page": "details",
+      "anchor": "Devices for education",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/education/products/office?icid=EDU_office365_FAQ",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/microsoft-365/buy/compare-all-microsoft-365-products?ocid=cmmtjeb37jb?icid=deals-page_AllDealsTab_R2_CP2_M365Offer_HOLFY27",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/power-platform/products/power-apps/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/startups/blog/experts-on-ai-a-series-of-fireside-chats-about-llms-and-ai-best-practices/",
+      "page": "details",
+      "anchor": "Read the blog",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/store/b/XBOXconsoles?icid=deals-page_XBOXTab_R1_CP2_XBOX-PayPal_HOLFY27",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/store/b/certified-refurbished-products?icid=StudentDeals_R4_CP1_RefurbishedDevices_06202025",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/store/b/education",
+      "page": "terms",
+      "anchor": "Deals for students and parents",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.microsoft.com/en-us/store/b/sale?icid=DSM_TopNavDeals",
       "page": "terms",
@@ -19,38 +163,6 @@
       "origin": "official"
     },
     {
-      "url": "https://www.microsoft.com/software-development-companies?icid=DSM_All_SoftwareCompanies&ocid=cmm3atxvn98",
-      "page": "portfolio",
-      "anchor": "Software companies",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.microsoft.com/en-us/startups/blog/experts-on-ai-a-series-of-fireside-chats-about-llms-and-ai-best-practices/",
-      "page": "details",
-      "anchor": "Read the blog",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.microsoft.com/en-us/education/devices/overview",
-      "page": "details",
-      "anchor": "Devices for education",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.microsoft.com/en-us/store/b/education",
-      "page": "terms",
-      "anchor": "Deals for students and parents",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.microsoft.com/software-development-companies/offers-benefits/isv-success?icid=DSM_Footer_SupportAIMarketplace&ocid=cmm3atxvn98",
       "page": "portfolio",
       "anchor": "Support for AI marketplace apps",
@@ -59,7 +171,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.microsoft.com/software-development-companies?icid=DSM_Footer_SoftwareCompanies&ocid=cmm3atxvn98",
+      "url": "https://www.microsoft.com/software-development-companies?icid=DSM_All_SoftwareCompanies&ocid=cmm3atxvn98",
       "page": "portfolio",
       "anchor": "Software companies",
       "fetched": false,
@@ -67,9 +179,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.microsoft.com/about",
-      "page": "details",
-      "anchor": "About Microsoft",
+      "url": "https://www.microsoft.com/software-development-companies?icid=DSM_Footer_SoftwareCompanies&ocid=cmm3atxvn98",
+      "page": "portfolio",
+      "anchor": "Software companies",
       "fetched": false,
       "blocked": null,
       "origin": "official"

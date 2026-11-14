@@ -1,108 +1,661 @@
 {
   "programId": "tech-wildcatters",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://techwildcatters.com/",
-    "https://techwildcatters.com/about-us/"
+    "https://techwildcatters.com/bc-game-live-dealer-options-enjoy-real-time-interaction-and-immersive-gameplay/",
+    "https://techwildcatters.com/casea-casino-live-casino-experience-enjoy-real-time-gaming-with-top-dealers/",
+    "https://techwildcatters.com/cupidono-casino-objevte-vyhody-hrani-s-zivymi-dealery-a-bonusy/",
+    "https://techwildcatters.com/explore-the-top-live-dealer-games-at-vegas-hero-for-uk-players-in-2026/",
+    "https://techwildcatters.com/faqs/",
+    "https://techwildcatters.com/getting-started-with-live-dealer-games-at-bc-game-tips-for-beginners/",
+    "https://techwildcatters.com/what-to-know-about-bonus-terms-at-non-ukgc-casinos-for-a-rewarding-experience/",
+    "https://techwildcatters.com/about-us/",
+    "https://techwildcatters.com/mentorship-program/",
+    "https://techwildcatters.com/tw-saudi-accelerator-2024/",
+    "https://techwildcatters.com/portfolio/",
+    "https://techwildcatters.com/q2-2023-portfolio-news/",
+    "https://techwildcatters.com/q3-2023-portfolio-news/"
   ],
   "evidence": [
     {
-      "id": "check-email-4fa4139731",
+      "id": "check-duration-15a4749a4c",
       "url": "https://techwildcatters.com/about-us/",
-      "title": "Tech Wildcatters — details page checked by scrape.py",
+      "title": "Tech Wildcatters — program page",
+      "excerpt": "our relationship does not end after 12 weeks. We are not focused on short term metrics to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2949351804",
+      "url": "https://techwildcatters.com/tw-saudi-accelerator-2024/",
+      "title": "Tech Wildcatters — program page",
+      "excerpt": "and within the MENA region. Our classes run for 12 weeks starting in September, but our relationship and",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-29d21b6f79",
+      "url": "https://techwildcatters.com/about-us/",
+      "title": "Tech Wildcatters — program page",
+      "excerpt": "to dive into the TW ecosystem over a rigorous 12 week period. Unlike many accelerators, our",
+      "page": "details"
+    },
+    {
+      "id": "check-email-02ab4492f3",
+      "url": "https://techwildcatters.com/tw-saudi-accelerator-2024/",
+      "title": "Tech Wildcatters — program page",
       "excerpt": "and create opportunities. Gallery Gallery Contact info@techwildcatters.com © All Copyright 2024 by Tech Wildcatters",
       "page": "details"
     },
     {
+      "id": "check-email-07b7265f85",
+      "url": "https://techwildcatters.com/portfolio/",
+      "title": "Tech Wildcatters — portfolio page",
+      "excerpt": "Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Portfolio Tech Wildcatters Portfolio featured",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-07de9c6ae3",
+      "url": "https://techwildcatters.com/q3-2023-portfolio-news/",
+      "title": "Tech Wildcatters — portfolio page",
+      "excerpt": "Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Q3 2023 Portfolio News Tech Wildcatters Blog",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-0abc80a7cb",
+      "url": "https://techwildcatters.com/faqs/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "info@techwildcatters.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-0b9981e968",
+      "url": "https://techwildcatters.com/cupidono-casino-objevte-vyhody-hrani-s-zivymi-dealery-a-bonusy/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News &",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-1174799e9d",
+      "url": "https://techwildcatters.com/getting-started-with-live-dealer-games-at-bc-game-tips-for-beginners/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Getting started with live dealer games at BC",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-1471f5651f",
+      "url": "https://techwildcatters.com/cupidono-casino-objevte-vyhody-hrani-s-zivymi-dealery-a-bonusy/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Cupidono Casino: Objevte výhody hraní s živými",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-205028f8c1",
+      "url": "https://techwildcatters.com/explore-the-top-live-dealer-games-at-vegas-hero-for-uk-players-in-2026/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "and create opportunities. Gallery Gallery Contact info@techwildcatters.com © All Copyright 2024 by Tech Wildcatters",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-27c84f32ce",
+      "url": "https://techwildcatters.com/getting-started-with-live-dealer-games-at-bc-game-tips-for-beginners/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "info@techwildcatters.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-29d4be52dc",
+      "url": "https://techwildcatters.com/portfolio/",
+      "title": "Tech Wildcatters — portfolio page",
+      "excerpt": "and create opportunities. Gallery Gallery Contact info@techwildcatters.com © All Copyright 2024 by Tech Wildcatters",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-2ab17aaad2",
+      "url": "https://techwildcatters.com/explore-the-top-live-dealer-games-at-vegas-hero-for-uk-players-in-2026/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "info@techwildcatters.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-303e51fee8",
+      "url": "https://techwildcatters.com/q2-2023-portfolio-news/",
+      "title": "Tech Wildcatters — portfolio page",
+      "excerpt": "Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Q2 2023 Portfolio News Tech Wildcatters Blog",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-375f847db9",
+      "url": "https://techwildcatters.com/casea-casino-live-casino-experience-enjoy-real-time-gaming-with-top-dealers/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Casea Casino live casino experience: enjoy",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-3bcaf9a555",
+      "url": "https://techwildcatters.com/casea-casino-live-casino-experience-enjoy-real-time-gaming-with-top-dealers/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "and create opportunities. Gallery Gallery Contact info@techwildcatters.com © All Copyright 2024 by Tech Wildcatters",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-3c92aa8734",
+      "url": "https://techwildcatters.com/portfolio/",
+      "title": "Tech Wildcatters — portfolio page",
+      "excerpt": "to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News &",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-3f61e9f688",
+      "url": "https://techwildcatters.com/q3-2023-portfolio-news/",
+      "title": "Tech Wildcatters — portfolio page",
+      "excerpt": "and create opportunities. Gallery Gallery Contact info@techwildcatters.com © All Copyright 2024 by Tech Wildcatters",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-492d973b40",
+      "url": "https://techwildcatters.com/getting-started-with-live-dealer-games-at-bc-game-tips-for-beginners/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "and create opportunities. Gallery Gallery Contact info@techwildcatters.com © All Copyright 2024 by Tech Wildcatters",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-4f6059d58e",
+      "url": "https://techwildcatters.com/bc-game-live-dealer-options-enjoy-real-time-interaction-and-immersive-gameplay/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here BC Game live dealer options: enjoy real-time",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-4fa4139731",
+      "url": "https://techwildcatters.com/about-us/",
+      "title": "Tech Wildcatters — program page",
+      "excerpt": "and create opportunities. Gallery Gallery Contact info@techwildcatters.com © All Copyright 2024 by Tech Wildcatters",
+      "page": "details"
+    },
+    {
+      "id": "check-email-5278459aa7",
+      "url": "https://techwildcatters.com/getting-started-with-live-dealer-games-at-bc-game-tips-for-beginners/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News &",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-59d07ce7b8",
+      "url": "https://techwildcatters.com/explore-the-top-live-dealer-games-at-vegas-hero-for-uk-players-in-2026/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News &",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-5b2a043187",
+      "url": "https://techwildcatters.com/q2-2023-portfolio-news/",
+      "title": "Tech Wildcatters — portfolio page",
+      "excerpt": "info@techwildcatters.com",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-5bb10317b3",
       "url": "https://techwildcatters.com/about-us/",
-      "title": "Tech Wildcatters — details page checked by scrape.py",
+      "title": "Tech Wildcatters — program page",
       "excerpt": "info@techwildcatters.com",
       "page": "details"
     },
     {
+      "id": "check-email-5bc1c93732",
+      "url": "https://techwildcatters.com/q3-2023-portfolio-news/",
+      "title": "Tech Wildcatters — portfolio page",
+      "excerpt": "info@techwildcatters.com",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-656efacc59",
+      "url": "https://techwildcatters.com/mentorship-program/",
+      "title": "Tech Wildcatters — program page",
+      "excerpt": "and create opportunities. Gallery Gallery Contact info@techwildcatters.com © All Copyright 2024 by Tech Wildcatters",
+      "page": "details"
+    },
+    {
+      "id": "check-email-6dcd29ea50",
+      "url": "https://techwildcatters.com/bc-game-live-dealer-options-enjoy-real-time-interaction-and-immersive-gameplay/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "info@techwildcatters.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-71184fc82c",
+      "url": "https://techwildcatters.com/bc-game-live-dealer-options-enjoy-real-time-interaction-and-immersive-gameplay/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "and create opportunities. Gallery Gallery Contact info@techwildcatters.com © All Copyright 2024 by Tech Wildcatters",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-73983ee9b4",
+      "url": "https://techwildcatters.com/what-to-know-about-bonus-terms-at-non-ukgc-casinos-for-a-rewarding-experience/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News &",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-7a689967de",
+      "url": "https://techwildcatters.com/q2-2023-portfolio-news/",
+      "title": "Tech Wildcatters — portfolio page",
+      "excerpt": "and create opportunities. Gallery Gallery Contact info@techwildcatters.com © All Copyright 2024 by Tech Wildcatters",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-7c096f9951",
+      "url": "https://techwildcatters.com/cupidono-casino-objevte-vyhody-hrani-s-zivymi-dealery-a-bonusy/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "info@techwildcatters.com",
+      "page": "terms"
+    },
+    {
       "id": "check-email-8234363a45",
       "url": "https://techwildcatters.com/",
-      "title": "Tech Wildcatters — homepage checked by scrape.py",
+      "title": "Tech Wildcatters — homepage",
       "excerpt": "Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Tech Wildcatters is a venture capital firm",
       "page": "details"
     },
     {
       "id": "check-email-8ad261ecc3",
       "url": "https://techwildcatters.com/",
-      "title": "Tech Wildcatters — homepage checked by scrape.py",
+      "title": "Tech Wildcatters — homepage",
       "excerpt": "and create opportunities. Gallery Gallery Contact info@techwildcatters.com © All Copyright 2024 by Tech Wildcatters",
       "page": "details"
     },
     {
+      "id": "check-email-8b7e89c340",
+      "url": "https://techwildcatters.com/bc-game-live-dealer-options-enjoy-real-time-interaction-and-immersive-gameplay/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News &",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-8b8d14b3a0",
+      "url": "https://techwildcatters.com/tw-saudi-accelerator-2024/",
+      "title": "Tech Wildcatters — program page",
+      "excerpt": "Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here TW Saudi Accelerator 2024 Tech Wildcatters TW",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8c5fcd86c0",
+      "url": "https://techwildcatters.com/cupidono-casino-objevte-vyhody-hrani-s-zivymi-dealery-a-bonusy/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "and create opportunities. Gallery Gallery Contact info@techwildcatters.com © All Copyright 2024 by Tech Wildcatters",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-8d2d865579",
+      "url": "https://techwildcatters.com/tw-saudi-accelerator-2024/",
+      "title": "Tech Wildcatters — program page",
+      "excerpt": "info@techwildcatters.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8f7b27bc84",
+      "url": "https://techwildcatters.com/faqs/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News &",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-9cc17dac21",
+      "url": "https://techwildcatters.com/explore-the-top-live-dealer-games-at-vegas-hero-for-uk-players-in-2026/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Explore the top live dealer games at Vegas",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-9cda8d0b7b",
+      "url": "https://techwildcatters.com/casea-casino-live-casino-experience-enjoy-real-time-gaming-with-top-dealers/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "info@techwildcatters.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-a0cf26b199",
+      "url": "https://techwildcatters.com/portfolio/",
+      "title": "Tech Wildcatters — portfolio page",
+      "excerpt": "info@techwildcatters.com",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-a117f15a4d",
       "url": "https://techwildcatters.com/",
-      "title": "Tech Wildcatters — homepage checked by scrape.py",
+      "title": "Tech Wildcatters — homepage",
       "excerpt": "to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News &",
       "page": "details"
     },
     {
+      "id": "check-email-a992e16362",
+      "url": "https://techwildcatters.com/faqs/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Faqs Tech Wildcatters Faqs Welcome Looking for",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-be1e6ccff2",
+      "url": "https://techwildcatters.com/mentorship-program/",
+      "title": "Tech Wildcatters — program page",
+      "excerpt": "info@techwildcatters.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c856016d88",
+      "url": "https://techwildcatters.com/mentorship-program/",
+      "title": "Tech Wildcatters — program page",
+      "excerpt": "to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News &",
+      "page": "details"
+    },
+    {
+      "id": "check-email-ce7bd69d36",
+      "url": "https://techwildcatters.com/tw-saudi-accelerator-2024/",
+      "title": "Tech Wildcatters — program page",
+      "excerpt": "to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News &",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d551ac3b55",
+      "url": "https://techwildcatters.com/mentorship-program/",
+      "title": "Tech Wildcatters — program page",
+      "excerpt": "Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Mentorship Program Tech Wildcatters Mentorship",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d789f0e06a",
+      "url": "https://techwildcatters.com/q3-2023-portfolio-news/",
+      "title": "Tech Wildcatters — portfolio page",
+      "excerpt": "to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News &",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-d7f4ad7436",
       "url": "https://techwildcatters.com/about-us/",
-      "title": "Tech Wildcatters — details page checked by scrape.py",
+      "title": "Tech Wildcatters — program page",
       "excerpt": "to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News &",
       "page": "details"
     },
     {
       "id": "check-email-da56c8815d",
       "url": "https://techwildcatters.com/",
-      "title": "Tech Wildcatters — homepage checked by scrape.py",
+      "title": "Tech Wildcatters — homepage",
       "excerpt": "info@techwildcatters.com",
       "page": "details"
     },
     {
+      "id": "check-email-de3a520003",
+      "url": "https://techwildcatters.com/casea-casino-live-casino-experience-enjoy-real-time-gaming-with-top-dealers/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News &",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-de6567fe74",
+      "url": "https://techwildcatters.com/q2-2023-portfolio-news/",
+      "title": "Tech Wildcatters — portfolio page",
+      "excerpt": "to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News &",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-df123f8b1a",
+      "url": "https://techwildcatters.com/faqs/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "and create opportunities. Gallery Gallery Contact info@techwildcatters.com © All Copyright 2024 by Tech Wildcatters",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-e0b0fd7e15",
+      "url": "https://techwildcatters.com/what-to-know-about-bonus-terms-at-non-ukgc-casinos-for-a-rewarding-experience/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "info@techwildcatters.com",
+      "page": "terms"
+    },
+    {
       "id": "check-email-eb64a5882b",
       "url": "https://techwildcatters.com/about-us/",
-      "title": "Tech Wildcatters — details page checked by scrape.py",
+      "title": "Tech Wildcatters — program page",
       "excerpt": "Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here About Us Tech Wildcatters About Us 00 Years of",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f300bb02a6",
+      "url": "https://techwildcatters.com/what-to-know-about-bonus-terms-at-non-ukgc-casinos-for-a-rewarding-experience/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here What to know about bonus terms at non UKGC",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-f613aa1c8b",
+      "url": "https://techwildcatters.com/what-to-know-about-bonus-terms-at-non-ukgc-casinos-for-a-rewarding-experience/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "and create opportunities. Gallery Gallery Contact info@techwildcatters.com © All Copyright 2024 by Tech Wildcatters",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-53bec3e604",
+      "url": "https://techwildcatters.com/",
+      "title": "Tech Wildcatters — homepage",
+      "excerpt": "Zagorin Founder “While we were already based in San Francisco, we joined TW to get access to B2B",
       "page": "details"
     },
     {
       "id": "check-name-61a0dda85e",
       "url": "https://techwildcatters.com/",
-      "title": "Tech Wildcatters — homepage checked by scrape.py",
+      "title": "Tech Wildcatters — homepage",
       "excerpt": "Tech Wildcatters Skip to content 5960 Berkshire Ln, 6th Floor, Dallas, TX",
       "page": "details"
     },
     {
-      "id": "check-portfolio-559db0bfd2",
-      "url": "https://techwildcatters.com/",
-      "title": "Tech Wildcatters — homepage checked by scrape.py",
-      "excerpt": "Scalable Pathway → https://techwildcatters.com/portfolio/",
-      "page": "details"
+      "id": "check-phone-1d919aa917",
+      "url": "https://techwildcatters.com/faqs/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "+92 (8800) - 9850",
+      "page": "terms"
     },
     {
-      "id": "check-portfolio-8a0806d6fb",
-      "url": "https://techwildcatters.com/about-us/",
-      "title": "Tech Wildcatters — details page checked by scrape.py",
+      "id": "check-portfolio-0d50fadbf6",
+      "url": "https://techwildcatters.com/mentorship-program/",
+      "title": "Tech Wildcatters — program page",
       "excerpt": "Portfolio → https://techwildcatters.com/portfolio/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-1b9152aa6e",
+      "url": "https://techwildcatters.com/cupidono-casino-objevte-vyhody-hrani-s-zivymi-dealery-a-bonusy/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "Portfolio → https://techwildcatters.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-559db0bfd2",
+      "url": "https://techwildcatters.com/",
+      "title": "Tech Wildcatters — homepage",
+      "excerpt": "Scalable Pathway → https://techwildcatters.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-74a5b2ccef",
+      "url": "https://techwildcatters.com/bc-game-live-dealer-options-enjoy-real-time-interaction-and-immersive-gameplay/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "Portfolio → https://techwildcatters.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8a0806d6fb",
+      "url": "https://techwildcatters.com/about-us/",
+      "title": "Tech Wildcatters — program page",
+      "excerpt": "Portfolio → https://techwildcatters.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-952220a5bf",
+      "url": "https://techwildcatters.com/faqs/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "Portfolio → https://techwildcatters.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9c80657139",
+      "url": "https://techwildcatters.com/tw-saudi-accelerator-2024/",
+      "title": "Tech Wildcatters — program page",
+      "excerpt": "Portfolio → https://techwildcatters.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a688f76cfa",
+      "url": "https://techwildcatters.com/what-to-know-about-bonus-terms-at-non-ukgc-casinos-for-a-rewarding-experience/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "Portfolio → https://techwildcatters.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-bb6f886d3c",
+      "url": "https://techwildcatters.com/q2-2023-portfolio-news/",
+      "title": "Tech Wildcatters — portfolio page",
+      "excerpt": "Portfolio → https://techwildcatters.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-c6c32b9de0",
       "url": "https://techwildcatters.com/",
-      "title": "Tech Wildcatters — homepage checked by scrape.py",
+      "title": "Tech Wildcatters — homepage",
       "excerpt": "https://techwildcatters.com/portfolio/",
       "page": "details"
     },
     {
       "id": "check-portfolio-cdb5afd5df",
       "url": "https://techwildcatters.com/",
-      "title": "Tech Wildcatters — homepage checked by scrape.py",
+      "title": "Tech Wildcatters — homepage",
       "excerpt": "Portfolio → https://techwildcatters.com/portfolio/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-d94428387d",
+      "url": "https://techwildcatters.com/q3-2023-portfolio-news/",
+      "title": "Tech Wildcatters — portfolio page",
+      "excerpt": "Portfolio → https://techwildcatters.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-e197076685",
+      "url": "https://techwildcatters.com/explore-the-top-live-dealer-games-at-vegas-hero-for-uk-players-in-2026/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "Portfolio → https://techwildcatters.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e6fe05c5aa",
+      "url": "https://techwildcatters.com/getting-started-with-live-dealer-games-at-bc-game-tips-for-beginners/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "Portfolio → https://techwildcatters.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-eb6cd4fb73",
+      "url": "https://techwildcatters.com/casea-casino-live-casino-experience-enjoy-real-time-gaming-with-top-dealers/",
+      "title": "Tech Wildcatters — terms page",
+      "excerpt": "Portfolio → https://techwildcatters.com/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-3c72985a2d",
       "url": "https://techwildcatters.com/",
-      "title": "Tech Wildcatters — homepage checked by scrape.py",
+      "title": "Tech Wildcatters — homepage",
       "excerpt": "https://techwildcatters.com/",
       "page": "details"
+    },
+    {
+      "id": "check-route-57d8b57a9f",
+      "url": "https://techwildcatters.com/tw-saudi-accelerator-2024/",
+      "title": "Tech Wildcatters — program page",
+      "excerpt": "Apply Now → https://www.f6s.com/tech-wildcatters-saudi-accelerator-2024/apply",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-9a0ae2387d",
+      "url": "https://techwildcatters.com/",
+      "page": "details",
+      "excerpt": "Tech Wildcatters Skip to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News & Insights Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Tech Wildcatters is a venture capital firm investing in visionary founders with a framework to disrupt on a global scale. Trusted Guidance for Startup Founders Learn More Global Vision Identify lucrative markets early on with strategy to pursue Mentor Driven Hands-on mentorship to increase probability of success Scalable Pathway Capital-efficient path to growth and funding Become a Mentor Learn More Global Vision Identify lucrative markets early on with strategy to pursue Mentor Driven Hands-on mentorship to increase probability of success Scalable Pathway Capital-efficient path to growth and funding Investing in the Future Learn More Global Vision Identify lucrative markets early on with strategy to pursue Mentor Driven Hands-on mentorship to increase probability of success Scalable Pathway Capital-efficient path to growth and funding 00 Years of Experience About TECH WILDCATTERS WE BELIEVE IN ENTREPRENEURS THAT ADAPT TO CHALLENGES AND CREATE OPPORTUNITIES Mid 21st century is changing faster than ever. Our program invests in visionary founders who strive to be at the forefront of driving these changes. Hands-on Mentorship"
+    },
+    {
+      "id": "check-page-5441fbab41",
+      "url": "https://techwildcatters.com/bc-game-live-dealer-options-enjoy-real-time-interaction-and-immersive-gameplay/",
+      "page": "terms",
+      "excerpt": "BC Game live dealer options: enjoy real-time interaction and immersive gameplay – Tech Wildcatters Skip to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News & Insights Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here BC Game live dealer options: enjoy real-time interaction and immersive gameplay Tech Wildcatters Blog public BC Game live dealer options: enjoy real-time interaction and immersive gameplay by ricky In the evolving world of online gaming, casinos are continually enhancing player experiences with innovative features. One such advancement is the introduction of live dealer games, which provide an immersive atmosphere reminiscent of traditional casinos. BC Game stands out as a platform that offers a broad range of these engaging options, allowing players to enjoy real-time interactions while playing their favorite games from the comfort of their homes. With its unique blend of cryptocurrency betting and live interactions, bc game is a noteworthy choice for both seasoned players and newcomers alike. How new players can read the key casino signals Understanding the dynamics of online casinos can be quite overwhelming for new players. However, recognizing the key signals that indicate a reputable casino is crucial for a safe and enjoyable gaming"
+    },
+    {
+      "id": "check-page-eaff139efa",
+      "url": "https://techwildcatters.com/casea-casino-live-casino-experience-enjoy-real-time-gaming-with-top-dealers/",
+      "page": "terms",
+      "excerpt": "Casea Casino live casino experience: enjoy real-time gaming with top dealers – Tech Wildcatters Skip to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News & Insights Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Casea Casino live casino experience: enjoy real-time gaming with top dealers Tech Wildcatters Blog public Casea Casino live casino experience: enjoy real-time gaming with top dealers by ricky In the world of online gaming, live casinos have transformed the way players engage in their favorite games. Many enthusiasts are discovering that Casea Online Casino stands out in this vibrant landscape by offering an interactive and immersive live casino experience. With live dealers and real-time gameplay, players can enjoy the thrill of a casino from the comfort of their homes. This article explores how to evaluate Casea Casino, what to expect in its live gaming section, and the various benefits associated with playing there. How to evaluate Casea Casino without guesswork Choosing the right online casino can be daunting, particularly with the plethora of options available today. Evaluating Casea Casino requires focusing on aspects like game selection, user experience, banking options, and customer support. A comprehensive analysis will help players"
+    },
+    {
+      "id": "check-page-43ce743792",
+      "url": "https://techwildcatters.com/cupidono-casino-objevte-vyhody-hrani-s-zivymi-dealery-a-bonusy/",
+      "page": "terms",
+      "excerpt": "Cupidono Casino: Objevte výhody hraní s živými dealery a bonusy – Tech Wildcatters Skip to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News & Insights Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Cupidono Casino: Objevte výhody hraní s živými dealery a bonusy Tech Wildcatters Blog public Cupidono Casino: Objevte výhody hraní s živými dealery a bonusy by ricky Cupidono Casino představuje atraktivní platformu pro všechny milovníky online her, kde můžete objevovat vzrušení ze živých dealerů a široké spektrum herních možností. Tento článek se zaměřuje na výhody, které hraní v online kasinech přináší, a vysvětluje, proč byste měli zvolit právě Cupidono Casino jako svou herní destinaci v roce 2026, kdy se očekává nárůst popularity těchto služeb. Základy, které utvářejí chytrá rozhodnutí v kasinu Při výběru online kasina je důležité zaměřit se na několik klíčových aspektů. Cupidono Casino nabízí rozmanitou nabídku her, včetně video automatů, živých her a progresivních jackpotů. Možnost hrát v českých korunách zajišťuje, že se můžete soustředit na zábavu, aniž byste se museli obávat výše směnného kurzu. Významným faktorem pro spokojenost hráčů jsou také atraktivní bonusy, které mohou výrazně zvýšit váš herní zážitek. Co dalšího byste měli mít na paměti při"
+    },
+    {
+      "id": "check-page-2158a39410",
+      "url": "https://techwildcatters.com/explore-the-top-live-dealer-games-at-vegas-hero-for-uk-players-in-2026/",
+      "page": "terms",
+      "excerpt": "Explore the top live dealer games at Vegas Hero for UK players in 2026 – Tech Wildcatters Skip to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News & Insights Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Explore the top live dealer games at Vegas Hero for UK players in 2026 Tech Wildcatters Blog public Explore the top live dealer games at Vegas Hero for UK players in 2026 by ricky As the world of online casinos continues to evolve, live dealer games have become a popular choice among UK players looking for an immersive gambling experience. At Vegas Hero , players can engage with real dealers in real time, bringing the excitement of a physical casino directly to their screens. With a vast selection of live dealer games, as well as a user-friendly mobile interface and fast payouts, Vegas Hero stands out as a premier destination for online gaming enthusiasts in 2026. What players need to understand before they start Before diving into the world of live dealer games at Vegas Hero, it’s essential for players to understand a few key elements. Live dealer games offer the thrill of a real casino experience, streamed directly to your device. Players can interact with dealers and other players, creating a social atmosphere that enhances the gaming experience."
+    },
+    {
+      "id": "check-page-c0a78b69dd",
+      "url": "https://techwildcatters.com/faqs/",
+      "page": "terms",
+      "excerpt": "Faqs – Tech Wildcatters Skip to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News & Insights Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Faqs Tech Wildcatters Faqs Welcome Looking for Help? There are many variations of passages the majority have alteration in some. Nam hendrerit elit vel urna congue. Contact Now Explain us everything you need? Still have Questions? Call Now! Have Question? Free +92 (8800) - 9850 What is a Direct Immigration Services? There are many variations of passages the majority have suffered alteration in some fo injected humour, or randomised words believable. Phasellus a rhoncus erat. Vivamus vel eros vitae est aliquet pellentesque vitae. What are the Benefits of Visa Consultancy? There are many variations of passages the majority have suffered alteration in some fo injected humour, or randomised words believable. Phasellus a rhoncus erat. Vivamus vel eros vitae est aliquet pellentesque vitae. What We should do If our Visa get Rejection? There are many variations of passages the majority have suffered alteration in some fo injected humour, or randomised words believable. Phasellus a rhoncus erat. Vivamus vel eros vitae est aliquet pellentesque vitae. Which Documents are Required to Apply Visa Online? There are many variations"
+    },
+    {
+      "id": "check-page-2caef17f88",
+      "url": "https://techwildcatters.com/getting-started-with-live-dealer-games-at-bc-game-tips-for-beginners/",
+      "page": "terms",
+      "excerpt": "Getting started with live dealer games at BC Game: tips for beginners – Tech Wildcatters Skip to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News & Insights Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Getting started with live dealer games at BC Game: tips for beginners Tech Wildcatters Blog public Getting started with live dealer games at BC Game: tips for beginners by ricky If you’re new to the world of online casinos, particularly live dealer games, getting started can be both exciting and daunting. BC Game, a well-established crypto casino, offers a unique platform catering to gamers who enjoy the thrill of real-time interaction with live dealers while also making use of cryptocurrencies for payments. One great option for those interested in such platforms is bc game , which provides a variety of games and bonuses tailored to enhance your experience. In this article, we will provide you with essential tips for beginners keen to explore live dealer games at this innovative casino. How casino works for new players Understanding how online casinos operate is crucial for new players. At its core, an online casino is a digital platform where players can participate in various games for real money. BC Game features a wide range of casino games,"
+    },
+    {
+      "id": "check-page-749b3b67d0",
+      "url": "https://techwildcatters.com/what-to-know-about-bonus-terms-at-non-ukgc-casinos-for-a-rewarding-experience/",
+      "page": "terms",
+      "excerpt": "What to know about bonus terms at non UKGC casinos for a rewarding experience – Tech Wildcatters Skip to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News & Insights Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here What to know about bonus terms at non UKGC casinos for a rewarding experience Tech Wildcatters Blog public What to know about bonus terms at non UKGC casinos for a rewarding experience by ricky Understanding the intricacies of bonus terms at non UKGC casinos is vital for an enjoyable online gaming experience. British players can access a diverse range of casinos that offer generous bonuses, including welcome packages, free spins, and ongoing promotions. However, while these bonuses can enhance gameplay, it’s crucial to comprehend their terms and conditions to avoid any unpleasant surprises later on. This article will delve into key aspects of non ukgc casinos , highlighting how to maximize your experience. How the core features support everyday play Non UKGC casinos are rapidly gaining popularity among online gaming enthusiasts, particularly British players looking for more freedom and enticing offers than traditional UK-licensed platforms. These international casinos often feature fewer restrictions, allowing players to explore a broader"
+    },
+    {
+      "id": "check-page-7e6d3a098a",
+      "url": "https://techwildcatters.com/about-us/",
+      "page": "details",
+      "excerpt": "About Us – Tech Wildcatters Skip to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News & Insights Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here About Us Tech Wildcatters About Us 00 Years of Experience About TECH WILDCATTERS WE BELIEVE IN ENTREPRENEURS THAT ADAPT TO CHALLENGES AND CREATE OPPORTUNITIES Mid 21st century is changing faster than ever. Our program invests in visionary founders who strive to be at the forefront of driving these changes. Hands-on Mentorship Practical, Efficient, Effective Opportunity 99% Tech Wildcatters is an early stage venture capital fund founded in 2009. We invest in pre-seed companies through our mentorship-driven accelerator program, seed, and series A stage companies. We have invested in 100+ companies and have 13 exits to date. Headquartered in Dallas, Texas, we invest across the United States and internationally. We prefer founders that have a global vision in scaling their companies and those that we can actively add value through our mentorship network. Our TW Training Camp accelerator program is a good entry point for pre-seed companies to dive into the TW ecosystem over a rigorous 12 week period. Unlike many accelerators, our relationship does not end after 12 weeks. We are not focused on short term metrics to look"
+    },
+    {
+      "id": "check-page-4a8a9af14d",
+      "url": "https://techwildcatters.com/mentorship-program/",
+      "page": "details",
+      "excerpt": "Mentorship Program – Tech Wildcatters Skip to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News & Insights Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Mentorship Program Tech Wildcatters Mentorship Program The Tech Wildcatters Mentorship Program is an integral part of our offerings as an active venture capital investor. Through our extensive network, we identify the right mentors and introduce them to become an additional resource to our founders. We continue to facilitate the process to fit the needs of each portfolio compan Mentor Safe Space The mentorship program is designed to create a safe space where founders can bounce ideas off of mentors without judgment. It is also a safe space where mentors are here to pay it forward and help the next generation of entrepreneurs. Do mentors get compensated? Mentors should not be seeking cash or equity compensation from startups during the initial phases of the relationship. Over time, if a founder feels comfortable working with the mentor on a more engaged ongoing basis, the founder may invite the mentor to join the company in a more formalized role in which compensation can then be offered. Become a Mentor Get in touch with our experts. We believe in entrepreneurs that adapt to challenges and create"
+    },
+    {
+      "id": "check-page-8da2b51ca0",
+      "url": "https://techwildcatters.com/tw-saudi-accelerator-2024/",
+      "page": "details",
+      "excerpt": "TW Saudi Accelerator 2024 – Tech Wildcatters Skip to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News & Insights Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here TW Saudi Accelerator 2024 Tech Wildcatters TW Saudi Accelerator 2024 Tech Wildcatters is accepting applications for our 2024 Saudi Accelerator cohort to take place in Riyadh in Fall 2024. We are looking for global startups who are looking to build presence in the Middle East region upon entering the program, while eventual goals of expanding into the United States and/or Southeast Asia. Apply Now Accelerator participants will be part of a small cohort that will receive hands-on guidance from the TW team and mentors from the U.S. and within the MENA region. Our classes run for 12 weeks starting in September, but our relationship and support begins before that and continues well beyond the program end date. It takes years to build a company to the level of success we are looking for; therefore, we will work alongside our founders throughout the journey. Latest posts Oppdag trygge innskudd og uttak på Cup… November 4, 2026 Επίσημος οδηγός πρόσβασης στο Bananzia… November 4, 2026 Mythoswin Casino: Αξιοποιήστε το welco… November 4, 2026 Get in touch with our experts. We believe in entrepreneurs that"
+    },
+    {
+      "id": "check-page-32627be8b3",
+      "url": "https://techwildcatters.com/portfolio/",
+      "page": "portfolio",
+      "excerpt": "Portfolio – Tech Wildcatters Skip to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News & Insights Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Portfolio Tech Wildcatters Portfolio featured Exits through Strategic Acquisitions Acquired by Caterpillar, Inc. (NYSE: CAT) Acquired by private equity group owning GoCanvas Acquired by Atos SE (Euronext Paris: ATO) Acquired by Professional Datasolutions, Inc. FEATURED ACTIVE PORTFOLIO Brius (2022) Bear Claw (2022) Seasonshare (2021) Iceiba (2019) AfrolandTV (2019) Boat Planet (2019) RefineRE (2017) Arkestro (2017) Meowtel (2017) Fetch (2016) Selery (2016) Fast Visa (2016) Telecalm (2016) Local Adventures (2016) Cookstime (2016) Capparsa (2015) Game Time Giving (2015) CancerGene Connect (2015) PledgeCents (2014) Modern (2014) Upswing (2014) Your Sigma (2014) GruupMeet (2014) Whichbox (2014) Klick Push (2013) GlimpzIt (2013) GroupRaise (2013) FanPrint (2012) YooLotto (2012) Siftery (2012) Validic (2012) DeviceMagic (2011) Proxomo (2011) koupon (2011) Nimbix (2011) Image Vision (2010) Key Ring (2010) Brand Protection Agency (2010) Get in touch with our experts. We believe in entrepreneurs that adapt to challenges and create opportunities. Gallery Gallery Contact info@techwildcatters.com © All Copyright 2024 by Tech"
+    },
+    {
+      "id": "check-page-8edd7635d1",
+      "url": "https://techwildcatters.com/q2-2023-portfolio-news/",
+      "page": "portfolio",
+      "excerpt": "Q2 2023 Portfolio News – Tech Wildcatters Skip to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News & Insights Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Q2 2023 Portfolio News Tech Wildcatters Blog 2023 Q2 2023 Portfolio News June 30, 2023 by ricky Arkestro raised $26.0 million of Series A venture funding in a deal led by New Enterprise Associates, Construct, and Koch Disruptive in June 2022. This funding has been used to accelerate growth, enable Arkestro to further help customers amplify the impact of procurement’s influence across their enterprises using behavioral science, game theory and predictive machine learning models applied at a massive scale. AfroLandTV experienced significant organic growth and a large amount of monthly active users across their owned and operated platforms, including apps and linear channels. They are the biggest free streaming service for black audiences in the US. RefineRE helped the Head of Real Estate and team at an American multinational information technology services and consulting company combine all their portfolio data in a centralized platform, which provided them with consistent information and instant direct access for all team members across the globe. Fetch raised an additional $29 million in 2022 as an"
+    },
+    {
+      "id": "check-page-c96304b3d2",
+      "url": "https://techwildcatters.com/q3-2023-portfolio-news/",
+      "page": "portfolio",
+      "excerpt": "Q3 2023 Portfolio News – Tech Wildcatters Skip to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News & Insights Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Q3 2023 Portfolio News Tech Wildcatters Blog 2023 Q3 2023 Portfolio News September 30, 2023 by ricky Arkestro is continuing to be leveraged by Dover Chemical Corporation to streamline procurement processes and drive cost savings. To date, they have completed over 1,000 projects with Arkestro, leading to an average of nearly 2 events per day. Dover Chemical plans to continue to expand its work within the Arkestro platform. Validic has partnered with Withings Health Solutions by adding the Withings Body Pro scale and the Withings BPM Connect Pro BP monitor into Validic’s health IoT platform. This partnership furthers Validic’s commitment to encouraging patients to have greater accountability for their own well-being. LocalAdventures has partnered with TourRadar, which is a B2B booking tool for partners to offer customers a selection of curated multi-day trips across 160 countries. This partnership will help LocalAdventures add more experiences and reach a much wider audience than ever before. Posted in: 2023 Tags: 30 Sep 2023 Latest posts Oppdag trygge innskudd og uttak på Cup… November 4, 2026"
     }
   ],
   "findings": {
@@ -112,8 +665,18 @@
         "evidenceId": "check-email-da56c8815d"
       }
     ],
-    "phones": [],
-    "routes": [],
+    "phones": [
+      {
+        "value": "9288009850",
+        "evidenceId": "check-phone-1d919aa917"
+      }
+    ],
+    "routes": [
+      {
+        "value": "https://www.f6s.com/tech-wildcatters-saudi-accelerator-2024/apply",
+        "evidenceId": "check-route-57d8b57a9f"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://techwildcatters.com/",
@@ -123,8 +686,25 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12",
+        "evidenceId": "check-duration-29d21b6f79"
+      }
+    ],
+    "format": [],
+    "location": [
+      {
+        "value": "San Francisco",
+        "evidenceId": "check-location-53bec3e604"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://techwildcatters.com/portfolio/",

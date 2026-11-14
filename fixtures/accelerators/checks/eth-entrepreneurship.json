@@ -1,6 +1,6 @@
 {
   "programId": "eth-entrepreneurship",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://entrepreneurship.ethz.ch/"
   ],
@@ -8,16 +8,24 @@
     {
       "id": "check-name-b5b908af9b",
       "url": "https://entrepreneurship.ethz.ch/",
-      "title": "ETH Entrepreneurship — homepage checked by scrape.py",
+      "title": "ETH Entrepreneurship — homepage",
       "excerpt": "ETH Entrepreneurship - Spin-offs, Startups & Investment Opportunities – ETH",
       "page": "details"
     },
     {
       "id": "check-route-a5a78b5a94",
       "url": "https://entrepreneurship.ethz.ch/",
-      "title": "ETH Entrepreneurship — homepage checked by scrape.py",
+      "title": "ETH Entrepreneurship — homepage",
       "excerpt": "Homepage → https://entrepreneurship.ethz.ch/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-3d333fa360",
+      "url": "https://entrepreneurship.ethz.ch/",
+      "page": "details",
+      "excerpt": "ETH Entrepreneurship - Spin-offs, Startups & Investment Opportunities – ETH Entrepreneurship | ETH Zurich Homepage Navigation Search Content Footer Contact Sitemap ETH Entrepreneurship Services Student portal Alumni association Staffnet Login Search Search EN Departments ETH Zurich VPWW ETH Entrepreneurship Language Selection English Directly go to the content ETH Entrepreneurship : Overview and News Footer Search Keyword or person Follow us Services Student portal Alumni association Staffnet Login Contact ETH Entrepreneurship Website ETH Entrepreneurship OAT ETH Zurich, ETH Entrepreneurship, Andreasstrasse 5 8050 Zürich Schweiz Show more Show less Departments D-ARCH Architecture D-BAUG Civil, Environmental and Geomatic Engineering D-BIOL Biology D-BSSE Biosystems Science and Engineering D-CHAB Chemistry and Applied Biosciences D-EAPS Earth and Planetary Sciences D-GESS Humanities, Social and Political Sciences D-HEST Health Sciences and Technology D-INFK Computer Science D-ITET Information Technology and Electrical Engineering D-MATH Mathematics D-MATL Department of Materials D-MAVT Mechanical and Process Engineering D-MTEC Management, Technology and Economics D-PHYS Physics D-USYS Environmental Systems Science Table of contents and legal Sitemap Imprint Accessibility Statement Disclaimer & Copyright Privacy Policy © 2026 Eidgenössische Technische Hochschule Zürich JavaScript"
     }
   ],
   "findings": {
@@ -33,8 +41,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

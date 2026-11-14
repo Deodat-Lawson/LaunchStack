@@ -1,5 +1,30 @@
 {
   "programId": "startup-chile",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
-  "pages": []
+  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "pages": [
+    {
+      "url": "https://startupchile.org/blog/annual-alumni-passport/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupchile.org/blog/faqs-2023/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupchile.org/content/uploads/terms-conditions-big-13.pdf",
+      "page": "terms",
+      "anchor": "T&C in english add",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
 }

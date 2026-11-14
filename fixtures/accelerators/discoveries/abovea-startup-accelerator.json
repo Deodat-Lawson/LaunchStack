@@ -1,36 +1,12 @@
 {
   "programId": "abovea-startup-accelerator",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://abovea.tech/portfolio-startup-growth-operations/",
-      "page": "portfolio",
-      "anchor": "Startup Portfolio Growth & Operations",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://abovea.tech/faq/",
-      "page": "terms",
-      "anchor": "FAQ",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://abovea.tech/about-us/",
       "page": "details",
       "anchor": "Who We Are",
       "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://abovea.tech/team/about-abovea-team/",
-      "page": "details",
-      "anchor": "Our Team",
-      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -43,11 +19,107 @@
       "origin": "official"
     },
     {
+      "url": "https://abovea.tech/chinese-companies-global-seo/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://abovea.tech/faq/",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://abovea.tech/founder-led-sales-storytelling-strategy/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://abovea.tech/growth-hacking-myths-2025/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://abovea.tech/how-do-startup-accelerators-work-2025/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://abovea.tech/insights-strategies/agencies-wildfire-technology-companies/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://abovea.tech/insights-strategies/seo-wildfire-detection-companies/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://abovea.tech/investment-research-market-intelligence/",
+      "page": "terms",
+      "anchor": "Investment Research & Market Intelligence",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://abovea.tech/korean-companies-seo-global/",
       "page": "portfolio",
       "anchor": "",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://abovea.tech/portfolio-startup-growth-operations/",
+      "page": "portfolio",
+      "anchor": "Startup Portfolio Growth & Operations",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://abovea.tech/programmatic-seo-vs-traditional-seo-guide/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://abovea.tech/smart-marketing-shipping-containers/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://abovea.tech/team/about-abovea-team/",
+      "page": "details",
+      "anchor": "Our Team",
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     }
   ]

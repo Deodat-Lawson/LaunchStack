@@ -1,87 +1,241 @@
 {
   "programId": "beta-i",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://beta-i.com/",
-    "https://beta-i.com/about.html"
+    "https://beta-i.com/about.html",
+    "https://beta-i.com/case-ai-ignite.html",
+    "https://beta-i.com/case-resource.html",
+    "https://beta-i.com/case-aws-clean-energy.html"
   ],
   "evidence": [
     {
+      "id": "check-duration-43b57b8c3a",
+      "url": "https://beta-i.com/case-aws-clean-energy.html",
+      "title": "Beta-i — program page",
+      "excerpt": "Who it is for AWS Energy clients Duration 5 weeks Beta-i role Programme delivery with AWS All",
+      "page": "details"
+    },
+    {
+      "id": "check-email-0839548ef3",
+      "url": "https://beta-i.com/case-aws-clean-energy.html",
+      "title": "Beta-i — program page",
+      "excerpt": "or write to hello@beta-i.com Your message goes straight to hello@beta-i.com. We reply within two working days. Beta-i © 2026 ·",
+      "page": "details"
+    },
+    {
       "id": "check-email-113333a371",
       "url": "https://beta-i.com/about.html",
-      "title": "Beta-i — details page checked by scrape.py",
+      "title": "Beta-i — program page",
       "excerpt": "hello@beta-i.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-20bdff02c2",
+      "url": "https://beta-i.com/case-resource.html",
+      "title": "Beta-i — portfolio page",
+      "excerpt": "hello@beta-i.com",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-2f85a3a0f6",
+      "url": "https://beta-i.com/case-aws-clean-energy.html",
+      "title": "Beta-i — program page",
+      "excerpt": "hello@beta-i.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-46644229c2",
+      "url": "https://beta-i.com/case-aws-clean-energy.html",
+      "title": "Beta-i — program page",
+      "excerpt": "innovation Who we are Careers Privacy and cookies hello@beta-i.com Newsletter Beta-i Brasil ↗ Lisbon · Brussels · Boston ·",
       "page": "details"
     },
     {
       "id": "check-email-497df82591",
       "url": "https://beta-i.com/",
-      "title": "Beta-i — homepage checked by scrape.py",
+      "title": "Beta-i — homepage",
       "excerpt": "you like to move forward? Send your challenge or write to hello@beta-i.com Your message goes straight to hello@beta-i.com. We reply",
       "page": "details"
     },
     {
+      "id": "check-email-544f5556f0",
+      "url": "https://beta-i.com/case-resource.html",
+      "title": "Beta-i — portfolio page",
+      "excerpt": "innovation Who we are Careers Privacy and cookies hello@beta-i.com Newsletter Beta-i Brasil ↗ Lisbon · Brussels · Boston ·",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-5bfe9c0605",
       "url": "https://beta-i.com/about.html",
-      "title": "Beta-i — details page checked by scrape.py",
+      "title": "Beta-i — program page",
       "excerpt": "or write to hello@beta-i.com",
       "page": "details"
     },
     {
+      "id": "check-email-7d39253eea",
+      "url": "https://beta-i.com/case-resource.html",
+      "title": "Beta-i — portfolio page",
+      "excerpt": "or write to hello@beta-i.com Your message goes straight to hello@beta-i.com. We reply within two working days. Beta-i © 2026 ·",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-96fe7c1952",
       "url": "https://beta-i.com/",
-      "title": "Beta-i — homepage checked by scrape.py",
+      "title": "Beta-i — homepage",
       "excerpt": "innovation Who we are Careers Privacy and cookies hello@beta-i.com Subscribe to our newsletter Beta-i Brasil ↗ Lisbon ·",
       "page": "details"
     },
     {
+      "id": "check-email-c06017dbc3",
+      "url": "https://beta-i.com/case-resource.html",
+      "title": "Beta-i — portfolio page",
+      "excerpt": "or write to hello@beta-i.com",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-c25cacfbcb",
+      "url": "https://beta-i.com/case-resource.html",
+      "title": "Beta-i — portfolio page",
+      "excerpt": "you like to move forward? Send your challenge or write to hello@beta-i.com Your message goes straight to hello@beta-i.com. We reply",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-c5b613af48",
       "url": "https://beta-i.com/about.html",
-      "title": "Beta-i — details page checked by scrape.py",
+      "title": "Beta-i — program page",
       "excerpt": "innovation Who we are Careers Privacy and cookies hello@beta-i.com Newsletter Beta-i Brasil ↗ Lisbon · Brussels · Boston ·",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c7616b5ade",
+      "url": "https://beta-i.com/case-ai-ignite.html",
+      "title": "Beta-i — program page",
+      "excerpt": "you like to move forward? Send your challenge or write to hello@beta-i.com Your message goes straight to hello@beta-i.com. We reply",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c8640e2142",
+      "url": "https://beta-i.com/case-aws-clean-energy.html",
+      "title": "Beta-i — program page",
+      "excerpt": "or write to hello@beta-i.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c88d2e0fab",
+      "url": "https://beta-i.com/case-ai-ignite.html",
+      "title": "Beta-i — program page",
+      "excerpt": "hello@beta-i.com",
       "page": "details"
     },
     {
       "id": "check-email-d0b825acbe",
       "url": "https://beta-i.com/about.html",
-      "title": "Beta-i — details page checked by scrape.py",
+      "title": "Beta-i — program page",
       "excerpt": "you like to move forward? Send your challenge or write to hello@beta-i.com Your message goes straight to hello@beta-i.com. We reply",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d764f9f17c",
+      "url": "https://beta-i.com/case-ai-ignite.html",
+      "title": "Beta-i — program page",
+      "excerpt": "or write to hello@beta-i.com Your message goes straight to hello@beta-i.com. We reply within two working days. Beta-i © 2026 ·",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d83923b7eb",
+      "url": "https://beta-i.com/case-ai-ignite.html",
+      "title": "Beta-i — program page",
+      "excerpt": "innovation Who we are Careers Privacy and cookies hello@beta-i.com Newsletter Beta-i Brasil ↗ Lisbon · Brussels · Boston ·",
       "page": "details"
     },
     {
       "id": "check-email-e59d8665cc",
       "url": "https://beta-i.com/about.html",
-      "title": "Beta-i — details page checked by scrape.py",
+      "title": "Beta-i — program page",
       "excerpt": "or write to hello@beta-i.com Your message goes straight to hello@beta-i.com. We reply within two working days. Beta-i © 2026 ·",
       "page": "details"
     },
     {
       "id": "check-email-e8a1d5af53",
       "url": "https://beta-i.com/",
-      "title": "Beta-i — homepage checked by scrape.py",
+      "title": "Beta-i — homepage",
       "excerpt": "hello@beta-i.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e8ab5e91b9",
+      "url": "https://beta-i.com/case-aws-clean-energy.html",
+      "title": "Beta-i — program page",
+      "excerpt": "you like to move forward? Send your challenge or write to hello@beta-i.com Your message goes straight to hello@beta-i.com. We reply",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f183f62753",
+      "url": "https://beta-i.com/case-ai-ignite.html",
+      "title": "Beta-i — program page",
+      "excerpt": "or write to hello@beta-i.com",
       "page": "details"
     },
     {
       "id": "check-email-fd5d8d676f",
       "url": "https://beta-i.com/",
-      "title": "Beta-i — homepage checked by scrape.py",
+      "title": "Beta-i — homepage",
       "excerpt": "or write to hello@beta-i.com Your message goes straight to hello@beta-i.com. We reply within two working days. Beta-i © 2026 ·",
       "page": "details"
     },
     {
       "id": "check-email-fda179d310",
       "url": "https://beta-i.com/",
-      "title": "Beta-i — homepage checked by scrape.py",
+      "title": "Beta-i — homepage",
       "excerpt": "or write to hello@beta-i.com",
       "page": "details"
     },
     {
       "id": "check-name-83796e4a7f",
       "url": "https://beta-i.com/",
-      "title": "Beta-i — homepage checked by scrape.py",
+      "title": "Beta-i — homepage",
       "excerpt": "Beta-i · Collaborative Innovation · Innovation that gets",
       "page": "details"
+    },
+    {
+      "id": "check-route-07b0c9abec",
+      "url": "https://beta-i.com/",
+      "title": "Beta-i — homepage",
+      "excerpt": "Privacy and cookies → https://beta-i.com/",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-55c19e63f6",
+      "url": "https://beta-i.com/",
+      "page": "details",
+      "excerpt": "Beta-i · Collaborative Innovation · Innovation that gets delivered collaborative innovation Home On this page What you can expect Our approach Track record Numbers Our work Beyond one organisation Coalitions Your challenges Where to start What we do Three models What we do Work Cases by model Strategic direction Operating model Corporate venturing All of it Every case Searchable Who we are Careers Share your challenge Beta-i · Collaborative innovation Innovation that gets delivered . We work side by side with teams to turn innovation into measurable results. And when the problem is bigger than one company, as a global leader in collaborative innovation, we orchestrate the coalitions that deliver. Share your challenge See our track record Some of the organisations we have worked with What you can expect From innovation ambition to operational results . The teams we work with want more projects to reach operations. We work side by side to make that happen, and measure our contribution by the results we achieve together. 01 Strategy connected to delivery We involve the teams responsible for procurement and operations from the start, so the strategy reflects what implementation will require. 02 A clear path from pilot to deployment We design pilots with your teams around clear success criteria, ownership and the decisions needed to move towards deployment. 03 Experienced teams"
+    },
+    {
+      "id": "check-page-1efe6c3bc8",
+      "url": "https://beta-i.com/about.html",
+      "page": "details",
+      "excerpt": "Who we are · Beta-i · Collaborative innovation collaborative innovation Home On the homepage What you can expect Our approach Track record Numbers Our work Beyond one organisation Coalitions What we do Three models What we do Work Cases by model Strategic direction Operating model Corporate venturing All of it Every case Searchable Who we are Careers Share your challenge Who we are The future is made together. A team of first movers, born in Lisbon in 2009 to set the pace of an innovation ecosystem that barely existed yet. More than fifteen years later we work from Lisbon, Brussels, Boston and Sao Paulo, and the habit has not changed: we go first, and we take people with us. Where the work happens “It is the first time that we are doing this, but it is not the first time that we are doing things for the first time .” Our CEO, more often than he probably realises It is the closest thing we have to a job description. Nobody calls us because the path is known. They call us because it is not, and because somebody has to go first and bring the others along. Fifteen years of first times have taught us something that cannot be read in a method: how to move when the map runs out, how to keep several organisations moving together while it happens, and how to tell the difference between a risk worth taking and a detour. What we are made of. We are innovation experts, and we are leading"
+    },
+    {
+      "id": "check-page-6cd7c7c838",
+      "url": "https://beta-i.com/case-ai-ignite.html",
+      "page": "details",
+      "excerpt": "Jose de Mello · AI Ignite · Case · Beta-i collaborative innovation Home On the homepage What you can expect Our approach Track record Numbers Our work Beyond one organisation Coalitions What we do Three models What we do Work Cases by model Strategic direction Operating model Corporate venturing All of it Every case Searchable Who we are Careers Share your challenge Operating model · Health and diversified services · Portugal · 2026 Jose de Mello AI Ignite Building the confidence and capability to put AI to work. The facts Client Jose de Mello Context A diversified group's holding company Year 2026 Service line Operating model Format AI strategy and readiness sprint, with practical enablement and prototyping Audience Board, executive committee, directors and holding teams Our role Leadership and team enablement, opportunity mapping, pilot selection, prototype development and governance design Download the one pager ↓ All cases in this model Working side by side with Jose de Mello's holding teams, we connected AI learning with real business challenges. AI Ignite combined leadership development, practical experimentation and governance foundations, helping teams turn opportunities into prototypes and build the capability to continue. The problem Jose de Mello wanted to translate AI's potential into a practical way of working for its holding teams, while preparing the holding to"
+    },
+    {
+      "id": "check-page-4092ffb73b",
+      "url": "https://beta-i.com/case-resource.html",
+      "page": "portfolio",
+      "excerpt": "Sociedade Ponto Verde · Re_source · Case · Beta-i collaborative innovation Home On the homepage What you can expect Our approach Track record Numbers Our work Beyond one organisation Coalitions What we do Three models What we do Work Cases by model Strategic direction Operating model Corporate venturing All of it Every case Searchable Who we are Careers Share your challenge Corporate venturing · Packaging and circularity · 33 countries · Ongoing Sociedade Ponto Verde Re_source Bringing the packaging ecosystem together to develop more circular solutions. The facts Service line Corporate venturing Format Collaborative innovation across a value chain Who it is for Packaging, recycling and waste management organisations Duration Ongoing Beta-i role Programme management and ecosystem collaboration Download the one pager ↓ All cases in this model The problem Improving packaging recovery and recycling required innovation across organisations with different roles in the value chain. How it runs Beta-i manages Re_source to connect innovators, circular economy specialists and industrial partners around shared challenges. The work covers consumer engagement, material recovery, digitalisation and sorting technologies. What came out of it Forty one pilots under development. 119 solutions 41 pilots under development 13 companies 33 countries Why it matters here Value chain challenges can"
+    },
+    {
+      "id": "check-page-a059ece0b3",
+      "url": "https://beta-i.com/case-aws-clean-energy.html",
+      "page": "details",
+      "excerpt": "AWS · Clean Energy Accelerator 2.0 · Case · Beta-i collaborative innovation Home On the homepage What you can expect Our approach Track record Numbers Our work Beyond one organisation Coalitions What we do Three models What we do Work Cases by model Strategic direction Operating model Corporate venturing All of it Every case Searchable Who we are Careers Share your challenge Corporate venturing · Energy and climate · Global AWS Clean Energy Accelerator 2.0 Connecting clean energy innovators with the companies ready to test their solutions. The facts Service line Corporate venturing Format Startup acceleration and corporate collaboration Who it is for AWS Energy clients Duration 5 weeks Beta-i role Programme delivery with AWS All cases in this model The problem Companies addressing clean energy and decarbonisation challenges needed access to emerging technologies and ventures with which they could collaborate, supported by AWS technology. How it runs The accelerator supported selected startups through masterclasses, mentoring, networking and working sessions with corporate teams. The five week development programme focused on alignment between partners and preparation for pilots. What came out of it Ten pilots and four deployments. 424 startup applications 58 countries 500+ hours of mentorship 10 pilots 4 deployments Why it matters here Structured collaboration can help"
     }
   ],
   "findings": {
@@ -93,12 +247,29 @@
     ],
     "phones": [],
     "routes": [],
-    "applicationUrl": [],
+    "applicationUrl": [
+      {
+        "value": "https://beta-i.com/",
+        "evidenceId": "check-route-07b0c9abec"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "5",
+        "evidenceId": "check-duration-43b57b8c3a"
+      }
+    ],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

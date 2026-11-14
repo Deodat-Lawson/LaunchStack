@@ -1,12 +1,20 @@
 {
   "programId": "samsung-next",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://www.samsungnext.com/about",
+      "page": "details",
+      "anchor": "About",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
     {
       "url": "https://www.samsungnext.com/portfolio",
       "page": "portfolio",
       "anchor": "Portfolio",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -14,31 +22,7 @@
       "url": "https://www.samsungnext.com/portfolio?sector=AI",
       "page": "portfolio",
       "anchor": "01 ↗ AI Foundation models, edge deployment, and enterprise-scale implementation. Perplexity · Liquid AI · Black Forest Labs",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.samsungnext.com/portfolio?sector=Robotics",
-      "page": "portfolio",
-      "anchor": "02 ↗ Robotics Intelligent Machines Full-stack autonomy, advanced sensing, and human-machine interfaces. 1X · Field AI · Apptronik",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.samsungnext.com/portfolio?sector=Health",
-      "page": "portfolio",
-      "anchor": "03 ↗ Digital Health & MedTech Bio-electronic integration, precision diagnostics, and next-gen wearables. Maven Clinic · Function Health · Signos",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.samsungnext.com/portfolio?sector=Services",
-      "page": "portfolio",
-      "anchor": "04 ↗ Services Stablecoin · Blockchain · Mediatech Decentralized finance infrastructure, on-chain economies, and next-gen media platforms. Bastion · LayerZero · Volley",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -46,16 +30,32 @@
       "url": "https://www.samsungnext.com/portfolio?sector=Frontier",
       "page": "portfolio",
       "anchor": "05 ↗ Frontier Next-Gen Tech Novel compute, advanced materials, energy systems, and emerging deep-tech platforms. Rain · Base Power · Harmonic",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.samsungnext.com/about",
-      "page": "details",
-      "anchor": "About",
-      "fetched": false,
-      "blocked": "fetch_failed",
+      "url": "https://www.samsungnext.com/portfolio?sector=Health",
+      "page": "portfolio",
+      "anchor": "03 ↗ Digital Health & MedTech Bio-electronic integration, precision diagnostics, and next-gen wearables. Maven Clinic · Function Health · Signos",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.samsungnext.com/portfolio?sector=Robotics",
+      "page": "portfolio",
+      "anchor": "02 ↗ Robotics Intelligent Machines Full-stack autonomy, advanced sensing, and human-machine interfaces. 1X · Field AI · Apptronik",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.samsungnext.com/portfolio?sector=Services",
+      "page": "portfolio",
+      "anchor": "04 ↗ Services Stablecoin · Blockchain · Mediatech Decentralized finance infrastructure, on-chain economies, and next-gen media platforms. Bastion · LayerZero · Volley",
+      "fetched": true,
+      "blocked": null,
       "origin": "official"
     }
   ]

@@ -1,7 +1,15 @@
 {
   "programId": "general-catalyst",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://www.generalcatalyst.com/companies/anthropic",
+      "page": "portfolio",
+      "anchor": "Quadrupling DOWN ON ANTHROPIC",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.generalcatalyst.com/portfolio",
       "page": "portfolio",
@@ -11,10 +19,114 @@
       "origin": "official"
     },
     {
-      "url": "https://www.generalcatalyst.com/companies/anthropic",
-      "page": "portfolio",
-      "anchor": "Quadrupling DOWN ON ANTHROPIC",
-      "fetched": false,
+      "url": "https://www.generalcatalyst.com/stories/announcing-chief-investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.generalcatalyst.com/stories/combating-the-mounting-addiction-mental-health-crisis-with-compassionate-evidenced-based-care-our-investment-in-eleanor-health",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.generalcatalyst.com/stories/focusing-on-europe-a-conversation-with-gcs-london-based-investment-team",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.generalcatalyst.com/stories/global-resilience-in-india-announcing-our-investment-in-jeh-aerospace",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.generalcatalyst.com/stories/our-investment-fivetran-making-data-flow",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-accrual",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-adept-empowering-knowledge-workers-with-ai",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-alpha-9-oncology",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-apiiro-expanding-visibility-in-application-security",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-applied-intuition",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-arca",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-argmax",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-armis",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.generalcatalyst.com/stories/prosimo-delivering-application-experience-across-multi-cloud",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

@@ -1,0 +1,129 @@
+{
+  "programId": "vogt-awards",
+  "checkedAt": "2026-11-14T20:04:58.000Z",
+  "pagesRead": [
+    "https://www.vogtawards.com"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-6c92c50b9d",
+      "url": "https://www.vogtawards.com",
+      "title": "The Vogt Awards — homepage",
+      "excerpt": "Awards Cohort These six early-stage industry disruptors will receive $25,000 in non-dilutive grant funding and participate in a 10-week",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-99ec3ff1ca",
+      "url": "https://www.vogtawards.com",
+      "title": "The Vogt Awards — homepage",
+      "excerpt": "the next level. Each year, up to six early-stage businesses receive $25,000 in non-dilutive grant funding, participation in a 10-week startup",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-0b41e2716e",
+      "url": "https://www.vogtawards.com",
+      "title": "The Vogt Awards — homepage",
+      "excerpt": "non-dilutive grant funding and participate in a 10-week accelerator program where they will receive",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c20b174c82",
+      "url": "https://www.vogtawards.com",
+      "title": "The Vogt Awards — homepage",
+      "excerpt": "non-dilutive grant funding, participation in a 10-week startup accelerator program, coaching,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-6986bb382e",
+      "url": "https://www.vogtawards.com",
+      "title": "The Vogt Awards — homepage",
+      "excerpt": "Our office is currently operating on a Hybrid Schedule Mondays and Fridays - Open to visitors by",
+      "page": "details"
+    },
+    {
+      "id": "check-name-d5feb752c5",
+      "url": "https://www.vogtawards.com",
+      "title": "The Vogt Awards — homepage",
+      "excerpt": "Awards is celebrating its 26th year. Since 1999, the Vogt Awards has offered entrepreneurs in the Louisville region a",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-c0291d8df8",
+      "url": "https://www.vogtawards.com",
+      "page": "details",
+      "excerpt": "Vogt Awards - Community Foundation of Louisville : Community Foundation of Louisville Toggle navigation Community Foundation of Louisville Find a Nonprofit Support Our Work Donor Login Find a Nonprofit Support Our Work Donor Login Who We Are About Why We’re Here Financials Staff Board of Directors Employment Opportunities What We Do Fund for Louisville Community Support Funding Invest Louisville Give for Good Louisville Investment Strategies Regional Philanthropy Nonprofit Resources Greater Louisville Project Reports Ways to Give Donors Year-End Giving Donor Login Create a Fund Planned Giving Endow Kentucky Tax Credit Contribute to a Specific Fund Donor FAQs Professional Advisors Partner With Us Planned Giving Investment Strategies Grants & Scholarships Grant Opportunities Apply – Scholarships Find Your Scholarship Scholarship FAQs Celebrate Scholars Create a Scholarship Fund Stories & Events Blog Events Vogt Awards The Community Foundation of Louisville’s Vogt Invention & Innovation Awards is celebrating its 26th year. Since 1999, the Vogt Awards has offered entrepreneurs in the Louisville region a unique and exciting opportunity to take their businesses to the next level. Each year, up to six early-stage businesses receive $25,000 in non-dilutive grant funding, participation in a 10-week startup accelerator program, coaching, mentorship, strategic introductions, and"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "10",
+        "evidenceId": "check-duration-c20b174c82"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-6986bb382e"
+      }
+    ],
+    "location": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "the next level. Each year, up to six early-stage businesses receive $25,000 in non-dilutive grant funding, participation in a 10-week startup",
+        "evidenceId": "check-deal-99ec3ff1ca"
+      },
+      {
+        "value": "Awards Cohort These six early-stage industry disruptors will receive $25,000 in non-dilutive grant funding and participate in a 10-week",
+        "evidenceId": "check-deal-6c92c50b9d"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "25000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-99ec3ff1ca"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "25000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-6c92c50b9d"
+      }
+    ],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "The Vogt Awards",
+        "evidenceId": "check-name-d5feb752c5"
+      }
+    ],
+    "examplePages": []
+  }
+}

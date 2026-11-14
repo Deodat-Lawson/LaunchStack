@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.telstra.com.au/business-enterprise/muru-d",
   "applyUrl": "https://www.telstra.com.au/business-enterprise/muru-d",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: muru-D - Telstra Enterprise Publisher: Telstra Name: muru-D - Telstra Enterprise Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Innovation happens here At muru-D, we turn 'what if' into 'what's next' by co-creating with our strategic partners and customers through exploration and incubation of new products, services and technologies. We're tackling some of the biggest problems the world faces today, one idea at a time. muru-D is Telstra's hub for incubating ideas, products, and technologies. The name muru-D has a meaningful origin rooted in the Sydney Aboriginal Eora language. The word 'muru' means path, symbolising a journey or direction. The 'D' stands for digital, representing the focus on digital innovation. Together, muru-D signifies a pathway to digital innovation. We explore new technologies and rapidly prototype solutions, drawing on our expertise in 5G, IoT, connectivity, edge computing, and applied AI. Partnering with industry, experts, and universities, we develop real-world solutions for real-world problems. Our process includes prototyping, proof-of-concepts, customer trials, and human-centred design workshops. We also support founders driving social technological impact and innovation in AI, VR, AR, drones, satellites, and robotics. Get in touch with muru-D No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "muru-D is Telstra's hub for incubating ideas and technologies. Explore new tech, prototype solutions, and support founders driving social technological impact. Learn more to help your startup grow.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Our process includes prototyping, proof-of-concepts, customer trials, and human-centred design workshops. We also support founders driving social technological impact and innovation in AI, VR, AR, drones, satellites, and robotics.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "murud-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.telstra.com.au/business-enterprise/muru-d",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

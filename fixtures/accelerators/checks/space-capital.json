@@ -1,70 +1,303 @@
 {
   "programId": "space-capital",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.spacecapital.com/",
-    "https://www.spacecapital.com/about"
+    "https://www.spacecapital.com/blogs/skywatch-pixels-become-applications",
+    "https://www.spacecapital.com/blogs/evaluating-seed-stage-investment-opportunities",
+    "https://www.spacecapital.com/terms-of-service",
+    "https://www.spacecapital.com/about",
+    "https://www.spacecapital.com/research",
+    "https://www.spacecapital.com/space-iq",
+    "https://www.spacecapital.com/blogs/mapping-companies-improving-everyday-life-part-1",
+    "https://www.spacecapital.com/blogs/mapping-companies-improving-everyday-life-part-2",
+    "https://www.spacecapital.com/portfolio",
+    "https://www.spacecapital.com/portfolio/afference",
+    "https://www.spacecapital.com/portfolio/akin",
+    "https://www.spacecapital.com/portfolio/all-space",
+    "https://www.spacecapital.com/portfolio/allevi",
+    "https://www.spacecapital.com/portfolio/arbol"
   ],
   "evidence": [
     {
+      "id": "check-format-3e97015b35",
+      "url": "https://www.spacecapital.com/blogs/skywatch-pixels-become-applications",
+      "title": "Space Capital — application page",
+      "excerpt": "language and geospatial prompts, combining vector tiles, remote sensing layers, and user-defined areas of interest into",
+      "page": "application"
+    },
+    {
+      "id": "check-format-4cc89e60fa",
+      "url": "https://www.spacecapital.com/portfolio/afference",
+      "title": "Space Capital — portfolio page",
+      "excerpt": "such as space, aerospace, maintenance, assembly, and remote operations can all benefit from the enhanced feedback. The",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-location-92968ea590",
+      "url": "https://www.spacecapital.com/terms-of-service",
+      "title": "Space Capital — terms page",
+      "excerpt": "in the state or federal courts located in New York County, New York. These terms are binding on",
+      "page": "terms"
+    },
+    {
       "id": "check-name-ccb723691c",
       "url": "https://www.spacecapital.com/",
-      "title": "Space Capital — homepage checked by scrape.py",
+      "title": "Space Capital — homepage",
       "excerpt": "Space Capital | Space Tech for the Real World LP LOGIN About Portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-0c4c6107be",
+      "url": "https://www.spacecapital.com/portfolio/afference",
+      "title": "Space Capital — portfolio page",
+      "excerpt": "Portfolio → https://www.spacecapital.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-0ffa9ba1c4",
+      "url": "https://www.spacecapital.com/portfolio/all-space",
+      "title": "Space Capital — portfolio page",
+      "excerpt": "Portfolio → https://www.spacecapital.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-1725285b57",
+      "url": "https://www.spacecapital.com/portfolio/allevi",
+      "title": "Space Capital — portfolio page",
+      "excerpt": "Portfolio → https://www.spacecapital.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-212eeed6e4",
+      "url": "https://www.spacecapital.com/portfolio/akin",
+      "title": "Space Capital — portfolio page",
+      "excerpt": "Portfolio → https://www.spacecapital.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-243a260502",
+      "url": "https://www.spacecapital.com/blogs/skywatch-pixels-become-applications",
+      "title": "Space Capital — application page",
+      "excerpt": "Portfolio → https://www.spacecapital.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3182eccab8",
+      "url": "https://www.spacecapital.com/blogs/mapping-companies-improving-everyday-life-part-1",
+      "title": "Space Capital — portfolio page",
+      "excerpt": "Portfolio → https://www.spacecapital.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-3a139efa42",
       "url": "https://www.spacecapital.com/about",
-      "title": "Space Capital — details page checked by scrape.py",
+      "title": "Space Capital — program page",
       "excerpt": "Portfolio → https://www.spacecapital.com/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-441726b0b9",
       "url": "https://www.spacecapital.com/about",
-      "title": "Space Capital — details page checked by scrape.py",
+      "title": "Space Capital — program page",
       "excerpt": "See the full portfolio → https://www.spacecapital.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-65a1477c18",
+      "url": "https://www.spacecapital.com/portfolio/afference",
+      "title": "Space Capital — portfolio page",
+      "excerpt": "Back to companies → https://www.spacecapital.com/portfolio#companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-664a751ec7",
+      "url": "https://www.spacecapital.com/portfolio/all-space",
+      "title": "Space Capital — portfolio page",
+      "excerpt": "Back to companies → https://www.spacecapital.com/portfolio#companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-6b3feb6689",
+      "url": "https://www.spacecapital.com/portfolio/arbol",
+      "title": "Space Capital — portfolio page",
+      "excerpt": "Portfolio → https://www.spacecapital.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-6e62c503e0",
+      "url": "https://www.spacecapital.com/portfolio/akin",
+      "title": "Space Capital — portfolio page",
+      "excerpt": "Back to companies → https://www.spacecapital.com/portfolio#companies",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-775fdab5e7",
       "url": "https://www.spacecapital.com/",
-      "title": "Space Capital — homepage checked by scrape.py",
+      "title": "Space Capital — homepage",
       "excerpt": "Portfolio → https://www.spacecapital.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-8b4db1970d",
+      "url": "https://www.spacecapital.com/space-iq",
+      "title": "Space Capital — terms page",
+      "excerpt": "Portfolio → https://www.spacecapital.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-92ee4ce629",
+      "url": "https://www.spacecapital.com/blogs/mapping-companies-improving-everyday-life-part-2",
+      "title": "Space Capital — portfolio page",
+      "excerpt": "Portfolio → https://www.spacecapital.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-a8ab82835b",
+      "url": "https://www.spacecapital.com/blogs/evaluating-seed-stage-investment-opportunities",
+      "title": "Space Capital — terms page",
+      "excerpt": "Portfolio → https://www.spacecapital.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-bf15ef388a",
       "url": "https://www.spacecapital.com/",
-      "title": "Space Capital — homepage checked by scrape.py",
+      "title": "Space Capital — homepage",
       "excerpt": "document.addEventListener('DOMContentLoaded', () => { const poster = document.querySelector('[mobile-hero-poster]'); if (!poster) return; const video = document.createElement('video'); video.autoplay = true; video.muted = true; video.playsInline = true; video.loop = true; video.setAttribute('mobile-hero-video', ''); const source = document.createElement('source'); // source.src = 'https://js.spacecapital.com/videos/mobile-orbit_video.webm'; source.src = 'https://js.spacecapital.com/videos/orbit_video(h.265).mp4'; video.appendChild(source); video.addEventListener('canplay', () => { poster.replaceWith(video); }, { once: true }); video.load(); }); [mobile-hero-video] { display: flex; } → https://www.spacecapital.com/portfolio",
       "page": "details"
     },
     {
-      "id": "check-route-5000c96e31",
-      "url": "https://www.spacecapital.com/about",
-      "title": "Space Capital — details page checked by scrape.py",
-      "excerpt": "Reports & Playbooks Investment frameworks for understanding the space economy as a stack of infrastructure, distribution, and applications. GPS, GEOINT, SatComm and more. → https://www.spacecapital.com/research",
-      "page": "details"
+      "id": "check-portfolio-cda615ac62",
+      "url": "https://www.spacecapital.com/portfolio/allevi",
+      "title": "Space Capital — portfolio page",
+      "excerpt": "Back to companies → https://www.spacecapital.com/portfolio#companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-d3d35b4d2f",
+      "url": "https://www.spacecapital.com/terms-of-service",
+      "title": "Space Capital — terms page",
+      "excerpt": "Portfolio → https://www.spacecapital.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-de2d43b4df",
+      "url": "https://www.spacecapital.com/portfolio/arbol",
+      "title": "Space Capital — portfolio page",
+      "excerpt": "Back to companies → https://www.spacecapital.com/portfolio#companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-f2e89f8aa9",
+      "url": "https://www.spacecapital.com/research",
+      "title": "Space Capital — terms page",
+      "excerpt": "Portfolio → https://www.spacecapital.com/portfolio",
+      "page": "terms"
     },
     {
       "id": "check-route-ebaa1e28f2",
       "url": "https://www.spacecapital.com/",
-      "title": "Space Capital — homepage checked by scrape.py",
+      "title": "Space Capital — homepage",
       "excerpt": "https://www.spacecapital.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-cede068d3a",
+      "url": "https://www.spacecapital.com/",
+      "page": "details",
+      "excerpt": "Space Capital | Space Tech for the Real World LP LOGIN About Portfolio Research Summit Investors TALENT If you would like to share your ideas, business, or feedback with us, please email us. All business plan submissions must include a clear description of your operations and current progress. Email: launch@spacecapital.com Linkedin Youtube Twitter/X LP LOGIN LP LOGIN see full portfolio SPACE TECH FOR THE REAL WORLD Investing in the Invisible Backbone that Powers the Global Economy Space-BASED TECHNOLOGIES ARE THE BUILDING BLOCKS OF INNOVATION ON EARTH Satellites -- GPS, geospatial intelligence, and satellite communications -- are already the invisible backbone that powers the world's largest industries today. GPS alone has generated trillions of dollars in economic value. Geospatial intelligence and satellite communications are following the same trajectory. We understand the space economy ‍ at a fundamentally deep leveL Our partners have built rockets and satellites, founded successful space companies, and driven major exits – including the $500M Skybox sale to Google as CEO We've been pioneering investment in this category for over a decade, and we’re better positioned than ever to capture the outsized returns in this next wave. 0:00 / 0:00 We don't follow playbooks We write them We authored The Space Economy , published by Wiley, and created the GPS, GEOINT, and SatCom"
+    },
+    {
+      "id": "check-page-12c4b54b3f",
+      "url": "https://www.spacecapital.com/blogs/skywatch-pixels-become-applications",
+      "page": "application",
+      "excerpt": "Space Capital | Insights | SkyWatch: Where Pixels Become Applications LP LOGIN About Portfolio Research Summit Investors TALENT If you would like to share your ideas, business, or feedback with us, please email us. All business plan submissions must include a clear description of your operations and current progress. Email: launch@spacecapital.com Linkedin Youtube Twitter/X LP LOGIN LP LOGIN Back to blog Published July 25, 2025 SkyWatch: Where Pixels Become Applications SkyWatch makes commercial imagery instantly usable in ArcGIS, powering real-time decisions and GeoAI. Leveling Up Geospatial in the Modern Data Stack In early 2025, a pivotal moment arrived for the world of geospatial intelligence. For decades, professionals working within Esri’s ArcGIS platform, urban planners, land managers, insurers, infrastructure operators, and many more have relied on Earth observation (EO) data to inform critical decision-making. Yet despite the growing abundance of commercial satellite and aerial imagery, integrating that data into daily workflows has remained a time-consuming and fragmented process. For many users, acquiring the right imagery and preparing it for use could take days, or even weeks, during which its value increasingly diminished. That changed with the launch of the Content Store for ArcGIS , a native integration developed jointly by Esri , the global leader in"
+    },
+    {
+      "id": "check-page-b96953e4b7",
+      "url": "https://www.spacecapital.com/blogs/evaluating-seed-stage-investment-opportunities",
+      "page": "terms",
+      "excerpt": "Space Capital | Insights | Evaluating Seed Stage Investment Opportunities LP LOGIN About Portfolio Research Summit Investors TALENT If you would like to share your ideas, business, or feedback with us, please email us. All business plan submissions must include a clear description of your operations and current progress. Email: launch@spacecapital.com Linkedin Youtube Twitter/X LP LOGIN LP LOGIN Back to blog Published June 9, 2021 Evaluating Seed Stage Investment Opportunities The Space Capital diligence process involves a collaborative effort across the Space Capital team and network to develop a 360 degree view of the company, its founders and partners, its customers, its goals, and ultimately its needs. Seed investing is far from an exact science. Because early-stage companies do not yet have a history of revenue and growth, investors must rely on observations and past experience to make judgments about the growth potential of the prospective company. This reliance on intuition and subjective information means there is all the more value in a systematic, institutional process that is respectful of the founder's time. And it is designed to quickly reach an informed decision on the most promising space technology companies to invest in. In this blog post, we share insights into Space Capital’s four-step investment process for Seed stage investing: Alignment: Thesis and Value"
+    },
+    {
+      "id": "check-page-7a91c2ed1f",
+      "url": "https://www.spacecapital.com/terms-of-service",
+      "page": "terms",
+      "excerpt": "Space Capital | Terms of Use LP LOGIN About Portfolio Research Summit Investors TALENT If you would like to share your ideas, business, or feedback with us, please email us. All business plan submissions must include a clear description of your operations and current progress. Email: launch@spacecapital.com Linkedin Youtube Twitter/X LP LOGIN LP LOGIN Terms of Use Updated March 27, 2020 TERMS OF USE Please read the following terms and conditions. They govern your use of this website and its associated services, including the email newsletter. By using this website, you agree to be bound by these terms and conditions, which may be updated from time and time and posted on this Terms of Use page. To EU Residents: Space Capital processes your personal data in accordance with the General Data Protection Regulation (EU) 2016/679 (“GDPR”). Additional notifications required by the GDPR can be found in our GDPR Privacy Notice accessible here . Except as otherwise noted in this website, all content and material on this website—including information, photos, podcasts, blog posts, graphics/charts, icons, code, design and overall appearance—are the property of Space Capital and should not be used, modified or reproduced without our prior written consent. All trademarks, trade names and logos displayed on this website are the property of Space Capital, its affiliates or their respective"
+    },
+    {
+      "id": "check-page-9a86e5893d",
+      "url": "https://www.spacecapital.com/about",
+      "page": "details",
+      "excerpt": "About | Space Capital LP LOGIN About Portfolio Research Summit Investors TALENT If you would like to share your ideas, business, or feedback with us, please email us. All business plan submissions must include a clear description of your operations and current progress. Email: launch@spacecapital.com Linkedin Youtube Twitter/X LP LOGIN LP LOGIN About space Capital Founded in 2012, Space Capital is a venture capital firm with over $1 billion AUM investing at the intersection of space technology and global markets. We understand the space economy at a fundamentally deep level. Our partners have built advanced rockets and satellites. We have founded companies with assets currently in orbit and have led multiple category-defining exits as CEO, including the $500M sale of Skybox Imaging to Google. We've been pioneering investment in this category for over 10 years and we've written the book on the sector with The Space Economy, published by Wiley. 10+ Years Pioneering the category 4 Institutional funds $1B+ Assets under management 2012 Founded Our Thesis Space-based technologies are the building blocks of innovation on Earth. GPS, geospatial intelligence, and satellite communications are already the invisible backbone powering the world’s largest industries. GPS alone has generated trillions in cumulative economic value, and we believe it provides a playbook for how space-based"
+    },
+    {
+      "id": "check-page-c46dc1c183",
+      "url": "https://www.spacecapital.com/research",
+      "page": "terms",
+      "excerpt": "Space Venture Capital Blog & News | Space Capital | Research LP LOGIN About Portfolio Research Summit Investors TALENT If you would like to share your ideas, business, or feedback with us, please email us. All business plan submissions must include a clear description of your operations and current progress. Email: launch@spacecapital.com Linkedin Youtube Twitter/X LP LOGIN LP LOGIN REPORTS SPACE IQ The SPACE ECONOMY BOOK Blog NEWSROOM {{msg.text}} loading loading Read more about us {{ window.getRelatedLinkCardLabel(relatedLink.url) }} {{ relatedLink.title }} {{ relatedLink.description }} Read more Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. About Research Portfolio TALENT Summit investors Stay up to date on the latest news This field is required This field is required Please enter a valid email address Subscribe Now Thanks, you'll hear from us shortly. Submit another email Oops! Something went wrong while submitting the form. If you would like to share your ideas, business, or feedback with us, please email us. All business plan submissions must include a clear description of your operations and current progress Email: launch@spacecapital.com Privacy Policy Terms of Use 2026 Space Capital. All Rights Reserved."
+    },
+    {
+      "id": "check-page-83175d5eb4",
+      "url": "https://www.spacecapital.com/space-iq",
+      "page": "terms",
+      "excerpt": "How Much Is Invested in the Space Economy? | Space IQ — Space Capital LP LOGIN About Portfolio Research Summit Investors TALENT If you would like to share your ideas, business, or feedback with us, please email us. All business plan submissions must include a clear description of your operations and current progress. Email: launch@spacecapital.com Linkedin Youtube Twitter/X LP LOGIN LP LOGIN Space Investment Quarterly Space IQ is Space Capital's quarterly report on private market startup activity and investment trends in the space economy, manually curated from 3,000+ companies and briefed each quarter from Nasdaq MarketSite. SPACE IQ Watch the Briefing Watch the Briefing GET THE REPORT GET THE REPORT Space IQ has been cited by the U.S. Department of Commerce, and its findings have been covered by Reuters, the Financial Times, SpaceNews, and CNBC. Nasdaq is Space Capital's institutional partner on the space economy and hosts the quarterly Space IQ Briefing at Nasdaq MarketSite. Data ‍ VISUALIZATION $519 billion invested across the space economy since 2009. Explore the dataset, manually curated and classified across Infrastructure, Distribution, and Applications. Learn more about Our Methodology. GET THE LATEST REPORT Q3 2026 Space Investment Quarterly This field is required Please enter a valid first name Please enter a valid last name Please enter a valid email address Which"
+    },
+    {
+      "id": "check-page-986c4dec60",
+      "url": "https://www.spacecapital.com/blogs/mapping-companies-improving-everyday-life-part-1",
+      "page": "portfolio",
+      "excerpt": "Space Capital | Insights | Mapping companies that are improving your everyday life - Part 1 LP LOGIN About Portfolio Research Summit Investors TALENT If you would like to share your ideas, business, or feedback with us, please email us. All business plan submissions must include a clear description of your operations and current progress. Email: launch@spacecapital.com Linkedin Youtube Twitter/X LP LOGIN LP LOGIN Back to blog Published December 20, 2021 Mapping companies that are improving your everyday life - Part 1 Maps are one of the most revolutionary creations of mankind. Maps and their evolution revolutionize every era in which we live and have lived. Maps are one of the most revolutionary creations of mankind. As a picture is worth a thousand words and maps are made of millions of pictures, maps deliver an instant understanding of our surroundings because the power of visualization is so intuitive to us. It is an elegant way to make us aware of where we are and can take us to where we want to go in our everyday lives. But what many people have not realized is that maps have played such an invaluable part in the history of realizing humanity’s prosperity, and they will be an even more integral part in everyone’s daily activities in the journey beyond. From the earliest hand-drawn paper maps to the rise of Geographic Information Systems (GIS) companies, maps have come a"
+    },
+    {
+      "id": "check-page-788cc03af7",
+      "url": "https://www.spacecapital.com/blogs/mapping-companies-improving-everyday-life-part-2",
+      "page": "portfolio",
+      "excerpt": "Space Capital | Insights | Mapping companies that are improving your everyday life - Part 2 LP LOGIN About Portfolio Research Summit Investors TALENT If you would like to share your ideas, business, or feedback with us, please email us. All business plan submissions must include a clear description of your operations and current progress. Email: launch@spacecapital.com Linkedin Youtube Twitter/X LP LOGIN LP LOGIN Back to blog Published December 22, 2021 Mapping companies that are improving your everyday life - Part 2 Mapping may have started as a simple way of figuring out how to get from location A to location B, but it has now evolved into a staple part of life. Mapping may have started as a simple way of figuring out how to get from location A to location B, but it has now evolved into a staple part of life. But now, the future of new GIS applications such as Mapbox and Niantic, uncover what they are doing to improve our everyday lives. ‍ Powering Location-based Services ‍ Mapbox When you use Instacart to deliver a big bag of groceries to your home in a matter of hours, have you ever wondered who is behind the elegant delivery tracking window? Mapbox is. Mapbox is the platform that powers the location technology in apps. Developers use them to add live location into their applications, such as embedded maps, navigation, and search services to mobile and web applications,"
+    },
+    {
+      "id": "check-page-7240bb61a2",
+      "url": "https://www.spacecapital.com/portfolio",
+      "page": "portfolio",
+      "excerpt": "Portfolio | Space Capital LP LOGIN About Portfolio Research Summit Investors TALENT If you would like to share your ideas, business, or feedback with us, please email us. All business plan submissions must include a clear description of your operations and current progress. Email: launch@spacecapital.com Linkedin Youtube Twitter/X LP LOGIN LP LOGIN THE DEFINITIVE SPACE PORTFOLIO The market leaders, category creators, and most consequential companies in the space economy. SpaceX 01 / 05 Planet 01 / 05 Impulse Space 01 / 05 Muon Space 01 / 05 Learn more All Tech Layers Applications Distribution Infrastructure All Industries Satellites Launch Stations Logistics Lunar Industrials Afference Satellites , GEOINT , Applications aKin Stations , Services , Infrastructure Allevi Stations , Services , Infrastructure ALL.SPACE Satellites , SatCom , Distribution Arbol Satellites , GEOINT , Applications Armada Satellites , SatCom , Distribution Astrobotic Lunar , Transport , Infrastructure Asymm Satellites , SatCom , Infrastructure Atlas Space Operations Satellites , SatCom , Distribution Bliq Satellites , GPS , Applications BridgeComm Satellites , SatCom , Distribution Canada Rocket Company Launch , Small , Infrastructure ClearRoad Satellites , GPS , Applications Cognitive3D Satellites , GPS , Distribution dataPlor Satellites , GPS , Applications dClimate Satellites , GEOINT , Applications"
+    },
+    {
+      "id": "check-page-e80a80b57c",
+      "url": "https://www.spacecapital.com/portfolio/afference",
+      "page": "portfolio",
+      "excerpt": "Afference | Wearable Technology | Space Capital LP LOGIN About Portfolio Research Summit Investors TALENT If you would like to share your ideas, business, or feedback with us, please email us. All business plan submissions must include a clear description of your operations and current progress. Email: launch@spacecapital.com Linkedin Youtube Twitter/X LP LOGIN LP LOGIN Back to companies Afference Founded in 2022 Boulder, CO, USA Afference is building wearables that create tactile sensations using direct neural stimulation to enable digital interactions for the Spatial Computing era. Explore the Company Explore the Company Why We Invested Why We Invested COMPANY OVERVIEW Afference is a hardware-enabled software company at the forefront of Spatial Computing, which involves the digitization and interaction with real-world spaces through digital devices. It is poised to transform how users interact with digital content. Current input methods, such as hand tracking technologies lack any tactile feedback, which is crucial for sensory perception involving vision, sound, and touch. Afference addresses this gap with their innovative haptic device, “The Phantom”. This glovelet device creates an artificial sensation of touch through neurostimulation. Unlike existing bulky and tethered haptic devices, The Phantom is non-invasive, supports hand tracking, has a longer battery life than the"
+    },
+    {
+      "id": "check-page-1b60903685",
+      "url": "https://www.spacecapital.com/portfolio/akin",
+      "page": "portfolio",
+      "excerpt": "aKin | Portfolio company | Space Capital LP LOGIN About Portfolio Research Summit Investors TALENT If you would like to share your ideas, business, or feedback with us, please email us. All business plan submissions must include a clear description of your operations and current progress. Email: launch@spacecapital.com Linkedin Youtube Twitter/X LP LOGIN LP LOGIN Back to companies aKin Founded in 2018 Haymarket, New South Wales Akin is developing advanced AI models for a future where AI and humans coexist harmoniously, focusing on applications across healthcare, space, and daily living. Explore the Company Explore the Company Why We Invested Why We Invested COMPANY OVERVIEW Akin develops advanced AI systems at the intersection of neuroscience, chaos theory, and AI, focusing on symbiotic AI that adapts dynamically to users and environments. The company creates AI solutions for various sectors, including healthcare, government, and space exploration, aiming to foster a future where AI and humanity coexist harmoniously. Akin's AI applications range from personal assistants for daily living to sophisticated analytics tools for clinicians, emphasizing ethical development and public benefit. THESIS FIT As humanity takes its first steps to become an interplanetary society, the leading minds are building key capabilities that bridge launch to boots on the ground. Akin focuses on a new"
+    },
+    {
+      "id": "check-page-8902e6ce92",
+      "url": "https://www.spacecapital.com/portfolio/all-space",
+      "page": "portfolio",
+      "excerpt": "ALL.SPACE | Portfolio company | Space Capital LP LOGIN About Portfolio Research Summit Investors TALENT If you would like to share your ideas, business, or feedback with us, please email us. All business plan submissions must include a clear description of your operations and current progress. Email: launch@spacecapital.com Linkedin Youtube Twitter/X LP LOGIN LP LOGIN Back to companies ALL.SPACE Founded in 2013 London, England, UK All.Space provides multi-band, multi-orbit satellite antennas to connect next generation satellite and terrestrial communications networks. Explore the Company Explore the Company Why We Invested Why We Invested COMPANY OVERVIEW All.Space aims to bring high throughput satellite communications to scale through radical price and performance disruption. All.Space is leveraging its optical technology to develop all-electric, multi-beam, low power, multi-frequency smart terminals at a fraction of today’s cost and with a step-change in performance. THESIS FIT All.Space provides a step change in SatCom terminals, delivering a single antenna to communicate across bands, orbits, and even providers. The company is a key part of our SatCom strategy, where we see the terrestrial and satellite-based networks converging to deliver ubiquitous connectivity. NOTABLE CO-INVESTORS About Research Portfolio TALENT Summit investors Stay up to date on the latest news This"
+    },
+    {
+      "id": "check-page-69dd9dd53c",
+      "url": "https://www.spacecapital.com/portfolio/allevi",
+      "page": "portfolio",
+      "excerpt": "Allevi | Portfolio company | Space Capital LP LOGIN About Portfolio Research Summit Investors TALENT If you would like to share your ideas, business, or feedback with us, please email us. All business plan submissions must include a clear description of your operations and current progress. Email: launch@spacecapital.com Linkedin Youtube Twitter/X LP LOGIN LP LOGIN Back to companies Allevi Founded in 2014 Philadelphia, Pennsylvania Allevi is pioneering the field of 3D bioprinting by offering advanced bioprinters and bioinks that enable researchers to engineer living tissues for various applications. Explore the Company Explore the Company Why We Invested Why We Invested COMPANY OVERVIEW Through its versatile bioprinting platforms which can impact tissue engineering, organ-on-a-chip development, and pharmaceutical, Allevi empowers scientists to design and create complex tissue structures efficiently, advancing research in regenerative medicine and biomedical innovation. THESIS FIT Allevi's accessible and versatile platforms simplify biofabrication, accelerating biomedical innovation. This aligns with Space Capital's investment thesis of advancing cutting-edge technology that supports groundbreaking research and fosters scalable solutions in critical industries like healthcare and life sciences. NOTABLE CO-INVESTORS No items found. About Research Portfolio TALENT Summit"
+    },
+    {
+      "id": "check-page-b2809bd529",
+      "url": "https://www.spacecapital.com/portfolio/arbol",
+      "page": "portfolio",
+      "excerpt": "Arbol | Portfolio company | Space Capital LP LOGIN About Portfolio Research Summit Investors TALENT If you would like to share your ideas, business, or feedback with us, please email us. All business plan submissions must include a clear description of your operations and current progress. Email: launch@spacecapital.com Linkedin Youtube Twitter/X LP LOGIN LP LOGIN Back to companies Arbol Founded in 2018 New York, NY, USA Arbol is developing an insurance marketplace that connects weather exposed entities with capital providers including insurers and asset managers. Arbol’s parametric insurance platform removes information asymmetry and reduces administrative costs by leveraging objective data from satellites and weather stations. Explore the Company Explore the Company Why We Invested Why We Invested COMPANY OVERVIEW Weather is one of the primary sources of risk on the planet directly affecting the livelihoods of over 2.5 billion people and 70% of all businesses. Parametric weather insurance is based on predetermined, verifiable, and objective metrics that customers choose at the beginning of their contract, such as yearly deviation in rainfall amounts or temperature. After deciding on a premium and selecting a payout amount, the end user relies on Arbol’s platform to handle the rest. THESIS FIT Arbol has created a marketplace for parametric insurance leveraging a variety of"
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [
-      {
-        "value": "https://www.spacecapital.com/research",
-        "evidenceId": "check-route-5000c96e31"
-      }
-    ],
+    "routes": [],
     "applicationUrl": [
       {
         "value": "https://www.spacecapital.com/",
@@ -74,12 +307,33 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-3e97015b35"
+      }
+    ],
+    "location": [
+      {
+        "value": "New York County",
+        "evidenceId": "check-location-92968ea590"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.spacecapital.com/portfolio",
         "evidenceId": "check-portfolio-775fdab5e7"
+      },
+      {
+        "value": "https://www.spacecapital.com/portfolio#companies",
+        "evidenceId": "check-portfolio-65a1477c18"
       }
     ],
     "name": [

@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.startmate.com/",
   "applyUrl": "https://www.startmate.com/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founde No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Startmate backs ANZ's most ambitious founders with $120k, a 14-week Accelerator and mentors who invest. Summer '27 applications close 8 November.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "For 15 years we have invested in and supercharged the best founders in ANZ. It doesn't matter where you are on your founder journey - aspiring or proven - Startmate's DNA is giving founders an unfair advantage.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "startmate-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.startmate.com/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

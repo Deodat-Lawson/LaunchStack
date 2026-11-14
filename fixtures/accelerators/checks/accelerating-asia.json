@@ -1,215 +1,927 @@
 {
   "programId": "accelerating-asia",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.acceleratingasia.com/",
-    "https://www.acceleratingasia.com/getfunded",
-    "https://www.acceleratingasia.com/about",
-    "https://www.acceleratingasia.com/latest-news/acceleratingasia-the-dealflow-behind-fund2"
+    "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-724-applications",
+    "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-applications",
+    "https://www.acceleratingasia.com/latest-news/why-weve-launched-applications-for-a-gender-advisory-committee",
+    "https://www.acceleratingasia.com/latest-news/accelerating-asia-doubles-down-on-investment-startups-to-receive-s-200-000",
+    "https://www.acceleratingasia.com/latest-news/acceleratingasia-101-investments",
+    "https://www.acceleratingasia.com/latest-news/acceleratingasia-how-we-evaluate",
+    "https://www.acceleratingasia.com/latest-news/acceleratingasia-the-dealflow-behind-fund2",
+    "https://www.acceleratingasia.com/latest-news/chatgenie-raises-investment",
+    "https://www.acceleratingasia.com/latest-news/cohort-10-startup-investments",
+    "https://www.acceleratingasia.com/latest-news/craigs-startup-investment-terms-traffic-light",
+    "https://www.acceleratingasia.com/latest-news/five-ways-to-increase-investor-deal-flow",
+    "https://www.acceleratingasia.com/latest-news/introducing-new-investments-cohort-6",
+    "https://www.acceleratingasia.com/latest-news/tag/dealflow",
+    "https://www.acceleratingasia.com/latest-news/whats-the-deal-with-safe-notes-craig-explains"
   ],
   "evidence": [
     {
-      "id": "check-deal-16694250ed",
-      "url": "https://www.acceleratingasia.com/getfunded",
-      "title": "Accelerating Asia — batches page checked by scrape.py",
-      "excerpt": "an initial US$100k investment from Accelerating Asia Ventures' early-stage venture capital fund once you clear conditions precedent and a further potential US$150k in investment after the program. You can read more about our investment terms here . Where does my investment come from? Accelerating Asia Ventures operates",
-      "page": "batches"
+      "id": "check-announced-00909001f0",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-101-investments",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": ". Or email the details to us at team@acceleratingasia.com . Applications close February 15. See more details below ⬇️ For investors interested in",
+      "page": "terms"
     },
     {
-      "id": "check-deal-5b380a7c2e",
-      "url": "https://www.acceleratingasia.com/getfunded",
-      "title": "Accelerating Asia — batches page checked by scrape.py",
-      "excerpt": "product” Tasfia Tasbin & Rubaiyat F﻿. C﻿O-FOUNDERS MARKOPOLO﻿.AI WHAT WE OFFER STARTUPS 🡐 WHAT WE OFFER STARTUPS 🡐 Benefits from Day One Investment: Up to US$250k Accelerating Asia Ventures invests up to US$250k into pre-Series A tech startups through our early stage Venture Capital fund into startups joining our",
-      "page": "batches"
+      "id": "check-announced-106f71d50a",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-how-we-evaluate",
+      "title": "Accelerating Asia — application page",
+      "excerpt": ". Or email the details to us at team@acceleratingasia.com . Applications close February 15. See more details below ⬇️ Applications Open for Cohort 13",
+      "page": "application"
     },
     {
-      "id": "check-deal-756395a96f",
-      "url": "https://www.acceleratingasia.com/getfunded",
-      "title": "Accelerating Asia — batches page checked by scrape.py",
-      "excerpt": "up to US$250k into pre-Series A tech startups through our early stage Venture Capital fund into startups joining our flagship accelerator program. We invest US$100k up front with a potential US$150k in follow-on funding. Tailored Advice & Program Growth, business models. scaling, fundraising, and marketing, our expert",
-      "page": "batches"
+      "id": "check-announced-70f8bd5f9d",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-101-investments",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "due diligence. By the end, we know who can execute under pressure. Cohort 13 applications are now open until February 15. Apply here: https://www.acceleratingasia.com/getfunded If you",
+      "page": "terms"
     },
     {
-      "id": "check-deal-f12fcef22c",
-      "url": "https://www.acceleratingasia.com/getfunded",
-      "title": "Accelerating Asia — batches page checked by scrape.py",
-      "excerpt": "of ex Founders,, we know the value of getting investors that align with your vision and growth trajectory. As an independent VC accelerator we invest up to US$250k in startups who are part of our flagship program via a SAFE note. Separate to the investment, we also charge an additional program fee of US$35k and 3% equity",
-      "page": "batches"
+      "id": "check-announced-778ede77fa",
+      "url": "https://www.acceleratingasia.com/latest-news/introducing-new-investments-cohort-6",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "about investing alongside us. The invite only Demo Day for Cohort 6 will be held on June 30, more information on how to apply to attend can be found here ‍",
+      "page": "terms"
+    },
+    {
+      "id": "check-announced-81b41e3cc7",
+      "url": "https://www.acceleratingasia.com/latest-news/cohort-10-startup-investments",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "to announce the newest faces at Accelerating Asia Ventures: Meet Cohort 10! Oct 2 Written by Amra Naidoo 💪 These 9 startups are some seriously",
+      "page": "terms"
+    },
+    {
+      "id": "check-announced-8c67454cd0",
+      "url": "https://www.acceleratingasia.com/",
+      "title": "Accelerating Asia — homepage",
+      "excerpt": "Sherwin Sinio Read more → Sherwin Sinio NEWS EVENTS Events Jan 14 Cohort 14 Demo Day - SINGAPORE Read more → Jan 21 Cohort 14 Virtual Demo Day (Live in Zoom) Read more → Get in",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-d7dfa0d500",
+      "url": "https://www.acceleratingasia.com/latest-news/why-weve-launched-applications-for-a-gender-advisory-committee",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "investment ecosystem. This opportunity is open to everyone to apply. Applications close on 17 January. Apply here ‍ Amra Naidoo",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-eb4a2dbe0b",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-how-we-evaluate",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "Founders who engage with feedback do. That's it. No secret formula. Cohort 13 applications are now open until February 15. Apply here: https://www.acceleratingasia.com/getfunded If you",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-244694137d",
+      "url": "https://www.acceleratingasia.com/latest-news/whats-the-deal-with-safe-notes-craig-explains",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "as a result of the investment in the SAFE. In this case it is $100,000/$2,000,000 = 5% ‍ Now, the amount the investor actually receives",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-6d0ca3d598",
+      "url": "https://www.acceleratingasia.com/latest-news/accelerating-asia-doubles-down-on-investment-startups-to-receive-s-200-000",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "early-stage startup accelerators in the region who are investing SG$100,000 or less in their startups in exchange for equity. ‍ “Over the past",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-796491dcf1",
+      "url": "https://www.acceleratingasia.com/latest-news/whats-the-deal-with-safe-notes-craig-explains",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "involved. Example Let’s assume an Angel investor decides to invest $100,000 in an early stage startup at the following terms: ‍ SAFE ‍ Investment",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-88fb5af8a8",
+      "url": "https://www.acceleratingasia.com/latest-news/whats-the-deal-with-safe-notes-craig-explains",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "the valuation cap of the SAFE? $4,000,000 is larger than the cap of $2,000,000 so the answer is no. Therefore, the cap will be used to convert the",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-8a7046c8d5",
+      "url": "https://www.acceleratingasia.com/latest-news/whats-the-deal-with-safe-notes-craig-explains",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "The minimum raise needed to trigger the SAFE conversion is $500,000 and the investment amount for the new round is $1,000,000 so the SAFE",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-a14171054c",
+      "url": "https://www.acceleratingasia.com/latest-news/whats-the-deal-with-safe-notes-craig-explains",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "is $500,000 and the investment amount for the new round is $1,000,000 so the SAFE is triggered. ‍ In order to determine the valuation that",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-b2c224eadb",
+      "url": "https://www.acceleratingasia.com/latest-news/whats-the-deal-with-safe-notes-craig-explains",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "a result of the investment in the SAFE. In this case it is $100,000/$2,000,000 = 5% ‍ Now, the amount the investor actually receives will be",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-c63aa6ab35",
+      "url": "https://www.acceleratingasia.com/latest-news/whats-the-deal-with-safe-notes-craig-explains",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "‍ Investment $100,000 Cap $2,000,000 Discount 20% Qualifying Round $500,000 ‍ Now let’s assume a Venture Capital fund decides to invest in the",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-ca7f427f51",
+      "url": "https://www.acceleratingasia.com/latest-news/whats-the-deal-with-safe-notes-craig-explains",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "an early stage startup at the following terms: ‍ SAFE ‍ Investment $100,000 Cap $2,000,000 Discount 20% Qualifying Round $500,000 ‍ Now let’s",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-ee9945a2c9",
+      "url": "https://www.acceleratingasia.com/latest-news/whats-the-deal-with-safe-notes-craig-explains",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "startup at the following terms: ‍ SAFE ‍ Investment $100,000 Cap $2,000,000 Discount 20% Qualifying Round $500,000 ‍ Now let’s assume a Venture",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f6aa63e76c",
+      "url": "https://www.acceleratingasia.com/latest-news/accelerating-asia-doubles-down-on-investment-startups-to-receive-s-200-000",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "is changing how it invests, with startups eligible to receive up to S$200,000 investment from Accelerating Asia via a SAFE note for around 7-10",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-1f0675b09c",
+      "url": "https://www.acceleratingasia.com/latest-news/chatgenie-raises-investment",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "who want to try the features of ChatGenie, a 3-month ChatGenie Pro subscription for free to help them",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-9175a899fa",
+      "url": "https://www.acceleratingasia.com/latest-news/chatgenie-raises-investment",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "in the INQBATION: Leveling up B2B Startups 6-month program because we saw how much they grew during",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-df94708ab6",
+      "url": "https://www.acceleratingasia.com/latest-news/cohort-10-startup-investments",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "A few snappy facts about Cohort 10: 🚀 We are 1 month into the start of the program and the founders",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-0730c7ca27",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "team@acceleratingasia.com and we'll get back to yo",
+      "page": "application"
+    },
+    {
+      "id": "check-email-11cf27860d",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "and we'll send access. Ask a question first. Email team@acceleratingasia.com and we'll get back to yo u. Ready to invest? Book a call",
+      "page": "application"
+    },
+    {
+      "id": "check-email-1790279587",
+      "url": "https://www.acceleratingasia.com/latest-news/tag/dealflow",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Privacy Policy Cookie Policy SUPPORT LINKS GET IN TOUCH team@acceleratingasia.com Copyright © 2022 Accelerating Asia Pte Ltd. All Rights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-231e5d494b",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-724-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "and we'll send access. Ask a question first. Email team@acceleratingasia.com and we'll get back to yo u. Ready to invest? Book a call",
+      "page": "application"
+    },
+    {
+      "id": "check-email-2f3c45fb24",
+      "url": "https://www.acceleratingasia.com/latest-news/cohort-10-startup-investments",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Privacy Policy Cookie Policy SUPPORT LINKS GET IN TOUCH team@acceleratingasia.com Copyright © 2022 Accelerating Asia Pte Ltd. All Rights",
+      "page": "terms"
     },
     {
       "id": "check-email-32eb036eda",
       "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-the-dealflow-behind-fund2",
-      "title": "Accelerating Asia — terms page checked by scrape.py",
+      "title": "Accelerating Asia — terms page",
       "excerpt": ". Then review the fund and portfolio , or email team@acceleratingasia.com to talk through your questions with us. Start with the",
       "page": "terms"
     },
     {
+      "id": "check-email-364a0c1fdf",
+      "url": "https://www.acceleratingasia.com/latest-news/accelerating-asia-doubles-down-on-investment-startups-to-receive-s-200-000",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Privacy Policy Cookie Policy SUPPORT LINKS GET IN TOUCH team@acceleratingasia.com Copyright © 2022 Accelerating Asia Pte Ltd. All Rights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-4ebdec5f6e",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-724-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "See the portfoli (team@acceleratingasia.com)",
+      "page": "application"
+    },
+    {
+      "id": "check-email-4ef2b090a7",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "Craig & Amra General P (team@acceleratingasia.com)",
+      "page": "application"
+    },
+    {
+      "id": "check-email-5108d145b3",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-how-we-evaluate",
+      "title": "Accelerating Asia — application page",
+      "excerpt": ". Or email the details to us at team@acceleratingasia.com . Applications close February 15. See more details below",
+      "page": "application"
+    },
+    {
       "id": "check-email-59f1dc4018",
       "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-the-dealflow-behind-fund2",
-      "title": "Accelerating Asia — terms page checked by scrape.py",
+      "title": "Accelerating Asia — terms page",
       "excerpt": "Privacy Policy Cookie Policy SUPPORT LINKS GET IN TOUCH team@acceleratingasia.com Copyright © 2022 Accelerating Asia Pte Ltd. All Rights",
       "page": "terms"
     },
     {
       "id": "check-email-67e1594734",
       "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-the-dealflow-behind-fund2",
-      "title": "Accelerating Asia — terms page checked by scrape.py",
+      "title": "Accelerating Asia — terms page",
       "excerpt": "team@acceleratingasia.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-6f784070fe",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-724-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "Ventures (team@acceleratingasia.com)",
+      "page": "application"
+    },
+    {
+      "id": "check-email-70ce7e875e",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-how-we-evaluate",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "Privacy Policy Cookie Policy SUPPORT LINKS GET IN TOUCH team@acceleratingasia.com Copyright © 2022 Accelerating Asia Pte Ltd. All Rights",
+      "page": "application"
+    },
+    {
+      "id": "check-email-7a023ea9d3",
+      "url": "https://www.acceleratingasia.com/latest-news/craigs-startup-investment-terms-traffic-light",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Privacy Policy Cookie Policy SUPPORT LINKS GET IN TOUCH team@acceleratingasia.com Copyright © 2022 Accelerating Asia Pte Ltd. All Rights",
       "page": "terms"
     },
     {
       "id": "check-email-7a3dab1602",
       "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-the-dealflow-behind-fund2",
-      "title": "Accelerating Asia — terms page checked by scrape.py",
+      "title": "Accelerating Asia — terms page",
       "excerpt": "data requests, or portfolio introductions, contact: team@acceleratingasia.com Sherwin Sinio Previous Previous Is AI changing how quickly",
       "page": "terms"
     },
     {
-      "id": "check-email-bc6bac52d0",
-      "url": "https://www.acceleratingasia.com/getfunded",
-      "title": "Accelerating Asia — batches page checked by scrape.py",
+      "id": "check-email-7a7c559d61",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-applications",
+      "title": "Accelerating Asia — application page",
       "excerpt": "Privacy Policy Cookie Policy SUPPORT LINKS GET IN TOUCH team@acceleratingasia.com Copyright © 2022 Accelerating Asia Pte Ltd. All Rights",
-      "page": "batches"
+      "page": "application"
+    },
+    {
+      "id": "check-email-7f6ea767be",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-724-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "team@acceleratingasia.com and we'll get back to yo",
+      "page": "application"
+    },
+    {
+      "id": "check-email-838fc5cacd",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-how-we-evaluate",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "team@acceleratingasia.com",
+      "page": "application"
+    },
+    {
+      "id": "check-email-8ee54f7b45",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-101-investments",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "team@acceleratingasia.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-9a6266732d",
+      "url": "https://www.acceleratingasia.com/latest-news/why-weve-launched-applications-for-a-gender-advisory-committee",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "Privacy Policy Cookie Policy SUPPORT LINKS GET IN TOUCH team@acceleratingasia.com Copyright © 2022 Accelerating Asia Pte Ltd. All Rights",
+      "page": "application"
+    },
+    {
+      "id": "check-email-a4665f2156",
+      "url": "https://www.acceleratingasia.com/latest-news/chatgenie-raises-investment",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Privacy Policy Cookie Policy SUPPORT LINKS GET IN TOUCH team@acceleratingasia.com Copyright © 2022 Accelerating Asia Pte Ltd. All Rights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-a6fd170259",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-101-investments",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Privacy Policy Cookie Policy SUPPORT LINKS GET IN TOUCH team@acceleratingasia.com Copyright © 2022 Accelerating Asia Pte Ltd. All Rights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-b2b42a7cbc",
+      "url": "https://www.acceleratingasia.com/latest-news/introducing-new-investments-cohort-6",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Privacy Policy Cookie Policy SUPPORT LINKS GET IN TOUCH team@acceleratingasia.com Copyright © 2022 Accelerating Asia Pte Ltd. All Rights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-b6c78f3711",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-101-investments",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": ". Or email the details to us at team@acceleratingasia.com . Applications close February 15. See more details below",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-ba80f73689",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-how-we-evaluate",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "at acceleratingasia.com/investors or by contacting team@acceleratingasia.com . About Accelerating Asia Ventures Accelerating Asia",
+      "page": "application"
+    },
+    {
+      "id": "check-email-bbd052b546",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-724-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "data requests, or portfolio introductions, contact: team@acceleratingasia.com Sherwin Sinio Previous Previous [ANNOUNCEMENT]",
+      "page": "application"
+    },
+    {
+      "id": "check-email-bf832f7570",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-724-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "Craig & Amra General P (team@acceleratingasia.com)",
+      "page": "application"
+    },
+    {
+      "id": "check-email-c65d0336b5",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "Ventures (team@acceleratingasia.com)",
+      "page": "application"
+    },
+    {
+      "id": "check-email-d6bc14fc32",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "See the portfoli (team@acceleratingasia.com)",
+      "page": "application"
+    },
+    {
+      "id": "check-email-d7f6db4389",
+      "url": "https://www.acceleratingasia.com/latest-news/five-ways-to-increase-investor-deal-flow",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Privacy Policy Cookie Policy SUPPORT LINKS GET IN TOUCH team@acceleratingasia.com Copyright © 2022 Accelerating Asia Pte Ltd. All Rights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-d8690fbde5",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "data requests, or portfolio introductions, contact: team@acceleratingasia.com Sherwin Sinio Previous Previous Cohort 13: What 724",
+      "page": "application"
+    },
+    {
+      "id": "check-email-dbd74c6057",
+      "url": "https://www.acceleratingasia.com/latest-news/whats-the-deal-with-safe-notes-craig-explains",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Privacy Policy Cookie Policy SUPPORT LINKS GET IN TOUCH team@acceleratingasia.com Copyright © 2022 Accelerating Asia Pte Ltd. All Rights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-e01eb611a4",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-how-we-evaluate",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "data requests, or portfolio introductions, contact: team@acceleratingasia.com Sherwin Sinio Previous Previous What 101 Investments Looks",
+      "page": "application"
+    },
+    {
+      "id": "check-email-e77a911673",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-101-investments",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "at acceleratingasia.com/investors or by contacting team@acceleratingasia.com . About Accelerating Asia Ventures Accelerating Asia",
+      "page": "terms"
     },
     {
       "id": "check-email-f5c58e1ce6",
       "url": "https://www.acceleratingasia.com/",
-      "title": "Accelerating Asia — homepage checked by scrape.py",
+      "title": "Accelerating Asia — homepage",
       "excerpt": "Privacy Policy Cookie Policy SUPPORT LINKS GET IN TOUCH team@acceleratingasia.com Copyright © 2022 Accelerating Asia Pte Ltd. All Rights",
       "page": "details"
     },
     {
       "id": "check-email-f763cb3ff1",
       "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-the-dealflow-behind-fund2",
-      "title": "Accelerating Asia — terms page checked by scrape.py",
+      "title": "Accelerating Asia — terms page",
       "excerpt": "See the portfoli (team@acceleratingasia.com)",
       "page": "terms"
     },
     {
-      "id": "check-email-fd55574af4",
-      "url": "https://www.acceleratingasia.com/about",
-      "title": "Accelerating Asia — details page checked by scrape.py",
+      "id": "check-email-f80ca2086f",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-724-applications",
+      "title": "Accelerating Asia — application page",
       "excerpt": "Privacy Policy Cookie Policy SUPPORT LINKS GET IN TOUCH team@acceleratingasia.com Copyright © 2022 Accelerating Asia Pte Ltd. All Rights",
+      "page": "application"
+    },
+    {
+      "id": "check-email-fb8339cc85",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-101-investments",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "data requests, or portfolio introductions, contact: team@acceleratingasia.com Sherwin Sinio Previous Previous Founder Story: How",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-9cec65aedb",
+      "url": "https://www.acceleratingasia.com/",
+      "title": "Accelerating Asia — homepage",
+      "excerpt": "14 Demo Day - SINGAPORE Read more → Jan 21 Cohort 14 Virtual Demo Day (Live in Zoom) Read more → Get in Touch Get in",
       "page": "details"
     },
     {
       "id": "check-name-6f5521714b",
       "url": "https://www.acceleratingasia.com/",
-      "title": "Accelerating Asia — homepage checked by scrape.py",
+      "title": "Accelerating Asia — homepage",
       "excerpt": "Accelerating Asia Ventures | Asia's Leading VC Accelerator 0 Skip to Content",
       "page": "details"
     },
     {
       "id": "check-portfolio-086ecf7f84",
       "url": "https://www.acceleratingasia.com/",
-      "title": "Accelerating Asia — homepage checked by scrape.py",
+      "title": "Accelerating Asia — homepage",
       "excerpt": "Portfolio → https://www.acceleratingasia.com/portfolio",
       "page": "details"
-    },
-    {
-      "id": "check-portfolio-0ae1ed5cbb",
-      "url": "https://www.acceleratingasia.com/about",
-      "title": "Accelerating Asia — details page checked by scrape.py",
-      "excerpt": "Portfolio → https://www.acceleratingasia.com/portfolio",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-13e2d2e888",
-      "url": "https://www.acceleratingasia.com/getfunded",
-      "title": "Accelerating Asia — batches page checked by scrape.py",
-      "excerpt": "Portfolio → https://www.acceleratingasia.com/portfolio",
-      "page": "batches"
     },
     {
       "id": "check-portfolio-18a863c2fb",
       "url": "https://www.acceleratingasia.com/",
-      "title": "Accelerating Asia — homepage checked by scrape.py",
+      "title": "Accelerating Asia — homepage",
       "excerpt": "View Portfolio → https://www.acceleratingasia.com/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-1ac566f281",
       "url": "https://www.acceleratingasia.com/",
-      "title": "Accelerating Asia — homepage checked by scrape.py",
+      "title": "Accelerating Asia — homepage",
       "excerpt": "Folder: Startups → https://www.acceleratingasia.com/startups",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-2361612145",
+      "url": "https://www.acceleratingasia.com/latest-news/chatgenie-raises-investment",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Folder: Startups → https://www.acceleratingasia.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-27a2640ba3",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-the-dealflow-behind-fund2",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "acceleratingasia.co → http://acceleratingasia.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2e0a16a410",
+      "url": "https://www.acceleratingasia.com/latest-news/cohort-10-startup-investments",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "startups → https://www.acceleratingasia.com/latest-news/tag/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2e32e69ede",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-how-we-evaluate",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "Portfolio → https://www.acceleratingasia.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-37a6383aa1",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "Portfolio → https://www.acceleratingasia.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3b8469c9d3",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-724-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "Folder: Startups → https://www.acceleratingasia.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3ea968de5d",
+      "url": "https://www.acceleratingasia.com/latest-news/whats-the-deal-with-safe-notes-craig-explains",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Portfolio → https://www.acceleratingasia.com/portfolio",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-424740cc4c",
       "url": "https://www.acceleratingasia.com/",
-      "title": "Accelerating Asia — homepage checked by scrape.py",
+      "title": "Accelerating Asia — homepage",
       "excerpt": "view portfolio → https://www.acceleratingasia.com/portfolio",
       "page": "details"
     },
     {
-      "id": "check-portfolio-4d715e4230",
-      "url": "https://www.acceleratingasia.com/getfunded",
-      "title": "Accelerating Asia — batches page checked by scrape.py",
+      "id": "check-portfolio-4a79c80b2c",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-applications",
+      "title": "Accelerating Asia — application page",
       "excerpt": "Folder: Startups → https://www.acceleratingasia.com/startups",
-      "page": "batches"
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-4f907f28d8",
+      "url": "https://www.acceleratingasia.com/latest-news/five-ways-to-increase-investor-deal-flow",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "“Portfolio” page → https://www.acceleratingasia.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5170569d92",
+      "url": "https://www.acceleratingasia.com/latest-news/whats-the-deal-with-safe-notes-craig-explains",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Folder: Startups → https://www.acceleratingasia.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-567faedbef",
+      "url": "https://www.acceleratingasia.com/latest-news/introducing-new-investments-cohort-6",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Folder: Startups → https://www.acceleratingasia.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6116e1537a",
+      "url": "https://www.acceleratingasia.com/latest-news/accelerating-asia-doubles-down-on-investment-startups-to-receive-s-200-000",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Portfolio → https://www.acceleratingasia.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-696ecfb7da",
+      "url": "https://www.acceleratingasia.com/latest-news/introducing-new-investments-cohort-6",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Portfolio → https://www.acceleratingasia.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-69bef77f1f",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-724-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "Portfolio → https://www.acceleratingasia.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-6e4089761f",
+      "url": "https://www.acceleratingasia.com/latest-news/craigs-startup-investment-terms-traffic-light",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Portfolio → https://www.acceleratingasia.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-70022bd319",
+      "url": "https://www.acceleratingasia.com/latest-news/why-weve-launched-applications-for-a-gender-advisory-committee",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "Portfolio → https://www.acceleratingasia.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-776e90792d",
+      "url": "https://www.acceleratingasia.com/latest-news/why-weve-launched-applications-for-a-gender-advisory-committee",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "Folder: Startups → https://www.acceleratingasia.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7a5979e31e",
+      "url": "https://www.acceleratingasia.com/latest-news/chatgenie-raises-investment",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Portfolio → https://www.acceleratingasia.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8c8a521411",
+      "url": "https://www.acceleratingasia.com/latest-news/craigs-startup-investment-terms-traffic-light",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Folder: Startups → https://www.acceleratingasia.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9c111b289f",
+      "url": "https://www.acceleratingasia.com/latest-news/accelerating-asia-doubles-down-on-investment-startups-to-receive-s-200-000",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Folder: Startups → https://www.acceleratingasia.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a2c07431d1",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "acceleratingasia.co → http://acceleratingasia.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-ae80193094",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-how-we-evaluate",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "Folder: Startups → https://www.acceleratingasia.com/startups",
+      "page": "application"
     },
     {
       "id": "check-portfolio-b48caa7f9e",
       "url": "https://www.acceleratingasia.com/",
-      "title": "Accelerating Asia — homepage checked by scrape.py",
+      "title": "Accelerating Asia — homepage",
       "excerpt": "View portfolio → https://www.acceleratingasia.com/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-b7c17bf0c0",
       "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-the-dealflow-behind-fund2",
-      "title": "Accelerating Asia — terms page checked by scrape.py",
+      "title": "Accelerating Asia — terms page",
       "excerpt": "Folder: Startups → https://www.acceleratingasia.com/startups",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-baf6bee7a0",
-      "url": "https://www.acceleratingasia.com/about",
-      "title": "Accelerating Asia — details page checked by scrape.py",
-      "excerpt": "Folder: Startups → https://www.acceleratingasia.com/startups",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-d3e6b2f302",
-      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-the-dealflow-behind-fund2",
-      "title": "Accelerating Asia — terms page checked by scrape.py",
+      "id": "check-portfolio-bd3532b4f8",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-101-investments",
+      "title": "Accelerating Asia — terms page",
       "excerpt": "Portfolio → https://www.acceleratingasia.com/portfolio",
       "page": "terms"
     },
     {
+      "id": "check-portfolio-cf12111bc0",
+      "url": "https://www.acceleratingasia.com/latest-news/introducing-new-investments-cohort-6",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Accelerating Asia’s portfolio → https://acceleratingasia.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d0d2b4fcc2",
+      "url": "https://www.acceleratingasia.com/latest-news/cohort-10-startup-investments",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Portfolio → https://www.acceleratingasia.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d3e6b2f302",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-the-dealflow-behind-fund2",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Portfolio → https://www.acceleratingasia.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d618e048c0",
+      "url": "https://www.acceleratingasia.com/latest-news/cohort-10-startup-investments",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Folder: Startups → https://www.acceleratingasia.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e7b3d1244f",
+      "url": "https://www.acceleratingasia.com/latest-news/five-ways-to-increase-investor-deal-flow",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Portfolio → https://www.acceleratingasia.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ea7b761af1",
+      "url": "https://www.acceleratingasia.com/latest-news/five-ways-to-increase-investor-deal-flow",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Folder: Startups → https://www.acceleratingasia.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ee37a4d158",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-101-investments",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Folder: Startups → https://www.acceleratingasia.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f0037a9ac8",
+      "url": "https://www.acceleratingasia.com/latest-news/tag/dealflow",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Folder: Startups → https://www.acceleratingasia.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f156f188c9",
+      "url": "https://www.acceleratingasia.com/latest-news/tag/dealflow",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Portfolio → https://www.acceleratingasia.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f613920a6b",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-724-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "acceleratingasia.co → http://acceleratingasia.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1378bd3a32",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-101-investments",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "Next Next How We Evaluate: What We Look for in 700+ Applications → https://www.acceleratingasia.com/latest-news/acceleratingasia-how-we-evaluate",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-43fa5d9194",
+      "url": "https://www.acceleratingasia.com/latest-news/why-weve-launched-applications-for-a-gender-advisory-committee",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "Apply here → https://acceleratingasia.com/latest-news/2019/12/9/gender-advisory-group",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bbc29a24c1",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-724-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "Next Next Almost every C13 application mentioned AI. Here's how we read through it. → https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-applications",
+      "page": "application"
+    },
+    {
       "id": "check-route-bdc5dc131a",
       "url": "https://www.acceleratingasia.com/",
-      "title": "Accelerating Asia — homepage checked by scrape.py",
+      "title": "Accelerating Asia — homepage",
       "excerpt": "https://www.acceleratingasia.com/",
       "page": "details"
     },
     {
+      "id": "check-selectivity-09ff551688",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-724-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "[ANNOUNCEMENT] Accelerating Asia Ventures Cohort 13: 5 Startups, 5 Countries, Under 1% Acceptance Rate Next Next Almost every C13 application mentioned AI. Here's how we read",
+      "page": "application"
+    },
+    {
       "id": "check-selectivity-23879c96ad",
       "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-the-dealflow-behind-fund2",
-      "title": "Accelerating Asia — terms page checked by scrape.py",
+      "title": "Accelerating Asia — terms page",
       "excerpt": "single category dominated the pipeline. Even AI, the largest, only represented 21% of applications. The business-model data was more concentrated. 43% of the companies were B2B",
       "page": "terms"
     },
     {
       "id": "check-selectivity-25ad873672",
       "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-the-dealflow-behind-fund2",
-      "title": "Accelerating Asia — terms page checked by scrape.py",
+      "title": "Accelerating Asia — terms page",
       "excerpt": "26% came from further afield. The United States country field represented 13% of applications, 8% selected \"Other\" because they operate across multiple or unlisted markets,",
       "page": "terms"
     },
     {
+      "id": "check-selectivity-417e0c06a6",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-724-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "others looking for multi-million dollar rounds backed by serious traction. 41% of applicants already had soft commitments from investors in place before our evaluation",
+      "page": "application"
+    },
+    {
+      "id": "check-selectivity-56125a138d",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-724-applications",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "a signal that the process itself has value to the founders who go through it. 23.7% of applicants have applied to Accelerating Asia before. The report drops in June. We will",
+      "page": "application"
+    },
+    {
+      "id": "check-selectivity-8ce4d4f8c2",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-how-we-evaluate",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "we receive 700+ applications . We select around 10 applications . That's a 1-2% acceptance rate . Our LPs trust us with their capital. Our portfolio founders trust us with",
+      "page": "application"
+    },
+    {
       "id": "check-selectivity-b8c1fb2ba8",
       "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-the-dealflow-behind-fund2",
-      "title": "Accelerating Asia — terms page checked by scrape.py",
+      "title": "Accelerating Asia — terms page",
       "excerpt": "building, and how they plan to sell it AI was the largest primary industry at 21% of applications, followed by SaaS at 12%, education at 7%, medtech at 6% and agritech at 6%.",
       "page": "terms"
     },
     {
-      "id": "check-status-7d58fb2bcd",
-      "url": "https://www.acceleratingasia.com/getfunded",
-      "title": "Accelerating Asia — batches page checked by scrape.py",
-      "excerpt": "27.26% Annualised Revenue Growth US$174M+ Investment Raised IN PARTNERSHIP WITH Program Timeline ONGOING Applications are now open for Cohort 14 AUGUST 2026 Selection Interviews for Cohort 14 Begins OCTOBER 2026 Start of Program NOVEMBER",
-      "page": "batches"
+      "id": "check-selectivity-df8d6aff97",
+      "url": "https://www.acceleratingasia.com/latest-news/cohort-10-startup-investments",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "[ANNOUNCEMENT] Accelerating Asia Ventures Cohort 11: 9 Startups, 7 Countries, 2% Acceptance Rate Next Next Things to Look Out For in Term Sheets - Part 1: Understanding",
+      "page": "terms"
+    },
+    {
+      "id": "check-status-ebf9028584",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-how-we-evaluate",
+      "title": "Accelerating Asia — application page",
+      "excerpt": "get defensive don't improve. Founders who engage with feedback do. That's it. No secret formula. Cohort 13 applications are now open until February 15. Apply here: https://www.acceleratingasia.com/getfunded If you know a founder who'd be a",
+      "page": "application"
+    },
+    {
+      "id": "check-status-ef867126b8",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-101-investments",
+      "title": "Accelerating Asia — terms page",
+      "excerpt": "that doubles as extended due diligence. By the end, we know who can execute under pressure. Cohort 13 applications are now open until February 15. Apply here: https://www.acceleratingasia.com/getfunded If you know a founder who'd be a",
+      "page": "terms"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-cd7799d4d7",
+      "url": "https://www.acceleratingasia.com/",
+      "page": "details",
+      "excerpt": "Accelerating Asia Ventures | Asia's Leading VC Accelerator 0 Skip to Content Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Folder: Investor Hub Back Start here Investor Portal Folder: Startups Back Get Funded Portfolio Apply for Cohort 13 About Us Folder: News & Events Back News Events Subscribe Invest with us Asia’s Top VC Accelerator INVEST WITH US ▸ GET FUNDED ▸ WHAT WE DO Asia's early stage accelerator VC fund that invests in high growth startups . Accelerating Asia exists to back the undiscovered. We find high-potential founders in Southeast and South Asia—the ones with real traction and grit, but without the traditional background. Through our accelerator, we provide the capital, credibility, and hands-on partnership they need to get to the next level. For our investor partners, we offer a trusted, systematic way to access and meaningfully engage with the future of innovation in the world's most dynamic markets. 25+ Vertical US$542K+ Average Monthly Revenue 19 Operating Markets 27.26% Annualised Revenue Growth US$174M+ Investment Raised AI-Powered Farming Insights Aunkur (iPage)"
+    },
+    {
+      "id": "check-page-8c0fa52a3b",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-724-applications",
+      "page": "application",
+      "excerpt": "Cohort 13: What 724 Applications Tell Us About the State of Early-Stage Asia — Accelerating Asia Ventures 0 Skip to Content Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Folder: Investor Hub Back Start here Investor Portal Folder: Startups Back Get Funded Portfolio Apply for Cohort 13 About Us Folder: News & Events Back News Events Subscribe Invest with us Cohort 13: What 724 Applications Tell Us About the State of Early-Stage Asia May 28 Written by Sherwin Sinio By Amra Naidoo & Craig Bristol Dixon, General Partners, Accelerating Asia Ventures Before we announce the startups selected for Cohort 13, we want to share what the application data tells us about the state of early-stage startup building across Asia right now. C13 produced 724 applications , the largest pool we've ever evaluated for a single cohort, spanning 20 countries , across a remarkable spread of sectors, stages, and founder backgrounds. Five rounds of evaluation later, a small group is about to be announced. But the story of who applied is worth telling first. More than half are already making money The most important"
+    },
+    {
+      "id": "check-page-a3e128ab86",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-applications",
+      "page": "application",
+      "excerpt": "Almost every C13 application mentioned AI. Here's how we read through it. — Accelerating Asia Ventures 0 Skip to Content Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Folder: Investor Hub Back Start here Investor Portal Folder: Startups Back Get Funded Portfolio Apply for Cohort 13 About Us Folder: News & Events Back News Events Subscribe Invest with us Almost every C13 application mentioned AI. Here's how we read through it. May 26 Written by Sherwin Sinio By Amra Naidoo & Craig Bristol Dixon, General Partners, Accelerating Asia Ventures Almost every application we read for C13 mentioned AI. That sounds like exaggeration but it isn't. When AI shows up in every deck, \"we use AI\" stops being information. It becomes the same as \"we have a website.\" It tells us nothing about whether the company is differentiated, defensible, or fundable. Some of this \"trend\" gave us flashbacks to the web 3 / blockchain / crypto timeline. Or the time when every second company applying was fintech. Or even the time where suddenly every startup was working on greentech / sustainability. The point is, every"
+    },
+    {
+      "id": "check-page-045479722e",
+      "url": "https://www.acceleratingasia.com/latest-news/why-weve-launched-applications-for-a-gender-advisory-committee",
+      "page": "application",
+      "excerpt": "Why we’ve launched applications for a Gender Advisory Committee — Accelerating Asia Ventures 0 Skip to Content Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Folder: Investor Hub Back Start here Investor Portal Folder: Startups Back Get Funded Portfolio Apply for Cohort 13 About Us Folder: News & Events Back News Events Subscribe Invest with us Why we’ve launched applications for a Gender Advisory Committee announcements Dec 19 Written by Amra Naidoo In case you missed it, Accelerating Asia has opened applications for our Gender Advisory Committee. Why have we decided to appoint a Gender Advisory Committee? ‍ Well, for our first year of operations, we think we’ve done pretty well in promoting a safe, inclusive and diverse ecosystem, as well as initiatives that drive this forward. Our first cohort included 40 percent female-led ventures. We have an incredibly diverse team ourselves and are one of the few venture capital funds in the region (and globally) with a female General Partner. ‍ But we know there’s still more we can do to recognise and remove existing barriers, moving closer to"
+    },
+    {
+      "id": "check-page-a7ad0e28bf",
+      "url": "https://www.acceleratingasia.com/latest-news/accelerating-asia-doubles-down-on-investment-startups-to-receive-s-200-000",
+      "page": "terms",
+      "excerpt": "Accelerating Asia doubles down on investment; startups to receive S$200,000 — Accelerating Asia Ventures 0 Skip to Content Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Folder: Investor Hub Back Start here Investor Portal Folder: Startups Back Get Funded Portfolio Apply for Cohort 13 About Us Folder: News & Events Back News Events Subscribe Invest with us Accelerating Asia doubles down on investment; startups to receive S$200,000 announcements Apr 30 Written by Rohana Wood ‍ Singapore – 29 April 2020 – Early-stage venture capital fund Accelerating Asia today announced it is changing how it invests, with startups eligible to receive up to S$200,000 investment from Accelerating Asia via a SAFE note for around 7-10 percent of equity. Startups participating in Accelerating Asia’s flagship accelerator programme will receive up to S$200,000 investment including S$25,000 to support their startup, access to the flagship accelerator and around $225,000 in program perks. ‍ Accelerating Asia’s programme seeks to identify high-impact and high-potential startups from all sectors across the region"
+    },
+    {
+      "id": "check-page-b5352f5c4e",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-101-investments",
+      "page": "terms",
+      "excerpt": "What 101 Investments Looks Like — Accelerating Asia Ventures 0 Skip to Content Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Folder: Investor Hub Back Start here Investor Portal Folder: Startups Back Get Funded Portfolio Apply for Cohort 13 About Us Folder: News & Events Back News Events Subscribe Invest with us What 101 Investments Looks Like Feb 4 Written by Sherwin Sinio We just made our 101st investment . Here's what the portfolio looks like across Southeast Asia and South Asia: TransTrack - Cohort 4 (Indonesia), built fleet intelligence for trucking companies. 72x from our initial investment. EasyRice - Cohort 7 (Thailand), uses AI to grade rice quality in seconds. Solving a problem that affects millions of farmers and millers. Fineksi - Cohort 12 (Indonesia), automates credit analysis for banks. Now working with Hana Bank, Permata, BNI Finance. Podium - Cohort 12 (Singapore), is building professional community for women. 300+ paying members, grown entirely through word of mouth. Plus 97 more across fintech, logistics, agriculture, healthcare, and enterprise tech. 57% of our"
+    },
+    {
+      "id": "check-page-589e953d14",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-how-we-evaluate",
+      "page": "application",
+      "excerpt": "How We Evaluate: What We Look for in 700+ Applications — Accelerating Asia Ventures 0 Skip to Content Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Folder: Investor Hub Back Start here Investor Portal Folder: Startups Back Get Funded Portfolio Apply for Cohort 13 About Us Folder: News & Events Back News Events Subscribe Invest with us How We Evaluate: What We Look for in 700+ Applications Feb 3 Written by Sherwin Sinio Every cohort, we receive 700+ applications . We select around 10 applications . That's a 1-2% acceptance rate . Our LPs trust us with their capital. Our portfolio founders trust us with their network. The bar has to be high. Here's how we decide: TEAM Can you build? Can you sell? Can you adapt when your first plan fails? We're not looking for pedigree. We're looking for evidence. What have you already done? We back solo founders if they have a strong team around them. Building a company is too hard to do completely alone. TRACTION Revenue is the clearest signal. It proves someone values what you're building. But we'll consider strong user growth, signed pilots, or"
+    },
+    {
+      "id": "check-page-d37e672e93",
+      "url": "https://www.acceleratingasia.com/latest-news/acceleratingasia-the-dealflow-behind-fund2",
+      "page": "terms",
+      "excerpt": "563 Applications: The Deal Flow Behind Fund 2 — Accelerating Asia Ventures 0 Skip to Content Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Folder: Investor Hub Back Start here Investor Portal Folder: Startups Back Get Funded Portfolio Apply for Cohort 13 About Us Folder: News & Events Back News Events Subscribe Invest with us 563 Applications: The Deal Flow Behind Fund 2 Sep 29 Written by Sherwin Sinio Every early-stage fund talks about deal flow. Cohort 14 gives us a very practical way to show what ours looks like: 563 applications sourced through our team and a network that stretches across South Asia, Southeast Asia and well beyond our immediate circles. We are now in the final stage of selection. Around 1% of the original pipeline has reached final interviews with Craig and Amra, and the companies selected from that group will become the next investments made through Fund 2. Before we announce them, here is what the application data tells us about the pipeline they came through. Commercial traction before institutional capital 64% of the companies are already generating revenue ."
+    },
+    {
+      "id": "check-page-f9847d22f6",
+      "url": "https://www.acceleratingasia.com/latest-news/chatgenie-raises-investment",
+      "page": "terms",
+      "excerpt": "ChatGenie raises investment — Accelerating Asia Ventures 0 Skip to Content Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Folder: Investor Hub Back Start here Investor Portal Folder: Startups Back Get Funded Portfolio Apply for Cohort 13 About Us Folder: News & Events Back News Events Subscribe Invest with us ChatGenie raises investment startup-spotlights Jan 26 Written by Rohana Wood Fast-growing Multi-Channel Commerce Platform development startup company, ChatGenie , reached another milestone by raising additional capital in its recent fundraising campaign as part of Accelerating Asia’s fifth cohort. ‍ The funding it secured will enable ChatGenie to expand its reach in distributing its product to as many merchants as possible. Currently, the pandemic-born startup has provided online payment and automated delivery services to more than 2,500 merchants. ‍ With the increasing demand of online businesses now, the investment will also help ChatGenie to expand its operations by growing its team to cater to more clients and scale its services. ‍ ‍ OPPORTUNITY IN CRISIS Founded a month before"
+    },
+    {
+      "id": "check-page-f37d10af58",
+      "url": "https://www.acceleratingasia.com/latest-news/cohort-10-startup-investments",
+      "page": "terms",
+      "excerpt": "[ANNOUNCEMENT] We're pleased to announce the newest faces at Accelerating Asia Ventures: Meet Cohort 10! — Accelerating Asia Ventures 0 Skip to Content Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Folder: Investor Hub Back Start here Investor Portal Folder: Startups Back Get Funded Portfolio Apply for Cohort 13 About Us Folder: News & Events Back News Events Subscribe Invest with us [ANNOUNCEMENT] We're pleased to announce the newest faces at Accelerating Asia Ventures: Meet Cohort 10! Oct 2 Written by Amra Naidoo 💪 These 9 startups are some seriously kick-ass businesses. We've spent months searching, reviewing applications and interviewing hundreds of startups around Southeast Asia and South Asia. For this batch, the acceptance rate was only 1.8% so it was a pretty tough decision to make. Accelerating Asia Ventures Cohort 10 startups attend the Founders Retreat in Bali A few snappy facts about Cohort 10: 🚀 We are 1 month into the start of the program and the founders are currently in Bali with our team at our Cohort Retreat. Within the past month, 2 startups have already received"
+    },
+    {
+      "id": "check-page-d50c11a51d",
+      "url": "https://www.acceleratingasia.com/latest-news/craigs-startup-investment-terms-traffic-light",
+      "page": "terms",
+      "excerpt": "Craig's Startup Investment Terms 'Traffic Light' — Accelerating Asia Ventures 0 Skip to Content Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Folder: Investor Hub Back Start here Investor Portal Folder: Startups Back Get Funded Portfolio Apply for Cohort 13 About Us Folder: News & Events Back News Events Subscribe Invest with us Craig's Startup Investment Terms 'Traffic Light' articles Craig's Blog Jun 30 Written by Craig Bristol Dixon Raising startup capital in Southeast Asia? Here's a quick guide to terms in an easy to reference format. ‍ So, an investor hands you a term sheet. It's got quite a few terms in there and you're not sure which ones are ok and which ones might be non-standard and hurtful to you and/or your startup. Have no fear, the traffic light is here! ‍ Here's a quick guide to which of the most common terms are standard and which you should push back on. ‍ Feel free to bookmark it. ‍ I'll update as I receive new input and see term sheets coming in to the startups I advise. Try to make all of your docs green lights :) ‍ fundraising Craig Bristol Dixon"
+    },
+    {
+      "id": "check-page-dbde182b6d",
+      "url": "https://www.acceleratingasia.com/latest-news/five-ways-to-increase-investor-deal-flow",
+      "page": "terms",
+      "excerpt": "Five Ways to Increase Investor Deal Flow — Accelerating Asia Ventures 0 Skip to Content Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Folder: Investor Hub Back Start here Investor Portal Folder: Startups Back Get Funded Portfolio Apply for Cohort 13 About Us Folder: News & Events Back News Events Subscribe Invest with us Five Ways to Increase Investor Deal Flow Uncategorized Aug 25 Written by Accelerating Asia Ventures As an investor, your deal flow is your lifeblood. Your success five to ten years down the line depends on the quality of startups you’re meeting today. If you have a healthy pipeline of promising startups, you may just back the next Grab or Canva. If, on the other hand, your pipeline is a trickle of odd leads, you’re more likely to be left in the dust. This principle applies to all investors, including everyone from angels and family offices to syndicates and venture capitalists. Unfortunately, most investors tend to focus on becoming better at determining the investment-worthiness of the few startups they do meet. While this skill is important, what is arguably even more"
+    },
+    {
+      "id": "check-page-b51e11c8a7",
+      "url": "https://www.acceleratingasia.com/latest-news/introducing-new-investments-cohort-6",
+      "page": "terms",
+      "excerpt": "Accelerating Asia announces Q1 investments into 13 startups across 10+ markets — Accelerating Asia Ventures 0 Skip to Content Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Folder: Investor Hub Back Start here Investor Portal Folder: Startups Back Get Funded Portfolio Apply for Cohort 13 About Us Folder: News & Events Back News Events Subscribe Invest with us Accelerating Asia announces Q1 investments into 13 startups across 10+ markets Uncategorized May 5 Written by Rohana Wood International early-stage VC fund, Accelerating Asia has announced its latest round of investments today including nine new companies joining Cohort 6 of the flagship program and additional capital into four existing portfolio companies. The new investments take Accelerating Asia’s portfolio to 52 startups who have raised a total of over US$42M. Cohort 6 continues the portfolio’s trend of attracting early investor interest with ~US$1.5M in soft commitments received during month 1 of the program when access is reserved for Accelerating Asia’s network, adding to the $2.5M raised prior to joining the program. The"
+    },
+    {
+      "id": "check-page-158d840cc3",
+      "url": "https://www.acceleratingasia.com/latest-news/tag/dealflow",
+      "page": "terms",
+      "excerpt": "dealflow — News — Accelerating Asia Ventures 0 Skip to Content Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Folder: Investor Hub Back Start here Investor Portal Folder: Startups Back Get Funded Portfolio Apply for Cohort 13 About Us Folder: News & Events Back News Events Subscribe Invest with us News & Content The latest blogs, interviews, investor and startup resources and the latest updates from Accelerating Asia Ventures. No results found FEATURED NEWS News From Bali to Bangladesh: What It Means to Invest Alongside Us Read more → News November 10, 2026 Sherwin Sinio From Bali to Bangladesh: What It Means to Invest Alongside Us November 10, 2026 Sherwin Sinio Read more → November 10, 2026 Sherwin Sinio OTHER NEWS articles Accelerating Asia Ventures 11/27/23 articles Accelerating Asia Ventures 11/27/23 Breaking new ground: Why investors should look at emerging markets Read More articles Accelerating Asia Ventures 11/6/23 articles Accelerating Asia Ventures 11/6/23 Fundraising in a downturn: Why it benefits investors to go counter-cyclical Read More articles , Craig's Blog Accelerating"
+    },
+    {
+      "id": "check-page-07afef9f9d",
+      "url": "https://www.acceleratingasia.com/latest-news/whats-the-deal-with-safe-notes-craig-explains",
+      "page": "terms",
+      "excerpt": "What's the deal with SAFE notes? Craig explains — Accelerating Asia Ventures 0 Skip to Content Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Investor Hub Start here Investor Portal Startups Get Funded Portfolio Apply for Cohort 13 About Us News & Events News Events Subscribe Invest with us Open Menu Close Menu Folder: Investor Hub Back Start here Investor Portal Folder: Startups Back Get Funded Portfolio Apply for Cohort 13 About Us Folder: News & Events Back News Events Subscribe Invest with us What's the deal with SAFE notes? Craig explains articles Jan 15 Written by Craig Bristol Dixon Angel investor: “Sure, I’ll invest in your startup! I love what you all are doing and really believe in the potential of your business!” Founder: “Great, let’s move forwards!” Angel Investor: “Sounds good, so do we need to sign a contract or something?” Founder: “Yeah, I guess so. Do you know what sort of contract we should use?” Angel Investor: “No, I thought you would. OK, let’s do some research and reconnect next week.” Founder (to themselves): “Shit! Why didn’t I have a document ready to go? Now we’re delayed and who knows what might happen…” Angel Investor (to themselves): “Hmm, I thought they’d be better prepared for this situation… Am I the only one investing? If"
     }
   ],
   "findings": {
@@ -220,7 +932,20 @@
       }
     ],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://www.acceleratingasia.com/latest-news/acceleratingasia-ai-c13-applications",
+        "evidenceId": "check-route-bbc29a24c1"
+      },
+      {
+        "value": "https://acceleratingasia.com/latest-news/2019/12/9/gender-advisory-group",
+        "evidenceId": "check-route-43fa5d9194"
+      },
+      {
+        "value": "https://www.acceleratingasia.com/latest-news/acceleratingasia-how-we-evaluate",
+        "evidenceId": "check-route-1378bd3a32"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://www.acceleratingasia.com/",
@@ -230,12 +955,85 @@
     "applicationsOpen": [
       {
         "value": true,
-        "evidenceId": "check-status-7d58fb2bcd"
+        "evidenceId": "check-status-ef867126b8"
       }
     ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "Jan",
+        "evidenceId": "check-announced-8c67454cd0"
+      },
+      {
+        "value": "January",
+        "evidenceId": "check-announced-d7dfa0d500"
+      },
+      {
+        "value": "February",
+        "evidenceId": "check-announced-70f8bd5f9d"
+      },
+      {
+        "value": "Oct",
+        "evidenceId": "check-announced-81b41e3cc7"
+      },
+      {
+        "value": "June",
+        "evidenceId": "check-announced-778ede77fa"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-1f0675b09c"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-9175a899fa"
+      },
+      {
+        "value": "1 month",
+        "evidenceId": "check-duration-df94708ab6"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-9cec65aedb"
+      }
+    ],
+    "location": [],
     "selectivity": [
+      {
+        "value": {
+          "rate": 0.41,
+          "bounded": false
+        },
+        "evidenceId": "check-selectivity-417e0c06a6"
+      },
+      {
+        "value": {
+          "rate": 0.237,
+          "bounded": false
+        },
+        "evidenceId": "check-selectivity-56125a138d"
+      },
+      {
+        "value": {
+          "rate": null,
+          "bounded": true
+        },
+        "evidenceId": "check-selectivity-09ff551688"
+      },
+      {
+        "value": {
+          "rate": 0.02,
+          "bounded": false
+        },
+        "evidenceId": "check-selectivity-8ce4d4f8c2"
+      },
       {
         "value": {
           "rate": 0.13,
@@ -253,20 +1051,102 @@
     ],
     "dealText": [
       {
-        "value": "product” Tasfia Tasbin & Rubaiyat F﻿. C﻿O-FOUNDERS MARKOPOLO﻿.AI WHAT WE OFFER STARTUPS 🡐 WHAT WE OFFER STARTUPS 🡐 Benefits from Day One Investment: Up to US$250k Accelerating Asia Ventures invests up to US$250k into pre-Series A tech startups through our early stage Venture Capital fund into startups joining our",
-        "evidenceId": "check-deal-5b380a7c2e"
+        "value": "is changing how it invests, with startups eligible to receive up to S$200,000 investment from Accelerating Asia via a SAFE note for around 7-10",
+        "evidenceId": "check-deal-f6aa63e76c"
       },
       {
-        "value": "up to US$250k into pre-Series A tech startups through our early stage Venture Capital fund into startups joining our flagship accelerator program. We invest US$100k up front with a potential US$150k in follow-on funding. Tailored Advice & Program Growth, business models. scaling, fundraising, and marketing, our expert",
-        "evidenceId": "check-deal-756395a96f"
+        "value": "early-stage startup accelerators in the region who are investing SG$100,000 or less in their startups in exchange for equity. ‍ “Over the past",
+        "evidenceId": "check-deal-6d0ca3d598"
       },
       {
-        "value": "of ex Founders,, we know the value of getting investors that align with your vision and growth trajectory. As an independent VC accelerator we invest up to US$250k in startups who are part of our flagship program via a SAFE note. Separate to the investment, we also charge an additional program fee of US$35k and 3% equity",
-        "evidenceId": "check-deal-f12fcef22c"
+        "value": "involved. Example Let’s assume an Angel investor decides to invest $100,000 in an early stage startup at the following terms: ‍ SAFE ‍ Investment",
+        "evidenceId": "check-deal-796491dcf1"
       },
       {
-        "value": "an initial US$100k investment from Accelerating Asia Ventures' early-stage venture capital fund once you clear conditions precedent and a further potential US$150k in investment after the program. You can read more about our investment terms here . Where does my investment come from? Accelerating Asia Ventures operates",
-        "evidenceId": "check-deal-16694250ed"
+        "value": "an early stage startup at the following terms: ‍ SAFE ‍ Investment $100,000 Cap $2,000,000 Discount 20% Qualifying Round $500,000 ‍ Now let’s",
+        "evidenceId": "check-deal-ca7f427f51"
+      },
+      {
+        "value": "startup at the following terms: ‍ SAFE ‍ Investment $100,000 Cap $2,000,000 Discount 20% Qualifying Round $500,000 ‍ Now let’s assume a Venture",
+        "evidenceId": "check-deal-ee9945a2c9"
+      },
+      {
+        "value": "‍ Investment $100,000 Cap $2,000,000 Discount 20% Qualifying Round $500,000 ‍ Now let’s assume a Venture Capital fund decides to invest in the",
+        "evidenceId": "check-deal-c63aa6ab35"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "200000",
+          "currency": "USD",
+          "equity": null,
+          "label": "SAFE",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-f6aa63e76c"
+      },
+      {
+        "value": {
+          "kind": "equity",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Equity",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-6d0ca3d598"
+      },
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": null,
+          "label": "SAFE",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-796491dcf1"
+      },
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": "20%",
+          "label": "SAFE",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-ca7f427f51"
+      },
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "2000000",
+          "currency": "USD",
+          "equity": "20%",
+          "label": "SAFE",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-ee9945a2c9"
+      },
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "500000",
+          "currency": "USD",
+          "equity": "20%",
+          "label": "SAFE",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-c63aa6ab35"
       }
     ],
     "portfolioPages": [
@@ -277,6 +1157,18 @@
       {
         "value": "https://www.acceleratingasia.com/portfolio",
         "evidenceId": "check-portfolio-424740cc4c"
+      },
+      {
+        "value": "http://acceleratingasia.com/portfolio",
+        "evidenceId": "check-portfolio-f613920a6b"
+      },
+      {
+        "value": "https://www.acceleratingasia.com/latest-news/tag/startups",
+        "evidenceId": "check-portfolio-2e0a16a410"
+      },
+      {
+        "value": "https://acceleratingasia.com/portfolio",
+        "evidenceId": "check-portfolio-cf12111bc0"
       }
     ],
     "name": [

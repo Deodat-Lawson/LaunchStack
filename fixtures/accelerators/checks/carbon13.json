@@ -1,124 +1,633 @@
 {
   "programId": "carbon13",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://carbonthirteen.com/",
-    "https://carbonthirteen.com/programmes/",
+    "https://carbonthirteen.com/about-us/our-community/domain-startup-experts-application-form/",
+    "https://carbonthirteen.com/about-us/our-community/partner-domain-expert-application-form/",
     "https://carbonthirteen.com/programmes/apply-now/",
-    "https://carbonthirteen.com/frequently-asked-questions/"
+    "https://carbonthirteen.com/programmes/venture-builder-cambridge/venture-builder-application-stage-1-cambridge/",
+    "https://carbonthirteen.com/tag/applications/",
+    "https://carbonthirteen.com/tag/p2-application-video-support/",
+    "https://carbonthirteen.com/tag/phase-2-application-video/",
+    "https://carbonthirteen.com/frequently-asked-questions/",
+    "https://carbonthirteen.com/home/founders-home/investment-case-resources/",
+    "https://carbonthirteen.com/home/founders-home/investment-checklist/",
+    "https://carbonthirteen.com/investment-documentation-berlin-europe-venture-builder/",
+    "https://carbonthirteen.com/investment-documentation-cambridge-uk-venture-builder/",
+    "https://carbonthirteen.com/investment-documentation-venture-accelerator/",
+    "https://carbonthirteen.com/news/climate-takes-100-investments/"
   ],
   "evidence": [
     {
+      "id": "check-announced-11971f058b",
+      "url": "https://carbonthirteen.com/news/climate-takes-100-investments/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "impact potential, then you should apply to our Venture Accelerator , applications open in late January. If you’re an innovator at a corporate looking to work with",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-19f7f27089",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "are the objectives of Phase 2? During Phase 2 (3 months) teams will work to uncover a venture which can",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-205d6fc34b",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "phase of the programme (“Teaming & Ideation”, 10 weeks) will be delivered partly in person, partly",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-2797082b9d",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "phase of the programme (“Teaming & Ideation”, 6 weeks) will be delivered partly in person, partly",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-7615974d41",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "to a cohort of 80. By the end of Phase 1 (10 weeks) entrepreneurs need to seek to form 2-3 person",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b2dcfa277f",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "objectives of Phase 3? Phase 3 of the programme (4 months) focuses on generating the proof points",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f6a2291a8a",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "on your Global Talent application within 2 weeks . A Global Talent Visa is a Tier 1 visa, meaning",
+      "page": "terms"
+    },
+    {
       "id": "check-email-03d50f704b",
       "url": "https://carbonthirteen.com/programmes/apply-now/",
-      "title": "Carbon13 — application page checked by scrape.py",
+      "title": "Carbon13 — application page",
       "excerpt": "\"email\": \"info@carbonthirteen.com\"",
       "page": "application"
     },
     {
-      "id": "check-email-32d5403735",
-      "url": "https://carbonthirteen.com/programmes/",
-      "title": "Carbon13 — details page checked by scrape.py",
+      "id": "check-email-18bacd9731",
+      "url": "https://carbonthirteen.com/tag/applications/",
+      "title": "Carbon13 — application page",
       "excerpt": "\"email\": \"info@carbonthirteen.com\"",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-email-239f7439eb",
+      "url": "https://carbonthirteen.com/news/climate-takes-100-investments/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "\"email\": \"info@carbonthirteen.com\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-2bdec29483",
+      "url": "https://carbonthirteen.com/programmes/venture-builder-cambridge/venture-builder-application-stage-1-cambridge/",
+      "title": "Carbon13 — application page",
+      "excerpt": "\"email\": \"info@carbonthirteen.com\"",
+      "page": "application"
     },
     {
       "id": "check-email-35a56e5b60",
       "url": "https://carbonthirteen.com/frequently-asked-questions/",
-      "title": "Carbon13 — terms page checked by scrape.py",
+      "title": "Carbon13 — terms page",
       "excerpt": "need any further information or help, please contact us on hello@carbonthirteen.com. K L How do the teams/ventures get funded? The investment",
       "page": "terms"
     },
     {
+      "id": "check-email-582aa27fc5",
+      "url": "https://carbonthirteen.com/about-us/our-community/partner-domain-expert-application-form/",
+      "title": "Carbon13 — application page",
+      "excerpt": "\"email\": \"info@carbonthirteen.com\"",
+      "page": "application"
+    },
+    {
+      "id": "check-email-676bd969ed",
+      "url": "https://carbonthirteen.com/investment-documentation-berlin-europe-venture-builder/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "\"email\": \"info@carbonthirteen.com\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-737b89af88",
+      "url": "https://carbonthirteen.com/home/founders-home/investment-case-resources/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "\"email\": \"info@carbonthirteen.com\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-743d4eceee",
+      "url": "https://carbonthirteen.com/investment-documentation-venture-accelerator/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "\"email\": \"info@carbonthirteen.com\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-7de0bb2814",
+      "url": "https://carbonthirteen.com/investment-documentation-cambridge-uk-venture-builder/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "\"email\": \"info@carbonthirteen.com\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-8971762db7",
+      "url": "https://carbonthirteen.com/home/founders-home/investment-checklist/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "\"email\": \"info@carbonthirteen.com\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-bc1102645e",
+      "url": "https://carbonthirteen.com/about-us/our-community/domain-startup-experts-application-form/",
+      "title": "Carbon13 — application page",
+      "excerpt": "\"email\": \"info@carbonthirteen.com\"",
+      "page": "application"
+    },
+    {
       "id": "check-email-c540242fa1",
       "url": "https://carbonthirteen.com/frequently-asked-questions/",
-      "title": "Carbon13 — terms page checked by scrape.py",
+      "title": "Carbon13 — terms page",
       "excerpt": "need any further information or help, please contact us on hello@carbonthirteen.com. K L How do the teams/ventures get funded The investment",
       "page": "terms"
     },
     {
+      "id": "check-email-d29e36f9ce",
+      "url": "https://carbonthirteen.com/tag/phase-2-application-video/",
+      "title": "Carbon13 — application page",
+      "excerpt": "\"email\": \"info@carbonthirteen.com\"",
+      "page": "application"
+    },
+    {
+      "id": "check-email-e366f538b0",
+      "url": "https://carbonthirteen.com/tag/p2-application-video-support/",
+      "title": "Carbon13 — application page",
+      "excerpt": "\"email\": \"info@carbonthirteen.com\"",
+      "page": "application"
+    },
+    {
       "id": "check-email-e8e2edd02c",
       "url": "https://carbonthirteen.com/",
-      "title": "Carbon13 — homepage checked by scrape.py",
+      "title": "Carbon13 — homepage",
       "excerpt": "\"email\": \"info@carbonthirteen.com\"",
       "page": "details"
     },
     {
       "id": "check-email-ed281eb550",
       "url": "https://carbonthirteen.com/frequently-asked-questions/",
-      "title": "Carbon13 — terms page checked by scrape.py",
+      "title": "Carbon13 — terms page",
       "excerpt": "\"email\": \"info@carbonthirteen.com\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-0db7c196ca",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "“virtual” days you can be located anywhere. There is no hybrid delivery where some people are in person and others are",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-0f5f8371fc",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "will need to attend in person, in Berlin, while on the “virtual” days you can be located anywhere. There is no hybrid",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-14e96b2d4f",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "delivery where some people are in person and others are virtual on the same day. In the in person days, delivery will take",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6809848802",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "hours” below). You will need to be able to attend the in person part of the programme in Cambridge, UK. Please do not",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-76e9a478fb",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "(“Teaming & Ideation”, 10 weeks) will be delivered partly in person, partly virtually. This means that on the “in person” days",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-7a23af9a2d",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "in person and others are virtual on the same day. In the in person days, delivery will take place during 9am to 5pm UK time",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-917199d9df",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "There is no hybrid delivery where some people are in person and others are virtual on the same day. In the in person",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-9567252eac",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "delivery where some people are in person and others are virtual on the same day. Delivery will take place during our “core",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-c0903123ad",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "There is no hybrid delivery where some people are in person and others are virtual on the same day. Delivery will take",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-e1f668473f",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "(“Teaming & Ideation”, 6 weeks) will be delivered partly in person, partly virtually. This means that on the “in-person” days",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-eba3390f91",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "will need to attend in person, in Cambridge, while on the “virtual” days you can be located anywhere. There is no hybrid",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-f1290b85e9",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "means that on the “in person” days you will need to attend in person, in Cambridge, while on the “virtual” days you can be",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-f24cf84a39",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "in person, partly virtually. This means that on the “in person” days you will need to attend in person, in Cambridge,",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-fa87487756",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "Berlin time. You will need to be able to attend the in person part of the programme in Berlin, Germany. Please do not",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-fbff2f9e46",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "means that on the “in-person” days you will need to attend in person, in Berlin, while on the “virtual” days you can be located",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-fcfc4bb265",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "in person, partly virtually. This means that on the “in-person” days you will need to attend in person, in Berlin, while",
       "page": "terms"
     },
     {
       "id": "check-name-7ce2f97d78",
       "url": "https://carbonthirteen.com/",
-      "title": "Carbon13 — homepage checked by scrape.py",
+      "title": "Carbon13 — homepage",
       "excerpt": "Home - Carbon13 Programmes Portfolio About us News Investors Jobs Apply",
       "page": "details"
     },
     {
       "id": "check-portfolio-08612b29bf",
       "url": "https://carbonthirteen.com/programmes/apply-now/",
-      "title": "Carbon13 — application page checked by scrape.py",
+      "title": "Carbon13 — application page",
       "excerpt": "Portfolio → https://carbonthirteen.com/our-portfolio/",
       "page": "application"
     },
     {
-      "id": "check-portfolio-5838e49906",
-      "url": "https://carbonthirteen.com/frequently-asked-questions/",
-      "title": "Carbon13 — terms page checked by scrape.py",
+      "id": "check-portfolio-12330e46ee",
+      "url": "https://carbonthirteen.com/tag/p2-application-video-support/",
+      "title": "Carbon13 — application page",
+      "excerpt": "Portfolio → https://carbonthirteen.com/our-portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-124ca6a0c1",
+      "url": "https://carbonthirteen.com/tag/phase-2-application-video/",
+      "title": "Carbon13 — application page",
+      "excerpt": "Portfolio → https://carbonthirteen.com/our-portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-4bcea5e1a9",
+      "url": "https://carbonthirteen.com/home/founders-home/investment-case-resources/",
+      "title": "Carbon13 — terms page",
       "excerpt": "Portfolio → https://carbonthirteen.com/our-portfolio/",
       "page": "terms"
     },
     {
+      "id": "check-portfolio-504411c247",
+      "url": "https://carbonthirteen.com/news/climate-takes-100-investments/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "Portfolio → https://carbonthirteen.com/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5838e49906",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "Portfolio → https://carbonthirteen.com/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5d63175d8b",
+      "url": "https://carbonthirteen.com/investment-documentation-berlin-europe-venture-builder/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "Portfolio → https://carbonthirteen.com/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-62f46ab875",
+      "url": "https://carbonthirteen.com/tag/applications/",
+      "title": "Carbon13 — application page",
+      "excerpt": "Portfolio → https://carbonthirteen.com/our-portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-6e74bf2c22",
+      "url": "https://carbonthirteen.com/about-us/our-community/partner-domain-expert-application-form/",
+      "title": "Carbon13 — application page",
+      "excerpt": "Portfolio → https://carbonthirteen.com/our-portfolio/",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-7a6c4f719f",
       "url": "https://carbonthirteen.com/",
-      "title": "Carbon13 — homepage checked by scrape.py",
+      "title": "Carbon13 — homepage",
       "excerpt": "Our Portfolio → https://carbonthirteen.com/our-portfolio/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-9887118bfe",
+      "url": "https://carbonthirteen.com/investment-documentation-venture-accelerator/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "Portfolio → https://carbonthirteen.com/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9d47a90902",
+      "url": "https://carbonthirteen.com/home/founders-home/investment-checklist/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "Portfolio → https://carbonthirteen.com/our-portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-ac3f95dcc1",
       "url": "https://carbonthirteen.com/",
-      "title": "Carbon13 — homepage checked by scrape.py",
+      "title": "Carbon13 — homepage",
       "excerpt": "Portfolio → https://carbonthirteen.com/our-portfolio/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-cfce3b25c8",
-      "url": "https://carbonthirteen.com/programmes/",
-      "title": "Carbon13 — details page checked by scrape.py",
+      "id": "check-portfolio-ba9e54edfc",
+      "url": "https://carbonthirteen.com/about-us/our-community/domain-startup-experts-application-form/",
+      "title": "Carbon13 — application page",
       "excerpt": "Portfolio → https://carbonthirteen.com/our-portfolio/",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d13a21a47c",
+      "url": "https://carbonthirteen.com/investment-documentation-cambridge-uk-venture-builder/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "Portfolio → https://carbonthirteen.com/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e25943427b",
+      "url": "https://carbonthirteen.com/programmes/venture-builder-cambridge/venture-builder-application-stage-1-cambridge/",
+      "title": "Carbon13 — application page",
+      "excerpt": "Portfolio → https://carbonthirteen.com/our-portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-012f3c879c",
+      "url": "https://carbonthirteen.com/news/climate-takes-100-investments/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "Apply Now → https://carbonthirteen.com/programmes/apply-now/",
+      "page": "terms"
     },
     {
       "id": "check-route-06cc394ae7",
       "url": "https://carbonthirteen.com/",
-      "title": "Carbon13 — homepage checked by scrape.py",
+      "title": "Carbon13 — homepage",
       "excerpt": "Apply Now → https://carbonthirteen.com/programmes/apply-now/",
       "page": "details"
     },
     {
-      "id": "check-route-2d9121c11f",
-      "url": "https://carbonthirteen.com/programmes/",
-      "title": "Carbon13 — details page checked by scrape.py",
+      "id": "check-route-0db2eaa326",
+      "url": "https://carbonthirteen.com/about-us/our-community/domain-startup-experts-application-form/",
+      "title": "Carbon13 — application page",
       "excerpt": "Apply Now → https://carbonthirteen.com/programmes/apply-now/",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-route-454d8b5cb2",
+      "url": "https://carbonthirteen.com/news/climate-takes-100-investments/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "apply to our Venture Accelerator → https://carbonthirteen.com/programmes/venture-launchpad/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-57b1a768d2",
+      "url": "https://carbonthirteen.com/home/founders-home/investment-case-resources/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "Apply Now → https://carbonthirteen.com/programmes/apply-now/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-59aa942c65",
+      "url": "https://carbonthirteen.com/about-us/our-community/partner-domain-expert-application-form/",
+      "title": "Carbon13 — application page",
+      "excerpt": "Apply Now → https://carbonthirteen.com/programmes/apply-now/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-60a9c4d8f5",
+      "url": "https://carbonthirteen.com/investment-documentation-venture-accelerator/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "Apply Now → https://carbonthirteen.com/programmes/apply-now/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-70f1cf6398",
+      "url": "https://carbonthirteen.com/news/climate-takes-100-investments/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "applications open for our Venture Builder in January. → https://carbonthirteen.com/programmes/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-7bbcce7838",
+      "url": "https://carbonthirteen.com/investment-documentation-berlin-europe-venture-builder/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "Apply Now → https://carbonthirteen.com/programmes/apply-now/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-881853334b",
+      "url": "https://carbonthirteen.com/tag/applications/",
+      "title": "Carbon13 — application page",
+      "excerpt": "Apply Now → https://carbonthirteen.com/programmes/apply-now/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-932519e3e4",
+      "url": "https://carbonthirteen.com/tag/phase-2-application-video/",
+      "title": "Carbon13 — application page",
+      "excerpt": "Apply Now → https://carbonthirteen.com/programmes/apply-now/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ac75a22ae6",
+      "url": "https://carbonthirteen.com/programmes/venture-builder-cambridge/venture-builder-application-stage-1-cambridge/",
+      "title": "Carbon13 — application page",
+      "excerpt": "Apply Now → https://carbonthirteen.com/programmes/apply-now/",
+      "page": "application"
     },
     {
       "id": "check-route-b4930e6dc4",
       "url": "https://carbonthirteen.com/frequently-asked-questions/",
-      "title": "Carbon13 — terms page checked by scrape.py",
+      "title": "Carbon13 — terms page",
+      "excerpt": "Apply Now → https://carbonthirteen.com/programmes/apply-now/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-c68214ad02",
+      "url": "https://carbonthirteen.com/home/founders-home/investment-checklist/",
+      "title": "Carbon13 — terms page",
+      "excerpt": "Apply Now → https://carbonthirteen.com/programmes/apply-now/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-d4067ded4f",
+      "url": "https://carbonthirteen.com/tag/p2-application-video-support/",
+      "title": "Carbon13 — application page",
+      "excerpt": "Apply Now → https://carbonthirteen.com/programmes/apply-now/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d6e4f4f562",
+      "url": "https://carbonthirteen.com/investment-documentation-cambridge-uk-venture-builder/",
+      "title": "Carbon13 — terms page",
       "excerpt": "Apply Now → https://carbonthirteen.com/programmes/apply-now/",
       "page": "terms"
     },
     {
       "id": "check-status-fa2e64347d",
       "url": "https://carbonthirteen.com/",
-      "title": "Carbon13 — homepage checked by scrape.py",
+      "title": "Carbon13 — homepage",
       "excerpt": "of domain expertise, investors, and partners. Apply Now to The super advisor for ambitious climate startups Applications Now Open Carbon13’s Venture Accelerator Programme Investing in over 100 climate-tech start-ups since 2021, Carbon13",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-c0db321199",
+      "url": "https://carbonthirteen.com/",
+      "page": "details",
+      "excerpt": "Home - Carbon13 Programmes Portfolio About us News Investors Jobs Apply Now Select Page We believe entrepreneurs will change the trajectory of climate change. The Venture Builder for the Climate Emergency Image Bluemethane ‘s first-of-its kind technology detects and captures methane emissions from water sources to create a new source of bio-power We build ventures capable of mitigating at least 10M tonnes of CO2e per annum once at scale The Venture Builder for the Climate Emergency Image Dr. Nicky Dee , Carbon13 Co-Founder and Chief Sustainability Officer “With the help of Carbon13, we’re able to quantify our carbon footprint and carbon impact.” The Venture Builder for the Climate Emergency Image Gabriele Barteskaite, CPO and Co-founder at Future Greens , is decarbonising our food system by growing fresh produce using food waste. Carbon13 builds and backs ventures addressing Earth’s critical life support systems. Initially this means addressing the most urgent problem of our time – climate change.  Determined People The climate crisis needs determined founders committed to this challenge, including scientists, engineers, and serial entrepreneurs. The average age of our cohorts is 37, and a third hold PhDs.  CARBON AT OUR CORE Every startup we build has the potential to reduce or remove CO₂e emissions by net 10 million tonnes per year when at scale.  OUR MISSION IS CLIMATE"
+    },
+    {
+      "id": "check-page-d3d4013725",
+      "url": "https://carbonthirteen.com/about-us/our-community/domain-startup-experts-application-form/",
+      "page": "application",
+      "excerpt": "Domain & Startup Expert Application Form - Carbon13 Programmes Portfolio About us News Investors Jobs Apply Now Select Page Our community Domain Expert & Start-up Expert Application Domain & Startup Experts Application Form Email This field is for validation purposes and should be left unchanged. Name (Required) First Last Email (Required) Intro Email Address If you would like us to use a different email address for introductions, please add it here. Phone (Required) Address (Required) Street Address Address Line 2 City County / State / Region ZIP / Postal Code Afghanistan Åland Islands Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei Darussalam Bulgaria Burkina Faso Burundi Cambodia Cameroon Canada Cape Verde Cayman Islands Central African Republic Chad Chile China Christmas Island Cocos Islands Colombia Comoros Congo Congo, Democratic Republic of the Cook Islands Costa Rica Côte d'Ivoire Croatia Cuba Curaçao Cyprus Czechia Denmark Djibouti Dominica Dominican Republic Ecuador Egypt El Salvador Equatorial Guinea Eritrea Estonia Eswatini Ethiopia Falkland Islands Faroe Islands Fiji"
+    },
+    {
+      "id": "check-page-a49b7cdc95",
+      "url": "https://carbonthirteen.com/about-us/our-community/partner-domain-expert-application-form/",
+      "page": "application",
+      "excerpt": "Partner Domain Expert Application Form - Carbon13 Programmes Portfolio About us News Investors Jobs Apply Now Select Page Our community Partner Domain Expert Application Partner Domain Experts Application Form X/Twitter This field is for validation purposes and should be left unchanged. Name (Required) First Last Work email (Required) Phone Company (Required) Job Title (Required) What is your most recent job title? Professional Profile Link (Required) e.g. LinkedIn, Xing Please provide a short bio that highlights your overall expertise relevant for our climate-tech startups. This will be shared with members of the Carbon 13 cohort in a private directory What are the names of the top three companies you are proud to have worked at, including any start-ups you founded or positions held in large corporations etc... Company 1 Company 2 Company 2 Company 3 Company 3 Please select all relevant choices reflecting your professional experience (Required) Technical Expert Industry Expert Startup Expert (former founder, or one of the first employees of a startup) Startup Ecosystem Player Investor What type of investor are you? Venture Capital (VC) Corporate Venture Capital (CVC) Corporate Family Office Angel Investor High Net Worth Individual Foundation Other (please specify) Please specify Have you worked as a mentor or advisor to either individuals or teams previously? (Required) Yes"
+    },
+    {
+      "id": "check-page-bc24875363",
+      "url": "https://carbonthirteen.com/programmes/apply-now/",
+      "page": "application",
+      "excerpt": "Apply Now - Carbon13 Programmes Portfolio About us News Investors Jobs Apply Now Select Page Venture Builder & Launchpad Apply Now Image Ki Hydrogen ‘s patented solution uses biomass electrolysis from waste streams such as breweries and agriculture to reduce energy required to produce green hydrogen by up to 75%. Our Programmes Whether you’re already a founder or ready to become one, explore our programmes to see how we’ll work with you to innovate on solutions for the climate emergency. Venture Builder Cambridge An eight-month programme for a cohort of 80 determined individuals from the UK and beyond, who don’t have a startup yet but want to find a co-founder and build a climate-tech startup. Learn more Venture Builder Berlin For founders resident in the EU, our Berlin Venture Builder combines the entrepreneurial and academic spirit of Cambridge with the DACH climate tech scene. Learn more VENTURE ACCELERATOR The Venture Accelerator is for pre-seed startups looking to raise their first round and want a superadvisor accelerator to work on product/market fit, go-to-market and investment readiness. Learn more Newsletter Join Carbon13’s community to follow our startups’ progress, including news, raises, events and job opportunities. Sign Up News FAQs Events Venture Job Board Media & Press Kit Partnerships Venture Builder Cambridge Venture Builder Berlin Venture Launchpad Our"
+    },
+    {
+      "id": "check-page-937272a370",
+      "url": "https://carbonthirteen.com/programmes/venture-builder-cambridge/venture-builder-application-stage-1-cambridge/",
+      "page": "application",
+      "excerpt": "Venture Builder Application Stage 1 Cambridge - Carbon13 Programmes Portfolio About us News Investors Jobs Apply Now Select Page Venture Builder Programme Cambridge Your Ticket for Cohort 7 Apply now Image Biozeroc ‘s patent pending BioConcrete solution removes the need for cement in the concrete manufacturing process. Apply now for our next Cambridge Cohort Are you willing to dedicate your skills, experiences and qualifications to solving climate change? Carbon13 is the Venture Builder for the Climate Emergency. Be one of 80 participants from tech, science and business and find the ideal cofounder among them. We put you in the best starting position for a successful climate tech startup that really moves the needle. To do that, we ask you to aim big, to build a solution with the potential to reduce carbon dioxide (or equivalent greenhouse gases) by 10 million tonnes per year , at scale – and all our support is designed to help you reach that figure. Our Cambridge origins have taught us the importance of world-class carbon, commercial and scientific understanding. Our growth to Berlin fuels the ecosystem of domain expertise, investors, and partners. You can benefit from the best of both worlds. Apply now Programme info Newsletter Join Carbon13’s community to follow our startups’ progress, including news, raises, events and job opportunities. Sign Up News FAQs Events Venture"
+    },
+    {
+      "id": "check-page-256411dd5b",
+      "url": "https://carbonthirteen.com/tag/applications/",
+      "page": "application",
+      "excerpt": "Applications Archives - Carbon13 Programmes Portfolio About us News Investors Jobs Apply Now Select Page We are looking for you Jul 22, 2025 | News All great stories start somewhere. Yours could start with an application. Carbon13 builds and backs ventures addressing Earth’s critical life support systems. Initially this means addressing the most urgent problem of our time – climate change. We are looking for you!... Newsletter Join Carbon13’s community to follow our startups’ progress, including news, raises, events and job opportunities. Sign Up News FAQs Events Venture Job Board Media & Press Kit Partnerships Venture Builder Cambridge Venture Builder Berlin Venture Launchpad Our Community Legal & Privacy Terms & Conditions Diversity & Inclusion Code of Conduct Risk Summary Carbon13 Capital Limited (FRN: 953220) is an Appointed Representative of Thema Management Ltd , an FCA authorised and regulated entity (FRN: 978496), in relation to their role as investment advisor to Carbon13 I SLP. Copyright ©2023+ Carbon13 Salisbury House, Station Road, Cambridge, CB1 2LA. All rights reserved."
+    },
+    {
+      "id": "check-page-d9cfd532c8",
+      "url": "https://carbonthirteen.com/tag/p2-application-video-support/",
+      "page": "application",
+      "excerpt": "P2 Application Video Support Archives - Carbon13 Programmes Portfolio About us News Investors Jobs Apply Now Select Page No Results Found The page you requested could not be found. Try refining your search, or use the navigation above to locate the post. Newsletter Join Carbon13’s community to follow our startups’ progress, including news, raises, events and job opportunities. Sign Up News FAQs Events Venture Job Board Media & Press Kit Partnerships Venture Builder Cambridge Venture Builder Berlin Venture Launchpad Our Community Legal & Privacy Terms & Conditions Diversity & Inclusion Code of Conduct Risk Summary Carbon13 Capital Limited (FRN: 953220) is an Appointed Representative of Thema Management Ltd , an FCA authorised and regulated entity (FRN: 978496), in relation to their role as investment advisor to Carbon13 I SLP. Copyright ©2023+ Carbon13 Salisbury House, Station Road, Cambridge, CB1 2LA. All rights reserved."
+    },
+    {
+      "id": "check-page-daef2da894",
+      "url": "https://carbonthirteen.com/tag/phase-2-application-video/",
+      "page": "application",
+      "excerpt": "Phase 2 Application Video Archives - Carbon13 Programmes Portfolio About us News Investors Jobs Apply Now Select Page No Results Found The page you requested could not be found. Try refining your search, or use the navigation above to locate the post. Newsletter Join Carbon13’s community to follow our startups’ progress, including news, raises, events and job opportunities. Sign Up News FAQs Events Venture Job Board Media & Press Kit Partnerships Venture Builder Cambridge Venture Builder Berlin Venture Launchpad Our Community Legal & Privacy Terms & Conditions Diversity & Inclusion Code of Conduct Risk Summary Carbon13 Capital Limited (FRN: 953220) is an Appointed Representative of Thema Management Ltd , an FCA authorised and regulated entity (FRN: 978496), in relation to their role as investment advisor to Carbon13 I SLP. Copyright ©2023+ Carbon13 Salisbury House, Station Road, Cambridge, CB1 2LA. All rights reserved."
+    },
+    {
+      "id": "check-page-caf80d00a5",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "page": "terms",
+      "excerpt": "Frequently Asked Questions - Carbon13 Programmes Portfolio About us News Investors Jobs Apply Now Select Page FAQs Building a company with Carbon13​ K L What is the application process for your programme? The application process is in multiple stages. Stage 1 is a brief eligibility questionnaire. Stage 2 is an application form which will require about two hours to complete via SurveyMonkey Apply. Your submitted application will be independently assessed by two members of our team using a scoring matrix. Using the scoring matrix the team will decide who will be invited for an interview. Applicants chosen for interview will be interviewed by two people from our team. The team will then reconvene and agree which applicants should be offered a place on the programme. K L How much experience do I need? If you want to build a venture with the potential to reduce carbon emissions, then please apply to the programme. We encourage you to be honest about your experience. K L How do you assess people’s applications? All applications are independently assessed by a panel of assessors, who will use a scoring mechanism that takes into consideration the demands of the programme alongside the need to ensure there is diversity and appropriate different skills in the teams that will come together on the programme. K L I don't fit the standard mould of an entrepreneur, should I still apply? The"
+    },
+    {
+      "id": "check-page-2b939ca87c",
+      "url": "https://carbonthirteen.com/home/founders-home/investment-case-resources/",
+      "page": "terms",
+      "excerpt": "Investment Case Resources - Carbon13 Programmes Portfolio About us News Investors Jobs Apply Now Select Page Membership Required You must be a member to access this content. View Membership Levels Already a member? Log in here Newsletter Join Carbon13’s community to follow our startups’ progress, including news, raises, events and job opportunities. Sign Up News FAQs Events Venture Job Board Media & Press Kit Partnerships Venture Builder Cambridge Venture Builder Berlin Venture Launchpad Our Community Legal & Privacy Terms & Conditions Diversity & Inclusion Code of Conduct Risk Summary Carbon13 Capital Limited (FRN: 953220) is an Appointed Representative of Thema Management Ltd , an FCA authorised and regulated entity (FRN: 978496), in relation to their role as investment advisor to Carbon13 I SLP. Copyright ©2023+ Carbon13 Salisbury House, Station Road, Cambridge, CB1 2LA. All rights reserved."
+    },
+    {
+      "id": "check-page-66565df92a",
+      "url": "https://carbonthirteen.com/home/founders-home/investment-checklist/",
+      "page": "terms",
+      "excerpt": "Investment Resources - Carbon13 Programmes Portfolio About us News Investors Jobs Apply Now Select Page Membership Required You must be a member to access this content. View Membership Levels Already a member? Log in here Newsletter Join Carbon13’s community to follow our startups’ progress, including news, raises, events and job opportunities. Sign Up News FAQs Events Venture Job Board Media & Press Kit Partnerships Venture Builder Cambridge Venture Builder Berlin Venture Launchpad Our Community Legal & Privacy Terms & Conditions Diversity & Inclusion Code of Conduct Risk Summary Carbon13 Capital Limited (FRN: 953220) is an Appointed Representative of Thema Management Ltd , an FCA authorised and regulated entity (FRN: 978496), in relation to their role as investment advisor to Carbon13 I SLP. Copyright ©2023+ Carbon13 Salisbury House, Station Road, Cambridge, CB1 2LA. All rights reserved."
+    },
+    {
+      "id": "check-page-2f93b8401a",
+      "url": "https://carbonthirteen.com/investment-documentation-berlin-europe-venture-builder/",
+      "page": "terms",
+      "excerpt": "Investment Documentation Berlin/Europe Venture builder - Carbon13 Programmes Portfolio About us News Investors Jobs Apply Now Select Page Membership Required You must be a member to access this content. View Membership Levels Already a member? Log in here Newsletter Join Carbon13’s community to follow our startups’ progress, including news, raises, events and job opportunities. Sign Up News FAQs Events Venture Job Board Media & Press Kit Partnerships Venture Builder Cambridge Venture Builder Berlin Venture Launchpad Our Community Legal & Privacy Terms & Conditions Diversity & Inclusion Code of Conduct Risk Summary Carbon13 Capital Limited (FRN: 953220) is an Appointed Representative of Thema Management Ltd , an FCA authorised and regulated entity (FRN: 978496), in relation to their role as investment advisor to Carbon13 I SLP. Copyright ©2023+ Carbon13 Salisbury House, Station Road, Cambridge, CB1 2LA. All rights reserved."
+    },
+    {
+      "id": "check-page-8a43aae6ff",
+      "url": "https://carbonthirteen.com/investment-documentation-cambridge-uk-venture-builder/",
+      "page": "terms",
+      "excerpt": "Investment Documentation Cambridge/UK Venture Builder - Carbon13 Programmes Portfolio About us News Investors Jobs Apply Now Select Page Membership Required You must be a member to access this content. View Membership Levels Already a member? Log in here Newsletter Join Carbon13’s community to follow our startups’ progress, including news, raises, events and job opportunities. Sign Up News FAQs Events Venture Job Board Media & Press Kit Partnerships Venture Builder Cambridge Venture Builder Berlin Venture Launchpad Our Community Legal & Privacy Terms & Conditions Diversity & Inclusion Code of Conduct Risk Summary Carbon13 Capital Limited (FRN: 953220) is an Appointed Representative of Thema Management Ltd , an FCA authorised and regulated entity (FRN: 978496), in relation to their role as investment advisor to Carbon13 I SLP. Copyright ©2023+ Carbon13 Salisbury House, Station Road, Cambridge, CB1 2LA. All rights reserved."
+    },
+    {
+      "id": "check-page-fe69a8d5e0",
+      "url": "https://carbonthirteen.com/investment-documentation-venture-accelerator/",
+      "page": "terms",
+      "excerpt": "Investment Documentation - Venture Accelerator - Carbon13 Programmes Portfolio About us News Investors Jobs Apply Now Select Page Membership Required You must be a member to access this content. View Membership Levels Already a member? Log in here Newsletter Join Carbon13’s community to follow our startups’ progress, including news, raises, events and job opportunities. Sign Up News FAQs Events Venture Job Board Media & Press Kit Partnerships Venture Builder Cambridge Venture Builder Berlin Venture Launchpad Our Community Legal & Privacy Terms & Conditions Diversity & Inclusion Code of Conduct Risk Summary Carbon13 Capital Limited (FRN: 953220) is an Appointed Representative of Thema Management Ltd , an FCA authorised and regulated entity (FRN: 978496), in relation to their role as investment advisor to Carbon13 I SLP. Copyright ©2023+ Carbon13 Salisbury House, Station Road, Cambridge, CB1 2LA. All rights reserved."
+    },
+    {
+      "id": "check-page-a08ecea022",
+      "url": "https://carbonthirteen.com/news/climate-takes-100-investments/",
+      "page": "terms",
+      "excerpt": "Climate Takes 100 Investments - Carbon13 Programmes Portfolio About us News Investors Jobs Apply Now Select Page Climate Takes 100 Investments Dec 17, 2025 | News , Podcasts This episode of our podcast is dedicated to the biggest Carbon13 milestone yet – we just hit 100 invested ventures! That’s 100 invested climate startups since we signed our first cheques in 2021. We booted up our website in 2020 and welcomed the first fifty founders through our door in March 2021 – now over 1500 have participated in a Carbon13 programme. The current portfolio is working towards a potential Co2e emissions reduction of an incredible 340 million tonnes per year – that’s just under 1% of global emissions right now. So let’s chat with Nicky, Michael and Sara about our 100 invested ventures milestone, including: – The mission of Carbon13’s portfolio and why we’ve built it – Examples of startups that embody the Carbon13 story (hard to pick from 100!) – What people misunderstand about “impact” – How climate’s changed since 2020 and by extension, how climate entrepreneurs should approach 2026. “The climatetech space has become more sophisticated. We’ve got a better understanding of not just the tech, but where the commercial opportunities are. And increasingly, we do expect founders to enter with some sort of an idea, either a commercial frustration or a technical trajectory that they’ve been"
     }
   ],
   "findings": {
@@ -137,6 +646,14 @@
       {
         "value": "https://carbonthirteen.com/programmes/apply-now/",
         "evidenceId": "check-route-06cc394ae7"
+      },
+      {
+        "value": "https://carbonthirteen.com/programmes/",
+        "evidenceId": "check-route-70f1cf6398"
+      },
+      {
+        "value": "https://carbonthirteen.com/programmes/venture-launchpad/",
+        "evidenceId": "check-route-454d8b5cb2"
       }
     ],
     "applicationUrl": [
@@ -153,8 +670,54 @@
     ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "January",
+        "evidenceId": "check-announced-11971f058b"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "10",
+        "evidenceId": "check-duration-7615974d41"
+      },
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-19f7f27089"
+      },
+      {
+        "value": "4 months",
+        "evidenceId": "check-duration-b2dcfa277f"
+      },
+      {
+        "value": "6",
+        "evidenceId": "check-duration-2797082b9d"
+      },
+      {
+        "value": "2",
+        "evidenceId": "check-duration-f6a2291a8a"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-76e9a478fb"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-eba3390f91"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-0db7c196ca"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://carbonthirteen.com/our-portfolio/",

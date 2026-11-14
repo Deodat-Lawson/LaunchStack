@@ -1,18 +1,143 @@
 {
   "programId": "eit-manufacturing",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.eit.europa.eu/",
-    "https://www.eit.europa.eu/global-challenges/about-our-knowledge-and-innovation-communities",
-    "https://www.eit.europa.eu/our-activities/call-for-eit-communities/2021/faq"
+    "https://www.eit.europa.eu/our-activities/call-for-eit-communities/2021/faq",
+    "https://www.eit.europa.eu/who-we-are/faq",
+    "https://www.eit.europa.eu/about-us",
+    "https://www.eit.europa.eu/about-us/contact-us",
+    "https://eit.europa.eu/who-we-are/faq",
+    "https://www.eit.europa.eu/about-us/eit-glance",
+    "https://www.eit.europa.eu/about-us/eit-governance",
+    "https://www.eit.europa.eu/about-us/eit-governance/eit-governing-board",
+    "https://www.eit.europa.eu/about-us/eit-governance/eit-management-team",
+    "https://www.eit.europa.eu/about-us/eit-governance/public-meetings-record",
+    "https://www.eit.europa.eu/about-us/eit-legal-framework",
+    "https://www.eit.europa.eu/about-us/legal-framework/complaints",
+    "https://www.eit.europa.eu/about-us/legal-framework/conflicts-interest",
+    "https://www.eit.europa.eu/about-us/legal-framework/data-protection"
   ],
   "evidence": [
     {
+      "id": "check-announced-72f07ad468",
+      "url": "https://www.eit.europa.eu/about-us/legal-framework/complaints",
+      "title": "EIT Manufacturing — program page",
+      "excerpt": "to reply within two months of receipt of a complete complaint. This deadline may be extended depending on the complexity of the case. The EIT commits",
+      "page": "details"
+    },
+    {
+      "id": "check-location-1178ad4f74",
+      "url": "https://www.eit.europa.eu/about-us/contact-us",
+      "title": "EIT Manufacturing — program page",
+      "excerpt": "Contact us The EIT's main office is located in Budapest. Address: Infopark 1 Building E,",
+      "page": "details"
+    },
+    {
+      "id": "check-location-187d56d33a",
+      "url": "https://www.eit.europa.eu/about-us",
+      "title": "EIT Manufacturing — program page",
+      "excerpt": "Get in Touch The EIT's main office is located in Budapest. FAQ Navigate our frequently asked",
+      "page": "details"
+    },
+    {
       "id": "check-route-9d9db44c93",
       "url": "https://www.eit.europa.eu/",
-      "title": "EIT Manufacturing — homepage checked by scrape.py",
+      "title": "EIT Manufacturing — homepage",
       "excerpt": "https://www.eit.europa.eu/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-a4b4272e0b",
+      "url": "https://www.eit.europa.eu/",
+      "page": "details",
+      "excerpt": "European Institute of Innovation & Technology (EIT) | EIT Skip to main content A body of the European Union EN English German French Spanish Italian Dutch Polish Portuguese Greek Czech Danish Estonian Finnish Hungarian Lithuanian Latvian Romanian Slovak Slovenian Swedish Bulgarian Croatian Maltese Irish Translating page... This may take 30-60 seconds Dark Theme Search Enter your keywords Apply Menu Global challenges About our communities Added value manufacturing Climate change Cultural & creative sectors & industries Digitalisation Future of food Health innovation Raw materials Sustainable energy Urban mobility Water resilience Activities EIT Community activities Entrepreneurial education Innovation driven research Business creation Regional innovation scheme Knowledge centre EIT Awards Opportunities Current opportunities Call for EIT Communities EIT Water EIT Culture & Creativity FAQs Invitations for KICs Work with us Vacancies Procurement Open calls Other calls and notices Newsroom News Events Past events Press Newsletter About Us EIT at a glance EIT Impact stories EIT Ecosystem Map EIT Governance EIT Governing Board EIT Management Team Public meetings record EIT Alumni Activities Stakeholders and partners EU institutions National authorities Member State representatives group Representatives and substitutes Documents Legal framework Data protection Conflicts of Interest"
+    },
+    {
+      "id": "check-page-7b494c5705",
+      "url": "https://www.eit.europa.eu/our-activities/call-for-eit-communities/2021/faq",
+      "page": "terms",
+      "excerpt": "2021 Call for Proposals - FAQs | EIT Skip to main content A body of the European Union EN English German French Spanish Italian Dutch Polish Portuguese Greek Czech Danish Estonian Finnish Hungarian Lithuanian Latvian Romanian Slovak Slovenian Swedish Bulgarian Croatian Maltese Irish Translating page... This may take 30-60 seconds Dark Theme Search Enter your keywords Apply Menu Global challenges About our communities Added value manufacturing Climate change Cultural & creative sectors & industries Digitalisation Future of food Health innovation Raw materials Sustainable energy Urban mobility Water resilience Activities EIT Community activities Entrepreneurial education Innovation driven research Business creation Regional innovation scheme Knowledge centre EIT Awards Opportunities Current opportunities Call for EIT Communities EIT Water EIT Culture & Creativity FAQs Invitations for KICs Work with us Vacancies Procurement Open calls Other calls and notices Newsroom News Events Past events Press Newsletter About Us EIT at a glance EIT Impact stories EIT Ecosystem Map EIT Governance EIT Governing Board EIT Management Team Public meetings record EIT Alumni Activities Stakeholders and partners EU institutions National authorities Member State representatives group Representatives and substitutes Documents Legal framework Data protection Conflicts of Interest Complaints Public"
+    },
+    {
+      "id": "check-page-7b589511d2",
+      "url": "https://www.eit.europa.eu/who-we-are/faq",
+      "page": "terms",
+      "excerpt": "FAQ | EIT Skip to main content A body of the European Union EN English German French Spanish Italian Dutch Polish Portuguese Greek Czech Danish Estonian Finnish Hungarian Lithuanian Latvian Romanian Slovak Slovenian Swedish Bulgarian Croatian Maltese Irish Translating page... This may take 30-60 seconds Dark Theme Search Enter your keywords Apply Menu Global challenges About our communities Added value manufacturing Climate change Cultural & creative sectors & industries Digitalisation Future of food Health innovation Raw materials Sustainable energy Urban mobility Water resilience Activities EIT Community activities Entrepreneurial education Innovation driven research Business creation Regional innovation scheme Knowledge centre EIT Awards Opportunities Current opportunities Call for EIT Communities EIT Water EIT Culture & Creativity FAQs Invitations for KICs Work with us Vacancies Procurement Open calls Other calls and notices Newsroom News Events Past events Press Newsletter About Us EIT at a glance EIT Impact stories EIT Ecosystem Map EIT Governance EIT Governing Board EIT Management Team Public meetings record EIT Alumni Activities Stakeholders and partners EU institutions National authorities Member State representatives group Representatives and substitutes Documents Legal framework Data protection Conflicts of Interest Complaints Public access to documents Library Get"
+    },
+    {
+      "id": "check-page-3c54aeb2bd",
+      "url": "https://www.eit.europa.eu/about-us",
+      "page": "details",
+      "excerpt": "About us | EIT Skip to main content A body of the European Union EN English German French Spanish Italian Dutch Polish Portuguese Greek Czech Danish Estonian Finnish Hungarian Lithuanian Latvian Romanian Slovak Slovenian Swedish Bulgarian Croatian Maltese Irish Translating page... This may take 30-60 seconds Dark Theme Search Enter your keywords Apply Menu Global challenges About our communities Added value manufacturing Climate change Cultural & creative sectors & industries Digitalisation Future of food Health innovation Raw materials Sustainable energy Urban mobility Water resilience Activities EIT Community activities Entrepreneurial education Innovation driven research Business creation Regional innovation scheme Knowledge centre EIT Awards Opportunities Current opportunities Call for EIT Communities EIT Water EIT Culture & Creativity FAQs Invitations for KICs Work with us Vacancies Procurement Open calls Other calls and notices Newsroom News Events Past events Press Newsletter About Us EIT at a glance EIT Impact stories EIT Ecosystem Map EIT Governance EIT Governing Board EIT Management Team Public meetings record EIT Alumni Activities Stakeholders and partners EU institutions National authorities Member State representatives group Representatives and substitutes Documents Legal framework Data protection Conflicts of Interest Complaints Public access to documents Library"
+    },
+    {
+      "id": "check-page-79437628b4",
+      "url": "https://www.eit.europa.eu/about-us/contact-us",
+      "page": "details",
+      "excerpt": "Contact us | EIT Skip to main content A body of the European Union EN English German French Spanish Italian Dutch Polish Portuguese Greek Czech Danish Estonian Finnish Hungarian Lithuanian Latvian Romanian Slovak Slovenian Swedish Bulgarian Croatian Maltese Irish Translating page... This may take 30-60 seconds Dark Theme Search Enter your keywords Apply Menu Global challenges About our communities Added value manufacturing Climate change Cultural & creative sectors & industries Digitalisation Future of food Health innovation Raw materials Sustainable energy Urban mobility Water resilience Activities EIT Community activities Entrepreneurial education Innovation driven research Business creation Regional innovation scheme Knowledge centre EIT Awards Opportunities Current opportunities Call for EIT Communities EIT Water EIT Culture & Creativity FAQs Invitations for KICs Work with us Vacancies Procurement Open calls Other calls and notices Newsroom News Events Past events Press Newsletter About Us EIT at a glance EIT Impact stories EIT Ecosystem Map EIT Governance EIT Governing Board EIT Management Team Public meetings record EIT Alumni Activities Stakeholders and partners EU institutions National authorities Member State representatives group Representatives and substitutes Documents Legal framework Data protection Conflicts of Interest Complaints Public access to documents"
+    },
+    {
+      "id": "check-page-d46ef6d042",
+      "url": "https://eit.europa.eu/who-we-are/faq",
+      "page": "terms",
+      "excerpt": "FAQ | EIT Skip to main content A body of the European Union EN English German French Spanish Italian Dutch Polish Portuguese Greek Czech Danish Estonian Finnish Hungarian Lithuanian Latvian Romanian Slovak Slovenian Swedish Bulgarian Croatian Maltese Irish Translating page... This may take 30-60 seconds Dark Theme Search Enter your keywords Apply Menu Global challenges About our communities Added value manufacturing Climate change Cultural & creative sectors & industries Digitalisation Future of food Health innovation Raw materials Sustainable energy Urban mobility Water resilience Activities EIT Community activities Entrepreneurial education Innovation driven research Business creation Regional innovation scheme Knowledge centre EIT Awards Opportunities Current opportunities Call for EIT Communities EIT Water EIT Culture & Creativity FAQs Invitations for KICs Work with us Vacancies Procurement Open calls Other calls and notices Newsroom News Events Past events Press Newsletter About Us EIT at a glance EIT Impact stories EIT Ecosystem Map EIT Governance EIT Governing Board EIT Management Team Public meetings record EIT Alumni Activities Stakeholders and partners EU institutions National authorities Member State representatives group Representatives and substitutes Documents Legal framework Data protection Conflicts of Interest Complaints Public access to documents Library Get"
+    },
+    {
+      "id": "check-page-ca77384fe8",
+      "url": "https://www.eit.europa.eu/about-us/eit-glance",
+      "page": "details",
+      "excerpt": "EIT at a glance | EIT Skip to main content A body of the European Union EN English German French Spanish Italian Dutch Polish Portuguese Greek Czech Danish Estonian Finnish Hungarian Lithuanian Latvian Romanian Slovak Slovenian Swedish Bulgarian Croatian Maltese Irish Translating page... This may take 30-60 seconds Dark Theme Search Enter your keywords Apply Menu Global challenges About our communities Added value manufacturing Climate change Cultural & creative sectors & industries Digitalisation Future of food Health innovation Raw materials Sustainable energy Urban mobility Water resilience Activities EIT Community activities Entrepreneurial education Innovation driven research Business creation Regional innovation scheme Knowledge centre EIT Awards Opportunities Current opportunities Call for EIT Communities EIT Water EIT Culture & Creativity FAQs Invitations for KICs Work with us Vacancies Procurement Open calls Other calls and notices Newsroom News Events Past events Press Newsletter About Us EIT at a glance EIT Impact stories EIT Ecosystem Map EIT Governance EIT Governing Board EIT Management Team Public meetings record EIT Alumni Activities Stakeholders and partners EU institutions National authorities Member State representatives group Representatives and substitutes Documents Legal framework Data protection Conflicts of Interest Complaints Public access to documents"
+    },
+    {
+      "id": "check-page-bb48a21665",
+      "url": "https://www.eit.europa.eu/about-us/eit-governance",
+      "page": "details",
+      "excerpt": "EIT Governance | EIT Skip to main content A body of the European Union EN English German French Spanish Italian Dutch Polish Portuguese Greek Czech Danish Estonian Finnish Hungarian Lithuanian Latvian Romanian Slovak Slovenian Swedish Bulgarian Croatian Maltese Irish Translating page... This may take 30-60 seconds Dark Theme Search Enter your keywords Apply Menu Global challenges About our communities Added value manufacturing Climate change Cultural & creative sectors & industries Digitalisation Future of food Health innovation Raw materials Sustainable energy Urban mobility Water resilience Activities EIT Community activities Entrepreneurial education Innovation driven research Business creation Regional innovation scheme Knowledge centre EIT Awards Opportunities Current opportunities Call for EIT Communities EIT Water EIT Culture & Creativity FAQs Invitations for KICs Work with us Vacancies Procurement Open calls Other calls and notices Newsroom News Events Past events Press Newsletter About Us EIT at a glance EIT Impact stories EIT Ecosystem Map EIT Governance EIT Governing Board EIT Management Team Public meetings record EIT Alumni Activities Stakeholders and partners EU institutions National authorities Member State representatives group Representatives and substitutes Documents Legal framework Data protection Conflicts of Interest Complaints Public access to documents"
+    },
+    {
+      "id": "check-page-3b63ad5105",
+      "url": "https://www.eit.europa.eu/about-us/eit-governance/eit-governing-board",
+      "page": "details",
+      "excerpt": "EIT Governing Board | EIT Skip to main content A body of the European Union EN English German French Spanish Italian Dutch Polish Portuguese Greek Czech Danish Estonian Finnish Hungarian Lithuanian Latvian Romanian Slovak Slovenian Swedish Bulgarian Croatian Maltese Irish Translating page... This may take 30-60 seconds Dark Theme Search Enter your keywords Apply Menu Global challenges About our communities Added value manufacturing Climate change Cultural & creative sectors & industries Digitalisation Future of food Health innovation Raw materials Sustainable energy Urban mobility Water resilience Activities EIT Community activities Entrepreneurial education Innovation driven research Business creation Regional innovation scheme Knowledge centre EIT Awards Opportunities Current opportunities Call for EIT Communities EIT Water EIT Culture & Creativity FAQs Invitations for KICs Work with us Vacancies Procurement Open calls Other calls and notices Newsroom News Events Past events Press Newsletter About Us EIT at a glance EIT Impact stories EIT Ecosystem Map EIT Governance EIT Governing Board EIT Management Team Public meetings record EIT Alumni Activities Stakeholders and partners EU institutions National authorities Member State representatives group Representatives and substitutes Documents Legal framework Data protection Conflicts of Interest Complaints Public access to"
+    },
+    {
+      "id": "check-page-e56b9a3fb6",
+      "url": "https://www.eit.europa.eu/about-us/eit-governance/eit-management-team",
+      "page": "details",
+      "excerpt": "EIT Management Team | EIT Skip to main content A body of the European Union EN English German French Spanish Italian Dutch Polish Portuguese Greek Czech Danish Estonian Finnish Hungarian Lithuanian Latvian Romanian Slovak Slovenian Swedish Bulgarian Croatian Maltese Irish Translating page... This may take 30-60 seconds Dark Theme Search Enter your keywords Apply Menu Global challenges About our communities Added value manufacturing Climate change Cultural & creative sectors & industries Digitalisation Future of food Health innovation Raw materials Sustainable energy Urban mobility Water resilience Activities EIT Community activities Entrepreneurial education Innovation driven research Business creation Regional innovation scheme Knowledge centre EIT Awards Opportunities Current opportunities Call for EIT Communities EIT Water EIT Culture & Creativity FAQs Invitations for KICs Work with us Vacancies Procurement Open calls Other calls and notices Newsroom News Events Past events Press Newsletter About Us EIT at a glance EIT Impact stories EIT Ecosystem Map EIT Governance EIT Governing Board EIT Management Team Public meetings record EIT Alumni Activities Stakeholders and partners EU institutions National authorities Member State representatives group Representatives and substitutes Documents Legal framework Data protection Conflicts of Interest Complaints Public access to"
+    },
+    {
+      "id": "check-page-13cf8fb114",
+      "url": "https://www.eit.europa.eu/about-us/eit-governance/public-meetings-record",
+      "page": "details",
+      "excerpt": "Public Meetings Record | EIT Skip to main content A body of the European Union EN English German French Spanish Italian Dutch Polish Portuguese Greek Czech Danish Estonian Finnish Hungarian Lithuanian Latvian Romanian Slovak Slovenian Swedish Bulgarian Croatian Maltese Irish Translating page... This may take 30-60 seconds Dark Theme Search Enter your keywords Apply Menu Global challenges About our communities Added value manufacturing Climate change Cultural & creative sectors & industries Digitalisation Future of food Health innovation Raw materials Sustainable energy Urban mobility Water resilience Activities EIT Community activities Entrepreneurial education Innovation driven research Business creation Regional innovation scheme Knowledge centre EIT Awards Opportunities Current opportunities Call for EIT Communities EIT Water EIT Culture & Creativity FAQs Invitations for KICs Work with us Vacancies Procurement Open calls Other calls and notices Newsroom News Events Past events Press Newsletter About Us EIT at a glance EIT Impact stories EIT Ecosystem Map EIT Governance EIT Governing Board EIT Management Team Public meetings record EIT Alumni Activities Stakeholders and partners EU institutions National authorities Member State representatives group Representatives and substitutes Documents Legal framework Data protection Conflicts of Interest Complaints Public access to"
+    },
+    {
+      "id": "check-page-9a45f36ce2",
+      "url": "https://www.eit.europa.eu/about-us/eit-legal-framework",
+      "page": "details",
+      "excerpt": "EIT legal framework | EIT Skip to main content A body of the European Union EN English German French Spanish Italian Dutch Polish Portuguese Greek Czech Danish Estonian Finnish Hungarian Lithuanian Latvian Romanian Slovak Slovenian Swedish Bulgarian Croatian Maltese Irish Translating page... This may take 30-60 seconds Dark Theme Search Enter your keywords Apply Menu Global challenges About our communities Added value manufacturing Climate change Cultural & creative sectors & industries Digitalisation Future of food Health innovation Raw materials Sustainable energy Urban mobility Water resilience Activities EIT Community activities Entrepreneurial education Innovation driven research Business creation Regional innovation scheme Knowledge centre EIT Awards Opportunities Current opportunities Call for EIT Communities EIT Water EIT Culture & Creativity FAQs Invitations for KICs Work with us Vacancies Procurement Open calls Other calls and notices Newsroom News Events Past events Press Newsletter About Us EIT at a glance EIT Impact stories EIT Ecosystem Map EIT Governance EIT Governing Board EIT Management Team Public meetings record EIT Alumni Activities Stakeholders and partners EU institutions National authorities Member State representatives group Representatives and substitutes Documents Legal framework Data protection Conflicts of Interest Complaints Public access to"
+    },
+    {
+      "id": "check-page-1109158d34",
+      "url": "https://www.eit.europa.eu/about-us/legal-framework/complaints",
+      "page": "details",
+      "excerpt": "Complaints | EIT Skip to main content A body of the European Union EN English German French Spanish Italian Dutch Polish Portuguese Greek Czech Danish Estonian Finnish Hungarian Lithuanian Latvian Romanian Slovak Slovenian Swedish Bulgarian Croatian Maltese Irish Translating page... This may take 30-60 seconds Dark Theme Search Enter your keywords Apply Menu Global challenges About our communities Added value manufacturing Climate change Cultural & creative sectors & industries Digitalisation Future of food Health innovation Raw materials Sustainable energy Urban mobility Water resilience Activities EIT Community activities Entrepreneurial education Innovation driven research Business creation Regional innovation scheme Knowledge centre EIT Awards Opportunities Current opportunities Call for EIT Communities EIT Water EIT Culture & Creativity FAQs Invitations for KICs Work with us Vacancies Procurement Open calls Other calls and notices Newsroom News Events Past events Press Newsletter About Us EIT at a glance EIT Impact stories EIT Ecosystem Map EIT Governance EIT Governing Board EIT Management Team Public meetings record EIT Alumni Activities Stakeholders and partners EU institutions National authorities Member State representatives group Representatives and substitutes Documents Legal framework Data protection Conflicts of Interest Complaints Public access to documents"
+    },
+    {
+      "id": "check-page-708dbdfc8b",
+      "url": "https://www.eit.europa.eu/about-us/legal-framework/conflicts-interest",
+      "page": "details",
+      "excerpt": "Conflicts of interest | EIT Skip to main content A body of the European Union EN English German French Spanish Italian Dutch Polish Portuguese Greek Czech Danish Estonian Finnish Hungarian Lithuanian Latvian Romanian Slovak Slovenian Swedish Bulgarian Croatian Maltese Irish Translating page... This may take 30-60 seconds Dark Theme Search Enter your keywords Apply Menu Global challenges About our communities Added value manufacturing Climate change Cultural & creative sectors & industries Digitalisation Future of food Health innovation Raw materials Sustainable energy Urban mobility Water resilience Activities EIT Community activities Entrepreneurial education Innovation driven research Business creation Regional innovation scheme Knowledge centre EIT Awards Opportunities Current opportunities Call for EIT Communities EIT Water EIT Culture & Creativity FAQs Invitations for KICs Work with us Vacancies Procurement Open calls Other calls and notices Newsroom News Events Past events Press Newsletter About Us EIT at a glance EIT Impact stories EIT Ecosystem Map EIT Governance EIT Governing Board EIT Management Team Public meetings record EIT Alumni Activities Stakeholders and partners EU institutions National authorities Member State representatives group Representatives and substitutes Documents Legal framework Data protection Conflicts of Interest Complaints Public access to"
+    },
+    {
+      "id": "check-page-72c460ab0c",
+      "url": "https://www.eit.europa.eu/about-us/legal-framework/data-protection",
+      "page": "details",
+      "excerpt": "Data protection | EIT Skip to main content A body of the European Union EN English German French Spanish Italian Dutch Polish Portuguese Greek Czech Danish Estonian Finnish Hungarian Lithuanian Latvian Romanian Slovak Slovenian Swedish Bulgarian Croatian Maltese Irish Translating page... This may take 30-60 seconds Dark Theme Search Enter your keywords Apply Menu Global challenges About our communities Added value manufacturing Climate change Cultural & creative sectors & industries Digitalisation Future of food Health innovation Raw materials Sustainable energy Urban mobility Water resilience Activities EIT Community activities Entrepreneurial education Innovation driven research Business creation Regional innovation scheme Knowledge centre EIT Awards Opportunities Current opportunities Call for EIT Communities EIT Water EIT Culture & Creativity FAQs Invitations for KICs Work with us Vacancies Procurement Open calls Other calls and notices Newsroom News Events Past events Press Newsletter About Us EIT at a glance EIT Impact stories EIT Ecosystem Map EIT Governance EIT Governing Board EIT Management Team Public meetings record EIT Alumni Activities Stakeholders and partners EU institutions National authorities Member State representatives group Representatives and substitutes Documents Legal framework Data protection Conflicts of Interest Complaints Public access to documents"
     }
   ],
   "findings": {
@@ -28,8 +153,25 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "may",
+        "evidenceId": "check-announced-72f07ad468"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [
+      {
+        "value": "Budapest",
+        "evidenceId": "check-location-187d56d33a"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

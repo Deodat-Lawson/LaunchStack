@@ -1,59 +1,388 @@
 {
   "programId": "northzone",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://northzone.com/",
-    "https://northzone.com/about"
+    "https://northzone.com/insights/tobii-gaze-application-wins-microsoft-award",
+    "https://northzone.com/insights/tobii-gaze-application-wins-microsoft-award?e99d84d8_page=2",
+    "https://northzone.com/insights/annoucing-investment-fubotv",
+    "https://northzone.com/insights/announcing-investment-personio",
+    "https://northzone.com/insights/announcing-our-investment-in-nested",
+    "https://northzone.com/insights/architectural-collaboration-reimagined-our-investment-in-rayon",
+    "https://northzone.com/insights/autonomous-truck-company-einride-plans-to-go-public-in-spac-deal",
+    "https://northzone.com/insights/backed-by-disney-kahoot-expands-investment-in-new-games",
+    "https://northzone.com/insights/barcelona-strike-supponor-virtual-advertising-deal",
+    "https://northzone.com/insights/basketball-legend-pau-gasol-joins-healthtech-scaleup-idoven-in-a-new-round-of-investment",
+    "https://northzone.com/insights/bringing-more-transparency-to-employee-compensation-our-investment-in-ravio",
+    "https://northzone.com/insights/cathay-innovations-first-investment-in-germany-is-healthcare-startup-medwing",
+    "https://northzone.com/insights/firstminute-capitals-sam-endacott-joins-northzone-to-lead-early-stage-ai-investment",
+    "https://northzone.com/insights/four-ai-unicorns-minted-this-year-more-in-the-making-the-result-of-northzones-deep-conviction-in-ai-underscoring-the-strength-of-our-long-term-ai-investment-strategy"
   ],
   "evidence": [
     {
+      "id": "check-email-043563cf06",
+      "url": "https://northzone.com/insights/tobii-gaze-application-wins-microsoft-award",
+      "title": "Northzone — application page",
+      "excerpt": "Contact (hello@northzone.com)",
+      "page": "application"
+    },
+    {
+      "id": "check-email-0888bfd6fb",
+      "url": "https://northzone.com/insights/barcelona-strike-supponor-virtual-advertising-deal",
+      "title": "Northzone — terms page",
+      "excerpt": "Contact (hello@northzone.com)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-1796076a6b",
+      "url": "https://northzone.com/insights/bringing-more-transparency-to-employee-compensation-our-investment-in-ravio",
+      "title": "Northzone — terms page",
+      "excerpt": "Contact (hello@northzone.com)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-26d42c19ba",
+      "url": "https://northzone.com/insights/cathay-innovations-first-investment-in-germany-is-healthcare-startup-medwing",
+      "title": "Northzone — terms page",
+      "excerpt": "Contact (hello@northzone.com)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-2743a30452",
+      "url": "https://northzone.com/insights/firstminute-capitals-sam-endacott-joins-northzone-to-lead-early-stage-ai-investment",
+      "title": "Northzone — terms page",
+      "excerpt": "Contact (hello@northzone.com)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-34c44e43f5",
+      "url": "https://northzone.com/insights/announcing-investment-personio",
+      "title": "Northzone — terms page",
+      "excerpt": "Contact (hello@northzone.com)",
+      "page": "terms"
+    },
+    {
       "id": "check-email-37e100c9b1",
       "url": "https://northzone.com/",
-      "title": "Northzone — homepage checked by scrape.py",
+      "title": "Northzone — homepage",
       "excerpt": "Contact (hello@northzone.com)",
       "page": "details"
     },
     {
-      "id": "check-email-9713913c7d",
-      "url": "https://northzone.com/about",
-      "title": "Northzone — details page checked by scrape.py",
+      "id": "check-email-38f84016ec",
+      "url": "https://northzone.com/insights/four-ai-unicorns-minted-this-year-more-in-the-making-the-result-of-northzones-deep-conviction-in-ai-underscoring-the-strength-of-our-long-term-ai-investment-strategy",
+      "title": "Northzone — terms page",
       "excerpt": "Contact (hello@northzone.com)",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-email-46310171b1",
+      "url": "https://northzone.com/insights/announcing-our-investment-in-nested",
+      "title": "Northzone — terms page",
+      "excerpt": "Contact (hello@northzone.com)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-4cae0e61c9",
+      "url": "https://northzone.com/insights/autonomous-truck-company-einride-plans-to-go-public-in-spac-deal",
+      "title": "Northzone — terms page",
+      "excerpt": "Contact (hello@northzone.com)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-61435d65ad",
+      "url": "https://northzone.com/insights/backed-by-disney-kahoot-expands-investment-in-new-games",
+      "title": "Northzone — terms page",
+      "excerpt": "Contact (hello@northzone.com)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-a382c90aa8",
+      "url": "https://northzone.com/insights/tobii-gaze-application-wins-microsoft-award?e99d84d8_page=2",
+      "title": "Northzone — application page",
+      "excerpt": "Contact (hello@northzone.com)",
+      "page": "application"
+    },
+    {
+      "id": "check-email-b03136adaf",
+      "url": "https://northzone.com/insights/basketball-legend-pau-gasol-joins-healthtech-scaleup-idoven-in-a-new-round-of-investment",
+      "title": "Northzone — terms page",
+      "excerpt": "Contact (hello@northzone.com)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-b188b2f639",
+      "url": "https://northzone.com/insights/annoucing-investment-fubotv",
+      "title": "Northzone — terms page",
+      "excerpt": "Contact (hello@northzone.com)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-c36e478241",
+      "url": "https://northzone.com/insights/architectural-collaboration-reimagined-our-investment-in-rayon",
+      "title": "Northzone — terms page",
+      "excerpt": "Contact (hello@northzone.com)",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-0e280cb7ec",
+      "url": "https://northzone.com/insights/barcelona-strike-supponor-virtual-advertising-deal",
+      "title": "Northzone — terms page",
+      "excerpt": "Team Platform Insights Press Barcelona strike Supponor virtual advertising deal View article Read more Press Autonomous",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-dc4be3f062",
+      "url": "https://northzone.com/insights/annoucing-investment-fubotv",
+      "title": "Northzone — terms page",
+      "excerpt": "soccer service, fuboTV has evolved into one of the top virtual MVPDs in the U.S., bringing subscribers access to dozens",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-ec07f4c93a",
+      "url": "https://northzone.com/insights/barcelona-strike-supponor-virtual-advertising-deal",
+      "title": "Northzone — terms page",
+      "excerpt": "Barcelona strike Supponor virtual advertising deal - Northzone About Portfolio Team Platform",
+      "page": "terms"
     },
     {
       "id": "check-name-6186669f26",
       "url": "https://northzone.com/",
-      "title": "Northzone — homepage checked by scrape.py",
+      "title": "Northzone — homepage",
       "excerpt": "Northzone About Portfolio Team Platform Insights Blitzy Growth 2026",
       "page": "details"
     },
     {
+      "id": "check-portfolio-0148604d0d",
+      "url": "https://northzone.com/insights/four-ai-unicorns-minted-this-year-more-in-the-making-the-result-of-northzones-deep-conviction-in-ai-underscoring-the-strength-of-our-long-term-ai-investment-strategy",
+      "title": "Northzone — terms page",
+      "excerpt": "Portfolio → https://northzone.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-0be4659e1d",
       "url": "https://northzone.com/",
-      "title": "Northzone — homepage checked by scrape.py",
+      "title": "Northzone — homepage",
       "excerpt": "View all → https://northzone.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-1a5b80cc7c",
+      "url": "https://northzone.com/insights/annoucing-investment-fubotv",
+      "title": "Northzone — terms page",
+      "excerpt": "Portfolio → https://northzone.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-1f1f882421",
       "url": "https://northzone.com/",
-      "title": "Northzone — homepage checked by scrape.py",
+      "title": "Northzone — homepage",
       "excerpt": "Portfolio → https://northzone.com/portfolio",
       "page": "details"
     },
     {
-      "id": "check-portfolio-7bd150f066",
-      "url": "https://northzone.com/about",
-      "title": "Northzone — details page checked by scrape.py",
+      "id": "check-portfolio-2b63a834cd",
+      "url": "https://northzone.com/insights/tobii-gaze-application-wins-microsoft-award?e99d84d8_page=2",
+      "title": "Northzone — application page",
       "excerpt": "Portfolio → https://northzone.com/portfolio",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-2c9b6a8fc5",
+      "url": "https://northzone.com/insights/architectural-collaboration-reimagined-our-investment-in-rayon",
+      "title": "Northzone — terms page",
+      "excerpt": "Portfolio → https://northzone.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-317f063afe",
+      "url": "https://northzone.com/insights/autonomous-truck-company-einride-plans-to-go-public-in-spac-deal",
+      "title": "Northzone — terms page",
+      "excerpt": "Portfolio → https://northzone.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-3d463348fd",
+      "url": "https://northzone.com/insights/backed-by-disney-kahoot-expands-investment-in-new-games",
+      "title": "Northzone — terms page",
+      "excerpt": "Portfolio → https://northzone.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-418c713272",
+      "url": "https://northzone.com/insights/cathay-innovations-first-investment-in-germany-is-healthcare-startup-medwing",
+      "title": "Northzone — terms page",
+      "excerpt": "Portfolio → https://northzone.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6e2fefd517",
+      "url": "https://northzone.com/insights/barcelona-strike-supponor-virtual-advertising-deal",
+      "title": "Northzone — terms page",
+      "excerpt": "Portfolio → https://northzone.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-944919cf8f",
+      "url": "https://northzone.com/insights/basketball-legend-pau-gasol-joins-healthtech-scaleup-idoven-in-a-new-round-of-investment",
+      "title": "Northzone — terms page",
+      "excerpt": "Portfolio → https://northzone.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9a3ba50303",
+      "url": "https://northzone.com/insights/announcing-our-investment-in-nested",
+      "title": "Northzone — terms page",
+      "excerpt": "Portfolio → https://northzone.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b3dffbeb4b",
+      "url": "https://northzone.com/insights/announcing-investment-personio",
+      "title": "Northzone — terms page",
+      "excerpt": "Portfolio → https://northzone.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ce69ac222e",
+      "url": "https://northzone.com/insights/tobii-gaze-application-wins-microsoft-award",
+      "title": "Northzone — application page",
+      "excerpt": "Portfolio → https://northzone.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d05b5056a0",
+      "url": "https://northzone.com/insights/bringing-more-transparency-to-employee-compensation-our-investment-in-ravio",
+      "title": "Northzone — terms page",
+      "excerpt": "Portfolio → https://northzone.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-de85c9475b",
+      "url": "https://northzone.com/insights/firstminute-capitals-sam-endacott-joins-northzone-to-lead-early-stage-ai-investment",
+      "title": "Northzone — terms page",
+      "excerpt": "Portfolio → https://northzone.com/portfolio",
+      "page": "terms"
     },
     {
       "id": "check-route-0d637d9a71",
       "url": "https://northzone.com/",
-      "title": "Northzone — homepage checked by scrape.py",
+      "title": "Northzone — homepage",
       "excerpt": "https://northzone.com/",
       "page": "details"
+    },
+    {
+      "id": "check-route-2957a863b3",
+      "url": "https://northzone.com/insights/tobii-gaze-application-wins-microsoft-award?e99d84d8_page=2",
+      "title": "Northzone — application page",
+      "excerpt": "Previous → https://northzone.com/insights/tobii-gaze-application-wins-microsoft-award?e99d84d8_page=1",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3d90ad871d",
+      "url": "https://northzone.com/insights/tobii-gaze-application-wins-microsoft-award?e99d84d8_page=2",
+      "title": "Northzone — application page",
+      "excerpt": "Load more → https://northzone.com/insights/tobii-gaze-application-wins-microsoft-award?e99d84d8_page=3",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d86ce8e4b9",
+      "url": "https://northzone.com/insights/tobii-gaze-application-wins-microsoft-award",
+      "title": "Northzone — application page",
+      "excerpt": "Load more → https://northzone.com/insights/tobii-gaze-application-wins-microsoft-award?e99d84d8_page=2",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-83548533a4",
+      "url": "https://northzone.com/",
+      "page": "details",
+      "excerpt": "Northzone About Portfolio Team Platform Insights Blitzy Growth 2026 Build software in days Boston OpenFX Early 2025 Building global money rails San Francisco Xbow Growth 2026 Autonomous offensive security San Francisco Genesis AI Early 2025 Teaching machines to act San Francisco Tandem Health Early 2024 Unshackling doctors from admin Stockholm Spring Health Early 2020 Precision mental health care New York Spotify Early 2008 How the world listens Stockholm Personio Early 2017 Intelligent HR platform Munich Klarna Early 2015 Smoother payments Stockholm GC AI Growth 2025 Empowering in-house lawyers New York Black Forest Labs Early 2024 Building state-of-the-art AI Freiburg Cusp AI Early 2024 Designing breakthrough materials Cambridge Backing world-changing companies from inception to IPO 30 Years of compounding judgment $3.1B+ Assets under management 5 Offices: London · New York · Berlin · Stockholm · Amsterdam 250+ Investments (and counting) Portfolio View all Early · 2008 Spotify How the world listens Early · 2015 Klarna Smoother payments Early · 2024 Black Forest Labs Building state-of-the-art AI Early · 2025 Genesis AI Teaching machines to act Early · 2017 Personio Intelligent HR platform Early · 2024 Cusp AI Designing breakthrough materials Early · 2020 Spring Health Precision mental health care Growth · 2026 Blitzy Build software in days Growth · 2026 Xbow Autonomous"
+    },
+    {
+      "id": "check-page-8407ad92b5",
+      "url": "https://northzone.com/insights/tobii-gaze-application-wins-microsoft-award",
+      "page": "application",
+      "excerpt": "Tobii Gaze Application Wins Microsoft Award - Northzone About Portfolio Team Platform Insights Press Tobii Gaze Application Wins Microsoft Award Stockholm, April 27, 2012 – Tobii Technology, the global leader in eye tracking and gaze interaction, has been awarded a 2012 Microsoft Award in the client category for its revolutionary new Tobii Gaze Selection application. Award winners were announced at Microsoft’s Tech Days 2012 developer conference in Sweden on April 25. The award-winning Tobii Gaze Selection is a feature of the Tobii Windows Control software application for hands-free access to Windows. Tobii’s best-in-class eye-tracking hardware—including Tobii PCEye—is used in combination with this innovative, Tobii-developed interface based on Microsoft core software technology. The feature has been developed specifically for people who, because of disabilities, can’t use a keyboard or a mouse, and therefore rely entirely on gaze, commonly referred to as eye-control, to access a computer. “For a person who is challenged with limb paralysis or limb loss due to an injury or disease, the ability to operate a computer is of profound importance to their emotional and physical rehabilitation process. By being able to access a computer, a person can reconnect with their world and more quickly regain some level of independence after traumatic injuries,” said Henrik Eskilsson, CEO of"
+    },
+    {
+      "id": "check-page-d6cd06b0c9",
+      "url": "https://northzone.com/insights/tobii-gaze-application-wins-microsoft-award?e99d84d8_page=2",
+      "page": "application",
+      "excerpt": "Tobii Gaze Application Wins Microsoft Award - Northzone About Portfolio Team Platform Insights Press Tobii Gaze Application Wins Microsoft Award Stockholm, April 27, 2012 – Tobii Technology, the global leader in eye tracking and gaze interaction, has been awarded a 2012 Microsoft Award in the client category for its revolutionary new Tobii Gaze Selection application. Award winners were announced at Microsoft’s Tech Days 2012 developer conference in Sweden on April 25. The award-winning Tobii Gaze Selection is a feature of the Tobii Windows Control software application for hands-free access to Windows. Tobii’s best-in-class eye-tracking hardware—including Tobii PCEye—is used in combination with this innovative, Tobii-developed interface based on Microsoft core software technology. The feature has been developed specifically for people who, because of disabilities, can’t use a keyboard or a mouse, and therefore rely entirely on gaze, commonly referred to as eye-control, to access a computer. “For a person who is challenged with limb paralysis or limb loss due to an injury or disease, the ability to operate a computer is of profound importance to their emotional and physical rehabilitation process. By being able to access a computer, a person can reconnect with their world and more quickly regain some level of independence after traumatic injuries,” said Henrik Eskilsson, CEO of"
+    },
+    {
+      "id": "check-page-889eb7eda3",
+      "url": "https://northzone.com/insights/annoucing-investment-fubotv",
+      "page": "terms",
+      "excerpt": "Annoucing our investment in fuboTV - Northzone About Portfolio Team Platform Insights Investment Annoucing our investment in fuboTV FUBOTV CLOSES $55 MILLION SERIES C ROUND Fundraising to Enable Sports-First, Live Streaming TV Service to Invest in Additional Content, Engineering Talent and Expanded Marketing Efforts Round Led by Northzone, along with Investments from 21st Century Fox, Scripps Networks Interactive and Sky NEW YORK – June 19, 2017 – fuboTV ( fubo.tv ), the leading sports-first streaming TV service in the U.S., today announced it raised an additional $55 million (U.S. dollars). The Series C round was led by leading Europe and New York-based VC fund Northzone , which will take a board position at the company. Also participating in the round are 21st Century Fox and Sky – both previously part of fuboTV’s Series B round – and Scripps Networks Interactive . The total investment raised to date by fuboTV is now more than $75 million. Launched in January 2015 as a streaming soccer service, fuboTV has evolved into one of the top virtual MVPDs in the U.S., bringing subscribers access to dozens of sports, entertainment, and news channels. The company launched its expanded “ Fubo Premier ” entry-level bundle in April 2017 with a line-up of 55-plus channels, including 31 that feature sports content – more than any competitor’s similar package. This live streaming TV line-up"
+    },
+    {
+      "id": "check-page-d625228018",
+      "url": "https://northzone.com/insights/announcing-investment-personio",
+      "page": "terms",
+      "excerpt": "Announcing our investment in Personio - Northzone About Portfolio Team Platform Insights Investment Announcing our investment in Personio We are delighted to annouce our investment in the German HR-management and recruiting platform Personio, in a $12 million (€ 10.5 million) A-round alongside GFC and Picus. Michiel Kotting comments: “With their innovative, one-stop solution for talent acquisition, HR administration, and employee retention, Personio is a game-changer in the HR solutions market for small and medium enterprises in Europe. In a market that has a global value of $ 14 billion, HR teams in SMEs are still served by outdated and disparate systems. Personio changes all of that. We have been hugely impressed with what Hanno and the team have achieved since their launch in 2015, and believe they are in a strong position build the category leadership in the space.” Read more here: https://techcrunch.com/2017/08/03/personio/ ‍ By Northzone August 3, 2017 Read more Investment Partnering with Blitzy to scale autonomous software development for the enterprise May 5, 2026 Investment Partnering with OpenFX: Rewiring the $200 Trillion Global Cross-Border Payments Market April 2, 2026 Investment Partnering with XBOW to scale autonomous offensive security March 18, 2026 Load more LinkedIn , X , Contact ©2026 All rights reserved. Legal ."
+    },
+    {
+      "id": "check-page-212b4eac62",
+      "url": "https://northzone.com/insights/announcing-our-investment-in-nested",
+      "page": "terms",
+      "excerpt": "Announcing our investment in Nested - Northzone About Portfolio Team Platform Insights Investment Announcing our investment in Nested Nested, the startup that simplifies selling your home, has raised £120m in funds as they continue to disrupt estate agency in the UK. The round consists of £100m in debt financing from an institutional investor, and £20m in equity from leading European VCs Northzone and Balderton Capital, bringing total funding for the growing business to £165m. Launched in 2016, Nested is the first estate agent to make home sellers chain-free. The company provide a cash advance on the value of the property enabling customers to become cash buyers, speeding up the process of moving home. Since launching, Nested has experienced rapid growth, helping over 400 homeowners during a period of market uncertainty with home sales falling 12% over the last year and 61% of homes for sale in London withdrawing from the market without selling, an effect of a slowing market in anticipation of Brexit. Nested is driven by a mission to fix the broken housing market, bringing honesty to a traditionally opaque industry. In addition to the unique cash advance, Nested have built a strong reputation with customers for transparent and data-driven valuations, offering vastly improved accuracy compared to high-street estate agents. To back-up it’s ability to value homes accurately,"
+    },
+    {
+      "id": "check-page-65005c138b",
+      "url": "https://northzone.com/insights/architectural-collaboration-reimagined-our-investment-in-rayon",
+      "page": "terms",
+      "excerpt": "Architectural collaboration reimagined: our investment in Rayon - Northzone About Portfolio Team Platform Insights Investment Architectural collaboration reimagined: our investment in Rayon We’re delighted to announce our investment in Rayon , the collaborative design tool for the architecture, engineering and construction industries (AEC). We have co-led their €4m Seed round alongside existing investor Foundamental, with participation from Seedcamp and angels including renowned architect Norman Foster. The AEC industries have lagged behind in adopting new technologies, resulting in significant inefficiencies for architects and construction workers. As we’ve seen with the likes of Spacemaker and Infogrid, these industries are amongst the least disrupted by new technology. Design processes in this field have traditionally been siloed, relying on PDFs and outdated tools for communication. Here comes Rayon: founded in 2021 by co-founders Bastien Dolla and Stanislas Chaillou, they bridge this gap, providing a browser-based platform for teams to collaborate on 2D floor plans in real-time, significantly enhancing efficiency and agility. While initially focused on architects and interior designers, Rayon’s versatility extends to other verticals such as real estate, landscaping, hospitality, logistics, and urban planning. The software’s capabilities are extensive, allowing users to"
+    },
+    {
+      "id": "check-page-3e3b4f3cec",
+      "url": "https://northzone.com/insights/autonomous-truck-company-einride-plans-to-go-public-in-spac-deal",
+      "page": "terms",
+      "excerpt": "Autonomous-Truck Company Einride Plans to Go Public in SPAC Deal (The Wall Street Journal) - Northzone About Portfolio Team Platform Insights Press Autonomous-Truck Company Einride Plans to Go Public in SPAC Deal (The Wall Street Journal) View article Read more Press Autonomous AI Outgrows Agents As Blitzy, XBOW And Google Deliver (Forbes) August 24, 2026 Press AI productivity tools are overhyped and overfunded. Investors should look elsewhere. (Fortune) August 21, 2026 Press AI security startup Xbow valued at more than $1 billion (Bloomberg) March 18, 2026 Load more LinkedIn , X , Contact ©2026 All rights reserved. Legal ."
+    },
+    {
+      "id": "check-page-f0244c1716",
+      "url": "https://northzone.com/insights/backed-by-disney-kahoot-expands-investment-in-new-games",
+      "page": "terms",
+      "excerpt": "Backed by Disney, Kahoot expands investment in new games - Northzone About Portfolio Team Platform Insights Press Backed by Disney, Kahoot expands investment in new games View article Read more Press Autonomous AI Outgrows Agents As Blitzy, XBOW And Google Deliver (Forbes) August 24, 2026 Press AI productivity tools are overhyped and overfunded. Investors should look elsewhere. (Fortune) August 21, 2026 Press AI security startup Xbow valued at more than $1 billion (Bloomberg) March 18, 2026 Load more LinkedIn , X , Contact ©2026 All rights reserved. Legal ."
+    },
+    {
+      "id": "check-page-75229c155c",
+      "url": "https://northzone.com/insights/barcelona-strike-supponor-virtual-advertising-deal",
+      "page": "terms",
+      "excerpt": "Barcelona strike Supponor virtual advertising deal - Northzone About Portfolio Team Platform Insights Press Barcelona strike Supponor virtual advertising deal View article Read more Press Autonomous AI Outgrows Agents As Blitzy, XBOW And Google Deliver (Forbes) August 24, 2026 Press AI productivity tools are overhyped and overfunded. Investors should look elsewhere. (Fortune) August 21, 2026 Press AI security startup Xbow valued at more than $1 billion (Bloomberg) March 18, 2026 Load more LinkedIn , X , Contact ©2026 All rights reserved. Legal ."
+    },
+    {
+      "id": "check-page-e82727439d",
+      "url": "https://northzone.com/insights/basketball-legend-pau-gasol-joins-healthtech-scaleup-idoven-in-a-new-round-of-investment",
+      "page": "terms",
+      "excerpt": "Basketball Legend Pau Gasol joins Healthtech Scaleup Idoven in a new round of investment - Northzone About Portfolio Team Platform Insights Press Basketball Legend Pau Gasol joins Healthtech Scaleup Idoven in a new round of investment View article Read more Press Autonomous AI Outgrows Agents As Blitzy, XBOW And Google Deliver (Forbes) August 24, 2026 Press AI productivity tools are overhyped and overfunded. Investors should look elsewhere. (Fortune) August 21, 2026 Press AI security startup Xbow valued at more than $1 billion (Bloomberg) March 18, 2026 Load more LinkedIn , X , Contact ©2026 All rights reserved. Legal ."
+    },
+    {
+      "id": "check-page-a15f4676f7",
+      "url": "https://northzone.com/insights/bringing-more-transparency-to-employee-compensation-our-investment-in-ravio",
+      "page": "terms",
+      "excerpt": "Bringing more transparency to employee compensation: our investment in Ravio - Northzone About Portfolio Team Platform Insights Investment Bringing more transparency to employee compensation: our investment in Ravio We are very proud to announce our investment in Ravio, leading their $10m seed round with the participation of our friends at Cherry Ventures and Spark Capital. Ravio allows fast-growing tech startups to stay on the pulse of talent market insights in real-time, with the most complete benchmarking tool in the market. Ravio is solving one of the most pressing challenges of HR professionals at VC-backed companies: compensation management. Fast-growing companies rely mostly on internal and static data points to build comprehensive compensation packages for their current or prospective employees, making it difficult to get a clear understanding of market rates as they design competitive packages: from salaries to equity, including employee benefits. This challenge is further amplified in Europe through added geographic complexity: many European tech companies build teams spanning across multiple countries from day one. This makes it even more important for HR teams to have access to relevant local compensation benchmarks in real-time to ensure they can attract and retain the best talent in the market. There comes Ravio, building a complete set of tools that empowers"
+    },
+    {
+      "id": "check-page-0badf8a5f6",
+      "url": "https://northzone.com/insights/cathay-innovations-first-investment-in-germany-is-healthcare-startup-medwing",
+      "page": "terms",
+      "excerpt": "Cathay Innovation’s first investment in Germany is healthcare startup Medwing - Northzone About Portfolio Team Platform Insights Press Cathay Innovation’s first investment in Germany is healthcare startup Medwing View article Read more Press Autonomous AI Outgrows Agents As Blitzy, XBOW And Google Deliver (Forbes) August 24, 2026 Press AI productivity tools are overhyped and overfunded. Investors should look elsewhere. (Fortune) August 21, 2026 Press AI security startup Xbow valued at more than $1 billion (Bloomberg) March 18, 2026 Load more LinkedIn , X , Contact ©2026 All rights reserved. Legal ."
+    },
+    {
+      "id": "check-page-1c7c3b1f62",
+      "url": "https://northzone.com/insights/firstminute-capitals-sam-endacott-joins-northzone-to-lead-early-stage-ai-investment",
+      "page": "terms",
+      "excerpt": "firstminute capital's Sam Endacott joins Northzone to lead early-stage AI investment - Northzone About Portfolio Team Platform Insights Spotlight firstminute capital's Sam Endacott joins Northzone to lead early-stage AI investment London, 1st June 2026. Northzone has appointed Sam Endacott as a Partner in its London office, deepening the firm’s focus on applied and physical AI. Sam joins Northzone from firstminute capital , where he spent more than eight years backing founders across AI, software infrastructure and fintech. At Northzone, Sam will concentrate on early‑stage investments, primarily from seed to Series B, with a particular interest in how AI and software are transforming traditional industries such as financial services, healthcare, and industrial manufacturing. At firstminute capital, Sam led the seed investment into n8n, which recently announced a strategic SAP-backed round valuing it at $5.2bn. He was also an early backer of Storyblok, Stitch, Protex AI and Unleash. With more than ten funds raised and its most recent in excess of $1.2bn, Northzone invests across every stage from seed to growth. The firm has invested in more than 175 companies across nearly three decades, including early bets on Spotify, Klarna, Personio and Trustpilot. This hire signals the firm's growing commitment to AI, building on recent investments including Tandem Health, CuspAI, and"
+    },
+    {
+      "id": "check-page-aba67a7170",
+      "url": "https://northzone.com/insights/four-ai-unicorns-minted-this-year-more-in-the-making-the-result-of-northzones-deep-conviction-in-ai-underscoring-the-strength-of-our-long-term-ai-investment-strategy",
+      "page": "terms",
+      "excerpt": "Four AI unicorns minted this year. More in the making. - Northzone About Portfolio Team Platform Insights Perspective Four AI unicorns minted this year. More in the making. The result of Northzone's deep conviction in AI and underscoring the strength of our long-term AI investment strategy Robotics, Foundational AI, Defence, AI Applications, Space, Fintech, Material Science, Semiconductors…new tech leaders are emerging across all these categories in 2026 on both sides of the Atlantic, with Europe ramping up its share of AI category leading contenders. We’re privileged to have a front-row seat as we have heavily invested into AI. It is fantastic to see the success as showcased by four of our AI portfolio companies becoming newly minted unicorns already this year: Black Forest Labs, Blitzy, CuspAI and XBOW. 🇪🇺Black Forest Labs builds leading image and video models. $3.3b valuation, backed by Northzone, a16z, General Catalyst, Salesforce Ventures, NVIDIA, and Temasek. 🇺🇲Blitzy autonomously generates enterprise software. $1.4b valuation, backed by Northzone, Battery, PSG, and Liberty Mutual. 🇪🇺CuspAI designs new materials for the semiconductor industry. $2.6b valuation, backed by Northzone, Kleiner Perkins, NEA, Bezos Expeditions, Lux, Temasek, UK Sovereign AI Fund, and AMD Ventures. 🇪🇺🇺🇲XBOW secures enterprise systems with their autonomous offensive security platform. $1b+"
     }
   ],
   "findings": {
@@ -64,7 +393,20 @@
       }
     ],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://northzone.com/insights/tobii-gaze-application-wins-microsoft-award?e99d84d8_page=2",
+        "evidenceId": "check-route-d86ce8e4b9"
+      },
+      {
+        "value": "https://northzone.com/insights/tobii-gaze-application-wins-microsoft-award?e99d84d8_page=1",
+        "evidenceId": "check-route-2957a863b3"
+      },
+      {
+        "value": "https://northzone.com/insights/tobii-gaze-application-wins-microsoft-award?e99d84d8_page=3",
+        "evidenceId": "check-route-3d90ad871d"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://northzone.com/",
@@ -74,8 +416,20 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-dc4be3f062"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://northzone.com/portfolio",

@@ -1,12 +1,36 @@
 {
   "programId": "stellaris-vp",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.stellarisvp.com/portfolio",
-      "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
+      "url": "https://www.stellarisvp.com/blog/accelerating-ai-adoption-in-radiology-our-investment-in-carpl",
+      "page": "terms",
+      "anchor": "Why we invested",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.stellarisvp.com/blog/announcing-our-first-investment---wydr",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.stellarisvp.com/blog/building-a-co-pilot-for-front-end-developers---our-investment-in-kombai",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.stellarisvp.com/blog/building-an-operating-system-for-enterprise-sales-process---our-investment-in-buyerassist",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -15,6 +39,110 @@
       "page": "application",
       "anchor": "READ MORE",
       "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.stellarisvp.com/blog/catalyzing-indias-move-to-electric---our-investment-in-turno",
+      "page": "terms",
+      "anchor": "Why we invested",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.stellarisvp.com/blog/creating-the-discussion-platform-for-bharat--our-investment-in-manch",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.stellarisvp.com/blog/decoding-our-investment-in-limechat",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.stellarisvp.com/blog/disrupting-social-commerce---our-investment-in-shop101",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.stellarisvp.com/blog/empowering-next--gen-b2b-marketers---announcing-our-investment-in-factorsai",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.stellarisvp.com/blog/from-plastic-to-sustainable-alternatives-our-investment-in-cirkla",
+      "page": "terms",
+      "anchor": "READ MORE",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.stellarisvp.com/blog/future-of-creator-monetization-is-direct-our-investment-in-rigi",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.stellarisvp.com/blog/our-investment-in-noticeboard",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.stellarisvp.com/blog/re-inventing-user-adoption-and-support--our-investment-in-whatfix",
+      "page": "terms",
+      "anchor": "Why we invested",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.stellarisvp.com/blog/revolutionizing-global-content-consumption-with-webcomics-our-investment-in-dashtoon",
+      "page": "terms",
+      "anchor": "Why we invested",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.stellarisvp.com/blog/spectrum-is-just-the-start-how-5g-will-enable-a-wave-of-new-applications",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.stellarisvp.com/blog/the-future-of-micro-drama-in-india-our-investment-in-flick-tv",
+      "page": "terms",
+      "anchor": "READ MORE",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.stellarisvp.com/portfolio",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     }

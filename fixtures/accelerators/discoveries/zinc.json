@@ -1,11 +1,91 @@
 {
   "programId": "zinc",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.zinc.vc/programmes/pre-seed-investment/",
+      "url": "https://www.zinc.vc/blog/announcing-the-third-cohort-of-innovation-fellowships-in-health-and-care-at-zinc/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zinc.vc/blog/announcing-zincs-investment-in-kilogen-building-the-future-of-molecular-glue-drug-discovery/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zinc.vc/blog/building-next-generation-battery-recycling-announcing-zincs-investment-in-cellmine/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zinc.vc/blog/investing-in-the-future-of-green-hydrogen-announcing-zincs-pre-seed-investment-in-clyde-hydrogen-systems/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zinc.vc/blog/investing-in-the-future-of-respiratory-medicine-announcing-zincs-pre-seed-investment-in-microsol/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zinc.vc/blog/looking-to-apply-to-the-zinc-venture-builder-heres-everything-you-need-to-know/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zinc.vc/blog/supercharging-the-search-for-your-ideal-co-founder/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zinc.vc/blog/tangent-secures-1-1m-pre-seed-investment-to-drive-social-mobility-in-tech/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zinc.vc/event/cohort-4-bristol-show-tell/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zinc.vc/event/what-does-research-tell-us-about-innovation-in-industries-with-significant-impacts-on-the-environment/",
       "page": "details",
-      "anchor": "Investment",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zinc.vc/investment-priorities/",
+      "page": "terms",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -15,6 +95,30 @@
       "page": "portfolio",
       "anchor": "Portfolio",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zinc.vc/pre-seed-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zinc.vc/press/social-enterprise-builder-bags-3m-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zinc.vc/programmes/pre-seed-investment/",
+      "page": "terms",
+      "anchor": "Investment",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

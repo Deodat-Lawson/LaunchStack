@@ -1,6 +1,6 @@
 {
   "programId": "kickstart-innovation",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "http://kickstart-innovation.com/apply",
@@ -11,11 +11,11 @@
       "origin": "official"
     },
     {
-      "url": "https://www.kickstart-innovation.com/about-impact",
-      "page": "details",
-      "anchor": "Read more about",
-      "fetched": true,
-      "blocked": null,
+      "url": "https://intrapreneurs.kickstart-innovation.com/apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "robots",
       "origin": "official"
     },
     {
@@ -35,6 +35,14 @@
       "origin": "official"
     },
     {
+      "url": "https://www.kickstart-innovation.com/about-impact",
+      "page": "details",
+      "anchor": "Read more about",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.kickstart-innovation.com/academy-intrapreneurship",
       "page": "details",
       "anchor": "Intrapreneurship program",
@@ -43,10 +51,106 @@
       "origin": "official"
     },
     {
+      "url": "https://www.kickstart-innovation.com/apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kickstart-innovation.com/community-investors",
+      "page": "terms",
+      "anchor": "Discover your next investment",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.kickstart-innovation.com/community-startups-alumni",
       "page": "portfolio",
       "anchor": "Startups and alumni",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kickstart-innovation.com/post/41-international-startups-in-switzerland-to-make-deals-in-the-coming-weeks",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kickstart-innovation.com/post/application-for-the-3rd-swiss-market-entry-bootcamp-starts",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kickstart-innovation.com/post/kickstart-2024-new-milestones-for-swiss-innovation-over-340-deals-reached",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kickstart-innovation.com/post/kickstart-accelerator-invites-startups-in-educational-tech-to-apply-for-new-edtech-vertical",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kickstart-innovation.com/post/kickstart-innovation-2025-celebrates-10-years-of-innovation-reaching-400-deals-marks-a-decade-of-i",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kickstart-innovation.com/post/kickstart-intrapreneurship-program-2025-applications-open",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kickstart-innovation.com/post/kickstart-program-launches-9th-iteration-to-drive-collaborative-solutions-and-investments",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kickstart-innovation.com/post/kickstart-program-meets-milestone-of-over-200-innovation-deals",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kickstart-innovation.com/post/startups-can-apply-for-the-international-kickstart-innovation-program-2025-until-26-may",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kickstart-innovation.com/post/ten-reasons-not-to-apply-to-kickstart",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

@@ -1,25 +1,304 @@
 {
   "programId": "astrolabs",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://astrolabs.com/",
+    "https://insight.astrolabs.com/how-to-get-a-foreign-investment-license-in-saudi-arabia/",
+    "https://insight.astrolabs.com/napster-incorporates-in-saudi-arabia-deepening-its-investment-in-the-kingdom-s-ai-economy",
     "https://insight.astrolabs.com/banque-saudi-fransi-and-astrolabs-announce-2nd-cohort-of-the-banker-technologist-to-empower-saudi-arabias-next-gen-talents-in-the-financial-sector/",
-    "https://insight.astrolabs.com/majid-al-futtaim-announces-winners-of-the-second-edition-of-its-launchpad-accelerator-programme/"
+    "https://astrolabs.com/about-us",
+    "https://astrolabs.com/corporate-innovation-programs",
+    "https://astrolabs.com/market-entry-programs",
+    "https://insight.astrolabs.com/majid-al-futtaim-announces-winners-of-the-second-edition-of-its-launchpad-accelerator-programme/",
+    "https://insight.astrolabs.com/astrolabs-and-sab-accelerate-expansion-opportunities-in-saudi-arabia-for-fast-growing-international-new-economy-companies/",
+    "https://insight.astrolabs.com/how-can-foreign-companies-achieve-a-successful-launch-and-operational-readiness-in-saudi-arabia",
+    "https://insight.astrolabs.com/saudization-requirements-2025-must-knows-for-companies-setting-up-a-business-in-saudi-arabia"
   ],
   "evidence": [
     {
+      "id": "check-duration-0e3b608afd",
+      "url": "https://astrolabs.com/market-entry-programs",
+      "title": "AstroLabs — program page",
+      "excerpt": "entry timelines (from 8–12 months down to ~2 months), and that 91% of entrants hire local talent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-11d197062a",
+      "url": "https://astrolabs.com/market-entry-programs",
+      "title": "AstroLabs — program page",
+      "excerpt": "acceleration in market entry timelines (from 8–12 months down to ~2 months), and that 91% of entrants",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-14058dff98",
+      "url": "https://astrolabs.com/",
+      "title": "AstroLabs — homepage",
+      "excerpt": "that 91% of entrants hire local talent within 4 months. Read more Reports November 25, 2024 Saudi",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-19ed472e2f",
+      "url": "https://astrolabs.com/corporate-innovation-programs",
+      "title": "AstroLabs — program page",
+      "excerpt": "on SOW Step 1 Define Challenges & Objectives 1 week We run innovation discovery workshops with your",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2da1d77120",
+      "url": "https://astrolabs.com/about-us",
+      "title": "AstroLabs — program page",
+      "excerpt": "acceleration in market entry timelines (from 8–12 months down to ~2 months), and that 91% of entrants",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-52d631fbeb",
+      "url": "https://astrolabs.com/corporate-innovation-programs",
+      "title": "AstroLabs — program page",
+      "excerpt": "Rapid Experimentation Step 3 Validate & Pilot 4-6 weeks Present outcomes at an internal showcase or Demo",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-5b13c57ede",
+      "url": "https://astrolabs.com/about-us",
+      "title": "AstroLabs — program page",
+      "excerpt": "that 91% of entrants hire local talent within 4 months. Read more Reports November 25, 2024 Saudi",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-65047cd1f1",
+      "url": "https://astrolabs.com/",
+      "title": "AstroLabs — homepage",
+      "excerpt": "entry timelines (from 8–12 months down to ~2 months), and that 91% of entrants hire local talent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-7301522dab",
+      "url": "https://astrolabs.com/market-entry-programs",
+      "title": "AstroLabs — program page",
+      "excerpt": "that 91% of entrants hire local talent within 4 months. Read more Reports November 25, 2024 Saudi",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-7e5d6949ee",
+      "url": "https://astrolabs.com/corporate-innovation-programs",
+      "title": "AstroLabs — program page",
+      "excerpt": "that 91% of entrants hire local talent within 4 months. Read more Reports November 25, 2024 Saudi",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-8486dc98dc",
+      "url": "https://insight.astrolabs.com/how-can-foreign-companies-achieve-a-successful-launch-and-operational-readiness-in-saudi-arabia",
+      "title": "AstroLabs — portfolio page",
+      "excerpt": "were looking to enter Saudi Arabia within 1-3 months of last year, as compared to 48% in 2023. Of",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-84cba2f96c",
+      "url": "https://astrolabs.com/market-entry-programs",
+      "title": "AstroLabs — program page",
+      "excerpt": "First Step 2 Entity Setup & Market Activation 2-4 weeks We handle end-to-end legal setup including MISA",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-93bc9396ce",
+      "url": "https://astrolabs.com/market-entry-programs",
+      "title": "AstroLabs — program page",
+      "excerpt": "Strategic Assessment & Localization Blueprint 1-2 weeks We assess your global expansion goals,",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9ebf334738",
+      "url": "https://astrolabs.com/corporate-innovation-programs",
+      "title": "AstroLabs — program page",
+      "excerpt": "Alignment Step 1 Define Challenges & Objectives 1 week Choose between tapping into AstroLabs’ 3,000+",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b379ccdc8d",
+      "url": "https://astrolabs.com/market-entry-programs",
+      "title": "AstroLabs — program page",
+      "excerpt": "Strategic Assessment & Localization Blueprint 1-2 weeks We handle end-to-end legal setup including MISA",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-baab3f75a0",
+      "url": "https://astrolabs.com/corporate-innovation-programs",
+      "title": "AstroLabs — program page",
+      "excerpt": "acceleration in market entry timelines (from 8–12 months down to ~2 months), and that 91% of entrants",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-d52912e8a5",
+      "url": "https://astrolabs.com/",
+      "title": "AstroLabs — homepage",
+      "excerpt": "acceleration in market entry timelines (from 8–12 months down to ~2 months), and that 91% of entrants",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e02a0fc193",
+      "url": "https://astrolabs.com/corporate-innovation-programs",
+      "title": "AstroLabs — program page",
+      "excerpt": "entry timelines (from 8–12 months down to ~2 months), and that 91% of entrants hire local talent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e151024a2d",
+      "url": "https://astrolabs.com/corporate-innovation-programs",
+      "title": "AstroLabs — program page",
+      "excerpt": "or In-House Ideation Step 3 Validate & Pilot 4-6 weeks Test selected ideas or startup collaborations",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e511457c8b",
+      "url": "https://astrolabs.com/market-entry-programs",
+      "title": "AstroLabs — program page",
+      "excerpt": "Launch Step 2 Entity Setup & Market Activation 2-4 weeks We support hiring, onboarding, business",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ff388eadbb",
+      "url": "https://astrolabs.com/about-us",
+      "title": "AstroLabs — program page",
+      "excerpt": "entry timelines (from 8–12 months down to ~2 months), and that 91% of entrants hire local talent",
+      "page": "details"
+    },
+    {
+      "id": "check-format-228edd4f75",
+      "url": "https://astrolabs.com/",
+      "title": "AstroLabs — homepage",
+      "excerpt": "AstroLabs to Fuel Growth of the VR and AR Sectors 5dVR, a virtual reality content and production studio, has expanded to",
+      "page": "details"
+    },
+    {
+      "id": "check-format-42c358cf53",
+      "url": "https://astrolabs.com/market-entry-programs",
+      "title": "AstroLabs — program page",
+      "excerpt": "and make use of augmented reality (AR), mixed reality and virtual reality (VR) technologies. Read More News & Media Aurora",
+      "page": "details"
+    },
+    {
+      "id": "check-format-486492a7cd",
+      "url": "https://astrolabs.com/",
+      "title": "AstroLabs — homepage",
+      "excerpt": "and make use of augmented reality (AR), mixed reality and virtual reality (VR) technologies. Read More News & Media Aurora",
+      "page": "details"
+    },
+    {
+      "id": "check-format-4ac00749c6",
+      "url": "https://astrolabs.com/corporate-innovation-programs",
+      "title": "AstroLabs — program page",
+      "excerpt": "and make use of augmented reality (AR), mixed reality and virtual reality (VR) technologies. Read More News & Media Aurora",
+      "page": "details"
+    },
+    {
+      "id": "check-format-76344dc682",
+      "url": "https://astrolabs.com/corporate-innovation-programs",
+      "title": "AstroLabs — program page",
+      "excerpt": "AstroLabs to Fuel Growth of the VR and AR Sectors 5dVR, a virtual reality content and production studio, has expanded to",
+      "page": "details"
+    },
+    {
+      "id": "check-format-9764b69eaf",
+      "url": "https://astrolabs.com/about-us",
+      "title": "AstroLabs — program page",
+      "excerpt": "and make use of augmented reality (AR), mixed reality and virtual reality (VR) technologies. Read More News & Media Aurora",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c3d9e64e37",
+      "url": "https://astrolabs.com/market-entry-programs",
+      "title": "AstroLabs — program page",
+      "excerpt": "AstroLabs to Fuel Growth of the VR and AR Sectors 5dVR, a virtual reality content and production studio, has expanded to",
+      "page": "details"
+    },
+    {
+      "id": "check-format-cdbf1aed20",
+      "url": "https://astrolabs.com/about-us",
+      "title": "AstroLabs — program page",
+      "excerpt": "AstroLabs to Fuel Growth of the VR and AR Sectors 5dVR, a virtual reality content and production studio, has expanded to",
+      "page": "details"
+    },
+    {
       "id": "check-name-c4717a0b4f",
       "url": "https://astrolabs.com/",
-      "title": "AstroLabs — homepage checked by scrape.py",
+      "title": "AstroLabs — homepage",
       "excerpt": "Business Expansion in Saudi Arabia & UAE | AstroLabs Products Solutions Company Saudization Calculator Free",
       "page": "details"
     },
     {
       "id": "check-route-6c7ca38c4f",
       "url": "https://astrolabs.com/",
-      "title": "AstroLabs — homepage checked by scrape.py",
+      "title": "AstroLabs — homepage",
       "excerpt": "https://astrolabs.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-d4d313ca67",
+      "url": "https://astrolabs.com/",
+      "page": "details",
+      "excerpt": "Business Expansion in Saudi Arabia & UAE | AstroLabs Products Solutions Company Saudization Calculator Free Sign In Enquire Now Sign In Toggle navigation menu Enquire Now Your Partner for Expansion in Saudi Arabia & UAE Set up, operate, and integrate your business with full compliance and market readiness. Enquire now Our Products Business Setup Compliance & Support HR & Payroll Solutions Office Solutions Innovation Programs Accounting & Tax Business Setup Expand and grow your business with confidence Saudi Arabia Business Setup with MISA Launch your Saudi entity with full support compliance and government requirements Explore Saudi Business Setup Services United Arab Emirates Business Setup with DMCC (#1 Free Zone in UAE) Set up your business in the most vibrant market of the UAE with 100% foreign ownership Check Out Our UAE Business Setup Services Our Products Business Setup Compliance & Support HR & Payroll Solutions Office Solutions Innovation Programs Accounting & Tax Business Setup Expand and grow your business with confidence Saudi Arabia Business Setup with MISA Launch your Saudi entity with full support compliance and government requirements Explore Saudi Business Setup Services United Arab Emirates Business Setup with DMCC (#1 Free Zone in UAE) Set up your business in the most vibrant market of the UAE with 100% foreign ownership Check Out Our UAE Business Setup"
+    },
+    {
+      "id": "check-page-482eed905e",
+      "url": "https://insight.astrolabs.com/how-to-get-a-foreign-investment-license-in-saudi-arabia/",
+      "page": "terms",
+      "excerpt": "How to Get a Foreign Investment License in Saudi Arabia | AstroLabs Toggle navigation menu Ecosystem Highlights Market Outlook Digital Transformation AstroLabs In the News Contact Search ⌘ K Home Market Outlook How to Get a Foreign Investment License in Saudi Arabia Market Outlook • Dec 15, 2024 • 6 min read How to Get a Foreign Investment License in Saudi Arabia Loading form... In this article, we’ll guide you on how to get a foreign investment license in Saudi Arabia, also known as a MISA license, whether you’re a startup or a large corporation. Having a foreign investment license from MISA (previously SAGIA) is evidence that you have a legitimate business recognized by the local authorities. This not only gives your business legal backing but also opens the door for numerous business opportunities, from gaining the trust of customers and investors to accessing government incentives and winning large contracts. The following are the steps to acquire a MISA License in Saudi Arabia Step 1: Select the Right Business License Step 2: Decide on a Structure for Your Venture Step 3: Prepare the Required Documents Step 4: Submit an Online Application Step 5: Apply for the New Entity’s Name Step 6: Draft Articles of Association (AoA) Step 7: Apply for a Commercial Registration How to Get a Foreign Investment License in Saudi: A Step-by-Step Guide Navigating the process of obtaining"
+    },
+    {
+      "id": "check-page-ffab78f74a",
+      "url": "https://insight.astrolabs.com/napster-incorporates-in-saudi-arabia-deepening-its-investment-in-the-kingdom-s-ai-economy",
+      "page": "terms",
+      "excerpt": "Napster Incorporates in Saudi Arabia | AstroLabs Toggle navigation menu Ecosystem Highlights Market Outlook Digital Transformation AstroLabs In the News Contact Search ⌘ K Home AstroLabs In the News Napster Incorporates in Saudi Arabia, Deepening Its Investment in the Kingdom's AI Economy AstroLabs In the News • Sep 7, 2026 • 5 min read Napster Incorporates in Saudi Arabia, Deepening Its Investment in the Kingdom's AI Economy The company establishes a locally governed entity with support from the Ministry of Investment of Saudi Arabia, formalizing more than a year of commitments across Saudi Arabia and the Gulf Riyadh, Saudi Arabia — September 7, 2026 — Napster, the AI company democratizing access to expertise through embodied, multimodal agents, is now officially incorporated in Saudi Arabia, establishing a legal entity in the Kingdom with support from the Ministry of Investment of Saudi Arabia and AstroLabs. The move gives Napster a permanent, locally governed presence in one of its most important markets and formalizes an investment the company has been building across Saudi Arabia and the wider Gulf for more than a year. Saudi Arabia has become one of the fastest-growing digital economies in the world, driven by national AI initiatives under Vision 2030 and sustained investment in local infrastructure. Organizations across the public and private sector are moving quickly"
+    },
+    {
+      "id": "check-page-dc12d8c6aa",
+      "url": "https://insight.astrolabs.com/banque-saudi-fransi-and-astrolabs-announce-2nd-cohort-of-the-banker-technologist-to-empower-saudi-arabias-next-gen-talents-in-the-financial-sector/",
+      "page": "batches",
+      "excerpt": "Banque Saudi Fransi and AstroLabs announce 2nd cohort of the “Banker Technologist” to empower Saudi Arabia’s next-gen talents in the financial sector | AstroLabs Toggle navigation menu Ecosystem Highlights Market Outlook Digital Transformation AstroLabs In the News Contact Search ⌘ K Home AstroLabs In the News Banque Saudi Fransi and AstroLabs announce 2nd cohort of the “Banker Technologist” to empower Saudi Arabia&#8217;s next-gen talents in the financial sector AstroLabs In the News • Mar 13, 2024 • 4 min read Banque Saudi Fransi and AstroLabs announce 2nd cohort of the “Banker Technologist” to empower Saudi Arabia’s next-gen talents in the financial sector Loading form... Following the success and impact of its first cohort, Banque Saudi Fransi (BSF) has announced the start of the second cohort of its “Banker Technologist” to nurture the growth of new tech talent pipelines in Saudi Arabia. The program is held in partnership with AstroLabs, the Gulf’s leading expansion platform. The initiative comes as part of the BSF’s efforts to develop its human capital and accelerate its digital mindset while nurturing the growth of talent in the financial sector. The kingdom is actively fostering a conducive environment for banking and financial innovation and strengthening its digital infrastructure in line with its Vision 2030 for digital transformation. At the helm of this growth are"
+    },
+    {
+      "id": "check-page-98ebc7aaac",
+      "url": "https://astrolabs.com/about-us",
+      "page": "details",
+      "excerpt": "About Us | AstroLabs Products Solutions Company Saudization Calculator Free Sign In Enquire Now Sign In Toggle navigation menu Enquire Now Gulf's Leading Business Expansion Platform Empowering companies to thrive across the Gulf since 2013 Partner with us Contact us Our Story Our Origin Founded in 2013, AstroLabs was built with one mission in mind: simplify and accelerate Gulf market entry. What began as a small, dedicated team has matured into a powerhouse platform supporting over 1,800 companies, from nimble startups to global enterprises – across 37 industries and 50+ countries. Using a blend of cutting-edge technology and hands-on expertise, we drive sustainable growth and successful expansion in the region Our Mission We help high-growth companies scale across the Gulf with a digital-first, end-to-end setup experience Founded in Dubai AstroLabs is established with a bold vision to simplify business expansion across the Gulf. The founding team hosts one of the region’s first tech ecosystem gatherings, drawing over 500 global tech leaders to Dubai 2013 2016 2018 2024 2025 12+ Years of experience 1,800+ Companies Supported $60B+ Capital Raised by our network 35+ Sectors Enabled Our Core Values Our values are at the heart of everything we do, shaping how we partner with clients, communities, and governments across the Gulf Excellence Striving for the highest quality in every"
+    },
+    {
+      "id": "check-page-77b665d0fb",
+      "url": "https://astrolabs.com/corporate-innovation-programs",
+      "page": "details",
+      "excerpt": "Corporate Innovation Programs | AstroLabs Products Solutions Company Saudization Calculator Free Sign In Enquire Now Sign In Toggle navigation menu Enquire Now Power Innovation Inside Your Organization From startup sourcing to intrapreneurship labs, our corporate innovation programs help you unlock bold ideas, faster execution, and measurable business impact Enquire now Why Leading Organizations Innovate With Us End-to-End Innovation Execution From challenge definition to solution rollout, we cover the full cycle Access to 3,000+ Startups & Tech Solutions Our sourcing pipeline spans MENA and global ecosystems Outcome-Focused Programs Whether it’s pilot launches or talent upskilling, we deliver business results—not just workshops Deep Ecosystem Integration With roots in Saudi and the UAE, we help you navigate local opportunities and scale Your Innovation Journey With AstroLabs From internal alignment to external activation, here’s what your program can look like: Book a strategy session We run innovation discovery workshops with your internal champions to align on priority use cases, strategic goals, and readiness for integration Innovation Alignment Step 1 Define Challenges & Objectives 1 week Choose between tapping into AstroLabs’ 3,000+ vetted startups or running internal ideation labs to surface promising solutions from within Startup Sourcing or In-House Ideation Step 2"
+    },
+    {
+      "id": "check-page-6f93a9b986",
+      "url": "https://astrolabs.com/market-entry-programs",
+      "page": "details",
+      "excerpt": "Market Entry Programs | AstroLabs Products Solutions Company Saudization Calculator Free Sign In Enquire Now Sign In Toggle navigation menu Enquire Now Enter the Saudi & UAE Markets With Confidence Our market entry and ecosystem programs help international companies, investors, and governments land, launch, and scale in the Gulf—with deep regional know-how and unmatched execution support Enquire now Why Global Organizations Trust Us With Market Entry On-the-Ground Expertise Years of experience in the Gulf’s regulatory, business, and cultural landscape Full Soft-Landing Support From licensing and setup to talent and growth—handled by one local partner Access to Ecosystems Plug into curated networks of startups, investors, government stakeholders, and corporates Designed for Scale We don’t just land you—we help you build for long-term regional success Your 30–90 Day Market Entry Journey Whether you're launching directly or through an ecosystem partnership, here's what the path typically looks like: Schedule an intro call We assess your global expansion goals, regulatory landscape, and Saudi market fit—then design a localized entry strategy aligned with national priorities and sector opportunities Market Strategy First Step 1 Strategic Assessment & Localization Blueprint 1-2 weeks We handle end-to-end legal setup including MISA licensing, CR registration, MoCs, and office"
+    },
+    {
+      "id": "check-page-5835b0074c",
+      "url": "https://insight.astrolabs.com/majid-al-futtaim-announces-winners-of-the-second-edition-of-its-launchpad-accelerator-programme/",
+      "page": "details",
+      "excerpt": "Majid Al Futtaim Announces Winners of the Second Edition of its Launchpad Accelerator Programme | AstroLabs Toggle navigation menu Ecosystem Highlights Market Outlook Digital Transformation AstroLabs In the News Contact Search ⌘ K Home AstroLabs In the News Majid Al Futtaim Announces Winners of the Second Edition of its Launchpad Accelerator Programme AstroLabs In the News • Oct 9, 2023 • 5 min read Majid Al Futtaim Announces Winners of the Second Edition of its Launchpad Accelerator Programme Loading form... Dubai, UAE – 9 October 2023: Majid Al Futtaim, the leading shopping mall, communities, retail and leisure pioneer across the Middle East, Africa and Asia, announced the winners of the second edition of its Launchpad Accelerator Programme in collaboration with AstroLabs, DIFC Launchpad and Microsoft. Supporting the UAE’s vision to become the most entrepreneurial nation by 2031, Majid Al Futtaim welcomed seven startups to its ecosystem from the climate tech, homegrown brands, and retail tech sectors. At a dynamic and competitive three-day pitch event hosted at Majid Al Futtaim’s corporate headquarters, budding entrepreneurs were invited to pitch their business plans to senior leadership and subject matter experts from around the business. The judging panel then deliberated collectively to select winners across the three categories. New for the 2023 programme was the"
+    },
+    {
+      "id": "check-page-e164f87c26",
+      "url": "https://insight.astrolabs.com/astrolabs-and-sab-accelerate-expansion-opportunities-in-saudi-arabia-for-fast-growing-international-new-economy-companies/",
+      "page": "portfolio",
+      "excerpt": "AstroLabs and SAB accelerate expansion opportunities in Saudi Arabia for fast-growing, international new economy companies | AstroLabs Toggle navigation menu Ecosystem Highlights Market Outlook Digital Transformation AstroLabs In the News Contact Search ⌘ K Home AstroLabs In the News AstroLabs and SAB accelerate expansion opportunities in Saudi Arabia for fast-growing, international new economy companies AstroLabs In the News • May 26, 2025 • 4 min read AstroLabs and SAB accelerate expansion opportunities in Saudi Arabia for fast-growing, international new economy companies Loading form... 26 May, 2025, Riyadh, Saudi Arabia: AstroLabs, the Gulf region’s leading business expansion platform, has partnered with Saudi Awaal Bank “SAB”. This partnership serves to support the aspirations of fast growing companies seeking to enter and expand their business activities in the Kingdom of Saudi Arabia; as well as strengthening SAB’s commitment to the Kingdom’s aim to accelerate private sector contribution to the economy (with a goal of achieving a 65% contribution to GDP from the private sector by 2030). The partnership provides a seamless experience for companies by offering dedicated support in relation to market entry guidance, company formation, and licensing. Supplementary services also include support with identification and setting up of offices and ongoing business development"
+    },
+    {
+      "id": "check-page-5a89bdd5d6",
+      "url": "https://insight.astrolabs.com/how-can-foreign-companies-achieve-a-successful-launch-and-operational-readiness-in-saudi-arabia",
+      "page": "portfolio",
+      "excerpt": "How Can Foreign Companies Achieve a Successful Launch and Operational Readiness in Saudi Arabia? | AstroLabs Toggle navigation menu Ecosystem Highlights Market Outlook Digital Transformation AstroLabs In the News Contact Search ⌘ K Home Market Outlook How Can Foreign Companies Achieve a Successful Launch and Operational Readiness in Saudi Arabia? Market Outlook • Nov 6, 2025 • 5 min read How Can Foreign Companies Achieve a Successful Launch and Operational Readiness in Saudi Arabia? Loading form... Making the move to Saudi Arabia provides a game-changing growth opportunity for global businesses. Our 2025 Market Entry Report showed that 64% of companies were looking to enter Saudi Arabia within 1-3 months of last year, as compared to 48% in 2023. Of these, almost 30% were looking to expand immediately within a month. As exciting as it is to expand into Saudi Arabia, many companies can be unaware of the regulatory matters necessary to get their operations off the ground. While market entry remains the primary focus, if a company is unprepared for change, it risks falling behind due to poor operational readiness. Top Issues Companies Face After Expanding in Saudi Arabia Ideally, robust operational readiness helps businesses anticipate and address market changes as well as adapt to evolving conditions to avoid stagnation. The success of this approach requires being constantly on"
+    },
+    {
+      "id": "check-page-0c782d50d9",
+      "url": "https://insight.astrolabs.com/saudization-requirements-2025-must-knows-for-companies-setting-up-a-business-in-saudi-arabia",
+      "page": "portfolio",
+      "excerpt": "Saudi Arabia Business Setup in 2026: Key Saudization Updates | AstroLabs Toggle navigation menu Ecosystem Highlights Market Outlook Digital Transformation AstroLabs In the News Contact Search ⌘ K Home Market Outlook Saudi Arabia Business Setup: Key Saudization Updates in 2026 Market Outlook • Jan 30, 2026 • 9 min read Saudi Arabia Business Setup: Key Saudization Updates in 2026 Loading form... Compliance with Saudization requirements is a non-negligible aspect of a complete business setup and company registration in Saudi Arabia. This compliance places foreign companies on a path towards sustainable financial growth, making them uniquely positioned to bid on governmental projects and gain access to financial support and incentives for training programs. Understanding the Saudization (Nitaqat) Program and the Impact of Noncompliance on Foreign Businesses The workforce nationalization scheme, known as Saudization or Nitaqat, mandates that foreign businesses in Saudi Arabia hire a specific number of nationals based on a quota system. Under the Saudization frameworks, foreign businesses are primarily classified into five categories: Platinum, High Green, Mid Green, Low Green, and Red. The required quota is determined based on the proportion of Saudi employees vis-à-vis the total number of employees in a company. It varies depending on the company’s size and industry. Typically,"
     }
   ],
   "findings": {
@@ -35,8 +314,45 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-d52912e8a5"
+      },
+      {
+        "value": "2 months",
+        "evidenceId": "check-duration-65047cd1f1"
+      },
+      {
+        "value": "4 months",
+        "evidenceId": "check-duration-14058dff98"
+      },
+      {
+        "value": "1",
+        "evidenceId": "check-duration-9ebf334738"
+      },
+      {
+        "value": "6",
+        "evidenceId": "check-duration-52d631fbeb"
+      },
+      {
+        "value": "2",
+        "evidenceId": "check-duration-b379ccdc8d"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-228edd4f75"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

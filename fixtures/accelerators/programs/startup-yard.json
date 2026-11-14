@@ -9,14 +9,14 @@
   "websiteUrl": "https://startupyard.com/",
   "applyUrl": "https://startupyard.com/apply-to-startupyard-remote-lab/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: At StartupYard, we believe great founders are more than just successful entrepreneurs. They’re pioneers, explorers of the technological frontier, driven by an obsession to solve real problems and create technologies that will shape the future. But it takes more than just a great idea to reach orbit. It takes vision, resilience, and the right crew. Building a company from nothing is a great undertaking in life. And I am so glad now that we didn’t choose to do it alone. StartupYard has become a vital part of our DNA, and has been with us 100% along the way. Mergim Cahani CEO, Gjirafa It’s been a life-changing experience. Rossum would not be where it is today if it was not for all the work we did during our time with StartupYard . Petr Baudis CTO, Rossum I knew that StartupYard’s network is extensive, but it actually exceeded my expectations. Virtually everyone relevant for any business in this region is in the +1 network of StartupYard . Petr Boros CEO, Retino It is awesome! One thing StartupYard helped me understand was that network is a very important part of building a successful business. Before StartupYard, we were always more like a lone pack of wolves, thinking we can fight our way through all the obstacles, but now we have a lot of awesome connections to people with very bright minds and amazing ideas which helped us a lot during the program. Kirill Shamanin CEO, DishBoar No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Need help with your startup? Apply to StartupYard, Central Europe’s Leading Accelerator for Technology Startups",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Applying for StartupYard was a well-thought-out decision and we knew what we should expect – the main expected outcome for us was to start transforming our startup into a company, to formulate our ideas in strategy. We have received very important experience in the project and we already have a much more clear view forward for the future.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "startup-yard-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://startupyard.com/apply-to-startupyard-remote-lab/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

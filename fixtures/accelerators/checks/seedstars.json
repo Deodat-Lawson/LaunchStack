@@ -1,32 +1,199 @@
 {
   "programId": "seedstars",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.seedstars.com/",
-    "https://www.seedstars.com/about/",
-    "https://www.seedstars.com/content-hub/newsroom/"
+    "https://www.seedstars.com/content-hub/newsroom/2020-migration-challenge-call-applications-now-open/",
+    "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
+    "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
+    "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
+    "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/",
+    "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/agrovine-engineering/",
+    "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/aquafarms-africa/",
+    "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/crop2cash/",
+    "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/gnugrid-africa-limited/",
+    "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/green-innovation-ventures-enterprises-limited/",
+    "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/insurepay/",
+    "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/jirogasy/",
+    "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/kiri-ev-ltd/",
+    "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/kitovu-technology-company/"
   ],
   "evidence": [
     {
+      "id": "check-announced-ac71e8fb26",
+      "url": "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
+      "title": "Seedstars — application page",
+      "excerpt": "service to evaluate the applications submitted. Important dates The deadline for submitting projects will be from August 28 to October 13, 2023 at 23:59 hours Colombia time. The review of",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-f1f478f278",
+      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
+      "title": "Seedstars — application page",
+      "excerpt": "the name of the best startup from emerging markets who will get USD 500,000 in investment and the title of the Global Winner 2020/21. « As the",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-6ff9635e60",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/",
+      "title": "Seedstars — terms page",
+      "excerpt": "Readiness Program. The startups set out on a 3 month long capacity building program that focused on",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-7554494657",
+      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
+      "title": "Seedstars — application page",
+      "excerpt": "in January 2023 and will last between 3 and 6 months. The first winning proposal will receive a",
+      "page": "application"
+    },
+    {
+      "id": "check-format-1e8cc3e667",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/kitovu-technology-company/",
+      "title": "Seedstars — terms page",
+      "excerpt": "through our own developed digital platform that applies remote sensing and data science. Check our website or Get in",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-67b04d6e32",
+      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
+      "title": "Seedstars — application page",
+      "excerpt": "proposals will have the opportunity to participate in a virtual workshop on how to develop gender-sensitive fintech",
+      "page": "application"
+    },
+    {
+      "id": "check-format-f46bcad0dd",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/green-innovation-ventures-enterprises-limited/",
+      "title": "Seedstars — terms page",
+      "excerpt": "and Energy as a Service(EaaS) management solutions to remote last mile manufacturers, customers, distributors and sale",
+      "page": "terms"
+    },
+    {
       "id": "check-name-64f8682bc9",
       "url": "https://www.seedstars.com/",
-      "title": "Seedstars — homepage checked by scrape.py",
+      "title": "Seedstars — homepage",
       "excerpt": "Home Seedstars | Home Skip to main content x About ABOUT Our story Our",
       "page": "details"
     },
     {
       "id": "check-route-3550b9e897",
       "url": "https://www.seedstars.com/",
-      "title": "Seedstars — homepage checked by scrape.py",
+      "title": "Seedstars — homepage",
       "excerpt": "APPLY NOW → https://www.seedstars.com/community/entrepreneurs/programs/",
       "page": "details"
     },
     {
       "id": "check-route-5ae1450820",
       "url": "https://www.seedstars.com/",
-      "title": "Seedstars — homepage checked by scrape.py",
+      "title": "Seedstars — homepage",
       "excerpt": "https://www.seedstars.com/",
       "page": "details"
+    },
+    {
+      "id": "check-status-071265b156",
+      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
+      "title": "Seedstars — application page",
+      "excerpt": "Seedstars Brings Its Startup Competition Online: 2020 Applications Are Open Seedstars | Seedstars Brings Its Startup Competition Online: 2020 Applications Are Open Skip to main content",
+      "page": "application"
+    },
+    {
+      "id": "check-status-fe488ff130",
+      "url": "https://www.seedstars.com/content-hub/newsroom/2020-migration-challenge-call-applications-now-open/",
+      "title": "Seedstars — application page",
+      "excerpt": "The 2020 Migration Challenge Call for Applications is Now Open Seedstars | The 2020 Migration Challenge Call for Applications is Now Open Skip to main content x About",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-9d8d16d882",
+      "url": "https://www.seedstars.com/",
+      "page": "details",
+      "excerpt": "Home Seedstars | Home Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE Have an impact in emerging and frontier markets Have an impact in emerging and frontier markets SEE ALL SERVICES Seedstars International Ventures: The Emerging Markets Seed Fund DISCOVER MORE Get ahead of the curve faster Seedstars Programs APPLY NOW Find out about opportunities to collaborate with us SEE OPPORTUNITIES Unique stories about entrepreneurship in emerging and frontier markets SEE ALL STORIES Impacting emerging markets through technology and entrepreneurship"
+    },
+    {
+      "id": "check-page-88a4582d3a",
+      "url": "https://www.seedstars.com/content-hub/newsroom/2020-migration-challenge-call-applications-now-open/",
+      "page": "application",
+      "excerpt": "The 2020 Migration Challenge Call for Applications is Now Open Seedstars | The 2020 Migration Challenge Call for Applications is Now Open Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME RESOURCES NEWSROOM THE 2020 MIGRATION CHALLENGE CALL FOR APPLICATIONS IS NOW OPEN GLOBAL • ECOSYSTEM ENABLER & INVESTMENT The 2020 Migration Challenge Call for Applications is Now Open Seedstars Global JULY 13, 2020 Seedstars , in partnership with the International Organisation of Employers (IOE) and the Business Advisory Group on Migration , is to"
+    },
+    {
+      "id": "check-page-790a534037",
+      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
+      "page": "application",
+      "excerpt": "Call for applications for the Financial Inclusion Lab 2022 powered by the Development Bank of Latin America (CAF) Seedstars | Call for applications for the Financial Inclusion Lab 2022 powered by the Development Bank of Latin America (CAF) Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME RESOURCES NEWSROOM CALL FOR APPLICATIONS FOR THE FINANCIAL INCLUSION LAB 2022 POWERED BY THE DEVELOPMENT BANK OF LATIN AMERICA (CAF) LATAM • FINANCIAL Call for applications for the Financial Inclusion Lab 2022 powered by the Development Bank of Latin"
+    },
+    {
+      "id": "check-page-da21323881",
+      "url": "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
+      "page": "application",
+      "excerpt": "Open Applications for: CAF's Financial Inclusion Lab 2023 Seedstars | Open Applications for: CAF's Financial Inclusion Lab 2023 Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME RESOURCES NEWSROOM OPEN APPLICATIONS FOR: CAF'S FINANCIAL INCLUSION LAB 2023 LATAM • FINANCIAL SERVICES Open Applications for: CAF's Financial Inclusion Lab 2023 Seedstars Global AUGUST 29, 2023 This year's edition is aimed at startups from all member countries of CAF -development bank of Latin America- with innovative technological solutions that contribute to"
+    },
+    {
+      "id": "check-page-6f43752d45",
+      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
+      "page": "application",
+      "excerpt": "Seedstars Brings Its Startup Competition Online: 2020 Applications Are Open Seedstars | Seedstars Brings Its Startup Competition Online: 2020 Applications Are Open Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME RESOURCES NEWSROOM SEEDSTARS BRINGS ITS STARTUP COMPETITION ONLINE: 2020 APPLICATIONS ARE OPEN GLOBAL • INVESTMENT Seedstars Brings Its Startup Competition Online: 2020 Applications Are Open Seedstars Global JUNE 25, 2020 We are happy to announce that Seedstars World Competition 2020/21 will be held exclusively online and the"
+    },
+    {
+      "id": "check-page-1a7640d2df",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/",
+      "page": "terms",
+      "excerpt": "Seedstars and Shell Foundation Investment Readiness Program Seedstars | Seedstars and Shell Foundation Investment Readiness Program Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE Seedstars and Shell Foundation Investment Readiness Program Inviting all investors to book 1on1 meetings with startups of interest. MEET THE STARTUPS HOME WHO WE WORK WITH ENTREPRENEURS SEEDSTARS PROGRAMS SEEDSTARS AND SHELL FOUNDATION INVESTMENT READINESS PROGRAM Program Partners Seedstars and Shell Foundation Investment Readiness Program Seedstars and Shell"
+    },
+    {
+      "id": "check-page-60a0685230",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/agrovine-engineering/",
+      "page": "terms",
+      "excerpt": "Agrovine Engineering Seedstars | Agrovine Engineering Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME WHO WE WORK WITH ENTREPRENEURS SEEDSTARS PROGRAMS SEEDSTARS AND SHELL FOUNDATION INVESTMENT READINESS PROGRAM AGROVINE ENGINEERING Agrovine Engineering Problem we are solving The agriculture sector in many Sub-Saharan African (SSA) countries has not yet realized its full potential in order to achieve a sustainable agricultural sector that could feed SSA countries by 2030. This situation has serious implications for food security, due to"
+    },
+    {
+      "id": "check-page-6bedc85327",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/aquafarms-africa/",
+      "page": "terms",
+      "excerpt": "AquaFarms Africa Seedstars | AquaFarms Africa Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME WHO WE WORK WITH ENTREPRENEURS SEEDSTARS PROGRAMS SEEDSTARS AND SHELL FOUNDATION INVESTMENT READINESS PROGRAM AQUAFARMS AFRICA AquaFarms Africa Problem we are solving 70% of food products consumed in Africa are imported. Companies that import fresh produce complain of inefficiency from both imports and local produce, and across West Africa, agricultural growth is limited by environmental and structural issues that reduce capacity to supply"
+    },
+    {
+      "id": "check-page-af1b74df88",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/crop2cash/",
+      "page": "terms",
+      "excerpt": "Crop2Cash Seedstars | Crop2Cash Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME WHO WE WORK WITH ENTREPRENEURS SEEDSTARS PROGRAMS SEEDSTARS AND SHELL FOUNDATION INVESTMENT READINESS PROGRAM CROP2CASH Crop2Cash Problem we are solving Agricultural loan officers in banks have huge budgets that are never really used because they do not know how to profile farmers for credit. Hence they create requirements that farmers can't meet in their quest for profiling them, which makes it harder for farmers to access much-needed finance. Solution"
+    },
+    {
+      "id": "check-page-a405dd4970",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/gnugrid-africa-limited/",
+      "page": "terms",
+      "excerpt": "gnuGrid Africa Limited Seedstars | gnuGrid Africa Limited Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME WHO WE WORK WITH ENTREPRENEURS SEEDSTARS PROGRAMS SEEDSTARS AND SHELL FOUNDATION INVESTMENT READINESS PROGRAM GNUGRID AFRICA LIMITED gnuGrid Africa Limited Problem we are solving Financial institutions, especially in the informal sector face an upsurge of non-performing loans and high default rates, due to a high number of serial/multiple borrowers. In December 2020, non-performing loans amounted to USD 68m ( UGX 242.6bn), a 48%"
+    },
+    {
+      "id": "check-page-842bd21cb6",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/green-innovation-ventures-enterprises-limited/",
+      "page": "terms",
+      "excerpt": "Green Innovation Ventures Enterprises Limited Seedstars | Green Innovation Ventures Enterprises Limited Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME WHO WE WORK WITH ENTREPRENEURS SEEDSTARS PROGRAMS SEEDSTARS AND SHELL FOUNDATION INVESTMENT READINESS PROGRAM GREEN INNOVATION VENTURES ENTERPRISES LIMITED Green Innovation Ventures Enterprises Limited Problem we are solving Lack of access to affordable energy. About 600 million people in Sub-Saharan Africa and 97 million in East Africa have no access to electricity. Additionally, there"
+    },
+    {
+      "id": "check-page-5dab6b9335",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/insurepay/",
+      "page": "terms",
+      "excerpt": "InsurePay Seedstars | InsurePay Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME WHO WE WORK WITH ENTREPRENEURS SEEDSTARS PROGRAMS SEEDSTARS AND SHELL FOUNDATION INVESTMENT READINESS PROGRAM INSUREPAY InsurePay Problem we are solving Zambia has 2 million small-scale farmers that form the mainstay of the rural economy, contributing to 6.5% of Zambia’s GDP. Despite this critical role they play in ensuring food security and providing employment to about 54% of Zambia’s population, smallholder farmers remain the most underserved population."
+    },
+    {
+      "id": "check-page-61b0a64986",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/jirogasy/",
+      "page": "terms",
+      "excerpt": "Jirogasy Seedstars | Jirogasy Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME WHO WE WORK WITH ENTREPRENEURS SEEDSTARS PROGRAMS SEEDSTARS AND SHELL FOUNDATION INVESTMENT READINESS PROGRAM JIROGASY Jirogasy Problem we are solving Off-grid areas are tough environments where the use of digital and modern technologies is difficult. Most of the off-grid products don't collect data remotely, which disables clear communication between customers and distributors. Furthermore, mid/low income populations from off-grid areas can't have productive"
+    },
+    {
+      "id": "check-page-c74aa9b9b5",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/kiri-ev-ltd/",
+      "page": "terms",
+      "excerpt": "Kiri EV Ltd Seedstars | Kiri EV Ltd Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME WHO WE WORK WITH ENTREPRENEURS SEEDSTARS PROGRAMS SEEDSTARS AND SHELL FOUNDATION INVESTMENT READINESS PROGRAM KIRI EV LTD Kiri EV Ltd Problem we are solving Two wheelers are the number one vehicle for last mile goods and people delivery, but motorcycles are on average 10 times more polluting per mile than a passenger car, light truck or SUV. Furthermore, transportation accounts for 23% of household expenditures. Solution Kiri EV offers holistic"
+    },
+    {
+      "id": "check-page-d464693f8b",
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/kitovu-technology-company/",
+      "page": "terms",
+      "excerpt": "Kitovu Technology Company Seedstars | Kitovu Technology Company Skip to main content x About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes ESO Alliance ESO ALLIANCE Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources x SUBSCRIBE HOME WHO WE WORK WITH ENTREPRENEURS SEEDSTARS PROGRAMS SEEDSTARS AND SHELL FOUNDATION INVESTMENT READINESS PROGRAM KITOVU TECHNOLOGY COMPANY Kitovu Technology Company Problem we are solving Lack of access to quality and affordable inputs, dearth of information on good agricultural practices, and accessing guaranteed markets for their produce are critical challenges that affect African smallholder farmers. It leads to yields at a"
     }
   ],
   "findings": {
@@ -44,11 +211,60 @@
         "evidenceId": "check-route-5ae1450820"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-fe488ff130"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "August",
+        "evidenceId": "check-announced-ac71e8fb26"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-7554494657"
+      },
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-6ff9635e60"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-67b04d6e32"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "the name of the best startup from emerging markets who will get USD 500,000 in investment and the title of the Global Winner 2020/21. « As the",
+        "evidenceId": "check-deal-f1f478f278"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "500000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-f1f478f278"
+      }
+    ],
     "portfolioPages": [],
     "name": [
       {

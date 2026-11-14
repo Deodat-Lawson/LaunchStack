@@ -1,74 +1,157 @@
 {
   "programId": "sheraa",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://sheraa.ae/",
+    "https://sheraa.ae/deal-dock",
+    "https://sheraa.ae/ar/switch-lang/front.page.deal_dock",
     "https://sheraa.ae/about-us",
-    "https://sheraa.ae/deal-dock"
+    "https://sheraa.ae/ar/switch-lang/front.page.about-us"
   ],
   "evidence": [
     {
       "id": "check-deadline-461f3ed872",
       "url": "https://sheraa.ae/",
-      "title": "Sheraa — homepage checked by scrape.py",
+      "title": "Sheraa — homepage",
       "excerpt": "and industry access, using the latest AI tools. Apply Now Applications close 19 November 2026. Apply early. Applications are reviewed on a rolling",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-749a56dba3",
+      "url": "https://sheraa.ae/",
+      "title": "Sheraa — homepage",
+      "excerpt": "and strengthen their path to scale. Duration 4 months Format Part-time / Hybrid Who is it for",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9fed9d58ed",
+      "url": "https://sheraa.ae/",
+      "title": "Sheraa — homepage",
+      "excerpt": "fundamentals and prepare for growth. Duration 8 weeks Format Part-time Who is it for Students &",
+      "page": "details"
+    },
+    {
+      "id": "check-format-acc243d30f",
+      "url": "https://sheraa.ae/",
+      "title": "Sheraa — homepage",
+      "excerpt": "their path to scale. Duration 4 months Format Part-time / Hybrid Who is it for Early-stage founders Support Expert",
       "page": "details"
     },
     {
       "id": "check-name-f9f0089057",
       "url": "https://sheraa.ae/",
-      "title": "Sheraa — homepage checked by scrape.py",
+      "title": "Sheraa — homepage",
       "excerpt": "an idea, building a startup, or scaling a business, Sheraa Membership connects you to the right people,",
       "page": "details"
     },
     {
       "id": "check-phone-0ed71e637e",
       "url": "https://sheraa.ae/about-us",
-      "title": "Sheraa — details page checked by scrape.py",
+      "title": "Sheraa — program page",
       "excerpt": "+971 6 532 6483",
       "page": "details"
     },
     {
       "id": "check-phone-17a1f7a308",
       "url": "https://sheraa.ae/about-us",
-      "title": "Sheraa — details page checked by scrape.py",
+      "title": "Sheraa — program page",
       "excerpt": "+971 6 569 4939",
       "page": "details"
     },
     {
       "id": "check-phone-2e96c1b0fb",
       "url": "https://sheraa.ae/about-us",
-      "title": "Sheraa — details page checked by scrape.py",
+      "title": "Sheraa — program page",
+      "excerpt": "+971 6 509 4000",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-36a65bd53d",
+      "url": "https://sheraa.ae/ar/switch-lang/front.page.about-us",
+      "title": "Sheraa — program page",
+      "excerpt": "+971 6 532 6483",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-9da1f91c79",
+      "url": "https://sheraa.ae/ar/switch-lang/front.page.about-us",
+      "title": "Sheraa — program page",
+      "excerpt": "+971 6 767 5966",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-d15ed8aea5",
+      "url": "https://sheraa.ae/ar/switch-lang/front.page.about-us",
+      "title": "Sheraa — program page",
       "excerpt": "+971 6 509 4000",
       "page": "details"
     },
     {
       "id": "check-portfolio-c4257f31cc",
       "url": "https://sheraa.ae/",
-      "title": "Sheraa — homepage checked by scrape.py",
+      "title": "Sheraa — homepage",
       "excerpt": "Our Startups → https://sheraa.ae/meet-our-startups",
       "page": "details"
     },
     {
       "id": "check-portfolio-dd6fd5b2dc",
       "url": "https://sheraa.ae/about-us",
-      "title": "Sheraa — details page checked by scrape.py",
+      "title": "Sheraa — program page",
       "excerpt": "Our Startups → https://sheraa.ae/meet-our-startups",
       "page": "details"
     },
     {
       "id": "check-portfolio-ef4909c13d",
       "url": "https://sheraa.ae/deal-dock",
-      "title": "Sheraa — terms page checked by scrape.py",
+      "title": "Sheraa — terms page",
       "excerpt": "Our Startups → https://sheraa.ae/meet-our-startups",
       "page": "terms"
     },
     {
+      "id": "check-rolling-f97a0239c4",
+      "url": "https://sheraa.ae/",
+      "title": "Sheraa — homepage",
+      "excerpt": "Applications close 19 November 2026. Apply early. Applications are reviewed on a rolling basis. One Membership Endless Possibilities Whether you're exploring an idea,",
+      "page": "details"
+    },
+    {
       "id": "check-route-78d024bd82",
       "url": "https://sheraa.ae/",
-      "title": "Sheraa — homepage checked by scrape.py",
+      "title": "Sheraa — homepage",
       "excerpt": "https://sheraa.ae",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-1ed934fd8f",
+      "url": "https://sheraa.ae/",
+      "page": "details",
+      "excerpt": "Home About us SWIF Events Sharjah Entrepreneurship Festival Deal Dock ERF Membership Our Startups Sharjah Perfume Reports English العربيـــة About us SWIF Events Sharjah Entrepreneurship Festival Deal Dock ERF Membership Our Startups Sharjah Perfume Reports English العربيـــة Not Visible Turn your idea into a venture built for the real world. Build, test and grow your idea through hands-on workshops, mentorship and industry access, using the latest AI tools. Apply Now Applications close 19 November 2026. Apply early. Applications are reviewed on a rolling basis. One Membership Endless Possibilities Whether you're exploring an idea, building a startup, or scaling a business, Sheraa Membership connects you to the right people, opportunities, and support that help your business move forward. Learn more We Are Sheraa UAE'S LEADING EARLY-STAGE STARTUP ECOSYSTEM Sheraa supports visionary founders on their journey from early traction to global scale. Since 2016, our founder-first programs, expert mentorship, and ecosystem access have helped startups grow, scale, and compete on a global platform 0 + Startups Supported 0 % Survival Rate for Incubated Startups 0 B Capital raised by Incubated Startups Why Founders Choose Sheraa BUSINESS OPPORTUNITIES Direct connections to government, corporate partners, investors, and ecosystem leaders Opportunities for partnerships, pilots, and market"
+    },
+    {
+      "id": "check-page-d4798dcac5",
+      "url": "https://sheraa.ae/deal-dock",
+      "page": "terms",
+      "excerpt": "Deal Dock About us SWIF Events Sharjah Entrepreneurship Festival Deal Dock ERF Membership Our Startups Sharjah Perfume Reports English العربيـــة About us SWIF Events Sharjah Entrepreneurship Festival Deal Dock ERF Membership Our Startups Sharjah Perfume Reports English العربيـــة Deal Dock Sheraa Deal Dock is a dedicated platform designed to connect founders with the right people at the right time. It creates structured opportunities for startups to engage with investors, suppliers, and ecosystem partners through curated meetings and introductions. Built to support meaningful conversations and real outcomes, Deal Dock helps founders move beyond networking and into focused, purpose-driven engagement that supports growth and scale. WHERE CAPITAL MEETS OPPORTUNITY For Investors The Investors Edition brings together high-potential startups with a network of regional and international investors. Through match-made pitch sessions, one-on-one meetings, and targeted discussions, founders gain direct access to funding opportunities, investor insights, and strategic capital support. This edition supports startups as they move from early traction toward scalable growth and future funding rounds, while strengthening the pipeline of investable ventures within the Sheraa ecosystem. FOR SUPPLIERS The Suppliers Edition connects startups and SMEs with corporate and government partners to"
+    },
+    {
+      "id": "check-page-45d7d17f89",
+      "url": "https://sheraa.ae/ar/switch-lang/front.page.deal_dock",
+      "page": "terms",
+      "excerpt": "Deal Dock من نحن المشاريع البرامج المجتمع SWIF الفعاليات مهرجان الشارقة لريادة الأعمال مرسى شراع للاستثمار ERF عضوية عطر الشارقة أغريبوست التقارير العربيـــة English من نحن المشاريع البرامج المجتمع SWIF الفعاليات مهرجان الشارقة لريادة الأعمال مرسى شراع للاستثمار ERF عضوية عطر الشارقة أغريبوست التقارير العربيـــة English مرسى شراع للاستثمار مرسى شراع للاستثمار منصة مخصصة صممت لربط المؤسسين بالأشخاص المناسبين في الوقت المناسب. توفر المنصة فرصا منظمة للشركات الناشئة للتفاعل مع المستثمرين والموردين وشركاء المنظومة الريادية عبر لقاءات تعارف مختارة بعناية. صممت المنصة لدعم محادثات ذات قيمة وتحقيق نتائج ملموسة، حيث تمكّن مرسى شراع للاستثمار المؤسسين من تجاوز أساليب التواصل التقليدية نحو تفاعل مركز وهادف يعزز النمو ويدفع الشركات نحو الازدهار. حيث يلتقي رأس المال بالفرص للمستثمرين نسخة المستثمرين تجمع بين الشركات الناشئة المؤهلة وعالية الإمكانات وشبكة من المستثمرين الإقليميين والدوليين، عبر جلسات عرض منسقة، واجتماعات فردية، ونقاشات مركزة. يتيح للمؤسسين الوصول المباشر إلى فرص التمويل، واكتساب رؤى استثمارية قيّمة، والحصول على دعم استراتيجي لرأس المال. يدعم هذا الإصدار الشركات الناشئة في انتقالها من المراحل المبكرة إلى التوسع القابل للنمو، والاستعداد للجولات التمويلية المستقبلية، مع تعزيز خط المشاريع القابلة للاستثمار ضمن منظومة شراع الريادية. للموردين نسخة الموردين تتيح للشركات الناشئة والشركات الصغيرة والمتوسطة التواصل مع شركاء من القطاعين الحكومي والخاص، لفتح مسارات حقيقية للوصول إلى"
+    },
+    {
+      "id": "check-page-40aa442f6a",
+      "url": "https://sheraa.ae/about-us",
+      "page": "details",
+      "excerpt": "About Us About us SWIF Events Sharjah Entrepreneurship Festival Deal Dock ERF Membership Our Startups Sharjah Perfume Reports English العربيـــة About us SWIF Events Sharjah Entrepreneurship Festival Deal Dock ERF Membership Our Startups Sharjah Perfume Reports English العربيـــة about us Every founder's journey takes courage; the courage to step into uncertainty and build something bold. Entrepreneurship is rarely smooth, and no one should have to navigate it alone. Sheraa exists to turn courage into momentum. Like a sail catching the wind, we help founders harness their ambition, networks, and belief to move forward with confidence. More than an ecosystem, Sheraa is a home for founders who dare to grow and scale fearlessly, backed by a community invested in their success. sheraa sail boldly purpose To empower founders, entrepreneurs and communities to connect, explore, innovate and transform with courage, while building, scaling and shaping the future. vision To establish Sharjah as a leading entrepreneurship ecosystem where ventures build, scale and create lasting economic impact for the Emirate mission To create Destination Sharjah, an environment appealing for innovative founders, startups and SMEs to live, build and grow by providing end-to-end support to establish, scale and succeed. FROM OUR LEADERSHIP At Sheraa, we are deeply inspired by Sharjah’s unique ability to"
+    },
+    {
+      "id": "check-page-81cf788eee",
+      "url": "https://sheraa.ae/ar/switch-lang/front.page.about-us",
+      "page": "details",
+      "excerpt": "About Us من نحن المشاريع البرامج المجتمع SWIF الفعاليات مهرجان الشارقة لريادة الأعمال مرسى شراع للاستثمار ERF عضوية عطر الشارقة أغريبوست التقارير العربيـــة English من نحن المشاريع البرامج المجتمع SWIF الفعاليات مهرجان الشارقة لريادة الأعمال مرسى شراع للاستثمار ERF عضوية عطر الشارقة أغريبوست التقارير العربيـــة English من نحن تعد رحلة كل مؤسس مغامرة؛ مغامرة لاكتشاف المجهول وبناء فكرة تحمل طموحا كبيرا. نادرا ما تكون ريادة الأعمال طريقا ممهدا، فهي رحلة تتعزز بالشراكة لا بالعزلة. ومن هنا، يؤدي شراع دور البوصلة في هذه الرحلة، فتمنحها اتجاها وقوة. وكما تمضي السفينة مستعينة بالرياح نحو أفق أوسع، نمكن المؤسسين من توظيف طموحاتهم ونقاط قوتهم وإيمانهم بما يبنون، ليتقدموا بثبات وثقة. شراع بيئة تحتضن المؤسسين الذين يختارون النمو والمجازفة، ويخوضون رحلتهم مدعومين بمجتمع يؤمن بإمكاناتهم ويستثمر في نجاحهم. شراع أبحر بجرأة الغاية دعم المؤسسين ورواد الأعمال والمجموعات للتواصل والاستكشاف والإبداع، وتمكينهم من إحداث التغيير بخطى ثابتة في مسيرتهم نحو الازدهار والتوسع والمساهمة في بناء المستقبل. الرؤية ترسيخ مكانة إمارة الشارقة كمنظومة ريادية رائدة، تنمو فيها المشاريع وتتوسع وتحقق أثرا اقتصاديا مستداما للإمارة. الرسالة ترسيخ مكانة إمارة الشارقة وجهةً جاذبة للمؤسسين المبتكرين والشركات الناشئة والصغيرة والمتوسطة، تمكنهم من العيش والازدهار والنمو، عبر توفير دعم متكامل يرافقهم في تأسيس مشاريعهم وتطويرها وتعزيز فرص نجاحها. كلمة قيادتنا نحن ، في شراع ، مصدر إلهامنا العميق هو إمكانية الشارقة الفريدة على"
     }
   ],
   "findings": {
@@ -85,6 +168,10 @@
       {
         "value": "+971 6 532 6483",
         "evidenceId": "check-phone-0ed71e637e"
+      },
+      {
+        "value": "+971 6 767 5966",
+        "evidenceId": "check-phone-9da1f91c79"
       }
     ],
     "routes": [],
@@ -102,8 +189,34 @@
         "evidenceId": "check-deadline-461f3ed872"
       }
     ],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-f97a0239c4"
+      }
+    ],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "8",
+        "evidenceId": "check-duration-9fed9d58ed"
+      },
+      {
+        "value": "4 months",
+        "evidenceId": "check-duration-749a56dba3"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-acc243d30f"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://sheraa.ae/meet-our-startups",

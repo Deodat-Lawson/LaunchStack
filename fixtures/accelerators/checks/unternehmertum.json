@@ -1,45 +1,437 @@
 {
   "programId": "unternehmertum",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:59:02.000Z",
   "pagesRead": [
     "https://www.unternehmertum.de/en",
-    "https://www.unternehmertum.de/en/about/facts-figures/"
+    "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
+    "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/",
+    "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
+    "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
+    "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/calendar.ics",
+    "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/calendar.ics",
+    "https://www.unternehmertum.de/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+    "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+    "https://www.unternehmertum.de/presse/investment-in-wire-uvc-partners-leitet-serie-b-finanzierungsrunde-mit-ueber-17-mio-euro/",
+    "https://www.unternehmertum.de/presse/q-ant-sichert-62-millionen-euro-investment-fuer-photonische-prozessoren/",
+    "https://www.unternehmertum.de/presse/studie-futuremadeingermany-de-vergleicht-innovations-investments/",
+    "https://www.unternehmertum.de/presse/xplore-by-unternehmertum-ideale-unterstuetzung-fuer-early-stage-start-ups/",
+    "https://www.unternehmertum.de/en/careers/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+    "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/"
   ],
   "evidence": [
     {
+      "id": "check-deal-421aaacc0e",
+      "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "title": "UnternehmerTUM — terms page",
+      "excerpt": "assets under management, UVC Partners typically invests between € 500,000 and € 10 million initially and up to € 30 million per company. The",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-b4a77f58df",
+      "url": "https://www.unternehmertum.de/en/careers/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "title": "UnternehmerTUM — terms page",
+      "excerpt": "management, UVC Partners typically invests between € 500,000 and € 10 million initially and up to € 30 million per company. The portfolio includes",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-bc6aaf7893",
+      "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "title": "UnternehmerTUM — terms page",
+      "excerpt": "management, UVC Partners typically invests between € 500,000 and € 10 million initially and up to € 30 million per company. The portfolio includes",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-e5c3a69cec",
+      "url": "https://www.unternehmertum.de/en/careers/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "title": "UnternehmerTUM — terms page",
+      "excerpt": "assets under management, UVC Partners typically invests between € 500,000 and € 10 million initially and up to € 30 million per company. The",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-0ae7f683ba",
+      "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "title": "UnternehmerTUM — terms page",
+      "excerpt": "or our Berlin Office Duration: Internship: 3-6 month full-time Deine Aufgaben Deal sourcing Great",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-2b2aada5a8",
+      "url": "https://www.unternehmertum.de/en/careers/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "title": "UnternehmerTUM — terms page",
+      "excerpt": "Garching & München Full- or part-time Permanent 3-month Training & Internship Program @ Digital Product",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-3a769b4495",
+      "url": "https://www.unternehmertum.de/en/careers/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "title": "UnternehmerTUM — terms page",
+      "excerpt": "or our Berlin Office Duration: Internship: 5-6 month full-time Your mission Deal sourcing Great",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-5f35c1b75d",
+      "url": "https://www.unternehmertum.de/en/careers/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "title": "UnternehmerTUM — terms page",
+      "excerpt": "VC Trainee Program – Take part in our unique 10-month venture capital traineeship program covering all",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-9c04f93100",
+      "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "title": "UnternehmerTUM — terms page",
+      "excerpt": "& München Voll- oder Teilzeit Festanstellung 3-month Training Program @ Digital Product School",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-eec219ce51",
+      "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "title": "UnternehmerTUM — terms page",
+      "excerpt": "VC Trainee Program – Take part in our unique 10-month venture capital traineeship program covering all",
+      "page": "terms"
+    },
+    {
       "id": "check-email-8ff7e5d19b",
       "url": "https://www.unternehmertum.de/en",
-      "title": "UnternehmerTUM — homepage checked by scrape.py",
+      "title": "UnternehmerTUM — homepage",
       "excerpt": "Get in touch (info@unternehmertum.de)",
       "page": "details"
     },
     {
+      "id": "check-format-091c974e7f",
+      "url": "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "title": "UnternehmerTUM — terms page",
+      "excerpt": "to the Entry Gate Pitches, which will take place in a hybrid setting (July 15 & 16, 2026, tbc.) at one of our Regional",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-19cae6ecd4",
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "out more about the application process ? Then join our Virtual Info Session on June 2, 6:00 – 7:00 pm (CEST). Agenda",
+      "page": "application"
+    },
+    {
+      "id": "check-format-3c0e2360db",
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/calendar.ics",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "SUMMARY:Application Advice for the Executive MBAs - Virtual Info Session DESCRIPTION:Take the opportunity to learn",
+      "page": "application"
+    },
+    {
+      "id": "check-format-4f745e5c57",
+      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "Events Events Application Advice for the Executive MBAs - Virtual Info Session Talk with Q&A Take the opportunity to learn",
+      "page": "application"
+    },
+    {
+      "id": "check-format-5158b62296",
+      "url": "https://www.unternehmertum.de/presse/investment-in-wire-uvc-partners-leitet-serie-b-finanzierungsrunde-mit-ueber-17-mio-euro/",
+      "title": "UnternehmerTUM — terms page",
+      "excerpt": "sowie fünf der G7-Regierungen. Da hybride und Remote-Arbeitsmodelle zunehmend zur Normalität gehören, müssen",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-73025c6035",
+      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "out more about the application process ? Then join our Virtual Info Session on May 2, 6:00 – 7:00 pm (CEST). Agenda",
+      "page": "application"
+    },
+    {
+      "id": "check-format-821567555e",
+      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "Events Events Application Advice for the Executive MBAs - Virtual Info Session Talk with Q&A Take the opportunity to learn",
+      "page": "application"
+    },
+    {
+      "id": "check-format-8f7d96f7bb",
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "Events Events Application Advice for the Executive MBAs - Virtual Info Session Talk with Q&A Take the opportunity to learn",
+      "page": "application"
+    },
+    {
+      "id": "check-format-9613429b6b",
+      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "Application Advice for the Executive MBAs - Virtual Info Session | UnternehmerTUM Skip to content Offering",
+      "page": "application"
+    },
+    {
+      "id": "check-format-99433c27f4",
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "Application Advice for the Executive MBAs - Virtual Info Session | UnternehmerTUM Zum Inhalt springen Angebot",
+      "page": "application"
+    },
+    {
+      "id": "check-format-a889c51f7a",
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "out more about the application process ? Then join our Virtual Info Session on May 2, 6:00 – 7:00 pm (CEST). Agenda",
+      "page": "application"
+    },
+    {
+      "id": "check-format-a977a959f5",
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/calendar.ics",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "SUMMARY:Application Advice for the Executive MBAs - Virtual Info Session DESCRIPTION:Take the opportunity to learn",
+      "page": "application"
+    },
+    {
+      "id": "check-format-ae449d3a8b",
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "Events Events Application Advice for the Executive MBAs - Virtual Info Session Talk with Q&A Take the opportunity to learn",
+      "page": "application"
+    },
+    {
+      "id": "check-format-bfadb10af2",
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "Application Advice for the Executive MBAs - Virtual Info Session | UnternehmerTUM Zum Inhalt springen Angebot",
+      "page": "application"
+    },
+    {
+      "id": "check-format-c552fc0587",
+      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "Application Advice for the Executive MBAs - Virtual Info Session | UnternehmerTUM Skip to content Offering",
+      "page": "application"
+    },
+    {
+      "id": "check-format-f00cba071c",
+      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "out more about the application process ? Then join our Virtual Info Session on June 2, 6:00 – 7:00 pm (CEST). Agenda",
+      "page": "application"
+    },
+    {
       "id": "check-name-f05b8d3b8e",
       "url": "https://www.unternehmertum.de/en",
-      "title": "UnternehmerTUM — homepage checked by scrape.py",
+      "title": "UnternehmerTUM — homepage",
       "excerpt": "UnternehmerTUM | Europe’s Leading Center for Innovation and Business",
       "page": "details"
     },
     {
+      "id": "check-phone-93e6cc2575",
+      "url": "https://www.unternehmertum.de/presse/xplore-by-unternehmertum-ideale-unterstuetzung-fuer-early-stage-start-ups/",
+      "title": "UnternehmerTUM — terms page",
+      "excerpt": "icons / phone icons / phone (+49895419869903)",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-aac64bd163",
+      "url": "https://www.unternehmertum.de/presse/studie-futuremadeingermany-de-vergleicht-innovations-investments/",
+      "title": "UnternehmerTUM — terms page",
+      "excerpt": "icons / phone icons / phone (+49895419869903)",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-d67d0357ed",
+      "url": "https://www.unternehmertum.de/presse/investment-in-wire-uvc-partners-leitet-serie-b-finanzierungsrunde-mit-ueber-17-mio-euro/",
+      "title": "UnternehmerTUM — terms page",
+      "excerpt": "icons / phone icons / phone (+49895419869903)",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-ff2f57e3b0",
+      "url": "https://www.unternehmertum.de/presse/q-ant-sichert-62-millionen-euro-investment-fuer-photonische-prozessoren/",
+      "title": "UnternehmerTUM — terms page",
+      "excerpt": "icons / phone icons / phone (+49895419869903)",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-4119c913a3",
       "url": "https://www.unternehmertum.de/en",
-      "title": "UnternehmerTUM — homepage checked by scrape.py",
+      "title": "UnternehmerTUM — homepage",
       "excerpt": "Companies icons / arrow-right icons / arrow-right → https://www.unternehmertum.de/en/offering/companies/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-c861927c65",
-      "url": "https://www.unternehmertum.de/en/about/facts-figures/",
-      "title": "UnternehmerTUM — details page checked by scrape.py",
+      "id": "check-portfolio-6cdb5d8b53",
+      "url": "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "title": "UnternehmerTUM — terms page",
       "excerpt": "Companies icons / arrow-right icons / arrow-right → https://www.unternehmertum.de/en/offering/companies/",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b4b51ee88e",
+      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "Companies icons / arrow-right icons / arrow-right → https://www.unternehmertum.de/en/offering/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-bef0e3f398",
+      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "Companies icons / arrow-right icons / arrow-right → https://www.unternehmertum.de/en/offering/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d83a7b9901",
+      "url": "https://www.unternehmertum.de/en/careers/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "title": "UnternehmerTUM — terms page",
+      "excerpt": "Companies icons / arrow-right icons / arrow-right → https://www.unternehmertum.de/en/offering/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-06c6992daa",
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "2. Mai 2022 (Im Kalender speichern) → https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/calendar.ics",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5f9c5e5d67",
+      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "DE → https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8790c8e228",
+      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "DE → https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
+      "page": "application"
     },
     {
       "id": "check-route-ab3ec6a14f",
       "url": "https://www.unternehmertum.de/en",
-      "title": "UnternehmerTUM — homepage checked by scrape.py",
+      "title": "UnternehmerTUM — homepage",
       "excerpt": "UnternehmerTUM Logo → https://www.unternehmertum.de/en/",
       "page": "details"
+    },
+    {
+      "id": "check-route-b0abe2fc9a",
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "EN → https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c043623ac2",
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "2. Juni 2022 (Im Kalender speichern) → https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/calendar.ics",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e4d12eb1d5",
+      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "May 2, 2022 (Save to calendar) → https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/calendar.ics",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e543ac05ba",
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "EN → https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f7b70d10ce",
+      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
+      "title": "UnternehmerTUM — application page",
+      "excerpt": "June 2, 2022 (Save to calendar) → https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/calendar.ics",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-d34d271b4b",
+      "url": "https://www.unternehmertum.de/en",
+      "page": "details",
+      "excerpt": "UnternehmerTUM | Europe’s Leading Center for Innovation and Business Creation | UnternehmerTUM Skip to content Offering Offering submenu Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (opens in a new window) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Facts & Figures Locations Careers Press Network Insights Events Open search Open menu Search term Search DE EN Close menu Offering Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center Women Start-up About Facts & Figures Locations Careers Press Insights Events We’re Europe’s Leading Center for Innovation and Business Creation Learn more Physical AI Growth Lab: A new accelerator program with Microsoft, Infineon, and NVIDIA Read now MSC Frontier Tech Hub 2027: Frontier technologies shaping security and resilience Read now Podcast: Gordon Gorski on family businesses and the AI future Listen now In a Nutshell Great ideas need the right foundation. UnternehmerTUM builds"
+    },
+    {
+      "id": "check-page-812b38a72a",
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
+      "page": "application",
+      "excerpt": "Application Advice for the Executive MBAs - Virtual Info Session | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Events Application Advice for the Executive MBAs - Virtual Info Session Talk with Q&A Take the opportunity to learn more about the admissions process for the entire Executive MBA program collection offered by TUM Institut of LifeLong Learning. Zum Artikel springen Datum 2. Mai 2022 (Im Kalender speichern) Uhrzeit 18:00 → bis 19:00 Im"
+    },
+    {
+      "id": "check-page-bbceee981d",
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/",
+      "page": "application",
+      "excerpt": "Application Advice for the Executive MBAs - Virtual Info Session | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Events Application Advice for the Executive MBAs - Virtual Info Session Talk with Q&A Take the opportunity to learn more about the admissions process for the entire Executive MBA program collection offered by TUM Institut of LifeLong Learning. Zum Artikel springen Datum 2. Juni 2022 (Im Kalender speichern) Uhrzeit 18:00 → bis 19:00 Im"
+    },
+    {
+      "id": "check-page-ffd9454a46",
+      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
+      "page": "application",
+      "excerpt": "Application Advice for the Executive MBAs - Virtual Info Session | UnternehmerTUM Skip to content Offering Offering submenu Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (opens in a new window) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Facts & Figures Locations Careers Press Network Insights Events Open search Open menu Search term Search DE EN Close menu Offering Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center Women Start-up About Facts & Figures Locations Careers Press Insights Events Events Application Advice for the Executive MBAs - Virtual Info Session Talk with Q&A Take the opportunity to learn more about the admissions process for the entire Executive MBA program collection offered by TUM Institut of LifeLong Learning. Skip to article Date May 2, 2022 (Save to calendar) Time 6:00 PM → to 7:00 PM Save to calendar Location Online Are you planning to apply for our Executive MBA in Innovation and"
+    },
+    {
+      "id": "check-page-c65e2b1631",
+      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
+      "page": "application",
+      "excerpt": "Application Advice for the Executive MBAs - Virtual Info Session | UnternehmerTUM Skip to content Offering Offering submenu Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (opens in a new window) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Facts & Figures Locations Careers Press Network Insights Events Open search Open menu Search term Search DE EN Close menu Offering Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center Women Start-up About Facts & Figures Locations Careers Press Insights Events Events Application Advice for the Executive MBAs - Virtual Info Session Talk with Q&A Take the opportunity to learn more about the admissions process for the entire Executive MBA program collection offered by TUM Institut of LifeLong Learning. Skip to article Date June 2, 2022 (Save to calendar) Time 6:00 PM → to 7:00 PM Save to calendar Location Online Are you planning to apply for our Executive MBA in Innovation and"
+    },
+    {
+      "id": "check-page-248527af89",
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/calendar.ics",
+      "page": "application",
+      "excerpt": "BEGIN:VCALENDAR VERSION:2.0 PRODID:-//UnternehmerTUM//Website//DE CALSCALE:GREGORIAN METHOD:PUBLISH BEGIN:VEVENT UID:event-14550-14551@www.unternehmertum.de DTSTAMP:20261114T211207Z DTSTART:20220502T160000Z DTEND:20220502T170000Z SUMMARY:Application Advice for the Executive MBAs - Virtual Info Session DESCRIPTION:Take the opportunity to learn more about the admissions process for the entire Executive MBA program collection offered by TUM Institut of LifeLong Learning. LOCATION:Online URL:https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/ END:VEVENT END:VCALENDAR"
+    },
+    {
+      "id": "check-page-4d83441382",
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/calendar.ics",
+      "page": "application",
+      "excerpt": "BEGIN:VCALENDAR VERSION:2.0 PRODID:-//UnternehmerTUM//Website//DE CALSCALE:GREGORIAN METHOD:PUBLISH BEGIN:VEVENT UID:event-14748-14749@www.unternehmertum.de DTSTAMP:20261114T211209Z DTSTART:20220602T160000Z DTEND:20220602T170000Z SUMMARY:Application Advice for the Executive MBAs - Virtual Info Session DESCRIPTION:Take the opportunity to learn more about the admissions process for the entire Executive MBA program collection offered by TUM Institut of LifeLong Learning. LOCATION:Online URL:https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/ END:VEVENT END:VCALENDAR"
+    },
+    {
+      "id": "check-page-a03cb554ec",
+      "url": "https://www.unternehmertum.de/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Teilnahmebedingungen Women Startup Award | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Women Startup Award Teilnahmebedingungen für den Women Startup Award Präambel Der Women Startup Award ist ein Wettbewerb für (angehende) Gründerinnen aus Bayern im Tech- und Innovationsbereich. Ziel ist es, Frauen in der Startup-Szene sichtbarer zu machen und ihre unternehmerischen Kompetenzen zu stärken. Mit einer Kombination aus Pitch-Wettbewerb,"
+    },
+    {
+      "id": "check-page-3b5711be9a",
+      "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "page": "terms",
+      "excerpt": "Unsolicited Application: Intern or Working Student for our Investment Team at UVC | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Karriere Unsolicited Application : Intern or Working Student for our Investment Team at UVC Arbeitszeit Teilzeit Art der Anstellung Werkstudent:in Arbeitsort München Kreativquartier Über uns UVC Partners is a leading Munich- and Berlin-based early-stage venture capital firm that invests in European B2B tech start-ups"
+    },
+    {
+      "id": "check-page-fe0096376f",
+      "url": "https://www.unternehmertum.de/presse/investment-in-wire-uvc-partners-leitet-serie-b-finanzierungsrunde-mit-ueber-17-mio-euro/",
+      "page": "terms",
+      "excerpt": "Investment in Wire: UVC Partners leitet Serie-B-Finanzierungsrunde mit über 17 Mio. Euro | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Presse Investment in Wire: UVC Partners leitet Serie-B-Finanzierungsrunde mit über 17 Mio. Euro Zum Artikel springen Veröffentlicht am 14. April 2021 Teilen Wire, die weltweit sicherste Kollaborationsplattform, erhält nach Abschluss der Serie-B-Finanzierungsrunde ein Investment in Höhe von 17,4 Mio. Euro,"
+    },
+    {
+      "id": "check-page-209593db76",
+      "url": "https://www.unternehmertum.de/presse/q-ant-sichert-62-millionen-euro-investment-fuer-photonische-prozessoren/",
+      "page": "terms",
+      "excerpt": "Q.ANT sichert 62 Millionen Euro Investment für photonische Prozessoren | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Presse Q.ANT sichert 62 Millionen Euro Investment für photonische Prozessoren Zum Artikel springen Veröffentlicht am 17. Juli 2025 Teilen Europas größte Serie-A-Finanzierung für photonisches Computing beschleunigt die Markteinführung lichtbasierter Prozessoren – zur Lösung der Energie- und Skalierungsprobleme der KI. München,"
+    },
+    {
+      "id": "check-page-4feb43cee6",
+      "url": "https://www.unternehmertum.de/presse/studie-futuremadeingermany-de-vergleicht-innovations-investments/",
+      "page": "terms",
+      "excerpt": "Studie “FutureMadeInGermany.de” vergleicht Innovations-Investments | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Presse Studie “FutureMadeInGermany.de” vergleicht Innovations-Investments Zum Artikel springen Veröffentlicht am 22. November 2019 Teilen Garching bei München, 22. November 2019. Die marktführenden Positionen, die sich deutsche DAX-Unternehmen über Jahrzehnte hinweg erarbeitet haben, sind das Ergebnis leistungsfähiger interner"
+    },
+    {
+      "id": "check-page-e1ea68d071",
+      "url": "https://www.unternehmertum.de/presse/xplore-by-unternehmertum-ideale-unterstuetzung-fuer-early-stage-start-ups/",
+      "page": "terms",
+      "excerpt": "XPLORE by UnternehmerTUM: Ideale Unterstützung für early-stage Start-ups | UnternehmerTUM Zum Inhalt springen Angebot Untermenü Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (öffnet in neuem Fenster) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Untermenü About Daten & Fakten Standorte Karriere Presse Netzwerk Insights Events Suche öffnen Menü öffnen Suchbegriff Suchen DE EN Menü schließen Angebot Innovators Startups & Scaleups Unternehmen Key Industries and Technologies Advanced Manufacturing Aerospace & Space Agrifood & BioTech AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center for Innovation and Entrepreneurship Practice Women Start-up About Daten & Fakten Standorte Karriere Presse Insights Events Presse XPLORE by UnternehmerTUM: Ideale Unterstützung für early-stage Start-ups Zum Artikel springen Veröffentlicht am 14. Juni 2023 Teilen Das neu konzipierte Angebot von XPLORE schließt mit seinem Netzwerk, bestehend aus Coaches, Business Angels und Mentoren, eine Lücke zwischen klassischen Bildungs- und Inkubationsformaten"
+    },
+    {
+      "id": "check-page-b91c5b9a9d",
+      "url": "https://www.unternehmertum.de/en/careers/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "page": "terms",
+      "excerpt": "Unsolicited Application: Intern or Working Student for our Investment Team at UVC | UnternehmerTUM Skip to content Offering Offering submenu Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (opens in a new window) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Facts & Figures Locations Careers Press Network Insights Events Open search Open menu Search term Search DE EN Close menu Offering Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center Women Start-up About Facts & Figures Locations Careers Press Insights Events Careers Unsolicited Application : Intern or Working Student for our Investment Team at UVC Working hours Part-time Employment type Working student Location München Kreativquartier About us UVC Partners is a leading Munich- and Berlin-based early-stage venture capital firm that invests in European B2B tech start-ups from pre-seed to series A. With about € 400 million assets under management, UVC Partners"
+    },
+    {
+      "id": "check-page-57e797a2cb",
+      "url": "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Women Startup Award Terms and Conditions | UnternehmerTUM Skip to content Offering Offering submenu Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries (opens in a new window) Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Initiatives, Network & Cooperations About Facts & Figures Locations Careers Press Network Insights Events Open search Open menu Search term Search DE EN Close menu Offering Innovators Startups & Scaleups Companies Key Industries and Technologies Advanced Manufacturing Aerospace & Space AgriFood AI & Digital Products Built Environment Circular Industries Energy GovTech Healthcare Social Tech Mobility Quantum Robotics & Physical AI Ecosystem International Learning and Exchange Center Women Start-up About Facts & Figures Locations Careers Press Insights Events Women Startup Award Terms and Conditions for the Women Startup Award Preamble The Women Startup Award is a competition for Bavarian (prospective) female founders in the tech and innovation sector. The aim is to make women more visible in the startup scene and to strengthen their entrepreneurial skills. With a mix of pitch competition, practical knowledge building, individual coaching, mentor matching and media attention, we create a comprehensive"
     }
   ],
   "findings": {
@@ -49,8 +441,38 @@
         "evidenceId": "check-email-8ff7e5d19b"
       }
     ],
-    "phones": [],
-    "routes": [],
+    "phones": [
+      {
+        "value": "+49895419869903",
+        "evidenceId": "check-phone-d67d0357ed"
+      }
+    ],
+    "routes": [
+      {
+        "value": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
+        "evidenceId": "check-route-e543ac05ba"
+      },
+      {
+        "value": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/calendar.ics",
+        "evidenceId": "check-route-06c6992daa"
+      },
+      {
+        "value": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
+        "evidenceId": "check-route-b0abe2fc9a"
+      },
+      {
+        "value": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/calendar.ics",
+        "evidenceId": "check-route-c043623ac2"
+      },
+      {
+        "value": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
+        "evidenceId": "check-route-8790c8e228"
+      },
+      {
+        "value": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/calendar.ics",
+        "evidenceId": "check-route-e4d12eb1d5"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://www.unternehmertum.de/en/",
@@ -60,8 +482,71 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-0ae7f683ba"
+      },
+      {
+        "value": "10 months",
+        "evidenceId": "check-duration-eec219ce51"
+      },
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-9c04f93100"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-bfadb10af2"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-091c974e7f"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "assets under management, UVC Partners typically invests between € 500,000 and € 10 million initially and up to € 30 million per company. The",
+        "evidenceId": "check-deal-421aaacc0e"
+      },
+      {
+        "value": "management, UVC Partners typically invests between € 500,000 and € 10 million initially and up to € 30 million per company. The portfolio includes",
+        "evidenceId": "check-deal-bc6aaf7893"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "500000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-421aaacc0e"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "10000000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-bc6aaf7893"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://www.unternehmertum.de/en/offering/companies/",

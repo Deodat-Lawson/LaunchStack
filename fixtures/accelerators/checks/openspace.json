@@ -1,37 +1,311 @@
 {
   "programId": "openspace",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://www.openspacecapital.com/"
+    "https://www.openspacecapital.com/",
+    "https://www.openspacecapital.com/insights/accelerating-venture-climate-investment-in-southeast-asia",
+    "https://www.openspacecapital.com/companies",
+    "https://www.openspacecapital.com/insights/openspace-portfolio-companies-on-forbes-asia-100-to-watch-list",
+    "https://www.openspacecapital.com/insights/portfolio-company-feature-cheak",
+    "https://www.openspacecapital.com/insights/portfolio-company-feature-janji-jiwa",
+    "https://www.openspacecapital.com/insights/portfolio-company-feature-love-bonito",
+    "https://www.openspacecapital.com/insights/portfolio-company-feature-sarisuki",
+    "https://www.openspacecapital.com/portfolio/amp",
+    "https://www.openspacecapital.com/portfolio/ampd",
+    "https://www.openspacecapital.com/portfolio/beleaf",
+    "https://www.openspacecapital.com/portfolio/briohr",
+    "https://www.openspacecapital.com/portfolio/broom",
+    "https://www.openspacecapital.com/portfolio/chope",
+    "https://www.openspacecapital.com/portfolio/copilotiq"
   ],
   "evidence": [
     {
+      "id": "check-duration-fa1efa0d9e",
+      "url": "https://www.openspacecapital.com/insights/accelerating-venture-climate-investment-in-southeast-asia",
+      "title": "Openspace Ventures — terms page",
+      "excerpt": "Bain & Company. [16] See footnote 1. First 11 months of 2023. [17] European Commission - Emissions",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-08c028ad21",
+      "url": "https://www.openspacecapital.com/portfolio/copilotiq",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "and chronic care. next COMPANY Actively revolutionizing remote health monitoring. CopilotIQ is an end-to-end platform for",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-9abff9035a",
+      "url": "https://www.openspacecapital.com/companies",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "enabling provider partners to deliver immediate access to virtual cognitive care. READ MORE Nurturing Indonesian agriculture",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-ad14841502",
+      "url": "https://www.openspacecapital.com/companies",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "enabling provider partners to deliver immediate access to virtual cognitive care. READ MORE Largest consumer app in",
+      "page": "portfolio"
+    },
+    {
       "id": "check-name-2ca97f5ec3",
       "url": "https://www.openspacecapital.com/",
-      "title": "Openspace Ventures — homepage checked by scrape.py",
+      "title": "Openspace Ventures — homepage",
       "excerpt": "3.0 • Jul 6, 2023 Meet the Team: Pareen • Jul 5, 2023 Openspace Ventures Leads USD 5.5M Series B+ Funding Round for Finnomena • Jul",
       "page": "details"
     },
     {
+      "id": "check-portfolio-067585048c",
+      "url": "https://www.openspacecapital.com/insights/openspace-portfolio-companies-on-forbes-asia-100-to-watch-list",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "Companies → https://www.openspacecapital.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-2451619ec1",
+      "url": "https://www.openspacecapital.com/portfolio/beleaf",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "Back to COMPANIES → https://www.openspacecapital.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-4197ca82ca",
+      "url": "https://www.openspacecapital.com/portfolio/broom",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "Companies → https://www.openspacecapital.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-483279cb47",
+      "url": "https://www.openspacecapital.com/insights/portfolio-company-feature-sarisuki",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "Companies → https://www.openspacecapital.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-4dff1c9db6",
+      "url": "https://www.openspacecapital.com/portfolio/ampd",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "Companies → https://www.openspacecapital.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-5ef1e3c121",
+      "url": "https://www.openspacecapital.com/portfolio/chope",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "Back to COMPANIES → https://www.openspacecapital.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-64d79eba35",
+      "url": "https://www.openspacecapital.com/portfolio/chope",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "Companies → https://www.openspacecapital.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-68db12e114",
+      "url": "https://www.openspacecapital.com/portfolio/amp",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "Companies → https://www.openspacecapital.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-6943e0c44f",
+      "url": "https://www.openspacecapital.com/portfolio/copilotiq",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "Companies → https://www.openspacecapital.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-6958223d69",
+      "url": "https://www.openspacecapital.com/portfolio/broom",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "Back to COMPANIES → https://www.openspacecapital.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-72547c21f4",
+      "url": "https://www.openspacecapital.com/portfolio/amp",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "Back to COMPANIES → https://www.openspacecapital.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-785f950ef7",
+      "url": "https://www.openspacecapital.com/portfolio/briohr",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "Companies → https://www.openspacecapital.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-7f2405f612",
+      "url": "https://www.openspacecapital.com/insights/accelerating-venture-climate-investment-in-southeast-asia",
+      "title": "Openspace Ventures — terms page",
+      "excerpt": "Companies → https://www.openspacecapital.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-850eb5d524",
+      "url": "https://www.openspacecapital.com/insights/portfolio-company-feature-love-bonito",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "Companies → https://www.openspacecapital.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-9266ad0924",
+      "url": "https://www.openspacecapital.com/portfolio/beleaf",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "Companies → https://www.openspacecapital.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-a942da310a",
+      "url": "https://www.openspacecapital.com/portfolio/ampd",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "Back to COMPANIES → https://www.openspacecapital.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-c22cb17fd3",
+      "url": "https://www.openspacecapital.com/insights/portfolio-company-feature-janji-jiwa",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "Companies → https://www.openspacecapital.com/companies",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-d8bb422ed4",
       "url": "https://www.openspacecapital.com/",
-      "title": "Openspace Ventures — homepage checked by scrape.py",
+      "title": "Openspace Ventures — homepage",
       "excerpt": "Companies → https://www.openspacecapital.com/companies",
       "page": "details"
     },
     {
       "id": "check-portfolio-dcbdc41be6",
       "url": "https://www.openspacecapital.com/",
-      "title": "Openspace Ventures — homepage checked by scrape.py",
+      "title": "Openspace Ventures — homepage",
       "excerpt": "OUR COMPANIES → https://www.openspacecapital.com/companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-e3d7d05cdb",
+      "url": "https://www.openspacecapital.com/portfolio/copilotiq",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "Back to COMPANIES → https://www.openspacecapital.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-ea9da60c55",
+      "url": "https://www.openspacecapital.com/portfolio/briohr",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "Back to COMPANIES → https://www.openspacecapital.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-fe854e628b",
+      "url": "https://www.openspacecapital.com/insights/portfolio-company-feature-cheak",
+      "title": "Openspace Ventures — portfolio page",
+      "excerpt": "Companies → https://www.openspacecapital.com/companies",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-3d146cfac8",
       "url": "https://www.openspacecapital.com/",
-      "title": "Openspace Ventures — homepage checked by scrape.py",
+      "title": "Openspace Ventures — homepage",
       "excerpt": "https://www.openspacecapital.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-f98bc258c0",
+      "url": "https://www.openspacecapital.com/",
+      "page": "details",
+      "excerpt": "Multi-strategy asset manager focused on Southeast Asia Contact Investor Login Team Companies Strategies Responsibility Reports Careers Team Companies Strategies Responsibility Reports Contact Careers Investor Login Investing with Active Intelligence Openspace Capital is a multi-strategy asset manager with a long-established specialist focus on Southeast Asia. HOW WE DO IT → We fund tech-native and tech-enabled businesses across multiple stages and product needs. We are an investment firm with US$800M in committed capital across 6 funds. We focus on Southeast Asia, investing in tech native and tech-enabled companies at the early and growth stage, within different sectors. ‍ By harnessing Active Intelligence we have worked with our portfolio companies to realize bolder visions, and accelerate their progress in a responsible and viable way. Our STRATEGIES OUR COMPANIES Active Intelligence through a singular focus on Southeast Asia. MEET OUR TEAM → GET IN TOUCH → Active Intelligence from a deep regional team, with a diversity of thought and experiences. MEET OUR TEAM → GET IN TOUCH → Active Intelligence from a widescale, always-available operational team. MEET OUR TEAM → GET IN TOUCH → The Coalesce Index: Southeast Asia, 2nd Edition The 2nd edition of the Coalesce Index measures the extent to which Southeast Asia has become more interconnected since our inaugural report. It"
+    },
+    {
+      "id": "check-page-965fd5b701",
+      "url": "https://www.openspacecapital.com/insights/accelerating-venture-climate-investment-in-southeast-asia",
+      "page": "terms",
+      "excerpt": "Southeast Asia Venture Capital News & Insight | Openspace Contact Investor Login Team Companies Strategies Responsibility Reports Careers Team Companies Strategies Responsibility Reports Contact Careers Investor Login Accelerating Venture Climate Investments in Southeast Asia Shane Chesson Jaclyn Seow June 20, 2024 Did you know that Southeast Asia’s climate tech scene is booming? From soaring investments to corporate champions, discover how the region is greening its future. Yet, amidst the growth, challenges loom—like balancing returns with impact. Join us as we navigate the highs, lows, and regulatory twists shaping SEA's climate revolution. ‍ Climate tech investing is on the rise in Southeast Asia (SEA) . The sector is seeing growing interest from investors, with the share of climate tech deals as a proportion of all venture funding expanding from 3.2% in 2019 to 9.5% in 20231. The volume of climate tech equity deals also saw a compound annual growth rate of over 15% from 2019 to 2023 [2] , and almost 30 climate-specific funds with full or majority allocations in Southeast Asia have emerged since 2020, raising over $830M in committed capital [3] . ‍ Early-stage venture rounds (i.e. prior to Series B) historically account for most of the climate tech equity deals in Southeast Asia , consistently comprising an average of 85% [4] of deal volume in recent years, with only a"
+    },
+    {
+      "id": "check-page-4e7ae49e3f",
+      "url": "https://www.openspacecapital.com/companies",
+      "page": "portfolio",
+      "excerpt": "Multi-strategy asset manager focused on Southeast Asia Contact Investor Login Team Companies Strategies Responsibility Reports Careers Team Companies Strategies Responsibility Reports Contact Careers Investor Login Our companies transform categories and lives. We have worked with them go from strength-to-strength by openly sharing our expertise and experiences. Featured Companies With Gojek (now GoTo) since Series A Featured Portfolio Featured Portfolio With Halodoc since Series A Featured Portfolio With Igloo since Series A Featured Portfolio With Abacus Digital since Series A Our companies transform categories, lives and culture. We are always there to help our companies when and where they ask for it - and we will always partner with absolute candour and good humour. Largest consumer app in Indonesia, combining on-demand services, eCommerce and financial services. READ MORE IDX: GOTO Southeast Asia’s leading provider of digital financial services. READ MORE End-to-end platform for AI-driven in-home patient care from pre-surgery, to acute, post-acute, and chronic care. READ MORE Southeast Asia's largest vertically integrated, omni-channel womenswear brand. READ MORE Southeast Asia's leading full stack insurance technology company providing insurance for all. READ MORE Clean battery storage systems designed for challenging environments. READ MORE Digital platform simplifying"
+    },
+    {
+      "id": "check-page-358399d107",
+      "url": "https://www.openspacecapital.com/insights/openspace-portfolio-companies-on-forbes-asia-100-to-watch-list",
+      "page": "portfolio",
+      "excerpt": "Southeast Asia Venture Capital News & Insight | Openspace Contact Investor Login Team Companies Strategies Responsibility Reports Careers Team Companies Strategies Responsibility Reports Contact Careers Investor Login Openspace Portfolio Companies on Forbes Asia 100 To Watch List Fadhilah Syara (Rara) October 24, 2023 Six Openspace portfolio companies have secured spots on the Forbes Asia 100 To Watch list for 2023. Forbes highlights notable, emerging companies catering to underserved markets or applying new technologies, from generative AI to blood-based cancer diagnostics. The list spans thirteen countries and territories, covering eleven distinct categories, including biotechnology and healthcare, e-commerce and retail, and finance. ‍ Here are the portfolio companies featured on the Forbes Asia 100 To Watch list: ‍ Abacus Digital Abacus Digital is a fintech brand on a mission to create a fairer financial system in Thailand. With a portfolio of products, they are providing constructive credit, and in doing so are, for the first time, giving people a real chance to pursue their ambitions and create a Thailand where access to opportunity is not limited by access to credit. Abacus Digital recognizes the challenges and risks people have traditionally faced in the sector and has designed its products to be easily used and understood by customers with all levels of digital and"
+    },
+    {
+      "id": "check-page-dd339be5f7",
+      "url": "https://www.openspacecapital.com/insights/portfolio-company-feature-cheak",
+      "page": "portfolio",
+      "excerpt": "Southeast Asia Venture Capital News & Insight | Openspace Contact Investor Login Team Companies Strategies Responsibility Reports Careers Team Companies Strategies Responsibility Reports Contact Careers Investor Login Portfolio Company Feature: cheak Freddie Luchterhand April 4, 2023 We're shining a spotlight on women's activewear brand cheak , which was acquired in 2022 by our portfolio company, Love Bonito . cheak has acquired notable success and recognition as a homegrown brand focusing on inclusivity and instilling confidence in women through activewear. As such, we decided to find out more about what's behind the brand's success by asking co-founder Tiffany Chng several questions on her journey of building cheak. ‍ 1. You have achieved notable success in building recognition for Cheak across Singapore - what do you think are key factors for your success? Always having a customer first mentality Our customers are the heart of what we do - every design, marketing activation and operational changes are made with our customers in mind, how can we continue to add value to their lives? By taking a customer first approach, we are able to prioritise what is important to us and deliver a product and experience to our customers that will keep them coming back. ‍ 2. What are some key considerations that you take into account when coming up with products for your target audience?"
+    },
+    {
+      "id": "check-page-28673fccb0",
+      "url": "https://www.openspacecapital.com/insights/portfolio-company-feature-janji-jiwa",
+      "page": "portfolio",
+      "excerpt": "Southeast Asia Venture Capital News & Insight | Openspace Contact Investor Login Team Companies Strategies Responsibility Reports Careers Team Companies Strategies Responsibility Reports Contact Careers Investor Login Portfolio Company Feature: Janji Jiwa Jessica Huang Pouleur April 26, 2023 Today we're featuring Janji Jiwa , one of our portfolio companies that is a coffee chain from Indonesia that has made a name for itself not just for its delicious food and beverages, but also for its exceptional hospitality. At Janji Jiwa , the emphasis is not just on serving great drinks, but on creating a welcoming atmosphere for guests. Whether you're an entrepreneur looking to improve your hospitality practices or simply a lover of great food and warm hospitality, there's something to take away from this. ‍ 1. We recognize that good customer service and hospitality is integral to the Janji Jiwa brand. What are several ways through which you actively strive to deliver a quality experience to Janji Jiwa customers? Our core brand values are: We listen, We create, and We serve. These values are very important as we are constantly pursuing excellent service for our customers. We listen to our customers' feedback and needs via platform that we use to connect with our customers, called JIWA CARE. Through that platform, we create improvements in our products, speed of service, and other"
+    },
+    {
+      "id": "check-page-16bf527765",
+      "url": "https://www.openspacecapital.com/insights/portfolio-company-feature-love-bonito",
+      "page": "portfolio",
+      "excerpt": "Southeast Asia Venture Capital News & Insight | Openspace Contact Investor Login Team Companies Strategies Responsibility Reports Careers Team Companies Strategies Responsibility Reports Contact Careers Investor Login Portfolio Company Feature: Love Bonito Freddie Luchterhand April 11, 2023 We're featuring our portfolio company, Love, Bonito , on the Openspace blog today, being a case study of a highly successful womenswear company from Singapore which has achieved notable global recognition. To gain more insight on Love, Bonito 's brand story and international expansion & localisation strategies, we've decided to ask CEO Dione Song more about these topics. Dione has played an integral role in Love, Bonito's success, having held the positions of Chief Commercial Officer and Chief Operating Officer prior to her current position as CEO. She has extensive experience with the brand's vision, strategy, culture and growth, which we think many other budding entrepreneurs and companies can learn from. 1. Can you share more about Love, Bonito’s brand story and purpose? ‍ Love, Bonito (previously known as BonitoChico) started out as a livejournal site by three friends in their university years, selling pre-loved clothes as a means to earn extra pocket money. Since our official launch in 2010, we have grown to become Southeast Asia’s leading vertically integrated, omni-channel womenswear"
+    },
+    {
+      "id": "check-page-7175e828da",
+      "url": "https://www.openspacecapital.com/insights/portfolio-company-feature-sarisuki",
+      "page": "portfolio",
+      "excerpt": "Southeast Asia Venture Capital News & Insight | Openspace Contact Investor Login Team Companies Strategies Responsibility Reports Careers Team Companies Strategies Responsibility Reports Contact Careers Investor Login Portfolio Company Feature: Sarisuki Jaclyn Seow February 28, 2023 Sarisuki is one of our portfolio companies from the Philippines, where they are disrupting the food supply chain by providing high quality products to consumers at more affordable pricing, serving as an end-to-end e-grocery platform in the country. ‍ Sarisuki adopts an agent model, where consumers are able to purchase fresh groceries from “community leaders” who purchase these products in bulk, a model that allows them to access supermarket quality products at wet market prices. Sarisuki’s business model also helps Filipinos earn a decent income easily, needing only a smartphone and an internet connection to be a community leader. ‍ With key urban areas in the Philippines facing high population density, growing disposable income and maturing digital connectivity, Sarisuki’s services has the potential to grow in time to come. ‍ RETURN TO INSIGHTS Sarisuki is one of our portfolio companies from the Philippines, where they are disrupting the food supply chain by providing high quality products to consumers at more affordable pricing, serving as an end-to-end e-grocery platform in the country. ‍"
+    },
+    {
+      "id": "check-page-54cb3225b4",
+      "url": "https://www.openspacecapital.com/portfolio/amp",
+      "page": "portfolio",
+      "excerpt": "Portfolio — AMP Contact Investor Login Team Companies Strategies Responsibility Reports Careers Team Companies Strategies Responsibility Reports Contact Careers Investor Login AMP creates apps that help eCommerce businesses thrive. next COMPANY Singapore, Global useamp.com Back to COMPANIES AMP creates apps that help eCommerce businesses thrive. next COMPANY Actively amping up ecommerce businesses AMP creates apps that help eCommerce businesses thrive. Founded: This is some text inside of a div block. Founders: This is some text inside of a div block. Industry: e-Commerce Investment Year This is some text inside of a div block. Country Singapore, Global Industry Investing with Active Intelligence Get the Latest from Openspace Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Home Team Companies Strategies Responsibility News Careers Contact Press Legal Openspace Capital Pte. Ltd. UEN: 201737044M • © 2025. All Rights Reserved."
+    },
+    {
+      "id": "check-page-858280aecb",
+      "url": "https://www.openspacecapital.com/portfolio/ampd",
+      "page": "portfolio",
+      "excerpt": "Portfolio — AMPD Energy Contact Investor Login Team Companies Strategies Responsibility Reports Careers Team Companies Strategies Responsibility Reports Contact Careers Investor Login Ampd Energy designs and manufactures clean battery storage systems designed for challenging environments. next COMPANY Singapore, Global ampd.energy Back to COMPANIES Ampd Energy designs and manufactures clean battery storage systems designed for challenging environments. next COMPANY Actively transforming the construction industry into a more sustainable future for all. Ampd Energy designs and manufactures clean battery storage systems designed for challenging environments. Founded: This is some text inside of a div block. Founders: This is some text inside of a div block. Industry: Energy Investment Year This is some text inside of a div block. Country Singapore, Global Industry Investing with Active Intelligence Get the Latest from Openspace Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Home Team Companies Strategies Responsibility News Careers Contact Press Legal Openspace Capital Pte. Ltd. UEN: 201737044M • © 2025. All Rights Reserved."
+    },
+    {
+      "id": "check-page-f87d5dba58",
+      "url": "https://www.openspacecapital.com/portfolio/beleaf",
+      "page": "portfolio",
+      "excerpt": "Portfolio — Beleaf Farms Contact Investor Login Team Companies Strategies Responsibility Reports Careers Team Companies Strategies Responsibility Reports Contact Careers Investor Login Beleaf nurtures Indonesian agriculture to provide nutritious produce around the world. next COMPANY Indonesia, Regional beleaf.co.id Back to COMPANIES Beleaf nurtures Indonesian agriculture to provide nutritious produce around the world. next COMPANY Actively improving the way Indonesia farms Beleaf nurtures Indonesian agriculture to provide nutritious produce around the world. Founded: This is some text inside of a div block. Founders: This is some text inside of a div block. Industry: Agriculture Investment Year This is some text inside of a div block. Country Indonesia, Regional Industry Investing with Active Intelligence Get the Latest from Openspace Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Home Team Companies Strategies Responsibility News Careers Contact Press Legal Openspace Capital Pte. Ltd. UEN: 201737044M • © 2025. All Rights Reserved."
+    },
+    {
+      "id": "check-page-7bea75d5d9",
+      "url": "https://www.openspacecapital.com/portfolio/briohr",
+      "page": "portfolio",
+      "excerpt": "Portfolio — brioHR Contact Investor Login Team Companies Strategies Responsibility Reports Careers Team Companies Strategies Responsibility Reports Contact Careers Investor Login BrioHR is an all-in-one HRMS platform, developed specifically for regional businesses. next COMPANY Malaysia, Regional briohr Back to COMPANIES BrioHR is an all-in-one HRMS platform, developed specifically for regional businesses. next COMPANY Actively redefining how business manage and grow their teams BrioHR is an all-in-one HRMS platform, developed specifically for regional businesses. Founded: This is some text inside of a div block. Founders: This is some text inside of a div block. Industry: HR Tech. SaaS Investment Year This is some text inside of a div block. Country Malaysia, Regional Industry Investing with Active Intelligence Get the Latest from Openspace Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Home Team Companies Strategies Responsibility News Careers Contact Press Legal Openspace Capital Pte. Ltd. UEN: 201737044M • © 2025. All Rights Reserved."
+    },
+    {
+      "id": "check-page-06a6bb025d",
+      "url": "https://www.openspacecapital.com/portfolio/broom",
+      "page": "portfolio",
+      "excerpt": "Portfolio — Broom Contact Investor Login Team Companies Strategies Responsibility Reports Careers Team Companies Strategies Responsibility Reports Contact Careers Investor Login Broom is a digital financing platfrom for auto-dealers. next COMPANY Indonesia broom.id Back to COMPANIES Broom is a digital financing platfrom for auto-dealers. next COMPANY Actively helping used car dealers work more efficiently Broom is a digital financing platfrom for auto-dealers. Founded: This is some text inside of a div block. Founders: This is some text inside of a div block. Industry: Automotive Investment Year This is some text inside of a div block. Country Indonesia Industry Investing with Active Intelligence Get the Latest from Openspace Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Home Team Companies Strategies Responsibility News Careers Contact Press Legal Openspace Capital Pte. Ltd. UEN: 201737044M • © 2025. All Rights Reserved."
+    },
+    {
+      "id": "check-page-55619af2a4",
+      "url": "https://www.openspacecapital.com/portfolio/chope",
+      "page": "portfolio",
+      "excerpt": "Portfolio — Chope Contact Investor Login Team Companies Strategies Responsibility Reports Careers Team Companies Strategies Responsibility Reports Contact Careers Investor Login Chope is Asia's leading real-time reservations platform connecting diners to restaurants. next COMPANY Singapore, Regional chope.co Back to COMPANIES Chope is Asia's leading real-time reservations platform connecting diners to restaurants. next COMPANY Acquired by Grab Actively serving memories Chope is Asia's leading real-time reservations platform connecting diners to restaurants. Founded: This is some text inside of a div block. Founders: This is some text inside of a div block. Industry: Consumer, Saas Investment Year This is some text inside of a div block. Country Singapore, Regional Industry Investing with Active Intelligence Get the Latest from Openspace Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Home Team Companies Strategies Responsibility News Careers Contact Press Legal Openspace Capital Pte. Ltd. UEN: 201737044M • © 2025. All Rights Reserved."
+    },
+    {
+      "id": "check-page-dac96bbf34",
+      "url": "https://www.openspacecapital.com/portfolio/copilotiq",
+      "page": "portfolio",
+      "excerpt": "Portfolio — CopilotIQ Contact Investor Login Team Companies Strategies Responsibility Reports Careers Team Companies Strategies Responsibility Reports Contact Careers Investor Login CopilotIQ is an end-to-end platform for AI-driven in-home patient care from pre-surgery, to acute, post-acute, and chronic care. next COMPANY Global copilotiq.com Back to COMPANIES CopilotIQ is an end-to-end platform for AI-driven in-home patient care from pre-surgery, to acute, post-acute, and chronic care. next COMPANY Actively revolutionizing remote health monitoring. CopilotIQ is an end-to-end platform for AI-driven in-home patient care from pre-surgery, to acute, post-acute, and chronic care. Founded: This is some text inside of a div block. Founders: This is some text inside of a div block. Industry: Healthcare Services Investment Year This is some text inside of a div block. Country Global Industry Investing with Active Intelligence Get the Latest from Openspace Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Home Team Companies Strategies Responsibility News Careers Contact Press Legal Openspace Capital Pte. Ltd. UEN: 201737044M • © 2025. All Rights Reserved."
     }
   ],
   "findings": {
@@ -47,8 +321,25 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "11 months",
+        "evidenceId": "check-duration-fa1efa0d9e"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-9abff9035a"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.openspacecapital.com/companies",

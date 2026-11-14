@@ -99,18 +99,6 @@
       "status": "open"
     },
     {
-      "id": "agoranov:stale:official-logo",
-      "programId": "agoranov",
-      "group": "identity",
-      "field": "stale:official-logo",
-      "state": "stale",
-      "evidenceIds": [
-        "official-logo"
-      ],
-      "detail": "The stored logo URL is no longer on the page and no header mark could replace it. The stored logo was kept.",
-      "status": "open"
-    },
-    {
       "id": "alchemist:stale:flagship",
       "programId": "alchemist",
       "group": "identity",
@@ -191,7 +179,7 @@
       "evidenceIds": [
         "homepage"
       ],
-      "detail": "The page could not be fetched. The stored excerpt and last successful check were kept.",
+      "detail": "robots.txt could not be fetched, so the page was treated as disallowed. The stored excerpt was kept.",
       "status": "open"
     },
     {
@@ -203,7 +191,20 @@
       "evidenceIds": [
         "homepage"
       ],
-      "detail": "robots.txt disallows a refresh of this URL. The stored excerpt was kept.",
+      "detail": "The page could not be fetched. The stored excerpt and last successful check were kept.",
+      "status": "open"
+    },
+    {
+      "id": "brinc:applicationsOpen",
+      "programId": "brinc",
+      "group": "identity",
+      "field": "applicationsOpen",
+      "state": "conflicting",
+      "evidenceIds": [
+        "check-status-96d851c6f9",
+        "check-status-c3b7e352bd"
+      ],
+      "detail": "The checked pages say both that applications are open and that they are closed.",
       "status": "open"
     },
     {
@@ -215,7 +216,7 @@
       "evidenceIds": [
         "homepage"
       ],
-      "detail": "robots.txt disallows a refresh of this URL. The stored excerpt was kept.",
+      "detail": "The page could not be fetched. The stored excerpt and last successful check were kept.",
       "status": "open"
     },
     {
@@ -229,6 +230,18 @@
         "check-status-12d60f956e"
       ],
       "detail": "The checked pages say both that applications are open and that they are closed.",
+      "status": "open"
+    },
+    {
+      "id": "communitech:inaccessible:homepage",
+      "programId": "communitech",
+      "group": "identity",
+      "field": "inaccessible:homepage",
+      "state": "inaccessible",
+      "evidenceIds": [
+        "homepage"
+      ],
+      "detail": "The page could not be fetched. The stored excerpt and last successful check were kept.",
       "status": "open"
     },
     {
@@ -292,18 +305,6 @@
       "status": "open"
     },
     {
-      "id": "esa-bic:inaccessible:homepage",
-      "programId": "esa-bic",
-      "group": "identity",
-      "field": "inaccessible:homepage",
-      "state": "inaccessible",
-      "evidenceIds": [
-        "homepage"
-      ],
-      "detail": "robots.txt disallows a refresh of this URL. The stored excerpt was kept.",
-      "status": "open"
-    },
-    {
       "id": "founder-institute:stale:dc-program",
       "programId": "founder-institute",
       "group": "identity",
@@ -311,6 +312,18 @@
       "state": "stale",
       "evidenceIds": [
         "dc-program"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "founder-institute:stale:homepage",
+      "programId": "founder-institute",
+      "group": "identity",
+      "field": "stale:homepage",
+      "state": "stale",
+      "evidenceIds": [
+        "homepage"
       ],
       "detail": "The stored excerpt is no longer on the page. It was not replaced.",
       "status": "open"
@@ -337,6 +350,31 @@
         "official-logo"
       ],
       "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "free-electrons-program:inaccessible:homepage",
+      "programId": "free-electrons-program",
+      "group": "identity",
+      "field": "inaccessible:homepage",
+      "state": "inaccessible",
+      "evidenceIds": [
+        "homepage"
+      ],
+      "detail": "The page could not be fetched. The stored excerpt and last successful check were kept.",
+      "status": "open"
+    },
+    {
+      "id": "gener8tor:applicationsOpen",
+      "programId": "gener8tor",
+      "group": "identity",
+      "field": "applicationsOpen",
+      "state": "conflicting",
+      "evidenceIds": [
+        "check-status-5e9dda4978",
+        "check-status-b41bf2b5de"
+      ],
+      "detail": "The checked pages say both that applications are open and that they are closed.",
       "status": "open"
     },
     {
@@ -408,7 +446,7 @@
       "evidenceIds": [
         "apply"
       ],
-      "detail": "The page could not be fetched. The stored excerpt and last successful check were kept.",
+      "detail": "robots.txt could not be fetched, so the page was treated as disallowed. The stored excerpt was kept.",
       "status": "open"
     },
     {
@@ -420,7 +458,7 @@
       "evidenceIds": [
         "homepage"
       ],
-      "detail": "The page could not be fetched. The stored excerpt and last successful check were kept.",
+      "detail": "robots.txt could not be fetched, so the page was treated as disallowed. The stored excerpt was kept.",
       "status": "open"
     },
     {
@@ -432,44 +470,57 @@
       "evidenceIds": [
         "official-logo"
       ],
+      "detail": "robots.txt could not be fetched, so the page was treated as disallowed. The stored excerpt was kept.",
+      "status": "open"
+    },
+    {
+      "id": "ideaspace:inaccessible:homepage",
+      "programId": "ideaspace",
+      "group": "identity",
+      "field": "inaccessible:homepage",
+      "state": "inaccessible",
+      "evidenceIds": [
+        "homepage"
+      ],
       "detail": "The page could not be fetched. The stored excerpt and last successful check were kept.",
       "status": "open"
     },
     {
-      "id": "microsoft-for-startups:stale:official-logo",
-      "programId": "microsoft-for-startups",
+      "id": "innovation-labs:inaccessible:homepage",
+      "programId": "innovation-labs",
       "group": "identity",
-      "field": "stale:official-logo",
-      "state": "stale",
+      "field": "inaccessible:homepage",
+      "state": "inaccessible",
       "evidenceIds": [
-        "official-logo"
+        "homepage"
       ],
-      "detail": "The stored logo URL is no longer on the page and no header mark could replace it. The stored logo was kept.",
+      "detail": "The page returned a bot check (\"you are using an unsupported browser\") instead of program text. The stored excerpt was kept.",
       "status": "open"
     },
     {
-      "id": "next-canada:applicationsOpen",
-      "programId": "next-canada",
+      "id": "parallel18:applicationsOpen",
+      "programId": "parallel18",
       "group": "identity",
       "field": "applicationsOpen",
       "state": "conflicting",
       "evidenceIds": [
-        "check-status-8ebc37b58c",
-        "check-status-b3830bfde9"
+        "check-status-31a5293549",
+        "check-status-0cd57882b8"
       ],
       "detail": "The checked pages say both that applications are open and that they are closed.",
       "status": "open"
     },
     {
-      "id": "sebrae:stale:official-logo",
-      "programId": "sebrae",
+      "id": "seedcamp:applicationsOpen",
+      "programId": "seedcamp",
       "group": "identity",
-      "field": "stale:official-logo",
-      "state": "stale",
+      "field": "applicationsOpen",
+      "state": "conflicting",
       "evidenceIds": [
-        "official-logo"
+        "check-status-4a978e9489",
+        "check-status-db70c81e5b"
       ],
-      "detail": "The stored logo URL is no longer on the page and no header mark could replace it. The stored logo was kept.",
+      "detail": "The checked pages say both that applications are open and that they are closed.",
       "status": "open"
     },
     {
@@ -522,27 +573,16 @@
       "status": "open"
     },
     {
-      "id": "startup-portugal:stale:official-logo",
-      "programId": "startup-portugal",
+      "id": "startuplab:applicationsOpen",
+      "programId": "startuplab",
       "group": "identity",
-      "field": "stale:official-logo",
-      "state": "stale",
+      "field": "applicationsOpen",
+      "state": "conflicting",
       "evidenceIds": [
-        "official-logo"
+        "check-status-a345e20718",
+        "check-status-13231dcb13"
       ],
-      "detail": "The stored logo URL is no longer on the page and no header mark could replace it. The stored logo was kept.",
-      "status": "open"
-    },
-    {
-      "id": "t-hub:stale:official-logo",
-      "programId": "t-hub",
-      "group": "identity",
-      "field": "stale:official-logo",
-      "state": "stale",
-      "evidenceIds": [
-        "official-logo"
-      ],
-      "detail": "The stored logo URL is no longer on the page and no header mark could replace it. The stored logo was kept.",
+      "detail": "The checked pages say both that applications are open and that they are closed.",
       "status": "open"
     },
     {
@@ -579,18 +619,6 @@
         "london-schedule"
       ],
       "detail": "The stored excerpt is no longer on the page. It was not replaced.",
-      "status": "open"
-    },
-    {
-      "id": "unternehmertum:stale:official-logo",
-      "programId": "unternehmertum",
-      "group": "identity",
-      "field": "stale:official-logo",
-      "state": "stale",
-      "evidenceIds": [
-        "official-logo"
-      ],
-      "detail": "The stored logo URL is no longer on the page and no header mark could replace it. The stored logo was kept.",
       "status": "open"
     },
     {

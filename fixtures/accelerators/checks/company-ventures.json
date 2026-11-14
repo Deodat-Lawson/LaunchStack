@@ -1,95 +1,608 @@
 {
   "programId": "company-ventures",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.companyventures.com/",
-    "https://www.companyventures.com/programs"
+    "https://www.companyventures.com/post/revisiting-maven-clinics-2015-grand-central-tech-application",
+    "https://www.companyventures.com/post/investing-in-noetica-building-the-source-of-truth-for-corporate-transaction-terms",
+    "https://www.companyventures.com/post/applications-are-open-for-our-third-cohort-of-boost",
+    "https://www.companyventures.com/post/company-ventures-welcomes-summer-2024-internship-cohort",
+    "https://www.companyventures.com/post/demo-day---our-2024-boost-cohort-takes-the-stage",
+    "https://www.companyventures.com/post/fall-2025-gct-cohort",
+    "https://www.companyventures.com/post/introducing-our-spring-2025-grand-central-tech-residency-cohort",
+    "https://www.companyventures.com/post/introducing-the-2025-boost-founder-fellowship-cohort",
+    "https://www.companyventures.com/post/introducing-the-grand-central-tech-residency-fall-2024-cohort",
+    "https://www.companyventures.com/post/introducing-the-grand-central-tech-residency-spring-2024-fall-2023-cohorts",
+    "https://www.companyventures.com/post/introducing-the-grand-central-tech-spring-2023-residence-cohort",
+    "https://www.companyventures.com/post/looking-back-on-the-inaugural-cohort-of-the-boost-founder-fellowship",
+    "https://www.companyventures.com/post/meet-the-gct-startup-in-residence-2020-cohort",
+    "https://www.companyventures.com/post/meet-the-gct-startup-in-residence-2021-cohort"
   ],
   "evidence": [
     {
-      "id": "check-deal-4f39fe3523",
-      "url": "https://www.companyventures.com/programs",
-      "title": "Company Ventures — details page checked by scrape.py",
-      "excerpt": "it. For founders looking to leverage our embedded incubation studio, Terrarium, to build transformational healthcare companies. Benefits 4 months full-time · $10K/mo stipend Access to 50+ healthcare enterprise partners Co-develop thesis with Terrarium team Co-founder matching via in-house platform Idea bank of 30+",
+      "id": "check-announced-b554bc1706",
+      "url": "https://www.companyventures.com/post/applications-are-open-for-our-third-cohort-of-boost",
+      "title": "Company Ventures — batches page",
+      "excerpt": "and it remains a core focus of our work. Applications for the next cohort will be open until December 6th. To learn more and apply, visit our website . A general info",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-47fe5d979e",
+      "url": "https://www.companyventures.com/post/introducing-the-grand-central-tech-residency-spring-2024-fall-2023-cohorts",
+      "title": "Company Ventures — batches page",
+      "excerpt": "direction as we have with AI over the last 12 months. Unsurprisingly, this year’s cohort reflects",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-51e9f7e225",
+      "url": "https://www.companyventures.com/post/investing-in-noetica-building-the-source-of-truth-for-corporate-transaction-terms",
+      "title": "Company Ventures — terms page",
+      "excerpt": "within minutes, versus hours our days. In only 18 months, Noetica’s platform has analyzed $350B of",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-679df18a74",
+      "url": "https://www.companyventures.com/post/meet-the-gct-startup-in-residence-2021-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "HS-educated people into healthcare jobs in 4 months. With intense unmet employer demand for",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-75dc20e235",
+      "url": "https://www.companyventures.com/post/looking-back-on-the-inaugural-cohort-of-the-boost-founder-fellowship",
+      "title": "Company Ventures — batches page",
+      "excerpt": "supported 100 startups across the city. Our 4-month pre-accelerator program worked with founders",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-81bde16658",
+      "url": "https://www.companyventures.com/post/applications-are-open-for-our-third-cohort-of-boost",
+      "title": "Company Ventures — batches page",
+      "excerpt": "Economic Development Corporation, Boost is a 4-month program addressing the funding disparities for",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-b9e69e5a9c",
+      "url": "https://www.companyventures.com/post/applications-are-open-for-our-third-cohort-of-boost",
+      "title": "Company Ventures — batches page",
+      "excerpt": "have collectively secured $650,000 during the 4-month program. Additionally, 80% of these startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-f52d75b6d2",
+      "url": "https://www.companyventures.com/post/demo-day---our-2024-boost-cohort-takes-the-stage",
+      "title": "Company Ventures — batches page",
+      "excerpt": "founders across all tech-enabled sectors. Our 4-month pre-accelerator program included founders who",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-0413670a48",
+      "url": "https://www.companyventures.com/post/introducing-the-grand-central-tech-residency-fall-2024-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "using a combination of coordination software with virtual care services helps any surgical provider implement",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-1834609618",
+      "url": "https://www.companyventures.com/post/introducing-the-grand-central-tech-spring-2023-residence-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "and external precedent transactions. Pharmesol is a virtual medication assistant that automates high quality",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-2a61ff47ed",
+      "url": "https://www.companyventures.com/post/meet-the-gct-startup-in-residence-2020-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "mission to tackle the menopause taboo for women. Elektra’s virtual clinic solves the care gap via personalized,",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-3420279e50",
+      "url": "https://www.companyventures.com/post/introducing-our-spring-2025-grand-central-tech-residency-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "efficacy and financial ROI, proactively recommends virtual care interventions for targeted member populations through",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-440a4239db",
+      "url": "https://www.companyventures.com/post/meet-the-gct-startup-in-residence-2021-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "“close to home” and designed for the needs of today’s remote workforce. Daybase locations are independently owned and",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-4a4047b827",
+      "url": "https://www.companyventures.com/post/meet-the-gct-startup-in-residence-2021-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "is certainly a type of startup that has adapted to the remote work environment and is thriving. But there is absolutely",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-4d7d6d96a3",
+      "url": "https://www.companyventures.com/post/meet-the-gct-startup-in-residence-2021-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "and receiving appropriate medication and care. Orbiit is a virtual networking platform helping community managers",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-6465b760bf",
+      "url": "https://www.companyventures.com/post/introducing-the-grand-central-tech-residency-spring-2024-fall-2023-cohorts",
+      "title": "Company Ventures — batches page",
+      "excerpt": "using a combination of coordination software with virtual care services helps any surgical provider implement",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-6eecd341cf",
+      "url": "https://www.companyventures.com/post/meet-the-gct-startup-in-residence-2021-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "Hyp shifts the elevates the consumer by leveraging users’ virtual identities. Legitimate is a digital identity platform that",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-c06e2be69d",
+      "url": "https://www.companyventures.com/post/introducing-our-spring-2025-grand-central-tech-residency-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "makes it easy for payers and their members to navigate virtual-first care vendors. Architect Health evaluates vendors for",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-cb992fd5b1",
+      "url": "https://www.companyventures.com/",
+      "title": "Company Ventures — homepage",
+      "excerpt": "- we might have a seat for you. 03 Fundraising While our in-person community is core to what we do, we invest beyond it. We",
       "page": "details"
+    },
+    {
+      "id": "check-format-e11f7ccc05",
+      "url": "https://www.companyventures.com/post/meet-the-gct-startup-in-residence-2021-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "that use Daybase’s technology stack, giving the new remote worker a productive space of consistent quality. Deep is a",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-ed7bb0f072",
+      "url": "https://www.companyventures.com/post/meet-the-gct-startup-in-residence-2021-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "financial prosperity for its customers. Neura Health is a virtual neurology clinic on a mission to improve access and",
+      "page": "batches"
     },
     {
       "id": "check-name-78b749933c",
       "url": "https://www.companyventures.com/",
-      "title": "Company Ventures — homepage checked by scrape.py",
+      "title": "Company Ventures — homepage",
       "excerpt": "Company Ventures Go Back Team Portfolio Programs News & Insights Apply",
       "page": "details"
     },
     {
+      "id": "check-portfolio-0602780f69",
+      "url": "https://www.companyventures.com/post/revisiting-maven-clinics-2015-grand-central-tech-application",
+      "title": "Company Ventures — application page",
+      "excerpt": "Portfolio → https://www.companyventures.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-090988436c",
+      "url": "https://www.companyventures.com/post/applications-are-open-for-our-third-cohort-of-boost",
+      "title": "Company Ventures — batches page",
+      "excerpt": "Portfolio → https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-0ef19f39ea",
+      "url": "https://www.companyventures.com/post/meet-the-gct-startup-in-residence-2020-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-1b80868b5e",
+      "url": "https://www.companyventures.com/post/introducing-our-spring-2025-grand-central-tech-residency-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "Portfolio → https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-26a4ec0f33",
+      "url": "https://www.companyventures.com/post/demo-day---our-2024-boost-cohort-takes-the-stage",
+      "title": "Company Ventures — batches page",
+      "excerpt": "Portfolio → https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-2ca51b49f9",
+      "url": "https://www.companyventures.com/post/revisiting-maven-clinics-2015-grand-central-tech-application",
+      "title": "Company Ventures — application page",
+      "excerpt": "https://www.companyventures.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-35f0f3abfb",
+      "url": "https://www.companyventures.com/post/introducing-the-grand-central-tech-residency-fall-2024-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-40942de2c0",
+      "url": "https://www.companyventures.com/post/investing-in-noetica-building-the-source-of-truth-for-corporate-transaction-terms",
+      "title": "Company Ventures — terms page",
+      "excerpt": "https://www.companyventures.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-476e8471f7",
+      "url": "https://www.companyventures.com/post/applications-are-open-for-our-third-cohort-of-boost",
+      "title": "Company Ventures — batches page",
+      "excerpt": "https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-4d4ea5c4a3",
+      "url": "https://www.companyventures.com/post/introducing-the-2025-boost-founder-fellowship-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-524c58307c",
+      "url": "https://www.companyventures.com/post/meet-the-gct-startup-in-residence-2021-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "Portfolio → https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-584b66e378",
+      "url": "https://www.companyventures.com/post/fall-2025-gct-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-7995a6138b",
       "url": "https://www.companyventures.com/",
-      "title": "Company Ventures — homepage checked by scrape.py",
+      "title": "Company Ventures — homepage",
       "excerpt": "https://www.companyventures.com/portfolio",
       "page": "details"
     },
     {
-      "id": "check-portfolio-7ce539ac28",
-      "url": "https://www.companyventures.com/programs",
-      "title": "Company Ventures — details page checked by scrape.py",
+      "id": "check-portfolio-7bc4d1ed46",
+      "url": "https://www.companyventures.com/post/looking-back-on-the-inaugural-cohort-of-the-boost-founder-fellowship",
+      "title": "Company Ventures — batches page",
       "excerpt": "Portfolio → https://www.companyventures.com/portfolio",
-      "page": "details"
+      "page": "batches"
     },
     {
-      "id": "check-portfolio-9190adb3e6",
-      "url": "https://www.companyventures.com/programs",
-      "title": "Company Ventures — details page checked by scrape.py",
+      "id": "check-portfolio-86968bda7e",
+      "url": "https://www.companyventures.com/post/investing-in-noetica-building-the-source-of-truth-for-corporate-transaction-terms",
+      "title": "Company Ventures — terms page",
+      "excerpt": "Portfolio → https://www.companyventures.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-88aa9435cb",
+      "url": "https://www.companyventures.com/post/introducing-the-grand-central-tech-residency-spring-2024-fall-2023-cohorts",
+      "title": "Company Ventures — batches page",
       "excerpt": "https://www.companyventures.com/portfolio",
-      "page": "details"
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-8cf0a68fa8",
+      "url": "https://www.companyventures.com/post/introducing-the-grand-central-tech-residency-fall-2024-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "Portfolio → https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-9805436e9e",
+      "url": "https://www.companyventures.com/post/introducing-the-2025-boost-founder-fellowship-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "Portfolio → https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-981ea299d9",
+      "url": "https://www.companyventures.com/post/introducing-the-grand-central-tech-spring-2023-residence-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "https://www.companyventures.com/portfolio",
+      "page": "batches"
     },
     {
       "id": "check-portfolio-9e2422dbf0",
       "url": "https://www.companyventures.com/",
-      "title": "Company Ventures — homepage checked by scrape.py",
+      "title": "Company Ventures — homepage",
       "excerpt": "portfolio → https://www.companyventures.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-ab94f279f7",
+      "url": "https://www.companyventures.com/post/meet-the-gct-startup-in-residence-2020-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "Portfolio → https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-b361a4dca2",
       "url": "https://www.companyventures.com/",
-      "title": "Company Ventures — homepage checked by scrape.py",
+      "title": "Company Ventures — homepage",
       "excerpt": "Portfolio → https://www.companyventures.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-c5aa5c4e2e",
+      "url": "https://www.companyventures.com/post/looking-back-on-the-inaugural-cohort-of-the-boost-founder-fellowship",
+      "title": "Company Ventures — batches page",
+      "excerpt": "https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-c9401cbd54",
+      "url": "https://www.companyventures.com/post/company-ventures-welcomes-summer-2024-internship-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-cbcb9be108",
+      "url": "https://www.companyventures.com/post/company-ventures-welcomes-summer-2024-internship-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "Portfolio → https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-d6e7b9391b",
+      "url": "https://www.companyventures.com/post/fall-2025-gct-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "Portfolio → https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-e66f62b249",
+      "url": "https://www.companyventures.com/post/introducing-the-grand-central-tech-residency-spring-2024-fall-2023-cohorts",
+      "title": "Company Ventures — batches page",
+      "excerpt": "Portfolio → https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-e7a45dc320",
+      "url": "https://www.companyventures.com/post/introducing-the-grand-central-tech-spring-2023-residence-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "Portfolio → https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-f448922d5f",
+      "url": "https://www.companyventures.com/post/demo-day---our-2024-boost-cohort-takes-the-stage",
+      "title": "Company Ventures — batches page",
+      "excerpt": "https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-f6d003062b",
+      "url": "https://www.companyventures.com/post/meet-the-gct-startup-in-residence-2021-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-f73996f442",
+      "url": "https://www.companyventures.com/post/introducing-our-spring-2025-grand-central-tech-residency-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "https://www.companyventures.com/portfolio",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-f9eacc603e",
       "url": "https://www.companyventures.com/",
-      "title": "Company Ventures — homepage checked by scrape.py",
+      "title": "Company Ventures — homepage",
       "excerpt": "https://www.companyventures.com/portfolio/#companies",
       "page": "details"
     },
     {
+      "id": "check-rolling-1766551d79",
+      "url": "https://www.companyventures.com/post/introducing-our-spring-2025-grand-central-tech-residency-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "these teams interests you, we're accepting applications for future cohorts on a rolling basis: Apply now . Ready to build? LET'S GET TO WORK Apply Now Stay connected",
+      "page": "batches"
+    },
+    {
+      "id": "check-rolling-dd1674ef65",
+      "url": "https://www.companyventures.com/post/fall-2025-gct-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": ", Architect Health , Keru.ai , ‍ Krexin , Prefix , and Quantro Security . Applications are open on a rolling basis, and in early 2026 we will begin screening for the Spring 2026 cohort. To join",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-749dd00e41",
+      "url": "https://www.companyventures.com/post/fall-2025-gct-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "apply now → https://docs.google.com/forms/d/e/1FAIpQLSczMJSQBHRljGqBmv_86qvNzqSBTn5luF2SBEXIQac807cSwg/viewform",
+      "page": "batches"
+    },
+    {
       "id": "check-route-f3eb72176a",
       "url": "https://www.companyventures.com/",
-      "title": "Company Ventures — homepage checked by scrape.py",
+      "title": "Company Ventures — homepage",
       "excerpt": "https://www.companyventures.com/",
       "page": "details"
+    },
+    {
+      "id": "check-route-f611827dd3",
+      "url": "https://www.companyventures.com/post/introducing-our-spring-2025-grand-central-tech-residency-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "Apply now → https://docs.google.com/forms/d/e/1FAIpQLSczMJSQBHRljGqBmv_86qvNzqSBTn5luF2SBEXIQac807cSwg/viewform",
+      "page": "batches"
+    },
+    {
+      "id": "check-status-1ab141b8fe",
+      "url": "https://www.companyventures.com/post/applications-are-open-for-our-third-cohort-of-boost",
+      "title": "Company Ventures — batches page",
+      "excerpt": "Applications are open for our third cohort of Boost! Go Back Team Portfolio Programs News & Insights Apply Apply Two short steps,",
+      "page": "batches"
+    },
+    {
+      "id": "check-status-5b4a02d335",
+      "url": "https://www.companyventures.com/post/fall-2025-gct-cohort",
+      "title": "Company Ventures — batches page",
+      "excerpt": "Central: 2nd Set AI , Alchemi , Architect Health , Keru.ai , ‍ Krexin , Prefix , and Quantro Security . Applications are open on a rolling basis, and in early 2026 we will begin screening for the Spring 2026 cohort. To join and build",
+      "page": "batches"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-1645f7ec98",
+      "url": "https://www.companyventures.com/",
+      "page": "details",
+      "excerpt": "Company Ventures Go Back Team Portfolio Programs News & Insights Apply Apply Two short steps, about a minute. All fields are required unless marked optional. Step 1 of 2 · About you First name Enter your first name. Last name Enter your last name. Email Enter an email like name@company.com. LinkedIn profile Paste your LinkedIn profile link. X (Twitter) (optional) Where are you in your founder journey? Choose one Exploring ideas, not building yet Building a prototype or MVP Launched, with early users or revenue Raising or have raised a pre-seed round Choose where you are right now. Is this your first time founding a company? Yes No Choose Yes or No. What spaces or industries are you looking to build in? Why? Help us understand how you’re looking at the world and what you want to build. Tell us what you want to build and why. Link to your deck, if you have one (optional) Link(s) to anything else you’ve built you think we should see (optional) How did you hear about Company Ventures? Choose one Referral Info session or event NYCEDC LinkedIn X (Twitter) Newsletter or press Search Other Choose how you heard about us. Who referred you? (optional) Back Continue Thanks, there . We’ve received your application. We read every one and will get back to you at your email . Close Your application didn’t go through. Check your connection and try again. Build in Good Company. Company Ventures"
+    },
+    {
+      "id": "check-page-60b3e45cb8",
+      "url": "https://www.companyventures.com/post/revisiting-maven-clinics-2015-grand-central-tech-application",
+      "page": "application",
+      "excerpt": "Go Back Team Portfolio Programs News & Insights Apply Apply Two short steps, about a minute. All fields are required unless marked optional. Step 1 of 2 · About you First name Enter your first name. Last name Enter your last name. Email Enter an email like name@company.com. LinkedIn profile Paste your LinkedIn profile link. X (Twitter) (optional) Where are you in your founder journey? Choose one Exploring ideas, not building yet Building a prototype or MVP Launched, with early users or revenue Raising or have raised a pre-seed round Choose where you are right now. Is this your first time founding a company? Yes No Choose Yes or No. What spaces or industries are you looking to build in? Why? Help us understand how you’re looking at the world and what you want to build. Tell us what you want to build and why. Link to your deck, if you have one (optional) Link(s) to anything else you’ve built you think we should see (optional) How did you hear about Company Ventures? Choose one Referral Info session or event NYCEDC LinkedIn X (Twitter) Newsletter or press Search Other Choose how you heard about us. Who referred you? (optional) Back Continue Thanks, there . We’ve received your application. We read every one and will get back to you at your email . Close Your application didn’t go through. Check your connection and try again. Revisiting Maven Clinic's 2015 Grand Central Tech"
+    },
+    {
+      "id": "check-page-0caa1d15f5",
+      "url": "https://www.companyventures.com/post/investing-in-noetica-building-the-source-of-truth-for-corporate-transaction-terms",
+      "page": "terms",
+      "excerpt": "Noetica uses proprietary ML models and NLP frameworks to ingest thousands of capital market deal documents, identify the key deal terms, and benchmark those against the rest of the market. Go Back Team Portfolio Programs News & Insights Apply Apply Two short steps, about a minute. All fields are required unless marked optional. Step 1 of 2 · About you First name Enter your first name. Last name Enter your last name. Email Enter an email like name@company.com. LinkedIn profile Paste your LinkedIn profile link. X (Twitter) (optional) Where are you in your founder journey? Choose one Exploring ideas, not building yet Building a prototype or MVP Launched, with early users or revenue Raising or have raised a pre-seed round Choose where you are right now. Is this your first time founding a company? Yes No Choose Yes or No. What spaces or industries are you looking to build in? Why? Help us understand how you’re looking at the world and what you want to build. Tell us what you want to build and why. Link to your deck, if you have one (optional) Link(s) to anything else you’ve built you think we should see (optional) How did you hear about Company Ventures? Choose one Referral Info session or event NYCEDC LinkedIn X (Twitter) Newsletter or press Search Other Choose how you heard about us. Who referred you? (optional) Back Continue Thanks, there . We’ve received your application. We"
+    },
+    {
+      "id": "check-page-f15f3d2f74",
+      "url": "https://www.companyventures.com/post/applications-are-open-for-our-third-cohort-of-boost",
+      "page": "batches",
+      "excerpt": "Applications are open for our third cohort of Boost! Go Back Team Portfolio Programs News & Insights Apply Apply Two short steps, about a minute. All fields are required unless marked optional. Step 1 of 2 · About you First name Enter your first name. Last name Enter your last name. Email Enter an email like name@company.com. LinkedIn profile Paste your LinkedIn profile link. X (Twitter) (optional) Where are you in your founder journey? Choose one Exploring ideas, not building yet Building a prototype or MVP Launched, with early users or revenue Raising or have raised a pre-seed round Choose where you are right now. Is this your first time founding a company? Yes No Choose Yes or No. What spaces or industries are you looking to build in? Why? Help us understand how you’re looking at the world and what you want to build. Tell us what you want to build and why. Link to your deck, if you have one (optional) Link(s) to anything else you’ve built you think we should see (optional) How did you hear about Company Ventures? Choose one Referral Info session or event NYCEDC LinkedIn X (Twitter) Newsletter or press Search Other Choose how you heard about us. Who referred you? (optional) Back Continue Thanks, there . We’ve received your application. We read every one and will get back to you at your email . Close Your application didn’t go through. Check your connection and try again."
+    },
+    {
+      "id": "check-page-c5eb094aa2",
+      "url": "https://www.companyventures.com/post/company-ventures-welcomes-summer-2024-internship-cohort",
+      "page": "batches",
+      "excerpt": "Company Ventures Welcomes Summer 2024 Internship Cohort Go Back Team Portfolio Programs News & Insights Apply Apply Two short steps, about a minute. All fields are required unless marked optional. Step 1 of 2 · About you First name Enter your first name. Last name Enter your last name. Email Enter an email like name@company.com. LinkedIn profile Paste your LinkedIn profile link. X (Twitter) (optional) Where are you in your founder journey? Choose one Exploring ideas, not building yet Building a prototype or MVP Launched, with early users or revenue Raising or have raised a pre-seed round Choose where you are right now. Is this your first time founding a company? Yes No Choose Yes or No. What spaces or industries are you looking to build in? Why? Help us understand how you’re looking at the world and what you want to build. Tell us what you want to build and why. Link to your deck, if you have one (optional) Link(s) to anything else you’ve built you think we should see (optional) How did you hear about Company Ventures? Choose one Referral Info session or event NYCEDC LinkedIn X (Twitter) Newsletter or press Search Other Choose how you heard about us. Who referred you? (optional) Back Continue Thanks, there . We’ve received your application. We read every one and will get back to you at your email . Close Your application didn’t go through. Check your connection and try again."
+    },
+    {
+      "id": "check-page-24e20ef0ef",
+      "url": "https://www.companyventures.com/post/demo-day---our-2024-boost-cohort-takes-the-stage",
+      "page": "batches",
+      "excerpt": "Demo Day – Our 2024 Boost Cohort Takes the Stage Go Back Team Portfolio Programs News & Insights Apply Apply Two short steps, about a minute. All fields are required unless marked optional. Step 1 of 2 · About you First name Enter your first name. Last name Enter your last name. Email Enter an email like name@company.com. LinkedIn profile Paste your LinkedIn profile link. X (Twitter) (optional) Where are you in your founder journey? Choose one Exploring ideas, not building yet Building a prototype or MVP Launched, with early users or revenue Raising or have raised a pre-seed round Choose where you are right now. Is this your first time founding a company? Yes No Choose Yes or No. What spaces or industries are you looking to build in? Why? Help us understand how you’re looking at the world and what you want to build. Tell us what you want to build and why. Link to your deck, if you have one (optional) Link(s) to anything else you’ve built you think we should see (optional) How did you hear about Company Ventures? Choose one Referral Info session or event NYCEDC LinkedIn X (Twitter) Newsletter or press Search Other Choose how you heard about us. Who referred you? (optional) Back Continue Thanks, there . We’ve received your application. We read every one and will get back to you at your email . Close Your application didn’t go through. Check your connection and try again. Demo"
+    },
+    {
+      "id": "check-page-9b7b65a96d",
+      "url": "https://www.companyventures.com/post/fall-2025-gct-cohort",
+      "page": "batches",
+      "excerpt": "Go Back Team Portfolio Programs News & Insights Apply Apply Two short steps, about a minute. All fields are required unless marked optional. Step 1 of 2 · About you First name Enter your first name. Last name Enter your last name. Email Enter an email like name@company.com. LinkedIn profile Paste your LinkedIn profile link. X (Twitter) (optional) Where are you in your founder journey? Choose one Exploring ideas, not building yet Building a prototype or MVP Launched, with early users or revenue Raising or have raised a pre-seed round Choose where you are right now. Is this your first time founding a company? Yes No Choose Yes or No. What spaces or industries are you looking to build in? Why? Help us understand how you’re looking at the world and what you want to build. Tell us what you want to build and why. Link to your deck, if you have one (optional) Link(s) to anything else you’ve built you think we should see (optional) How did you hear about Company Ventures? Choose one Referral Info session or event NYCEDC LinkedIn X (Twitter) Newsletter or press Search Other Choose how you heard about us. Who referred you? (optional) Back Continue Thanks, there . We’ve received your application. We read every one and will get back to you at your email . Close Your application didn’t go through. Check your connection and try again. Announcing the Fall 2025 Grand Central Tech Cohort! News"
+    },
+    {
+      "id": "check-page-3befdf8d2b",
+      "url": "https://www.companyventures.com/post/introducing-our-spring-2025-grand-central-tech-residency-cohort",
+      "page": "batches",
+      "excerpt": "Welcome to Grand Central Tech: 2nd Set AI, Alchemi, Architect Health, Keru.ai, Krexin, Persona, Prefix, Quantro Security. Go Back Team Portfolio Programs News & Insights Apply Apply Two short steps, about a minute. All fields are required unless marked optional. Step 1 of 2 · About you First name Enter your first name. Last name Enter your last name. Email Enter an email like name@company.com. LinkedIn profile Paste your LinkedIn profile link. X (Twitter) (optional) Where are you in your founder journey? Choose one Exploring ideas, not building yet Building a prototype or MVP Launched, with early users or revenue Raising or have raised a pre-seed round Choose where you are right now. Is this your first time founding a company? Yes No Choose Yes or No. What spaces or industries are you looking to build in? Why? Help us understand how you’re looking at the world and what you want to build. Tell us what you want to build and why. Link to your deck, if you have one (optional) Link(s) to anything else you’ve built you think we should see (optional) How did you hear about Company Ventures? Choose one Referral Info session or event NYCEDC LinkedIn X (Twitter) Newsletter or press Search Other Choose how you heard about us. Who referred you? (optional) Back Continue Thanks, there . We’ve received your application. We read every one and will get back to you at your email . Close Your"
+    },
+    {
+      "id": "check-page-89c0a03dad",
+      "url": "https://www.companyventures.com/post/introducing-the-2025-boost-founder-fellowship-cohort",
+      "page": "batches",
+      "excerpt": "Introducing the 2025 Boost Founder Fellowship Cohort Go Back Team Portfolio Programs News & Insights Apply Apply Two short steps, about a minute. All fields are required unless marked optional. Step 1 of 2 · About you First name Enter your first name. Last name Enter your last name. Email Enter an email like name@company.com. LinkedIn profile Paste your LinkedIn profile link. X (Twitter) (optional) Where are you in your founder journey? Choose one Exploring ideas, not building yet Building a prototype or MVP Launched, with early users or revenue Raising or have raised a pre-seed round Choose where you are right now. Is this your first time founding a company? Yes No Choose Yes or No. What spaces or industries are you looking to build in? Why? Help us understand how you’re looking at the world and what you want to build. Tell us what you want to build and why. Link to your deck, if you have one (optional) Link(s) to anything else you’ve built you think we should see (optional) How did you hear about Company Ventures? Choose one Referral Info session or event NYCEDC LinkedIn X (Twitter) Newsletter or press Search Other Choose how you heard about us. Who referred you? (optional) Back Continue Thanks, there . We’ve received your application. We read every one and will get back to you at your email . Close Your application didn’t go through. Check your connection and try again."
+    },
+    {
+      "id": "check-page-78a864c6a3",
+      "url": "https://www.companyventures.com/post/introducing-the-grand-central-tech-residency-fall-2024-cohort",
+      "page": "batches",
+      "excerpt": "Introducing the Grand Central Tech Residency Fall 2024 Cohort Go Back Team Portfolio Programs News & Insights Apply Apply Two short steps, about a minute. All fields are required unless marked optional. Step 1 of 2 · About you First name Enter your first name. Last name Enter your last name. Email Enter an email like name@company.com. LinkedIn profile Paste your LinkedIn profile link. X (Twitter) (optional) Where are you in your founder journey? Choose one Exploring ideas, not building yet Building a prototype or MVP Launched, with early users or revenue Raising or have raised a pre-seed round Choose where you are right now. Is this your first time founding a company? Yes No Choose Yes or No. What spaces or industries are you looking to build in? Why? Help us understand how you’re looking at the world and what you want to build. Tell us what you want to build and why. Link to your deck, if you have one (optional) Link(s) to anything else you’ve built you think we should see (optional) How did you hear about Company Ventures? Choose one Referral Info session or event NYCEDC LinkedIn X (Twitter) Newsletter or press Search Other Choose how you heard about us. Who referred you? (optional) Back Continue Thanks, there . We’ve received your application. We read every one and will get back to you at your email . Close Your application didn’t go through. Check your connection and try"
+    },
+    {
+      "id": "check-page-4aee03ddd8",
+      "url": "https://www.companyventures.com/post/introducing-the-grand-central-tech-residency-spring-2024-fall-2023-cohorts",
+      "page": "batches",
+      "excerpt": "Introducing the Grand Central Tech Residency Spring 2024 & Fall 2023 Cohorts Go Back Team Portfolio Programs News & Insights Apply Apply Two short steps, about a minute. All fields are required unless marked optional. Step 1 of 2 · About you First name Enter your first name. Last name Enter your last name. Email Enter an email like name@company.com. LinkedIn profile Paste your LinkedIn profile link. X (Twitter) (optional) Where are you in your founder journey? Choose one Exploring ideas, not building yet Building a prototype or MVP Launched, with early users or revenue Raising or have raised a pre-seed round Choose where you are right now. Is this your first time founding a company? Yes No Choose Yes or No. What spaces or industries are you looking to build in? Why? Help us understand how you’re looking at the world and what you want to build. Tell us what you want to build and why. Link to your deck, if you have one (optional) Link(s) to anything else you’ve built you think we should see (optional) How did you hear about Company Ventures? Choose one Referral Info session or event NYCEDC LinkedIn X (Twitter) Newsletter or press Search Other Choose how you heard about us. Who referred you? (optional) Back Continue Thanks, there . We’ve received your application. We read every one and will get back to you at your email . Close Your application didn’t go through. Check your"
+    },
+    {
+      "id": "check-page-3407894a23",
+      "url": "https://www.companyventures.com/post/introducing-the-grand-central-tech-spring-2023-residence-cohort",
+      "page": "batches",
+      "excerpt": "Introducing the Grand Central Tech Spring 2023 Startup-in-Residence Cohort Go Back Team Portfolio Programs News & Insights Apply Apply Two short steps, about a minute. All fields are required unless marked optional. Step 1 of 2 · About you First name Enter your first name. Last name Enter your last name. Email Enter an email like name@company.com. LinkedIn profile Paste your LinkedIn profile link. X (Twitter) (optional) Where are you in your founder journey? Choose one Exploring ideas, not building yet Building a prototype or MVP Launched, with early users or revenue Raising or have raised a pre-seed round Choose where you are right now. Is this your first time founding a company? Yes No Choose Yes or No. What spaces or industries are you looking to build in? Why? Help us understand how you’re looking at the world and what you want to build. Tell us what you want to build and why. Link to your deck, if you have one (optional) Link(s) to anything else you’ve built you think we should see (optional) How did you hear about Company Ventures? Choose one Referral Info session or event NYCEDC LinkedIn X (Twitter) Newsletter or press Search Other Choose how you heard about us. Who referred you? (optional) Back Continue Thanks, there . We’ve received your application. We read every one and will get back to you at your email . Close Your application didn’t go through. Check your"
+    },
+    {
+      "id": "check-page-eb7939e0f1",
+      "url": "https://www.companyventures.com/post/looking-back-on-the-inaugural-cohort-of-the-boost-founder-fellowship",
+      "page": "batches",
+      "excerpt": "Looking Back on the Inaugural Cohort of the Boost Founder Fellowship Go Back Team Portfolio Programs News & Insights Apply Apply Two short steps, about a minute. All fields are required unless marked optional. Step 1 of 2 · About you First name Enter your first name. Last name Enter your last name. Email Enter an email like name@company.com. LinkedIn profile Paste your LinkedIn profile link. X (Twitter) (optional) Where are you in your founder journey? Choose one Exploring ideas, not building yet Building a prototype or MVP Launched, with early users or revenue Raising or have raised a pre-seed round Choose where you are right now. Is this your first time founding a company? Yes No Choose Yes or No. What spaces or industries are you looking to build in? Why? Help us understand how you’re looking at the world and what you want to build. Tell us what you want to build and why. Link to your deck, if you have one (optional) Link(s) to anything else you’ve built you think we should see (optional) How did you hear about Company Ventures? Choose one Referral Info session or event NYCEDC LinkedIn X (Twitter) Newsletter or press Search Other Choose how you heard about us. Who referred you? (optional) Back Continue Thanks, there . We’ve received your application. We read every one and will get back to you at your email . Close Your application didn’t go through. Check your connection"
+    },
+    {
+      "id": "check-page-7b55905fb6",
+      "url": "https://www.companyventures.com/post/meet-the-gct-startup-in-residence-2020-cohort",
+      "page": "batches",
+      "excerpt": "Go Back Team Portfolio Programs News & Insights Apply Apply Two short steps, about a minute. All fields are required unless marked optional. Step 1 of 2 · About you First name Enter your first name. Last name Enter your last name. Email Enter an email like name@company.com. LinkedIn profile Paste your LinkedIn profile link. X (Twitter) (optional) Where are you in your founder journey? Choose one Exploring ideas, not building yet Building a prototype or MVP Launched, with early users or revenue Raising or have raised a pre-seed round Choose where you are right now. Is this your first time founding a company? Yes No Choose Yes or No. What spaces or industries are you looking to build in? Why? Help us understand how you’re looking at the world and what you want to build. Tell us what you want to build and why. Link to your deck, if you have one (optional) Link(s) to anything else you’ve built you think we should see (optional) How did you hear about Company Ventures? Choose one Referral Info session or event NYCEDC LinkedIn X (Twitter) Newsletter or press Search Other Choose how you heard about us. Who referred you? (optional) Back Continue Thanks, there . We’ve received your application. We read every one and will get back to you at your email . Close Your application didn’t go through. Check your connection and try again. Meet the GCT Startup-in-Residence 2020 cohort Insights"
+    },
+    {
+      "id": "check-page-436b0bef2b",
+      "url": "https://www.companyventures.com/post/meet-the-gct-startup-in-residence-2021-cohort",
+      "page": "batches",
+      "excerpt": "Go Back Team Portfolio Programs News & Insights Apply Apply Two short steps, about a minute. All fields are required unless marked optional. Step 1 of 2 · About you First name Enter your first name. Last name Enter your last name. Email Enter an email like name@company.com. LinkedIn profile Paste your LinkedIn profile link. X (Twitter) (optional) Where are you in your founder journey? Choose one Exploring ideas, not building yet Building a prototype or MVP Launched, with early users or revenue Raising or have raised a pre-seed round Choose where you are right now. Is this your first time founding a company? Yes No Choose Yes or No. What spaces or industries are you looking to build in? Why? Help us understand how you’re looking at the world and what you want to build. Tell us what you want to build and why. Link to your deck, if you have one (optional) Link(s) to anything else you’ve built you think we should see (optional) How did you hear about Company Ventures? Choose one Referral Info session or event NYCEDC LinkedIn X (Twitter) Newsletter or press Search Other Choose how you heard about us. Who referred you? (optional) Back Continue Thanks, there . We’ve received your application. We read every one and will get back to you at your email . Close Your application didn’t go through. Check your connection and try again. Meet the GCT Startup-in-Residence 2021 cohort News Sep"
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://docs.google.com/forms/d/e/1FAIpQLSczMJSQBHRljGqBmv_86qvNzqSBTn5luF2SBEXIQac807cSwg/viewform",
+        "evidenceId": "check-route-749dd00e41"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://www.companyventures.com/",
         "evidenceId": "check-route-f3eb72176a"
       }
     ],
-    "applicationsOpen": [],
-    "operatingStatus": [],
-    "deadlines": [],
-    "selectivity": [],
-    "dealText": [
+    "applicationsOpen": [
       {
-        "value": "it. For founders looking to leverage our embedded incubation studio, Terrarium, to build transformational healthcare companies. Benefits 4 months full-time · $10K/mo stipend Access to 50+ healthcare enterprise partners Co-develop thesis with Terrarium team Co-founder matching via in-house platform Idea bank of 30+",
-        "evidenceId": "check-deal-4f39fe3523"
+        "value": true,
+        "evidenceId": "check-status-1ab141b8fe"
       }
     ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-dd1674ef65"
+      }
+    ],
+    "announcedIntake": [
+      {
+        "value": "December",
+        "evidenceId": "check-announced-b554bc1706"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-51e9f7e225"
+      },
+      {
+        "value": "4 months",
+        "evidenceId": "check-duration-81bde16658"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-47fe5d979e"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-cb992fd5b1"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-c06e2be69d"
+      }
+    ],
+    "location": [],
+    "selectivity": [],
+    "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.companyventures.com/portfolio",

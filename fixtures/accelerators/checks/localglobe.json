@@ -1,59 +1,297 @@
 {
   "programId": "localglobe",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.phoenixcourt.vc/funds/localglobe",
-    "https://www.phoenixcourt.vc/about"
+    "https://www.phoenixcourt.vc/news/4-investment-themes",
+    "https://www.phoenixcourt.vc/news/a-new-financial-system-of-record-our-investment-in-translucent",
+    "https://www.phoenixcourt.vc/news/latitudes-investment-in-flow",
+    "https://www.phoenixcourt.vc/news/latitudes-investment-in-goodlord",
+    "https://www.phoenixcourt.vc/news/making-banking-open-our-investment-in-yapily",
+    "https://www.phoenixcourt.vc/news/our-investment-in-comind-redefining-how-the-brain-is-measured",
+    "https://www.phoenixcourt.vc/news/our-investment-in-condense",
+    "https://www.phoenixcourt.vc/news/our-investment-in-cuspai",
+    "https://www.phoenixcourt.vc/news/our-investment-in-early-making-the-invisible-detectable",
+    "https://www.phoenixcourt.vc/news/our-investment-in-echo",
+    "https://www.phoenixcourt.vc/news/our-investment-in-ers",
+    "https://www.phoenixcourt.vc/news/our-investment-in-foondamate",
+    "https://www.phoenixcourt.vc/news/our-investment-in-gospel-technology",
+    "https://www.phoenixcourt.vc/news/our-investment-in-gotrade"
   ],
   "evidence": [
     {
+      "id": "check-duration-317c756f44",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-cuspai",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "Ghissassi , and their progress over the past 12 months has been remarkable. Chad’s background includes",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-59d3dbc749",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-condense",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "Ziv Reichert 27 Jul 2022 LinkedIn • X The last 24 months have seen the world retreat online. As countries",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-1527613d6d",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-condense",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "to capture + stream the world around them directly into virtual worlds. The next MrBeast or Charli D’amelio may very well",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-40333b2023",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-condense",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "through text and photos was replaced by time spent roaming virtual environments — games, game-like social spaces, VR, etc. It",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-59d54273a2",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-condense",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "to enable broadcasters and creators to stream content into virtual properties using cutting-edge infrastructure was born",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-f049487990",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-condense",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "Meanwhile, older crowds went wild for crypto-native virtual worlds, driving the market caps of projects like The",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-486172cbb8",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-early-making-the-invisible-detectable",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "College, London). And they are based in King’s Cross, which (as you probably know",
+      "page": "terms"
+    },
+    {
       "id": "check-name-b7dfc1ce94",
       "url": "https://www.phoenixcourt.vc/funds/localglobe",
-      "title": "LocalGlobe — homepage checked by scrape.py",
+      "title": "LocalGlobe — homepage",
       "excerpt": "LocalGlobe | Phoenix Court Skip to content Phoenix Court About Us",
       "page": "details"
     },
     {
+      "id": "check-portfolio-149b0d44ff",
+      "url": "https://www.phoenixcourt.vc/news/latitudes-investment-in-goodlord",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "Companies → https://www.phoenixcourt.vc/companies",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-2957e21dc4",
       "url": "https://www.phoenixcourt.vc/funds/localglobe",
-      "title": "LocalGlobe — homepage checked by scrape.py",
+      "title": "LocalGlobe — homepage",
       "excerpt": "Companies → https://www.phoenixcourt.vc/companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-3c60ed8159",
+      "url": "https://www.phoenixcourt.vc/news/making-banking-open-our-investment-in-yapily",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "Companies → https://www.phoenixcourt.vc/companies",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-4c3160d678",
       "url": "https://www.phoenixcourt.vc/funds/localglobe",
-      "title": "LocalGlobe — homepage checked by scrape.py",
+      "title": "LocalGlobe — homepage",
       "excerpt": "View all LocalGlobe companies → https://www.phoenixcourt.vc/companies?fund=localglobe",
       "page": "details"
     },
     {
       "id": "check-portfolio-4ec5ce9153",
       "url": "https://www.phoenixcourt.vc/funds/localglobe",
-      "title": "LocalGlobe — homepage checked by scrape.py",
+      "title": "LocalGlobe — homepage",
       "excerpt": "LocalGlobe Companies → https://www.phoenixcourt.vc/companies?fund=localglobe",
       "page": "details"
     },
     {
-      "id": "check-portfolio-65f18411eb",
-      "url": "https://www.phoenixcourt.vc/about",
-      "title": "LocalGlobe — details page checked by scrape.py",
-      "excerpt": "Our Companies → https://www.phoenixcourt.vc/companies",
-      "page": "details"
+      "id": "check-portfolio-52ffaf9996",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-early-making-the-invisible-detectable",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "Companies → https://www.phoenixcourt.vc/companies",
+      "page": "terms"
     },
     {
-      "id": "check-portfolio-fcd3f24a10",
-      "url": "https://www.phoenixcourt.vc/about",
-      "title": "LocalGlobe — details page checked by scrape.py",
+      "id": "check-portfolio-563620af0a",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-gospel-technology",
+      "title": "LocalGlobe — terms page",
       "excerpt": "Companies → https://www.phoenixcourt.vc/companies",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5ebb07736a",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-echo",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "Companies → https://www.phoenixcourt.vc/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-64e0a34a44",
+      "url": "https://www.phoenixcourt.vc/news/4-investment-themes",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "Companies → https://www.phoenixcourt.vc/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6e50db56d9",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-foondamate",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "Companies → https://www.phoenixcourt.vc/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7ba58709d4",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-cuspai",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "Companies → https://www.phoenixcourt.vc/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7c04d494d5",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-ers",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "Companies → https://www.phoenixcourt.vc/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7c50a3fdbd",
+      "url": "https://www.phoenixcourt.vc/news/a-new-financial-system-of-record-our-investment-in-translucent",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "Companies → https://www.phoenixcourt.vc/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-97a02784fe",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-condense",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "Companies → https://www.phoenixcourt.vc/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9cb3e86321",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-comind-redefining-how-the-brain-is-measured",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "Companies → https://www.phoenixcourt.vc/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e377228308",
+      "url": "https://www.phoenixcourt.vc/news/latitudes-investment-in-flow",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "Companies → https://www.phoenixcourt.vc/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f536dcca13",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-gotrade",
+      "title": "LocalGlobe — terms page",
+      "excerpt": "Companies → https://www.phoenixcourt.vc/companies",
+      "page": "terms"
     },
     {
       "id": "check-route-9c09de84c8",
       "url": "https://www.phoenixcourt.vc/funds/localglobe",
-      "title": "LocalGlobe — homepage checked by scrape.py",
+      "title": "LocalGlobe — homepage",
       "excerpt": "LocalGlobe → https://www.phoenixcourt.vc/funds/localglobe",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-2f04dc5f8e",
+      "url": "https://www.phoenixcourt.vc/funds/localglobe",
+      "page": "details",
+      "excerpt": "LocalGlobe | Phoenix Court Skip to content Phoenix Court About Us Companies Funds Phoenix Court Companies Phoenix Court Works Funds LocalGlobe Latitude Solar Basecamp About Us Team Jobs Contact Open Court News and Insights Founder Interviews Events Somers Town / King's Cross 2 Brill Pl London NW1 1DX LinkedIn • X LocalGlobe LocalGlobe Companies For exceptional founders who see a problem and have an unquenchable conviction about how to solve it. Our early stage fund is where most Phoenix Court relationships begin. Sector Generalist Track record Europe’s #1 investor for backing $100M+ revenue companies at seed Companies backed at this stage View all LocalGlobe companies Olix AI & Machine Learning 2024 MicroAGI AI & Machine Learning 2025 Mistral AI AI & Machine Learning 2023 CuspAI AI & Machine Learning 2024 CoMind Health 2019 Wonder Studios AI & Machine Learning 2025 Spore.Bio Food & Agriculture 2023 ModelML Finance & Payments 2024 Founder interviews Co-founder & CEO Marc Warner Read their thoughts Co-founder & CEO Amine Raji Read their thoughts Co-founder & CEO Dr Katie King Read their thoughts In their own words Our Red Book interview series collates stories, anecdotes, and learnings from our most prominent and promising founders. All founder interviews Phoenix Court Companies Phoenix Court Works Companies House Funds LocalGlobe Latitude Solar Basecamp About Us Team Jobs"
+    },
+    {
+      "id": "check-page-b86d51060c",
+      "url": "https://www.phoenixcourt.vc/news/4-investment-themes",
+      "page": "terms",
+      "excerpt": "4 investment themes | Phoenix Court Skip to content Phoenix Court About Us Companies Funds Phoenix Court Companies Phoenix Court Works Funds LocalGlobe Latitude Solar Basecamp About Us Team Jobs Contact Open Court News and Insights Founder Interviews Events Somers Town / King's Cross 2 Brill Pl London NW1 1DX LinkedIn • X News and Views News listing 4 investment themes 9 Feb 2024 The innovation cycle doesn’t stop. There is an abundance of things to be excited about right now. Together with the LocalGlobe team, here are some of the themes I’m spending a fair amount of time on. It includes a mix of emerging ideas, opportunities, and more established areas where we've already made several investments. Please note that this list is non-exhaustive: we often find ourselves venturing into new territories guided by the founders we meet, arguably the most rewarding aspect of investing at the early stage. Here are four themes that we’re excited to invest in and explore: 1. Consumer-Grade Products for Business Workflows : These products digitize critical business workflows, including transactions such as ordering, spending, and payments. They come in various forms, including vertical software, B2B marketplaces, SaaS+marketplaces, and finance platforms. Matan, co-founder & CEO of Melio , describes it as “workflow+payflow”. It’s an area where we’ve been very active over the past 5+ years;"
+    },
+    {
+      "id": "check-page-d2dbdab8ae",
+      "url": "https://www.phoenixcourt.vc/news/a-new-financial-system-of-record-our-investment-in-translucent",
+      "page": "terms",
+      "excerpt": "A new financial system of record — our investment in Translucent | Phoenix Court Skip to content Phoenix Court About Us Companies Funds Phoenix Court Companies Phoenix Court Works Funds LocalGlobe Latitude Solar Basecamp About Us Team Jobs Contact Open Court News and Insights Founder Interviews Events Somers Town / King's Cross 2 Brill Pl London NW1 1DX LinkedIn • X News and Views News listing A new financial system of record — our investment in Translucent Written by Remus Brett 29 Mar 2023 LinkedIn • X Scaling companies is hard. Really hard. Many of the challenges, like finding product market fit, hiring and raising capital are well documented. Some are not, like scaling a finance function. But this is a huge problem and one we’ve seen firsthand across our portfolio of growing companies. The problems are multifold but a critical one kicks in when a company expands beyond one “entity” (think new location or subsidiary). Whilst setting up a single entity business has never been easier thanks to cloud accounting platforms like Xero and QuickBooks, these systems don’t do multi-entity well. Data becomes fragmented (e.g. Datev in Germany and Cegid in France), siloed, and messy given the need for country-specific charts of accounts. Manual workarounds are required for basic tasks like search and consolidated reporting. And it’s just as the business scales when the finance function"
+    },
+    {
+      "id": "check-page-d39be9ccaf",
+      "url": "https://www.phoenixcourt.vc/news/latitudes-investment-in-flow",
+      "page": "terms",
+      "excerpt": "Latitude’s investment in Flow | Phoenix Court Skip to content Phoenix Court About Us Companies Funds Phoenix Court Companies Phoenix Court Works Funds LocalGlobe Latitude Solar Basecamp About Us Team Jobs Contact Open Court News and Insights Founder Interviews Events Somers Town / King's Cross 2 Brill Pl London NW1 1DX LinkedIn • X News and Views News listing Latitude’s investment in Flow 4 Dec 2019 With today’s announcement of Flow 's series B financing, we wanted to share a little about our excitement for what Rob, Mike and the Flow team are building, and why this represents a quintessential Latitude investment. We launched Latitude in 2018 with a simple notion, that by building on top of the platform and reach of our seed-focused sister fund, LocalGlobe, we could create a different type of Series B+ fund. One that would be able to access a rich seam of world-class founders in situations where we have materially differentiated access and insights. We’ve known Rob Keve, co-founder and CEO at Flow, for many years. My Partners, Robin and Saul, backed Rob in his previous startup, Fizzback, from seed through to exit to Nice Systems in 2011. This followed a long friendship with Rob going back to the 1990s. In 2015, Rob let us know that he was launching Flow with co-founder and CTO Mike Bryzek (previously co-founder/CTO at Gilt Groupe). Once Rob and Mike set up the Flow headquarter"
+    },
+    {
+      "id": "check-page-16aa26ff1c",
+      "url": "https://www.phoenixcourt.vc/news/latitudes-investment-in-goodlord",
+      "page": "terms",
+      "excerpt": "Latitude’s investment in Goodlord | Phoenix Court Skip to content Phoenix Court About Us Companies Funds Phoenix Court Companies Phoenix Court Works Funds LocalGlobe Latitude Solar Basecamp About Us Team Jobs Contact Open Court News and Insights Founder Interviews Events Somers Town / King's Cross 2 Brill Pl London NW1 1DX LinkedIn • X News and Views News listing Latitude’s investment in Goodlord 9 Mar 2020 Stories written about tech startups tend to fall into one of two categories — rocketship or flameout. Today these stories spill over from the tech press to coffee table magazines, as tech has become central to our world. Founders are compared to Henry Ford, or snake oil salesmen. Readers are invited to gasp in awe, or condemn. Reality though is typically more prosaic — the path to success is not a straight line. There are downs, often many of them, but they make the ups all the more satisfying — they feel earned. Latitude’s series B investment in Goodlord speaks to the power of mission and the resolve of a hundred or so Goodlordians. Since LocalGlobe led Goodlord’s seed round in 2016, both little and a lot has changed. The mission remains undented — transform the rental experience. Goodlord today offers a product which is quietly becoming the market standard and repeatedly delighting customers at an incredibly stressful moment in their lives. However, there are many new"
+    },
+    {
+      "id": "check-page-fedf1e362d",
+      "url": "https://www.phoenixcourt.vc/news/making-banking-open-our-investment-in-yapily",
+      "page": "terms",
+      "excerpt": "Making banking open: our investment in Yapily | Phoenix Court Skip to content Phoenix Court About Us Companies Funds Phoenix Court Companies Phoenix Court Works Funds LocalGlobe Latitude Solar Basecamp About Us Team Jobs Contact Open Court News and Insights Founder Interviews Events Somers Town / King's Cross 2 Brill Pl London NW1 1DX LinkedIn • X News and Views News listing Making banking open: our investment in Yapily Written by Remus Brett 29 May 2019 LinkedIn • X For fear of revealing my age, I first authored a report on “The Future of eBanking” in the late 1990s. Dot-com mania was in full swing with equity analysts and researchers alike competing to publish ever steeper growth charts. This revolution was going to impact every consumer touchpoint from what is now a graveyard of technologies like WAP phones, smart kiosks and TV banking (despite many incorrect calls, I’m pleased to say even then I was bearish on TV banking). How would we summarise progress since? Well, based on those giddy predictions, I think we’d have to say disappointing. Whilst Monzo, Revolut, et al. are now making impressive progress in the UK, the major high street banks continue to control current account banking, especially when measuring salaried accounts where true relationships are held. The picture in SME banking is even more depressing although thankfully the likes of Tide point to a brighter"
+    },
+    {
+      "id": "check-page-01a14e5298",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-comind-redefining-how-the-brain-is-measured",
+      "page": "terms",
+      "excerpt": "Our investment in CoMind: Redefining how the brain is measured | Phoenix Court Skip to content Phoenix Court About Us Companies Funds Phoenix Court Companies Phoenix Court Works Funds LocalGlobe Latitude Solar Basecamp About Us Team Jobs Contact Open Court News and Insights Founder Interviews Events Somers Town / King's Cross 2 Brill Pl London NW1 1DX LinkedIn • X News and Views News listing Our investment in CoMind: Redefining how the brain is measured Written by Julia Hawkins 20 Oct 2025 LinkedIn • X At LocalGlobe and Latitude, we’ve always believed that the next wave of European technology will be defined not only by software, but by science and engineering breakthroughs that fundamentally reshape industries. CoMind is one of those companies, a pioneer redefining how the brain is monitored, entirely non-invasively, through breakthroughs in photonics. From Science Fiction to Standard of Care For decades, doctors treating critically ill patients have faced an impossible choice: invasive procedures that require drilling into the skull, or unreliable non-invasive methods that compromise care. CoMind resolves that dilemma. Its first product, CoMind One, uses low-power laser light to measure cerebral blood flow, brain pressure, cerebral autoregulation, and other vital parameters; continuously, safely, and without surgery. CoMind’s mission is to redefine how the brain is measured"
+    },
+    {
+      "id": "check-page-f610f08961",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-condense",
+      "page": "terms",
+      "excerpt": "Our investment in Condense | Phoenix Court Skip to content Phoenix Court About Us Companies Funds Phoenix Court Companies Phoenix Court Works Funds LocalGlobe Latitude Solar Basecamp About Us Team Jobs Contact Open Court News and Insights Founder Interviews Events Somers Town / King's Cross 2 Brill Pl London NW1 1DX LinkedIn • X News and Views News listing Our investment in Condense Written by Ziv Reichert 27 Jul 2022 LinkedIn • X The last 24 months have seen the world retreat online. As countries locked up and as borders shut down, people found shelter on the internet. Circumstances forced us into physical hibernation, but in parallel, pushed us to explore new ways of building intimacy on the web. It comes as no surprise that at this time of isolation, we looked for ways to stay connected. After all, the human default is to be social. It is fair to say that all of this — COVID, lockdowns, WFH — accelerated what was already underway — a tectonic shift from a 2D internet to a 3D one. An internet that is more immersive and human-centric, one that makes you feel presence. For many, time spent scrolling through text and photos was replaced by time spent roaming virtual environments — games, game-like social spaces, VR, etc. It is no coincidence that as schools shut down, the likes of Roblox and Fortnite saw DAUs surge to the 10s of millions. Kids replaced physical playgrounds with"
+    },
+    {
+      "id": "check-page-9a592befb8",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-cuspai",
+      "page": "terms",
+      "excerpt": "Our investment in CuspAI | Phoenix Court Skip to content Phoenix Court About Us Companies Funds Phoenix Court Companies Phoenix Court Works Funds LocalGlobe Latitude Solar Basecamp About Us Team Jobs Contact Open Court News and Insights Founder Interviews Events Somers Town / King's Cross 2 Brill Pl London NW1 1DX LinkedIn • X News and Views News listing Our investment in CuspAI Written by Julia Hawkins 19 Sept 2025 LinkedIn • X We are proud to continue investing in CuspAI through Latitude as they announce a $100m+ funding round led by Temasek and NEA. Having supported Cusp from its seed stage via LocalGlobe, we are excited to continue backing their extraordinary journey through Latitude. I focus my time on finding and working with the most ambitious founders solving the hardest problems with original technology and science that can scale globally. In other words, those building the future we are all going to live in. CuspAI is changing the slow, trial-and-error process of discovering new materials. Their AI-driven platform creates a systematic engine for innovation, enabling the rapid design of breakthrough materials in sectors like separations chemistry, energy, and semiconductors, areas with enormous potential for both economic and societal value. What took decades can now be achieved in months, marking a major leap forward for science and industry. We’ve had the privilege"
+    },
+    {
+      "id": "check-page-7ed92226c8",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-early-making-the-invisible-detectable",
+      "page": "terms",
+      "excerpt": "Our investment in Early: making the invisible detectable | Phoenix Court Skip to content Phoenix Court About Us Companies Funds Phoenix Court Companies Phoenix Court Works Funds LocalGlobe Latitude Solar Basecamp About Us Team Jobs Contact Open Court News and Insights Founder Interviews Events Somers Town / King's Cross 2 Brill Pl London NW1 1DX LinkedIn • X News and Views News listing Our investment in Early: making the invisible detectable Written by Julia Hawkins 25 Sept 2023 LinkedIn • X We are at the start of a massive healthcare wave, which will see the emphasis move from sick care to health care. Today, approximately 70% of NHS budgets is spent on hospital and specialist care. But increasingly there is recognition that this focus on sick care is not working: more than ⅓ of all UK cancer patients are diagnosed in A&E. For some cancers, diagnosis happens even later. 56% of England & Wales pancreatic cancers were diagnosed in A&E. This is simply too late. The earlier the diagnosis, the better the chances of survival. For lung cancer, if it’s detected at Stage 4, you have a less than 20% chance of living longer than a year. If it’s detected at Stage 1, you have an 80% chance. Some of the key reasons for not detecting serious illness earlier is that we often don’t know there is something wrong with us, or it’s inconvenient to make an appointment to find out. This is where"
+    },
+    {
+      "id": "check-page-909627e83e",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-echo",
+      "page": "terms",
+      "excerpt": "Our investment in Echo | Phoenix Court Skip to content Phoenix Court About Us Companies Funds Phoenix Court Companies Phoenix Court Works Funds LocalGlobe Latitude Solar Basecamp About Us Team Jobs Contact Open Court News and Insights Founder Interviews Events Somers Town / King's Cross 2 Brill Pl London NW1 1DX LinkedIn • X News and Views News listing Our investment in Echo 24 Oct 2017 “I’m British, I know how to queue” says Arthur Dent in Hitchhikers Guide to the Galaxy. It seems that Brits are renowned globally (or even galaxy wide) for their ability to queue; and the undisputed gold standard of British queuing is the Wimbledon queue. But not all queues are created equal. Beyond the manicured lawns of Wimbledon, queuing is one of the nation’s most tedious tasks; when surveyed 44% say that queuing is worse than washing up. The average Brit spends five hours and 35 minutes in queues each month, with post offices, supermarkets and pharmacies among the most significant contributors. Over a year, that’s almost three days of waiting. Take pharmacies: for some the process of handing over a paper prescription and then waiting to have it filled, is a valuable experience. Some may have developed trusted relationships with their pharmacists, while others simply value the face-to-face contact of a community pharmacy. For these individuals, the time spent in a pharmacy adds to the"
+    },
+    {
+      "id": "check-page-f62373f309",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-ers",
+      "page": "terms",
+      "excerpt": "Our investment in ERS | Phoenix Court Skip to content Phoenix Court About Us Companies Funds Phoenix Court Companies Phoenix Court Works Funds LocalGlobe Latitude Solar Basecamp About Us Team Jobs Contact Open Court News and Insights Founder Interviews Events Somers Town / King's Cross 2 Brill Pl London NW1 1DX LinkedIn • X News and Views News listing Our investment in ERS 9 Mar 2023 Ever since publishing The Climate Equation , and making our first investments in companies like Sylvera and Supercritical , the carbon markets have been a prominent feature of our investment thesis in technologies to counter the effects of climate change. A quick Google search will be enough to reveal that these markets are not working as well as they should: carbon offsetting projects don’t always deliver the reduction or removal in emissions they were designed to, there are project types currently allowed to generate carbon credits that really shouldn’t be, project certification bodies are slow and inefficient, companies might use offsets to greenwash activities that should be decarbonised... the list goes on. So, why invest in technologies for the carbon markets? One fundamental belief we have is that in order for climate change to be mitigated, the economics of our global system of production need to incentivise climate-friendly decisions. By associating a cost with offsetting emissions,"
+    },
+    {
+      "id": "check-page-fe58af62ec",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-foondamate",
+      "page": "terms",
+      "excerpt": "Our investment in FoondaMate | Phoenix Court Skip to content Phoenix Court About Us Companies Funds Phoenix Court Companies Phoenix Court Works Funds LocalGlobe Latitude Solar Basecamp About Us Team Jobs Contact Open Court News and Insights Founder Interviews Events Somers Town / King's Cross 2 Brill Pl London NW1 1DX LinkedIn • X News and Views News listing Our investment in FoondaMate Written by Ziv Reichert 23 May 2022 LinkedIn • X “ <p data-block-key=\"dsfj2\">Talent is equally distributed yet opportunities are not.</p> ” This was the opening line to the first conversation we had with Dacod and Tao back in late 2021. It’s fair to say that it struck a chord. According to research by the UN, only 4 out of every 100 children in Africa are expected to enter a graduate / postgraduate institution. If you look at South and West Asia, the figure stands slightly higher at 14, while in LATAM it is 36. Meanwhile, in North America, we’re talking 87 . If ever there was a bleak picture, this one’s it. Simply put, where you are born makes a difference. While it is unlikely to come as surprise to anyone, it is important to emphasise: there are profound economic returns to education. A study by the World Bank suggests that, on average, each subsequent year of schooling raises future earning potential by 10%. In Sub-Saharan Africa it is 13.5%. To put it bluntly, getting students through the"
+    },
+    {
+      "id": "check-page-e7923ebc94",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-gospel-technology",
+      "page": "terms",
+      "excerpt": "Our investment in Gospel Technology | Phoenix Court Skip to content Phoenix Court About Us Companies Funds Phoenix Court Companies Phoenix Court Works Funds LocalGlobe Latitude Solar Basecamp About Us Team Jobs Contact Open Court News and Insights Founder Interviews Events Somers Town / King's Cross 2 Brill Pl London NW1 1DX LinkedIn • X News and Views News listing Our investment in Gospel Technology Written by Remus Brett 17 Jul 2018 LinkedIn • X Conviction What’s in a word? “A firmly held belief” or “the feeling of being sure that what you believe is true” are two definitions. In stockmarket terms, conviction investing is a specific method based on picking fewer stocks than traditionally-managed funds, taking larger individual positions and sticking with them for longer. It’s also a word used with abundance in the VC world and one which is, on the surface, straightforward to grasp, more instinctive and less technical than stockmarkets. However, as a relative newcomer to venture, knowing when one has ‘conviction’ is more complex than you may think. When do you know you have it? Is it an absolute concept or can one have 80% conviction? It’s a bit like trying to decipher the emotional complexities of a first romance, “is this what love really feels like?”. In early stage investing, false signals of conviction, often influenced by similarities to a previous success, personal"
+    },
+    {
+      "id": "check-page-790a4c8c1b",
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-gotrade",
+      "page": "terms",
+      "excerpt": "Our investment in Gotrade | Phoenix Court Skip to content Phoenix Court About Us Companies Funds Phoenix Court Companies Phoenix Court Works Funds LocalGlobe Latitude Solar Basecamp About Us Team Jobs Contact Open Court News and Insights Founder Interviews Events Somers Town / King's Cross 2 Brill Pl London NW1 1DX LinkedIn • X News and Views News listing Our investment in Gotrade Written by Remus Brett 4 Apr 2022 LinkedIn • X There is a hidden superpower behind many of the most successful global fintechs. Yes you’ll find product brilliance, yes you’ll find exceptional engineers but, perhaps the unsung heroes, are the regulatory masterminds. By definition, the most disruptive fintechs often have no regulatory precedent or framework in which to operate. The way founders choose to navigate these unchartered waters is a unique challenge. Some aim for rapid scale with the hope this scale gives them a stronger hand to negotiate with regulators. Some stay on the fence too long and get overtaken by more aggressive competitors. Some seem to get it just right. This we feel, is the path travelled by Gotrade . As of today, Gotrade became the first locally regulated platform to enable fractional US share trading in Indonesian history. Whilst this may be a sidebar in today’s funding announcement , we have had a front-row seat over the past three years and have seen just how much time,"
     }
   ],
   "findings": {
@@ -69,8 +307,34 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "24 months",
+        "evidenceId": "check-duration-59d3dbc749"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-317c756f44"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-40333b2023"
+      }
+    ],
+    "location": [
+      {
+        "value": "King",
+        "evidenceId": "check-location-486172cbb8"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.phoenixcourt.vc/companies",

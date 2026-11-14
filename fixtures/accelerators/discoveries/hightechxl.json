@@ -1,7 +1,31 @@
 {
   "programId": "hightechxl",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://www.hightechxl.com/about-us/",
+      "page": "details",
+      "anchor": "About us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hightechxl.com/career/open-application/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hightechxl.com/events/dutch-singapore-deep-tech-expansion-program-info-session/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.hightechxl.com/faq/",
       "page": "terms",
@@ -11,10 +35,98 @@
       "origin": "official"
     },
     {
+      "url": "https://www.hightechxl.com/founders/",
+      "page": "details",
+      "anchor": "For founders As a founder you join a world-class venture builder. Moreover, where the risks are shared, the path is structured, and we have your back. No idea? No problem Focus Dee",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hightechxl.com/investors/",
+      "page": "terms",
+      "anchor": "For Investors We offer early access to high-impact deep-tech ventures from the start of their journey, giving you access to early investment opportunities. Industry focus Deep-tech",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hightechxl.com/news/amber-doubles-the-number-of-car-sharing-hubs-with-recent-investment-from-bom-brabant-ventures/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hightechxl.com/news/aplhabeats-receives-e1-5-million-inphocal-receives-e2-million-in-deeptechxl-first-investment-round/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hightechxl.com/news/asmls-rob-van-der-werf-an-investment-in-startups-is-an-investment-in-eindhovens-future/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hightechxl.com/news/ato-gear-maker-of-sports-wearable-arion-raises-new-investment-round-to-accelerate-commercial-rollout-of-its-cuttinng-edge-running-ai/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hightechxl.com/news/epc-patent-attorneys-dos-and-donts-when-applying-for-a-patent/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hightechxl.com/news/exploring-the-latest-technologies-spring-2025/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hightechxl.com/news/hightechxl-alumnus-sustonable-announces-equity-investment-from-gulermak-heavy-industries/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hightechxl.com/news/second-cohort-of-deep-tech-ventures-starts-venture-building-program/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hightechxl.com/news/singapore-program-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.hightechxl.com/our-program/",
       "page": "details",
       "anchor": "Our program",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -22,22 +134,6 @@
       "url": "https://www.hightechxl.com/portfolio/",
       "page": "portfolio",
       "anchor": "Portfolio",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.hightechxl.com/about-us/",
-      "page": "details",
-      "anchor": "About us",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.hightechxl.com/founders/",
-      "page": "details",
-      "anchor": "For founders As a founder you join a world-class venture builder. Moreover, where the risks are shared, the path is structured, and we have your back. No idea? No problem Focus Dee",
       "fetched": false,
       "blocked": null,
       "origin": "official"

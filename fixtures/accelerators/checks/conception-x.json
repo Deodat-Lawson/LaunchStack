@@ -1,55 +1,249 @@
 {
   "programId": "conception-x",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.conceptionx.org/",
-    "https://www.conceptionx.org/about"
+    "https://www.conceptionx.org/terms-conditions",
+    "https://www.conceptionx.org/about",
+    "https://www.conceptionx.org/pathways",
+    "https://www.conceptionx.org/portfolio",
+    "https://www.conceptionx.org/portfolio?bf83028f_page=2"
   ],
   "evidence": [
     {
       "id": "check-deadline-3ed86fed2b",
       "url": "https://www.conceptionx.org/",
-      "title": "Conception X — homepage checked by scrape.py",
+      "title": "Conception X — homepage",
       "excerpt": "Applications for our Spring 2027 cohorts are open. Apply by 6 December 2026 or join our next discovery session if you have more",
+      "page": "details"
+    },
+    {
+      "id": "check-deadline-a736cdfa14",
+      "url": "https://www.conceptionx.org/pathways",
+      "title": "Conception X — program page",
+      "excerpt": "Applications for our Spring 2027 cohorts are open. Apply by 6 December 2026 or join our next discovery session if you have more",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-047d4d6eae",
+      "url": "https://www.conceptionx.org/pathways",
+      "title": "Conception X — program page",
+      "excerpt": "& Conditions Venture Scientist 100 Our flagship, 9-month venture-building programme supporting ~100 PhD",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3cd78c09a2",
+      "url": "https://www.conceptionx.org/",
+      "title": "Conception X — homepage",
+      "excerpt": "leading to a $3.4 million pre-seed less than 12 months after launch. Alexander Pomberger ReactWise CX24",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-52bbd0075e",
+      "url": "https://www.conceptionx.org/terms-conditions",
+      "title": "Conception X — terms page",
+      "excerpt": "& Conditions Venture Scientist 100 Our flagship, 9-month venture-building programme supporting ~100 PhD",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a00f43d515",
+      "url": "https://www.conceptionx.org/",
+      "title": "Conception X — homepage",
+      "excerpt": "deeptech faster. Raise Learn more → Learn more → 10-week investment readiness programme for science",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b1dd231c1e",
+      "url": "https://www.conceptionx.org/about",
+      "title": "Conception X — program page",
+      "excerpt": "& Conditions Venture Scientist 100 Our flagship, 9-month venture-building programme supporting ~100 PhD",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ba3738c9f5",
+      "url": "https://www.conceptionx.org/portfolio",
+      "title": "Conception X — portfolio page",
+      "excerpt": "& Conditions Venture Scientist 100 Our flagship, 9-month venture-building programme supporting ~100 PhD",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-d70dc1d406",
+      "url": "https://www.conceptionx.org/",
+      "title": "Conception X — homepage",
+      "excerpt": "fellowship for future science founders. 9 months. A cohort of ~100 researchers. For technical",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e3b6d15678",
+      "url": "https://www.conceptionx.org/",
+      "title": "Conception X — homepage",
+      "excerpt": "& Conditions Venture Scientist 100 Our flagship, 9-month venture creation fellowship supporting ~100 PhD",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ffe5773ff9",
+      "url": "https://www.conceptionx.org/portfolio?bf83028f_page=2",
+      "title": "Conception X — portfolio page",
+      "excerpt": "& Conditions Venture Scientist 100 Our flagship, 9-month venture-building programme supporting ~100 PhD",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-20eb070bc3",
+      "url": "https://www.conceptionx.org/terms-conditions",
+      "title": "Conception X — terms page",
+      "excerpt": "info@conceptionx.org",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-43bfec2d82",
+      "url": "https://www.conceptionx.org/terms-conditions",
+      "title": "Conception X — terms page",
+      "excerpt": "on our site other than that set out above, please contact info@conceptionx.org. 16. WHICH COUNTRY’S LAWS APPLY TO ANY DISPUTES? 16.1. If",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-a917fbde8d",
+      "url": "https://www.conceptionx.org/terms-conditions",
+      "title": "Conception X — terms page",
+      "excerpt": "Road, London, EC1V 2NX. 2.2 To contact us, please email info@conceptionx.org . 3. BY USING OUR SITE YOU ACCEPT THESE TERMS 3.1. By",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-e584bc4d7b",
+      "url": "https://www.conceptionx.org/terms-conditions",
+      "title": "Conception X — terms page",
+      "excerpt": "about content uploaded by other users please contact us on info@conceptionx.org . 13. OUR RESPONSIBILITY FOR LOSS OR DAMAGE SUFFERED BY",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-45cd1beb8b",
+      "url": "https://www.conceptionx.org/",
+      "title": "Conception X — homepage",
+      "excerpt": "therapies Read the article ↗ Acquired by EnergyHub to grow virtual power plants Read the article ↗ Acquired by Odyssey",
       "page": "details"
     },
     {
       "id": "check-name-27590277fa",
       "url": "https://www.conceptionx.org/",
-      "title": "Conception X — homepage checked by scrape.py",
+      "title": "Conception X — homepage",
       "excerpt": "Where scientists become Venture Scientists | Conception X Apply ↗ Close menu Close menu Pathways Venture Scientist",
       "page": "details"
     },
     {
+      "id": "check-portfolio-0e7803c675",
+      "url": "https://www.conceptionx.org/terms-conditions",
+      "title": "Conception X — terms page",
+      "excerpt": "Portfolio → https://www.conceptionx.org/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-25f2d17088",
+      "url": "https://www.conceptionx.org/portfolio?bf83028f_page=2",
+      "title": "Conception X — portfolio page",
+      "excerpt": "Show more → https://www.conceptionx.org/portfolio?bf83028f_page=3",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-2f49c23602",
+      "url": "https://www.conceptionx.org/portfolio?bf83028f_page=2",
+      "title": "Conception X — portfolio page",
+      "excerpt": "Portfolio → https://www.conceptionx.org/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-3fb80224fc",
+      "url": "https://www.conceptionx.org/portfolio",
+      "title": "Conception X — portfolio page",
+      "excerpt": "Show more → https://www.conceptionx.org/portfolio?bf83028f_page=2",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-b0678b5634",
       "url": "https://www.conceptionx.org/about",
-      "title": "Conception X — details page checked by scrape.py",
+      "title": "Conception X — program page",
       "excerpt": "Portfolio → https://www.conceptionx.org/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-bc794bba3a",
       "url": "https://www.conceptionx.org/",
-      "title": "Conception X — homepage checked by scrape.py",
+      "title": "Conception X — homepage",
       "excerpt": "Portfolio → https://www.conceptionx.org/portfolio",
       "page": "details"
     },
     {
-      "id": "check-route-db43a76a3d",
+      "id": "check-portfolio-e237644ae7",
+      "url": "https://www.conceptionx.org/pathways",
+      "title": "Conception X — program page",
+      "excerpt": "Portfolio → https://www.conceptionx.org/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f9317b2826",
+      "url": "https://www.conceptionx.org/portfolio?bf83028f_page=2",
+      "title": "Conception X — portfolio page",
+      "excerpt": "Previous → https://www.conceptionx.org/portfolio?bf83028f_page=1",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-29ca617d42",
       "url": "https://www.conceptionx.org/",
-      "title": "Conception X — homepage checked by scrape.py",
-      "excerpt": "https://www.conceptionx.org/",
+      "title": "Conception X — homepage",
+      "excerpt": "Apply ↗ → https://www.conceptionx.org/",
       "page": "details"
     }
   ],
+  "pageQuotes": [
+    {
+      "id": "check-page-d5da25e377",
+      "url": "https://www.conceptionx.org/",
+      "page": "details",
+      "excerpt": "Where scientists become Venture Scientists | Conception X Apply ↗ Close menu Close menu Pathways Venture Scientist 100 Raise Portfolio About News Contact LinkedIn Medium Privacy Policy Terms & Conditions Venture Scientist 100 Our flagship, 9-month venture creation fellowship supporting ~100 PhD founders every year. Learn more → Please rotate your device just announced: Our new Physical Innovation Lab, powered by Positron ↗ Learn more We launch the next generation of venture scientists Apply now ↗ Explore our pathways Conception X is building a future where more researchers become founders of exceptional companies. Key partners A new kind of founder is emerging. We discover and back venture scientists. We believe 2% of scientists will create the most important companies of the next century, but too few today become founders. We work with top academic talent across Europe’s leading research institutions to turn ambitious science into scalable ventures – repeatedly. Outcomes at scale A record of deeptech venture creation 869 Founders launched 250 Companies created £1B+ Portfolio valuation 15 Countries covered 92 Universities represented £3M raised to enable RNA-based control systems for gene therapies Read the article ↗ Acquired by EnergyHub to grow virtual power plants Read the article ↗ Acquired by Odyssey Therapeutics to accelerate drug discovery Read the article ↗ $7.9M"
+    },
+    {
+      "id": "check-page-4f229eb87e",
+      "url": "https://www.conceptionx.org/terms-conditions",
+      "page": "terms",
+      "excerpt": "Terms & Conditions Apply ↗ Close menu Close menu Pathways Venture Scientist 100 Raise Portfolio About News Contact LinkedIn Medium Privacy Policy Terms & Conditions Venture Scientist 100 Our flagship, 9-month venture-building programme supporting ~100 PhD founders every year. Learn more → Terms & Conditions PLEASE READ THESE TERMS AND CONDITIONS CAREFULLY BEFORE USING THIS SITE 1. WHAT’S IN THESE TERMS? These terms tell you the rules for using our website ConceptionX.org (our site). 2. WHO WE ARE AND HOW TO CONTACT US 2.1. ConceptionX.org is a site operated by Conception X Limited (“We”). We are registered in England and Wales under company number 11653102 and have our registered office at 124 City Road, London, EC1V 2NX. 2.2 To contact us, please email info@conceptionx.org . 3. BY USING OUR SITE YOU ACCEPT THESE TERMS 3.1. By using our site, you confirm that you accept these terms of use and that you agree to comply with them. 3.2. If you do not agree to these terms, you must not use our site. 4. HOW WE MAY USE YOUR PERSONAL INFORMATION We will only use your personal information as set out in our Privacy Policy . 5. WE MAY MAKE CHANGES TO THESE TERMS We amend these terms from time to time. Every time you wish to use our site, please check these terms to ensure you understand the terms that apply at that time. 6. WE MAY MAKE CHANGES TO OUR SITE We may update and change our"
+    },
+    {
+      "id": "check-page-91e355712f",
+      "url": "https://www.conceptionx.org/about",
+      "page": "details",
+      "excerpt": "About Conception X | The Platform Backing PhD Founders Please rotate your device Apply ↗ Close menu Close menu Pathways Venture Scientist 100 Raise Portfolio About News Contact LinkedIn Medium Privacy Policy Terms & Conditions Venture Scientist 100 Our flagship, 9-month venture-building programme supporting ~100 PhD founders every year. Learn more → At Conception X, we turn researchers into founders of tomorrow's most influential companies We create deeptech companies at scale by backing top researchers at the moment they’re most likely to found. How we think Our Venture Science model is designed for founders building from their research. 01— We start with talent. We back exceptional scientists at the earliest stage, scouting continuously across 100+ universities to identify researchers advancing the frontier of their field who also show a unique combination of qualities – including high intellectual ambition and early market curiosity. We then help them develop an entrepreneurial mindset during their PhD and postdoc. We’ve found that 34% of researchers start companies with this support – compared to 1.7% without. 02— Scientists make better founders. Not every scientist should be a founder, but we believe that the most consequential companies of the next decades will be built by researchers. A new generation of founders is emerging – Venture Scientists – starting companies"
+    },
+    {
+      "id": "check-page-cc88285808",
+      "url": "https://www.conceptionx.org/pathways",
+      "page": "details",
+      "excerpt": "Build a company from your research. We build it with you | Conception X Please rotate your device Apply ↗ Close menu Close menu Pathways Venture Scientist 100 Raise Portfolio About News Contact LinkedIn Medium Privacy Policy Terms & Conditions Venture Scientist 100 Our flagship, 9-month venture-building programme supporting ~100 PhD founders every year. Learn more → Build a company from your research. We build it with you. Conception X is for scientists who can't stop thinking about what their research could become – and have the drive and ambition to find out. We call them Venture Scientists. START WHERE YOU ARE Researchers join us early, although at different stages. Our programmes are designed to complement your academic journey, and support progression from idea formation to first fundraise – and beyond. Early PhD or postdoc, curious You're early in your research, but curious about the founder path and ready to explore whether it's for you. Mid-research, exploring You’ve explored entrepreneurship through workshops or hackathons and want to define your vision, team and commercial framework. Mid-research, gaining traction You're forming a team, planning partnerships or pilots and starting to understand the investment landscape. Ready to raise and go full-time You have a team, have completed customer discovery, and are ready to launch with the right funding. Two pathways,"
+    },
+    {
+      "id": "check-page-db5de86ea0",
+      "url": "https://www.conceptionx.org/portfolio",
+      "page": "portfolio",
+      "excerpt": "Deep Tech Companies Built by PhD Founders | Conception X Please rotate your device Apply ↗ Close menu Close menu Pathways Venture Scientist 100 Raise Portfolio About News Contact LinkedIn Medium Privacy Policy Terms & Conditions Venture Scientist 100 Our flagship, 9-month venture-building programme supporting ~100 PhD founders every year. Learn more → What we’ve backed Conception X founders build companies that anticipate fundamental shifts in human behaviour and address problems that will become apparent years from now. Year ALL CX18 CX19 CX20 CX21 CX22 CX23 CX24 CX25 CX26 Sector All Advanced Manufacturing Security Energy Robotics Future of Computing Advanced Materials Novel AI Space Bio & Health Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. HyperCIM Founded By Tanya Mangoma Cohort CX21 Future of Computing HyperCIM HyperCIM develops compute-in-memory processors that eliminate AI data bottlenecks by processing data directly where it is stored instead of transferring it between chips. Website LinkedIn Forgent AI Founded By Leonard Wossnig Cohort CX18 Novel AI Forgent AI Forgent develops AI agents that automate public sector tender discovery, proposal drafting and bid management for enterprise procurement teams. Website LinkedIn RedBerry Labs Founded By Sophia Kalanovska & Charles Higgins Cohort CX22 Novel AI RedBerry Labs"
+    },
+    {
+      "id": "check-page-01166d213f",
+      "url": "https://www.conceptionx.org/portfolio?bf83028f_page=2",
+      "page": "portfolio",
+      "excerpt": "Deep Tech Companies Built by PhD Founders | Conception X Please rotate your device Apply ↗ Close menu Close menu Pathways Venture Scientist 100 Raise Portfolio About News Contact LinkedIn Medium Privacy Policy Terms & Conditions Venture Scientist 100 Our flagship, 9-month venture-building programme supporting ~100 PhD founders every year. Learn more → What we’ve backed Conception X founders build companies that anticipate fundamental shifts in human behaviour and address problems that will become apparent years from now. Year ALL CX18 CX19 CX20 CX21 CX22 CX23 CX24 CX25 CX26 Sector All Advanced Manufacturing Security Energy Robotics Future of Computing Advanced Materials Novel AI Space Bio & Health Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Ridescan Cohort CX23 Novel AI Robotics Ridescan Ridescan has developed an AI-driven ​anomaly detection solution that enhances ​autonomous systems' safety, reliability and ​efficiency, enabling proactive risk mitigation ​and preventing catastrophic failures. Website LinkedIn Contact RevEng.ai Cohort CX22 Security RevEng.ai RevEng.ai is a deep AI framework that detects vulnerabilities across an organisation's cyber security supply chain for proactive cyber defense. Website LinkedIn Contact RemePhy Cohort CX23 Bio & Health RemePhy RemePhy (formerly PhytoMines) is developing"
+    }
+  ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "info@conceptionx.org",
+        "evidenceId": "check-email-20eb070bc3"
+      }
+    ],
     "phones": [],
     "routes": [],
     "applicationUrl": [
       {
         "value": "https://www.conceptionx.org/",
-        "evidenceId": "check-route-db43a76a3d"
+        "evidenceId": "check-route-29ca617d42"
       }
     ],
     "applicationsOpen": [],
@@ -60,12 +254,49 @@
         "evidenceId": "check-deadline-3ed86fed2b"
       }
     ],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "9 months",
+        "evidenceId": "check-duration-e3b6d15678"
+      },
+      {
+        "value": "10",
+        "evidenceId": "check-duration-a00f43d515"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-3cd78c09a2"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-45cd1beb8b"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.conceptionx.org/portfolio",
         "evidenceId": "check-portfolio-bc794bba3a"
+      },
+      {
+        "value": "https://www.conceptionx.org/portfolio?bf83028f_page=2",
+        "evidenceId": "check-portfolio-3fb80224fc"
+      },
+      {
+        "value": "https://www.conceptionx.org/portfolio?bf83028f_page=1",
+        "evidenceId": "check-portfolio-f9317b2826"
+      },
+      {
+        "value": "https://www.conceptionx.org/portfolio?bf83028f_page=3",
+        "evidenceId": "check-portfolio-25f2d17088"
       }
     ],
     "name": [

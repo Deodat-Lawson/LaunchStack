@@ -1,59 +1,497 @@
 {
   "programId": "accelerace",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:59:02.000Z",
   "pagesRead": [
     "https://accelerace.io/",
-    "https://accelerace.io/about/",
-    "https://accelerace.io/faq/"
+    "https://accelerace.io/apply-now-the-worlds-only-soundtech-accelerator-program/",
+    "https://accelerace.io/europes-largest-startup-competition-opens-applications/",
+    "https://accelerace.io/accelerace-alumnus-sensohive-receives-double-digit-million-investment/",
+    "https://accelerace.io/accelerace-invest-donkey-republic-raises-double-digit-series-investment/",
+    "https://accelerace.io/accelerace-raises-1-7-million-investment-help-startups-succeed/",
+    "https://accelerace.io/antag-therapeutics-raises-3m-usd-series-investment-novo-seeds/",
+    "https://accelerace.io/category/investments/",
+    "https://accelerace.io/exclusive-network-ensures-qualified-investment-growth-startups/",
+    "https://accelerace.io/faq/",
+    "https://accelerace.io/funding/",
+    "https://accelerace.io/investment-monta-biosciences-raises-investment-promising-cancer-treatment-2/",
+    "https://accelerace.io/investment-readiness-test-vita/",
+    "https://accelerace.io/investment-readiness-test/",
+    "https://platform.accelerace.io/apply/tools"
   ],
   "evidence": [
     {
+      "id": "check-duration-05ec80e0b3",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "if you are logged in has_logged_in 1 year 1 month 1 day Used by Vimeo to remember if you have",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-095f896834",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "LinkedIn members for advertising lang 1 year 1 month 1 day Used by LinkedIn to remember a user's",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-10c494bd77",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "remember your cookie consent tool_ref_* 1 year 1 month 1 day Used by Accelerace to remember which tool",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-19bad62c5a",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "to remember if you have logged in CONSENT 1 year 1 month 1 day Used by Youtube to collect information",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-36996b3928",
+      "url": "https://accelerace.io/funding/",
+      "title": "Accelerace — terms page",
+      "excerpt": "from building and scaling their own startups. 7-week investment program Get ready to fundraise in 7",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-371386cf81",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "remember settings you have made language 1 year 1 month 1 day Used by Vimeo to remember your language",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-40147de807",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "and other platforms VISITOR_INFO1_LIVE 1 year 1 month 1 day Used by Youtube to collect information",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-4aeb17a6ac",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "to enforce consent on the client side lms_ads 1 month 2 days Used by LinkedIn to identify LinkedIn",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-4e6bbbf57e",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "to approve users and API clients li_mc 6 months 2 weeks 12 hours Used by LinkedIn as a temporary cache",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-59e7d203db",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "platforms More details Marketing li_at 1 year 1 month 1 day Used by LinkedIn to approve users and API",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-5c03a6d80b",
+      "url": "https://accelerace.io/funding/",
+      "title": "Accelerace — terms page",
+      "excerpt": "one that fit you the best timing wise. Is the 7-week investment program online or offline? Hybrid!",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-5d430dfffb",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "detect and prevent abuse on the platform li_sugr 3 months 6 days Used by LinkedIn to make a probabilistic",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-62aba10bde",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "other platforms VISITOR_PRIVACY_METADATA 1 year 1 month 1 day Used by Youtube to collect information",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-69ad295261",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "LinkedIn to approve users and API clients li_mc 6 months 2 weeks 12 hours Used by LinkedIn as a temporary",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-76cb29400f",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "your language settings is_logged_in 1 year 1 month 1 day Used by Vimeo to remember if you are",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-7ca6a0c4db",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "through partners and other platforms YSC 1 year 1 month 1 day Used by Youtube to collect information",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-833dba11fa",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "for non-essential purposes UserMatchHistory 1 month 2 days Used by LinkedIn to track visitors on",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-96e65eac21",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "outside the Designated Countries lms_analytics 1 month 2 days Used by LinkedIn to identify LinkedIn",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-9d87dccfae",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "to remember your cookie consent _abexps 1 year 1 month 1 day Used by Vimeo to remember settings you",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-ab510f50e2",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "humans and bots OptanonAlertBoxClosed 1 year 1 month 1 day Used by Vimeo to remember if you have seen",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-ac380502aa",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "to remember settings you have made player 1 year 1 month 1 day Used by Vimeo to remember settings you",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-b1337c536c",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "your consent. laravel_cookie_consent 1 year 1 month 1 day Used to store the user's cookie consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-c0d95da5ec",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "Introjs tutorial laravel_cookie_consent 1 year 1 month 1 day Used by Accelerace to remember your cookie",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d02ac06297",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "by the user in their settings bcookie 1 year 1 month 1 day Used by LinkedIn to identify devices",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d0615645d5",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "the cookie consent popup OptanonConsent 1 year 1 month 1 day Used by Vimeo to remember your cookie",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d0711ac95e",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "forgery attacks. introjs-dontShowAgain 1 year 1 month 1 day Used by Accelerace to remember if you have",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d629034d2e",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "off LinkedIn for analytics li_gc 6 months 2 weeks 12 hours Used by LinkedIn to store consent of",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-e180d7dcfa",
+      "url": "https://accelerace.io/funding/",
+      "title": "Accelerace — terms page",
+      "excerpt": "us to make fast investments. Do we apply to the 7-week investment program separately? Nope. You are",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e3d160b3b8",
+      "url": "https://accelerace.io/funding/",
+      "title": "Accelerace — terms page",
+      "excerpt": "at our invite-only Investor Day to wrap-up the 7-week investment program. You pitch and we match you",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e6e1b7a943",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "Members off LinkedIn for analytics li_gc 6 months 2 weeks 12 hours Used by LinkedIn to store",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-ec6d97cd8e",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "the visitor's preferences AnalyticsSyncHistory 1 month 2 days Used by LinkedIn to store information",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-ee27d1e186",
+      "url": "https://accelerace.io/funding/",
+      "title": "Accelerace — terms page",
+      "excerpt": "investment program Get ready to fundraise in 7 weeks! Together, we take a 360-degree view of your",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-fee3ed72bc",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "title": "Accelerace — application page",
+      "excerpt": "remember which tool you last used __cf_bm 1 year 1 month 1 day Used by Vimeo to distinguish between",
+      "page": "application"
+    },
+    {
+      "id": "check-format-1026306578",
+      "url": "https://accelerace.io/funding/",
+      "title": "Accelerace — terms page",
+      "excerpt": "wise. Is the 7-week investment program online or offline? Hybrid! Some events will take place online , and some in-person",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-e4da16be35",
+      "url": "https://accelerace.io/funding/",
+      "title": "Accelerace — terms page",
+      "excerpt": "Hybrid! Some events will take place online , and some in-person in Copenhagen. Get our stories delivered From us to your",
+      "page": "terms"
+    },
+    {
       "id": "check-name-bb35ae36aa",
       "url": "https://accelerace.io/",
-      "title": "Accelerace — homepage checked by scrape.py",
+      "title": "Accelerace — homepage",
       "excerpt": "Accelerace – Leading Pre-Seed Investor & Accelerator Investments Get",
       "page": "details"
     },
     {
-      "id": "check-portfolio-32022d967f",
-      "url": "https://accelerace.io/about/",
-      "title": "Accelerace — details page checked by scrape.py",
+      "id": "check-portfolio-1767191a20",
+      "url": "https://accelerace.io/apply-now-the-worlds-only-soundtech-accelerator-program/",
+      "title": "Accelerace — application page",
       "excerpt": "Portfolio → https://accelerace.io/startups/",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5348112bf6",
+      "url": "https://accelerace.io/funding/",
+      "title": "Accelerace — terms page",
+      "excerpt": "Portfolio → https://accelerace.io/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-742462e3d0",
+      "url": "https://accelerace.io/europes-largest-startup-competition-opens-applications/",
+      "title": "Accelerace — application page",
+      "excerpt": "Portfolio → https://accelerace.io/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-781a6e72e9",
+      "url": "https://accelerace.io/accelerace-raises-1-7-million-investment-help-startups-succeed/",
+      "title": "Accelerace — terms page",
+      "excerpt": "Portfolio → https://accelerace.io/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7a95009911",
+      "url": "https://accelerace.io/funding/",
+      "title": "Accelerace — terms page",
+      "excerpt": "See all portfolio companies → https://accelerace.io/portfolio/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-9dd1c045c1",
       "url": "https://accelerace.io/",
-      "title": "Accelerace — homepage checked by scrape.py",
+      "title": "Accelerace — homepage",
       "excerpt": "Portfolio → https://accelerace.io/startups/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-ab754b9d95",
+      "url": "https://accelerace.io/accelerace-invest-donkey-republic-raises-double-digit-series-investment/",
+      "title": "Accelerace — terms page",
+      "excerpt": "Portfolio → https://accelerace.io/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b0789cad4d",
+      "url": "https://accelerace.io/exclusive-network-ensures-qualified-investment-growth-startups/",
+      "title": "Accelerace — terms page",
+      "excerpt": "Portfolio → https://accelerace.io/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-bb5ed4a9cc",
+      "url": "https://accelerace.io/antag-therapeutics-raises-3m-usd-series-investment-novo-seeds/",
+      "title": "Accelerace — terms page",
+      "excerpt": "Portfolio → https://accelerace.io/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d1baaf9dee",
+      "url": "https://accelerace.io/investment-monta-biosciences-raises-investment-promising-cancer-treatment-2/",
+      "title": "Accelerace — terms page",
+      "excerpt": "Portfolio → https://accelerace.io/startups/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-d4263d70c4",
       "url": "https://accelerace.io/faq/",
-      "title": "Accelerace — terms page checked by scrape.py",
+      "title": "Accelerace — terms page",
+      "excerpt": "Portfolio → https://accelerace.io/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d73c8333b1",
+      "url": "https://accelerace.io/investment-readiness-test/",
+      "title": "Accelerace — terms page",
       "excerpt": "Portfolio → https://accelerace.io/startups/",
       "page": "terms"
     },
     {
       "id": "check-portfolio-ee6614cbd7",
       "url": "https://accelerace.io/",
-      "title": "Accelerace — homepage checked by scrape.py",
+      "title": "Accelerace — homepage",
       "excerpt": "Meet our portfolio → https://accelerace.io/startups/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-f2df390fbb",
+      "url": "https://accelerace.io/category/investments/",
+      "title": "Accelerace — terms page",
+      "excerpt": "Portfolio → https://accelerace.io/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f4ee1738e0",
+      "url": "https://accelerace.io/accelerace-alumnus-sensohive-receives-double-digit-million-investment/",
+      "title": "Accelerace — terms page",
+      "excerpt": "Portfolio → https://accelerace.io/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-7d48b731b9",
+      "url": "https://accelerace.io/investment-readiness-test/",
+      "title": "Accelerace — terms page",
+      "excerpt": "free platform full of courses and tools → https://platform.accelerace.io/apply/tools",
+      "page": "terms"
+    },
+    {
       "id": "check-route-8a47be0058",
       "url": "https://accelerace.io/",
-      "title": "Accelerace — homepage checked by scrape.py",
+      "title": "Accelerace — homepage",
       "excerpt": "https://accelerace.io/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-64549d222f",
+      "url": "https://accelerace.io/",
+      "page": "details",
+      "excerpt": "Accelerace – Leading Pre-Seed Investor & Accelerator Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Home of the Nordic founders building the great companies of tomorrow We are the leading pre-seed investor and startup accelerator in the Nordics This is Accelerace Since 2008, Accelerace has been the first stop for 2000+ parents, university students, c-level executives, first-timers, crazy people and everyone in-between that today lead some of Europe’s most promising startups and scaleups. Pre-seed funding We invest in Nordic and Baltic pre-seed stage startups and invite you to our lifelong founders community, Accelerace Allstars. Get funding Partner programmes We co-manage several accelerator and mentoring programmes around Europe for startups in different industries and stages. Get accelerated Corporate matchmaking We leverage our understanding of both startups and corporates, to find the perfect curated matches, that benefits everyone. Match now Accelerace allstars Pre-seed funding and support from top founders By becoming a portfolio company of Accelerace, you automatically become part of Accelerace Allstars. This is a lifelong community for founders in the Nordics and Baltics, where we help you prepare to raise seed"
+    },
+    {
+      "id": "check-page-c5ca7d761b",
+      "url": "https://accelerace.io/apply-now-the-worlds-only-soundtech-accelerator-program/",
+      "page": "application",
+      "excerpt": "Apply now: the World’s Only Soundtech Accelerator Program » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Apply now: the World’s Only Soundtech Accelerator Program Share: Share this on WhatsApp Share this on FaceBook Share this on Twitter"
+    },
+    {
+      "id": "check-page-6a614f82b4",
+      "url": "https://accelerace.io/europes-largest-startup-competition-opens-applications/",
+      "page": "application",
+      "excerpt": "Europe’s largest startup competition opens for applications » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Europe’s largest startup competition opens for applications Share: Share this on WhatsApp Share this on FaceBook Share this on Twitter"
+    },
+    {
+      "id": "check-page-d3ab9723f9",
+      "url": "https://accelerace.io/accelerace-alumnus-sensohive-receives-double-digit-million-investment/",
+      "page": "terms",
+      "excerpt": "Accelerace alumnus Sensohive receives double digit million investment » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Accelerace alumnus Sensohive receives double digit million investment Share: Share this on WhatsApp Share this on FaceBook Share this on Twitter"
+    },
+    {
+      "id": "check-page-61dfdf0c0d",
+      "url": "https://accelerace.io/accelerace-invest-donkey-republic-raises-double-digit-series-investment/",
+      "page": "terms",
+      "excerpt": "Accelerace Invest: Donkey republic raises investment Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Accelerace Invest: Donkey Republic raises double-digit Series A investment Share: Share this on WhatsApp Share this on FaceBook Share this on Twitter"
+    },
+    {
+      "id": "check-page-f59c20a3b3",
+      "url": "https://accelerace.io/accelerace-raises-1-7-million-investment-help-startups-succeed/",
+      "page": "terms",
+      "excerpt": "Accelerace raises $1.7 million investment to help startups succeed » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Accelerace raises $1.7 million investment to help startups succeed Share: Share this on WhatsApp Share this on FaceBook Share this on Twitter"
+    },
+    {
+      "id": "check-page-8dec6f4973",
+      "url": "https://accelerace.io/antag-therapeutics-raises-3m-usd-series-investment-novo-seeds/",
+      "page": "terms",
+      "excerpt": "Antag Therapeutics raises 3M USD in a Series A investment from Novo Seeds » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Antag Therapeutics raises 3M USD in a Series A investment from Novo Seeds Share: Share this on WhatsApp Share this on FaceBook Share this on Twitter"
+    },
+    {
+      "id": "check-page-4cf6dc61d0",
+      "url": "https://accelerace.io/category/investments/",
+      "page": "terms",
+      "excerpt": "Investments Archives » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Category: Investments Search Tags: new investment MederiAI targets the gut to save lives Endoscopies are vital procedures in detecting life threatening conditions, but they can often be slow, invasive and subject to human error – MederiAI aims to change that. MederiAI is developing an AI-powered software solution that assists gastroenterologists in analysing capsule endoscopy videos faster, more accurately, and at a significantly lower cost. Capsule endoscopy is a […] Hans Christian Mandøe Mar 27 Mar 26 A more diverse involvement in business decisions Accelerace have invested in Involved, who are dedicated to enhancing decision-making by providing leaders with access to diverse perspectives from employees and stakeholders. Imagine a large meeting room, filled with stakeholders who have insights and opinions on the company’s next major focus area – the reason for today’s meeting. But somehow, even though more than […] Hans Christian Mandøe Mar 12 Mar 12 EV charging for apartment buildings is finally here! Accelerace have invested in Elby, a company that gives private apartment complexes the ability to install EV charging points directly into their"
+    },
+    {
+      "id": "check-page-18c3a5a479",
+      "url": "https://accelerace.io/exclusive-network-ensures-qualified-investment-growth-startups/",
+      "page": "terms",
+      "excerpt": "Exclusive network ensures qualified investment for growth startups » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Exclusive network ensures qualified investment for growth startups Share: Share this on WhatsApp Share this on FaceBook Share this on Twitter"
+    },
+    {
+      "id": "check-page-80af3116e4",
+      "url": "https://accelerace.io/faq/",
+      "page": "terms",
+      "excerpt": "FAQ » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact FAQ - what people ask us Please look through our frequently asked questions sections below. If you still did not find the answer to your question please do not hesitate to reach out to us by mail or through the info form . Are we going to a pitch session in order to get selected? No, our selection will be based on personal interviews with your personal Business Accelerator – not a pitch session. In our experience, we get to know you a lot better in this way – and you get to know us a lot better. It’s not only us that select you – you should also feel that you want to spend your valuable time with us. This forms the basis for a great relationship going forward! Is it possible to include IP documents in the application? Yes, you can attach documents to your application. If you scroll down the application page (For startups/Apply) you will be able to attach files. All your documents and other details will be kept confidential. What stage should the participating startups be at? It depends a little on technology and market, but from the level of MVP, prototype or more. Our focus is market development. What is the outline of the contents of the program? Our program is"
+    },
+    {
+      "id": "check-page-8a55842a4c",
+      "url": "https://accelerace.io/funding/",
+      "page": "terms",
+      "excerpt": "Funding » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Pre-seed funding and support from top founders Submit pitch deck Accelerace Allstars is a community of successful founders in the Nordics and Baltics — the ones that made it big like Templafy , Penneo and Coinify , and the ones that will. We invest 1 000 000 DKK and deliver value beyond money. If you want to get mentored by the Accelerace Allstars mentors (a.k.a. our most successful alumni founders), close a seed round and get access to community activities, we are the pre-seed investor you need. Support and funding from founders that have One major benefit of becoming a portfolio company of Accelerace Invest II is access to the Allstars mentors — the founders of Templafy , Penneo , Actimo , Coinify , Densou , Axdraft , Graduateland and Dreamplan ! The Allstars mentors are Accelerace’s most successful alumni founders. After building companies that got publicly listed, acquired by industry-leading players and raised millions of dollars, they have returned to Accelerace to support the next generation of founders as mentors and investors. the deal 1 000 000 DKK convertible loans We invest 1 000 000 DKK before you have customers, revenue or traction, using a"
+    },
+    {
+      "id": "check-page-fbd6cefacd",
+      "url": "https://accelerace.io/investment-monta-biosciences-raises-investment-promising-cancer-treatment-2/",
+      "page": "terms",
+      "excerpt": "Investment: MonTa BioSciences raises investment for promising cancer treatment » Accelerace Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Investment: MonTa BioSciences raises investment for promising cancer treatment Share: Share this on WhatsApp Share this on FaceBook Share this on Twitter"
+    },
+    {
+      "id": "check-page-dc1f84ba44",
+      "url": "https://accelerace.io/investment-readiness-test-vita/",
+      "page": "terms",
+      "excerpt": "Investment readiness test - Vita » Accelerace Investment readiness test – Vita Test how ready you are for getting an investment from Vita Accelerator Answer the 12 questions below and instantly see how likely your startup is to get an investment offer from Vita Accelerator. The test should take less than 15 minutes and we only ask for your contact information so we can explore an actual investment. Step 1 of 14 7% Phone This field is for validation purposes and should be left unchanged. Which team description below best describes your current team? * The team is defined as the founding team, which means team members with significant upside in the company. Typically, that includes founders and founding employees. Agencies, freelancers, and interns are not founding team members. Incomplete founding team. Your team still lacks one or more co-founders. Complete founding team, with no startup experience, and no industry experience. Your team is complete enough to obtain product-market-fit. None of the founders have been founders or founding employees in a startup before. Nor have any of the founders work experience from the industry. Complete founding team, little startup experience, little industry experience. Your team is complete enough to obtain product-market-fit. One (or more) of the founders have been founders or founding employees in a short-lived startup. One (or more) of"
+    },
+    {
+      "id": "check-page-618d1b691d",
+      "url": "https://accelerace.io/investment-readiness-test/",
+      "page": "terms",
+      "excerpt": "Test Your Investment Readiness - Accelerace Invest Investments Get funding Portfolio Transparency report Matchmaking Sidel Pilot Project 2025 For startups For corporates Stories About Accelerace Our story Partner programs Team Careers Presskit Contact Test how ready you are for getting an investment from Accelerace Answer the 12 questions below and instantly see how likely your startup is to get an investment offer from Accelerace. The test should take less than 15 minutes and we only ask for your contact information so we can explore an actual investment. Step 1 of 14 7% Company This field is for validation purposes and should be left unchanged. Which team description below best describes your current team? * The team is defined as the founding team, which means team members with significant upside in the company. Typically, that includes founders and founding employees. Agencies, freelancers, and interns are not founding team members. Incomplete founding team. Your team still lacks one or more co-founders. Complete founding team, with no startup experience, and no industry experience. Your team is complete enough to obtain product-market-fit. None of the founders have been founders or founding employees in a startup before. Nor have any of the founders work experience from the industry. Complete founding team, little startup experience, little industry experience. Your team"
+    },
+    {
+      "id": "check-page-078895ad9b",
+      "url": "https://platform.accelerace.io/apply/tools",
+      "page": "application",
+      "excerpt": "We use cookies This website uses cookies in order to enhance the overall user experience. Only essentials Accept all Customize Essential cookies There are some cookies that we have to include in order for certain web pages to function. For this reason, they do not require your consent. laravel_cookie_consent 1 year 1 month 1 day Used to store the user's cookie consent preferences. laravel_session 1 day Used to identify the user's browsing session. XSRF-TOKEN 1 day Used to secure both the user and our website against cross-site request forgery attacks. introjs-dontShowAgain 1 year 1 month 1 day Used by Accelerace to remember if you have seen the Introjs tutorial laravel_cookie_consent 1 year 1 month 1 day Used by Accelerace to remember your cookie consent tool_ref_* 1 year 1 month 1 day Used by Accelerace to remember which tool you last used __cf_bm 1 year 1 month 1 day Used by Vimeo to distinguish between humans and bots OptanonAlertBoxClosed 1 year 1 month 1 day Used by Vimeo to remember if you have seen the cookie consent popup OptanonConsent 1 year 1 month 1 day Used by Vimeo to remember your cookie consent _abexps 1 year 1 month 1 day Used by Vimeo to remember settings you have made player 1 year 1 month 1 day Used by Vimeo to remember settings you have made language 1 year 1 month 1 day Used by Vimeo to remember your language settings is_logged_in 1 year 1 month 1 day"
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://platform.accelerace.io/apply/tools",
+        "evidenceId": "check-route-7d48b731b9"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://accelerace.io/",
@@ -63,12 +501,53 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "7",
+        "evidenceId": "check-duration-36996b3928"
+      },
+      {
+        "value": "1 month",
+        "evidenceId": "check-duration-b1337c536c"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-69ad295261"
+      },
+      {
+        "value": "2",
+        "evidenceId": "check-duration-4e6bbbf57e"
+      },
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-5d430dfffb"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-1026306578"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-e4da16be35"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://accelerace.io/startups/",
         "evidenceId": "check-portfolio-9dd1c045c1"
+      },
+      {
+        "value": "https://accelerace.io/portfolio/",
+        "evidenceId": "check-portfolio-7a95009911"
       }
     ],
     "name": [

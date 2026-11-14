@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.hkstp.org/",
   "applyUrl": "https://www.hkstp.org/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: HKSTP | Hong Kong’s Innovation & Technology Ecosystem Main Menu Discover Sites Investment Opportunities Partnerships Global Mixer Hong Kong Advantage Greater Bay Area Sites Explore the spaces fuelling Hong Kong’s I&T growth Hong Kong Science Park Hong Kong's leading I&T ecosystem advancing global innovation InnoCentre Multi-space work hub for GreenTech and FinTech Tai Po InnoPark MARS and PMC sites for pharma, medical, and precision manufacturing Tseung Kwan O InnoPark AMC and DTHub spaces for marine, data tech, and smart production Yuen Long InnoPark Centres driving the future of Micro-E, pharma, and biomedicine HKSTP Shenzhen Branch GBA hub connecting innovators to Chinese Mainland and beyond INNOPOLE Northern Metropolis campus powering AI+ industries with deep tech Investment Opportunities Tap into our network of investors and promising startups Partnerships Work with a wide network of partners spanning industries in and beyond Hong Kong Global Mixer Connect with global communities via tech shows, tours and events Hong Kong Advantage Learn why Hong Kong is your gateway to global success Greater Bay Area Unlock GBA’s vast opportunities for startups and businesses Discover Sites Investment Opportunities Partnerships Global Mixer Hong Kong Advantage Greater Bay Area Sites Explore the spaces fuelling Hong Kong’s I&T growth Hong Kong Science Park Hong Kong's leading I&T ecosystem No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "HKSTP drives innovation and technology in Hong Kong, connecting startups, tech companies, talent, investors and partners to accelerate innovation and business growth.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Ailytics’ AI-powered industrial video analytics solution is paving the way for a safer, smarter airport operation. Currently being tested at the new office building site in front of Terminal 1 of the Rome Fiumicino Airport, they are potentially setting new standards in construction site management, empowering teams to act swiftly and ensure worker protection.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "hkstp-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.hkstp.org/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

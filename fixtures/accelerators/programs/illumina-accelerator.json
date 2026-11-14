@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.illumina.com/company/illumina-for-startups.html",
   "applyUrl": "https://www.illumina.com/company/illumina-for-startups.html",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Future-ready: Built to accelerate performance and value See timeline Kits & Reagents Detect five DNA bases in a single assay while delivering concurrent genetic and epigenetic insights Learn more Selection Tools All Selection & Planning Tools NGS Workflow Finder - now with oncology workflows Take the guesswork out of your next workflow. Get recommendations and resources so you can sequence with confidence. Explore the tool Software & Analysis Illumina BioInsight Platform All Software One platform for complete biological insights Explore genomic and multiomic software with award-winning accuracy, peer-reviewed AI, and purpose-built cloud solutions Learn more Services No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "At Illumina, we’re committed to unlocking the power of the genome, and we know we can’t do it alone. Illumina for Startups is our way of accelerating innovation in the entrepreneurial community by partnering with leading venture capital investors and entrepreneurs to create, launch and grow genomics startups. Together, we're advancing breakthrough applications in genomics, including therapeutics, diagnostics, agriculture, synthetic biology, software and direct-to-consumer applications.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "At Illumina, we’re committed to unlocking the power of the genome, and we know we can’t do it alone. Illumina for Startups is our way of accelerating innovation in the entrepreneurial community by partnering with leading venture capital investors and entrepreneurs to create, launch and grow genomics startups. Together, we're advancing breakthrough applications in genomics, including therapeutics, diagnostics, agriculture, synthetic biology, software and direct-to-consumer applications.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "illumina-accelerator-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.illumina.com/company/illumina-for-startups.html",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

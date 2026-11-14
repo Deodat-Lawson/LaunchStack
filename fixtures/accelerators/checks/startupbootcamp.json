@@ -1,404 +1,1543 @@
 {
   "programId": "startupbootcamp",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://startupbootcamp.org/",
-    "https://startupbootcamp.org/about/contact",
-    "https://startupbootcamp.org/about/faq",
-    "https://startupbootcamp.org/articles/startupbootcamp-afritech-adds-dutch-entrepreneurial-development-bank-to-list-of-partners-for-cohort-3-of-the-asip-accelerator-program"
+    "https://startupbootcamp.org/accelerator-apply",
+    "https://startupbootcamp.org/accelerator/afritech",
+    "https://startupbootcamp.org/accelerator/aivolution",
+    "https://startupbootcamp.org/accelerator/aivolution-ii",
+    "https://startupbootcamp.org/accelerator/aivolution-iii",
+    "https://startupbootcamp.org/accelerator/decarbonize",
+    "https://startupbootcamp.org/accelerator/deeptech-robotics",
+    "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+    "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+    "https://startupbootcamp.org/accelerator/energy-climate",
+    "https://startupbootcamp.org/accelerator/energy-climate-ii",
+    "https://startupbootcamp.org/accelerator/energy-sustainability",
+    "https://startupbootcamp.org/accelerator/energyinc",
+    "https://startupbootcamp.org/accelerator/energynext"
   ],
   "evidence": [
     {
-      "id": "check-deal-161660eacb",
+      "id": "check-announced-95e1859d99",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Decarbonize Accelerator FOR STARTUPS & SCALEUPS Accelerator timeline Application Open April Applications for our accelerator are open! Apply here Download SHA",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-0d6a844eec",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "for exposure, media & PR activities. Capital USD 100k including USD 50k cash investment per startup to cover expenses during the program and",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-4900b1d2fb",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "cash investment per startup to cover expenses during the program and USD 50k in-kind services. About the Energy & Sustainability Accelerator The",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-adfe02efd9",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
-      "excerpt": "HealthTech Project in Africa, Supported by Gates Foundation and Run by SBC Afritech July 4, 2022 The pan-African accelerator will provide access to a grant of $50,000, market and government access events across the continent, and a connection to a global ecosystem in the healthcare community. Startupbootcamp Welcomes Ten",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "2022 The pan-African accelerator will provide access to a grant of $50,000, market and government access events across the continent, and a",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-b27b01d6a5",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Ongoing collaborations for exposure, media & PR activities. Capital USD 100k including USD 50k cash investment per startup to cover expenses",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-039ec878c8",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "mistakes - allowing them to reach in the 3-months accelerator what they would only achieve in 2+",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-0aefa67304",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "your startup's growth and success in just 3 months with our hybrid program, designed to drive",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-0f569449ca",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "your startup's growth and success in just 3 months with our hybrid program, designed to drive",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-2521943ad8",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "here Hybrid Acceleration A high paced, flexible 10 week program designed to provide participants with",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-2da95dab67",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Program Kick-Off It’s time! Startups begin their 3-month program to accelerate and scale their business.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-391276fbfc",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Italy Apply here Hybrid Acceleration An intense 3-month accelerator designed to enable growth at speed.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-3971fa53e1",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startupbootcamp Accelerator During our intense 3-month accelerator program, selected startups receive",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-402d780a1a",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "your startup's growth and success in just 3 months with our hybrid program, designed to drive",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-4478a47e4e",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Program Kick-Off It’s time! Startups begin their 3-month program to accelerate and scale their business.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-5cddf10fb4",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Africa Apply here Hybrid Acceleration An intense 3-month accelerator designed to enable growth at speed.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-60212894b8",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "have all made real progress over the 12 week intensive. We’ve been impressed by the quality",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-6b9ad20862",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "KSA Apply here Hybrid Acceleration An intense 3-month in-person accelerator designed to enable growth",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-6c1c81dd21",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "able to guide, coach and assist the startups in 3 months time to first class pitches, resulting in having",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-760d9c9105",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "your startup's growth and success in just 3 months with our hybrid program, designed to drive",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-82782f4a19",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startupbootcamp Accelerator During our intense 3-month accelerator program, selected startups receive",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-831b0c3d64",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startupbootcamp Accelerator During our intense 3-month accelerator program, selected startups receive",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-87a68ed5de",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Program Kick-Off It’s time! Startups begin their 3-month program to accelerate and scale their business.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-8e2db36ec2",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "your startup's growth and success in just 3 months with our hybrid program, designed to drive",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-8ef44851d7",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "VentureAus Applications Open Australia A 12-week pre-accelerator program helping people with bold",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-999d925517",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "your startup's growth and success in just 3 months with our hybrid program, designed to drive",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-aaeb7f323a",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Program Kick-Off It’s time! Startups begin their 3-month program to accelerate and scale their business.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-b6fd5c22db",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startupbootcamp Accelerator During our intense 3-month accelerator program, selected startups receive",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-be3ef3fcda",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "your startup's growth and success in just 3 months with our hybrid program, designed to drive",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-be8c8acac0",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Program Kick-Off It’s time! Startups begin their 3-month program to accelerate and scale their business.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-c4746d32c3",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Apply here Hybrid Acceleration An intense 3-month accelerator designed to enable growth at speed.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-ce5bdc8095",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startupbootcamp Accelerator During our intense 3-month accelerator program, selected startups receive",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d75d34ff0e",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Apply here Hybrid Acceleration An intense 3-month accelerator designed to enable growth at speed.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-0332316709",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "and shape the future of healthcare. Health & Lifescience I Hybrid | Amsterdam All-accelerators country-all years-all",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1d21470657",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Applications close on: August 24, 2024 August 2024 Hybrid | The Netherlands Apply here Hybrid Acceleration",
+      "page": "application"
+    },
+    {
+      "id": "check-format-21b07519d8",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "innovations on a global scale. Energy & Climate II Hybrid | Amsterdam All-accelerators country-all years-all Food &",
+      "page": "details"
+    },
+    {
+      "id": "check-format-33daa257f3",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "2, 2024 - March 2025 Applications Close December 2024 Hybrid | Amsterdam About Startupbootcamp Accelerator During our",
+      "page": "application"
+    },
+    {
+      "id": "check-format-3739f531a3",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "startup's growth and success in just 3 months with our hybrid program, designed to drive sustainable results at speed.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-3920773420",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "country-all years-all Food & AgriTech Applications Open Hybrid | The Netherlands An accelerator designed to new",
+      "page": "details"
+    },
+    {
+      "id": "check-format-39da19e78e",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "startup's growth and success in just 3 months with our hybrid program, designed to drive sustainable results at speed.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-3dd3ef7074",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "close on: July 8, 2021 8 July 2022 Australia Apply here Hybrid Acceleration An intense 3-month accelerator designed to",
+      "page": "application"
+    },
+    {
+      "id": "check-format-3ed7c602b4",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "24, 2024 August 2024 Hybrid | The Netherlands Apply here Hybrid Acceleration Accelerate your startup's growth and success",
+      "page": "application"
+    },
+    {
+      "id": "check-format-46ce688748",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "years-all Energy & Climate III Applications Open Hybrid | Amsterdam An accelerator designed to drive the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-46d361c6fa",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "startup's growth and success in just 3 months with our hybrid program, designed to drive sustainable results at speed.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-47ae5f3031",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "on a global scale. December 2, 2024 Energy & Climate Hybrid | The Netherlands December 2, 2024 September 2, 2024 2024",
+      "page": "details"
+    },
+    {
+      "id": "check-format-48eb4af2de",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "country-all All-accelerators country-all years-all Virtual Drive years-all All-accelerators country-all",
+      "page": "application"
+    },
+    {
+      "id": "check-format-48f15b0466",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "innovations. August 24, 2024 DeepTech & Robotics Hybrid | The Netherlands August 24, 2024 June 1, 2024 2024",
+      "page": "details"
+    },
+    {
+      "id": "check-format-49961247d6",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "years-all Water & Infrastructure Applications Open Hybrid | The Netherlands An accelerator designed to ensure access",
+      "page": "details"
+    },
+    {
+      "id": "check-format-4cac4b60bb",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "country-all years-all AIvolution III Applications Open Hybrid | The Netherlands An accelerator designed to ignite the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-52eafb987e",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "through AI and Web3. March 7, 2025 AIvolution III Hybrid | The Netherlands March 7, 2025 December 12, 2024 2025 AI",
+      "page": "details"
+    },
+    {
+      "id": "check-format-60ec7cec3e",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "years-all DeepTech & Robotics Applications Open Hybrid | The Netherlands An accelerator designed to fuel startups",
+      "page": "details"
+    },
+    {
+      "id": "check-format-6682c5bd10",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "digitalization and sustainability. Food & AgriTech III Hybrid | The Netherlands 2024 All-accelerators country-all",
+      "page": "details"
+    },
+    {
+      "id": "check-format-690872e3bc",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "technologies. December 2, 2024 Water & Infrastructure Hybrid | The Netherlands December 2, 2024 September 2, 2024 2024",
+      "page": "details"
+    },
+    {
+      "id": "check-format-75c5e6c194",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "innovations on a global scale. Energy & Climate III Hybrid | Amsterdam 2025 All-accelerators country-all years-all",
+      "page": "details"
+    },
+    {
+      "id": "check-format-7801657b88",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "country-all years-all Food & AgriTech II Applications Open Hybrid | The Netherlands An accelerator designed to new",
+      "page": "details"
+    },
+    {
+      "id": "check-format-7916a6c67a",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "startup's growth and success in just 3 months with our hybrid program, designed to drive sustainable results at speed.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-7b0140c14a",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "country-all All-accelerators country-all years-all Virtual Drive years-all All-accelerators country-all",
+      "page": "application"
+    },
+    {
+      "id": "check-format-7bd4301e64",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "- December 4th, 2025 Applications Close August 10th, 2025 Hybrid | Amsterdam About Startupbootcamp Accelerator During our",
+      "page": "application"
+    },
+    {
+      "id": "check-format-7cccaa3389",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "impact across industries. DeepTech & Robotics III Hybrid | Amsterdam All-accelerators country-all years-all Energy",
+      "page": "details"
+    },
+    {
+      "id": "check-format-81bb633814",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "14, 2025 - July 4, 2025 Applications Close March 7, 2025 Hybrid | Amsterdam About Startupbootcamp Accelerator During our",
+      "page": "application"
+    },
+    {
+      "id": "check-format-82781870af",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "economy solutions. December 2, 2024 Production & Industry Hybrid | The Netherlands December 2, 2024 September 2, 2024 2024",
+      "page": "details"
+    },
+    {
+      "id": "check-format-8bf1762269",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "country-all All-accelerators country-all years-all Virtual Drive years-all All-accelerators country-all",
+      "page": "application"
+    },
+    {
+      "id": "check-format-8c8144d9c8",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "cybersecurity, fraud detection, process automation, and virtual assistants. ‍ Do you lead an AI or Web3 startup that",
+      "page": "application"
+    },
+    {
+      "id": "check-format-962b8f9535",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "on: May 8, 2024 Wednesday, 8 May 2024 Italy Apply here Hybrid Acceleration An intense 3-month accelerator designed to",
+      "page": "application"
+    },
+    {
+      "id": "check-format-98be8a14c1",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "February 22, 2022 22 February 2023 Australia Apply here Hybrid Acceleration A high paced, flexible 10 week program",
+      "page": "application"
+    },
+    {
+      "id": "check-format-9a6d2617e4",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "country-all years-all AIvolution II Applications Open Hybrid | The Netherlands An accelerator designed to ignite the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-9be0e8df3f",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "& fraud Detection, Data-driven decision making, Virtual personal assistance, AI driven process automation, Web3,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-9c6d69f98d",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "14, 2025 - July 4, 2025 Applications Close March 7, 2025 Hybrid | Amsterdam About Startupbootcamp Accelerator During our",
+      "page": "application"
+    },
+    {
+      "id": "check-format-a5c107b3b6",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "years-all Health & Lifescience I Applications Open Hybrid | Amsterdam Accelerating breakthrough solutions in health",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ae47dd28e1",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "years-all Production & Industry Applications Open Hybrid | The Netherlands An accelerator designed to promote",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b2528382ab",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "and sustainability. August 24, 2024 Food & AgriTech Hybrid | The Netherlands August 24, 2024 May 6, 2024 2024 Food &",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b3abb54539",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "through AI and Web3. August 24, 2024 AIvolution II Hybrid | The Netherlands August 24, 2024 June 1, 2024 2024 AI &",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b6a79c29a0",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "country-all All-accelerators country-all years-all Virtual Drive years-all All-accelerators country-all",
+      "page": "application"
+    },
+    {
+      "id": "check-format-b81b393cf6",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "years-all Food & AgriTech III Applications Open Hybrid | The Netherlands An accelerator designed to new",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b8cc6b5c3b",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "country-all All-accelerators country-all years-all Virtual Drive years-all All-accelerators country-all",
+      "page": "application"
+    },
+    {
+      "id": "check-format-c3e8d29455",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Applications close on: August 24, 2024 August 2024 Hybrid | The Netherlands Apply here Hybrid Acceleration",
+      "page": "application"
+    },
+    {
+      "id": "check-format-d29e8feb07",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "August 22, 2024 August 22, 2024 Dhahran, KSA Apply here Hybrid Acceleration An intense 3-month in-person accelerator",
+      "page": "application"
+    },
+    {
+      "id": "check-format-d595a0f62d",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "September 8, 2023 8 September 2023 South Africa Apply here Hybrid Acceleration An intense 3-month accelerator designed to",
+      "page": "application"
+    },
+    {
+      "id": "check-format-d6e8c5d860",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "country-all years-all Energy & Climate Applications Open Hybrid | The Netherlands An accelerator designed to drive the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-dc8d0ecbf0",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "startup's growth and success in just 3 months with our hybrid program, designed to drive sustainable results at speed.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-df66d9141e",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "and sustainability. March 7, 2025 Food & AgriTech II Hybrid | The Netherlands March 7, 2025 December 12, 2024 2024",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e32a2810e4",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "KSA Apply here Hybrid Acceleration An intense 3-month in-person accelerator designed to enable growth at speed. Access to",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e50476113a",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "startup's growth and success in just 3 months with our hybrid program, designed to drive sustainable results at speed.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e5afcd10c1",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "years-all DeepTech & Robotics III Applications Open Hybrid | Amsterdam Looking for bold founders driving scientific",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e70a7fc769",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "country-all All-accelerators country-all years-all Virtual Drive years-all All-accelerators country-all",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e7224ec27d",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "country-all All-accelerators country-all years-all Virtual Drive years-all All-accelerators country-all",
+      "page": "application"
+    },
+    {
+      "id": "check-format-eaf6d7bcee",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "24, 2024 August 2024 Hybrid | The Netherlands Apply here Hybrid Acceleration Accelerate your startup's growth and success",
+      "page": "application"
+    },
+    {
+      "id": "check-format-f0294e1b1f",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "innovations. March 7, 2025 DeepTech & Robotics II Hybrid | The Netherlands March 7, 2025 December 12, 2024 2025",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f0dbaf67e3",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "startup's growth and success in just 3 months with our hybrid program, designed to drive sustainable results at speed.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-f6e641b847",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "country-all All-accelerators country-all years-all Virtual Drive years-all All-accelerators country-all",
+      "page": "application"
+    },
+    {
+      "id": "check-format-f7d1b55723",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "close on: August 1, 2023 4/1/2023 Australia Apply here Hybrid Acceleration An intense 3-month accelerator designed to",
+      "page": "application"
+    },
+    {
+      "id": "check-format-f9873bad66",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "- December 4th, 2025 Applications Close August 10th, 2025 Hybrid | Amsterdam About Startupbootcamp Accelerator During our",
+      "page": "application"
+    },
+    {
+      "id": "check-format-fb483e0a33",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "years-all Energy & Climate II Applications Open Hybrid | Amsterdam An accelerator designed to drive the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-fd33da7668",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage",
+      "excerpt": "years-all DeepTech & Robotics II Applications Open Hybrid | The Netherlands An accelerator designed to fuel startups",
       "page": "details"
     },
     {
       "id": "check-name-7fb87518b1",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Startupbootcamp Accelerators Investors Partners Mentors Events About us",
       "page": "details"
     },
     {
-      "id": "check-portfolio-026b32e7c6",
-      "url": "https://startupbootcamp.org/about/faq",
-      "title": "Startupbootcamp — terms page checked by scrape.py",
-      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
-      "page": "terms"
+      "id": "check-portfolio-0187445d1e",
+      "url": "https://startupbootcamp.org/accelerator-apply",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-03b8220182",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
     },
     {
       "id": "check-portfolio-09453cf8fb",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
       "page": "details"
     },
     {
-      "id": "check-portfolio-30d6eb199e",
-      "url": "https://startupbootcamp.org/about/contact",
-      "title": "Startupbootcamp — details page checked by scrape.py",
+      "id": "check-portfolio-0a5035fa03",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-1258397f8a",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-140a7a8754",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-159c66d917",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-19ca0960b3",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-1a5b1d33e0",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-1b6de5169e",
+      "url": "https://startupbootcamp.org/accelerator-apply",
+      "title": "Startupbootcamp — application page",
       "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-1c6dcc5d9a",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-21eb192eb8",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-23982ce22d",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-326fd02817",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-326fd090b2",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
     },
     {
       "id": "check-portfolio-3537a6afa6",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-35ea0f6299",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
     },
     {
       "id": "check-portfolio-3a5e830b02",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-3bb77f35e3",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3e309a9db8",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3e752ca9b5",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
     },
     {
       "id": "check-portfolio-4337a7ab0f",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
       "page": "details"
     },
     {
-      "id": "check-portfolio-6bbcbf6b2a",
-      "url": "https://startupbootcamp.org/articles/startupbootcamp-afritech-adds-dutch-entrepreneurial-development-bank-to-list-of-partners-for-cohort-3-of-the-asip-accelerator-program",
-      "title": "Startupbootcamp — batches page checked by scrape.py",
+      "id": "check-portfolio-447bb9004b",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "title": "Startupbootcamp — application page",
       "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
-      "page": "batches"
+      "page": "application"
     },
     {
-      "id": "check-portfolio-7f7a0a3f93",
-      "url": "https://startupbootcamp.org/about/faq",
-      "title": "Startupbootcamp — terms page checked by scrape.py",
-      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
-      "page": "terms"
+      "id": "check-portfolio-47fbdb8191",
+      "url": "https://startupbootcamp.org/accelerator-apply",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
     },
     {
-      "id": "check-portfolio-7fa207dff2",
-      "url": "https://startupbootcamp.org/about/faq",
-      "title": "Startupbootcamp — terms page checked by scrape.py",
+      "id": "check-portfolio-4b42dcc157",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-505823750d",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "title": "Startupbootcamp — application page",
       "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
-      "page": "terms"
+      "page": "application"
     },
     {
-      "id": "check-portfolio-b42583c04f",
-      "url": "https://startupbootcamp.org/about/faq",
-      "title": "Startupbootcamp — terms page checked by scrape.py",
+      "id": "check-portfolio-54c3378a44",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5a3122e6ed",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5d913e5534",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-6429a3d6f3",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-68d0ed3ae5",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "title": "Startupbootcamp — application page",
       "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
-      "page": "terms"
+      "page": "application"
     },
     {
-      "id": "check-portfolio-c8498dbd14",
-      "url": "https://startupbootcamp.org/articles/startupbootcamp-afritech-adds-dutch-entrepreneurial-development-bank-to-list-of-partners-for-cohort-3-of-the-asip-accelerator-program",
-      "title": "Startupbootcamp — batches page checked by scrape.py",
+      "id": "check-portfolio-725467b493",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "title": "Startupbootcamp — application page",
       "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
-      "page": "batches"
+      "page": "application"
     },
     {
-      "id": "check-portfolio-c8bbbd8fce",
-      "url": "https://startupbootcamp.org/about/contact",
-      "title": "Startupbootcamp — details page checked by scrape.py",
+      "id": "check-portfolio-75a09813e2",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "title": "Startupbootcamp — application page",
       "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
-      "page": "details"
+      "page": "application"
     },
     {
-      "id": "check-portfolio-ca22657f3e",
-      "url": "https://startupbootcamp.org/about/contact",
-      "title": "Startupbootcamp — details page checked by scrape.py",
-      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-d6012e4087",
-      "url": "https://startupbootcamp.org/about/contact",
-      "title": "Startupbootcamp — details page checked by scrape.py",
+      "id": "check-portfolio-7b923c8a38",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "title": "Startupbootcamp — application page",
       "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
-      "page": "details"
+      "page": "application"
     },
     {
-      "id": "check-portfolio-f33e500367",
-      "url": "https://startupbootcamp.org/articles/startupbootcamp-afritech-adds-dutch-entrepreneurial-development-bank-to-list-of-partners-for-cohort-3-of-the-asip-accelerator-program",
-      "title": "Startupbootcamp — batches page checked by scrape.py",
-      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
-      "page": "batches"
+      "id": "check-portfolio-7d32da12fd",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
     },
     {
-      "id": "check-portfolio-f87650c719",
-      "url": "https://startupbootcamp.org/articles/startupbootcamp-afritech-adds-dutch-entrepreneurial-development-bank-to-list-of-partners-for-cohort-3-of-the-asip-accelerator-program",
-      "title": "Startupbootcamp — batches page checked by scrape.py",
+      "id": "check-portfolio-8bf2164885",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-8c76576b2b",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "title": "Startupbootcamp — application page",
       "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
-      "page": "batches"
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-91671fe151",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-96e29a0623",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-972beac605",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a2fbf24eef",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a376dbbecf",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a749c0f6d9",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-add2cbe9a8",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b413881958",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b626be28ee",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b6bd1ab871",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-bd5f66d04e",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-cb0f23979f",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-cc3125ee7b",
+      "url": "https://startupbootcamp.org/accelerator-apply",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-cde548649d",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d6a9724d59",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d7a561b015",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d913b2be76",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-dcbe5cbdfc",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-df38fea4a0",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-e3c4a352dc",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-e6f8142160",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f0ba29d0b2",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f691883bfe",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "application"
+    },
+    {
+      "id": "check-route-01035c0f32",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Apply here → https://www.f6s.com/sbc-aivolution-2024/",
+      "page": "application"
     },
     {
       "id": "check-route-0de65c6d56",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Energy & Climate III Applications Open Hybrid | Amsterdam An accelerator designed to drive the transition to renewable energy and combat climate change by fostering disruptive innovations on a global scale. Energy & Climate III Hybrid | Amsterdam 2025 All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/energy-climate-iii",
       "page": "details"
     },
     {
+      "id": "check-route-0ecca70754",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Apply Now → https://www.f6s.com/sbc-deeptech-robotics-2/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0f11881936",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Apply here → https://www.f6s.com/sbc-aivolution-2",
+      "page": "application"
+    },
+    {
       "id": "check-route-100d9f7ddb",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "AfriTech Applications Open South Africa An accelerator designed to empower impact & sustainability startups September 8, 2023 AfriTech South Africa February 8, 2024 September 8, 2023 July 10, 2023 8 February 2024 2023 Sustainability All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/afritech",
       "page": "details"
     },
     {
       "id": "check-route-14458858eb",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "AIvolution Applications Open Italy An accelerator designed to empower AI & Web3 May 8, 2024 AIvolution Italy May 8, 2024 February 21, 2024 2024 AI & Web3 All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/aivolution",
       "page": "details"
     },
     {
       "id": "check-route-146853b83c",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Production & Industry Applications Open Hybrid | The Netherlands An accelerator designed to promote sustainable manufacturing practices by empowering startups to develop eco-friendly materials and circular economy solutions. December 2, 2024 Production & Industry Hybrid | The Netherlands December 2, 2024 September 2, 2024 2024 Production & Industry All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/production-industry",
       "page": "details"
     },
     {
       "id": "check-route-1d407f3879",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Food & AgriTech Applications Open Hybrid | The Netherlands An accelerator designed to new technologies along the food value chain to meet the growing demand for food safety, digitalization and sustainability. August 24, 2024 Food & AgriTech Hybrid | The Netherlands August 24, 2024 May 6, 2024 2024 Food & AgriTech All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/food-agritech",
       "page": "details"
     },
     {
       "id": "check-route-20ca1661a8",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Food & AgriTech III Applications Open Hybrid | The Netherlands An accelerator designed to new technologies along the food value chain to meet the growing demand for food safety, digitalization and sustainability. Food & AgriTech III Hybrid | The Netherlands 2024 All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/food-agritech-iii",
       "page": "details"
     },
     {
+      "id": "check-route-224d7864b2",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Apply Now → https://www.f6s.com/sbc-aivolution-3/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-30f4038933",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Apply here → https://www.f6s.com/sustainability-energy-accelerators/apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-319b7fa629",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "PropTech & Housing Applications Open Australia An accelerator designed to empower PropTech startups April 30, 2024 PropTech & Housing Australia April 30, 2024 March 1, 2024 2024 PropTech & Housing All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/proptech-housing",
       "page": "details"
     },
     {
+      "id": "check-route-39095d5b3d",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Get started → https://www.f6s.com/sustainability-energy-accelerators/apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-397ebb0311",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Sustainability Applications Open Netherlands An accelerator designed to empower sustainability startups & scaleups May 31, 2023 Sustainability Netherlands November 30, 2023 May 31, 2023 March 1, 2023 30 November 2023 2023 Sustainability All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/sustainability",
       "page": "details"
     },
     {
       "id": "check-route-398de36d46",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "FoodTech Tasmania Applications Open Australia An accelerator designed to empower Food & AgriTech startups June 14, 2024 FoodTech Tasmania Australia June 14, 2024 April 2, 2024 2024 Food All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/foodtech-tasmania",
       "page": "details"
     },
     {
       "id": "check-route-3baed89095",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "AIvolution III Applications Open Hybrid | The Netherlands An accelerator designed to ignite the future of intelligent and decentralized innovation through AI and Web3. March 7, 2025 AIvolution III Hybrid | The Netherlands March 7, 2025 December 12, 2024 2025 AI & Web3 III All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/aivolution-iii",
       "page": "details"
     },
     {
       "id": "check-route-3d2f37e5b2",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "EnergyInc Applications Open Australia A pre-accelerator designed to fast-track sustainability business ideas towards being a startup. February 22, 2022 EnergyInc Australia November 21, 2023 February 22, 2022 November 21, 2022 21 November 2023 2023 Energy All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/energyinc",
       "page": "details"
     },
     {
       "id": "check-route-45285498df",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "AIvolution II Applications Open Hybrid | The Netherlands An accelerator designed to ignite the future of intelligent and decentralized innovation through AI and Web3. August 24, 2024 AIvolution II Hybrid | The Netherlands August 24, 2024 June 1, 2024 2024 AI & Web3 All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/aivolution-ii",
       "page": "details"
     },
     {
       "id": "check-route-475c68aaff",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "WeSportUP Applications Open Italy An accelerator designed to empower SportsTech startups August 15, 2024 WeSportUP Italy August 15, 2024 June 1, 2023 2024 Sports & Events All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/wesportup",
       "page": "details"
     },
     {
+      "id": "check-route-657a3bf376",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Apply Now → https://www.f6s.com/sbc-deeptech-robotics-3/apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-669f3f51c2",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "DeepTech & Robotics Applications Open Hybrid | The Netherlands An accelerator designed to fuel startups pioneering scientific breakthroughs and disruptive engineering innovations. August 24, 2024 DeepTech & Robotics Hybrid | The Netherlands August 24, 2024 June 1, 2024 2024 DeepTech & Robotics All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/deeptech-robotics",
       "page": "details"
     },
     {
       "id": "check-route-70f3262b8f",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Renewable Energy & Net-Zero Applications Open Netherlands An accelerator designed to empower renewable energy & net-zero startups January 31, 2024 Renewable Energy & Net-Zero Netherlands November 30, 2023 January 31, 2024 September 27, 2023 30 November 2023 2023 Energy All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/renewable-energy-net-zero",
       "page": "details"
     },
     {
       "id": "check-route-71730591c5",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "https://startupbootcamp.org/",
       "page": "details"
     },
     {
       "id": "check-route-744924beba",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "DeepTech & Robotics II Applications Open Hybrid | The Netherlands An accelerator designed to fuel startups pioneering scientific breakthroughs and disruptive engineering innovations. March 7, 2025 DeepTech & Robotics II Hybrid | The Netherlands March 7, 2025 December 12, 2024 2025 DeepTech & Robotics All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
       "page": "details"
     },
     {
       "id": "check-route-754b6427a7",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "DeepTech & Robotics III Applications Open Hybrid | Amsterdam Looking for bold founders driving scientific breakthroughs and engineering innovations to advance DeepTech and robotics for real-world impact across industries. DeepTech & Robotics III Hybrid | Amsterdam All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
       "page": "details"
     },
     {
+      "id": "check-route-758a50280a",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Apply here → https://www.f6s.com/sbc-deeptech-robotics-2024",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7bc89b2a19",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Apply Now → https://www.f6s.com/sbc-energy-climate-2/apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-8419826e4e",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Sports & EventTech Applications Open Australia An accelerator designed to empower sports & eventtech startups & scaleups April 18, 2022 Sports & EventTech Australia September 1, 2022 April 18, 2022 January 1, 2022 1 September 2022 2022 Sports & Events All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/sports-eventtech",
       "page": "details"
     },
     {
       "id": "check-route-8cbce862cf",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Georgia I Applications Open Georgia & beyond Whether you’re validating your first idea, building a MVP, or ready to launch your product in the market and scale your business, Startupbootcamp Georgia gives you the funding, mentorship, and a global network to grow. Georgia I Georgia & beyond 2025 All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/georgia-i",
       "page": "details"
     },
     {
+      "id": "check-route-8df927bfa9",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "LOOP Autonomous Drone Systems The Netherlands Fast, simple and autonomous rush order drone delivery solutions for both defense and industry applications. → https://startupbootcamp.org/startup/loop-autonomous-drone-systems",
+      "page": "application"
+    },
+    {
       "id": "check-route-97ded023a2",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Styleit Applications Open Italy An accelerator designed to empower FashionTech startups February 28, 2025 Styleit Italy February 28, 2025 December 4, 2024 2024 Fashion All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/styleit",
       "page": "details"
     },
     {
       "id": "check-route-9842977471",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Decarbonize Applications Open Australia An accelerator designed to empower startups decarbonizing the world, through an ambitious partnership wih Mitsubishi Corporation and NYK Line. August 1, 2023 Decarbonize Australia August 1, 2023 April 1, 2023 1 November 2023 Decarbonize All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/decarbonize",
       "page": "details"
     },
     {
       "id": "check-route-a56ee1be90",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Energy & Climate Applications Open Hybrid | The Netherlands An accelerator designed to drive the transition to renewable energy and combat climate change by fostering disruptive innovations on a global scale. December 2, 2024 Energy & Climate Hybrid | The Netherlands December 2, 2024 September 2, 2024 2024 Energy & Climate All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/energy-climate",
       "page": "details"
     },
     {
       "id": "check-route-a57450a2c3",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Sustainable Fintech Applications Open Australia An accelerator designed to empower sustainable fintech startups & scaleups April 17, 2023 Sustainable Fintech Australia August 31, 2023 April 17, 2023 January 23, 2023 31 August 2023 2023 Fintech All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/sustainable-fintech",
       "page": "details"
     },
     {
       "id": "check-route-ab835b2f32",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "VentureAus Applications Open Australia A 12-week pre-accelerator program helping people with bold ideas and scalable businesses to launch their venture in Australia. August 15, 2022 VentureAus Australia December 1, 2022 August 15, 2022 July 1, 2022 December 2022 2022 Sustainability All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/ventureaus",
       "page": "details"
     },
     {
       "id": "check-route-b39103ffc0",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Mobility & Transportation Applications Open Netherlands An accelerator designed to empower mobility & transportation startups August 14, 2023 Mobility & Transportation Netherlands December 7, 2023 August 14, 2023 March 1, 2023 7 December 2023 2023 Mobility + Bold Action All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/mobility-transportation",
       "page": "details"
     },
     {
       "id": "check-route-bd03a6d4a6",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Water & Infrastructure Applications Open Hybrid | The Netherlands An accelerator designed to ensure access to clean water and resilient infrastructure while addressing climate-related vulnerabilities through innovative water technologies. December 2, 2024 Water & Infrastructure Hybrid | The Netherlands December 2, 2024 September 2, 2024 2024 Water & Infrastructure All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/water-infrastructure",
       "page": "details"
     },
     {
       "id": "check-route-be97656109",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Momentum Applications Open Amsterdam Momentum, The Fast Track to Entrepreneurship August 1, 2025 Momentum Amsterdam August 1, 2025 September 30, 2023 2023 Female Entrepreneurship All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/momentum",
       "page": "details"
     },
     {
       "id": "check-route-cd0834a9be",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "FinTech & Cybersecurity Applications Open Netherlands An accelerator designed to empower fintech startups November 15, 2023 FinTech & Cybersecurity Netherlands June 2, 2022 November 15, 2023 September 1, 2021 2 June 2022 2022 Fintech All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/fintech-cybersecurity",
       "page": "details"
     },
     {
+      "id": "check-route-d4cbc8bac7",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "DevisionX United Kingdom Simplify your AI Computer Vision journey with Tuba.AI, the one-stop platform to build AI Vision applications seamlessly. → https://startupbootcamp.org/startup/devisionx",
+      "page": "application"
+    },
+    {
       "id": "check-route-dc659693c1",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Health & Lifescience I Applications Open Hybrid | Amsterdam Accelerating breakthrough solutions in health and life sciences to improve lives and shape the future of healthcare. Health & Lifescience I Hybrid | Amsterdam All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/health-lifescience-i",
       "page": "details"
     },
     {
       "id": "check-route-e094348857",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "EnergyNext Applications Open Australia An accelerator designed to empower energy startups & scaleups July 8, 2021 EnergyNext Australia December 1, 2021 July 8, 2021 December 6, 2021 1 December 2022 2022 Energy All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/energynext",
       "page": "details"
     },
     {
+      "id": "check-route-e37d59c914",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "title": "Startupbootcamp — application page",
+      "excerpt": "Apply Now → https://www.f6s.com/sbc-aivolution-3/apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-e5435dbcd8",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Apply to an accelerator now → https://startupbootcamp.org/startups/accelerators",
       "page": "details"
     },
     {
       "id": "check-route-ef05e3408e",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Energy & Sustainability Applications Open Dhahran, KSA Empowering startups and visionaries worldwide to tackle critical challenges in energy transition and sustainability August 22, 2024 Energy & Sustainability Dhahran, KSA August 22, 2024 July 18, 2024 2024 Energy & Sustainability All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/energy-sustainability",
       "page": "details"
     },
     {
       "id": "check-route-f00c826518",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Inclusive FinTech & DeFi Applications Open Netherlands An accelerator designed to empower inclusive fintech & defi startups January 31, 2024 Inclusive FinTech & DeFi Netherlands January 31, 2024 September 27, 2023 2023 Fintech + Bold Action All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/inclusive-fintech-defi",
       "page": "details"
     },
     {
       "id": "check-route-f568b13563",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Energy & Climate II Applications Open Hybrid | Amsterdam An accelerator designed to drive the transition to renewable energy and combat climate change by fostering disruptive innovations on a global scale. Energy & Climate II Hybrid | Amsterdam All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/energy-climate-ii",
       "page": "details"
     },
     {
       "id": "check-route-f6ba6ac981",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "FinTech Mexico City Applications Open Mexico An accelerator designed to empower fintech startups December 12, 2023 FinTech Mexico City Mexico December 12, 2023 September 17, 2023 2020 Fintech All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/fintech-mexico-city",
       "page": "details"
     },
     {
       "id": "check-route-f77c84782c",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Food & AgriTech II Applications Open Hybrid | The Netherlands An accelerator designed to new technologies along the food value chain to meet the growing demand for food safety, digitalization and sustainability. March 7, 2025 Food & AgriTech II Hybrid | The Netherlands March 7, 2025 December 12, 2024 2024 Food & AgriTech All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/food-agritech-ii",
       "page": "details"
     },
     {
       "id": "check-route-f97abdc36b",
       "url": "https://startupbootcamp.org/",
-      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "title": "Startupbootcamp — homepage",
       "excerpt": "Amsterdam’s Startupbootcamp unveils 10 new startups for its Renewable Energy & Net-Zero programme February 3, 2023 According to the startup accelerator, around 20 teams were selected for the Selection Days event from the pool of 2,000 applications. → https://startupbootcamp.org/articles/amsterdams-startupbootcamp-unveils-10-new-startups-for-its-renewable-energy-net-zero-programme",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-9b8d0fbd09",
+      "url": "https://startupbootcamp.org/",
+      "page": "details",
+      "excerpt": "Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise. Events join our"
+    },
+    {
+      "id": "check-page-a7ad0e4ccb",
+      "url": "https://startupbootcamp.org/accelerator-apply",
+      "page": "application",
+      "excerpt": "Accelerator Apply Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise. Events join our"
+    },
+    {
+      "id": "check-page-89393ba689",
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "page": "application",
+      "excerpt": "AfriTech | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise. Events"
+    },
+    {
+      "id": "check-page-d23cee8d4b",
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "page": "application",
+      "excerpt": "AIvolution | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise."
+    },
+    {
+      "id": "check-page-8d12b5f6af",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "page": "application",
+      "excerpt": "AIvolution II | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise."
+    },
+    {
+      "id": "check-page-71b8ce5d6e",
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "page": "application",
+      "excerpt": "AI & Web 3 III (2025) Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise. Events join"
+    },
+    {
+      "id": "check-page-195e06bf71",
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "page": "application",
+      "excerpt": "Decarbonize | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise."
+    },
+    {
+      "id": "check-page-a8f224ec3d",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "page": "application",
+      "excerpt": "DeepTech & Robotics | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and"
+    },
+    {
+      "id": "check-page-1260fc3e4e",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "page": "application",
+      "excerpt": "DeepTech and Robotics II (2025) Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise."
+    },
+    {
+      "id": "check-page-7a0d3fc37a",
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "page": "application",
+      "excerpt": "DeepTech and Robotics III Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise. Events"
+    },
+    {
+      "id": "check-page-2c75cecc4f",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "page": "application",
+      "excerpt": "Energy (2025) Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise. Events join our"
+    },
+    {
+      "id": "check-page-05225a9541",
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "page": "application",
+      "excerpt": "Energy & climate II Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise. Events join"
+    },
+    {
+      "id": "check-page-bfac32c6e3",
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "page": "application",
+      "excerpt": "Energy & Sustainability | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and"
+    },
+    {
+      "id": "check-page-937ae8a98b",
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "page": "application",
+      "excerpt": "EnergyInc | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise."
+    },
+    {
+      "id": "check-page-f376e936a6",
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "page": "application",
+      "excerpt": "EnergyNext | Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise."
     }
   ],
   "findings": {
@@ -439,11 +1578,98 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "April",
+        "evidenceId": "check-announced-95e1859d99"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-6c1c81dd21"
+      },
+      {
+        "value": "12",
+        "evidenceId": "check-duration-60212894b8"
+      },
+      {
+        "value": "10",
+        "evidenceId": "check-duration-2521943ad8"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-46ce688748"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-7b0140c14a"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-e32a2810e4"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "HealthTech Project in Africa, Supported by Gates Foundation and Run by SBC Afritech July 4, 2022 The pan-African accelerator will provide access to a grant of $50,000, market and government access events across the continent, and a connection to a global ecosystem in the healthcare community. Startupbootcamp Welcomes Ten",
-        "evidenceId": "check-deal-161660eacb"
+        "value": "2022 The pan-African accelerator will provide access to a grant of $50,000, market and government access events across the continent, and a",
+        "evidenceId": "check-deal-adfe02efd9"
+      },
+      {
+        "value": "Ongoing collaborations for exposure, media & PR activities. Capital USD 100k including USD 50k cash investment per startup to cover expenses",
+        "evidenceId": "check-deal-b27b01d6a5"
+      },
+      {
+        "value": "for exposure, media & PR activities. Capital USD 100k including USD 50k cash investment per startup to cover expenses during the program and",
+        "evidenceId": "check-deal-0d6a844eec"
+      },
+      {
+        "value": "cash investment per startup to cover expenses during the program and USD 50k in-kind services. About the Energy & Sustainability Accelerator The",
+        "evidenceId": "check-deal-4900b1d2fb"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "50000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-adfe02efd9"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-b27b01d6a5"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "50000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-0d6a844eec"
       }
     ],
     "portfolioPages": [

@@ -1,23 +1,7 @@
 {
   "programId": "accel-atoms",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://atoms.accel.com/portfolio-old",
-      "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://atoms.accel.com/faqs",
-      "page": "terms",
-      "anchor": "FAQs",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://apply.accel-atoms.com/",
       "page": "application",
@@ -30,7 +14,87 @@
       "url": "https://atoms.accel.com/apply",
       "page": "application",
       "anchor": "APPLY",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://atoms.accel.com/apply-early",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://atoms.accel.com/faqs",
+      "page": "terms",
+      "anchor": "FAQs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://atoms.accel.com/news/ai-cohort-2026-with-google",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://atoms.accel.com/news/announcing-our-accel-atoms-3-0-cohort-in-ai-and-industry-5-0",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://atoms.accel.com/news/announcing-the-14-startups-from-the-diwali-21-cohort-of-accel-atoms",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://atoms.accel.com/news/atoms-cohort-2-applications-are-now-open",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://atoms.accel.com/news/bytebeam-an-accel-atoms-cohort-company-raises-3-million-in-their-seed-round",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://atoms.accel.com/news/dhiwise-a-surat-boys-dream-to-build-a-programming-platform-for-the-global-developer-community",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://atoms.accel.com/news/how-we-designed-the-atoms-program-for-pre-seed-startups",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://atoms.accel.com/news/innovation-is-everywhere-what-we-learned-from-our-holi-cohorts-applications",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -39,6 +103,22 @@
       "page": "batches",
       "anchor": "AI Cohort 2026: Meet the Startups Read the Blog",
       "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://atoms.accel.com/news/rigi-an-accel-atoms-cohort-company-raises-10-million-in-series-a",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://atoms.accel.com/portfolio-old",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     }

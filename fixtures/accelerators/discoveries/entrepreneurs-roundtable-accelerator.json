@@ -1,7 +1,31 @@
 {
   "programId": "entrepreneurs-roundtable-accelerator",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://www.eranyc.com/2016/11/01/pittsburghs-growth-real-estate-investment-opportunities/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eranyc.com/2017/02/10/biometric-theft-big-deal-behavioral-biometrics-can-help/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eranyc.com/apply/",
+      "page": "application",
+      "anchor": "W'27 Open",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.eranyc.com/companies/",
       "page": "portfolio",
@@ -19,9 +43,81 @@
       "origin": "official"
     },
     {
-      "url": "https://www.eranyc.com/apply/",
-      "page": "application",
-      "anchor": "W'27 Open",
+      "url": "https://www.eranyc.com/press/ai-startup-ceo-pay-employee-18000-year-live-close-work-investment-worth/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eranyc.com/press/cardflight-receives-growth-investment-westview-capital-partners/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eranyc.com/press/demo-day-dispatches-meet-latest-batch-entrepreneurs-roundtable-accelerator-alums/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eranyc.com/press/entrepreneurs-roundtable-accelerator-demo-day-2017-presents-13th-cohort-silicon-alley/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eranyc.com/press/era-graduates-batch-8-demo-day-new-york/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eranyc.com/press/exclusive-doubleverify-acquire-rockerbox-85m-deal/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eranyc.com/press/heymilo-secures-2-2-million-interview-evaluate-candidates-scale-ai-agents/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eranyc.com/press/myro-receives-investment-serena-williams-carmelo-anthony-athletes-two-number-investors-contributed-7-million-seed-funding-round-refillable-deodorant-brand/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eranyc.com/press/nycs-entrepreneurs-roundtable-accelerator-announces-participants-winter-2017-program-increases-initial-investment-100000/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eranyc.com/press/real-estate-lending-investment-bankers-coming/",
+      "page": "terms",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

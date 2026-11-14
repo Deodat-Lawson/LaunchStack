@@ -1,5 +1,1094 @@
 {
   "programId": "apx",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
-  "pages": []
+  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "pages": [
+    {
+      "url": "https://apx.vc/jobs/investment-manager-fdm-at-apx-in-berlin",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/airtime",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/along",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/askui",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/aucta",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/augmented-hearing",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/beatvest",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/bendi",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/betafashion",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/bigfoot",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/bildia",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/bluedot",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/bonnet",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/bonrepublic",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/box-to-box",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/cappi",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/chargetrip",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/clous",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/codio-impact",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/cooperhire",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/cycle",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/dana",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/datacy",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/dealcode",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/deepgears",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/defudger",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/dieter",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/dilecy",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/dogo",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/doshi",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/duke",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/easyquant",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/emmora",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/emocional",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/envoy",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/envsion",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/equityhub",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/exponential-technologies",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/fabrikator",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/flowlab",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/foodable",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/forloopai",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/framen",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/fridai",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/fyta",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/gerneohne",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/getease",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/getquin",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/ghost-feel-it-gmbh",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/glassdollar",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/hashup",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/haslle",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/helios-aerospace",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/heytimi",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/heyvie",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/hirize",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/humant-life",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/hyre",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/incube-space",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/innential",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/justhome",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/konvi",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/kosa-ai",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/lama",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/leon-mobility",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/lifelive",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/loco",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/marine-digital",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/marq",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/mietwise",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/minqi",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/moojo",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/mysecondear",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/mysoftwarescout",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/mysupply",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/neuralspace",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/nitrobox",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/notch",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/nuvo",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/offmade",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/osterus",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/overtone",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/peers",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/piggit",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/plan3t",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/pleez",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/pool",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/positive-carbon",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/promiseq",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/propel",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/pukket",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/qualifyze",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/quiver",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/recoro",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/remotemore",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/ridebee",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/roombles",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/scavengar",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/seashell",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/seecares",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/shapematchr",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/sharpist",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/skyserve-by-hyspace",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/spotter",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/spreadmix",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/spreekit",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/sqin",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/stryza",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/sway",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/syndicai",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/synsor-ai",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/terrainq",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/the-new-health-club",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/thinkimmo",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/thisthat",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/titan-academy",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/trucksters",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/tucan-ai",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/ucura",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/unown",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/vendimo",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/veritic",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/visiolab",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/watchbooks",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/wefindflats",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/wholesome-health",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/wpcs",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/yolawo",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/yolife",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/yolla",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/portfolio/zoyya",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/press/04-06-2020-apx-integrates-mental-health-support-into-its-startup-accelerator-program-english-german",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/press/21-01-2021-apx-raises-significant-new-funds-from-investors-axel-springer-and-porsche-and-announces-ambitious-new-investment-strategy-english-german",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/press/business-insider-apx-accelerator-becomes-a-vc",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apx.vc/press/porsche-and-axel-springer-increase-investment-into-early-stage-fund-apx-to-e55m",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
 }

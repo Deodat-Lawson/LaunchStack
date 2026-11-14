@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.startupbraga.com/",
   "applyUrl": "https://www.startupbraga.com/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Programa intensivo de formação que visa estimular ideias de negócio de base tecnológica que surjam em contexto académico. Saber Mais Em 2026, a Startup Braga dinamizará dois programas de aceleração: a 10.ª edição do seu programa de aceleração e a 2.ª edição do Global Health Accelerator. Precisas de orientação para validar e definir o teu modelo de negócio? Saber Mais Programa orientado para startups em fase de arranque que necessitem de espaços de trabalho que incluem o acesso a um conjunto de recursos e serviços de valor acrescentado. Saber Mais Verticais Apoiamos projetos tecnológicos altamente escaláveis TECNOLOGIAS DIGITAIS PARA A SAÚDE CONHEÇA AS EMPRESAS Na Startup Braga sabemos que o sucesso só é possível com trabalho e com as ferramentas certas, pelo que a nossa missão é munir os empreendedores dos apoios e conhecimentos para que possam atingir os seus objetivos. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Programa intensivo de formação que visa estimular ideias de negócio de base tecnológica que surjam em contexto académico.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Em 2026, a Startup Braga dinamizará dois programas de aceleração: a 10.ª edição do seu programa de aceleração e a 2.ª edição do Global Health Accelerator. Precisas de orientação para validar e definir o teu modelo de negócio?",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "startup-braga-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.startupbraga.com/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

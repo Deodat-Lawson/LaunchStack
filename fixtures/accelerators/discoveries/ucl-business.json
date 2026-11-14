@@ -1,7 +1,103 @@
 {
   "programId": "ucl-business",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "http://www.uclventures.com/about-us/careers",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/events-programmes/2025/enacuity-ceo-reflects-commercialisation-challenges",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/events-programmes/2025/i-o-inspire-entrepreneurs-shine-finale-showcase",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/events-programmes/2026/autolus-founder-discusses-long-journey-research-impact",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/events-programmes/2026/i-o-converse-interview-phasecraft-co-founder-toby-cubitt",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/global-impact/case-studies/autolus-therapeutics-reprogramming-patients-cells-kill-cancer",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/new-information-about-ucl-ventures",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/spinout-portfolio",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/spinout-portfolio-news/2025/ai-assisted-ms-breakthrough-paves-way-personalised-treatment",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/spinout-portfolio-news/2025/ucl-spinouts-recognised-leaders-londons-life-sciences-boom",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/spinout-portfolio-news/2026/acoubatt-raises-ps11m-battery-listening-technology",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.uclventures.com/spinout-portfolio-news/2026/early-promise-reported-severe-lupus-autolus-car-t-therapy",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.uclventures.com/spinout-portfolio",
       "page": "portfolio",
@@ -11,41 +107,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.uclventures.com/spinout-portfolio/social-ventures?search_api_fulltext=&field_area_of_operation%5B387%5D=387",
+      "url": "https://www.uclventures.com/spinout-portfolio-news/2026/new-path-forward-gene-therapy-targeting-rare-childhood-disease",
       "page": "portfolio",
-      "anchor": "Social Ventures Ventures driving impact in communities",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.uclventures.com/who-we-are",
-      "page": "details",
-      "anchor": "Learn more about UCL Ventures",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.uclventures.com/spinout-portfolio/gigaton",
-      "page": "portfolio",
-      "anchor": "Gigaton",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.uclventures.com/spinout-portfolio/endomag",
-      "page": "portfolio",
-      "anchor": "Endomag",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.uclventures.com/spinout-portfolio/autolus-therapeutics",
-      "page": "portfolio",
-      "anchor": "Autolus Therapeutics",
+      "anchor": "New path forward for gene therapy targeting rare childhood disease",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -59,10 +123,50 @@
       "origin": "official"
     },
     {
-      "url": "https://www.uclventures.com/spinout-portfolio-news/2026/new-path-forward-gene-therapy-targeting-rare-childhood-disease",
+      "url": "https://www.uclventures.com/spinout-portfolio/autolus-therapeutics",
       "page": "portfolio",
-      "anchor": "New path forward for gene therapy targeting rare childhood disease",
+      "anchor": "Autolus Therapeutics",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.uclventures.com/spinout-portfolio/endomag",
+      "page": "portfolio",
+      "anchor": "Endomag",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.uclventures.com/spinout-portfolio/gigaton",
+      "page": "portfolio",
+      "anchor": "Gigaton",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.uclventures.com/spinout-portfolio/social-ventures?search_api_fulltext=&field_area_of_operation%5B387%5D=387",
+      "page": "portfolio",
+      "anchor": "Social Ventures Ventures driving impact in communities",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.uclventures.com/what-we-do",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.uclventures.com/who-we-are",
+      "page": "details",
+      "anchor": "Learn more about UCL Ventures",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

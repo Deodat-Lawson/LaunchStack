@@ -1,214 +1,1522 @@
 {
   "programId": "nus-enterprise",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
     "https://nusx.edu.sg/",
+    "https://nusx.edu.sg/programmes/noc/application",
+    "https://nusx.edu.sg/about",
+    "https://nusx.edu.sg/about/leadership",
+    "https://nusx.edu.sg/iti",
+    "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
+    "https://nusx.edu.sg/partnerships",
     "https://nusx.edu.sg/programmes",
-    "https://nusx.edu.sg/programmes/noc/application"
+    "https://nusx.edu.sg/programmes/grip",
+    "https://nusx.edu.sg/programmes/noc",
+    "https://nusx.edu.sg/programmes/noc-awards",
+    "https://nusx.edu.sg/programmes/noc/curriculum",
+    "https://nusx.edu.sg/programmes/noc/curriculum/faculty-facilitators/",
+    "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
+    "https://nusx.edu.sg/programmes/noc/locations"
   ],
   "evidence": [
     {
+      "id": "check-duration-0379b36244",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "22 01 / 01 Table 22.2: NOC Japan (Nagoya 6-month) for NOC AY2025/26 Sem 2 Intake and earlier",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-042324afe5",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "for undergraduates only. Short Programme is 6 months long open to undergraduates at all eligible",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-0ad0efbb4c",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "/ 01 Table 10.2: NOC Greater Bay Area (Shenzhen 6-month) for NOC AY2025/26 Sem 1 Intake and earlier",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-12e49ec3c3",
+      "url": "https://nusx.edu.sg/programmes",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "policymakers shaping the future of Asia. Summer 5 weeks Learn more MSc in Venture Creation MSVC puts NUS",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-142308f105",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "details NOC Germany / Munich 6-month programme 12-month programme Curriculum Course code / Title",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-14c317a706",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Indonesia (Bandung / Jakarta / Yogyakarta 6-month) for NOC AY2025/26 Sem 2 Intake onwards",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-172dd432a5",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Full Year and Short Programme? Full Year is 12 months at a single location, for undergraduates only.",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-1c011d2bed",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "(Maximum) 20 01 / 01 Table 9.2: NOC Munich (6-month) for NOC AY2025/26 Sem 2 (Jan'26) Intake",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-1f89707e7d",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "title": "NUS Enterprise — application page",
+      "excerpt": "Semester 2 - Jan 2027 Intake (All Year-Long & 6-Month Programmes) 21 May 2026, Thurs 3pm - 4pm SGT ·",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-1fcee77661",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "(Maximum) 22 01 / 01 Table 7.2: NOC Singapore (6-month) for NOC AY2025/26 Sem 1 Intake and earlier",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-23563cd01d",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "details NOC Japan / Nagoya 3-month programme 6-month programme Curriculum Course code / Title",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2713eed688",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "(Maximum) 20 01 / 01 Table 7.1: NOC Singapore (6-month) for NOC AY2025/26 Sem 2 Intake onwards",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2a78b24196",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Curriculum details NOC China / Shanghai 3-month programme 6-month programme Curriculum Course",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2d847f8eb7",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "18 01 / 01 Table 11.2: NOC Vietnam (Hanoi 6-month) for NOC AY2025/26 Sem 2 Intake onwards",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2f7c35479f",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "details NOC Vietnam / Ho Chi Minh City 6-month programme Curriculum Course code / Title",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2f8983a72d",
+      "url": "https://nusx.edu.sg/programmes",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "to see if your degree can accommodate 6 to 12 months abroad. [3] What does it cost? NOC is part of",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3060ae8f0b",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "filters. Curriculum details NOC Vietnam / Hanoi 6-month programme Curriculum Course code / Title",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3644594ab7",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "(Maximum) 36 01 / 01 Table 9.1: NOC Munich (12-month) for NOC AY2026/27 Sem 1 (Aug'26) Intake onwards",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-382bf3d180",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "/ 01 Table 11.1: NOC Vietnam (Ho Chi Minh City 6-month) for NOC AY2025/26 Sem 2 Intake onwards",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-418266433e",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "details NOC China / Shenzhen 3-month programme 6-month programme Curriculum Course code / Title",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-4188b530d3",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Curriculum details NOC USA / New York 3-month programme 6-month programme Curriculum Course",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-43f302729d",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "is built from two kinds of courses. NOC runs for 12 months and consists of two parts. The internship, and",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-461a67eb8d",
+      "url": "https://nusx.edu.sg/programmes",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "doors for growth and capital. Graduate degree 12 months Learn more (opens in a new tab) What our",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-4d55c0ee41",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "E-Scholars will be enrolled in one of the 6-month NUS Overseas College Programmes (NOC). NOC",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-51f60d1a94",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Valley 3-month programme 6-month programme 12-month programme Curriculum Course code / Title",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-5b8c7a5ad1",
+      "url": "https://nusx.edu.sg/programmes",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Full Year and Short Programme? Full Year is 12 months at a single location, for undergraduates only.",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-5f27a55c53",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "title": "NUS Enterprise — application page",
+      "excerpt": "to here Requirements Requirements by programme 12 Months – Overseas 6 Months – Overseas 6 Months –",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-64604035cb",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "focal area of NOC curriculum structure and NOC 6-month programme students are to complete 2 essential",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-699be57572",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC USA / Silicon Valley 3-month programme 6-month programme 12-month programme Curriculum Course",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-6a22aedbf9",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "details NOC China / Shanghai 3-month programme 6-month programme Curriculum Course code / Title",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-6d77736378",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Indonesia (Bandung / Jakarta / Yogyakarta 6-month) for NOC AY2025/26 Sem 1 Intake and earlier",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-6e91557620",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "20 01 / 01 Table 22.1: NOC Japan (Nagoya 6-month) for NOC AY2026/27 Sem 1 Intake onwards",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-76fff62bbc",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "title": "NUS Enterprise — application page",
+      "excerpt": "student — undergraduate (or graduate, for the 6-month overseas programme) I’ll have at least one",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-79a27907c0",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "/ 01 Table 11.3: NOC Vietnam (Ho Chi Minh City 6-month) for NOC AY2025/26 Sem 1 Intake and earlier",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-7b2d9bdf44",
+      "url": "https://nusx.edu.sg/programmes",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "for undergraduates only. Short Programme is 6 months long, open to undergraduates at all eligible",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-7f70e63765",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "(Maximum) 20 01 / 01 Table 10.1: NOC Shenzhen 6-month for NOC AY2025/26 Sem 2 Intake onwards",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-812e1d8509",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Curriculum details NOC Singapore / Singapore 6-month programme Curriculum Course code / Title",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-86c8c87e4f",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "title": "NUS Enterprise — application page",
+      "excerpt": "Requirements by programme 12 Months – Overseas 6 Months – Overseas 6 Months – Singapore [01] Locations",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-8ae9896f54",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Curriculum details NOC Sweden / Stockholm 12-month programme Curriculum Course code / Title",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-976c145a29",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "There are 2 durations of the NOC programme 12 month 2 NUS semesters up to 40 units 6 month 1 NUS",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9935717238",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Curriculum details NOC Indonesia / Jakarta 6-month programme Curriculum Course code / Title",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9a17f4949a",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "details NOC USA / New York 3-month programme 6-month programme Curriculum Course code / Title",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9cf1636f5f",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "(with photos) of experiential learning, within 2 weeks after end of programme Complete mandatory",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9d8f14db4f",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "22 01 / 01 Table 11.4: NOC Vietnam (Hanoi 6-month) for NOC AY2025/26 Sem 1 Intake and earlier",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-a666cb4d66",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "to see if your degree can accommodate 6 to 12 months abroad. [2] Does NOC count toward my degree?",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b16746f926",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Curriculum details NOC Germany / Munich 6-month programme 12-month programme Curriculum Course",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b97bd60551",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Indonesia (Bandung / Jakarta / Yogyakarta 3-month) for NOC AY2022/23 Special Term Intake onwards",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c5d7d25058",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "title": "NUS Enterprise — application page",
+      "excerpt": "Semester 1 - Aug 2027 Intake (All Year-Long & 6-Month Programmes) 2 Nov 2026, Mon 2pm - 3pm SGT ·",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d815454498",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Curriculum details NOC USA / Silicon Valley 3-month programme 6-month programme 12-month programme",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-d90e150c49",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Curriculum details NOC Canada / Toronto-Waterloo 12-month programme Curriculum Course code / Title",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-da6aca8079",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Curriculum details NOC Japan / Nagoya 3-month programme 6-month programme Curriculum Course",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-dbde23f720",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "and entrepreneurial activities. NOC China — 12-month only All nationalities Tech-related companies",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ddbe81bfcf",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "12 month 2 NUS semesters up to 40 units 6 month 1 NUS semester up to 20 units * NOC programme",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e026f6358c",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Curriculum details NOC China / Shenzhen 3-month programme 6-month programme Curriculum Course",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e0a8a41cf6",
+      "url": "https://nusx.edu.sg/programmes",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "companies, three of them unicorns. Flagship 12 months Learn more Summer Programme in Entrepreneurship",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e82e4dc443",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "title": "NUS Enterprise — application page",
+      "excerpt": "12 Months – Overseas 6 Months – Overseas 6 Months – Singapore [01] Locations New York Shanghai",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-f6c582ac59",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Strong entrepreneurial qualities and potential 6-month NOC China students are not eligible What's",
+      "page": "details"
+    },
+    {
       "id": "check-email-0bb0601fca",
       "url": "https://nusx.edu.sg/",
-      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "title": "NUS Enterprise — homepage",
       "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "details"
+    },
+    {
+      "id": "check-email-142affb83c",
+      "url": "https://nusx.edu.sg/programmes/noc/locations",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "details"
+    },
+    {
+      "id": "check-email-16267a00d9",
+      "url": "https://nusx.edu.sg/about",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "details"
+    },
+    {
+      "id": "check-email-199552942a",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "details"
+    },
+    {
+      "id": "check-email-1f727b7422",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings",
+      "page": "details"
+    },
+    {
+      "id": "check-email-2c2445d2cd",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "details"
+    },
+    {
+      "id": "check-email-3201210678",
+      "url": "https://nusx.edu.sg/partnerships",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings",
       "page": "details"
     },
     {
       "id": "check-email-34398ab355",
       "url": "https://nusx.edu.sg/programmes/noc/application",
-      "title": "NUS Enterprise — application page checked by scrape.py",
+      "title": "NUS Enterprise — application page",
       "excerpt": "CONNECT@NUSX.EDU.SG",
       "page": "application"
     },
     {
+      "id": "check-email-36cc04653f",
+      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings NUSX",
+      "page": "details"
+    },
+    {
+      "id": "check-email-3d6c8e7720",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings NOC",
+      "page": "details"
+    },
+    {
       "id": "check-email-4a23787a83",
       "url": "https://nusx.edu.sg/programmes",
-      "title": "NUS Enterprise — details page checked by scrape.py",
+      "title": "NUS Enterprise — program page",
       "excerpt": "CONNECT@NUSX.EDU.SG",
       "page": "details"
     },
     {
       "id": "check-email-4ada507442",
       "url": "https://nusx.edu.sg/programmes/noc/application",
-      "title": "NUS Enterprise — application page checked by scrape.py",
+      "title": "NUS Enterprise — application page",
       "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings",
       "page": "application"
     },
     {
+      "id": "check-email-54eab01ad5",
+      "url": "https://nusx.edu.sg/about",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings About",
+      "page": "details"
+    },
+    {
+      "id": "check-email-5e523d5f5c",
+      "url": "https://nusx.edu.sg/programmes/noc/locations",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings Locations",
+      "page": "details"
+    },
+    {
+      "id": "check-email-61fc61b29e",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings",
+      "page": "details"
+    },
+    {
+      "id": "check-email-685f02c8c3",
+      "url": "https://nusx.edu.sg/partnerships",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "details"
+    },
+    {
+      "id": "check-email-6fb6776b94",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/faculty-facilitators/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "details"
+    },
+    {
+      "id": "check-email-7ebd2e3628",
+      "url": "https://nusx.edu.sg/iti",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8238baf15c",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/faculty-facilitators/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings Faculty",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8a5c3cc6df",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8f9377781b",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "details"
+    },
+    {
+      "id": "check-email-99441d726b",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "details"
+    },
+    {
+      "id": "check-email-a593d29eed",
+      "url": "https://nusx.edu.sg/iti",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings ITI",
+      "page": "details"
+    },
+    {
       "id": "check-email-af3e3fddd3",
       "url": "https://nusx.edu.sg/programmes",
-      "title": "NUS Enterprise — details page checked by scrape.py",
+      "title": "NUS Enterprise — program page",
       "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b1e6468e04",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "details"
+    },
+    {
+      "id": "check-email-dea07c9aa0",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings Awards",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e5cbfb8c7f",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
       "page": "details"
     },
     {
       "id": "check-email-f60d132f26",
       "url": "https://nusx.edu.sg/",
-      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "title": "NUS Enterprise — homepage",
       "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings NUSX",
       "page": "details"
     },
     {
-      "id": "check-name-efc46febbd",
+      "id": "check-email-ff4c5def96",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings GRIP",
+      "page": "details"
+    },
+    {
+      "id": "check-email-ff843193e6",
+      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "details"
+    },
+    {
+      "id": "check-format-7b44b2292c",
+      "url": "https://nusx.edu.sg/partnerships",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "include Campus visit The work is more convincing in person. Spend a day inside NUSX. Walk through B71, sit in on a",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e55166cd3f",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "title": "NUS Enterprise — application page",
+      "excerpt": "send-off briefing on 10 May 2027 (to be confirmed, hybrid). After that, you’re off. On appeals NOC’s selection",
+      "page": "application"
+    },
+    {
+      "id": "check-name-0690fa109b",
       "url": "https://nusx.edu.sg/",
-      "title": "NUS Enterprise — homepage checked by scrape.py",
-      "excerpt": "and ideas find a path to use and scale. NUSX was known as NUS Enterprise until September 2026. [2] What happened to NUS Enterprise?",
+      "title": "NUS Enterprise — homepage",
+      "excerpt": "Joe Rouse, Ambassador-at-Large, Start-ups Community, NUS Enterprise In conversation with… Joe Rouse B71 B71 FAQ The most",
       "page": "details"
     },
     {
       "id": "check-phone-06e22c1145",
       "url": "https://nusx.edu.sg/",
-      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "title": "NUS Enterprise — homepage",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-0d34a13fb1",
+      "url": "https://nusx.edu.sg/iti",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-3892184203",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-3da2ff3762",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/faculty-facilitators/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-46be93b769",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-472485180d",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-609817d119",
+      "url": "https://nusx.edu.sg/programmes/noc/locations",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-87caa4dd5a",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "title": "NUS Enterprise — program page",
       "excerpt": "+65 6516 7175",
       "page": "details"
     },
     {
       "id": "check-phone-aa62179c92",
       "url": "https://nusx.edu.sg/programmes/noc/application",
-      "title": "NUS Enterprise — application page checked by scrape.py",
+      "title": "NUS Enterprise — application page",
       "excerpt": "+65 6516 7175",
       "page": "application"
     },
     {
+      "id": "check-phone-acc89543d2",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-c2bded8aa6",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-c60fd3cec3",
+      "url": "https://nusx.edu.sg/partnerships",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-cec1841618",
+      "url": "https://nusx.edu.sg/about",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
       "id": "check-phone-cedfe6b671",
       "url": "https://nusx.edu.sg/programmes",
-      "title": "NUS Enterprise — details page checked by scrape.py",
+      "title": "NUS Enterprise — program page",
       "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-e28a2a7de3",
+      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-001c69feae",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
       "page": "details"
     },
     {
       "id": "check-portfolio-011e418ca0",
       "url": "https://nusx.edu.sg/programmes/noc/application",
-      "title": "NUS Enterprise — application page checked by scrape.py",
+      "title": "NUS Enterprise — application page",
       "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
       "page": "application"
     },
     {
+      "id": "check-portfolio-06d0b6ee93",
+      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0a201b7797",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0eefb34faa",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-104e3fa4d0",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/faculty-facilitators/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1400b8ce6d",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1832395c63",
+      "url": "https://nusx.edu.sg/about",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-190a6817de",
+      "url": "https://nusx.edu.sg/iti",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-197364f989",
+      "url": "https://nusx.edu.sg/iti",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-1a7fa5ef10",
       "url": "https://nusx.edu.sg/programmes",
-      "title": "NUS Enterprise — details page checked by scrape.py",
+      "title": "NUS Enterprise — program page",
       "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1f95985113",
+      "url": "https://nusx.edu.sg/partnerships",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
       "page": "details"
     },
     {
       "id": "check-portfolio-282789e53f",
       "url": "https://nusx.edu.sg/programmes/noc/application",
-      "title": "NUS Enterprise — application page checked by scrape.py",
+      "title": "NUS Enterprise — application page",
       "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
       "page": "application"
     },
     {
+      "id": "check-portfolio-2aeb7ecf74",
+      "url": "https://nusx.edu.sg/partnerships",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-2d579bb0ea",
       "url": "https://nusx.edu.sg/",
-      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "title": "NUS Enterprise — homepage",
       "excerpt": "For Founders → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2f84bcd3fe",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-38fce18ae3",
+      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-394a72f9ed",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-39b0e3d444",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/faculty-facilitators/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3c0d012e9f",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3e30c0154d",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3eb83319e3",
+      "url": "https://nusx.edu.sg/programmes/noc/locations",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-45fa65316b",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-47272d7572",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
       "page": "details"
     },
     {
       "id": "check-portfolio-4cc40cee05",
       "url": "https://nusx.edu.sg/",
-      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "title": "NUS Enterprise — homepage",
       "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
       "page": "details"
     },
     {
       "id": "check-portfolio-4db400d16c",
       "url": "https://nusx.edu.sg/programmes",
-      "title": "NUS Enterprise — details page checked by scrape.py",
+      "title": "NUS Enterprise — program page",
       "excerpt": "See alumni stories → https://nusx.edu.sg/programmes/noc/alumni",
       "page": "details"
     },
     {
       "id": "check-portfolio-4fe249f1ba",
       "url": "https://nusx.edu.sg/programmes",
-      "title": "NUS Enterprise — details page checked by scrape.py",
+      "title": "NUS Enterprise — program page",
       "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
       "page": "details"
     },
     {
       "id": "check-portfolio-501d0dc3bb",
       "url": "https://nusx.edu.sg/programmes/noc/application",
-      "title": "NUS Enterprise — application page checked by scrape.py",
+      "title": "NUS Enterprise — application page",
       "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
       "page": "application"
     },
     {
+      "id": "check-portfolio-54228df962",
+      "url": "https://nusx.edu.sg/partnerships",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5f6be29abc",
+      "url": "https://nusx.edu.sg/iti",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-647e374d44",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6661d4799e",
+      "url": "https://nusx.edu.sg/partnerships",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6e32c3f7b2",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-6fd17456e1",
       "url": "https://nusx.edu.sg/programmes/noc/application",
-      "title": "NUS Enterprise — application page checked by scrape.py",
+      "title": "NUS Enterprise — application page",
       "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
       "page": "application"
     },
     {
+      "id": "check-portfolio-7209f10044",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-728477de7a",
+      "url": "https://nusx.edu.sg/programmes/noc/locations",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7499f9b5a2",
+      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-79edd36cb2",
       "url": "https://nusx.edu.sg/",
-      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "title": "NUS Enterprise — homepage",
       "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7aff27b3c3",
+      "url": "https://nusx.edu.sg/about",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7ee847e6b6",
+      "url": "https://nusx.edu.sg/about",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7fe327d0a3",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/faculty-facilitators/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-82754fb44a",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8764ebf983",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-89c6504f8d",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8a2c4ad36e",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-94623b7a43",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-95797828c2",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-97cb54ced0",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/faculty-facilitators/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9d667b743e",
+      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9e3e51cbf1",
+      "url": "https://nusx.edu.sg/iti",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-acac58984b",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ace2426c28",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b61dd85415",
+      "url": "https://nusx.edu.sg/programmes/noc/locations",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
       "page": "details"
     },
     {
       "id": "check-portfolio-b79aba9b43",
       "url": "https://nusx.edu.sg/programmes",
-      "title": "NUS Enterprise — details page checked by scrape.py",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b7de7714bc",
+      "url": "https://nusx.edu.sg/about",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bf0d1748e7",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "title": "NUS Enterprise — program page",
       "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
       "page": "details"
     },
     {
       "id": "check-portfolio-bf311ea60b",
       "url": "https://nusx.edu.sg/",
-      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "title": "NUS Enterprise — homepage",
       "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
       "page": "details"
     },
     {
       "id": "check-portfolio-c997c6be89",
       "url": "https://nusx.edu.sg/programmes",
-      "title": "NUS Enterprise — details page checked by scrape.py",
+      "title": "NUS Enterprise — program page",
       "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d2ee8b785c",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-da383efa99",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
       "page": "details"
     },
     {
       "id": "check-portfolio-e3d60a69b9",
       "url": "https://nusx.edu.sg/",
-      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "title": "NUS Enterprise — homepage",
       "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ed54ecb2e0",
+      "url": "https://nusx.edu.sg/programmes/noc/locations",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-route-14ef50fc4c",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1c2c31807f",
+      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1d78c71de0",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/faculty-facilitators/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
       "page": "details"
     },
     {
       "id": "check-route-1de3dfd879",
       "url": "https://nusx.edu.sg/",
-      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "title": "NUS Enterprise — homepage",
       "excerpt": "https://nusx.edu.sg/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2d66948c8d",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-31d15c4a4e",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "See requirements → https://nusx.edu.sg/programmes/noc/application",
       "page": "details"
     },
     {
       "id": "check-route-412bf43114",
       "url": "https://nusx.edu.sg/programmes",
-      "title": "NUS Enterprise — details page checked by scrape.py",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-53cd37a7e8",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "apply to NOC (opens in a new tab) → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-702246731c",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "title": "NUS Enterprise — program page",
       "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
       "page": "details"
     },
     {
       "id": "check-route-72825e1115",
       "url": "https://nusx.edu.sg/",
-      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "title": "NUS Enterprise — homepage",
       "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7d921f7865",
+      "url": "https://nusx.edu.sg/programmes/noc/locations",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-818b19632c",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/faculty-facilitators/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8323a1656c",
+      "url": "https://nusx.edu.sg/partnerships",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9526ef8d2f",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-96ec462fe0",
+      "url": "https://nusx.edu.sg/about",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9ae541c771",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a206b7d4c7",
+      "url": "https://nusx.edu.sg/partnerships",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
       "page": "details"
     },
     {
       "id": "check-route-a421cea954",
       "url": "https://nusx.edu.sg/programmes",
-      "title": "NUS Enterprise — details page checked by scrape.py",
+      "title": "NUS Enterprise — program page",
       "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-aaa35a5fce",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-bafa1027bb",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c815c3dc2e",
+      "url": "https://nusx.edu.sg/iti",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c89de09286",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c91b038cac",
+      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ca311fa5e5",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply now → https://nusx.edu.sg/programmes/noc/application/",
       "page": "details"
     },
     {
       "id": "check-route-ccd6492cad",
       "url": "https://nusx.edu.sg/",
-      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "title": "NUS Enterprise — homepage",
       "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
       "page": "details"
+    },
+    {
+      "id": "check-route-d5b555bae0",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "See requirements → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d5c2771931",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d9495fdda2",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-dad6e22453",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-dc22b90e11",
+      "url": "https://nusx.edu.sg/iti",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-dcb873e74e",
+      "url": "https://nusx.edu.sg/about",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e28afae9e3",
+      "url": "https://nusx.edu.sg/programmes/noc/locations",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-fbd238bcbb",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-status-17221e00cb",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "title": "NUS Enterprise — program page",
+      "excerpt": "• 2005 Jeffrey Tiong Co-founder, Patsnap Founder IP Check back soon · NOC AY27/28 Sem 1 — Dec 2027 Intake Applications are closed. What is required › Travel Preparedness Course (TPC) 24 hours to reflect › Resume and latest unofficial NUS",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-51f8749355",
+      "url": "https://nusx.edu.sg/",
+      "page": "details",
+      "excerpt": "NUSX — Where deep tech grows Home Programmes Startups Partnerships Researchers Content About My corner Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in motion. Learn more → ITI Overview Start with the problem [ Research Impact ] For"
+    },
+    {
+      "id": "check-page-1d99cfe50e",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "page": "application",
+      "excerpt": "Apply to NOC Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in"
+    },
+    {
+      "id": "check-page-ba4c244213",
+      "url": "https://nusx.edu.sg/about",
+      "page": "details",
+      "excerpt": "About Home Programmes Startups Partnerships Researchers Content About My corner Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in motion. Learn more → ITI Overview Start with the problem [ Research Impact ] For Researchers Test the opportunity"
+    },
+    {
+      "id": "check-page-91eb40d4a6",
+      "url": "https://nusx.edu.sg/about/leadership",
+      "page": "details",
+      "excerpt": "Leadership Home Programmes Startups Partnerships Researchers Content About My corner Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in motion. Learn more → ITI Overview Start with the problem [ Research Impact ] For Researchers Test the"
+    },
+    {
+      "id": "check-page-a62a7f2edf",
+      "url": "https://nusx.edu.sg/iti",
+      "page": "details",
+      "excerpt": "Idea To Impact Home Programmes Startups Partnerships Researchers Content About My corner Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in motion. Learn more → ITI Overview Start with the problem [ Research Impact ] For Researchers Test the"
+    },
+    {
+      "id": "check-page-428d7a1038",
+      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
+      "page": "details",
+      "excerpt": "First-of-its-kind Venture Capital Programme in Asia launches as NUS commits S$150 million to boost growth of deep tech start-ups Home Programmes Startups Partnerships Researchers Content About My corner Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures"
+    },
+    {
+      "id": "check-page-0813accdff",
+      "url": "https://nusx.edu.sg/partnerships",
+      "page": "details",
+      "excerpt": "Partnerships Home Programmes Startups Partnerships Researchers Content About My corner Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in motion. Learn more → ITI Overview Start with the problem [ Research Impact ] For Researchers Test the"
+    },
+    {
+      "id": "check-page-26ccf7f5c2",
+      "url": "https://nusx.edu.sg/programmes",
+      "page": "details",
+      "excerpt": "Programmes — NUSX Home Programmes Startups Partnerships Researchers Content About My corner Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in motion. Learn more → ITI Overview Start with the problem [ Research Impact ] For Researchers Test the"
+    },
+    {
+      "id": "check-page-bfedf29d18",
+      "url": "https://nusx.edu.sg/programmes/grip",
+      "page": "details",
+      "excerpt": "GRIP: Graduate Research Innovation Programme Home Programmes Startups Partnerships Researchers Content About My corner Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already in motion. Learn more → ITI Overview Start with the problem [ Research Impact"
+    },
+    {
+      "id": "check-page-460add1edc",
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "page": "details",
+      "excerpt": "NOC Overview — NUS Overseas Colleges Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back"
+    },
+    {
+      "id": "check-page-33aa0f9251",
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "page": "details",
+      "excerpt": "NOC Awards & Scholarships Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures"
+    },
+    {
+      "id": "check-page-d870a539d2",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
+      "page": "details",
+      "excerpt": "NOC Curriculum Overview Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures"
+    },
+    {
+      "id": "check-page-94c6e96cbe",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/faculty-facilitators/",
+      "page": "details",
+      "excerpt": "Faculty Facilitators Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures"
+    },
+    {
+      "id": "check-page-6c436a0a0b",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
+      "page": "details",
+      "excerpt": "CDE/SoC Internship Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or back ventures already"
+    },
+    {
+      "id": "check-page-a04ecb338d",
+      "url": "https://nusx.edu.sg/programmes/noc/locations",
+      "page": "details",
+      "excerpt": "NOC Locations — NUS Overseas Colleges Home Programmes Startups Partnerships Researchers Content About My corner Overview / Locations / Curriculum Overview / Awards & Scholarships / N-House / Our alumni / Application Programmes Overview Find the right program for you [ Get Started ] NUS Overseas Colleges (NOC) Spend a year working at a startup abroad Summer Programme Get your first taste of startups GRIP Turn lab IP into a company MSc in Venture Creation ↗ Build a company and earn a master's [ Programmes ] Take the next step Build a startup inside the world's leading ecosystems through NUS Overseas Colleges. Apply for NOC → Startups Overview See how NUSX backs startups Start-Up Stories Learn from founder journeys [ General ] B71 Join a global innovation community PIER71 ↗ Grow a maritime tech startup CyberSG TIG ↗ Grow a cybersecurity startup [ Connect ] DVL Build a resilient future. SXF From PoC to product launch Societal Impact Build solutions for social good Funding (Startups) Find capital for your startup [ Support ] It is through 'blue sky' research that you get the real technological breakthroughs. Read story → Partnerships Overview Find the right way to partner Innovation Partner Solve problems with our research [ Work with us ] Research Partnerships License technology we've built [ Programmes & Team ] Partner or invest License breakthrough tech, sponsor research, or"
     }
   ],
   "findings": {
@@ -228,6 +1536,10 @@
       {
         "value": "https://nusx.edu.sg/programmes/noc/application",
         "evidenceId": "check-route-72825e1115"
+      },
+      {
+        "value": "https://nusx.edu.sg/programmes/noc/application/",
+        "evidenceId": "check-route-ca311fa5e5"
       }
     ],
     "applicationUrl": [
@@ -236,11 +1548,53 @@
         "evidenceId": "check-route-1de3dfd879"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": false,
+        "evidenceId": "check-status-17221e00cb"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-76fff62bbc"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-5f27a55c53"
+      },
+      {
+        "value": "5",
+        "evidenceId": "check-duration-12e49ec3c3"
+      },
+      {
+        "value": "2",
+        "evidenceId": "check-duration-9cf1636f5f"
+      },
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-b97bd60551"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-e55166cd3f"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-7b44b2292c"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://nusx.edu.sg/startups",
@@ -254,7 +1608,7 @@
     "name": [
       {
         "value": "NUS Enterprise",
-        "evidenceId": "check-name-efc46febbd"
+        "evidenceId": "check-name-0690fa109b"
       }
     ],
     "examplePages": []

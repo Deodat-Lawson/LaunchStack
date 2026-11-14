@@ -1,19 +1,27 @@
 {
   "programId": "startmate",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.startmate.com/accelerator",
-      "page": "application",
-      "anchor": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE.",
-      "fetched": true,
+      "url": "https://www.startmate.com/about-us",
+      "page": "details",
+      "anchor": "Our story Our story",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.startmate.com/writing/meet-our-winter-26-accelerator-cohort",
-      "page": "batches",
-      "anchor": "Read more Read more",
+      "url": "https://www.startmate.com/accelerator",
+      "page": "details",
+      "anchor": "Accelerator Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/faq",
+      "page": "terms",
+      "anchor": "FAQ FAQ",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -27,17 +35,113 @@
       "origin": "official"
     },
     {
-      "url": "https://www.startmate.com/about-us",
-      "page": "details",
-      "anchor": "Our story Our story",
+      "url": "https://www.startmate.com/terms-and-conditions",
+      "page": "terms",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.startmate.com/faq",
+      "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
       "page": "terms",
-      "anchor": "FAQ FAQ",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/writing/how-to-make-your-first-startup-investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/writing/investment-notes-andromeda",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/writing/investment-notes-aquila",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/writing/investment-notes-butter",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/writing/investment-notes-dexta",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/writing/investment-notes-eggy",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/writing/meet-our-winter-26-accelerator-cohort",
+      "page": "batches",
+      "anchor": "Read more Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/writing/moonshot-co-founders-learnt-applying-y-combinator",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

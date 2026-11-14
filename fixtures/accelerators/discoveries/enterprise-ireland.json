@@ -1,20 +1,12 @@
 {
   "programId": "enterprise-ireland",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pages": [
     {
-      "url": "https://www.enterprise-ireland.com/en/global",
-      "page": "portfolio",
-      "anchor": "I want to connect with Irish companies",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.enterprise-ireland.com/en/supports/for-large-companies",
-      "page": "portfolio",
-      "anchor": "Large companies",
-      "fetched": false,
+      "url": "http://directory.enterprise-ireland.com/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -27,10 +19,90 @@
       "origin": "official"
     },
     {
+      "url": "https://www.enterprise-ireland.com/en/about-enterprise-ireland/our-impact",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.enterprise-ireland.com/en/about-enterprise-ireland/our-strategy",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.enterprise-ireland.com/en/about-enterprise-ireland/our-team",
       "page": "details",
       "anchor": "Our team",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.enterprise-ireland.com/en/global",
+      "page": "portfolio",
+      "anchor": "I want to connect with Irish companies",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.enterprise-ireland.com/en/global/about-enterprise-ireland",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.enterprise-ireland.com/en/global/about-irish-innovation",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.enterprise-ireland.com/en/legal/enterprise-ireland-terms-conditions",
+      "page": "terms",
+      "anchor": "Enterprise Ireland Terms & Conditions",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.enterprise-ireland.com/en/legal/enterprise-ireland-terms-conditions/copyright",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.enterprise-ireland.com/en/legal/enterprise-ireland-terms-conditions/oecd-anti-bribery-convention",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.enterprise-ireland.com/en/supports/for-large-companies",
+      "page": "portfolio",
+      "anchor": "Large companies",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.enterprise-ireland.com/en/supports/innovation-partnership-programme",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

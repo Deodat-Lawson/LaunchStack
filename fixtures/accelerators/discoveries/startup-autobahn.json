@@ -1,20 +1,116 @@
 {
   "programId": "startup-autobahn",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://startup-autobahn.com/our-program/",
+      "url": "https://startup-autobahn.com/about/",
       "page": "details",
-      "anchor": "Our Program",
+      "anchor": "About",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://startup-autobahn.com/about/",
+      "url": "https://startup-autobahn.com/allgemein/130-joint-projects-between-startups-and-corporations-initiated-but-still-hungry-startup-autobahn-launches-program-4/",
       "page": "details",
-      "anchor": "About",
-      "fetched": false,
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup-autobahn.com/allgemein/28-startups-selected-for-startup-autobahn-program-2/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup-autobahn.com/allgemein/check-out-the-video-about-startup-autobahn-program-1/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup-autobahn.com/allgemein/europes-largest-innovation-platform-startup-autobahn-launches-its-third-100-day-program-in-stuttgart/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup-autobahn.com/allgemein/fibres-startup-autobahn-is-about-direct-sales-opportunities/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup-autobahn.com/allgemein/jetlite-about-startup-autobahn-the-program-is-very-well-organised-and-stuffed-with-premium-partners/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup-autobahn.com/allgemein/startup-autobahn-march-focus-week-program-2-has-started/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup-autobahn.com/allgemein/startups-selected-for-startup-autobahn-program-1/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup-autobahn.com/allgemein/we-are-hiring-startup-autobahn-is-looking-for-an-accelerator-director/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup-autobahn.com/allgemein/where-others-see-craziness-we-do-see-our-purpose-a-week-about-shared-mobility-services-performance-driving-at-startup-autobahn/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup-autobahn.com/news/press-release/motherson-additional-press-information-about-pilot-projects/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup-autobahn.com/news/press-release/porsche-additional-press-information-about-pilot-projects/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup-autobahn.com/our-program/",
+      "page": "details",
+      "anchor": "Our Program",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

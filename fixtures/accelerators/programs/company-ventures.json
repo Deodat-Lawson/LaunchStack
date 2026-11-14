@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.companyventures.com/",
   "applyUrl": "https://www.companyventures.com/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Company Ventures Go Back Team Portfolio Programs News & Insights Apply Company Ventures is a first check venture firm. We provide founders daily access to a community of excellence, embedded in world class physical space. Learn More We pioneered the Residency model with Grand Central Tech in 2014, built on a single conviction: that working alongside exceptional founders every day is the most powerful accelerant for an early-stage company. Our peers host annual founder summits. We host them daily. As first check investors we identify exceptionally qualified founders and leverage our unique infrastructure to position them to win. We are specifically interested in founders focused on building generational AI companies at the application and data infrastructure / model augmentation layers. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "First check venture firm providing founders daily access to a community of excellence in world-class physical space. 208 alumni companies, $5B+ raised.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Company Ventures is a first check venture firm. We provide founders daily access to a community of excellence, embedded in world class physical space.",
     "sourceIds": [
       "homepage"
     ],
@@ -26,9 +26,9 @@
     {
       "id": "official-logo",
       "url": "https://www.companyventures.com/",
-      "title": "Company Ventures — official mark on the retrieved page",
-      "quote": "https://cdn.prod.website-files.com/6a4fd698eafab820207615f1/6a4fd698eafab82020761619_faviconwebclip.png",
-      "checkedAt": "2026-11-03T00:18:31.000Z"
+      "title": "Company Ventures — no rule-validated official mark",
+      "quote": "https://cdn.prod.website-files.com/6a29437f4c75cda35afdb762/6a2a6b29ba1158a445f719fc_faviconwebclip.png",
+      "checkedAt": "2026-11-14T20:59:02.000Z"
     },
     {
       "id": "homepage",
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "company-ventures-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.companyventures.com/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

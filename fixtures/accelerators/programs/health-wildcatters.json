@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 2,
+  "id": "health-wildcatters",
+  "name": "Health Wildcatters",
+  "logo": {
+    "path": "/accelerators/logos/health-wildcatters.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "http://healthwildcatters.com/",
+  "applyUrl": "http://healthwildcatters.com/",
+  "description": {
+    "text": "Health Wildcatters provides investment and key resources to support healthcare entrepreneurs.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "Health Wildcatters provides investment and key resources to support healthcare entrepreneurs.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "http://healthwildcatters.com/",
+      "title": "Health Wildcatters — official mark on the retrieved page",
+      "quote": "https://images.squarespace-cdn.com/content/v1/63e15579a08795186bedfb3e/fca393b9-aa3d-4f29-a34a-5818aa6e4ec9/HW+Logo+Horizontal.png?format=1500w",
+      "checkedAt": "2026-11-14T20:04:58.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "http://healthwildcatters.com/",
+      "title": "Health Wildcatters — visible page text",
+      "quote": "Health Wildcatters 0 Skip to Content Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Office Space Office Space Rental Featured Artists Get In Touch Outreach Form Speaker Request Form Open Menu Close Menu Pitch Day Folder: Accelerator Back Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team Folder: Office Space Back Office Space Rental Featured Artists Folder: Get In Touch Back Outreach Form Speaker Request Form Future-Proofing Healthcare Health Wildcatters provides investment and key resources to support healthcare entrepreneurs. Health Wildcatters Accelerator Program Health Wildcatters was founded in 2013 to address the need for a health innovation hub in the burgeoning Dallas/Fort Worth Metroplex healthcare industry. Since its inception the Health Wildcatters portfolio has grown to 140 startups who have raised over $350 million. Health Wildcatters provides a seed investment, in-kind perks and a vast network of mentors comprised of well over 200 individuals spanning the healthcare industry, professional services and many other verticals. In a nutshell, 8 to 12 startups will join",
+      "checkedAt": "2026-11-14T20:04:58.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ]
+    }
+  ]
+}

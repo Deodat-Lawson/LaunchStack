@@ -1,41 +1,260 @@
 {
   "programId": "eit-urban-mobility",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.eiturbanmobility.eu/",
-    "https://www.eiturbanmobility.eu/who-we-are/about-us/"
+    "https://www.eiturbanmobility.eu/applications-are-open-for-the-eit-urban-mobility-market-readiness-accelerators-2024/",
+    "https://www.eiturbanmobility.eu/apply-to-our-innovative-masters-programmes-in-urban-mobility-by-1-february-2022/",
+    "https://www.eiturbanmobility.eu/call-for-applications-to-eit-ris-joint-innovation-incubator-programme/",
+    "https://www.eiturbanmobility.eu/eit-urban-mobility-master-school-is-now-open-for-applications/",
+    "https://www.eiturbanmobility.eu/eit-urban-mobility-master-school-launches-second-round-of-applications-until-16-april/",
+    "https://www.eiturbanmobility.eu/eit-urban-mobility-master-school-opens-applications-on-15-november-2024/",
+    "https://www.eiturbanmobility.eu/eit-urban-mobility-master-school-opens-applications-on-15-november/",
+    "https://www.eiturbanmobility.eu/innovation-challenges-electromobility-apply-for-the-challenge/",
+    "https://www.eiturbanmobility.eu/nearly-750-partners-apply-for-the-eits-hei-initiatives-pilot-call-for-proposals/",
+    "https://www.eiturbanmobility.eu/netzerocities-twin-cities-programme-open-for-applications-now/",
+    "https://www.eiturbanmobility.eu/raptor-pilot-2-programme-now-open-for-applications/",
+    "https://www.eiturbanmobility.eu/successful-application-opening-kick-off-event/",
+    "https://www.eiturbanmobility.eu/tandem-women-in-cycling-programme-applications-open/",
+    "https://www.eiturbanmobility.eu/what-we-offer/education-and-training/doctoral-training-programme/doctoral-training-network-applications-procedure/"
   ],
   "evidence": [
     {
+      "id": "check-deadline-59de93d214",
+      "url": "https://www.eiturbanmobility.eu/what-we-offer/education-and-training/doctoral-training-programme/doctoral-training-network-applications-procedure/",
+      "title": "EIT Urban Mobility — application page",
+      "excerpt": "to 12.30 CET. Register here . Applications are now open. Deadline: 6 December 2026 Learn more about the DTN's opportunities! More Info",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-4c113553ac",
+      "url": "https://www.eiturbanmobility.eu/netzerocities-twin-cities-programme-open-for-applications-now/",
+      "title": "EIT Urban Mobility — application page",
+      "excerpt": "October 2024. Selected Twin Cities will join an 18-month tailored learning programme for knowledge",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-f865a18a21",
+      "url": "https://www.eiturbanmobility.eu/what-we-offer/education-and-training/doctoral-training-programme/doctoral-training-network-applications-procedure/",
+      "title": "EIT Urban Mobility — application page",
+      "excerpt": "– Completion of three elective courses – 4-6 month international and cross‐organizational mobility",
+      "page": "application"
+    },
+    {
+      "id": "check-format-6365fbea0c",
+      "url": "https://www.eiturbanmobility.eu/tandem-women-in-cycling-programme-applications-open/",
+      "title": "EIT Urban Mobility — application page",
+      "excerpt": "spread out over 4-5 online sessions and one weekend-long in-person training in Brussels (Belgium). Following the training",
+      "page": "application"
+    },
+    {
       "id": "check-name-aced287dd4",
       "url": "https://www.eiturbanmobility.eu/",
-      "title": "EIT Urban Mobility — homepage checked by scrape.py",
+      "title": "EIT Urban Mobility — homepage",
       "excerpt": "EIT Urban Mobility - largest community for urban mobility innovation Skip to",
       "page": "details"
     },
     {
       "id": "check-route-044fb8e962",
       "url": "https://www.eiturbanmobility.eu/",
-      "title": "EIT Urban Mobility — homepage checked by scrape.py",
+      "title": "EIT Urban Mobility — homepage",
       "excerpt": ".st0 { stroke: #fff; stroke-miterlimit: 10; stroke-width: 2px; } .st0, .st1, .st2 { fill: #184595; } .st3 { fill: #76bc21; } .st2 { fill-rule: evenodd; } → https://www.eiturbanmobility.eu",
       "page": "details"
+    },
+    {
+      "id": "check-route-268e36ae52",
+      "url": "https://www.eiturbanmobility.eu/eit-urban-mobility-master-school-opens-applications-on-15-november-2024/",
+      "title": "EIT Urban Mobility — application page",
+      "excerpt": "APPLY HERE → https://academy.eiturbanmobility.eu/SITE/PRIVATE/GO/default.aspx",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ac54259422",
+      "url": "https://www.eiturbanmobility.eu/call-for-applications-to-eit-ris-joint-innovation-incubator-programme/",
+      "title": "EIT Urban Mobility — application page",
+      "excerpt": "EIT-UM-Joint-Incubator-Application-Form → https://www.eiturbanmobility.eu/wp-content/uploads/2021/02/EIT-UM-Joint-Incubator-Application-Form.docx",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ca4f7eab5d",
+      "url": "https://www.eiturbanmobility.eu/call-for-applications-to-eit-ris-joint-innovation-incubator-programme/",
+      "title": "EIT Urban Mobility — application page",
+      "excerpt": "Download → https://www.eiturbanmobility.eu/wp-content/uploads/2021/02/EIT-UM-Joint-Incubator-Application-Form.docx",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e787286b27",
+      "url": "https://www.eiturbanmobility.eu/raptor-pilot-2-programme-now-open-for-applications/",
+      "title": "EIT Urban Mobility — application page",
+      "excerpt": "[email protected] . → https://www.eiturbanmobility.eu/raptor-pilot-2-programme-now-open-for-applications/raptor@eiturbanmobility.eu",
+      "page": "application"
+    },
+    {
+      "id": "check-status-f61b230c0f",
+      "url": "https://www.eiturbanmobility.eu/what-we-offer/education-and-training/doctoral-training-programme/doctoral-training-network-applications-procedure/",
+      "title": "EIT Urban Mobility — application page",
+      "excerpt": "the DTN office will host an info session on 18 November 2026, from 11.00 to 12.30 CET. Register here . Applications are now open. Deadline: 6 December 2026 Learn more about the DTN's opportunities! More Info Updates Subscribe to our",
+      "page": "application"
+    },
+    {
+      "id": "check-status-fa04b39520",
+      "url": "https://www.eiturbanmobility.eu/applications-are-open-for-the-eit-urban-mobility-market-readiness-accelerators-2024/",
+      "title": "EIT Urban Mobility — application page",
+      "excerpt": "US Request for proposals Become a partner Call for proposals Career opportunities CONTACT US Home > News > Applications are open for the EIT Urban Mobility Market Readiness Accelerators 2024 Applications are open for the EIT Urban",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-7501d34001",
+      "url": "https://www.eiturbanmobility.eu/",
+      "page": "details",
+      "excerpt": "EIT Urban Mobility - largest community for urban mobility innovation Skip to content ENGLISH MOBILITY INNOVATORS MOBILITY MARKETPLACE Search WHAT WE OFFER Close WHAT WE OFFER Open WHAT WE OFFER Match and connect We match and connect key stakeholders – including public administrations, students, research institutes, universities, large enterprises, SMEs, startups and NGOs – to accelerate the transformation of the mobility sector across all our activities and geographies. READ MORE Education and training We elevate talent to business by fostering entrepreneurship and upskilling practitioners for the urban mobility challenges of tomorrow. We offer several master’s programmes, a Doctoral Training Network, tailored courses for students and professionals, and numerous incubator programmes to nurture entrepreneurship. READ MORE Innovations to market We bring innovations to market by supporting partners to develop, deploy and commercialise mobility products and services. Our activities accelerate innovations’ time to market and further scale their impact in European cities. READ MORE Support to startups We grow startups to scale by providing access to funding, coaching, and concrete opportunities through our accelerator and scale-up programmes. We nurture entrepreneurs to create and scale new solutions by connecting them with a broader network of potential shareholders and customers."
+    },
+    {
+      "id": "check-page-ffefb4c866",
+      "url": "https://www.eiturbanmobility.eu/applications-are-open-for-the-eit-urban-mobility-market-readiness-accelerators-2024/",
+      "page": "application",
+      "excerpt": "Market Readiness Accelerators 2024: Apply Now - EIT Urban Mobility Skip to content ENGLISH MOBILITY INNOVATORS MOBILITY MARKETPLACE Search WHAT WE OFFER Close WHAT WE OFFER Open WHAT WE OFFER Match and connect We match and connect key stakeholders – including public administrations, students, research institutes, universities, large enterprises, SMEs, startups and NGOs – to accelerate the transformation of the mobility sector across all our activities and geographies. READ MORE Education and training We elevate talent to business by fostering entrepreneurship and upskilling practitioners for the urban mobility challenges of tomorrow. We offer several master’s programmes, a Doctoral Training Network, tailored courses for students and professionals, and numerous incubator programmes to nurture entrepreneurship. READ MORE Innovations to market We bring innovations to market by supporting partners to develop, deploy and commercialise mobility products and services. Our activities accelerate innovations’ time to market and further scale their impact in European cities. READ MORE Support to startups We grow startups to scale by providing access to funding, coaching, and concrete opportunities through our accelerator and scale-up programmes. We nurture entrepreneurs to create and scale new solutions by connecting them with a broader network of potential shareholders and customers."
+    },
+    {
+      "id": "check-page-00970c2306",
+      "url": "https://www.eiturbanmobility.eu/apply-to-our-innovative-masters-programmes-in-urban-mobility-by-1-february-2022/",
+      "page": "application",
+      "excerpt": "Apply to our innovative master’s programmes in Urban Mobility by 1 February 2022! - EIT Urban Mobility Apply to our innovative master’s programmes in Urban Mobility by 1 February 2022! % Skip to content ENGLISH MOBILITY INNOVATORS MOBILITY MARKETPLACE Search WHAT WE OFFER Close WHAT WE OFFER Open WHAT WE OFFER Match and connect We match and connect key stakeholders – including public administrations, students, research institutes, universities, large enterprises, SMEs, startups and NGOs – to accelerate the transformation of the mobility sector across all our activities and geographies. READ MORE Education and training We elevate talent to business by fostering entrepreneurship and upskilling practitioners for the urban mobility challenges of tomorrow. We offer several master’s programmes, a Doctoral Training Network, tailored courses for students and professionals, and numerous incubator programmes to nurture entrepreneurship. READ MORE Innovations to market We bring innovations to market by supporting partners to develop, deploy and commercialise mobility products and services. Our activities accelerate innovations’ time to market and further scale their impact in European cities. READ MORE Support to startups We grow startups to scale by providing access to funding, coaching, and concrete opportunities through our accelerator and scale-up programmes. We nurture entrepreneurs"
+    },
+    {
+      "id": "check-page-4efb229c97",
+      "url": "https://www.eiturbanmobility.eu/call-for-applications-to-eit-ris-joint-innovation-incubator-programme/",
+      "page": "application",
+      "excerpt": "Call for applications to EIT RIS Joint Innovation Incubator Programme - EIT Urban Mobility Skip to content ENGLISH MOBILITY INNOVATORS MOBILITY MARKETPLACE Search WHAT WE OFFER Close WHAT WE OFFER Open WHAT WE OFFER Match and connect We match and connect key stakeholders – including public administrations, students, research institutes, universities, large enterprises, SMEs, startups and NGOs – to accelerate the transformation of the mobility sector across all our activities and geographies. READ MORE Education and training We elevate talent to business by fostering entrepreneurship and upskilling practitioners for the urban mobility challenges of tomorrow. We offer several master’s programmes, a Doctoral Training Network, tailored courses for students and professionals, and numerous incubator programmes to nurture entrepreneurship. READ MORE Innovations to market We bring innovations to market by supporting partners to develop, deploy and commercialise mobility products and services. Our activities accelerate innovations’ time to market and further scale their impact in European cities. READ MORE Support to startups We grow startups to scale by providing access to funding, coaching, and concrete opportunities through our accelerator and scale-up programmes. We nurture entrepreneurs to create and scale new solutions by connecting them with a broader network of potential"
+    },
+    {
+      "id": "check-page-f125536beb",
+      "url": "https://www.eiturbanmobility.eu/eit-urban-mobility-master-school-is-now-open-for-applications/",
+      "page": "application",
+      "excerpt": "EIT Urban Mobility Master School is now open for applications - EIT Urban Mobility Skip to content ENGLISH MOBILITY INNOVATORS MOBILITY MARKETPLACE Search WHAT WE OFFER Close WHAT WE OFFER Open WHAT WE OFFER Match and connect We match and connect key stakeholders – including public administrations, students, research institutes, universities, large enterprises, SMEs, startups and NGOs – to accelerate the transformation of the mobility sector across all our activities and geographies. READ MORE Education and training We elevate talent to business by fostering entrepreneurship and upskilling practitioners for the urban mobility challenges of tomorrow. We offer several master’s programmes, a Doctoral Training Network, tailored courses for students and professionals, and numerous incubator programmes to nurture entrepreneurship. READ MORE Innovations to market We bring innovations to market by supporting partners to develop, deploy and commercialise mobility products and services. Our activities accelerate innovations’ time to market and further scale their impact in European cities. READ MORE Support to startups We grow startups to scale by providing access to funding, coaching, and concrete opportunities through our accelerator and scale-up programmes. We nurture entrepreneurs to create and scale new solutions by connecting them with a broader network of potential shareholders"
+    },
+    {
+      "id": "check-page-8365d41564",
+      "url": "https://www.eiturbanmobility.eu/eit-urban-mobility-master-school-launches-second-round-of-applications-until-16-april/",
+      "page": "application",
+      "excerpt": "EIT Urban Mobility Master School launches second round of applications until 16 April - EIT Urban Mobility Skip to content ENGLISH MOBILITY INNOVATORS MOBILITY MARKETPLACE Search WHAT WE OFFER Close WHAT WE OFFER Open WHAT WE OFFER Match and connect We match and connect key stakeholders – including public administrations, students, research institutes, universities, large enterprises, SMEs, startups and NGOs – to accelerate the transformation of the mobility sector across all our activities and geographies. READ MORE Education and training We elevate talent to business by fostering entrepreneurship and upskilling practitioners for the urban mobility challenges of tomorrow. We offer several master’s programmes, a Doctoral Training Network, tailored courses for students and professionals, and numerous incubator programmes to nurture entrepreneurship. READ MORE Innovations to market We bring innovations to market by supporting partners to develop, deploy and commercialise mobility products and services. Our activities accelerate innovations’ time to market and further scale their impact in European cities. READ MORE Support to startups We grow startups to scale by providing access to funding, coaching, and concrete opportunities through our accelerator and scale-up programmes. We nurture entrepreneurs to create and scale new solutions by connecting them with a broader network of"
+    },
+    {
+      "id": "check-page-b1101b8c56",
+      "url": "https://www.eiturbanmobility.eu/eit-urban-mobility-master-school-opens-applications-on-15-november-2024/",
+      "page": "application",
+      "excerpt": "EIT Urban Mobility Master School opens applications on 15 November 2024 - EIT Urban Mobility Skip to content ENGLISH MOBILITY INNOVATORS MOBILITY MARKETPLACE Search WHAT WE OFFER Close WHAT WE OFFER Open WHAT WE OFFER Match and connect We match and connect key stakeholders – including public administrations, students, research institutes, universities, large enterprises, SMEs, startups and NGOs – to accelerate the transformation of the mobility sector across all our activities and geographies. READ MORE Education and training We elevate talent to business by fostering entrepreneurship and upskilling practitioners for the urban mobility challenges of tomorrow. We offer several master’s programmes, a Doctoral Training Network, tailored courses for students and professionals, and numerous incubator programmes to nurture entrepreneurship. READ MORE Innovations to market We bring innovations to market by supporting partners to develop, deploy and commercialise mobility products and services. Our activities accelerate innovations’ time to market and further scale their impact in European cities. READ MORE Support to startups We grow startups to scale by providing access to funding, coaching, and concrete opportunities through our accelerator and scale-up programmes. We nurture entrepreneurs to create and scale new solutions by connecting them with a broader network of potential"
+    },
+    {
+      "id": "check-page-d244ef0482",
+      "url": "https://www.eiturbanmobility.eu/eit-urban-mobility-master-school-opens-applications-on-15-november/",
+      "page": "application",
+      "excerpt": "EIT Urban Mobility Master School opens applications on 15 November - EIT Urban Mobility Skip to content ENGLISH MOBILITY INNOVATORS MOBILITY MARKETPLACE Search WHAT WE OFFER Close WHAT WE OFFER Open WHAT WE OFFER Match and connect We match and connect key stakeholders – including public administrations, students, research institutes, universities, large enterprises, SMEs, startups and NGOs – to accelerate the transformation of the mobility sector across all our activities and geographies. READ MORE Education and training We elevate talent to business by fostering entrepreneurship and upskilling practitioners for the urban mobility challenges of tomorrow. We offer several master’s programmes, a Doctoral Training Network, tailored courses for students and professionals, and numerous incubator programmes to nurture entrepreneurship. READ MORE Innovations to market We bring innovations to market by supporting partners to develop, deploy and commercialise mobility products and services. Our activities accelerate innovations’ time to market and further scale their impact in European cities. READ MORE Support to startups We grow startups to scale by providing access to funding, coaching, and concrete opportunities through our accelerator and scale-up programmes. We nurture entrepreneurs to create and scale new solutions by connecting them with a broader network of potential"
+    },
+    {
+      "id": "check-page-fcc20b10f7",
+      "url": "https://www.eiturbanmobility.eu/innovation-challenges-electromobility-apply-for-the-challenge/",
+      "page": "application",
+      "excerpt": "INNOVATION CHALLENGES ELECTROMOBILITY. Apply for the Challenge - EIT Urban Mobility Skip to content ENGLISH MOBILITY INNOVATORS MOBILITY MARKETPLACE Search WHAT WE OFFER Close WHAT WE OFFER Open WHAT WE OFFER Match and connect We match and connect key stakeholders – including public administrations, students, research institutes, universities, large enterprises, SMEs, startups and NGOs – to accelerate the transformation of the mobility sector across all our activities and geographies. READ MORE Education and training We elevate talent to business by fostering entrepreneurship and upskilling practitioners for the urban mobility challenges of tomorrow. We offer several master’s programmes, a Doctoral Training Network, tailored courses for students and professionals, and numerous incubator programmes to nurture entrepreneurship. READ MORE Innovations to market We bring innovations to market by supporting partners to develop, deploy and commercialise mobility products and services. Our activities accelerate innovations’ time to market and further scale their impact in European cities. READ MORE Support to startups We grow startups to scale by providing access to funding, coaching, and concrete opportunities through our accelerator and scale-up programmes. We nurture entrepreneurs to create and scale new solutions by connecting them with a broader network of potential shareholders"
+    },
+    {
+      "id": "check-page-4c77447335",
+      "url": "https://www.eiturbanmobility.eu/nearly-750-partners-apply-for-the-eits-hei-initiatives-pilot-call-for-proposals/",
+      "page": "application",
+      "excerpt": "Nearly 750 partners apply for the EIT's HEI Initiative's Pilot Call for Proposals - EIT Urban Mobility Skip to content ENGLISH MOBILITY INNOVATORS MOBILITY MARKETPLACE Search WHAT WE OFFER Close WHAT WE OFFER Open WHAT WE OFFER Match and connect We match and connect key stakeholders – including public administrations, students, research institutes, universities, large enterprises, SMEs, startups and NGOs – to accelerate the transformation of the mobility sector across all our activities and geographies. READ MORE Education and training We elevate talent to business by fostering entrepreneurship and upskilling practitioners for the urban mobility challenges of tomorrow. We offer several master’s programmes, a Doctoral Training Network, tailored courses for students and professionals, and numerous incubator programmes to nurture entrepreneurship. READ MORE Innovations to market We bring innovations to market by supporting partners to develop, deploy and commercialise mobility products and services. Our activities accelerate innovations’ time to market and further scale their impact in European cities. READ MORE Support to startups We grow startups to scale by providing access to funding, coaching, and concrete opportunities through our accelerator and scale-up programmes. We nurture entrepreneurs to create and scale new solutions by connecting them with a broader network of"
+    },
+    {
+      "id": "check-page-0a7d0daf5b",
+      "url": "https://www.eiturbanmobility.eu/netzerocities-twin-cities-programme-open-for-applications-now/",
+      "page": "application",
+      "excerpt": "NetZeroCities: - EIT Urban Mobility Call for Twin Cities Skip to content ENGLISH MOBILITY INNOVATORS MOBILITY MARKETPLACE Search WHAT WE OFFER Close WHAT WE OFFER Open WHAT WE OFFER Match and connect We match and connect key stakeholders – including public administrations, students, research institutes, universities, large enterprises, SMEs, startups and NGOs – to accelerate the transformation of the mobility sector across all our activities and geographies. READ MORE Education and training We elevate talent to business by fostering entrepreneurship and upskilling practitioners for the urban mobility challenges of tomorrow. We offer several master’s programmes, a Doctoral Training Network, tailored courses for students and professionals, and numerous incubator programmes to nurture entrepreneurship. READ MORE Innovations to market We bring innovations to market by supporting partners to develop, deploy and commercialise mobility products and services. Our activities accelerate innovations’ time to market and further scale their impact in European cities. READ MORE Support to startups We grow startups to scale by providing access to funding, coaching, and concrete opportunities through our accelerator and scale-up programmes. We nurture entrepreneurs to create and scale new solutions by connecting them with a broader network of potential shareholders and customers. READ MORE"
+    },
+    {
+      "id": "check-page-d72088c07e",
+      "url": "https://www.eiturbanmobility.eu/raptor-pilot-2-programme-now-open-for-applications/",
+      "page": "application",
+      "excerpt": "Raptor pilot 2 programme - now open for applications - EIT Urban Mobility Skip to content ENGLISH MOBILITY INNOVATORS MOBILITY MARKETPLACE Search WHAT WE OFFER Close WHAT WE OFFER Open WHAT WE OFFER Match and connect We match and connect key stakeholders – including public administrations, students, research institutes, universities, large enterprises, SMEs, startups and NGOs – to accelerate the transformation of the mobility sector across all our activities and geographies. READ MORE Education and training We elevate talent to business by fostering entrepreneurship and upskilling practitioners for the urban mobility challenges of tomorrow. We offer several master’s programmes, a Doctoral Training Network, tailored courses for students and professionals, and numerous incubator programmes to nurture entrepreneurship. READ MORE Innovations to market We bring innovations to market by supporting partners to develop, deploy and commercialise mobility products and services. Our activities accelerate innovations’ time to market and further scale their impact in European cities. READ MORE Support to startups We grow startups to scale by providing access to funding, coaching, and concrete opportunities through our accelerator and scale-up programmes. We nurture entrepreneurs to create and scale new solutions by connecting them with a broader network of potential shareholders and"
+    },
+    {
+      "id": "check-page-ed5c68d1be",
+      "url": "https://www.eiturbanmobility.eu/successful-application-opening-kick-off-event/",
+      "page": "application",
+      "excerpt": "SUCCESSFUL APPLICATION OPENING & KICK OFF EVENT - EIT Urban Mobility Skip to content ENGLISH MOBILITY INNOVATORS MOBILITY MARKETPLACE Search WHAT WE OFFER Close WHAT WE OFFER Open WHAT WE OFFER Match and connect We match and connect key stakeholders – including public administrations, students, research institutes, universities, large enterprises, SMEs, startups and NGOs – to accelerate the transformation of the mobility sector across all our activities and geographies. READ MORE Education and training We elevate talent to business by fostering entrepreneurship and upskilling practitioners for the urban mobility challenges of tomorrow. We offer several master’s programmes, a Doctoral Training Network, tailored courses for students and professionals, and numerous incubator programmes to nurture entrepreneurship. READ MORE Innovations to market We bring innovations to market by supporting partners to develop, deploy and commercialise mobility products and services. Our activities accelerate innovations’ time to market and further scale their impact in European cities. READ MORE Support to startups We grow startups to scale by providing access to funding, coaching, and concrete opportunities through our accelerator and scale-up programmes. We nurture entrepreneurs to create and scale new solutions by connecting them with a broader network of potential shareholders and customers."
+    },
+    {
+      "id": "check-page-8e943bf1d2",
+      "url": "https://www.eiturbanmobility.eu/tandem-women-in-cycling-programme-applications-open/",
+      "page": "application",
+      "excerpt": "TandEM Women in Cycling programme – Applications open! - EIT Urban Mobility Skip to content ENGLISH MOBILITY INNOVATORS MOBILITY MARKETPLACE Search WHAT WE OFFER Close WHAT WE OFFER Open WHAT WE OFFER Match and connect We match and connect key stakeholders – including public administrations, students, research institutes, universities, large enterprises, SMEs, startups and NGOs – to accelerate the transformation of the mobility sector across all our activities and geographies. READ MORE Education and training We elevate talent to business by fostering entrepreneurship and upskilling practitioners for the urban mobility challenges of tomorrow. We offer several master’s programmes, a Doctoral Training Network, tailored courses for students and professionals, and numerous incubator programmes to nurture entrepreneurship. READ MORE Innovations to market We bring innovations to market by supporting partners to develop, deploy and commercialise mobility products and services. Our activities accelerate innovations’ time to market and further scale their impact in European cities. READ MORE Support to startups We grow startups to scale by providing access to funding, coaching, and concrete opportunities through our accelerator and scale-up programmes. We nurture entrepreneurs to create and scale new solutions by connecting them with a broader network of potential shareholders and"
+    },
+    {
+      "id": "check-page-6bc1b557d8",
+      "url": "https://www.eiturbanmobility.eu/what-we-offer/education-and-training/doctoral-training-programme/doctoral-training-network-applications-procedure/",
+      "page": "application",
+      "excerpt": "Doctoral Training Network Applications Procedure - EIT Urban Mobility Skip to content ENGLISH MOBILITY INNOVATORS MOBILITY MARKETPLACE Search WHAT WE OFFER Close WHAT WE OFFER Open WHAT WE OFFER Match and connect We match and connect key stakeholders – including public administrations, students, research institutes, universities, large enterprises, SMEs, startups and NGOs – to accelerate the transformation of the mobility sector across all our activities and geographies. READ MORE Education and training We elevate talent to business by fostering entrepreneurship and upskilling practitioners for the urban mobility challenges of tomorrow. We offer several master’s programmes, a Doctoral Training Network, tailored courses for students and professionals, and numerous incubator programmes to nurture entrepreneurship. READ MORE Innovations to market We bring innovations to market by supporting partners to develop, deploy and commercialise mobility products and services. Our activities accelerate innovations’ time to market and further scale their impact in European cities. READ MORE Support to startups We grow startups to scale by providing access to funding, coaching, and concrete opportunities through our accelerator and scale-up programmes. We nurture entrepreneurs to create and scale new solutions by connecting them with a broader network of potential shareholders and customers."
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://www.eiturbanmobility.eu/wp-content/uploads/2021/02/EIT-UM-Joint-Incubator-Application-Form.docx",
+        "evidenceId": "check-route-ac54259422"
+      },
+      {
+        "value": "https://academy.eiturbanmobility.eu/SITE/PRIVATE/GO/default.aspx",
+        "evidenceId": "check-route-268e36ae52"
+      },
+      {
+        "value": "https://www.eiturbanmobility.eu/raptor-pilot-2-programme-now-open-for-applications/raptor@eiturbanmobility.eu",
+        "evidenceId": "check-route-e787286b27"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://www.eiturbanmobility.eu",
         "evidenceId": "check-route-044fb8e962"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-fa04b39520"
+      }
+    ],
     "operatingStatus": [],
-    "deadlines": [],
+    "deadlines": [
+      {
+        "value": "2026-12-06",
+        "evidenceId": "check-deadline-59de93d214"
+      }
+    ],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-4c113553ac"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-f865a18a21"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-6365fbea0c"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

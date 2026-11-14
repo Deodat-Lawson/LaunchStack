@@ -1,11 +1,123 @@
 {
   "programId": "climate-kic",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.climate-kic.org/who-we-are/about-climate-kic/",
-      "page": "details",
-      "anchor": "About Climate KIC",
+      "url": "https://www.climate-kic.org/events/apply-for-accelerator-programme-in-germany-switzerland-austria/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/events/circular-investment-readiness-network-cirn-cities-enabling-local-start-ups/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/events/community-connect-unpacking-the-eu-clean-industrial-deal/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/events/eucirculartalks-industrial-symbiosis-a-tool-for-the-green-deal/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/events/idealab-our-future-after-coal/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/events/innovation-and-investment-in-the-energy-transition/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/events/innovation-entrepreneurship-investment-climate-solutions/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/events/masterclass-sales-hacking-deal-closing-with-steli-efti/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/events/msca-eu-green-deal-cluster-event/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/get-involved/investment-opportunities/",
+      "page": "terms",
+      "anchor": "Invest with us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/news/call-for-applications-climate-kic-accelerator-programme-recruits-new-start-ups-in-france/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/news/climathon-opens-applications-2017-city-hosts/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/open-call/design-and-run-your-own-circular-economy-programme-applications-open-for-entrepreneurship-support-organisations-esos-in-india-and-kenya/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/open-call/eit-community-new-european-bauhaus-call-for-applications-2027-catalyse-neb/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/open-call/start-ups-applications-for-climatelaunchpad-2026/",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -27,17 +139,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.climate-kic.org/programmes/place-based-transformations/",
-      "page": "details",
-      "anchor": "Place-based transformations",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.climate-kic.org/programmes/learning-by-doing/",
-      "page": "details",
-      "anchor": "Learning by doing",
+      "url": "https://www.climate-kic.org/policies/",
+      "page": "terms",
+      "anchor": "Terms & Conditions",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -51,49 +155,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.climate-kic.org/programmes/europe-2030-missions/",
-      "page": "details",
-      "anchor": "Europe 2030 missions",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.climate-kic.org/programmes/climate-entrepreneurship/inclusive-climate-innovation/",
       "page": "details",
       "anchor": "Inclusive climate innovation",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/",
-      "page": "details",
-      "anchor": "Climate KIC Academy",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.climate-kic.org/programmes/our-portfolio/",
-      "page": "portfolio",
-      "anchor": "Our portfolio",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.climate-kic.org/programmes/europe-2030-missions/100-european-regions-on-a-transformative-climate-resilience-journey/",
-      "page": "details",
-      "anchor": "Learn more",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.climate-kic.org/programmes/place-based-transformations/adaptation-innovation-cluster-tanzania/",
-      "page": "details",
-      "anchor": "Learn more",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -107,7 +171,63 @@
       "origin": "official"
     },
     {
+      "url": "https://www.climate-kic.org/programmes/europe-2030-missions/",
+      "page": "details",
+      "anchor": "Europe 2030 missions",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/europe-2030-missions/100-european-regions-on-a-transformative-climate-resilience-journey/",
+      "page": "details",
+      "anchor": "Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/",
+      "page": "details",
+      "anchor": "Learning by doing",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/",
+      "page": "details",
+      "anchor": "Climate KIC Academy",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.climate-kic.org/programmes/learning/climate-leadership-academy/",
+      "page": "details",
+      "anchor": "Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "portfolio",
+      "anchor": "Our portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/place-based-transformations/",
+      "page": "details",
+      "anchor": "Place-based transformations",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/place-based-transformations/adaptation-innovation-cluster-tanzania/",
       "page": "details",
       "anchor": "Learn more",
       "fetched": false,
@@ -120,6 +240,30 @@
       "anchor": "Learn more",
       "fetched": false,
       "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/who-we-are/about-climate-kic/",
+      "page": "details",
+      "anchor": "About Climate KIC",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/wp-content/uploads/2017/04/Call-for-Application_CO.doc",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/wp-content/uploads/2017/04/Start-up-Acceleration-Application-Template-2017.docx",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     }
   ]

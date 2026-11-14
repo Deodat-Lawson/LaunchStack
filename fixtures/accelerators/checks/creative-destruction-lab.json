@@ -1,110 +1,584 @@
 {
   "programId": "creative-destruction-lab",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://creativedestructionlab.com/",
-    "https://creativedestructionlab.com/about/",
     "https://creativedestructionlab.com/application-triage/",
-    "https://creativedestructionlab.com/faq/"
+    "https://creativedestructionlab.com/blockchain-application/",
+    "https://creativedestructionlab.com/blog/applications-launch-2023-24/",
+    "https://creativedestructionlab.com/blog/applications-open-2022/",
+    "https://creativedestructionlab.com/blog/cdl-oxford-announce-new-mentors-makes-call-for-ai-start-up-applications/",
+    "https://creativedestructionlab.com/blog/founders-find-practical-applications-for-quantum-computing-at-cdls-2021-quantum-hackathon/",
+    "https://creativedestructionlab.com/blog/quantum-applications-2023-24/",
+    "https://creativedestructionlab.com/blog/thinking-about-applying-to-the-creative-destruction-labs-2018-19-program-read-this-first/",
+    "https://creativedestructionlab.com/quantum-application/",
+    "https://creativedestructionlab.com/fr/application-triage/",
+    "https://creativedestructionlab.com/fr/blockchain-application/",
+    "https://creativedestructionlab.com/fr/blog/applications-launch-2023-24/",
+    "https://creativedestructionlab.com/fr/blog/applications-open-2022/",
+    "https://creativedestructionlab.com/fr/blog/cdl-oxford-announce-new-mentors-makes-call-for-ai-start-up-applications/"
   ],
   "evidence": [
     {
+      "id": "check-announced-23030e98d0",
+      "url": "https://creativedestructionlab.com/fr/blog/cdl-oxford-announce-new-mentors-makes-call-for-ai-start-up-applications/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "joining and will be announced over the coming weeks. The application deadline is August 12th. For more information about CDL-Oxford please visit:",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-901b05db25",
+      "url": "https://creativedestructionlab.com/blog/cdl-oxford-announce-new-mentors-makes-call-for-ai-start-up-applications/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "joining and will be announced over the coming weeks. The application deadline is August 12th. For more information about CDL-Oxford please visit:",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-6be7c83606",
+      "url": "https://creativedestructionlab.com/fr/application-triage/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "leading scientists and engineers Personalized 8-week objectives to sharpen your strategy and drive",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-ba90e3fa83",
+      "url": "https://creativedestructionlab.com/application-triage/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "leading scientists and engineers Personalized 8-week objectives to sharpen your strategy and drive",
+      "page": "application"
+    },
+    {
+      "id": "check-email-1a6cf9439c",
+      "url": "https://creativedestructionlab.com/fr/application-triage/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "admissions@creativedestructionlab.com",
+      "page": "application"
+    },
+    {
+      "id": "check-email-206f8f5fb0",
+      "url": "https://creativedestructionlab.com/fr/application-triage/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "is unclear, you can always contact us directly at admissions@creativedestructionlab.com . Se connecter à la Communauté Webinaire d'introduction au",
+      "page": "application"
+    },
+    {
       "id": "check-email-54b3f80980",
       "url": "https://creativedestructionlab.com/application-triage/",
-      "title": "Creative Destruction Lab — application page checked by scrape.py",
+      "title": "Creative Destruction Lab — application page",
       "excerpt": "is unclear, you can always contact us directly at admissions@creativedestructionlab.com . Log in to Community CDL Intro Webinar FAQs Press Job",
       "page": "application"
     },
     {
       "id": "check-email-99ea5fc58e",
       "url": "https://creativedestructionlab.com/application-triage/",
-      "title": "Creative Destruction Lab — application page checked by scrape.py",
+      "title": "Creative Destruction Lab — application page",
       "excerpt": "admissions@creativedestructionlab.com",
+      "page": "application"
+    },
+    {
+      "id": "check-format-0d9569dacc",
+      "url": "https://creativedestructionlab.com/blog/founders-find-practical-applications-for-quantum-computing-at-cdls-2021-quantum-hackathon/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "solve it at scale with Leap’s hybrid solvers (BQM and DQM hybrid solvers); And Rigetti supplied an amplitude encoding",
+      "page": "application"
+    },
+    {
+      "id": "check-format-1a2f3abd34",
+      "url": "https://creativedestructionlab.com/blog/founders-find-practical-applications-for-quantum-computing-at-cdls-2021-quantum-hackathon/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "a practical problem and solve it at scale with Leap’s hybrid solvers (BQM and DQM hybrid solvers); And Rigetti supplied",
+      "page": "application"
+    },
+    {
+      "id": "check-format-251731ede8",
+      "url": "https://creativedestructionlab.com/blog/thinking-about-applying-to-the-creative-destruction-labs-2018-19-program-read-this-first/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "month’s worth of objectives. There are no exceptions to in-person attendance — CDL mentors fly in from around the world so",
+      "page": "application"
+    },
+    {
+      "id": "check-format-cfa3a55723",
+      "url": "https://creativedestructionlab.com/blog/thinking-about-applying-to-the-creative-destruction-labs-2018-19-program-read-this-first/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "know the dates far in advance. There are five of these in-person meetings per year where we convene our mentors, scientists",
       "page": "application"
     },
     {
       "id": "check-name-b707be27e7",
       "url": "https://creativedestructionlab.com/",
-      "title": "Creative Destruction Lab — homepage checked by scrape.py",
+      "title": "Creative Destruction Lab — homepage",
       "excerpt": "Home - Creative Destruction Lab × About Program Streams Locations Staff Putting AI to Work",
       "page": "details"
     },
     {
-      "id": "check-portfolio-000f92ed05",
-      "url": "https://creativedestructionlab.com/about/",
-      "title": "Creative Destruction Lab — details page checked by scrape.py",
-      "excerpt": "Companies → https://creativedestructionlab.com/companies/",
-      "page": "details"
+      "id": "check-portfolio-0af865d52d",
+      "url": "https://creativedestructionlab.com/fr/blockchain-application/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Entreprises → https://creativedestructionlab.com/fr/companies/",
+      "page": "application"
     },
     {
-      "id": "check-portfolio-23843afa97",
-      "url": "https://creativedestructionlab.com/faq/",
-      "title": "Creative Destruction Lab — terms page checked by scrape.py",
+      "id": "check-portfolio-11db8cb0c2",
+      "url": "https://creativedestructionlab.com/blog/applications-open-2022/",
+      "title": "Creative Destruction Lab — application page",
       "excerpt": "Companies → https://creativedestructionlab.com/companies/",
-      "page": "terms"
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-171246fa38",
+      "url": "https://creativedestructionlab.com/fr/blog/applications-open-2022/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Entreprises → https://creativedestructionlab.com/fr/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-1bb9e5b444",
+      "url": "https://creativedestructionlab.com/blog/cdl-oxford-announce-new-mentors-makes-call-for-ai-start-up-applications/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Companies → https://creativedestructionlab.com/companies/",
+      "page": "application"
     },
     {
       "id": "check-portfolio-4e21d14628",
       "url": "https://creativedestructionlab.com/",
-      "title": "Creative Destruction Lab — homepage checked by scrape.py",
+      "title": "Creative Destruction Lab — homepage",
       "excerpt": "Companies → https://creativedestructionlab.com/companies/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-596cbe437d",
+      "url": "https://creativedestructionlab.com/fr/blog/applications-launch-2023-24/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Entreprises → https://creativedestructionlab.com/fr/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-6d9d911366",
+      "url": "https://creativedestructionlab.com/fr/application-triage/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Entreprises → https://creativedestructionlab.com/fr/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-78ac699c6e",
+      "url": "https://creativedestructionlab.com/blog/founders-find-practical-applications-for-quantum-computing-at-cdls-2021-quantum-hackathon/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Companies → https://creativedestructionlab.com/companies/",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-a2b721b865",
       "url": "https://creativedestructionlab.com/application-triage/",
-      "title": "Creative Destruction Lab — application page checked by scrape.py",
+      "title": "Creative Destruction Lab — application page",
       "excerpt": "Companies → https://creativedestructionlab.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a4a2cb2374",
+      "url": "https://creativedestructionlab.com/blog/thinking-about-applying-to-the-creative-destruction-labs-2018-19-program-read-this-first/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Companies → https://creativedestructionlab.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b540c019e6",
+      "url": "https://creativedestructionlab.com/blog/quantum-applications-2023-24/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Companies → https://creativedestructionlab.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d57e40d851",
+      "url": "https://creativedestructionlab.com/fr/blog/cdl-oxford-announce-new-mentors-makes-call-for-ai-start-up-applications/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Entreprises → https://creativedestructionlab.com/fr/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d6fa702d77",
+      "url": "https://creativedestructionlab.com/blockchain-application/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Companies → https://creativedestructionlab.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-ddcc075548",
+      "url": "https://creativedestructionlab.com/blog/applications-launch-2023-24/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Companies → https://creativedestructionlab.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-eb42ca2b4e",
+      "url": "https://creativedestructionlab.com/quantum-application/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Companies → https://creativedestructionlab.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-028eb17908",
+      "url": "https://creativedestructionlab.com/blog/thinking-about-applying-to-the-creative-destruction-labs-2018-19-program-read-this-first/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "FR → https://creativedestructionlab.com/fr/blog/thinking-about-applying-to-the-creative-destruction-labs-2018-19-program-read-this-first/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-08048ac64c",
+      "url": "https://creativedestructionlab.com/blockchain-application/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Apply → https://creativedestructionlab.com/application-triage/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0e280bcc48",
+      "url": "https://creativedestructionlab.com/blog/quantum-applications-2023-24/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "accepted online → https://creativedestructionlab.com/application-triage/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0e471d62b1",
+      "url": "https://creativedestructionlab.com/blog/founders-find-practical-applications-for-quantum-computing-at-cdls-2021-quantum-hackathon/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Apply → https://creativedestructionlab.com/application-triage/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1b5a688f83",
+      "url": "https://creativedestructionlab.com/blockchain-application/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "2023/24 Blockchain/Web3 application template → https://creativedestructionlab.com/wp-content/uploads/2023/02/Blockchain_Web3-2023_24-Application-Word-Template.docx",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1c9c720919",
+      "url": "https://creativedestructionlab.com/blog/applications-launch-2023-24/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "FR → https://creativedestructionlab.com/fr/blog/applications-launch-2023-24/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-271db2b6e2",
+      "url": "https://creativedestructionlab.com/blog/applications-open-2022/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "FR → https://creativedestructionlab.com/fr/blog/applications-open-2022/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-29d6fd0b23",
+      "url": "https://creativedestructionlab.com/quantum-application/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Apply → https://creativedestructionlab.com/application-triage/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2cdbb1852e",
+      "url": "https://creativedestructionlab.com/blog/thinking-about-applying-to-the-creative-destruction-labs-2018-19-program-read-this-first/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Apply → https://creativedestructionlab.com/application-triage/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3090b96af5",
+      "url": "https://creativedestructionlab.com/quantum-application/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "FR → https://creativedestructionlab.com/fr/quantum-application/",
       "page": "application"
     },
     {
       "id": "check-route-326752b3d4",
       "url": "https://creativedestructionlab.com/application-triage/",
-      "title": "Creative Destruction Lab — application page checked by scrape.py",
+      "title": "Creative Destruction Lab — application page",
       "excerpt": "FR → https://creativedestructionlab.com/fr/application-triage/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-369120bb8b",
+      "url": "https://creativedestructionlab.com/blockchain-application/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "FR → https://creativedestructionlab.com/fr/blockchain-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3b4497ac8b",
+      "url": "https://creativedestructionlab.com/blog/applications-open-2022/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "News Creative Destruction Lab Seeking Start-ups to Apply for Quantum Stream Early-stage ventures and teams in both the quantum software and hardware sectors are encouraged to apply to CDL-Toronto’s world-renowned quantum bootcamp and objective-setting program. → https://creativedestructionlab.com/blog/quantum-applications-2023-24/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3c53a0970c",
+      "url": "https://creativedestructionlab.com/fr/blog/applications-open-2022/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Appliquer → https://creativedestructionlab.com/fr/application-triage/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3fda2fb22f",
+      "url": "https://creativedestructionlab.com/fr/blog/cdl-oxford-announce-new-mentors-makes-call-for-ai-start-up-applications/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "EN → https://creativedestructionlab.com/blog/cdl-oxford-announce-new-mentors-makes-call-for-ai-start-up-applications/",
       "page": "application"
     },
     {
       "id": "check-route-46cecd8e1c",
       "url": "https://creativedestructionlab.com/",
-      "title": "Creative Destruction Lab — homepage checked by scrape.py",
+      "title": "Creative Destruction Lab — homepage",
       "excerpt": "Program → https://creativedestructionlab.com/program/",
       "page": "details"
     },
     {
+      "id": "check-route-657bcbaa25",
+      "url": "https://creativedestructionlab.com/fr/blog/applications-launch-2023-24/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Appliquer → https://creativedestructionlab.com/fr/application-triage/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-679e15b110",
+      "url": "https://creativedestructionlab.com/fr/blog/applications-open-2022/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "News Creative Destruction Lab Seeking Start-ups to Apply for Quantum Stream Early-stage ventures and teams in both the quantum software and hardware sectors are encouraged to apply to CDL-Toronto’s world-renowned quantum bootcamp and objective-setting program. → https://creativedestructionlab.com/fr/blog/quantum-applications-2023-24/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7ac59e59da",
+      "url": "https://creativedestructionlab.com/blog/founders-find-practical-applications-for-quantum-computing-at-cdls-2021-quantum-hackathon/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "FR → https://creativedestructionlab.com/fr/blog/founders-find-practical-applications-for-quantum-computing-at-cdls-2021-quantum-hackathon/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8776c90146",
+      "url": "https://creativedestructionlab.com/blog/quantum-applications-2023-24/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "FR → https://creativedestructionlab.com/fr/blog/quantum-applications-2023-24/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-97dfaddfea",
+      "url": "https://creativedestructionlab.com/fr/application-triage/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "EN → https://creativedestructionlab.com/application-triage/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9e3b0161a4",
+      "url": "https://creativedestructionlab.com/fr/blockchain-application/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Appliquer → https://creativedestructionlab.com/fr/application-triage/",
+      "page": "application"
+    },
+    {
       "id": "check-route-a5b49d28d7",
       "url": "https://creativedestructionlab.com/",
-      "title": "Creative Destruction Lab — homepage checked by scrape.py",
+      "title": "Creative Destruction Lab — homepage",
       "excerpt": "Apply → https://creativedestructionlab.com/application-triage/",
       "page": "details"
     },
     {
-      "id": "check-route-acce73bc29",
-      "url": "https://creativedestructionlab.com/about/",
-      "title": "Creative Destruction Lab — details page checked by scrape.py",
-      "excerpt": "Apply → https://creativedestructionlab.com/application-triage/",
-      "page": "details"
+      "id": "check-route-ab9a805c99",
+      "url": "https://creativedestructionlab.com/fr/blockchain-application/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "EN → https://creativedestructionlab.com/blockchain-application/",
+      "page": "application"
     },
     {
-      "id": "check-route-d4cdd6266e",
-      "url": "https://creativedestructionlab.com/faq/",
-      "title": "Creative Destruction Lab — terms page checked by scrape.py",
+      "id": "check-route-ae73ac1667",
+      "url": "https://creativedestructionlab.com/quantum-application/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "2023/24 Quantum application template → https://creativedestructionlab.com/wp-content/uploads/2023/02/Quantum-2023_24-Application-Word-Template-Review-2023.docx",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c4e48879b3",
+      "url": "https://creativedestructionlab.com/fr/blog/applications-open-2022/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "EN → https://creativedestructionlab.com/blog/applications-open-2022/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c84bdf7e76",
+      "url": "https://creativedestructionlab.com/blog/applications-open-2022/",
+      "title": "Creative Destruction Lab — application page",
       "excerpt": "Apply → https://creativedestructionlab.com/application-triage/",
-      "page": "terms"
+      "page": "application"
+    },
+    {
+      "id": "check-route-cb83d695a2",
+      "url": "https://creativedestructionlab.com/blog/cdl-oxford-announce-new-mentors-makes-call-for-ai-start-up-applications/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Apply → https://creativedestructionlab.com/application-triage/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d3f9b0e149",
+      "url": "https://creativedestructionlab.com/fr/blockchain-application/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "2023/24 Blockchain/Web3 application template → https://creativedestructionlab.com/wp-content/uploads/2023/02/Blockchain_Web3-2023_24-Application-Word-Template.docx",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d643cdcd01",
+      "url": "https://creativedestructionlab.com/blog/applications-launch-2023-24/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Apply → https://creativedestructionlab.com/application-triage/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-dea8cb6650",
+      "url": "https://creativedestructionlab.com/fr/blog/cdl-oxford-announce-new-mentors-makes-call-for-ai-start-up-applications/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Appliquer → https://creativedestructionlab.com/fr/application-triage/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e373190ac6",
+      "url": "https://creativedestructionlab.com/blog/cdl-oxford-announce-new-mentors-makes-call-for-ai-start-up-applications/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "FR → https://creativedestructionlab.com/fr/blog/cdl-oxford-announce-new-mentors-makes-call-for-ai-start-up-applications/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e487b9ba5b",
+      "url": "https://creativedestructionlab.com/blog/quantum-applications-2023-24/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Apply → https://creativedestructionlab.com/application-triage/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ff7d26a8be",
+      "url": "https://creativedestructionlab.com/fr/blog/applications-launch-2023-24/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "EN → https://creativedestructionlab.com/blog/applications-launch-2023-24/",
+      "page": "application"
+    },
+    {
+      "id": "check-status-3b5735a4ce",
+      "url": "https://creativedestructionlab.com/fr/application-triage/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "companies have graduated from CDL and generated over CAD $60B in equity value. Applications for the 2026/27 program have closed. What You’ll Get Focused mentorship from accomplished entrepreneurs and investors Technical guidance from",
+      "page": "application"
+    },
+    {
+      "id": "check-status-5542de64da",
+      "url": "https://creativedestructionlab.com/blog/applications-launch-2023-24/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Build Something Massive: Applications Now Open for the CDL Program - Creative Destruction Lab × About Program Streams Locations Staff Putting AI to Work",
+      "page": "application"
     },
     {
       "id": "check-status-655f04fa23",
       "url": "https://creativedestructionlab.com/",
-      "title": "Creative Destruction Lab — homepage checked by scrape.py",
+      "title": "Creative Destruction Lab — homepage",
       "excerpt": "will advance research-driven entrepreneurship and strengthen Qatar’s role in the global innovation economy. Applications are now open for the 2026/27 program year Apply × Log in to Community CDL Intro Webinar FAQs Press Job Postings Contact",
       "page": "details"
     },
     {
       "id": "check-status-dd608d233b",
       "url": "https://creativedestructionlab.com/application-triage/",
-      "title": "Creative Destruction Lab — application page checked by scrape.py",
+      "title": "Creative Destruction Lab — application page",
       "excerpt": "companies have graduated from CDL and generated over CAD $60B in equity value. Applications for the 2026/27 program have closed. What You’ll Get Focused mentorship from accomplished entrepreneurs and investors Technical guidance from",
       "page": "application"
+    },
+    {
+      "id": "check-status-f24402c38d",
+      "url": "https://creativedestructionlab.com/fr/blog/applications-launch-2023-24/",
+      "title": "Creative Destruction Lab — application page",
+      "excerpt": "Build Something Massive: Applications Now Open for the CDL Program - Creative Destruction Lab × A propos de Programme Volets Localisation des sites",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-94588f7b6a",
+      "url": "https://creativedestructionlab.com/",
+      "page": "details",
+      "excerpt": "Home - Creative Destruction Lab × About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply Your browser does not support the video element. BUILD SOMETHING MASSIVE Watch video Creative Destruction Lab (CDL) is a nonprofit organization that delivers an objectives-based"
+    },
+    {
+      "id": "check-page-2386a1619d",
+      "url": "https://creativedestructionlab.com/application-triage/",
+      "page": "application",
+      "excerpt": "Application Triage - Creative Destruction Lab × About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply Applications are currently closed If you’re a founder developing a science- or technology-based venture with the potential for massive scale, this is your"
+    },
+    {
+      "id": "check-page-9cfb06b1fc",
+      "url": "https://creativedestructionlab.com/blockchain-application/",
+      "page": "application",
+      "excerpt": "CDL Blockchain/Web3 Application - Creative Destruction Lab About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply CDL Blockchain/Web3 Application You can prepare your answers for the 2023/24 CDL Blockchain/Web3 application using the following template: 2023/24"
+    },
+    {
+      "id": "check-page-d4d07d4c83",
+      "url": "https://creativedestructionlab.com/blog/applications-launch-2023-24/",
+      "page": "application",
+      "excerpt": "Build Something Massive: Applications Now Open for the CDL Program - Creative Destruction Lab × About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply Announcements Build Something Massive: Applications Now Open for the CDL Program Creative Destruction Lab announces"
+    },
+    {
+      "id": "check-page-2b25684b55",
+      "url": "https://creativedestructionlab.com/blog/applications-open-2022/",
+      "page": "application",
+      "excerpt": "CDL’s 2022/23 Applications Are Officially Open for the 11th Program Year, in 16 Streams Across 10 Global Locations - Creative Destruction Lab × About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply News CDL’s 2022/23 Applications Are Officially Open for the 11th"
+    },
+    {
+      "id": "check-page-ff7f3b577c",
+      "url": "https://creativedestructionlab.com/blog/cdl-oxford-announce-new-mentors-makes-call-for-ai-start-up-applications/",
+      "page": "application",
+      "excerpt": "CDL-Oxford announces new mentors; makes call for AI start-up applications - Creative Destruction Lab × About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply Blog Post CDL-Oxford announces new mentors; makes call for AI start-up applications CDL-Oxford, hosted at"
+    },
+    {
+      "id": "check-page-84bbb3de2a",
+      "url": "https://creativedestructionlab.com/blog/founders-find-practical-applications-for-quantum-computing-at-cdls-2021-quantum-hackathon/",
+      "page": "application",
+      "excerpt": "Founders find practical applications for quantum computing at CDL’s 2021 Quantum Hackathon - Creative Destruction Lab × About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply Blog Post Founders find practical applications for quantum computing at CDL’s 2021 Quantum"
+    },
+    {
+      "id": "check-page-44bc78d7bd",
+      "url": "https://creativedestructionlab.com/blog/quantum-applications-2023-24/",
+      "page": "application",
+      "excerpt": "Creative Destruction Lab Seeking Start-ups to Apply for Quantum Stream - Creative Destruction Lab × About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply News Creative Destruction Lab Seeking Start-ups to Apply for Quantum Stream Early-stage ventures and teams in"
+    },
+    {
+      "id": "check-page-94b3d8678f",
+      "url": "https://creativedestructionlab.com/blog/thinking-about-applying-to-the-creative-destruction-labs-2018-19-program-read-this-first/",
+      "page": "application",
+      "excerpt": "Thinking about applying to the Creative Destruction Lab’s 2018/19 program? Read this first. - Creative Destruction Lab × About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply Blog Post Thinking about applying to the Creative Destruction Lab’s 2018/19 program? Read"
+    },
+    {
+      "id": "check-page-0cf8c88d05",
+      "url": "https://creativedestructionlab.com/quantum-application/",
+      "page": "application",
+      "excerpt": "CDL Quantum Application - Creative Destruction Lab About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply About Program Streams Locations Staff Putting AI to Work CDL Research Streams Prime (General) AgriFood Artificial Intelligence Biomedical Engineering BioTech Cancer Climate Computational Health Compute Defence Digital Society Energy Health Health & Wellness Healthcare Delivery Healthcare Robotics Manufacturing Minerals Neuro Next Gen Computing Oceans Quantum Risk Space Supply Chain Web3 Locations Berlin Calgary Cleveland Doha Estonia Halifax London Melbourne Milan Montreal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Companies Partners Blog Community EN FR Apply CDL Quantum Application You can prepare your answers for the CDL Quantum application using the following template 2023/24 Quantum application template 404"
+    },
+    {
+      "id": "check-page-ed12464651",
+      "url": "https://creativedestructionlab.com/fr/application-triage/",
+      "page": "application",
+      "excerpt": "Application Triage - Creative Destruction Lab × A propos de Programme Volets Localisation des sites Personnel Mettre l'IA au travail CDL Research Volets Prime (général) Agroalimentaire Intelligence artificielle Ingénierie biomédicale BioTech Le cancer Climat Santé computationnelle Calculer Defence Société numérique L'énergie Santé Santé et bien-être Healthcare Delivery Healthcare Robotics Fabrication Minéraux Neuro L'informatique nouvelle génération Océans Quantum Risque L'espace Chaîne d'approvisionnement Web3 Localisation des sites Berlin Calgary Cleveland Doha Estonie Halifax London Melbourne Milan Montréal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Entreprises Partenaires Blog Communauté EN FR Appliquer A propos de Programme Volets Localisation des sites Personnel Mettre l'IA au travail CDL Research Volets Prime (général) Agroalimentaire Intelligence artificielle Ingénierie biomédicale BioTech Le cancer Climat Santé computationnelle Calculer Defence Société numérique L'énergie Santé Santé et bien-être Healthcare Delivery Healthcare Robotics Fabrication Minéraux Neuro L'informatique nouvelle génération Océans Quantum Risque L'espace Chaîne d'approvisionnement Web3 Localisation des sites Berlin Calgary Cleveland Doha Estonie Halifax London Melbourne Milan Montréal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Entreprises"
+    },
+    {
+      "id": "check-page-4a6481d56e",
+      "url": "https://creativedestructionlab.com/fr/blockchain-application/",
+      "page": "application",
+      "excerpt": "CDL Blockchain/Web3 Application - Creative Destruction Lab A propos de Programme Volets Localisation des sites Personnel Mettre l'IA au travail CDL Research Volets Prime (général) Agroalimentaire Intelligence artificielle Ingénierie biomédicale BioTech Le cancer Climat Santé computationnelle Calculer Defence Société numérique L'énergie Santé Santé et bien-être Healthcare Delivery Healthcare Robotics Fabrication Minéraux Neuro L'informatique nouvelle génération Océans Quantum Risque L'espace Chaîne d'approvisionnement Web3 Localisation des sites Berlin Calgary Cleveland Doha Estonie Halifax London Melbourne Milan Montréal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Entreprises Partenaires Blog Communauté EN FR Appliquer A propos de Programme Volets Localisation des sites Personnel Mettre l'IA au travail CDL Research Volets Prime (général) Agroalimentaire Intelligence artificielle Ingénierie biomédicale BioTech Le cancer Climat Santé computationnelle Calculer Defence Société numérique L'énergie Santé Santé et bien-être Healthcare Delivery Healthcare Robotics Fabrication Minéraux Neuro L'informatique nouvelle génération Océans Quantum Risque L'espace Chaîne d'approvisionnement Web3 Localisation des sites Berlin Calgary Cleveland Doha Estonie Halifax London Melbourne Milan Montréal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors"
+    },
+    {
+      "id": "check-page-a100ff43e9",
+      "url": "https://creativedestructionlab.com/fr/blog/applications-launch-2023-24/",
+      "page": "application",
+      "excerpt": "Build Something Massive: Applications Now Open for the CDL Program - Creative Destruction Lab × A propos de Programme Volets Localisation des sites Personnel Mettre l'IA au travail CDL Research Volets Prime (général) Agroalimentaire Intelligence artificielle Ingénierie biomédicale BioTech Le cancer Climat Santé computationnelle Calculer Defence Société numérique L'énergie Santé Santé et bien-être Healthcare Delivery Healthcare Robotics Fabrication Minéraux Neuro L'informatique nouvelle génération Océans Quantum Risque L'espace Chaîne d'approvisionnement Web3 Localisation des sites Berlin Calgary Cleveland Doha Estonie Halifax London Melbourne Milan Montréal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Entreprises Partenaires Blog Communauté EN FR Appliquer A propos de Programme Volets Localisation des sites Personnel Mettre l'IA au travail CDL Research Volets Prime (général) Agroalimentaire Intelligence artificielle Ingénierie biomédicale BioTech Le cancer Climat Santé computationnelle Calculer Defence Société numérique L'énergie Santé Santé et bien-être Healthcare Delivery Healthcare Robotics Fabrication Minéraux Neuro L'informatique nouvelle génération Océans Quantum Risque L'espace Chaîne d'approvisionnement Web3 Localisation des sites Berlin Calgary Cleveland Doha Estonie Halifax London Melbourne Milan Montréal Paris San Sebastian Seattle Texas"
+    },
+    {
+      "id": "check-page-0dfb9c8d1c",
+      "url": "https://creativedestructionlab.com/fr/blog/applications-open-2022/",
+      "page": "application",
+      "excerpt": "CDL’s 2022/23 Applications Are Officially Open for the 11th Program Year, in 16 Streams Across 10 Global Locations - Creative Destruction Lab × A propos de Programme Volets Localisation des sites Personnel Mettre l'IA au travail CDL Research Volets Prime (général) Agroalimentaire Intelligence artificielle Ingénierie biomédicale BioTech Le cancer Climat Santé computationnelle Calculer Defence Société numérique L'énergie Santé Santé et bien-être Healthcare Delivery Healthcare Robotics Fabrication Minéraux Neuro L'informatique nouvelle génération Océans Quantum Risque L'espace Chaîne d'approvisionnement Web3 Localisation des sites Berlin Calgary Cleveland Doha Estonie Halifax London Melbourne Milan Montréal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Entreprises Partenaires Blog Communauté EN FR Appliquer A propos de Programme Volets Localisation des sites Personnel Mettre l'IA au travail CDL Research Volets Prime (général) Agroalimentaire Intelligence artificielle Ingénierie biomédicale BioTech Le cancer Climat Santé computationnelle Calculer Defence Société numérique L'énergie Santé Santé et bien-être Healthcare Delivery Healthcare Robotics Fabrication Minéraux Neuro L'informatique nouvelle génération Océans Quantum Risque L'espace Chaîne d'approvisionnement Web3 Localisation des sites Berlin Calgary Cleveland Doha Estonie Halifax London Melbourne"
+    },
+    {
+      "id": "check-page-be566f1bd0",
+      "url": "https://creativedestructionlab.com/fr/blog/cdl-oxford-announce-new-mentors-makes-call-for-ai-start-up-applications/",
+      "page": "application",
+      "excerpt": "CDL-Oxford announces new mentors; makes call for AI start-up applications - Creative Destruction Lab × A propos de Programme Volets Localisation des sites Personnel Mettre l'IA au travail CDL Research Volets Prime (général) Agroalimentaire Intelligence artificielle Ingénierie biomédicale BioTech Le cancer Climat Santé computationnelle Calculer Defence Société numérique L'énergie Santé Santé et bien-être Healthcare Delivery Healthcare Robotics Fabrication Minéraux Neuro L'informatique nouvelle génération Océans Quantum Risque L'espace Chaîne d'approvisionnement Web3 Localisation des sites Berlin Calgary Cleveland Doha Estonie Halifax London Melbourne Milan Montréal Paris San Sebastian Seattle Texas Toronto Vancouver Wisconsin Mentors Entreprises Partenaires Blog Communauté EN FR Appliquer A propos de Programme Volets Localisation des sites Personnel Mettre l'IA au travail CDL Research Volets Prime (général) Agroalimentaire Intelligence artificielle Ingénierie biomédicale BioTech Le cancer Climat Santé computationnelle Calculer Defence Société numérique L'énergie Santé Santé et bien-être Healthcare Delivery Healthcare Robotics Fabrication Minéraux Neuro L'informatique nouvelle génération Océans Quantum Risque L'espace Chaîne d'approvisionnement Web3 Localisation des sites Berlin Calgary Cleveland Doha Estonie Halifax London Melbourne Milan Montréal Paris San Sebastian Seattle"
     }
   ],
   "findings": {
@@ -127,6 +601,18 @@
       {
         "value": "mailto:admissions@creativedestructionlab.com",
         "evidenceId": "check-email-99ea5fc58e"
+      },
+      {
+        "value": "https://creativedestructionlab.com/fr/blockchain-application/",
+        "evidenceId": "check-route-369120bb8b"
+      },
+      {
+        "value": "https://creativedestructionlab.com/wp-content/uploads/2023/02/Blockchain_Web3-2023_24-Application-Word-Template.docx",
+        "evidenceId": "check-route-1b5a688f83"
+      },
+      {
+        "value": "https://creativedestructionlab.com/fr/blog/applications-launch-2023-24/",
+        "evidenceId": "check-route-1c9c720919"
       }
     ],
     "applicationUrl": [
@@ -148,12 +634,42 @@
       }
     ],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "August",
+        "evidenceId": "check-announced-901b05db25"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "8",
+        "evidenceId": "check-duration-ba90e3fa83"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-1a2f3abd34"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-cfa3a55723"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://creativedestructionlab.com/companies/",
         "evidenceId": "check-portfolio-4e21d14628"
+      },
+      {
+        "value": "https://creativedestructionlab.com/fr/companies/",
+        "evidenceId": "check-portfolio-6d9d911366"
       }
     ],
     "name": [

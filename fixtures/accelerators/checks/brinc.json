@@ -1,47 +1,617 @@
 {
   "programId": "brinc",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://brinc.io/"
+    "https://brinc.io/",
+    "https://brinc.io/hong-kong-financial-innovation-program",
+    "https://brinc.io/virtual-accelerator",
+    "https://application-form.brinc.io/",
+    "https://brinc.io/virtual-accelerator-lite",
+    "https://brinc.io/web3-accelerator",
+    "https://brinc.io/xrpl-program",
+    "https://brinc.io/our-portfolio"
   ],
   "evidence": [
     {
+      "id": "check-announced-5165b4995e",
+      "url": "https://brinc.io/hong-kong-financial-innovation-program",
+      "title": "BRINC — program page",
+      "excerpt": "Check Eligibility Program Details Duration 12 Weeks Application deadline 25th August Cohort size Up to 10 Startups Delivery Hybrid Remote workshops and",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-0447349dcc",
+      "url": "https://brinc.io/web3-accelerator",
+      "title": "BRINC — program page",
+      "excerpt": "corporate partners. Is there a program fee? Yes, the program fee is $40,000 USD. Please consult the Brinc team if you qualify for rebates or",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-14257144d4",
+      "url": "https://brinc.io/hong-kong-financial-innovation-program",
+      "title": "BRINC — program page",
+      "excerpt": "and mentoring, with selected in-person sessions. Program Fee USD35,000 Subsidies and other reimbursement schemes are available for",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-07ff2d772c",
+      "url": "https://brinc.io/virtual-accelerator-lite",
+      "title": "BRINC — program page",
+      "excerpt": "Now Enrolling Scale smarter. Raise faster. In 4 weeks. The same frameworks, coaching and investor",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-23bf8a16b5",
+      "url": "https://brinc.io/web3-accelerator",
+      "title": "BRINC — program page",
+      "excerpt": "assist in securing investment opportunities? Our 12-week sprint focuses on co-creating partner-aligned",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-29e4e01348",
+      "url": "https://brinc.io/xrpl-program",
+      "title": "BRINC — program page",
+      "excerpt": "infrastructure that institutions can use? Join a 12-week program by Brinc, Ripple, and XRPL for startups",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3fb3b4205f",
+      "url": "https://brinc.io/hong-kong-financial-innovation-program",
+      "title": "BRINC — program page",
+      "excerpt": "rules. Program date 15th September onwards for 12 months. Exact start day to be confirmed upon selection",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-4588fc0170",
+      "url": "https://brinc.io/virtual-accelerator",
+      "title": "BRINC — program page",
+      "excerpt": "know what it takes. Program Snapshot Duration : 4 Weeks Format : Virtual + Interactive Tuition includes:",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-4b4a68c880",
+      "url": "https://brinc.io/xrpl-program",
+      "title": "BRINC — program page",
+      "excerpt": "Final startups begin onboarding and join the 12-week program. Apply Now FAQs Who is this program for?",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-53ccbca897",
+      "url": "https://brinc.io/hong-kong-financial-innovation-program",
+      "title": "BRINC — program page",
+      "excerpt": "Check Eligibility Program Details Duration 12 Weeks Application deadline 25th August Cohort size Up",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-54bdd40541",
+      "url": "https://brinc.io/xrpl-program",
+      "title": "BRINC — program page",
+      "excerpt": "of Financial Infrastructure in Hong Kong A 12-week program led by Brinc in partnership with Ripple",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-61c5220b3b",
+      "url": "https://brinc.io/xrpl-program",
+      "title": "BRINC — program page",
+      "excerpt": "fundraising, compliance, and XRPL development. 12 Weeks. Built Around Real-World Outcomes. Step 1",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-744fe18d3a",
+      "url": "https://brinc.io/web3-accelerator",
+      "title": "BRINC — program page",
+      "excerpt": "(FAQs)​ What’s the offer? - A customized 12-week accelerator sprint to build production-ready",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-909ac0b721",
+      "url": "https://brinc.io/hong-kong-financial-innovation-program",
+      "title": "BRINC — program page",
+      "excerpt": "Enterprise-Ready Proof of Concept Join a focused 12-week program from Brinc and OSN designed to help",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ad139c789b",
+      "url": "https://brinc.io/virtual-accelerator-lite",
+      "title": "BRINC — program page",
+      "excerpt": "90 days. Four pillars. One execution engine. A 4-week sprint blending workshops, templates and",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b703c380a7",
+      "url": "https://brinc.io/hong-kong-financial-innovation-program",
+      "title": "BRINC — program page",
+      "excerpt": "reimbursement for eligible Cyberport companies. 12 week focused program. What founders leave with Every",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c82053c0fd",
+      "url": "https://brinc.io/hong-kong-financial-innovation-program",
+      "title": "BRINC — program page",
+      "excerpt": "does the program offer? The program is a focused 12-week sprint designed to help fintech startups turn a",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-cda0af2479",
+      "url": "https://brinc.io/virtual-accelerator-lite",
+      "title": "BRINC — program page",
+      "excerpt": "Pricing. Outcome-backed Structure. - Full 4-week program access - 1:1 strategic coaching sessions",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-d49c2d37b9",
+      "url": "https://brinc.io/xrpl-program",
+      "title": "BRINC — program page",
+      "excerpt": "grant funding. How long is the program? 12 weeks. Is the program in-person, virtual, or hybrid?",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e851f46666",
+      "url": "https://brinc.io/virtual-accelerator-lite",
+      "title": "BRINC — program page",
+      "excerpt": "inside, at a glance. Duration Self-paced (4 weeks recommended) Format Virtual + Interactive",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-eac98b567a",
+      "url": "https://brinc.io/virtual-accelerator",
+      "title": "BRINC — program page",
+      "excerpt": "Fast-track your startup's growth in just 4 weeks - with 1:1 coaching, investor and partner",
+      "page": "details"
+    },
+    {
+      "id": "check-format-131170eecc",
+      "url": "https://application-form.brinc.io/",
+      "title": "BRINC — application page",
+      "excerpt": "Brinc Virtual Accelerator Application ​ Brinc Founder Application Please",
+      "page": "application"
+    },
+    {
+      "id": "check-format-15507fd709",
+      "url": "https://brinc.io/web3-accelerator",
+      "title": "BRINC — program page",
+      "excerpt": "support and high-quality mentorship. Is this program virtual or in-person? The program is conducted virtually, allowing",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1d89856a6e",
+      "url": "https://brinc.io/virtual-accelerator",
+      "title": "BRINC — program page",
+      "excerpt": "Complete post-program execution plan Pitch at Our Virtual Demo Day Build for Execution For founders who want to move",
+      "page": "details"
+    },
+    {
+      "id": "check-format-20e0276e3a",
+      "url": "https://brinc.io/hong-kong-financial-innovation-program",
+      "title": "BRINC — program page",
+      "excerpt": "interview before final selection. Is the program virtual or in person? The expected format is hybrid, combining",
+      "page": "details"
+    },
+    {
+      "id": "check-format-2ba2c6c321",
+      "url": "https://brinc.io/hong-kong-financial-innovation-program",
+      "title": "BRINC — program page",
+      "excerpt": "25th August Cohort size Up to 10 Startups Delivery Hybrid Remote workshops and mentoring, with selected in-person sessions.",
+      "page": "details"
+    },
+    {
+      "id": "check-format-2bb5783897",
+      "url": "https://brinc.io/hong-kong-financial-innovation-program",
+      "title": "BRINC — program page",
+      "excerpt": "or in person? The expected format is hybrid, combining remote workshops and mentoring with selected in-person sessions",
+      "page": "details"
+    },
+    {
+      "id": "check-format-3534a32231",
+      "url": "https://brinc.io/hong-kong-financial-innovation-program",
+      "title": "BRINC — program page",
+      "excerpt": "the program virtual or in person? The expected format is hybrid, combining remote workshops and mentoring with selected",
+      "page": "details"
+    },
+    {
+      "id": "check-format-3ab5489f96",
+      "url": "https://brinc.io/virtual-accelerator",
+      "title": "BRINC — program page",
+      "excerpt": "not theory - from real-world builders and investors. Virtual Demo Day - MENA Edition Pitch to active MENA and global",
+      "page": "details"
+    },
+    {
+      "id": "check-format-46362a50b7",
+      "url": "https://brinc.io/virtual-accelerator-lite",
+      "title": "BRINC — program page",
+      "excerpt": "Virtual Accelerator Lite Investors Partners Link 1 Link 2 Founders",
+      "page": "details"
+    },
+    {
+      "id": "check-format-4aeab7d63e",
+      "url": "https://brinc.io/our-portfolio",
+      "title": "BRINC — portfolio page",
+      "excerpt": "platform empowering users to invest, build, and experience virtual worlds through integrated tools and solutions. Website",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-50159c0710",
+      "url": "https://brinc.io/xrpl-program",
+      "title": "BRINC — program page",
+      "excerpt": "or hybrid? The program will be conducted online, with an in-person Demo Day hosted in Hong Kong. Do startups need to be based",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5f7bc2916c",
+      "url": "https://brinc.io/virtual-accelerator",
+      "title": "BRINC — program page",
+      "excerpt": "went wrong while submitting the form. Brinc x MONIIFY Virtual Accelerator Fast-track your startup's growth in just 4",
+      "page": "details"
+    },
+    {
+      "id": "check-format-65b24da175",
+      "url": "https://brinc.io/xrpl-program",
+      "title": "BRINC — program page",
+      "excerpt": "program? 12 weeks. Is the program in-person, virtual, or hybrid? The program will be conducted online, with an in-person",
+      "page": "details"
+    },
+    {
+      "id": "check-format-6b416639e2",
+      "url": "https://brinc.io/virtual-accelerator",
+      "title": "BRINC — program page",
+      "excerpt": "it takes. Program Snapshot Duration : 4 Weeks Format : Virtual + Interactive Tuition includes: 1:1 Coaching | Group",
+      "page": "details"
+    },
+    {
+      "id": "check-format-6d91f60c7b",
+      "url": "https://brinc.io/virtual-accelerator-lite",
+      "title": "BRINC — program page",
+      "excerpt": "a glance. Duration Self-paced (4 weeks recommended) Format Virtual + Interactive Coaching 1:1 Strategy Sessions Access",
+      "page": "details"
+    },
+    {
+      "id": "check-format-713cb033f4",
+      "url": "https://brinc.io/our-portfolio",
+      "title": "BRINC — portfolio page",
+      "excerpt": "platform empowering users to invest, build, and experience virtual worlds through integrated tools and solutions. Gaming",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-80f708cc41",
+      "url": "https://brinc.io/virtual-accelerator",
+      "title": "BRINC — program page",
+      "excerpt": "and group mentorship sessions - all capped off with a virtual demo day. Apply Now Brinc's first tuition-based program.",
+      "page": "details"
+    },
+    {
+      "id": "check-format-9b117c1ebe",
+      "url": "https://brinc.io/web3-accelerator",
+      "title": "BRINC — program page",
+      "excerpt": "and high-quality mentorship. Is this program virtual or in-person? The program is conducted virtually, allowing startups to",
+      "page": "details"
+    },
+    {
+      "id": "check-format-9ea1702746",
+      "url": "https://brinc.io/hong-kong-financial-innovation-program",
+      "title": "BRINC — program page",
+      "excerpt": "before final selection. Is the program virtual or in person? The expected format is hybrid, combining remote workshops",
+      "page": "details"
+    },
+    {
+      "id": "check-format-aeff9d8453",
+      "url": "https://brinc.io/hong-kong-financial-innovation-program",
+      "title": "BRINC — program page",
+      "excerpt": "Hybrid Remote workshops and mentoring, with selected in-person sessions. Program Fee USD35,000 Subsidies and other",
+      "page": "details"
+    },
+    {
+      "id": "check-format-bfe2594964",
+      "url": "https://brinc.io/our-portfolio",
+      "title": "BRINC — portfolio page",
+      "excerpt": "Industries develops haptic wearables enabling immersive virtual simulations for training, product design, and engineering",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-c16b6c2e95",
+      "url": "https://brinc.io/xrpl-program",
+      "title": "BRINC — program page",
+      "excerpt": "long is the program? 12 weeks. Is the program in-person, virtual, or hybrid? The program will be conducted online, with an",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c1e303c071",
+      "url": "https://brinc.io/hong-kong-financial-innovation-program",
+      "title": "BRINC — program page",
+      "excerpt": "25th August Cohort size Up to 10 Startups Delivery Hybrid Remote workshops and mentoring, with selected in-person",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c40d595a47",
+      "url": "https://brinc.io/hong-kong-financial-innovation-program",
+      "title": "BRINC — program page",
+      "excerpt": "combining remote workshops and mentoring with selected in-person sessions and ecosystem engagements in Hong Kong. Final",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d94f6c9f85",
+      "url": "https://brinc.io/xrpl-program",
+      "title": "BRINC — program page",
+      "excerpt": "funding. How long is the program? 12 weeks. Is the program in-person, virtual, or hybrid? The program will be conducted online,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-fe92a315c2",
+      "url": "https://brinc.io/virtual-accelerator",
+      "title": "BRINC — program page",
+      "excerpt": "Brinc x MONIIFY Virtual Accelerator for Startups Investors Partners Link 1 Link 2",
+      "page": "details"
+    },
+    {
+      "id": "check-location-62be81b21d",
+      "url": "https://brinc.io/hong-kong-financial-innovation-program",
+      "title": "BRINC — program page",
+      "excerpt": "with selected teams. Do we need to be based in Hong Kong? Hong Kong-based startups and",
+      "page": "details"
+    },
+    {
+      "id": "check-location-b75d156a50",
+      "url": "https://brinc.io/xrpl-program",
+      "title": "BRINC — program page",
+      "excerpt": "in Hong Kong. Do startups need to be based in Hong Kong? Startups with a strong connection to",
+      "page": "details"
+    },
+    {
       "id": "check-name-b7a910295a",
       "url": "https://brinc.io/",
-      "title": "BRINC — homepage checked by scrape.py",
+      "title": "BRINC — homepage",
       "excerpt": "Brinc | Venture Accelerator & Private Market Innovation",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-29b3eafa8b",
+      "url": "https://brinc.io/virtual-accelerator-lite",
+      "title": "BRINC — program page",
+      "excerpt": "Portfolio → https://brinc.io/our-portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a5ea3d95cb",
+      "url": "https://brinc.io/web3-accelerator",
+      "title": "BRINC — program page",
+      "excerpt": "Portfolio → https://brinc.io/our-portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bd27a9a914",
+      "url": "https://brinc.io/xrpl-program",
+      "title": "BRINC — program page",
+      "excerpt": "Portfolio → https://brinc.io/our-portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c1c500b75b",
+      "url": "https://brinc.io/hong-kong-financial-innovation-program",
+      "title": "BRINC — program page",
+      "excerpt": "Portfolio → https://brinc.io/our-portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d4396f009d",
+      "url": "https://brinc.io/virtual-accelerator",
+      "title": "BRINC — program page",
+      "excerpt": "Portfolio → https://brinc.io/our-portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-d9a8d5fb52",
       "url": "https://brinc.io/",
-      "title": "BRINC — homepage checked by scrape.py",
+      "title": "BRINC — homepage",
       "excerpt": "Portfolio → https://brinc.io/our-portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-47fcccb229",
+      "url": "https://brinc.io/virtual-accelerator",
+      "title": "BRINC — program page",
+      "excerpt": "Apply Now → https://application-form.brinc.io/",
       "page": "details"
     },
     {
       "id": "check-route-56909522a1",
       "url": "https://brinc.io/",
-      "title": "BRINC — homepage checked by scrape.py",
+      "title": "BRINC — homepage",
       "excerpt": "https://brinc.io/",
       "page": "details"
+    },
+    {
+      "id": "check-route-92f01c0a8f",
+      "url": "https://brinc.io/xrpl-program",
+      "title": "BRINC — program page",
+      "excerpt": "Apply Now → https://airtable.com/appO6UjaQfU92aIhc/pagojNBqROFqN80Xl/form?submissionGuid=bebd3070-74a4-4ac3-94ff-14fb8b1ba464",
+      "page": "details"
+    },
+    {
+      "id": "check-start-0c9fe5e002",
+      "url": "https://brinc.io/virtual-accelerator",
+      "title": "BRINC — program page",
+      "excerpt": "includes: 1:1 Coaching | Group Workshops | AMAs | Demo Day Program starts July 2026 Apply Now Secure Your Spot Connect with us Contact Us",
+      "page": "details"
+    },
+    {
+      "id": "check-status-96d851c6f9",
+      "url": "https://brinc.io/web3-accelerator",
+      "title": "BRINC — program page",
+      "excerpt": "powered by Brinc Seize the opportunity to lead the charge in accelerating Stablecoin adoption in Hong Kong. Applications now open. Building an exciting project in these areas? Hong Kong’s retail loyalty and payment ecosystem is ready for",
+      "page": "details"
+    },
+    {
+      "id": "check-status-c3b7e352bd",
+      "url": "https://brinc.io/xrpl-program",
+      "title": "BRINC — program page",
+      "excerpt": "with Ripple for startups building real-world financial applications on the XRP Ledger (XRPL). The applications are closed. Fill the form below for getting notified on future programs. Name* Company* *By submitting, you consent to",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-b31847ab87",
+      "url": "https://brinc.io/",
+      "page": "details",
+      "excerpt": "Brinc | Venture Accelerator & Private Market Innovation Investors Partners Link 1 Link 2 Founders Portfolio Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Shaping the Future of Private Markets Through Innovation We give investors access to private opportunities, help corporates and governments innovate with accelerator programs and support founders to build lasting businesses. Our Portfolio Location: Estonia Stage: Exit Sector: Web3 & Blockchain Location: USA Stage: Series B Sector: Cellular Agriculture Location: Hong Kong Stage: Series Pre-A Sector: AI & Machine Learning Our Co-investors Tim Draper Sam Altman Sergey Brin John Doerr Arthur Hayes About Us Brinc is focused on transforming how private markets operate. We connect capital, corporates, and founders through investment structures, tailored programs, and scalable communities. Our mission is to accelerate the next generation of businesses by bridging ecosystems, deploying capital intelligently, and enabling founders with the tools they need to thrive. Our Services For Investors We work with accredited investors and partner firms on private-market co-investment, alongside operators and syndicate leads across our global network. For Corporates and Governments We design and deliver innovation programs and strategic initiatives with leading partners, to help organizations"
+    },
+    {
+      "id": "check-page-93ba4ddc81",
+      "url": "https://brinc.io/hong-kong-financial-innovation-program",
+      "page": "details",
+      "excerpt": "Hong Kong Financial Innovation Program Investors Partners Link 1 Link 2 Founders Portfolio Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Turn Your Fintech Product Into an Enterprise-Ready Proof of Concept Join a focused 12-week program from Brinc and OSN designed to help high-potential fintech startups validate real-world use cases, shape a credible POC and access technical, corporate and investor pathways. Request a Fast-Track Review Eligible Cyberport companies may be able to receive reimbursement of up to 75% of the program fee, subject to Cyberport approval and applicable funding rules. Move beyond pitch decks. The program is structured around problem definition, POC design and commercial readiness. 100% of Participants achieved a POC Up to 75% fee reimbursement for eligible Cyberport companies. 12 week focused program. What founders leave with Every cohort moves through the stages built to turn a promising idea into a credible, enterprise-ready proof of concept. Enterprise - ready POC A clearly defined problem statement, scope, success criteria, implementation requirements and next-step plan. Technical and product validation Guidance to assess architecture, infrastructure fit, compliance considerations and technical readiness. Corporate and market readiness Feedback from relevant financial-services operators on"
+    },
+    {
+      "id": "check-page-465ca92f77",
+      "url": "https://brinc.io/virtual-accelerator",
+      "page": "details",
+      "excerpt": "Brinc x MONIIFY Virtual Accelerator for Startups Investors Partners Link 1 Link 2 Founders Portfolio Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Brinc x MONIIFY Virtual Accelerator Fast-track your startup's growth in just 4 weeks - with 1:1 coaching, investor and partner introductions, and group mentorship sessions - all capped off with a virtual demo day. Apply Now Brinc's first tuition-based program. Built by founders for founders. Why Brinc x MONIIFY: Brinc helps founders scale with investors, partners, and proven execution frameworks. MONIIFY provides media reach and go-to-market insight across the Middle East. Together, founders get the access and distribution needed to build real momentum in the region. Program Outcomes A refined pitch & investor narrative A validated GTM strategy & traction plan A clear fundraising roadmap Credibility with VCs & operators 1:1 investor and partner introductions Complete post-program execution plan Pitch at Our Virtual Demo Day Build for Execution For founders who want to move fast - blending coaching, mentorship, and on-demand content. Learn, build, and execute - all in one month. Inside The Program Personalized Growth Acceleration Weekly 1:1 Strategy Sprints tailored to your next milestone and growth. Focus on market entry, early traction, and fundraising readiness for your"
+    },
+    {
+      "id": "check-page-660889c90a",
+      "url": "https://application-form.brinc.io/",
+      "page": "application",
+      "excerpt": "Brinc Virtual Accelerator Application ​ Brinc Founder Application Please answer every question. Incomplete applications will not be accepted. Begin Application"
+    },
+    {
+      "id": "check-page-566bc4087c",
+      "url": "https://brinc.io/virtual-accelerator-lite",
+      "page": "details",
+      "excerpt": "Virtual Accelerator Lite Investors Partners Link 1 Link 2 Founders Portfolio Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Now Enrolling Scale smarter. Raise faster. In 4 weeks. The same frameworks, coaching and investor network powering Brinc's flagship accelerator, now self-paced, with 1:1 strategy sessions and curated intros at the end. Built for founders who execute. Book a call 100% Money back guarantee | Start instantly, self paced Not all accelerators are built equal. Born in emerging markets, built for global growth, run by serial entrepreneurs with multiple exits. We've built before, and we build alongside you. 260 + Total Global Portfolio Companies 10k+ Founders Supported 75 + Programs Run $ 1.69 B+ Combined Portfolio Market Cap Born in emerging markets Started in China, scaled across India, now building in the UAE, we go deep, build local, unlock real ecosystems. Founders first, always Built and run by serial entrepreneurs. We know the grind, what raising takes, and how to get it done. Outcomes, not theory Every framework, intro and session is engineered for traction and capital, measured in 90 days. Four pillars. One execution engine. A 4-week sprint blending workshops, templates and strategic check-ins, engineered to turn execution into fundraising momentum. Pillar 1 Recorded Workshops On-demand expert sessions"
+    },
+    {
+      "id": "check-page-08c697a3e3",
+      "url": "https://brinc.io/web3-accelerator",
+      "page": "details",
+      "excerpt": "Web3-Accelerator Investors Partners Link 1 Link 2 Founders Portfolio Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Octopus x IDA Web3 Accelerator Cohort 2 powered by Brinc Seize the opportunity to lead the charge in accelerating Stablecoin adoption in Hong Kong. Applications now open. Building an exciting project in these areas? Hong Kong’s retail loyalty and payment ecosystem is ready for modernization to better serve merchants, enhance consumer experiences, and support Hong Kong’s fintech leadership. We seek innovative startups to address key challenges: Transforming Cross-Border Payments for a Digital Economy Modernize infrastructure for seamless real-time, compliant cross-border payments enabling global trade; attract crypto-native users; and unlock new revenue streams and partnerships (i.e. rewards). Reimagining Loyalty for the Web3 Economy Transform loyalty programs into dynamic, efficient, and transparent systems that improve SME cash flow, simplify reward redemption, and adapt to evolving consumer behaviors. Empowering SMEs with Cost-Effective Digital Solutions Lower transaction fees, reduce onboarding complexity, and enhance marketing through integrated, data-driven omni-channel solutions to help SMEs thrive digitally. Ready to innovate with us? Transform Hong Kong’s retail loyalty and payment landscape with"
+    },
+    {
+      "id": "check-page-168add8ed8",
+      "url": "https://brinc.io/xrpl-program",
+      "page": "details",
+      "excerpt": "XRPL Program by Brinc Investors Partners Link 1 Link 2 Founders Portfolio Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Non-Dilutive Grants Funding Available Build the Future of Financial Infrastructure in Hong Kong A 12-week program led by Brinc in partnership with Ripple for startups building real-world financial applications on the XRP Ledger (XRPL). The applications are closed. Fill the form below for getting notified on future programs. Name* Company* *By submitting, you consent to being added to Brinc's email subscription list and acknowledge that you may receive updates & marketing communications from Brinc. Thank you! Your submission has been received. Oops! Something went wrong while submitting the form. Powered by global operators in venture building, blockchain infrastructure, and financial innovation. Who We’re Looking For Startups building practical financial infrastructure with clear institutional, commercial, or market-level use cases. Payments & FX Tokenization & Capital Markets Institutional DeFi Credit & Lending RegTech & Security Infrastructure Custody and Digital Asset Operations AI & Agentic Commerce What Selected Startups Get Non-dilutive grants funding opportunity Grant support for product development, market entry, and growth. Financial industry mentorship Access leaders across banking, payments,"
+    },
+    {
+      "id": "check-page-6506aa3427",
+      "url": "https://brinc.io/our-portfolio",
+      "page": "portfolio",
+      "excerpt": "Brinc Portfolio Companies | Global Venture Accelerator Investors Partners Link 1 Link 2 Founders Portfolio Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Our Spotlight Companies Zeta Surgical Healthcare | Early Zeta Surgical develops surgical navigation and robotics tools to make minimally invasive surgeries easier, faster and more accessible. Website Link No items found. Close Zeta Surgical Zeta Surgical develops surgical navigation and robotics tools to make minimally invasive surgeries easier, faster and more accessible. Soundbrenner Consumer | Growth Soundbrenner has developed wearables tools and a cutting-edge app to create a music practice experience that is fun, educational and rewarding. Website Link No items found. Close Soundbrenner Soundbrenner has developed wearables tools and a cutting-edge app to create a music practice experience that is fun, educational and rewarding. Omni.pet Agrifood | Growth Omni is a vet-founded, science-backed brand creating plant-based meat for dogs, transforming the pet food industry with healthy, sustainable alternatives. Website Link No items found. Close Omni.pet Omni is a vet-founded, science-backed brand creating plant-based meat for dogs, transforming the pet food industry with healthy, sustainable alternatives. Aonic (Poladrone) Smart Cities & IOT | Growth Aonic is an all-in-one"
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://application-form.brinc.io/",
+        "evidenceId": "check-route-47fcccb229"
+      },
+      {
+        "value": "https://airtable.com/appO6UjaQfU92aIhc/pagojNBqROFqN80Xl/form?submissionGuid=bebd3070-74a4-4ac3-94ff-14fb8b1ba464",
+        "evidenceId": "check-route-92f01c0a8f"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://brinc.io/",
         "evidenceId": "check-route-56909522a1"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-96d851c6f9"
+      },
+      {
+        "value": false,
+        "evidenceId": "check-status-c3b7e352bd"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "August",
+        "evidenceId": "check-announced-5165b4995e"
+      }
+    ],
+    "cohortStarts": [
+      {
+        "value": "July 2026",
+        "evidenceId": "check-start-0c9fe5e002"
+      }
+    ],
+    "durationWeeks": [
+      {
+        "value": "12",
+        "evidenceId": "check-duration-909ac0b721"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-3fb3b4205f"
+      },
+      {
+        "value": "4",
+        "evidenceId": "check-duration-eac98b567a"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-c1e303c071"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-2ba2c6c321"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-aeff9d8453"
+      }
+    ],
+    "location": [
+      {
+        "value": "Hong Kong",
+        "evidenceId": "check-location-62be81b21d"
+      }
+    ],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "and mentoring, with selected in-person sessions. Program Fee USD35,000 Subsidies and other reimbursement schemes are available for",
+        "evidenceId": "check-deal-14257144d4"
+      },
+      {
+        "value": "corporate partners. Is there a program fee? Yes, the program fee is $40,000 USD. Please consult the Brinc team if you qualify for rebates or",
+        "evidenceId": "check-deal-0447349dcc"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "fee",
+          "amount": "35000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Fee",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-14257144d4"
+      },
+      {
+        "value": {
+          "kind": "fee",
+          "amount": "40000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Fee",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-0447349dcc"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://brinc.io/our-portfolio",

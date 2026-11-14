@@ -1,71 +1,337 @@
 {
   "programId": "startup-bahrain",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://startupbahrain.com/",
-    "https://startupbahrain.com/about"
+    "https://startupbahrain.com/blog/alrawi-wins-best-application-for-smart-devices-award",
+    "https://startupbahrain.com/blog/applications-are-open-for-bahrain-fintech-bays-ambitious-fintech-national-fintech-program",
+    "https://startupbahrain.com/blog/applications-are-open-now-for-georgetown-fintech-program-2-0",
+    "https://startupbahrain.com/blog/applications-open-for-riyada-business-accelerator-program-for-tech-startups",
+    "https://startupbahrain.com/blog/apply-for-tamkeens-start-your-business-support-everything-you-need-to-know",
+    "https://startupbahrain.com/blog/applying-for-cr-in-bahrain-these-are-the-documents-youll-need",
+    "https://startupbahrain.com/blog/badir-to-start-accepting-applications-for-forthcoming-training-bootcamp-next-month",
+    "https://startupbahrain.com/blog/bahrain-fintech-bay-invites-application-for-flagship-accelerator-program",
+    "https://startupbahrain.com/blog/bahraini-startup-kashtah-has-been-recently-acquired-heres-an-exclusive-from-the-founder-of-the-application",
+    "https://startupbahrain.com/blog/bahraini-tech-startups-take-note-zain-great-idea-2021-is-accepting-applications-now",
+    "https://startupbahrain.com/blog/benefit-awarded-with-best-application-for-the-smart-devices-award",
+    "https://startupbahrain.com/blog/benefit-unveils-fully-revamped-version-of-benefitpay-application",
+    "https://startupbahrain.com/blog/bibf-partnered-with-information-egovernment-authority-to-organize-a-specialized-seminar-on-ai-chat-gpt-and-their-applications",
+    "https://startupbahrain.com/blog/brincs-global-iot-accelerator-has-now-opened-applications-for-its-connected-hardware-program-in-bahrain"
   ],
   "evidence": [
     {
-      "id": "check-email-0d3af469fe",
-      "url": "https://startupbahrain.com/about",
-      "title": "Startup Bahrain — details page checked by scrape.py",
-      "excerpt": "Contact (contact@startupbahrain.com)",
-      "page": "details"
+      "id": "check-deal-da402289d4",
+      "url": "https://startupbahrain.com/blog/applications-are-open-now-for-georgetown-fintech-program-2-0",
+      "title": "Startup Bahrain — application page",
+      "excerpt": "fields. The shortlisted candidates will be charged BHD 2,500 (approx $6,630) as the program fee for the six-month-long program. So if you have",
+      "page": "application"
     },
     {
-      "id": "check-email-6926953ba3",
-      "url": "https://startupbahrain.com/about",
-      "title": "Startup Bahrain — details page checked by scrape.py",
-      "excerpt": "We are excited to have you! Just send us your details on help@startupbahrain.com and we will get back to you! Can StartUp Bahrain promote",
-      "page": "details"
+      "id": "check-duration-0eac749c44",
+      "url": "https://startupbahrain.com/blog/bahrain-fintech-bay-invites-application-for-flagship-accelerator-program",
+      "title": "Startup Bahrain — application page",
+      "excerpt": "be prepared to relocate to Bahrain for at least 8 weeks during the 12-week long program. The program",
+      "page": "application"
     },
     {
-      "id": "check-email-859fa232fb",
-      "url": "https://startupbahrain.com/about",
-      "title": "Startup Bahrain — details page checked by scrape.py",
-      "excerpt": "Apply (contact@startupbahrain.com)",
-      "page": "details"
+      "id": "check-duration-28bd6244e8",
+      "url": "https://startupbahrain.com/blog/bahrain-fintech-bay-invites-application-for-flagship-accelerator-program",
+      "title": "Startup Bahrain — application page",
+      "excerpt": "to Bahrain for at least 8 weeks during the 12-week long program. The program will kick off on May",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-2d8ab99f52",
+      "url": "https://startupbahrain.com/blog/applications-are-open-for-bahrain-fintech-bays-ambitious-fintech-national-fintech-program",
+      "title": "Startup Bahrain — application page",
+      "excerpt": "to over 30 potential employees in one roof. 6- month internship: The internship, starting in October,",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-e1d9cb8035",
+      "url": "https://startupbahrain.com/blog/applications-are-open-now-for-georgetown-fintech-program-2-0",
+      "title": "Startup Bahrain — application page",
+      "excerpt": "GCC residents, including Lebanon and Jordan. The 12-week-long program by the Georgetown University ’s",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-fd2cf94081",
+      "url": "https://startupbahrain.com/blog/applications-are-open-for-bahrain-fintech-bays-ambitious-fintech-national-fintech-program",
+      "title": "Startup Bahrain — application page",
+      "excerpt": "with a leading business school, spread across 12 weeks with two live sessions in Bahrain. The course",
+      "page": "application"
+    },
+    {
+      "id": "check-format-98c3b4189a",
+      "url": "https://startupbahrain.com/blog/bahraini-tech-startups-take-note-zain-great-idea-2021-is-accepting-applications-now",
+      "title": "Startup Bahrain — application page",
+      "excerpt": "licensing services. Wait, there's more. As part of the virtual program, participating startup founders will also gain",
+      "page": "application"
+    },
+    {
+      "id": "check-format-b1cd796a5e",
+      "url": "https://startupbahrain.com/blog/applying-for-cr-in-bahrain-these-are-the-documents-youll-need",
+      "title": "Startup Bahrain — application page",
+      "excerpt": "Twitter, and Instagram. ‹ What you can and can't do with a Virtual CR in Bahrain Easy way to add activity to your Bahraini",
+      "page": "application"
+    },
+    {
+      "id": "check-format-c4374f9625",
+      "url": "https://startupbahrain.com/blog/applying-for-cr-in-bahrain-these-are-the-documents-youll-need",
+      "title": "Startup Bahrain — application page",
+      "excerpt": "enterprise without an office, consider applying for Virtual CR under the MoICT’s new initiative dubbed Sijili. These",
+      "page": "application"
     },
     {
       "id": "check-name-2d1cbacfce",
       "url": "https://startupbahrain.com/",
-      "title": "Startup Bahrain — homepage checked by scrape.py",
+      "title": "Startup Bahrain — homepage",
       "excerpt": "StartUp Bahrain Ecosystem Guide Pitch Weekend Blog Perks Resources Bahrain",
       "page": "details"
     },
     {
+      "id": "check-route-21d824af64",
+      "url": "https://startupbahrain.com/blog/applications-are-open-now-for-georgetown-fintech-program-2-0",
+      "title": "Startup Bahrain — application page",
+      "excerpt": "Applications are open for Bahrain FinTech Bay’s ambitious National FinTech Talent Program › → https://startupbahrain.com/blog/applications-are-open-for-bahrain-fintech-bays-ambitious-fintech-national-fintech-program",
+      "page": "application"
+    },
+    {
       "id": "check-route-8b570f7408",
       "url": "https://startupbahrain.com/",
-      "title": "Startup Bahrain — homepage checked by scrape.py",
+      "title": "Startup Bahrain — homepage",
       "excerpt": "https://startupbahrain.com/",
       "page": "details"
+    },
+    {
+      "id": "check-route-b60f986b5f",
+      "url": "https://startupbahrain.com/blog/apply-for-tamkeens-start-your-business-support-everything-you-need-to-know",
+      "title": "Startup Bahrain — application page",
+      "excerpt": "Tamkeen opens applications for the Governance Program in partnership with EMIC Training and INSEAD › → https://startupbahrain.com/blog/tamkeen-opens-applications-for-the-governance-program-in-partnership-with-emic-training-and-insead",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c2b57e3439",
+      "url": "https://startupbahrain.com/blog/bahrain-fintech-bay-invites-application-for-flagship-accelerator-program",
+      "title": "Startup Bahrain — application page",
+      "excerpt": "‹ FLat6Labs Bahrain wants YOU to apply to its 5th cycle → https://startupbahrain.com/blog/flat6labs-bahrain-wants-you-to-apply-to-its-5th-cycle",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fae2dbfc4e",
+      "url": "https://startupbahrain.com/blog/applications-are-open-for-bahrain-fintech-bays-ambitious-fintech-national-fintech-program",
+      "title": "Startup Bahrain — application page",
+      "excerpt": "‹ Applications are open now for Georgetown FinTech Program 2.0 → https://startupbahrain.com/blog/applications-are-open-now-for-georgetown-fintech-program-2-0",
+      "page": "application"
+    },
+    {
+      "id": "check-status-7aca8dfc39",
+      "url": "https://startupbahrain.com/blog/applications-open-for-riyada-business-accelerator-program-for-tech-startups",
+      "title": "Startup Bahrain — application page",
+      "excerpt": "The Labour Fund ( Tamkeen ) and Salica Investments (previously known as Hambro Perks) today announced that applications are now open for the second cohort of the Riyada Business Accelerator Program , an initiative for tech startups with",
+      "page": "application"
+    },
+    {
+      "id": "check-status-81d4388608",
+      "url": "https://startupbahrain.com/blog/brincs-global-iot-accelerator-has-now-opened-applications-for-its-connected-hardware-program-in-bahrain",
+      "title": "Startup Bahrain — application page",
+      "excerpt": "for its connected hardware program in Bahrain Jun 5, 2018 Are you a hardware and IoT entrepreneur? Because applications are now open for the world-leading Brinc Accelerator Program ! IoT founders have an incredible opportunity to join the",
+      "page": "application"
+    },
+    {
+      "id": "check-status-a8fe361c54",
+      "url": "https://startupbahrain.com/blog/applications-are-open-for-bahrain-fintech-bays-ambitious-fintech-national-fintech-program",
+      "title": "Startup Bahrain — application page",
+      "excerpt": "Applications are open for Bahrain FinTech Bay’s ambitious National FinTech Talent Program - StartUp Bahrain Ecosystem Guide Pitch",
+      "page": "application"
+    },
+    {
+      "id": "check-status-ef12e3974f",
+      "url": "https://startupbahrain.com/blog/bahraini-tech-startups-take-note-zain-great-idea-2021-is-accepting-applications-now",
+      "title": "Startup Bahrain — application page",
+      "excerpt": "Middle Eastern telecommunications company Zain in partnership with Brilliant Lab has announced that it is now accepting applications for the Zain Great Idea (ZGI) Investment and Acceleration Program. So if you are a tech startup in Bahrain,",
+      "page": "application"
+    },
+    {
+      "id": "check-status-fb00d9a306",
+      "url": "https://startupbahrain.com/blog/applications-are-open-now-for-georgetown-fintech-program-2-0",
+      "title": "Startup Bahrain — application page",
+      "excerpt": "Applications are open now for Georgetown FinTech Program 2.0 - StartUp Bahrain Ecosystem Guide Pitch Weekend Blog Perks Resources",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-8e15976258",
+      "url": "https://startupbahrain.com/",
+      "page": "details",
+      "excerpt": "StartUp Bahrain Ecosystem Guide Pitch Weekend Blog Perks Resources Bahrain About Contact The perfect launchpad to scale in the Middle East The perfect launchpad to scale in the Middle East From startups to regional scaleups, some of the Middle East’s hottest are a part of the StartUp Bahrain ecosystem. There’s many more, check them out → Let's talk? Happy to help you launch, grow, and scale. GUIDE Learn from the ecosystem's best guide on starting Fundraising support with connections to hundreds of external investors. PITCH Pitch and win with the best at StartUp Bahrain Pitch Fundraising support with connections to hundreds of external investors. PERKS Get perked and gain an edge to get you going Fundraising support with connections to hundreds of external investors. INFORMATION & EGOVERNMENT AUTHORITY WINNER eGovernment Excellence Award star star star star star ENTERPRISE AGILITY AWARDS WINNER Digital Startup Hub of The Year star star star star star UNIPAL WINNER Youth Champions star star star star star Strategic Partners These entities are at the center of what drives the national startup community, reach out if you'd like to be in their company. Tamkeen Mumtalakat Bahrain Economic Development Board Reboot Coding Institute General Assembly American University of Bahrain Spring Ordable/ Brinc Ministry of Industry & Commerce Bahrain Development Bank DOO AI CX for the GCC, for"
+    },
+    {
+      "id": "check-page-7e44d33f2b",
+      "url": "https://startupbahrain.com/blog/alrawi-wins-best-application-for-smart-devices-award",
+      "page": "application",
+      "excerpt": "AlRawi wins “Best Application for Smart Devices” Award - StartUp Bahrain Ecosystem Guide Pitch Weekend Blog Perks Resources Bahrain About Contact AlRawi wins “Best Application for Smart Devices” Award Apr 30, 2019 The eGovernment Excellence Award , under the Patronage of H.H. Sheikh Mohammed bin Mubarak Al Khalifa, was held on April 28, 2019 at the Gulf Hotel Bahrain. The Information and eGovernment Authority has organized the award ceremony to recognize various talents around the Kingdom and reward them for their achievements. One of our very own Bahraini startups, AlRawi , has won under the category of Best Application for Smart Devices. AlRawi won the award because of its successful app that has an impact on society, the ability to provide effective communication to the audience, and the degree of effectiveness in society. Founded by Hala Sulaiman , Ameera Al-Qubaiti, and Mohamed Ebrahim, Alrawi is a platform to make books and cultural content more accessible to a wider audience in the Arab world. To encourage continuous learning, AlRawi Books has a wide variety of audiobooks in Arabic that cater to those who want to read books with busy schedules. It creates a network between the reader and the author and gives new opportunities for publishers, authors, narrators, etc. Commenting on the award, CEO Mohamed Ebrahim said, “We are honored to receive this prestigious award.” He"
+    },
+    {
+      "id": "check-page-25feab94d4",
+      "url": "https://startupbahrain.com/blog/applications-are-open-for-bahrain-fintech-bays-ambitious-fintech-national-fintech-program",
+      "page": "application",
+      "excerpt": "Applications are open for Bahrain FinTech Bay’s ambitious National FinTech Talent Program - StartUp Bahrain Ecosystem Guide Pitch Weekend Blog Perks Resources Bahrain About Contact Applications are open for Bahrain FinTech Bay’s ambitious National FinTech Talent Program Aug 26, 2019 Eyes set on incorporating fresh blood into the country’s burgeoning FinTech ecosystem, Bahrain FinTech Bay (BFB) will soon be launching its flagship National FinTech Talent Program, supported by Tamkeen. The program is open for Bahrainis who are fresh graduates and looking to gain some experience within the FinTech field and to master the skills and knowledge needed to begin a career in the field. The program will be divided into the following steps: Career Fair: Applicants will be invited to a career fair on September 19 with networking opportunities to over 30 potential employees in one roof. 6- month internship: The internship, starting in October, will enable candidates to receive training and mentorship from BFB partners across corporates, financial institutions, and universities from across the region and beyond. Georgetown FinTech Program: Study with a leading business school, spread across 12 weeks with two live sessions in Bahrain. The course will begin in October 2019 and end on January 2020. Blockchain & AI Academies: BFB will organize a special training session on Blockchain & AI"
+    },
+    {
+      "id": "check-page-3648e97f72",
+      "url": "https://startupbahrain.com/blog/applications-are-open-now-for-georgetown-fintech-program-2-0",
+      "page": "application",
+      "excerpt": "Applications are open now for Georgetown FinTech Program 2.0 - StartUp Bahrain Ecosystem Guide Pitch Weekend Blog Perks Resources Bahrain About Contact Applications are open now for Georgetown FinTech Program 2.0 Aug 27, 2019 The second cohort of the prestigious Georgetown FinTech Program will kick off on Oct 26, 2019, with the vision of enabling candidates to comprehend the scope of FinTech and how disruptive technologies can be used to pave the way for new opportunities. Whether you work for an Islamic retail bank aiming to go digital, or simply an employee looking to get out of your comfort zone and establish your own FinTech startup, you will benefit from applying for this program. The minimum educational qualification of the applicant must be a Bachelor's degree or higher. In addition, the applicant must also have fluency in English in addition to a minimum of two years of work experience in any of finance, technology, or other related fields. The shortlisted candidates will be charged BHD 2,500 (approx $6,630) as the program fee for the six-month-long program. So if you have always wanted to pursue a career in the cutting-edge FinTech sector in the region, this is the one opportunity you don't want to miss out on! The application window is currently open for all Bahraini and GCC residents, including Lebanon and Jordan. The 12-week-long program by the Georgetown"
+    },
+    {
+      "id": "check-page-53f484f062",
+      "url": "https://startupbahrain.com/blog/applications-open-for-riyada-business-accelerator-program-for-tech-startups",
+      "page": "application",
+      "excerpt": "Applications open for Riyada Business Accelerator Program for tech startups - StartUp Bahrain Ecosystem Guide Pitch Weekend Blog Perks Resources Bahrain About Contact Applications open for Riyada Business Accelerator Program for tech startups Nov 26, 2024 The Labour Fund ( Tamkeen ) and Salica Investments (previously known as Hambro Perks) today announced that applications are now open for the second cohort of the Riyada Business Accelerator Program , an initiative for tech startups with Minimum Viable Products (MVPs) or those nearing product launch. Applications are open until 4th of December 2025 . The Riyada Business Accelerator Program aims to equip entrepreneurs with the knowledge and skills needed to transform their innovative ideas into successful businesses. Over the span of six months, the program will offer participants numerous benefits, including guidance from experienced mentors, potential funding opportunities, commercialization strategies, support in building a competitive product, assistance with business financials, and insights into achieving product-market fit—all while fostering a strong, capable team. The success of the first cohort underscores the program's transformative potential, as highlighted by Salman Almarzooq , founder of Travilege: \"The Riyada Business Accelerator Program has been a game-changer for my business, especially with the funding I"
+    },
+    {
+      "id": "check-page-310c6af4ba",
+      "url": "https://startupbahrain.com/blog/apply-for-tamkeens-start-your-business-support-everything-you-need-to-know",
+      "page": "application",
+      "excerpt": "Apply for Tamkeen's Start Your Business Support: Everything You Need to Know - StartUp Bahrain Ecosystem Guide Pitch Weekend Blog Perks Resources Bahrain About Contact Apply for Tamkeen's Start Your Business Support: Everything You Need to Know Dec 2, 2024 Why Tamkeen’s Startup Support is a Game-Changer For entrepreneurs in Bahrain, access to funding and business support can make or break a startup . This is where Tamkeen’s Start Your Business (SYB) program comes in—a government-backed initiative designed to help startups launch, scale, and thrive. With financial grants, mentorship, and strategic guidance , this program provides a low-risk way for founders to turn their ideas into reality. This guide will walk you through who is eligible, how to apply, and how to maximize the benefits of Tamkeen’s Start Your Business support . What is Tamkeen’s Start Your Business Support? Why It Matters: Tamkeen’s Start Your Business (SYB) program is a financial and advisory support package for entrepreneurs looking to establish or expand their businesses in Bahrain. ✅ Financial Support – Covers a percentage of startup costs, equipment, and operational expenses . ✅ Training & Mentorship – Provides business advisory, skills training, and expert mentorship to help entrepreneurs succeed. ✅ Networking & Resources – Connects startups with investors, accelerators, and government incentives . 📌"
+    },
+    {
+      "id": "check-page-ef22a23b5d",
+      "url": "https://startupbahrain.com/blog/applying-for-cr-in-bahrain-these-are-the-documents-youll-need",
+      "page": "application",
+      "excerpt": "Applying for CR in Bahrain? These are the documents you’ll need - StartUp Bahrain Ecosystem Guide Pitch Weekend Blog Perks Resources Bahrain About Contact Applying for CR in Bahrain? These are the documents you’ll need Mar 10, 2020 So all your entrepreneurial ambitions are about to come true as your startup gears up to take the market by storm. Congratulations, an excellent achievement, but a little bit of work before that. We assume you are done formulating a strategy to execute your business plan and all now left is the paperwork mandatory for regulatory compliance. You know, the boring stuff that everyone hates but nobody can do without. In Bahrain, when it comes to regulatory and legal compliances for a business, a commercial registration (CR) is one of the foremost requirements. Below, we’re going to discuss what exactly CR is for along with all the documents you’ll need to furnish to get one for your upcoming startup. What is a CR certificate in Bahrain Simply put, a commercial registration certificate is a piece of legal document that businesses and investors receive as soon as they register their organization with the Ministry of Industry, Commerce, & Tourism (MoICT) . The Bahraini government issues two different types of CR certificates: CR certificate issued without a license for business activities. CR certificate issued to startups with approval for business"
+    },
+    {
+      "id": "check-page-31ff28a58f",
+      "url": "https://startupbahrain.com/blog/badir-to-start-accepting-applications-for-forthcoming-training-bootcamp-next-month",
+      "page": "application",
+      "excerpt": "Badir to start accepting applications for forthcoming training bootcamp next month - StartUp Bahrain Ecosystem Guide Pitch Weekend Blog Perks Resources Bahrain About Contact Badir to start accepting applications for forthcoming training bootcamp next month Mar 13, 2018 Badir Program for Technology Incubators , on behalf of King Abdulaziz City for Science and Technology (KACST), has announced that the application process for the forthcoming training boot camp in Riyadh and Al Qassim will commence in mid-April. The boot camp will be geared towards enabling startups in the region to accelerate their growth while simultaneously developing a culture of entrepreneurship among the young population. Also, it will help participating tech startups to attract investments on the merit of their ideas and innovation. Spanning five days in each region, the training boot camp will offer insightful lectures by experienced industry leaders and mentors, training sessions, entrepreneurial workshops, and special sessions dedicated to the creation of new tech firms. The training will also include other important aspects of expanding a business including how to pitch ideas and business plans to investors. To be eligible for participating in the boot camp, applicants must share their ideas of at least one advanced project that could potentially contribute to the solution of one or more concerning"
+    },
+    {
+      "id": "check-page-624d83a82d",
+      "url": "https://startupbahrain.com/blog/bahrain-fintech-bay-invites-application-for-flagship-accelerator-program",
+      "page": "application",
+      "excerpt": "Bahrain FinTech Bay invites application for flagship accelerator program - StartUp Bahrain Ecosystem Guide Pitch Weekend Blog Perks Resources Bahrain About Contact Bahrain FinTech Bay invites application for flagship accelerator program Jan 19, 2020 All you budding Bahraini entrepreneurs out there harboring big dreams in the realm of financial technologies, the time is now to grab on to one of the biggest opportunities you’ll have this year. Bahrain FinTech Bay (BFB) , the first-of-its-kind FinTech hub in MENA, has kick-started the application process for its flagship “BFB Acceleration Program.” More precisely, the application window opened on January 15, 2020, and will continue accepting new entries for the program till March 15, 2020. Startups belonging to any of the following industries and sectors will be considered for the program: Blockchain & Cryptocurrency, Cybersecurity and Data Science, Digital and Open Banking, Financial Health and Inclusion, InsurTech, Payments and Remittances, RegTech, and WealthTech. To be eligible for the program, your FinTech startup must have at least a product prototype, or an early proof-of-concept (PoC). Other eligibility criteria include: A clear product development and execution roadmap. A ready-to-go business plan and pitch deck. Founders and management team must have a balance of technical background and some business experience More"
+    },
+    {
+      "id": "check-page-aa29c1b291",
+      "url": "https://startupbahrain.com/blog/bahraini-startup-kashtah-has-been-recently-acquired-heres-an-exclusive-from-the-founder-of-the-application",
+      "page": "application",
+      "excerpt": "Bahraini startup Kashtah has been recently acquired, here’s an exclusive from the founder of the application! - StartUp Bahrain Ecosystem Guide Pitch Weekend Blog Perks Resources Bahrain About Contact Bahraini startup Kashtah has been recently acquired, here’s an exclusive from the founder of the application! Oct 15, 2018 Othman is a Senior Officer in the Development Team of a Bank, as well as a graduate of computer science. and according to him, the idea of creating the Kashtah application came to him during one summer, in which he “tried to book a number of swimming pools” however, stumbled upon a roadblock in which he found “great difficulty in finding the available periods and arranging the date with friends. The goal was to make all this effort in just 3 steps through the application”. And that, he sure did! The concept of the application eases the process of booking swimming pools in Bahrain, solving the issue of having to contact various owners of different facilities that are up for rent, as well as coordinating the time and date suitable for both parties, in which the space is available and then when the customer requires it. It’s a solution that benefits the end-user as much as it eases the lives of both them and the owners of pools around the island, summarizing an entire day’s effort in a few clicks. When it comes to the acquisition, according to Othman, it"
+    },
+    {
+      "id": "check-page-efbb3ada88",
+      "url": "https://startupbahrain.com/blog/bahraini-tech-startups-take-note-zain-great-idea-2021-is-accepting-applications-now",
+      "page": "application",
+      "excerpt": "GCC tech startups, take note! Zain Great Idea 2021 is accepting applications now - StartUp Bahrain Ecosystem Guide Pitch Weekend Blog Perks Resources Bahrain About Contact GCC tech startups, take note! Zain Great Idea 2021 is accepting applications now Dec 28, 2020 Leading Middle Eastern telecommunications company Zain in partnership with Brilliant Lab has announced that it is now accepting applications for the Zain Great Idea (ZGI) Investment and Acceleration Program. So if you are a tech startup in Bahrain, it's a perfect chance to enroll in the program alongside some of the best emerging tech companies from all across the region. The last date for submitting your online application is Jan 15, 2021. In its sixth year, the coming rendition of ZGI has a lot of perks in store for promising startups. For example, you stand a chance to bag $50,000 in cash investment from the Brilliant Start investment fund by Brilliant Lab in exchange for no less than a 5% stake in your company. Additionally, you will have access to high-quality legal and administrative support. In fact, the Brilliant Lab team will also help you receive commercial licensing services. Wait, there's more. As part of the virtual program, participating startup founders will also gain access to training sessions provided by leading technology enterprise experts from IE, MIT, and Stanford Business Schools. Zain will"
+    },
+    {
+      "id": "check-page-aae46f9a5f",
+      "url": "https://startupbahrain.com/blog/benefit-awarded-with-best-application-for-the-smart-devices-award",
+      "page": "application",
+      "excerpt": "BENEFIT awarded with ‘Best Application for the Smart Devices Award’ - StartUp Bahrain Ecosystem Guide Pitch Weekend Blog Perks Resources Bahrain About Contact BENEFIT awarded with ‘Best Application for the Smart Devices Award’ Oct 31, 2021 The kingdom’s leading regional player in electronic financial transactions; BENEFIT received the eGovernment Excellence Award 2021 for ‘The Best Application for the Smart Devices Award’. BENEFIT won the award on the strength of its mobile application; BenefitPay, which was designed to meet the unique needs of both consumers and business that enables fast, secure, and convenient payments. The Smart Devices Award recognizes the private sector entities that provide a smart device application to their end users with the aim of reducing the cost, time, and effort in accomplishing a task or a series of tasks. The award comes as recognition of BENEFIT’S leading efforts to push the boundaries within the Financial ecosystem in the Kingdom. This achievement further validates BENEFIT’s unparalleled endeavors in the Kingdom as the top FinTech industry leader, in line with Bahrain’s Economic Vision 2030 . The eGovernment Excellence Award was created under the Patronage of HH Sheikh Mohammed Bin Mubarak Al Khalifa, Deputy Prime Minister and Chairman of the Supreme Committee for Information and Communication Technology (SCICT), the eGovernment Excellence"
+    },
+    {
+      "id": "check-page-38810cb249",
+      "url": "https://startupbahrain.com/blog/benefit-unveils-fully-revamped-version-of-benefitpay-application",
+      "page": "application",
+      "excerpt": "BENEFIT unveils fully revamped version of BenefitPay application - StartUp Bahrain Ecosystem Guide Pitch Weekend Blog Perks Resources Bahrain About Contact BENEFIT unveils fully revamped version of BenefitPay application May 16, 2023 BENEFIT , the Kingdom’s innovator and leading company in Fintech and electronic financial transactions services, has officially announced the upcoming launch of a fully revamped version of the BenefitPay application. The latest release of the application has been developed with an effort to reflect and incorporate latest technology and feedback from the users themselves, including the company's prior launch of the public beta test campaign centered around the slogan \"You Inspire, We Deliver.\" During the public beta test campaign, the public was invited to participate and offer feedback, outlining their expectations and proposing potential enhancements. BENEFIT implemented the data to incorporate the recommendations and feedback in its latest version of the BenefitPay application. The revamped version has been designed to meet the evolving needs of users in the Kingdom, promising to provide an enhanced user experience, making electronic financial transactions easier and quicker. Mr. Yousif AlNefaiei , Deputy Chief Executive – Business Development & Services at BENEFIT, commented on the launch: “Our strategic plans include a range of qualitative"
+    },
+    {
+      "id": "check-page-68462ab19f",
+      "url": "https://startupbahrain.com/blog/bibf-partnered-with-information-egovernment-authority-to-organize-a-specialized-seminar-on-ai-chat-gpt-and-their-applications",
+      "page": "application",
+      "excerpt": "BIBF partnered with Information & eGovernment Authority to organize a specialized seminar on AI, Chat GPT and their applications - StartUp Bahrain Ecosystem Guide Pitch Weekend Blog Perks Resources Bahrain About Contact BIBF partnered with Information & eGovernment Authority to organize a specialized seminar on AI, Chat GPT and their applications Mar 22, 2023 The Bahrain Institute of Banking and Finance (BIBF), in partnership with the Information & eGovernment Authority (iGA), organized a specialized seminar on Artificial Intelligence and Chat GPT for more than 250 employees from the public sector. H.E. Mr. Mohammed Ali Al Qaed , Chief Executive of the Information & eGovernment Authority, Dr. Ahmed Al Shaikh , the BIBF’s Director, attended the seminar, in addition to senior management from both entities. The seminar presented the uses and practical applications of artificial intelligence and Chat GPT technology, emphasizing its potential to transform public and private sector services and streamline operations in the Kingdom of Bahrain. Participants learned about the innovative applications of ChatGPT, their role in enhancing communication, and how government employees can better serve citizens and residents. The seminar included presentations from the BIBF’s Digital Transformation and Project Management Centre experts, Mrs. Noora Al Balooshi and Mr. Nishanth Parthi, in"
+    },
+    {
+      "id": "check-page-bd1deb5937",
+      "url": "https://startupbahrain.com/blog/brincs-global-iot-accelerator-has-now-opened-applications-for-its-connected-hardware-program-in-bahrain",
+      "page": "application",
+      "excerpt": "Brinc’s global IoT accelerator has now opened applications for its connected hardware program in Bahrain - StartUp Bahrain Ecosystem Guide Pitch Weekend Blog Perks Resources Bahrain About Contact Brinc’s global IoT accelerator has now opened applications for its connected hardware program in Bahrain Jun 5, 2018 Are you a hardware and IoT entrepreneur? Because applications are now open for the world-leading Brinc Accelerator Program ! IoT founders have an incredible opportunity to join the next cycle, unlocking a number of perks like; $25,000 - $60,000 investment, education, co-working space, mentorship, expertise in product development and a bridge to China for manufacturing. For the uninitiated, Brinc helps founders build and launch connected hardware businesses. As one of the most active hardware investors globally, this year they launched their MENA accelerator in Bahrain - the first IoT accelerator in the region and a game changer for local hardware startups. Brinc MENA has partnered with Tamkeen , Batelco and StartUp Bahrain to provide an end-to-end platform that will take early-stage connected hardware startups from concept to commercialisation. Applications are open until 25th July 2018. If you are up for the challenge go ahead and apply online here to get a chance to win your seat in the Bahrain Autumn program! ‹ EPMG acquires Moroccan startup Mubawab Early-stage"
     }
   ],
   "findings": {
-    "emails": [
+    "emails": [],
+    "phones": [],
+    "routes": [
       {
-        "value": "contact@startupbahrain.com",
-        "evidenceId": "check-email-0d3af469fe"
+        "value": "https://startupbahrain.com/blog/applications-are-open-now-for-georgetown-fintech-program-2-0",
+        "evidenceId": "check-route-fae2dbfc4e"
       },
       {
-        "value": "help@startupbahrain.com",
-        "evidenceId": "check-email-6926953ba3"
+        "value": "https://startupbahrain.com/blog/applications-are-open-for-bahrain-fintech-bays-ambitious-fintech-national-fintech-program",
+        "evidenceId": "check-route-21d824af64"
+      },
+      {
+        "value": "https://startupbahrain.com/blog/tamkeen-opens-applications-for-the-governance-program-in-partnership-with-emic-training-and-insead",
+        "evidenceId": "check-route-b60f986b5f"
+      },
+      {
+        "value": "https://startupbahrain.com/blog/flat6labs-bahrain-wants-you-to-apply-to-its-5th-cycle",
+        "evidenceId": "check-route-c2b57e3439"
       }
     ],
-    "phones": [],
-    "routes": [],
     "applicationUrl": [
       {
         "value": "https://startupbahrain.com/",
         "evidenceId": "check-route-8b570f7408"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-a8fe361c54"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-2d8ab99f52"
+      },
+      {
+        "value": "12",
+        "evidenceId": "check-duration-fd2cf94081"
+      },
+      {
+        "value": "8",
+        "evidenceId": "check-duration-0eac749c44"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-c4374f9625"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "fields. The shortlisted candidates will be charged BHD 2,500 (approx $6,630) as the program fee for the six-month-long program. So if you have",
+        "evidenceId": "check-deal-da402289d4"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "fee",
+          "amount": "6630",
+          "currency": "USD",
+          "equity": null,
+          "label": "Fee",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-da402289d4"
+      }
+    ],
     "portfolioPages": [],
     "name": [
       {

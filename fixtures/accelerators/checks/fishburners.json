@@ -1,41 +1,248 @@
 {
   "programId": "fishburners",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://fishburners.org/",
-    "https://fishburners.org/about-fishburners"
+    "https://fishburners.org/founders-hub-terms",
+    "https://fishburners.org/terms",
+    "https://fishburners.org/about-fishburners",
+    "https://fishburners.org/blog/sip-ventures-partnership-program",
+    "https://fishburners.org/residency"
   ],
   "evidence": [
     {
+      "id": "check-deal-7b7d78fc4a",
+      "url": "https://fishburners.org/blog/sip-ventures-partnership-program",
+      "title": "Fishburners — program page",
+      "excerpt": "logistics, or supply chain tools) What You’ll Gain Up to $150,000 in equity-free funding per selected business Direct access to Asahi",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-bea59a5402",
+      "url": "https://fishburners.org/blog/sip-ventures-partnership-program",
+      "title": "Fishburners — program page",
+      "excerpt": "12–20 week commercial pilot with Asahi Beverages, supported by up to $150,000 in non-dilutive funding (a mix of cash and in-kind support). Each",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-f92d8e3649",
+      "url": "https://fishburners.org/blog/sip-ventures-partnership-program",
+      "title": "Fishburners — program page",
+      "excerpt": "scaleups across Australia and New Zealand. The program offers up to $150,000 in equity-free funding and the opportunity to pilot your solution",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-58bd940493",
+      "url": "https://fishburners.org/terms",
+      "title": "Fishburners — terms page",
+      "excerpt": "At any time during the Term, and for a period of 6 months after the Term, you must not approach any of our",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d4146339f6",
+      "url": "https://fishburners.org/terms",
+      "title": "Fishburners — terms page",
+      "excerpt": "ceased to be employed or engaged by us more than 6 months before being employed or engaged by you; or we",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ddf8e39c0e",
+      "url": "https://fishburners.org/blog/sip-ventures-partnership-program",
+      "title": "Fishburners — program page",
+      "excerpt": "digitally. Successful applicants will enter a 12–20 week commercial pilot with Asahi Beverages, supported",
+      "page": "details"
+    },
+    {
+      "id": "check-email-ba6552a3f7",
+      "url": "https://fishburners.org/founders-hub-terms",
+      "title": "Fishburners — terms page",
+      "excerpt": "policy . If you have any questions, please contact us at support@fishburners.org Published 23 August 2023 Contact Us Log In How it Works",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6f4efa0628",
+      "url": "https://fishburners.org/",
+      "title": "Fishburners — homepage",
+      "excerpt": "Residency The high-performance, focused and exclusive in-person environment putting you alongside people who share your",
+      "page": "details"
+    },
+    {
+      "id": "check-format-790026501f",
+      "url": "https://fishburners.org/",
+      "title": "Fishburners — homepage",
+      "excerpt": "ENVIROMENT TO TAKE YOUR STARTUP FURTHER? An in-person founder environment purpose built for those who are",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c1b1e31511",
+      "url": "https://fishburners.org/",
+      "title": "Fishburners — homepage",
+      "excerpt": "who are chasing results, collaboration and connection. An in-person founder environment purpose built for those who are",
+      "page": "details"
+    },
+    {
       "id": "check-name-3a9328ac5b",
       "url": "https://fishburners.org/",
-      "title": "Fishburners — homepage checked by scrape.py",
+      "title": "Fishburners — homepage",
       "excerpt": "The Leading Startup Community in Australia FISHBURNERS FISHBURNERS FISHBURNERS How It Works About us Residency",
       "page": "details"
     },
     {
-      "id": "check-route-2e661fda2b",
-      "url": "https://fishburners.org/about-fishburners",
-      "title": "Fishburners — details page checked by scrape.py",
+      "id": "check-rolling-e45e2c7eb9",
+      "url": "https://fishburners.org/blog/sip-ventures-partnership-program",
+      "title": "Fishburners — program page",
+      "excerpt": "overrun, founders Key Dates Applications close: October 31, 2025 Assessment: Rolling basis through November 2025 Final selections: December 2025 Pilots commence: First",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2bf2ec25bb",
+      "url": "https://fishburners.org/residency",
+      "title": "Fishburners — program page",
+      "excerpt": "Apply for the Residency Program → https://form.typeform.com/to/Hc6ahjwa",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8953dfde26",
+      "url": "https://fishburners.org/residency",
+      "title": "Fishburners — program page",
+      "excerpt": "Apply to Residency Program → https://form.typeform.com/to/Hc6ahjwa",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9c6301c462",
+      "url": "https://fishburners.org/founders-hub-terms",
+      "title": "Fishburners — terms page",
       "excerpt": "FISHBURNERS → https://fishburners.org/",
+      "page": "terms"
+    },
+    {
+      "id": "check-status-fab1df8adc",
+      "url": "https://fishburners.org/blog/sip-ventures-partnership-program",
+      "title": "Fishburners — program page",
+      "excerpt": "APPLICATIONS NOW OPEN: SIP VENTURES PARTNERSHIP PROGRAM APPLICATIONS NOW OPEN: SIP VENTURES PARTNERSHIP PROGRAM APPLICATIONS NOW",
       "page": "details"
     }
   ],
+  "pageQuotes": [
+    {
+      "id": "check-page-f8d2c910aa",
+      "url": "https://fishburners.org/",
+      "page": "details",
+      "excerpt": "The Leading Startup Community in Australia FISHBURNERS FISHBURNERS FISHBURNERS How It Works About us Residency Passport Manifesto Newsroom Ecosystem Navigator Login Login Build with people who’ve been there. Build with people who’ve been there. Build with people who’ve been there. Get direct access to mentors , investors , partners , and fellow founders. Get direct access to mentors , investors , partners , and fellow founders. WE ARE AUSTRALIA’S LEADING STARTUP COMMUNITY Fishburners is the home of Australia’s largest community of tech startups. We connect ambitious founders to the people, opportunities, and networks that drive their growth. Fishburners is the home of Australia’s largest community of tech startups. We connect ambitious founders to the people, opportunities, and networks that drive their growth. Fishburners is the home of Australia’s largest community of tech startups. We connect ambitious founders to the people, opportunities, and networks that drive their growth. From first idea through to Series A, Fishburners is where startups generate revenue, attract capital, and build companies with global ambition—surrounded by others on the same path. From first idea through to Series A, Fishburners is where startups generate revenue, attract capital, and build companies with global ambition—surrounded by others on the same path. From first idea through to Series A,"
+    },
+    {
+      "id": "check-page-d8b200e31b",
+      "url": "https://fishburners.org/founders-hub-terms",
+      "page": "terms",
+      "excerpt": "The Leading Startup Community in Australia FISHBURNERS How It Works About us Residency Passport Manifesto Newsroom Ecosystem Navigator Login FISHBURNERS Login FISHBURNERS Login F O U N D E R S H U B T E R M S & C O N D I T I O N S We offer a type of digital membership called a Fishburners Founders Hub where people can join the Fishburners online community and have access to benefits offered by us. Depending on your membership type you will have varied access to the Portal and all of the provisions within these Terms and Conditions may not apply to you. These Terms and Conditions apply only to digital memberships being offered by us. Founders Hub Membership 1.1 You become a Founders Hub Member once your application has been accepted and we receive your first payment of the Founders Hub membership fees. Once you are a Founders Hub member we will notify you in writing. 1.2 Your Founders Hub membership entitles you to the benefits offered by us from time to time. 1.3 A list of the Founders Hub membership types, fees and benefits you have access to as part of your Founders Hub membership can be found here . 1.4 The list of benefits may vary during your Founders Hub membership and not all the benefits are guaranteed to be available during the time of your Founders Hub membership. 1.5 We may from time-to-time offer discretionary benefits to you. The discretionary benefits may vary."
+    },
+    {
+      "id": "check-page-cfd8585882",
+      "url": "https://fishburners.org/terms",
+      "page": "terms",
+      "excerpt": "The Leading Startup Community in Australia FISHBURNERS How It Works About us Residency Passport Manifesto Newsroom Ecosystem Navigator Login FISHBURNERS Login T E R M S Fishburners Customer Terms and Conditions These terms and conditions apply to you if you are a Customer at our Premises. These terms and conditions govern your membership and your use of the Benefits provided by Fishburners to you as a Customer. Definitions In these terms and conditions, unless the context otherwise requires: Benefits mean the membership benefits associated with your type of membership offered by us and accessible to you during the term of your membership with us. A list of the Benefits currently offered by us is available here for Customers. Business Hours mean 8:00am until 6:00pm during weekdays, excluding public holidays. Content has the meaning given to it in clause 5.1. Customer means any person who has applied to us for membership and has been granted membership status in accordance with the guidelines set by us. Fees mean the membership fees described in clause 7. Fishburners is referred to as “we”, “us” and “our”; you as the Customer is referred to as “you” and “your”. Premises means all premises occupied by us, including 64 York Street, Sydney NSW 2000 and 477 Pitt Street, Sydney, NSW 2000 (and all equipment, fixtures and fittings located on these Premises) to which you are given"
+    },
+    {
+      "id": "check-page-fd61a25641",
+      "url": "https://fishburners.org/about-fishburners",
+      "page": "details",
+      "excerpt": "The Leading Startup Community In Australia - About Us FISHBURNERS How It Works About us Residency Passport Manifesto Newsroom Ecosystem Navigator Login FISHBURNERS Login FISHBURNERS Login Fishburners is Australia’s longest-enduring and largest tech startup community. Our purpose is to create a better world by enhancing a culture of innovation and entrepreneurship. Fishburners empowers all entrepreneurs through education, support, resources and experiences that ultimately define our community. Fishburners is Australia’s longest-enduring and largest tech startup community. Our purpose is to create a better world by enhancing a culture of innovation and entrepreneurship. Fishburners empowers all entrepreneurs through education, support, resources and experiences that ultimately define our community. Fishburners is Australia’s longest-enduring and largest tech startup community. Our purpose is to create a better world by enhancing a culture of innovation and entrepreneurship. Fishburners empowers all entrepreneurs through education, support, resources and experiences that ultimately define our community. We are the epicentre of the startup ecosystem, building a diverse and inclusive community of operators, founders and partners, powering early stage entrepreneurs to learn and grow. If you’re looking for a community that fuses legacy with innovation, and fosters digital and"
+    },
+    {
+      "id": "check-page-a6c54e621d",
+      "url": "https://fishburners.org/blog/sip-ventures-partnership-program",
+      "page": "details",
+      "excerpt": "APPLICATIONS NOW OPEN: SIP VENTURES PARTNERSHIP PROGRAM APPLICATIONS NOW OPEN: SIP VENTURES PARTNERSHIP PROGRAM APPLICATIONS NOW OPEN: SIP VENTURES PARTNERSHIP PROGRAM Oct 9, 2025 Opportunity Sip Ventures, the corporate venture studio of Asahi Beverages, has launched a new program to collaborate with startups and scaleups across Australia and New Zealand. The program offers up to $150,000 in equity-free funding and the opportunity to pilot your solution within one of Australia’s most respected beverage companies. About Sip Ventures Sip Ventures is Asahi Beverages’ innovation arm, built to identify and develop the next generation of commercial opportunities for the business. Over the past three and a half years, the Sip Ventures team has launched projects spanning social connection tools for Gen Z, commercial reuse of internal waste streams, and consumer hardware innovation. Now, Sip Ventures is opening its doors to external collaboration, inviting proven startups and scaleups to bring innovation into Asahi Beverages' network and help shape how consumers experience beverages across Australia and New Zealand. The Opportunity Sip Ventures is seeking businesses that enhance how Asahi Beverages’ products are enjoyed, whether at home, in retail, at venues, or digitally. Successful applicants will enter a 12–20 week commercial pilot with Asahi Beverages, supported by up to $150,000"
+    },
+    {
+      "id": "check-page-97e0576d1e",
+      "url": "https://fishburners.org/residency",
+      "page": "details",
+      "excerpt": "Fishburners Residency Program - Grow your startup without giving up equity FISHBURNERS How It Works About us Residency Passport Manifesto Newsroom Ecosystem Navigator Login FISHBURNERS Login GROW YOUR STARTUP WITHOUT GIVING UP EQUITY Fishburners’ new year-round program with daily structure, accountability, and access to the people, knowledge, and opportunities that grow your startup. Join the Waitlist Fishburners’ new year-round program with daily structure, accountability, and access to the people, knowledge, and opportunities that grow your startup. Join the Waitlist Fishburners’ new year-round program with daily structure, accountability, and access to the people, knowledge, and opportunities that grow your startup. Join the Waitlist A HIGH-PERFORMANCE ENVIRONMENT FOR FOUNDERS SERIOUS ABOUT GROWTH. The Fishburners Residency Program is a year-round, high-performance environment designed for founders who want consistent progress, not sporadic wins. We combine structure, accountability, and daily proximity to the right people so momentum becomes part of your everyday The Fishburners Residency Program is a year-round, high-performance environment designed for founders who want consistent progress, not sporadic wins. We combine structure, accountability, and daily proximity to the right people so momentum becomes part of your everyday Stage-specific programming keeps you focused"
+    }
+  ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "support@fishburners.org",
+        "evidenceId": "check-email-ba6552a3f7"
+      }
+    ],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://form.typeform.com/to/Hc6ahjwa",
+        "evidenceId": "check-route-8953dfde26"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://fishburners.org/",
-        "evidenceId": "check-route-2e661fda2b"
+        "evidenceId": "check-route-9c6301c462"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-fab1df8adc"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-e45e2c7eb9"
+      }
+    ],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-58bd940493"
+      },
+      {
+        "value": "20",
+        "evidenceId": "check-duration-ddf8e39c0e"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-6f4efa0628"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "scaleups across Australia and New Zealand. The program offers up to $150,000 in equity-free funding and the opportunity to pilot your solution",
+        "evidenceId": "check-deal-f92d8e3649"
+      },
+      {
+        "value": "12–20 week commercial pilot with Asahi Beverages, supported by up to $150,000 in non-dilutive funding (a mix of cash and in-kind support). Each",
+        "evidenceId": "check-deal-bea59a5402"
+      },
+      {
+        "value": "logistics, or supply chain tools) What You’ll Gain Up to $150,000 in equity-free funding per selected business Direct access to Asahi",
+        "evidenceId": "check-deal-7b7d78fc4a"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "150000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-f92d8e3649"
+      }
+    ],
     "portfolioPages": [],
     "name": [
       {

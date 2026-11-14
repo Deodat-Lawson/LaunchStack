@@ -1,51 +1,19 @@
 {
   "programId": "dmz",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://dmz.torontomu.ca/our-programs",
-      "page": "details",
-      "anchor": "Find your program Discover the program that fits your needs.",
+      "url": "http://mydmz.torontomu.ca/portal/apply/dmzyyz",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://dmz.torontomu.ca/incubator",
+      "url": "https://dmz.torontomu.ca/about",
       "page": "details",
-      "anchor": "Incubator 18-month program to scale and become investor-ready.",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://dmz.torontomu.ca/pre-incubator",
-      "page": "details",
-      "anchor": "Pre-Incubator 9-month program to get your first customers and sell.",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://dmz.torontomu.ca/chi",
-      "page": "details",
-      "anchor": "Centre for Housing Innovation Accelerator program and skill building initiatives.",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://dmz.torontomu.ca/validator",
-      "page": "details",
-      "anchor": "Validator 10-week program for Black founders to validate an idea and test demand.",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://dmz.torontomu.ca/toronto-pearson",
-      "page": "details",
-      "anchor": "Toronto Pearson Innovation Program Collaborating with startups to shape smarter travel.",
+      "anchor": "About DMZ A tech incubator & global ecosystem helping startups grow & scale.",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -67,49 +35,9 @@
       "origin": "official"
     },
     {
-      "url": "https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
-      "page": "application",
-      "anchor": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form.",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://dmz.torontomu.ca/enterprise",
+      "url": "https://dmz.torontomu.ca/chi",
       "page": "details",
-      "anchor": "Enterprise overview Global initiatives to build ecosystems and fuel innovation.",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://dmz.torontomu.ca/about",
-      "page": "details",
-      "anchor": "About DMZ A tech incubator & global ecosystem helping startups grow & scale.",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://dmz.torontomu.ca/press",
-      "page": "details",
-      "anchor": "Press Stories showcasing our founders, programs, and global reach.",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://dmz.torontomu.ca/faq",
-      "page": "terms",
-      "anchor": "FAQs Quick answers to common questions about our programs and support.",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://dmz.torontomu.ca/oh-canada-directory",
-      "page": "portfolio",
-      "anchor": "Oh Canada Tech Directory Connect with world-class Canadian companies.",
+      "anchor": "Centre for Housing Innovation Accelerator program and skill building initiatives.",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -123,10 +51,146 @@
       "origin": "official"
     },
     {
-      "url": "https://mydmz.torontomu.ca/portal/apply",
-      "page": "application",
-      "anchor": "Apply",
+      "url": "https://dmz.torontomu.ca/edtech",
+      "page": "details",
+      "anchor": "Siakam EdTech Engine 12-week accelerator to transform education in classrooms.",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/embark-business-academy",
+      "page": "details",
+      "anchor": "Embark Business Academy A free career accelerator for students and grads to gain skills and solve real business cases.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/enterprise",
+      "page": "details",
+      "anchor": "Enterprise overview Global initiatives to build ecosystems and fuel innovation.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/faq",
+      "page": "terms",
+      "anchor": "FAQs Quick answers to common questions about our programs and support.",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/incubator",
+      "page": "details",
+      "anchor": "Incubator 18-month program to scale and become investor-ready.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/oh-canada-directory",
+      "page": "portfolio",
+      "anchor": "Oh Canada Tech Directory Connect with world-class Canadian companies.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/our-programs",
+      "page": "details",
+      "anchor": "Find your program Discover the program that fits your needs.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/post/ashu-and-andrew-met-in-dmz-first-sandbox-cohort-in-2018-now-theyre-revolutionizing-the-mortgage-industry",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/post/one-pitch-a-year-of-progress-what-happened-after-house-beat-secured-investment-at-wis",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/post/zero-hero-crowdfunding-first-investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/pre-incubator",
+      "page": "details",
+      "anchor": "Pre-Incubator 9-month program to get your first customers and sell.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/press",
+      "page": "details",
+      "anchor": "Press Stories showcasing our founders, programs, and global reach.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-2024-women-innovation-summit-to-award-100000-in-cash-investments-from-the-firehood-and-honour-trailblazing-women-in-tech-across-canada",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-black-innovation-summit-returns-for-year-five-with-over-300-000-in-grants-and-investments-to-back-canadas-most-promising-black-tech-founders",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-women-innovation-summit-returns-for-year-three-with-100-000-in-cash-investments-from-the-firehood-to-back-the-visionaries-transforming-the-tech-landscape",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -135,6 +199,46 @@
       "page": "details",
       "anchor": "Find your program",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/thank-you-for-applying",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/toronto-pearson",
+      "page": "details",
+      "anchor": "Toronto Pearson Innovation Program Collaborating with startups to shape smarter travel.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dmz.torontomu.ca/validator",
+      "page": "details",
+      "anchor": "Validator 10-week program for Black founders to validate an idea and test demand.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://mydmz.torontomu.ca/portal/apply",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "application",
+      "anchor": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form.",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

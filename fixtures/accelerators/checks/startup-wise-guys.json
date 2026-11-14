@@ -1,136 +1,801 @@
 {
   "programId": "startup-wise-guys",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:59:02.000Z",
   "pagesRead": [
     "https://startupwiseguys.com/",
-    "https://startupwiseguys.com/building/"
+    "https://startupwiseguys.com/all-programs/the-founders-club/founders-club-application/",
+    "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
+    "https://startupwiseguys.com/news/idea-stage-startups-from-baltics-and-ukraine-can-apply-for-25k-eur-financial-support-and-pre-accelerator-program/",
+    "https://startupwiseguys.com/investment-deal/",
+    "https://startupwiseguys.com/news/ai-deep-tech-in-early-stage-investment-evolution-challenges/",
+    "https://startupwiseguys.com/news/category/investment/",
+    "https://startupwiseguys.com/news/copernic-space-secures-seed-investment-to-democratize-space-economy/",
+    "https://startupwiseguys.com/news/drivex-secures-1-2m-investment-to-revolutionize-auto-repair-and-automotive-technology/",
+    "https://startupwiseguys.com/news/fueling-innovation-through-strategic-investment-in-lumian-energy/",
+    "https://startupwiseguys.com/news/how-a-e1m-investment-is-propelling-restworld-toward-global-hospitality-leadership/",
+    "https://startupwiseguys.com/news/startup-loyi-secures-e425000-investment-to-revolutionize-banking-loyalty-programs-with-web3-and-gamification/",
+    "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
+    "https://startupwiseguys.com/news/young-entrepreneurs-summer-school-from-an-idea-to-an-investment-proposal/",
+    "https://startupwiseguys.com/news/10-teams-to-watch-from-the-second-saas-bilbao-batch/"
   ],
   "evidence": [
     {
+      "id": "check-announced-3495adbe7d",
+      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "Balkan Accelerator Program are now officially open. The final deadline is May 18 , and applications will be reviewed on a rolling basis , which",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-37e261dcd5",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/founders-club-application/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "up to our newsletter Program costs:* The program inscription fee is € 1000+VAT per individual or €1500+VAT per team (to be paid upon",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-624937a82c",
+      "url": "https://startupwiseguys.com/investment-deal/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "startups joining the Accelerator Programs, we initially invest up to €100,000 in exchange for a negotiated equity in your company. The exact terms",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-6ece160a5e",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/founders-club-application/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "costs:* The program inscription fee is € 1000+VAT per individual or €1500+VAT per team (to be paid upon inscription) and €500+VAT for",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-937dda02b2",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/founders-club-application/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "individual or €1500+VAT per team (to be paid upon inscription) and €500+VAT for CTOs/Developers. By the end of the program, you will have",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-f9ba516a8e",
+      "url": "https://startupwiseguys.com/news/idea-stage-startups-from-baltics-and-ukraine-can-apply-for-25k-eur-financial-support-and-pre-accelerator-program/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "where non incorporated idea stage startups can compete for up to 25K eur financial support per startup, along with 8 weeks online",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-363e30eae6",
+      "url": "https://startupwiseguys.com/news/idea-stage-startups-from-baltics-and-ukraine-can-apply-for-25k-eur-financial-support-and-pre-accelerator-program/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "eur financial support per startup, along with 8 weeks online pre-accelerator program. The main",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-48cdf8febf",
+      "url": "https://startupwiseguys.com/news/how-a-e1m-investment-is-propelling-restworld-toward-global-hospitality-leadership/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "startup’s impressive performance over the past 12 months. We’re confident in an even brighter future",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-5881d051e9",
+      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "all of them have just finished deals in the past 2 weeks (disclaimer: all of those terms sheets were",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-6252f855fa",
+      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "companies – what’s your survival plan for next 9 months without the money, and then – how getting a",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-71fff0ca0c",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/founders-club-application/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "period of the Founders Club Program, including 6 months after the end. All personal data, except full",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-78cc756899",
+      "url": "https://startupwiseguys.com/investment-deal/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "to a vast network, all within an intensive 14-week acceleration program designed to fast-track your",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-83d04b7917",
+      "url": "https://startupwiseguys.com/investment-deal/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "after a set period of time, usually between 18-24 months from signing. Ideal for startups expecting to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-aedcf58c61",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/founders-club-application/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "your 1st founding (up to €100k!). The program is 3 months long with weekly workshops (each 2 hours long) +",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d7dcb313c0",
+      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "C, etc) and how they are going to look in 18-24 months. In the previous crisis valuations went down by",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-feaf16e6f2",
+      "url": "https://startupwiseguys.com/news/10-teams-to-watch-from-the-second-saas-bilbao-batch/",
+      "title": "Startup Wise Guys — batches page",
+      "excerpt": "Selected teams will go through an intense 3-month-long acceleration program and get access to up",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-051755cddd",
+      "url": "https://startupwiseguys.com/news/idea-stage-startups-from-baltics-and-ukraine-can-apply-for-25k-eur-financial-support-and-pre-accelerator-program/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "application"
+    },
+    {
+      "id": "check-email-082bd3c2fe",
+      "url": "https://startupwiseguys.com/investment-deal/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-08b6d1550c",
+      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "application"
+    },
+    {
+      "id": "check-email-10b682e299",
+      "url": "https://startupwiseguys.com/news/how-a-e1m-investment-is-propelling-restworld-toward-global-hospitality-leadership/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-11d9387191",
+      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "application"
+    },
+    {
+      "id": "check-email-1dfe65bcf8",
+      "url": "https://startupwiseguys.com/news/fueling-innovation-through-strategic-investment-in-lumian-energy/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-2608b84579",
+      "url": "https://startupwiseguys.com/news/copernic-space-secures-seed-investment-to-democratize-space-economy/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-2f7ec54c39",
+      "url": "https://startupwiseguys.com/investment-deal/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-30f6c562b1",
+      "url": "https://startupwiseguys.com/news/drivex-secures-1-2m-investment-to-revolutionize-auto-repair-and-automotive-technology/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-375d46481d",
+      "url": "https://startupwiseguys.com/news/idea-stage-startups-from-baltics-and-ukraine-can-apply-for-25k-eur-financial-support-and-pre-accelerator-program/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "application"
+    },
+    {
+      "id": "check-email-46f80039b4",
+      "url": "https://startupwiseguys.com/news/10-teams-to-watch-from-the-second-saas-bilbao-batch/",
+      "title": "Startup Wise Guys — batches page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-53eb50304c",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/founders-club-application/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "application"
+    },
+    {
+      "id": "check-email-54bdb6ef44",
+      "url": "https://startupwiseguys.com/news/category/investment/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-5814d45828",
+      "url": "https://startupwiseguys.com/news/category/investment/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-6d04877244",
+      "url": "https://startupwiseguys.com/news/copernic-space-secures-seed-investment-to-democratize-space-economy/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-74c6e07006",
+      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-7b38947bf7",
+      "url": "https://startupwiseguys.com/news/drivex-secures-1-2m-investment-to-revolutionize-auto-repair-and-automotive-technology/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-7ff0ea2ebd",
+      "url": "https://startupwiseguys.com/news/startup-loyi-secures-e425000-investment-to-revolutionize-banking-loyalty-programs-with-web3-and-gamification/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-839f4463e6",
+      "url": "https://startupwiseguys.com/news/how-a-e1m-investment-is-propelling-restworld-toward-global-hospitality-leadership/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "terms"
+    },
+    {
       "id": "check-email-855bbd6006",
       "url": "https://startupwiseguys.com/",
-      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "title": "Startup Wise Guys — homepage",
       "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
       "page": "details"
     },
     {
-      "id": "check-email-97a22a55cf",
-      "url": "https://startupwiseguys.com/building/",
-      "title": "Startup Wise Guys — details page checked by scrape.py",
+      "id": "check-email-a974b77b7f",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/founders-club-application/",
+      "title": "Startup Wise Guys — application page",
       "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-email-b365f8e3b4",
+      "url": "https://startupwiseguys.com/news/young-entrepreneurs-summer-school-from-an-idea-to-an-investment-proposal/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-c7282ba6fb",
+      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-d34afe06a7",
+      "url": "https://startupwiseguys.com/news/10-teams-to-watch-from-the-second-saas-bilbao-batch/",
+      "title": "Startup Wise Guys — batches page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "batches"
     },
     {
       "id": "check-email-d500f5871f",
       "url": "https://startupwiseguys.com/",
-      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "title": "Startup Wise Guys — homepage",
       "excerpt": "hello@startupwiseguys.com",
       "page": "details"
     },
     {
-      "id": "check-email-f645c7bbaa",
-      "url": "https://startupwiseguys.com/building/",
-      "title": "Startup Wise Guys — details page checked by scrape.py",
+      "id": "check-email-e20900edc1",
+      "url": "https://startupwiseguys.com/news/young-entrepreneurs-summer-school-from-an-idea-to-an-investment-proposal/",
+      "title": "Startup Wise Guys — terms page",
       "excerpt": "hello@startupwiseguys.com",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-email-e5358ed934",
+      "url": "https://startupwiseguys.com/news/ai-deep-tech-in-early-stage-investment-evolution-challenges/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-ed2cbb7389",
+      "url": "https://startupwiseguys.com/news/startup-loyi-secures-e425000-investment-to-revolutionize-banking-loyalty-programs-with-web3-and-gamification/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-f2e48d8e6c",
+      "url": "https://startupwiseguys.com/news/fueling-innovation-through-strategic-investment-in-lumian-energy/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-f7dd1e01de",
+      "url": "https://startupwiseguys.com/news/ai-deep-tech-in-early-stage-investment-evolution-challenges/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-036927bce5",
+      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "processes that before required workshops, committees and in-person meetings. The same applies to the processes for how VCs",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-4bd5ff097a",
+      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "is what this accelerator is meant to address. Through a hybrid format combining online sessions with in-person bootcamps",
+      "page": "application"
+    },
+    {
+      "id": "check-format-4e90b0c3a0",
+      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "Through a hybrid format combining online sessions with in-person bootcamps in Prishtina and Skopje , the program will",
+      "page": "application"
+    },
+    {
+      "id": "check-format-76b9b8d165",
+      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Execution – can the processes and product be adapted to remote situations Credit risk – what the impact of it might be on",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-847929657b",
+      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "is an obvious push on some technologies like VR or AR, remote collaboration tools, and industries like MedTech or",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-a56e031ea2",
+      "url": "https://startupwiseguys.com/news/drivex-secures-1-2m-investment-to-revolutionize-auto-repair-and-automotive-technology/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "12 markets, solidifying DriveX’s position as the leading remote inspection provider in the Baltic States. Strategic",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-f011e5ca32",
+      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Success stories Success stories: GoRamp Startup advice Virtual impact News Startup Wise Guys becomes official partner for",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-a169ef2f88",
+      "url": "https://startupwiseguys.com/news/startup-loyi-secures-e425000-investment-to-revolutionize-banking-loyalty-programs-with-web3-and-gamification/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "of loyalty programs. About Loyi: Loyi, based in Berlin, revolutionizes customer loyalty with",
+      "page": "terms"
     },
     {
       "id": "check-name-3f0aa27aa6",
       "url": "https://startupwiseguys.com/",
-      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "title": "Startup Wise Guys — homepage",
       "excerpt": "Startup Wise Guys | Investing In The Bold Ones Menu Close For Founders",
       "page": "details"
     },
     {
+      "id": "check-portfolio-069e961bb8",
+      "url": "https://startupwiseguys.com/news/startup-loyi-secures-e425000-investment-to-revolutionize-banking-loyalty-programs-with-web3-and-gamification/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-12f2f19cbe",
+      "url": "https://startupwiseguys.com/news/young-entrepreneurs-summer-school-from-an-idea-to-an-investment-proposal/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-14da315b92",
+      "url": "https://startupwiseguys.com/news/drivex-secures-1-2m-investment-to-revolutionize-auto-repair-and-automotive-technology/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "DriveX Technologies → https://startupwiseguys.com/portfolio/#drivex-technologies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-1e9a065cde",
+      "url": "https://startupwiseguys.com/news/ai-deep-tech-in-early-stage-investment-evolution-challenges/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-29a415d901",
       "url": "https://startupwiseguys.com/",
-      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "title": "Startup Wise Guys — homepage",
       "excerpt": "StepShot → https://startupwiseguys.com/portfolio/#stepshot",
       "page": "details"
     },
     {
       "id": "check-portfolio-37087edd9a",
       "url": "https://startupwiseguys.com/",
-      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "title": "Startup Wise Guys — homepage",
       "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-3b63190134",
+      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "application"
     },
     {
       "id": "check-portfolio-4286b920e8",
       "url": "https://startupwiseguys.com/",
-      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "title": "Startup Wise Guys — homepage",
       "excerpt": "EstateGuru → https://startupwiseguys.com/portfolio/#estateguru",
       "page": "details"
     },
     {
-      "id": "check-portfolio-614cf2e6c0",
-      "url": "https://startupwiseguys.com/building/",
-      "title": "Startup Wise Guys — details page checked by scrape.py",
-      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
-      "page": "details"
+      "id": "check-portfolio-4312930275",
+      "url": "https://startupwiseguys.com/news/young-entrepreneurs-summer-school-from-an-idea-to-an-investment-proposal/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "terms"
     },
     {
-      "id": "check-portfolio-6abddc27e4",
-      "url": "https://startupwiseguys.com/building/",
-      "title": "Startup Wise Guys — details page checked by scrape.py",
+      "id": "check-portfolio-5045f92301",
+      "url": "https://startupwiseguys.com/news/10-teams-to-watch-from-the-second-saas-bilbao-batch/",
+      "title": "Startup Wise Guys — batches page",
+      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-5bc489b438",
+      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5d5945ac02",
+      "url": "https://startupwiseguys.com/news/category/investment/",
+      "title": "Startup Wise Guys — terms page",
       "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-688720e597",
+      "url": "https://startupwiseguys.com/news/how-a-e1m-investment-is-propelling-restworld-toward-global-hospitality-leadership/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Restworld → https://startupwiseguys.com/portfolio/#restworld",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6b5073ce31",
+      "url": "https://startupwiseguys.com/news/startup-loyi-secures-e425000-investment-to-revolutionize-banking-loyalty-programs-with-web3-and-gamification/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6c5864d97b",
+      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-769572cbb1",
       "url": "https://startupwiseguys.com/",
-      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "title": "Startup Wise Guys — homepage",
       "excerpt": "VitalFields → https://startupwiseguys.com/portfolio/#vitalfields",
       "page": "details"
     },
     {
+      "id": "check-portfolio-792a5d18bc",
+      "url": "https://startupwiseguys.com/news/how-a-e1m-investment-is-propelling-restworld-toward-global-hospitality-leadership/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-7b2337002d",
       "url": "https://startupwiseguys.com/",
-      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "title": "Startup Wise Guys — homepage",
       "excerpt": "Fractory → https://startupwiseguys.com/portfolio/#fractory",
       "page": "details"
     },
     {
+      "id": "check-portfolio-8ccf697a89",
+      "url": "https://startupwiseguys.com/news/category/investment/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-91fa376969",
+      "url": "https://startupwiseguys.com/news/startup-loyi-secures-e425000-investment-to-revolutionize-banking-loyalty-programs-with-web3-and-gamification/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Loyi → https://startupwiseguys.com/portfolio/#loyi",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9874a452db",
+      "url": "https://startupwiseguys.com/news/drivex-secures-1-2m-investment-to-revolutionize-auto-repair-and-automotive-technology/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9f9b82bb8b",
+      "url": "https://startupwiseguys.com/news/drivex-secures-1-2m-investment-to-revolutionize-auto-repair-and-automotive-technology/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a0a0a41631",
+      "url": "https://startupwiseguys.com/news/how-a-e1m-investment-is-propelling-restworld-toward-global-hospitality-leadership/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-a4dbe7c27e",
       "url": "https://startupwiseguys.com/",
-      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "title": "Startup Wise Guys — homepage",
       "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-a73716a46a",
+      "url": "https://startupwiseguys.com/news/ai-deep-tech-in-early-stage-investment-evolution-challenges/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-a8a90092ca",
       "url": "https://startupwiseguys.com/",
-      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "title": "Startup Wise Guys — homepage",
       "excerpt": "CallPage → https://startupwiseguys.com/portfolio/#callpage",
       "page": "details"
     },
     {
+      "id": "check-portfolio-a94e039b9c",
+      "url": "https://startupwiseguys.com/news/10-teams-to-watch-from-the-second-saas-bilbao-batch/",
+      "title": "Startup Wise Guys — batches page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-a9b66abe85",
+      "url": "https://startupwiseguys.com/news/copernic-space-secures-seed-investment-to-democratize-space-economy/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-becbf21f5b",
+      "url": "https://startupwiseguys.com/investment-deal/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c152695300",
+      "url": "https://startupwiseguys.com/news/fueling-innovation-through-strategic-investment-in-lumian-energy/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c716169dc6",
+      "url": "https://startupwiseguys.com/news/idea-stage-startups-from-baltics-and-ukraine-can-apply-for-25k-eur-financial-support-and-pre-accelerator-program/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-c9af285771",
       "url": "https://startupwiseguys.com/",
-      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "title": "Startup Wise Guys — homepage",
       "excerpt": "VOCHI → https://startupwiseguys.com/portfolio/#vochi",
       "page": "details"
     },
     {
+      "id": "check-portfolio-ca0576be56",
+      "url": "https://startupwiseguys.com/news/idea-stage-startups-from-baltics-and-ukraine-can-apply-for-25k-eur-financial-support-and-pre-accelerator-program/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d450b7565b",
+      "url": "https://startupwiseguys.com/news/copernic-space-secures-seed-investment-to-democratize-space-economy/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d843a9cc37",
+      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f12420a919",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/founders-club-application/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f6ee9f853e",
+      "url": "https://startupwiseguys.com/news/fueling-innovation-through-strategic-investment-in-lumian-energy/",
+      "title": "Startup Wise Guys — terms page",
+      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-fb6f78470f",
       "url": "https://startupwiseguys.com/",
-      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "title": "Startup Wise Guys — homepage",
       "excerpt": "Ondato → https://startupwiseguys.com/portfolio/#ondato",
       "page": "details"
     },
     {
       "id": "check-portfolio-fccc95a412",
       "url": "https://startupwiseguys.com/",
-      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "title": "Startup Wise Guys — homepage",
       "excerpt": "Katana → https://startupwiseguys.com/portfolio/#katana-technologies",
       "page": "details"
     },
     {
+      "id": "check-rolling-a2bffe5059",
+      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "open. The final deadline is May 18 , and applications will be reviewed on a rolling basis , which means early applications are strongly encouraged. If you are building",
+      "page": "application"
+    },
+    {
       "id": "check-route-3cb7c6ef0c",
       "url": "https://startupwiseguys.com/",
-      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "title": "Startup Wise Guys — homepage",
       "excerpt": "https://startupwiseguys.com",
       "page": "details"
+    },
+    {
+      "id": "check-route-45816255f6",
+      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "Apply here → https://airtable.com/app21MYqwW64bMEYJ/pagSnYigPrCWXvgT8/form",
+      "page": "application"
+    },
+    {
+      "id": "check-status-9696934fc7",
+      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
+      "title": "Startup Wise Guys — application page",
+      "excerpt": "Applications Are Now Open for the Western Balkans Accelerator Program - Startup Wise Guys Menu Close For Founders Startup Stages",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-1df9fb7060",
+      "url": "https://startupwiseguys.com/",
+      "page": "details",
+      "excerpt": "Startup Wise Guys | Investing In The Bold Ones Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Investing in the bold ones Global VC funds and accelerators for passionate B2B startup founders See all programs We help you to solve key challenges at every stage Dare to dream global. We’re a startup accelerator like no other, our optimized approach puts early-stage startups on the map and catapults them into worldwide success. Startup Wise Guys’ origins began in Europe’s tech-savvy startup capital, Estonia. Since 2012, we have used our carefully curated expertise, skills and funding to skyrocket hundreds of emerging early-stage startups into upwards growth. This is not our first rodeo… we are the most experienced accelerator fund in the region with over 45+ programs, an international community of founders from over 60 countries and an established market in CEE and CIS countries. Do you think you have what it takes? Ready to take the world by storm? The proof is in the pudding"
+    },
+    {
+      "id": "check-page-54fd793765",
+      "url": "https://startupwiseguys.com/all-programs/the-founders-club/founders-club-application/",
+      "page": "application",
+      "excerpt": "Founders Club application - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home All programs The Founders Club Founders Club application Founders Club application Join Startup Wise Guys Founders Club! Our plan is to help you find co-founders that complement your skills (or reinforce your team in case you have one already), help you zero-in a great B2B business idea and provide you with your 1st founding (up to €100k!). The program is 3 months long with weekly workshops (each 2 hours long) + some homework. Your name* Surname* Your email* Linkedin page* Upload your CV (optional) I am applying as:* an individual a team (up to 3 people) LinkedIn profile of your team member Nr. 1: LinkedIn profile of your team member Nr. 2: LinkedIn profile of your team member Nr. 3: Do you have a B2B business/startup idea?* No Yes Please explain it in 1 - 3 sentences: Vertical: FinTech Sustainability XR SaaS Cyber HealthTech EdTech Other Does not matter Which vertical interests"
+    },
+    {
+      "id": "check-page-e13a4cb700",
+      "url": "https://startupwiseguys.com/news/applications-are-now-open-for-the-western-balkan-accelerator-program/",
+      "page": "application",
+      "excerpt": "Applications Are Now Open for the Western Balkans Accelerator Program - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs 2026 News Startups Applications Are Now Open for the Western Balkans Accelerator Program Back to News A few months ago, in Prishtina, we brought together founders, ecosystem builders, institutions, and international partners to discuss a fundamental question: What does it really take to build a sustainable startup ecosystem in an emerging market? One of the clearest conclusions from the Kosovo Startup Ecosystem Forum was that ambition is not the problem. Talent is not the problem either. What early-stage ecosystems often need most is structure: the right support, at the right time, for the right founders. That is exactly the context in which the Western Balkan Accelerator Program was built. A next step, not a standalone initiative If the Forum was a moment of alignment, this program is a step into execution. The Western Balkan Accelerator"
+    },
+    {
+      "id": "check-page-cbb8562373",
+      "url": "https://startupwiseguys.com/news/idea-stage-startups-from-baltics-and-ukraine-can-apply-for-25k-eur-financial-support-and-pre-accelerator-program/",
+      "page": "application",
+      "excerpt": "Idea stage startups from Baltics and Ukraine can apply for 25K eur financial support and pre-accelerator program - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs News Idea stage startups from Baltics and Ukraine can apply for 25K eur financial support and pre-accelerator program Back to News Second year in a row EIT Digital and Startup Wise Guys are running a Venture Program, where non incorporated idea stage startups can compete for up to 25K eur financial support per startup, along with 8 weeks online pre-accelerator program. The main criteria for startup eligibility is at least 2 team members that are legal residents of Baltic countries or Ukraine, not incorporated yet and working on innovative ideas. While Startup Wise Guys is the local partner in particular 4 countries, in total EIT Digital Venture Program is run in 20 European countries with 4 other local partners. Idea stage teams from Estonia, Latvia, Lithuania, and Ukraine can apply here till April"
+    },
+    {
+      "id": "check-page-38e27b7c72",
+      "url": "https://startupwiseguys.com/investment-deal/",
+      "page": "terms",
+      "excerpt": "Investment deal - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Home Investment deal Investment Deal Introduction At Startup Wise Guys (SWG), our mission is to empower founders with the resources, mentorship, and funding they need to scale their startups into successful, high-impact businesses. We offer a comprehensive investment package that includes capital, hands-on mentorship, and access to a vast network, all within an intensive 14-week acceleration program designed to fast-track your growth. About the deal We recognize that every startup is unique, and we tailor our investment structure to meet your specific needs. Typically, for startups joining the Accelerator Programs, we initially invest up to €100,000 in exchange for a negotiated equity in your company. The exact terms are determined by factors such as your company’s maturity, revenue, market potential, and team strength. Our investment is delivered through industry-standard instruments, such as"
+    },
+    {
+      "id": "check-page-b5e10fba33",
+      "url": "https://startupwiseguys.com/news/ai-deep-tech-in-early-stage-investment-evolution-challenges/",
+      "page": "terms",
+      "excerpt": "AI Deep Tech in Early-Stage Investment: Evolution & Challenges - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs AI News Startups AI Deep Tech in Early-Stage Investment: Evolution & Challenges Back to News Share article The Intersection of AI Deep Tech and Early-Stage VC In today’s fast-evolving tech landscape, AI Deep Tech has become a focal point for early-stage VC investments. Recently, I was invited to speak at Expand North Star in Dubai on “The Impact of AI in Deep Tech VC Investment.” This opportunity led me to immerse myself in the latest resources, including insights from Sequoia’s Generative AI Report, helping me see AI not as a standalone concept but as a technology that’s becoming embedded in every modern tech stack. Going forward, it won’t be about if companies use AI, but rather how they leverage it for productivity and differentiation. “AI is no longer a standalone concept; it’s embedded in every modern tech stack. The question now isn’t if"
+    },
+    {
+      "id": "check-page-3340947d46",
+      "url": "https://startupwiseguys.com/news/category/investment/",
+      "page": "terms",
+      "excerpt": "Investment Archives - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Category: Investment Back to News 2026 Investment Startups The First Startup Win Is Not Always Revenue: How Three Founders Met in Founders Club 19 2026 Investment Startups SOMAREALITY Raises Over €3 Million to Build the Future of Cognitive Insights 2025 Investment News Startups CryptoSwift Raises €510K to Solve One of Crypto’s Biggest Compliance Headaches 2025 Cyber Investment News Startups Copernic Space Secures Seed Investment to Democratize Access to the Space Economy 2025 Cyber Investment News Startups Zerow is Reinventing Luxury Fashion with Circular Innovation 2025 Cyber Investment News Startups BotsCrew Acquired by CourtAvenue: Marking a New Exit and New Chapter in Conversational AI Innovation 2025 Cyber Investment News Startups Cloudtainer Lands $228K to Advance Smart Cargo Locks 2025 Investment News SaaS Startups DriveX Secures €1.2M Investment to Revolutionize Auto Repair and"
+    },
+    {
+      "id": "check-page-9d068068f7",
+      "url": "https://startupwiseguys.com/news/copernic-space-secures-seed-investment-to-democratize-space-economy/",
+      "page": "terms",
+      "excerpt": "Copernic Space Secures Seed Investment to Democratize Access to the Space Economy - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs 2025 Cyber Investment News Startups Copernic Space Secures Seed Investment to Democratize Access to the Space Economy Back to News Copernic Space has secured a significant seed investment from Dark Horse Venture Partners , marking a major step toward building the financial and marketplace infrastructure that will power the next era of the commercial space economy. The company’s platform enables real-world space assets —from lunar missions to in-orbit services—to be tokenized, owned, and traded , opening the space industry to a much wider range of investors and commercial participants. This strategic investment will accelerate Copernic Space’s mission roadmap along will secured space asset sales and product launches, reinforcing its role as a pioneer in tokenized space finance and the commercialization. Turning Space Into a Liquid"
+    },
+    {
+      "id": "check-page-e6afccb7db",
+      "url": "https://startupwiseguys.com/news/drivex-secures-1-2m-investment-to-revolutionize-auto-repair-and-automotive-technology/",
+      "page": "terms",
+      "excerpt": "DriveX Secures €1.2M Investment to Revolutionize Auto Repair and Automotive Technology - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs 2025 Investment News SaaS Startups DriveX Secures €1.2M Investment to Revolutionize Auto Repair and Automotive Technology Back to News DriveX Technologies , a standout from our SaaS Tallinn 2022 Batch , has successfully secured € 1.2 million in funding! This significant investment marks a new milestone in automotive technology and the insurance industry , signaling an exciting step forward in DriveX’s mission to eliminate dishonesty and waste in the car repair industry. Innovating Auto Repair with AI-Powered Inspections Founded in 2019 at Porsche’s Open Innovation Hackathon , DriveX was born out of a vision to streamline vehicle pre-inspections and transform the auto insurance market. By utilizing AI-powered vehicle inspection software , DriveX is tackling one of the most common issues in auto repair: glass damage , which"
+    },
+    {
+      "id": "check-page-98a32dc5f3",
+      "url": "https://startupwiseguys.com/news/fueling-innovation-through-strategic-investment-in-lumian-energy/",
+      "page": "terms",
+      "excerpt": "Fueling Innovation Through Strategic Investment in Lumian Energy - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Investment News Startups Fueling Innovation Through Strategic Investment in Lumian Energy Back to News Share article About Lumian Energy Founded in 2023 by Batu Balkır, Emre Birol, and Levent Şahiner, Lumian Inc. is a rising force in B2B energy management solutions. The company’s SaaS platform offers businesses a streamlined, hardware-free way to manage energy from the initial supply process. Lumian’s software provides real-time energy consumption monitoring, bill analysis, invoice validation, predictive alerts, and regulatory notifications—all deployable in under five minutes. The platform’s IoT capabilities also enable in-depth device monitoring for clients seeking advanced energy insights. Operating across Turkey, the EU, EMEA, the Caspian, and Turkic Republics, Lumian serves over 60 clients and manages energy for 1,250 facilities,"
+    },
+    {
+      "id": "check-page-b5944a01d0",
+      "url": "https://startupwiseguys.com/news/how-a-e1m-investment-is-propelling-restworld-toward-global-hospitality-leadership/",
+      "page": "terms",
+      "excerpt": "How a €1M Investment is Propelling Restworld Toward Global Hospitality Leadership - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Investment Italy News Startups How a €1M Investment is Propelling Restworld Toward Global Hospitality Leadership Back to News Restworld , portfolio company from our SaaS Milan 2022 batch, has raised €1 million in seed funding to revolutionize hiring in the hospitality and restaurant sector (Ho.Re.Ca). The Turin-based startup bridges the gap between businesses and job seekers, emphasizing transparency, accessibility, and ethical recruitment practices. The funding will support the creation of Restworld’s 2.0 platform, tailored to serve businesses of all sizes, from independent eateries to global chains. This milestone comes at a time of rapid change in the hospitality sector, underpinned by updates to Italy’s national labor agreement (CCNL). Expanding to Global Horizons With €1 million in revenue in 2024, partnerships with Lavazza,"
+    },
+    {
+      "id": "check-page-dee70125a7",
+      "url": "https://startupwiseguys.com/news/startup-loyi-secures-e425000-investment-to-revolutionize-banking-loyalty-programs-with-web3-and-gamification/",
+      "page": "terms",
+      "excerpt": "Startup Loyi Secures €425,000 Investment to Revolutionize Banking Loyalty Programs with Web3 and Gamification - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Startups Success stories Web3 Startup Loyi Secures €425,000 Investment to Revolutionize Banking Loyalty Programs with Web3 and Gamification Back to News Loyi , a pioneering brand under Enefty Technologies and a standout portfolio company of Startup Wise Guys from our second Web3 acceleration program , has secured a significant €425,000 investment from DG Nexolution. This funding is set to revolutionize customer loyalty programs using Web3 technology and gamification, bringing innovative blockchain-based solutions to Volksbanken and Raiffeisenbanken . Loyi is poised to transform customer engagement in the banking sector. Curious about the future of loyalty programs and blockchain technology? Read on to discover more about the company’s mission and their groundbreaking approach. Pioneering Loyalty with"
+    },
+    {
+      "id": "check-page-09cb2a8d62",
+      "url": "https://startupwiseguys.com/news/vc-investment-in-times-of-crisis/",
+      "page": "terms",
+      "excerpt": "VC Investment in Times of Crisis - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs News VC Investment in Times of Crisis Back to News Not much of an intro is needed, The World is different today. You might have thought that fundraising is something easily approachable, and now there are many open questions – to fundraise or not to fundraise, what to do with a round in progress, how to close funding deals, are VCs even considering new investments or are they on lockdown too? While a list of Active investors in spite of Corona circles around and VCs say that they are open for business – what does it really mean? To find some answers and to help our portfolio startups get through this crisis as smoothly as possible, we gathered a panel of 5 amazing people and great professionals representing some of the best VCs in Europe, sitting in Tallinn, Riga, Warsaw, Vienna, and Berlin to talk about VC investments in times of crisis. Here are some of the highlights from"
+    },
+    {
+      "id": "check-page-aec0c3d0ed",
+      "url": "https://startupwiseguys.com/news/young-entrepreneurs-summer-school-from-an-idea-to-an-investment-proposal/",
+      "page": "terms",
+      "excerpt": "Young Entrepreneurs Summer School - from an idea to an investment proposal - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Foundation Impact News Young Entrepreneurs Summer School – from an idea to an investment proposal Back to News It’s not even a secret – the world needs ever more young talents. We at Startup Wise Guys realized that we can educate and build the entrepreneurial spirit in students’ minds, hence why for the second time we organized the Young Entrepreneurs Summer School in collaboration with Estonian Business School, recently held in Tallinn. The young Entrepreneurs program is an intensive 7-day program for high school and university students eager to learn more about entrepreneurship and what it takes to build a startup. 🚀 This year 15 students joined the program to learn about business strategies, problem-solving skills, sales, and digital marketing from 23 amazing mentors. During the week students went through 10 lectures and 8 workshops,"
+    },
+    {
+      "id": "check-page-ee7df77f82",
+      "url": "https://startupwiseguys.com/news/10-teams-to-watch-from-the-second-saas-bilbao-batch/",
+      "page": "batches",
+      "excerpt": "10 teams to watch from the second SaaS Bilbao batch - Startup Wise Guys Menu Close For Founders Startup Stages Building Programs for founders or teams just starting out and looking to validate their MVP. Growing Acceleration programs for teams building products and taking them to the market. Scaling Programs for scaleups growing with necessity to expand their market. Verticals Cybersecurity Defence and Security Fintech SaaS Proptech Sustainability Web3 Other Mentors For Investors About Portfolio All programs All programs Growing SaaS Spain Startups 10 teams to watch from the second SaaS Bilbao batch Back to News We are excited to welcome 10 startups to our acceleration program that kicked off this Spring in Bilbao, Spain. Over the next three months, we’ll work closely with each team to help them refine their strategies, develop their products, and scale their businesses. Founders will have access to our network of over 750+ like-minded founders and 550+ mentors, investors, and industry experts. Selected teams will go through an intense 3-month-long acceleration program and get access to up to €100K convertible investment (€70K cash + €30K towards the program) with a potential €100K follow-on after the program. Joining us from around the world, these teams share a common goal: to revolutionize the way we work and live. From a real estate development platform to an asynchronous"
     }
   ],
   "findings": {
@@ -141,18 +806,170 @@
       }
     ],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://airtable.com/app21MYqwW64bMEYJ/pagSnYigPrCWXvgT8/form",
+        "evidenceId": "check-route-45816255f6"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://startupwiseguys.com",
         "evidenceId": "check-route-3cb7c6ef0c"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-9696934fc7"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-a2bffe5059"
+      }
+    ],
+    "announcedIntake": [
+      {
+        "value": "May",
+        "evidenceId": "check-announced-3495adbe7d"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-aedcf58c61"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-71fff0ca0c"
+      },
+      {
+        "value": "8",
+        "evidenceId": "check-duration-363e30eae6"
+      },
+      {
+        "value": "14",
+        "evidenceId": "check-duration-78cc756899"
+      },
+      {
+        "value": "24 months",
+        "evidenceId": "check-duration-83d04b7917"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-48cdf8febf"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-4bd5ff097a"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-4e90b0c3a0"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-a56e031ea2"
+      }
+    ],
+    "location": [
+      {
+        "value": "Berlin",
+        "evidenceId": "check-location-a169ef2f88"
+      }
+    ],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "up to our newsletter Program costs:* The program inscription fee is € 1000+VAT per individual or €1500+VAT per team (to be paid upon",
+        "evidenceId": "check-deal-37e261dcd5"
+      },
+      {
+        "value": "costs:* The program inscription fee is € 1000+VAT per individual or €1500+VAT per team (to be paid upon inscription) and €500+VAT for",
+        "evidenceId": "check-deal-6ece160a5e"
+      },
+      {
+        "value": "individual or €1500+VAT per team (to be paid upon inscription) and €500+VAT for CTOs/Developers. By the end of the program, you will have",
+        "evidenceId": "check-deal-937dda02b2"
+      },
+      {
+        "value": "where non incorporated idea stage startups can compete for up to 25K eur financial support per startup, along with 8 weeks online",
+        "evidenceId": "check-deal-f9ba516a8e"
+      },
+      {
+        "value": "startups joining the Accelerator Programs, we initially invest up to €100,000 in exchange for a negotiated equity in your company. The exact terms",
+        "evidenceId": "check-deal-624937a82c"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "fee",
+          "amount": "1000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Fee",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-37e261dcd5"
+      },
+      {
+        "value": {
+          "kind": "fee",
+          "amount": "1500",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Fee",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-6ece160a5e"
+      },
+      {
+        "value": {
+          "kind": "fee",
+          "amount": "500",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Fee",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-937dda02b2"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "25000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-f9ba516a8e"
+      },
+      {
+        "value": {
+          "kind": "equity",
+          "amount": "100000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Equity",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-624937a82c"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://startupwiseguys.com/portfolio/",

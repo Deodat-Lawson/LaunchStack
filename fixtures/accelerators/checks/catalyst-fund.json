@@ -1,78 +1,551 @@
 {
   "programId": "catalyst-fund",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.thecatalystfund.com/",
+    "https://www.thecatalystfund.com/faqs",
+    "https://www.thecatalystfund.com/insight/our-investment-thesis",
+    "https://www.thecatalystfund.com/catalyst-climate-champions",
+    "https://www.thecatalystfund.com/community-overview",
     "https://www.thecatalystfund.com/our-story",
-    "https://www.thecatalystfund.com/faqs"
+    "https://www.thecatalystfund.com/past-accelerators-overview",
+    "https://www.thecatalystfund.com/inclusive-digital-commerce",
+    "https://www.thecatalystfund.com/portfolio",
+    "https://www.thecatalystfund.com/portfolio?94232af5_page=2",
+    "https://www.thecatalystfund.com/portfolio?aa42568c_page=2",
+    "https://www.thecatalystfund.com/portfolios/abalobi",
+    "https://www.thecatalystfund.com/portfolios/agrails",
+    "https://www.thecatalystfund.com/portfolios/agro-supply",
+    "https://www.thecatalystfund.com/portfolios/aquarech"
   ],
   "evidence": [
     {
-      "id": "check-deal-0b008ab905",
+      "id": "check-deal-7ed1b443b2",
       "url": "https://www.thecatalystfund.com/",
-      "title": "Catalyst Fund — homepage checked by scrape.py",
-      "excerpt": "turning African factories’ biomass waste into durable carbon removal and healthier soils OUR CURRENT BACKERS Who we are VC fund and Venture Builder We invest $200K in pre-seed startups and follow on at Seed and Series A. Thesis-Driven Investor We back founders building climate adaptation and resilience solutions in",
+      "title": "Catalyst Fund — homepage",
+      "excerpt": "OUR CURRENT BACKERS Who we are VC fund and Venture Builder We invest $200K in pre-seed startups and follow on at Seed and Series A.",
       "page": "details"
+    },
+    {
+      "id": "check-duration-069b0734d2",
+      "url": "https://www.thecatalystfund.com/portfolios/aquarech",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-171257bab5",
+      "url": "https://www.thecatalystfund.com/",
+      "title": "Catalyst Fund — homepage",
+      "excerpt": "of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-24c4c5a065",
+      "url": "https://www.thecatalystfund.com/insight/our-investment-thesis",
+      "title": "Catalyst Fund — terms page",
+      "excerpt": "of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-2e01da27f7",
+      "url": "https://www.thecatalystfund.com/inclusive-digital-commerce",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-4a56f2dcb4",
+      "url": "https://www.thecatalystfund.com/past-accelerators-overview",
+      "title": "Catalyst Fund — program page",
+      "excerpt": "of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-6157d14cc9",
+      "url": "https://www.thecatalystfund.com/portfolio?aa42568c_page=2",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-65f655aade",
+      "url": "https://www.thecatalystfund.com/catalyst-climate-champions",
+      "title": "Catalyst Fund — program page",
+      "excerpt": "of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-67e50a2c1e",
+      "url": "https://www.thecatalystfund.com/portfolio?94232af5_page=2",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-6dd4184816",
+      "url": "https://www.thecatalystfund.com/community-overview",
+      "title": "Catalyst Fund — program page",
+      "excerpt": "of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-7535646358",
+      "url": "https://www.thecatalystfund.com/portfolios/agrails",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-8d7dfa7bc4",
+      "url": "https://www.thecatalystfund.com/faqs",
+      "title": "Catalyst Fund — terms page",
+      "excerpt": "journey for Catalyst Fund startups lasts about 6 months and includes a combination of bespoke in-person",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-9d79240e5d",
+      "url": "https://www.thecatalystfund.com/portfolios/abalobi",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-a1a8473622",
+      "url": "https://www.thecatalystfund.com/portfolios/agro-supply",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-bf6f3db843",
+      "url": "https://www.thecatalystfund.com/faqs",
+      "title": "Catalyst Fund — terms page",
+      "excerpt": "of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f2eae75e27",
+      "url": "https://www.thecatalystfund.com/inclusive-digital-commerce",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "the scaling stage Minimum runway Company has 6-12 months of runway Geography Company is Ghana-based (or",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-f3b43090cb",
+      "url": "https://www.thecatalystfund.com/our-story",
+      "title": "Catalyst Fund — program page",
+      "excerpt": "of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-f528dd4ccc",
+      "url": "https://www.thecatalystfund.com/portfolio",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-270f44ebd2",
+      "url": "https://www.thecatalystfund.com/catalyst-climate-champions",
+      "title": "Catalyst Fund — program page",
+      "excerpt": "Get started (hello@thecatalystfund.com)",
+      "page": "details"
+    },
+    {
+      "id": "check-format-47e457cd05",
+      "url": "https://www.thecatalystfund.com/faqs",
+      "title": "Catalyst Fund — terms page",
+      "excerpt": "lasts about 6 months and includes a combination of bespoke in-person and remote support from our venture building team. The",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-4c92f0c216",
+      "url": "https://www.thecatalystfund.com/faqs",
+      "title": "Catalyst Fund — terms page",
+      "excerpt": "months and includes a combination of bespoke in-person and remote support from our venture building team. The exact support",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-58100cbdd6",
+      "url": "https://www.thecatalystfund.com/portfolio?aa42568c_page=2",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "providers to democratize access Learn more Harvesting AI, remote sensing data and alternative data for agri-lending Learn",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-752882800c",
+      "url": "https://www.thecatalystfund.com/portfolios/agro-supply",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "and to cash out in order to purchase farm inputs such as hybrid (drought-resistant) seeds, from maize to sorghum,",
+      "page": "portfolio"
     },
     {
       "id": "check-name-4761e2eb2c",
       "url": "https://www.thecatalystfund.com/",
-      "title": "Catalyst Fund — homepage checked by scrape.py",
+      "title": "Catalyst Fund — homepage",
       "excerpt": "The Catalyst Fund: Pre-seed VC fund and venture builder Who we are Our Story",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-06e2344c4e",
+      "url": "https://www.thecatalystfund.com/catalyst-climate-champions",
+      "title": "Catalyst Fund — program page",
+      "excerpt": "Portfolio → https://www.thecatalystfund.com/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-07be180ba3",
       "url": "https://www.thecatalystfund.com/faqs",
-      "title": "Catalyst Fund — terms page checked by scrape.py",
+      "title": "Catalyst Fund — terms page",
       "excerpt": "Portfolio → https://www.thecatalystfund.com/portfolio",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-0d3c758bb8",
+      "url": "https://www.thecatalystfund.com/portfolio?aa42568c_page=2",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Load more → https://www.thecatalystfund.com/portfolio?94232af5_page=2&aa42568c_page=2",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-15101c1cbc",
       "url": "https://www.thecatalystfund.com/faqs",
-      "title": "Catalyst Fund — terms page checked by scrape.py",
+      "title": "Catalyst Fund — terms page",
       "excerpt": "Who we've invested in → https://www.thecatalystfund.com/portfolio",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-69e26ce085",
-      "url": "https://www.thecatalystfund.com/our-story",
-      "title": "Catalyst Fund — details page checked by scrape.py",
+      "id": "check-portfolio-1c788a1286",
+      "url": "https://www.thecatalystfund.com/portfolios/agro-supply",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Portfolio → https://www.thecatalystfund.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-1e31ecb67a",
+      "url": "https://www.thecatalystfund.com/portfolio",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Load more → https://www.thecatalystfund.com/portfolio?94232af5_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-2444350042",
+      "url": "https://www.thecatalystfund.com/insight/our-investment-thesis",
+      "title": "Catalyst Fund — terms page",
+      "excerpt": "Who we've invested in → https://www.thecatalystfund.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-281195b454",
+      "url": "https://www.thecatalystfund.com/catalyst-climate-champions",
+      "title": "Catalyst Fund — program page",
       "excerpt": "Who we've invested in → https://www.thecatalystfund.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-3dff73bcfa",
+      "url": "https://www.thecatalystfund.com/portfolio?94232af5_page=2",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Portfolio → https://www.thecatalystfund.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-45d8d6b25c",
+      "url": "https://www.thecatalystfund.com/portfolios/agrails",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Who we've invested in → https://www.thecatalystfund.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-49925329d0",
+      "url": "https://www.thecatalystfund.com/portfolios/aquarech",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Who we've invested in → https://www.thecatalystfund.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-4b53b3527a",
+      "url": "https://www.thecatalystfund.com/portfolio?94232af5_page=2",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Previous → https://www.thecatalystfund.com/portfolio?94232af5_page=1",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-51b935d34e",
+      "url": "https://www.thecatalystfund.com/portfolios/abalobi",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Who we've invested in → https://www.thecatalystfund.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-645c6012bf",
+      "url": "https://www.thecatalystfund.com/insight/our-investment-thesis",
+      "title": "Catalyst Fund — terms page",
+      "excerpt": "Portfolio → https://www.thecatalystfund.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-64eaaef7b0",
+      "url": "https://www.thecatalystfund.com/portfolio?aa42568c_page=2",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Previous → https://www.thecatalystfund.com/portfolio?aa42568c_page=1",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-69e26ce085",
+      "url": "https://www.thecatalystfund.com/our-story",
+      "title": "Catalyst Fund — program page",
+      "excerpt": "Who we've invested in → https://www.thecatalystfund.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-727d61c0fb",
+      "url": "https://www.thecatalystfund.com/portfolio?94232af5_page=2",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Load more → https://www.thecatalystfund.com/portfolio?94232af5_page=2&aa42568c_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-72be813052",
+      "url": "https://www.thecatalystfund.com/portfolio?94232af5_page=2",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Load more → https://www.thecatalystfund.com/portfolio?94232af5_page=3",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-7dc58753c4",
       "url": "https://www.thecatalystfund.com/our-story",
-      "title": "Catalyst Fund — details page checked by scrape.py",
+      "title": "Catalyst Fund — program page",
       "excerpt": "Portfolio → https://www.thecatalystfund.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-800f9e5b57",
+      "url": "https://www.thecatalystfund.com/portfolio?aa42568c_page=2",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Who we've invested in → https://www.thecatalystfund.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-90ae376faa",
+      "url": "https://www.thecatalystfund.com/portfolios/aquarech",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Portfolio → https://www.thecatalystfund.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-910b072f6f",
+      "url": "https://www.thecatalystfund.com/portfolio",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Load more → https://www.thecatalystfund.com/portfolio?aa42568c_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-958b3a8044",
+      "url": "https://www.thecatalystfund.com/portfolios/agrails",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Portfolio → https://www.thecatalystfund.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-9bbf82fe8c",
+      "url": "https://www.thecatalystfund.com/past-accelerators-overview",
+      "title": "Catalyst Fund — program page",
+      "excerpt": "Portfolio → https://www.thecatalystfund.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9dad82f919",
+      "url": "https://www.thecatalystfund.com/inclusive-digital-commerce",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Portfolio → https://www.thecatalystfund.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-a343d4d64f",
+      "url": "https://www.thecatalystfund.com/inclusive-digital-commerce",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Who we've invested in → https://www.thecatalystfund.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-a56c0d1711",
+      "url": "https://www.thecatalystfund.com/portfolio?aa42568c_page=2",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Load more → https://www.thecatalystfund.com/portfolio?aa42568c_page=3",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-ab1acef558",
+      "url": "https://www.thecatalystfund.com/portfolios/abalobi",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Portfolio → https://www.thecatalystfund.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-b72c4b3725",
+      "url": "https://www.thecatalystfund.com/portfolio?aa42568c_page=2",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Portfolio → https://www.thecatalystfund.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-b7704caebd",
       "url": "https://www.thecatalystfund.com/",
-      "title": "Catalyst Fund — homepage checked by scrape.py",
+      "title": "Catalyst Fund — homepage",
       "excerpt": "Portfolio → https://www.thecatalystfund.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bba287dc19",
+      "url": "https://www.thecatalystfund.com/past-accelerators-overview",
+      "title": "Catalyst Fund — program page",
+      "excerpt": "Who we've invested in → https://www.thecatalystfund.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c337257f3f",
+      "url": "https://www.thecatalystfund.com/community-overview",
+      "title": "Catalyst Fund — program page",
+      "excerpt": "Who we've invested in → https://www.thecatalystfund.com/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-d447f764a3",
       "url": "https://www.thecatalystfund.com/",
-      "title": "Catalyst Fund — homepage checked by scrape.py",
+      "title": "Catalyst Fund — homepage",
       "excerpt": "Who we've invested in → https://www.thecatalystfund.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-edda23681d",
+      "url": "https://www.thecatalystfund.com/community-overview",
+      "title": "Catalyst Fund — program page",
+      "excerpt": "Portfolio → https://www.thecatalystfund.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-eff36a6690",
+      "url": "https://www.thecatalystfund.com/portfolio?94232af5_page=2",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Who we've invested in → https://www.thecatalystfund.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-f66469e011",
+      "url": "https://www.thecatalystfund.com/portfolios/agro-supply",
+      "title": "Catalyst Fund — portfolio page",
+      "excerpt": "Who we've invested in → https://www.thecatalystfund.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-f137fcf40d",
       "url": "https://www.thecatalystfund.com/",
-      "title": "Catalyst Fund — homepage checked by scrape.py",
+      "title": "Catalyst Fund — homepage",
       "excerpt": "https://www.thecatalystfund.com/",
       "page": "details"
     }
   ],
+  "pageQuotes": [
+    {
+      "id": "check-page-d1815c95af",
+      "url": "https://www.thecatalystfund.com/",
+      "page": "details",
+      "excerpt": "The Catalyst Fund: Pre-seed VC fund and venture builder Who we are Our Story Learn about our mission, vision and journey Our Model We operate under a proven model Our Team Meet the people behind Catalyst Fund Careers We are looking for talented individuals Code of Conduct Our code of conduct for fund investees Portfolio Insights Community Overview Learn more about our community Circle of Investors A group of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at one of our events Past Accelerators Overview Learn more about our Past Accelerators Inclusive Fintech Supported early-stage fintech startups in emerging markets Inclusive Digital Commerce Scaled digital commerce companies in Ghana Assistive Technology Lorem ipsum dolor sit amet consectetur elit Contact us Partner with us Investing for a climate- resilient future in Africa We partner with founders building tech solutions for climate adaptation and resilience Insights Why we invested in BIG, the venture turning African factories’ biomass waste into durable carbon removal and healthier soils Insights Why we invested in Mujer Financiera Insights Why we invested in BIG, the venture turning African factories’ biomass waste into durable carbon removal and healthier soils OUR CURRENT BACKERS Who we are VC fund and Venture Builder We invest $200K in pre-seed startups and follow on"
+    },
+    {
+      "id": "check-page-435200f3c8",
+      "url": "https://www.thecatalystfund.com/faqs",
+      "page": "terms",
+      "excerpt": "Faqs Who we are Our Story Learn about our mission, vision and journey Our Model We operate under a proven model Our Team Meet the people behind Catalyst Fund Careers We are looking for talented individuals Code of Conduct Our code of conduct for fund investees Portfolio Insights Community Overview Learn more about our community Circle of Investors A group of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at one of our events Past Accelerators Overview Learn more about our Past Accelerators Inclusive Fintech Supported early-stage fintech startups in emerging markets Inclusive Digital Commerce Scaled digital commerce companies in Ghana Assistive Technology Lorem ipsum dolor sit amet consectetur elit Contact us Pitch to Us Frequently Asked Questions Got questions? We've got answers Contact Question text goes here Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere. Question text goes here Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo"
+    },
+    {
+      "id": "check-page-1b5d1ab819",
+      "url": "https://www.thecatalystfund.com/insight/our-investment-thesis",
+      "page": "terms",
+      "excerpt": "Catalyst Fund Who we are Our Story Learn about our mission, vision and journey Our Model We operate under a proven model Our Team Meet the people behind Catalyst Fund Careers We are looking for talented individuals Code of Conduct Our code of conduct for fund investees Portfolio Insights Community Overview Learn more about our community Circle of Investors A group of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at one of our events Past Accelerators Overview Learn more about our Past Accelerators Inclusive Fintech Supported early-stage fintech startups in emerging markets Inclusive Digital Commerce Scaled digital commerce companies in Ghana Assistive Technology Lorem ipsum dolor sit amet consectetur elit Contact us Pitch to Us Blog Lorem ipsum dolor sit amet, consectetur adipiscing elit. Insight Report Our Investment Thesis & October 30, 2023 Category Blog title heading will go here Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros. Full name 11 Jan 2022 • 5 min read Category Blog title heading will go here Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros. Full name 11 Jan 2022 • 5 min read Category Blog title heading will go here Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros. Full name 11 Jan 2022 • 5"
+    },
+    {
+      "id": "check-page-a953c5db98",
+      "url": "https://www.thecatalystfund.com/catalyst-climate-champions",
+      "page": "details",
+      "excerpt": "Catalyst Climate Champions Who we are Our Story Learn about our mission, vision and journey Our Model We operate under a proven model Our Team Meet the people behind Catalyst Fund Careers We are looking for talented individuals Code of Conduct Our code of conduct for fund investees Portfolio Insights Community Overview Learn more about our community Circle of Investors A group of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at one of our events Past Accelerators Overview Learn more about our Past Accelerators Inclusive Fintech Supported early-stage fintech startups in emerging markets Inclusive Digital Commerce Scaled digital commerce companies in Ghana Assistive Technology Lorem ipsum dolor sit amet consectetur elit Contact us Pitch to Us Community Catalyst Climate Champions This program builds climate resilience through entrepreneurship networks that facilitate local dialogue and inspire climate-smart innovation Join us Button The Catalyst Fund accelerates the tech ecosystem by bringing together leading global and local innovators to form circles of investors, corporate institutions, talent networks, and other enablers, who commit to working with us to advance the wider ecosystem. Our Catalyst Climate Champions are Based In: Uganda Nigeria Tanzania Passionate about: Climate Tech African Innovation Venture Capital Our"
+    },
+    {
+      "id": "check-page-d6e9533f2a",
+      "url": "https://www.thecatalystfund.com/community-overview",
+      "page": "details",
+      "excerpt": "Community Overview Who we are Our Story Learn about our mission, vision and journey Our Model We operate under a proven model Our Team Meet the people behind Catalyst Fund Careers We are looking for talented individuals Code of Conduct Our code of conduct for fund investees Portfolio Insights Community Overview Learn more about our community Circle of Investors A group of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at one of our events Past Accelerators Overview Learn more about our Past Accelerators Inclusive Fintech Supported early-stage fintech startups in emerging markets Inclusive Digital Commerce Scaled digital commerce companies in Ghana Assistive Technology Lorem ipsum dolor sit amet consectetur elit Contact us Join us Community We build ecosystems that enable founders to succeed We know that accelerating climate tech startups directly isn’t enough. The wider environment they operate in needs to be conducive to their growth: addressing capital, talent, partnerships, and regulatory barriers. Button Catalyst Fund accelerates the climate tech ecosystem by bringing together leading global and local innovators who commit to working with us to advance the wider ecosystem. Our team Circle of Investors Our Circle of Investors is composed of 250+ leading global and local emerging markets and tech investors, who are excited"
+    },
+    {
+      "id": "check-page-cdd111cd14",
+      "url": "https://www.thecatalystfund.com/our-story",
+      "page": "details",
+      "excerpt": "The Catalyst Fund: Our story Who we are Our Story Learn about our mission, vision and journey Our Model We operate under a proven model Our Team Meet the people behind Catalyst Fund Careers We are looking for talented individuals Code of Conduct Our code of conduct for fund investees Portfolio Insights Community Overview Learn more about our community Circle of Investors A group of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at one of our events Past Accelerators Overview Learn more about our Past Accelerators Inclusive Fintech Supported early-stage fintech startups in emerging markets Inclusive Digital Commerce Scaled digital commerce companies in Ghana Assistive Technology Lorem ipsum dolor sit amet consectetur elit Contact us Pitch to Us Who we are Investing for a climate-resilient future in Africa Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Button Button At Catalyst Fund, we are committed to investing in a climate-resilient future for Africa. As a venture capital fund and venture builder, we partner with visionary founders who are developing high-impact climate adaptation solutions to enhance the resilience of communities and the planet. Our investments span critical sectors including climate-smart agritech and food systems, climate insurance, land"
+    },
+    {
+      "id": "check-page-5b854c8173",
+      "url": "https://www.thecatalystfund.com/past-accelerators-overview",
+      "page": "details",
+      "excerpt": "Past Accelerators Who we are Our Story Learn about our mission, vision and journey Our Model We operate under a proven model Our Team Meet the people behind Catalyst Fund Careers We are looking for talented individuals Code of Conduct Our code of conduct for fund investees Portfolio Insights Community Overview Learn more about our community Circle of Investors A group of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at one of our events Past Accelerators Overview Learn more about our Past Accelerators Inclusive Fintech Supported early-stage fintech startups in emerging markets Inclusive Digital Commerce Scaled digital commerce companies in Ghana Assistive Technology Lorem ipsum dolor sit amet consectetur elit Contact us Join us Overview Past Accelerators Prior to launching its Catalyst Climate Resilience Fund, Catalyst Fund has successfully run two transformative programs aimed at empowering startups and innovators across emerging markets. Button Our Inclusive Fintech and Digital Commerce Accelerators have been instrumental in empowering entrepreneurs to address critical gaps in these sectors. Through partnerships with the Bill & Melinda Gates Foundation, JPMorgan Chase & Co, FCDO, PayPal, and the Mastercard Foundation, we have provided essential patient capital, venture building support, and access to investors. These"
+    },
+    {
+      "id": "check-page-32858fcb16",
+      "url": "https://www.thecatalystfund.com/inclusive-digital-commerce",
+      "page": "portfolio",
+      "excerpt": "Inclusive digital commerce Who we are Our Story Learn about our mission, vision and journey Our Model We operate under a proven model Our Team Meet the people behind Catalyst Fund Careers We are looking for talented individuals Code of Conduct Our code of conduct for fund investees Portfolio Insights Community Overview Learn more about our community Circle of Investors A group of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at one of our events Past Accelerators Overview Learn more about our Past Accelerators Inclusive Fintech Supported early-stage fintech startups in emerging markets Inclusive Digital Commerce Scaled digital commerce companies in Ghana Assistive Technology Lorem ipsum dolor sit amet consectetur elit Contact us Pitch to Us Community Past Accelerator: Inclusive Digital Commerce The Catalyst Fund Inclusive Digital Commerce Accelerator supported digital commerce companies building solutions designed to improve the livelihoods and financial resilience of micro and small enterprises (MSEs). Join us Button The Catalyst Fund accelerates the tech ecosystem by bringing together leading global and local innovators to form circles of investors, corporate institutions, talent networks, and other enablers, who commit to working with us to advance the wider ecosystem. Community Partners + supporters The Catalyst Fund"
+    },
+    {
+      "id": "check-page-76ef9db79e",
+      "url": "https://www.thecatalystfund.com/portfolio",
+      "page": "portfolio",
+      "excerpt": "Portfolio Who we are Our Story Learn about our mission, vision and journey Our Model We operate under a proven model Our Team Meet the people behind Catalyst Fund Careers We are looking for talented individuals Code of Conduct Our code of conduct for fund investees Portfolio Insights Community Overview Learn more about our community Circle of Investors A group of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at one of our events Past Accelerators Overview Learn more about our Past Accelerators Inclusive Fintech Supported early-stage fintech startups in emerging markets Inclusive Digital Commerce Scaled digital commerce companies in Ghana Assistive Technology Lorem ipsum dolor sit amet consectetur elit Contact us Pitch to Us Startup Portfolio We’ve accelerated 81 companies across 19 markets since 2015 Investing for a climate-resilient future in Africa, today we partner with founders building tech solutions for climate adaptation and resilience Button Button Current Portfolio Past Accelerators Kenya Tab 1 Tab 2 Tab 3 Agrails Current fund Agrails Country Kenya Keep IT Cool Current fund Keep IT Cool Country Kenya Octavia Carbon Current fund Octavia Carbon Country Kenya Farm to Feed Current fund Farm to Feed Country Kenya Uganda Tab 1 Tab 2 Tab 3 Agro Supply Current fund Agro Supply Country Uganda Tanzania Tab 1 Tab 2 Tab 3 OKOA"
+    },
+    {
+      "id": "check-page-9219f30fbd",
+      "url": "https://www.thecatalystfund.com/portfolio?94232af5_page=2",
+      "page": "portfolio",
+      "excerpt": "Portfolio Who we are Our Story Learn about our mission, vision and journey Our Model We operate under a proven model Our Team Meet the people behind Catalyst Fund Careers We are looking for talented individuals Code of Conduct Our code of conduct for fund investees Portfolio Insights Community Overview Learn more about our community Circle of Investors A group of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at one of our events Past Accelerators Overview Learn more about our Past Accelerators Inclusive Fintech Supported early-stage fintech startups in emerging markets Inclusive Digital Commerce Scaled digital commerce companies in Ghana Assistive Technology Lorem ipsum dolor sit amet consectetur elit Contact us Pitch to Us Startup Portfolio We’ve accelerated 81 companies across 19 markets since 2015 Investing for a climate-resilient future in Africa, today we partner with founders building tech solutions for climate adaptation and resilience Button Button Current Portfolio Past Accelerators Kenya Tab 1 Tab 2 Tab 3 Agrails Current fund Agrails Country Kenya Keep IT Cool Current fund Keep IT Cool Country Kenya Octavia Carbon Current fund Octavia Carbon Country Kenya Farm to Feed Current fund Farm to Feed Country Kenya Uganda Tab 1 Tab 2 Tab 3 Agro Supply Current fund Agro Supply Country Uganda Tanzania Tab 1 Tab 2 Tab 3 OKOA"
+    },
+    {
+      "id": "check-page-c4fc5c3f93",
+      "url": "https://www.thecatalystfund.com/portfolio?aa42568c_page=2",
+      "page": "portfolio",
+      "excerpt": "Portfolio Who we are Our Story Learn about our mission, vision and journey Our Model We operate under a proven model Our Team Meet the people behind Catalyst Fund Careers We are looking for talented individuals Code of Conduct Our code of conduct for fund investees Portfolio Insights Community Overview Learn more about our community Circle of Investors A group of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at one of our events Past Accelerators Overview Learn more about our Past Accelerators Inclusive Fintech Supported early-stage fintech startups in emerging markets Inclusive Digital Commerce Scaled digital commerce companies in Ghana Assistive Technology Lorem ipsum dolor sit amet consectetur elit Contact us Pitch to Us Startup Portfolio We’ve accelerated 81 companies across 19 markets since 2015 Investing for a climate-resilient future in Africa, today we partner with founders building tech solutions for climate adaptation and resilience Button Button Current Portfolio Past Accelerators Kenya Tab 1 Tab 2 Tab 3 Agrails Current fund Agrails Country Kenya Keep IT Cool Current fund Keep IT Cool Country Kenya Octavia Carbon Current fund Octavia Carbon Country Kenya Farm to Feed Current fund Farm to Feed Country Kenya Uganda Tab 1 Tab 2 Tab 3 Agro Supply Current fund Agro Supply Country Uganda Tanzania Tab 1 Tab 2 Tab 3 OKOA"
+    },
+    {
+      "id": "check-page-3dc26cb280",
+      "url": "https://www.thecatalystfund.com/portfolios/abalobi",
+      "page": "portfolio",
+      "excerpt": "Catalyst Fund Who we are Our Story Learn about our mission, vision and journey Our Model We operate under a proven model Our Team Meet the people behind Catalyst Fund Careers We are looking for talented individuals Code of Conduct Our code of conduct for fund investees Portfolio Insights Community Overview Learn more about our community Circle of Investors A group of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at one of our events Past Accelerators Overview Learn more about our Past Accelerators Inclusive Fintech Supported early-stage fintech startups in emerging markets Inclusive Digital Commerce Scaled digital commerce companies in Ghana Assistive Technology Lorem ipsum dolor sit amet consectetur elit Contact us Pitch to Us Back Abalobi South Africa B2B Payments + financial management ABALOBI is a South African-based, global social enterprise. Their mission is to contribute towards thriving, equitable, climate change resilient and sustainable small-scale fishing communities globally . Their technologies and programs poise small-scale fishers for social, economic and ecological sustainability. They believe in participatory fisheries rebuilding strategies that consider ocean life and livelihoods. Go to website Subscribe to Catalyst Fund's #InclusiveTech Newsletter A regular digest of latest news, articles and resources We"
+    },
+    {
+      "id": "check-page-9db57c03a8",
+      "url": "https://www.thecatalystfund.com/portfolios/agrails",
+      "page": "portfolio",
+      "excerpt": "Catalyst Fund Who we are Our Story Learn about our mission, vision and journey Our Model We operate under a proven model Our Team Meet the people behind Catalyst Fund Careers We are looking for talented individuals Code of Conduct Our code of conduct for fund investees Portfolio Insights Community Overview Learn more about our community Circle of Investors A group of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at one of our events Past Accelerators Overview Learn more about our Past Accelerators Inclusive Fintech Supported early-stage fintech startups in emerging markets Inclusive Digital Commerce Scaled digital commerce companies in Ghana Assistive Technology Lorem ipsum dolor sit amet consectetur elit Contact us Pitch to Us Back Agrails Kenya Climate data Agrails provides AI-powered climate risk intelligence to help insurers and financial institutions navigate the complexities of agricultural lending. Their platform uses advanced data analytics to monitor, underwrite, and verify farm portfolios in real-time, building the resilience of smallholder farmers against climate volatility. Go to website Subscribe to Catalyst Fund's #InclusiveTech Newsletter A regular digest of latest news, articles and resources We care about your data in our privacy policy . Subscribed! Oops! Something went wrong. Try again! Social Where we’re"
+    },
+    {
+      "id": "check-page-03465d7e83",
+      "url": "https://www.thecatalystfund.com/portfolios/agro-supply",
+      "page": "portfolio",
+      "excerpt": "Catalyst Fund Who we are Our Story Learn about our mission, vision and journey Our Model We operate under a proven model Our Team Meet the people behind Catalyst Fund Careers We are looking for talented individuals Code of Conduct Our code of conduct for fund investees Portfolio Insights Community Overview Learn more about our community Circle of Investors A group of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at one of our events Past Accelerators Overview Learn more about our Past Accelerators Inclusive Fintech Supported early-stage fintech startups in emerging markets Inclusive Digital Commerce Scaled digital commerce companies in Ghana Assistive Technology Lorem ipsum dolor sit amet consectetur elit Contact us Pitch to Us Back Agro Supply Uganda B2C Mobile Layaway System A mobile layaway system that helps farmers save money gradually using their mobile phones and to cash out in order to purchase farm inputs such as hybrid (drought-resistant) seeds, from maize to sorghum, sunflower and soybean during the planting season. Read: Why We Invested Go to website Subscribe to Catalyst Fund's #InclusiveTech Newsletter A regular digest of latest news, articles and resources We care about your data in our privacy policy . Subscribed! Oops! Something went wrong. Try again! Social Where we’re located About Our Story Our Team Our"
+    },
+    {
+      "id": "check-page-ccba338f46",
+      "url": "https://www.thecatalystfund.com/portfolios/aquarech",
+      "page": "portfolio",
+      "excerpt": "Catalyst Fund Who we are Our Story Learn about our mission, vision and journey Our Model We operate under a proven model Our Team Meet the people behind Catalyst Fund Careers We are looking for talented individuals Code of Conduct Our code of conduct for fund investees Portfolio Insights Community Overview Learn more about our community Circle of Investors A group of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at one of our events Past Accelerators Overview Learn more about our Past Accelerators Inclusive Fintech Supported early-stage fintech startups in emerging markets Inclusive Digital Commerce Scaled digital commerce companies in Ghana Assistive Technology Lorem ipsum dolor sit amet consectetur elit Contact us Pitch to Us Back Aquarech Kenya B2C Aquaculture solution Feed marketplace and precision fish farming app, with optional hardware sensor Go to website Subscribe to Catalyst Fund's #InclusiveTech Newsletter A regular digest of latest news, articles and resources We care about your data in our privacy policy . Subscribed! Oops! Something went wrong. Try again! Social Where we’re located About Our Story Our Team Our Model Careers FAQ Contact Us Code of Conduct External Communications Mechanism PAST ACCELERATOR Overview Inclusive Fintech Inclusive Digital Commerce Assistive Technology Insights Publications Community"
+    }
+  ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "hello@thecatalystfund.com",
+        "evidenceId": "check-email-270f44ebd2"
+      }
+    ],
     "phones": [],
     "routes": [],
     "applicationUrl": [
@@ -84,17 +557,79 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-171257bab5"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-8d7dfa7bc4"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-47e457cd05"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-4c92f0c216"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-752882800c"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "turning African factories’ biomass waste into durable carbon removal and healthier soils OUR CURRENT BACKERS Who we are VC fund and Venture Builder We invest $200K in pre-seed startups and follow on at Seed and Series A. Thesis-Driven Investor We back founders building climate adaptation and resilience solutions in",
-        "evidenceId": "check-deal-0b008ab905"
+        "value": "OUR CURRENT BACKERS Who we are VC fund and Venture Builder We invest $200K in pre-seed startups and follow on at Seed and Series A.",
+        "evidenceId": "check-deal-7ed1b443b2"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "200000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-7ed1b443b2"
       }
     ],
     "portfolioPages": [
       {
         "value": "https://www.thecatalystfund.com/portfolio",
         "evidenceId": "check-portfolio-b7704caebd"
+      },
+      {
+        "value": "https://www.thecatalystfund.com/portfolio?94232af5_page=2",
+        "evidenceId": "check-portfolio-1e31ecb67a"
+      },
+      {
+        "value": "https://www.thecatalystfund.com/portfolio?aa42568c_page=2",
+        "evidenceId": "check-portfolio-910b072f6f"
+      },
+      {
+        "value": "https://www.thecatalystfund.com/portfolio?94232af5_page=1",
+        "evidenceId": "check-portfolio-4b53b3527a"
+      },
+      {
+        "value": "https://www.thecatalystfund.com/portfolio?94232af5_page=3",
+        "evidenceId": "check-portfolio-72be813052"
+      },
+      {
+        "value": "https://www.thecatalystfund.com/portfolio?94232af5_page=2&aa42568c_page=2",
+        "evidenceId": "check-portfolio-727d61c0fb"
       }
     ],
     "name": [

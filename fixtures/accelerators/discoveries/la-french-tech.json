@@ -1,36 +1,116 @@
 {
   "programId": "la-french-tech",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://lafrenchtech.gouv.fr/fr/programme/french-tech-next-40-120/",
+      "url": "https://lafrenchtech.gouv.fr/en/launch-of-the-french-tech-2030-support-programme/",
       "page": "details",
-      "anchor": "French Tech Next40/120",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://lafrenchtech.gouv.fr/fr/programme/french-tech-2030/",
-      "page": "details",
-      "anchor": "French Tech 2030",
-      "fetched": false,
+      "url": "https://lafrenchtech.gouv.fr/en/les-102-laureats-de-la-5e-promotion-du-french-tech-tremplin-incubation-devoiles-a-vivatech/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://lafrenchtech.gouv.fr/fr/programme/french-tech-nova/",
+      "url": "https://lafrenchtech.gouv.fr/en/our-programs/",
       "page": "details",
-      "anchor": "French Tech Nova",
-      "fetched": false,
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://lafrenchtech.gouv.fr/fr/programme/french-tech-tremplin/",
+      "url": "https://lafrenchtech.gouv.fr/en/overview-french-tech-2026/",
       "page": "details",
-      "anchor": "French Tech Tremplin",
-      "fetched": false,
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-2030/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-next40-120/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-nova/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lafrenchtech.gouv.fr/en/programme/french-tech-tremplin/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lafrenchtech.gouv.fr/en/the-criteria-for-the-french-tech-next40-120-programme-are-changing/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lafrenchtech.gouv.fr/fr/annonce-des-laureats-de-la-4eme-promotion-du-programme-french-tech-tremplin-incubation/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lafrenchtech.gouv.fr/fr/annonce-des-laureats-de-la-phase-incubation-du-programme-french-tech-tremplin/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lafrenchtech.gouv.fr/fr/evenement-oa/le-programme-willa-possible/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lafrenchtech.gouv.fr/fr/evenement-oa/le-programme-willa-start/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lafrenchtech.gouv.fr/fr/faq/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -54,6 +134,38 @@
       "url": "https://lafrenchtech.gouv.fr/fr/nos-programmes-daccompagnement/",
       "page": "details",
       "anchor": "Découvrir nos programmes",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lafrenchtech.gouv.fr/fr/programme/french-tech-2030/",
+      "page": "details",
+      "anchor": "French Tech 2030",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lafrenchtech.gouv.fr/fr/programme/french-tech-next-40-120/",
+      "page": "details",
+      "anchor": "French Tech Next40/120",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lafrenchtech.gouv.fr/fr/programme/french-tech-nova/",
+      "page": "details",
+      "anchor": "French Tech Nova",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lafrenchtech.gouv.fr/fr/programme/french-tech-tremplin/",
+      "page": "details",
+      "anchor": "French Tech Tremplin",
       "fetched": false,
       "blocked": null,
       "origin": "official"

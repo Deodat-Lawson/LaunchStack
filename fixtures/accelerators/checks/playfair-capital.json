@@ -1,37 +1,318 @@
 {
   "programId": "playfair-capital",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
-    "https://playfair.vc/"
+    "https://playfair.vc/",
+    "https://playfair.vc/about.php",
+    "https://playfair.vc/companies/Yaso",
+    "https://playfair.vc/companies/about.php",
+    "https://playfair.vc/companies/aerocloud",
+    "https://playfair.vc/companies/angels.php",
+    "https://playfair.vc/companies/appearhere",
+    "https://playfair.vc/companies/approach.php",
+    "https://playfair.vc/companies/ascento",
+    "https://playfair.vc/companies/astral-systems",
+    "https://playfair.vc/companies/bryo",
+    "https://playfair.vc/companies/community.php",
+    "https://playfair.vc/companies/content.php",
+    "https://playfair.vc/companies/continuum",
+    "https://www.playfair.vc/content.php?p=our-investment-in-continuum-industries"
   ],
   "evidence": [
     {
-      "id": "check-deal-90ca6f04c8",
+      "id": "check-deal-c579a95b58",
       "url": "https://playfair.vc/",
-      "title": "Playfair Capital — homepage checked by scrape.py",
-      "excerpt": "Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us We play fair by founders Investing exclusively at pre-seed in the UK & Europe from our £57m Fund 3, we give you an unfair advantage, taking you from where you are to where you want to be We partner with visionary founders, with hustle, heart and",
+      "title": "Playfair Capital — homepage",
+      "excerpt": "support you through Series A. We have the capacity to invest up to £5m per company Our goal is simple: ensure you have the right support to",
       "page": "details"
     },
     {
-      "id": "check-deal-e18d08a2b1",
-      "url": "https://playfair.vc/",
-      "title": "Playfair Capital — homepage checked by scrape.py",
-      "excerpt": "and energy as you need to succeed 60% of the fund is reserved for follow-on and we will support you through Series A. We have the capacity to invest up to £5m per company Our goal is simple: ensure you have the right support to build your company into a global category leader We co-invest in 100% of our new",
-      "page": "details"
+      "id": "check-portfolio-03f94872cf",
+      "url": "https://playfair.vc/companies/appearhere",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-056ecb4427",
+      "url": "https://playfair.vc/companies/aerocloud",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/companies/portfolio.php",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-14bfc7c5ef",
       "url": "https://playfair.vc/",
-      "title": "Playfair Capital — homepage checked by scrape.py",
+      "title": "Playfair Capital — homepage",
+      "excerpt": "Portfolio → https://playfair.vc/portfolio.php",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1fc99da6b2",
+      "url": "https://playfair.vc/companies/Yaso",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-20aff753b2",
+      "url": "https://playfair.vc/companies/content.php",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/companies/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-302177f9b8",
+      "url": "https://playfair.vc/companies/ascento",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/companies/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-30a2b7f3e4",
+      "url": "https://playfair.vc/companies/astral-systems",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-45ba8f7521",
+      "url": "https://www.playfair.vc/content.php?p=our-investment-in-continuum-industries",
+      "title": "Playfair Capital — terms page",
+      "excerpt": "Portfolio → https://www.playfair.vc/portfolio.php",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-463edcfb30",
+      "url": "https://playfair.vc/companies/angels.php",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/companies/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-49f295d344",
+      "url": "https://playfair.vc/companies/approach.php",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/companies/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-4ae1c262bf",
+      "url": "https://playfair.vc/companies/appearhere",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/companies/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-5296bc03fc",
+      "url": "https://playfair.vc/companies/about.php",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-5640bc70a6",
+      "url": "https://playfair.vc/companies/community.php",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/companies/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-5f022db6e0",
+      "url": "https://playfair.vc/companies/community.php",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-6d30edab72",
+      "url": "https://playfair.vc/companies/Yaso",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/companies/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-7bc8f60fc6",
+      "url": "https://playfair.vc/companies/bryo",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-7fed725be2",
+      "url": "https://playfair.vc/companies/about.php",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/companies/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-844248e177",
+      "url": "https://playfair.vc/companies/angels.php",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-9ce50737de",
+      "url": "https://playfair.vc/companies/ascento",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-a8094470ec",
+      "url": "https://playfair.vc/companies/continuum",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-c3207ab6a7",
+      "url": "https://playfair.vc/companies/aerocloud",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-c39c8cb71d",
+      "url": "https://playfair.vc/companies/bryo",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/companies/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-d16836ba97",
+      "url": "https://playfair.vc/companies/approach.php",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-d5ffbaf0e2",
+      "url": "https://playfair.vc/companies/continuum",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/companies/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-d6b9ca29f7",
+      "url": "https://playfair.vc/companies/content.php",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-e7d571079f",
+      "url": "https://playfair.vc/companies/astral-systems",
+      "title": "Playfair Capital — portfolio page",
+      "excerpt": "Portfolio → https://playfair.vc/companies/portfolio.php",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-f1ea8ff5d6",
+      "url": "https://playfair.vc/about.php",
+      "title": "Playfair Capital — program page",
       "excerpt": "Portfolio → https://playfair.vc/portfolio.php",
       "page": "details"
     },
     {
       "id": "check-route-bea2074af3",
       "url": "https://playfair.vc/",
-      "title": "Playfair Capital — homepage checked by scrape.py",
+      "title": "Playfair Capital — homepage",
       "excerpt": "https://playfair.vc/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-0f2af37e71",
+      "url": "https://playfair.vc/",
+      "page": "details",
+      "excerpt": "London Venture Capital Firm for European Pre-Seed Investment | Playfair Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us We play fair by founders Investing exclusively at pre-seed in the UK & Europe from our £57m Fund 3, we give you an unfair advantage, taking you from where you are to where you want to be We partner with visionary founders, with hustle, heart and humility, who see the world not as it is, but as it could be, and together build durable foundations for growth Our pre-seed to Series A graduation rate is 78% - ~4x the industry average Since 2013, our founders have raised >$3bn of follow-on capital from the world's best specialist and multi-stage funds. Most recently: $37m Series B Kinnevik $72.5m Series B BPC $36m Series B Hedosophia $17m Series A DCVC $20m Series A GV We are highly selective, making 6 investments per year. When we agree to invest, we are all in and will give you as much time and energy as you need to succeed 60% of the fund is reserved for follow-on and we will support you through Series A. We have the capacity to invest up to £5m per company Our goal is simple: ensure you have the right support to build your company into a global category leader We co-invest in 100% of our new investments, optimising for the best combination of funds and angels, writing cheques from £100k for angel rounds to £1.5m for the largest pre-seed"
+    },
+    {
+      "id": "check-page-0eb581ffe1",
+      "url": "https://playfair.vc/about.php",
+      "page": "details",
+      "excerpt": "About Playfair Capital - London Pre-Seed Startup Investors Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector agnostic fund with a contrarian approach to pre-seed investing 92% of our portfolio recommend working with us Story We look for visionary founders, with hustle, heart and humility, who see the world, not as it is, but as it could be 78% of our companies have successfully raised a Series A round Portfolio We combine financial capital, emotional intelligence and a willingness to do whatever’s required Because we know it takes more than funding for a startup to survive and thrive; the right support goes beyond writing cheques Thesis We’re an ecosystem player here for the long-term It’s a step towards the tomorrow we all want to live in Content We’re committed to readdressing the gender imbalance in venture, by breaking down barriers and opening doors Collaboration is Queen: Our female founder network has collectively raised £600m Female Founders We believe that access to VC should be open and based on merit, we review each and every application It’s never too early for an initial conversation Pitch us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a"
+    },
+    {
+      "id": "check-page-53b25308ae",
+      "url": "https://playfair.vc/companies/Yaso",
+      "page": "portfolio",
+      "excerpt": "YASO: The Operating System for Global Brands in China – Playfair Portfolio Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector agnostic fund with a contrarian approach to pre-seed investing 92% of our portfolio recommend working with us Story We look for visionary founders, with hustle, heart and humility, who see the world, not as it is, but as it could be 78% of our companies have successfully raised a Series A round Portfolio We combine financial capital, emotional intelligence and a willingness to do whatever’s required Because we know it takes more than funding for a startup to survive and thrive; the right support goes beyond writing cheques Thesis We’re an ecosystem player here for the long-term It’s a step towards the tomorrow we all want to live in Content We’re committed to readdressing the gender imbalance in venture, by breaking down barriers and opening doors Collaboration is Queen: Our female founder network has collectively raised £600m Female Founders We believe that access to VC should be open and based on merit, we review each and every application It’s never too early for an initial conversation Pitch us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be"
+    },
+    {
+      "id": "check-page-2e5e083062",
+      "url": "https://playfair.vc/companies/about.php",
+      "page": "portfolio",
+      "excerpt": "Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector agnostic fund with a contrarian approach to pre-seed investing 92% of our portfolio recommend working with us Story We look for visionary founders, with hustle, heart and humility, who see the world, not as it is, but as it could be 78% of our companies have successfully raised a Series A round Portfolio We combine financial capital, emotional intelligence and a willingness to do whatever’s required Because we know it takes more than funding for a startup to survive and thrive; the right support goes beyond writing cheques Thesis We’re an ecosystem player here for the long-term It’s a step towards the tomorrow we all want to live in Content We’re committed to readdressing the gender imbalance in venture, by breaking down barriers and opening doors Collaboration is Queen: Our female founder network has collectively raised £600m Female Founders We believe that access to VC should be open and based on merit, we review each and every application It’s never too early for an initial conversation Pitch us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector-agnostic fund with a contrarian approach to pre-seed"
+    },
+    {
+      "id": "check-page-e0cb0eb03d",
+      "url": "https://playfair.vc/companies/aerocloud",
+      "page": "portfolio",
+      "excerpt": "AeroCloud: Cloud-Based Airport Operations Software – Playfair Portfolio Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector agnostic fund with a contrarian approach to pre-seed investing 92% of our portfolio recommend working with us Story We look for visionary founders, with hustle, heart and humility, who see the world, not as it is, but as it could be 78% of our companies have successfully raised a Series A round Portfolio We combine financial capital, emotional intelligence and a willingness to do whatever’s required Because we know it takes more than funding for a startup to survive and thrive; the right support goes beyond writing cheques Thesis We’re an ecosystem player here for the long-term It’s a step towards the tomorrow we all want to live in Content We’re committed to readdressing the gender imbalance in venture, by breaking down barriers and opening doors Collaboration is Queen: Our female founder network has collectively raised £600m Female Founders We believe that access to VC should be open and based on merit, we review each and every application It’s never too early for an initial conversation Pitch us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be"
+    },
+    {
+      "id": "check-page-ab6da97804",
+      "url": "https://playfair.vc/companies/angels.php",
+      "page": "portfolio",
+      "excerpt": "Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector agnostic fund with a contrarian approach to pre-seed investing 92% of our portfolio recommend working with us Story We look for visionary founders, with hustle, heart and humility, who see the world, not as it is, but as it could be 78% of our companies have successfully raised a Series A round Portfolio We combine financial capital, emotional intelligence and a willingness to do whatever’s required Because we know it takes more than funding for a startup to survive and thrive; the right support goes beyond writing cheques Thesis We’re an ecosystem player here for the long-term It’s a step towards the tomorrow we all want to live in Content We’re committed to readdressing the gender imbalance in venture, by breaking down barriers and opening doors Collaboration is Queen: Our female founder network has collectively raised £600m Female Founders We believe that access to VC should be open and based on merit, we review each and every application It’s never too early for an initial conversation Pitch us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector-agnostic fund with a contrarian approach to pre-seed"
+    },
+    {
+      "id": "check-page-83086e1111",
+      "url": "https://playfair.vc/companies/appearhere",
+      "page": "portfolio",
+      "excerpt": "Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector agnostic fund with a contrarian approach to pre-seed investing 92% of our portfolio recommend working with us Story We look for visionary founders, with hustle, heart and humility, who see the world, not as it is, but as it could be 78% of our companies have successfully raised a Series A round Portfolio We combine financial capital, emotional intelligence and a willingness to do whatever’s required Because we know it takes more than funding for a startup to survive and thrive; the right support goes beyond writing cheques Thesis We’re an ecosystem player here for the long-term It’s a step towards the tomorrow we all want to live in Content We’re committed to readdressing the gender imbalance in venture, by breaking down barriers and opening doors Collaboration is Queen: Our female founder network has collectively raised £600m Female Founders We believe that access to VC should be open and based on merit, we review each and every application It’s never too early for an initial conversation Pitch us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector-agnostic fund with a contrarian approach to pre-seed"
+    },
+    {
+      "id": "check-page-0ed42d7222",
+      "url": "https://playfair.vc/companies/approach.php",
+      "page": "portfolio",
+      "excerpt": "Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector agnostic fund with a contrarian approach to pre-seed investing 92% of our portfolio recommend working with us Story We look for visionary founders, with hustle, heart and humility, who see the world, not as it is, but as it could be 78% of our companies have successfully raised a Series A round Portfolio We combine financial capital, emotional intelligence and a willingness to do whatever’s required Because we know it takes more than funding for a startup to survive and thrive; the right support goes beyond writing cheques Thesis We’re an ecosystem player here for the long-term It’s a step towards the tomorrow we all want to live in Content We’re committed to readdressing the gender imbalance in venture, by breaking down barriers and opening doors Collaboration is Queen: Our female founder network has collectively raised £600m Female Founders We believe that access to VC should be open and based on merit, we review each and every application It’s never too early for an initial conversation Pitch us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector-agnostic fund with a contrarian approach to pre-seed"
+    },
+    {
+      "id": "check-page-4c00d9778a",
+      "url": "https://playfair.vc/companies/ascento",
+      "page": "portfolio",
+      "excerpt": "Ascento: Automated Outdoor Security Robots – Playfair Portfolio Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector agnostic fund with a contrarian approach to pre-seed investing 92% of our portfolio recommend working with us Story We look for visionary founders, with hustle, heart and humility, who see the world, not as it is, but as it could be 78% of our companies have successfully raised a Series A round Portfolio We combine financial capital, emotional intelligence and a willingness to do whatever’s required Because we know it takes more than funding for a startup to survive and thrive; the right support goes beyond writing cheques Thesis We’re an ecosystem player here for the long-term It’s a step towards the tomorrow we all want to live in Content We’re committed to readdressing the gender imbalance in venture, by breaking down barriers and opening doors Collaboration is Queen: Our female founder network has collectively raised £600m Female Founders We believe that access to VC should be open and based on merit, we review each and every application It’s never too early for an initial conversation Pitch us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a"
+    },
+    {
+      "id": "check-page-ec2fbc3f4e",
+      "url": "https://playfair.vc/companies/astral-systems",
+      "page": "portfolio",
+      "excerpt": "Astral Systems: Compact Fusion Reactors – Playfair Portfolio Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector agnostic fund with a contrarian approach to pre-seed investing 92% of our portfolio recommend working with us Story We look for visionary founders, with hustle, heart and humility, who see the world, not as it is, but as it could be 78% of our companies have successfully raised a Series A round Portfolio We combine financial capital, emotional intelligence and a willingness to do whatever’s required Because we know it takes more than funding for a startup to survive and thrive; the right support goes beyond writing cheques Thesis We’re an ecosystem player here for the long-term It’s a step towards the tomorrow we all want to live in Content We’re committed to readdressing the gender imbalance in venture, by breaking down barriers and opening doors Collaboration is Queen: Our female founder network has collectively raised £600m Female Founders We believe that access to VC should be open and based on merit, we review each and every application It’s never too early for an initial conversation Pitch us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a"
+    },
+    {
+      "id": "check-page-472d0829fb",
+      "url": "https://playfair.vc/companies/bryo",
+      "page": "portfolio",
+      "excerpt": "Bryo: AI-Driven Industrial Quoting for Sales Teams – Playfair Portfolio Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector agnostic fund with a contrarian approach to pre-seed investing 92% of our portfolio recommend working with us Story We look for visionary founders, with hustle, heart and humility, who see the world, not as it is, but as it could be 78% of our companies have successfully raised a Series A round Portfolio We combine financial capital, emotional intelligence and a willingness to do whatever’s required Because we know it takes more than funding for a startup to survive and thrive; the right support goes beyond writing cheques Thesis We’re an ecosystem player here for the long-term It’s a step towards the tomorrow we all want to live in Content We’re committed to readdressing the gender imbalance in venture, by breaking down barriers and opening doors Collaboration is Queen: Our female founder network has collectively raised £600m Female Founders We believe that access to VC should be open and based on merit, we review each and every application It’s never too early for an initial conversation Pitch us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be"
+    },
+    {
+      "id": "check-page-6506e4cc1f",
+      "url": "https://playfair.vc/companies/community.php",
+      "page": "portfolio",
+      "excerpt": "Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector agnostic fund with a contrarian approach to pre-seed investing 92% of our portfolio recommend working with us Story We look for visionary founders, with hustle, heart and humility, who see the world, not as it is, but as it could be 78% of our companies have successfully raised a Series A round Portfolio We combine financial capital, emotional intelligence and a willingness to do whatever’s required Because we know it takes more than funding for a startup to survive and thrive; the right support goes beyond writing cheques Thesis We’re an ecosystem player here for the long-term It’s a step towards the tomorrow we all want to live in Content We’re committed to readdressing the gender imbalance in venture, by breaking down barriers and opening doors Collaboration is Queen: Our female founder network has collectively raised £600m Female Founders We believe that access to VC should be open and based on merit, we review each and every application It’s never too early for an initial conversation Pitch us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector-agnostic fund with a contrarian approach to pre-seed"
+    },
+    {
+      "id": "check-page-5b516238fb",
+      "url": "https://playfair.vc/companies/content.php",
+      "page": "portfolio",
+      "excerpt": "Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector agnostic fund with a contrarian approach to pre-seed investing 92% of our portfolio recommend working with us Story We look for visionary founders, with hustle, heart and humility, who see the world, not as it is, but as it could be 78% of our companies have successfully raised a Series A round Portfolio We combine financial capital, emotional intelligence and a willingness to do whatever’s required Because we know it takes more than funding for a startup to survive and thrive; the right support goes beyond writing cheques Thesis We’re an ecosystem player here for the long-term It’s a step towards the tomorrow we all want to live in Content We’re committed to readdressing the gender imbalance in venture, by breaking down barriers and opening doors Collaboration is Queen: Our female founder network has collectively raised £600m Female Founders We believe that access to VC should be open and based on merit, we review each and every application It’s never too early for an initial conversation Pitch us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector-agnostic fund with a contrarian approach to pre-seed"
+    },
+    {
+      "id": "check-page-9b09452652",
+      "url": "https://playfair.vc/companies/continuum",
+      "page": "portfolio",
+      "excerpt": "Continuum: AI Planning for Linear Infrastructure – Playfair Portfolio Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector agnostic fund with a contrarian approach to pre-seed investing 92% of our portfolio recommend working with us Story We look for visionary founders, with hustle, heart and humility, who see the world, not as it is, but as it could be 78% of our companies have successfully raised a Series A round Portfolio We combine financial capital, emotional intelligence and a willingness to do whatever’s required Because we know it takes more than funding for a startup to survive and thrive; the right support goes beyond writing cheques Thesis We’re an ecosystem player here for the long-term It’s a step towards the tomorrow we all want to live in Content We’re committed to readdressing the gender imbalance in venture, by breaking down barriers and opening doors Collaboration is Queen: Our female founder network has collectively raised £600m Female Founders We believe that access to VC should be open and based on merit, we review each and every application It’s never too early for an initial conversation Pitch us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be"
+    },
+    {
+      "id": "check-page-908ec02e3a",
+      "url": "https://www.playfair.vc/content.php?p=our-investment-in-continuum-industries",
+      "page": "terms",
+      "excerpt": "Content from the Playfair Team Including Blog Posts & Podcasts Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a sector agnostic fund with a contrarian approach to pre-seed investing 92% of our portfolio recommend working with us Story We look for visionary founders, with hustle, heart and humility, who see the world, not as it is, but as it could be 78% of our companies have successfully raised a Series A round Portfolio We combine financial capital, emotional intelligence and a willingness to do whatever’s required Because we know it takes more than funding for a startup to survive and thrive; the right support goes beyond writing cheques Thesis We’re an ecosystem player here for the long-term It’s a step towards the tomorrow we all want to live in Content We’re committed to readdressing the gender imbalance in venture, by breaking down barriers and opening doors Collaboration is Queen: Our female founder network has collectively raised £600m Female Founders We believe that access to VC should be open and based on merit, we review each and every application It’s never too early for an initial conversation Pitch us We play fair by founders Giving you an unfair advantage, to take you from where you are to where you want to be We’re a"
     }
   ],
   "findings": {
@@ -47,21 +328,45 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us We play fair by founders Investing exclusively at pre-seed in the UK & Europe from our £57m Fund 3, we give you an unfair advantage, taking you from where you are to where you want to be We partner with visionary founders, with hustle, heart and",
-        "evidenceId": "check-deal-90ca6f04c8"
-      },
+        "value": "support you through Series A. We have the capacity to invest up to £5m per company Our goal is simple: ensure you have the right support to",
+        "evidenceId": "check-deal-c579a95b58"
+      }
+    ],
+    "dealComponents": [
       {
-        "value": "and energy as you need to succeed 60% of the fund is reserved for follow-on and we will support you through Series A. We have the capacity to invest up to £5m per company Our goal is simple: ensure you have the right support to build your company into a global category leader We co-invest in 100% of our new",
-        "evidenceId": "check-deal-e18d08a2b1"
+        "value": {
+          "kind": "cash",
+          "amount": "5000000",
+          "currency": "GBP",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-c579a95b58"
       }
     ],
     "portfolioPages": [
       {
         "value": "https://playfair.vc/portfolio.php",
         "evidenceId": "check-portfolio-14bfc7c5ef"
+      },
+      {
+        "value": "https://playfair.vc/companies/portfolio.php",
+        "evidenceId": "check-portfolio-6d30edab72"
+      },
+      {
+        "value": "https://www.playfair.vc/portfolio.php",
+        "evidenceId": "check-portfolio-45ba8f7521"
       }
     ],
     "name": [],

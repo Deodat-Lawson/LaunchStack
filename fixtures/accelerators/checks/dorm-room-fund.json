@@ -1,44 +1,122 @@
 {
   "programId": "dorm-room-fund",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://www.dormroomfund.com/"
+    "https://www.dormroomfund.com/",
+    "https://www.dormroomfund.com/portfolio",
+    "https://www.dormroomfund.com/portfolio?f3d579bb_page=2"
   ],
   "evidence": [
     {
       "id": "check-name-39bed6b365",
       "url": "https://www.dormroomfund.com/",
-      "title": "Dorm Room Fund — homepage checked by scrape.py",
+      "title": "Dorm Room Fund — homepage",
       "excerpt": "Dorm Room Fund | First Check for Student Founders Apply Portfolio Team",
       "page": "details"
     },
     {
       "id": "check-portfolio-0d5ec6c972",
       "url": "https://www.dormroomfund.com/",
-      "title": "Dorm Room Fund — homepage checked by scrape.py",
+      "title": "Dorm Room Fund — homepage",
       "excerpt": "Portfolio → https://www.dormroomfund.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-2aa12b966a",
+      "url": "https://www.dormroomfund.com/portfolio?f3d579bb_page=2",
+      "title": "Dorm Room Fund — portfolio page",
+      "excerpt": "Load more → https://www.dormroomfund.com/portfolio?f3d579bb_page=3",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-901a872b2c",
+      "url": "https://www.dormroomfund.com/portfolio?f3d579bb_page=2",
+      "title": "Dorm Room Fund — portfolio page",
+      "excerpt": "Portfolio → https://www.dormroomfund.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-a8bb432303",
+      "url": "https://www.dormroomfund.com/portfolio",
+      "title": "Dorm Room Fund — portfolio page",
+      "excerpt": "Load more → https://www.dormroomfund.com/portfolio?f3d579bb_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-bbec07d21c",
+      "url": "https://www.dormroomfund.com/portfolio?f3d579bb_page=2",
+      "title": "Dorm Room Fund — portfolio page",
+      "excerpt": "Previous → https://www.dormroomfund.com/portfolio?f3d579bb_page=1",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-48913de692",
+      "url": "https://www.dormroomfund.com/portfolio?f3d579bb_page=2",
+      "title": "Dorm Room Fund — portfolio page",
+      "excerpt": "Apply for funding → https://airtable.com/embed/appP6NRnqNGp9XyEH/shrIkIQTZqkdcS05v",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-4c3e3e38ad",
+      "url": "https://www.dormroomfund.com/portfolio?f3d579bb_page=2",
+      "title": "Dorm Room Fund — portfolio page",
+      "excerpt": "Apply → https://airtable.com/appP6NRnqNGp9XyEH/shrIkIQTZqkdcS05v",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-6fa91675d4",
+      "url": "https://www.dormroomfund.com/portfolio",
+      "title": "Dorm Room Fund — portfolio page",
+      "excerpt": "Apply for funding → https://airtable.com/embed/appP6NRnqNGp9XyEH/shrIkIQTZqkdcS05v",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-7733fc4298",
       "url": "https://www.dormroomfund.com/",
-      "title": "Dorm Room Fund — homepage checked by scrape.py",
+      "title": "Dorm Room Fund — homepage",
       "excerpt": "Apply → https://airtable.com/appP6NRnqNGp9XyEH/shrIkIQTZqkdcS05v",
       "page": "details"
     },
     {
       "id": "check-route-78a7618dfb",
       "url": "https://www.dormroomfund.com/",
-      "title": "Dorm Room Fund — homepage checked by scrape.py",
+      "title": "Dorm Room Fund — homepage",
       "excerpt": "https://www.dormroomfund.com/",
       "page": "details"
     },
     {
+      "id": "check-route-b140431ab5",
+      "url": "https://www.dormroomfund.com/portfolio",
+      "title": "Dorm Room Fund — portfolio page",
+      "excerpt": "Apply → https://airtable.com/appP6NRnqNGp9XyEH/shrIkIQTZqkdcS05v",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-c3419fa374",
       "url": "https://www.dormroomfund.com/",
-      "title": "Dorm Room Fund — homepage checked by scrape.py",
+      "title": "Dorm Room Fund — homepage",
       "excerpt": "Apply for funding → https://airtable.com/embed/appP6NRnqNGp9XyEH/shrIkIQTZqkdcS05v",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-6b3adea1a0",
+      "url": "https://www.dormroomfund.com/",
+      "page": "details",
+      "excerpt": "Dorm Room Fund | First Check for Student Founders Apply Portfolio Team How we work Join the team The first yes. We write the first check for founders still in school or just out. 339 + companies $ 14 B+ in follow-on capital 12 + years backing student founders Each one started where you are 339 + $ 14 B+ 12 + Each one started where You are The first door is the hardest. We hold it open. ← → Developer Tools · MIT, 2022 Michael Truell We backed Michael before he had an idea, let alone a product. The bet was not on a category or a deck. It was on a builder we knew would keep going. Cursor Where coding dissolves into conversation. Healthcare · University of Pennsylvania, 2019 Toni Oloko & Daniel Hanover Before the pitch deck was the factory. Toni moved from thesis to physical reality while he was still finishing his degree, and we had a front row seat. Dandy Where dentistry catches up to software. Hardware · Harvard Business School & MIT, 2016 Brandon & Ryan Tseng When 29 of 30 investors passed, we saw the mission clearly. Shield AI was not simply building drones. They were building a way to keep people out of harm's way. Shield AI Where tools become wingmen. Healthcare · Stanford & USC, 2016 Tanay Tandon & Deepika Bodapati Tanay and Deepika were already building across the clinical frontier as students. Their first clinical trial spotted a leukemia diagnosis before the hospital"
+    },
+    {
+      "id": "check-page-150ad77ea4",
+      "url": "https://www.dormroomfund.com/portfolio",
+      "page": "portfolio",
+      "excerpt": "Portfolio Apply Portfolio Team How we work Join the team First check. Full conviction. A network that doesn't graduate. Apply for funding 340 first checks and counting. Yours could be next. Apply for funding Our Portfolio All Healthcare Hardware Fintech Enterprise Developer Tools Consumer Climate Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. 3DFortify Hardware A&B Consumer a37 Developer Tools Enterprise Aavia Healthcare Consumer Aavrani Consumer Ablytx, Inc. Healthcare Aeromutable Climate Hardware AethexAI Enterprise Developer Tools Ahma & Co Healthcare Aktiv Learning Enterprise Alima Enterprise Altro Health Healthcare American Tractor Company Hardware Amira Health Healthcare Hardware Consumer AMPAWorks Enterprise Anecdote Travel Consumer Animate Bio Consumer Anjuna Security Enterprise Answers AI Consumer Anthro Energy Hardware Climate Anvara Enterprise Anygraph Enterprise Applecart Enterprise Arix Technologies Hardware Enterprise Array Insights Healthcare Enterprise Ash Healthcare Consumer Atomscale Enterprise Aurie Healthcare Hardware Ava Consumer Aviato Enterprise Avora Healthcare Enterprise Banyan Fintech Enterprise Barnwell Bio Healthcare Enterprise Baton Media Consumer BeamBar Consumer Bevi Hardware Enterprise Bevspot Enterprise Biobot Analytics Healthcare Enterprise Bizwise Enterprise Bluedot Technologies Fintech"
+    },
+    {
+      "id": "check-page-4922fca015",
+      "url": "https://www.dormroomfund.com/portfolio?f3d579bb_page=2",
+      "page": "portfolio",
+      "excerpt": "Portfolio Apply Portfolio Team How we work Join the team First check. Full conviction. A network that doesn't graduate. Apply for funding 340 first checks and counting. Yours could be next. Apply for funding Our Portfolio All Healthcare Hardware Fintech Enterprise Developer Tools Consumer Climate Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Flowmill Developer Tools Enterprise Flyby Hardware Enterprise Forest Devices Healthcare Hardware Formally Enterprise FreeWill Consumer Enterprise FreshX Enterprise Fuego Consumer Fulton Consumer Gainful Consumer Gander Enterprise Gencores Hardware Enterprise Geneoscopy Healthcare Genia Designs Enterprise GetNoble Enterprise Gnara Consumer Gridline AI Fintech Climate Hadrius Fintech Enterprise Hailify Consumer Harlem Capital Partners Fintech Harper Wilde Consumer Hashi Enterprise Healthie Healthcare Enterprise Hey Jane Healthcare Consumer Highlight Enterprise HighTouch Enterprise Developer Tools Hiro Developer Tools Hour Work Enterprise HumanFirst Healthcare Enterprise Hydrant Consumer HYP Consumer Hyro Enterprise Iconic Air Climate Enterprise Illuminant Surgical Healthcare Hardware Indax Enterprise Infinite Uptime Hardware Enterprise Instrument Capital Fintech Intelligent Flying Machines Hardware Enterprise Inversion Space Hardware Enterprise InVision Laboratory Developer Tools IRON"
     }
   ],
   "findings": {
@@ -63,12 +141,31 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.dormroomfund.com/portfolio",
         "evidenceId": "check-portfolio-0d5ec6c972"
+      },
+      {
+        "value": "https://www.dormroomfund.com/portfolio?f3d579bb_page=2",
+        "evidenceId": "check-portfolio-a8bb432303"
+      },
+      {
+        "value": "https://www.dormroomfund.com/portfolio?f3d579bb_page=1",
+        "evidenceId": "check-portfolio-bbec07d21c"
+      },
+      {
+        "value": "https://www.dormroomfund.com/portfolio?f3d579bb_page=3",
+        "evidenceId": "check-portfolio-2aa12b966a"
       }
     ],
     "name": [

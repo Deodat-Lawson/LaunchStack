@@ -1,28 +1,20 @@
 {
   "programId": "starburst",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://starburst.aero/about/",
+      "url": "http://starburst.aero/about/",
       "page": "details",
-      "anchor": "About",
+      "anchor": "About Us",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://starburst.aero/accelerator-program/",
+      "url": "http://starburst.aero/accelerator-program/",
       "page": "details",
-      "anchor": "Startups",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://starburst.aero/portfolio/",
-      "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -35,9 +27,97 @@
       "origin": "official"
     },
     {
-      "url": "http://starburst.aero/about/",
+      "url": "http://starburst.aero/startup-programs/",
       "page": "details",
-      "anchor": "About Us",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://starburst.aero/terms-conditions/",
+      "page": "terms",
+      "anchor": "Terms of Service",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://starburst.aero/about/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://starburst.aero/accelerator-program/",
+      "page": "details",
+      "anchor": "Startups",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://starburst.aero/contact/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://starburst.aero/investments/",
+      "page": "terms",
+      "anchor": "Investors",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://starburst.aero/nasa-space-health-accelerator",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://starburst.aero/news/catalonia-space-accelerator-welcomes-its-new-cohort-of-space-innovators/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://starburst.aero/news/sustainable-aviation-technologies-and-energies-accelerator/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://starburst.aero/newspace-catalonia-accelerator/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://starburst.aero/portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -46,7 +126,15 @@
       "url": "https://starburst.aero/startup-programs/",
       "page": "details",
       "anchor": "Startup Programs",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://starburst.aero/terms-conditions/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

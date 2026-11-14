@@ -1,66 +1,612 @@
 {
   "programId": "parallel18",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://parallel18.com/",
-    "https://parallel18.com/about-us/"
+    "https://parallel18.com/applications-are-open-all-you-need-to-know-about-p18s-gen-x/",
+    "https://parallel18.com/taking-a-leap-applying-to-an-accelerator-and-uprooting-your-life/",
+    "https://parallel18.com/tips-to-fill-out-gen-8s-application/",
+    "https://parallel18.com/39-startups-receive-investment-from-parallel18-s-business-continuity-fund/",
+    "https://parallel18.com/parallel18-evolves-from-grants-to-strategic-investment-platform/",
+    "https://parallel18.com/terms-conditions-xpand-2/",
+    "https://parallel18.com/terms-conditions-xpand/",
+    "https://parallel18.com/terms-conditions/",
+    "https://parallel18.com/the-1-2-3-of-investment-series/",
+    "https://parallel18.com/why-puerto-rico-is-an-ideal-place-to-test-your-product-and-grow/",
+    "https://parallel18.com/artist-dates-as-a-team-how-creative-breaks-spark-ideas/",
+    "https://parallel18.com/before-february-flies-don-t-miss-p18-s-latest-updates/",
+    "https://parallel18.com/bioleap-announces-third-cohort-with-340k-in-grants-to-boost-puerto-ricos-biosciences-ecosystem/",
+    "https://parallel18.com/it-s-been-a-newsworthy-november-at-parallel18-catch-up-on-the-latest-updates/"
   ],
   "evidence": [
     {
+      "id": "check-announced-b65661a80f",
+      "url": "https://parallel18.com/",
+      "title": "Parallel18 — homepage",
+      "excerpt": "ecosystem, selects the startups that participate in each cohort. *Selection process may vary by generation. Who is going to have access to my application?",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-ca5f1273b9",
+      "url": "https://parallel18.com/before-february-flies-don-t-miss-p18-s-latest-updates/",
+      "title": "Parallel18 — batches page",
+      "excerpt": "mentoring and investment evaluation 1-on-1 meetings with the current cohort and P18Ventures alumni. This January we were happy to host Hispanics in Philanthropy’s executive group!",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-ce43fd1f4a",
+      "url": "https://parallel18.com/applications-are-open-all-you-need-to-know-about-p18s-gen-x/",
+      "title": "Parallel18 — application page",
+      "excerpt": "at the same time, it transcends the physical space.” The official cohort will be announced mid-May and the 20-week intensive program will begin by the end of June. The",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-5011189c9d",
+      "url": "https://parallel18.com/applications-are-open-all-you-need-to-know-about-p18s-gen-x/",
+      "title": "Parallel18 — application page",
+      "excerpt": "The second disbursement will be an investment for the amount of $25,000 USD on an Simple Agreement for Future Equity (SAFE), uncapped with a",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-7e1d041336",
+      "url": "https://parallel18.com/terms-conditions/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "Research Trust will provide a grant of forty thousand dollars (USD $40,000) delivered in various sets throughout the program, subject to the",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-871a2e643b",
+      "url": "https://parallel18.com/39-startups-receive-investment-from-parallel18-s-business-continuity-fund/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "of Operations. This way, the PRSTRT invested between US $25K to US $35K in every startup using a standard convertible note, with the",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-a63244524f",
+      "url": "https://parallel18.com/39-startups-receive-investment-from-parallel18-s-business-continuity-fund/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "Director of Operations. This way, the PRSTRT invested between US $25K to US $35K in every startup using a standard convertible note, with",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-052f545bf2",
+      "url": "https://parallel18.com/parallel18-evolves-from-grants-to-strategic-investment-platform/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "Puerto Rican companies through a specialized 12-week curriculum. This curriculum drives the",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-339ad4fc86",
+      "url": "https://parallel18.com/applications-are-open-all-you-need-to-know-about-p18s-gen-x/",
+      "title": "Parallel18 — application page",
+      "excerpt": "cohort will be announced mid-May and the 20-week intensive program will begin by the end of June.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-38d271fb54",
+      "url": "https://parallel18.com/taking-a-leap-applying-to-an-accelerator-and-uprooting-your-life/",
+      "title": "Parallel18 — application page",
+      "excerpt": "they are. Parallel18 , for example, runs for 20 weeks twice a year. And, let’s face it, Puerto Rico",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-55cca3c73c",
+      "url": "https://parallel18.com/bioleap-announces-third-cohort-with-340k-in-grants-to-boost-puerto-ricos-biosciences-ecosystem/",
+      "title": "Parallel18 — batches page",
+      "excerpt": "provides entrepreneurs with three key benefits: 12 weeks of business education, 16 weeks of technical",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-7ac8368c49",
+      "url": "https://parallel18.com/bioleap-announces-third-cohort-with-340k-in-grants-to-boost-puerto-ricos-biosciences-ecosystem/",
+      "title": "Parallel18 — batches page",
+      "excerpt": "key benefits: 12 weeks of business education, 16 weeks of technical assistance, and ongoing mentorship",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-8ece76b94a",
+      "url": "https://parallel18.com/terms-conditions/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "submitted. 8. Deadlines The Program duration is 20 weeks and will be understood to have begun on the date",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-95d63f67ff",
+      "url": "https://parallel18.com/terms-conditions/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "use of funds report must be delivered within 2 weeks after the expiration date of the term for",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-98bd6f0215",
+      "url": "https://parallel18.com/applications-are-open-all-you-need-to-know-about-p18s-gen-x/",
+      "title": "Parallel18 — application page",
+      "excerpt": "must be willing to be on the island during the 20-week program. Applicants should research and develop",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-99deee5c4c",
+      "url": "https://parallel18.com/terms-conditions/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "Mandatory Activities During participation in the 5-month Program, the beneficiary must participate in the",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b103d3963d",
+      "url": "https://parallel18.com/applications-are-open-all-you-need-to-know-about-p18s-gen-x/",
+      "title": "Parallel18 — application page",
+      "excerpt": "USD grant that startups will receive during the 20-week program. The companies will receive this amount",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d70f274dca",
+      "url": "https://parallel18.com/terms-conditions/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "the progress of the company during the first 2.5 months. If the company does not meet Program’s",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-0575fda828",
+      "url": "https://parallel18.com/terms-conditions-xpand/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "invited to an interview if needed, conducted virtually or in person. The purpose of the interview is to clarify information",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-07aae8ed5f",
+      "url": "https://parallel18.com/terms-conditions-xpand-2/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "offered in English, Spanish, or both, and may be conducted in person, virtually, or in hybrid format, as determined by BioLeap.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-08b44fb181",
+      "url": "https://parallel18.com/terms-conditions/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "considered. If the team members that plan to participate in person in Parallel18 are not U.S. citizens, they must have the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-3412c320ae",
+      "url": "https://parallel18.com/terms-conditions-xpand-2/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "[mandatory]: Seminar series: Participants will attend virtual sessions twice a week, featuring invited speakers or",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-3b6d3ee152",
+      "url": "https://parallel18.com/terms-conditions-xpand-2/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "their progress. Monthly [mandatory]: Meet the Founder: In-person fireside chats with accomplished founders from Puerto Rico",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-3e5f57d61d",
+      "url": "https://parallel18.com/it-s-been-a-newsworthy-november-at-parallel18-catch-up-on-the-latest-updates/",
+      "title": "Parallel18 — batches page",
+      "excerpt": "Education from a pool of 458 startups as part of enlightED Virtual Edition 2020 . Organized by IE University , Fundación",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-4ece0d9ad4",
+      "url": "https://parallel18.com/terms-conditions-xpand-2/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "Catch-up meetings : Participants will attend biweekly virtual catch-up meetings with BioLeap staff to monitor their",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6888803a0a",
+      "url": "https://parallel18.com/39-startups-receive-investment-from-parallel18-s-business-continuity-fund/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "led by two Puerto Rican women; Brands Of (Puerto Rico), a virtual marketplace that sells and exports local products from a",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6f2ac00e94",
+      "url": "https://parallel18.com/applications-are-open-all-you-need-to-know-about-p18s-gen-x/",
+      "title": "Parallel18 — application page",
+      "excerpt": "in-person format from Puerto Rico: Gen.X, will follow an in-person format. Our participants will get involved with Puerto",
+      "page": "application"
+    },
+    {
+      "id": "check-format-7926a17e06",
+      "url": "https://parallel18.com/terms-conditions-xpand-2/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "and scalability. Connect18 / Parallel ventures events: In-person networking events designed to connect participants with",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-7abd85c949",
+      "url": "https://parallel18.com/applications-are-open-all-you-need-to-know-about-p18s-gen-x/",
+      "title": "Parallel18 — application page",
+      "excerpt": "acquiring customers, among other aspects. The return to an in-person format can be subject to change; depending on how the",
+      "page": "application"
+    },
+    {
+      "id": "check-format-92962b4b93",
+      "url": "https://parallel18.com/parallel18-evolves-from-grants-to-strategic-investment-platform/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "ecosystem needs in Puerto Rico and around the world. The Virtual Bootcamp represents our latest initiative. It’s",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-a20ae80527",
+      "url": "https://parallel18.com/terms-conditions/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "period, an interview through videoconference, or in person if feasible, may be requested to clarify questions from",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-c5c02c69fc",
+      "url": "https://parallel18.com/applications-are-open-all-you-need-to-know-about-p18s-gen-x/",
+      "title": "Parallel18 — application page",
+      "excerpt": "with traction and revenue. Be able to participate in our in-person format from Puerto Rico: Gen.X, will follow an in-person",
+      "page": "application"
+    },
+    {
+      "id": "check-format-c65845d4d5",
+      "url": "https://parallel18.com/39-startups-receive-investment-from-parallel18-s-business-continuity-fund/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "anyone can create their customized training academy and virtual courses, are among the product and services that benefited",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d1e097dd1e",
+      "url": "https://parallel18.com/terms-conditions-xpand-2/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "may require one or more interviews via video conference or in person, when possible, to address any queries and provide further",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d8b0015714",
+      "url": "https://parallel18.com/terms-conditions-xpand-2/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "or both, and may be conducted in person, virtually, or in hybrid format, as determined by BioLeap. BioLeap shall identify",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-fd4585da4d",
+      "url": "https://parallel18.com/it-s-been-a-newsworthy-november-at-parallel18-catch-up-on-the-latest-updates/",
+      "title": "Parallel18 — batches page",
+      "excerpt": "businesses, acquired Gen.3 #P18Alumnus Claimbot , the virtual chat engine built for the automotive industry. Mobile Tech",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-3bd4ca103a",
+      "url": "https://parallel18.com/39-startups-receive-investment-from-parallel18-s-business-continuity-fund/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "the international program for startups based in San Juan hopes that the BCF’s injection of",
+      "page": "terms"
+    },
+    {
       "id": "check-name-f0a307ea12",
       "url": "https://parallel18.com/",
-      "title": "Parallel18 — homepage checked by scrape.py",
+      "title": "Parallel18 — homepage",
       "excerpt": "Home - Parallel18 Skip to content About us Programs BioLeap P18 Xpand VCAP",
       "page": "details"
     },
     {
-      "id": "check-phone-2d2ee3dbfb",
-      "url": "https://parallel18.com/about-us/",
-      "title": "Parallel18 — details page checked by scrape.py",
+      "id": "check-phone-07a4f856ef",
+      "url": "https://parallel18.com/39-startups-receive-investment-from-parallel18-s-business-continuity-fund/",
+      "title": "Parallel18 — terms page",
       "excerpt": "Call us +1(787)705-9786",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-3aa0c71e03",
+      "url": "https://parallel18.com/it-s-been-a-newsworthy-november-at-parallel18-catch-up-on-the-latest-updates/",
+      "title": "Parallel18 — batches page",
+      "excerpt": "Call us +1(787)705-9786",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-3c920354fa",
+      "url": "https://parallel18.com/taking-a-leap-applying-to-an-accelerator-and-uprooting-your-life/",
+      "title": "Parallel18 — application page",
+      "excerpt": "Call us +1(787)705-9786",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-8ba1d9831e",
+      "url": "https://parallel18.com/applications-are-open-all-you-need-to-know-about-p18s-gen-x/",
+      "title": "Parallel18 — application page",
+      "excerpt": "Call us +1(787)705-9786",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-a02d6a4092",
+      "url": "https://parallel18.com/why-puerto-rico-is-an-ideal-place-to-test-your-product-and-grow/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "Call us +1(787)705-9786",
+      "page": "terms"
     },
     {
       "id": "check-phone-a492cc9362",
       "url": "https://parallel18.com/",
-      "title": "Parallel18 — homepage checked by scrape.py",
+      "title": "Parallel18 — homepage",
       "excerpt": "Call us +1(787)705-9786",
       "page": "details"
     },
     {
-      "id": "check-portfolio-46e11315e3",
-      "url": "https://parallel18.com/about-us/",
-      "title": "Parallel18 — details page checked by scrape.py",
+      "id": "check-phone-c41e23a180",
+      "url": "https://parallel18.com/artist-dates-as-a-team-how-creative-breaks-spark-ideas/",
+      "title": "Parallel18 — batches page",
+      "excerpt": "Call us +1(787)705-9786",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-c89329d301",
+      "url": "https://parallel18.com/before-february-flies-don-t-miss-p18-s-latest-updates/",
+      "title": "Parallel18 — batches page",
+      "excerpt": "Call us +1(787)705-9786",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-d04111bbef",
+      "url": "https://parallel18.com/parallel18-evolves-from-grants-to-strategic-investment-platform/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "Call us +1(787)705-9786",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-e27e894524",
+      "url": "https://parallel18.com/tips-to-fill-out-gen-8s-application/",
+      "title": "Parallel18 — application page",
+      "excerpt": "Call us +1(787)705-9786",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-e51b1517f7",
+      "url": "https://parallel18.com/the-1-2-3-of-investment-series/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "Call us +1(787)705-9786",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-e5c8c24b44",
+      "url": "https://parallel18.com/bioleap-announces-third-cohort-with-340k-in-grants-to-boost-puerto-ricos-biosciences-ecosystem/",
+      "title": "Parallel18 — batches page",
+      "excerpt": "Call us +1(787)705-9786",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-4e9d27c8e7",
+      "url": "https://parallel18.com/bioleap-announces-third-cohort-with-340k-in-grants-to-boost-puerto-ricos-biosciences-ecosystem/",
+      "title": "Parallel18 — batches page",
       "excerpt": "Ventures → https://parallel18.com/ventures/",
-      "page": "details"
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-543902f6f8",
+      "url": "https://parallel18.com/the-1-2-3-of-investment-series/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "Ventures → https://parallel18.com/ventures/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5e6997d25f",
+      "url": "https://parallel18.com/taking-a-leap-applying-to-an-accelerator-and-uprooting-your-life/",
+      "title": "Parallel18 — application page",
+      "excerpt": "Ventures → https://parallel18.com/ventures/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-69f95babbb",
+      "url": "https://parallel18.com/39-startups-receive-investment-from-parallel18-s-business-continuity-fund/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "Ventures → https://parallel18.com/ventures/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6fe74efbb6",
+      "url": "https://parallel18.com/terms-conditions/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "Ventures → https://parallel18.com/ventures/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7065f418c3",
+      "url": "https://parallel18.com/it-s-been-a-newsworthy-november-at-parallel18-catch-up-on-the-latest-updates/",
+      "title": "Parallel18 — batches page",
+      "excerpt": "Ventures → https://parallel18.com/ventures/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-74c523531f",
+      "url": "https://parallel18.com/terms-conditions-xpand/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "Ventures → https://parallel18.com/ventures/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-830aebe2d1",
+      "url": "https://parallel18.com/artist-dates-as-a-team-how-creative-breaks-spark-ideas/",
+      "title": "Parallel18 — batches page",
+      "excerpt": "Ventures → https://parallel18.com/ventures/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-969a528436",
+      "url": "https://parallel18.com/parallel18-evolves-from-grants-to-strategic-investment-platform/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "Ventures → https://parallel18.com/ventures/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-a04cf73583",
       "url": "https://parallel18.com/",
-      "title": "Parallel18 — homepage checked by scrape.py",
+      "title": "Parallel18 — homepage",
       "excerpt": "Ventures → https://parallel18.com/ventures/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-a5ee181dd8",
+      "url": "https://parallel18.com/tips-to-fill-out-gen-8s-application/",
+      "title": "Parallel18 — application page",
+      "excerpt": "Ventures → https://parallel18.com/ventures/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-bee69ee9ef",
+      "url": "https://parallel18.com/terms-conditions-xpand-2/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "Ventures → https://parallel18.com/ventures/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-edf436b4a7",
+      "url": "https://parallel18.com/before-february-flies-don-t-miss-p18-s-latest-updates/",
+      "title": "Parallel18 — batches page",
+      "excerpt": "Ventures → https://parallel18.com/ventures/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-f154a6ff6f",
+      "url": "https://parallel18.com/why-puerto-rico-is-an-ideal-place-to-test-your-product-and-grow/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "Ventures → https://parallel18.com/ventures/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-fbffb53707",
+      "url": "https://parallel18.com/applications-are-open-all-you-need-to-know-about-p18s-gen-x/",
+      "title": "Parallel18 — application page",
+      "excerpt": "Ventures → https://parallel18.com/ventures/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-015a4c7efb",
+      "url": "https://parallel18.com/applications-are-open-all-you-need-to-know-about-p18s-gen-x/",
+      "title": "Parallel18 — application page",
+      "excerpt": "the application → https://parallel18.com/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5b208ce540",
+      "url": "https://parallel18.com/why-puerto-rico-is-an-ideal-place-to-test-your-product-and-grow/",
+      "title": "Parallel18 — terms page",
+      "excerpt": "http://parallel18.com/apply/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-ba7d232398",
       "url": "https://parallel18.com/",
-      "title": "Parallel18 — homepage checked by scrape.py",
+      "title": "Parallel18 — homepage",
       "excerpt": "https://parallel18.com",
       "page": "details"
     },
     {
-      "id": "check-status-31a5293549",
-      "url": "https://parallel18.com/",
-      "title": "Parallel18 — homepage checked by scrape.py",
-      "excerpt": "Who is going to review my application to parallel18? Parallel18 has a multi-step judging process. After applications are closed, the parallel18 team does an internal screening to understand which companies comply with the program’s",
-      "page": "details"
+      "id": "check-route-f06be4223c",
+      "url": "https://parallel18.com/taking-a-leap-applying-to-an-accelerator-and-uprooting-your-life/",
+      "title": "Parallel18 — application page",
+      "excerpt": "http://parallel18.com/apply/",
+      "page": "application"
     },
     {
-      "id": "check-status-7d27786224",
-      "url": "https://parallel18.com/about-us/",
-      "title": "Parallel18 — details page checked by scrape.py",
+      "id": "check-status-0cd57882b8",
+      "url": "https://parallel18.com/applications-are-open-all-you-need-to-know-about-p18s-gen-x/",
+      "title": "Parallel18 — application page",
+      "excerpt": "Applications are open! All you need to know about P18’s Gen. X - Parallel18 Skip to content About us Programs BioLeap P18 Xpand",
+      "page": "application"
+    },
+    {
+      "id": "check-status-31a5293549",
+      "url": "https://parallel18.com/",
+      "title": "Parallel18 — homepage",
       "excerpt": "Who is going to review my application to parallel18? Parallel18 has a multi-step judging process. After applications are closed, the parallel18 team does an internal screening to understand which companies comply with the program’s",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-9de3bd1111",
+      "url": "https://parallel18.com/",
+      "page": "details",
+      "excerpt": "Home - Parallel18 Skip to content About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog EN ES EN ES About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog From Puerto Rico to the world! Read all about it here! learn more Relive our P18 Gen.14 DemoDay! Watch here From Puerto Rico to the world! Read all about it here Learn More Xpand: Global reach. Sustainable expansion. Learn More We advance Puerto Rico’s economy and its citizens’ well-being​. Learn More Investing in Startups Accelerating Impact Get to know our programs Incubation program for Life Sciences Startups. Discover Acceleration program for Puerto Rican and international startups. Discover Scale up program designed for growth-stage companies. Discover Startup directory Explore our parallel18 Alumni! More than 600+ solutions from all over the world. 2040 (eessii) PORTFOLIO FinTech & Finance 360deportes.tv Gen 3 P18 Entertainment & Media 9 Millones PORTFOLIO Entertainment & Media A Medias PORTFOLIO E-Commerce & Marketplace Abacrop PORTFOLIO Gen 10 P18 AgriTech & Food Abartys Health LLC Gen 2 P18 Gen 2 Xpand HealthTech & Biotech Abaxto Gen 7 P18 SaaS & Enterprise Software"
+    },
+    {
+      "id": "check-page-2f2b7e4d7a",
+      "url": "https://parallel18.com/applications-are-open-all-you-need-to-know-about-p18s-gen-x/",
+      "page": "application",
+      "excerpt": "Applications are open! All you need to know about P18’s Gen. X - Parallel18 Skip to content About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog EN ES EN ES About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog Applications are open! All you need to know about P18’s Gen. X Gen. X is determined in disrupting the startup ecosystem as we know it and with that in mind: we’re selecting only 10 companies that will participate in our thriving international acceleration program. “Accelerators are pivoting and parallel18 is leading the way too. As we celebrate our tenth cohort, we wanted to do something different. With that in mind, we are awarding the largest grant ever and reducing the number of participants to offer a specialized and tailored program experience for them,” revealed Juan Carlos Hernández, parallel18’s Executive Director. Furthermore, we will be offering a staggering $150,000 USD grant that will be disbursed into two payments: a $125,000 USD grant that startups will receive during the 20-week program. The companies will receive this amount in exchange for a promise or commitment to donate to our parent organization"
+    },
+    {
+      "id": "check-page-8c0492b470",
+      "url": "https://parallel18.com/taking-a-leap-applying-to-an-accelerator-and-uprooting-your-life/",
+      "page": "application",
+      "excerpt": "Taking a leap: applying to an accelerator and uprooting your life - Parallel18 Skip to content About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog EN ES EN ES About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog Taking a leap: applying to an accelerator and uprooting your life The wind on your face, the thrill running on your veins, you look out to playground ready to jump and feel invincible. Remember those days? That feeling before jumping, before finally taking that leap, is still incomparable. But once we grow, it’s harder to jump, especially if the leap means uprooting your life for a business you’re still working hard on. Yet, that’s what entrepreneurs all over the world do when applying to accelerators outside of their home base, opening to the possibility of running their business elsewhere. If you are considering applying to an incubator or accelerator, here’s what you need to consider. What about my personal life? Leaving your life behind when you’re young and single sounds like the start of a great movie, anything can happen in your adventure. But leaving once you’ve started to settle on your ways, got married"
+    },
+    {
+      "id": "check-page-1c4d39d82d",
+      "url": "https://parallel18.com/tips-to-fill-out-gen-8s-application/",
+      "page": "application",
+      "excerpt": "Tips to fill out Gen.8’s application - Parallel18 Skip to content About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog EN ES EN ES About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog Tips to fill out Gen.8’s application If you’re in the process of completing your application for Gen.8, our team has some tips for you! Check them out and make sure to submit by next Monday, February 17th, 2020 for a chance to become a #P18Startup with all the right business and investment connections. Don’t stress over the pitch video No, it doesn’t have to be made like a pro. We do not expect people who apply to be experts in video and sound production or that they spend money on creating one. The video can be recorded using a tripod and a cell phone. What’s important is that the video looks and sounds good. Judges should be able to see the faces of those who speak, and, above all, understand well what they say. Why? This is the only chance the parallel18 team and the judges have to put a face to the entrepreneurs they are evaluating. If you and your team members are in different places, you can each record yourselves separately and then"
+    },
+    {
+      "id": "check-page-5296163c50",
+      "url": "https://parallel18.com/39-startups-receive-investment-from-parallel18-s-business-continuity-fund/",
+      "page": "terms",
+      "excerpt": "39 startups receive investment from parallel18’s Business Continuity Fund - Parallel18 Skip to content About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog EN ES EN ES About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog 39 startups receive investment from parallel18’s Business Continuity Fund PRESS RELEASE: The list of startups includes 13 Puerto Rican companies that will receive between US $25K to US $35K to continue growing their businesses in light of the pandemic San Juan, Puerto Rico, October 28th 2020 — As part of its mission to support innovative entrepreneurship and impact Puerto Rico’s economy, parallel18 — along with its parent organization, the Puerto Rico Science, Technology and Research Trust — announced the 39 startups that will benefit from its US $1M Business Continuity Fund (BCF.) An investment vehicle created to help graduated companies from the program to face the new economic challenges caused by COVID-19. According to a report published by the SME Banking Club about coronavirus’s economic impact on the global startup ecosystem, international venture capital financing has been reduced by approximately"
+    },
+    {
+      "id": "check-page-a3d5d98d21",
+      "url": "https://parallel18.com/parallel18-evolves-from-grants-to-strategic-investment-platform/",
+      "page": "terms",
+      "excerpt": "parallel18 Investment Platform: From Grants to Equity Investment - Parallel18 Skip to content About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog EN ES EN ES About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog parallel18 Invest Platform: From Grant to Equity Investment After ten years of supporting Puerto Rico’s entrepreneurial ecosystem, parallel18 is launching a new investment platform in 2026. This transformation marks the program’s most ambitious shift yet — transitioning from a traditional grant-based accelerator to a structured investment model that promises to reshape how Puerto Rican and international startups access capital and scale globally. Why Change Now? The entrepreneurial landscape of Puerto Rico and beyond have shifted. What was once an emerging ecosystem requiring basic support has matured into a sophisticated network of educated founders, experienced mentors, and globally competitive startups. The challenges have shifted from “How do we start?” to “How do we scale internationally?” Traditional grant models, while effective for early-stage support, have their own limitations. Grants are finite — they’re"
+    },
+    {
+      "id": "check-page-280d0fdd7c",
+      "url": "https://parallel18.com/terms-conditions-xpand-2/",
+      "page": "terms",
+      "excerpt": "Terms & Conditions - BioLeap - Parallel18 Skip to content About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog EN ES EN ES About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog Terms & Conditions BioLeap program Antecedent BioLeap is the first incubator program focused on the Life Sciences and the STEM field in Puerto Rico. Our primary objective includes facilitating economic growth by advancing local scientific research towards commercialization. The BioLeap is a program initiative of Parallel18, which is a program of the Puerto Rico Science, Technology and Research Trust (the “ TRUST ”), a private non-profit organization established to advance the economy of Puerto Rico and the well-being of its citizens through innovation, entrepreneurship, research, and participation in the global knowledge economy. The TRUST aims to stimulate investment and financing for R&D in science and technology, fostering job creation. Managing a diverse portfolio, the organization oversees numerous initiatives, providing grants, technical support, meetups, and educational resources for various stakeholders, including researchers, entrepreneurs,"
+    },
+    {
+      "id": "check-page-b5c4ceb100",
+      "url": "https://parallel18.com/terms-conditions-xpand/",
+      "page": "terms",
+      "excerpt": "Terms & Conditions - Xpand - Parallel18 Skip to content About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog EN ES EN ES About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog ANTECEDENT Xpand Puerto Rico is a growth stage program developed by Parallel18 and subsidized by Banco Popular of Puerto Rico. It is designed to support innovative companies and established small businesses from Puerto Rico that are ready to expand toward sustainable growth and scale to new markets. Xpand is delivered as a structured, resource-rich growth program built around three pillars: Plan, Finance, and Scale. Every participating company builds and executes a living growth plan, strengthens its financing readiness alongside Banco Popular, and accesses the resources it needs without stepping away from running its business. Parallel18, a program of the Puerto Rico Science, Technology, and Research Trust, is a top-level, performance-driven international innovation hub focused on providing funding, mentorship, business connections, and investment to underrepresented founders worldwide. The Puerto Rico Science, Technology and Research Trust (the “"
+    },
+    {
+      "id": "check-page-4c0cf30228",
+      "url": "https://parallel18.com/terms-conditions/",
+      "page": "terms",
+      "excerpt": "Terms & Conditions - Parallel18 Skip to content About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog EN ES EN ES About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog 1. Antecedent Parallel18 is a top-level, performance-driven international startup program with a social mission: offering entrepreneurs from all over the world access to high-quality business training, grants, mentors, business contacts and investors to help them scale globally while working to position Puerto Rico as a unique hub for innovative businesses and technology. The program is part of the Puerto Rico Science, Technology, and Research Trust, a private non-profit organization created with the goal of maximizing Puerto Rico’s participation and creation of jobs in the global knowledge economy by promoting investment and financing of science and technology research development. The organization manages and hosts over a dozen initiatives that range from grants and technical support to meetups and educational resources for researchers, entrepreneurs, farmers, investors, and other groups. 2. Main Goal Our acceleration program welcomes companies from around"
+    },
+    {
+      "id": "check-page-326dcb90a5",
+      "url": "https://parallel18.com/the-1-2-3-of-investment-series/",
+      "page": "terms",
+      "excerpt": "The 1–2–3 of investment series - Parallel18 Skip to content About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog EN ES EN ES About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog The 1–2–3 of investment series If you’re an idea person, the startup world can seem like a daunting place once the conversation turns to numbers. And while relying on experts is the way to go, it is fundamental to understand what is happening to be a part of the conversation. Fret not, this is your very basic introduction to investment rounds. First things first, the investment series are not a quality descriptor of your business, rather where your business it at that point — early stages, developing, etc. Each series has its own learning curve, regarding what works and what doesn’t, both for you and your investors. And there are certain steps repeated: doing background checks on your investors, knowing how to concisely and clearly present your company, maintaining (and improving along the way) your business plan. Seed Funding While it can be confused with early stage funding, seed funding is the very first funding round. Seed and early stage"
+    },
+    {
+      "id": "check-page-f6390c2e88",
+      "url": "https://parallel18.com/why-puerto-rico-is-an-ideal-place-to-test-your-product-and-grow/",
+      "page": "terms",
+      "excerpt": "Why Puerto Rico is an ideal place to test your product and grow - Parallel18 Skip to content About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog EN ES EN ES About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog Why Puerto Rico is an ideal place to test your product and grow When Google’s much anticipated Project Ara , the modular customizable phone that has yet to be released, announced its pilot program, none of the regular tech cities were mentioned. Instead, the tech giant went with a Caribbean island that boasts a population of over 3 million, Puerto Rico. Though the project fell through, Google still plans to utilize the island in future projects. This is a surprise to those not familiar with the island but, truth be told, Puerto Rico has both measurable and immeasurable value to those looking for a test market whether for a product, service, even an app. It’s a sizeable yet workable market that is open to new ideas. Here are some benefits of doing testing in Puerto Rico: U.S. ties For over a century, Puerto Rico and U.S. have maintained a political relationship. Its current status allows for entrepreneurs both local,"
+    },
+    {
+      "id": "check-page-5e6e4b1a17",
+      "url": "https://parallel18.com/artist-dates-as-a-team-how-creative-breaks-spark-ideas/",
+      "page": "batches",
+      "excerpt": "Artist Dates Team: How it Sparks Creative Ideas - Parallel18 Skip to content About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog EN ES EN ES About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog Artist Dates as a Team: How Creative Breaks Spark Ideas At parallel18, we believe artist dates as a team spark innovation everywhere. They don’t happen only behind desks or in meetings. Often, the best ideas emerge when team members give themselves permission to break routine together. Exposing ourselves to new experiences as a group sparks creativity. This week, I discovered just how powerful artist dates as a team can be. I remember my first graduate class. We were assigned an artist date: a solo artistic experience. Mine happened in Boston, MA. The goal was simple: awaken creativity through new experiences. Years later, I realized something powerful. This practice could inspire and unite teams. Our Very First Date! This week I took my team, the famous Mac & Cheese , on an artist date to the Bad Bunny immersive experience . At first, it seemed to be just a recreational outing and ended up becoming a powerful reminder of what"
+    },
+    {
+      "id": "check-page-6637db2915",
+      "url": "https://parallel18.com/before-february-flies-don-t-miss-p18-s-latest-updates/",
+      "page": "batches",
+      "excerpt": "Before February flies, don’t miss P18’s latest updates! - Parallel18 Skip to content About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog EN ES EN ES About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog Before February flies, don’t miss P18’s latest updates! Word has it that January was too long. But it seems like February has come and almost gone in the blink of an eye. During this month we saw the closing of our Gen.8 application period and will see which companies will make it to the next round of judging. After that, it’s all hands are on deck in preparations for the Investor Immersion Week, pitch practices, and, the most awaited event of them all, #P18DemoDay! With that said, we can’t go on without acknowledging how last month was a challenging one for Puerto Rico. And while we have to keep operating to continue bringing growth opportunities to all of our startups, our thoughts are still with those in need. It is precisely in moments like this that we reassure the need to foster an innovation mentality, which oftentimes is the first-response to hardship. We’ve seen it with companies like #P18Alumni Uva or #P18Startup"
+    },
+    {
+      "id": "check-page-b593ef607a",
+      "url": "https://parallel18.com/bioleap-announces-third-cohort-with-340k-in-grants-to-boost-puerto-ricos-biosciences-ecosystem/",
+      "page": "batches",
+      "excerpt": "BioLeap Startup Grants: Third Cohort Awards $340k - Parallel18 Skip to content About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog EN ES EN ES About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog BioLeap Startup Grants: Third Cohort Awards $340k to 17 Companies Here’s why this cohort marks a turning point for the island’s bioscience innovation scene. BioLeap , managed by parallel18 and the Puerto Rico Science, Technology and Research Trust , announced its third cohort launch today. The program will award $20,000 grants to 17 local life science companies. The completely free initiative provides entrepreneurs with three key benefits: 12 weeks of business education, 16 weeks of technical assistance, and ongoing mentorship from industry experts. These experts guide participants through commercial and regulatory challenges. Program participants gain practical tools to structure their businesses. They launch functional prototypes and develop patentable technologies. The ultimate goal: commercialize innovations worldwide. Meet the Gen. 3 Companies The companies selected in Gen. 3 of BioLeap and that will receive the grant are:"
+    },
+    {
+      "id": "check-page-7b9ffd2723",
+      "url": "https://parallel18.com/it-s-been-a-newsworthy-november-at-parallel18-catch-up-on-the-latest-updates/",
+      "page": "batches",
+      "excerpt": "It’s been a newsworthy November at parallel18! Catch up on the latest updates - Parallel18 Skip to content About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog EN ES EN ES About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog About us Programs BioLeap P18 Xpand VCAP Ventures Connect News Room Startup Directory Blog It’s been a newsworthy November at parallel18! Catch up on the latest updates This November has been action-packed with updates! While our alumni have been reaching significant milestones, our program has amazing news as well, from the successful kickoff of pre18 Gen.3, to the official announcement of our P18Ventures Business Continuity Fund investees and the acquisition of another P18Alumni. Last week was Global Entrepreneurship Week and we couldn’t be prouder to see how our program contributes to the global startup ecosystem. This milestone and the achievements of our startups make us start reflecting on this year and how, despite its challenges, it has put our thesis to the test: that diverse innovative entrepreneurship is the way forward . And to showcase the opportunities available for global entrepreneurs in Latin America, last Friday, November 20th we hosted a panel discussion called LATAM"
     }
   ],
   "findings": {
@@ -71,7 +617,16 @@
         "evidenceId": "check-phone-a492cc9362"
       }
     ],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://parallel18.com/",
+        "evidenceId": "check-route-015a4c7efb"
+      },
+      {
+        "value": "http://parallel18.com/apply/",
+        "evidenceId": "check-route-f06be4223c"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://parallel18.com",
@@ -82,12 +637,141 @@
       {
         "value": false,
         "evidenceId": "check-status-31a5293549"
+      },
+      {
+        "value": true,
+        "evidenceId": "check-status-0cd57882b8"
       }
     ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "may",
+        "evidenceId": "check-announced-b65661a80f"
+      },
+      {
+        "value": "May",
+        "evidenceId": "check-announced-ce43fd1f4a"
+      },
+      {
+        "value": "January",
+        "evidenceId": "check-announced-ca5f1273b9"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "20",
+        "evidenceId": "check-duration-b103d3963d"
+      },
+      {
+        "value": "12",
+        "evidenceId": "check-duration-052f545bf2"
+      },
+      {
+        "value": "5 months",
+        "evidenceId": "check-duration-99deee5c4c"
+      },
+      {
+        "value": "2",
+        "evidenceId": "check-duration-95d63f67ff"
+      },
+      {
+        "value": "16",
+        "evidenceId": "check-duration-7ac8368c49"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-c5c02c69fc"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-6888803a0a"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-d8b0015714"
+      }
+    ],
+    "location": [
+      {
+        "value": "San Juan",
+        "evidenceId": "check-location-3bd4ca103a"
+      }
+    ],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "The second disbursement will be an investment for the amount of $25,000 USD on an Simple Agreement for Future Equity (SAFE), uncapped with a",
+        "evidenceId": "check-deal-5011189c9d"
+      },
+      {
+        "value": "Director of Operations. This way, the PRSTRT invested between US $25K to US $35K in every startup using a standard convertible note, with",
+        "evidenceId": "check-deal-a63244524f"
+      },
+      {
+        "value": "of Operations. This way, the PRSTRT invested between US $25K to US $35K in every startup using a standard convertible note, with the",
+        "evidenceId": "check-deal-871a2e643b"
+      },
+      {
+        "value": "Research Trust will provide a grant of forty thousand dollars (USD $40,000) delivered in various sets throughout the program, subject to the",
+        "evidenceId": "check-deal-7e1d041336"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "equity",
+          "amount": "25000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Equity",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-5011189c9d"
+      },
+      {
+        "value": {
+          "kind": "convertible",
+          "amount": "25000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Convertible note",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-a63244524f"
+      },
+      {
+        "value": {
+          "kind": "convertible",
+          "amount": "35000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Convertible note",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-871a2e643b"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "40000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-7e1d041336"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://parallel18.com/ventures/",

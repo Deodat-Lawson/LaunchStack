@@ -1,24 +1,297 @@
 {
   "programId": "design-terminal",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://civitta.com/hu",
-    "https://civitta.com/hu/nemzeti-tehetseg-kozpont-start-programcsalad/"
+    "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+    "https://civitta.com/global-funding-opportunities/interregional-innovation-investments-instrument-i3/",
+    "https://civitta.com/our-work/optimising-car-dealership-network-in-estonia/",
+    "https://civitta.com/our-work/releaf-paper-attracting-e10-5m-investment-for-innovation/",
+    "https://civitta.com/our-work/usaid-nigeria-agribusiness-investment-activity-collaborative-policy-development-and-implementation/",
+    "https://civitta.com/our-work/weventure-strengthening-investment-readiness-of-women-entrepreneurs/",
+    "https://civitta.com/sk/morning-health-talks-bratislava-exploring-healthcare-innovation-and-investment/",
+    "https://civitta.com/sk/news-insights/the-future-of-healthcare-investments-and-innovation/",
+    "https://civitta.com/topics/investment-readiness/",
+    "https://civitta.com/topics/public-finance-investment/",
+    "https://civitta.com/weventure-empowering-women-entrepreneurs-to-grow-scale-and-attract-investment/",
+    "https://civitta.com/our-work/ohtuleht-codebase-updates/",
+    "https://civitta.com/about-us/",
+    "https://civitta.com/career/partner-development-program/"
   ],
   "evidence": [
     {
+      "id": "check-duration-199894bf70",
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "title": "Design Terminal — application page",
+      "excerpt": ": 12–18+ Months Application-to-decision: 6–12 months (multi-stage evaluations) Fund disbursement:",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-1ada408d5c",
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "title": "Design Terminal — application page",
+      "excerpt": "~ 6 months Fund disbursement: Additional 2–6 months after signing the contract Best for : R&D-heavy",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-27a15d4495",
+      "url": "https://civitta.com/weventure-empowering-women-entrepreneurs-to-grow-scale-and-attract-investment/",
+      "title": "Design Terminal — terms page",
+      "excerpt": "day Program Timeline Total duration of training ~12 weeks. Key milestones: 1 Applications open 2",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-30a97b1933",
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "title": "Design Terminal — application page",
+      "excerpt": "Accelerator, Eurostars, Digital Europe, LIFE): 6–12 months Application-to-decision: ~ 6 months Fund",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-496b174bb4",
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "title": "Design Terminal — application page",
+      "excerpt": "innovation vouchers Application-to-decision: ~2 months Fund disbursement: Within a few months after",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-882e47ddd0",
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "title": "Design Terminal — application page",
+      "excerpt": "Fund disbursement: First payment typically 3–6 months after signing Best for : Cross-border",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-98f279b281",
+      "url": "https://civitta.com/weventure-empowering-women-entrepreneurs-to-grow-scale-and-attract-investment/",
+      "title": "Design Terminal — terms page",
+      "excerpt": "confidence to investors at home and abroad. Over 12 weeks, the program combines practical training,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-adf9e4b83c",
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "title": "Design Terminal — application page",
+      "excerpt": "LIFE): 6–12 months Application-to-decision: ~ 6 months Fund disbursement: Additional 2–6 months after",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-b75cdd7b3b",
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "title": "Design Terminal — application page",
+      "excerpt": "it’s crucial to start planning early—ideally 6–12 months before you need the funds. Civitta helps",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d0886400b8",
+      "url": "https://civitta.com/career/partner-development-program/",
+      "title": "Design Terminal — program page",
+      "excerpt": "and build a path towards Partnership. Over 6–12 months, you will develop your own client portfolio,",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-d80a1c9076",
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "title": "Design Terminal — application page",
+      "excerpt": "Fast-track grants (small & cascade funding): 2–4 months Examples: Cascade funding, Digital Europe,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-efd8c860f0",
+      "url": "https://civitta.com/our-work/weventure-strengthening-investment-readiness-of-women-entrepreneurs/",
+      "title": "Design Terminal — terms page",
+      "excerpt": "decks. Online delivery enhanced accessibility , while in-person networking activities and Demo Days played an important",
+      "page": "terms"
+    },
+    {
       "id": "check-name-1c23efebcf",
       "url": "https://civitta.com/hu",
-      "title": "Design Terminal — homepage checked by scrape.py",
+      "title": "Design Terminal — homepage",
       "excerpt": "Budapest Határőr st. 36, 1122 Telephone +36 70 669 1466 Design Terminal Public Benefit Non-profit Ltd. VAT HU25717002 Péter",
       "page": "details"
     },
     {
+      "id": "check-portfolio-0fe3550b93",
+      "url": "https://civitta.com/our-work/ohtuleht-codebase-updates/",
+      "title": "Design Terminal — batches page",
+      "excerpt": "Startups → https://civitta.com/startups/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-274b80c27d",
+      "url": "https://civitta.com/topics/investment-readiness/",
+      "title": "Design Terminal — terms page",
+      "excerpt": "Startups → https://civitta.com/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-38fd4f1033",
+      "url": "https://civitta.com/our-work/optimising-car-dealership-network-in-estonia/",
+      "title": "Design Terminal — terms page",
+      "excerpt": "Startups → https://civitta.com/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-47998c95a0",
+      "url": "https://civitta.com/our-work/weventure-strengthening-investment-readiness-of-women-entrepreneurs/",
+      "title": "Design Terminal — terms page",
+      "excerpt": "Startups → https://civitta.com/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5fb9b1802c",
+      "url": "https://civitta.com/our-work/releaf-paper-attracting-e10-5m-investment-for-innovation/",
+      "title": "Design Terminal — terms page",
+      "excerpt": "Startups → https://civitta.com/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-67507bfe2c",
+      "url": "https://civitta.com/career/partner-development-program/",
+      "title": "Design Terminal — program page",
+      "excerpt": "Startups → https://civitta.com/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-77a5052e18",
+      "url": "https://civitta.com/weventure-empowering-women-entrepreneurs-to-grow-scale-and-attract-investment/",
+      "title": "Design Terminal — terms page",
+      "excerpt": "Startups → https://civitta.com/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8224f8885c",
+      "url": "https://civitta.com/our-work/usaid-nigeria-agribusiness-investment-activity-collaborative-policy-development-and-implementation/",
+      "title": "Design Terminal — terms page",
+      "excerpt": "Startups → https://civitta.com/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8c846b61d9",
+      "url": "https://civitta.com/about-us/",
+      "title": "Design Terminal — program page",
+      "excerpt": "Startups → https://civitta.com/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ee23b880e9",
+      "url": "https://civitta.com/global-funding-opportunities/interregional-innovation-investments-instrument-i3/",
+      "title": "Design Terminal — terms page",
+      "excerpt": "Startups → https://civitta.com/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-fb5bb199e1",
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "title": "Design Terminal — application page",
+      "excerpt": "Startups → https://civitta.com/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-fdc44e6207",
+      "url": "https://civitta.com/topics/public-finance-investment/",
+      "title": "Design Terminal — terms page",
+      "excerpt": "Startups → https://civitta.com/startups/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-2de29f6eb8",
       "url": "https://civitta.com/hu",
-      "title": "Design Terminal — homepage checked by scrape.py",
+      "title": "Design Terminal — homepage",
       "excerpt": "https://civitta.com/hu",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-e2dbee70fc",
+      "url": "https://civitta.com/hu",
+      "page": "details",
+      "excerpt": "Civitta Magyarország: Vállalkozásfejlesztés, forrásszerzési tanácsadás, digitális megoldások Ügyfeleink Szolgáltatásaink Aktív programok Csapatunk Karrier Kapcsolat Központi Civitta Kapcsolatfelvétel Ügyfeleink Szolgáltatásaink Aktív programok Csapatunk Karrier Kapcsolat Központi Civitta Vállalkozásfejlesztés, forrásszerzési tanácsadás, digitális megoldások A Civitta Közép- és Kelet-Európából indult, és büszkék vagyunk arra, hogy mára a legnagyobb e régióban alapított tanácsadó céggé váltunk, miközben világszerte valósítunk meg projekteket. Tehetséggondozás Vállalkozásfejlesztő programokat tervezünk és valósítunk meg, a legfiatalabbak pedig oktatási programokon keresztül ösztönözzük vállalkozás indításra. Közszektor tanácsadás Hazai és nemzetközi szinten is támogatunk intézményeket szakpolitika-alkotásban, gazdasági növekedés előmozdításában és transzformációs programok megvalósításában. Tanácsadás Stratégia, elemzések, fenntarthatóság, AI- és adatmegoldásokkal segítjük a szervezeteket. Az intézményeket szakpolitika-alkotásban és transzformációs programok megvalósításában támogatjuk. Forrásszerzési támogatás Támogatjuk ügyfeleinket a nemzetközi és hazai finanszírozási programokból származó források megszerzésében és kezelésében. Digitális megoldások Digitális termékeket, platformokat és élményeket tervezünk és fejlesztünk, beleértve a szoftverfejlesztést, a UX/UI design-t és a"
+    },
+    {
+      "id": "check-page-916cf03586",
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "page": "application",
+      "excerpt": "Civitta | Preparing for a Successful Funding Application Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native development Web development & e-commerce"
+    },
+    {
+      "id": "check-page-b204f2b384",
+      "url": "https://civitta.com/global-funding-opportunities/interregional-innovation-investments-instrument-i3/",
+      "page": "terms",
+      "excerpt": "Civitta | Interregional Innovation Investments Instrument (I3) Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native development Web development &"
+    },
+    {
+      "id": "check-page-c333673411",
+      "url": "https://civitta.com/our-work/optimising-car-dealership-network-in-estonia/",
+      "page": "terms",
+      "excerpt": "Civitta | Optimising car dealership network in Estonia Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native development Web development & e-commerce"
+    },
+    {
+      "id": "check-page-4c7b95f796",
+      "url": "https://civitta.com/our-work/releaf-paper-attracting-e10-5m-investment-for-innovation/",
+      "page": "terms",
+      "excerpt": "Civitta | ReLeaf Paper: attracting €10.5m investment for innovation Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native development Web development &"
+    },
+    {
+      "id": "check-page-46a608940a",
+      "url": "https://civitta.com/our-work/usaid-nigeria-agribusiness-investment-activity-collaborative-policy-development-and-implementation/",
+      "page": "terms",
+      "excerpt": "Civitta | USAID Nigeria Agribusiness Investment Activity: Collaborative Policy Development and Implementation Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform"
+    },
+    {
+      "id": "check-page-764ee757e5",
+      "url": "https://civitta.com/our-work/weventure-strengthening-investment-readiness-of-women-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "Civitta | WeVenture: Strengthening Investment Readiness of Women Entrepreneurs Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native development Web"
+    },
+    {
+      "id": "check-page-367f3e9558",
+      "url": "https://civitta.com/sk/morning-health-talks-bratislava-exploring-healthcare-innovation-and-investment/",
+      "page": "terms",
+      "excerpt": "Civitta | Morning Health Talks Bratislava: Exploring healthcare innovation and investment Klienti Práca Tím Kariéra Kontakty Globálny web Kontaktujte nás Klienti Práca Tím Kariéra Kontakty Globálny web Morning Health Talks Bratislava: Exploring healthcare innovation and investment Insights Read time 3 min. Back to all news and insights On October 10, 2024, Civitta hosted the latest edition of EIT Health Morning Health Talks in Bratislava, bringing together healthcare leaders, investors, and startups. Keynote speaker Zuzana Kasanová from KU Leuven shared insights into building successful biomedical startups. She highlighted key factors like market validation, regulatory compliance, and team strength. KU Leuven’s accelerator program has supported 44 impactful projects, with 12 spin-offs expected by 2024. Investing in healthcare innovation in Central Eastern Europe Michal Nešpor from Crowdberry addressed the challenges of attracting investments to the region. Slovakia lags behind in healthcare investments compared to other EU countries, with limited access to foreign investors. He emphasized the importance of private capital in driving local healthcare startups forward. Abigail Sidibé, HICEE project coordinator, discussed a gap analysis revealing barriers in market validation, legal support, and a lack of business acumen in researchers. Investor panel discussion The event’s panel"
+    },
+    {
+      "id": "check-page-a2d671109c",
+      "url": "https://civitta.com/sk/news-insights/the-future-of-healthcare-investments-and-innovation/",
+      "page": "terms",
+      "excerpt": "Civitta | The future of healthcare: Investments and innovation Klienti Práca Tím Kariéra Kontakty Globálny web Kontaktujte nás Klienti Práca Tím Kariéra Kontakty Globálny web The future of healthcare: Investments and innovation Insights Read time 2 min. Back to all news and insights Civitta Slovakia, as the EIT Health Hub in Slovakia, is organizing another EIT Health Morning Health Talks , which will return to Bratislava on October 10, 2024. This event will bring together key players from Slovakia’s healthcare innovation ecosystem to discuss the latest trends and foster collaboration in the sector. This edition will focus on exploring investments and financing for innovative healthcare projects within the CEE region. As part of the ongoing Morning Health Talks series, this event will allow attendees to network and engage with experts, investors, and innovators shaping the future of healthcare in the region. Key Focus Areas & Agenda Together with our guests, we will analyze the current state of venture capital investments in healthcare startups across Central and Eastern Europe (CEE), with a particular emphasis on Slovakia. This will be followed by a panel discussion with investors and VC funds. In the next part, several Slovak startups will present their projects and their path to funding. Finally, we will explore different funding opportunities for innovative healthcare"
+    },
+    {
+      "id": "check-page-ebe0900a93",
+      "url": "https://civitta.com/topics/investment-readiness/",
+      "page": "terms",
+      "excerpt": "Civitta | Investment Readiness Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native development Web development & e-commerce Online campaigns, WordPress"
+    },
+    {
+      "id": "check-page-2d0ab3b8e8",
+      "url": "https://civitta.com/topics/public-finance-investment/",
+      "page": "terms",
+      "excerpt": "Civitta | Public Finance & Investment Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native development Web development & e-commerce Online campaigns,"
+    },
+    {
+      "id": "check-page-3a69d81276",
+      "url": "https://civitta.com/weventure-empowering-women-entrepreneurs-to-grow-scale-and-attract-investment/",
+      "page": "terms",
+      "excerpt": "Civitta | WeVenture — Empowering Women Entrepreneurs to grow, scale and attract investment Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native"
+    },
+    {
+      "id": "check-page-6f1a59fbd8",
+      "url": "https://civitta.com/our-work/ohtuleht-codebase-updates/",
+      "page": "batches",
+      "excerpt": "Civitta | Ohtuleht: codebase updates Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native development Web development & e-commerce Online campaigns,"
+    },
+    {
+      "id": "check-page-6d0f811423",
+      "url": "https://civitta.com/about-us/",
+      "page": "details",
+      "excerpt": "Civitta | About us Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native development Web development & e-commerce Online campaigns, WordPress landing"
+    },
+    {
+      "id": "check-page-f59f497edc",
+      "url": "https://civitta.com/career/partner-development-program/",
+      "page": "details",
+      "excerpt": "Civitta | Partner Development Program Services Public advisory Innovation ecosystems Ecosystem development, business growth & acceleration programs, open Innovation programs Digital transformation Digital strategy and roadmap, system specification design, implementation oversight Public policy & research Policy research, monitoring, evaluation & impact assessment Economic development Public governance, private sector & SME development, feasibility studies & analytical support Infrastructure & climate Urban & territorial development, sustainable development, transport & infrastructure development, energy sector services Technical assistance Talent recruitment, employee support, project management, contract management Consulting Strategy & growth Strategic planning, commercial excellence, international growth, M&A support, transformation Market research Market and brand analysis, consumer insights, organisational studies, sociological research Sustainability / ESG Quantifying impact, ESG analytics, sustainability strategy setting, reporting & compliance AI & Data AI solutions, machine learning systems and data platforms Digital Software development .NET, Node.js, Symfony, Laravel, Java, ReactJS, TypeScript, GraphQL, team on demand Mobile app development Native iOS and Android development, cross-platform React Native development Web development & e-commerce Online campaigns,"
     }
   ],
   "findings": {
@@ -34,9 +307,47 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "4 months",
+        "evidenceId": "check-duration-d80a1c9076"
+      },
+      {
+        "value": "2 months",
+        "evidenceId": "check-duration-496b174bb4"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-30a97b1933"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-adf9e4b83c"
+      },
+      {
+        "value": "12",
+        "evidenceId": "check-duration-98f279b281"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-efd8c860f0"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
-    "portfolioPages": [],
+    "dealComponents": [],
+    "portfolioPages": [
+      {
+        "value": "https://civitta.com/startups/",
+        "evidenceId": "check-portfolio-fb5bb199e1"
+      }
+    ],
     "name": [
       {
         "value": "Design Terminal",

@@ -1,123 +1,794 @@
 {
   "programId": "berkeley-skydeck",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://skydeck.berkeley.edu/",
     "https://skydeck.berkeley.edu/apply/",
-    "https://skydeck.berkeley.edu/our_team/"
+    "https://skydeck.berkeley.edu/applyli/",
+    "https://skydeck.berkeley.edu/berkeley-skydeck-accelerator-program-armenian-startups-can-apply-for/",
+    "https://skydeck.berkeley.edu/fall-2019-applications-open/",
+    "https://skydeck.berkeley.edu/berkeley-skydeck-fund-hits-milestone-as-most-active-seed-fund-with-more-than-100-investments-in-three-years/",
+    "https://skydeck.berkeley.edu/batch11/",
+    "https://skydeck.berkeley.edu/batch12/",
+    "https://skydeck.berkeley.edu/batch13/",
+    "https://skydeck.berkeley.edu/batch14/",
+    "https://skydeck.berkeley.edu/batch15/",
+    "https://skydeck.berkeley.edu/batch16/",
+    "https://skydeck.berkeley.edu/batch17/",
+    "https://skydeck.berkeley.edu/batch18/",
+    "https://skydeck.berkeley.edu/batch19-1/"
   ],
   "evidence": [
     {
-      "id": "check-deal-1e1196e2c8",
+      "id": "check-announced-4a874dd86d",
+      "url": "https://skydeck.berkeley.edu/apply/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": "PROGRAMS Berkeley SkyDeck ADVISORS JOBS Applications for Batch 24 open in January! CONNECT Why do startups come to SkyDeck? SkyDeck is",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-6334d24df8",
       "url": "https://skydeck.berkeley.edu/",
-      "title": "Berkeley SkyDeck — homepage checked by scrape.py",
-      "excerpt": "Fund SkyDeck’s Dedicated Venture Fund The Berkeley SkyDeck Fund is the investment partner for UC Berkeley’s SkyDeck Accelerator Program. The Fund invests $200K into each startup that goes through SkyDeck, and can participate in later stage investment rounds with Berkeley founders. One of the most active seed",
+      "title": "Berkeley SkyDeck — homepage",
+      "excerpt": "Berkeley SkyDeck ADVISORS JOBS Where visionaries take flight SkyDeck Batch 24 Applications open in January! LEARN MORE Our Journey to make SkyDeck the best accelerator for",
       "page": "details"
+    },
+    {
+      "id": "check-deal-09726e7916",
+      "url": "https://skydeck.berkeley.edu/",
+      "title": "Berkeley SkyDeck — homepage",
+      "excerpt": "for UC Berkeley’s SkyDeck Accelerator Program. The Fund invests $200K into each startup that goes through SkyDeck, and can participate in",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-33a87c2a75",
+      "url": "https://skydeck.berkeley.edu/",
+      "title": "Berkeley SkyDeck — homepage",
+      "excerpt": "Program Roughly 20 startups are selected every 6 months to receive a $200,000 investment from the",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-373ef6e28e",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "market which we will be pursuing in the next 12-18 months after we prove the reliability and safety of our",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-62c9b8c8fc",
+      "url": "https://skydeck.berkeley.edu/apply/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": "COMMUNITY Roughly 20 startups are selected every 6 months to receive a $210,000 investment from the",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-66a8e79b5b",
+      "url": "https://skydeck.berkeley.edu/",
+      "title": "Berkeley SkyDeck — homepage",
+      "excerpt": "to send startups to be accelerated for a 3-month period at SkyDeck. SkyDeck welcomes IPP startups",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c5feb98ab9",
+      "url": "https://skydeck.berkeley.edu/apply/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": ". The SkyDeck Berkeley Acceleration Method is a 6-month acceleration process for promising startups in",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-e3f0468822",
+      "url": "https://skydeck.berkeley.edu/applyli/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": ". The SkyDeck Berkeley Acceleration Method is a 6-month acceleration process for promising startups in",
+      "page": "application"
+    },
+    {
+      "id": "check-format-0030b36807",
+      "url": "https://skydeck.berkeley.edu/batch11/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-06682080bf",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "products – that’s what Experify is all about. With its hybrid social messaging platform and SaaS, Experify helps",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-0b79300b75",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-accelerator-program-armenian-startups-can-apply-for/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "application"
+    },
+    {
+      "id": "check-format-167032967e",
+      "url": "https://skydeck.berkeley.edu/applyli/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": "with a Lead Advisor, have designated work space when in-person at SkyDeck in Berkeley, and designated work space when",
+      "page": "application"
+    },
+    {
+      "id": "check-format-271530062d",
+      "url": "https://skydeck.berkeley.edu/batch16/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-639dc3d54c",
+      "url": "https://skydeck.berkeley.edu/fall-2019-applications-open/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "application"
+    },
+    {
+      "id": "check-format-660afffec2",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Betti Renata Betti Thank you to our SkyDeck Batch 12 Virtual Demo Day Sponsors! Platinum sponsors Gold sponsors",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-7071b55c12",
+      "url": "https://skydeck.berkeley.edu/batch19-1/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-7affbde738",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-9617fd031d",
+      "url": "https://skydeck.berkeley.edu/batch17/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-9da2bcf501",
+      "url": "https://skydeck.berkeley.edu/apply/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "application"
+    },
+    {
+      "id": "check-format-9ed7ad985e",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-fund-hits-milestone-as-most-active-seed-fund-with-more-than-100-investments-in-three-years/",
+      "title": "Berkeley SkyDeck — terms page",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-a4b12f8c14",
+      "url": "https://skydeck.berkeley.edu/batch17/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "USA – Enterprise/B2B Software ReframeAI is developing Virtual AI Agents to help sales representatives quickly conduct",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-bb6b20b30d",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-bf5bb7114c",
+      "url": "https://skydeck.berkeley.edu/batch15/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-c2604ebfe9",
+      "url": "https://skydeck.berkeley.edu/",
+      "title": "Berkeley SkyDeck — homepage",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c293f33d04",
+      "url": "https://skydeck.berkeley.edu/applyli/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": "at SkyDeck in Berkeley, and designated work space when in-person at SkyDeck in Milan, and present at Demo Day. Between 60",
+      "page": "application"
+    },
+    {
+      "id": "check-format-d01448e81c",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "enhances speech in real-time and integrates into any virtual phone/video conferencing software. With the global trend",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-d03e70e7ca",
+      "url": "https://skydeck.berkeley.edu/batch14/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-d65b93b3ca",
+      "url": "https://skydeck.berkeley.edu/batch11/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Heisley-Cook David Mun Thank you to our SkyDeck Batch 11 Virtual Demo Day Sponsors! Platinum sponsors Gold & Silver",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-e64d279a5b",
+      "url": "https://skydeck.berkeley.edu/batch18/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-ee58985396",
+      "url": "https://skydeck.berkeley.edu/applyli/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": "News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck",
+      "page": "application"
+    },
+    {
+      "id": "check-format-fc9a123546",
+      "url": "https://skydeck.berkeley.edu/batch16/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "with Integrated Card Payments, AI-Driven Bookkeeping & Virtual CFO. Small businesses will no longer have to struggle with",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-a8da6dd8e3",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "networks like a cloud. We are headquartered in Santa Clara, California, with a globally",
+      "page": "batches"
     },
     {
       "id": "check-name-23d371f307",
       "url": "https://skydeck.berkeley.edu/",
-      "title": "Berkeley SkyDeck — homepage checked by scrape.py",
+      "title": "Berkeley SkyDeck — homepage",
       "excerpt": "Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES",
       "page": "details"
     },
     {
+      "id": "check-portfolio-00289308cc",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-00f0c571c6",
+      "url": "https://skydeck.berkeley.edu/batch18/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-019170ca60",
+      "url": "https://skydeck.berkeley.edu/batch15/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-1c9e710085",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-21a9260852",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-fund-hits-milestone-as-most-active-seed-fund-with-more-than-100-investments-in-three-years/",
+      "title": "Berkeley SkyDeck — terms page",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-21e03e389a",
       "url": "https://skydeck.berkeley.edu/",
-      "title": "Berkeley SkyDeck — homepage checked by scrape.py",
+      "title": "Berkeley SkyDeck — homepage",
       "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-2508ec112b",
+      "url": "https://skydeck.berkeley.edu/batch17/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-25d1b7c581",
       "url": "https://skydeck.berkeley.edu/",
-      "title": "Berkeley SkyDeck — homepage checked by scrape.py",
+      "title": "Berkeley SkyDeck — homepage",
       "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-291e4492ea",
       "url": "https://skydeck.berkeley.edu/",
-      "title": "Berkeley SkyDeck — homepage checked by scrape.py",
+      "title": "Berkeley SkyDeck — homepage",
       "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-2cc3edbf06",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-fund-hits-milestone-as-most-active-seed-fund-with-more-than-100-investments-in-three-years/",
+      "title": "Berkeley SkyDeck — terms page",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-3017cac4ae",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-fund-hits-milestone-as-most-active-seed-fund-with-more-than-100-investments-in-three-years/",
+      "title": "Berkeley SkyDeck — terms page",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-3471441ee5",
+      "url": "https://skydeck.berkeley.edu/batch19-1/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
     },
     {
       "id": "check-portfolio-361ca93bfd",
       "url": "https://skydeck.berkeley.edu/",
-      "title": "Berkeley SkyDeck — homepage checked by scrape.py",
+      "title": "Berkeley SkyDeck — homepage",
       "excerpt": "See all the companies → https://skydeck.berkeley.edu/portfolio",
       "page": "details"
     },
     {
-      "id": "check-portfolio-4018d0ed19",
-      "url": "https://skydeck.berkeley.edu/our_team/",
-      "title": "Berkeley SkyDeck — details page checked by scrape.py",
+      "id": "check-portfolio-380e3dc0aa",
+      "url": "https://skydeck.berkeley.edu/fall-2019-applications-open/",
+      "title": "Berkeley SkyDeck — application page",
       "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
-      "page": "details"
+      "page": "application"
     },
     {
-      "id": "check-portfolio-5006a17dea",
-      "url": "https://skydeck.berkeley.edu/our_team/",
-      "title": "Berkeley SkyDeck — details page checked by scrape.py",
+      "id": "check-portfolio-3ec733a6a6",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-accelerator-program-armenian-startups-can-apply-for/",
+      "title": "Berkeley SkyDeck — application page",
       "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
-      "page": "details"
+      "page": "application"
     },
     {
-      "id": "check-portfolio-5f6ec5548c",
-      "url": "https://skydeck.berkeley.edu/our_team/",
-      "title": "Berkeley SkyDeck — details page checked by scrape.py",
+      "id": "check-portfolio-404ffd05cf",
+      "url": "https://skydeck.berkeley.edu/batch15/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-45754d13f2",
+      "url": "https://skydeck.berkeley.edu/batch11/",
+      "title": "Berkeley SkyDeck — batches page",
       "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
-      "page": "details"
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-4b76afa87e",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-accelerator-program-armenian-startups-can-apply-for/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-56602800f9",
+      "url": "https://skydeck.berkeley.edu/batch17/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-58b1a1e41c",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-accelerator-program-armenian-startups-can-apply-for/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5edb54014a",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-6d0ec187c7",
+      "url": "https://skydeck.berkeley.edu/batch16/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-6dca0e172f",
+      "url": "https://skydeck.berkeley.edu/batch16/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-77af78a64f",
+      "url": "https://skydeck.berkeley.edu/batch18/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-7870d16d29",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-78aef8e001",
+      "url": "https://skydeck.berkeley.edu/batch16/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-7b3e7eb1dd",
+      "url": "https://skydeck.berkeley.edu/applyli/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7ba1f1be66",
+      "url": "https://skydeck.berkeley.edu/fall-2019-applications-open/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "application"
     },
     {
       "id": "check-portfolio-8925a3a55b",
       "url": "https://skydeck.berkeley.edu/apply/",
-      "title": "Berkeley SkyDeck — application page checked by scrape.py",
+      "title": "Berkeley SkyDeck — application page",
       "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
       "page": "application"
     },
     {
+      "id": "check-portfolio-8b8e933696",
+      "url": "https://skydeck.berkeley.edu/fall-2019-applications-open/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-8e798e18a4",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-95fcc24385",
+      "url": "https://skydeck.berkeley.edu/applyli/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-96dee61dda",
+      "url": "https://skydeck.berkeley.edu/batch19-1/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-9eb5916370",
       "url": "https://skydeck.berkeley.edu/apply/",
-      "title": "Berkeley SkyDeck — application page checked by scrape.py",
+      "title": "Berkeley SkyDeck — application page",
       "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
       "page": "application"
     },
     {
+      "id": "check-portfolio-ab0cb9a508",
+      "url": "https://skydeck.berkeley.edu/batch19-1/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-ab38791985",
+      "url": "https://skydeck.berkeley.edu/batch14/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-b702006515",
+      "url": "https://skydeck.berkeley.edu/batch11/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-c58a848779",
+      "url": "https://skydeck.berkeley.edu/batch14/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-c616ff1db3",
+      "url": "https://skydeck.berkeley.edu/batch14/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-caa3623df0",
+      "url": "https://skydeck.berkeley.edu/batch18/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-cc3cbbd229",
+      "url": "https://skydeck.berkeley.edu/batch15/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-dd2babdb2e",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-e58db841d1",
+      "url": "https://skydeck.berkeley.edu/applyli/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-e73f1d9175",
+      "url": "https://skydeck.berkeley.edu/batch17/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-f159f43277",
       "url": "https://skydeck.berkeley.edu/apply/",
-      "title": "Berkeley SkyDeck — application page checked by scrape.py",
+      "title": "Berkeley SkyDeck — application page",
       "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f8308b7580",
+      "url": "https://skydeck.berkeley.edu/batch11/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-2256acdc24",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-accelerator-program-armenian-startups-can-apply-for/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-22f2f64787",
+      "url": "https://skydeck.berkeley.edu/applyli/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
       "page": "application"
     },
     {
       "id": "check-route-2b80af7b0a",
       "url": "https://skydeck.berkeley.edu/",
-      "title": "Berkeley SkyDeck — homepage checked by scrape.py",
+      "title": "Berkeley SkyDeck — homepage",
       "excerpt": "APPLY NOW → https://skydeck.berkeley.edu/apply/",
       "page": "details"
     },
     {
       "id": "check-route-34c3dd4994",
       "url": "https://skydeck.berkeley.edu/",
-      "title": "Berkeley SkyDeck — homepage checked by scrape.py",
+      "title": "Berkeley SkyDeck — homepage",
       "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
       "page": "details"
     },
     {
-      "id": "check-route-4bc423873c",
-      "url": "https://skydeck.berkeley.edu/our_team/",
-      "title": "Berkeley SkyDeck — details page checked by scrape.py",
+      "id": "check-route-399e78b2aa",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "title": "Berkeley SkyDeck — batches page",
       "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
-      "page": "details"
+      "page": "batches"
+    },
+    {
+      "id": "check-route-514e1d0ffd",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-fund-hits-milestone-as-most-active-seed-fund-with-more-than-100-investments-in-three-years/",
+      "title": "Berkeley SkyDeck — terms page",
+      "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-7abc31fb3e",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-923b95a14a",
+      "url": "https://skydeck.berkeley.edu/batch14/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-abaed95c8c",
+      "url": "https://skydeck.berkeley.edu/batch19-1/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-bbf3c7a5e7",
+      "url": "https://skydeck.berkeley.edu/batch11/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-c49eb8090c",
+      "url": "https://skydeck.berkeley.edu/batch18/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
+      "page": "batches"
     },
     {
       "id": "check-route-d046e8162b",
       "url": "https://skydeck.berkeley.edu/",
-      "title": "Berkeley SkyDeck — homepage checked by scrape.py",
+      "title": "Berkeley SkyDeck — homepage",
       "excerpt": "LEARN MORE → https://skydeck.berkeley.edu/apply/",
       "page": "details"
+    },
+    {
+      "id": "check-route-e1e05927ac",
+      "url": "https://skydeck.berkeley.edu/batch17/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-e783ace1bc",
+      "url": "https://skydeck.berkeley.edu/batch16/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-f1d28964df",
+      "url": "https://skydeck.berkeley.edu/fall-2019-applications-open/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f252d35d06",
+      "url": "https://skydeck.berkeley.edu/batch15/",
+      "title": "Berkeley SkyDeck — batches page",
+      "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-status-6ed76a1859",
+      "url": "https://skydeck.berkeley.edu/fall-2019-applications-open/",
+      "title": "Berkeley SkyDeck — application page",
+      "excerpt": "PROGRAMS Berkeley SkyDeck ADVISORS JOBS 01 April 2019 Fall 2019 applications open UC Berkeley SkyDeck Now Accepting Applications for 2019 Fall Cohort BACK TO NEWS NEXT STORY 0 Likes News from SkyDeck Newsletter – September 16, 2026",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-325cd95fd2",
+      "url": "https://skydeck.berkeley.edu/",
+      "page": "details",
+      "excerpt": "Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS Where visionaries take flight SkyDeck Batch 24 Applications open in January! LEARN MORE Our Journey to make SkyDeck the best accelerator for startups The SkyDeck Experience (2 mins.) “SkyDeck has provided us with the opportunity to connect with world class advisors.” – Chantal, CTO of LimeLoop APPLY NOW “Berkeley SkyDeck gave us the network and support we needed to succeed in the early stage of our company. They helped us hire top talent, identify go to market strategies, and raise our seed round.” – Davit Baghdasaryan, Co-Founder & CEO of Krisp APPLY NOW SkyDeck by the numbers Since 2012, Berkeley SkyDeck has been at the forefront of innovation. $2.7B Raised by SkyTeams $200K Investment per startup 25 Series A, B rounds raised 17 Exits through acquisitions 1000 Attendees at Demo Day What makes SkyDeck special? SkyDeck has developed a strong global reputation and"
+    },
+    {
+      "id": "check-page-e41b1964b9",
+      "url": "https://skydeck.berkeley.edu/apply/",
+      "page": "application",
+      "excerpt": "APPLY – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS Applications for Batch 24 open in January! CONNECT Why do startups come to SkyDeck? SkyDeck is industry-agnostic: we accept applications from companies in all industries. CONNECT About the program ELIGIBILITY REQUIREMENTS UC & GLOBAL COMMUNITY Roughly 20 startups are selected every 6 months to receive a $210,000 investment from the Berkeley SkyDeck Fund. Startups from all over the world are eligible and encouraged to apply. Historically, about 2/3 of the startups were founded outside the US. UC-affiliated companies and international startups continue to be a priority for SkyDeck. Learn more about the Global Founders Program . The SkyDeck Berkeley Acceleration Method is a 6-month acceleration process for promising startups in any vertical. Between 20 and 25 selected Cohort teams receive a $210K investment from Berkeley SkyDeck Fund. Cohort teams participate"
+    },
+    {
+      "id": "check-page-024dfe05cd",
+      "url": "https://skydeck.berkeley.edu/applyli/",
+      "page": "application",
+      "excerpt": "APPLY-Linkedin – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS Applications for Batch 21 are now open! APPLY HERE Why do startups come to SkyDeck? SkyDeck is industry-agnostic: we accept applications from companies in all industries. APPLY About the program ELIGIBILITY REQUIREMENTS UC & GLOBAL COMMUNITY To be eligible to apply for SkyDeck, there must be at least one team member that is UC-affiliated or qualifies as a “global” founder. UC affiliated is defined as someone who is a founder, investor, advisor, or board member affiliated with UC Berkeley, another University of California campus, or Berkeley Lab (LBNL). UC affiliated founders can be students, alumni, faculty, staff, postdoc researchers, or visiting scholars. Global founders are individuals born outside of the U.S., or have lived outside of the U.S. for most of their life. Learn more about the Global Founders Program . The SkyDeck Berkeley"
+    },
+    {
+      "id": "check-page-81af6ef7ad",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-accelerator-program-armenian-startups-can-apply-for/",
+      "page": "application",
+      "excerpt": "Berkeley SkyDeck Accelerator Program Armenian Startups can apply for – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS 09 October 2019 Berkeley SkyDeck Accelerator Program Armenian Startups can apply for BACK TO NEWS NEXT STORY 0 Likes News from SkyDeck Newsletter – September 16, 2026 Berkeley SkyDeck is excited to partner with Pianeta Accelerator, in collaboration with Factory Plus, to build a cross-border bridge between the European innovation ecosystem and Silicon Valley. Built for ambitious founders developing breakthrough technologies in Clean Tech, AI, Bio &... Newsletter – September 2, 2026 On September 30, Berkeley SkyDeck’s Batch 22 startups will take stage. 18 companies spanning physical AI, GPU hardware accelerators, biotech therapeutics, and enterprise agent infrastructure will pitch. Following the pitches, meet the founders at the Demo Day Expo and attend... Newsletter – August 20, 2026 When"
+    },
+    {
+      "id": "check-page-44c25f0377",
+      "url": "https://skydeck.berkeley.edu/fall-2019-applications-open/",
+      "page": "application",
+      "excerpt": "Fall 2019 applications open – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS 01 April 2019 Fall 2019 applications open UC Berkeley SkyDeck Now Accepting Applications for 2019 Fall Cohort BACK TO NEWS NEXT STORY 0 Likes News from SkyDeck Newsletter – September 16, 2026 Berkeley SkyDeck is excited to partner with Pianeta Accelerator, in collaboration with Factory Plus, to build a cross-border bridge between the European innovation ecosystem and Silicon Valley. Built for ambitious founders developing breakthrough technologies in Clean Tech, AI, Bio &... Newsletter – September 2, 2026 On September 30, Berkeley SkyDeck’s Batch 22 startups will take stage. 18 companies spanning physical AI, GPU hardware accelerators, biotech therapeutics, and enterprise agent infrastructure will pitch. Following the pitches, meet the founders at the Demo Day Expo and attend... Newsletter – August 20, 2026 When Berkeley SkyDeck"
+    },
+    {
+      "id": "check-page-6d23e696d0",
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-fund-hits-milestone-as-most-active-seed-fund-with-more-than-100-investments-in-three-years/",
+      "page": "terms",
+      "excerpt": "Berkeley SkyDeck Fund Hits Milestone as Most Active Seed Fund with More Than 100 Investments in Three Years – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS 29 January 2021 Berkeley SkyDeck Fund Hits Milestone as Most Active Seed Fund with More Than 100 Investments in Three Years BACK TO NEWS NEXT STORY 0 Likes News from SkyDeck Newsletter – September 16, 2026 Berkeley SkyDeck is excited to partner with Pianeta Accelerator, in collaboration with Factory Plus, to build a cross-border bridge between the European innovation ecosystem and Silicon Valley. Built for ambitious founders developing breakthrough technologies in Clean Tech, AI, Bio &... Newsletter – September 2, 2026 On September 30, Berkeley SkyDeck’s Batch 22 startups will take stage. 18 companies spanning physical AI, GPU hardware accelerators, biotech therapeutics, and enterprise agent infrastructure will pitch. Following the pitches, meet the"
+    },
+    {
+      "id": "check-page-e8f2d94eef",
+      "url": "https://skydeck.berkeley.edu/batch11/",
+      "page": "batches",
+      "excerpt": "Demo Day Batch 11 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS Berkeley SkyDeck Demo Day Batch 11 CONTACT WEBSITE Dcipher Analytics USA/Sweden – SaaS/Text analytics/NLP Dcipher Analytics provides a SaaS-based toolbox for accelerating, automating, and improving the process of turning unstructured text into insights. Through innovation in Natural Language Processing, we are pursuing the goal of saving competitive intelligence professionals billions of hours of insight work per year collectively, while increasing the quality of their output. click to read more Meet the Team Mats Lindgren Tomas Larsson Zafer Çavdar CONTACT WEBSITE EndoCrine USA – BioTech/Pharma/Therapeutics EndoCrine is working on providing transformational therapies for patients with diabetes by harnessing the power of miniaturized human cellular models. We are using advanced human stem cell technologies and cellular metabolic models to"
+    },
+    {
+      "id": "check-page-5d3f4f31f1",
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "page": "batches",
+      "excerpt": "Demo Day Batch 12 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS Berkeley SkyDeck Demo Day Batch 12 CONTACT WEBSITE Accountstory USA – Enterprise/B2B Software Accountstory is building the source of truth for how companies buy. Using our web app, B2B sales teams get a very good understanding of how their target accounts buy software and services. click to read more Meet the Team David K. Iyamah Chijoke (CJ) Nwuzi Fadi Kfoury CONTACT WEBSITE Artivive USA/Austria – Software Artivive is defining the art form of the 21st century by building a growing community around creative augmented reality. With 110k creators from 120 countries, we have the 3rd biggest creator community after Facebook and Snapchat. Take a look at some of the great artworks brought to life with Artivive: www.instagram.com/artiviveapp/ click to read more Meet the Team Sergiu Ardelean Codin Popescu CONTACT WEBSITE Berkm USA/Taiwan–"
+    },
+    {
+      "id": "check-page-9a5e571303",
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "page": "batches",
+      "excerpt": "Demo Day Batch 13 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS BATCH 13 DEMO DAY CONTACT WEBSITE Akin Mental Health USA – HealthTech/Digital Health Akin Mental Health supports families caring for a loved one with a severe mental illness (for example bipolar disorder or schizophrenia). Decades of research show that when family caregivers are given knowledge and support this creates an outsized impact on patient recovery. Akin provides families with personalized lessons, community connections and access to expereinced guides that help families navigate the challenges of mental illness and find healing together. click to read more Meet the Team Stephanie Greer Matthew Montañez CONTACT WEBSITE Cura Therapeutics USA – BioTech Cura therapeutics is developing innovative immunotherapies to cure a wide range of cancers, specifically solid malignancies. Our technologies are based on multi-functional immune proteins"
+    },
+    {
+      "id": "check-page-9ad15feb5d",
+      "url": "https://skydeck.berkeley.edu/batch14/",
+      "page": "batches",
+      "excerpt": "Demo Day Batch 14 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS This content is password protected. To view it please enter your password below: Password: Berkeley SkyDeck University of California, Berkeley 2150 Shattuck Avenue, Penthouse Berkeley, CA 94704 © 2026 University of California, Berkeley Berkeley SkyDeck is a program of the University of California, Berkeley Contact Us About Companies Begin.Berkeley GIVE TO SKYDECK Press Release Podcast We are using cookies to give you the best experience on our website. You can find out more about which cookies we are using or switch them off in settings . Accept Change cookie settings Close GDPR Cookie Settings Privacy Overview Strictly Necessary Cookies 3rd Party Cookies Privacy Overview This website uses cookies so that we can provide you with the best user experience possible. Cookie information is stored in your browser and performs functions such as"
+    },
+    {
+      "id": "check-page-ad942cf042",
+      "url": "https://skydeck.berkeley.edu/batch15/",
+      "page": "batches",
+      "excerpt": "Demo Day Batch 15 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS This content is password protected. To view it please enter your password below: Password: Berkeley SkyDeck University of California, Berkeley 2150 Shattuck Avenue, Penthouse Berkeley, CA 94704 © 2026 University of California, Berkeley Berkeley SkyDeck is a program of the University of California, Berkeley Contact Us About Companies Begin.Berkeley GIVE TO SKYDECK Press Release Podcast We are using cookies to give you the best experience on our website. You can find out more about which cookies we are using or switch them off in settings . Accept Change cookie settings Close GDPR Cookie Settings Privacy Overview Strictly Necessary Cookies 3rd Party Cookies Privacy Overview This website uses cookies so that we can provide you with the best user experience possible. Cookie information is stored in your browser and performs functions such as"
+    },
+    {
+      "id": "check-page-c46492fbc6",
+      "url": "https://skydeck.berkeley.edu/batch16/",
+      "page": "batches",
+      "excerpt": "Demo Day Batch 16 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS BATCH 16 DEMO DAY CONTACT WEBSITE AI Embodied USA/UK- B2B Software AI Embodied is a B2B SaaS platform designed to empower businesses to rapidly test and deploy AI-driven solutions for text-rich data. With our intuitive no-code interface, you can harness the power and flexibility of an ML expert. click to read more Meet the Team Hamzah Shahkhan Fizza Tariq Shahkhan CONTACT WEBSITE Augmental USA – BioTech/MedTech Augmental is building smart mouthwear for hands-free device control and conversational AI. We are defining a new wearable category to enhance on-the-go human-computer interaction. click to read more Meet the Team Corten Singer Tomás Vega CONTACT WEBSITE CarbonGraph USA/Canada – Climate / B2B Software CarbonGraph is a digital platform that companies use to measure and communicate the carbon footprint of their products, allowing them to"
+    },
+    {
+      "id": "check-page-37e4bb308f",
+      "url": "https://skydeck.berkeley.edu/batch17/",
+      "page": "batches",
+      "excerpt": "Batch 17 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS BATCH 17 DEMO DAY CONTACT WEBSITE Algorized USA/Switzerland – DeepTech Sensing and perception AI software for presence sensing. Leveraging advanced algorithms with Ultra-Wideband chips for indoor navigation, human presence detection, age differentiation, and vital sign monitoring for consumer electronics, mobile and automotive. click to read more Meet the Team Natalya Lopareva Andrey Katz Christian Gomes CONTACT WEBSITE Allos AI USA/UK – Digital Health Allos is a complex generics pharma startup enabled by Causal AI. Leveraging EHR and prescription data, we are using Causal AI to identify unmet clinical needs, and forecast clinical trial patient response to derisk our pipeline of complex generics. With our differentiated approach we are making complex generics more accessible. click to read more Meet the Team Aditya Varna Iyer Isaac To Ivano Lodato Balu"
+    },
+    {
+      "id": "check-page-22ad6e3040",
+      "url": "https://skydeck.berkeley.edu/batch18/",
+      "page": "batches",
+      "excerpt": "Demo Day Batch 18 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS BATCH 18 DEMO DAY CONTACT WEBSITE ALKEMIO USA/Argentina- Climate Tech Alkemio’s modular refining innovation empowers miners to produce domestic rare earth metals on-site through a cost-effective and easily deployable process, driven by proprietary selective molecular technology. click to read more Meet the Team Francisco Morrone Lucia Curti Ailin Svagzdys Federico Pereyra Bonnet CONTACT WEBSITE Blocq USA/Japan – Crypto/Blockchain BlocQ is the world’s first quantum cybersecurity company, leveraging advanced quantum computing technologies to provide a wide range of quantum-resistant software, ensure a seamless transition to post-quantum cryptography, and safeguard digital assets against emerging quantum-era risks. click to read more Meet the Team Sho Sugiura Takashi Nishina CONTACT WEBSITE Congrify USA/Germany – Enterprise / B2B Software Payments"
+    },
+    {
+      "id": "check-page-65abdaddeb",
+      "url": "https://skydeck.berkeley.edu/batch19-1/",
+      "page": "batches",
+      "excerpt": "Demo Day Batch 19 – Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS NEWSLETTER INVESTORS COMPANIES Portfolio PARTNERS ABOUT Team & Ambassadors Faculty Advisors Media SkyDeck News Media Kit Students ACE Program Intern Scholarship Virtual Intern Fair Campus Partnerships PROGRAMS Berkeley SkyDeck ADVISORS JOBS This content is password protected. To view it please enter your password below: Password: Berkeley SkyDeck University of California, Berkeley 2150 Shattuck Avenue, Penthouse Berkeley, CA 94704 © 2026 University of California, Berkeley Berkeley SkyDeck is a program of the University of California, Berkeley Contact Us About Companies Begin.Berkeley GIVE TO SKYDECK Press Release Podcast We are using cookies to give you the best experience on our website. You can find out more about which cookies we are using or switch them off in settings . Accept Change cookie settings Close GDPR Cookie Settings Privacy Overview Strictly Necessary Cookies 3rd Party Cookies Privacy Overview This website uses cookies so that we can provide you with the best user experience possible. Cookie information is stored in your browser and performs functions such as"
     }
   ],
   "findings": {
@@ -135,14 +806,75 @@
         "evidenceId": "check-route-34c3dd4994"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-6ed76a1859"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "January",
+        "evidenceId": "check-announced-6334d24df8"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-33a87c2a75"
+      },
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-66a8e79b5b"
+      },
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-373ef6e28e"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-c2604ebfe9"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-167032967e"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-06682080bf"
+      }
+    ],
+    "location": [
+      {
+        "value": "Santa Clara",
+        "evidenceId": "check-location-a8da6dd8e3"
+      }
+    ],
     "selectivity": [],
     "dealText": [
       {
-        "value": "Fund SkyDeck’s Dedicated Venture Fund The Berkeley SkyDeck Fund is the investment partner for UC Berkeley’s SkyDeck Accelerator Program. The Fund invests $200K into each startup that goes through SkyDeck, and can participate in later stage investment rounds with Berkeley founders. One of the most active seed",
-        "evidenceId": "check-deal-1e1196e2c8"
+        "value": "for UC Berkeley’s SkyDeck Accelerator Program. The Fund invests $200K into each startup that goes through SkyDeck, and can participate in",
+        "evidenceId": "check-deal-09726e7916"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "200000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-09726e7916"
       }
     ],
     "portfolioPages": [

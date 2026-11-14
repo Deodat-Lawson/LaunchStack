@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.bethnalgreenventures.com/",
   "applyUrl": "https://www.bethnalgreenventures.com/apply",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: We have three newsletters at BGV. BGV News, The Practical Optimist and the Tech for Good Compass. Let us know below, how you want to hear from us. First name Last name Email What would you like to receive? BGV News Practical Optimis Tech for Good Compass Thank you for subscribing! Oops! Something went wrong. Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact menu close Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact Europe’s leading early-stage tech for good VC We invest in ambitious founders using technology to tackle big social and environmental problems that aim to radically improve millions of lives. Tech for good is about practical optimism. It’s about being committed to a problem and ambitious enough to find a solution. It’s about leveraging the functions of business and technology not just for profit, but for people and the planet. Tech for good is about practical optimism. It’s about being committed to a problem and ambitious enough to find a solution. It’s about leveraging the functions of business and technology not just for profit, but for people and the planet. Go No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Europe’s leading early-stage tech for good VC. We invest in ambitious and diverse founders aiming to positively impact the lives of millions.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "We’re not just jumping on the impact bandwagon, we helped build it. Since 2012 we’ve pioneered tech for good. That means our experience and expertise is unrivalled when it comes to building a tech startup with impact at its core.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "bethnal-green-ventures-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.bethnalgreenventures.com/apply",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

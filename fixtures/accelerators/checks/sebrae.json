@@ -1,28 +1,153 @@
 {
   "programId": "sebrae",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://sebrae.com.br/"
+    "https://sebrae.com.br/",
+    "https://sebrae.com.br/empreendedores/conteudos/gerenciar/estoque-ideal-para-a-black-friday-quanto-comprar-e-quando-repor",
+    "https://sebrae.com.br/ba/subsites/programa-qualificacao-peiex",
+    "https://sebrae.com.br/ba/subsites/programas/conexao-ssa-criativa",
+    "https://sebrae.com.br/ba/subsites/programas/conexao-ssa-criativa-micsur",
+    "https://sebrae.com.br/ba/subsites/programas/conexao-ssa-criativa-missoes-nacionais",
+    "https://sebrae.com.br/ce/subsites/programas/acelera-vila-velha",
+    "https://sebrae.com.br/ce/subsites/programas/agenda-lider-ceara",
+    "https://sebrae.com.br/ce/subsites/programas/boletim-de-inovacao",
+    "https://sebrae.com.br/df/subsites/programas/agentes-de-mercado",
+    "https://sebrae.com.br/df/subsites/programas/made-in-quadrado",
+    "https://sebrae.com.br/empreendedores/conteudos/gerenciar/kit-programa-fidelidade-indicacao",
+    "https://sebrae.com.br/empreendedores/conteudos/gerenciar/programa-fidelidade-cliente-bairro",
+    "https://sebrae.com.br/mg/subsites/programas/rede-aqui-tem-sebrae",
+    "https://sebrae.com.br/ms/subsites/programas/programa-peiex-ms"
   ],
   "evidence": [
     {
       "id": "check-name-a10460fecc",
       "url": "https://sebrae.com.br/",
-      "title": "Sebrae — homepage checked by scrape.py",
+      "title": "Sebrae — homepage",
       "excerpt": "Sebrae | Abra, Formalize e Faça seu Negócio Crescer Sebrae |",
       "page": "details"
+    },
+    {
+      "id": "check-route-1418f1a0a6",
+      "url": "https://sebrae.com.br/ce/subsites/programas/agenda-lider-ceara",
+      "title": "Sebrae — program page",
+      "excerpt": "Empreendedores → https://sebrae.com.br/",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-2b4b00c539",
+      "url": "https://sebrae.com.br/",
+      "page": "details",
+      "excerpt": "Sebrae | Abra, Formalize e Faça seu Negócio Crescer Sebrae | Abra, Formalize e Faça seu Negócio Crescer O Sebrae é o parceiro do empreendedorismo e dos pequenos negócios. Conte com nossas orientações e capacitações para começar, crescer ou transformar sua empresa."
+    },
+    {
+      "id": "check-page-bffba41164",
+      "url": "https://sebrae.com.br/empreendedores/conteudos/gerenciar/estoque-ideal-para-a-black-friday-quanto-comprar-e-quando-repor",
+      "page": "terms",
+      "excerpt": "Estoque para Black Friday: quanto comprar e quando repor Estoque para Black Friday: quanto comprar e quando repor Planeje o estoque da Black Friday com previsão de vendas, reserva de segurança e ponto de reposição. Veja exemplos e dicas para produtos e serviços."
+    },
+    {
+      "id": "check-page-cddaba49bb",
+      "url": "https://sebrae.com.br/ba/subsites/programa-qualificacao-peiex",
+      "page": "details",
+      "excerpt": "Programa de Qualificação em Exportação - PEIEX Programa de Qualificação em Exportação - PEIEX O Sebrae/BA publica Edital de Chamada Pública para Habilitação de Pessoas Jurídicas para atuação no Programa de Qualificação em Exportação (PEIEX)"
+    },
+    {
+      "id": "check-page-f28013893f",
+      "url": "https://sebrae.com.br/ba/subsites/programas/conexao-ssa-criativa",
+      "page": "details",
+      "excerpt": "Conexão SSA Criativa leva empresas à WOMEX e San Sebastian Conexão SSA Criativa leva empresas à WOMEX e San Sebastian SECULT Salvador e Sebrae Bahia selecionam empresas para missões internacionais de música e audiovisual com formação especializada e custeio integral."
+    },
+    {
+      "id": "check-page-310014d2c1",
+      "url": "https://sebrae.com.br/ba/subsites/programas/conexao-ssa-criativa-micsur",
+      "page": "details",
+      "excerpt": "Conexão SSA Criativa leva empresas a MICSUR Conexão SSA Criativa leva empresas a MICSUR SECULT Salvador e Sebrae Bahia selecionam empresas para missão internacional de música e audiovisual com formação especializada e custeio integral."
+    },
+    {
+      "id": "check-page-2da76aa7cb",
+      "url": "https://sebrae.com.br/ba/subsites/programas/conexao-ssa-criativa-missoes-nacionais",
+      "page": "details",
+      "excerpt": "Conexão SSA Criativa leva empresas a Missões Nacionais Conexão SSA Criativa leva empresas a Missões Nacionais SECULT Salvador e Sebrae Bahia selecionam empresas para missões nacionais de música e audiovisual com formação especializada e custeio integral."
+    },
+    {
+      "id": "check-page-ce668dda54",
+      "url": "https://sebrae.com.br/ce/subsites/programas/acelera-vila-velha",
+      "page": "details",
+      "excerpt": "Acelera Vila Velha Acelera Vila Velha O Acelera Vila Velha é um programa de aceleração voltado ao fortalecimento de pequenos negócios, unindo capacitação, mentoria e acompanhamento contínuo.&nbsp; Entenda mais sobre o Programa:"
+    },
+    {
+      "id": "check-page-954d9506bf",
+      "url": "https://sebrae.com.br/ce/subsites/programas/agenda-lider-ceara",
+      "page": "details",
+      "excerpt": "LIDER - Sebrae Ceará Onde você está? Ative a localização e descubra destaques do Sebrae no seu estado. Ativar localização Empreendedores Estudantes e Professores Agentes Públicos Alto contraste Mostrar novidades Localização Entrar Início Guia do MEI Tudo para o mei O que é MEI Quero ser MEI Criadores de conteúdo Venda online e e-commerce Agronegócio e Rural Jornada MEI Empreenda Regularize Profissionalize TransforME Descubra o seu momento Mais populares Emitir Nota Fiscal Emitir boleto DAS MEI Declaração Anual MEI DASN Regularizar DAS atrasados Marketing Digital para MEI Explorar Guia do MEI Semana do MEI 2026 Confira como foi Decola MEI Participar do próximo App Sebrae para iOS e Android Baixar grátis Pro seu negócio Comece Encontre ideias de negócio Como abrir uma empresa Habilidades empreendedoras Mostrar tudo Gerencie Emitir Nota Fiscal - Produto Emitir Nota Fiscal - Serviço Crie seu Fluxo de Caixa Mostrar tudo Expanda Como conseguir crédito no banco Como vender mais Tenha mais engajamento nas redes sociais Venda online Mostrar tudo Crie seu plano de negócios Criar meu plano Sebrae Startups Explorar soluções Sebrae na sua empresa Conhecer Conteúdos Cursos e Eventos Cursos online - EAD Assista no seu computador, tablet ou celular Cursos e eventos locais Confira a programação no seu estado Soluções ALI - Agentes de inovação Capital empreendedor ESG - Sustentabilidade FAMPE -"
+    },
+    {
+      "id": "check-page-9d7f4c1d68",
+      "url": "https://sebrae.com.br/ce/subsites/programas/boletim-de-inovacao",
+      "page": "details",
+      "excerpt": "Boletim de Editais e Ações de Fomento aos pequenos Negócios Boletim de Editais e Ações de Fomento aos pequenos Negócios Informativos, editais, projetos e oportunidades para empreendedores e pequenos negócios inovadores no Ceará."
+    },
+    {
+      "id": "check-page-01b7949c80",
+      "url": "https://sebrae.com.br/df/subsites/programas/agentes-de-mercado",
+      "page": "details",
+      "excerpt": "Agentes de Mercado Agentes de Mercado Prepare sua empresa para ampliar vendas, conquistar novos clientes e encontrar oportunidades de mercado com acompanhamento especializado do Sebrae. Com os Agentes de Mercado, sua empresa participa de uma jornada estruturada para fortalecer a gestão comercial e se aproximar de potenciais compradores."
+    },
+    {
+      "id": "check-page-a7062fb8fd",
+      "url": "https://sebrae.com.br/df/subsites/programas/made-in-quadrado",
+      "page": "details",
+      "excerpt": "Made in Quadrado 2026 - chamamento público Made in Quadrado 2026 - chamamento público O Made in Quadrado valoriza produtos, experiências, sabores e saberes que representam a identidade do Distrito Federal, fortalecendo pequenos negócios e ampliando suas oportunidades de mercado. A participação é gratuita, com inscrições permanentes a partir de 5 de novembro de 2026. A iniciativa contempla turismo, artesanato e manualidades, alimentos e bebidas e gastronomia."
+    },
+    {
+      "id": "check-page-daa276b289",
+      "url": "https://sebrae.com.br/empreendedores/conteudos/gerenciar/kit-programa-fidelidade-indicacao",
+      "page": "details",
+      "excerpt": "Kit programa de fidelidade para o cliente voltar e indicar Kit programa de fidelidade para o cliente voltar e indicar Faça o cliente do bairro voltar e indicar com o seu programa de fidelidade. Use cartão fidelidade, cupom de indicação, regulamento e ficha de controle prontos para preencher e imprimir. Baixe o kit grátis!"
+    },
+    {
+      "id": "check-page-cee80c8079",
+      "url": "https://sebrae.com.br/empreendedores/conteudos/gerenciar/programa-fidelidade-cliente-bairro",
+      "page": "details",
+      "excerpt": "Programa de fidelidade para o cliente voltar e indicar Programa de fidelidade para o cliente voltar e indicar Aprenda a criar um programa de fidelidade em sete passos e faça o cliente do bairro voltar e indicar. Confira!"
+    },
+    {
+      "id": "check-page-ef399d85c3",
+      "url": "https://sebrae.com.br/mg/subsites/programas/rede-aqui-tem-sebrae",
+      "page": "details",
+      "excerpt": "Rede Aqui Tem Sebrae Onde você está? Ative a localização e descubra destaques do Sebrae no seu estado. Ativar localização Empreendedores Estudantes e Professores Agentes Públicos Alto contraste Mostrar novidades Localização Entrar Início Guia do MEI Tudo para o mei O que é MEI Quero ser MEI Criadores de conteúdo Venda online e e-commerce Agronegócio e Rural Jornada MEI Empreenda Regularize Profissionalize TransforME Descubra o seu momento Mais populares Emitir Nota Fiscal Emitir boleto DAS MEI Declaração Anual MEI DASN Regularizar DAS atrasados Marketing Digital para MEI Explorar Guia do MEI Semana do MEI 2026 Confira como foi Decola MEI Participar do próximo App Sebrae para iOS e Android Baixar grátis Pro seu negócio Comece Encontre ideias de negócio Como abrir uma empresa Habilidades empreendedoras Mostrar tudo Gerencie Emitir Nota Fiscal - Produto Emitir Nota Fiscal - Serviço Crie seu Fluxo de Caixa Mostrar tudo Expanda Como conseguir crédito no banco Como vender mais Tenha mais engajamento nas redes sociais Venda online Mostrar tudo Crie seu plano de negócios Criar meu plano Sebrae Startups Explorar soluções Sebrae na sua empresa Conhecer Conteúdos Cursos e Eventos Cursos online - EAD Assista no seu computador, tablet ou celular Cursos e eventos locais Confira a programação no seu estado Soluções ALI - Agentes de inovação Capital empreendedor ESG - Sustentabilidade FAMPE -"
+    },
+    {
+      "id": "check-page-a201745363",
+      "url": "https://sebrae.com.br/ms/subsites/programas/programa-peiex-ms",
+      "page": "details",
+      "excerpt": "Alinhamento Metodológico: Monitoramento e Aplicação Núcleo PEIEX-MS Alinhamento Metodológico: Monitoramento e Aplicação Núcleo PEIEX-MS O Sebrae/MS publica Chamada Pública para Habilitação de Pessoas Jurídicas para atuação no Programa de Qualificação em Exportação- PEIEX."
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
     "routes": [],
-    "applicationUrl": [],
+    "applicationUrl": [
+      {
+        "value": "https://sebrae.com.br/",
+        "evidenceId": "check-route-1418f1a0a6"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

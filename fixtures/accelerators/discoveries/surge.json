@@ -1,15 +1,7 @@
 {
   "programId": "surge",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://surge.peakxv.com/companies",
-      "page": "portfolio",
-      "anchor": "Startups",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://surge.peakxv.com/apply",
       "page": "application",
@@ -19,9 +11,97 @@
       "origin": "official"
     },
     {
-      "url": "https://surge.peakxv.com/reach-out",
-      "page": "application",
-      "anchor": "Apply",
+      "url": "https://surge.peakxv.com/cohorts/surge-01",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/cohorts/surge-02",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/cohorts/surge-03",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/cohorts/surge-04",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/cohorts/surge-05",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/cohorts/surge-06",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/cohorts/surge-07",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/cohorts/surge-08",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/cohorts/surge-09",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/cohorts/surge-10",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/cohorts/surge-11",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies",
+      "page": "portfolio",
+      "anchor": "Startups",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -35,17 +115,9 @@
       "origin": "official"
     },
     {
-      "url": "https://surge.peakxv.com/companies/atlan",
+      "url": "https://surge.peakxv.com/companies/ambak",
       "page": "portfolio",
-      "anchor": "Atlan is a modern data collaboration workspace, enabling teams to create a single source of truth for all their data assets, and collaborate across the modern data stack. Read more",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://surge.peakxv.com/companies/multiplier",
-      "page": "portfolio",
-      "anchor": "Global HR platform for hiring, managing, and paying employees worldwide. Read more",
+      "anchor": "Ambak is a home loan marketplace that helps buyers compare options across 50+ lenders and secure the right mortgage with less friction. Read more",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -59,9 +131,65 @@
       "origin": "official"
     },
     {
+      "url": "https://surge.peakxv.com/companies/atlan",
+      "page": "portfolio",
+      "anchor": "Atlan is a modern data collaboration workspace, enabling teams to create a single source of truth for all their data assets, and collaborate across the modern data stack. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/ethereal-machines",
+      "page": "portfolio",
+      "anchor": "Ethereal Machines is an advanced manufacturing company that produces precision engineering components through its proprietary multi-axis computer numerical control (CNC) machines. ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/horizon-quantum-computing",
+      "page": "portfolio",
+      "anchor": "Horizon Quantum Computing is a Singapore-based company building software-development tools to enable the next revolution in computing. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/justai",
+      "page": "portfolio",
+      "anchor": "JustAI is an agentic marketing platform that uses AI to test and optimize lifecycle content, turning channels like email into an autonomous revenue engine. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/khatabook",
+      "page": "portfolio",
+      "anchor": "Khatabook is a digital ledger service for SMBs that offers them an easy, online bookkeeping solution to manage their business. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/multiplier",
+      "page": "portfolio",
+      "anchor": "Global HR platform for hiring, managing, and paying employees worldwide. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://surge.peakxv.com/companies/plum",
       "page": "portfolio",
       "anchor": "Plum is transforming the employee healthcare experience by providing comprehensive group health insurance with seamless digital claims experience. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/primetrace",
+      "page": "portfolio",
+      "anchor": "Primetrace is a consumer AI company that builds a portfolio of AI-native apps for everyday use, reaching over 300 million users across India. Read more",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -83,22 +211,6 @@
       "origin": "official"
     },
     {
-      "url": "https://surge.peakxv.com/companies/khatabook",
-      "page": "portfolio",
-      "anchor": "Khatabook is a digital ledger service for SMBs that offers them an easy, online bookkeeping solution to manage their business. Read more",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://surge.peakxv.com/companies/ambak",
-      "page": "portfolio",
-      "anchor": "Ambak is a home loan marketplace that helps buyers compare options across 50+ lenders and secure the right mortgage with less friction. Read more",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://surge.peakxv.com/companies/the-health-factory",
       "page": "portfolio",
       "anchor": "The Health Factory is a direct-to-consumer food brand that makes high-protein, low-carb bread and bakery products for healthier everyday eating. Read more",
@@ -115,34 +227,18 @@
       "origin": "official"
     },
     {
-      "url": "https://surge.peakxv.com/companies/horizon-quantum-computing",
-      "page": "portfolio",
-      "anchor": "Horizon Quantum Computing is a Singapore-based company building software-development tools to enable the next revolution in computing. Read more",
-      "fetched": false,
+      "url": "https://surge.peakxv.com/faqs",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://surge.peakxv.com/companies/ethereal-machines",
-      "page": "portfolio",
-      "anchor": "Ethereal Machines is an advanced manufacturing company that produces precision engineering components through its proprietary multi-axis computer numerical control (CNC) machines. ",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://surge.peakxv.com/companies/primetrace",
-      "page": "portfolio",
-      "anchor": "Primetrace is a consumer AI company that builds a portfolio of AI-native apps for everyday use, reaching over 300 million users across India. Read more",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://surge.peakxv.com/companies/justai",
-      "page": "portfolio",
-      "anchor": "JustAI is an agentic marketing platform that uses AI to test and optimize lifecycle content, turning channels like email into an autonomous revenue engine. Read more",
-      "fetched": false,
+      "url": "https://surge.peakxv.com/reach-out",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

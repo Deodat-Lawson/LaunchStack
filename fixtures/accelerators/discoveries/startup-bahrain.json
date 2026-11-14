@@ -1,12 +1,132 @@
 {
   "programId": "startup-bahrain",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://startupbahrain.com/about",
       "page": "details",
       "anchor": "About",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbahrain.com/blog/alrawi-wins-best-application-for-smart-devices-award",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbahrain.com/blog/applications-are-open-for-bahrain-fintech-bays-ambitious-fintech-national-fintech-program",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbahrain.com/blog/applications-are-open-now-for-georgetown-fintech-program-2-0",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbahrain.com/blog/applications-open-for-riyada-business-accelerator-program-for-tech-startups",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbahrain.com/blog/apply-for-tamkeens-start-your-business-support-everything-you-need-to-know",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbahrain.com/blog/applying-for-cr-in-bahrain-these-are-the-documents-youll-need",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbahrain.com/blog/badir-to-start-accepting-applications-for-forthcoming-training-bootcamp-next-month",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbahrain.com/blog/bahrain-fintech-bay-invites-application-for-flagship-accelerator-program",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbahrain.com/blog/bahraini-startup-kashtah-has-been-recently-acquired-heres-an-exclusive-from-the-founder-of-the-application",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbahrain.com/blog/bahraini-tech-startups-take-note-zain-great-idea-2021-is-accepting-applications-now",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbahrain.com/blog/benefit-awarded-with-best-application-for-the-smart-devices-award",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbahrain.com/blog/benefit-unveils-fully-revamped-version-of-benefitpay-application",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbahrain.com/blog/bibf-partnered-with-information-egovernment-authority-to-organize-a-specialized-seminar-on-ai-chat-gpt-and-their-applications",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbahrain.com/blog/brincs-global-iot-accelerator-has-now-opened-applications-for-its-connected-hardware-program-in-bahrain",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbahrain.com/ecosystem",
+      "page": "terms",
+      "anchor": "Invest Find the best tech ideas to diversify and invest in. The riskiest ideas offer the highest rewards, jump in and help scale national innovation. 223+ Startups $50m Investments",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     }

@@ -1,11 +1,123 @@
 {
   "programId": "capital-factory",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://apply.workable.com/capital-factory/",
+      "page": "application",
+      "anchor": "Careers",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.workable.com/capital-factory/j/ABA27178DF/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.workable.com/capital-factory/j/E29CBF1F2D/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.workable.com/capital-factory/j/E8319084FF/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/about",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://capitalfactory.com/portfolio",
       "page": "portfolio",
       "anchor": "Portfolio",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/portfolio/1-true-health-care-management-inc",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/portfolio/2a-biosciences",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/portfolio/aalo-atomics",
+      "page": "portfolio",
+      "anchor": "Aalo Atomics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/portfolio/aceable",
+      "page": "portfolio",
+      "anchor": "Aceable",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/portfolio/allen-control-systems",
+      "page": "portfolio",
+      "anchor": "Allen Control Systems",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -14,6 +126,14 @@
       "url": "https://capitalfactory.com/portfolio/apptronik",
       "page": "portfolio",
       "anchor": "Apptronik",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/portfolio/casimir-space",
+      "page": "portfolio",
+      "anchor": "Casimir Space",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -35,25 +155,9 @@
       "origin": "official"
     },
     {
-      "url": "https://capitalfactory.com/portfolio/multicoin-capital",
+      "url": "https://capitalfactory.com/portfolio/element3-resources",
       "page": "portfolio",
-      "anchor": "Multicoin",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalfactory.com/portfolio/wander",
-      "page": "portfolio",
-      "anchor": "Wander",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalfactory.com/portfolio/allen-control-systems",
-      "page": "portfolio",
-      "anchor": "Allen Control Systems",
+      "anchor": "Element3 Resources",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -75,145 +179,9 @@
       "origin": "official"
     },
     {
-      "url": "https://capitalfactory.com/portfolio/paradromics-inc",
-      "page": "portfolio",
-      "anchor": "Paradromics",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalfactory.com/portfolio/saronic-technologies",
-      "page": "portfolio",
-      "anchor": "Saronic",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalfactory.com/portfolio/x-bow-systems",
-      "page": "portfolio",
-      "anchor": "X-Bow",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalfactory.com/portfolio/casimir-space",
-      "page": "portfolio",
-      "anchor": "Casimir Space",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalfactory.com/portfolio/aceable",
-      "page": "portfolio",
-      "anchor": "Aceable",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalfactory.com/portfolio/living-security",
-      "page": "portfolio",
-      "anchor": "Living Security",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalfactory.com/portfolio/pipedream",
-      "page": "portfolio",
-      "anchor": "Pipedream",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalfactory.com/portfolio/traxyl",
-      "page": "portfolio",
-      "anchor": "TRAXyL, Inc.",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://capitalfactory.com/portfolio/intuitive-machines",
       "page": "portfolio",
       "anchor": "Intuitive Machines",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalfactory.com/portfolio/voyager-space",
-      "page": "portfolio",
-      "anchor": "Voyager Space",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalfactory.com/portfolio/storable",
-      "page": "portfolio",
-      "anchor": "Storable (formerly SpareFoot)",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalfactory.com/portfolio/venus-aerospace",
-      "page": "portfolio",
-      "anchor": "Venus Aerospace",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalfactory.com/portfolio/mantis-space",
-      "page": "portfolio",
-      "anchor": "Mantis Space",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalfactory.com/portfolio/aalo-atomics",
-      "page": "portfolio",
-      "anchor": "Aalo Atomics",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalfactory.com/portfolio/element3-resources",
-      "page": "portfolio",
-      "anchor": "Element3 Resources",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalfactory.com/portfolio/phantom-neuro",
-      "page": "portfolio",
-      "anchor": "Phantom Neuro",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalfactory.com/portfolio/vironexis",
-      "page": "portfolio",
-      "anchor": "Vironexis",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://capitalfactory.com/portfolio/red-6",
-      "page": "portfolio",
-      "anchor": "Red 6",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -227,6 +195,118 @@
       "origin": "official"
     },
     {
+      "url": "https://capitalfactory.com/portfolio/living-security",
+      "page": "portfolio",
+      "anchor": "Living Security",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/portfolio/mantis-space",
+      "page": "portfolio",
+      "anchor": "Mantis Space",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/portfolio/multicoin-capital",
+      "page": "portfolio",
+      "anchor": "Multicoin",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/portfolio/paradromics-inc",
+      "page": "portfolio",
+      "anchor": "Paradromics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/portfolio/phantom-neuro",
+      "page": "portfolio",
+      "anchor": "Phantom Neuro",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/portfolio/pipedream",
+      "page": "portfolio",
+      "anchor": "Pipedream",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/portfolio/red-6",
+      "page": "portfolio",
+      "anchor": "Red 6",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/portfolio/saronic-technologies",
+      "page": "portfolio",
+      "anchor": "Saronic",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/portfolio/storable",
+      "page": "portfolio",
+      "anchor": "Storable (formerly SpareFoot)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/portfolio/traxyl",
+      "page": "portfolio",
+      "anchor": "TRAXyL, Inc.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/portfolio/venus-aerospace",
+      "page": "portfolio",
+      "anchor": "Venus Aerospace",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/portfolio/vironexis",
+      "page": "portfolio",
+      "anchor": "Vironexis",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/portfolio/voyager-space",
+      "page": "portfolio",
+      "anchor": "Voyager Space",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/portfolio/wander",
+      "page": "portfolio",
+      "anchor": "Wander",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://capitalfactory.com/portfolio/wonder-dynamics-aether",
       "page": "portfolio",
       "anchor": "Wonder Dynamics (Aether) Acquired · Autodesk",
@@ -235,17 +315,25 @@
       "origin": "official"
     },
     {
-      "url": "https://apply.workable.com/capital-factory/",
-      "page": "application",
-      "anchor": "Careers",
+      "url": "https://capitalfactory.com/portfolio/x-bow-systems",
+      "page": "portfolio",
+      "anchor": "X-Bow",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalfactory.com/terms",
+      "page": "terms",
+      "anchor": "Terms",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://capitalfactory.com/about",
-      "page": "details",
-      "anchor": "About",
+      "url": "https://capitalfactory.com/texas-fund",
+      "page": "terms",
+      "anchor": "Texas Fund We write the first check into the hardest problems. Cash investments in Texas deep tech — pitch us, no warm intro needed. →",
       "fetched": true,
       "blocked": null,
       "origin": "official"

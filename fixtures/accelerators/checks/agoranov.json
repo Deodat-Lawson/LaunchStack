@@ -1,44 +1,73 @@
 {
   "programId": "agoranov",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://www.agoranov.com/"
+    "https://www.agoranov.com/",
+    "https://www.agoranov.com/apply"
   ],
   "evidence": [
     {
       "id": "check-name-3e05f09f54",
       "url": "https://www.agoranov.com/",
-      "title": "Agoranov — homepage checked by scrape.py",
+      "title": "Agoranov — homepage",
       "excerpt": "Accueil Agoranov Offre Startups Équipe Startups à l'École Se connecter FR",
       "page": "details"
     },
     {
       "id": "check-portfolio-467d45e63b",
       "url": "https://www.agoranov.com/",
-      "title": "Agoranov — homepage checked by scrape.py",
+      "title": "Agoranov — homepage",
       "excerpt": "Startups → https://www.agoranov.com/startups#Nos-startups",
       "page": "details"
     },
     {
+      "id": "check-portfolio-9c6ef32610",
+      "url": "https://www.agoranov.com/apply",
+      "title": "Agoranov — application page",
+      "excerpt": "Startups → https://www.agoranov.com/all-startups#Nos-startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b65ff06997",
+      "url": "https://www.agoranov.com/apply",
+      "title": "Agoranov — application page",
+      "excerpt": "Startups → https://www.agoranov.com/all-startups",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-c575a688c1",
       "url": "https://www.agoranov.com/",
-      "title": "Agoranov — homepage checked by scrape.py",
+      "title": "Agoranov — homepage",
       "excerpt": "Voir toutes les startups → https://www.agoranov.com/startups",
       "page": "details"
     },
     {
       "id": "check-portfolio-ccb1659718",
       "url": "https://www.agoranov.com/",
-      "title": "Agoranov — homepage checked by scrape.py",
+      "title": "Agoranov — homepage",
       "excerpt": "Startups → https://www.agoranov.com/startups",
       "page": "details"
     },
     {
       "id": "check-route-cbbeda5b8e",
       "url": "https://www.agoranov.com/",
-      "title": "Agoranov — homepage checked by scrape.py",
+      "title": "Agoranov — homepage",
       "excerpt": "https://www.agoranov.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-ac67fda24d",
+      "url": "https://www.agoranov.com/",
+      "page": "details",
+      "excerpt": "Accueil Agoranov Offre Startups Équipe Startups à l'École Se connecter FR EN L'incubateur Sciences & Tech de Paris Candidater Notre offre Vous êtes porteur d'un projet de création d’entreprise innovante ? Rejoignez notre programme d'incubation axé sur trois verticales : Industrie & Greentech, Numérique et Santé. ‍ Chez Agoranov, vous intégrez une communauté d'entrepreneurs dans un environnement sécurisé et convivial. Nous facilitons votre accès aux compétences, outils et infrastructures indispensables au succès et à la croissance de votre entreprise ! Accompagnement personnalisé Un accompagnement personnalisé par une équipe expérimentée. Un chargé d'affaires sera votre interlocuteur privilégié et vous bénéficierez également de l'accès à une équipe aux profils variés. Hébergement clé en main 2300 m² d'infrastructures : bureaux privatifs, open-space, laboratoires secs et humides privatifs, salle froide climatisée, 2 hottes, salles de réunions équipées, espaces de convivialité, cafétéria et terrasse ! Programme d'accélération L'accès à un programme d'accélération composé de formations et d’événements : workshops et office hours animés par des experts externes, des industriels, des alumni et des événements de networking. Communauté d'entrepreneurs L'opportunité d'intégrer une communauté de plus de 1000 entrepreneurs Anciens d’Agoranov et de profiter de partages d’expérience et"
+    },
+    {
+      "id": "check-page-495bdbe49b",
+      "url": "https://www.agoranov.com/apply",
+      "page": "application",
+      "excerpt": "Apply Offer Startups Team Startups at School Login FR EN The selection process < Retour The selection process is carried out with respect for confidentiality. Please follow all the steps below if you wish to apply Step 1 Access the questionnaire Step 2 The Agoranov team will contact you. If your project is eligible , an economic and technological expertise of your project will be carried out. Step 3 You present your project to our Expert Committee,which then transmits its recommendation to the Selection Committee for a final decision. Step 4 You will be contacted by your account executive following the decision of the Agoranov Selection Committee. If the answer is favorable, you signez sign an incubation agreement with Agoranov. 96 BIS boulevard Raspail, 75006 Paris ‍ 01 44 18 07 15 courrier@agoranov.com Startups Startups at School Jobs Apply"
     }
   ],
   "findings": {
@@ -54,8 +83,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.agoranov.com/startups",
@@ -64,6 +100,14 @@
       {
         "value": "https://www.agoranov.com/startups#Nos-startups",
         "evidenceId": "check-portfolio-467d45e63b"
+      },
+      {
+        "value": "https://www.agoranov.com/all-startups",
+        "evidenceId": "check-portfolio-b65ff06997"
+      },
+      {
+        "value": "https://www.agoranov.com/all-startups#Nos-startups",
+        "evidenceId": "check-portfolio-9c6ef32610"
       }
     ],
     "name": [

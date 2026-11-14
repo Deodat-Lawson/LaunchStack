@@ -1,28 +1,62 @@
 {
   "programId": "pioneer",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://pioneer.app/"
+    "https://pioneer.app/",
+    "https://pioneer.app/blog/pioneer/"
   ],
   "evidence": [
     {
       "id": "check-name-62fe6e63fb",
       "url": "https://pioneer.app/",
-      "title": "Pioneer — homepage checked by scrape.py",
+      "title": "Pioneer — homepage",
       "excerpt": "Pioneer Pioneer Pioneer is a startup accelerator for ambitious",
       "page": "details"
+    },
+    {
+      "id": "check-route-fa592d2f10",
+      "url": "https://pioneer.app/blog/pioneer/",
+      "title": "Pioneer — terms page",
+      "excerpt": "← Home → https://pioneer.app/",
+      "page": "terms"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-6bd3e25ff0",
+      "url": "https://pioneer.app/",
+      "page": "details",
+      "excerpt": "Pioneer Pioneer Pioneer is a startup accelerator for ambitious outsiders. We've funded 150+ companies with 300+ founders in 50+ countries. We stopped making new investments in 2024. Our companies are worth over $2B in aggregate. They've gone on to raise from Sequoia, a16z, General Catalyst, Y Combinator, Khosla Ventures, and many more. Some of our investments include: Railway (TQ Ventures, Redpoint) Slash (Ribbit, Goodwater, NEA) Roboflow (GV, Craft) E2B (Insight, Decibel) TextQL (DCM, Neo) Pioneer was founded by Rishi Narang and Daniel Gross in 2018, and is backed by Stripe and Marc Andreessen. Our founders have been mentored by an incredible network of advisors & speakers including: Christina Cacioppo , Co-founder & CEO of Vanta David Hsu , Co-founder & CEO of Retool Dylan Field , Co-founder & CEO of Figma Guillermo Rauch , Co-founder & CEO of Vercel Immad Akhund , Co-founder & CEO of Mercury Jeff Weinstein , Product Lead at Stripe John Collison , Co-founder & President of Stripe Laura Behrens Wu , Co-founder & CEO of Shippo Laura Deming , Partner at age1 Olof Mathé , Co-founder & CEO of Mixmax Patrick Collison , Co-founder & CEO of Stripe Sriram Krishnan , Partner at a16z And dozens of other founders, investors, and operators. “Pioneer is the biggest ramp in terms of changing my life's trajectory. There's no doubt I would be completely somewhere else were it not for"
+    },
+    {
+      "id": "check-page-c98edc6505",
+      "url": "https://pioneer.app/blog/pioneer/",
+      "page": "terms",
+      "excerpt": "Pioneer ← Home Pioneer We founded Pioneer in 2018 on a mission to find & fund the world's creative, ambitious outsiders. Earlier this year, we made our final investment. Over the past 6 years, we built a community of 300+ founders in 50+ countries. We invested in 150+ companies collectively worth over $1B. Tens of thousands of founders across nearly every country on Earth used the Pioneer Tournament to share 60,000+ progress updates with each other, and exchanged 600,000+ pieces of feedback. Pioneer has had two core theses from day one: There are countless brilliant outsiders around the world who could build great companies, but just don't have the right network, environment, or credentials to do so. Software can find them. While we still firmly believe in our theses, we've decided to stop pursuing this goal. We'll continue to support our founder community for years to come, of course! Finally, a huge thank you to all of our supporters. Hundreds of investors, advisors, founders, and operators in our broader network worked with Pioneers over the years to maximize their odds of success, and we are grateful for your help! P.S. Many founders we've reached out to have asked us how we discovered their startups—especially ones in stealth. We built a number of mechanisms to prove our ideas, using everything from experimental tests and gamification to mass web scraping and novel ML"
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
     "routes": [],
-    "applicationUrl": [],
+    "applicationUrl": [
+      {
+        "value": "https://pioneer.app/",
+        "evidenceId": "check-route-fa592d2f10"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

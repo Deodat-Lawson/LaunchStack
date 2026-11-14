@@ -1,348 +1,1207 @@
 {
   "programId": "hub71",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.hub71.com/",
+    "https://www.hub71.com/ar/partners/apply",
+    "https://www.hub71.com/ar/program/hub71-plus-climatetech/apply",
+    "https://www.hub71.com/ar/program/hub71-plus-digital-assets/apply",
+    "https://www.hub71.com/ar/program/hub71-plus-life-sciences/apply",
+    "https://www.hub71.com/ar/program/initiate/apply",
     "https://www.hub71.com/i-am-a-startup",
-    "https://www.hub71.com/faqs",
-    "https://www.hub71.com/program/initiate"
+    "https://www.hub71.com/partners/apply",
+    "https://www.hub71.com/program/access-programme/apply",
+    "https://www.hub71.com/program/hub71-plus-ai",
+    "https://www.hub71.com/program/hub71-plus-climatetech/apply",
+    "https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+    "https://www.hub71.com/program/hub71-plus-life-sciences/apply",
+    "https://www.hub71.com/program/initiate/apply",
+    "https://www.hub71.com/ar/faqs"
   ],
   "evidence": [
     {
-      "id": "check-deal-34472b9319",
-      "url": "https://www.hub71.com/faqs",
-      "title": "Hub71 — terms page checked by scrape.py",
-      "excerpt": "including Access, Hub71+ Digital Assets and Hub71+ ClimateTech will receive AED 250,000 worth of in-kind incentives in the form of support services, and AED 250,000 in cash in exchange for equity through a SAFE note. High-performing startups are eligible to receive a top-up of up to AED 250,000 in exchange for additional",
+      "id": "check-deal-18a2715713",
+      "url": "https://www.hub71.com/program/hub71-plus-climatetech/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "that can be utilized with a range of service providers, and AED 250,000 in cash in exchange for equity through a SAFE note. High-performing",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-2063cb0928",
+      "url": "https://www.hub71.com/program/access-programme/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "startups committed to Abu Dhabi are eligible to receive a top-up of AED 250,000 in exchange for additional equity by the end of the one year program.",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-2288dc7e32",
+      "url": "https://www.hub71.com/program/access-programme/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "that can be utilized with a range of service providers, and AED 250,000 in cash in exchange for equity through a SAFE note. High-performing",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-22e24c5b03",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "will be eligible to receive extensions and a top-up of up to AED 250,000 in exchange for additional equity, upon completion of the programme",
       "page": "terms"
     },
     {
-      "id": "check-deal-71156c5253",
-      "url": "https://www.hub71.com/faqs",
-      "title": "Hub71 — terms page checked by scrape.py",
-      "excerpt": "funding if I complete the programme successfully? High-performing startups, who are part of our programmes, are eligible to receive a top-up of up to AED 250,000 in exchange for additional equity upon completion of the programmes or after one year. Eligible startups will need to meet a set of criteria outlined by Hub71.",
+      "id": "check-deal-29f083d13b",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "worth of in-kind incentives in the form of support services, and AED 250,000 in cash in exchange for equity through a SAFE note. High-performing",
       "page": "terms"
     },
     {
-      "id": "check-deal-7a194dda88",
-      "url": "https://www.hub71.com/faqs",
-      "title": "Hub71 — terms page checked by scrape.py",
-      "excerpt": "the SAFE note does Hub71 use? Hub71 uses a future looking MFN (Most Favored Nation) uncapped, no discount, Future Looking MFN SAFE note that grants startups AED 250,000 in cash in exchange for equity. What are the terms of engagement between Hub71 and selected startups? Startups selected to join Hub71 enter into an agreement",
+      "id": "check-deal-498e069960",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "startups committed to Abu Dhabi are eligible to receive a top-up of AED 250,000 in exchange for additional equity by the end of the one year program.",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-51c052a62a",
+      "url": "https://www.hub71.com/program/hub71-plus-life-sciences/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "that can be utilized with a range of service providers, and AED 250,000 in cash in exchange for equity through a SAFE note. High-performing",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-5fe3a47364",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "If your startup has been selected to join Hub71, you will receive AED 250,000 in exchange for equity through a SAFE note. What is a SAFE note? A",
       "page": "terms"
     },
     {
-      "id": "check-deal-8b8657b13c",
-      "url": "https://www.hub71.com/faqs",
-      "title": "Hub71 — terms page checked by scrape.py",
-      "excerpt": "What are the programme timelines? Access is a 12-month programme. High-performing startups will be eligible to receive extensions and a top-up of up to AED 250,000 in exchange for additional equity, upon completion of the programme or after one year. This also applies to the specialist ecosystems, Hub71+ Digital Assets,",
+      "id": "check-deal-614cfc3fd7",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "High-performing startups are eligible to receive a top-up of up to AED 250,000 in exchange for additional equity, upon completion of the programme",
       "page": "terms"
     },
     {
-      "id": "check-deal-bef453a08d",
-      "url": "https://www.hub71.com/faqs",
-      "title": "Hub71 — terms page checked by scrape.py",
-      "excerpt": "to join Hub71 enter into an agreement that includes access to AED 250,000 worth of in-kind incentives for support services. Additionally, they receive AED 250,000 in cash in exchange for equity through a SAFE note, designed to provide both financial and operational support to help startups scale effectively. How can",
+      "id": "check-deal-6459e40363",
+      "url": "https://www.hub71.com/program/hub71-plus-climatetech/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "startups committed to Abu Dhabi are eligible to receive a top-up of AED 250,000 in exchange for additional equity by the end of the one year program.",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-7199ec1699",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "that can be utilized with a range of service providers, and AED 250,000 in cash in exchange for equity through a SAFE note. High-performing",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-7d48e8251e",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "worth of in-kind incentives in the form of support services, and AED 250,000 in cash for exchange for equity through a SAFE note. High-performing",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-85ff5ea6ac",
+      "url": "https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "startups committed to Abu Dhabi are eligible to receive a top-up of AED 250,000 in exchange for additional equity by the end of the one year program.",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-aae7ae1304",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "in-kind incentives for support services. Additionally, they receive AED 250,000 in cash in exchange for equity through a SAFE note, designed to",
       "page": "terms"
     },
     {
-      "id": "check-deal-ef7a6492d1",
-      "url": "https://www.hub71.com/faqs",
-      "title": "Hub71 — terms page checked by scrape.py",
-      "excerpt": "aimed at securing investment and connecting founders with our network of capital partners. If your startup has been selected to join Hub71, you will receive AED 250,000 in exchange for equity through a SAFE note. What is a SAFE note? A SAFE note (Simple Agreement for Future Equity) is a promise to give an investor shares in",
+      "id": "check-deal-c9210610b9",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "High-performing start-ups are eligible to receive a top-up of up to AED 250,000 in exchange for additional equity, upon completion of the programme",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-cd48d55c83",
+      "url": "https://www.hub71.com/program/hub71-plus-life-sciences/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "startups committed to Abu Dhabi are eligible to receive a top-up of AED 250,000 in exchange for additional equity by the end of the one year program.",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-e574cb32a4",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "part of our programmes, are eligible to receive a top-up of up to AED 250,000 in exchange for additional equity upon completion of the programmes",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-ecd4b26d54",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "no discount, Future Looking MFN SAFE note that grants startups AED 250,000 in cash in exchange for equity. What are the terms of engagement",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f9f306637f",
+      "url": "https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "that can be utilized with a range of service providers, and AED 250,000 in cash in exchange for equity through a SAFE note. High-performing",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-1204589117",
+      "url": "https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "about the status of your application within 3 months of applying. Selection rounds: Round 1:",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-26d55d1b7d",
+      "url": "https://www.hub71.com/program/hub71-plus-life-sciences/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "4: Final selection committee Programme: Hub71’s 12-month programme starts in September 2027 Applications",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-2fad1c6c3f",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Stay tuned for more details. Access: A 12-month programme that offers startups a structured",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-30dbe02977",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "the UAE’s marketplace. Market entry preparation (4 weeks) This phase focuses on preparing startups for",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-318d5f5743",
+      "url": "https://www.hub71.com/program/access-programme/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "about the status of your application within 3 months of applying. Selection rounds: Round 1:",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-35facfaffb",
+      "url": "https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "4: Final selection committee Programme: Hub71’s 12-month programme starts in September 2027 Applications",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-36eb3ffd03",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "about the status of your application within 3 months of applying. When will Hub71 be selecting its",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-46e47dc9ff",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "4: Final selection committee Programme: Hub71’s 12-month programme starts in September 2027 Applications",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-5322ab035a",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "of investors and partners. Programme launch (4 weeks) In this launch phase, startups set KPIs and",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-5b8f5a5947",
+      "url": "https://www.hub71.com/program/hub71-plus-climatetech/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "4: Final selection committee Programme: Hub71’s 12-month programme starts in September 2027 Applications",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-8662f882e3",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "specialist ecosystem, startups will enrol in a 12-month programme that provides a comprehensive support",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-90f345fd4a",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "How long are Hub71’s programmes? Access is a 12-month programme. During this time, your startup will",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-990e4010a9",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "ClimateTech specialist ecosystem will enroll for 12-months, including a three-month guided by New Energy",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a090187994",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "across diverse sectors will enroll in a 12-month programme that provides a comprehensive support",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a1777a87e7",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Your startup will also be enrolled in our 3-month guided track, run by some of the industry’s",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a75e2ab524",
+      "url": "https://www.hub71.com/program/access-programme/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "4: Final selection committee Programme: Hub71’s 12-month programme starts in September 2027 Applications",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-aa80db9f54",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "opportunities for startups. Growth acceleration (4 weeks) The ‘Growth’ phase concentrates on key areas",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-ac869ad307",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "vibrant ecosystem. Programme timeline Overview A 12-month programme that provides a comprehensive support",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-aca8dea0b8",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "What are the programme timelines? Access is a 12-month programme. High-performing startups will be",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-af37da5088",
+      "url": "https://www.hub71.com/program/hub71-plus-life-sciences/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "about the status of your application within 3 months of applying. Selection rounds: Round 1:",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-bf0e210700",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "about the status of your application within 3 months of applying. Selection rounds: Round 1:",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-c028912b1f",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Assets specialist ecosystem will enroll for 12-months, including a three-month guided track by Elixir",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-deb274d0e5",
+      "url": "https://www.hub71.com/program/hub71-plus-climatetech/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "about the status of your application within 3 months of applying. Selection rounds: Round 1:",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-e22e483549",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "specialist ecosystem, startups will enroll in a 12-month programme that provides a comprehensive support",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e467ad89bd",
+      "url": "https://www.hub71.com/i-am-a-startup",
+      "title": "Hub71 — application page",
+      "excerpt": "startups, Access is a 12-month programme with a 3-month guided track to help founders grow, connect, and",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-ecb34b3858",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "will need to be present on-ground for the first 3-months of the programme. What is the structure of the",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f13b866e85",
+      "url": "https://www.hub71.com/i-am-a-startup",
+      "title": "Hub71 — application page",
+      "excerpt": "For pre-seed to Series A startups, Access is a 12-month programme with a 3-month guided track to help",
+      "page": "application"
+    },
+    {
+      "id": "check-format-65ba3c2a64",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "of State for Artificial Intelligence, Digital Economy & Remote Work Applications Office Technology partners Amazon Web",
+      "page": "application"
+    },
+    {
+      "id": "check-location-58fabd9b94",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Mubadala Investment Company, we are based in ADGM, where we connect high-growth startups",
       "page": "terms"
     },
     {
       "id": "check-name-0d8fb9bb14",
       "url": "https://www.hub71.com/",
-      "title": "Hub71 — homepage checked by scrape.py",
+      "title": "Hub71 — homepage",
       "excerpt": "Hub71 | Abu Dhabi’s Unique Global Tech Ecosystem Accessibility",
       "page": "details"
     },
     {
-      "id": "check-portfolio-1617de8db0",
-      "url": "https://www.hub71.com/",
-      "title": "Hub71 — homepage checked by scrape.py",
-      "excerpt": "01 - Startups We empower startups and entrepreneurs who dare to dream big, connecting founders with the right mentors and resources to turn visionary ideas into disruptive companies. → https://www.hub71.com/startups",
-      "page": "details"
+      "id": "check-portfolio-0a4d4c4e64",
+      "url": "https://www.hub71.com/ar/partners/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "دليل الشركات الناشئة → https://www.hub71.com/ar/startups",
+      "page": "application"
     },
     {
-      "id": "check-portfolio-26846f3f64",
-      "url": "https://www.hub71.com/i-am-a-startup",
-      "title": "Hub71 — application page checked by scrape.py",
+      "id": "check-portfolio-0abf41110a",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
       "excerpt": "Startup Directory → https://www.hub71.com/startups",
       "page": "application"
     },
     {
+      "id": "check-portfolio-1617de8db0",
+      "url": "https://www.hub71.com/",
+      "title": "Hub71 — homepage",
+      "excerpt": "01 - Startups We empower startups and entrepreneurs who dare to dream big, connecting founders with the right mentors and resources to turn visionary ideas into disruptive companies. → https://www.hub71.com/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-18b5470159",
+      "url": "https://www.hub71.com/partners/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Community Directory → https://www.hub71.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-200307a074",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "Community Directory → https://www.hub71.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-26846f3f64",
+      "url": "https://www.hub71.com/i-am-a-startup",
+      "title": "Hub71 — application page",
+      "excerpt": "Startup Directory → https://www.hub71.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-2d6c4f691d",
+      "url": "https://www.hub71.com/program/hub71-plus-life-sciences/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Startup Directory → https://www.hub71.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-2ed5d2276a",
+      "url": "https://www.hub71.com/ar/program/hub71-plus-climatetech/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "دليل الشركات الناشئة → https://www.hub71.com/ar/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3c8f833687",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Community Directory → https://www.hub71.com/startups",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-3d7a743fb0",
       "url": "https://www.hub71.com/",
-      "title": "Hub71 — homepage checked by scrape.py",
+      "title": "Hub71 — homepage",
       "excerpt": "Startup Directory → https://www.hub71.com/startups",
       "page": "details"
     },
     {
-      "id": "check-portfolio-408e13b99d",
-      "url": "https://www.hub71.com/program/initiate",
-      "title": "Hub71 — details page checked by scrape.py",
-      "excerpt": "Startup Directory → https://www.hub71.com/startups",
-      "page": "details"
+      "id": "check-portfolio-466d8d733e",
+      "url": "https://www.hub71.com/ar/program/initiate/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "دليل المجتمع → https://www.hub71.com/ar/startups",
+      "page": "application"
     },
     {
-      "id": "check-portfolio-b23df6c7ad",
-      "url": "https://www.hub71.com/program/initiate",
-      "title": "Hub71 — details page checked by scrape.py",
+      "id": "check-portfolio-46c967e216",
+      "url": "https://www.hub71.com/program/access-programme/apply",
+      "title": "Hub71 — application page",
       "excerpt": "Community Directory → https://www.hub71.com/startups",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5533d871d6",
+      "url": "https://www.hub71.com/ar/program/hub71-plus-life-sciences/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "دليل المجتمع → https://www.hub71.com/ar/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-57921585ca",
+      "url": "https://www.hub71.com/program/hub71-plus-climatetech/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Startup Directory → https://www.hub71.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-57d4eee3a0",
+      "url": "https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Community Directory → https://www.hub71.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-726fcc5311",
+      "url": "https://www.hub71.com/program/hub71-plus-climatetech/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Community Directory → https://www.hub71.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-77d7b52a3a",
+      "url": "https://www.hub71.com/program/initiate/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Startup Directory → https://www.hub71.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7e9a97b183",
+      "url": "https://www.hub71.com/ar/program/hub71-plus-digital-assets/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "دليل المجتمع → https://www.hub71.com/ar/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7ec804c8d5",
+      "url": "https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Startup Directory → https://www.hub71.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-82b250b956",
+      "url": "https://www.hub71.com/program/access-programme/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Startup Directory → https://www.hub71.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-8b6c0fceaf",
+      "url": "https://www.hub71.com/ar/program/hub71-plus-digital-assets/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "دليل الشركات الناشئة → https://www.hub71.com/ar/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-933c24851e",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Startup Directory → https://www.hub71.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9f25266873",
+      "url": "https://www.hub71.com/program/hub71-plus-life-sciences/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Community Directory → https://www.hub71.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a403f1bf6b",
+      "url": "https://www.hub71.com/ar/program/hub71-plus-climatetech/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "دليل المجتمع → https://www.hub71.com/ar/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a9dbc41564",
+      "url": "https://www.hub71.com/ar/program/initiate/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "دليل الشركات الناشئة → https://www.hub71.com/ar/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-acc8efdd11",
+      "url": "https://www.hub71.com/ar/program/hub71-plus-life-sciences/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "دليل الشركات الناشئة → https://www.hub71.com/ar/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b9708cb6b9",
+      "url": "https://www.hub71.com/program/initiate/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Community Directory → https://www.hub71.com/startups",
+      "page": "application"
     },
     {
       "id": "check-portfolio-bb02c44fe2",
       "url": "https://www.hub71.com/i-am-a-startup",
-      "title": "Hub71 — application page checked by scrape.py",
+      "title": "Hub71 — application page",
       "excerpt": "Community Directory → https://www.hub71.com/startups",
       "page": "application"
     },
     {
       "id": "check-portfolio-be18b62d17",
       "url": "https://www.hub71.com/",
-      "title": "Hub71 — homepage checked by scrape.py",
+      "title": "Hub71 — homepage",
       "excerpt": "Community Directory → https://www.hub71.com/startups",
       "page": "details"
     },
     {
-      "id": "check-portfolio-be40d86c29",
-      "url": "https://www.hub71.com/faqs",
-      "title": "Hub71 — terms page checked by scrape.py",
-      "excerpt": "Startup Directory → https://www.hub71.com/startups",
-      "page": "terms"
+      "id": "check-portfolio-eb1e4c2167",
+      "url": "https://www.hub71.com/ar/partners/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "دليل المجتمع → https://www.hub71.com/ar/startups",
+      "page": "application"
     },
     {
-      "id": "check-portfolio-f4474a2e3c",
-      "url": "https://www.hub71.com/faqs",
-      "title": "Hub71 — terms page checked by scrape.py",
-      "excerpt": "Community Directory → https://www.hub71.com/startups",
-      "page": "terms"
+      "id": "check-portfolio-eba32def81",
+      "url": "https://www.hub71.com/partners/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Startup Directory → https://www.hub71.com/startups",
+      "page": "application"
     },
     {
       "id": "check-portfolio-f8b9b3e399",
       "url": "https://www.hub71.com/",
-      "title": "Hub71 — homepage checked by scrape.py",
+      "title": "Hub71 — homepage",
       "excerpt": "All Startups → https://www.hub71.com/startups",
       "page": "details"
     },
     {
-      "id": "check-route-1e29292751",
-      "url": "https://www.hub71.com/program/initiate",
-      "title": "Hub71 — details page checked by scrape.py",
-      "excerpt": "Apply → https://www.hub71.com/i-am-a-startup#programsSection",
-      "page": "details"
+      "id": "check-route-003ea80e57",
+      "url": "https://www.hub71.com/ar/program/initiate/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "EN → https://www.hub71.com/program/initiate/apply",
+      "page": "application"
     },
     {
-      "id": "check-route-2076712247",
-      "url": "https://www.hub71.com/program/initiate",
-      "title": "Hub71 — details page checked by scrape.py",
+      "id": "check-route-00e9de83a2",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "Apply Now → https://www.hub71.com/program/eca-anjal-z-x-hub71/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-01c7d6de66",
+      "url": "https://www.hub71.com/program/access-programme/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "AR → https://www.hub71.com/ar/program/برنامج-بناء-الشركات-access/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-01dd0cc9a1",
+      "url": "https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Apply → https://www.hub71.com/i-am-a-startup#programsSection",
+      "page": "application"
+    },
+    {
+      "id": "check-route-023d6c6334",
+      "url": "https://www.hub71.com/program/hub71-plus-climatetech/apply",
+      "title": "Hub71 — application page",
       "excerpt": "Partnerships at Hub71 → https://www.hub71.com/partners/apply",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-route-0582ed99e7",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "Apply to Partner → https://www.hub71.com/partners/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0869b5bfca",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "Apply → https://www.hub71.com/i-am-a-startup#programsSection",
+      "page": "application"
+    },
+    {
+      "id": "check-route-14bc372533",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "Apply Now → https://www.hub71.com/program/access-programme/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1e390caa92",
+      "url": "https://www.hub71.com/program/initiate/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "AR → https://www.hub71.com/ar/program/initiate/apply",
+      "page": "application"
     },
     {
       "id": "check-route-244dc6c83a",
       "url": "https://www.hub71.com/",
-      "title": "Hub71 — homepage checked by scrape.py",
+      "title": "Hub71 — homepage",
       "excerpt": "Apply Now → https://airtable.com/app58upkP7sGrjdWX/shr4tDyAOlWv1nW3A",
       "page": "details"
     },
     {
-      "id": "check-route-2f37240ff5",
-      "url": "https://www.hub71.com/faqs",
-      "title": "Hub71 — terms page checked by scrape.py",
-      "excerpt": "Hub71+ ClimateTech → https://www.hub71.com/program/hub71-plus-climatetech/apply",
-      "page": "terms"
+      "id": "check-route-2529c1256c",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "Apply Now → https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "page": "application"
     },
     {
-      "id": "check-route-3f966661d0",
-      "url": "https://www.hub71.com/faqs",
-      "title": "Hub71 — terms page checked by scrape.py",
-      "excerpt": "form → https://www.hub71.com/program/hub71-plus-digital-assets/apply",
-      "page": "terms"
+      "id": "check-route-28803afc71",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "Apply Now → https://www.hub71.com/program/sandbox-programme/apply",
+      "page": "application"
     },
     {
-      "id": "check-route-4b3ef2e77c",
-      "url": "https://www.hub71.com/program/initiate",
-      "title": "Hub71 — details page checked by scrape.py",
-      "excerpt": "Apply Now → https://www.hub71.com/program/initiate/apply",
-      "page": "details"
+      "id": "check-route-2b2ab553d7",
+      "url": "https://www.hub71.com/ar/program/hub71-plus-life-sciences/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "EN → https://www.hub71.com/program/hub71-plus-life-sciences/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-312c1b915b",
+      "url": "https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "AR → https://www.hub71.com/ar/program/hub71-plus-digital-assets/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3d4251f9a6",
+      "url": "https://www.hub71.com/ar/program/initiate/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "الشراكات في Hub71 → https://www.hub71.com/ar/partners/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4224089316",
+      "url": "https://www.hub71.com/partners/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Apply → https://www.hub71.com/i-am-a-startup#programsSection",
+      "page": "application"
+    },
+    {
+      "id": "check-route-486e2a78f7",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "Apply Now → https://www.hub71.com/program/savi/apply",
+      "page": "application"
     },
     {
       "id": "check-route-4c461eeb52",
       "url": "https://www.hub71.com/",
-      "title": "Hub71 — homepage checked by scrape.py",
+      "title": "Hub71 — homepage",
       "excerpt": "Apply → https://www.hub71.com/i-am-a-startup#programsSection",
       "page": "details"
     },
     {
+      "id": "check-route-4c704924f1",
+      "url": "https://www.hub71.com/ar/program/hub71-plus-climatetech/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "EN → https://www.hub71.com/program/hub71-plus-climatetech/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4dc14846b8",
+      "url": "https://www.hub71.com/ar/program/hub71-plus-life-sciences/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "الشراكات في Hub71 → https://www.hub71.com/ar/partners/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-56b37a7e61",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Partnerships at Hub71 → https://www.hub71.com/partners/apply",
+      "page": "terms"
+    },
+    {
       "id": "check-route-57778da35c",
       "url": "https://www.hub71.com/i-am-a-startup",
-      "title": "Hub71 — application page checked by scrape.py",
+      "title": "Hub71 — application page",
       "excerpt": "Apply Now → https://airtable.com/app58upkP7sGrjdWX/shrV4DoOZLLFIVwjn?prefill_Lead+source=Website&hide_Lead+source=true",
       "page": "application"
     },
     {
       "id": "check-route-5a3291b93c",
       "url": "https://www.hub71.com/",
-      "title": "Hub71 — homepage checked by scrape.py",
+      "title": "Hub71 — homepage",
       "excerpt": "Apply Now → https://airtable.com/app58upkP7sGrjdWX/shrV4DoOZLLFIVwjn?prefill_Lead+source=Website&hide_Lead+source=true",
       "page": "details"
     },
     {
       "id": "check-route-5ce084a813",
       "url": "https://www.hub71.com/i-am-a-startup",
-      "title": "Hub71 — application page checked by scrape.py",
+      "title": "Hub71 — application page",
       "excerpt": "Apply Now → https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6365771ef7",
+      "url": "https://www.hub71.com/ar/program/hub71-plus-digital-assets/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "الشراكات في Hub71 → https://www.hub71.com/ar/partners/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-65ca3dadec",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "Apply Now → https://www.hub71.com/program/initiate/apply",
       "page": "application"
     },
     {
       "id": "check-route-690ce7da21",
       "url": "https://www.hub71.com/",
-      "title": "Hub71 — homepage checked by scrape.py",
+      "title": "Hub71 — homepage",
       "excerpt": "Apply Now → https://www.hub71.com/program/initiate/apply",
       "page": "details"
     },
     {
-      "id": "check-route-6932c6445a",
-      "url": "https://www.hub71.com/faqs",
-      "title": "Hub71 — terms page checked by scrape.py",
-      "excerpt": "Apply → https://www.hub71.com/i-am-a-startup#programsSection",
-      "page": "terms"
+      "id": "check-route-6b1c0e1383",
+      "url": "https://www.hub71.com/program/hub71-plus-climatetech/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "AR → https://www.hub71.com/ar/program/hub71-plus-climatetech/apply",
+      "page": "application"
     },
     {
       "id": "check-route-6d4a7a0c5e",
       "url": "https://www.hub71.com/i-am-a-startup",
-      "title": "Hub71 — application page checked by scrape.py",
+      "title": "Hub71 — application page",
       "excerpt": "Apply Now → https://www.hub71.com/program/hub71-plus-climatetech/apply",
       "page": "application"
     },
     {
       "id": "check-route-6d4b2ba978",
       "url": "https://www.hub71.com/",
-      "title": "Hub71 — homepage checked by scrape.py",
+      "title": "Hub71 — homepage",
       "excerpt": "Apply Now → https://www.hub71.com/program/hub71-plus-ai#widget-programs",
       "page": "details"
     },
     {
+      "id": "check-route-7019c61718",
+      "url": "https://www.hub71.com/program/hub71-plus-life-sciences/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "AR → https://www.hub71.com/ar/program/hub71-plus-life-sciences/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7819643001",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Hub71+ ClimateTech → https://www.hub71.com/program/hub71-plus-climatetech/apply",
+      "page": "terms"
+    },
+    {
       "id": "check-route-7a83f4fee9",
       "url": "https://www.hub71.com/",
-      "title": "Hub71 — homepage checked by scrape.py",
+      "title": "Hub71 — homepage",
       "excerpt": "Partnerships at Hub71 → https://www.hub71.com/partners/apply",
       "page": "details"
     },
     {
       "id": "check-route-7a952f2af0",
       "url": "https://www.hub71.com/",
-      "title": "Hub71 — homepage checked by scrape.py",
+      "title": "Hub71 — homepage",
       "excerpt": "Apply Now → https://airtable.com/app58upkP7sGrjdWX/shr3LrX1tdEldq4rd",
       "page": "details"
     },
     {
+      "id": "check-route-7b308ce2ea",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "Apply Now → https://www.hub71.com/program/hub71-plus-life-sciences/apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-7e4075b2b2",
       "url": "https://www.hub71.com/i-am-a-startup",
-      "title": "Hub71 — application page checked by scrape.py",
+      "title": "Hub71 — application page",
       "excerpt": "Apply Now → https://www.hub71.com/program/access-programme/apply",
       "page": "application"
     },
     {
-      "id": "check-route-a03d51eabf",
-      "url": "https://www.hub71.com/program/initiate",
-      "title": "Hub71 — details page checked by scrape.py",
-      "excerpt": "Join our community as a Partner → https://www.hub71.com/partners/apply",
-      "page": "details"
+      "id": "check-route-82ff5259a6",
+      "url": "https://www.hub71.com/program/hub71-plus-climatetech/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Apply → https://www.hub71.com/i-am-a-startup#programsSection",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8631bb1221",
+      "url": "https://www.hub71.com/ar/program/hub71-plus-climatetech/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "الشراكات في Hub71 → https://www.hub71.com/ar/partners/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8b951cce1a",
+      "url": "https://www.hub71.com/program/access-programme/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Apply → https://www.hub71.com/i-am-a-startup#programsSection",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8dca2d5d8d",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "Apply Now → https://www.hub71.com/program/hub71-plus-climatetech/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8febc8566c",
+      "url": "https://www.hub71.com/program/initiate/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Partnerships at Hub71 → https://www.hub71.com/partners/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-90618154d9",
+      "url": "https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Partnerships at Hub71 → https://www.hub71.com/partners/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9e71912b67",
+      "url": "https://www.hub71.com/program/hub71-plus-life-sciences/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Apply → https://www.hub71.com/i-am-a-startup#programsSection",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a1be0f9d5e",
+      "url": "https://www.hub71.com/program/hub71-plus-life-sciences/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Partnerships at Hub71 → https://www.hub71.com/partners/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a4231ef5b0",
+      "url": "https://www.hub71.com/program/initiate/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Apply → https://www.hub71.com/i-am-a-startup#programsSection",
+      "page": "application"
+    },
+    {
+      "id": "check-route-accc1b50a8",
+      "url": "https://www.hub71.com/ar/partners/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "EN → https://www.hub71.com/partners/apply",
+      "page": "application"
     },
     {
       "id": "check-route-ad6fe6dd57",
       "url": "https://www.hub71.com/i-am-a-startup",
-      "title": "Hub71 — application page checked by scrape.py",
+      "title": "Hub71 — application page",
       "excerpt": "Apply Now → https://airtable.com/app58upkP7sGrjdWX/shr4tDyAOlWv1nW3A",
       "page": "application"
     },
     {
-      "id": "check-route-b999956e06",
-      "url": "https://www.hub71.com/faqs",
-      "title": "Hub71 — terms page checked by scrape.py",
+      "id": "check-route-b2849c2398",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "form → https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b572d6621b",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Hub71+ Digital Assets → https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b951c26528",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
       "excerpt": "here → https://www.hub71.com/partners/apply",
       "page": "terms"
     },
     {
       "id": "check-route-ba527ce3a6",
       "url": "https://www.hub71.com/",
-      "title": "Hub71 — homepage checked by scrape.py",
+      "title": "Hub71 — homepage",
       "excerpt": "Apply Now → https://www.hub71.com/program/hub71-plus-life-sciences/apply",
       "page": "details"
     },
     {
       "id": "check-route-c06339d56e",
       "url": "https://www.hub71.com/i-am-a-startup",
-      "title": "Hub71 — application page checked by scrape.py",
+      "title": "Hub71 — application page",
       "excerpt": "Partnerships at Hub71 → https://www.hub71.com/partners/apply",
       "page": "application"
     },
     {
-      "id": "check-route-d0a6882a6e",
-      "url": "https://www.hub71.com/faqs",
-      "title": "Hub71 — terms page checked by scrape.py",
+      "id": "check-route-c41eec46ae",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "Partnerships at Hub71 → https://www.hub71.com/partners/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-caa37d69f5",
+      "url": "https://www.hub71.com/ar/program/hub71-plus-digital-assets/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "EN → https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cdcfd0b5d9",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
       "excerpt": "here → https://www.hub71.com/program/hub71-plus-climatetech/apply",
       "page": "terms"
     },
     {
-      "id": "check-route-e090d4b994",
-      "url": "https://www.hub71.com/faqs",
-      "title": "Hub71 — terms page checked by scrape.py",
-      "excerpt": "Partnerships at Hub71 → https://www.hub71.com/partners/apply",
+      "id": "check-route-d4a840108e",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Apply → https://www.hub71.com/i-am-a-startup#programsSection",
       "page": "terms"
+    },
+    {
+      "id": "check-route-e2f75054f8",
+      "url": "https://www.hub71.com/program/access-programme/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Partnerships at Hub71 → https://www.hub71.com/partners/apply",
+      "page": "application"
     },
     {
       "id": "check-route-ecf1eafcbf",
       "url": "https://www.hub71.com/i-am-a-startup",
-      "title": "Hub71 — application page checked by scrape.py",
+      "title": "Hub71 — application page",
       "excerpt": "Apply Now → https://www.hub71.com/program/initiate/apply",
       "page": "application"
     },
     {
       "id": "check-route-f250d80053",
       "url": "https://www.hub71.com/i-am-a-startup",
-      "title": "Hub71 — application page checked by scrape.py",
+      "title": "Hub71 — application page",
       "excerpt": "Apply Now → https://airtable.com/app58upkP7sGrjdWX/shr3LrX1tdEldq4rd",
       "page": "application"
     },
     {
       "id": "check-route-f529af16cf",
       "url": "https://www.hub71.com/",
-      "title": "Hub71 — homepage checked by scrape.py",
+      "title": "Hub71 — homepage",
       "excerpt": "Apply Now → https://www.hub71.com/program/hub71-plus-climatetech/apply",
       "page": "details"
     },
     {
+      "id": "check-route-f8b5cee5a5",
+      "url": "https://www.hub71.com/partners/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "AR → https://www.hub71.com/ar/partners/apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-f96269c582",
       "url": "https://www.hub71.com/",
-      "title": "Hub71 — homepage checked by scrape.py",
+      "title": "Hub71 — homepage",
       "excerpt": "Apply Now → https://www.hub71.com/program/hub71-plus-digital-assets/apply",
       "page": "details"
     },
     {
       "id": "check-route-fa524e45b4",
       "url": "https://www.hub71.com/i-am-a-startup",
-      "title": "Hub71 — application page checked by scrape.py",
+      "title": "Hub71 — application page",
       "excerpt": "Apply Now → https://www.hub71.com/program/hub71-plus-life-sciences/apply",
       "page": "application"
     },
     {
       "id": "check-route-fd36cbc29c",
       "url": "https://www.hub71.com/",
-      "title": "Hub71 — homepage checked by scrape.py",
+      "title": "Hub71 — homepage",
       "excerpt": "Apply Now → https://www.hub71.com/program/access-programme/apply",
       "page": "details"
     },
     {
-      "id": "check-route-ff4507157a",
-      "url": "https://www.hub71.com/faqs",
-      "title": "Hub71 — terms page checked by scrape.py",
-      "excerpt": "Hub71+ Digital Assets → https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "id": "check-start-4fcd2ed046",
+      "url": "https://www.hub71.com/program/access-programme/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "4: Final selection committee Programme: Hub71’s 12-month programme starts in September 2027 Applications Applications do not close after the deadline:",
+      "page": "application"
+    },
+    {
+      "id": "check-start-69b34396b7",
+      "url": "https://www.hub71.com/program/access-programme/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Cohort 21. The current deadline is February 2027, and the programme starts in September 2027. Timelines for Cohort 21 Application review: if you apply",
+      "page": "application"
+    },
+    {
+      "id": "check-start-6d4e7c0b7d",
+      "url": "https://www.hub71.com/program/hub71-plus-life-sciences/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "4: Final selection committee Programme: Hub71’s 12-month programme starts in September 2027 Applications Applications do not close after the deadline:",
+      "page": "application"
+    },
+    {
+      "id": "check-start-7c7ef46737",
+      "url": "https://www.hub71.com/program/hub71-plus-climatetech/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Cohort 21. The current deadline is February 2027, and the programme starts in September 2027. Timelines for Cohort 21 Application review: if you apply",
+      "page": "application"
+    },
+    {
+      "id": "check-start-83f052848f",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "Cohort 21. The current deadline is February 2027, and the programme starts in September 2027. Timelines for Cohort 21 Application review: if you apply",
+      "page": "application"
+    },
+    {
+      "id": "check-start-8cd612ff12",
+      "url": "https://www.hub71.com/program/hub71-plus-life-sciences/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Cohort 21. The current deadline is February 2027, and the programme starts in September 2027. Timelines for Cohort 21 Application review: if you apply",
+      "page": "application"
+    },
+    {
+      "id": "check-start-a268c0fa18",
+      "url": "https://www.hub71.com/ar/faqs",
+      "title": "Hub71 — terms page",
+      "excerpt": "Cohort 21. The current deadline is February 2027, and the programme starts in September 2027. Application review: if you apply before the deadline, our",
       "page": "terms"
+    },
+    {
+      "id": "check-start-b55023b747",
+      "url": "https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "Cohort 21. The current deadline is February 2027, and the programme starts in September 2027. Timelines for Cohort 21 Application review: if you apply",
+      "page": "application"
+    },
+    {
+      "id": "check-start-c92276b979",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "title": "Hub71 — application page",
+      "excerpt": "4: Final selection committee Programme: Hub71’s 12-month programme starts in September 2027 Applications Applications do not close after the deadline:",
+      "page": "application"
+    },
+    {
+      "id": "check-start-ca4db30502",
+      "url": "https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "4: Final selection committee Programme: Hub71’s 12-month programme starts in September 2027 Applications Applications do not close after the deadline:",
+      "page": "application"
+    },
+    {
+      "id": "check-start-d19363421a",
+      "url": "https://www.hub71.com/program/hub71-plus-climatetech/apply",
+      "title": "Hub71 — application page",
+      "excerpt": "4: Final selection committee Programme: Hub71’s 12-month programme starts in September 2027 Applications Applications do not close after the deadline:",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-c9f4d2c52f",
+      "url": "https://www.hub71.com/",
+      "page": "details",
+      "excerpt": "Hub71 | Abu Dhabi’s Unique Global Tech Ecosystem Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Abu Dhabi’s Global Tech Ecosystem 640+ Startups 240+ Partners I Am A Startup I Am An Investor I Am A Talent Abu Dhabi’s Global Tech Ecosystem is powering a cleaner climate 640+ Startups 240+ Partners I Am A Startup I Am An Investor I Am A Talent Abu Dhabi’s Global Tech Ecosystem is transforming finance 640+ Startups 240+ Partners I Am A Startup I Am An Investor I Am A Talent Abu Dhabi’s Global Tech Ecosystem is driving health breakthroughs 640+ Startups 240+ Partners I Am A Startup I Am An Investor I Am A Talent What's Happening? Press Release Hub71 Startup, Vivan Therapeutics set to Begin TuMatch™ Clinical Registration Study at Burjeel Cancer Institute, Abu Dhabi 12 Nov , 2026"
+    },
+    {
+      "id": "check-page-86f8a62f97",
+      "url": "https://www.hub71.com/ar/partners/apply",
+      "page": "application",
+      "excerpt": "Hub71 | شركاؤنا قائمة الوصول النص حجم الخط المساعدة البصرية التباين القراءة الصوتية استمع إلى الصفحة إعادة تعيين حضور جلسة تعريفية الشراكات في Hub71 تقرير الأثــــر EN تقرير الأثــــر IMPACT REPORT EN حول من نحن قدّم طلبًا جلسات تعريفية برامجنا دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير الأسئلة الشائعة اتصل بنا حول من نحن قدّم طلبًا جلسات تعريفية برامجنا دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير الأسئلة الشائعة اتصل بنا إشعار الخصوصية شروط الاستخدام إشعار الخصوصية شروط الاستخدام الصفحة الرئيسية شركاؤنا استمارة التقديم استمارة تقديم الشركاء اشترك في نشرتنا الإخبارية اشترك ساعات العمل من الاثنين إلى الجمعة من الساعة 9 صباحًا حتى 5 مساءً أنا شركة ناشئة أنا مستثمر أنا موهبة الشراكات في Hub71 الأسئلة الشائعة اتصل بنا حول من نحن قدّم طلبًا جلسة معلوماتية ملاحظات/اقتراح دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء ADGM TECH LICENSE من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير إشعار الخصوصية شروط الاستخدام © حقوق الطبع والنشر 2026 استمع"
+    },
+    {
+      "id": "check-page-e2c824cc1a",
+      "url": "https://www.hub71.com/ar/program/hub71-plus-climatetech/apply",
+      "page": "application",
+      "excerpt": "Hub71 | Hub71+ ClimateTech قائمة الوصول النص حجم الخط المساعدة البصرية التباين القراءة الصوتية استمع إلى الصفحة إعادة تعيين حضور جلسة تعريفية الشراكات في Hub71 تقرير الأثــــر EN تقرير الأثــــر IMPACT REPORT EN حول من نحن قدّم طلبًا جلسات تعريفية برامجنا دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير الأسئلة الشائعة اتصل بنا حول من نحن قدّم طلبًا جلسات تعريفية برامجنا دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير الأسئلة الشائعة اتصل بنا إشعار الخصوصية شروط الاستخدام إشعار الخصوصية شروط الاستخدام الصفحة الرئيسية Hub71+ ClimateTech استمارة التقديم Hub71+ ClimateTech استمارة التقديم تحميل النموذج... الجدول الزمني والمتطلبات للتقديم يقبل Hub71 حالياً طلبات الانضمام إلى الدفعة العشرين (Cohort 20). الموعد النهائي الحالي للتقديم هو 21 أغسطس 2026، على أن يبدأ البرنامج في فبراير 2027. الجداول الزمنية للدفعة20 مراجعة الطلبات: إذا تقدّمت بطلبك قبل الموعد النهائي، سيقوم فريق التوريد والاختيار لدينا بمراجعة طلبك خلال الفترة من يونيو إلى نوفمبر 2026. من المفترض أن تتلقى ملاحظات حول حالة طلبك خلال ثلاثة أشهر من تاريخ التقديم. جولات الاختيار: الجولة 1: مراجعة الطلبات الجولة 2: فريق Hub71 يلتقي بالمؤسسين المختارين الجولة 3: شركاء Hub71 يلتقون بالمؤسسين المختارين الجولة 4: لجنة الاختيار النهائية البرنامج: برنامج Hub71 الذي يستمر لمدة 12"
+    },
+    {
+      "id": "check-page-4723398c0d",
+      "url": "https://www.hub71.com/ar/program/hub71-plus-digital-assets/apply",
+      "page": "application",
+      "excerpt": "Hub71 | Hub71+ Digital Assets قائمة الوصول النص حجم الخط المساعدة البصرية التباين القراءة الصوتية استمع إلى الصفحة إعادة تعيين حضور جلسة تعريفية الشراكات في Hub71 تقرير الأثــــر EN تقرير الأثــــر IMPACT REPORT EN حول من نحن قدّم طلبًا جلسات تعريفية برامجنا دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير الأسئلة الشائعة اتصل بنا حول من نحن قدّم طلبًا جلسات تعريفية برامجنا دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير الأسئلة الشائعة اتصل بنا إشعار الخصوصية شروط الاستخدام إشعار الخصوصية شروط الاستخدام الصفحة الرئيسية Hub71+ Digital Assets استمارة التقديم Hub71+ Digital Assets استمارة التقديم تحميل النموذج... الجدول الزمني والمتطلبات للتقديم يقبل Hub71 حالياً طلبات الانضمام إلى الدفعة العشرين (Cohort 20). الموعد النهائي الحالي للتقديم هو 21 أغسطس 2026، على أن يبدأ البرنامج في فبراير 2027. الجداول الزمنية للدفعة20 مراجعة الطلبات: إذا تقدّمت بطلبك قبل الموعد النهائي، سيقوم فريق التوريد والاختيار لدينا بمراجعة طلبك خلال الفترة من يونيو إلى نوفمبر 2026. من المفترض أن تتلقى ملاحظات حول حالة طلبك خلال ثلاثة أشهر من تاريخ التقديم. جولات الاختيار: الجولة 1: مراجعة الطلبات الجولة 2: فريق Hub71 يلتقي بالمؤسسين المختارين الجولة 3: شركاء Hub71 يلتقون بالمؤسسين المختارين الجولة 4: لجنة الاختيار النهائية البرنامج: برنامج Hub71 الذي يستمر"
+    },
+    {
+      "id": "check-page-a9cb8e5a17",
+      "url": "https://www.hub71.com/ar/program/hub71-plus-life-sciences/apply",
+      "page": "application",
+      "excerpt": "Hub71 | Life Sciences قائمة الوصول النص حجم الخط المساعدة البصرية التباين القراءة الصوتية استمع إلى الصفحة إعادة تعيين حضور جلسة تعريفية الشراكات في Hub71 تقرير الأثــــر EN تقرير الأثــــر IMPACT REPORT EN حول من نحن قدّم طلبًا جلسات تعريفية برامجنا دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير الأسئلة الشائعة اتصل بنا حول من نحن قدّم طلبًا جلسات تعريفية برامجنا دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير الأسئلة الشائعة اتصل بنا إشعار الخصوصية شروط الاستخدام إشعار الخصوصية شروط الاستخدام الصفحة الرئيسية Life Sciences استمارة التقديم Life Sciences استمارة التقديم تحميل النموذج... الجدول الزمني والمتطلبات للتقديم يقبل Hub71 حالياً طلبات الانضمام إلى الدفعة العشرين (Cohort 20). الموعد النهائي الحالي للتقديم هو 21 أغسطس 2026، على أن يبدأ البرنامج في فبراير 2027. الجداول الزمنية للدفعة20 مراجعة الطلبات: إذا تقدّمت بطلبك قبل الموعد النهائي، سيقوم فريق التوريد والاختيار لدينا بمراجعة طلبك خلال الفترة من يونيو إلى نوفمبر 2026. من المفترض أن تتلقى ملاحظات حول حالة طلبك خلال ثلاثة أشهر من تاريخ التقديم. جولات الاختيار: الجولة 1: مراجعة الطلبات الجولة 2: فريق Hub71 يلتقي بالمؤسسين المختارين الجولة 3: شركاء Hub71 يلتقون بالمؤسسين المختارين الجولة 4: لجنة الاختيار النهائية البرنامج: برنامج Hub71 الذي يستمر لمدة 12 أشهر يبدأ في"
+    },
+    {
+      "id": "check-page-5998fcf287",
+      "url": "https://www.hub71.com/ar/program/initiate/apply",
+      "page": "application",
+      "excerpt": "Hub71 | Initiate قائمة الوصول النص حجم الخط المساعدة البصرية التباين القراءة الصوتية استمع إلى الصفحة إعادة تعيين حضور جلسة تعريفية الشراكات في Hub71 تقرير الأثــــر EN تقرير الأثــــر IMPACT REPORT EN حول من نحن قدّم طلبًا جلسات تعريفية برامجنا دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير الأسئلة الشائعة اتصل بنا حول من نحن قدّم طلبًا جلسات تعريفية برامجنا دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير الأسئلة الشائعة اتصل بنا إشعار الخصوصية شروط الاستخدام إشعار الخصوصية شروط الاستخدام الصفحة الرئيسية Initiate استمارة التقديم Initiate استمارة التقديم تحميل النموذج... اشترك في نشرتنا الإخبارية اشترك ساعات العمل من الاثنين إلى الجمعة من الساعة 9 صباحًا حتى 5 مساءً أنا شركة ناشئة أنا مستثمر أنا موهبة الشراكات في Hub71 الأسئلة الشائعة اتصل بنا حول من نحن قدّم طلبًا جلسة معلوماتية ملاحظات/اقتراح دليل المجتمع دليل الشركات الناشئة دليل المستثمرين دليل الشركاء ADGM TECH LICENSE من مجتمعنا الأخبار الأحداث الموارد المسار إلى Hub71 التقارير إشعار الخصوصية شروط الاستخدام © حقوق الطبع والنشر 2026 استمع"
+    },
+    {
+      "id": "check-page-e1cac1bece",
+      "url": "https://www.hub71.com/i-am-a-startup",
+      "page": "application",
+      "excerpt": "Hub71 | I Am A Startup Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Homepage I Am A Startup Grow your startup with Hub71 Are you a disruptive entrepreneur, or a pioneering problem-solver or innovative startup seeking investment options? You’re in the right place. We’re an ecosystem dedicated to driving real, lasting impact – a community of freethinkers who dare to challenge the status quo. Join us and bring your ideas to life. Startup Guide to Abu Dhabi explore A vibrant tech community Free housing, office space & health insurance Growth with Startup Accelerator programs Engage with our corporate partners Gain access to 40+ capital partners Favourable regulatory environment through ADGM Hub71+ AI A cross-programme ecosystem for startups building with AI. LEARN MORE Explore"
+    },
+    {
+      "id": "check-page-ddd73d6ec9",
+      "url": "https://www.hub71.com/partners/apply",
+      "page": "application",
+      "excerpt": "Hub71 | Our Partners Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Homepage Partners Application form Partners Application Form Subscribe to our Newsletter subscribe Office hours Monday to Friday, 9AM to 5PM I Am A Startup I am an investor I Am A Talent Partnerships at Hub71 FAQs Contact us About Who we are Apply Info session Feedback/Suggestion Community Directory Startup Directory Investor Directory Partner Directory ADGM TECH LICENSE Around the Community News Events Resources Pathway to Hub71 Reports Privacy Notice Terms of use © Copyright 2026 Listen"
+    },
+    {
+      "id": "check-page-22a1aa21ce",
+      "url": "https://www.hub71.com/program/access-programme/apply",
+      "page": "application",
+      "excerpt": "Hub71 | Access Programme Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Homepage Access Programme Application form Access Programme Application form Loading form... Application timeline and requirements Hub71 is currently accepting applications for Cohort 21. The current deadline is February 2027, and the programme starts in September 2027. Timelines for Cohort 21 Application review: if you apply before the deadline, our sourcing and selection team will review your application by April 2027 . You should be receiving feedback about the status of your application within 3 months of applying. Selection rounds: Round 1: Application review Round 2: Hub71 team meets shortlisted founders Round 3: Hub71 partners meet shortlisted founders Round 4: Final selection committee Programme:"
+    },
+    {
+      "id": "check-page-223a32c713",
+      "url": "https://www.hub71.com/program/hub71-plus-ai",
+      "page": "application",
+      "excerpt": "Hub71 | Program details Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Application timeline and requirements Hub71 is currently accepting applications for Cohort 21. The current deadline is February 2027, and the programme starts in September 2027. Timelines for Cohort 21 Application review: if you apply before the deadline, our sourcing and selection team will review your application by April 2027 . You should be receiving feedback about the status of your application within 3 months of applying. Selection rounds: Round 1: Application review Round 2: Hub71 team meets shortlisted founders Round 3: Hub71 partners meet shortlisted founders Round 4: Final selection committee Programme: Hub71’s 12-month programme starts in September 2027 Applications Applications do not close"
+    },
+    {
+      "id": "check-page-ddead57b53",
+      "url": "https://www.hub71.com/program/hub71-plus-climatetech/apply",
+      "page": "application",
+      "excerpt": "Hub71 | Hub71+ ClimateTech Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Homepage Hub71+ ClimateTech Application form Hub71+ ClimateTech Application form Loading form... Application timeline and requirements Hub71 is currently accepting applications for Cohort 21. The current deadline is February 2027, and the programme starts in September 2027. Timelines for Cohort 21 Application review: if you apply before the deadline, our sourcing and selection team will review your application by April 2027 . You should be receiving feedback about the status of your application within 3 months of applying. Selection rounds: Round 1: Application review Round 2: Hub71 team meets shortlisted founders Round 3: Hub71 partners meet shortlisted founders Round 4: Final selection committee"
+    },
+    {
+      "id": "check-page-50cee85438",
+      "url": "https://www.hub71.com/program/hub71-plus-digital-assets/apply",
+      "page": "application",
+      "excerpt": "Hub71 | Hub71+ Digital Assets Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Homepage Hub71+ Digital Assets Application form Hub71+ Digital Assets Application form Loading form... Application timeline and requirements Hub71 is currently accepting applications for Cohort 21. The current deadline is February 2027, and the programme starts in September 2027. Timelines for Cohort 21 Application review: if you apply before the deadline, our sourcing and selection team will review your application by April 2027 . You should be receiving feedback about the status of your application within 3 months of applying. Selection rounds: Round 1: Application review Round 2: Hub71 team meets shortlisted founders Round 3: Hub71 partners meet shortlisted founders Round 4: Final selection"
+    },
+    {
+      "id": "check-page-17f44ab832",
+      "url": "https://www.hub71.com/program/hub71-plus-life-sciences/apply",
+      "page": "application",
+      "excerpt": "Hub71 | Hub71+ Life Sciences Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Homepage Hub71+ Life Sciences Application form Hub71+ Life Sciences Application form Loading form... Application timeline and requirements Hub71 is currently accepting applications for Cohort 21. The current deadline is February 2027, and the programme starts in September 2027. Timelines for Cohort 21 Application review: if you apply before the deadline, our sourcing and selection team will review your application by April 2027 . You should be receiving feedback about the status of your application within 3 months of applying. Selection rounds: Round 1: Application review Round 2: Hub71 team meets shortlisted founders Round 3: Hub71 partners meet shortlisted founders Round 4: Final selection"
+    },
+    {
+      "id": "check-page-a60ded696c",
+      "url": "https://www.hub71.com/program/initiate/apply",
+      "page": "application",
+      "excerpt": "Hub71 | Initiate Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Homepage Initiate Application form Initiate Application form Loading form... Subscribe to our Newsletter subscribe Office hours Monday to Friday, 9AM to 5PM I Am A Startup I am an investor I Am A Talent Partnerships at Hub71 FAQs Contact us About Who we are Apply Info session Feedback/Suggestion Community Directory Startup Directory Investor Directory Partner Directory ADGM TECH LICENSE Around the Community News Events Resources Pathway to Hub71 Reports Privacy Notice Terms of use © Copyright 2026 Listen"
+    },
+    {
+      "id": "check-page-18a2e02098",
+      "url": "https://www.hub71.com/ar/faqs",
+      "page": "terms",
+      "excerpt": "Hub71 | FAQs Accessibility Menu Text Font Size Visual Assistance Contrast Read Aloud Listen to Page Reset Attend info session Partnerships at Hub71 impact report AR IMPACT REPORT IMPACT REPORT AR About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us About Who we are Apply Info sessions Our programmes Community Directory Startup Directory Investor Directory Partner Directory Around the Community News Events Resources Pathway to Hub71 Reports FAQs Contact Us Privacy Notice Terms of use Privacy Notice Terms of use Homepage About FAQs FAQs Table of contents • What is Hub71? • Where is Hub71 located? • Who is part of the Hub71 ecosystem? • How does Hub71 support startups? • What benefits and incentives will startups receive upon joining Hub71? • What programs does Hub71 offer? • What is the difference between each program? • Which is the right programme for me? • How can I apply to join Hub71? • What information am I required to submit as part of my application? • What are the eligibility criteria for a startup to apply to Hub71? • Can I apply to more than one programme at the same time? • Do you accept startups at all stages of growth? • Can a startup from outside the United Arab Emirates apply to Hub71? • What criteria will a"
     }
   ],
   "findings": {
@@ -376,44 +1235,120 @@
     ],
     "applicationUrl": [
       {
-        "value": "https://www.hub71.com/program/initiate/apply",
-        "evidenceId": "check-route-690ce7da21"
+        "value": "https://www.hub71.com/i-am-a-startup#programsSection",
+        "evidenceId": "check-route-4c461eeb52"
       }
     ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [
+      {
+        "value": "September 2027",
+        "evidenceId": "check-start-69b34396b7"
+      }
+    ],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-f13b866e85"
+      },
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-e467ad89bd"
+      },
+      {
+        "value": "4",
+        "evidenceId": "check-duration-5322ab035a"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-65ba3c2a64"
+      }
+    ],
+    "location": [
+      {
+        "value": "ADGM",
+        "evidenceId": "check-location-58fabd9b94"
+      }
+    ],
     "selectivity": [],
     "dealText": [
       {
-        "value": "including Access, Hub71+ Digital Assets and Hub71+ ClimateTech will receive AED 250,000 worth of in-kind incentives in the form of support services, and AED 250,000 in cash in exchange for equity through a SAFE note. High-performing startups are eligible to receive a top-up of up to AED 250,000 in exchange for additional",
-        "evidenceId": "check-deal-34472b9319"
+        "value": "that can be utilized with a range of service providers, and AED 250,000 in cash in exchange for equity through a SAFE note. High-performing",
+        "evidenceId": "check-deal-2288dc7e32"
       },
       {
-        "value": "What are the programme timelines? Access is a 12-month programme. High-performing startups will be eligible to receive extensions and a top-up of up to AED 250,000 in exchange for additional equity, upon completion of the programme or after one year. This also applies to the specialist ecosystems, Hub71+ Digital Assets,",
-        "evidenceId": "check-deal-8b8657b13c"
+        "value": "startups committed to Abu Dhabi are eligible to receive a top-up of AED 250,000 in exchange for additional equity by the end of the one year program.",
+        "evidenceId": "check-deal-2063cb0928"
       },
       {
-        "value": "aimed at securing investment and connecting founders with our network of capital partners. If your startup has been selected to join Hub71, you will receive AED 250,000 in exchange for equity through a SAFE note. What is a SAFE note? A SAFE note (Simple Agreement for Future Equity) is a promise to give an investor shares in",
-        "evidenceId": "check-deal-ef7a6492d1"
+        "value": "worth of in-kind incentives in the form of support services, and AED 250,000 in cash for exchange for equity through a SAFE note. High-performing",
+        "evidenceId": "check-deal-7d48e8251e"
       },
       {
-        "value": "the SAFE note does Hub71 use? Hub71 uses a future looking MFN (Most Favored Nation) uncapped, no discount, Future Looking MFN SAFE note that grants startups AED 250,000 in cash in exchange for equity. What are the terms of engagement between Hub71 and selected startups? Startups selected to join Hub71 enter into an agreement",
-        "evidenceId": "check-deal-7a194dda88"
+        "value": "High-performing start-ups are eligible to receive a top-up of up to AED 250,000 in exchange for additional equity, upon completion of the programme",
+        "evidenceId": "check-deal-c9210610b9"
       },
       {
-        "value": "to join Hub71 enter into an agreement that includes access to AED 250,000 worth of in-kind incentives for support services. Additionally, they receive AED 250,000 in cash in exchange for equity through a SAFE note, designed to provide both financial and operational support to help startups scale effectively. How can",
-        "evidenceId": "check-deal-bef453a08d"
+        "value": "worth of in-kind incentives in the form of support services, and AED 250,000 in cash in exchange for equity through a SAFE note. High-performing",
+        "evidenceId": "check-deal-29f083d13b"
       },
       {
-        "value": "funding if I complete the programme successfully? High-performing startups, who are part of our programmes, are eligible to receive a top-up of up to AED 250,000 in exchange for additional equity upon completion of the programmes or after one year. Eligible startups will need to meet a set of criteria outlined by Hub71.",
-        "evidenceId": "check-deal-71156c5253"
+        "value": "High-performing startups are eligible to receive a top-up of up to AED 250,000 in exchange for additional equity, upon completion of the programme",
+        "evidenceId": "check-deal-614cfc3fd7"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "equity",
+          "amount": "250000",
+          "currency": "AED",
+          "equity": null,
+          "label": "Equity",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-2288dc7e32"
+      },
+      {
+        "value": {
+          "kind": "equity",
+          "amount": "250000",
+          "currency": "AED",
+          "equity": null,
+          "label": "Equity",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-c9210610b9"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "250000",
+          "currency": "AED",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-ecd4b26d54"
       }
     ],
     "portfolioPages": [
       {
         "value": "https://www.hub71.com/startups",
         "evidenceId": "check-portfolio-3d7a743fb0"
+      },
+      {
+        "value": "https://www.hub71.com/ar/startups",
+        "evidenceId": "check-portfolio-0a4d4c4e64"
       }
     ],
     "name": [

@@ -1,7 +1,39 @@
 {
   "programId": "hustle-fund",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://www.hustlefund.vc/angel-squad-investments",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hustlefund.vc/blog-categories-investors/dealflow",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hustlefund.vc/deal-framework",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hustlefund.vc/faq",
+      "page": "terms",
+      "anchor": "Founder FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.hustlefund.vc/founders",
       "page": "portfolio",
@@ -11,9 +43,81 @@
       "origin": "official"
     },
     {
-      "url": "https://www.hustlefund.vc/faq",
+      "url": "https://www.hustlefund.vc/post/3-ways-to-win-allocation-in-deals",
       "page": "terms",
-      "anchor": "Founder FAQ",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hustlefund.vc/post/adding-value-101-how-to-support-founders-post-investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hustlefund.vc/post/alexis-ohanian-investments-from-reddit-co-founder-to-1b-venture-capital-disruptor",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hustlefund.vc/post/an-angel-investors-blueprint-for-seeing-winning-the-best-deals",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hustlefund.vc/post/angel-investment-tax-credit",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hustlefund.vc/post/angel-squad--what-cyan-banister-investments-reveal-about-pattern-recognition-and-why-her-story-should-change-how-you-think-about-deal-evaluatio",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hustlefund.vc/post/angel-squad-7-best-angel-investor-networks-for-your-first-10k-investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hustlefund.vc/post/angel-squad-aaron-levie-investments-what-boxs-co-founder-looks-for-when-writing-checks",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hustlefund.vc/squad",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hustlefund.vc/squad?utm_source=blog&utm_medium=blog&utm_campaign=blog",
+      "page": "other",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

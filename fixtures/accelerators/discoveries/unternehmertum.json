@@ -1,27 +1,19 @@
 {
   "programId": "unternehmertum",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.unternehmertum.de/en/offering/companies/",
-      "page": "portfolio",
-      "anchor": "Companies icons / arrow-right icons / arrow-right",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.unternehmertum.de/en/about/facts-figures/",
-      "page": "details",
-      "anchor": "Facts & Figures icons / arrow-right",
+      "url": "https://www.unternehmertum.de/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.unternehmertum.de/en/about/locations/",
+      "url": "https://www.unternehmertum.de/en/about/",
       "page": "details",
-      "anchor": "Locations icons / arrow-right",
+      "anchor": "About icons / arrow-right",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -35,9 +27,17 @@
       "origin": "official"
     },
     {
-      "url": "https://www.unternehmertum.de/en/about/press/",
+      "url": "https://www.unternehmertum.de/en/about/facts-figures/",
       "page": "details",
-      "anchor": "Press icons / arrow-right",
+      "anchor": "Facts & Figures icons / arrow-right",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/en/about/locations/",
+      "page": "details",
+      "anchor": "Locations icons / arrow-right",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -51,10 +51,130 @@
       "origin": "official"
     },
     {
-      "url": "https://www.unternehmertum.de/en/about/",
+      "url": "https://www.unternehmertum.de/en/about/press/",
       "page": "details",
-      "anchor": "About icons / arrow-right",
+      "anchor": "Press icons / arrow-right",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/en/careers/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/en/ecosystem/women-startup/women-startup-award/women-startup-award-terms-and-conditions/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020522/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/en/events/application-advice-for-the-executive-mbas-020622/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/en/news/accelerator-launches-physical-ai-growth-lab/",
+      "page": "details",
+      "anchor": "icons / arrow-right icons / arrow-right Read now",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/en/offering/companies/",
+      "page": "portfolio",
+      "anchor": "Companies icons / arrow-right icons / arrow-right",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020522/calendar.ics",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/events/application-advice-for-the-executive-mbas-020622/calendar.ics",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/karriere/unsolicited-application-intern-or-working-student-for-our-investment-team-at-uvc/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/presse/investment-in-wire-uvc-partners-leitet-serie-b-finanzierungsrunde-mit-ueber-17-mio-euro/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/presse/q-ant-sichert-62-millionen-euro-investment-fuer-photonische-prozessoren/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/presse/studie-futuremadeingermany-de-vergleicht-innovations-investments/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/presse/xplore-by-unternehmertum-ideale-unterstuetzung-fuer-early-stage-start-ups/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

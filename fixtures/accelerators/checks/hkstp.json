@@ -1,73 +1,752 @@
 {
   "programId": "hkstp",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.hkstp.org/",
-    "https://www.hkstp.org/en/about-hkstp/our-impact/why-china/hong-kong-science-park-shenzhen-branch"
+    "https://www.hkstp.org/en/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+    "https://www.hkstp.org/en/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+    "https://www.hkstp.org/en/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+    "https://www.hkstp.org/en/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+    "https://www.hkstp.org/en/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+    "https://epic.hkstp.org/",
+    "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+    "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+    "https://www.hkstp.org/zh-cn/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+    "https://www.hkstp.org/zh-cn/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+    "https://www.hkstp.org/zh-cn/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+    "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+    "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+    "https://www.hkstp.org/zh-hk/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t"
   ],
   "evidence": [
     {
-      "id": "check-email-788c3cacfd",
-      "url": "https://www.hkstp.org/en/about-hkstp/our-impact/why-china/hong-kong-science-park-shenzhen-branch",
-      "title": "Hong Kong Science and Technology Parks — details page checked by scrape.py",
+      "id": "check-email-0776087735",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "enquiry.marketing@hkstp.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-18e3aee604",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "enquiry.marketing@hkstp.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-1b7e0f30b6",
+      "url": "https://epic.hkstp.org/",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "partnerships@hkstp.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-1cd0cd15b6",
+      "url": "https://epic.hkstp.org/",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "Park General Enquiries: EPIC@hkstp.org Sponsorship: partnerships@hkstp.org +852 2629 1818 Privacy Policy PICS Terms of Use ©2025 Hong",
+      "page": "application"
+    },
+    {
+      "id": "check-email-2e63bb9592",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "出版資料 招標公告 企業管治 有用連結 媒體工具 供應商註冊 聯絡我們 聯絡我們 香港科學園 5E 大樓 5 樓 enquiry.marketing@hkstp.org +852 2629 1818 隱私及免責聲明 個人信息收集聲明 使用條款 無障礙瀏覽 促進種族平等 網站地圖",
+      "page": "application"
+    },
+    {
+      "id": "check-email-32f7a6f0a0",
+      "url": "https://www.hkstp.org/zh-cn/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "enquiry.marketing@hkstp.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-35e51250cc",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "enquiry.marketing@hkstp.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-3f8bbcf284",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "enquiry.marketing@hkstp.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-472036cfa3",
+      "url": "https://www.hkstp.org/en/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "title": "Hong Kong Science and Technology Parks — application page",
       "excerpt": "us Contact Us 5/F, Building 5E, Hong Kong Science Park enquiry.marketing@hkstp.org +852 2629 1818 Privacy Policy PICS Terms of Use",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-email-4f0f4dde1d",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "出版資料 招標公告 企業管治 有用連結 媒體工具 供應商註冊 聯絡我們 聯絡我們 香港科學園 5E 大樓 5 樓 enquiry.marketing@hkstp.org +852 2629 1818 隱私及免責聲明 個人信息收集聲明 使用條款 無障礙瀏覽 促進種族平等 網站地圖",
+      "page": "application"
+    },
+    {
+      "id": "check-email-51519ad0cd",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "出版资料 招标公告 企业管治 有用连结 媒体工具 供应商注册 联络我们 联络我们 香港科学园 5E 大楼 5 楼 enquiry.marketing@hkstp.org +852 2629 1818 隐私及免责声明 个人信息收集声明 使用条款 无障碍浏览 促进种族平等 网站地图",
+      "page": "application"
+    },
+    {
+      "id": "check-email-621261638f",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "出版資料 招標公告 企業管治 有用連結 媒體工具 供應商註冊 聯絡我們 聯絡我們 香港科學園 5E 大樓 5 樓 enquiry.marketing@hkstp.org +852 2629 1818 隱私及免責聲明 個人信息收集聲明 使用條款 無障礙瀏覽 促進種族平等 網站地圖",
+      "page": "application"
+    },
+    {
+      "id": "check-email-6393e11256",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "us Contact Us 5/F, Building 5E, Hong Kong Science Park enquiry.marketing@hkstp.org +852 2629 1818 Privacy Policy PICS Terms of Use",
+      "page": "application"
+    },
+    {
+      "id": "check-email-69a661f820",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "enquiry.marketing@hkstp.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-76e8cb8772",
+      "url": "https://www.hkstp.org/en/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "enquiry.marketing@hkstp.org",
+      "page": "application"
     },
     {
       "id": "check-email-7f54f37d53",
       "url": "https://www.hkstp.org/",
-      "title": "Hong Kong Science and Technology Parks — homepage checked by scrape.py",
+      "title": "Hong Kong Science and Technology Parks — homepage",
       "excerpt": "enquiry.marketing@hkstp.org",
       "page": "details"
     },
     {
-      "id": "check-email-8108540360",
-      "url": "https://www.hkstp.org/en/about-hkstp/our-impact/why-china/hong-kong-science-park-shenzhen-branch",
-      "title": "Hong Kong Science and Technology Parks — details page checked by scrape.py",
+      "id": "check-email-8389167b9b",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
       "excerpt": "enquiry.marketing@hkstp.org",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-email-8b64a96ddb",
+      "url": "https://www.hkstp.org/zh-cn/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "出版资料 招标公告 企业管治 有用连结 媒体工具 供应商注册 联络我们 联络我们 香港科学园 5E 大楼 5 楼 enquiry.marketing@hkstp.org +852 2629 1818 隐私及免责声明 个人信息收集声明 使用条款 无障碍浏览 促进种族平等 网站地图",
+      "page": "application"
+    },
+    {
+      "id": "check-email-8f3c8dc0ae",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "enquiry.marketing@hkstp.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-9e3ff349a7",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "出版资料 招标公告 企业管治 有用连结 媒体工具 供应商注册 联络我们 联络我们 香港科学园 5E 大楼 5 楼 enquiry.marketing@hkstp.org +852 2629 1818 隐私及免责声明 个人信息收集声明 使用条款 无障碍浏览 促进种族平等 网站地图",
+      "page": "application"
+    },
+    {
+      "id": "check-email-9f8ee119aa",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "us Contact Us 5/F, Building 5E, Hong Kong Science Park enquiry.marketing@hkstp.org +852 2629 1818 Privacy Policy PICS Terms of Use",
+      "page": "application"
+    },
+    {
+      "id": "check-email-a155804303",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "出版资料 招标公告 企业管治 有用连结 媒体工具 供应商注册 联络我们 联络我们 香港科学园 5E 大楼 5 楼 enquiry.marketing@hkstp.org +852 2629 1818 隐私及免责声明 个人信息收集声明 使用条款 无障碍浏览 促进种族平等 网站地图",
+      "page": "application"
+    },
+    {
+      "id": "check-email-a5abe69dcf",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "enquiry.marketing@hkstp.org",
+      "page": "application"
     },
     {
       "id": "check-email-b93e1c1140",
       "url": "https://www.hkstp.org/",
-      "title": "Hong Kong Science and Technology Parks — homepage checked by scrape.py",
+      "title": "Hong Kong Science and Technology Parks — homepage",
       "excerpt": "us Contact Us 5/F, Building 5E, Hong Kong Science Park enquiry.marketing@hkstp.org +852 2629 1818 Privacy Policy PICS Terms of Use",
       "page": "details"
     },
     {
+      "id": "check-email-ba1dfacd27",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "出版资料 招标公告 企业管治 有用连结 媒体工具 供应商注册 联络我们 联络我们 香港科学园 5E 大楼 5 楼 enquiry.marketing@hkstp.org +852 2629 1818 隐私及免责声明 个人信息收集声明 使用条款 无障碍浏览 促进种族平等 网站地图",
+      "page": "application"
+    },
+    {
+      "id": "check-email-c72fc309d9",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "enquiry.marketing@hkstp.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-c96bae2f9c",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "enquiry.marketing@hkstp.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-d012623f52",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "us Contact Us 5/F, Building 5E, Hong Kong Science Park enquiry.marketing@hkstp.org +852 2629 1818 Privacy Policy PICS Terms of Use",
+      "page": "application"
+    },
+    {
+      "id": "check-email-dc67d53031",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "enquiry.marketing@hkstp.org",
+      "page": "application"
+    },
+    {
       "id": "check-email-e20b0b579a",
       "url": "https://www.hkstp.org/",
-      "title": "Hong Kong Science and Technology Parks — homepage checked by scrape.py",
+      "title": "Hong Kong Science and Technology Parks — homepage",
       "excerpt": "site. If you are concerned, please contact us at enquiry.marketing@hkstp.org and/or report to the Police. ACCEPT Disclaimer We use",
       "page": "details"
     },
     {
+      "id": "check-email-eed5d4d539",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "us Contact Us 5/F, Building 5E, Hong Kong Science Park enquiry.marketing@hkstp.org +852 2629 1818 Privacy Policy PICS Terms of Use",
+      "page": "application"
+    },
+    {
+      "id": "check-format-a2737cb066",
+      "url": "https://epic.hkstp.org/",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "Present your solutions to investors and corporate leaders in person with live enquiries and feedback. EXPLORE HONG KONG",
+      "page": "application"
+    },
+    {
+      "id": "check-format-fb38e46b55",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "innovative ideas. The Data Studio and online portal is a virtual extension of Hong Kong Science Park. This one-stop",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-0042a84cef",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "+852 2629 1818",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-0223bb7c3f",
+      "url": "https://epic.hkstp.org/",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "+852 2629 1818",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-041b1636e7",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "+852 2629 1818",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-235a5c2f82",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "+852 2629 1818",
+      "page": "application"
+    },
+    {
       "id": "check-phone-29fbfae1a1",
       "url": "https://www.hkstp.org/",
-      "title": "Hong Kong Science and Technology Parks — homepage checked by scrape.py",
+      "title": "Hong Kong Science and Technology Parks — homepage",
       "excerpt": "+852 2629 1818",
       "page": "details"
     },
     {
-      "id": "check-phone-621c92a69f",
-      "url": "https://www.hkstp.org/en/about-hkstp/our-impact/why-china/hong-kong-science-park-shenzhen-branch",
-      "title": "Hong Kong Science and Technology Parks — details page checked by scrape.py",
+      "id": "check-phone-2d282e99cc",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
       "excerpt": "+852 2629 1818",
-      "page": "details"
+      "page": "application"
     },
     {
-      "id": "check-portfolio-c5016841b8",
-      "url": "https://www.hkstp.org/en/about-hkstp/our-impact/why-china/hong-kong-science-park-shenzhen-branch",
-      "title": "Hong Kong Science and Technology Parks — details page checked by scrape.py",
+      "id": "check-phone-3b9fdc7933",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "+852 2629 1818",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-6a8c5bcb80",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "+852 2629 1818",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-8aa9640263",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "+852 2629 1818",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-9e512da9e5",
+      "url": "https://www.hkstp.org/zh-cn/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "+852 2629 1818",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-a916459c31",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "+852 2629 1818",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-d23f972a8f",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "+852 2629 1818",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-e81b994d72",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "+852 2629 1818",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-e9445ca9bc",
+      "url": "https://www.hkstp.org/en/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "+852 2629 1818",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-fe34816590",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "+852 2629 1818",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-07f197d34f",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+      "title": "Hong Kong Science and Technology Parks — application page",
       "excerpt": "Startups Alumni Association → https://www.hkstp.org/en/programmes/alumni",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-19802573f3",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "香港科学园创科会 → https://www.hkstp.org/zh-cn/programmes/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-1e13447648",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "香港科学园创科会 → https://www.hkstp.org/zh-cn/programmes/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-62109623b2",
+      "url": "https://epic.hkstp.org/",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "Alumni → https://epic.hkstp.org/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7d4d96fb31",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "Startups Alumni Association → https://www.hkstp.org/en/programmes/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7ed39b3640",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "香港科學園創科會 → https://www.hkstp.org/zh-hk/programmes/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b8f70d4140",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "香港科学园创科会 → https://www.hkstp.org/zh-cn/programmes/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-bd442c541e",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "香港科学园创科会 → https://www.hkstp.org/zh-cn/programmes/alumni",
+      "page": "application"
     },
     {
       "id": "check-portfolio-c6b2c8c7fb",
       "url": "https://www.hkstp.org/",
-      "title": "Hong Kong Science and Technology Parks — homepage checked by scrape.py",
+      "title": "Hong Kong Science and Technology Parks — homepage",
       "excerpt": "Startups Alumni Association → https://www.hkstp.org/en/programmes/alumni",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-d147311170",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "Startups Alumni Association → https://www.hkstp.org/en/programmes/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-eb9e25c327",
+      "url": "https://www.hkstp.org/en/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "Startups Alumni Association → https://www.hkstp.org/en/programmes/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-eedda9a604",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "香港科學園創科會 → https://www.hkstp.org/zh-hk/programmes/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f4294aec4d",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "香港科學園創科會 → https://www.hkstp.org/zh-hk/programmes/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f7e8045dab",
+      "url": "https://www.hkstp.org/zh-cn/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "香港科学园创科会 → https://www.hkstp.org/zh-cn/programmes/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-ff833ca827",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "Startups Alumni Association → https://www.hkstp.org/en/programmes/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-route-00e6e2623b",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "简 → https://www.hkstp.org/zh-cn/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-08a4ade1fe",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "繁 → https://www.hkstp.org/zh-hk/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0b8ee9675d",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "简 → https://www.hkstp.org/zh-cn/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0fc74042a6",
+      "url": "https://www.hkstp.org/en/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "繁 → https://www.hkstp.org/zh-hk/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "page": "application"
+    },
+    {
+      "id": "check-route-13b7704e68",
+      "url": "https://www.hkstp.org/zh-cn/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "EN → https://www.hkstp.org/en/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1489466445",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "EN → https://www.hkstp.org/en/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-158397c37f",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "EN → https://www.hkstp.org/en/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2657ea6d37",
+      "url": "https://www.hkstp.org/en/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "简 → https://www.hkstp.org/zh-cn/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "page": "application"
+    },
+    {
+      "id": "check-route-38ff7c34cf",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "EN → https://www.hkstp.org/en/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3ffefcec20",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "EN → https://www.hkstp.org/en/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4bb9c4dc10",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "简 → https://www.hkstp.org/zh-cn/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "page": "application"
+    },
+    {
+      "id": "check-route-52a8fe2df4",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "简 → https://www.hkstp.org/zh-cn/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-58b01d34b9",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "EN → https://www.hkstp.org/en/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-72a5f0a79b",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "繁 → https://www.hkstp.org/zh-hk/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-76f2d7e745",
+      "url": "https://www.hkstp.org/en/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "APPLY NOW → https://epic.hkstp.org/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-890937901c",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "EN → https://www.hkstp.org/en/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a001a29ca2",
+      "url": "https://www.hkstp.org/zh-cn/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "繁 → https://www.hkstp.org/zh-hk/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a55c096c98",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "繁 → https://www.hkstp.org/zh-hk/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b14a769f25",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "繁 → https://www.hkstp.org/zh-hk/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b23e903712",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "繁 → https://www.hkstp.org/zh-hk/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bcfa6003a1",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "繁 → https://www.hkstp.org/zh-hk/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d0f4024640",
+      "url": "https://www.hkstp.org/en/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "APPLY NOW → https://epic.hkstp.org",
+      "page": "application"
+    },
+    {
+      "id": "check-route-dda0cb839d",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "繁 → https://www.hkstp.org/zh-hk/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e7d85548ee",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "EN → https://www.hkstp.org/en/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "page": "application"
+    },
+    {
+      "id": "check-route-eba8dfd94e",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "简 → https://www.hkstp.org/zh-cn/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-edf76f8c42",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "简 → https://www.hkstp.org/zh-cn/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f1fd74c32d",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "简 → https://www.hkstp.org/zh-cn/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ff7189d1d4",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "title": "Hong Kong Science and Technology Parks — application page",
+      "excerpt": "繁 → https://www.hkstp.org/zh-hk/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-f682a939a5",
+      "url": "https://www.hkstp.org/",
+      "page": "details",
+      "excerpt": "HKSTP | Hong Kong’s Innovation & Technology Ecosystem Main Menu Discover Sites Investment Opportunities Partnerships Global Mixer Hong Kong Advantage Greater Bay Area Sites Explore the spaces fuelling Hong Kong’s I&T growth Hong Kong Science Park Hong Kong's leading I&T ecosystem advancing global innovation InnoCentre Multi-space work hub for GreenTech and FinTech Tai Po InnoPark MARS and PMC sites for pharma, medical, and precision manufacturing Tseung Kwan O InnoPark AMC and DTHub spaces for marine, data tech, and smart production Yuen Long InnoPark Centres driving the future of Micro-E, pharma, and biomedicine HKSTP Shenzhen Branch GBA hub connecting innovators to Chinese Mainland and beyond INNOPOLE Northern Metropolis campus powering AI+ industries with deep tech Investment Opportunities Tap into our network of investors and promising startups Partnerships Work with a wide network of partners spanning industries in and beyond Hong Kong Global Mixer Connect with global communities via tech shows, tours and events Hong Kong Advantage Learn why Hong Kong is your gateway to global success Greater Bay Area Unlock GBA’s vast opportunities for startups and businesses Discover Sites Investment Opportunities Partnerships Global Mixer Hong Kong Advantage Greater Bay Area Sites Explore the spaces fuelling Hong Kong’s I&T growth Hong Kong Science Park Hong Kong's leading I&T"
+    },
+    {
+      "id": "check-page-e2452619e8",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "page": "application",
+      "excerpt": "ACCESS Tech Symposium on AI Accelerators: Tech, Circuits & Applications | HKSTP Main Menu Discover Sites Investment Opportunities Partnerships Global Mixer Hong Kong Advantage Greater Bay Area Sites Explore the spaces fuelling Hong Kong’s I&T growth Hong Kong Science Park Hong Kong's leading I&T ecosystem advancing global innovation InnoCentre Multi-space work hub for GreenTech and FinTech Tai Po InnoPark MARS and PMC sites for pharma, medical, and precision manufacturing Tseung Kwan O InnoPark AMC and DTHub spaces for marine, data tech, and smart production Yuen Long InnoPark Centres driving the future of Micro-E, pharma, and biomedicine HKSTP Shenzhen Branch GBA hub connecting innovators to Chinese Mainland and beyond INNOPOLE Northern Metropolis campus powering AI+ industries with deep tech Investment Opportunities Tap into our network of investors and promising startups Partnerships Work with a wide network of partners spanning industries in and beyond Hong Kong Global Mixer Connect with global communities via tech shows, tours and events Hong Kong Advantage Learn why Hong Kong is your gateway to global success Greater Bay Area Unlock GBA’s vast opportunities for startups and businesses Discover Sites Investment Opportunities Partnerships Global Mixer Hong Kong Advantage Greater Bay Area Sites Explore the spaces fuelling Hong Kong’s I&T growth Hong Kong Science Park Hong"
+    },
+    {
+      "id": "check-page-50490551dc",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "page": "application",
+      "excerpt": "HKSTP Thought-leadership Series: Symposium on Innovative Robotics Technologies and Applications Main Menu Discover Sites Investment Opportunities Partnerships Global Mixer Hong Kong Advantage Greater Bay Area Sites Explore the spaces fuelling Hong Kong’s I&T growth Hong Kong Science Park Hong Kong's leading I&T ecosystem advancing global innovation InnoCentre Multi-space work hub for GreenTech and FinTech Tai Po InnoPark MARS and PMC sites for pharma, medical, and precision manufacturing Tseung Kwan O InnoPark AMC and DTHub spaces for marine, data tech, and smart production Yuen Long InnoPark Centres driving the future of Micro-E, pharma, and biomedicine HKSTP Shenzhen Branch GBA hub connecting innovators to Chinese Mainland and beyond INNOPOLE Northern Metropolis campus powering AI+ industries with deep tech Investment Opportunities Tap into our network of investors and promising startups Partnerships Work with a wide network of partners spanning industries in and beyond Hong Kong Global Mixer Connect with global communities via tech shows, tours and events Hong Kong Advantage Learn why Hong Kong is your gateway to global success Greater Bay Area Unlock GBA’s vast opportunities for startups and businesses Discover Sites Investment Opportunities Partnerships Global Mixer Hong Kong Advantage Greater Bay Area Sites Explore the spaces fuelling Hong Kong’s I&T growth Hong Kong"
+    },
+    {
+      "id": "check-page-b9e912a375",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "page": "application",
+      "excerpt": "HKSTP’s Data Studio Enhances Big Data Applications and R&D | HKSTP Main Menu Discover Sites Investment Opportunities Partnerships Global Mixer Hong Kong Advantage Greater Bay Area Sites Explore the spaces fuelling Hong Kong’s I&T growth Hong Kong Science Park Hong Kong's leading I&T ecosystem advancing global innovation InnoCentre Multi-space work hub for GreenTech and FinTech Tai Po InnoPark MARS and PMC sites for pharma, medical, and precision manufacturing Tseung Kwan O InnoPark AMC and DTHub spaces for marine, data tech, and smart production Yuen Long InnoPark Centres driving the future of Micro-E, pharma, and biomedicine HKSTP Shenzhen Branch GBA hub connecting innovators to Chinese Mainland and beyond INNOPOLE Northern Metropolis campus powering AI+ industries with deep tech Investment Opportunities Tap into our network of investors and promising startups Partnerships Work with a wide network of partners spanning industries in and beyond Hong Kong Global Mixer Connect with global communities via tech shows, tours and events Hong Kong Advantage Learn why Hong Kong is your gateway to global success Greater Bay Area Unlock GBA’s vast opportunities for startups and businesses Discover Sites Investment Opportunities Partnerships Global Mixer Hong Kong Advantage Greater Bay Area Sites Explore the spaces fuelling Hong Kong’s I&T growth Hong Kong Science Park Hong Kong's leading"
+    },
+    {
+      "id": "check-page-e9033f8f29",
+      "url": "https://www.hkstp.org/en/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+      "page": "application",
+      "excerpt": "1st Greater Bay Area 5G Challenge to Accelerate Smart City Development | HKSTP Main Menu Discover Sites Investment Opportunities Partnerships Global Mixer Hong Kong Advantage Greater Bay Area Sites Explore the spaces fuelling Hong Kong’s I&T growth Hong Kong Science Park Hong Kong's leading I&T ecosystem advancing global innovation InnoCentre Multi-space work hub for GreenTech and FinTech Tai Po InnoPark MARS and PMC sites for pharma, medical, and precision manufacturing Tseung Kwan O InnoPark AMC and DTHub spaces for marine, data tech, and smart production Yuen Long InnoPark Centres driving the future of Micro-E, pharma, and biomedicine HKSTP Shenzhen Branch GBA hub connecting innovators to Chinese Mainland and beyond INNOPOLE Northern Metropolis campus powering AI+ industries with deep tech Investment Opportunities Tap into our network of investors and promising startups Partnerships Work with a wide network of partners spanning industries in and beyond Hong Kong Global Mixer Connect with global communities via tech shows, tours and events Hong Kong Advantage Learn why Hong Kong is your gateway to global success Greater Bay Area Unlock GBA’s vast opportunities for startups and businesses Discover Sites Investment Opportunities Partnerships Global Mixer Hong Kong Advantage Greater Bay Area Sites Explore the spaces fuelling Hong Kong’s I&T growth Hong Kong Science Park Hong"
+    },
+    {
+      "id": "check-page-8a06e16972",
+      "url": "https://www.hkstp.org/en/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "page": "application",
+      "excerpt": "Mentor Sharing - Kelvin Wong: How IoT applications complies ESG and decarbonise Main Menu Discover Sites Investment Opportunities Partnerships Global Mixer Hong Kong Advantage Greater Bay Area Sites Explore the spaces fuelling Hong Kong’s I&T growth Hong Kong Science Park Hong Kong's leading I&T ecosystem advancing global innovation InnoCentre Multi-space work hub for GreenTech and FinTech Tai Po InnoPark MARS and PMC sites for pharma, medical, and precision manufacturing Tseung Kwan O InnoPark AMC and DTHub spaces for marine, data tech, and smart production Yuen Long InnoPark Centres driving the future of Micro-E, pharma, and biomedicine HKSTP Shenzhen Branch GBA hub connecting innovators to Chinese Mainland and beyond INNOPOLE Northern Metropolis campus powering AI+ industries with deep tech Investment Opportunities Tap into our network of investors and promising startups Partnerships Work with a wide network of partners spanning industries in and beyond Hong Kong Global Mixer Connect with global communities via tech shows, tours and events Hong Kong Advantage Learn why Hong Kong is your gateway to global success Greater Bay Area Unlock GBA’s vast opportunities for startups and businesses Discover Sites Investment Opportunities Partnerships Global Mixer Hong Kong Advantage Greater Bay Area Sites Explore the spaces fuelling Hong Kong’s I&T growth Hong Kong Science Park Hong"
+    },
+    {
+      "id": "check-page-2e2e448c96",
+      "url": "https://epic.hkstp.org/",
+      "page": "application",
+      "excerpt": "Elevator Pitch International Competition 2025 - 7 Nov 2025 Kai Tak Cruise Terminal, Hong Kong Co-Title Sponsors Co-Title Sponsors Key Info Key Info Top 100 Game Plan EPIC Week Sponsors & Partners Judges Alumni News & Media Latest News Media Library FAQ Key Info Time Until Application Deadline 00 DAYS 00 HR 00 MIN 00 SEC THE PITCH THAT CHANGES EVERYTHING EPIC 2025 is not just another competition—it’s the ultimate global platform for startups to scale. Held in Hong Kong, Asia’s premier startup ecosystem, EPIC offers direct access to a vibrant business environment and invaluable opportunities to connect with the fast-growing Greater Bay Area, helping you supercharge your global ambitions. EPIC isn’t just another competition, but offers unparalleled exposure to investors and corporate partners, exclusive networking opportunities, and tailored support to help you present your innovation and break into key global markets. One pitch. 60 seconds. Your once-in-a-lifetime opportunity starts here. of targeted investment funding* applications in 2025 from 70+ economies seconds of express pitch OVERALL CHAMPION USD 60,000 3 Tech Track Winners USD 20,000 EACH TOP 12 FINALISTS USD 10,000 EACH *Investor Partners will consider investing in applicants (subject to terms and conditions to be agreed between the parties). WHAT MAKES EPIC UNIQUE? Shui Liu Managing Director Baidu Venture For"
+    },
+    {
+      "id": "check-page-d3267f65c0",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "page": "application",
+      "excerpt": "智能芯片与系统研发中心 (ACCESS) 年度技术研讨会－AI加速器前沿问题III Main Menu 认识我们 创科园区 投资机遇 企业合作 Global Mixer 香港优势 大湾区发展机遇 创科园区 推动香港初创企业及科研发展的园区 香港科学园 香港领先创科中心推动全球创新 创新中心 专为绿色科技与金融科技打造的多功能工作空间 大埔创新园 汇聚药物及医疗用品制造中心（MARS）与精密制造中心（PMC）的创新生产基地 将军澳创新园 由先进制造业中心（AMC）及数据技术中心（DTHub）带动海运、数据科技及智能生产发展的创新园区 元朗创新园 微电子中心（MEC）所在地，并设有医药及生物医学制造基地 香港科学园深圳分园 粤港澳大湾区枢纽，连接创科者与我国内地及更广泛的市场 INNOPOLE 北部都会区最新园区，以深度科技驱动 AI+ 相关产业发展 投资机遇 探索连接投资者与具潜力初创企业的平台 企业合作 与广泛的伙伴合作，涵盖多个产业，遍及香港及海外 Global Mixer 通过博览会、考察和海外拓展活动，连接全球创科社群 香港优势 为何香港是你通往全球商业的理想大门 大湾区发展机遇 发掘粤港澳大湾区为初创企业带来的广阔机遇 认识我们 创科园区 投资机遇 企业合作 Global Mixer 香港优势 大湾区发展机遇 创科园区 推动香港初创企业及科研发展的园区 香港科学园 香港领先创科中心推动全球创新 创新中心 专为绿色科技与金融科技打造的多功能工作空间 大埔创新园 汇聚药物及医疗用品制造中心（MARS）与精密制造中心（PMC）的创新生产基地 将军澳创新园 由先进制造业中心（AMC）及数据技术中心（DTHub）带动海运、数据科技及智能生产发展的创新园区 元朗创新园 微电子中心（MEC）所在地，并设有医药及生物医学制造基地 香港科学园深圳分园 粤港澳大湾区枢纽，连接创科者与我国内地及更广泛的市场 INNOPOLE 北部都会区最新园区，以深度科技驱动 AI+ 相关产业发展 投资机遇 探索连接投资者与具潜力初创企业的平台 企业合作 与广泛的伙伴合作，涵盖多个产业，遍及香港及海外 Global Mixer 通过博览会、考察和海外拓展活动，连接全球创科社群 香港优势 为何香港是你通往全球商业的理想大门 大湾区发展机遇 发掘粤港澳大湾区为初创企业带来的广阔机遇 锐见创科 创科 与新俱来 创科者故事 Mastery Collides Home Away From Home HKSTP I&T Powerhouse 创科步伐 超越明日 创科 与新俱来 邀请你与我们一同庆祝 25 周年的辉煌成就，携手迈进下一个全新舞台。 创科者故事 始于香港初创企业的故事，探索启发全球的创新力量 在香港展开一场未来城市实验：人工智能的真实应用 AI 如何革新工作流程、提升决策质素、保障员工福祉？ 光芒都被人形机械人抢光？！ 了解现实世界中机械人如何落地应用 创新园：香港制造 深度聚焦创新园内每个创新者的突破和故事 荟萃创科者 《创科故事展》 深入了解我们的创科先锋 微电子入行攻略 来自园区微电子创科者的入行与职涯心得 高锟爵士的故事 诺贝尔奖得主、「光纤通讯之父」的人生历程 Mastery Collides 摄影大师夏永康以镜头展现科技与创意的融合 Home Away From"
+    },
+    {
+      "id": "check-page-00e8dad080",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "page": "application",
+      "excerpt": "[科技专家分享系列] 创新机械人科技和应用研讨会 Main Menu 认识我们 创科园区 投资机遇 企业合作 Global Mixer 香港优势 大湾区发展机遇 创科园区 推动香港初创企业及科研发展的园区 香港科学园 香港领先创科中心推动全球创新 创新中心 专为绿色科技与金融科技打造的多功能工作空间 大埔创新园 汇聚药物及医疗用品制造中心（MARS）与精密制造中心（PMC）的创新生产基地 将军澳创新园 由先进制造业中心（AMC）及数据技术中心（DTHub）带动海运、数据科技及智能生产发展的创新园区 元朗创新园 微电子中心（MEC）所在地，并设有医药及生物医学制造基地 香港科学园深圳分园 粤港澳大湾区枢纽，连接创科者与我国内地及更广泛的市场 INNOPOLE 北部都会区最新园区，以深度科技驱动 AI+ 相关产业发展 投资机遇 探索连接投资者与具潜力初创企业的平台 企业合作 与广泛的伙伴合作，涵盖多个产业，遍及香港及海外 Global Mixer 通过博览会、考察和海外拓展活动，连接全球创科社群 香港优势 为何香港是你通往全球商业的理想大门 大湾区发展机遇 发掘粤港澳大湾区为初创企业带来的广阔机遇 认识我们 创科园区 投资机遇 企业合作 Global Mixer 香港优势 大湾区发展机遇 创科园区 推动香港初创企业及科研发展的园区 香港科学园 香港领先创科中心推动全球创新 创新中心 专为绿色科技与金融科技打造的多功能工作空间 大埔创新园 汇聚药物及医疗用品制造中心（MARS）与精密制造中心（PMC）的创新生产基地 将军澳创新园 由先进制造业中心（AMC）及数据技术中心（DTHub）带动海运、数据科技及智能生产发展的创新园区 元朗创新园 微电子中心（MEC）所在地，并设有医药及生物医学制造基地 香港科学园深圳分园 粤港澳大湾区枢纽，连接创科者与我国内地及更广泛的市场 INNOPOLE 北部都会区最新园区，以深度科技驱动 AI+ 相关产业发展 投资机遇 探索连接投资者与具潜力初创企业的平台 企业合作 与广泛的伙伴合作，涵盖多个产业，遍及香港及海外 Global Mixer 通过博览会、考察和海外拓展活动，连接全球创科社群 香港优势 为何香港是你通往全球商业的理想大门 大湾区发展机遇 发掘粤港澳大湾区为初创企业带来的广阔机遇 锐见创科 创科 与新俱来 创科者故事 Mastery Collides Home Away From Home HKSTP I&T Powerhouse 创科步伐 超越明日 创科 与新俱来 邀请你与我们一同庆祝 25 周年的辉煌成就，携手迈进下一个全新舞台。 创科者故事 始于香港初创企业的故事，探索启发全球的创新力量 在香港展开一场未来城市实验：人工智能的真实应用 AI 如何革新工作流程、提升决策质素、保障员工福祉？ 光芒都被人形机械人抢光？！ 了解现实世界中机械人如何落地应用 创新园：香港制造 深度聚焦创新园内每个创新者的突破和故事 荟萃创科者 《创科故事展》 深入了解我们的创科先锋 微电子入行攻略 来自园区微电子创科者的入行与职涯心得 高锟爵士的故事 诺贝尔奖得主、「光纤通讯之父」的人生历程 Mastery Collides 摄影大师夏永康以镜头展现科技与创意的融合 Home Away From Home"
+    },
+    {
+      "id": "check-page-8f7abcc549",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "page": "application",
+      "excerpt": "香港科技园公司启用数据工作室暨网上平台 促进大数据流通及数据应用研发 带动经济及社会效益 Main Menu 认识我们 创科园区 投资机遇 企业合作 Global Mixer 香港优势 大湾区发展机遇 创科园区 推动香港初创企业及科研发展的园区 香港科学园 香港领先创科中心推动全球创新 创新中心 专为绿色科技与金融科技打造的多功能工作空间 大埔创新园 汇聚药物及医疗用品制造中心（MARS）与精密制造中心（PMC）的创新生产基地 将军澳创新园 由先进制造业中心（AMC）及数据技术中心（DTHub）带动海运、数据科技及智能生产发展的创新园区 元朗创新园 微电子中心（MEC）所在地，并设有医药及生物医学制造基地 香港科学园深圳分园 粤港澳大湾区枢纽，连接创科者与我国内地及更广泛的市场 INNOPOLE 北部都会区最新园区，以深度科技驱动 AI+ 相关产业发展 投资机遇 探索连接投资者与具潜力初创企业的平台 企业合作 与广泛的伙伴合作，涵盖多个产业，遍及香港及海外 Global Mixer 通过博览会、考察和海外拓展活动，连接全球创科社群 香港优势 为何香港是你通往全球商业的理想大门 大湾区发展机遇 发掘粤港澳大湾区为初创企业带来的广阔机遇 认识我们 创科园区 投资机遇 企业合作 Global Mixer 香港优势 大湾区发展机遇 创科园区 推动香港初创企业及科研发展的园区 香港科学园 香港领先创科中心推动全球创新 创新中心 专为绿色科技与金融科技打造的多功能工作空间 大埔创新园 汇聚药物及医疗用品制造中心（MARS）与精密制造中心（PMC）的创新生产基地 将军澳创新园 由先进制造业中心（AMC）及数据技术中心（DTHub）带动海运、数据科技及智能生产发展的创新园区 元朗创新园 微电子中心（MEC）所在地，并设有医药及生物医学制造基地 香港科学园深圳分园 粤港澳大湾区枢纽，连接创科者与我国内地及更广泛的市场 INNOPOLE 北部都会区最新园区，以深度科技驱动 AI+ 相关产业发展 投资机遇 探索连接投资者与具潜力初创企业的平台 企业合作 与广泛的伙伴合作，涵盖多个产业，遍及香港及海外 Global Mixer 通过博览会、考察和海外拓展活动，连接全球创科社群 香港优势 为何香港是你通往全球商业的理想大门 大湾区发展机遇 发掘粤港澳大湾区为初创企业带来的广阔机遇 锐见创科 创科 与新俱来 创科者故事 Mastery Collides Home Away From Home HKSTP I&T Powerhouse 创科步伐 超越明日 创科 与新俱来 邀请你与我们一同庆祝 25 周年的辉煌成就，携手迈进下一个全新舞台。 创科者故事 始于香港初创企业的故事，探索启发全球的创新力量 在香港展开一场未来城市实验：人工智能的真实应用 AI 如何革新工作流程、提升决策质素、保障员工福祉？ 光芒都被人形机械人抢光？！ 了解现实世界中机械人如何落地应用 创新园：香港制造 深度聚焦创新园内每个创新者的突破和故事 荟萃创科者 《创科故事展》 深入了解我们的创科先锋 微电子入行攻略 来自园区微电子创科者的入行与职涯心得 高锟爵士的故事 诺贝尔奖得主、「光纤通讯之父」的人生历程 Mastery Collides 摄影大师夏永康以镜头展现科技与创意的融合 Home Away"
+    },
+    {
+      "id": "check-page-9d1fa50a8a",
+      "url": "https://www.hkstp.org/zh-cn/park-life/news-and-events/news/the-1st-greater-bay-area-5g-application-and-innovation-challenge-to-accelerate-smart-city-developm",
+      "page": "application",
+      "excerpt": "「第一届大湾区5G应用创新大赛」暨颁奖典礼圆满结束 发掘5G潜能 助力湾区智慧城市群发展 Main Menu 认识我们 创科园区 投资机遇 企业合作 Global Mixer 香港优势 大湾区发展机遇 创科园区 推动香港初创企业及科研发展的园区 香港科学园 香港领先创科中心推动全球创新 创新中心 专为绿色科技与金融科技打造的多功能工作空间 大埔创新园 汇聚药物及医疗用品制造中心（MARS）与精密制造中心（PMC）的创新生产基地 将军澳创新园 由先进制造业中心（AMC）及数据技术中心（DTHub）带动海运、数据科技及智能生产发展的创新园区 元朗创新园 微电子中心（MEC）所在地，并设有医药及生物医学制造基地 香港科学园深圳分园 粤港澳大湾区枢纽，连接创科者与我国内地及更广泛的市场 INNOPOLE 北部都会区最新园区，以深度科技驱动 AI+ 相关产业发展 投资机遇 探索连接投资者与具潜力初创企业的平台 企业合作 与广泛的伙伴合作，涵盖多个产业，遍及香港及海外 Global Mixer 通过博览会、考察和海外拓展活动，连接全球创科社群 香港优势 为何香港是你通往全球商业的理想大门 大湾区发展机遇 发掘粤港澳大湾区为初创企业带来的广阔机遇 认识我们 创科园区 投资机遇 企业合作 Global Mixer 香港优势 大湾区发展机遇 创科园区 推动香港初创企业及科研发展的园区 香港科学园 香港领先创科中心推动全球创新 创新中心 专为绿色科技与金融科技打造的多功能工作空间 大埔创新园 汇聚药物及医疗用品制造中心（MARS）与精密制造中心（PMC）的创新生产基地 将军澳创新园 由先进制造业中心（AMC）及数据技术中心（DTHub）带动海运、数据科技及智能生产发展的创新园区 元朗创新园 微电子中心（MEC）所在地，并设有医药及生物医学制造基地 香港科学园深圳分园 粤港澳大湾区枢纽，连接创科者与我国内地及更广泛的市场 INNOPOLE 北部都会区最新园区，以深度科技驱动 AI+ 相关产业发展 投资机遇 探索连接投资者与具潜力初创企业的平台 企业合作 与广泛的伙伴合作，涵盖多个产业，遍及香港及海外 Global Mixer 通过博览会、考察和海外拓展活动，连接全球创科社群 香港优势 为何香港是你通往全球商业的理想大门 大湾区发展机遇 发掘粤港澳大湾区为初创企业带来的广阔机遇 锐见创科 创科 与新俱来 创科者故事 Mastery Collides Home Away From Home HKSTP I&T Powerhouse 创科步伐 超越明日 创科 与新俱来 邀请你与我们一同庆祝 25 周年的辉煌成就，携手迈进下一个全新舞台。 创科者故事 始于香港初创企业的故事，探索启发全球的创新力量 在香港展开一场未来城市实验：人工智能的真实应用 AI 如何革新工作流程、提升决策质素、保障员工福祉？ 光芒都被人形机械人抢光？！ 了解现实世界中机械人如何落地应用 创新园：香港制造 深度聚焦创新园内每个创新者的突破和故事 荟萃创科者 《创科故事展》 深入了解我们的创科先锋 微电子入行攻略 来自园区微电子创科者的入行与职涯心得 高锟爵士的故事 诺贝尔奖得主、「光纤通讯之父」的人生历程 Mastery Collides 摄影大师夏永康以镜头展现科技与创意的融合 Home Away"
+    },
+    {
+      "id": "check-page-1cf4be08b3",
+      "url": "https://www.hkstp.org/zh-cn/programmes/mentorship/mentorship-event/component/mentorship-event/data/xxx-mentor-sharing---kelvin-wong---how-iot-applications-complies-esg-and-decarbonise",
+      "page": "application",
+      "excerpt": "导师分享会 - Kelvin Wong: How IoT applications complies ESG and decarbonise Main Menu 认识我们 创科园区 投资机遇 企业合作 Global Mixer 香港优势 大湾区发展机遇 创科园区 推动香港初创企业及科研发展的园区 香港科学园 香港领先创科中心推动全球创新 创新中心 专为绿色科技与金融科技打造的多功能工作空间 大埔创新园 汇聚药物及医疗用品制造中心（MARS）与精密制造中心（PMC）的创新生产基地 将军澳创新园 由先进制造业中心（AMC）及数据技术中心（DTHub）带动海运、数据科技及智能生产发展的创新园区 元朗创新园 微电子中心（MEC）所在地，并设有医药及生物医学制造基地 香港科学园深圳分园 粤港澳大湾区枢纽，连接创科者与我国内地及更广泛的市场 INNOPOLE 北部都会区最新园区，以深度科技驱动 AI+ 相关产业发展 投资机遇 探索连接投资者与具潜力初创企业的平台 企业合作 与广泛的伙伴合作，涵盖多个产业，遍及香港及海外 Global Mixer 通过博览会、考察和海外拓展活动，连接全球创科社群 香港优势 为何香港是你通往全球商业的理想大门 大湾区发展机遇 发掘粤港澳大湾区为初创企业带来的广阔机遇 认识我们 创科园区 投资机遇 企业合作 Global Mixer 香港优势 大湾区发展机遇 创科园区 推动香港初创企业及科研发展的园区 香港科学园 香港领先创科中心推动全球创新 创新中心 专为绿色科技与金融科技打造的多功能工作空间 大埔创新园 汇聚药物及医疗用品制造中心（MARS）与精密制造中心（PMC）的创新生产基地 将军澳创新园 由先进制造业中心（AMC）及数据技术中心（DTHub）带动海运、数据科技及智能生产发展的创新园区 元朗创新园 微电子中心（MEC）所在地，并设有医药及生物医学制造基地 香港科学园深圳分园 粤港澳大湾区枢纽，连接创科者与我国内地及更广泛的市场 INNOPOLE 北部都会区最新园区，以深度科技驱动 AI+ 相关产业发展 投资机遇 探索连接投资者与具潜力初创企业的平台 企业合作 与广泛的伙伴合作，涵盖多个产业，遍及香港及海外 Global Mixer 通过博览会、考察和海外拓展活动，连接全球创科社群 香港优势 为何香港是你通往全球商业的理想大门 大湾区发展机遇 发掘粤港澳大湾区为初创企业带来的广阔机遇 锐见创科 创科 与新俱来 创科者故事 Mastery Collides Home Away From Home HKSTP I&T Powerhouse 创科步伐 超越明日 创科 与新俱来 邀请你与我们一同庆祝 25 周年的辉煌成就，携手迈进下一个全新舞台。 创科者故事 始于香港初创企业的故事，探索启发全球的创新力量 在香港展开一场未来城市实验：人工智能的真实应用 AI 如何革新工作流程、提升决策质素、保障员工福祉？ 光芒都被人形机械人抢光？！ 了解现实世界中机械人如何落地应用 创新园：香港制造 深度聚焦创新园内每个创新者的突破和故事 荟萃创科者 《创科故事展》 深入了解我们的创科先锋 微电子入行攻略 来自园区微电子创科者的入行与职涯心得 高锟爵士的故事 诺贝尔奖得主、「光纤通讯之父」的人生历程 Mastery Collides"
+    },
+    {
+      "id": "check-page-d2b806a8a5",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+      "page": "application",
+      "excerpt": "智能晶片與系統研發中心 (ACCESS) 年度技術研討會－AI加速器前沿問題III Main Menu 認識我們 創科園區 投資機遇 企業合作 Global Mixer 香港優勢 大灣區發展機遇 創科園區 推動香港初創企業及科研發展的園區 香港科學園 香港領先創科中心推動全球創新 創新中心 專為綠色科技與金融科技打造的多功能工作空間 大埔創新園 匯聚藥物及醫療用品製造中心（MARS）與精密製造中心（PMC）的創新生產基地 將軍澳創新園 由先進製造業中心（AMC）及數據技術中心（DTHub）帶動海運、數據科技及智能生產發展的創新園區 元朗創新園 微電子中心（MEC）所在地，並設有醫藥及生物醫學製造基地 香港科學園深圳分園 粵港澳大灣區樞紐，連接創科者與中國內地及更廣泛的市場 INNOPOLE 北部都會區最新園區，以深度科技驅動 AI+ 相關產業發展 投資機遇 探索連結投資者與富潛力初創企業的平台 企業合作 與廣泛的夥伴合作，涵蓋多個產業，遍及香港及海外 Global Mixer 透過博覽會、考察和海外拓展活動，連繫全球創科社群 香港優勢 為何香港是你通往全球商業的理想大門 大灣區發展機遇 發掘粵港澳大灣區為初創企業帶來的廣闊機遇 認識我們 創科園區 投資機遇 企業合作 Global Mixer 香港優勢 大灣區發展機遇 創科園區 推動香港初創企業及科研發展的園區 香港科學園 香港領先創科中心推動全球創新 創新中心 專為綠色科技與金融科技打造的多功能工作空間 大埔創新園 匯聚藥物及醫療用品製造中心（MARS）與精密製造中心（PMC）的創新生產基地 將軍澳創新園 由先進製造業中心（AMC）及數據技術中心（DTHub）帶動海運、數據科技及智能生產發展的創新園區 元朗創新園 微電子中心（MEC）所在地，並設有醫藥及生物醫學製造基地 香港科學園深圳分園 粵港澳大灣區樞紐，連接創科者與中國內地及更廣泛的市場 INNOPOLE 北部都會區最新園區，以深度科技驅動 AI+ 相關產業發展 投資機遇 探索連結投資者與富潛力初創企業的平台 企業合作 與廣泛的夥伴合作，涵蓋多個產業，遍及香港及海外 Global Mixer 透過博覽會、考察和海外拓展活動，連繫全球創科社群 香港優勢 為何香港是你通往全球商業的理想大門 大灣區發展機遇 發掘粵港澳大灣區為初創企業帶來的廣闊機遇 銳見創科 創科 與新俱來 創科者故事 Mastery Collides Home Away From Home HKSTP I&T Powerhouse 創科步伐 超越明日 創科 與新俱來 邀請你與我們一同慶祝 25 週年的輝煌成就，攜手邁進下一個全新舞台。 創科者故事 始於香港初創企業的故事，探索啟發全球的創新力量 在香港展開一場未來城市實驗：人工智能的真實應用 AI 如何革新工作流程、提升決策質素、保障員工福祉? 光芒都被人形機械人搶光？！ 了解現實世界中機械人如何落地應用 創新園：香港製造 深度聚焦創新園內每個創新者的突破和故事 薈萃創科者 《創科故事展》 深入了解我們的創科先鋒 微電子入行攻略 來自園區微電子創科者的入行與職涯心得 高錕爵士的故事 諾貝爾獎得主、「光纖通訊之父」的人生歷程 Mastery Collides 攝影大師夏永康以鏡頭展現科技與創意的融合 Home Away From"
+    },
+    {
+      "id": "check-page-2147c04f99",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+      "page": "application",
+      "excerpt": "[科技專家分享系列] 創新機械人科技和應用研討會 Main Menu 認識我們 創科園區 投資機遇 企業合作 Global Mixer 香港優勢 大灣區發展機遇 創科園區 推動香港初創企業及科研發展的園區 香港科學園 香港領先創科中心推動全球創新 創新中心 專為綠色科技與金融科技打造的多功能工作空間 大埔創新園 匯聚藥物及醫療用品製造中心（MARS）與精密製造中心（PMC）的創新生產基地 將軍澳創新園 由先進製造業中心（AMC）及數據技術中心（DTHub）帶動海運、數據科技及智能生產發展的創新園區 元朗創新園 微電子中心（MEC）所在地，並設有醫藥及生物醫學製造基地 香港科學園深圳分園 粵港澳大灣區樞紐，連接創科者與中國內地及更廣泛的市場 INNOPOLE 北部都會區最新園區，以深度科技驅動 AI+ 相關產業發展 投資機遇 探索連結投資者與富潛力初創企業的平台 企業合作 與廣泛的夥伴合作，涵蓋多個產業，遍及香港及海外 Global Mixer 透過博覽會、考察和海外拓展活動，連繫全球創科社群 香港優勢 為何香港是你通往全球商業的理想大門 大灣區發展機遇 發掘粵港澳大灣區為初創企業帶來的廣闊機遇 認識我們 創科園區 投資機遇 企業合作 Global Mixer 香港優勢 大灣區發展機遇 創科園區 推動香港初創企業及科研發展的園區 香港科學園 香港領先創科中心推動全球創新 創新中心 專為綠色科技與金融科技打造的多功能工作空間 大埔創新園 匯聚藥物及醫療用品製造中心（MARS）與精密製造中心（PMC）的創新生產基地 將軍澳創新園 由先進製造業中心（AMC）及數據技術中心（DTHub）帶動海運、數據科技及智能生產發展的創新園區 元朗創新園 微電子中心（MEC）所在地，並設有醫藥及生物醫學製造基地 香港科學園深圳分園 粵港澳大灣區樞紐，連接創科者與中國內地及更廣泛的市場 INNOPOLE 北部都會區最新園區，以深度科技驅動 AI+ 相關產業發展 投資機遇 探索連結投資者與富潛力初創企業的平台 企業合作 與廣泛的夥伴合作，涵蓋多個產業，遍及香港及海外 Global Mixer 透過博覽會、考察和海外拓展活動，連繫全球創科社群 香港優勢 為何香港是你通往全球商業的理想大門 大灣區發展機遇 發掘粵港澳大灣區為初創企業帶來的廣闊機遇 銳見創科 創科 與新俱來 創科者故事 Mastery Collides Home Away From Home HKSTP I&T Powerhouse 創科步伐 超越明日 創科 與新俱來 邀請你與我們一同慶祝 25 週年的輝煌成就，攜手邁進下一個全新舞台。 創科者故事 始於香港初創企業的故事，探索啟發全球的創新力量 在香港展開一場未來城市實驗：人工智能的真實應用 AI 如何革新工作流程、提升決策質素、保障員工福祉? 光芒都被人形機械人搶光？！ 了解現實世界中機械人如何落地應用 創新園：香港製造 深度聚焦創新園內每個創新者的突破和故事 薈萃創科者 《創科故事展》 深入了解我們的創科先鋒 微電子入行攻略 來自園區微電子創科者的入行與職涯心得 高錕爵士的故事 諾貝爾獎得主、「光纖通訊之父」的人生歷程 Mastery Collides 攝影大師夏永康以鏡頭展現科技與創意的融合 Home Away From Home"
+    },
+    {
+      "id": "check-page-15f117fb86",
+      "url": "https://www.hkstp.org/zh-hk/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+      "page": "application",
+      "excerpt": "香港科技園公司啟用數據工作室暨網上平台 促進大數據流通及數據應用研發 帶動經濟及社會效益 Main Menu 認識我們 創科園區 投資機遇 企業合作 Global Mixer 香港優勢 大灣區發展機遇 創科園區 推動香港初創企業及科研發展的園區 香港科學園 香港領先創科中心推動全球創新 創新中心 專為綠色科技與金融科技打造的多功能工作空間 大埔創新園 匯聚藥物及醫療用品製造中心（MARS）與精密製造中心（PMC）的創新生產基地 將軍澳創新園 由先進製造業中心（AMC）及數據技術中心（DTHub）帶動海運、數據科技及智能生產發展的創新園區 元朗創新園 微電子中心（MEC）所在地，並設有醫藥及生物醫學製造基地 香港科學園深圳分園 粵港澳大灣區樞紐，連接創科者與中國內地及更廣泛的市場 INNOPOLE 北部都會區最新園區，以深度科技驅動 AI+ 相關產業發展 投資機遇 探索連結投資者與富潛力初創企業的平台 企業合作 與廣泛的夥伴合作，涵蓋多個產業，遍及香港及海外 Global Mixer 透過博覽會、考察和海外拓展活動，連繫全球創科社群 香港優勢 為何香港是你通往全球商業的理想大門 大灣區發展機遇 發掘粵港澳大灣區為初創企業帶來的廣闊機遇 認識我們 創科園區 投資機遇 企業合作 Global Mixer 香港優勢 大灣區發展機遇 創科園區 推動香港初創企業及科研發展的園區 香港科學園 香港領先創科中心推動全球創新 創新中心 專為綠色科技與金融科技打造的多功能工作空間 大埔創新園 匯聚藥物及醫療用品製造中心（MARS）與精密製造中心（PMC）的創新生產基地 將軍澳創新園 由先進製造業中心（AMC）及數據技術中心（DTHub）帶動海運、數據科技及智能生產發展的創新園區 元朗創新園 微電子中心（MEC）所在地，並設有醫藥及生物醫學製造基地 香港科學園深圳分園 粵港澳大灣區樞紐，連接創科者與中國內地及更廣泛的市場 INNOPOLE 北部都會區最新園區，以深度科技驅動 AI+ 相關產業發展 投資機遇 探索連結投資者與富潛力初創企業的平台 企業合作 與廣泛的夥伴合作，涵蓋多個產業，遍及香港及海外 Global Mixer 透過博覽會、考察和海外拓展活動，連繫全球創科社群 香港優勢 為何香港是你通往全球商業的理想大門 大灣區發展機遇 發掘粵港澳大灣區為初創企業帶來的廣闊機遇 銳見創科 創科 與新俱來 創科者故事 Mastery Collides Home Away From Home HKSTP I&T Powerhouse 創科步伐 超越明日 創科 與新俱來 邀請你與我們一同慶祝 25 週年的輝煌成就，攜手邁進下一個全新舞台。 創科者故事 始於香港初創企業的故事，探索啟發全球的創新力量 在香港展開一場未來城市實驗：人工智能的真實應用 AI 如何革新工作流程、提升決策質素、保障員工福祉? 光芒都被人形機械人搶光？！ 了解現實世界中機械人如何落地應用 創新園：香港製造 深度聚焦創新園內每個創新者的突破和故事 薈萃創科者 《創科故事展》 深入了解我們的創科先鋒 微電子入行攻略 來自園區微電子創科者的入行與職涯心得 高錕爵士的故事 諾貝爾獎得主、「光纖通訊之父」的人生歷程 Mastery Collides 攝影大師夏永康以鏡頭展現科技與創意的融合 Home Away"
     }
   ],
   "findings": {
@@ -75,6 +754,10 @@
       {
         "value": "enquiry.marketing@hkstp.org",
         "evidenceId": "check-email-7f54f37d53"
+      },
+      {
+        "value": "partnerships@hkstp.org",
+        "evidenceId": "check-email-1b7e0f30b6"
       }
     ],
     "phones": [
@@ -83,17 +766,75 @@
         "evidenceId": "check-phone-29fbfae1a1"
       }
     ],
-    "routes": [],
-    "applicationUrl": [],
+    "routes": [
+      {
+        "value": "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+        "evidenceId": "check-route-b23e903712"
+      },
+      {
+        "value": "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+        "evidenceId": "check-route-52a8fe2df4"
+      },
+      {
+        "value": "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+        "evidenceId": "check-route-ff7189d1d4"
+      },
+      {
+        "value": "https://www.hkstp.org/zh-cn/park-life/news-and-events/events/hkstp-thought-leadership-series-symposium-on-innovative-robotics-technologies-and-applications",
+        "evidenceId": "check-route-00e6e2623b"
+      },
+      {
+        "value": "https://www.hkstp.org/zh-hk/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+        "evidenceId": "check-route-08a4ade1fe"
+      },
+      {
+        "value": "https://www.hkstp.org/zh-cn/park-life/news-and-events/news/hkstp-launches-data-studio-and-online-portal-for-enhancing-bigdata-flow-and-data-applications-rd-t",
+        "evidenceId": "check-route-4bb9c4dc10"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.hkstp.org/zh-hk/park-life/news-and-events/events/access-technology-symposium-on-frontiers-of-ai-accelerators-technologies-circuits-and-applications",
+        "evidenceId": "check-route-b23e903712"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-fb38e46b55"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-a2737cb066"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.hkstp.org/en/programmes/alumni",
         "evidenceId": "check-portfolio-c6b2c8c7fb"
+      },
+      {
+        "value": "https://epic.hkstp.org/alumni",
+        "evidenceId": "check-portfolio-62109623b2"
+      },
+      {
+        "value": "https://www.hkstp.org/zh-cn/programmes/alumni",
+        "evidenceId": "check-portfolio-b8f70d4140"
+      },
+      {
+        "value": "https://www.hkstp.org/zh-hk/programmes/alumni",
+        "evidenceId": "check-portfolio-7ed39b3640"
       }
     ],
     "name": [],

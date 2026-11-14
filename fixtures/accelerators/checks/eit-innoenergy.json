@@ -1,118 +1,423 @@
 {
   "programId": "eit-innoenergy",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
     "https://innoenergy.com/",
-    "https://innoenergy.com/about-us/"
+    "https://innoenergy.com/news-resources/accelerate-skellefteaa-2021-programme-opens-for-applications-for-clean-energy-startups-in-northern-sweden/",
+    "https://innoenergy.com/news-resources/applications-for-the-second-edition-of-the-hello-cleantech-programme-for-cleantech-innovators-are-open/",
+    "https://innoenergy.com/news-resources/eit-innoenergy-beeplanet-zabala-idae-grants-for-energy-storage-and-real-application-cases/",
+    "https://innoenergy.com/news-resources/eit-innoenergy-invests-in-tribonex-to-reduce-friction-losses-and-wear-in-industrial-applications/",
+    "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
+    "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications-in-hungary-and-turkey/",
+    "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications/",
+    "https://innoenergy.com/news-resources/webinar-battery-storage-applications/",
+    "https://innoenergy.com/startups/apply-form/",
+    "https://innoenergy.com/uploads/2023/01/application-form-template_december_2020.docx",
+    "https://innoenergy.com/uploads/2023/01/application-scoreboard_decmber_2020.pdf",
+    "https://innoenergy.com/uploads/2023/01/webinar_battery-storage-applications_2020-03-04.pdf",
+    "https://innoenergy.com/news-resources/a-new-industrial-phase-for-the-european-green-deal/",
+    "https://innoenergy.com/news-resources/a-novel-private-public-fund-to-unlock-e500bn-for-europes-clean-industrial-deal/"
   ],
   "evidence": [
     {
-      "id": "check-portfolio-20917af7b5",
-      "url": "https://innoenergy.com/about-us/",
-      "title": "EIT InnoEnergy — details page checked by scrape.py",
-      "excerpt": "Learn more about our portfolio in renewables → https://innoenergy.com/portfolio/?page=1&productsThematicFields=renewable-energies",
-      "page": "details"
+      "id": "check-email-11a191258a",
+      "url": "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications-in-hungary-and-turkey/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "apply@innoenergy.com",
+      "page": "application"
     },
     {
-      "id": "check-portfolio-2bc6e01b62",
-      "url": "https://innoenergy.com/about-us/",
-      "title": "EIT InnoEnergy — details page checked by scrape.py",
-      "excerpt": "Learn more about our startups in energy for circular economy → https://innoenergy.com/portfolio/?page=1&productsThematicFields=energy-for-circular-economy",
-      "page": "details"
+      "id": "check-email-71d036ff71",
+      "url": "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications-in-hungary-and-turkey/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "How to apply Send the filled application form to apply@innoenergy.com . In case you need assistance at any point of the",
+      "page": "application"
+    },
+    {
+      "id": "check-email-9dc75619d1",
+      "url": "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications-in-hungary-and-turkey/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "the application process, please feel free to contact us at apply@innoenergy.com . <<<Download application form template>>> I Stage –",
+      "page": "application"
+    },
+    {
+      "id": "check-format-334c552988",
+      "url": "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "candidates from Stage I and arrange a pitching session in person or via videoconference to further validate the",
+      "page": "application"
+    },
+    {
+      "id": "check-format-c266530ea2",
+      "url": "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications-in-hungary-and-turkey/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "candidates from Stage I and arrange a pitching session in person or via video conference to further validate the",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-02dc157c49",
+      "url": "https://innoenergy.com/news-resources/webinar-battery-storage-applications/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-18348df228",
+      "url": "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-26998973c3",
+      "url": "https://innoenergy.com/startups/apply-form/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "application"
     },
     {
       "id": "check-portfolio-2d32353901",
       "url": "https://innoenergy.com/",
-      "title": "EIT InnoEnergy — homepage checked by scrape.py",
+      "title": "EIT InnoEnergy — homepage",
       "excerpt": "Invest in and de-risk early-stage startups → https://innoenergy.com/portfolio/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-2e3956ef85",
-      "url": "https://innoenergy.com/about-us/",
-      "title": "EIT InnoEnergy — details page checked by scrape.py",
-      "excerpt": "Learn more about our startups in energy storage → https://innoenergy.com/portfolio/?page=1&productsThematicFields=energy-storage",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-3257eabb40",
-      "url": "https://innoenergy.com/about-us/",
-      "title": "EIT InnoEnergy — details page checked by scrape.py",
+      "id": "check-portfolio-3aa2ea452a",
+      "url": "https://innoenergy.com/news-resources/a-novel-private-public-fund-to-unlock-e500bn-for-europes-clean-industrial-deal/",
+      "title": "EIT InnoEnergy — terms page",
       "excerpt": "For Startups → https://innoenergy.com/startups/",
-      "page": "details"
+      "page": "terms"
     },
     {
       "id": "check-portfolio-3b5988723c",
       "url": "https://innoenergy.com/",
-      "title": "EIT InnoEnergy — homepage checked by scrape.py",
+      "title": "EIT InnoEnergy — homepage",
       "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-4eafb9b1e5",
-      "url": "https://innoenergy.com/about-us/",
-      "title": "EIT InnoEnergy — details page checked by scrape.py",
-      "excerpt": "Learn more about our startups in energy for transport and mobility → https://innoenergy.com/portfolio/?page=1&productsThematicFields=energy-for-transport-and-mobility",
-      "page": "details"
+      "id": "check-portfolio-5186f70a70",
+      "url": "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "application"
     },
     {
-      "id": "check-portfolio-5a7dc5f05e",
-      "url": "https://innoenergy.com/about-us/",
-      "title": "EIT InnoEnergy — details page checked by scrape.py",
-      "excerpt": "Learn more about our portfolio in smart grids → https://innoenergy.com/portfolio/?page=1&productsThematicFields=smart-electric-grid",
-      "page": "details"
+      "id": "check-portfolio-55d4998c32",
+      "url": "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-63ae8ed8ee",
+      "url": "https://innoenergy.com/news-resources/eit-innoenergy-invests-in-tribonex-to-reduce-friction-losses-and-wear-in-industrial-applications/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "application"
     },
     {
       "id": "check-portfolio-65bd2f1e2f",
       "url": "https://innoenergy.com/",
-      "title": "EIT InnoEnergy — homepage checked by scrape.py",
+      "title": "EIT InnoEnergy — homepage",
       "excerpt": "For Startups → https://innoenergy.com/startups/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-ad26bf65e2",
-      "url": "https://innoenergy.com/about-us/",
-      "title": "EIT InnoEnergy — details page checked by scrape.py",
+      "id": "check-portfolio-77f324df53",
+      "url": "https://innoenergy.com/news-resources/a-new-industrial-phase-for-the-european-green-deal/",
+      "title": "EIT InnoEnergy — terms page",
       "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
-      "page": "details"
+      "page": "terms"
     },
     {
-      "id": "check-portfolio-c8961c0dca",
-      "url": "https://innoenergy.com/about-us/",
-      "title": "EIT InnoEnergy — details page checked by scrape.py",
-      "excerpt": "Learn more about our initiatives for decarbonising the industry → https://innoenergy.com/portfolio/?page=1&productsThematicFields=decarbonizing-industry",
-      "page": "details"
+      "id": "check-portfolio-7d6fc72678",
+      "url": "https://innoenergy.com/news-resources/accelerate-skellefteaa-2021-programme-opens-for-applications-for-clean-energy-startups-in-northern-sweden/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "application"
     },
     {
-      "id": "check-portfolio-fa5f2c0fce",
-      "url": "https://innoenergy.com/about-us/",
-      "title": "EIT InnoEnergy — details page checked by scrape.py",
-      "excerpt": "Learn more about our startups in energy efficiency → https://innoenergy.com/portfolio/?page=1&productsThematicFields=energy-efficiency",
-      "page": "details"
+      "id": "check-portfolio-826d1bfec1",
+      "url": "https://innoenergy.com/news-resources/a-new-industrial-phase-for-the-european-green-deal/",
+      "title": "EIT InnoEnergy — terms page",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-856e2d5709",
+      "url": "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications-in-hungary-and-turkey/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-88059dab31",
+      "url": "https://innoenergy.com/news-resources/eit-innoenergy-invests-in-tribonex-to-reduce-friction-losses-and-wear-in-industrial-applications/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-8acb81bccc",
+      "url": "https://innoenergy.com/startups/apply-form/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-96dc91c2f6",
+      "url": "https://innoenergy.com/news-resources/applications-for-the-second-edition-of-the-hello-cleantech-programme-for-cleantech-innovators-are-open/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-97c021ae0b",
+      "url": "https://innoenergy.com/news-resources/webinar-battery-storage-applications/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-998cf8de07",
+      "url": "https://innoenergy.com/news-resources/a-novel-private-public-fund-to-unlock-e500bn-for-europes-clean-industrial-deal/",
+      "title": "EIT InnoEnergy — terms page",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a9f3ee37dc",
+      "url": "https://innoenergy.com/news-resources/accelerate-skellefteaa-2021-programme-opens-for-applications-for-clean-energy-startups-in-northern-sweden/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-ca964bf4ab",
+      "url": "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-cb97f9d66e",
+      "url": "https://innoenergy.com/news-resources/eit-innoenergy-beeplanet-zabala-idae-grants-for-energy-storage-and-real-application-cases/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-cd409e3269",
+      "url": "https://innoenergy.com/news-resources/eit-innoenergy-beeplanet-zabala-idae-grants-for-energy-storage-and-real-application-cases/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-ef5084245b",
+      "url": "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications-in-hungary-and-turkey/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-fe01885f94",
+      "url": "https://innoenergy.com/news-resources/applications-for-the-second-edition-of-the-hello-cleantech-programme-for-cleantech-innovators-are-open/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-380e1f8a66",
+      "url": "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications-in-hungary-and-turkey/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "<<<Download application form template>>> → https://innoenergy.com/uploads/2023/01/application-form-template_december_2020.docx",
+      "page": "application"
+    },
+    {
+      "id": "check-route-499f45567d",
+      "url": "https://innoenergy.com/news-resources/webinar-battery-storage-applications/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "dowload here → https://innoenergy.com/uploads/2023/01/webinar_battery-storage-applications_2020-03-04.pdf",
+      "page": "application"
     },
     {
       "id": "check-route-b98a9d535e",
       "url": "https://innoenergy.com/",
-      "title": "EIT InnoEnergy — homepage checked by scrape.py",
+      "title": "EIT InnoEnergy — homepage",
       "excerpt": "https://innoenergy.com/",
       "page": "details"
+    },
+    {
+      "id": "check-route-c610a5a7d5",
+      "url": "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications-in-hungary-and-turkey/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "<<<Download scorecard link>>> → https://innoenergy.com/uploads/2023/01/application-scoreboard_decmber_2020.pdf",
+      "page": "application"
+    },
+    {
+      "id": "check-status-16d1d098e4",
+      "url": "https://innoenergy.com/news-resources/applications-for-the-second-edition-of-the-hello-cleantech-programme-for-cleantech-innovators-are-open/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "information and the application form are available on the programme’s website: https://hellocleantech.com/ . Applications are open until 15 December 2023 . Portfolio For Investors For Industry For Startups Skills Institute For students",
+      "page": "application"
+    },
+    {
+      "id": "check-status-3c73d71699",
+      "url": "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
+      "title": "EIT InnoEnergy — application page",
+      "excerpt": "a “speed dating” on the theme “Impact”. A global support programme is the key to success This call for applications is open to any innovative company of less than 3 years old working in the social and/or environmental field whose",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-46543f7b23",
+      "url": "https://innoenergy.com/",
+      "page": "details",
+      "excerpt": "InnoEnergy - Industrialising clean tech innovation Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Transitioning global energy Transforming every industry Contact us Head in the clouds. Feet on the ground. InnoEnergy is industrialising clean tech innovation to enable and grow a global net-zero economy We invest in early-stage companies and the current and future workforce, building resilient clean tech value chains that drive sustainable economic growth. Through the collective power of our ecosystem – with partners spanning industry, finance, public policy, and academia – we scale the energy transition at speed. We have been at the forefront of the clean energy transition since being initiated in 2010 by the European Institute of Innovation and Technology (EIT). Learn more about who we are 540 + Companies supported since 2010 160 + Active portfolio companies 2 .3 Gt Portfolio accumulated CO2e reduction potential by 2030 € 35 B+ Investment raised by portfolio companies through 2025 100 K+ Upskilled workers by end of 2024 2000 + Masters+ graduates We take a holistic approach to industrialising clean tech Invest in and de-risk early-stage startups Build new industrial champions Lead strategic industrial value chains Deliver upskilled talent for clean tech industries Prepare Masters graduates to lead the"
+    },
+    {
+      "id": "check-page-a06cccb877",
+      "url": "https://innoenergy.com/news-resources/accelerate-skellefteaa-2021-programme-opens-for-applications-for-clean-energy-startups-in-northern-sweden/",
+      "page": "application",
+      "excerpt": "Accelerate Skellefteå 2021 programme opens for applications for clean energy startups in Northern Sweden Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Jun 18, 2021 Accelerate Skellefteå 2021 programme opens for applications for clean energy startups in Northern Sweden Skellefteå, Sweden, is leading the green transformation in a region set to invest more than 70 billion Euros over the next 10 years and which has recently become a focal point for innovation in electrification and energy technology. To further propel the innovation process, the accelerator programme Accelerate Skellefteå is now issuing its second call to attract startups in clean energy technology to thrive and develop in a Scandinavian hotspot of energy, innovation, and growth. A growth opportunity for sustainable energy entrepreneurs Accelerate Skellefteå is a five-month long accelerator programme which aims to give startups with ideas in energy storage, mobility, and electrification the opportunity to further develop their concepts together with world-leading companies in Skellefteå, while also contributing to the momentum of innovation in existing industries. The initiative is operated jointly by EIT InnoEnergy, Skellefteå Kraft and Skellefteå Science City and this year also reinforced by the high-tech metals company Boliden and global"
+    },
+    {
+      "id": "check-page-a1fdd598c1",
+      "url": "https://innoenergy.com/news-resources/applications-for-the-second-edition-of-the-hello-cleantech-programme-for-cleantech-innovators-are-open/",
+      "page": "application",
+      "excerpt": "Applications for the second edition of the Hello CleanTech programme for cleantech innovators are open Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Nov 1, 2023 Applications for the second edition of the Hello CleanTech programme for cleantech innovators are open Start-ups, entrepreneurs, innovators and researchers who develop impactful tech solutions, accelerate the cleantech sector and make a real impact on the world’s energy industry can already apply for the Hello CleanTech 2.0 programme organised by EIT InnoEnergy alongside industry partners. In the first edition of the programme, over 250 applications were submitted, and 36 companies established cooperation with experienced market leaders, receiving business, technological and fundraising support. Hello CleanTech 2.0 The goal of the Hello CleanTech 2.0 programme is to create a platform that will enable start-ups, innovators and researchers to reach international corporations and establish potential cooperation. Among programme partners are: EIT InnoEnergy, Antler, Ciech Group, Commercialization Reactor, E44 ventures, EDP Renewables, Enea Innowacje, Enerco, Green Brother, Helve, Impact Prosper, South Poland Cleantech Cluster, World Fund, Cobin Angels, TDJ, Doral, Inci, Neurone, Boryszew, Sunly Startup, CofounderZone, Sabanci ARF, Warsaw Equity"
+    },
+    {
+      "id": "check-page-c62a830e60",
+      "url": "https://innoenergy.com/news-resources/eit-innoenergy-beeplanet-zabala-idae-grants-for-energy-storage-and-real-application-cases/",
+      "page": "application",
+      "excerpt": "EIT InnoEnergy, Beeplanet & Zabala - IDAE grants for energy storage and real application cases Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Oct 14, 2021 EIT InnoEnergy, Beeplanet & Zabala – IDAE grants for energy storage and real application cases EIT InnoEnergy, BeePlanet and Zabala invite you to participate in their webinar on how to benefit from IDAE funds support for storage innovations and how to apply it in industry and the primary sector, with practical cases. Register here! Agenda 30″ // How to benefit from IDAE grants for self-consumption and energy storage. – How to approach and present a project so that it can be financed. Keys to present the proposal. – Practical cases of financing: + Amount of aid in each type of line of financing. Financing. + Analysis of real budgets and final amounts of funding. 10″ // Case studies of storage applications with second-life batteries for electric vehicles: – Case of self-consumption in the primary sector: farms. – Case of industrial self-consumption and support for charging hubs. – Case of storage as support for fast charging points. recharging points. 10″ // Questions BeePlanet will be at the annual EIT InnoEnergy event, The Business Booster, in Berlin. If you would like to meet them and have the opportunity to exchange views with them, do not hesitate to"
+    },
+    {
+      "id": "check-page-1332f6445a",
+      "url": "https://innoenergy.com/news-resources/eit-innoenergy-invests-in-tribonex-to-reduce-friction-losses-and-wear-in-industrial-applications/",
+      "page": "application",
+      "excerpt": "EIT InnoEnergy invests in Tribonex to reduce friction losses and wear in industrial applications Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Sep 19, 2023 EIT InnoEnergy invests in Tribonex to reduce friction losses and wear in industrial applications EIT InnoEnergy, the innovation engine for sustainable energy across Europe, has invested in Tribonex, a Swedish scale-up offering surface treatment methods for friction and wear reduction in industrial applications. Estimates suggest that roughly 20% of the global energy use is lost to overcome friction in various applications such as EV drive trains, gearboxes, pumps and compressors. Friction not only results in significant energy losses, but also leads to wear, shortening both maintenance intervals and lifespan of industrial equipment. Additionally, friction generates heat, which often requires cooling systems. Tribonex provides patented, scalable and cost-effective surface treatments to reduce friction and wear – enabling their customers across various industries to cut operational expenses, prolong the lifespan of equipment and reduce failure rates. “We have during several years followed the progress by the Tribonex team and we are highly impressed by the accelerating market traction driven by their recent achievements in improving the technology to be"
+    },
+    {
+      "id": "check-page-238924b349",
+      "url": "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
+      "page": "application",
+      "excerpt": "\"Impact Startups\": Le Village by CA calls for applications with InnoEnergy France, Credit Agricole CIB, makesense Seed I & Groupe PSA Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Jan 20, 2023 “Impact Startups”: Le Village by CA calls for applications with InnoEnergy France, Credit Agricole CIB, makesense Seed I & Groupe PSA Call for applications “Impact Startups”: [Press release] The Village by CA and Credit Agricole CIB , EIT InnoEnergy , makesense Seed I & Groupe PSA are launching a call for applications dedicated to social and environmental startups. Deadline to apply: March 31, 2020 Paris, March 9, 2020 The Village by CA Paris, a unique ecosystem where startups and large groups meet and cooperate to innovate together, launches a call for applications dedicated to social and environmental startups in partnership with Crédit Agricole CIB, EIT InnoEnergy , make s ense Seed I and Groupe PSA. A call dedicated to startups with a positive impact on the environment and society All startups presenting a technology that responds to sustainable development: environmental (circular economy, carbon footprint, preservation of resources, etc.), social (inclusion, disability, education, health, etc.), and societal (mobility, cyber security, etc.) are eligible. A call for applications from 9 March to 31 March 2020"
+    },
+    {
+      "id": "check-page-55aafa8f42",
+      "url": "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications-in-hungary-and-turkey/",
+      "page": "application",
+      "excerpt": "Open call for EIT InnoEnergy Hub applications in Hungary and Turkey Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Nov 24, 2020 Open call for EIT InnoEnergy Hub applications in Hungary and Turkey EIT InnoEnergy Hubs are local offices operated by ambitious partners, who are looking to build their local position, strengthen their business model and become a leading actor in the local ecosystem by playing a role in our European Network. We are currently looking for partners to operate EIT InnoEnergy Hubs supported by the EIT InnoEnergy Power Alliance platform in the following countries: Hungary & Turkey. EIT InnoEnergy HUB’s scope Identify, develop, and support promising ideas, startups and entrepreneurs. Provide access to EIT InnoEnergy services Host and promote co-branded events (i.e. PowerUp! Competition, TBB, etc). Perform innovation capacity building services, pre-acceleration programmes. Actively promote EIT InnoEnergy Business Model and participate in the local ecosystem Perform local business development services and support sales channels for EIT InnoEnergy portfolio. How to apply Send the filled application form to apply@innoenergy.com . In case you need assistance at any point of the application process, please feel free to contact us at apply@innoenergy.com . <<<Download application form"
+    },
+    {
+      "id": "check-page-f5bcdf3a1d",
+      "url": "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications/",
+      "page": "application",
+      "excerpt": "Open call for EIT InnoEnergy Hub applications Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Jul 7, 2020 Open call for EIT InnoEnergy Hub applications EIT InnoEnergy Hubs are local offices operated by ambitious partners, who are looking to build their local position, strengthen their business model and become a leading actor in the local ecosystem by playing a role in our European Network. We are currently looking for partners to operate InnoEnergy Hubs supported by the EIT InnoEnergy Power Alliance platform in the following countries: Czechia, Greece, Lithuania, Estonia and Croatia. EIT InnoEnergy HUB’s scope Identify, develop, and support promising ideas, startups and entrepreneurs. Provide access to EIT InnoEnergy services Host and promote EIT InnoEnergy events (via the network of partners). Perform innovation capacity building services, pre-acceleration programmes. Actively promote the EIT InnoEnergy Business Model and actively participate in the local ecosystem Perform local business development services and support sales channels for EIT InnoEnergy portfolio. I Stage – application and shortlist (max 100 p) You apply by sending your application and we will select the best candidates according to the Evaluation ScoreBoard.The ones that pass over the minimum threshold will qualify for Stage II. Maximum"
+    },
+    {
+      "id": "check-page-2421f3e5b8",
+      "url": "https://innoenergy.com/news-resources/webinar-battery-storage-applications/",
+      "page": "application",
+      "excerpt": "Webinar | Battery Storage Applications Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Feb 11, 2020 Webinar | Battery Storage Applications Battery storage is set to completely disrupt the energy space and shape the future of the sector for the foreseeable future. The EU estimates that in Europe alone, the battery storage market will be worth €250 billion by 2025. Exploiting the opportunities to come and securing competitive edge in the longer-term starts with building the understanding of the different battery storage applications. The importance of batteries Energy and battery storage is at the heart of strategy for the European energy transition and is a rapidly expanding market. Battery storage can be deployed at different levels of the electricity system, providing a broad variety of values and allowing access to multiple revenue streams. Therefore, the battery storage industry is generating a vast interest and the number of investors looking to enter this market is continuously growing. Nonetheless, many are still having difficulties understanding how they could benefit from battery storage. In this free webinar, Johan Söderbom, Thematic Leader in Smart Grids and Energy Storage at EIT InnoEnergy will focus on providing you a comprehensive overview of the battery storage applications. Register"
+    },
+    {
+      "id": "check-page-c882b14026",
+      "url": "https://innoenergy.com/startups/apply-form/",
+      "page": "application",
+      "excerpt": "Apply form Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Join our ecosystem Apply now Do you want to join the most dynamic innovation ecosystem in the field of sustainable energy? Fill in the application form below to enter our business creation programmes. After you submit your application you will be contacted by the nearest team. \" * \" indicates required fields Country * — Please select — Afghanistan Albania Algeria Andorra Angola Antigua and Barbuda Argentina Armenia Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bhutan Bolivia Bosnia and Herzegovina Botswana Brazil Brunei Bulgaria Burkina Faso Burundi Côte d'Ivoire Cabo Verde Cambodia Cameroon Canada Central African Republic Chad Chile China Colombia Comoros Congo (Congo-Brazzaville) Costa Rica Croatia Cuba Cyprus Czechia (Czech Republic) Democratic Republic of the Congo Denmark Djibouti Dominica Dominican Republic Ecuador Egypt El Salvador Equatorial Guinea Eritrea Estonia Eswatini (fmr. \"Swaziland\") Ethiopia Fiji Finland France Gabon Gambia Georgia Germany Ghana Greece Grenada Guatemala Guinea Guinea-Bissau Guyana Haiti Holy See Honduras Hungary Iceland India Indonesia Iran Iraq Ireland Israel Italy Jamaica Japan Jordan Kazakhstan Kenya Kiribati Kuwait Kyrgyzstan Laos Latvia Lebanon Lesotho Liberia"
+    },
+    {
+      "id": "check-page-a244d30294",
+      "url": "https://innoenergy.com/uploads/2023/01/application-form-template_december_2020.docx",
+      "page": "application",
+      "excerpt": "PK ! /� %� � [Content_Types].xml � (� ���N�0 E�H�C�-j\\X ���� $@b�ړ��/�Ӗ�=�>\"�RRQ�� {��c%3����X@Lڻ���CV��^i7������� �S�x [Ab7�ӓ��*@*H�R�f���$g`E*} G;��V ��) B~�)����K� 0{��� j17X� ��$�)+n7u9�b�f}^筊 &��� �� i�/���5�2��\\פ� � �$�� [� 53j ų��(,U񥏊+/疔��6-�����F��B� R�[��lv��n���!� �}��k � }H�G�4�� \"jhz�� nn' �����XwB$\\ H�O��� D � �u�DX��7�o� ��� < �q �u' 8� ����>@ < ��l� � �)OL �A���@ \"�y ߉��o�T�� �P� 8�n�d� � l ����A O TK6_��� �� PK ! � �� N _rels/.rels � (� ���j�0 @���ѽQ�� �N/c�� � [IL ��j��� < �� ]�aG��ӓ�zs�Fu��]� �U �� ��^�[��x ����1x�p� ���f��#I)ʃ�Y �� ������ �*D�� i\")��c$���qU���~3��1��jH[{ �=E�� �� ~ f?��3-���޲]�Tꓸ2�j)�, l0/%��b� ���z���ŉ�, � �/�|f\\ Z��� ?6�!Y�_�o �]A� �� PK ! ,h �| < �x word/document.xml�}��L��� � �9���g3��>��Q9g 0J��Ĥp������^�v7� i�e{�w�� `��P�����~���׿�|���q��� �3~S� 3��`��f4�>�7�$� K����r���� ��?�ǿ��Vhf� �%@\"Hn����f���-�%������q��N�� },t ״�m [ � 8���д� �Oփ\\On����uԬX߂ʐ ��K=N��= ⻉0��� �?@ ��$ ���� �A� � � �� %��(=�8��(��)q?F�zL��1J��� ��ad � c_O�c��|=^g�'@8�S�p=7� �8{\"���� 8 ��(���� 8� -ۣ� ���M ������C�o���˩F|M��*��8��c�� Y�A�t�� ��(5�� < �_jD�{�rۈ�r� �L 2$u�� _ [r|�� ��6�Z �P �x�/U3 f�E ��Þgy�A��� �#� Ql'v��7_K�1�W��� �* V ���K#�-ɹ �Q��^ih� �t�FA-��/ �P���Ф����,� ͙̎ ��-�� < %İ�k� �A7���n*Ҟ0 �Pq���$i��( �BG(�#IJ �_G^V M!xJ���� ~؛O �Q JV�k у��At��gI�Sy\\ X ;����pZ\"�R� ]sQ�g;� �d�_�7�� � �}�� e��9z�[ �����\"� ]�ȿ��ѷ ��*�Rt� �c Pr��e'�\"��R �t0kIҒ ��~����� �-|B"
+    },
+    {
+      "id": "check-page-302d4575ce",
+      "url": "https://innoenergy.com/uploads/2023/01/application-scoreboard_decmber_2020.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.7 %���� 1 0 obj < >/Metadata 247 0 R/ViewerPreferences 248 0 R>> endobj 2 0 obj < > endobj 3 0 obj < > endobj 4 0 obj < >/Font < >/ProcSet[/PDF/Text/ImageB/ImageC/ImageI] >>/MediaBox[ 0 0 1584 1224] /Contents 5 0 R/Group < >/Tabs/S/StructParents 0>> endobj 5 0 obj < > stream x��=�v 7��>���O{ԉ��n�5gv�q|�g6 o�� M�$Y���*�_� Rë^4|�'�x,z�e��z��Γ� ��z��\"K m������� _ ��U/ � IQ=��y!G���-� ��z���`�( m����e��#RA� 6IY= B$Z6�&I��d��R < � ]� ��i$[�\"��S� e�� ��B-�*-�����>{ �gw�ߵ����� ?M���>����7�p^ ��#\"Z4e�e>� ���:�ҳi\\ �W}�Di� �Ԩh� sӤIk )ːüC�� �m�d�g4��xvw �w��R�� r8�֎i�\"� ը m� �� � o�`4 z��UՆ� � O� � + �l� %-+ � (�4��ҢDv�B�-S ��^ ���� 6Թ�����I?I � P {��{J=��|� ��:�\"�3��.�|F�@�A�. R ��� �Z #j� �����F�oXl�1L|W b�Me1�6C �� RS�I�{�9 !�¸�\\% �Qp g�Q} ø���0�K Fx8 < ��RWf n\\h k� ��� >� � �W'�6�2Ő� ����q��R>� �� @ Ŕ Ll��F}i� K \"�ǉL I�K]�I�7 D�E�]� �� ���K?��NP��� 5q;;&[Rld� �0_s�@Y �1�0�m�JP�?L';,�;E �K�H(L(���nÏ��G����� �25��|��/� �W�M��1�n܎(� �N7D�{ ��5�E ��X�?��D �;�����dun��} d �xcC� ���߭A�w؟� �� ��� ��?�AIz��/� ��� �}���[�ή��\"��;6 Fw��7����֕-| �Nz�-'�� -�H! \\����AeN|gw� � y ޑ챠K� < �=�b�A�� } c��� �y����ȧi\"�����&�N|C� }���Mn�'���]��6Vᘻn�ͨ������p��!� ��L�̹��Kr76�c��M8qy �%} � �_�. ��k @ �P ?�c\\��� � p�8 OD P~ } d.�K�b��Q�+�3 ԧ _:* �� �N��'M�� �\"���#+ذ�` �c�b�|����ybW�MB �G]� \"��m \"˹e��DIf�.� ; < ���$R�6\\�]E < ¾���\" 2�g 3��r:� � �M@�yd$T�D � v��\\�w�4�}A� �Z��oiƃ�SA ���Ե4�WK�)FO�O5ߪy4�"
+    },
+    {
+      "id": "check-page-ef8304cf8f",
+      "url": "https://innoenergy.com/uploads/2023/01/webinar_battery-storage-applications_2020-03-04.pdf",
+      "page": "application",
+      "excerpt": "%PDF-1.7 %���� 1 0 obj < >/Metadata 1310 0 R/ViewerPreferences 1311 0 R>> endobj 2 0 obj < > endobj 3 0 obj < >/XObject < >/Pattern < >/Font < >/ProcSet[/PDF/Text/ImageB/ImageC/ImageI] >>/MediaBox[ 0 0 960 540] /Contents 4 0 R/Group < >/Tabs/S/StructParents 0>> endobj 4 0 obj < > stream x��]K�%���7��� � ��z�J ��c$����@ �Yt*�� �v�ݛ��Y�H~�X� � 1���'�$�/I��y����~�������� ����W� �!��RX/[ �����w�_��7� �_�������ׯ��1� C^ �������|���e���� ��U!ł�Z���h۲]k����i���^R̗��K�Ǘ����� ?]� a ���@ < ���kk� ʵ��>D�˵��P��]j���K��u����k.�T I�wY{���k �GA^7?�0]�GmtU� k��xIm��� S����v9 ����L� �µ���n��7����ܧ�ǎ�Q�}�qI׮j4�n�5]▯k���km� E�]#�p���t��yY�]���k ;.�܇� i@� D�9]� ��k�+r @1�^� ��r������_ , � � �R� C��IE&'����z9C�1�)�@ � S^�˄`ē�V0j\"c���kZ ��qCܺ����J���t���#�ws�Jѳ4�y�@���6׆��N�eF[�(��R�WQK�keL� M���5l�6C���$ ��*�e ��_ 13�e�n���V =��` �Ga^L�� /r��M�PGK��*b]������ں-�Aa�)Cܕ!��.!��*.9C��+. r��+�XX�*37�k$rb�T%�.�Wo��J:jאx�AP ���5�b��dn� �~p �c�̅򣑻 �@p��3�K άR *m�ܜ̽!ٌz�n�Ͷ����ް�� D� �c`1���#k��G +� $G�8a�HRa;�K fFs�EI Ea�j�H� Z� � Ѡ\"Q� f �+Yl Ӎ�aY �C(8Ő >�)u�E�m(�n -��37��#3i�K���Y T 3K�B �vGy�� m���Ь� � F���d�G�$]��%���� �� < 8dV ��%� r�c� �5S ����@��+O�&u��j!/� d�� 6ܜ rp����/gȅmW �-�j yG �o��'%���.}� 0��q�VZ��ؖ뒵W DW 7%S�oz� �m��]�� g� �1yA5 ly �+Y̢� ��^ڗ����+)��pbB� � �lLf��#� �� � z���2���O��Q�� �))y��[� � ]�} X�O ���A�#�,�>A� �9r�b�)���\" � p�:� �fW:��I��3��N� :�#�,� l���$G.z: �Ǟ = �m� �Ջ,{�����Fj"
+    },
+    {
+      "id": "check-page-bbca2b31f0",
+      "url": "https://innoenergy.com/news-resources/a-new-industrial-phase-for-the-european-green-deal/",
+      "page": "terms",
+      "excerpt": "A new industrial phase for the European Green Deal Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Sep 26, 2023 A new industrial phase for the European Green Deal By Baptiste Buet, EU Business Unit Director, EIT InnoEnergy. The European Union steps up efforts to accelerate clean tech with an industrial strategy that is Made in Europe – an ambition that EIT InnoEnergy will continue to deliver on. The EU’s ‘State of the Union’ speech Each year, the President of the Commission makes a much-anticipated speech entitled the ‘State of the Union’, in which the priorities for the European Union (EU) are outlined for the year ahead. This year, climate tech was front and centre of the EU’s priorities with particular focus on the industrial pillar of Europe’s flagship Green Deal. A robust green industrial policy is now needed to reap the socio-economic benefits of the Green Deal: both resilient industrial value chains in climate technologies – like batteries or solar PV – and accelerated pathways to decarbonize hard to abate industries. For over a decade, InnoEnergy has been accelerating and de-risking industrial frontrunners to deliver on the European Green Deal ambitions. Three main messages on the Green Deal from President von der Leyen’s address were key: The European climate agenda is also an economically viable"
+    },
+    {
+      "id": "check-page-6d26bd8dec",
+      "url": "https://innoenergy.com/news-resources/a-novel-private-public-fund-to-unlock-e500bn-for-europes-clean-industrial-deal/",
+      "page": "terms",
+      "excerpt": "A novel private-public fund to unlock €500bn for Europe’s Clean Industrial Deal Skip To Main Content Portfolio Ecosystem For Startups For Investors For Industry For Students Skills Institute About us Jan 15, 2025 A novel private-public fund to unlock €500bn for Europe’s Clean Industrial Deal Written by InnoEnergy CEO Diego Pavia and Member of the European Parliament Pascal Canfin. This article was originally written for and published on the FT’s Sustainable Views . The incoming US administration looks set to shift its climate strategy, casting doubt over the $369bn Inflation Reduction Act – the largest public support scheme for clean technologies in American history. This presents a rare and unique opportunity for Europe to position itself as the global hub for investment and deployment of clean technologies. But in the face of fierce competition from China, Europe must act decisively to create conditions that make investing in home-grown green industrial projects feasible and compelling. With strained public budgets and three years to wait for the next EU budget, securing the financial firepower of a public US-style IRA is not realistic. Mobilising private capital through a private fund is the only viable path to securing the financial muscle needed. Europe’s regulatory stability and robust policy framework are not to be overlooked. Demand-side measures, such as the ambitious"
     }
   ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "apply@innoenergy.com",
+        "evidenceId": "check-email-11a191258a"
+      }
+    ],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "mailto:apply@innoenergy.com",
+        "evidenceId": "check-email-11a191258a"
+      },
+      {
+        "value": "https://innoenergy.com/uploads/2023/01/application-form-template_december_2020.docx",
+        "evidenceId": "check-route-380e1f8a66"
+      },
+      {
+        "value": "https://innoenergy.com/uploads/2023/01/application-scoreboard_decmber_2020.pdf",
+        "evidenceId": "check-route-c610a5a7d5"
+      },
+      {
+        "value": "https://innoenergy.com/uploads/2023/01/webinar_battery-storage-applications_2020-03-04.pdf",
+        "evidenceId": "check-route-499f45567d"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://innoenergy.com/",
         "evidenceId": "check-route-b98a9d535e"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-16d1d098e4"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-c266530ea2"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://innoenergy.com/portfolio/",
@@ -121,22 +426,6 @@
       {
         "value": "https://innoenergy.com/startups/",
         "evidenceId": "check-portfolio-65bd2f1e2f"
-      },
-      {
-        "value": "https://innoenergy.com/portfolio/?page=1&productsThematicFields=energy-storage",
-        "evidenceId": "check-portfolio-2e3956ef85"
-      },
-      {
-        "value": "https://innoenergy.com/portfolio/?page=1&productsThematicFields=energy-for-transport-and-mobility",
-        "evidenceId": "check-portfolio-4eafb9b1e5"
-      },
-      {
-        "value": "https://innoenergy.com/portfolio/?page=1&productsThematicFields=decarbonizing-industry",
-        "evidenceId": "check-portfolio-c8961c0dca"
-      },
-      {
-        "value": "https://innoenergy.com/portfolio/?page=1&productsThematicFields=smart-electric-grid",
-        "evidenceId": "check-portfolio-5a7dc5f05e"
       }
     ],
     "name": [],

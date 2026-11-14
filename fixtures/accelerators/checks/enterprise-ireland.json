@@ -1,52 +1,304 @@
 {
   "programId": "enterprise-ireland",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
     "https://www.enterprise-ireland.com/en/",
-    "https://www.enterprise-ireland.com/en/about-enterprise-ireland"
+    "https://www.enterprise-ireland.com/en/legal/enterprise-ireland-terms-conditions",
+    "https://www.enterprise-ireland.com/en/legal/enterprise-ireland-terms-conditions/copyright",
+    "https://www.enterprise-ireland.com/en/legal/enterprise-ireland-terms-conditions/oecd-anti-bribery-convention",
+    "https://www.enterprise-ireland.com/en/about-enterprise-ireland",
+    "https://www.enterprise-ireland.com/en/about-enterprise-ireland/our-team",
+    "https://www.enterprise-ireland.com/en/about-enterprise-ireland/our-impact",
+    "https://www.enterprise-ireland.com/en/about-enterprise-ireland/our-strategy",
+    "https://www.enterprise-ireland.com/en/global",
+    "https://www.enterprise-ireland.com/en/global/about-enterprise-ireland",
+    "https://www.enterprise-ireland.com/en/global/about-irish-innovation",
+    "https://www.enterprise-ireland.com/en/supports/for-large-companies",
+    "https://www.enterprise-ireland.com/en/supports/innovation-partnership-programme",
+    "http://directory.enterprise-ireland.com/"
   ],
   "evidence": [
     {
+      "id": "check-duration-85297538d1",
+      "url": "https://www.enterprise-ireland.com/en/supports/for-large-companies",
+      "title": "Enterprise Ireland — portfolio page",
+      "excerpt": "your business Large company SME Start-up A 6-month course to prepare for IPO Read more Eureka -",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-location-1dd2757d67",
+      "url": "https://www.enterprise-ireland.com/en/legal/enterprise-ireland-terms-conditions/oecd-anti-bribery-convention",
+      "title": "Enterprise Ireland — terms page",
+      "excerpt": "transactions, carried out by companies based in Convention Member Countries. The Convention requires that",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-de4ec3c467",
+      "url": "https://www.enterprise-ireland.com/en/about-enterprise-ireland/our-team",
+      "title": "Enterprise Ireland — program page",
+      "excerpt": "of business and specialist advisors based in Ireland, who work with colleagues located in",
+      "page": "details"
+    },
+    {
       "id": "check-name-f20ca6b5e4",
       "url": "https://www.enterprise-ireland.com/en/",
-      "title": "Enterprise Ireland — homepage checked by scrape.py",
+      "title": "Enterprise Ireland — homepage",
       "excerpt": "Helping Irish Business Go Global | Enterprise Ireland How can we help? Search See Results I’m an Irish company I",
       "page": "details"
     },
     {
+      "id": "check-phone-03c32b7c04",
+      "url": "https://www.enterprise-ireland.com/en/about-enterprise-ireland/our-impact",
+      "title": "Enterprise Ireland — program page",
+      "excerpt": "+353 (1) 7272000",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-03d2080896",
+      "url": "https://www.enterprise-ireland.com/en/global/about-enterprise-ireland",
+      "title": "Enterprise Ireland — program page",
+      "excerpt": "+353 (1) 7272000",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-0d56056252",
+      "url": "https://www.enterprise-ireland.com/en/legal/enterprise-ireland-terms-conditions/copyright",
+      "title": "Enterprise Ireland — terms page",
+      "excerpt": "+353 (1) 7272000",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-468150bfd9",
+      "url": "https://www.enterprise-ireland.com/en/supports/for-large-companies",
+      "title": "Enterprise Ireland — portfolio page",
+      "excerpt": "+353 (1) 7272000",
+      "page": "portfolio"
+    },
+    {
       "id": "check-phone-47f23aa8e5",
       "url": "https://www.enterprise-ireland.com/en/",
-      "title": "Enterprise Ireland — homepage checked by scrape.py",
+      "title": "Enterprise Ireland — homepage",
+      "excerpt": "+353 (1) 7272000",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-53f629c600",
+      "url": "https://www.enterprise-ireland.com/en/about-enterprise-ireland/our-team",
+      "title": "Enterprise Ireland — program page",
+      "excerpt": "+353 (1) 7272000",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-634cafbe1a",
+      "url": "https://www.enterprise-ireland.com/en/legal/enterprise-ireland-terms-conditions",
+      "title": "Enterprise Ireland — terms page",
+      "excerpt": "+353 (1) 7272000",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-7080575cd4",
+      "url": "https://www.enterprise-ireland.com/en/supports/innovation-partnership-programme",
+      "title": "Enterprise Ireland — program page",
+      "excerpt": "+353 (1) 7272000",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-7bc64ef2d8",
+      "url": "https://www.enterprise-ireland.com/en/about-enterprise-ireland/our-strategy",
+      "title": "Enterprise Ireland — program page",
       "excerpt": "+353 (1) 7272000",
       "page": "details"
     },
     {
       "id": "check-phone-b41475f7b3",
       "url": "https://www.enterprise-ireland.com/en/about-enterprise-ireland",
-      "title": "Enterprise Ireland — details page checked by scrape.py",
+      "title": "Enterprise Ireland — program page",
       "excerpt": "+353 (1) 7272000",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-bb7e9d1188",
+      "url": "https://www.enterprise-ireland.com/en/global/about-irish-innovation",
+      "title": "Enterprise Ireland — program page",
+      "excerpt": "+353 (1) 7272000",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-c8d40e45d0",
+      "url": "https://www.enterprise-ireland.com/en/legal/enterprise-ireland-terms-conditions/oecd-anti-bribery-convention",
+      "title": "Enterprise Ireland — terms page",
+      "excerpt": "+353 (1) 7272000",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-dff26a63d1",
+      "url": "https://www.enterprise-ireland.com/en/global",
+      "title": "Enterprise Ireland — portfolio page",
+      "excerpt": "+353 (1) 7272000",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-0dddd02cdc",
+      "url": "https://www.enterprise-ireland.com/en/supports/for-large-companies",
+      "title": "Enterprise Ireland — portfolio page",
+      "excerpt": "Startups → https://www.enterprise-ireland.com/en/supports/start-ups",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-34673fc9e2",
+      "url": "https://www.enterprise-ireland.com/en/about-enterprise-ireland/our-team",
+      "title": "Enterprise Ireland — program page",
+      "excerpt": "Startups → https://www.enterprise-ireland.com/en/supports/start-ups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4d16e64848",
+      "url": "https://www.enterprise-ireland.com/en/about-enterprise-ireland/our-strategy",
+      "title": "Enterprise Ireland — program page",
+      "excerpt": "Startups → https://www.enterprise-ireland.com/en/supports/start-ups",
       "page": "details"
     },
     {
       "id": "check-portfolio-7631b97b0b",
       "url": "https://www.enterprise-ireland.com/en/",
-      "title": "Enterprise Ireland — homepage checked by scrape.py",
+      "title": "Enterprise Ireland — homepage",
+      "excerpt": "Startups → https://www.enterprise-ireland.com/en/supports/start-ups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a3675d6a31",
+      "url": "https://www.enterprise-ireland.com/en/legal/enterprise-ireland-terms-conditions/oecd-anti-bribery-convention",
+      "title": "Enterprise Ireland — terms page",
+      "excerpt": "Startups → https://www.enterprise-ireland.com/en/supports/start-ups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a637197225",
+      "url": "https://www.enterprise-ireland.com/en/legal/enterprise-ireland-terms-conditions",
+      "title": "Enterprise Ireland — terms page",
+      "excerpt": "Startups → https://www.enterprise-ireland.com/en/supports/start-ups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e73b572002",
+      "url": "https://www.enterprise-ireland.com/en/supports/innovation-partnership-programme",
+      "title": "Enterprise Ireland — program page",
       "excerpt": "Startups → https://www.enterprise-ireland.com/en/supports/start-ups",
       "page": "details"
     },
     {
       "id": "check-portfolio-eda3d5f703",
       "url": "https://www.enterprise-ireland.com/en/about-enterprise-ireland",
-      "title": "Enterprise Ireland — details page checked by scrape.py",
+      "title": "Enterprise Ireland — program page",
       "excerpt": "Startups → https://www.enterprise-ireland.com/en/supports/start-ups",
       "page": "details"
     },
     {
+      "id": "check-portfolio-efd546fbba",
+      "url": "https://www.enterprise-ireland.com/en/about-enterprise-ireland/our-impact",
+      "title": "Enterprise Ireland — program page",
+      "excerpt": "Startups → https://www.enterprise-ireland.com/en/supports/start-ups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f669960b29",
+      "url": "https://www.enterprise-ireland.com/en/legal/enterprise-ireland-terms-conditions/copyright",
+      "title": "Enterprise Ireland — terms page",
+      "excerpt": "Startups → https://www.enterprise-ireland.com/en/supports/start-ups",
+      "page": "terms"
+    },
+    {
       "id": "check-route-c911c2a1c3",
       "url": "https://www.enterprise-ireland.com/en/",
-      "title": "Enterprise Ireland — homepage checked by scrape.py",
+      "title": "Enterprise Ireland — homepage",
       "excerpt": "I’m an Irish company → https://www.enterprise-ireland.com/en/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-dbc82797eb",
+      "url": "https://www.enterprise-ireland.com/en/",
+      "page": "details",
+      "excerpt": "Helping Irish Business Go Global | Enterprise Ireland How can we help? Search See Results I’m an Irish company I want to connect with Irish companies Search Submit a Claim Contact Us Supports Back Supports By Support Market access Capability development Funding and grants By Business Startups SMEs Large companies Researchers By Goal Expand your business Grow internationally Become more sustainable Become more innovative Transform your operations Enhance sales and marketing About Back About Who we are About Enterprise Ireland Our team Careers at Enterprise Ireland What we do How we help businesses grow Success stories Sectors we work in Regional development News and Events Back News and Events News News Publications and reports Press room Events Upcoming events Insights Insights and webinars Market Research Center Submit a Claim Contact Us Search On the Journey with Irish Business On the Journey with Irish Business Wherever you are on your journey, we’re here to help Start a business Discover supports for early-stage businesses Get started Expand your business Find the supports you need to grow, scale and drive performance Explore ways to grow Grow internationally Get advice and support to expand into international markets Start exporting Source Irish innovation Located outside Ireland and want to connect with Irish innovation? Explore partnerships Previous Next We deliver"
+    },
+    {
+      "id": "check-page-23cbc0054e",
+      "url": "https://www.enterprise-ireland.com/en/legal/enterprise-ireland-terms-conditions",
+      "page": "terms",
+      "excerpt": "Enterprise Ireland Terms & Conditions | Enterprise Ireland How can we help? Search See Results I’m an Irish company I want to connect with Irish companies Search Submit a Claim Contact Us Supports Back Supports By Support Market access Capability development Funding and grants By Business Startups SMEs Large companies Researchers By Goal Expand your business Grow internationally Become more sustainable Become more innovative Transform your operations Enhance sales and marketing About Back About Who we are About Enterprise Ireland Our team Careers at Enterprise Ireland What we do How we help businesses grow Success stories Sectors we work in Regional development News and Events Back News and Events News News Publications and reports Press room Events Upcoming events Insights Insights and webinars Market Research Center Submit a Claim Contact Us Search Enterprise Ireland Terms & Conditions Navigation Data Protection General Data Protection Statement Data Protection Statement for EI Funding, Investment & Support Services Recruitment Data Protection Statement Cookie Policy CCTV Statement Accessibility Enterprise Ireland Terms & Conditions Copyright OECD Anti-Bribery Convention FOI, AIE and Publication Freedom of Information statement Publications Scheme Re-use of Public Sector Information Regulation Policies & Guidelines Ombudsman Mission Statement Corporate Social Responsibility"
+    },
+    {
+      "id": "check-page-12204bee3e",
+      "url": "https://www.enterprise-ireland.com/en/legal/enterprise-ireland-terms-conditions/copyright",
+      "page": "terms",
+      "excerpt": "Copyright | Enterprise Ireland How can we help? Search See Results I’m an Irish company I want to connect with Irish companies Search Submit a Claim Contact Us Supports Back Supports By Support Market access Capability development Funding and grants By Business Startups SMEs Large companies Researchers By Goal Expand your business Grow internationally Become more sustainable Become more innovative Transform your operations Enhance sales and marketing About Back About Who we are About Enterprise Ireland Our team Careers at Enterprise Ireland What we do How we help businesses grow Success stories Sectors we work in Regional development News and Events Back News and Events News News Publications and reports Press room Events Upcoming events Insights Insights and webinars Market Research Center Submit a Claim Contact Us Search Enterprise Ireland Terms & Conditions Navigation Data Protection General Data Protection Statement Data Protection Statement for EI Funding, Investment & Support Services Recruitment Data Protection Statement Cookie Policy CCTV Statement Accessibility Enterprise Ireland Terms & Conditions Copyright OECD Anti-Bribery Convention FOI, AIE and Publication Freedom of Information statement Publications Scheme Re-use of Public Sector Information Regulation Policies & Guidelines Ombudsman Mission Statement Corporate Social Responsibility (CSR) State Aid Economic and"
+    },
+    {
+      "id": "check-page-399231e953",
+      "url": "https://www.enterprise-ireland.com/en/legal/enterprise-ireland-terms-conditions/oecd-anti-bribery-convention",
+      "page": "terms",
+      "excerpt": "OECD Anti-Bribery Convention | Enterprise Ireland How can we help? Search See Results I’m an Irish company I want to connect with Irish companies Search Submit a Claim Contact Us Supports Back Supports By Support Market access Capability development Funding and grants By Business Startups SMEs Large companies Researchers By Goal Expand your business Grow internationally Become more sustainable Become more innovative Transform your operations Enhance sales and marketing About Back About Who we are About Enterprise Ireland Our team Careers at Enterprise Ireland What we do How we help businesses grow Success stories Sectors we work in Regional development News and Events Back News and Events News News Publications and reports Press room Events Upcoming events Insights Insights and webinars Market Research Center Submit a Claim Contact Us Search Enterprise Ireland Terms & Conditions Navigation Data Protection General Data Protection Statement Data Protection Statement for EI Funding, Investment & Support Services Recruitment Data Protection Statement Cookie Policy CCTV Statement Accessibility Enterprise Ireland Terms & Conditions Copyright OECD Anti-Bribery Convention FOI, AIE and Publication Freedom of Information statement Publications Scheme Re-use of Public Sector Information Regulation Policies & Guidelines Ombudsman Mission Statement Corporate Social Responsibility (CSR)"
+    },
+    {
+      "id": "check-page-70d6077d81",
+      "url": "https://www.enterprise-ireland.com/en/about-enterprise-ireland",
+      "page": "details",
+      "excerpt": "Irish Enterprise Development Agency | Enterprise Ireland How can we help? Search See Results I’m an Irish company I want to connect with Irish companies Search Submit a Claim Contact Us Supports Back Supports By Support Market access Capability development Funding and grants By Business Startups SMEs Large companies Researchers By Goal Expand your business Grow internationally Become more sustainable Become more innovative Transform your operations Enhance sales and marketing About Back About Who we are About Enterprise Ireland Our team Careers at Enterprise Ireland What we do How we help businesses grow Success stories Sectors we work in Regional development News and Events Back News and Events News News Publications and reports Press room Events Upcoming events Insights Insights and webinars Market Research Center Submit a Claim Contact Us Search About Enterprise Ireland Enterprise Ireland is the Irish government’s enterprise development agency We invest in and support the development of Irish-owned companies on their journey to achieving greater scale and to become global leaders in their field. This provides a platform for strong economic growth, and creating and sustaining jobs in communities around the country. Our teams in Ireland and across our network of 40 international offices help Irish companies to develop high-growth strategies and to enter new markets with"
+    },
+    {
+      "id": "check-page-b5ff3c972a",
+      "url": "https://www.enterprise-ireland.com/en/about-enterprise-ireland/our-team",
+      "page": "details",
+      "excerpt": "Our People | Enterprise Ireland How can we help? Search See Results I’m an Irish company I want to connect with Irish companies Search Submit a Claim Contact Us Supports Back Supports By Support Market access Capability development Funding and grants By Business Startups SMEs Large companies Researchers By Goal Expand your business Grow internationally Become more sustainable Become more innovative Transform your operations Enhance sales and marketing About Back About Who we are About Enterprise Ireland Our team Careers at Enterprise Ireland What we do How we help businesses grow Success stories Sectors we work in Regional development News and Events Back News and Events News News Publications and reports Press room Events Upcoming events Insights Insights and webinars Market Research Center Submit a Claim Contact Us Search Our People About Enterprise Ireland's people Enterprise Ireland has a team of business and specialist advisors based in Ireland, who work with colleagues located in our international office network, to help Irish companies compete for and win international sales. Enterprise Ireland clients are assigned a Client Advisor according to their stage of development (e.g. startup, established or high growth) and sector (e.g. food, pharmaceuticals, international services). Other specialists work with clients to help them achieve global success, for example:"
+    },
+    {
+      "id": "check-page-c66713cb77",
+      "url": "https://www.enterprise-ireland.com/en/about-enterprise-ireland/our-impact",
+      "page": "details",
+      "excerpt": "Our Impact | Enterprise Ireland How can we help? Search See Results I’m an Irish company I want to connect with Irish companies Search Submit a Claim Contact Us Supports Back Supports By Support Market access Capability development Funding and grants By Business Startups SMEs Large companies Researchers By Goal Expand your business Grow internationally Become more sustainable Become more innovative Transform your operations Enhance sales and marketing About Back About Who we are About Enterprise Ireland Our team Careers at Enterprise Ireland What we do How we help businesses grow Success stories Sectors we work in Regional development News and Events Back News and Events News News Publications and reports Press room Events Upcoming events Insights Insights and webinars Market Research Center Submit a Claim Contact Us Search Our Impact Enterprise Ireland has played a central role in delivering sustainable prosperity since 1998 We support Irish businesses to start, become more innovative, and to grow internationally – driving economic growth, regional development, and supporting employment. These businesses play a vital role in the Irish economy and the impact of our support can be felt in communities throughout Ireland, wherever our client companies create jobs and opportunities. Enterprise Ireland's impact Supporting high-quality employment Enterprise Ireland works with and"
+    },
+    {
+      "id": "check-page-b01e76ca2d",
+      "url": "https://www.enterprise-ireland.com/en/about-enterprise-ireland/our-strategy",
+      "page": "details",
+      "excerpt": "Our Strategy | Enterprise Ireland How can we help? Search See Results I’m an Irish company I want to connect with Irish companies Search Submit a Claim Contact Us Supports Back Supports By Support Market access Capability development Funding and grants By Business Startups SMEs Large companies Researchers By Goal Expand your business Grow internationally Become more sustainable Become more innovative Transform your operations Enhance sales and marketing About Back About Who we are About Enterprise Ireland Our team Careers at Enterprise Ireland What we do How we help businesses grow Success stories Sectors we work in Regional development News and Events Back News and Events News News Publications and reports Press room Events Upcoming events Insights Insights and webinars Market Research Center Submit a Claim Contact Us Search Our Strategy Delivering for Ireland, Leading Globally: Strategy 2025-2029 ‘Delivering for Ireland, Leading Globally (2025-2029)’, is our new strategy that outlines our aims and ambitions for the Irish enterprise base and its purpose to ‘Accelerate Sustainable Irish Business’. The ambition over the next five years is to support Irish exporting companies to make an even greater contribution to the Irish economy through international growth and nationwide employment, with the long-term ambition that exporting Irish companies become the primary driver of the"
+    },
+    {
+      "id": "check-page-21d886fc5c",
+      "url": "https://www.enterprise-ireland.com/en/global",
+      "page": "portfolio",
+      "excerpt": "Ireland. Trusted by the world | Global | Enterprise Ireland How can we help? Search See Results I’m an Irish company I want to connect with Irish companies Search Industries Back Industries Agritech Digital Entertainment High Tech Construction Smart Mobility Aerospace and Aviation Fintech Medtech Travel Tech Cybersecurity Health and Beauty Smart Energy Pharma Partner in Ireland Back Irish Innovation About Irish Innovation Learn about Ireland's strengths and capabilities Irish Innovation Directory Browse and source Irish suppliers Success Stories News About us Contact Us Contact Us Search Ireland. Trusted by the World Ireland. Trusted by the World When innovation is mission-critical, the world's leading companies choose Ireland Irish companies don't just win contracts, they earn partnerships. From factory floors to trading floors, from data centres to power grids, the world's most demanding organisations rely on Irish innovation to reduce costs, improve performance, and solve their hardest problems. That's not a claim, it's a track record. How we help Trusted by the best, proven in the field Irish innovation is embedded at the heart of the world's most successful organisations Building America faster Partnering with Nucor Corporation, North America’s largest steel producer. Trusted by global banking Powering compliance for BNP Paribas and Santander. Mission-critical workflows"
+    },
+    {
+      "id": "check-page-5e65ad119d",
+      "url": "https://www.enterprise-ireland.com/en/global/about-enterprise-ireland",
+      "page": "details",
+      "excerpt": "Innovation and Trade Agency | Enterprise Ireland How can we help? Search See Results I’m an Irish company I want to connect with Irish companies Search Industries Back Industries Agritech Digital Entertainment High Tech Construction Smart Mobility Aerospace and Aviation Fintech Medtech Travel Tech Cybersecurity Health and Beauty Smart Energy Pharma Partner in Ireland Back Irish Innovation About Irish Innovation Learn about Ireland's strengths and capabilities Irish Innovation Directory Browse and source Irish suppliers Success Stories News About us Contact Us Contact Us Search About Enterprise Ireland We’re the Irish Government’s innovation and trade agency For 25 years, we’ve helped thousands of global customers to solve their business challenges and gain competitive advantage by partnering with Irish companies. As the most active venture capital investor in Europe by deal count, Enterprise Ireland invests in and supports innovative Irish companies and connects them with customers worldwide. Across 40 international offices, our industry advisors will work with you to understand your specific requirements and connect you with the innovative partner you need. What to expect when you partner with Enterprise Ireland We aim to create successful, sustainable business relationships between global customers and Irish companies. Our international network, in-market events and inward"
+    },
+    {
+      "id": "check-page-b67960727d",
+      "url": "https://www.enterprise-ireland.com/en/global/about-irish-innovation",
+      "page": "details",
+      "excerpt": "About Irish Innovation | Enterprise Ireland How can we help? Search See Results I’m an Irish company I want to connect with Irish companies Search Industries Back Industries Agritech Digital Entertainment High Tech Construction Smart Mobility Aerospace and Aviation Fintech Medtech Travel Tech Cybersecurity Health and Beauty Smart Energy Pharma Partner in Ireland Back Irish Innovation About Irish Innovation Learn about Ireland's strengths and capabilities Irish Innovation Directory Browse and source Irish suppliers Success Stories News About us Contact Us Contact Us Search About Irish Innovation Why partner with Irish businesses? Irish companies are renowned as ambitious and committed partners, driven by their customers’ success. An open, forward-looking mindset means that Ireland’s business reputation is built on product, service and process innovation. A longstanding track record of meeting global market leaders’ needs means that Ireland has a winning formula for the most demanding customers. Ireland- The home of innovation 1 Innovative 2 Adaptable 3 Resilient Ireland is a global innovation partner to some of the world’s most dynamic companies, delivering transformational technology that drives on their success. Building on decades of investment in science and technology, the Irish Government prioritises innovation by enabling a world-class R&D ecosystem. Here, cutting-edge"
+    },
+    {
+      "id": "check-page-5eca35ab8a",
+      "url": "https://www.enterprise-ireland.com/en/supports/for-large-companies",
+      "page": "portfolio",
+      "excerpt": "Large Companies | Enterprise Ireland How can we help? Search See Results I’m an Irish company I want to connect with Irish companies Search Submit a Claim Contact Us Supports Back Supports By Support Market access Capability development Funding and grants By Business Startups SMEs Large companies Researchers By Goal Expand your business Grow internationally Become more sustainable Become more innovative Transform your operations Enhance sales and marketing About Back About Who we are About Enterprise Ireland Our team Careers at Enterprise Ireland What we do How we help businesses grow Success stories Sectors we work in Regional development News and Events Back News and Events News News Publications and reports Press room Events Upcoming events Insights Insights and webinars Market Research Center Submit a Claim Contact Us Search Helping large companies make a sustainable impact Fostering economic growth Large companies play a key role in the Irish economy, supporting thriving local communities by creating employment and economic prosperity. Enterprise Ireland is committed to supporting large companies, both at home and in international markets, by providing advice, access to networks, a voice in government and capital investment for decarbonisation. What you can expect on your journey with Enterprise Ireland As a large company supported by Enterprise Ireland, you have access"
+    },
+    {
+      "id": "check-page-2421a6c09d",
+      "url": "https://www.enterprise-ireland.com/en/supports/innovation-partnership-programme",
+      "page": "details",
+      "excerpt": "Innovation Partnership Programme | Business Support | Enterprise Ireland How can we help? Search See Results I’m an Irish company I want to connect with Irish companies Search Submit a Claim Contact Us Supports Back Supports By Support Market access Capability development Funding and grants By Business Startups SMEs Large companies Researchers By Goal Expand your business Grow internationally Become more sustainable Become more innovative Transform your operations Enhance sales and marketing About Back About Who we are About Enterprise Ireland Our team Careers at Enterprise Ireland What we do How we help businesses grow Success stories Sectors we work in Regional development News and Events Back News and Events News News Publications and reports Press room Events Upcoming events Insights Insights and webinars Market Research Center Submit a Claim Contact Us Search Innovation Partnership Programme At a glance: Access to innovative expertise Up to 80% of the cost of research work Funding and Grants Capability Development Become more innovative Start-up SME Large company Researcher Copy URL URL Copied Submit a Claim News Insights & webinars Events Submit a Claim Insights & webinars News Events Phone +353 (1) 7272000 Head office East Point Business Park The Plaza Dublin 3 D03 E5R6 Manage Cookies support Funding and grants Market access Capability development For startups For SMEs"
+    },
+    {
+      "id": "check-page-2b6f645ac8",
+      "url": "http://directory.enterprise-ireland.com/",
+      "page": "portfolio",
+      "excerpt": "Irish Innovation Directory | Vendors Consent Details [#IABV2SETTINGS#] About This website uses cookies We use cookies to personalise content and ads, to provide social media features and to analyse our traffic. We also share information about your use of our site with our social media, advertising and analytics partners who may combine it with other information that you’ve provided to them or that they’ve collected from your use of their services. Show more [#GPC_BANNER_ICON#] [#GPC_TOAST_TEXT#] Consent Selection Necessary Spam Protection Statistics Marketing Show details Details Necessary 9 Necessary cookies help make a website usable by enabling basic functions like page navigation and access to secure areas of the website. The website cannot function properly without these cookies. Cloudflare 1 Learn more about this provider cf.turnstile.u This cookie is used to distinguish between humans and bots. Maximum Storage Duration : Persistent Type : HTML Local Storage Cookiebot 1 Learn more about this provider CookieConsent Stores the user's cookie consent state for the current domain Maximum Storage Duration : 1 year Type : HTTP Cookie Vimeo 1 Learn more about this provider cf_clearance This cookie is used to distinguish between humans and bots. Maximum Storage Duration : 1 year Type : HTTP Cookie irishadvantage.getproven.com 4 access_token Auth Logic Maximum Storage Duration :"
     }
   ],
   "findings": {
@@ -67,8 +319,29 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-85297538d1"
+      }
+    ],
+    "format": [],
+    "location": [
+      {
+        "value": "Convention Member Countries",
+        "evidenceId": "check-location-1dd2757d67"
+      },
+      {
+        "value": "Ireland",
+        "evidenceId": "check-location-de4ec3c467"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.enterprise-ireland.com/en/supports/start-ups",

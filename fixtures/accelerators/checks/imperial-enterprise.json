@@ -1,38 +1,402 @@
 {
   "programId": "imperial-enterprise",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.imperialenterpriselab.com/",
-    "https://www.imperialenterpriselab.com/programmes/"
+    "https://www.imperialenterpriselab.com/events/applying-to-the-green-tech-legal-collaborative-top-tips-for-startups/",
+    "https://www.imperialenterpriselab.com/events/how-to-apply-innovator-founder/",
+    "https://www.imperialenterpriselab.com/investment/",
+    "https://www.imperialenterpriselab.com/investment/investment-portal/",
+    "https://www.imperialenterpriselab.com/investment/office-hours/",
+    "https://www.imperialenterpriselab.com/about/",
+    "https://www.imperialenterpriselab.com/about/case-studies/",
+    "https://www.imperialenterpriselab.com/about/contact/",
+    "https://www.imperialenterpriselab.com/about/our-team/",
+    "https://www.imperialenterpriselab.com/programmes/",
+    "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+    "https://www.imperialenterpriselab.com/programmes/earthscale/",
+    "https://www.imperialenterpriselab.com/programmes/global-challenge-lab-2026/",
+    "https://www.imperialenterpriselab.com/programmes/imperial-be/"
   ],
   "evidence": [
     {
+      "id": "check-announced-019bcb171e",
+      "url": "https://www.imperialenterpriselab.com/programmes/global-challenge-lab-2026/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "Applications Open Secure your spot in the 2026 Global Challenge Lab cohort. 15 June: Slack Platform Opens Start networking and form your",
+      "page": "details"
+    },
+    {
+      "id": "check-deadline-32b160def6",
+      "url": "https://www.imperialenterpriselab.com/programmes/earthscale/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "partners to scale. Applications for Cohort 3 are now open. Apply by Friday 20 November 2026. Apply here Meet the cohorts 30 innovative climate tech",
+      "page": "details"
+    },
+    {
+      "id": "check-deadline-3a21e3b37a",
+      "url": "https://www.imperialenterpriselab.com/programmes/earthscale/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "This timeline applies to cohort 3: Date Programme Stage 20 November 2026 Applications close January 2027 Interviews for shortlisted applicants",
+      "page": "details"
+    },
+    {
+      "id": "check-deadline-c4f7ed6605",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "2026 - Applications Open 1 September 2026 - Application Deadline 25 January- 4 February 2027 - In-person Bootcamp in Accra, Ghana 26 November 2026 - 21",
+      "page": "details"
+    },
+    {
+      "id": "check-deadline-d34061bdcf",
+      "url": "https://www.imperialenterpriselab.com/programmes/earthscale/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "Page EarthScale Climate tech solutions. Built to scale. Apply by 20 November 2026 Programme Overview Entry Requirements Support to offer",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-6183f3bdea",
+      "url": "https://www.imperialenterpriselab.com/",
+      "title": "Imperial Enterprise Lab — homepage",
+      "excerpt": "coaching and mentoring , and a chance to win a share of a £30,000 equity-free prize fund. Apply now Welcome to Imperial Enterprise Lab,",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-7770cf1bbf",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "Fellows who are selected for the programme can receive up to £2000 as equity free grant. This might be for prototyping costs, web design",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-867fa30b62",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "support through the Fellows Fund. Each startup may apply for up to £2,000 as equity-free grant to cover business-related expenses and support",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-b19ba17246",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "internet and data costs. You will also be eligible to apply for an £2,000 equity free fund to advance your business. I only have an idea, can I",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-1b4d5093cf",
+      "url": "https://www.imperialenterpriselab.com/programmes/earthscale/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "support where possible. By the end of the 12-month journey, our goal is for each venture to have",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-1d5ad0e346",
+      "url": "https://www.imperialenterpriselab.com/programmes/earthscale/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "5 or 6 Seed investment raised Support to offer A 12-month cohort-based high-impact programme offering",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-8f13f3a431",
+      "url": "https://www.imperialenterpriselab.com/programmes/earthscale/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "EarthScale comes in. EarthScale is a UK-wide, 12-month programme designed to support climate tech",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b0f09d3f04",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "your passport is in date and has a minimum of 6 months left to expiry from 4 February 2027. I need a",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b61ad75f8b",
+      "url": "https://www.imperialenterpriselab.com/investment/office-hours/",
+      "title": "Imperial Enterprise Lab — terms page",
+      "excerpt": "Have set-up a business and be approximately 9 months away from completing your fundraising journey",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-02fe36e44a",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "attend the duration of the residential bootcamp in Accra in person *3; Be available to attend the Capstone week in London in",
+      "page": "details"
+    },
+    {
+      "id": "check-format-128cbb677e",
+      "url": "https://www.imperialenterpriselab.com/programmes/global-challenge-lab-2026/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "to the kick off date). 2. Join the sprint Participate in virtual workshops, expert keynotes, and mentorship. As a team, you",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1b5a454d53",
+      "url": "https://www.imperialenterpriselab.com/programmes/global-challenge-lab-2026/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "and a final pitch for funding. 14–30 July 2026 | Virtual What is Global Challenge Lab? Learning Outcomes Entry",
+      "page": "details"
+    },
+    {
+      "id": "check-format-24946ec4b2",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "2026 - Application Deadline 25 January- 4 February 2027 - In-person Bootcamp in Accra, Ghana 26 November 2026 - 21 May 2027 -",
+      "page": "details"
+    },
+    {
+      "id": "check-format-2f3d4a5fff",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "No, only the selected Fellow will be able to attend the in-person bootcamp. However, all online aspects of the programme are",
+      "page": "details"
+    },
+    {
+      "id": "check-format-38b252b0e1",
+      "url": "https://www.imperialenterpriselab.com/events/how-to-apply-innovator-founder/",
+      "title": "Imperial Enterprise Lab — application page",
+      "excerpt": "Founder Visa is the right option for you. Join this in person session with Envestors to understand if the Innovator",
+      "page": "application"
+    },
+    {
+      "id": "check-format-45f078a20c",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "the Founders: Join us in London in May 2027 to connect in person or join the capstone online. Contact us for more",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5720740bc9",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "designed to fuel high-potential startups through intensive in-person and online learning. You’ll gain essential skills, benefit",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5adcbae5c9",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "2026 - 21 May 2027 - Online Programming 14 - 21 May 2027 - In person Capstone event in London, UK FAQs When does CSF Cohort 3",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5fda7acaf2",
+      "url": "https://www.imperialenterpriselab.com/events/how-to-apply-innovator-founder/",
+      "title": "Imperial Enterprise Lab — application page",
+      "excerpt": "6pm - 7pm, Imperial College Business School Join this in person session with Envestors to understand if the Innovator",
+      "page": "application"
+    },
+    {
+      "id": "check-format-6d6660e947",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "to pitch to investors and industry leaders. Two-week in-person Bootcamp In person training – Accra, Ghana Workshops,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-7a1e3058c5",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "One founder from each selected team will participate in-person, while co-founders and team members can access the remote",
+      "page": "details"
+    },
+    {
+      "id": "check-format-807ab867e6",
+      "url": "https://www.imperialenterpriselab.com/programmes/earthscale/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "investment raised. The solution D eep tech hardware or hybrid climate solutions combining hardware and software.",
+      "page": "details"
+    },
+    {
+      "id": "check-format-80d4a08cb6",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "Are travel, accommodation, and meals covered for the in-person bootcamp in Ghana? Yes, travel, accommodation, and meals",
+      "page": "details"
+    },
+    {
+      "id": "check-format-99e0116916",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "Can multiple founders from the same startup attend the in-person bootcamp? No, only the selected Fellow will be able to",
+      "page": "details"
+    },
+    {
+      "id": "check-format-9e894673a6",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "the costs of applying for your visa. I can’t attend the in-person bootcamp, can I still join the programme? Unfortunately,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ba6b84320c",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "and industry leaders. Two-week in-person Bootcamp In person training – Accra, Ghana Workshops, covering topics such as",
+      "page": "details"
+    },
+    {
+      "id": "check-format-bca45c39d7",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "covered for one founder per team for the duration of the in-person bootcamp in Ghana. This support also includes costs for",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d291e193e1",
+      "url": "https://www.imperialenterpriselab.com/programmes/global-challenge-lab-2026/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "for your 3-minute pitch video and slide deck. 30 July: Virtual Demo Day & Pitching Showcase your innovation to the global",
+      "page": "details"
+    },
+    {
+      "id": "check-format-eb3227a2e3",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "successful entrepreneurs, investors and ecosystem experts Remote Content Monthly 1-2-1 business coaching Peer to peer",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f335217bff",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "*3; Be available to attend the Capstone week in London in person *4; In addition, Fellows must: Have a startup that has",
+      "page": "details"
+    },
+    {
+      "id": "check-format-fe0a5a0d1b",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "while co-founders and team members can access the remote portion, connecting with global mentors and industry",
+      "page": "details"
+    },
+    {
       "id": "check-name-834486cf2b",
       "url": "https://www.imperialenterpriselab.com/",
-      "title": "Imperial Enterprise Lab — homepage checked by scrape.py",
+      "title": "Imperial Enterprise Lab — homepage",
       "excerpt": "Home | Imperial Enterprise Lab Search Imperial’s Entrepreneurship Eco-System 🔎 What’s on",
+      "page": "details"
+    },
+    {
+      "id": "check-rolling-5a5625e22d",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "title": "Imperial Enterprise Lab — program page",
+      "excerpt": "to address business or participation-related costs. Applications are reviewed on a rolling basis by a panel, ensuring timely access to support. The average grant size will",
       "page": "details"
     },
     {
       "id": "check-route-b69ff8ab2c",
       "url": "https://www.imperialenterpriselab.com/",
-      "title": "Imperial Enterprise Lab — homepage checked by scrape.py",
+      "title": "Imperial Enterprise Lab — homepage",
       "excerpt": "Apply now → https://www.imperialenterpriselab.com/programmes/we-innovate/",
       "page": "details"
     },
     {
       "id": "check-route-c97f52e77e",
       "url": "https://www.imperialenterpriselab.com/",
-      "title": "Imperial Enterprise Lab — homepage checked by scrape.py",
+      "title": "Imperial Enterprise Lab — homepage",
       "excerpt": "https://www.imperialenterpriselab.com/",
       "page": "details"
     },
     {
       "id": "check-status-19e5e87eed",
       "url": "https://www.imperialenterpriselab.com/",
-      "title": "Imperial Enterprise Lab — homepage checked by scrape.py",
+      "title": "Imperial Enterprise Lab — homepage",
       "excerpt": "Resource Finder Recommended Suppliers List About Our Team Co-working Contact Support Us Select Page Applications are now open for WE Innovate 2027 Apply to Imperial’s award winning programme for female founders. Selected teams will",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-f8f541509b",
+      "url": "https://www.imperialenterpriselab.com/",
+      "page": "details",
+      "excerpt": "Home | Imperial Enterprise Lab Search Imperial’s Entrepreneurship Eco-System 🔎 What’s on Community Collider Idea Challenge All Events Education How To Masterclasses Programmes EarthScale Commonwealth Startup Fellowship WE Innovate Global Challenge Lab Venture Catalyst Challenge Green Tech Legal Collaborative Venture Treks Imperial BE MedTech SuperConnector AI SuperConnector Services Idea Surgeries Experts-in-Residence Imperial Venture Mentoring Service (IVM) Investment Investment Office Hours Investment Portal Resources Resource Finder Recommended Suppliers List About Our Team Co-working Contact Support Us Select Page Applications are now open for WE Innovate 2027 Apply to Imperial’s award winning programme for female founders. Selected teams will receive expert-led masterclasses, personalised coaching and mentoring , and a chance to win a share of a £30,000 equity-free prize fund. Apply now Welcome to Imperial Enterprise Lab, a dedicated support service for students, staff and alumni who want to develop their entrepreneurial mindset, skills, and networks. More about us How can we help you? We help people just like you test new ideas and launch products, services and ventures that address real-world challenges to make a positive difference to people and planet. I am a I want to... Scale my climate tech business Join our online founder community Meet potential co-founders Find"
+    },
+    {
+      "id": "check-page-e75c446452",
+      "url": "https://www.imperialenterpriselab.com/events/applying-to-the-green-tech-legal-collaborative-top-tips-for-startups/",
+      "page": "application",
+      "excerpt": "Top Tips on Applying to Green Tech Legal Collaborative | Imperial Enterprise Lab Search Imperial’s Entrepreneurship Eco-System 🔎 What’s on Community Collider Idea Challenge All Events Education How To Masterclasses Programmes EarthScale Commonwealth Startup Fellowship WE Innovate Global Challenge Lab Venture Catalyst Challenge Green Tech Legal Collaborative Venture Treks Imperial BE MedTech SuperConnector AI SuperConnector Services Idea Surgeries Experts-in-Residence Imperial Venture Mentoring Service (IVM) Investment Investment Office Hours Investment Portal Resources Resource Finder Recommended Suppliers List About Our Team Co-working Contact Support Us Select Page Top Tips on Applying to Green Tech Legal Collaborative Friday 30 January | 12pm-1pm | Online Join us for an online session where you can learn how to make an application to Green Tech Legal Collaborative. Are you thinking of applying to the Green Tech Legal Collaborative but unsure what makes a strong application? Join us for an online session on how to make your GTLC application stand out. Learn about key criteria to keep in mind when applying and top tips on what the selection committee looks for in a standout application. Expect to discover common pitfalls that applicants have made in the past when submitting an application, and how to avoid these. Who is this masterclass for? Early-stage climate and green tech"
+    },
+    {
+      "id": "check-page-382fcd443d",
+      "url": "https://www.imperialenterpriselab.com/events/how-to-apply-innovator-founder/",
+      "page": "application",
+      "excerpt": "How To: Apply for the Innovator Founder Visa | Imperial Enterprise Lab Search Imperial’s Entrepreneurship Eco-System 🔎 What’s on Community Collider Idea Challenge All Events Education How To Masterclasses Programmes EarthScale Commonwealth Startup Fellowship WE Innovate Global Challenge Lab Venture Catalyst Challenge Green Tech Legal Collaborative Venture Treks Imperial BE MedTech SuperConnector AI SuperConnector Services Idea Surgeries Experts-in-Residence Imperial Venture Mentoring Service (IVM) Investment Investment Office Hours Investment Portal Resources Resource Finder Recommended Suppliers List About Our Team Co-working Contact Support Us Select Page How To: Apply for the Innovator Founder Visa Monday 2nd March 2026, 6pm - 7pm, Imperial College Business School Join this in person session with Envestors to understand if the Innovator Founder Visa is the right option for you. Join this in person session with Envestors to understand if the Innovator Founder Visa is the right option for you. Who is this masterclass for? Any Imperial student, staff or alumni that wants to learn about the Innovator Founder Visa. What will you learn in this session? Participants will hear about: An overview of what the Innovator Founder route is What are the key requirements and criteria for endorsement under the route What is Envestors application process for endorsement How do Envestors"
+    },
+    {
+      "id": "check-page-3a6a00d2f2",
+      "url": "https://www.imperialenterpriselab.com/investment/",
+      "page": "terms",
+      "excerpt": "Investment | Imperial Enterprise Lab Search Imperial’s Entrepreneurship Eco-System 🔎 What’s on Community Collider Idea Challenge All Events Education How To Masterclasses Programmes EarthScale Commonwealth Startup Fellowship WE Innovate Global Challenge Lab Venture Catalyst Challenge Green Tech Legal Collaborative Venture Treks Imperial BE MedTech SuperConnector AI SuperConnector Services Idea Surgeries Experts-in-Residence Imperial Venture Mentoring Service (IVM) Investment Investment Office Hours Investment Portal Resources Resource Finder Recommended Suppliers List About Our Team Co-working Contact Support Us Select Page Investment     © Copyright 2026 Imperial Enterprise Lab All Rights Reserved Privacy Policy | Accessibility Website by Herd Get in touch Phone: +44 (0)20 7594 1964 Email: [email protected] Get the ‘D/srupt’ newsletter Loading..."
+    },
+    {
+      "id": "check-page-b647032d51",
+      "url": "https://www.imperialenterpriselab.com/investment/investment-portal/",
+      "page": "terms",
+      "excerpt": "Investment Portal | Imperial Enterprise Lab Search Imperial’s Entrepreneurship Eco-System 🔎 What’s on Community Collider Idea Challenge All Events Education How To Masterclasses Programmes EarthScale Commonwealth Startup Fellowship WE Innovate Global Challenge Lab Venture Catalyst Challenge Green Tech Legal Collaborative Venture Treks Imperial BE MedTech SuperConnector AI SuperConnector Services Idea Surgeries Experts-in-Residence Imperial Venture Mentoring Service (IVM) Investment Investment Office Hours Investment Portal Resources Resource Finder Recommended Suppliers List About Our Team Co-working Contact Support Us Select Page Imperial Investment Portal Ready to fundraise? Showcase your venture to our investor network. Find out more Overview Is my startup suitable? How do I get listed? Next steps What’s the Imperial Investment Portal? The Investment Portal allows investor-ready ventures with an Imperial connection to showcase their proposition to our network of over 500 Angels and VCs. We’ve created a free and efficient online platform that connects founders to investors. It’s designed to provide enough information for potential investors to make a quick decision on whether to take a deeper dive into your investment opportunity. Plus, we’ll alert investors when you open your funding round so they can take a look and contact you directly through the portal if you’ve got"
+    },
+    {
+      "id": "check-page-cf36a12500",
+      "url": "https://www.imperialenterpriselab.com/investment/office-hours/",
+      "page": "terms",
+      "excerpt": "Investment Office Hours | Imperial Enterprise Lab Search Imperial’s Entrepreneurship Eco-System 🔎 What’s on Community Collider Idea Challenge All Events Education How To Masterclasses Programmes EarthScale Commonwealth Startup Fellowship WE Innovate Global Challenge Lab Venture Catalyst Challenge Green Tech Legal Collaborative Venture Treks Imperial BE MedTech SuperConnector AI SuperConnector Services Idea Surgeries Experts-in-Residence Imperial Venture Mentoring Service (IVM) Investment Investment Office Hours Investment Portal Resources Resource Finder Recommended Suppliers List About Our Team Co-working Contact Support Us Select Page Investment Office Hours Stop by our virtual office and let us answer your investment questions. Book your Office Hours session Overview Who is Office Hours for? How does it work? Book Office Hours Get the guidance you need Investment Office Hours are a valuable opportunity for you to receive answers and personalised feedback on funding matters. Our Head of Investment Services ha s set aside time in his diary each week to meet with founders and provide one-to-one guidance to help you run a smooth fundraising process. Who is Office Hours for? Office Hours sessions are available to all Imperial College students, staff and alumni, and their co-founders. Figuring out when and how to secure investment can be pretty daunting. This focused meeting will"
+    },
+    {
+      "id": "check-page-a9023cbb05",
+      "url": "https://www.imperialenterpriselab.com/about/",
+      "page": "details",
+      "excerpt": "About | Imperial Enterprise Lab Search Imperial’s Entrepreneurship Eco-System 🔎 What’s on Community Collider Idea Challenge All Events Education How To Masterclasses Programmes EarthScale Commonwealth Startup Fellowship WE Innovate Global Challenge Lab Venture Catalyst Challenge Green Tech Legal Collaborative Venture Treks Imperial BE MedTech SuperConnector AI SuperConnector Services Idea Surgeries Experts-in-Residence Imperial Venture Mentoring Service (IVM) Investment Investment Office Hours Investment Portal Resources Resource Finder Recommended Suppliers List About Our Team Co-working Contact Support Us Select Page     © Copyright 2026 Imperial Enterprise Lab All Rights Reserved Privacy Policy | Accessibility Website by Herd Get in touch Phone: +44 (0)20 7594 1964 Email: [email protected] Get the ‘D/srupt’ newsletter Loading..."
+    },
+    {
+      "id": "check-page-8117f5fffb",
+      "url": "https://www.imperialenterpriselab.com/about/case-studies/",
+      "page": "details",
+      "excerpt": "Case Studies | Imperial Enterprise Lab Search Imperial’s Entrepreneurship Eco-System 🔎 What’s on Community Collider Idea Challenge All Events Education How To Masterclasses Programmes EarthScale Commonwealth Startup Fellowship WE Innovate Global Challenge Lab Venture Catalyst Challenge Green Tech Legal Collaborative Venture Treks Imperial BE MedTech SuperConnector AI SuperConnector Services Idea Surgeries Experts-in-Residence Imperial Venture Mentoring Service (IVM) Investment Investment Office Hours Investment Portal Resources Resource Finder Recommended Suppliers List About Our Team Co-working Contact Support Us Select Page Success Stories Imperial students just like you have used all the support the Enterprise Lab has on offer to create businesses that are having real world impact. They are revolutionising healthcare, creating groundbreaking innovations and saving the planet. Our community Meet our game changers Carbon Cell Sending polystyrene packing:How Carbon Cell turn bio waste into sustainable polymer-based packagingExpanded polystyrene (EPS) has to go. It was once the universal packaging material, but its sustainability credentials are poor. From the use of ... Find out more Peachies Born to do it: How Peachies transformed the disposable nappyBorn of a much-needed change to disposable nappy design Endless commoditisation means that the relentless demands of nappy"
+    },
+    {
+      "id": "check-page-4be7f96a76",
+      "url": "https://www.imperialenterpriselab.com/about/contact/",
+      "page": "details",
+      "excerpt": "Contact | Imperial Enterprise Lab Search Imperial’s Entrepreneurship Eco-System 🔎 What’s on Community Collider Idea Challenge All Events Education How To Masterclasses Programmes EarthScale Commonwealth Startup Fellowship WE Innovate Global Challenge Lab Venture Catalyst Challenge Green Tech Legal Collaborative Venture Treks Imperial BE MedTech SuperConnector AI SuperConnector Services Idea Surgeries Experts-in-Residence Imperial Venture Mentoring Service (IVM) Investment Investment Office Hours Investment Portal Resources Resource Finder Recommended Suppliers List About Our Team Co-working Contact Support Us Select Page Contact Got a question, need some advice or just need directions to the best basement on campus? Get in touch! Email: [email protected] Telephone: +44 (0)20 7594 1964 Opening hours Monday–Friday 10am–6pm (Times may vary – Please see our Co-Working page) Find us Imperial College London Level 0, Sherfield Building (Access via Wells Way) South Kensington Campus Exhibition Road London SW7 2AZ You can also join the ELab Slack Channel     © Copyright 2026 Imperial Enterprise Lab All Rights Reserved Privacy Policy | Accessibility Website by Herd Get in touch Phone: +44 (0)20 7594 1964 Email: [email protected] Get the ‘D/srupt’ newsletter Loading..."
+    },
+    {
+      "id": "check-page-47903528c8",
+      "url": "https://www.imperialenterpriselab.com/about/our-team/",
+      "page": "details",
+      "excerpt": "Our Team | Imperial Enterprise Lab Search Imperial’s Entrepreneurship Eco-System 🔎 What’s on Community Collider Idea Challenge All Events Education How To Masterclasses Programmes EarthScale Commonwealth Startup Fellowship WE Innovate Global Challenge Lab Venture Catalyst Challenge Green Tech Legal Collaborative Venture Treks Imperial BE MedTech SuperConnector AI SuperConnector Services Idea Surgeries Experts-in-Residence Imperial Venture Mentoring Service (IVM) Investment Investment Office Hours Investment Portal Resources Resource Finder Recommended Suppliers List About Our Team Co-working Contact Support Us Select Page Here to help The Enterprise Lab team are here to help talk through your idea, guide you through our programmes and point you in the direction of experts who can help. If you have a question, want to know more about what we do or want to visit the space just get in touch. Meet the team Directors The Directors drive the vision behind Imperial Enterprise Lab, shaping strategy, building partnerships and ensuring the Lab continues to support the next generation of innovators and founders. Their role is to create the direction, energy and opportunities that turn entrepreneurial ambition into real-world impact. Ben Mumby-Croft Director of Entrepreneurship Email : [email protected] Marcus Perkmann Academic Director Email : [email protected] Entrepreneurship The"
+    },
+    {
+      "id": "check-page-ca32b6f577",
+      "url": "https://www.imperialenterpriselab.com/programmes/",
+      "page": "details",
+      "excerpt": "Programmes | Imperial Enterprise Lab Search Imperial’s Entrepreneurship Eco-System 🔎 What’s on Community Collider Idea Challenge All Events Education How To Masterclasses Programmes EarthScale Commonwealth Startup Fellowship WE Innovate Global Challenge Lab Venture Catalyst Challenge Green Tech Legal Collaborative Venture Treks Imperial BE MedTech SuperConnector AI SuperConnector Services Idea Surgeries Experts-in-Residence Imperial Venture Mentoring Service (IVM) Investment Investment Office Hours Investment Portal Resources Resource Finder Recommended Suppliers List About Our Team Co-working Contact Support Us Select Page Programmes Venture Catalyst Challenge Find out more WE Innovate Find out more Global Challenge Find out more Medtech SuperConnector Find out more AI SuperConnector Find out more     © Copyright 2026 Imperial Enterprise Lab All Rights Reserved Privacy Policy | Accessibility Website by Herd Get in touch Phone: +44 (0)20 7594 1964 Email: [email protected] Get the ‘D/srupt’ newsletter Loading..."
+    },
+    {
+      "id": "check-page-eb7f210b1e",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "page": "details",
+      "excerpt": "Commonwealth Startup Fellowship | Imperial Enterprise Lab Search Imperial’s Entrepreneurship Eco-System 🔎 What’s on Community Collider Idea Challenge All Events Education How To Masterclasses Programmes EarthScale Commonwealth Startup Fellowship WE Innovate Global Challenge Lab Venture Catalyst Challenge Green Tech Legal Collaborative Venture Treks Imperial BE MedTech SuperConnector AI SuperConnector Services Idea Surgeries Experts-in-Residence Imperial Venture Mentoring Service (IVM) Investment Investment Office Hours Investment Portal Resources Resource Finder Recommended Suppliers List About Our Team Co-working Contact Support Us Select Page Commonwealth Startup Fellowship The Commonwealth Startup Fellowship (CSF) is a six-month programme designed to ignite and elevate high-potential startups from low- and middle-income countries across the Commonwealth. In partnership with: What is the Commonwealth Startup Fellowship? Learning Outcomes Who is this Fellowship for? Fellow Eligibility Key Dates FAQ's Support the Commonwealth Startup Fellowship What is the Commonwealth Startup Fellowship? This six-month programme is designed to fuel high-potential startups through intensive in-person and online learning. You’ll gain essential skills, benefit from tailored coaching, and get access to a powerful global network to help you overcome barriers and scale up your business. The"
+    },
+    {
+      "id": "check-page-c11ba5dcb1",
+      "url": "https://www.imperialenterpriselab.com/programmes/earthscale/",
+      "page": "details",
+      "excerpt": "EarthScale | Imperial Enterprise Lab Search Imperial’s Entrepreneurship Eco-System 🔎 What’s on Community Collider Idea Challenge All Events Education How To Masterclasses Programmes EarthScale Commonwealth Startup Fellowship WE Innovate Global Challenge Lab Venture Catalyst Challenge Green Tech Legal Collaborative Venture Treks Imperial BE MedTech SuperConnector AI SuperConnector Services Idea Surgeries Experts-in-Residence Imperial Venture Mentoring Service (IVM) Investment Investment Office Hours Investment Portal Resources Resource Finder Recommended Suppliers List About Our Team Co-working Contact Support Us Select Page EarthScale Climate tech solutions. Built to scale. Apply by 20 November 2026 Programme Overview Entry Requirements Support to offer Programme timeline How to Apply FAQs Overview Across the UK, high-potential climate innovations are emerging but many of these ventures stall between prototype and commercial success. That’s where EarthScale comes in. EarthScale is a UK-wide, 12-month programme designed to support climate tech ventures to scale, navigate manufacturing, and raise Series A funding. Imperial College London leads the programme through a collaboration between the Imperial Enterprise Lab and Undaunted . EarthScale brings together a growing collaborative network of university-led regional hubs, including Imperial College London, Cranfield University,"
+    },
+    {
+      "id": "check-page-55b516fd52",
+      "url": "https://www.imperialenterpriselab.com/programmes/global-challenge-lab-2026/",
+      "page": "details",
+      "excerpt": "Global Challenge Lab 2026 | Imperial Enterprise Lab Search Imperial’s Entrepreneurship Eco-System 🔎 What’s on Community Collider Idea Challenge All Events Education How To Masterclasses Programmes EarthScale Commonwealth Startup Fellowship WE Innovate Global Challenge Lab Venture Catalyst Challenge Green Tech Legal Collaborative Venture Treks Imperial BE MedTech SuperConnector AI SuperConnector Services Idea Surgeries Experts-in-Residence Imperial Venture Mentoring Service (IVM) Investment Investment Office Hours Investment Portal Resources Resource Finder Recommended Suppliers List About Our Team Co-working Contact Support Us Select Page Global Challenge Lab A 14-day immersive hackathon where students and offer holders collaborate across borders to turn ideas into real ventures with mentorship, workshops, and a final pitch for funding. 14–30 July 2026 | Virtual What is Global Challenge Lab? Learning Outcomes Entry Requirements Key Dates The Programme Experience Partners Join the Challenge What is Global Challenge Lab? One Imperial. Global Impact. Embark on an exciting entrepreneurial journey with the Global Challenge Lab. This year, the Global Challenge Lab evolves into a specialised, Imperial-led innovation sprint. While the programme is anchored by Imperial College London, it remains a borderless platform open to students and offer holders from our official university"
+    },
+    {
+      "id": "check-page-fb36f99611",
+      "url": "https://www.imperialenterpriselab.com/programmes/imperial-be/",
+      "page": "details",
+      "excerpt": "Imperial BE | Imperial Enterprise Lab Search Imperial’s Entrepreneurship Eco-System 🔎 What’s on Community Collider Idea Challenge All Events Education How To Masterclasses Programmes EarthScale Commonwealth Startup Fellowship WE Innovate Global Challenge Lab Venture Catalyst Challenge Green Tech Legal Collaborative Venture Treks Imperial BE MedTech SuperConnector AI SuperConnector Services Idea Surgeries Experts-in-Residence Imperial Venture Mentoring Service (IVM) Investment Investment Office Hours Investment Portal Resources Resource Finder Recommended Suppliers List About Our Team Co-working Contact Support Us Select Page Imperial BE Supporting Black entrepreneurship, promoting Black talent and encouraging greater inclusion through panel events, workshops and masterclasses. Championing diversity For founders of Black and mixed-Black heritage, the entrepreneurial journey can be especially challenging, facing multiple disparities such as access to capital. At Imperial Enterprise Lab, we believe that diversity is a competitive advantage not a tick box, b ut founders of Black and mixed-Black heritage face multiple barriers and limited support compared to their white counterparts. Extend VC reported that between 2009 and 2019 only 0.24% of venture capital raised in the UK went to Black founders, of which only 0.02% went to Black female founders. While there was a brief uptick in"
     }
   ],
   "findings": {
@@ -57,9 +421,115 @@
       }
     ],
     "operatingStatus": [],
-    "deadlines": [],
+    "deadlines": [
+      {
+        "value": "2027-02-04",
+        "evidenceId": "check-deadline-c4f7ed6605"
+      },
+      {
+        "value": "2026-11-20",
+        "evidenceId": "check-deadline-d34061bdcf"
+      }
+    ],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-5a5625e22d"
+      }
+    ],
+    "announcedIntake": [
+      {
+        "value": "June",
+        "evidenceId": "check-announced-019bcb171e"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "9 months",
+        "evidenceId": "check-duration-b61ad75f8b"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-b0f09d3f04"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-8f13f3a431"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-5fda7acaf2"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-fe0a5a0d1b"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-807ab867e6"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "coaching and mentoring , and a chance to win a share of a £30,000 equity-free prize fund. Apply now Welcome to Imperial Enterprise Lab,",
+        "evidenceId": "check-deal-6183f3bdea"
+      },
+      {
+        "value": "support through the Fellows Fund. Each startup may apply for up to £2,000 as equity-free grant to cover business-related expenses and support",
+        "evidenceId": "check-deal-867fa30b62"
+      },
+      {
+        "value": "internet and data costs. You will also be eligible to apply for an £2,000 equity free fund to advance your business. I only have an idea, can I",
+        "evidenceId": "check-deal-b19ba17246"
+      },
+      {
+        "value": "Fellows who are selected for the programme can receive up to £2000 as equity free grant. This might be for prototyping costs, web design",
+        "evidenceId": "check-deal-7770cf1bbf"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "30000",
+          "currency": "GBP",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-6183f3bdea"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "2000",
+          "currency": "GBP",
+          "equity": null,
+          "label": "Grant",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-867fa30b62"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "2000",
+          "currency": "GBP",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-b19ba17246"
+      }
+    ],
     "portfolioPages": [],
     "name": [
       {

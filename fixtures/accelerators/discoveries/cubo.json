@@ -1,12 +1,12 @@
 {
   "programId": "cubo",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://cubo.itau/startups-portfolio",
-      "page": "portfolio",
-      "anchor": "Vitrine Startups",
-      "fetched": false,
+      "url": "https://cubo.itau/corporates-apply",
+      "page": "application",
+      "anchor": "Innovation Day",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -19,9 +19,113 @@
       "origin": "official"
     },
     {
-      "url": "https://cubo.itau/partners-portfolio",
-      "page": "portfolio",
-      "anchor": "Vitrine Partners",
+      "url": "https://cubo.itau/en/corporates-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cubo.itau/en/events-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cubo.itau/en/events-sponsorship-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cubo.itau/en/investors-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cubo.itau/en/partners-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cubo.itau/en/startups-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cubo.itau/es/corporates-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cubo.itau/es/events-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cubo.itau/es/events-sponsorship-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cubo.itau/es/investors-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cubo.itau/es/partners-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cubo.itau/es/startups-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cubo.itau/events-apply",
+      "page": "application",
+      "anchor": "Solicite seu evento",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cubo.itau/events-sponsorship-apply",
+      "page": "application",
+      "anchor": "Seja um patrocinador",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -35,25 +139,17 @@
       "origin": "official"
     },
     {
-      "url": "https://cubo.itau/events-apply",
-      "page": "application",
-      "anchor": "Solicite seu evento",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://cubo.itau/corporates-apply",
-      "page": "application",
-      "anchor": "Innovation Day",
+      "url": "https://cubo.itau/partners-portfolio",
+      "page": "portfolio",
+      "anchor": "Vitrine Partners",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://cubo.itau/events-sponsorship-apply",
-      "page": "application",
-      "anchor": "Seja um patrocinador",
+      "url": "https://cubo.itau/startups-portfolio",
+      "page": "portfolio",
+      "anchor": "Vitrine Startups",
       "fetched": false,
       "blocked": null,
       "origin": "official"

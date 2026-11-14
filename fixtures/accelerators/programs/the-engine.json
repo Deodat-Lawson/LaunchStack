@@ -9,14 +9,14 @@
   "websiteUrl": "https://engine.xyz/",
   "applyUrl": "https://engine.xyz/landing/apply-for-residency",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: The home for Tough Tech The Engine supports Tough Tech Tough Tech is transformational science and engineering that solves the world’s most important challenges. companies building solutions for a healthier, more productive, and more sustainable world. MacroCycle's pilot plant, poised to upcycle up to 200,000 plastic bottles annually. The ElastrodeTM by Axoft: A soft and high-bandwidth neural interface. Hyfé: Understanding impacts of feed variability on bioprocess. Commonwealth Fusion Systems' magnet factory in Devens. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "The Engine is a nonprofit incubator and accelerator built by MIT to support Tough Tech startups in biotech, climate tech and beyond — from idea to impact.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Call for Applications: Ignition Pass to Fund Residency for Up to Five Tough Tech Startups. Apply by December 21 ●",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "the-engine-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://engine.xyz/landing/apply-for-residency",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

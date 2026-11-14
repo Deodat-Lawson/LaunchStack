@@ -1,6 +1,6 @@
 {
   "programId": "innovation-labs",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.innovationlabs.ro/"
   ],
@@ -8,9 +8,17 @@
     {
       "id": "check-name-95b1e7b600",
       "url": "https://www.innovationlabs.ro/",
-      "title": "Innovation Labs — homepage checked by scrape.py",
+      "title": "Innovation Labs — homepage",
       "excerpt": "Innovation Labs 2026 You are using an unsupported browser. We cannot",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-9d0a13579b",
+      "url": "https://www.innovationlabs.ro/",
+      "page": "details",
+      "excerpt": "Innovation Labs 2026 You are using an unsupported browser. We cannot guarantee that the website will work properly. For best results, try using Microsoft Edge, Google Chrome, Mozilla Firefox or any currently updated browser."
     }
   ],
   "findings": {
@@ -21,8 +29,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

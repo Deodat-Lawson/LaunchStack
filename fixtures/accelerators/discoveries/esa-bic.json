@@ -1,0 +1,126 @@
+{
+  "programId": "esa-bic",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
+  "pages": [
+    {
+      "url": "https://commercialisation.esa.int/about",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://commercialisation.esa.int/call-for-applications-epic-european-uae-space-startup-competition-2025/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://commercialisation.esa.int/capacity-building-for-family-offices-encouraging-late-stage-investment-in-the-european-space-industry/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://commercialisation.esa.int/capacity-building-programme-for-fund-managers-episode-5-fund-setup-investment-strategy-investment-team-exit-strategy/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://commercialisation.esa.int/earth-observation-applications-and-machine-learning-for-cultural-heritage-preservation/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://commercialisation.esa.int/esa-activity/disruptive-gnss-receiver-technologies-for-future-railway-signalling-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://commercialisation.esa.int/esa-activity/voliera-video-odometry-with-lidar-and-egnss-for-ertms-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://commercialisation.esa.int/esa-and-audacia-sign-an-agreement-with-the-expansion-investment-fund/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://commercialisation.esa.int/esa-patent/commercial-aviation-platform-for-earth-observation-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://commercialisation.esa.int/flight-ticket-initiative-apply-now-to-launch-your-satellite/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://commercialisation.esa.int/semilla-from-waste-to-resource-with-the-application-of-space-technology/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://commercialisation.esa.int/space-borne-remote-sensing-and-green-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://commercialisation.esa.int/space4rail/ao11026-space4rail-downstream-applications-in-artes-4-0-documents/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://commercialisation.esa.int/taking-our-experience-from-cooling-in-space-and-applying-it-innovatively-to-ground-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://commercialisation.esa.int/winners-of-the-esa-push-2023-unlocking-innovative-space-services-for-european-ecosystem-apply-today/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

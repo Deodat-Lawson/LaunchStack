@@ -1,7 +1,103 @@
 {
   "programId": "sequoia",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://jobs.sequoiacap.com/jobs",
+      "page": "portfolio",
+      "anchor": "Find Jobs at Sequoia Companies",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sequoiacap.com/article/lightstep-and-future-of-application-management",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sequoiacap.com/article/open-source-fellowship-applications",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sequoiacap.com/article/partnering-with-deno-application-development-for-the-modern-web",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sequoiacap.com/article/partnering-with-langchain-the-llm-application-framework",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sequoiacap.com/article/the-sequoia-fund-patient-capital-for-building-enduring-companies",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sequoiacap.com/article/universal-laws-of-physics-and-companies",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sequoiacap.com/companies/100-thieves",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sequoiacap.com/companies/210664",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sequoiacap.com/companies/247",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sequoiacap.com/companies/abby-care",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sequoiacap.com/companies/admob",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://sequoiacap.com/our-companies",
       "page": "portfolio",
@@ -19,11 +115,27 @@
       "origin": "official"
     },
     {
-      "url": "https://jobs.sequoiacap.com/jobs",
-      "page": "portfolio",
-      "anchor": "Find Jobs at Sequoia Companies",
-      "fetched": false,
+      "url": "https://sequoiacap.com/podcast/building-frontier-ai-at-the-application-layer-harvey-s-playbook",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sequoiacap.com/podcast/goldman-sachs-ceo-david-solomon-what-startup-founders-get-wrong-about-the-ceo-job",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sequoiacap.com/faq",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     }
   ]

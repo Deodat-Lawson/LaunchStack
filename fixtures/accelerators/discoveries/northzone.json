@@ -1,11 +1,123 @@
 {
   "programId": "northzone",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://northzone.com/about",
       "page": "details",
       "anchor": "About",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/insights/annoucing-investment-fubotv",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/insights/announcing-investment-personio",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/insights/announcing-our-investment-in-nested",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/insights/architectural-collaboration-reimagined-our-investment-in-rayon",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/insights/autonomous-truck-company-einride-plans-to-go-public-in-spac-deal",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/insights/backed-by-disney-kahoot-expands-investment-in-new-games",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/insights/barcelona-strike-supponor-virtual-advertising-deal",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/insights/basketball-legend-pau-gasol-joins-healthtech-scaleup-idoven-in-a-new-round-of-investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/insights/bringing-more-transparency-to-employee-compensation-our-investment-in-ravio",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/insights/cathay-innovations-first-investment-in-germany-is-healthcare-startup-medwing",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/insights/firstminute-capitals-sam-endacott-joins-northzone-to-lead-early-stage-ai-investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/insights/four-ai-unicorns-minted-this-year-more-in-the-making-the-result-of-northzones-deep-conviction-in-ai-underscoring-the-strength-of-our-long-term-ai-investment-strategy",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/insights/tobii-gaze-application-wins-microsoft-award",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/insights/tobii-gaze-application-wins-microsoft-award?e99d84d8_page=2",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -19,57 +131,9 @@
       "origin": "official"
     },
     {
-      "url": "https://northzone.com/portfolio/spotify",
-      "page": "portfolio",
-      "anchor": "Early · 2008 Spotify How the world listens",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://northzone.com/portfolio/klarna",
-      "page": "portfolio",
-      "anchor": "Early · 2015 Klarna Smoother payments",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://northzone.com/portfolio/black-forest-labs",
       "page": "portfolio",
       "anchor": "Early · 2024 Black Forest Labs Building state-of-the-art AI",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://northzone.com/portfolio/genesis-ai",
-      "page": "portfolio",
-      "anchor": "Early · 2025 Genesis AI Teaching machines to act",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://northzone.com/portfolio/personio",
-      "page": "portfolio",
-      "anchor": "Early · 2017 Personio Intelligent HR platform",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://northzone.com/portfolio/cuspai",
-      "page": "portfolio",
-      "anchor": "Early · 2024 Cusp AI Designing breakthrough materials",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://northzone.com/portfolio/spring-health",
-      "page": "portfolio",
-      "anchor": "Early · 2020 Spring Health Precision mental health care",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -83,17 +147,9 @@
       "origin": "official"
     },
     {
-      "url": "https://northzone.com/portfolio/xbow",
+      "url": "https://northzone.com/portfolio/cuspai",
       "page": "portfolio",
-      "anchor": "Growth · 2026 Xbow Autonomous offensive security",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://northzone.com/portfolio/tandem-health",
-      "page": "portfolio",
-      "anchor": "Early · 2024 Tandem Health Unshackling doctors from admin",
+      "anchor": "Early · 2024 Cusp AI Designing breakthrough materials",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -107,9 +163,65 @@
       "origin": "official"
     },
     {
+      "url": "https://northzone.com/portfolio/genesis-ai",
+      "page": "portfolio",
+      "anchor": "Early · 2025 Genesis AI Teaching machines to act",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/portfolio/klarna",
+      "page": "portfolio",
+      "anchor": "Early · 2015 Klarna Smoother payments",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://northzone.com/portfolio/openfx",
       "page": "portfolio",
       "anchor": "Early · 2025 OpenFX Building global money rails",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/portfolio/personio",
+      "page": "portfolio",
+      "anchor": "Early · 2017 Personio Intelligent HR platform",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/portfolio/spotify",
+      "page": "portfolio",
+      "anchor": "Early · 2008 Spotify How the world listens",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/portfolio/spring-health",
+      "page": "portfolio",
+      "anchor": "Early · 2020 Spring Health Precision mental health care",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/portfolio/tandem-health",
+      "page": "portfolio",
+      "anchor": "Early · 2024 Tandem Health Unshackling doctors from admin",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/portfolio/xbow",
+      "page": "portfolio",
+      "anchor": "Growth · 2026 Xbow Autonomous offensive security",
       "fetched": false,
       "blocked": null,
       "origin": "official"

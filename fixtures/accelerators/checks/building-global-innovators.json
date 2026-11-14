@@ -1,23 +1,278 @@
 {
   "programId": "building-global-innovators",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.bgi.pt/",
-    "https://www.bgi.pt/about"
+    "https://bgi.pt/eit-food/agrifoods-investment-launchpad",
+    "https://bgi.pt/about",
+    "https://bgi.pt/archive/about",
+    "https://bgi.pt/archive/our-programs",
+    "https://bgi.pt/bgi-accelerator",
+    "https://bgi.pt/eit-urban-mobility/mobility-mentoring-program",
+    "https://bgi.pt/eitclimatekic/accelerator",
+    "https://bgi.pt/eitdigital/venture-program",
+    "https://bgi.pt/programs",
+    "https://www.bgi.pt/about",
+    "https://www.bgi.pt/contact",
+    "https://www.bgi.pt/programs",
+    "https://bgi.pt/eit-food/healthysoil4food-summer-school-2026",
+    "https://bgi.pt/eit-urban-mobility/mobility-data-hackathon"
   ],
   "evidence": [
     {
+      "id": "check-duration-014775f69f",
+      "url": "https://bgi.pt/eit-food/healthysoil4food-summer-school-2026",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "1 st of August 2025 ‍ Duration 2 weeks online + 1 week in-person. ‍ Location Online and On-site (Penha",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2324852875",
+      "url": "https://bgi.pt/bgi-accelerator",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "on cohort needs Business Development support 8 Weeks of Mentorship The program Tech-based solutions",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-425030c872",
+      "url": "https://bgi.pt/eit-food/healthysoil4food-summer-school-2026",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "from 16 May – 1 June Language English Duration 2 weeks online + 1 week in-person Applications Open What",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-bd2df063b2",
+      "url": "https://bgi.pt/eit-food/healthysoil4food-summer-school-2026",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "28 th of July to 1 st of August 2025 ‍ Duration 2 weeks online + 1 week in-person. ‍ Location Online and",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c15c9270b2",
+      "url": "https://bgi.pt/eit-food/healthysoil4food-summer-school-2026",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "from experts. How Does it Work? • Duration: 2 weeks online + 1 week in-person. ‍ • Format: Online &",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c65fb65a2c",
+      "url": "https://bgi.pt/eit-food/healthysoil4food-summer-school-2026",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "June Language English Duration 2 weeks online + 1 week in-person Applications Open What is",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e36aef752d",
+      "url": "https://bgi.pt/eit-food/healthysoil4food-summer-school-2026",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "How Does it Work? • Duration: 2 weeks online + 1 week in-person. ‍ • Format: Online & Interactive",
+      "page": "details"
+    },
+    {
+      "id": "check-format-07f49b681d",
+      "url": "https://bgi.pt/eit-food/healthysoil4food-summer-school-2026",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "Date (Online) 30 th of June to 11 th of July 2025 ‍ Date (in-person) 28 th of July to 1 st of August 2025 ‍ Duration 2 weeks",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1a37e2ff3a",
+      "url": "https://bgi.pt/eit-food/healthysoil4food-summer-school-2026",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "Garcia, Portugal) Date Online : 29 June – 10 July 2026 ‍ In-person : 26 July – 31 July 2026 Price Online Component: Early",
+      "page": "details"
+    },
+    {
+      "id": "check-format-2e8a283e57",
+      "url": "https://bgi.pt/eit-food/healthysoil4food-summer-school-2026",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "to 1 st of August 2025 ‍ Duration 2 weeks online + 1 week in-person. ‍ Location Online and On-site (Penha Garcia, Portugal) ‍",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5c4894d9b8",
+      "url": "https://bgi.pt/eitdigital/venture-program",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "Reports Contact EIT Digital Venture Program Free, Hybrid Program Overview EIT Digital Venture Program is a",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5da8e39f20",
+      "url": "https://bgi.pt/eit-food/healthysoil4food-summer-school-2026",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "course plus access to the in-person week in Portugal. In-person week covers attendance, accommodation and meals on-site",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5ffb0a1bae",
+      "url": "https://bgi.pt/eit-food/healthysoil4food-summer-school-2026",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "€100 | €150 from 16 May – 12 June ‍ Full Program (Online + In-person): Early Bird (15 May) - €475 | €500 from 16 May – 1 June",
+      "page": "details"
+    },
+    {
+      "id": "check-format-a74b1f4197",
+      "url": "https://bgi.pt/eit-food/healthysoil4food-summer-school-2026",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "apply. The price includes online course plus access to the in-person week in Portugal. In-person week covers attendance,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ad5588e0e0",
+      "url": "https://bgi.pt/eit-food/healthysoil4food-summer-school-2026",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "decision-making July 10 Final Project Presentation Week 3 In-Person July 26 Welcome Reception & Social Program July 27 Soil",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b2087478d5",
+      "url": "https://bgi.pt/eit-food/healthysoil4food-summer-school-2026",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "– 1 June Language English Duration 2 weeks online + 1 week in-person Applications Open What is HealthySoil4Life? The",
+      "page": "details"
+    },
+    {
+      "id": "check-format-de612969f4",
+      "url": "https://bgi.pt/eit-food/healthysoil4food-summer-school-2026",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "How Does it Work? • Duration: 2 weeks online + 1 week in-person. ‍ • Format: Online & Interactive Sessions • Final",
+      "page": "details"
+    },
+    {
+      "id": "check-location-a25703a536",
+      "url": "https://bgi.pt/eit-urban-mobility/mobility-data-hackathon",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "challenge topics. Do I need to be based in Portugal? No. International startups are",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-0530b4e5ec",
+      "url": "https://www.bgi.pt/contact",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "+351 211 633 386",
+      "page": "details"
+    },
+    {
+      "id": "check-route-086f68dc94",
+      "url": "https://bgi.pt/eit-urban-mobility/mobility-data-hackathon",
+      "title": "Building Global Innovators — program page",
+      "excerpt": "Apply now → https://forms.gle/sunWhDTEUzNtDkHe7",
+      "page": "details"
+    },
+    {
       "id": "check-route-9f7e264a8e",
       "url": "https://www.bgi.pt/",
-      "title": "Building Global Innovators — homepage checked by scrape.py",
+      "title": "Building Global Innovators — homepage",
       "excerpt": "https://www.bgi.pt/",
       "page": "details"
     }
   ],
+  "pageQuotes": [
+    {
+      "id": "check-page-60af58a0a3",
+      "url": "https://www.bgi.pt/",
+      "page": "details",
+      "excerpt": "Home About us Programs Ecosystem Reports Contact BGI - Sustainable Ventures The Future Of Innovation Education Fund Innovation Innovation Education Fund Powerhouse Innovation Education Fund Powerhouse Innovation Innovation BGI is a portuguese world-class startup accelerator and venture builder, equipping innovators from all over the world with the right knowledge, tools and networks to succeed, while creating a more sustainable and innovative world for everyone. About us Explore Programs Download The Urban Mobility Scaleup Report 2026 The report provides actionable insights for investors, entrepreneurs, and policymakers who want to understand which ventures are shaping the future of urban mobility in Portugal and how the ecosystem is evolving Name (optional) Email * Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Sustainable Ventures The Future Of Innovation Education Fund Innovation Innovation Education Fund Powerhouse Innovation Education Fund Powerhouse Innovation Innovation BGI is a portuguese world-class startup accelerator and venture builder, equipping innovators from all over the world with the right knowledge, tools and networks to succeed, while creating a more sustainable and innovative world for everyone. About us Explore Programs 1 We help Startups and deep-tech SMEs to achieve their business, economic and"
+    },
+    {
+      "id": "check-page-bbb55f9292",
+      "url": "https://bgi.pt/eit-food/agrifoods-investment-launchpad",
+      "page": "terms",
+      "excerpt": "Agrifoods Investment Launchpad About us Programs Ecosystem Reports Contact Download our Report Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Do you want stay updated with the latest from BGI? Subscribe to our newsletter. Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Address: R. António Champalimaud 1, 1600-756 Lisbon Portugal ‍ ‍ Contact: geral@bgi.pt Home ABOUT PROGRAMS ECOSYSTEM REPORTS Privacy Policy Contact"
+    },
+    {
+      "id": "check-page-dd927981c4",
+      "url": "https://bgi.pt/about",
+      "page": "details",
+      "excerpt": "About About us Programs Ecosystem Reports Contact Who Are We? BGI is a world-class startup accelerator empowering innovators and professionals worldwide to transform science into high-impact, sustainable ventures. With over a decade of experience, BGI focuses on accelerating green biotechnology solutions that regenerate ecosystems, decarbonise industries and cities and build resilient economies. Based in Lisbon, BGI operates globally with sustainability at its core. Talk to us 1 Mission Empower innovators and startups to achieve sustainable economic, environmental and business success 2 Vision A world where innovation delivers impact for people and planet 3 Values Sustainability DNACollaboration & ecosystem buildingInnovation excellence Why BGI? Benefiting from our inception at MIT and partnership with the European Institute of Innovation and Technology (EIT) & the European Innovation Council (EIC), we are proud of our extensive portfolio. Over 800 entrepreneurs from around the world have relied on our services and network to succeed in their industries and make their startups prosper. 30+ Projects 15+ Years of experience Our Team Gonçalo Amorim CEO Ricardo Nunes CFO João Rabaça Director of Operations Cláudia Godinho Strategic Consultant Sofia Boléo Financial Administrative Soraia Caetano Projects Manager Jan Mrkus Project Manager Filipe Rollo Project Manager Catarina"
+    },
+    {
+      "id": "check-page-166906dcd1",
+      "url": "https://bgi.pt/archive/about",
+      "page": "details",
+      "excerpt": "About us About us Programs Ecosystem Reports Contact Who Are We? BGI is a world-class startup accelerator empowering innovators and professionals worldwide to transform science into high-impact, sustainable ventures. With over a decade of experience, BGI focuses on accelerating green biotechnology solutions that regenerate ecosystems, decarbonise industries and cities and build resilient economies. Based in Lisbon, BGI operates globally with sustainability at its core. Talk to us 1 Mission Empower innovators and startups to achieve sustainable economic, environmental and business success 2 Vision A world where innovation delivers impact for people and planet 3 Values Sustainability DNACollaboration & ecosystem buildingInnovation excellence Why BGI? Benefiting from our inception at MIT and partnership with the European Institute of Innovation and Technology (EIT) & the European Innovation Council (EIC), we are proud of our extensive portfolio. Over 800 entrepreneurs from around the world have relied on our services and network to succeed in their industries and make their startups prosper. 30+ Projects 15+ Years of experience Our Team Gonçalo Amorim CEO Ricardo Nunes CFO João Rabaça Director of Operations Cláudia Godinho Strategic Consultant Sofia Boléo Financial Administrative Soraia Caetano Projects Manager Jan Mrkus Project Manager Filipe Rollo Project Manager Catarina"
+    },
+    {
+      "id": "check-page-b32d72ca8e",
+      "url": "https://bgi.pt/archive/our-programs",
+      "page": "details",
+      "excerpt": "Our programs About us Programs Ecosystem Reports Contact bgi Our programs Looking for an innovation, education or acceleration program that will take you further? BGI is a leading organization in Portugal, with a global reach, dedicated to helping innovators achieve their business goals in a sustainable way. With a wide variety of programs in the areas of agrifood, climate, manufacturing, mobility and health, we equip you with the skills and the knowledge you need to succeed in today's fast-paced market. Explore our programs and learn how we can help you succeed while making an impact. Focus Area Agrifood Digital CleanTech Urban Mobility Health Multiple Categories Venture Acceleration Academy Innovation Investment R&D Multiple Status Open Closed Reset Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Showing 0 in total of 0 Filters Agrifood Closed Venture Acceleration Check the program AI4Agrifood Urban Mobility Open Ecosystem Insights Check the program Urban Mobility Scale-Up Report: Data Collection Urban Mobility Running Academy Check the program Innov4Mobility Agrifood Running Academy Check the program EWA - Empowering Women in Agrifood Urban Mobility Open Venture Acceleration Check the program Urban Mobility Startup Creation Agrifood Open Academy Check the program HealthySoil4Life Urban Mobility Open Academy Check the"
+    },
+    {
+      "id": "check-page-4ba4fc6af2",
+      "url": "https://bgi.pt/bgi-accelerator",
+      "page": "details",
+      "excerpt": "BGI Accelerator About us Programs Ecosystem Reports Contact BGI Accelerator Overview BGI Accelerator is a 11 year deep tech international Accelerator - Spin out of MIT Portugal Entrepreneurship Initiative. The accelerator provides to the startups: 2 Bootcamps with expert coaching 1 additional Bootcamp in Boston (Optional) 2 Demo days - Pitch to Investors, Clients and the General public 8 Weekly training and meetups focusing on cohort needs Business Development support 8 Weeks of Mentorship The program Tech-based solutions working on solving global challenges. Startups with less than 5 years. Need of considerable human and financial resources to achieve full commercialization. Revenue < €2.5M Get Involved Do you want stay updated with the latest from BGI? Subscribe to our newsletter. Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Address: R. António Champalimaud 1, 1600-756 Lisbon Portugal ‍ ‍ Contact: geral@bgi.pt Home ABOUT PROGRAMS ECOSYSTEM REPORTS Privacy Policy Contact"
+    },
+    {
+      "id": "check-page-e27bee90f3",
+      "url": "https://bgi.pt/eit-urban-mobility/mobility-mentoring-program",
+      "page": "details",
+      "excerpt": "Mobility Mentoring Program"
+    },
+    {
+      "id": "check-page-3eaf3556b7",
+      "url": "https://bgi.pt/eitclimatekic/accelerator",
+      "page": "details",
+      "excerpt": "Accelerator About us Programs Ecosystem Reports Contact EIT Climate-KIC Accelerator MED ClimAccelerator Overview Acceleration program focused on climate impact by cleantech commercialisation. It boosts innovation by supporting startups in 3 mediterranean countries: Portugal, Malta and Cyprus. ​In 3 stages, our program brings you the knowledge, resources, tools and the coaching a cleantech startup needs for success.​ Stage 1: Funding up to €5.000 Stage 2: Funding up to €20.000 Stage 3: Business Development Support Access to Europe’s largest CleanTech accelerator International Network Access to potential investors and clients Personalized Mentoring and Coaching Get Involved The program looks for innovators with ideas to takle climate change that fulfil the following criteria: -Have a breakthrough business model, exponential technology, or solution with substantial climate impact; -Core value proposition can be based on digital as well as non-digital solutions; -Proof of Concept (POC) exists, (ideally) with a proven need for the solution; -The startup is composed by a motivated team (at least two founders); -The team is committed to participate in the programme activities; -The team can work in an English-speaking environment. Do you want stay updated with the latest from BGI? Subscribe to our newsletter. Thank you! Your submission has been received! Oops! Something went wrong"
+    },
+    {
+      "id": "check-page-c5cfb094a8",
+      "url": "https://bgi.pt/eitdigital/venture-program",
+      "page": "details",
+      "excerpt": "Venture Program About us Programs Ecosystem Reports Contact EIT Digital Venture Program Free, Hybrid Program Overview EIT Digital Venture Program is a competition for teams of entrepreneurs with strong value propositions and an existing prototype or Proof of Concept (PoC) who are eager to finalise a minimum viable product (MVP) during an intensive eight-week Pre-Acceleration Phase. Venture teams are also provided with up to €25,000 to help them launch their startup. The programme operates in five regions and will be delivered by selected EIT Digital innovation partners - Found.ation Athens, Startup Wise Guys Tallin, BGI Lisbon and ABC Accelerator Ljubljana - each covering specific countries. Get Involved Teams of entrepreneurs that are residents of Portugal and Malta To be eligible, interested teams from the above mentioned countries must fulfil the following criteria:Teams must have an innovative business idea with a PoC or prototype in Digital Industry, Digital Tech, Digital Wellbeing, Digital Finance or Digital Cities.Teams must consist of at least two members and be multidisciplinary, with technology and management skills Teams must not have already established a legal entity for the project in question. Do you want stay updated with the latest from BGI? Subscribe to our newsletter. Thank you! Your submission has been received! Oops! Something went wrong while submitting"
+    },
+    {
+      "id": "check-page-1c081f4505",
+      "url": "https://bgi.pt/programs",
+      "page": "details",
+      "excerpt": "programs About us Programs Ecosystem Reports Contact Programs BGI is a leading innovation organization in Portugal with a global reach, helping innovators succeed through programs in agrifood, climate, manufacturing, mobility, and health, combining business growth with real impact. Talk to us Programs list Reset All Select by Status Select By Status Open [ 0 ] Closed [ 0 ] Running [ 0 ] Select by Focus Area Select By Focus area Urban Mobility [ 0 ] Agrifood [ 0 ] Digital [ 0 ] Health [ 0 ] Climate [ 0 ] Raw Materials [ 0 ] Manufacturing [ 0 ] Multiple [ 0 ] Search Programs Showing 0 results of 0 items. highlight Filtering by: Tag Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. See more AI4Agrifood Agrifood Closed See more Urban Mobility Scale-Up Report: Data Collection Urban Mobility Open See more Innov4Mobility Urban Mobility Running See more EWA - Empowering Women in Agrifood Agrifood Running See more Urban Mobility Startup Creation Urban Mobility Open See more HealthySoil4Life Agrifood Open See more Mobility Hackathon Urban Mobility Open See more Mobility Matchmaking 2026 Urban Mobility Open See more AmpliAqua® Agrifood Open See more Agrifood Disruptor Agrifood Running See more BGI as EIT Food Representative Agrifood Open See more Sustainable Foods TestBeds Agrifood Open See more Urban Mobility country representative Urban"
+    },
+    {
+      "id": "check-page-a881acdb81",
+      "url": "https://www.bgi.pt/about",
+      "page": "details",
+      "excerpt": "About About us Programs Ecosystem Reports Contact Who Are We? BGI is a world-class startup accelerator empowering innovators and professionals worldwide to transform science into high-impact, sustainable ventures. With over a decade of experience, BGI focuses on accelerating green biotechnology solutions that regenerate ecosystems, decarbonise industries and cities and build resilient economies. Based in Lisbon, BGI operates globally with sustainability at its core. Talk to us 1 Mission Empower innovators and startups to achieve sustainable economic, environmental and business success 2 Vision A world where innovation delivers impact for people and planet 3 Values Sustainability DNACollaboration & ecosystem buildingInnovation excellence Why BGI? Benefiting from our inception at MIT and partnership with the European Institute of Innovation and Technology (EIT) & the European Innovation Council (EIC), we are proud of our extensive portfolio. Over 800 entrepreneurs from around the world have relied on our services and network to succeed in their industries and make their startups prosper. 30+ Projects 15+ Years of experience Our Team Gonçalo Amorim CEO Ricardo Nunes CFO João Rabaça Director of Operations Cláudia Godinho Strategic Consultant Sofia Boléo Financial Administrative Soraia Caetano Projects Manager Jan Mrkus Project Manager Filipe Rollo Project Manager Catarina"
+    },
+    {
+      "id": "check-page-e6ad0952eb",
+      "url": "https://www.bgi.pt/contact",
+      "page": "details",
+      "excerpt": "Contact About us Programs Ecosystem Reports Contact Contact us today! Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Email geral@bgi.pt Phone +351 211 633 386 Address R. António Champalimaud 1, 1600-756 Lisboa Do you want stay updated with the latest from BGI? Subscribe to our newsletter. Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Address: R. António Champalimaud 1, 1600-756 Lisbon Portugal ‍ ‍ Contact: geral@bgi.pt Home ABOUT PROGRAMS ECOSYSTEM REPORTS Privacy Policy Contact"
+    },
+    {
+      "id": "check-page-df716340d0",
+      "url": "https://www.bgi.pt/programs",
+      "page": "details",
+      "excerpt": "programs About us Programs Ecosystem Reports Contact Programs BGI is a leading innovation organization in Portugal with a global reach, helping innovators succeed through programs in agrifood, climate, manufacturing, mobility, and health, combining business growth with real impact. Talk to us Programs list Reset All Select by Status Select By Status Open [ 0 ] Closed [ 0 ] Running [ 0 ] Select by Focus Area Select By Focus area Urban Mobility [ 0 ] Agrifood [ 0 ] Digital [ 0 ] Health [ 0 ] Climate [ 0 ] Raw Materials [ 0 ] Manufacturing [ 0 ] Multiple [ 0 ] Search Programs Showing 0 results of 0 items. highlight Filtering by: Tag Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. See more AI4Agrifood Agrifood Closed See more Urban Mobility Scale-Up Report: Data Collection Urban Mobility Open See more Innov4Mobility Urban Mobility Running See more EWA - Empowering Women in Agrifood Agrifood Running See more Urban Mobility Startup Creation Urban Mobility Open See more HealthySoil4Life Agrifood Open See more Mobility Hackathon Urban Mobility Open See more Mobility Matchmaking 2026 Urban Mobility Open See more AmpliAqua® Agrifood Open See more Agrifood Disruptor Agrifood Running See more BGI as EIT Food Representative Agrifood Open See more Sustainable Foods TestBeds Agrifood Open See more Urban Mobility country representative Urban"
+    },
+    {
+      "id": "check-page-a168bcce41",
+      "url": "https://bgi.pt/eit-food/healthysoil4food-summer-school-2026",
+      "page": "details",
+      "excerpt": "HealthySoil4Food Summer school 2026 About us Programs Ecosystem Reports Contact Overview Join the regenerative movement and unlock soil potential to drive a healthier, more sustainable future. ‍ ‍ When Soil Heals, the World Breathes ‍ Soils are at the heart of life. Learn how nutrient density, nature, gastronomy, and art come together to shape healthier communities and more resilient food systems - Two online weeks on a journey to understand your role in a truly sustainable future. ‍ On‑site , we blend nature, creativity, fun, and hands‑on problem-solving. Align with like‑minded professionals and practitioners, exercising your critical thinking and problem‑solving skills to co‑design real‑world solutions for regenerative agriculture, soil protection, and food wealth. It’s not just about soil, it’s about systems, civilization, and regeneration . Apply Now Location Online and On-site (Penha Garcia, Portugal) Date Online : 29 June – 10 July 2026 ‍ In-person : 26 July – 31 July 2026 Price Online Component: Early Bird (15 May) – €100 | €150 from 16 May – 12 June ‍ Full Program (Online + In-person): Early Bird (15 May) - €475 | €500 from 16 May – 1 June Language English Duration 2 weeks online + 1 week in-person Applications Open What is HealthySoil4Life? The HealthySoil4Life program is an innovative, challenge-based learning experience designed to equip students, researchers, and"
+    },
+    {
+      "id": "check-page-c543d368bf",
+      "url": "https://bgi.pt/eit-urban-mobility/mobility-data-hackathon",
+      "page": "details",
+      "excerpt": "Mobility Hackathon About us Programs Ecosystem Reports Contact urban mobility ‍ Applications Open: 10 September 2025 ‍ Applications close: 23 October 2025 ‍ Location Online + Final Pitch in Lisboa ‍ Date 30 October - 7 November 2025 ‍ Language Portuguese ‍ Price Free Register here Turning Data into Smarter Mobility Solutions The Urban Mobility Data Hackathon is a collaborative competition where students, professionals, and innovators can use data to design solutions for real urban mobility challenges presented by leading players in Portugal’s mobility ecosystem. Co-funded by EIT Urban Mobility and organized by BGI and Transportes Metropolitanos de Lisboa (TML), this event will bring the urban mobility community together to unlock innovation through data. Why Join? • Prizes and Opportunities Competing teams will have the chance to win a prize of up to 500€ . In addition, winning teams will receive support for their application to the EIT Jumpstarter Program and benefit from 8 hours of advisory support to further develop their idea in collaboration with TML. ‍ • Problem-Solving with Impact Tackle real-world challenges with a leading public transport operator.Dive into real datasets, uncover the key problems, and design actionable, data-driven solutions that shape the future of urban mobility and smarter cities.Gain access to real datasets from Portuguese mobility operators."
+    }
+  ],
   "findings": {
     "emails": [],
-    "phones": [],
-    "routes": [],
+    "phones": [
+      {
+        "value": "+351211633386",
+        "evidenceId": "check-phone-0530b4e5ec"
+      }
+    ],
+    "routes": [
+      {
+        "value": "https://forms.gle/sunWhDTEUzNtDkHe7",
+        "evidenceId": "check-route-086f68dc94"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://www.bgi.pt/",
@@ -27,8 +282,42 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "8",
+        "evidenceId": "check-duration-2324852875"
+      },
+      {
+        "value": "2",
+        "evidenceId": "check-duration-425030c872"
+      },
+      {
+        "value": "1",
+        "evidenceId": "check-duration-c65fb65a2c"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-5c4894d9b8"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-1a37e2ff3a"
+      }
+    ],
+    "location": [
+      {
+        "value": "Portugal",
+        "evidenceId": "check-location-a25703a536"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

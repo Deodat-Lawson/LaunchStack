@@ -1,87 +1,885 @@
 {
   "programId": "venture-center",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.venturecenter.co.in/",
-    "https://www.venturecenter.co.in/about"
+    "https://www.venturecenter.co.in/funding/seed-investments",
+    "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-leap-fund",
+    "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-seed-fund",
+    "https://www.venturecenter.co.in/funding/fellowships/seed-investments/nidhi-sss",
+    "https://www.venturecenter.co.in/funding/fellowships/seed-investments/startup-india-seed-fund-scheme",
+    "https://www.venturecenter.co.in/PMU",
+    "https://www.venturecenter.co.in/about",
+    "https://www.venturecenter.co.in/about/awards-and-recognition",
+    "https://www.venturecenter.co.in/about/history-and-milestones",
+    "https://www.venturecenter.co.in/about/life-at-venture-center",
+    "https://www.venturecenter.co.in/about/people",
+    "https://www.venturecenter.co.in/eta/",
+    "https://www.venturecenter.co.in/eta/apply/",
+    "https://www.venturecenter.co.in/events/197/immersion-program-for-managers-of-incubation-centers"
   ],
   "evidence": [
     {
+      "id": "check-duration-c1728b30bb",
+      "url": "https://www.venturecenter.co.in/",
+      "title": "Venture Center — homepage",
+      "excerpt": "answered as and when required. During all the 18 months of the project, the VC team was always available",
+      "page": "details"
+    },
+    {
+      "id": "check-format-0017745729",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/startup-india-seed-fund-scheme",
+      "title": "Venture Center — terms page",
+      "excerpt": "Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-11cdc0a4d9",
+      "url": "https://www.venturecenter.co.in/events/197/immersion-program-for-managers-of-incubation-centers",
+      "title": "Venture Center — program page",
+      "excerpt": "Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1297047526",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-leap-fund",
+      "title": "Venture Center — terms page",
+      "excerpt": "Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-16d13dd248",
+      "url": "https://www.venturecenter.co.in/about/awards-and-recognition",
+      "title": "Venture Center — program page",
+      "excerpt": "Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding",
+      "page": "details"
+    },
+    {
+      "id": "check-format-191ada0b46",
+      "url": "https://www.venturecenter.co.in/about/people",
+      "title": "Venture Center — program page",
+      "excerpt": "Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1d89ed6792",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/nidhi-sss",
+      "title": "Venture Center — terms page",
+      "excerpt": "Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-27af024a3b",
+      "url": "https://www.venturecenter.co.in/about/life-at-venture-center",
+      "title": "Venture Center — program page",
+      "excerpt": "Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR",
+      "page": "details"
+    },
+    {
+      "id": "check-format-2ca1664391",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/nidhi-sss",
+      "title": "Venture Center — terms page",
+      "excerpt": "Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-30e7af7cf0",
+      "url": "https://www.venturecenter.co.in/",
+      "title": "Venture Center — homepage",
+      "excerpt": "Event Thriving Together – Open Space Technology is an in-person gathering for founder entrepreneurs, organised by Venture",
+      "page": "details"
+    },
+    {
+      "id": "check-format-48d70b043c",
+      "url": "https://www.venturecenter.co.in/funding/seed-investments",
+      "title": "Venture Center — terms page",
+      "excerpt": "Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-5961c7bf1a",
+      "url": "https://www.venturecenter.co.in/about/life-at-venture-center",
+      "title": "Venture Center — program page",
+      "excerpt": "Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5a28640b5b",
+      "url": "https://www.venturecenter.co.in/events/197/immersion-program-for-managers-of-incubation-centers",
+      "title": "Venture Center — program page",
+      "excerpt": "Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR",
+      "page": "details"
+    },
+    {
+      "id": "check-format-66b1562560",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-seed-fund",
+      "title": "Venture Center — terms page",
+      "excerpt": "Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-68dc10f5fe",
+      "url": "https://www.venturecenter.co.in/events/197/immersion-program-for-managers-of-incubation-centers",
+      "title": "Venture Center — program page",
+      "excerpt": "19 and 20 November 2026 Venue: Venture Center, Pune Mode: In person How to Register Interested participants can register",
+      "page": "details"
+    },
+    {
+      "id": "check-format-70721f71e5",
+      "url": "https://www.venturecenter.co.in/",
+      "title": "Venture Center — homepage",
+      "excerpt": "Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR",
+      "page": "details"
+    },
+    {
+      "id": "check-format-7d9e45f50d",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/startup-india-seed-fund-scheme",
+      "title": "Venture Center — terms page",
+      "excerpt": "Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-81fb15efc5",
+      "url": "https://www.venturecenter.co.in/PMU",
+      "title": "Venture Center — program page",
+      "excerpt": "Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR",
+      "page": "details"
+    },
+    {
+      "id": "check-format-8eba7cdf01",
+      "url": "https://www.venturecenter.co.in/funding/seed-investments",
+      "title": "Venture Center — terms page",
+      "excerpt": "Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-9e1c23d20c",
+      "url": "https://www.venturecenter.co.in/",
+      "title": "Venture Center — homepage",
+      "excerpt": "Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding",
+      "page": "details"
+    },
+    {
+      "id": "check-format-a34bdbd6c4",
+      "url": "https://www.venturecenter.co.in/about/history-and-milestones",
+      "title": "Venture Center — program page",
+      "excerpt": "Partnered with Blockchain for Impact for the BFI-Biome Virtual Network Program Partnered with Gemini Graaphics under",
+      "page": "details"
+    },
+    {
+      "id": "check-format-a7d2d4db12",
+      "url": "https://www.venturecenter.co.in/about/history-and-milestones",
+      "title": "Venture Center — program page",
+      "excerpt": "Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d0a17fac8d",
+      "url": "https://www.venturecenter.co.in/about/people",
+      "title": "Venture Center — program page",
+      "excerpt": "Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d1d02c5ad4",
+      "url": "https://www.venturecenter.co.in/about/history-and-milestones",
+      "title": "Venture Center — program page",
+      "excerpt": "Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d5f6fb69e1",
+      "url": "https://www.venturecenter.co.in/about/awards-and-recognition",
+      "title": "Venture Center — program page",
+      "excerpt": "Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d67baac12d",
+      "url": "https://www.venturecenter.co.in/PMU",
+      "title": "Venture Center — program page",
+      "excerpt": "Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d802a08bb7",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-seed-fund",
+      "title": "Venture Center — terms page",
+      "excerpt": "Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d9a1f9274f",
+      "url": "https://www.venturecenter.co.in/about",
+      "title": "Venture Center — program page",
+      "excerpt": "Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ef5df63c0b",
+      "url": "https://www.venturecenter.co.in/about/history-and-milestones",
+      "title": "Venture Center — program page",
+      "excerpt": "companies have emerged from NCL. In 2011, we launched our virtual incubation program that has helped to expand our reach",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f19d73e38a",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-leap-fund",
+      "title": "Venture Center — terms page",
+      "excerpt": "Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-fa89e20cd0",
+      "url": "https://www.venturecenter.co.in/about",
+      "title": "Venture Center — program page",
+      "excerpt": "Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR",
+      "page": "details"
+    },
+    {
       "id": "check-name-268c8f004b",
       "url": "https://www.venturecenter.co.in/",
-      "title": "Venture Center — homepage checked by scrape.py",
+      "title": "Venture Center — homepage",
       "excerpt": "India's top incubator for inventive startups - Venture Center About Careers Contact Programs Support Incubation &",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-0b358c97d7",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-seed-fund",
+      "title": "Venture Center — terms page",
+      "excerpt": "+91-9156465104",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-214b99fed4",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-leap-fund",
+      "title": "Venture Center — terms page",
+      "excerpt": "+91 91 72 23 22 15",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-277fb73766",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/nidhi-sss",
+      "title": "Venture Center — terms page",
+      "excerpt": "+91-9156465104",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-3b41046703",
+      "url": "https://www.venturecenter.co.in/about/history-and-milestones",
+      "title": "Venture Center — program page",
+      "excerpt": "+91 91 72 23 22 15",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-4138eb4456",
+      "url": "https://www.venturecenter.co.in/funding/seed-investments",
+      "title": "Venture Center — terms page",
+      "excerpt": "+91 91 72 23 22 15",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-44945b7bf9",
+      "url": "https://www.venturecenter.co.in/about/people",
+      "title": "Venture Center — program page",
+      "excerpt": "+91 91 72 23 22 15",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-58b08e10fe",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/startup-india-seed-fund-scheme",
+      "title": "Venture Center — terms page",
+      "excerpt": "+91 91 72 23 22 15",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-694e5402e7",
+      "url": "https://www.venturecenter.co.in/funding/seed-investments",
+      "title": "Venture Center — terms page",
+      "excerpt": "+91-8956457046",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-77b47e708c",
+      "url": "https://www.venturecenter.co.in/PMU",
+      "title": "Venture Center — program page",
+      "excerpt": "+91 91 72 23 22 15",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-7c2da123c0",
+      "url": "https://www.venturecenter.co.in/about/awards-and-recognition",
+      "title": "Venture Center — program page",
+      "excerpt": "+91 91 72 23 22 15",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-819793ab9e",
+      "url": "https://www.venturecenter.co.in/events/197/immersion-program-for-managers-of-incubation-centers",
+      "title": "Venture Center — program page",
+      "excerpt": "+91 91 72 23 22 15",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-85099cc046",
+      "url": "https://www.venturecenter.co.in/funding/seed-investments",
+      "title": "Venture Center — terms page",
+      "excerpt": "+91-9156465104",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-a5484dfca1",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-seed-fund",
+      "title": "Venture Center — terms page",
+      "excerpt": "+91 91 72 23 22 15",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-a556c9173e",
+      "url": "https://www.venturecenter.co.in/events/197/immersion-program-for-managers-of-incubation-centers",
+      "title": "Venture Center — program page",
+      "excerpt": "+91-9156465146",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-ac4b9e4212",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/startup-india-seed-fund-scheme",
+      "title": "Venture Center — terms page",
+      "excerpt": "+91-8956457046",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-ae1582e078",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-leap-fund",
+      "title": "Venture Center — terms page",
+      "excerpt": "+91-9156465104",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-bb5a4b2733",
+      "url": "https://www.venturecenter.co.in/events/197/immersion-program-for-managers-of-incubation-centers",
+      "title": "Venture Center — program page",
+      "excerpt": "+91-8956457042",
       "page": "details"
     },
     {
       "id": "check-phone-c7e23ab13d",
       "url": "https://www.venturecenter.co.in/about",
-      "title": "Venture Center — details page checked by scrape.py",
+      "title": "Venture Center — program page",
       "excerpt": "+91 91 72 23 22 15",
       "page": "details"
+    },
+    {
+      "id": "check-phone-d7a6302e4f",
+      "url": "https://www.venturecenter.co.in/about/life-at-venture-center",
+      "title": "Venture Center — program page",
+      "excerpt": "+91 91 72 23 22 15",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-e4a2521460",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/nidhi-sss",
+      "title": "Venture Center — terms page",
+      "excerpt": "+91 91 72 23 22 15",
+      "page": "terms"
     },
     {
       "id": "check-phone-e67c4aea6c",
       "url": "https://www.venturecenter.co.in/",
-      "title": "Venture Center — homepage checked by scrape.py",
+      "title": "Venture Center — homepage",
       "excerpt": "+91 91 72 23 22 15",
       "page": "details"
     },
     {
-      "id": "check-portfolio-144b10b77c",
-      "url": "https://www.venturecenter.co.in/about",
-      "title": "Venture Center — details page checked by scrape.py",
+      "id": "check-portfolio-0049ccc9b6",
+      "url": "https://www.venturecenter.co.in/about/history-and-milestones",
+      "title": "Venture Center — program page",
       "excerpt": "Startup Directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
       "page": "details"
     },
     {
+      "id": "check-portfolio-0170dbd482",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-leap-fund",
+      "title": "Venture Center — terms page",
+      "excerpt": "Startup directory → https://www.venturecenter.co.in/funding/startups-and-success-stories/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-02fe2eb5d0",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-seed-fund",
+      "title": "Venture Center — terms page",
+      "excerpt": "Startup directory → https://www.venturecenter.co.in/funding/startups-and-success-stories/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-047e294800",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-leap-fund",
+      "title": "Venture Center — terms page",
+      "excerpt": "Startups → https://www.venturecenter.co.in/startups-and-success-stories",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-048bb00a3e",
+      "url": "https://www.venturecenter.co.in/events/197/immersion-program-for-managers-of-incubation-centers",
+      "title": "Venture Center — program page",
+      "excerpt": "Startup directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-04fb1e7b0c",
+      "url": "https://www.venturecenter.co.in/PMU",
+      "title": "Venture Center — program page",
+      "excerpt": "Startup directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-05f915b6c3",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/startup-india-seed-fund-scheme",
+      "title": "Venture Center — terms page",
+      "excerpt": "Our Startups → https://www.venturecenter.co.in/funding/about",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-078f1cdd63",
+      "url": "https://www.venturecenter.co.in/about/awards-and-recognition",
+      "title": "Venture Center — program page",
+      "excerpt": "Our Startups → https://www.venturecenter.co.in/about",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-119ca90fc4",
+      "url": "https://www.venturecenter.co.in/funding/seed-investments",
+      "title": "Venture Center — terms page",
+      "excerpt": "Startup Directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-144b10b77c",
+      "url": "https://www.venturecenter.co.in/about",
+      "title": "Venture Center — program page",
+      "excerpt": "Startup Directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-14aa647b32",
+      "url": "https://www.venturecenter.co.in/about/history-and-milestones",
+      "title": "Venture Center — program page",
+      "excerpt": "Our Startups → https://www.venturecenter.co.in/about",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-167565f11d",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/nidhi-sss",
+      "title": "Venture Center — terms page",
+      "excerpt": "Our Startups → https://www.venturecenter.co.in/funding/about",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2afdeb1334",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-seed-fund",
+      "title": "Venture Center — terms page",
+      "excerpt": "Startup Directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-3315a44cd5",
       "url": "https://www.venturecenter.co.in/",
-      "title": "Venture Center — homepage checked by scrape.py",
+      "title": "Venture Center — homepage",
       "excerpt": "Startup Directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
       "page": "details"
     },
     {
       "id": "check-portfolio-33a369e605",
       "url": "https://www.venturecenter.co.in/",
-      "title": "Venture Center — homepage checked by scrape.py",
+      "title": "Venture Center — homepage",
+      "excerpt": "Startup directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3d47a5fadf",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/nidhi-sss",
+      "title": "Venture Center — terms page",
+      "excerpt": "Startups → https://www.venturecenter.co.in/startups-and-success-stories",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-3fc3308095",
+      "url": "https://www.venturecenter.co.in/about/people",
+      "title": "Venture Center — program page",
+      "excerpt": "Startup directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-438f0c9601",
+      "url": "https://www.venturecenter.co.in/about/awards-and-recognition",
+      "title": "Venture Center — program page",
       "excerpt": "Startup directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
       "page": "details"
     },
     {
       "id": "check-portfolio-460d2dc1c6",
       "url": "https://www.venturecenter.co.in/about",
-      "title": "Venture Center — details page checked by scrape.py",
+      "title": "Venture Center — program page",
       "excerpt": "Startup directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4f313e32b9",
+      "url": "https://www.venturecenter.co.in/about/life-at-venture-center",
+      "title": "Venture Center — program page",
+      "excerpt": "Our Startups → https://www.venturecenter.co.in/about",
       "page": "details"
     },
     {
       "id": "check-portfolio-54d2d9a083",
       "url": "https://www.venturecenter.co.in/about",
-      "title": "Venture Center — details page checked by scrape.py",
+      "title": "Venture Center — program page",
       "excerpt": "Startups → https://www.venturecenter.co.in/startups-and-success-stories",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-55b6906794",
+      "url": "https://www.venturecenter.co.in/about/people",
+      "title": "Venture Center — program page",
+      "excerpt": "Our Startups → https://www.venturecenter.co.in/about",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-56dad9b5c7",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-leap-fund",
+      "title": "Venture Center — terms page",
+      "excerpt": "Our Startups → https://www.venturecenter.co.in/funding/about",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-584e6901f5",
+      "url": "https://www.venturecenter.co.in/funding/seed-investments",
+      "title": "Venture Center — terms page",
+      "excerpt": "Our Startups → https://www.venturecenter.co.in/about",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6935df4fd4",
+      "url": "https://www.venturecenter.co.in/PMU",
+      "title": "Venture Center — program page",
+      "excerpt": "Startup Directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
       "page": "details"
     },
     {
       "id": "check-portfolio-6ab987141f",
       "url": "https://www.venturecenter.co.in/",
-      "title": "Venture Center — homepage checked by scrape.py",
+      "title": "Venture Center — homepage",
       "excerpt": "Our Startups → https://www.venturecenter.co.in/about",
       "page": "details"
     },
     {
-      "id": "check-portfolio-eabdcb4edf",
-      "url": "https://www.venturecenter.co.in/",
-      "title": "Venture Center — homepage checked by scrape.py",
+      "id": "check-portfolio-729225ddc6",
+      "url": "https://www.venturecenter.co.in/about/history-and-milestones",
+      "title": "Venture Center — program page",
+      "excerpt": "Startup directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-734d886563",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/startup-india-seed-fund-scheme",
+      "title": "Venture Center — terms page",
+      "excerpt": "Startup Directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7eeb847662",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/startup-india-seed-fund-scheme",
+      "title": "Venture Center — terms page",
+      "excerpt": "Startup directory → https://www.venturecenter.co.in/funding/startups-and-success-stories/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-846ce19413",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-seed-fund",
+      "title": "Venture Center — terms page",
+      "excerpt": "Our Startups → https://www.venturecenter.co.in/funding/about",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-87e41c345c",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-seed-fund",
+      "title": "Venture Center — terms page",
+      "excerpt": "Startups → https://www.venturecenter.co.in/startups-and-success-stories",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-88a89df12d",
+      "url": "https://www.venturecenter.co.in/about/people",
+      "title": "Venture Center — program page",
       "excerpt": "Startups → https://www.venturecenter.co.in/startups-and-success-stories",
       "page": "details"
     },
     {
+      "id": "check-portfolio-8afe643995",
+      "url": "https://www.venturecenter.co.in/about/life-at-venture-center",
+      "title": "Venture Center — program page",
+      "excerpt": "Startup Directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8da58a399d",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-leap-fund",
+      "title": "Venture Center — terms page",
+      "excerpt": "Startup Directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8eaa81d922",
+      "url": "https://www.venturecenter.co.in/about/awards-and-recognition",
+      "title": "Venture Center — program page",
+      "excerpt": "Startup Directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-94f9c394d6",
+      "url": "https://www.venturecenter.co.in/funding/seed-investments",
+      "title": "Venture Center — terms page",
+      "excerpt": "Startups → https://www.venturecenter.co.in/startups-and-success-stories",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-97ccfe5aae",
+      "url": "https://www.venturecenter.co.in/about/awards-and-recognition",
+      "title": "Venture Center — program page",
+      "excerpt": "Startups → https://www.venturecenter.co.in/startups-and-success-stories",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9c7333a370",
+      "url": "https://www.venturecenter.co.in/about/history-and-milestones",
+      "title": "Venture Center — program page",
+      "excerpt": "Startups → https://www.venturecenter.co.in/startups-and-success-stories",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9ea5518eb3",
+      "url": "https://www.venturecenter.co.in/PMU",
+      "title": "Venture Center — program page",
+      "excerpt": "Startups → https://www.venturecenter.co.in/startups-and-success-stories",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a841090618",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/nidhi-sss",
+      "title": "Venture Center — terms page",
+      "excerpt": "Startup Directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c35b676c9f",
+      "url": "https://www.venturecenter.co.in/about/people",
+      "title": "Venture Center — program page",
+      "excerpt": "Startup Directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c8c31956dd",
+      "url": "https://www.venturecenter.co.in/events/197/immersion-program-for-managers-of-incubation-centers",
+      "title": "Venture Center — program page",
+      "excerpt": "Our Startups → https://www.venturecenter.co.in/about",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-cc012cd5fc",
+      "url": "https://www.venturecenter.co.in/events/197/immersion-program-for-managers-of-incubation-centers",
+      "title": "Venture Center — program page",
+      "excerpt": "Startups → https://www.venturecenter.co.in/startups-and-success-stories",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-cd304e78e4",
+      "url": "https://www.venturecenter.co.in/about/life-at-venture-center",
+      "title": "Venture Center — program page",
+      "excerpt": "Startups → https://www.venturecenter.co.in/startups-and-success-stories",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d4fb57e34b",
+      "url": "https://www.venturecenter.co.in/PMU",
+      "title": "Venture Center — program page",
+      "excerpt": "Our Startups → https://www.venturecenter.co.in/about",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-dbd08d5d83",
+      "url": "https://www.venturecenter.co.in/funding/seed-investments",
+      "title": "Venture Center — terms page",
+      "excerpt": "Startup directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-dc331a32e7",
+      "url": "https://www.venturecenter.co.in/events/197/immersion-program-for-managers-of-incubation-centers",
+      "title": "Venture Center — program page",
+      "excerpt": "Startup Directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-df318df856",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/startup-india-seed-fund-scheme",
+      "title": "Venture Center — terms page",
+      "excerpt": "Startups → https://www.venturecenter.co.in/startups-and-success-stories",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-df53c077fa",
+      "url": "https://www.venturecenter.co.in/about/life-at-venture-center",
+      "title": "Venture Center — program page",
+      "excerpt": "Startup directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e70a8401c7",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/nidhi-sss",
+      "title": "Venture Center — terms page",
+      "excerpt": "Startup directory → https://www.venturecenter.co.in/funding/startups-and-success-stories/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-eabdcb4edf",
+      "url": "https://www.venturecenter.co.in/",
+      "title": "Venture Center — homepage",
+      "excerpt": "Startups → https://www.venturecenter.co.in/startups-and-success-stories",
+      "page": "details"
+    },
+    {
+      "id": "check-route-18e1411adf",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-leap-fund",
+      "title": "Venture Center — terms page",
+      "excerpt": "Apply now → https://docs.google.com/forms/d/e/1FAIpQLSeVODzhL7FyjxkDT7XIc0jH6u6f4ATrwJ9AP6McSJVX-i7IjQ/viewform",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1a14dc4fff",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/nidhi-sss",
+      "title": "Venture Center — terms page",
+      "excerpt": "Apply now → https://forms.gle/ckzYA6HXKAWEPnQp8",
+      "page": "terms"
+    },
+    {
       "id": "check-route-7c6df589ee",
       "url": "https://www.venturecenter.co.in/",
-      "title": "Venture Center — homepage checked by scrape.py",
+      "title": "Venture Center — homepage",
       "excerpt": "https://www.venturecenter.co.in/",
       "page": "details"
+    },
+    {
+      "id": "check-route-845f293e0d",
+      "url": "https://www.venturecenter.co.in/eta/",
+      "title": "Venture Center — program page",
+      "excerpt": "Apply Now → https://www.venturecenter.co.in/eta/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8c74c753e5",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-seed-fund",
+      "title": "Venture Center — terms page",
+      "excerpt": "Apply now → https://forms.gle/ckzYA6HXKAWEPnQp8",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b460d8d9ce",
+      "url": "https://www.venturecenter.co.in/eta/",
+      "title": "Venture Center — program page",
+      "excerpt": "How to Apply → https://www.venturecenter.co.in/eta/apply/",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-f67b5f095e",
+      "url": "https://www.venturecenter.co.in/",
+      "page": "details",
+      "excerpt": "India's top incubator for inventive startups - Venture Center About Careers Contact Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding Fellowships Grants & CSR for Startups Seed Investments Funding Database Services Scientific Services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory and Business Consulting Meeting and Events Space Services Design & Branding Services Program Management Services Centers Startups Startup Directory Success Stories Resources Events Talk Series Events Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR Funding Database Services Scientific services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory Consulting Infrastructural support services Regulatory Services Programs Investor Readiness Program BFI BIOME MSME DEIA Catalyst Lab2Mkt: Spinouts from academic organizations Early Translation Accelerator MeiTY SAMRIDH Bioincubation Social Innovation BRBC Our Startups Startup directory Success Stories About us History & Milestones Life at VC Awards & Recognition Corporate Governance Our People Resources Annual Reports AiM Prime Playbook Candid Venture Center Library Technology Database Whitepapers Projects MSME IP Facilitation Center BIRAC BioNest NBM –"
+    },
+    {
+      "id": "check-page-1fd2eb8a39",
+      "url": "https://www.venturecenter.co.in/funding/seed-investments",
+      "page": "terms",
+      "excerpt": "Seed Investments About Careers Contact Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding Fellowships Grants & CSR for Startups Seed Investments Funding Database Services Scientific Services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory and Business Consulting Meeting and Events Space Services Design & Branding Services Program Management Services Centers Startups Startup Directory Success Stories Resources Events Talk Series Events Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR Funding Database Services Scientific services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory Consulting Infrastructural support services Regulatory Services Programs Investor Readiness Program BFI BIOME MSME DEIA Catalyst Lab2Mkt: Spinouts from academic organizations Early Translation Accelerator MeiTY SAMRIDH Bioincubation Social Innovation BRBC Our Startups Startup directory Success Stories About us History & Milestones Life at VC Awards & Recognition Corporate Governance Our People Resources Annual Reports AiM Prime Playbook Candid Venture Center Library Technology Database Whitepapers Projects MSME IP Facilitation Center BIRAC BioNest NBM – CBA Bajaj Auto CSR — Med Tech Clean Room"
+    },
+    {
+      "id": "check-page-2ad37d1c46",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-leap-fund",
+      "page": "terms",
+      "excerpt": "BIRAC LEAP Fund About Careers Contact Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding Fellowships Grants & CSR for Startups Seed Investments Funding Database Services Scientific Services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory and Business Consulting Meeting and Events Space Services Design & Branding Services Program Management Services Centers Startups Startup Directory Success Stories Resources Events Talk Series Events Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR Funding Database Services Scientific services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory Consulting Infrastructural support services Regulatory Services Programs Investor Readiness Program BFI BIOME MSME DEIA Catalyst Lab2Mkt: Spinouts from academic organizations Early Translation Accelerator MeiTY SAMRIDH Bioincubation Social Innovation BRBC Our Startups Startup directory Success Stories About us History & Milestones Life at VC Awards & Recognition Corporate Governance Our People Resources Annual Reports AiM Prime Playbook Candid Venture Center Library Technology Database Whitepapers Projects MSME IP Facilitation Center BIRAC BioNest NBM – CBA Bajaj Auto CSR — Med Tech Clean Room"
+    },
+    {
+      "id": "check-page-6db68a2f61",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/birac-seed-fund",
+      "page": "terms",
+      "excerpt": "BIRAC SEED Fund About Careers Contact Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding Fellowships Grants & CSR for Startups Seed Investments Funding Database Services Scientific Services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory and Business Consulting Meeting and Events Space Services Design & Branding Services Program Management Services Centers Startups Startup Directory Success Stories Resources Events Talk Series Events Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR Funding Database Services Scientific services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory Consulting Infrastructural support services Regulatory Services Programs Investor Readiness Program BFI BIOME MSME DEIA Catalyst Lab2Mkt: Spinouts from academic organizations Early Translation Accelerator MeiTY SAMRIDH Bioincubation Social Innovation BRBC Our Startups Startup directory Success Stories About us History & Milestones Life at VC Awards & Recognition Corporate Governance Our People Resources Annual Reports AiM Prime Playbook Candid Venture Center Library Technology Database Whitepapers Projects MSME IP Facilitation Center BIRAC BioNest NBM – CBA Bajaj Auto CSR — Med Tech Clean Room"
+    },
+    {
+      "id": "check-page-5c75f40580",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/nidhi-sss",
+      "page": "terms",
+      "excerpt": "NIDHI-SSS About Careers Contact Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding Fellowships Grants & CSR for Startups Seed Investments Funding Database Services Scientific Services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory and Business Consulting Meeting and Events Space Services Design & Branding Services Program Management Services Centers Startups Startup Directory Success Stories Resources Events Talk Series Events Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR Funding Database Services Scientific services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory Consulting Infrastructural support services Regulatory Services Programs Investor Readiness Program BFI BIOME MSME DEIA Catalyst Lab2Mkt: Spinouts from academic organizations Early Translation Accelerator MeiTY SAMRIDH Bioincubation Social Innovation BRBC Our Startups Startup directory Success Stories About us History & Milestones Life at VC Awards & Recognition Corporate Governance Our People Resources Annual Reports AiM Prime Playbook Candid Venture Center Library Technology Database Whitepapers Projects MSME IP Facilitation Center BIRAC BioNest NBM – CBA Bajaj Auto CSR — Med Tech Clean Room NIDHI-CoE"
+    },
+    {
+      "id": "check-page-0b520f6dea",
+      "url": "https://www.venturecenter.co.in/funding/fellowships/seed-investments/startup-india-seed-fund-scheme",
+      "page": "terms",
+      "excerpt": "Startup India Seed Fund Scheme About Careers Contact Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding Fellowships Grants & CSR for Startups Seed Investments Funding Database Services Scientific Services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory and Business Consulting Meeting and Events Space Services Design & Branding Services Program Management Services Centers Startups Startup Directory Success Stories Resources Events Talk Series Events Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR Funding Database Services Scientific services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory Consulting Infrastructural support services Regulatory Services Programs Investor Readiness Program BFI BIOME MSME DEIA Catalyst Lab2Mkt: Spinouts from academic organizations Early Translation Accelerator MeiTY SAMRIDH Bioincubation Social Innovation BRBC Our Startups Startup directory Success Stories About us History & Milestones Life at VC Awards & Recognition Corporate Governance Our People Resources Annual Reports AiM Prime Playbook Candid Venture Center Library Technology Database Whitepapers Projects MSME IP Facilitation Center BIRAC BioNest NBM – CBA Bajaj Auto CSR — Med Tech"
+    },
+    {
+      "id": "check-page-e7f5b10306",
+      "url": "https://www.venturecenter.co.in/PMU",
+      "page": "details",
+      "excerpt": "Program Management Unit @ Venture Center About Careers Contact Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding Fellowships Grants & CSR for Startups Seed Investments Funding Database Services Scientific Services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory and Business Consulting Meeting and Events Space Services Design & Branding Services Program Management Services Centers Startups Startup Directory Success Stories Resources Events Talk Series Events Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR Funding Database Services Scientific services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory Consulting Infrastructural support services Regulatory Services Programs Investor Readiness Program BFI BIOME MSME DEIA Catalyst Lab2Mkt: Spinouts from academic organizations Early Translation Accelerator MeiTY SAMRIDH Bioincubation Social Innovation BRBC Our Startups Startup directory Success Stories About us History & Milestones Life at VC Awards & Recognition Corporate Governance Our People Resources Annual Reports AiM Prime Playbook Candid Venture Center Library Technology Database Whitepapers Projects MSME IP Facilitation Center BIRAC BioNest NBM – CBA Bajaj Auto CSR —"
+    },
+    {
+      "id": "check-page-c4befc9088",
+      "url": "https://www.venturecenter.co.in/about",
+      "page": "details",
+      "excerpt": "About us About Careers Contact Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding Fellowships Grants & CSR for Startups Seed Investments Funding Database Services Scientific Services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory and Business Consulting Meeting and Events Space Services Design & Branding Services Program Management Services Centers Startups Startup Directory Success Stories Resources Events Talk Series Events Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR Funding Database Services Scientific services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory Consulting Infrastructural support services Regulatory Services Programs Investor Readiness Program BFI BIOME MSME DEIA Catalyst Lab2Mkt: Spinouts from academic organizations Early Translation Accelerator MeiTY SAMRIDH Bioincubation Social Innovation BRBC Our Startups Startup directory Success Stories About us History & Milestones Life at VC Awards & Recognition Corporate Governance Our People Resources Annual Reports AiM Prime Playbook Candid Venture Center Library Technology Database Whitepapers Projects MSME IP Facilitation Center BIRAC BioNest NBM – CBA Bajaj Auto CSR — Med Tech Clean Room NIDHI-CoE"
+    },
+    {
+      "id": "check-page-9f55075290",
+      "url": "https://www.venturecenter.co.in/about/awards-and-recognition",
+      "page": "details",
+      "excerpt": "Awards and Recognition About Careers Contact Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding Fellowships Grants & CSR for Startups Seed Investments Funding Database Services Scientific Services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory and Business Consulting Meeting and Events Space Services Design & Branding Services Program Management Services Centers Startups Startup Directory Success Stories Resources Events Talk Series Events Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR Funding Database Services Scientific services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory Consulting Infrastructural support services Regulatory Services Programs Investor Readiness Program BFI BIOME MSME DEIA Catalyst Lab2Mkt: Spinouts from academic organizations Early Translation Accelerator MeiTY SAMRIDH Bioincubation Social Innovation BRBC Our Startups Startup directory Success Stories About us History & Milestones Life at VC Awards & Recognition Corporate Governance Our People Resources Annual Reports AiM Prime Playbook Candid Venture Center Library Technology Database Whitepapers Projects MSME IP Facilitation Center BIRAC BioNest NBM – CBA Bajaj Auto CSR — Med Tech Clean Room"
+    },
+    {
+      "id": "check-page-c2b60d4b35",
+      "url": "https://www.venturecenter.co.in/about/history-and-milestones",
+      "page": "details",
+      "excerpt": "History & Milestones About Careers Contact Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding Fellowships Grants & CSR for Startups Seed Investments Funding Database Services Scientific Services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory and Business Consulting Meeting and Events Space Services Design & Branding Services Program Management Services Centers Startups Startup Directory Success Stories Resources Events Talk Series Events Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR Funding Database Services Scientific services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory Consulting Infrastructural support services Regulatory Services Programs Investor Readiness Program BFI BIOME MSME DEIA Catalyst Lab2Mkt: Spinouts from academic organizations Early Translation Accelerator MeiTY SAMRIDH Bioincubation Social Innovation BRBC Our Startups Startup directory Success Stories About us History & Milestones Life at VC Awards & Recognition Corporate Governance Our People Resources Annual Reports AiM Prime Playbook Candid Venture Center Library Technology Database Whitepapers Projects MSME IP Facilitation Center BIRAC BioNest NBM – CBA Bajaj Auto CSR — Med Tech Clean Room"
+    },
+    {
+      "id": "check-page-d54b77fd72",
+      "url": "https://www.venturecenter.co.in/about/life-at-venture-center",
+      "page": "details",
+      "excerpt": "Life at VC About Careers Contact Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding Fellowships Grants & CSR for Startups Seed Investments Funding Database Services Scientific Services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory and Business Consulting Meeting and Events Space Services Design & Branding Services Program Management Services Centers Startups Startup Directory Success Stories Resources Events Talk Series Events Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR Funding Database Services Scientific services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory Consulting Infrastructural support services Regulatory Services Programs Investor Readiness Program BFI BIOME MSME DEIA Catalyst Lab2Mkt: Spinouts from academic organizations Early Translation Accelerator MeiTY SAMRIDH Bioincubation Social Innovation BRBC Our Startups Startup directory Success Stories About us History & Milestones Life at VC Awards & Recognition Corporate Governance Our People Resources Annual Reports AiM Prime Playbook Candid Venture Center Library Technology Database Whitepapers Projects MSME IP Facilitation Center BIRAC BioNest NBM – CBA Bajaj Auto CSR — Med Tech Clean Room NIDHI-CoE"
+    },
+    {
+      "id": "check-page-d844271d61",
+      "url": "https://www.venturecenter.co.in/about/people",
+      "page": "details",
+      "excerpt": "Our People About Careers Contact Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding Fellowships Grants & CSR for Startups Seed Investments Funding Database Services Scientific Services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory and Business Consulting Meeting and Events Space Services Design & Branding Services Program Management Services Centers Startups Startup Directory Success Stories Resources Events Talk Series Events Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR Funding Database Services Scientific services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory Consulting Infrastructural support services Regulatory Services Programs Investor Readiness Program BFI BIOME MSME DEIA Catalyst Lab2Mkt: Spinouts from academic organizations Early Translation Accelerator MeiTY SAMRIDH Bioincubation Social Innovation BRBC Our Startups Startup directory Success Stories About us History & Milestones Life at VC Awards & Recognition Corporate Governance Our People Resources Annual Reports AiM Prime Playbook Candid Venture Center Library Technology Database Whitepapers Projects MSME IP Facilitation Center BIRAC BioNest NBM – CBA Bajaj Auto CSR — Med Tech Clean Room NIDHI-CoE"
+    },
+    {
+      "id": "check-page-ea3fac5946",
+      "url": "https://www.venturecenter.co.in/eta/",
+      "page": "details",
+      "excerpt": "Early Translation Accelerator – ETA at Venture Center Skip to content Home About ETA How to Apply Industry Partners Main Menu Home About ETA How to Apply Industry Partners Call Extended!!! Apply by 3rd November 2023 Early Translation Accelerator at Venture Center For catalysing translation of innovative technologies from academia & research institutions into commercially viable ventures and technologies Apply Now Rapid Translation The Early Translation Accelerator (ETA) enables rapid translation of academic discoveries at technology readiness levels (TRL 4-5) into validated technologies (TRL 7-8) in association with industry partners. More About TRL Funded Projects ETA Projects are funded up to 90% with support from DBT-BIRAC providing an opportunity for de-risking technologies before technology transfer and facilitating co-development by academia-industries partnership. Project Funding Focus Areas Industrial Biotechnology-based Consumer Products: Skin Care & Personal Care Cosmeceuticals Functional Foods & Beverages Nutraceuticals , Health & Wellness Household Care About Focus Areas Technologies for Skin & Personal Care Technology Pitch Video (YouTube) Pullulan DR ANIRBAN ROY CHOUDHURY CSIR-IMTECH, CHANDIGARH Technology Pitch Presentation Technology Pitch Video (YouTube) Cetearyl Alcohol DR SYED SHAMS YAZDANI DBT-ICGEB, DELHI Technology Pitch Presentation Technology Pitch"
+    },
+    {
+      "id": "check-page-9f05493e56",
+      "url": "https://www.venturecenter.co.in/eta/apply/",
+      "page": "application",
+      "excerpt": "How to Apply – Early Translation Accelerator Skip to content Home About ETA How to Apply Industry Partners Main Menu Home About ETA How to Apply Industry Partners Apply for ETA Who Can Apply? Inventors & Research Scientists from Universities, Academic and Research Institutions in India working on novel sustainable biotechnology products with application in consumer goods. How To Apply? All applicants can apply online by filling the form: https://forms.gle/Q7b49feC1aPB5bAs7 and uploading requested documents. For more details on ETA, download Programme Outline: http://bit.ly/eta-outline Benefits of Applying Opportunity for de-risking and development of technologies for enhancing their commercialisation prospects. Scale-up of novel bioprocesses and innovative technologies as funded projects with support from BIRAC and industry partners. Realising commercial potential of technologies with significant societal and market relevance. Helping industry address current global demand for sustainable technologies and green products. Fostering a robust innovation ecosystem in India by promoting collaboration between academia, research institutions and industries. Programme Plan Phases of the ETA Programme: Phase 1 – SELECTION: Call opens; Technology submissions received; Eligibility check including technical feasibility and due diligence; Shortlisting; Identifying industrial partners;"
+    },
+    {
+      "id": "check-page-81b6503aa8",
+      "url": "https://www.venturecenter.co.in/events/197/immersion-program-for-managers-of-incubation-centers",
+      "page": "details",
+      "excerpt": "Immersion Program for Managers of Incubation Centers About Careers Contact Programs Support Incubation & Acceleration Resident Virtual Pre-Incubation Accelerators Lab Spin-out Program Funding Fellowships Grants & CSR for Startups Seed Investments Funding Database Services Scientific Services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory and Business Consulting Meeting and Events Space Services Design & Branding Services Program Management Services Centers Startups Startup Directory Success Stories Resources Events Talk Series Events Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR Funding Database Services Scientific services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory Consulting Infrastructural support services Regulatory Services Programs Investor Readiness Program BFI BIOME MSME DEIA Catalyst Lab2Mkt: Spinouts from academic organizations Early Translation Accelerator MeiTY SAMRIDH Bioincubation Social Innovation BRBC Our Startups Startup directory Success Stories About us History & Milestones Life at VC Awards & Recognition Corporate Governance Our People Resources Annual Reports AiM Prime Playbook Candid Venture Center Library Technology Database Whitepapers Projects MSME IP Facilitation Center BIRAC BioNest NBM – CBA Bajaj"
     }
   ],
   "findings": {
@@ -90,9 +888,42 @@
       {
         "value": "+919172232215",
         "evidenceId": "check-phone-e67c4aea6c"
+      },
+      {
+        "value": "+91-9156465104",
+        "evidenceId": "check-phone-85099cc046"
+      },
+      {
+        "value": "+91-8956457046",
+        "evidenceId": "check-phone-694e5402e7"
+      },
+      {
+        "value": "+918956457042",
+        "evidenceId": "check-phone-bb5a4b2733"
+      },
+      {
+        "value": "+919156465146",
+        "evidenceId": "check-phone-a556c9173e"
       }
     ],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://docs.google.com/forms/d/e/1FAIpQLSeVODzhL7FyjxkDT7XIc0jH6u6f4ATrwJ9AP6McSJVX-i7IjQ/viewform",
+        "evidenceId": "check-route-18e1411adf"
+      },
+      {
+        "value": "https://forms.gle/ckzYA6HXKAWEPnQp8",
+        "evidenceId": "check-route-8c74c753e5"
+      },
+      {
+        "value": "https://www.venturecenter.co.in/eta/apply/",
+        "evidenceId": "check-route-b460d8d9ce"
+      },
+      {
+        "value": "https://www.venturecenter.co.in/eta/apply",
+        "evidenceId": "check-route-845f293e0d"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://www.venturecenter.co.in/",
@@ -102,8 +933,29 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-c1728b30bb"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-9e1c23d20c"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-30e7af7cf0"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.venturecenter.co.in/startups-and-success-stories",
@@ -116,6 +968,14 @@
       {
         "value": "https://www.venturecenter.co.in/about",
         "evidenceId": "check-portfolio-6ab987141f"
+      },
+      {
+        "value": "https://www.venturecenter.co.in/funding/about",
+        "evidenceId": "check-portfolio-56dad9b5c7"
+      },
+      {
+        "value": "https://www.venturecenter.co.in/funding/startups-and-success-stories/startups",
+        "evidenceId": "check-portfolio-0170dbd482"
       }
     ],
     "name": [

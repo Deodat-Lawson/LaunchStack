@@ -1,11 +1,59 @@
 {
   "programId": "parallel18",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "http://parallel18.com/apply/",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/39-startups-receive-investment-from-parallel18-s-business-continuity-fund/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://parallel18.com/about-us/",
       "page": "details",
       "anchor": "About us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/applications-are-open-all-you-need-to-know-about-p18s-gen-x/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/artist-dates-as-a-team-how-creative-breaks-spark-ideas/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/before-february-flies-don-t-miss-p18-s-latest-updates/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/bioleap-announces-third-cohort-with-340k-in-grants-to-boost-puerto-ricos-biosciences-ecosystem/",
+      "page": "batches",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -19,10 +67,90 @@
       "origin": "official"
     },
     {
+      "url": "https://parallel18.com/it-s-been-a-newsworthy-november-at-parallel18-catch-up-on-the-latest-updates/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://parallel18.com/p18/",
       "page": "details",
       "anchor": "Acceleration program for Puerto Rican and international startups. Discover",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/parallel18-evolves-from-grants-to-strategic-investment-platform/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/parallel18-named-one-of-americas-best-accelerators-in-2026/",
+      "page": "details",
+      "anchor": "learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/taking-a-leap-applying-to-an-accelerator-and-uprooting-your-life/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/terms-conditions-xpand-2/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/terms-conditions-xpand/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/terms-conditions/",
+      "page": "terms",
+      "anchor": "Terms & Conditions",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/the-1-2-3-of-investment-series/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/tips-to-fill-out-gen-8s-application/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/why-puerto-rico-is-an-ideal-place-to-test-your-product-and-grow/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

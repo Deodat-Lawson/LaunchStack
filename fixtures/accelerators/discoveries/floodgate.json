@@ -1,12 +1,20 @@
 {
   "programId": "floodgate",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://www.floodgate.com/companies",
       "page": "portfolio",
       "anchor": "Companies",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.floodgate.com/terms-conditions",
+      "page": "terms",
+      "anchor": "Legal",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.conceptionx.org/",
   "applyUrl": "https://www.conceptionx.org/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Scientist 100 Our flagship, 9-month venture creation fellowship supporting ~100 PhD founders every year. Learn more → Please rotate your device just announced: Our new Physical Innovation Lab, powered by Positron ↗ Learn more We launch the next generation of venture scientists Apply now ↗ Explore our pathways Conception X is building a future where more researchers become founders of exceptional companies. Key partners A new kind of founder is emerging. We discover and back venture scientists. We believe 2% of scientists will create the most important companies of the next century, but too few today become founders. We work with top academic talent across Europe’s leading research institutions to turn ambitious science into scalable ventures – repeatedly. Outcomes at scale A record of deeptech venture creation 869 Founders launched 250 Companies created £1B+ Portfolio valuation 15 Countries covered 92 Universities represented £3M raised to enable RNA-based control systems for gene therapies Read the article ↗ Acquired by EnergyHub to grow virtual power plants Read the article ↗ Acquired by Odyssey Therapeutics to accelerate drug discovery Read the article ↗ $7.9M raised to build the first LLM eval platform, team acquired by Anthropic Read the article ↗ £3M raised to enable RNA-based control systems for gene therapies Read the article ↗ Acquired by EnergyHub to grow virtual powe No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "We back PhD researchers across the UK and Europe to turn breakthrough research into venture-scale deep tech companies. No equity taken. No fees.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Not published on the official page.",
     "sourceIds": [
       "homepage"
     ],
@@ -26,9 +26,9 @@
     {
       "id": "official-logo",
       "url": "https://www.conceptionx.org/",
-      "title": "Conception X — official mark on the retrieved page",
-      "quote": "https://cdn.prod.website-files.com/69c521a6cc41e669170a0811/69cfca0dc5e777451af97a08_cx-logo-nav.svg",
-      "checkedAt": "2026-11-03T00:18:31.000Z"
+      "title": "Conception X — no rule-validated official mark",
+      "quote": "https://cdn.prod.website-files.com/69c521a6cc41e669170a0811/6a019c241d2cbbbde76dae8f_CX%20Webclip.png",
+      "checkedAt": "2026-11-14T20:59:02.000Z"
     },
     {
       "id": "homepage",
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "conception-x-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.conceptionx.org/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

@@ -1,29 +1,220 @@
 {
   "programId": "one-eight-seven-one",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://1871.com/",
-    "https://1871.com/about/our-board/"
+    "https://1871.com/event/blktech-founders-cohort-5-info-sessions/",
+    "https://1871.com/event/wistem-cohort-14-public-info-session/",
+    "https://1871.com/event/wmntech-founders-cohort-17-info-sessions/",
+    "https://1871.com/about/",
+    "https://1871.com/about/our-board/",
+    "https://1871.com/about/our-team/",
+    "https://1871.com/event/taxing-times-what-you-need-to-know-about-recent-tax-changes-those-on-the-horizon/",
+    "https://1871.com/event/tech-talk-chatting-about-chatgpt-effects-of-ai/"
   ],
   "evidence": [
     {
+      "id": "check-announced-44b727e760",
+      "url": "https://1871.com/event/wistem-cohort-14-public-info-session/",
+      "title": "1871 — batches page",
+      "excerpt": "14, 2026 Event End Date: November 14, 2026 Event Venue: WISTEM Cohort 14 kicks off February 8th! Join 1871’s Director of Affinity Programs as they discuss the",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-74370cbf0c",
+      "url": "https://1871.com/event/blktech-founders-cohort-5-info-sessions/",
+      "title": "1871 — batches page",
+      "excerpt": "to the public, nationwide & free to join. This 12-week program and mentoring initiative provide cohort",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-9e01c417b2",
+      "url": "https://1871.com/about/",
+      "title": "1871 — program page",
+      "excerpt": "to begin? Leave us a message and we will get in touch. info@1871.com 312.239.0310 222 W. Merchandise Mart Plaza Floor 12, Suite",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b39abd23b6",
+      "url": "https://1871.com/about/",
+      "title": "1871 — program page",
+      "excerpt": "info@1871.com",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1313499ebb",
+      "url": "https://1871.com/event/blktech-founders-cohort-5-info-sessions/",
+      "title": "1871 — batches page",
+      "excerpt": "Cohort 5 Info Sessions 6.13.23 or 6.23.23 | Various Times Virtual Early Stage You’re invited to our two public info sessions",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-40efef5a60",
+      "url": "https://1871.com/event/wistem-cohort-14-public-info-session/",
+      "title": "1871 — batches page",
+      "excerpt": "14 Public Info Session 01/27/2022 5:30 pm – 6:30 pm CST Virtual Early Stage Event Start Date: November 14, 2026 Event End",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-8f52759054",
+      "url": "https://1871.com/event/wmntech-founders-cohort-17-info-sessions/",
+      "title": "1871 — batches page",
+      "excerpt": "March 21, 2024 Event End Date: March 29, 2024 Event Venue: Virtual About 1871 1871 exists to inspire, equip, and support",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-c1d018a9f8",
+      "url": "https://1871.com/event/tech-talk-chatting-about-chatgpt-effects-of-ai/",
+      "title": "1871 — program page",
+      "excerpt": "ChatGPT – Effects of AI 03/29/2023 4:00 pm – 5:30 pm CST Virtual Corporate Early Stage Growth Stage Event Start Date:",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c48dc5faf1",
+      "url": "https://1871.com/event/taxing-times-what-you-need-to-know-about-recent-tax-changes-those-on-the-horizon/",
+      "title": "1871 — program page",
+      "excerpt": "& Those On The Horizon 03/23/2021 10:00 am – 11:00 am CST Virtual Early Stage Growth Stage Finance Event Start Date:",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e21fedb934",
+      "url": "https://1871.com/event/wmntech-founders-cohort-17-info-sessions/",
+      "title": "1871 — batches page",
+      "excerpt": "03.21.24 or 03.29.24 | Various Times 5:30 pm – 6:15 pm CST Virtual 45 minutes Corporate Early Stage Growth Stage Are you a",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-f20c4bd90b",
+      "url": "https://1871.com/event/blktech-founders-cohort-5-info-sessions/",
+      "title": "1871 — batches page",
+      "excerpt": "June 13, 2023 Event End Date: June 23, 2023 Event Venue: Virtual We’re recruiting extraordinary Black early-stage tech",
+      "page": "batches"
+    },
+    {
       "id": "check-name-e115241518",
       "url": "https://1871.com/",
-      "title": "1871 — homepage checked by scrape.py",
+      "title": "1871 — homepage",
       "excerpt": "1871 - Independent Innovation hub Menu Join Membership Early",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-e8fec72a50",
+      "url": "https://1871.com/about/",
+      "title": "1871 — program page",
+      "excerpt": "312.239.0310",
+      "page": "details"
+    },
+    {
+      "id": "check-route-87f7a11f10",
+      "url": "https://1871.com/",
+      "title": "1871 — homepage",
+      "excerpt": "Join → https://1871.com/",
       "page": "details"
     }
   ],
+  "pageQuotes": [
+    {
+      "id": "check-page-149a5f3a89",
+      "url": "https://1871.com/",
+      "page": "details",
+      "excerpt": "1871 - Independent Innovation hub Menu Join Membership Early Stage Growth Stage Corporate Innovator Events Upcoming Events 1871 Events Signature Events Momentum Awards International Women’s Day Campus Career Fair Juneteenth ScaleUp Tech Challenge Innovation Summits Climate Tech Innovation Showcase Construction Innovation Showcase FoodTech Innovation Showcase Emerging Tech Innovation Summit InsurTech Innovation Summit Sports & Entertainment Innovation Summit Supply Chain Innovation Summit FinTech Innovation Summit Pitch Competitions BLKtech Pitch Competition LTNtech Pitch Competition WMNtech Pitch Competition Talent Talks Programs Innovation Labs AI Innovation Lab Construction Tech Innovation Lab Climate Tech Innovation Lab Fintech Innovation Lab FoodTech Innovation Lab Health Tech Innovation Lab InsurTech Innovation Lab Sports Tech Innovation Lab Supply Chain Innovation Lab Web3 Innovation Lab Startup Roadmap Tech Founders BLKtech Founders LTNtech Founders WMNtech Founders Tech Leaders Fall Tech Leaders – BLKtech Leaders & LTNtech Leaders WMNtech Leaders 2025 WMNfintech Resources Community Resource Groups BLKtech Voices LTNtech Voices PRDtech Voices WMNtech Voices Job Network Our crew 1871 Board Our team Give Our Annual Fund 1871 Blog Blog Member Spotlight Vlog Shape what's next at 1871 Accelerate & collaborate at our global innovation hub 1871 is a private collective of"
+    },
+    {
+      "id": "check-page-2da9f28c73",
+      "url": "https://1871.com/event/blktech-founders-cohort-5-info-sessions/",
+      "page": "batches",
+      "excerpt": "BLKtech Founders Cohort 5 Info Sessions - 1871 - Independent Innovation hub Join Membership Early Stage Growth Stage Corporate Innovator Events Upcoming Events 1871 Events Signature Events Momentum Awards International Women’s Day Campus Career Fair Juneteenth ScaleUp Tech Challenge Innovation Summits Climate Tech Innovation Showcase Construction Innovation Showcase FoodTech Innovation Showcase Emerging Tech Innovation Summit InsurTech Innovation Summit Sports & Entertainment Innovation Summit Supply Chain Innovation Summit FinTech Innovation Summit Pitch Competitions BLKtech Pitch Competition LTNtech Pitch Competition WMNtech Pitch Competition Talent Talks Programs Innovation Labs AI Innovation Lab Construction Tech Innovation Lab Climate Tech Innovation Lab Fintech Innovation Lab FoodTech Innovation Lab Health Tech Innovation Lab InsurTech Innovation Lab Sports Tech Innovation Lab Supply Chain Innovation Lab Web3 Innovation Lab Startup Roadmap Tech Founders BLKtech Founders LTNtech Founders WMNtech Founders Tech Leaders Fall Tech Leaders – BLKtech Leaders & LTNtech Leaders WMNtech Leaders 2025 WMNfintech Resources Community Resource Groups BLKtech Voices LTNtech Voices PRDtech Voices WMNtech Voices Job Network Our crew 1871 Board Our team Give Our Annual Fund 1871 Blog Blog Member Spotlight Vlog Menu Join Membership Early Stage Growth Stage Corporate Innovator Events"
+    },
+    {
+      "id": "check-page-3502f6b07d",
+      "url": "https://1871.com/event/wistem-cohort-14-public-info-session/",
+      "page": "batches",
+      "excerpt": "WISTEM Cohort 14 Public Info Session - 1871 - Independent Innovation hub Join Membership Early Stage Growth Stage Corporate Innovator Events Upcoming Events 1871 Events Signature Events Momentum Awards International Women’s Day Campus Career Fair Juneteenth ScaleUp Tech Challenge Innovation Summits Climate Tech Innovation Showcase Construction Innovation Showcase FoodTech Innovation Showcase Emerging Tech Innovation Summit InsurTech Innovation Summit Sports & Entertainment Innovation Summit Supply Chain Innovation Summit FinTech Innovation Summit Pitch Competitions BLKtech Pitch Competition LTNtech Pitch Competition WMNtech Pitch Competition Talent Talks Programs Innovation Labs AI Innovation Lab Construction Tech Innovation Lab Climate Tech Innovation Lab Fintech Innovation Lab FoodTech Innovation Lab Health Tech Innovation Lab InsurTech Innovation Lab Sports Tech Innovation Lab Supply Chain Innovation Lab Web3 Innovation Lab Startup Roadmap Tech Founders BLKtech Founders LTNtech Founders WMNtech Founders Tech Leaders Fall Tech Leaders – BLKtech Leaders & LTNtech Leaders WMNtech Leaders 2025 WMNfintech Resources Community Resource Groups BLKtech Voices LTNtech Voices PRDtech Voices WMNtech Voices Job Network Our crew 1871 Board Our team Give Our Annual Fund 1871 Blog Blog Member Spotlight Vlog Menu Join Membership Early Stage Growth Stage Corporate Innovator Events Upcoming"
+    },
+    {
+      "id": "check-page-09e2a3c1c4",
+      "url": "https://1871.com/event/wmntech-founders-cohort-17-info-sessions/",
+      "page": "batches",
+      "excerpt": "WMNtech Founders Cohort 17 Info Sessions - 1871 - Independent Innovation hub Join Membership Early Stage Growth Stage Corporate Innovator Events Upcoming Events 1871 Events Signature Events Momentum Awards International Women’s Day Campus Career Fair Juneteenth ScaleUp Tech Challenge Innovation Summits Climate Tech Innovation Showcase Construction Innovation Showcase FoodTech Innovation Showcase Emerging Tech Innovation Summit InsurTech Innovation Summit Sports & Entertainment Innovation Summit Supply Chain Innovation Summit FinTech Innovation Summit Pitch Competitions BLKtech Pitch Competition LTNtech Pitch Competition WMNtech Pitch Competition Talent Talks Programs Innovation Labs AI Innovation Lab Construction Tech Innovation Lab Climate Tech Innovation Lab Fintech Innovation Lab FoodTech Innovation Lab Health Tech Innovation Lab InsurTech Innovation Lab Sports Tech Innovation Lab Supply Chain Innovation Lab Web3 Innovation Lab Startup Roadmap Tech Founders BLKtech Founders LTNtech Founders WMNtech Founders Tech Leaders Fall Tech Leaders – BLKtech Leaders & LTNtech Leaders WMNtech Leaders 2025 WMNfintech Resources Community Resource Groups BLKtech Voices LTNtech Voices PRDtech Voices WMNtech Voices Job Network Our crew 1871 Board Our team Give Our Annual Fund 1871 Blog Blog Member Spotlight Vlog Menu Join Membership Early Stage Growth Stage Corporate Innovator Events"
+    },
+    {
+      "id": "check-page-304d1c512c",
+      "url": "https://1871.com/about/",
+      "page": "details",
+      "excerpt": "About - 1871 - Independent Innovation hub Join Membership Early Stage Growth Stage Corporate Innovator Events Upcoming Events 1871 Events Signature Events Momentum Awards International Women’s Day Campus Career Fair Juneteenth ScaleUp Tech Challenge Innovation Summits Climate Tech Innovation Showcase Construction Innovation Showcase FoodTech Innovation Showcase Emerging Tech Innovation Summit InsurTech Innovation Summit Sports & Entertainment Innovation Summit Supply Chain Innovation Summit FinTech Innovation Summit Pitch Competitions BLKtech Pitch Competition LTNtech Pitch Competition WMNtech Pitch Competition Talent Talks Programs Innovation Labs AI Innovation Lab Construction Tech Innovation Lab Climate Tech Innovation Lab Fintech Innovation Lab FoodTech Innovation Lab Health Tech Innovation Lab InsurTech Innovation Lab Sports Tech Innovation Lab Supply Chain Innovation Lab Web3 Innovation Lab Startup Roadmap Tech Founders BLKtech Founders LTNtech Founders WMNtech Founders Tech Leaders Fall Tech Leaders – BLKtech Leaders & LTNtech Leaders WMNtech Leaders 2025 WMNfintech Resources Community Resource Groups BLKtech Voices LTNtech Voices PRDtech Voices WMNtech Voices Job Network Our crew 1871 Board Our team Give Our Annual Fund 1871 Blog Blog Member Spotlight Vlog Menu Join Membership Early Stage Growth Stage Corporate Innovator Events Upcoming Events 1871 Events Signature"
+    },
+    {
+      "id": "check-page-16e2d7fc96",
+      "url": "https://1871.com/about/our-board/",
+      "page": "details",
+      "excerpt": "Our Board - 1871 - Independent Innovation hub Join Membership Early Stage Growth Stage Corporate Innovator Events Upcoming Events 1871 Events Signature Events Momentum Awards International Women’s Day Campus Career Fair Juneteenth ScaleUp Tech Challenge Innovation Summits Climate Tech Innovation Showcase Construction Innovation Showcase FoodTech Innovation Showcase Emerging Tech Innovation Summit InsurTech Innovation Summit Sports & Entertainment Innovation Summit Supply Chain Innovation Summit FinTech Innovation Summit Pitch Competitions BLKtech Pitch Competition LTNtech Pitch Competition WMNtech Pitch Competition Talent Talks Programs Innovation Labs AI Innovation Lab Construction Tech Innovation Lab Climate Tech Innovation Lab Fintech Innovation Lab FoodTech Innovation Lab Health Tech Innovation Lab InsurTech Innovation Lab Sports Tech Innovation Lab Supply Chain Innovation Lab Web3 Innovation Lab Startup Roadmap Tech Founders BLKtech Founders LTNtech Founders WMNtech Founders Tech Leaders Fall Tech Leaders – BLKtech Leaders & LTNtech Leaders WMNtech Leaders 2025 WMNfintech Resources Community Resource Groups BLKtech Voices LTNtech Voices PRDtech Voices WMNtech Voices Job Network Our crew 1871 Board Our team Give Our Annual Fund 1871 Blog Blog Member Spotlight Vlog Menu Join Membership Early Stage Growth Stage Corporate Innovator Events Upcoming Events 1871 Events Signature"
+    },
+    {
+      "id": "check-page-d0d077372c",
+      "url": "https://1871.com/about/our-team/",
+      "page": "details",
+      "excerpt": "Our Team - 1871 - Independent Innovation hub Join Membership Early Stage Growth Stage Corporate Innovator Events Upcoming Events 1871 Events Signature Events Momentum Awards International Women’s Day Campus Career Fair Juneteenth ScaleUp Tech Challenge Innovation Summits Climate Tech Innovation Showcase Construction Innovation Showcase FoodTech Innovation Showcase Emerging Tech Innovation Summit InsurTech Innovation Summit Sports & Entertainment Innovation Summit Supply Chain Innovation Summit FinTech Innovation Summit Pitch Competitions BLKtech Pitch Competition LTNtech Pitch Competition WMNtech Pitch Competition Talent Talks Programs Innovation Labs AI Innovation Lab Construction Tech Innovation Lab Climate Tech Innovation Lab Fintech Innovation Lab FoodTech Innovation Lab Health Tech Innovation Lab InsurTech Innovation Lab Sports Tech Innovation Lab Supply Chain Innovation Lab Web3 Innovation Lab Startup Roadmap Tech Founders BLKtech Founders LTNtech Founders WMNtech Founders Tech Leaders Fall Tech Leaders – BLKtech Leaders & LTNtech Leaders WMNtech Leaders 2025 WMNfintech Resources Community Resource Groups BLKtech Voices LTNtech Voices PRDtech Voices WMNtech Voices Job Network Our crew 1871 Board Our team Give Our Annual Fund 1871 Blog Blog Member Spotlight Vlog Menu Join Membership Early Stage Growth Stage Corporate Innovator Events Upcoming Events 1871 Events Signature"
+    },
+    {
+      "id": "check-page-484ef3fe82",
+      "url": "https://1871.com/event/taxing-times-what-you-need-to-know-about-recent-tax-changes-those-on-the-horizon/",
+      "page": "details",
+      "excerpt": "Taxing Times: What You Need To Know About Recent Tax Changes & Those On The Horizon - 1871 - Independent Innovation hub Join Membership Early Stage Growth Stage Corporate Innovator Events Upcoming Events 1871 Events Signature Events Momentum Awards International Women’s Day Campus Career Fair Juneteenth ScaleUp Tech Challenge Innovation Summits Climate Tech Innovation Showcase Construction Innovation Showcase FoodTech Innovation Showcase Emerging Tech Innovation Summit InsurTech Innovation Summit Sports & Entertainment Innovation Summit Supply Chain Innovation Summit FinTech Innovation Summit Pitch Competitions BLKtech Pitch Competition LTNtech Pitch Competition WMNtech Pitch Competition Talent Talks Programs Innovation Labs AI Innovation Lab Construction Tech Innovation Lab Climate Tech Innovation Lab Fintech Innovation Lab FoodTech Innovation Lab Health Tech Innovation Lab InsurTech Innovation Lab Sports Tech Innovation Lab Supply Chain Innovation Lab Web3 Innovation Lab Startup Roadmap Tech Founders BLKtech Founders LTNtech Founders WMNtech Founders Tech Leaders Fall Tech Leaders – BLKtech Leaders & LTNtech Leaders WMNtech Leaders 2025 WMNfintech Resources Community Resource Groups BLKtech Voices LTNtech Voices PRDtech Voices WMNtech Voices Job Network Our crew 1871 Board Our team Give Our Annual Fund 1871 Blog Blog Member Spotlight Vlog Menu Join Membership Early Stage"
+    },
+    {
+      "id": "check-page-77f3d95d4b",
+      "url": "https://1871.com/event/tech-talk-chatting-about-chatgpt-effects-of-ai/",
+      "page": "details",
+      "excerpt": "Tech Talk: Chatting about ChatGPT - Effects of AI - 1871 - Independent Innovation hub Join Membership Early Stage Growth Stage Corporate Innovator Events Upcoming Events 1871 Events Signature Events Momentum Awards International Women’s Day Campus Career Fair Juneteenth ScaleUp Tech Challenge Innovation Summits Climate Tech Innovation Showcase Construction Innovation Showcase FoodTech Innovation Showcase Emerging Tech Innovation Summit InsurTech Innovation Summit Sports & Entertainment Innovation Summit Supply Chain Innovation Summit FinTech Innovation Summit Pitch Competitions BLKtech Pitch Competition LTNtech Pitch Competition WMNtech Pitch Competition Talent Talks Programs Innovation Labs AI Innovation Lab Construction Tech Innovation Lab Climate Tech Innovation Lab Fintech Innovation Lab FoodTech Innovation Lab Health Tech Innovation Lab InsurTech Innovation Lab Sports Tech Innovation Lab Supply Chain Innovation Lab Web3 Innovation Lab Startup Roadmap Tech Founders BLKtech Founders LTNtech Founders WMNtech Founders Tech Leaders Fall Tech Leaders – BLKtech Leaders & LTNtech Leaders WMNtech Leaders 2025 WMNfintech Resources Community Resource Groups BLKtech Voices LTNtech Voices PRDtech Voices WMNtech Voices Job Network Our crew 1871 Board Our team Give Our Annual Fund 1871 Blog Blog Member Spotlight Vlog Menu Join Membership Early Stage Growth Stage Corporate Innovator"
+    }
+  ],
   "findings": {
-    "emails": [],
-    "phones": [],
+    "emails": [
+      {
+        "value": "info@1871.com",
+        "evidenceId": "check-email-b39abd23b6"
+      }
+    ],
+    "phones": [
+      {
+        "value": "13122390310",
+        "evidenceId": "check-phone-e8fec72a50"
+      }
+    ],
     "routes": [],
-    "applicationUrl": [],
+    "applicationUrl": [
+      {
+        "value": "https://1871.com/",
+        "evidenceId": "check-route-87f7a11f10"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "February",
+        "evidenceId": "check-announced-44b727e760"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12",
+        "evidenceId": "check-duration-74370cbf0c"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-1313499ebb"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

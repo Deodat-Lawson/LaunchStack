@@ -1,138 +1,703 @@
 {
   "programId": "startup-yard",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://startupyard.com/",
+    "https://startupyard.com/6-tips-to-make-your-startup-accelerator-application-standout/",
+    "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel-1/",
+    "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel-2/",
+    "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel/",
+    "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-country/",
+    "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain-1/",
+    "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain-vs-domain/",
+    "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain/",
+    "https://startupyard.com/apply-to-startupyard-1-hour/",
     "https://startupyard.com/apply-to-startupyard-remote-lab/",
-    "https://startupyard.com/faq/",
-    "https://startupyard.com/the-next-wave-begins-startupyard-announces-batch-15/"
+    "https://startupyard.com/apply-to-startupyard/",
+    "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+    "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/1e6a047e/",
+    "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/attachment/43675945/"
   ],
   "evidence": [
     {
-      "id": "check-deal-670a3d25a7",
-      "url": "https://startupyard.com/faq/",
-      "title": "Startup Yard — terms page checked by scrape.py",
-      "excerpt": "If your startup needs funding, you can receive €25,000 in cash – bringing the total convertible note value to €70,000 = €45,000 (in-kind investment) + €25,000 (in cash). In exchange for the program and funding, we typically target around 5% equity in your startup. The convertible note is valid for 24 months.",
-      "page": "terms"
+      "id": "check-duration-0039d8dd6b",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "10 Finalists and 6 Winning Startups in 6 Weeks? We talk about Financing Interviews Life at an",
+      "page": "application"
     },
     {
-      "id": "check-deal-9745e09ea4",
-      "url": "https://startupyard.com/faq/",
-      "title": "Startup Yard — terms page checked by scrape.py",
-      "excerpt": "banks, and tech companies. Participation is completely free: there are no upfront costs. We provide the acceleration program through a convertible note worth €45,000 (in-kind investment). If your startup needs funding, you can receive €25,000 in cash – bringing the total convertible note value to €70,000 = €45,000 (in-kind",
-      "page": "terms"
+      "id": "check-duration-14101daa8e",
+      "url": "https://startupyard.com/",
+      "title": "Startup Yard — homepage",
+      "excerpt": "a reality. Pavel Konecny CEO, Neuron Soundware 3 months at StartupYard is like 3 years in normal time.",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-16f627da56",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Yard revolves around the Accelerator Program, a 3 month intensive residency at our offices in Prague,",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-2004ce7eee",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "select 10 finalists and 6 teams to enter our 3 Month Acceleration Program in Prague. -Great! Sounds",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-24ef47d44a",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "going to be working with the teams we choose for 6 months (3 months in Prague, 3 months back home), and",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-2c546dda11",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "6 teams to Prague. Even if we just spent the 2 months reading, there would only be time to review each",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-31e6b05fde",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "10 Finalists and 6 Winning Startups in 6 Weeks? December 11, 2013 / in StartupYard News / by",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-37d5dbe7cb",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "we choose for 6 months (3 months in Prague, 3 months back home), and those teams are going to be",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-3b0d5963b7",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "come on the very last day. We’ll have 2 months to review, vet, select and invite 6 teams to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-4aae40c998",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "the lobby anyway? We’re Going to Have an Insane 6 Weeks. That’s putting it mildly. Recent conversations",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-573adef295",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "attract 6 of the best Startups in Europe in just 6 Weeks, and we’ll be sharing the whole excruciating,",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-6417171361",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "get these processes moving. The grueling first 3 months ends on Demo Day, when you get a chance to shine",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-678dc637ea",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "10 Finalists and 6 Winning Startups in 6 Weeks? - StartupYard For Startups For Investors Blog",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-67e8c71b9c",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "you’re Woz, that’s fine too). Following the 3 month in-house program, teams return home to launch",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-7cb12523f6",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "home to launch their companies for another 12 weeks, remaining in constant touch with mentors and",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-809d1830c1",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "this program get free lodging and food for the 3 month program, return flights to one of the most",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-972b7fcd98",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "grows and matures, culminating after another 3 months in Investor Day- a conference in which you’ll",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-bcdd0dbfbb",
+      "url": "https://startupyard.com/",
+      "title": "Startup Yard — homepage",
+      "excerpt": "of the program? The remote program lasts for 3 months, during which you will undergo intense",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-cf1c2a281a",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "travel arrangements, and the logistics of a 3 months stay in the heart of Europe. More importantly,",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-daaf93a577",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "working with the teams we choose for 6 months (3 months in Prague, 3 months back home), and those teams",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-eaefcbfdc3",
+      "url": "https://startupyard.com/",
+      "title": "Startup Yard — homepage",
+      "excerpt": "on track to launch commercially within the next 6 months, or you have just launched. Your business must",
+      "page": "details"
+    },
+    {
+      "id": "check-format-11f0c82ec2",
+      "url": "https://startupyard.com/apply-to-startupyard/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Blog Apply Now Search Menu Menu Apply for one of our Remote Programs Follow on X Subscribe to RSS Feed Contact Us FAQ-",
+      "page": "application"
+    },
+    {
+      "id": "check-format-259ecd605c",
+      "url": "https://startupyard.com/",
+      "title": "Startup Yard — homepage",
+      "excerpt": "innovation and can fuel your growth. Ubiquitous Our fully remote program offers you access to world-class mentors and",
+      "page": "details"
+    },
+    {
+      "id": "check-format-2f0b51b1a5",
+      "url": "https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Apply to StartupYard Remote Lab - StartupYard For Startups For Investors Blog Apply",
+      "page": "application"
+    },
+    {
+      "id": "check-format-743fe6ee61",
+      "url": "https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "title": "Startup Yard — application page",
+      "excerpt": "About the Program The StartupYard program is a fast-pace remote 30 hours business and fundraising program for pre &",
+      "page": "application"
+    },
+    {
+      "id": "check-format-8bbf5986ee",
+      "url": "https://startupyard.com/",
+      "title": "Startup Yard — homepage",
+      "excerpt": "business models. What is the duration of the program? The remote program lasts for 3 months, during which you will undergo",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ce4507e796",
+      "url": "https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "title": "Startup Yard — application page",
+      "excerpt": "For Investors Blog Apply Now Search Menu Menu StartupYard Remote Program Choose the right program for your startup",
+      "page": "application"
     },
     {
       "id": "check-portfolio-14405134a5",
       "url": "https://startupyard.com/",
-      "title": "Startup Yard — homepage checked by scrape.py",
+      "title": "Startup Yard — homepage",
       "excerpt": "Startups → https://startupyard.com/category/startup/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-a267e82c2e",
-      "url": "https://startupyard.com/apply-to-startupyard-remote-lab/",
-      "title": "Startup Yard — application page checked by scrape.py",
+      "id": "check-portfolio-18c44cc3af",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain/",
+      "title": "Startup Yard — application page",
       "excerpt": "Startups → https://startupyard.com/category/startup/",
       "page": "application"
     },
     {
-      "id": "check-portfolio-bbffd81875",
-      "url": "https://startupyard.com/the-next-wave-begins-startupyard-announces-batch-15/",
-      "title": "Startup Yard — batches page checked by scrape.py",
+      "id": "check-portfolio-29fcf78ca3",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel/",
+      "title": "Startup Yard — application page",
       "excerpt": "Startups → https://startupyard.com/category/startup/",
-      "page": "batches"
+      "page": "application"
     },
     {
-      "id": "check-portfolio-ed6aea0851",
-      "url": "https://startupyard.com/faq/",
-      "title": "Startup Yard — terms page checked by scrape.py",
+      "id": "check-portfolio-2d5765e304",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/1e6a047e/",
+      "title": "Startup Yard — application page",
       "excerpt": "Startups → https://startupyard.com/category/startup/",
-      "page": "terms"
+      "page": "application"
     },
     {
-      "id": "check-route-1354d81d24",
-      "url": "https://startupyard.com/the-next-wave-begins-startupyard-announces-batch-15/",
-      "title": "Startup Yard — batches page checked by scrape.py",
-      "excerpt": "Apply page → https://startupyard.com/apply-to-startupyard-remote-lab/",
-      "page": "batches"
+      "id": "check-portfolio-558e511a54",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain-vs-domain/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Startups → https://startupyard.com/category/startup/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-58644ed67e",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel-1/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Startups → https://startupyard.com/category/startup/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7c03fdf38d",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain-1/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Startups → https://startupyard.com/category/startup/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-8812adfc55",
+      "url": "https://startupyard.com/apply-to-startupyard/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Startups → https://startupyard.com/category/startup/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-8ff9d20c3a",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-country/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Startups → https://startupyard.com/category/startup/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a267e82c2e",
+      "url": "https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Startups → https://startupyard.com/category/startup/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a5ad5cdb4a",
+      "url": "https://startupyard.com/6-tips-to-make-your-startup-accelerator-application-standout/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Startups → https://startupyard.com/category/startup/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a74315b5fd",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Startups → https://startupyard.com/category/startup/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a9280e6db8",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/attachment/43675945/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Startups → https://startupyard.com/category/startup/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-adbe680543",
+      "url": "https://startupyard.com/apply-to-startupyard-1-hour/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Startups → https://startupyard.com/category/startup/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-aecb43d167",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel-2/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Startups → https://startupyard.com/category/startup/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0960feb06b",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel-2/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Apply Now → https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0b3a717058",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-country/",
+      "title": "Startup Yard — application page",
+      "excerpt": "https://startupyard.com/wp-content/uploads/2023/05/Applications-per-country.png",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0b9a7547fa",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/attachment/43675945/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Apply Now → https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0fde60dabd",
+      "url": "https://startupyard.com/apply-to-startupyard/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Apply for one of our Remote Programs → https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-131ada3dc3",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/attachment/43675945/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Click to open the search input field Click to open the search input field Search → https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/attachment/43675945/?s=",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1eee2aa58f",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/1e6a047e/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Click to open the search input field Click to open the search input field Search → https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/1e6a047e/?s=",
+      "page": "application"
+    },
+    {
+      "id": "check-route-221c0d6e78",
+      "url": "https://startupyard.com/apply-to-startupyard/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Apply Now → https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2230016cb3",
+      "url": "https://startupyard.com/6-tips-to-make-your-startup-accelerator-application-standout/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Apply Now → https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-29cabb1282",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/1e6a047e/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Apply Now → https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2a6b514efe",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain-vs-domain/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Apply Now → https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3474ee2816",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Click to open the search input field Click to open the search input field Search → https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/?s=",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3c957ddabe",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-country/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Apply Now → https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4de390651a",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel-1/",
+      "title": "Startup Yard — application page",
+      "excerpt": "https://startupyard.com/wp-content/uploads/2023/05/Applications-Funnel-1.png",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5110d310f4",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Click to open the search input field Click to open the search input field Search → https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel/?s=",
+      "page": "application"
+    },
+    {
+      "id": "check-route-512a97a170",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Apply Now → https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "application"
     },
     {
       "id": "check-route-52a4e3183d",
       "url": "https://startupyard.com/apply-to-startupyard-remote-lab/",
-      "title": "Startup Yard — application page checked by scrape.py",
+      "title": "Startup Yard — application page",
       "excerpt": "Apply Now → https://thefintechers.notion.site/26e1e81998138112b6bdc73da32d03e0?pvs=105",
       "page": "application"
     },
     {
-      "id": "check-route-562946f059",
-      "url": "https://startupyard.com/the-next-wave-begins-startupyard-announces-batch-15/",
-      "title": "Startup Yard — batches page checked by scrape.py",
+      "id": "check-route-5be9356ad5",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain-1/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Click to open the search input field Click to open the search input field Search → https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain-1/?s=",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5f81052f42",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel/",
+      "title": "Startup Yard — application page",
       "excerpt": "Apply Now → https://startupyard.com/apply-to-startupyard-remote-lab/",
-      "page": "batches"
+      "page": "application"
+    },
+    {
+      "id": "check-route-69ecbfffc1",
+      "url": "https://startupyard.com/apply-to-startupyard-1-hour/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Click to open the search input field Click to open the search input field Search → https://startupyard.com/apply-to-startupyard-1-hour/?s=",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6a1683a50a",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel-2/",
+      "title": "Startup Yard — application page",
+      "excerpt": "https://startupyard.com/wp-content/uploads/2023/05/Applications-Funnel-2.png",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7195a2a50f",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Apply Now → https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "application"
     },
     {
       "id": "check-route-7739476d90",
       "url": "https://startupyard.com/apply-to-startupyard-remote-lab/",
-      "title": "Startup Yard — application page checked by scrape.py",
+      "title": "Startup Yard — application page",
       "excerpt": "Click to open the search input field Click to open the search input field Search → https://startupyard.com/apply-to-startupyard-remote-lab/?s=",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8add15c524",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain-1/",
+      "title": "Startup Yard — application page",
+      "excerpt": "https://startupyard.com/wp-content/uploads/2023/05/Applications-per-domain-1.png",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9c7b31719c",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-country/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Click to open the search input field Click to open the search input field Search → https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-country/?s=",
       "page": "application"
     },
     {
       "id": "check-route-9e013cca86",
       "url": "https://startupyard.com/",
-      "title": "Startup Yard — homepage checked by scrape.py",
+      "title": "Startup Yard — homepage",
       "excerpt": "Apply Now → https://startupyard.com/apply-to-startupyard-remote-lab/",
       "page": "details"
+    },
+    {
+      "id": "check-route-a168401b0e",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel/",
+      "title": "Startup Yard — application page",
+      "excerpt": "https://startupyard.com/wp-content/uploads/2023/05/Applications-Funnel.png",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a223ca2ed8",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain-vs-domain/",
+      "title": "Startup Yard — application page",
+      "excerpt": "https://startupyard.com/wp-content/uploads/2023/05/Applications-per-domain-vs.-Domain.png",
+      "page": "application"
     },
     {
       "id": "check-route-a29dddb24e",
       "url": "https://startupyard.com/",
-      "title": "Startup Yard — homepage checked by scrape.py",
+      "title": "Startup Yard — homepage",
       "excerpt": "Apply Now and Take Off → https://startupyard.com/apply-to-startupyard-remote-lab/",
       "page": "details"
     },
     {
-      "id": "check-route-c45a07d1a1",
-      "url": "https://startupyard.com/faq/",
-      "title": "Startup Yard — terms page checked by scrape.py",
+      "id": "check-route-b242bb821a",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain-vs-domain/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Click to open the search input field Click to open the search input field Search → https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain-vs-domain/?s=",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c0d3bd2187",
+      "url": "https://startupyard.com/6-tips-to-make-your-startup-accelerator-application-standout/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Click to open the search input field Click to open the search input field Search → https://startupyard.com/6-tips-to-make-your-startup-accelerator-application-standout/?s=",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cabfb271f5",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel-1/",
+      "title": "Startup Yard — application page",
       "excerpt": "Apply Now → https://startupyard.com/apply-to-startupyard-remote-lab/",
-      "page": "terms"
+      "page": "application"
     },
     {
-      "id": "check-route-d6d11c4600",
-      "url": "https://startupyard.com/faq/",
-      "title": "Startup Yard — terms page checked by scrape.py",
-      "excerpt": "just go to our apply page → https://startupyard.com/apply-to-startupyard-remote-lab/",
-      "page": "terms"
+      "id": "check-route-d4e704b256",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel-2/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Click to open the search input field Click to open the search input field Search → https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel-2/?s=",
+      "page": "application"
     },
     {
-      "id": "check-selectivity-16c182f16f",
-      "url": "https://startupyard.com/the-next-wave-begins-startupyard-announces-batch-15/",
-      "title": "Startup Yard — batches page checked by scrape.py",
-      "excerpt": "Thanks guys! ” Mergim Cahani CEO, Gjirafa, StartupYard Alum Why Now We accept less than 3% of applications and we operate on a rolling basis. The best time to apply is now. The longer",
-      "page": "batches"
+      "id": "check-route-da0dc7f486",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain-1/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Apply Now → https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-dc2242b0c7",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Click to open the search input field Click to open the search input field Search → https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain/?s=",
+      "page": "application"
+    },
+    {
+      "id": "check-route-eae9bd5f17",
+      "url": "https://startupyard.com/apply-to-startupyard/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Click to open the search input field Click to open the search input field Search → https://startupyard.com/apply-to-startupyard/?s=",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ef446807be",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel-1/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Click to open the search input field Click to open the search input field Search → https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel-1/?s=",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f4754b589f",
+      "url": "https://startupyard.com/6-tips-to-make-your-startup-accelerator-application-standout/",
+      "title": "Startup Yard — application page",
+      "excerpt": "applications → http://startupyard.com/apply-to-startupyard/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f6a65f5e52",
+      "url": "https://startupyard.com/apply-to-startupyard-1-hour/",
+      "title": "Startup Yard — application page",
+      "excerpt": "Apply Now → https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fda0b695b7",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain/",
+      "title": "Startup Yard — application page",
+      "excerpt": "https://startupyard.com/wp-content/uploads/2023/05/Applications-per-domain.png",
+      "page": "application"
     },
     {
       "id": "check-selectivity-5ddfa575cb",
       "url": "https://startupyard.com/",
-      "title": "Startup Yard — homepage checked by scrape.py",
+      "title": "Startup Yard — homepage",
       "excerpt": "Only the best make it through to our highly selective program. We accept less than 3% of applicants. Mentorship Our Top Gun’ mentors and management team guide you through the",
       "page": "details"
     },
     {
-      "id": "check-selectivity-989521cc0b",
-      "url": "https://startupyard.com/the-next-wave-begins-startupyard-announces-batch-15/",
-      "title": "Startup Yard — batches page checked by scrape.py",
-      "excerpt": "way. Thanks guys! ” Mergim Cahani CEO, Gjirafa, StartupYard Alum Why Now We accept less than 3% of applications and we operate on a rolling basis. The best time to apply is now. The longer",
-      "page": "batches"
-    },
-    {
       "id": "check-selectivity-b9582ba1e4",
       "url": "https://startupyard.com/",
-      "title": "Startup Yard — homepage checked by scrape.py",
+      "title": "Startup Yard — homepage",
       "excerpt": "your mettle. Only the best make it through to our highly selective program. We accept less than 3% of applicants. Mentorship Our Top Gun’ mentors and management team guide you through the",
       "page": "details"
+    },
+    {
+      "id": "check-selectivity-c094221a40",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "title": "Startup Yard — application page",
+      "excerpt": "round won’t come in until the final week. According to TechStars, a whole 25% of applications come on the very last day. We’ll have 2 months to review, vet, select and",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-a98eec421f",
+      "url": "https://startupyard.com/",
+      "page": "details",
+      "excerpt": "StartupYard - Accelerating Startups Since 2011 For Startups For Investors Blog Apply Now Search Menu Menu CEE Tech Founders Do You Have The Right Stuff? Previous Next Apply Now and Take Off Join the ranks of those who dared to dream big 130+ Startups €105m Raised 1,000s Jobs Created 26 Countries At StartupYard, we believe great founders are more than just successful entrepreneurs. They’re pioneers, explorers of the technological frontier, driven by an obsession to solve real problems and create technologies that will shape the future. But it takes more than just a great idea to reach orbit. It takes vision, resilience, and the right crew. They Had the Right Stuff and many more… Investors in our Alumni Include Building a company from nothing is a great undertaking in life. And I am so glad now that we didn’t choose to do it alone. StartupYard has become a vital part of our DNA, and has been with us 100% along the way. Mergim Cahani CEO, Gjirafa It’s been a life-changing experience. Rossum would not be where it is today if it was not for all the work we did during our time with StartupYard . Petr Baudis CTO, Rossum I knew that StartupYard’s network is extensive, but it actually exceeded my expectations. Virtually everyone relevant for any business in this region is in the +1 network of StartupYard . Petr Boros CEO, Retino It is awesome! One thing StartupYard helped me understand"
+    },
+    {
+      "id": "check-page-6ddc431ef7",
+      "url": "https://startupyard.com/6-tips-to-make-your-startup-accelerator-application-standout/",
+      "page": "application",
+      "excerpt": "6 Tips to Make Your Startup Accelerator Application Standout - StartupYard For Startups For Investors Blog Apply Now Search Menu Menu 6 Tips to Make Your Startup Accelerator Application Standout We receive a lot of applications at StartupYard for our startup accelerator but more than half of all applications don’t make it past the first screening. Here are 6 tips you can follow to give yourself a better chance of reaching the final rounds of selection. Complete Your Application Yes… Our first screening disqualifies any applications that are disorganised, incoherent, or incomplete. One would be surprised to see how many applications of those we receive. The process is not that complicated. A disciplined person can fill our application in a few minutes. There are no trick questions. Aim Global If your solution is only for the local market, it will not pass our first screening. We are looking for founders who can solve global problems or at least at a continent level (Europe for example). Of course we love small and traditional businesses but our startup accelerator is designed to benefit startups that have a global potential, and are scalable on the world market. Build a Platform We like platforms that enable new businesses to thrive. What does it means? If the solution you are building for the market you have chosen is flexible enough to offer API access or be reused for other"
+    },
+    {
+      "id": "check-page-28b74381d8",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel-1/",
+      "page": "application",
+      "excerpt": "Applications Funnel - StartupYard For Startups For Investors Blog Apply Now Search Menu Menu Applications Funnel May 26, 2023 / by StartupYard Share this entry Share on Facebook Share on X Share on WhatsApp Share on Pinterest Share on LinkedIn Share on Tumblr Share on Vk Share on Reddit Share by Mail http://startupyard.com/wp-content/uploads/2026/03/SY_accelerator_dark-15-years-2.png 0 0 StartupYard http://startupyard.com/wp-content/uploads/2026/03/SY_accelerator_dark-15-years-2.png StartupYard 2023-05-26 08:30:49 2023-05-26 08:30:57 Applications Funnel We talk about Financing Interviews Life at an Accelerator Marketing Personal Starting a Business Startup Tools Startups StartupYard News Recent Posts Meet Teamsharq: The Platform That Puts a Full Computer in Every Student’s Browser Meet CaseLens: The AI Specialized in Complex Disputes What We’re Seeing in Early Pitch Decks from the New Batch How to Choose the Right SaaS Pricing Model Startup Funding in Tranches: What You Need to Know Follow on X Subscribe to RSS Feed Contact Us FAQ- Frequently Asked Questions Our Team Our Mentors Privacy Policy We talk about Financing Interviews Life at an Accelerator Marketing Personal Starting a Business Startup Tools Startups StartupYard News StartupYard is proud to be GAN, a highly curated community of accelerators, partners, and investors. Scroll to top This site uses cookies. By"
+    },
+    {
+      "id": "check-page-0664e58313",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel-2/",
+      "page": "application",
+      "excerpt": "Applications Funnel - StartupYard For Startups For Investors Blog Apply Now Search Menu Menu Applications Funnel May 26, 2023 / by StartupYard Share this entry Share on Facebook Share on X Share on WhatsApp Share on Pinterest Share on LinkedIn Share on Tumblr Share on Vk Share on Reddit Share by Mail http://startupyard.com/wp-content/uploads/2026/03/SY_accelerator_dark-15-years-2.png 0 0 StartupYard http://startupyard.com/wp-content/uploads/2026/03/SY_accelerator_dark-15-years-2.png StartupYard 2023-05-26 08:39:06 2023-05-26 08:39:12 Applications Funnel We talk about Financing Interviews Life at an Accelerator Marketing Personal Starting a Business Startup Tools Startups StartupYard News Recent Posts Meet Teamsharq: The Platform That Puts a Full Computer in Every Student’s Browser Meet CaseLens: The AI Specialized in Complex Disputes What We’re Seeing in Early Pitch Decks from the New Batch How to Choose the Right SaaS Pricing Model Startup Funding in Tranches: What You Need to Know Follow on X Subscribe to RSS Feed Contact Us FAQ- Frequently Asked Questions Our Team Our Mentors Privacy Policy We talk about Financing Interviews Life at an Accelerator Marketing Personal Starting a Business Startup Tools Startups StartupYard News StartupYard is proud to be GAN, a highly curated community of accelerators, partners, and investors. Scroll to top This site uses cookies. By"
+    },
+    {
+      "id": "check-page-77b5e321ee",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel/",
+      "page": "application",
+      "excerpt": "Applications Funnel - StartupYard For Startups For Investors Blog Apply Now Search Menu Menu Applications Funnel May 25, 2023 / by StartupYard Share this entry Share on Facebook Share on X Share on WhatsApp Share on Pinterest Share on LinkedIn Share on Tumblr Share on Vk Share on Reddit Share by Mail http://startupyard.com/wp-content/uploads/2026/03/SY_accelerator_dark-15-years-2.png 0 0 StartupYard http://startupyard.com/wp-content/uploads/2026/03/SY_accelerator_dark-15-years-2.png StartupYard 2023-05-25 18:16:21 2023-05-25 18:16:21 Applications Funnel We talk about Financing Interviews Life at an Accelerator Marketing Personal Starting a Business Startup Tools Startups StartupYard News Recent Posts Meet Teamsharq: The Platform That Puts a Full Computer in Every Student’s Browser Meet CaseLens: The AI Specialized in Complex Disputes What We’re Seeing in Early Pitch Decks from the New Batch How to Choose the Right SaaS Pricing Model Startup Funding in Tranches: What You Need to Know Follow on X Subscribe to RSS Feed Contact Us FAQ- Frequently Asked Questions Our Team Our Mentors Privacy Policy We talk about Financing Interviews Life at an Accelerator Marketing Personal Starting a Business Startup Tools Startups StartupYard News StartupYard is proud to be GAN, a highly curated community of accelerators, partners, and investors. Scroll to top This site uses cookies. By"
+    },
+    {
+      "id": "check-page-11184972d2",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-country/",
+      "page": "application",
+      "excerpt": "Applications per country - StartupYard For Startups For Investors Blog Apply Now Search Menu Menu Applications per country May 25, 2023 / by StartupYard Share this entry Share on Facebook Share on X Share on WhatsApp Share on Pinterest Share on LinkedIn Share on Tumblr Share on Vk Share on Reddit Share by Mail http://startupyard.com/wp-content/uploads/2026/03/SY_accelerator_dark-15-years-2.png 0 0 StartupYard http://startupyard.com/wp-content/uploads/2026/03/SY_accelerator_dark-15-years-2.png StartupYard 2023-05-25 18:15:12 2023-05-25 18:15:12 Applications per country We talk about Financing Interviews Life at an Accelerator Marketing Personal Starting a Business Startup Tools Startups StartupYard News Recent Posts Meet Teamsharq: The Platform That Puts a Full Computer in Every Student’s Browser Meet CaseLens: The AI Specialized in Complex Disputes What We’re Seeing in Early Pitch Decks from the New Batch How to Choose the Right SaaS Pricing Model Startup Funding in Tranches: What You Need to Know Follow on X Subscribe to RSS Feed Contact Us FAQ- Frequently Asked Questions Our Team Our Mentors Privacy Policy We talk about Financing Interviews Life at an Accelerator Marketing Personal Starting a Business Startup Tools Startups StartupYard News StartupYard is proud to be GAN, a highly curated community of accelerators, partners, and investors. Scroll to top This site uses"
+    },
+    {
+      "id": "check-page-99971b94ad",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain-1/",
+      "page": "application",
+      "excerpt": "Applications per domain (1) - StartupYard For Startups For Investors Blog Apply Now Search Menu Menu Applications per domain (1) May 26, 2023 / by StartupYard Share this entry Share on Facebook Share on X Share on WhatsApp Share on Pinterest Share on LinkedIn Share on Tumblr Share on Vk Share on Reddit Share by Mail http://startupyard.com/wp-content/uploads/2026/03/SY_accelerator_dark-15-years-2.png 0 0 StartupYard http://startupyard.com/wp-content/uploads/2026/03/SY_accelerator_dark-15-years-2.png StartupYard 2023-05-26 08:35:44 2023-05-26 08:35:44 Applications per domain (1) We talk about Financing Interviews Life at an Accelerator Marketing Personal Starting a Business Startup Tools Startups StartupYard News Recent Posts Meet Teamsharq: The Platform That Puts a Full Computer in Every Student’s Browser Meet CaseLens: The AI Specialized in Complex Disputes What We’re Seeing in Early Pitch Decks from the New Batch How to Choose the Right SaaS Pricing Model Startup Funding in Tranches: What You Need to Know Follow on X Subscribe to RSS Feed Contact Us FAQ- Frequently Asked Questions Our Team Our Mentors Privacy Policy We talk about Financing Interviews Life at an Accelerator Marketing Personal Starting a Business Startup Tools Startups StartupYard News StartupYard is proud to be GAN, a highly curated community of accelerators, partners, and investors. Scroll to top This site"
+    },
+    {
+      "id": "check-page-5ddbd33949",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain-vs-domain/",
+      "page": "application",
+      "excerpt": "Applications per domain vs. Domain - StartupYard For Startups For Investors Blog Apply Now Search Menu Menu Applications per domain vs. Domain May 25, 2023 / by StartupYard Share this entry Share on Facebook Share on X Share on WhatsApp Share on Pinterest Share on LinkedIn Share on Tumblr Share on Vk Share on Reddit Share by Mail http://startupyard.com/wp-content/uploads/2026/03/SY_accelerator_dark-15-years-2.png 0 0 StartupYard http://startupyard.com/wp-content/uploads/2026/03/SY_accelerator_dark-15-years-2.png StartupYard 2023-05-25 18:16:01 2023-05-25 18:16:01 Applications per domain vs. Domain We talk about Financing Interviews Life at an Accelerator Marketing Personal Starting a Business Startup Tools Startups StartupYard News Recent Posts Meet Teamsharq: The Platform That Puts a Full Computer in Every Student’s Browser Meet CaseLens: The AI Specialized in Complex Disputes What We’re Seeing in Early Pitch Decks from the New Batch How to Choose the Right SaaS Pricing Model Startup Funding in Tranches: What You Need to Know Follow on X Subscribe to RSS Feed Contact Us FAQ- Frequently Asked Questions Our Team Our Mentors Privacy Policy We talk about Financing Interviews Life at an Accelerator Marketing Personal Starting a Business Startup Tools Startups StartupYard News StartupYard is proud to be GAN, a highly curated community of accelerators, partners, and investors."
+    },
+    {
+      "id": "check-page-b508d2f9ab",
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain/",
+      "page": "application",
+      "excerpt": "Applications per domain - StartupYard For Startups For Investors Blog Apply Now Search Menu Menu Applications per domain May 25, 2023 / by StartupYard Share this entry Share on Facebook Share on X Share on WhatsApp Share on Pinterest Share on LinkedIn Share on Tumblr Share on Vk Share on Reddit Share by Mail http://startupyard.com/wp-content/uploads/2026/03/SY_accelerator_dark-15-years-2.png 0 0 StartupYard http://startupyard.com/wp-content/uploads/2026/03/SY_accelerator_dark-15-years-2.png StartupYard 2023-05-25 18:30:35 2023-05-25 18:30:35 Applications per domain We talk about Financing Interviews Life at an Accelerator Marketing Personal Starting a Business Startup Tools Startups StartupYard News Recent Posts Meet Teamsharq: The Platform That Puts a Full Computer in Every Student’s Browser Meet CaseLens: The AI Specialized in Complex Disputes What We’re Seeing in Early Pitch Decks from the New Batch How to Choose the Right SaaS Pricing Model Startup Funding in Tranches: What You Need to Know Follow on X Subscribe to RSS Feed Contact Us FAQ- Frequently Asked Questions Our Team Our Mentors Privacy Policy We talk about Financing Interviews Life at an Accelerator Marketing Personal Starting a Business Startup Tools Startups StartupYard News StartupYard is proud to be GAN, a highly curated community of accelerators, partners, and investors. Scroll to top This site uses cookies."
+    },
+    {
+      "id": "check-page-745081e608",
+      "url": "https://startupyard.com/apply-to-startupyard-1-hour/",
+      "page": "application",
+      "excerpt": "How to Apply to StartupYard in 1 Hour or Less - StartupYard For Startups For Investors Blog Apply Now Search Menu Menu How to Apply to StartupYard in 1 Hour or Less January 16, 2018 / in Startup Tools / by StartupYard It’s amazing how difficult filling out forms and following instructions can be for startup founders. But why not? After all, startups aren’t supposed to follow the rules. Still, this is one thing we strongly recommend applicants to any accelerator take the time to do properly. It only takes an hour or less to write an application that will place you within our top picks for an interview with the selection committee. This is our strategy for finishing your application as soon as possible. But our application platform F6S, allows applicants to revise their applications continuously until the due date: January 31st, 2018. Ready to Apply to StartupYard? We’re looking for startup founders in Crypto, AI, IoT, and AR/VR! Get started applying to StartupYard Batch 9. Applications close January 31st, 2018. Apply to Batch 9 Now Apply to StartupYard in < 60 Minutes Phase One: Data Entry (5-10 Minutes) Pro Tip : Don’t go in Order! Go through the whole application and fill in the data answers first. This should be easy, and it will help you better answer the other questions. For example: When did you start your company? How much revenue have you made? What is the total amount"
+    },
+    {
+      "id": "check-page-9780f03479",
+      "url": "https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "application",
+      "excerpt": "Apply to StartupYard Remote Lab - StartupYard For Startups For Investors Blog Apply Now Search Menu Menu StartupYard Remote Program Choose the right program for your startup Deep-Tech * Applications Closed Learn more… FinTech With DEPO Ventures & Mastercard Apply Now Learn more… Note: we only accept startups from Europe Our Alumni Agree: StartupYard Works “StartupYard was a super­ important turning point in the journey of TeskaLabs and in my life. Simply put, there would be no TeskaLabs without StartupYard.” Ales Teska Founder and CEO, TeskaLabs “Building a company from nothing is a great undertaking in life. And I am so glad now that we didn’t choose to do it alone. StartupYard has been with us 100% along the way.” Mergim Cahani Founder and CEO, Gjirafa.com “It surprised us how eager the core StartupYard team was to help with their experience and feedback, they really became an important part of Rossum’s story.” Tomas Gogar Co-Founder, Rossum “It’s not about dreams, it’s about vision. StartupYard helped us to find a path– a way to make our vision a reality.” Pavel Konecny Founder and CEO, Neuron Soundware “I knew that StartupYard’s network of mentors is extensive, but it actually exceeded my expectations. Virtually everyone relevant for any business in this region is in the +1 network of StartupYard’s mentors.” Petr Boros Founder, Retino Previous Next About the Program The"
+    },
+    {
+      "id": "check-page-a14769016a",
+      "url": "https://startupyard.com/apply-to-startupyard/",
+      "page": "application",
+      "excerpt": "Apply to StartupYard - StartupYard For Startups For Investors Blog Apply Now Search Menu Menu Apply for one of our Remote Programs Follow on X Subscribe to RSS Feed Contact Us FAQ- Frequently Asked Questions Our Team Our Mentors Privacy Policy We talk about Financing Interviews Life at an Accelerator Marketing Personal Starting a Business Startup Tools Startups StartupYard News StartupYard is proud to be GAN, a highly curated community of accelerators, partners, and investors. Scroll to top This site uses cookies. By continuing to browse the site, you are agreeing to our use of cookies. OK Cookie and Privacy Settings How we use cookies We may request cookies to be set on your device. We use cookies to let us know when you visit our websites, how you interact with us, to enrich your user experience, and to customize your relationship with our website. Click on the different category headings to find out more. You can also change some of your preferences. Note that blocking some types of cookies may impact your experience on our websites and the services we are able to offer. Essential Website Cookies These cookies are strictly necessary to provide you with services available through our website and to use some of its features. Because these cookies are strictly necessary to deliver the website, refusing them will have impact how our site functions. You always can block or"
+    },
+    {
+      "id": "check-page-2ed70ae0ff",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "page": "application",
+      "excerpt": "Can we get 200 Applications, 10 Finalists and 6 Winning Startups in 6 Weeks? - StartupYard For Startups For Investors Blog Apply Now Search Menu Menu Can we get 200 Applications, 10 Finalists and 6 Winning Startups in 6 Weeks? December 11, 2013 / in StartupYard News / by StartupYard We need to attract 6 of the best Startups in Europe in just 6 Weeks, and we’ll be sharing the whole excruciating, beautiful process on this Blog. Welcome to the New StartUp Yard Blog. Getting here wasn’t easy. Why is there a dragon in the lobby anyway? We’re Going to Have an Insane 6 Weeks. That’s putting it mildly. Recent conversations with friends go something like this: -Hey, we’re redesigning our website and expanding our focus to all of Europe, recruiting at least 200 applicants, and we’ll select 10 finalists and 6 teams to enter our 3 Month Acceleration Program in Prague. -Great! Sounds like a challenge. When do you launch? Q3 2014? -Huh, what? We launch next week. – Oh… ok. How long do you have to get the applications? – Six weeks. – Oh… Are you sure this is a good idea? – The Board says it’s fine… – Ok…. good… luck. We’re a StartUp Seed Accelerator that is actually being run like a startup. It’s going to be great. Is This a Bad Idea? Not necessarily. Our feeling is that a startup Accelerator should be run a lot like a startup. Experiment, take risks, grow into new spaces, and never lose the"
+    },
+    {
+      "id": "check-page-440bbb007f",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/1e6a047e/",
+      "page": "application",
+      "excerpt": "1e6a047e - StartupYard For Startups For Investors Blog Apply Now Search Menu Menu 1e6a047e December 9, 2013 / by StartupYard Share this entry Share on Facebook Share on X Share on WhatsApp Share on Pinterest Share on LinkedIn Share on Tumblr Share on Vk Share on Reddit Share by Mail http://startupyard.com/wp-content/uploads/2026/03/SY_accelerator_dark-15-years-2.png 0 0 StartupYard http://startupyard.com/wp-content/uploads/2026/03/SY_accelerator_dark-15-years-2.png StartupYard 2013-12-09 11:59:20 2013-12-09 11:59:20 1e6a047e We talk about Financing Interviews Life at an Accelerator Marketing Personal Starting a Business Startup Tools Startups StartupYard News Recent Posts Meet Teamsharq: The Platform That Puts a Full Computer in Every Student’s Browser Meet CaseLens: The AI Specialized in Complex Disputes What We’re Seeing in Early Pitch Decks from the New Batch How to Choose the Right SaaS Pricing Model Startup Funding in Tranches: What You Need to Know Follow on X Subscribe to RSS Feed Contact Us FAQ- Frequently Asked Questions Our Team Our Mentors Privacy Policy We talk about Financing Interviews Life at an Accelerator Marketing Personal Starting a Business Startup Tools Startups StartupYard News StartupYard is proud to be GAN, a highly curated community of accelerators, partners, and investors. Scroll to top This site uses cookies. By continuing to browse the site, you are"
+    },
+    {
+      "id": "check-page-78c60766ef",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/attachment/43675945/",
+      "page": "application",
+      "excerpt": "Zeros - StartupYard For Startups For Investors Blog Apply Now Search Menu Menu Zeros December 9, 2013 / by StartupYard 0x00000D1… Of Course! Share this entry Share on Facebook Share on X Share on WhatsApp Share on Pinterest Share on LinkedIn Share on Tumblr Share on Vk Share on Reddit Share by Mail http://startupyard.com/wp-content/uploads/2026/03/SY_accelerator_dark-15-years-2.png 0 0 StartupYard http://startupyard.com/wp-content/uploads/2026/03/SY_accelerator_dark-15-years-2.png StartupYard 2013-12-09 12:16:41 2013-12-09 12:16:41 Zeros We talk about Financing Interviews Life at an Accelerator Marketing Personal Starting a Business Startup Tools Startups StartupYard News Recent Posts Meet Teamsharq: The Platform That Puts a Full Computer in Every Student’s Browser Meet CaseLens: The AI Specialized in Complex Disputes What We’re Seeing in Early Pitch Decks from the New Batch How to Choose the Right SaaS Pricing Model Startup Funding in Tranches: What You Need to Know Follow on X Subscribe to RSS Feed Contact Us FAQ- Frequently Asked Questions Our Team Our Mentors Privacy Policy We talk about Financing Interviews Life at an Accelerator Marketing Personal Starting a Business Startup Tools Startups StartupYard News StartupYard is proud to be GAN, a highly curated community of accelerators, partners, and investors. Scroll to top This site uses cookies. By continuing to browse the"
     }
   ],
   "findings": {
@@ -144,12 +709,24 @@
         "evidenceId": "check-route-9e013cca86"
       },
       {
-        "value": "https://startupyard.com/apply-to-startupyard-remote-lab/?s=",
-        "evidenceId": "check-route-7739476d90"
+        "value": "https://startupyard.com/6-tips-to-make-your-startup-accelerator-application-standout/?s=",
+        "evidenceId": "check-route-c0d3bd2187"
       },
       {
-        "value": "https://thefintechers.notion.site/26e1e81998138112b6bdc73da32d03e0?pvs=105",
-        "evidenceId": "check-route-52a4e3183d"
+        "value": "http://startupyard.com/apply-to-startupyard/",
+        "evidenceId": "check-route-f4754b589f"
+      },
+      {
+        "value": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel-1/?s=",
+        "evidenceId": "check-route-ef446807be"
+      },
+      {
+        "value": "https://startupyard.com/wp-content/uploads/2023/05/Applications-Funnel-1.png",
+        "evidenceId": "check-route-4de390651a"
+      },
+      {
+        "value": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel-2/?s=",
+        "evidenceId": "check-route-d4e704b256"
       }
     ],
     "applicationUrl": [
@@ -161,6 +738,38 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-14101daa8e"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-eaefcbfdc3"
+      },
+      {
+        "value": "6",
+        "evidenceId": "check-duration-678dc637ea"
+      },
+      {
+        "value": "2 months",
+        "evidenceId": "check-duration-3b0d5963b7"
+      },
+      {
+        "value": "12",
+        "evidenceId": "check-duration-7cb12523f6"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-259ecd605c"
+      }
+    ],
+    "location": [],
     "selectivity": [
       {
         "value": {
@@ -168,18 +777,17 @@
           "bounded": true
         },
         "evidenceId": "check-selectivity-5ddfa575cb"
-      }
-    ],
-    "dealText": [
-      {
-        "value": "banks, and tech companies. Participation is completely free: there are no upfront costs. We provide the acceleration program through a convertible note worth €45,000 (in-kind investment). If your startup needs funding, you can receive €25,000 in cash – bringing the total convertible note value to €70,000 = €45,000 (in-kind",
-        "evidenceId": "check-deal-9745e09ea4"
       },
       {
-        "value": "If your startup needs funding, you can receive €25,000 in cash – bringing the total convertible note value to €70,000 = €45,000 (in-kind investment) + €25,000 (in cash). In exchange for the program and funding, we typically target around 5% equity in your startup. The convertible note is valid for 24 months.",
-        "evidenceId": "check-deal-670a3d25a7"
+        "value": {
+          "rate": 0.25,
+          "bounded": false
+        },
+        "evidenceId": "check-selectivity-c094221a40"
       }
     ],
+    "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://startupyard.com/category/startup/",

@@ -1,43 +1,19 @@
 {
   "programId": "chalmers-ventures",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.chalmersventures.com/startups/",
-      "page": "portfolio",
-      "anchor": "Portfolio",
+      "url": "http://chalmersventures.com",
+      "page": "details",
+      "anchor": "About CV",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.chalmersventures.com/programs/",
+      "url": "https://chalmersventures.com/about/addresses",
       "page": "details",
-      "anchor": "Program and Tracks",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://chalmersventures.com/program/",
-      "page": "details",
-      "anchor": "Venture Building Programme",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://chalmersventures.com/mentorshipprogram/",
-      "page": "details",
-      "anchor": "The Mentorship Programme",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://chalmersventures.com/portfolio-support-functions/",
-      "page": "portfolio",
-      "anchor": "Offers | Deals | Support",
+      "anchor": "Show on map",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -51,9 +27,137 @@
       "origin": "official"
     },
     {
-      "url": "http://chalmersventures.com",
+      "url": "https://chalmersventures.com/career/investment-manager-2020-klar-justerad-2/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/career/investment-manager-2020/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/chalmers-ventures-investment-network-form/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/investments/",
+      "page": "terms",
+      "anchor": "Investments",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/investments/backgrounds-star-utah-wallpaper-milky-way-rocks-stars-arches-background-moab-arches_t20_ynzzvx/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/investments/bjo%cc%88rn-westman/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/investments/development-2024-2/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/investments/development/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/investments/e-mail-badge/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/investments/garden-plant-view-from-above-pattern-green-texture-leaves-jungle-background_t20_jjr0zk/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/investments/jonas-bergman-cirkel/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/mentorshipprogram/",
       "page": "details",
-      "anchor": "About CV",
+      "anchor": "The Mentorship Programme",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/news/application-startup-camp-open/tw_1024x512_startupcamp_big3/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/news/apply-climate-kic-nordics-accelerator-programme/screenshot-2019-01-30-08-27-26-2/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/news/apply-climate-kic-nordics-accelerator-programme/screenshot-2019-01-30-08-27-26/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/portfolio-support-functions/",
+      "page": "portfolio",
+      "anchor": "Offers | Deals | Support",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://chalmersventures.com/program/",
+      "page": "details",
+      "anchor": "Venture Building Programme",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -67,9 +171,25 @@
       "origin": "official"
     },
     {
-      "url": "https://chalmersventures.com/about/addresses",
+      "url": "https://www.chalmersventures.com/investeringar/investments/",
+      "page": "terms",
+      "anchor": "Investments",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.chalmersventures.com/programs/",
       "page": "details",
-      "anchor": "Show on map",
+      "anchor": "Program and Tracks",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.chalmersventures.com/startups/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
       "fetched": false,
       "blocked": null,
       "origin": "official"

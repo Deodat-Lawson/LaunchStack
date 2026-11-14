@@ -1,68 +1,12 @@
 {
   "programId": "utrechtinc",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://utrechtinc.nl/programs/",
-      "page": "details",
-      "anchor": "Programs",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://utrechtinc.nl/programs/ready-to-start/",
-      "page": "details",
-      "anchor": "Ready to start",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://utrechtinc.nl/programs/science-validation/",
-      "page": "details",
-      "anchor": "Science Validation",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://utrechtinc.nl/programs/life-science-validation/",
-      "page": "details",
-      "anchor": "Life Science Validation",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://utrechtinc.nl/programs/tech-validation/",
-      "page": "details",
-      "anchor": "Tech Validation",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://utrechtinc.nl/programs/student-validation/",
-      "page": "details",
-      "anchor": "Student Validation",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://utrechtinc.nl/programs/foundership/",
-      "page": "details",
-      "anchor": "The Foundership",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://utrechtinc.nl/about/",
       "page": "details",
       "anchor": "About us",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -70,7 +14,95 @@
       "url": "https://utrechtinc.nl/about/contact/",
       "page": "details",
       "anchor": "Contact",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://utrechtinc.nl/artikel/5-things-they-dont-tell-you-about-product-market-fit/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://utrechtinc.nl/artikel/managing-director/",
+      "page": "details",
+      "anchor": "Read more about We’re hiring: Managing Director of UtrechtInc",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://utrechtinc.nl/artikel/nestpod-goes-international/",
+      "page": "details",
+      "anchor": "Read more about Nestpod goes international",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://utrechtinc.nl/artikel/pitch-battle-20-nov/",
+      "page": "details",
+      "anchor": "Read more about Incubator Pitch Battle: Cast your vote!",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://utrechtinc.nl/artikel/science-based-validation-program-spring2025/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://utrechtinc.nl/artikel/spring-2026-science-validation-program-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://utrechtinc.nl/artikel/spring-2026-tech-validation-program-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://utrechtinc.nl/artikel/uniiq-100th-investment-bactheravax/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://utrechtinc.nl/artikel/welcome-new-cohort-science-validation-program-%f0%9f%8d%82-fall-2025/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://utrechtinc.nl/artikel/welcome-new-cohort-student-validation-program-%f0%9f%8d%82-fall-2025-2/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://utrechtinc.nl/artikel/welcome-new-cohort-tech-validation-program-%f0%9f%8d%82-fall-2025/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -91,25 +123,65 @@
       "origin": "official"
     },
     {
-      "url": "https://utrechtinc.nl/artikel/nestpod-goes-international/",
+      "url": "https://utrechtinc.nl/mentor-expertise/finance-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://utrechtinc.nl/programs/",
       "page": "details",
-      "anchor": "Read more about Nestpod goes international",
+      "anchor": "Programs",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://utrechtinc.nl/artikel/managing-director/",
+      "url": "https://utrechtinc.nl/programs/foundership/",
       "page": "details",
-      "anchor": "Read more about We’re hiring: Managing Director of UtrechtInc",
+      "anchor": "The Foundership",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://utrechtinc.nl/artikel/financefriday/",
+      "url": "https://utrechtinc.nl/programs/life-science-validation/",
       "page": "details",
-      "anchor": "Read more about Finance Friday: Building the future, together • October 16",
+      "anchor": "Life Science Validation",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://utrechtinc.nl/programs/ready-to-start/",
+      "page": "details",
+      "anchor": "Ready to start",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://utrechtinc.nl/programs/science-validation/",
+      "page": "details",
+      "anchor": "Science Validation",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://utrechtinc.nl/programs/student-validation/",
+      "page": "details",
+      "anchor": "Student Validation",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://utrechtinc.nl/programs/tech-validation/",
+      "page": "details",
+      "anchor": "Tech Validation",
       "fetched": false,
       "blocked": null,
       "origin": "official"

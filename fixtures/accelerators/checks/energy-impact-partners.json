@@ -1,37 +1,115 @@
 {
   "programId": "energy-impact-partners",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
-    "https://www.energyimpactpartners.com/"
+    "https://www.energyimpactpartners.com/",
+    "https://www.energyimpactpartners.com/team/investment_team/",
+    "https://www.energyimpactpartners.com/_portfolio/"
   ],
   "evidence": [
     {
-      "id": "check-deal-7bb53d1853",
+      "id": "check-format-1d7aaae783",
       "url": "https://www.energyimpactpartners.com/",
-      "title": "Energy Impact Partners — homepage checked by scrape.py",
-      "excerpt": "$10M in Funding as it Launches Digital CEO Protection Offering - April 22, 2025 GlobeNewswire News Room BP Ventures and Energy Impact Partners (EIP) Invest $25 Million Into Valve and Regulator Innovator, Oxford Flow - December 5, 2024 Oxford Flow eSmart Systems raises EUR 30 million in investment to accelerate growth -",
+      "title": "Energy Impact Partners — homepage",
+      "excerpt": "- June 11, 2024 Cision Canada GridBeyond raises $55M for virtual power plants - April 16, 2024 Axios Metafuels lands $8",
       "page": "details"
+    },
+    {
+      "id": "check-format-2b3ebbb7b2",
+      "url": "https://www.energyimpactpartners.com/_portfolio/",
+      "title": "Energy Impact Partners — portfolio page",
+      "excerpt": "system. DCP supports any vehicle architecture - from ICE, Hybrid, EV to Fuel Cell - while also meeting rigorous safety,",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-69c6c3a8f4",
+      "url": "https://www.energyimpactpartners.com/_portfolio/",
+      "title": "Energy Impact Partners — portfolio page",
+      "excerpt": "over 3,000 tech products, including smartphones, laptops, virtual reality (VR) gear, wearables and smart home appliances on",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-79a9bc7e64",
+      "url": "https://www.energyimpactpartners.com/_portfolio/",
+      "title": "Energy Impact Partners — portfolio page",
+      "excerpt": "and metadata frameworks to create a single cloud-based remote asset management platform that works with today’s",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-a3d6ce9747",
+      "url": "https://www.energyimpactpartners.com/_portfolio/",
+      "title": "Energy Impact Partners — portfolio page",
+      "excerpt": "with core competencies surrounding energy storage, remote load control, demand response, and billing. Visit site",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-b539d984cc",
+      "url": "https://www.energyimpactpartners.com/_portfolio/",
+      "title": "Energy Impact Partners — portfolio page",
+      "excerpt": "accelerate data cleaning and preparation across any cloud, hybrid, and multi-cloud environment. Visit site Urbint solves",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-fac6ba59f5",
+      "url": "https://www.energyimpactpartners.com/_portfolio/",
+      "title": "Energy Impact Partners — portfolio page",
+      "excerpt": "clean up and mowing clearing, with specialization in remote and difficult to reach areas such as national forests,",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-location-2d28b6a343",
+      "url": "https://www.energyimpactpartners.com/_portfolio/",
+      "title": "Energy Impact Partners — portfolio page",
+      "excerpt": "impact. Visit site Celerity, headquartered in San Francisco and founded in 2001, is a leading",
+      "page": "portfolio"
     },
     {
       "id": "check-name-970c1534db",
       "url": "https://www.energyimpactpartners.com/",
-      "title": "Energy Impact Partners — homepage checked by scrape.py",
+      "title": "Energy Impact Partners — homepage",
       "excerpt": "- April 22, 2025 GlobeNewswire News Room BP Ventures and Energy Impact Partners (EIP) Invest $25 Million Into Valve and Regulator",
       "page": "details"
     },
     {
+      "id": "check-portfolio-487ce0cb66",
+      "url": "https://www.energyimpactpartners.com/team/investment_team/",
+      "title": "Energy Impact Partners — terms page",
+      "excerpt": "portfolio → https://www.energyimpactpartners.com/_portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-658055e302",
       "url": "https://www.energyimpactpartners.com/",
-      "title": "Energy Impact Partners — homepage checked by scrape.py",
+      "title": "Energy Impact Partners — homepage",
       "excerpt": "portfolio → https://www.energyimpactpartners.com/_portfolio/",
       "page": "details"
     },
     {
       "id": "check-route-0b7d2fe3b6",
       "url": "https://www.energyimpactpartners.com/",
-      "title": "Energy Impact Partners — homepage checked by scrape.py",
+      "title": "Energy Impact Partners — homepage",
       "excerpt": "https://www.energyimpactpartners.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-2eeb9bf195",
+      "url": "https://www.energyimpactpartners.com/",
+      "page": "details",
+      "excerpt": "home - home - team approach portfolio insights & news join the team Partner Login team approach portfolio join the team news & insights home contact us partner portal ©2026 All Rights Reserved team approach portfolio join the team news & insights home contact us partner portal ©2026 All Rights Reserved investing in innovative companies powering a better energy future we bring together brilliant entrepreneurs and some of the world’s most influential corporates to help transform the global economy towards a better future. Form Energy Energy Storage for a Better World Pioneering battery technology to reshape the global electric system and give it new form. Dragos The First Industrial Cybersecurity Ecosystem Dragos is an industrial cybersecurity company founded by industrial security practitioners and focused on the industry's hardest security challenges. Its Dragos Platform, Threat Operations Center, and Intelligence team ensure asset owners and operators have access to the right tools to operate safely in the ever growing hostile digital landscape. Arcadia Clean Energy For Anyone Arcadia was founded in 2014 with one simple mission — to promote clean, renewable power across the United States Urbint Don't wait. Anticipate. Enabling utilities and infrastructure operators to make communities safer and more resilient through AI-powered solutions. Enchanted Rock On Demand Electric"
+    },
+    {
+      "id": "check-page-65677a1cfc",
+      "url": "https://www.energyimpactpartners.com/team/investment_team/",
+      "page": "terms",
+      "excerpt": "Investment Team Archives - Investment Team Archives - Sign-out team approach portfolio insights & news join the team Partner Login team approach portfolio join the team news & insights home contact us partner portal ©2026 All Rights Reserved team approach portfolio join the team news & insights home contact us partner portal ©2026 All Rights Reserved ©2026 Energy Impact Partners. All Rights Reserved"
+    },
+    {
+      "id": "check-page-6c66170027",
+      "url": "https://www.energyimpactpartners.com/_portfolio/",
+      "page": "portfolio",
+      "excerpt": "portfolio - portfolio - team approach portfolio insights & news join the team Partner Login team approach portfolio join the team news & insights home contact us partner portal ©2026 All Rights Reserved team approach portfolio join the team news & insights home contact us partner portal ©2026 All Rights Reserved the partner of choice for exceptional companies w e help founders grow. our portfolio our platform allows us to invest broadly across the energy economy of the future – we can help companies at the inflection stage scale, invest in new revolutionary technologies, or lend to established businesses. Aeroseal’s mission is to shrink carbon emissions with our breakthrough technologies -- 1 gigaton of CO2 annually. Driven by a passionate team in a dynamic culture, Aeroseal exists to advance sustainability through innovation. We have already completed nearly 200,000 seals, saving up to $2 billion in energy waste globally. Visit site Arcadia is the energy intelligence platform for businesses. We replace fragmented tools and manual workflows with one platform to organize data, pay utility bills, buy energy, and advance sustainability. Trusted by Fortune 2000 companies and small businesses globally, Arcadia combines global utility data, AI-powered analytics, and expert advisory to help enterprise teams save money, mitigate risk, and cut carbon. Visit site ASI is the frontier AI"
     }
   ],
   "findings": {
@@ -47,13 +125,29 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
-    "selectivity": [],
-    "dealText": [
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
       {
-        "value": "$10M in Funding as it Launches Digital CEO Protection Offering - April 22, 2025 GlobeNewswire News Room BP Ventures and Energy Impact Partners (EIP) Invest $25 Million Into Valve and Regulator Innovator, Oxford Flow - December 5, 2024 Oxford Flow eSmart Systems raises EUR 30 million in investment to accelerate growth -",
-        "evidenceId": "check-deal-7bb53d1853"
+        "value": "remote",
+        "evidenceId": "check-format-1d7aaae783"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-2b3ebbb7b2"
       }
     ],
+    "location": [
+      {
+        "value": "San Francisco",
+        "evidenceId": "check-location-2d28b6a343"
+      }
+    ],
+    "selectivity": [],
+    "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.energyimpactpartners.com/_portfolio/",

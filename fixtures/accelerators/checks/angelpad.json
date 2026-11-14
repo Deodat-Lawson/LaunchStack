@@ -1,74 +1,549 @@
 {
   "programId": "angelpad",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:59:02.000Z",
   "pagesRead": [
     "https://angelpad.com/",
+    "https://angelpad.com/b/can-i-apply-if-i-am-from-outside-the-us/",
+    "https://angelpad.com/a/cat/faq-2/",
+    "https://angelpad.com/a/cat/faq/",
+    "https://angelpad.com/b/accelerator-terms-sheet/",
+    "https://angelpad.com/b/gatik-valued-at-over-700-million-after-investment-from-microsoft/",
     "https://angelpad.com/b/self-driving-truck-startup-gatik-raises-200m-following-massive-pepsico-deal/",
-    "https://angelpad.com/#apply"
+    "https://angelpad.com/about/",
+    "https://angelpad.com/more/",
+    "https://angelpad.com/b/best-accelerator-rankings/",
+    "https://angelpad.com/b/p/clipabout/",
+    "https://angelpad.com/b/accelerator-rankings-2015/",
+    "https://angelpad.com/top",
+    "https://angelpad.com/a/cat/portfolio/",
+    "https://angelpad.com/b/companies-of-angelpad-8/"
   ],
   "evidence": [
     {
-      "id": "check-deal-5492b62d00",
-      "url": "https://angelpad.com/#apply",
-      "title": "AngelPad — application page checked by scrape.py",
-      "excerpt": "the startup founders. We roll up our sleeves and figure stuff out – everything – together with the founders. Funding Starting a company costs money. We invest $120,000 in each company. Startups have also access to more than $300,000 in cloud credits from AWS, Google and Digital Ocean. Community Working, not just alongside us,",
-      "page": "application"
+      "id": "check-deal-1800d0bfa5",
+      "url": "https://angelpad.com/",
+      "title": "AngelPad — homepage",
+      "excerpt": "$120,000 in each company. Startups have also access to more than $300,000 in cloud credits from AWS, Google and Digital Ocean. Community",
+      "page": "details"
     },
     {
-      "id": "check-deal-6885b44912",
+      "id": "check-deal-7ce35fd91a",
+      "url": "https://angelpad.com/b/accelerator-terms-sheet/",
+      "title": "AngelPad — terms page",
+      "excerpt": "for example, invests $150k, but then asks the company to pay $38k for the program , making the investment effectively $112k. While",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-ace0ea0719",
       "url": "https://angelpad.com/",
-      "title": "AngelPad — homepage checked by scrape.py",
-      "excerpt": "the startup founders. We roll up our sleeves and figure stuff out – everything – together with the founders. Funding Starting a company costs money. We invest $120,000 in each company. Startups have also access to more than $300,000 in cloud credits from AWS, Google and Digital Ocean. Community Working, not just alongside us,",
+      "title": "AngelPad — homepage",
+      "excerpt": "with the founders. Funding Starting a company costs money. We invest $120,000 in each company. Startups have also access to more than $300,000 in",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-e537a389c9",
+      "url": "https://angelpad.com/b/accelerator-terms-sheet/",
+      "title": "AngelPad — terms page",
+      "excerpt": "to “pay” for the program. 500 Startups for example, invests $150k, but then asks the company to pay $38k for the program , making the",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-3f4e6984ff",
+      "url": "https://angelpad.com/",
+      "title": "AngelPad — homepage",
+      "excerpt": "we have launched more than 150 companies . Every 6 months we select about 15 teams from a huge pool of",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-78eacde8b2",
+      "url": "https://angelpad.com/about/",
+      "title": "AngelPad — program page",
+      "excerpt": "more than 150 companies in 12 cohorts. Every 6 months we select about 20 teams from a huge pool of",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9fd0768772",
+      "url": "https://angelpad.com/",
+      "title": "AngelPad — homepage",
+      "excerpt": "Techcrunch The sheer progress a startup makes in 12 weeks of AngelPad is nothing short of stunning.",
+      "page": "details"
+    },
+    {
+      "id": "check-format-6ac43d8e78",
+      "url": "https://angelpad.com/b/companies-of-angelpad-8/",
+      "title": "AngelPad — portfolio page",
+      "excerpt": "Both are second-time entrepreneurs. Agentdesks builds a virtual network of real estate agents through a mobile CRM",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-bde8d346e2",
+      "url": "https://angelpad.com/",
+      "title": "AngelPad — homepage",
+      "excerpt": "if we like what we see, we’ll interview the founders in-person. The acceptance rate is low, very low, less than 1%, but",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c4d5bed8c5",
+      "url": "https://angelpad.com/a/cat/faq-2/",
+      "title": "AngelPad — terms page",
+      "excerpt": "decided to cancel a cohort because we strongly believe in in-person interactions with our founders. After not running a",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-62d5ab396f",
+      "url": "https://angelpad.com/about/",
+      "title": "AngelPad — program page",
+      "excerpt": "is a seed-stage accelerator program based in NYC and San Francisco. In the past 8 years",
+      "page": "details"
+    },
+    {
+      "id": "check-location-7acae3c1c2",
+      "url": "https://angelpad.com/",
+      "title": "AngelPad — homepage",
+      "excerpt": "AngelPad – #1 U.S Accelerator based in SF and NYC Skip to content Menu ABOUT",
       "page": "details"
     },
     {
       "id": "check-name-6a3965bf4d",
       "url": "https://angelpad.com/",
-      "title": "AngelPad — homepage checked by scrape.py",
+      "title": "AngelPad — homepage",
       "excerpt": "AngelPad – #1 U.S Accelerator based in SF and NYC Skip to content",
       "page": "details"
     },
     {
-      "id": "check-portfolio-21914383b6",
-      "url": "https://angelpad.com/#apply",
-      "title": "AngelPad — application page checked by scrape.py",
+      "id": "check-portfolio-0407c5907e",
+      "url": "https://angelpad.com/a/cat/portfolio/",
+      "title": "AngelPad — portfolio page",
+      "excerpt": "portfolio → https://angelpad.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-11e0cc18c1",
+      "url": "https://angelpad.com/b/can-i-apply-if-i-am-from-outside-the-us/",
+      "title": "AngelPad — application page",
+      "excerpt": "ALUMNI → https://angelpad.com/#portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-1438217ac7",
+      "url": "https://angelpad.com/b/best-accelerator-rankings/",
+      "title": "AngelPad — program page",
+      "excerpt": "ALUMNI → https://angelpad.com/#portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2061a17a4d",
+      "url": "https://angelpad.com/about/",
+      "title": "AngelPad — program page",
+      "excerpt": "portfolio → https://angelpad.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-35731d61be",
+      "url": "https://angelpad.com/b/p/clipabout/",
+      "title": "AngelPad — program page",
+      "excerpt": "ALUMNI → https://angelpad.com/#portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-40f486f6ed",
+      "url": "https://angelpad.com/b/can-i-apply-if-i-am-from-outside-the-us/",
+      "title": "AngelPad — application page",
       "excerpt": "portfolio → https://angelpad.com/portfolio/",
       "page": "application"
     },
     {
+      "id": "check-portfolio-4c4dfdcdce",
+      "url": "https://angelpad.com/top",
+      "title": "AngelPad — program page",
+      "excerpt": "Portfolio News → https://angelpad.com/a/cat/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5d1780c907",
+      "url": "https://angelpad.com/about/",
+      "title": "AngelPad — program page",
+      "excerpt": "ALUMNI → https://angelpad.com/#portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6fa929cc6b",
+      "url": "https://angelpad.com/b/best-accelerator-rankings/",
+      "title": "AngelPad — program page",
+      "excerpt": "portfolio → https://angelpad.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-728f53a5d1",
+      "url": "https://angelpad.com/a/cat/faq/",
+      "title": "AngelPad — terms page",
+      "excerpt": "portfolio → https://angelpad.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-750d1297ff",
+      "url": "https://angelpad.com/more/",
+      "title": "AngelPad — application page",
+      "excerpt": "ALUMNI → https://angelpad.com/#portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-75967f7c11",
+      "url": "https://angelpad.com/more/",
+      "title": "AngelPad — application page",
+      "excerpt": "portfolio → https://angelpad.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-78efb081e0",
+      "url": "https://angelpad.com/top",
+      "title": "AngelPad — program page",
+      "excerpt": "ALUMNI → https://angelpad.com/#portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-85b2d5a4a8",
+      "url": "https://angelpad.com/about/",
+      "title": "AngelPad — program page",
+      "excerpt": "150 companies → https://angelpad.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8d41309cbf",
+      "url": "https://angelpad.com/b/accelerator-rankings-2015/",
+      "title": "AngelPad — program page",
+      "excerpt": "portfolio → https://angelpad.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a9959255cf",
+      "url": "https://angelpad.com/b/accelerator-rankings-2015/",
+      "title": "AngelPad — program page",
+      "excerpt": "ALUMNI → https://angelpad.com/#portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ab169d77ea",
+      "url": "https://angelpad.com/top",
+      "title": "AngelPad — program page",
+      "excerpt": "portfolio → https://angelpad.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b0fdf5ea3f",
+      "url": "https://angelpad.com/a/cat/faq-2/",
+      "title": "AngelPad — terms page",
+      "excerpt": "ALUMNI → https://angelpad.com/#portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b2d5df4d8d",
+      "url": "https://angelpad.com/a/cat/faq-2/",
+      "title": "AngelPad — terms page",
+      "excerpt": "portfolio → https://angelpad.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-bee5be6a7d",
+      "url": "https://angelpad.com/b/gatik-valued-at-over-700-million-after-investment-from-microsoft/",
+      "title": "AngelPad — terms page",
+      "excerpt": "portfolio → https://angelpad.com/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-c0845cff69",
       "url": "https://angelpad.com/b/self-driving-truck-startup-gatik-raises-200m-following-massive-pepsico-deal/",
-      "title": "AngelPad — terms page checked by scrape.py",
+      "title": "AngelPad — terms page",
+      "excerpt": "portfolio → https://angelpad.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c185b9b6d4",
+      "url": "https://angelpad.com/b/gatik-valued-at-over-700-million-after-investment-from-microsoft/",
+      "title": "AngelPad — terms page",
+      "excerpt": "ALUMNI → https://angelpad.com/#portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ca1b4d5c7f",
+      "url": "https://angelpad.com/b/accelerator-terms-sheet/",
+      "title": "AngelPad — terms page",
+      "excerpt": "ALUMNI → https://angelpad.com/#portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ca70f0772d",
+      "url": "https://angelpad.com/b/companies-of-angelpad-8/",
+      "title": "AngelPad — portfolio page",
+      "excerpt": "ALUMNI → https://angelpad.com/#portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-cdfbc73273",
+      "url": "https://angelpad.com/b/accelerator-terms-sheet/",
+      "title": "AngelPad — terms page",
       "excerpt": "portfolio → https://angelpad.com/portfolio/",
       "page": "terms"
     },
     {
       "id": "check-portfolio-dd2affa470",
       "url": "https://angelpad.com/",
-      "title": "AngelPad — homepage checked by scrape.py",
+      "title": "AngelPad — homepage",
       "excerpt": "portfolio → https://angelpad.com/portfolio/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-ea9e7389a2",
+      "url": "https://angelpad.com/a/cat/faq/",
+      "title": "AngelPad — terms page",
+      "excerpt": "ALUMNI → https://angelpad.com/#portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-ed955ed488",
       "url": "https://angelpad.com/b/self-driving-truck-startup-gatik-raises-200m-following-massive-pepsico-deal/",
-      "title": "AngelPad — terms page checked by scrape.py",
+      "title": "AngelPad — terms page",
       "excerpt": "ALUMNI → https://angelpad.com/#portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-edf7efd045",
+      "url": "https://angelpad.com/b/companies-of-angelpad-8/",
+      "title": "AngelPad — portfolio page",
+      "excerpt": "portfolio → https://angelpad.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-f535050d6c",
+      "url": "https://angelpad.com/a/cat/portfolio/",
+      "title": "AngelPad — portfolio page",
+      "excerpt": "ALUMNI → https://angelpad.com/#portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-f88ce0a01b",
+      "url": "https://angelpad.com/b/p/clipabout/",
+      "title": "AngelPad — program page",
+      "excerpt": "portfolio → https://angelpad.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1a62e16ebb",
+      "url": "https://angelpad.com/top",
+      "title": "AngelPad — program page",
+      "excerpt": "APPLY → https://angelpad.com/#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1e4afd272d",
+      "url": "https://angelpad.com/about/",
+      "title": "AngelPad — program page",
+      "excerpt": "Apply to AngelPad → https://angelpad.com/more/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2710634594",
+      "url": "https://angelpad.com/a/cat/faq/",
+      "title": "AngelPad — terms page",
+      "excerpt": "https://angelpad.com/b/can-i-apply-if-i-am-from-outside-the-us/",
       "page": "terms"
     },
     {
       "id": "check-route-2d4b46d553",
       "url": "https://angelpad.com/b/self-driving-truck-startup-gatik-raises-200m-following-massive-pepsico-deal/",
-      "title": "AngelPad — terms page checked by scrape.py",
+      "title": "AngelPad — terms page",
+      "excerpt": "APPLY → https://angelpad.com/#apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-360bdffe2b",
+      "url": "https://angelpad.com/b/accelerator-terms-sheet/",
+      "title": "AngelPad — terms page",
       "excerpt": "APPLY → https://angelpad.com/#apply",
       "page": "terms"
     },
     {
       "id": "check-route-366f5cfb88",
       "url": "https://angelpad.com/",
-      "title": "AngelPad — homepage checked by scrape.py",
+      "title": "AngelPad — homepage",
       "excerpt": "APPLY → https://angelpad.com/#apply",
       "page": "details"
+    },
+    {
+      "id": "check-route-43cefcecdf",
+      "url": "https://angelpad.com/b/p/clipabout/",
+      "title": "AngelPad — program page",
+      "excerpt": "APPLY → https://angelpad.com/#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-458f72efa2",
+      "url": "https://angelpad.com/b/gatik-valued-at-over-700-million-after-investment-from-microsoft/",
+      "title": "AngelPad — terms page",
+      "excerpt": "APPLY → https://angelpad.com/#apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-6b4fadaea3",
+      "url": "https://angelpad.com/b/best-accelerator-rankings/",
+      "title": "AngelPad — program page",
+      "excerpt": "APPLY → https://angelpad.com/#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6d2257d839",
+      "url": "https://angelpad.com/more/",
+      "title": "AngelPad — application page",
+      "excerpt": "APPLY → https://angelpad.com/#apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7d13fb3ae7",
+      "url": "https://angelpad.com/b/accelerator-rankings-2015/",
+      "title": "AngelPad — program page",
+      "excerpt": "APPLY → https://angelpad.com/#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-83af65eb5f",
+      "url": "https://angelpad.com/a/cat/faq/",
+      "title": "AngelPad — terms page",
+      "excerpt": "Can I apply if I am from outside the US? → https://angelpad.com/b/can-i-apply-if-i-am-from-outside-the-us/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-acbe68eaad",
+      "url": "https://angelpad.com/a/cat/faq/",
+      "title": "AngelPad — terms page",
+      "excerpt": "APPLY → https://angelpad.com/#apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-bd85a5bf32",
+      "url": "https://angelpad.com/a/cat/faq-2/",
+      "title": "AngelPad — terms page",
+      "excerpt": "APPLY → https://angelpad.com/#apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-db12a3b939",
+      "url": "https://angelpad.com/b/can-i-apply-if-i-am-from-outside-the-us/",
+      "title": "AngelPad — application page",
+      "excerpt": "APPLY → https://angelpad.com/#apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ed01e2f575",
+      "url": "https://angelpad.com/a/cat/portfolio/",
+      "title": "AngelPad — portfolio page",
+      "excerpt": "APPLY → https://angelpad.com/#apply",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-fafc7989b6",
+      "url": "https://angelpad.com/about/",
+      "title": "AngelPad — program page",
+      "excerpt": "APPLY → https://angelpad.com/#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-fb95420a6b",
+      "url": "https://angelpad.com/b/companies-of-angelpad-8/",
+      "title": "AngelPad — portfolio page",
+      "excerpt": "APPLY → https://angelpad.com/#apply",
+      "page": "portfolio"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-f2bcf24232",
+      "url": "https://angelpad.com/",
+      "page": "details",
+      "excerpt": "AngelPad – #1 U.S Accelerator based in SF and NYC Skip to content Menu ABOUT ALUMNI TEAM APPLY NEWS >> portfolio contact Ranked #1 U.S Accelerator|Supporting Founders on Day One|We are Always the First Check Ranked Top U.S Accelerator by MIT’s Seed Accelerator Benchmark. AngelPad companies have raised over $4.4 Billion in Funding and the Portfolio has $7.2 Billion in Exits to date Learn Why Apply WE ARE A SEED STAGE ACCELERATOR What is AngelPad? AngelPad is a seed-stage accelerator program based in NYC and San Francisco. Since 2010 we have launched more than 150 companies . Every 6 months we select about 15 teams from a huge pool of applicants (usually around 2000) to work with us. While other accelerators have decided to “scale” and take on more and more companies or launch more and more cities, we have stayed true to our original goal: Find awesome companies with founders we like to work with and spend three very intense months with them. This focus has paid off, we have risen to be the #1 Accelerator in the U.S. (based on a real study from MIT/Brown University) and Strictly VC called us the “Anti-Y Combinator“. During the program, we work on everything from finding product market fit, defining a target market to getting first validation for the company. We are also instrumental in helping companies prepare for fundraising and of course for investor meetings. Techcrunch The"
+    },
+    {
+      "id": "check-page-950d8da5a4",
+      "url": "https://angelpad.com/b/can-i-apply-if-i-am-from-outside-the-us/",
+      "page": "application",
+      "excerpt": "Can I apply if I am from outside the US? – AngelPad Skip to content Menu ABOUT ALUMNI TEAM APPLY NEWS >> portfolio contact Can I apply if I am from outside the US? Yes, we often accept teams from outside the US. Pipedrive, Postmates, Tray.io and many more are teams that relocated for AngelPad. However, we are looking for companies that build for the US market or a global market. So if you are a french company building a company in France for the French market, you might not be a fit. AngelPad is ranked the #1 U.S. Accelerator by MIT’s U.S Seed Accelerator Rankings and StrictlyVC called it the “Anti Y-Combinator“. Our alumni include Postmates, Buffer, Periscope Data, Drone Deploy, Coverhound and 150 other startups . Copyright © AngelPad"
+    },
+    {
+      "id": "check-page-826a1f729d",
+      "url": "https://angelpad.com/a/cat/faq-2/",
+      "page": "terms",
+      "excerpt": "Frequently Asked Questions – AngelPad Skip to content Menu ABOUT ALUMNI TEAM APPLY NEWS >> portfolio contact Category: Frequently Asked Questions Frequently Asked Questions Is AngelPad still active? Yes, AngelPad is active. Early in the Pandemic, we decided to cancel a cohort because we strongly believe in in-person interactions with our founders. After not running a session in … AngelPad is ranked the #1 U.S. Accelerator by MIT’s U.S Seed Accelerator Rankings and StrictlyVC called it the “Anti Y-Combinator“. Our alumni include Postmates, Buffer, Periscope Data, Drone Deploy, Coverhound and 150 other startups . Copyright © AngelPad"
+    },
+    {
+      "id": "check-page-e1e836d403",
+      "url": "https://angelpad.com/a/cat/faq/",
+      "page": "terms",
+      "excerpt": "Frequent Questions – AngelPad Skip to content Menu ABOUT ALUMNI TEAM APPLY NEWS >> portfolio contact Category: Frequent Questions Frequent Questions Can I apply if I am from outside the US? Yes, we often accept teams from outside the US. Pipedrive, Postmates, Tray.io and many more are teams that relocated for AngelPad. AngelPad is ranked the #1 U.S. Accelerator by MIT’s U.S Seed Accelerator Rankings and StrictlyVC called it the “Anti Y-Combinator“. Our alumni include Postmates, Buffer, Periscope Data, Drone Deploy, Coverhound and 150 other startups . Copyright © AngelPad"
+    },
+    {
+      "id": "check-page-e9809a62af",
+      "url": "https://angelpad.com/b/accelerator-terms-sheet/",
+      "page": "terms",
+      "excerpt": "Common Accelerator Terms you need to understand before signing (Accelerator Terms Sheet) – AngelPad Skip to content Menu ABOUT ALUMNI TEAM APPLY NEWS >> portfolio contact Common Accelerator Terms you need to understand before signing (Accelerator Terms Sheet) Giving that you are at the “accepting offer” stage, I assume you have done diligence on the accelerator and their key people. Here are the terms you should look out for and understand. Investment – Understand how much money you will get and when. Dilution – Know how much % of your company you give up. A good way to understand dilution is to run a model with this excellent (and free) Cap Table & Exit Waterfall Tool . Program Cost – Some accelerators ask participants to “pay” for the program. 500 Startups for example, invests $150k, but then asks the company to pay $38k for the program , making the investment effectively $112k. While this looks strange, it is due to internal accounting and is generally ok. Just take it into account when you do the dilution math. Stock Type – Understand what kind of stock the accelerator gets. Common stock is the type of stock founders and employees get and it is generally less valuable than preferred stock. Preferred stock is the kind financial investors favor. Accelerators are somewhere in between since they provide both “sweat equity” like founders do, but also money like financial"
+    },
+    {
+      "id": "check-page-5c16b7aca4",
+      "url": "https://angelpad.com/b/gatik-valued-at-over-700-million-after-investment-from-microsoft/",
+      "page": "terms",
+      "excerpt": "Gatik valued at over $700 million after investment from Microsoft – AngelPad Skip to content Menu ABOUT ALUMNI TEAM APPLY NEWS >> portfolio contact Gatik valued at over $700 million after investment from Microsoft Gatik, the self-driveing truck company that launched at AngelPad #12, is now valued at over $700m. More here . AngelPad is ranked the #1 U.S. Accelerator by MIT’s U.S Seed Accelerator Rankings and StrictlyVC called it the “Anti Y-Combinator“. Our alumni include Postmates, Buffer, Periscope Data, Drone Deploy, Coverhound and 150 other startups . Copyright © AngelPad"
+    },
+    {
+      "id": "check-page-d90f5cb145",
+      "url": "https://angelpad.com/b/self-driving-truck-startup-gatik-raises-200m-following-massive-pepsico-deal/",
+      "page": "terms",
+      "excerpt": "Self-driving truck startup Gatik raises $200M following massive PepsiCo deal – AngelPad Skip to content Menu ABOUT ALUMNI TEAM APPLY NEWS >> portfolio contact Self-driving truck startup Gatik raises $200M following massive PepsiCo deal Gatik , the autonomous vehicle startup known for its self-driving box trucks, has raised $200 million just two months after striking a multiyear commercial agreement with PepsiCo. More here. AngelPad is ranked the #1 U.S. Accelerator by MIT’s U.S Seed Accelerator Rankings and StrictlyVC called it the “Anti Y-Combinator“. Our alumni include Postmates, Buffer, Periscope Data, Drone Deploy, Coverhound and 150 other startups . Copyright © AngelPad"
+    },
+    {
+      "id": "check-page-3f346a66d1",
+      "url": "https://angelpad.com/about/",
+      "page": "details",
+      "excerpt": "About AngelPad – AngelPad Skip to content Menu ABOUT ALUMNI TEAM APPLY NEWS >> portfolio contact About AngelPad AngelPad is a seed-stage accelerator program based in NYC and San Francisco. In the past 8 years we have launched more than 150 companies in 12 cohorts. Every 6 months we select about 20 teams from a huge pool of applicants (usually around 4000) to work with us. What’s different about AngelPad? While others have decided to “scale” and take on more companies or launch more cities, we have stayed true to our original goal: Find a bunch of awesome companies with founders we would like to work with and spend three very intense months with them . This focus has paid off, AngelPad has risen to be the #1 Accelerator in the U.S. (at least that’s what a real study from MIT/Brown University says) and Strictly VC called us the “Anti-Y Combinator”. During the program, we work on everything , really, everything. From finding product market fit, defining a target market to getting first validation for the company. We are also instrumental in helping companies prepare for fundraising and of course for our investor demo day. Who is behind AngelPad? AngelPad is Thomas Korte and Carine Magescas , a husband-and-wife founder team, who met working at – what else – a Startup back in 2001 in San Francisco. Business Insider profiled them in this article: “Meet Carine Magescas & Thomas Korte"
+    },
+    {
+      "id": "check-page-c568a86d0d",
+      "url": "https://angelpad.com/more/",
+      "page": "application",
+      "excerpt": "Apply to AngelPad – AngelPad Skip to content Menu ABOUT ALUMNI TEAM APPLY NEWS >> portfolio contact Apply to AngelPad AngelPad Application The application is currently closed. To get updates for the next cohort, please enter your email below. Stay safe. Carine & Thomas Leave this field empty if you're human: AngelPad is ranked the #1 U.S. Accelerator by MIT’s U.S Seed Accelerator Rankings and StrictlyVC called it the “Anti Y-Combinator“. Our alumni include Postmates, Buffer, Periscope Data, Drone Deploy, Coverhound and 150 other startups . Copyright © AngelPad"
+    },
+    {
+      "id": "check-page-879966f31b",
+      "url": "https://angelpad.com/b/best-accelerator-rankings/",
+      "page": "details",
+      "excerpt": "Top U.S. Accelerator 2018, 2017, 2016 & 2015 – AngelPad Skip to content Menu ABOUT ALUMNI TEAM APPLY NEWS >> portfolio contact Top U.S. Accelerator 2018, 2017, 2016 & 2015 Created by professors from MIT, Rice University, Brown University and support from the MIT Innovation Initiative, the Seed Accelerator Rankings Project is the only quantitative research study that provides reliable information about the performance of accelerator programs. 2018: Top Tier – Platinum Plus 2017: Top Tier – Platinum Plus 2016 : Top Tier – Platinum 2015: Highest Ranking – #1 Accelerator ( Techcrunch ) The rankings reflect a variety of metrics, including the valuations of participating startups, amount of funding raised, startups’ exits and satisfaction / ratings provided by program graduates. The Seed Accelerator Rankings Project helps entrepreneurs choose an accelerator by rigorously benchmarking performance, results and graduates’ satisfaction. In 2018, more than 160 accelerator programs were invited to participate. The rankings are based on detailed confidential data on accelerator portfolio outcomes. The research team survey the satisfaction of accelerator programs’ graduates – more than 1,000 graduates have taken the survey to date. The graduates would rank everything from how easy it was to apply for funding; whether the accelerator provided resources and advice like the best custom"
+    },
+    {
+      "id": "check-page-9e8af1d347",
+      "url": "https://angelpad.com/b/p/clipabout/",
+      "page": "details",
+      "excerpt": "Clipabout (acquired) – AngelPad Skip to content Menu ABOUT ALUMNI TEAM APPLY NEWS >> portfolio contact Clipabout (acquired) Clipabout (acquired) AngelPad is ranked the #1 U.S. Accelerator by MIT’s U.S Seed Accelerator Rankings and StrictlyVC called it the “Anti Y-Combinator“. Our alumni include Postmates, Buffer, Periscope Data, Drone Deploy, Coverhound and 150 other startups . Copyright © AngelPad"
+    },
+    {
+      "id": "check-page-cf925125dc",
+      "url": "https://angelpad.com/b/accelerator-rankings-2015/",
+      "page": "details",
+      "excerpt": "Top U.S. Accelerator 2018, 2017, 2016 & 2015 – AngelPad Skip to content Menu ABOUT ALUMNI TEAM APPLY NEWS >> portfolio contact Top U.S. Accelerator 2018, 2017, 2016 & 2015 Created by professors from MIT, Rice University, Brown University and support from the MIT Innovation Initiative, the Seed Accelerator Rankings Project is the only quantitative research study that provides reliable information about the performance of accelerator programs. 2018: Top Tier – Platinum Plus 2017: Top Tier – Platinum Plus 2016 : Top Tier – Platinum 2015: Highest Ranking – #1 Accelerator ( Techcrunch ) The rankings reflect a variety of metrics, including the valuations of participating startups, amount of funding raised, startups’ exits and satisfaction / ratings provided by program graduates. The Seed Accelerator Rankings Project helps entrepreneurs choose an accelerator by rigorously benchmarking performance, results and graduates’ satisfaction. In 2018, more than 160 accelerator programs were invited to participate. The rankings are based on detailed confidential data on accelerator portfolio outcomes. The research team survey the satisfaction of accelerator programs’ graduates – more than 1,000 graduates have taken the survey to date. The graduates would rank everything from how easy it was to apply for funding; whether the accelerator provided resources and advice like the best custom"
+    },
+    {
+      "id": "check-page-5cb65fcedf",
+      "url": "https://angelpad.com/top",
+      "page": "details",
+      "excerpt": "Page not found – AngelPad Skip to content Menu ABOUT ALUMNI TEAM APPLY NEWS >> portfolio contact Oops! That page can’t be found. It looks like nothing was found at this location. Maybe try one of the links below or a search? Search for: Recent Posts Self-driving truck startup Gatik raises $200M following massive PepsiCo deal Procore acquires DroneDeploy for $845M to scale robotic intelligence on construction sites. Zum raises $100M @ $1.7B valuation from TPG to scale AI-Driven student mobility platform Astronomer raises $213M and acquires Datakin to scale and expand globally Gatik valued at over $700 million after investment from Microsoft Most Used Categories AngelPad News (50) Portfolio News (13) In the Press (6) AP2 (2) AP1 (1) $100m plus (1) Founder Resources (1) AP9 (1) Social (1) Frequently Asked Questions (1) Archives Try looking in the monthly archives. 🙂 Archives Select Month August 2026 July 2026 April 2026 March 2023 January 2023 September 2022 March 2022 November 2021 October 2021 August 2021 June 2021 December 2020 November 2020 July 2020 May 2020 January 2020 November 2019 September 2019 May 2019 April 2019 March 2019 February 2019 October 2018 September 2018 June 2018 March 2018 March 2017 February 2017 June 2016 April 2016 February 2016 January 2016 October 2015 September 2015 July 2015 April 2015 January 2015 September 2014 June 2014 April 2014 February 2014"
+    },
+    {
+      "id": "check-page-a546f252aa",
+      "url": "https://angelpad.com/a/cat/portfolio/",
+      "page": "portfolio",
+      "excerpt": "Portfolio News – AngelPad Skip to content Menu ABOUT ALUMNI TEAM APPLY NEWS >> portfolio contact Category: Portfolio News AngelPad News / Portfolio News Fieldwire (AngelPad #6) is acquired for $300 Million San Francisco-based Fieldwire, founded in 2013 by Yves Frinault and Javed Singha, was acquired by Hilti, a Liechtenstein based multinational company that develops, manufactures, and markets products for the construction, … AngelPad News / Portfolio News Zūm raises $130M to modernize student transportation Zūm, a startup that provides transportation services for school-age children, has announced the close of a $130 million Series D raise, bringing its total funding to more than $200 million. … AngelPad News / Portfolio News Autonomous vehicle startup Gatik AI raised $85 million Gatik AI, our autonomous vehicle startup, raised $85 million in a Series B round led by new investor Koch Disruptive Technologies. Gatik has raised $114.5 million to date. AngelPad News / Portfolio News Uber Buys Postmates (AngelPad #1) for $2.65 Billion Postmates, the original food delivery-app company that launched at AngelPad in 2011, was acquired by Uber Eats for $2.65B. AngelPad News / Portfolio News Vista Equity Partners buys CRM Unicorn Pipedrive (AngelPad #3) for $1.5 Billion Almost 9 years to the day after Pipedrive launched at AngelPad’s 2011 Demo Day, the company sold a majority stake to"
+    },
+    {
+      "id": "check-page-0e2966dd92",
+      "url": "https://angelpad.com/b/companies-of-angelpad-8/",
+      "page": "portfolio",
+      "excerpt": "Meet the 13 companies of AngelPad #8 – AngelPad Skip to content Menu ABOUT ALUMNI TEAM APPLY NEWS >> portfolio contact Meet the 13 companies of AngelPad #8 No doubt the investors were expecting big things. Nearly all [AngelPad] companies have snagged seed funding from investors, with a handful of startups going on to raise tens of millions of dollars, including Vungle, Crittercism, and Postmates. Recently started companies that are rapidly growing to new heights will want to free up time to focus on their development without distraction from the lesser concerns of the business and so will likely benefit from a service that streamlines payroll responsibilities, like ensuring ACA Compliance , which is why a company like Zenefits can really be of help to up and coming businesses. Source: Strictly VC . Follow all AngelPad #8 companies on AngelList . CStorePro is a SaaS application for convenience store operations and procurement – a $250B market – already deployed in 700 locations and with $350,000 ARR. Founder is a UC Berkeley Haas graduate and repeat entrepreneur with in-depth experience of the market. Publet is a content marketing solution amplifying B2B white papers and collateral through social and mobile to generate sales leads. Customers include Orange Telecom and Dell. Founders are marketers, journalists, engineers who previously worked at CNN and Havas from Yale and"
     }
   ],
   "findings": {
@@ -77,7 +552,15 @@
     "routes": [
       {
         "value": "https://angelpad.com/#apply",
-        "evidenceId": "check-route-2d4b46d553"
+        "evidenceId": "check-route-db12a3b939"
+      },
+      {
+        "value": "https://angelpad.com/b/can-i-apply-if-i-am-from-outside-the-us/",
+        "evidenceId": "check-route-2710634594"
+      },
+      {
+        "value": "https://angelpad.com/more/",
+        "evidenceId": "check-route-1e4afd272d"
       }
     ],
     "applicationUrl": [
@@ -89,11 +572,106 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-3f4e6984ff"
+      },
+      {
+        "value": "12",
+        "evidenceId": "check-duration-9fd0768772"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-bde8d346e2"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-6ac43d8e78"
+      }
+    ],
+    "location": [
+      {
+        "value": "SF",
+        "evidenceId": "check-location-7acae3c1c2"
+      },
+      {
+        "value": "NYC",
+        "evidenceId": "check-location-62d5ab396f"
+      }
+    ],
     "selectivity": [],
     "dealText": [
       {
-        "value": "the startup founders. We roll up our sleeves and figure stuff out – everything – together with the founders. Funding Starting a company costs money. We invest $120,000 in each company. Startups have also access to more than $300,000 in cloud credits from AWS, Google and Digital Ocean. Community Working, not just alongside us,",
-        "evidenceId": "check-deal-6885b44912"
+        "value": "with the founders. Funding Starting a company costs money. We invest $120,000 in each company. Startups have also access to more than $300,000 in",
+        "evidenceId": "check-deal-ace0ea0719"
+      },
+      {
+        "value": "$120,000 in each company. Startups have also access to more than $300,000 in cloud credits from AWS, Google and Digital Ocean. Community",
+        "evidenceId": "check-deal-1800d0bfa5"
+      },
+      {
+        "value": "to “pay” for the program. 500 Startups for example, invests $150k, but then asks the company to pay $38k for the program , making the",
+        "evidenceId": "check-deal-e537a389c9"
+      },
+      {
+        "value": "for example, invests $150k, but then asks the company to pay $38k for the program , making the investment effectively $112k. While",
+        "evidenceId": "check-deal-7ce35fd91a"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "120000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-ace0ea0719"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "300000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-1800d0bfa5"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "150000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-e537a389c9"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "38000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-7ce35fd91a"
       }
     ],
     "portfolioPages": [
@@ -103,7 +681,11 @@
       },
       {
         "value": "https://angelpad.com/#portfolio",
-        "evidenceId": "check-portfolio-ed955ed488"
+        "evidenceId": "check-portfolio-11e0cc18c1"
+      },
+      {
+        "value": "https://angelpad.com/a/cat/portfolio/",
+        "evidenceId": "check-portfolio-4c4dfdcdce"
       }
     ],
     "name": [

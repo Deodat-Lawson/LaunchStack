@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.insightpartners.com/",
   "applyUrl": "https://www.insightpartners.com/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Insight Partners | We Scale Ambition at Every Stage Go to home page Scaling the future of AI. Previous slide Next slide Series A The leading AI writing platform for teams May Habib is challenging a $13B incumbent Series A / ScaleUp:AI Partner SAN FRANCISCO, CA Read Full Article Series A Definitive Agreement From Series A to $32B Acquisition A Landmark Journey Series A / Series C / Acq. Agreement Palo Alto, California Read More Private Round Definitive Agreement Healthcare Digital Innovation in Science Private Round / Acq. Agreement Boston, MA Series A CrewAI is a leading AI multi-agent platform Behind the Investment: meet João Moura Series A / ScaleUp:AI Partner New York, NY Read Full Article Series B IPO Business Operations Rebranding Monday.com A New Channel Partner Program From Growth to IPO Series B / Series C / Series D / IPO Tel Aviv, Israel ScaleUp: monday.com Series B Acquired Fintech Transforming Corporate Expense Tracking Scaling Operations Acquisition by Bill.com Series B / Series C / Series D / Acquired Draper, UT Series A Series C Healthtech First Mental Health Unicorn Series A / Series B / Series C San Francisco, CA Series C Acquired Driving Digital Innovation in the Circular Economy Unifying Sales and Marketing Expanding Through Strategic Acquisitions Transitioning to a SaaS Model Series C / Series D / Acquisition Limerick, Ireland Series C Acquired Enterprise Ar No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Insight Partners is a global software investor partnering with high-growth technology, software, and Internet startup and ScaleUp companies.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Our Onsite team helped accelerate SentinelOne’s meteoric growth through several deep engagements. Our Talent Center of Excellence helped the team add their CSO and participated in active CMO interview cycles, later working with their CMO to prepare for an IPO.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "insight-partners-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.insightpartners.com/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

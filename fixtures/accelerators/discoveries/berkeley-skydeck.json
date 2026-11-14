@@ -1,7 +1,15 @@
 {
   "programId": "berkeley-skydeck",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://skydeck.berkeley.edu/ace",
+      "page": "details",
+      "anchor": "ACE Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://skydeck.berkeley.edu/apply/",
       "page": "application",
@@ -11,10 +19,106 @@
       "origin": "official"
     },
     {
-      "url": "https://skydeck.berkeley.edu/portfolio/",
-      "page": "portfolio",
-      "anchor": "COMPANIES",
-      "fetched": false,
+      "url": "https://skydeck.berkeley.edu/applyli/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/batch11/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/batch12/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/batch13/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/batch14/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/batch15/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/batch16/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/batch17/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/batch18/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/batch19-1/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-accelerator-program-armenian-startups-can-apply-for/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/berkeley-skydeck-fund-hits-milestone-as-most-active-seed-fund-with-more-than-100-investments-in-three-years/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/fall-2019-applications-open/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -22,14 +126,14 @@
       "url": "https://skydeck.berkeley.edu/our_team/",
       "page": "details",
       "anchor": "ABOUT",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://skydeck.berkeley.edu/ace",
-      "page": "details",
-      "anchor": "ACE Program",
+      "url": "https://skydeck.berkeley.edu/portfolio/",
+      "page": "portfolio",
+      "anchor": "COMPANIES",
       "fetched": false,
       "blocked": null,
       "origin": "official"

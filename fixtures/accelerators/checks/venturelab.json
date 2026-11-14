@@ -1,49 +1,180 @@
 {
   "programId": "venturelab",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.venturelab.swiss/",
-    "https://www.venturelab.swiss/programs"
+    "https://www.venturelab.swiss/about",
+    "https://www.venturelab.swiss/programs",
+    "https://www.venturelab.swiss/AIT",
+    "https://www.venturelab.swiss/SwissPrimeSite",
+    "https://www.venturelab.swiss/newsletter"
   ],
   "evidence": [
     {
+      "id": "check-email-1d0854b174",
+      "url": "https://www.venturelab.swiss/about",
+      "title": "Venturelab — program page",
+      "excerpt": "Bâtiment C 1015 Lausanne Tel: +41 (0)58 767 00 00 Mail: info@venturelab.swiss St. Gallen Venturelab AG Unterstrasse 6 9000 St.Gallen",
+      "page": "details"
+    },
+    {
+      "id": "check-email-4de47e15e3",
+      "url": "https://www.venturelab.swiss/about",
+      "title": "Venturelab — program page",
+      "excerpt": "10A 8952 Schlieren-Zürich Tel: + 41 (0)58 767 00 01 Mail: info@venturelab.swiss Lausanne Venturelab SA EPFL Innovation Park Bâtiment C",
+      "page": "details"
+    },
+    {
+      "id": "check-email-95732e00a6",
+      "url": "https://www.venturelab.swiss/about",
+      "title": "Venturelab — program page",
+      "excerpt": "6 9000 St.Gallen Tel: + 41 (0)58 767 00 01 Mail: info@venturelab.swiss Startup Flagship Programs Venture Kick Innosuisse Start-up",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1596a0a0a2",
+      "url": "https://www.venturelab.swiss/SwissPrimeSite",
+      "title": "Venturelab — program page",
+      "excerpt": "Mobility, CleanTech, Big Data and Analytics, Augmented, Virtual & Mixed Reality and Fin- and RegTech. SWISS PRIME SITE'S",
+      "page": "details"
+    },
+    {
+      "id": "check-format-609190bd54",
+      "url": "https://www.venturelab.swiss/about",
+      "title": "Venturelab — program page",
+      "excerpt": "Venturelab? A coffee break with Calimna Sladic Discover A virtual coffee break with Ricardo Gago Discover A coffee break",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ae7d6e5838",
+      "url": "https://www.venturelab.swiss/SwissPrimeSite",
+      "title": "Venturelab — program page",
+      "excerpt": "for dynamic tech start-ups offering Augmented, Mixed and Virtual Reality solutions. When holo|one pitched their SaaS model",
+      "page": "details"
+    },
+    {
+      "id": "check-location-005b663628",
+      "url": "https://www.venturelab.swiss/about",
+      "title": "Venturelab — program page",
+      "excerpt": "the Institute for Young Entrepreneurs based in St. Gallen. Today, Venturelab Ltd is a",
+      "page": "details"
+    },
+    {
+      "id": "check-location-62c8688390",
+      "url": "https://www.venturelab.swiss/SwissPrimeSite",
+      "title": "Venturelab — program page",
+      "excerpt": "Prime Site was founded in 1999 and is headquartered in Zug. The company has been listed on the",
+      "page": "details"
+    },
+    {
       "id": "check-name-a55171e2f5",
       "url": "https://www.venturelab.swiss/",
-      "title": "Venturelab — homepage checked by scrape.py",
+      "title": "Venturelab — homepage",
       "excerpt": "Venturelab - World-class startups. Swiss made. - 20 years sailing the",
       "page": "details"
     },
     {
       "id": "check-portfolio-08a2950b75",
       "url": "https://www.venturelab.swiss/",
-      "title": "Venturelab — homepage checked by scrape.py",
+      "title": "Venturelab — homepage",
       "excerpt": "Discover all guided startups → https://www.venturelab.swiss/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2dba81e453",
+      "url": "https://www.venturelab.swiss/about",
+      "title": "Venturelab — program page",
+      "excerpt": "Startups → https://www.venturelab.swiss/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-32327fdc64",
+      "url": "https://www.venturelab.swiss/SwissPrimeSite",
+      "title": "Venturelab — program page",
+      "excerpt": "Startups → https://www.venturelab.swiss/startups",
       "page": "details"
     },
     {
       "id": "check-portfolio-6597d74065",
       "url": "https://www.venturelab.swiss/programs",
-      "title": "Venturelab — details page checked by scrape.py",
+      "title": "Venturelab — program page",
+      "excerpt": "Startups → https://www.venturelab.swiss/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e7f41a4710",
+      "url": "https://www.venturelab.swiss/AIT",
+      "title": "Venturelab — program page",
       "excerpt": "Startups → https://www.venturelab.swiss/startups",
       "page": "details"
     },
     {
       "id": "check-portfolio-f4bda4c22a",
       "url": "https://www.venturelab.swiss/",
-      "title": "Venturelab — homepage checked by scrape.py",
+      "title": "Venturelab — homepage",
+      "excerpt": "Startups → https://www.venturelab.swiss/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f882807781",
+      "url": "https://www.venturelab.swiss/newsletter",
+      "title": "Venturelab — program page",
       "excerpt": "Startups → https://www.venturelab.swiss/startups",
       "page": "details"
     },
     {
       "id": "check-route-540ab6ab2b",
       "url": "https://www.venturelab.swiss/",
-      "title": "Venturelab — homepage checked by scrape.py",
+      "title": "Venturelab — homepage",
       "excerpt": "Venturelab → https://www.venturelab.swiss/",
       "page": "details"
     }
   ],
+  "pageQuotes": [
+    {
+      "id": "check-page-827b6edd68",
+      "url": "https://www.venturelab.swiss/",
+      "page": "details",
+      "excerpt": "Venturelab - World-class startups. Swiss made. - 20 years sailing the waves of innovation Venturelab Home Startups Programs Events Partnering About News Follow us: Linkedin / Facebook / X / Instagram / Youtube Home Startups Programs Events Partnering About News Navigating the waters of entrepreneurship scroll south 21 years sailing the waves of innovation Venturelab set sail in 2004 , and has been designing and operating flagship startup programs to support the best entrepreneurial talents in Switzerland, including Venture Kick , Venture Leaders , the Top100 Swiss Startup Award , and Innosuisse Start-up Trainings . Together with successful founders, top academic collaborators, and leading industry partners, we support the best startups on their way to success. 90% of Swiss startups have been supported by Venturelab and our guided startups have attracted over CHF 15 billion in investments and created more than 25,000 active jobs. See how we can help realize your innovative potential and dive into the startup world. For startups For corporates For investors World-class startups. Swiss made. Selection of guided startups Discover all guided startups Programs for startups Apply to our free programs and events in your industry. These initiatives are led by accomplished founders, industry experts, and investors. Whether you're starting out and need support for training and funding,"
+    },
+    {
+      "id": "check-page-b2e155ba1c",
+      "url": "https://www.venturelab.swiss/about",
+      "page": "details",
+      "excerpt": "About Venturelab - world-class startups. Swiss made. Venturelab Home Startups Programs Events Partnering About News Follow us: Linkedin / Facebook / X / Instagram / Youtube Home Startups Programs Events Partnering About News World-class startups. Swiss made. scroll south Navigating the waters of entrepreneurship Venturelab set sail in 2004 . It began as the National Entrepreneurial Training initiative, which was mandated by the Swiss Innovation Agency to IFJ, the Institute for Young Entrepreneurs based in St. Gallen. Today, Venturelab Ltd is a fully private company supporting world-class startups, Swiss made. Since its inception, Venturelab has been improving and expanding the support offered to Switzerland's top entrepreneurs, continuously developing and deploying new tools and programs, including Venture Leaders in 2006, Venture Kick in 2007, the TOP 100 Swiss Startup Award in 2011, the Swisscom Startup Challenge in 2013, and the Innosuisse Start-up Training in 2018. To date, Venturelab has backed more than 1,000 startups in their global growth, supporting over 100,000 people in the startup ecosystem across various programs and events. Venturelab's committed team runs a broad range of impactful startup support programs in partnership with leading organizations to build world-class startups, Swiss made. Why work with us? Venturelab has an 20-year track record of developing"
+    },
+    {
+      "id": "check-page-4318b6e179",
+      "url": "https://www.venturelab.swiss/programs",
+      "page": "details",
+      "excerpt": "Support programs for startups & entrepreneurs in Switzerland - Venturelab Venturelab Home Startups Programs Events Partnering About News Follow us: Linkedin / Facebook / X / Instagram / Youtube Home Startups Programs Events Partnering About News Programs for startups and entrepreneurs scroll south Set sail for business brilliance Want to start or accelerate your entrepreneurial journey? Venturelab's programs are designed to support entrepreneurs with global ambitions - from early stage ideas to successful exits. Choose the program that fits your needs and get support in networking, training, fundraising, and accelerating your business development or pitch to investors. Startup trainings Venture Briefing Keynote talks for aspiring entrepreneurs discover more Venture Challenge Workshop series for aspriring entrepreneurs discover more Innosuisse Entrepreneurship Training: Business Creation Mission-based training for early-stage startups discover more Innosuisse Entrepreneurship Training: Workshop Series 4-hour workshops tackling key startup challenges discover more Innosuisse Entrepreneurship Training: Business Ideas 2h inspiring talks discover more Innosuisse Entrepreneurship Training: Business Concept 10x4h semester course discover more Innosuisse Entrepreneurship Training: Pivoting the Idea 2x4h workshop discover more Innosuisse Entrepreneurship Training: Co-Founder"
+    },
+    {
+      "id": "check-page-d957eb1f4a",
+      "url": "https://www.venturelab.swiss/AIT",
+      "page": "details",
+      "excerpt": "Academia Industry Training (AIT) - Venturelab Venturelab Home Startups Programs Events Partnering About News Follow us: Linkedin / Facebook / X / Instagram / Youtube Home Startups Programs Events Partnering About News Academia Industry Training scroll south Application phase is closed Applications for the Academia Industry Training are now closed. Subscribe to our newsletter to receive the latest updates and to discover even more events. The AIT program aims to support scientists in transforming their applied research into market application and discovering their entrepreneurial potential. By connecting scientists from top ins­titutions in Switzerland, India , and Singapore the program promotes an international network and enables access to the most promising markets and intel­lectual capitals in applied research. Develop a better understanding of the industry environment and esta­blish connections and first partnerships in the untapped Indian market Access a wide network of peers, mentors, and industry experts and ac­quire tools and skills to analyse the application of their research Boost the recognition of your inno­vation in another market Take a chance to earn a CHF 10,000 grant! MEET THE SELECTED SCIENCENTREPRENEURS 2024/2025 The Academia-Industry Training (AIT) Camp jury in India has selected 10 researchers from renowned Swiss universities to discover the market"
+    },
+    {
+      "id": "check-page-13b483c060",
+      "url": "https://www.venturelab.swiss/SwissPrimeSite",
+      "page": "details",
+      "excerpt": "Swiss Prime Site Start-up Accelerator Programme - Venturelab Venturelab Home Startups Programs Events Partnering About News Follow us: Linkedin / Facebook / X / Instagram / Youtube Home Startups Programs Events Partnering About News Swiss Prime Site Start-up Accelerator Program scroll south WE OFFER PERSPECTIVES As Switzerland's leading listed real estate company, Swiss Prime Site AG wants to be at the forefront of technological innovation and shape the digital transformation of the industry—together with Switzerland's most promising startups. WORKING WITH STARTUPS TO CREATE TOMORROW'S LIVING SPACES Swiss Prime Site (SPS) is the largest real estate company in Switzerland and one of the leading commercial real estate companies in Europe. The property portfolio is valued at approximately CHF 21 billion and includes own properties as well as those managed on behalf of third parties. Swiss Prime Site's own buildings, which are valued at CHF 13 billion, are concentrated in the office, retail and infrastructure segments in prime locations. The portfolio covers the densely populated regions of Zurich, Geneva and Basel, where SPS mainly owns properties in prime locations. The Asset Management business unit, Swiss Prime Site Solutions, manages assets totalling around CHF 8 billion. The product range includes open- and closed-end funds, as well as advisory services for third-party"
+    },
+    {
+      "id": "check-page-aa67e4c516",
+      "url": "https://www.venturelab.swiss/newsletter",
+      "page": "details",
+      "excerpt": "Subscribe to the Swiss Startup Insights - Venturelab Venturelab Home Startups Programs Events Partnering About News Follow us: Linkedin / Facebook / X / Instagram / Youtube Home Startups Programs Events Partnering About News Venturelab Newsletter scroll south More than 32,000 subscribers get our free newsletter to stay a step ahead on technology trends, venture capital in Switzerland, startups, events and workshops for entrepreneurs, and the industries of tomorrow. Subscribe to our weekly Swiss Startup Insights by Venturelab newsletter to stay ahead of innovation. Sign up for Venturelab's newsletter Subscribe 2026 11.11.2026 Swiss Startup Insights 04.11.2026 Swiss Startup Insights 28.10.2026 Swiss Startup Insights 21.10.2026 Swiss Startup Insights 14.10.2026 Swiss Startup Insights 07.10.2026 Swiss Startup Insights 30.09.2026 Swiss Startup Insights 23.09.2026 Swiss Startup Insights 16.09.2026 Swiss Startup Insights 10.09.2026 Top100 Swiss Startup Award 2026 02.09.2026 Swiss Startup Insights 26.08.2026 Swiss Startup Insights 19.08.2026 Swiss Startup Insights 12.08.2026 Swiss Startup Insights 29.07.2026 Swiss Startup Insights 15.07.2026 Swiss Startup Insights 08.07.2026 Swiss Startup Insights 01.07.2026 Swiss Startup Insights 24.06.2026 Swiss Startup Insights 17.06.2026 Swiss Startup Insights 10.06.2026 Swiss Startup Insights 03.06.2026 Swiss Startup Insights 27.05.2026 Swiss"
+    }
+  ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "info@venturelab.swiss",
+        "evidenceId": "check-email-4de47e15e3"
+      }
+    ],
     "phones": [],
     "routes": [],
     "applicationUrl": [
@@ -55,8 +186,29 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-609190bd54"
+      }
+    ],
+    "location": [
+      {
+        "value": "St",
+        "evidenceId": "check-location-005b663628"
+      },
+      {
+        "value": "Zug",
+        "evidenceId": "check-location-62c8688390"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.venturelab.swiss/startups",

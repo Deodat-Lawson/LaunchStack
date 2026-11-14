@@ -1,7 +1,79 @@
 {
   "programId": "imperial-enterprise",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://www.imperialenterpriselab.com/about/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imperialenterpriselab.com/about/case-studies/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imperialenterpriselab.com/about/contact/",
+      "page": "details",
+      "anchor": "Contact",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imperialenterpriselab.com/about/our-team/",
+      "page": "details",
+      "anchor": "Our Team",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imperialenterpriselab.com/events/applying-to-the-green-tech-legal-collaborative-top-tips-for-startups/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imperialenterpriselab.com/events/how-to-apply-innovator-founder/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imperialenterpriselab.com/investment/",
+      "page": "terms",
+      "anchor": "Investment",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imperialenterpriselab.com/investment/investment-portal/",
+      "page": "terms",
+      "anchor": "Investment Portal",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imperialenterpriselab.com/investment/office-hours/",
+      "page": "terms",
+      "anchor": "Investment Office Hours",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.imperialenterpriselab.com/programmes/",
       "page": "details",
@@ -11,17 +83,41 @@
       "origin": "official"
     },
     {
-      "url": "https://www.imperialenterpriselab.com/programmes/earthscale/",
+      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
       "page": "details",
-      "anchor": "EarthScale",
-      "fetched": false,
+      "anchor": "Commonwealth Startup Fellowship",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.imperialenterpriselab.com/programmes/commonwealth-startup-fellowship/",
+      "url": "https://www.imperialenterpriselab.com/programmes/earthscale/",
       "page": "details",
-      "anchor": "Commonwealth Startup Fellowship",
+      "anchor": "EarthScale",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imperialenterpriselab.com/programmes/global-challenge-lab-2026/",
+      "page": "details",
+      "anchor": "Global Challenge Lab",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imperialenterpriselab.com/programmes/imperial-be/",
+      "page": "details",
+      "anchor": "Imperial BE",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imperialenterpriselab.com/programmes/vcc/",
+      "page": "details",
+      "anchor": "Venture Catalyst Challenge",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -35,49 +131,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.imperialenterpriselab.com/programmes/global-challenge-lab-2026/",
+      "url": "https://www.imperialenterpriselab.com/resource-finder/?_startup_area=startup-accelerators",
       "page": "details",
-      "anchor": "Global Challenge Lab",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.imperialenterpriselab.com/programmes/vcc/",
-      "page": "details",
-      "anchor": "Venture Catalyst Challenge",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.imperialenterpriselab.com/programmes/imperial-be/",
-      "page": "details",
-      "anchor": "Imperial BE",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.imperialenterpriselab.com/about/",
-      "page": "details",
-      "anchor": "About",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.imperialenterpriselab.com/about/our-team/",
-      "page": "details",
-      "anchor": "Our Team",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.imperialenterpriselab.com/about/contact/",
-      "page": "details",
-      "anchor": "Contact",
+      "anchor": "Find other startup accelerators & networks",
       "fetched": false,
       "blocked": null,
       "origin": "official"

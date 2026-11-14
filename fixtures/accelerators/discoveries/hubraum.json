@@ -1,7 +1,103 @@
 {
   "programId": "hubraum",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://www.hubraum.com/initiatives/digital-innovation-program/",
+      "page": "details",
+      "anchor": "Digital Innovation Program",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hubraum.com/initiatives/first-mover-api-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hubraum.com/initiatives/past-programs/",
+      "page": "details",
+      "anchor": "Past Initiatives",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hubraum.com/initiatives/past-programs/5g-consumer-entertainment-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hubraum.com/initiatives/past-programs/5g-early-access-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hubraum.com/initiatives/past-programs/5g-prototyping/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hubraum.com/initiatives/past-programs/accuracy-unlocked/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hubraum.com/initiatives/past-programs/ai-co-creation-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hubraum.com/initiatives/past-programs/campus-network-program-2020/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hubraum.com/initiatives/past-programs/campus-network-program-2021/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hubraum.com/initiatives/past-programs/consumer-iot-esim-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hubraum.com/initiatives/past-programs/ios-augmented-reality-innovation-program-2021/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.hubraum.com/initiatives/security-co-creation-program/",
       "page": "details",
@@ -11,26 +107,10 @@
       "origin": "official"
     },
     {
-      "url": "https://www.hubraum.com/initiatives/digital-innovation-program/",
-      "page": "details",
-      "anchor": "Digital Innovation Program",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.hubraum.com/initiatives/past-programs/",
-      "page": "details",
-      "anchor": "Past Initiatives",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.hubraum.com/why-hubraum",
       "page": "details",
       "anchor": "About Us",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

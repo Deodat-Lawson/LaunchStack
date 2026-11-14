@@ -1,37 +1,115 @@
 {
   "programId": "z-fellows",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://www.zfellows.com/"
+    "https://www.zfellows.com/",
+    "https://www.zfellows.com/writings-copy/choosing-your-lifes-work-changing-the-world-and-dealing-with-setbacks",
+    "https://www.zfellows.com/writings/choosing-your-lifes-work-changing-the-world-and-dealing-with-setbacks",
+    "https://www.zfellows.com/writings-copy/insights-from-marcus-aurelius-elon-musk-s-algorithm-for-managing-companies-and-naval-s-best-tweets-on-startups"
   ],
   "evidence": [
     {
+      "id": "check-duration-371c4c1e1a",
+      "url": "https://www.zfellows.com/",
+      "title": "Z Fellows — homepage",
+      "excerpt": "Mentors FAQs Blog Startup Workshop Apply Now 1 week. $10,000. Your Fast-Track Into Silicon Valley. A",
+      "page": "details"
+    },
+    {
+      "id": "check-format-4143b11afd",
+      "url": "https://www.zfellows.com/",
+      "title": "Z Fellows — homepage",
+      "excerpt": "there are Z Fellows all over the world. Cohorts are mostly virtual, with the last day of the program in-person in SF or NYC.",
+      "page": "details"
+    },
+    {
+      "id": "check-format-77bc0fd78a",
+      "url": "https://www.zfellows.com/",
+      "title": "Z Fellows — homepage",
+      "excerpt": "are mostly virtual, with the last day of the program in-person in SF or NYC. Most Z Fellows end up coming to SF or NYC",
+      "page": "details"
+    },
+    {
       "id": "check-name-6db0185f34",
       "url": "https://www.zfellows.com/",
-      "title": "Z Fellows — homepage checked by scrape.py",
+      "title": "Z Fellows — homepage",
       "excerpt": "Z Fellows | Get Fast-Tracked into Silicon Valley Z Fellows About",
       "page": "details"
     },
     {
+      "id": "check-rolling-7ede7b1628",
+      "url": "https://www.zfellows.com/",
+      "title": "Z Fellows — homepage",
+      "excerpt": "to drop out or quit my job? No. What’s the timeline? Applications are reviewed on a rolling basis and there is no deadline to submit an application. We run multiple cohorts",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2fbb4e4197",
+      "url": "https://www.zfellows.com/writings/choosing-your-lifes-work-changing-the-world-and-dealing-with-setbacks",
+      "title": "Z Fellows — terms page",
+      "excerpt": "Apply now → https://docs.google.com/forms/d/1z5HG9Pj0hIxS2oZL_wcJS5QqDZlcVbkhYGHp5Kp_IGM",
+      "page": "terms"
+    },
+    {
       "id": "check-route-40fa6d01f9",
       "url": "https://www.zfellows.com/",
-      "title": "Z Fellows — homepage checked by scrape.py",
+      "title": "Z Fellows — homepage",
       "excerpt": "Apply Now → https://docs.google.com/forms/u/0/d/1z5HG9Pj0hIxS2oZL_wcJS5QqDZlcVbkhYGHp5Kp_IGM/viewform",
       "page": "details"
     },
     {
+      "id": "check-route-7e2c98011e",
+      "url": "https://www.zfellows.com/writings-copy/insights-from-marcus-aurelius-elon-musk-s-algorithm-for-managing-companies-and-naval-s-best-tweets-on-startups",
+      "title": "Z Fellows — portfolio page",
+      "excerpt": "Apply Now → https://docs.google.com/forms/u/0/d/1z5HG9Pj0hIxS2oZL_wcJS5QqDZlcVbkhYGHp5Kp_IGM/viewform?edit_requested=true",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-83a6c12fda",
+      "url": "https://www.zfellows.com/writings-copy/choosing-your-lifes-work-changing-the-world-and-dealing-with-setbacks",
+      "title": "Z Fellows — terms page",
+      "excerpt": "Apply Now → https://docs.google.com/forms/u/0/d/1z5HG9Pj0hIxS2oZL_wcJS5QqDZlcVbkhYGHp5Kp_IGM/viewform?edit_requested=true",
+      "page": "terms"
+    },
+    {
       "id": "check-route-8bad5ad610",
       "url": "https://www.zfellows.com/",
-      "title": "Z Fellows — homepage checked by scrape.py",
+      "title": "Z Fellows — homepage",
       "excerpt": "Apply Now → https://docs.google.com/forms/u/0/d/1z5HG9Pj0hIxS2oZL_wcJS5QqDZlcVbkhYGHp5Kp_IGM/viewform?edit_requested=true",
       "page": "details"
     },
     {
       "id": "check-route-ed18bcf52b",
       "url": "https://www.zfellows.com/",
-      "title": "Z Fellows — homepage checked by scrape.py",
+      "title": "Z Fellows — homepage",
       "excerpt": "Z Fellows → https://www.zfellows.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-cad05dd0fe",
+      "url": "https://www.zfellows.com/",
+      "page": "details",
+      "excerpt": "Z Fellows | Get Fast-Tracked into Silicon Valley Z Fellows About Mentors FAQs Blog Startup Workshop Apply Now 1 week. $10,000. Your Fast-Track Into Silicon Valley. A one-week experience bringing you together with founders of multi billion dollar companies. Apply Now There's a pattern among the most successful founders. They all started by learning from those who have built multi billion dollar companies. Getting mentored by proven founders is the fastest way to accelerate. Success leaves clues—follow them. Sergey brin & Larry Page (Founders of google) Mentored by Andy Bechtolsheim (founder of Sun Microsystems) mark zuckerberg (Founder of Facebook) Mentored by Peter Thiel (founder of PayPal) Steve Chen, Chad Hurley & Jawed Karim (Founders of YouTube) Mentored by Roelof Botha (PayPal CFO & Sequoia Capital) Z Fellows connects really early builders with multi billion dollar founders. Who are Z Fellows? Z Fellows are technical builders of all ages working on side projects and startups. We are your first believer . We’ve worked with high school dropouts, college students, and people with full-time jobs across a variety of industries including consumer, social, enterprise, defense, healthcare, edtech, fintech, gaming, cloud infrastructure, cybersecurity, crypto, AI, ML, climate, biotech, and more. Why Z Fellows? ABOUT THE PROGRAM A one-week experience bringing together ten builders"
+    },
+    {
+      "id": "check-page-376aa12764",
+      "url": "https://www.zfellows.com/writings-copy/choosing-your-lifes-work-changing-the-world-and-dealing-with-setbacks",
+      "page": "terms",
+      "excerpt": "Z Fellows Z Fellows About Mentors FAQs Blog Startup Workshop Apply Now Choosing your life’s work, changing the world, and dealing with setbacks November 4, 2024 1: Sam Altman on Choosing Your Life’s Work “It doesn’t matter how fast you move if it’s in a worthless direction. Picking the right thing to work on is the most important element of productivity and usually almost ignored. So think about it more! Independent thought is hard but it’s something you can get better at with practice. Develop the confidence to stick with your convictions. It will let you be courageous when you’re right about something important that most people don’t see.” Source: https://blog.samaltman.com/productivity 2: Brian Chesky on Changing the World Brian Chesky is the co-founder of AirBnB, who cites this quote from his design professor as a great source of inspiration. “I remember the first day at Rhode Island School of Design I had a teacher who said, ‘You’re a designer. You live in other people’s worlds because they designed that world for you, but those people were no smarter than you. It is your time to design the world you live in.’ This had a huge effect on me because it allowed me to stop editing my imagination. I think we go through our lives limiting our potential, and when times are tough it’s easy to convince ourselves that something isn’t possible, but if you start there then you limit"
+    },
+    {
+      "id": "check-page-6d1cf3f935",
+      "url": "https://www.zfellows.com/writings/choosing-your-lifes-work-changing-the-world-and-dealing-with-setbacks",
+      "page": "terms",
+      "excerpt": "Choosing your life’s work, changing the world, and dealing with setbacks | Z Fellows About FAQ Blog Startup Workshop Apply now Choosing your life’s work, changing the world, and dealing with setbacks Nov 4, 2024 by Z Fellows 1: Sam Altman on Choosing Your Life’s Work “It doesn’t matter how fast you move if it’s in a worthless direction. Picking the right thing to work on is the most important element of productivity and usually almost ignored. So think about it more! Independent thought is hard but it’s something you can get better at with practice. Develop the confidence to stick with your convictions. It will let you be courageous when you’re right about something important that most people don’t see.” Source: https://blog.samaltman.com/productivity 2: Brian Chesky on Changing the World Brian Chesky is the co-founder of AirBnB, who cites this quote from his design professor as a great source of inspiration. “I remember the first day at Rhode Island School of Design I had a teacher who said, ‘You’re a designer. You live in other people’s worlds because they designed that world for you, but those people were no smarter than you. It is your time to design the world you live in.’ This had a huge effect on me because it allowed me to stop editing my imagination. I think we go through our lives limiting our potential, and when times are tough it’s easy to convince ourselves that"
+    },
+    {
+      "id": "check-page-133ec41490",
+      "url": "https://www.zfellows.com/writings-copy/insights-from-marcus-aurelius-elon-musk-s-algorithm-for-managing-companies-and-naval-s-best-tweets-on-startups",
+      "page": "portfolio",
+      "excerpt": "Z Fellows Z Fellows About Mentors FAQs Blog Startup Workshop Apply Now Insights from Marcus Aurelius, Elon Musk's algorithm for managing companies, and Naval's best tweets on startups July 21, 2025 1: Insights from Marcus Aurelius “You have power over your mind - not outside events. Realize this, and you will find strength.” “The happiness of your life depends upon the quality of your thoughts.” “If you are distressed by anything external, the pain is not due to the thing itself, but to your estimate of it; and this you have the power to revoke at any moment.” “It is not death that a man should fear, but he should fear never beginning to live.” “Don't go on discussing what a good person should be. Just be one.” Source: Meditations by Marcus Aurelius 2: Elon Musk’s algorithm for managing companies Question every requirement — “Each should come with the name of the person who made it. Requirements from smart people are the most dangerous, because people are less likely to question them. Always do so, even if the requirement came from me. Then make the requirements less dumb.“ Delete any part or process you can — “You may have to add them back later. In fact, if you do not end up adding back at least 10% of them, then you didn’t delete enough.“ Simplify and optimize — “A common mistake is to simplify and optimize a part or a process that should not exist.” Accelerate cycle time —"
     }
   ],
   "findings": {
@@ -45,6 +123,10 @@
       {
         "value": "https://docs.google.com/forms/u/0/d/1z5HG9Pj0hIxS2oZL_wcJS5QqDZlcVbkhYGHp5Kp_IGM/viewform",
         "evidenceId": "check-route-40fa6d01f9"
+      },
+      {
+        "value": "https://docs.google.com/forms/d/1z5HG9Pj0hIxS2oZL_wcJS5QqDZlcVbkhYGHp5Kp_IGM",
+        "evidenceId": "check-route-2fbb4e4197"
       }
     ],
     "applicationUrl": [
@@ -56,8 +138,34 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-7ede7b1628"
+      }
+    ],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "1",
+        "evidenceId": "check-duration-371c4c1e1a"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-4143b11afd"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-77bc0fd78a"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

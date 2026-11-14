@@ -9,14 +9,14 @@
   "websiteUrl": "https://sosv.com/apply/sosv/",
   "applyUrl": "https://sosv.com/apply",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Contact Hi! Please introduce us to a point person for your company during the application process. First Name * Last Name * Contact Email * Enter Email Confirm Email We'll use this email address to confirm that we have received your application, and to subscribe you to our newsletters if you decide to opt in. It will also be our primary point of contact if we're interested in your application, so please make sure that it is valid, up-to-date and checked regularly. Company Give us a quick peek at your company. Company Name * Website Description, in 140 characters * Location * City State / Province / Region Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei Darussalam Bulgaria Burkina Faso Burundi Cabo Verde Cambodia Cameroon Canada Cayman Islands Central African Republic Chad Chile China Christmas Island Cocos Islands Colombia Comoros Congo Congo, Democratic Republic of the Cook Islands Costa Rica Croatia Cuba Curaçao Cyprus Czechia Côte d'Ivoi No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "#1 in Early Stage Deep Tech,​​ IndieBio is a startup accelerator for biotechnology. With two offices in New York and San Francisco, we specialize in deep tech startups focused on human and planetary health. IndieBio is a program of SOSV, a global venture capital firm providing multi-stage investment to support big ideas.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Not published on the official page.",
     "sourceIds": [
       "homepage"
     ],
@@ -27,8 +27,8 @@
       "id": "official-logo",
       "url": "https://sosv.com/apply/sosv/",
       "title": "SOSV New York — official mark on the retrieved page",
-      "quote": "https://sosv.com/wp-content/themes/sosv-faq/assets/images/logo.svg",
-      "checkedAt": "2026-11-03T00:18:31.000Z"
+      "quote": "https://sosv.com/wp-content/uploads/2026/03/sosv-logo-square.jpg",
+      "checkedAt": "2026-11-14T20:38:33.000Z"
     },
     {
       "id": "homepage",
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "sosv-ny-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://sosv.com/apply",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

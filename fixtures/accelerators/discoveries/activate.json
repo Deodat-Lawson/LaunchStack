@@ -1,11 +1,35 @@
 {
   "programId": "activate",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://activate.org/about-us",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://activate.org/application-interest/thank-you",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://activate.org/apply",
       "page": "application",
       "anchor": "Apply Now",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://activate.org/apply?hsLang=en",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -19,34 +43,18 @@
       "origin": "official"
     },
     {
+      "url": "https://activate.org/faq?hsLang=en",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://activate.org/global-programs",
       "page": "details",
       "anchor": "Programs",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://activate.org/japan-bridge-program",
-      "page": "details",
-      "anchor": "Japan Bridge",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://activate.org/about-us",
-      "page": "details",
-      "anchor": "About Us",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://activate.org/news/activate-welcomes-50-new-fellows-to-cohort-2026?hsLang=en",
-      "page": "batches",
-      "anchor": "Read more >",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -59,11 +67,107 @@
       "origin": "official"
     },
     {
+      "url": "https://activate.org/japan-bridge-program",
+      "page": "details",
+      "anchor": "Japan Bridge",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://activate.org/la-bridge-info",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://activate.org/la-bridge-info?hsLang=en",
+      "page": "application",
+      "anchor": "Applications Now Open: Louisiana BRIDGE",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://activate.org/news/activate-opens-2024-fellowship-applications-during-climate-week-nyc",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://activate.org/news/activate-updates-october-2026?hsLang=en",
       "page": "batches",
       "anchor": "",
       "fetched": false,
       "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://activate.org/news/activate-welcomes-50-new-fellows-to-cohort-2026?hsLang=en",
+      "page": "batches",
+      "anchor": "Read more >",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://activate.org/news/how-activate-fellows-are-applying-deep-tech-innovations-to-reimagine-mining",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://activate.org/news/where-does-climate-investment-currently-stand",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://activate.org/singapore-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://activate.org/singapore-apply?hsLang=en",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://info.activate.org/singapore-apply?hsLang=en",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.activate.org/apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.activate.org/apply/?hsLang=en",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     }
   ]

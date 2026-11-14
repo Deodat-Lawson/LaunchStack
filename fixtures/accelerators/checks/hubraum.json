@@ -1,24 +1,220 @@
 {
   "programId": "hubraum",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.hubraum.com/",
-    "https://www.hubraum.com/initiatives/security-co-creation-program/"
+    "https://www.hubraum.com/initiatives/digital-innovation-program/",
+    "https://www.hubraum.com/initiatives/past-programs/",
+    "https://www.hubraum.com/initiatives/security-co-creation-program/",
+    "https://www.hubraum.com/why-hubraum",
+    "https://www.hubraum.com/initiatives/first-mover-api-program/",
+    "https://www.hubraum.com/initiatives/past-programs/5g-consumer-entertainment-program/",
+    "https://www.hubraum.com/initiatives/past-programs/5g-early-access-program/",
+    "https://www.hubraum.com/initiatives/past-programs/5g-prototyping/",
+    "https://www.hubraum.com/initiatives/past-programs/accuracy-unlocked/",
+    "https://www.hubraum.com/initiatives/past-programs/ai-co-creation-program/",
+    "https://www.hubraum.com/initiatives/past-programs/campus-network-program-2020/",
+    "https://www.hubraum.com/initiatives/past-programs/campus-network-program-2021/",
+    "https://www.hubraum.com/initiatives/past-programs/consumer-iot-esim-program/",
+    "https://www.hubraum.com/initiatives/past-programs/ios-augmented-reality-innovation-program-2021/"
   ],
   "evidence": [
     {
+      "id": "check-announced-e2d16513e2",
+      "url": "https://www.hubraum.com/initiatives/past-programs/ios-augmented-reality-innovation-program-2021/",
+      "title": "hubraum — program page",
+      "excerpt": "is no better way to experience the tangible tomorrow. Application Deadline closed on 4th August. You can still apply for a last chance Wildcard Pitch . Our focus",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-816c95dde4",
+      "url": "https://www.hubraum.com/initiatives/past-programs/5g-consumer-entertainment-program/",
+      "title": "hubraum — program page",
+      "excerpt": "between hubraum and Quake Capital. Benefits A 3-month accelerator program that helps you boost your",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e40d9c0cef",
+      "url": "https://www.hubraum.com/initiatives/first-mover-api-program/",
+      "title": "hubraum — program page",
+      "excerpt": "alignment with the customer Step 3 Testing 1 to 2 months test time, depending on the use case Does your",
+      "page": "details"
+    },
+    {
+      "id": "check-format-10b6d0872a",
+      "url": "https://www.hubraum.com/initiatives/past-programs/campus-network-program-2020/",
+      "title": "hubraum — program page",
+      "excerpt": "possible on the campus with no problems. One example is remote maintenance of machines performed by manufacturers.",
+      "page": "details"
+    },
+    {
+      "id": "check-format-65cfc96770",
+      "url": "https://www.hubraum.com/initiatives/digital-innovation-program/",
+      "title": "hubraum — program page",
+      "excerpt": "phone. That’s the idea behind ZeroMissed.ai – the smart virtual phone assistant developed by one of our Digital Innovation",
+      "page": "details"
+    },
+    {
+      "id": "check-format-891b3ebbf8",
+      "url": "https://www.hubraum.com/initiatives/past-programs/campus-network-program-2021/",
+      "title": "hubraum — program page",
+      "excerpt": "possible on the campus with no problems. One example is remote maintenance of machines performed by manufacturers.",
+      "page": "details"
+    },
+    {
+      "id": "check-format-901dda92d2",
+      "url": "https://www.hubraum.com/",
+      "title": "hubraum — homepage",
+      "excerpt": "Founder of family.cards “MATSUKO’s mission is to imbue remote communication with a sense of physical presence and in",
+      "page": "details"
+    },
+    {
+      "id": "check-format-a5479d1681",
+      "url": "https://www.hubraum.com/initiatives/past-programs/5g-prototyping/",
+      "title": "hubraum — program page",
+      "excerpt": "We are looking for diverse solutions focused on: Virtual Gaming Virtual Gaming Entertainment Future Mobility",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c1032cfa06",
+      "url": "https://www.hubraum.com/initiatives/past-programs/5g-consumer-entertainment-program/",
+      "title": "hubraum — program page",
+      "excerpt": "interact with digital content and connect the physical and virtual world! Application phase for the program has ended Program",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f6f3a7a132",
+      "url": "https://www.hubraum.com/initiatives/past-programs/5g-prototyping/",
+      "title": "hubraum — program page",
+      "excerpt": "looking for diverse solutions focused on: Virtual Gaming Virtual Gaming Entertainment Future Mobility Timeline Our partners",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f8b3788141",
+      "url": "https://www.hubraum.com/initiatives/digital-innovation-program/",
+      "title": "hubraum — program page",
+      "excerpt": "! Their tech makes pushing security patches risk-free, remote, and quick – even if something goes wrong mid-process. As",
+      "page": "details"
+    },
+    {
+      "id": "check-format-fe5301dfeb",
+      "url": "https://www.hubraum.com/initiatives/past-programs/campus-network-program-2020/",
+      "title": "hubraum — program page",
+      "excerpt": "areas & benefits for you Our Focus Areas: Augmented & Virtual Reality (incl. IoT related solutions) Automated Guided",
+      "page": "details"
+    },
+    {
+      "id": "check-location-fd0dd236ab",
+      "url": "https://www.hubraum.com/initiatives/security-co-creation-program/",
+      "title": "hubraum — program page",
+      "excerpt": "Trust. QuantiCor QuantiCor Security, based in Darmstadt, is at the forefront of developing",
+      "page": "details"
+    },
+    {
       "id": "check-name-36a752a84d",
       "url": "https://www.hubraum.com/",
-      "title": "hubraum — homepage checked by scrape.py",
+      "title": "hubraum — homepage",
       "excerpt": "hubraum – Tech Incubator of Deutsche Telekom – Our tech incubator",
       "page": "details"
     },
     {
       "id": "check-route-db54ebad08",
       "url": "https://www.hubraum.com/",
-      "title": "hubraum — homepage checked by scrape.py",
+      "title": "hubraum — homepage",
       "excerpt": "https://www.hubraum.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-7b05c750a4",
+      "url": "https://www.hubraum.com/",
+      "page": "details",
+      "excerpt": "hubraum – Tech Incubator of Deutsche Telekom – Our tech incubator helps to take your product to the next level As startup incubator we offer coworking spaces, investments access to Deutsche Telekom Skip to content Initiatives Tangible Tomorrow 2026 Security Co-Creation Program Digital Innovation Program MWC 2026 Prototyping Campus Campus Berlin Campus Krakow Past Initiatives Startups & Partners Top Tech Tales Flexperto Xplora MonoLets News Blog Downloads Events Why hubraum About Us Team Search > Get in touch hubraum is Deutsche Telekom’s tech incubator. By bringing startups, developers, ecosystem partners and leading digital telco together, hubraum sparks innovation transfer and creates business opportunities for all sides. Recent Initiatives Tangible Tomorrow 2026 (international) Application Closed Tangible Tomorrow is a program focused on accelerating innovation by bringing together universities, startups, and spin-off companies working in telecommunications and human–machine interaction. The initiative supports projects at different stages of development — from early concepts and research to prototypes and pilot implementations. Its goal is to help promising ideas move beyond the lab and into practical use, delivering value both to industry and to society more broadly. Read more Security Co-Creation Program Application Closed Welcome to our Security Co-Creation Program — an"
+    },
+    {
+      "id": "check-page-6062c83ba0",
+      "url": "https://www.hubraum.com/initiatives/digital-innovation-program/",
+      "page": "details",
+      "excerpt": "Digital Innovation Program – hubraum – Tech Incubator of Deutsche Telekom Skip to content Initiatives Tangible Tomorrow 2026 Security Co-Creation Program Digital Innovation Program MWC 2026 Prototyping Campus Campus Berlin Campus Krakow Past Initiatives Startups & Partners Top Tech Tales Flexperto Xplora MonoLets News Blog Downloads Events Why hubraum About Us Team Search > Get in touch Digital Innovation Program Digital innovators, this one’s for you! Our latest program is designed for startups and SMEs looking to explore and scale their solutions using cutting-edge technologies. Digital Innovation Program Case Study Report How can startups and large enterprises turn innovative ideas into scalable solutions? This report summarizes the outcomes of the Digital Innovation Program, showcasing how startups, industry experts, and Deutsche Telekom collaborated to validate technologies, solve real business challenges, and accelerate innovation in areas such as AI, IoT, 5G, and Industry 4.0. Go to download Program Participants Atmesys Focused on IoT for agriculture, smart cities, and industry, Atmesys’ team is tackling real-world challenges with smart 5G-enabled solutions. With Deutsche Telekom and T-Mobile Polska’s unique resources, we’re integrating eSIM and IoT technologies into their devices, enabling seamless global provisioning for their gateways and ensuring they work"
+    },
+    {
+      "id": "check-page-0c51938305",
+      "url": "https://www.hubraum.com/initiatives/past-programs/",
+      "page": "details",
+      "excerpt": "Past Programs – hubraum – Tech Incubator of Deutsche Telekom Skip to content Initiatives Tangible Tomorrow 2026 Security Co-Creation Program Digital Innovation Program MWC 2026 Prototyping Campus Campus Berlin Campus Krakow Past Initiatives Startups & Partners Top Tech Tales Flexperto Xplora MonoLets News Blog Downloads Events Why hubraum About Us Team Search > Get in touch Past Initiatives Overview Tangible Tomorrow 2025 -> Security Co-creation Program 2025 -> First Mover API Program 2024 -> Telco Network API Challenge 2024 -> AI Co-Creation Program 2024 – > Wi-Fi Sensing Program 2024 -> IoT Space Challenge with ESA 2023 -> 5G Early Access Program 2023 -> Snapdragon Spaces Program 2022 -> iOS AR Innovation Program with Apple 2021 -> IoT Creators Residency Program 2021 -> Accuracy Unlocked 2021 -> Campus Network Program 2021 -> Network Sustainability Award 2021 -> 5G Consumer Entertainment Program 2020 -> Mixed Reality Program with Nreal 2020 -> Campus Network Program 2020 -> IoT Program with Microsoft 2018 -> LTE-M Prototyping 2018 -> Consumer IoT eSim Program 2019 -> Low Latency Prototyping 2018 -> 5G Prototyping 2018 -> Contact Initiatives Prototyping Campus Campus Berlin Campus Krakow Data Privacy Imprint Representatives Cookie Policy Privacy Settings Back to the top © hubraum 2026 Initiatives Toggle child menu Tangible Tomorrow 2026 Security Co-Creation Program Digital"
+    },
+    {
+      "id": "check-page-01367a0fc2",
+      "url": "https://www.hubraum.com/initiatives/security-co-creation-program/",
+      "page": "details",
+      "excerpt": "Security Co-Creation Program – hubraum – Tech Incubator of Deutsche Telekom Skip to content Initiatives Tangible Tomorrow 2026 Security Co-Creation Program Digital Innovation Program MWC 2026 Prototyping Campus Campus Berlin Campus Krakow Past Initiatives Startups & Partners Top Tech Tales Flexperto Xplora MonoLets News Blog Downloads Events Why hubraum About Us Team Search > Get in touch Security Co-Creation Program Security StartUps 1st Batch DeepKeep DeepKeep empowers large corporates that rely on AI, GenAI and LLM to manage risk and protect growth with AI-Native Security and Trust. QuantiCor QuantiCor Security, based in Darmstadt, is at the forefront of developing cutting-edge security solutions. The award-winning cybersecurity platform PQVault, recognized with the IT Security Award, provides essential tools for experts, developers, and SynthO Syntho supports any form of tabular data and also supports complex data types. Tabular data is a type of structured data that is organized in rows and columns, typically in the form of a table. Most of the times, you see this type of data in database Virtue AI Virtue AI empowers businesses to harness the potential of AI models and agents securely with their unique and research-driven operational frameworks and models. Whispeak Whispeak is a Biometric Authentication Solution for multiple purposes and uses. Based on voice"
+    },
+    {
+      "id": "check-page-6b285399fd",
+      "url": "https://www.hubraum.com/why-hubraum",
+      "page": "details",
+      "excerpt": "Why hubraum – hubraum – Tech Incubator of Deutsche Telekom Skip to content Initiatives Tangible Tomorrow 2026 Security Co-Creation Program Digital Innovation Program MWC 2026 Prototyping Campus Campus Berlin Campus Krakow Past Initiatives Startups & Partners Top Tech Tales Flexperto Xplora MonoLets News Blog Downloads Events Why hubraum About Us Team Search > Get in touch Why hubraum? We strive for excellence, connecting you with all the resources you need to succeed. A collaboration with us will mean early access to futuristic technology; consultations with tech and business experts; access to our co-working spaces in Berlin and Krakow; the opportunity to tap into Deutsche Telekom’s customer base. Pioneering partnerships – stronger together Benefits of cooperating with hubraum Access tomorrow’s technology, today Test your products on futuristic infrastructure (5G networks, testbeds, etc) at our campuses. Profit from our know-how Tap into the expertise of hundreds of Deutsche Telekom tech geniuses, with in-depth knowledge about everything from AI, ISAC to quantum communication. Benefit from our connections We’ll connect you with our global network of partners, founders and investors. Capitalize on our VC network We’ve got over a decade of incubating startups under our belt and know our way around the VC ecosystem — we’ve got this. Founder Stories hubraum is a great partner —"
+    },
+    {
+      "id": "check-page-7a9154515a",
+      "url": "https://www.hubraum.com/initiatives/first-mover-api-program/",
+      "page": "details",
+      "excerpt": "First Mover API Program – hubraum – Tech Incubator of Deutsche Telekom Skip to content Initiatives Tangible Tomorrow 2026 Security Co-Creation Program Digital Innovation Program MWC 2026 Prototyping Campus Campus Berlin Campus Krakow Past Initiatives Startups & Partners Top Tech Tales Flexperto Xplora MonoLets News Blog Downloads Events Why hubraum About Us Team Search > Get in touch First Mover API Program Apply here Join the First Mover API Program Welcome to the API world of Deutsche Telekom! MagentaBusiness APIs are all about empowering businesses and developers with enhanced communication capabilities. Our network APIs grant users access to dedicated quality of service for the network, device location services, and real-time device status checks, and more. These APIs streamline the integration of communication functionalities, ranging from messaging and voice services to immersive video conferencing and beyond. The commitment to accessibility is reflected in the diverse SDK offerings, catering to various programming languages, and ensuring seamless integration for developers, regardless of their coding preferences. Get to know our Network APIs The Quality on Demand (QoD) API for stable latency lets you specify data-transfer rates managed by our networks for all connected devices. The Location Verification API supplies location information from the sim card, making you"
+    },
+    {
+      "id": "check-page-5f4db34f97",
+      "url": "https://www.hubraum.com/initiatives/past-programs/5g-consumer-entertainment-program/",
+      "page": "details",
+      "excerpt": "5G consumer entertainment program – hubraum – Tech Incubator of Deutsche Telekom Skip to content Initiatives Tangible Tomorrow 2026 Security Co-Creation Program Digital Innovation Program MWC 2026 Prototyping Campus Campus Berlin Campus Krakow Past Initiatives Startups & Partners Top Tech Tales Flexperto Xplora MonoLets News Blog Downloads Events Why hubraum About Us Team Search > Get in touch 5G entertainment 5G is the new mobile communications standard. It makes brand new applications possible that require particularly fast networks with high capacity and short response times. 5G will change the way we communicate, how we interact with digital content and connect the physical and virtual world! Application phase for the program has ended Program Show, don’t tell We are very excited to make this next-gen technology tangible: something we can quite literally put into the hands of Deutsche Telekom’s customers. Together with our partner Quake Capital* we’re on the hunt for world class entrepreneurs and startups that bring compelling 5G-enhanced applications to mobile devices. This is your chance to bring 5G to the masses. Plus, in working together with hubraum, Deutsche Telekom and Quake you’ll have the best partners you could hope for to join you in the 5G revolution. We’re hosting the program right next to Deutsche Telekom’s HQ in the beautiful city of Bonn. This will give you"
+    },
+    {
+      "id": "check-page-389fad64c1",
+      "url": "https://www.hubraum.com/initiatives/past-programs/5g-early-access-program/",
+      "page": "details",
+      "excerpt": "5G Early Access Program – hubraum – Tech Incubator of Deutsche Telekom Skip to content Initiatives Tangible Tomorrow 2026 Security Co-Creation Program Digital Innovation Program MWC 2026 Prototyping Campus Campus Berlin Campus Krakow Past Initiatives Startups & Partners Top Tech Tales Flexperto Xplora MonoLets News Blog Downloads Events Why hubraum About Us Team Search > Get in touch 5G Early Access Program The 5G Early Access Program is a one-month program which culminates in startups testing their product in one of our 5G testbeds. Deutsche Telekom offers indoor and outdoor 5G testbeds in Berlin, Krakow and Seattle — environments where developers, startups, corporates, and hyperscalers can test 5G APIs directly on a fully functional 5G standalone core network. We are currently updating our testbeds and this program will resume in the second half of 2023. In the meantime… 5G APIs Our 5G APIs interact directly with our 5G Radio Access Network (RAN). They may allow users to obtain information from the network, such as location, congestion, and more, or to configure network settings.These APIs, such as 5G Latency API, 5G QoS API or 5G Throughput API, can, for example, set a quality of service for a device or IP flow. Stay ahead of the competition Developers, startups, corporates and hyperscalers can apply for our 5G Early Access Program to validate the impact of our 5G APIs on"
+    },
+    {
+      "id": "check-page-8453d14d90",
+      "url": "https://www.hubraum.com/initiatives/past-programs/5g-prototyping/",
+      "page": "details",
+      "excerpt": "5G prototyping – hubraum – Tech Incubator of Deutsche Telekom Skip to content Initiatives Tangible Tomorrow 2026 Security Co-Creation Program Digital Innovation Program MWC 2026 Prototyping Campus Campus Berlin Campus Krakow Past Initiatives Startups & Partners Top Tech Tales Flexperto Xplora MonoLets News Blog Downloads Events Why hubraum About Us Team Search > Get in touch 5G prototyping 5G is the next generation of communication networks designed to serve a Smart Digital Society. By delivering extreme broadband, ultra-robust low latency connectivity and massive Internet of Things networking, 5G will transform our lives, our businesses and our society. Working intensively with customers and industry partners, Deutsche Telekom is at the forefront of the development of the 5G standard that will redefine connectivity. 5G is driven by customer use cases – and will encompass three main classes of networks: Extreme Mobile Broadband for consumer digital services such as Immersive Media, Massive Machine-Type Communication for Internet of Things applications and Mission-Critical Machine-Type Communications providing – for example – low latency and reliability for industrial robotics. Deutsche Telekom’s early direct engagement with application developers and other innovators in activities such as hubraum 5G Prototyping will ensure that operators and innovators will ultimately bring"
+    },
+    {
+      "id": "check-page-7dcdf9ebea",
+      "url": "https://www.hubraum.com/initiatives/past-programs/accuracy-unlocked/",
+      "page": "details",
+      "excerpt": "accuracy unlocked – hubraum – Tech Incubator of Deutsche Telekom Skip to content Initiatives Tangible Tomorrow 2026 Security Co-Creation Program Digital Innovation Program MWC 2026 Prototyping Campus Campus Berlin Campus Krakow Past Initiatives Startups & Partners Top Tech Tales Flexperto Xplora MonoLets News Blog Downloads Events Why hubraum About Us Team Search > Get in touch accuracy unlocked Precise positioning is a high availability service that makes satellite navigation more accurate and reliable. Current GNSS solutions lack accuracy and security, however Deutsche Telekom and Swift Navigation’s Skylark cloud-based correction service are revolutionizing precise positioning for mass-market applications. This program invites startups and small companies to develop valuable use cases that adopt, integrate, and optimize this innovative technology to create value for their customers. What we can offer All of the teams selected for the acceleration program will receive the following: One (1) Precision GNSS Module (PGM) Evaluation Platform—featuring Swift Navigation’s mPCIe format PGM receiver installed in an IoT compute platform (which is yours to keep for protoyping and evaluation purposes) Free access to Swift’s Skylark™ GNSS correction service for the remainder of 2021 Communication and promotion of the program and the use cases by hubraum, Deutsche Telekom and Swift"
+    },
+    {
+      "id": "check-page-75c72878fb",
+      "url": "https://www.hubraum.com/initiatives/past-programs/ai-co-creation-program/",
+      "page": "details",
+      "excerpt": "AI Co-Creation Program – hubraum – Tech Incubator of Deutsche Telekom Skip to content Initiatives Tangible Tomorrow 2026 Security Co-Creation Program Digital Innovation Program MWC 2026 Prototyping Campus Campus Berlin Campus Krakow Past Initiatives Startups & Partners Top Tech Tales Flexperto Xplora MonoLets News Blog Downloads Events Why hubraum About Us Team Search > Get in touch AI Co-Creation Program Where Innovation meets Opportunity! Unlock the potential of your AI startup with Telekom hubraum’s AI Co-Creation Program – an initiative designed to connect, empower, and propel AI innovators with valuable business contacts and funding. In the era of limitless AI possibilities, our program offers business opportunities, mentoring and a community for AI startups. Application phase is closed Join in these focus areas With AI comes an enormous range of new opportunities for companies. In some areas, AI is currently triggering revolutionary processes and developments. In sales and customer service and the automotive industry in particular, there is immense potential for innovations in the field of telecommunications based on artificial intelligence. This is where we want to be at the forefront with (Gen)AI, initiating ground-breaking progress and helping to shape long-term megatrends. Our program is geared towards specific focus areas in which we want to drive the development of"
+    },
+    {
+      "id": "check-page-bb6af8813c",
+      "url": "https://www.hubraum.com/initiatives/past-programs/campus-network-program-2020/",
+      "page": "details",
+      "excerpt": "Campus network program 2020 – hubraum – Tech Incubator of Deutsche Telekom Skip to content Initiatives Tangible Tomorrow 2026 Security Co-Creation Program Digital Innovation Program MWC 2026 Prototyping Campus Campus Berlin Campus Krakow Past Initiatives Startups & Partners Top Tech Tales Flexperto Xplora MonoLets News Blog Downloads Events Why hubraum About Us Team Search > Get in touch campus network program 2020 Application phase has ended on May, 1st. The program We are looking for Best-of-Class Business Solutions representing the benefits of an Campus Network . Our aim is to implement your solution as a prototype at different locations where Deutsche Telekom has built up their Campus Networks for research and demonstration purposes. The overall goal of the program is not only to demonstrate your prototypes for sales activities, but also to integrate your solutions into End-to-End offers for our customers. Need more information on Campus Networks? Scroll down ! Focus areas & benefits for you Our Focus Areas: Augmented & Virtual Reality (incl. IoT related solutions) Automated Guided Vehicles (AGV) Artificial Intelligence Campus Positioning (Indoor/Outdoor) What’s in it for you: Chance to benefit from DT sales activities and to reach out to DT business customers Opportunity to test your solution on Campus Network infrastructure Access to experts with regard to Campus Network"
+    },
+    {
+      "id": "check-page-e98d1a30a2",
+      "url": "https://www.hubraum.com/initiatives/past-programs/campus-network-program-2021/",
+      "page": "details",
+      "excerpt": "campus network program 2021 – hubraum – Tech Incubator of Deutsche Telekom Skip to content Initiatives Tangible Tomorrow 2026 Security Co-Creation Program Digital Innovation Program MWC 2026 Prototyping Campus Campus Berlin Campus Krakow Past Initiatives Startups & Partners Top Tech Tales Flexperto Xplora MonoLets News Blog Downloads Events Why hubraum About Us Team Search > Get in touch campus network program 2021 The program As an integrator, telco expert and trusted advisor T-Systems shapes the digital future of its business customers. Customers appreciate the smart solutions of Deutsche Telekom’s subsidiary which are scalable and sustainable – in Automotive, Logistics, Retail, Healthcare, and many other industries. In view of today’s challenges, T-Systems built a powerful ecosystem for Edge Computing in combination with Telekom’s 5G Campus Networks called Campus Edge. Additionally, T-Systems works together with Hyperscalers such as AWS, integrating with their ecosystems. The Campus Network Program was launched in February 2021 with the aim to build Proof of Concepts (PoC) together with the selected partners at a Demo Center using T-Systems Edge Computing platform and Campus Network 5.0 in Germany. The implemented installations are then to be used for joint sales activities of T-Systems and its partners. The overarching goal is to demonstrate these solutions to customers"
+    },
+    {
+      "id": "check-page-c5f7a8dde5",
+      "url": "https://www.hubraum.com/initiatives/past-programs/consumer-iot-esim-program/",
+      "page": "details",
+      "excerpt": "Consumer IoT eSIM program – hubraum – Tech Incubator of Deutsche Telekom Skip to content Initiatives Tangible Tomorrow 2026 Security Co-Creation Program Digital Innovation Program MWC 2026 Prototyping Campus Campus Berlin Campus Krakow Past Initiatives Startups & Partners Top Tech Tales Flexperto Xplora MonoLets News Blog Downloads Events Why hubraum About Us Team Search > Get in touch Consumer IoT eSIM program Impressions What are the benefits? Faster, easier and more secure development with eSIM Starter Kit Free access to top-notch Telekom infrastructure with technical support Integration into the Deutsche Telekom’s consumer eSIM partner ecosystem Global DT’s IoT Connectivity across different technologies like LTE-M, 2G, 4G, 5G Financial and expert support in co-development of new joint product offerings What are we looking for? Within the hubraum Consumer IoT eSIM Program, we seek cooperation with IoT companies and scale-ups with consumer IoT products across different use-cases. We’re not open for applications yet, if you wish to get further information about the program and how to participate, please contact us at hello (at) hubraum.com . We are looking for solutions in wearables, live tracking, health monitoring, smart home. Real time location tracking on children, pets, elderly people Monitoring of health status information on patients Control of white goods. Consumer"
+    },
+    {
+      "id": "check-page-8437bfce91",
+      "url": "https://www.hubraum.com/initiatives/past-programs/ios-augmented-reality-innovation-program-2021/",
+      "page": "details",
+      "excerpt": "ios augmented reality innovation program 2021 – hubraum – Tech Incubator of Deutsche Telekom Skip to content Initiatives Tangible Tomorrow 2026 Security Co-Creation Program Digital Innovation Program MWC 2026 Prototyping Campus Campus Berlin Campus Krakow Past Initiatives Startups & Partners Top Tech Tales Flexperto Xplora MonoLets News Blog Downloads Events Why hubraum About Us Team Search > Get in touch Make tomorrow tangible The program We are inviting iOS developers from around the globe to show us their best-in-class Augmented Reality applications that, with the help of the program, can be boosted by Deutsche Telekom‘s technologies including 5G and Low Latency Edge Computing, along with early access to customers. Apple has the world’s largest AR platform, with hundreds of millions of AR enabled devices, as well as thousands of AR apps on the App Store. Apple hardware and software are designed from the ground up for AR, there is no better way to experience the tangible tomorrow. Application Deadline closed on 4th August. You can still apply for a last chance Wildcard Pitch . Our focus and benefits for you We are looking for Experienced iOS developers that would like to take advantage of Deutsche Telekom’s innovation incubator and development support directly from Apple Potential iOS Apps that can be relevant for mass-market customers What is the value for the selected"
     }
   ],
   "findings": {
@@ -34,8 +230,39 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "August",
+        "evidenceId": "check-announced-e2d16513e2"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "2 months",
+        "evidenceId": "check-duration-e40d9c0cef"
+      },
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-816c95dde4"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-901dda92d2"
+      }
+    ],
+    "location": [
+      {
+        "value": "Darmstadt",
+        "evidenceId": "check-location-fd0dd236ab"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

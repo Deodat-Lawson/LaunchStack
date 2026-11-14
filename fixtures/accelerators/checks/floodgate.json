@@ -1,30 +1,59 @@
 {
   "programId": "floodgate",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://www.floodgate.com/"
+    "https://www.floodgate.com/",
+    "https://www.floodgate.com/terms-conditions",
+    "https://www.floodgate.com/companies"
   ],
   "evidence": [
     {
       "id": "check-name-066dd6b4b8",
       "url": "https://www.floodgate.com/",
-      "title": "Floodgate — homepage checked by scrape.py",
+      "title": "Floodgate — homepage",
       "excerpt": "Floodgate - Your First True Believers BELIEFS Companies Team",
       "page": "details"
     },
     {
       "id": "check-portfolio-16b5d44bb0",
       "url": "https://www.floodgate.com/",
-      "title": "Floodgate — homepage checked by scrape.py",
+      "title": "Floodgate — homepage",
       "excerpt": "Companies → https://www.floodgate.com/companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-195dbc7bc2",
+      "url": "https://www.floodgate.com/terms-conditions",
+      "title": "Floodgate — terms page",
+      "excerpt": "Companies → https://www.floodgate.com/companies",
+      "page": "terms"
+    },
+    {
       "id": "check-route-e3aac84b8c",
       "url": "https://www.floodgate.com/",
-      "title": "Floodgate — homepage checked by scrape.py",
+      "title": "Floodgate — homepage",
       "excerpt": "https://www.floodgate.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-814f1dc902",
+      "url": "https://www.floodgate.com/",
+      "page": "details",
+      "excerpt": "Floodgate - Your First True Believers BELIEFS Companies Team Insights Pattern breakers Beliefs Companies Team Insights Pattern Breakers   © 2024 Floodgate Fund, LP Legal Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Backing extraordinary founders at pre-seed and seed 506 Santa Cruz Ave., Suite 200, Menlo Park, CA 94025"
+    },
+    {
+      "id": "check-page-884485c74a",
+      "url": "https://www.floodgate.com/terms-conditions",
+      "page": "terms",
+      "excerpt": "Terms & Conditions - Floodgate BELIEFS Companies Team Insights Pattern breakers Beliefs Companies Team Insights Pattern Breakers   © 2024 Floodgate Fund, LP Legal Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Terms & Conditions General: Floodgate Fund (“Floodgate”) is providing this website as an information service to the Internet community. Use of"
+    },
+    {
+      "id": "check-page-9895069e30",
+      "url": "https://www.floodgate.com/companies",
+      "page": "portfolio",
+      "excerpt": "Companies - Floodgate BELIEFS Companies Team Insights Pattern breakers Beliefs Companies Team Insights Pattern Breakers   © 2024 Floodgate Fund, LP Legal Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Your First True Believers Building Breakthroughs There will be a day when we wonder how people ever died in cars. Qasar Younis and Peter Ludwig were “Made in Detroit” before"
     }
   ],
   "findings": {
@@ -40,8 +69,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.floodgate.com/companies",

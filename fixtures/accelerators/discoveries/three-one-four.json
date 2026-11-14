@@ -1,7 +1,103 @@
 {
   "programId": "three-one-four",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://jobs.3one4capital.com/",
+      "page": "portfolio",
+      "anchor": "Portfolio Jobs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.3one4capital.com/blogs/3one4-capital-backs-zerocircle-innovative-bio-materials-from-regenerative-resources-designed-for-high-performance-global-applications",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.3one4capital.com/blogs/agnit-semiconductors-raises-2-6m-in-seed-extension-building-indias-first-vertically-integrated-gan-semiconductor-platform-for-advanced-radio-frequency-and-power-electronics-applications",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.3one4capital.com/blogs/applying-ai-in-india---early-segments-for-homegrown-innovation",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.3one4capital.com/blogs/booster-shot-for-startups-indian-firms-can-do-angel-investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.3one4capital.com/blogs/not-an-angel-tax-its-a-tax-on-investment-from-indians",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.3one4capital.com/blogs/siddarth-pai-reappointed-to-sebis-alternative-investment-policy-advisory-committee-aipac",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.3one4capital.com/blogs/the-3one4-capital-internship-program-building-judgment-through-execution",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.3one4capital.com/blogs/the-black-box-is-losing-the-boardroom-enterprise-ai-on-the-customers-terms-is-the-next-great-opportunity",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.3one4capital.com/blogs/the-changing-landscape-of-insurance-investments-convergence-of-tech-and-capital-in-the-sector",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.3one4capital.com/blogs/why-we-are-optimistic-about-indias-growth-prospects",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.3one4capital.com/platform-and-program",
       "page": "details",
@@ -19,17 +115,17 @@
       "origin": "official"
     },
     {
-      "url": "https://www.3one4capital.com/portfolio-companies/licious",
+      "url": "https://www.3one4capital.com/portfolio-companies/darwinbox",
       "page": "portfolio",
-      "anchor": "Licious",
+      "anchor": "Darwinbox",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.3one4capital.com/portfolio-companies/scimplify",
+      "url": "https://www.3one4capital.com/portfolio-companies/licious",
       "page": "portfolio",
-      "anchor": "Scimplify",
+      "anchor": "Licious",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -43,10 +139,26 @@
       "origin": "official"
     },
     {
-      "url": "https://www.3one4capital.com/portfolio-companies/darwinbox",
+      "url": "https://www.3one4capital.com/portfolio-companies/scimplify",
       "page": "portfolio",
-      "anchor": "Darwinbox",
+      "anchor": "Scimplify",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.3one4capital.com/team/anand-batra",
+      "page": "terms",
+      "anchor": "Anand Batra Investments",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.3one4capital.com/terms-and-conditions",
+      "page": "terms",
+      "anchor": "Terms & Conditions",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

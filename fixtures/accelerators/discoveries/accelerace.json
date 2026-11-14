@@ -1,35 +1,11 @@
 {
   "programId": "accelerace",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://accelerace.io/startups/",
-      "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://accelerace.io/about/",
       "page": "details",
       "anchor": "About Accelerace",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://accelerace.io/about/partner-programs/",
-      "page": "details",
-      "anchor": "Partner programs",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://accelerace.io/about/team/",
-      "page": "details",
-      "anchor": "Team",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -43,14 +19,6 @@
       "origin": "official"
     },
     {
-      "url": "https://accelerace.io/about/presskit/",
-      "page": "details",
-      "anchor": "Presskit",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://accelerace.io/about/contact/",
       "page": "details",
       "anchor": "Contact",
@@ -59,10 +27,50 @@
       "origin": "official"
     },
     {
-      "url": "https://accelerace.io/partner-programs/",
+      "url": "https://accelerace.io/about/partner-programs/",
       "page": "details",
-      "anchor": "Get accelerated",
+      "anchor": "Partner programs",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/about/presskit/",
+      "page": "details",
+      "anchor": "Presskit",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/about/team/",
+      "page": "details",
+      "anchor": "Team",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/accelerace-alumnus-sensohive-receives-double-digit-million-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/accelerace-invest-donkey-republic-raises-double-digit-series-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/accelerace-raises-1-7-million-investment-help-startups-succeed/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -75,9 +83,97 @@
       "origin": "official"
     },
     {
+      "url": "https://accelerace.io/antag-therapeutics-raises-3m-usd-series-investment-novo-seeds/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/apply-now-the-worlds-only-soundtech-accelerator-program/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/category/investments/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://accelerace.io/dreamplan-raise-seed-round/",
       "page": "portfolio",
       "anchor": "Dreamplan raise seed-round Accelerace portfolio company, Dreamplan, have raised a seed round of DKK 20 mio. (approx. € 2,7 mio.) with leading investors and business angels. The fin",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/europes-largest-startup-competition-opens-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/exclusive-network-ensures-qualified-investment-growth-startups/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/faq/",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/funding/",
+      "page": "terms",
+      "anchor": "Investments",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/investment-monta-biosciences-raises-investment-promising-cancer-treatment-2/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/investment-readiness-test-vita/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/investment-readiness-test/",
+      "page": "terms",
+      "anchor": "Test your investment readiness",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/partner-programs/",
+      "page": "details",
+      "anchor": "Get accelerated",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -91,9 +187,17 @@
       "origin": "official"
     },
     {
-      "url": "https://accelerace.io/faq/",
-      "page": "terms",
-      "anchor": "FAQ",
+      "url": "https://accelerace.io/startups/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://platform.accelerace.io/apply/tools",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

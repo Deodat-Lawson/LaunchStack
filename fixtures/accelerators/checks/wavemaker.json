@@ -1,37 +1,437 @@
 {
   "programId": "wavemaker",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
-    "https://wavemaker.vc/"
+    "https://wavemaker.vc/",
+    "https://wavemaker.vc/adb-lhoopa-sign-deal-to-expand-green-affordable-housing-in-the-philippines/",
+    "https://wavemaker.vc/dealstreetasia-indonesias-poultry-tech-startup-pitik-raises-14m-in-series-a-round-led-by-alpha-jwc/",
+    "https://wavemaker.vc/dealstreetasia-southeast-asias-deep-techs-can-hold-their-own-against-silicon-valley-firms-wavemaker-partners/",
+    "https://wavemaker.vc/our-investment-thesis/",
+    "https://wavemaker.vc/shikho-raises-0-9m-in-new-investment/",
+    "https://wavemaker.vc/singapore-venture-capital-private-equity-association-wavemaker-partners-wins-vc-deal-of-the-year-and-vc-exit-of-the-year/",
+    "https://wavemaker.vc/technode-global-cybersecurity-startup-watchtowr-totals-10-25m-in-pre-series-a-investment/",
+    "https://wavemaker.vc/technode-global-singapores-omnistream-closes-7m-series-a-investment-led-by-sig-venture-capital/",
+    "https://wavemaker.vc/transcelestial-brings-laser-communications-investment-to-australia-and-japans-telecom-defence-and-space-infrastructure/",
+    "https://wavemaker.vc/awareness-level-about-the-potential-benefits-of-energy-efficiency-is-low-in-sea-tablepointer-ceo/",
+    "https://wavemaker.vc/portfolio/",
+    "https://wavemaker.vc/wavemaker-portfolio/ecospirits/",
+    "https://wavemaker.vc/wavemaker-portfolio/growsari/",
+    "https://wavemaker.vc/wavemaker-portfolio/lhoopa/"
   ],
   "evidence": [
     {
+      "id": "check-duration-0cdf3d38c4",
+      "url": "https://wavemaker.vc/technode-global-cybersecurity-startup-watchtowr-totals-10-25m-in-pre-series-a-investment/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "2026 ChemT Biotechnology Raises US$5 Million in 18 months to bring AI to Biomanufacturing The total",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-2ca7ebb2b1",
+      "url": "https://wavemaker.vc/technode-global-singapores-omnistream-closes-7m-series-a-investment-led-by-sig-venture-capital/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "2026 ChemT Biotechnology Raises US$5 Million in 18 months to bring AI to Biomanufacturing The total",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-302985d444",
+      "url": "https://wavemaker.vc/transcelestial-brings-laser-communications-investment-to-australia-and-japans-telecom-defence-and-space-infrastructure/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "2026 ChemT Biotechnology Raises US$5 Million in 18 months to bring AI to Biomanufacturing The total",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-373258fed1",
+      "url": "https://wavemaker.vc/shikho-raises-0-9m-in-new-investment/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "2026 ChemT Biotechnology Raises US$5 Million in 18 months to bring AI to Biomanufacturing The total",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-5d609e2015",
+      "url": "https://wavemaker.vc/dealstreetasia-southeast-asias-deep-techs-can-hold-their-own-against-silicon-valley-firms-wavemaker-partners/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "2026 ChemT Biotechnology Raises US$5 Million in 18 months to bring AI to Biomanufacturing The total",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-696994f9c0",
+      "url": "https://wavemaker.vc/adb-lhoopa-sign-deal-to-expand-green-affordable-housing-in-the-philippines/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "2026 ChemT Biotechnology Raises US$5 Million in 18 months to bring AI to Biomanufacturing The total",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-6a6259f02a",
+      "url": "https://wavemaker.vc/wavemaker-portfolio/growsari/",
+      "title": "Wavemaker Partners — portfolio page",
+      "excerpt": "2026 ChemT Biotechnology Raises US$5 Million in 18 months to bring AI to Biomanufacturing The total",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-87c6c4123a",
+      "url": "https://wavemaker.vc/wavemaker-portfolio/ecospirits/",
+      "title": "Wavemaker Partners — portfolio page",
+      "excerpt": "2026 ChemT Biotechnology Raises US$5 Million in 18 months to bring AI to Biomanufacturing The total",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-962e88c17b",
+      "url": "https://wavemaker.vc/dealstreetasia-indonesias-poultry-tech-startup-pitik-raises-14m-in-series-a-round-led-by-alpha-jwc/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "2026 ChemT Biotechnology Raises US$5 Million in 18 months to bring AI to Biomanufacturing The total",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a2b1b392a8",
+      "url": "https://wavemaker.vc/",
+      "title": "Wavemaker Partners — homepage",
+      "excerpt": "News ChemT Biotechnology Raises US$5 Million in 18 months to bring AI to Biomanufacturing The total",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-a499124a20",
+      "url": "https://wavemaker.vc/awareness-level-about-the-potential-benefits-of-energy-efficiency-is-low-in-sea-tablepointer-ceo/",
+      "title": "Wavemaker Partners — program page",
+      "excerpt": "2026 ChemT Biotechnology Raises US$5 Million in 18 months to bring AI to Biomanufacturing The total",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b5177774e5",
+      "url": "https://wavemaker.vc/",
+      "title": "Wavemaker Partners — homepage",
+      "excerpt": "2026 ChemT Biotechnology Raises US$5 Million in 18 months to bring AI to Biomanufacturing The total",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-f3182c71cf",
+      "url": "https://wavemaker.vc/singapore-venture-capital-private-equity-association-wavemaker-partners-wins-vc-deal-of-the-year-and-vc-exit-of-the-year/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "2026 ChemT Biotechnology Raises US$5 Million in 18 months to bring AI to Biomanufacturing The total",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-0c8d5523f4",
+      "url": "https://wavemaker.vc/",
+      "title": "Wavemaker Partners — homepage",
+      "excerpt": "At the heart of the company is CelMo™, an AI-driven Virtual Cell platform trained on billions to trillions of",
+      "page": "details"
+    },
+    {
+      "id": "check-format-adad61e79c",
+      "url": "https://wavemaker.vc/",
+      "title": "Wavemaker Partners — homepage",
+      "excerpt": "and electronics integration remain in-house. This hybrid model allows Dat Bike to grow while maintaining quality",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ede3cb18fd",
+      "url": "https://wavemaker.vc/",
+      "title": "Wavemaker Partners — homepage",
+      "excerpt": "the intelligence layer for biomanufacturing. Its CelMo™ Virtual Cell platform combines AI, proprietary biological data,",
+      "page": "details"
+    },
+    {
       "id": "check-name-80e9e232e8",
       "url": "https://wavemaker.vc/",
-      "title": "Wavemaker Partners — homepage checked by scrape.py",
+      "title": "Wavemaker Partners — homepage",
       "excerpt": "Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Menu",
       "page": "details"
     },
     {
+      "id": "check-portfolio-1f01898064",
+      "url": "https://wavemaker.vc/singapore-venture-capital-private-equity-association-wavemaker-partners-wins-vc-deal-of-the-year-and-vc-exit-of-the-year/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-1f17ad927b",
+      "url": "https://wavemaker.vc/technode-global-singapores-omnistream-closes-7m-series-a-investment-led-by-sig-venture-capital/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-226b7fac24",
+      "url": "https://wavemaker.vc/adb-lhoopa-sign-deal-to-expand-green-affordable-housing-in-the-philippines/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2699828158",
+      "url": "https://wavemaker.vc/our-investment-thesis/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-2a876c0753",
       "url": "https://wavemaker.vc/",
-      "title": "Wavemaker Partners — homepage checked by scrape.py",
+      "title": "Wavemaker Partners — homepage",
       "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio/",
       "page": "details"
     },
     {
       "id": "check-portfolio-4ec7251161",
       "url": "https://wavemaker.vc/",
-      "title": "Wavemaker Partners — homepage checked by scrape.py",
+      "title": "Wavemaker Partners — homepage",
       "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-575006b1e4",
+      "url": "https://wavemaker.vc/shikho-raises-0-9m-in-new-investment/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-68ec6ab352",
+      "url": "https://wavemaker.vc/technode-global-cybersecurity-startup-watchtowr-totals-10-25m-in-pre-series-a-investment/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6ef399be59",
+      "url": "https://wavemaker.vc/wavemaker-portfolio/ecospirits/",
+      "title": "Wavemaker Partners — portfolio page",
+      "excerpt": "Portfolio → https://wavemaker.vc/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-73ac975c8a",
+      "url": "https://wavemaker.vc/dealstreetasia-southeast-asias-deep-techs-can-hold-their-own-against-silicon-valley-firms-wavemaker-partners/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-797fc7b114",
+      "url": "https://wavemaker.vc/wavemaker-portfolio/growsari/",
+      "title": "Wavemaker Partners — portfolio page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-7f5ba8540a",
+      "url": "https://wavemaker.vc/adb-lhoopa-sign-deal-to-expand-green-affordable-housing-in-the-philippines/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-85cf7c28dd",
+      "url": "https://wavemaker.vc/our-investment-thesis/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-884bb33428",
+      "url": "https://wavemaker.vc/awareness-level-about-the-potential-benefits-of-energy-efficiency-is-low-in-sea-tablepointer-ceo/",
+      "title": "Wavemaker Partners — program page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-95ff1af2a0",
+      "url": "https://wavemaker.vc/dealstreetasia-indonesias-poultry-tech-startup-pitik-raises-14m-in-series-a-round-led-by-alpha-jwc/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9bc7c85b5c",
+      "url": "https://wavemaker.vc/technode-global-cybersecurity-startup-watchtowr-totals-10-25m-in-pre-series-a-investment/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a171350515",
+      "url": "https://wavemaker.vc/transcelestial-brings-laser-communications-investment-to-australia-and-japans-telecom-defence-and-space-infrastructure/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-afe163ba76",
+      "url": "https://wavemaker.vc/dealstreetasia-southeast-asias-deep-techs-can-hold-their-own-against-silicon-valley-firms-wavemaker-partners/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b260868865",
+      "url": "https://wavemaker.vc/awareness-level-about-the-potential-benefits-of-energy-efficiency-is-low-in-sea-tablepointer-ceo/",
+      "title": "Wavemaker Partners — program page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b63c867283",
+      "url": "https://wavemaker.vc/wavemaker-portfolio/ecospirits/",
+      "title": "Wavemaker Partners — portfolio page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-babce11bc5",
+      "url": "https://wavemaker.vc/wavemaker-portfolio/ecospirits/",
+      "title": "Wavemaker Partners — portfolio page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-c371451dda",
+      "url": "https://wavemaker.vc/dealstreetasia-indonesias-poultry-tech-startup-pitik-raises-14m-in-series-a-round-led-by-alpha-jwc/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c787fb47ab",
+      "url": "https://wavemaker.vc/transcelestial-brings-laser-communications-investment-to-australia-and-japans-telecom-defence-and-space-infrastructure/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d023635439",
+      "url": "https://wavemaker.vc/wavemaker-portfolio/growsari/",
+      "title": "Wavemaker Partners — portfolio page",
+      "excerpt": "Portfolio → https://wavemaker.vc/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-e6566995a0",
+      "url": "https://wavemaker.vc/technode-global-singapores-omnistream-closes-7m-series-a-investment-led-by-sig-venture-capital/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e9e4db4b22",
+      "url": "https://wavemaker.vc/wavemaker-portfolio/growsari/",
+      "title": "Wavemaker Partners — portfolio page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-f4359301bc",
+      "url": "https://wavemaker.vc/shikho-raises-0-9m-in-new-investment/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f6b40d6421",
+      "url": "https://wavemaker.vc/singapore-venture-capital-private-equity-association-wavemaker-partners-wins-vc-deal-of-the-year-and-vc-exit-of-the-year/",
+      "title": "Wavemaker Partners — terms page",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-route-7ed7ae4c3d",
       "url": "https://wavemaker.vc/",
-      "title": "Wavemaker Partners — homepage checked by scrape.py",
+      "title": "Wavemaker Partners — homepage",
       "excerpt": "Wavemaker Ventures → https://wavemaker.vc/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-87d9fa5ad6",
+      "url": "https://wavemaker.vc/",
+      "page": "details",
+      "excerpt": "Wavemaker Ventures Skip to main content Wavemaker Ventures Get in touch About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Menu About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Get in touch Empowering innovations in Enterprise, Deep Tech, and Sustainability Empowering innovations in Enterprise, Deep Tech, and Sustainability We are Southeast Asia’s leading early-stage VC, backing Enterprise, Deep Tech, and Sustainability startups. We invest in undervalued companies with innovative solutions to meaningful problems in the region. 200 + companies invested in US$ 400 M total committed capital 92 % of active portfolio contributing to UN Sustainable Development Goals 5 industry awards received Our founders possess unique industry or technology insights, which they leverage to build scalable, defensible businesses, driving lasting positive change in their communities. Our Founders are... Authentic and Trustworthy Bold and Impact-Driven Ever-Curious and Insightful Action-Oriented and Resilient Authentic and Trustworthy Bold and Impact-Driven Ever-Curious and Insightful Action-Oriented and Resilient Wavemakers Providing family-owned stores direct access to manufacturers Partnered in 2017 for their Seed round Secured"
+    },
+    {
+      "id": "check-page-2d02cf2c59",
+      "url": "https://wavemaker.vc/adb-lhoopa-sign-deal-to-expand-green-affordable-housing-in-the-philippines/",
+      "page": "terms",
+      "excerpt": "ADB, Lhoopa Sign Deal to Expand Green Affordable Housing in the Philippines - Wavemaker Ventures Skip to main content Wavemaker Ventures Get in touch About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Menu About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Get in touch News / News ADB, Lhoopa Sign Deal to Expand Green Affordable Housing in the Philippines Wavemaker Ventures 18 Mar 2024 Wavemaker Ventures 18 Mar 2024 Share MANILA, PHILIPPINES (18 March 2024) — The Asian Development Bank (ADB) and Lhoopa, Inc. have signed a loan agreement of up to $20 million to help deliver affordable housing for average-income earners in the Philippines, improving their quality of life and reducing the country’s housing shortage. Our latest Our latest stories Spotlights 08 September 2026 Dat Bike: Redefining Performance for Electric Motorbikes In the crowded streets of Ho Chi Minh City, motorbikes are more than just vehicles – they are the heartbeat... Read more News 19 August 2026 Neocrete Cuts Both Carbon and Cost of Concrete at Commercial Scale, Backed by US$3.5m from Wavemaker Ventures, Temasek Trust's C3H and Icehouse Ventures Wavemaker Ventures, Temasek Trust’s C3H and Icehouse Ventures have backed Neocrete with"
+    },
+    {
+      "id": "check-page-8e8798cc1d",
+      "url": "https://wavemaker.vc/dealstreetasia-indonesias-poultry-tech-startup-pitik-raises-14m-in-series-a-round-led-by-alpha-jwc/",
+      "page": "terms",
+      "excerpt": "DealStreetAsia: Indonesia’s poultry tech startup Pitik raises $14m in Series A round led by Alpha JWC - Wavemaker Ventures Skip to main content Wavemaker Ventures Get in touch About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Menu About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Get in touch News / News DealStreetAsia: Indonesia’s poultry tech startup Pitik raises $14m in Series A round led by Alpha JWC Wavemaker Ventures 19 May 2022 Wavemaker Ventures 19 May 2022 Share Read news: Our latest Our latest stories Spotlights 08 September 2026 Dat Bike: Redefining Performance for Electric Motorbikes In the crowded streets of Ho Chi Minh City, motorbikes are more than just vehicles – they are the heartbeat... Read more News 19 August 2026 Neocrete Cuts Both Carbon and Cost of Concrete at Commercial Scale, Backed by US$3.5m from Wavemaker Ventures, Temasek Trust's C3H and Icehouse Ventures Wavemaker Ventures, Temasek Trust’s C3H and Icehouse Ventures have backed Neocrete with US$3.5... Read more News 17 July 2026 pQCee raises US$3.9 million to accelerate global expansion of quantum-safe cybersecurity solutions 17 July 2026, SINGAPORE — pQCee Pte Ltd (pQCee), a leading provider of quantum‑safe cybersecurity"
+    },
+    {
+      "id": "check-page-433b04c1ad",
+      "url": "https://wavemaker.vc/dealstreetasia-southeast-asias-deep-techs-can-hold-their-own-against-silicon-valley-firms-wavemaker-partners/",
+      "page": "terms",
+      "excerpt": "DealStreetAsia: Southeast Asia’s deep techs can hold their own against Silicon Valley firms: Wavemaker Partners - Wavemaker Ventures Skip to main content Wavemaker Ventures Get in touch About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Menu About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Get in touch News / Insights DealStreetAsia: Southeast Asia’s deep techs can hold their own against Silicon Valley firms: Wavemaker Partners Wavemaker Ventures 27 Nov 2020 Wavemaker Ventures 27 Nov 2020 Share Read News: wavemaker-sea-deep-tech Our latest Our latest stories Spotlights 08 September 2026 Dat Bike: Redefining Performance for Electric Motorbikes In the crowded streets of Ho Chi Minh City, motorbikes are more than just vehicles – they are the heartbeat... Read more News 19 August 2026 Neocrete Cuts Both Carbon and Cost of Concrete at Commercial Scale, Backed by US$3.5m from Wavemaker Ventures, Temasek Trust's C3H and Icehouse Ventures Wavemaker Ventures, Temasek Trust’s C3H and Icehouse Ventures have backed Neocrete with US$3.5... Read more News 17 July 2026 pQCee raises US$3.9 million to accelerate global expansion of quantum-safe cybersecurity solutions 17 July 2026, SINGAPORE — pQCee Pte Ltd (pQCee), a"
+    },
+    {
+      "id": "check-page-cc007c7880",
+      "url": "https://wavemaker.vc/our-investment-thesis/",
+      "page": "terms",
+      "excerpt": "Our Investment Thesis - Wavemaker Ventures Skip to main content Wavemaker Ventures Get in touch About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Menu About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Get in touch Our Investment Thesis Uncovering unobvious opportunities We exist to back companies that are often overlooked and undervalued, but hold the potential to create lasting value and positive change. Our Investment Thesis Our Investment Thesis Strong conviction on our focus areas We are the leading VC firm investing in early-stage Enterprise, Deep Tech, and Sustainability startups in Southeast Asia. Since 2012, we have made over 200 investments with US$500M AUM across 5 funds—each the largest of its kind at the time. No other firm in the region matches our dedication to these sectors. A sharp eye for unobvious opportunities Our investment philosophy is grounded in uncovering value where others see none. We seek out highly promising yet undervalued companies, driven by the equation: “Opportunity = Value – Perception.” By embracing Peter Thiel’s question, “What important truth do you believe that very few people agree with?”, we partner with founders who possess unique industry or technology insights."
+    },
+    {
+      "id": "check-page-46c37a70eb",
+      "url": "https://wavemaker.vc/shikho-raises-0-9m-in-new-investment/",
+      "page": "terms",
+      "excerpt": "Shikho raises $0.9m in new investment - Wavemaker Ventures Skip to main content Wavemaker Ventures Get in touch About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Menu About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Get in touch News / News Shikho raises $0.9m in new investment Wavemaker Ventures 20 Mar 2023 Wavemaker Ventures 20 Mar 2023 Share Read news: Our latest Our latest stories Spotlights 08 September 2026 Dat Bike: Redefining Performance for Electric Motorbikes In the crowded streets of Ho Chi Minh City, motorbikes are more than just vehicles – they are the heartbeat... Read more News 19 August 2026 Neocrete Cuts Both Carbon and Cost of Concrete at Commercial Scale, Backed by US$3.5m from Wavemaker Ventures, Temasek Trust's C3H and Icehouse Ventures Wavemaker Ventures, Temasek Trust’s C3H and Icehouse Ventures have backed Neocrete with US$3.5... Read more News 17 July 2026 pQCee raises US$3.9 million to accelerate global expansion of quantum-safe cybersecurity solutions 17 July 2026, SINGAPORE — pQCee Pte Ltd (pQCee), a leading provider of quantum‑safe cybersecurity technologies,... Read more News 22 June 2026 ChemT Biotechnology Raises US$5 Million in 18 months to bring AI to Biomanufacturing The"
+    },
+    {
+      "id": "check-page-33d532299d",
+      "url": "https://wavemaker.vc/singapore-venture-capital-private-equity-association-wavemaker-partners-wins-vc-deal-of-the-year-and-vc-exit-of-the-year/",
+      "page": "terms",
+      "excerpt": "Singapore Venture Capital & Private Equity Association: Wavemaker Partners wins VC Deal of the Year and VC Exit of the Year - Wavemaker Ventures Skip to main content Wavemaker Ventures Get in touch About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Menu About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Get in touch News / News Singapore Venture Capital & Private Equity Association: Wavemaker Partners wins VC Deal of the Year and VC Exit of the Year Wavemaker Ventures 21 Oct 2021 Wavemaker Ventures 21 Oct 2021 Share Read news: Our latest Our latest stories Spotlights 08 September 2026 Dat Bike: Redefining Performance for Electric Motorbikes In the crowded streets of Ho Chi Minh City, motorbikes are more than just vehicles – they are the heartbeat... Read more News 19 August 2026 Neocrete Cuts Both Carbon and Cost of Concrete at Commercial Scale, Backed by US$3.5m from Wavemaker Ventures, Temasek Trust's C3H and Icehouse Ventures Wavemaker Ventures, Temasek Trust’s C3H and Icehouse Ventures have backed Neocrete with US$3.5... Read more News 17 July 2026 pQCee raises US$3.9 million to accelerate global expansion of quantum-safe cybersecurity solutions 17 July 2026, SINGAPORE — pQCee Pte Ltd (pQCee), a leading"
+    },
+    {
+      "id": "check-page-c7a996d059",
+      "url": "https://wavemaker.vc/technode-global-cybersecurity-startup-watchtowr-totals-10-25m-in-pre-series-a-investment/",
+      "page": "terms",
+      "excerpt": "TechNode Global: Cybersecurity startup watchTowr totals $10.25M in Pre-Series A investment - Wavemaker Ventures Skip to main content Wavemaker Ventures Get in touch About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Menu About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Get in touch News / News TechNode Global: Cybersecurity startup watchTowr totals $10.25M in Pre-Series A investment Wavemaker Ventures 5 Jul 2022 Wavemaker Ventures 5 Jul 2022 Share Read news: Our latest Our latest stories Spotlights 08 September 2026 Dat Bike: Redefining Performance for Electric Motorbikes In the crowded streets of Ho Chi Minh City, motorbikes are more than just vehicles – they are the heartbeat... Read more News 19 August 2026 Neocrete Cuts Both Carbon and Cost of Concrete at Commercial Scale, Backed by US$3.5m from Wavemaker Ventures, Temasek Trust's C3H and Icehouse Ventures Wavemaker Ventures, Temasek Trust’s C3H and Icehouse Ventures have backed Neocrete with US$3.5... Read more News 17 July 2026 pQCee raises US$3.9 million to accelerate global expansion of quantum-safe cybersecurity solutions 17 July 2026, SINGAPORE — pQCee Pte Ltd (pQCee), a leading provider of quantum‑safe cybersecurity technologies,... Read more News"
+    },
+    {
+      "id": "check-page-50ee849e97",
+      "url": "https://wavemaker.vc/technode-global-singapores-omnistream-closes-7m-series-a-investment-led-by-sig-venture-capital/",
+      "page": "terms",
+      "excerpt": "TechNode Global: Singapore’s Omnistream closes $7M Series A investment led by SIG Venture Capital - Wavemaker Ventures Skip to main content Wavemaker Ventures Get in touch About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Menu About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Get in touch News / News TechNode Global: Singapore’s Omnistream closes $7M Series A investment led by SIG Venture Capital Wavemaker Ventures 8 Jun 2022 Wavemaker Ventures 8 Jun 2022 Share Omnistream, a Singapore-based data-empowered solutions company for the retail industry, said Tuesday it has raised $7 million in Series A funding led by SIG Venture Capital, the Asian venture capital arm of Susquehanna International Group (SIG). The round also saw participation from Delivery Hero Ventures, an independently managed venture capital fund backed by Delivery Hero, along with Asian investment management firm Spiral Ventures and venture capital firm Wavemaker Partners, Omnistream said in a statement. It also said that the new funding will allow Omnistream to rapidly scale to address the needs of retail clients globally and will result in the addition of more than 50 new roles to the team by the end of 2022. “I founded Omnistream as a"
+    },
+    {
+      "id": "check-page-70de03f796",
+      "url": "https://wavemaker.vc/transcelestial-brings-laser-communications-investment-to-australia-and-japans-telecom-defence-and-space-infrastructure/",
+      "page": "terms",
+      "excerpt": "Transcelestial brings laser communications investment to Australia and Japan’s telecom, defence and space infrastructure - Wavemaker Ventures Skip to main content Wavemaker Ventures Get in touch About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Menu About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Get in touch News / News Transcelestial brings laser communications investment to Australia and Japan’s telecom, defence and space infrastructure Wavemaker Ventures 30 Jun 2025 Wavemaker Ventures 30 Jun 2025 Share AUSTRALIA/JAPAN, 30 JUNE 2025: Transcelestial has landed an investment package, which brings the total investment to date to $30.7M, to deploy its laser communications technology across telecom, defence and space infrastructure across the emerging technology corridors of Australia and Japan. The funding round was co-led by NTT Finance – the finance arm of Japan’s leading telecommunications conglomerate and Paspalis Capital – a VC with strategic investment interests in Northern Australia. Additional participants in this round include Golden Egg Ventures, In-Q-Tel, David G. Wilson (ex-007 Franchise, Defense & Aerospace Investor, Tyr Ventures), Beyond Earth Technologies and Non Public. Our latest Our latest"
+    },
+    {
+      "id": "check-page-40a4dab193",
+      "url": "https://wavemaker.vc/awareness-level-about-the-potential-benefits-of-energy-efficiency-is-low-in-sea-tablepointer-ceo/",
+      "page": "details",
+      "excerpt": "Awareness level about the potential benefits of energy efficiency is low in SEA: TablePointer CEO - Wavemaker Ventures Skip to main content Wavemaker Ventures Get in touch About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Menu About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Get in touch News / Spotlights Awareness level about the potential benefits of energy efficiency is low in SEA: TablePointer CEO Wavemaker Ventures 13 Apr 2023 Wavemaker Ventures 13 Apr 2023 Share Early this week, energy-efficiency-as-a-service (EEaaS) startup TablePointer announced an over US$2.3 million oversubscribed seed funding round led by Wavemaker Partners, AgFunder, and ENGIE Factory. The Singapore-based firm will invest the money to develop new features and product modules and foray into new markets in Southeast Asia. Our latest Our latest stories Spotlights 08 September 2026 Dat Bike: Redefining Performance for Electric Motorbikes In the crowded streets of Ho Chi Minh City, motorbikes are more than just vehicles – they are the heartbeat... Read more News 19 August 2026 Neocrete Cuts Both Carbon and Cost of Concrete at Commercial Scale, Backed by US$3.5m from Wavemaker Ventures, Temasek Trust's C3H and Icehouse Ventures"
+    },
+    {
+      "id": "check-page-86667669e7",
+      "url": "https://wavemaker.vc/portfolio/",
+      "page": "portfolio",
+      "excerpt": "Portfolio - Wavemaker Ventures Skip to main content Wavemaker Ventures Get in touch About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Menu About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Get in touch Partnering with founders for lasting impact Partnering with founders for lasting impact Since 2012, we have invested in over 200 startups, each addressing critical global challenges with innovative, scalable, and defensible solutions. Today, 92% of our active portfolio companies contribute to at least one UN Sustainable Development Goal, reflecting our commitment to creating measurable, positive impact. Spotlights All Atomionics Founded by Sahil Tapiawala and Ravi Kumar, deep tech company Atomionics uses quantum gravimetry to map the Earth’s subsurface, making mineral discovery faster and more precise. Read more Dat Bike In the crowded streets of Ho Chi Minh City, motorbikes are more than just vehicles – they are the heartbeat of everyday life. Vietnam alone has over 77 million motorbikes, and across Southeast Asia, over 250 million rely on two-wheelers daily. Yet despite the massive market, the transition to electric has lagged behind. Early electric motorbikes were underpowered and short-range, feeling more"
+    },
+    {
+      "id": "check-page-402bfd2252",
+      "url": "https://wavemaker.vc/wavemaker-portfolio/ecospirits/",
+      "page": "portfolio",
+      "excerpt": "ecoSPIRITS - Wavemaker Ventures Skip to main content Wavemaker Ventures Get in touch About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Menu About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Get in touch Portfolio / ecoSPIRITS ecoSPIRITS provides wine and spirits producers and distributors the world’s first circular packaging technology and low-carbon footprint, last-mile spirits distribution system. Their goal is to eliminate the use of single-use glass packaging. Problem Environmental challenges : The spirits industry faces significant environmental concerns, particularly from single-use glass bottles, which accumulate in landfills. High costs : Single-use packaging and highly inefficient logistics account for up to 70% of the costs of distillers and beverage operators, impacting their profitability. Solution ecoSPIRITS has developed a sustainable, closed-loop distribution solution that aims to cut single-use packaging waste from the spirits and wine industry by 95%, reducing its carbon footprint. Key components include: EcoTOTE : A reusable, tamper-proof container that replaces traditional glass bottles. EcoPLANT : A facility that sanitises, refills, and reseals empty EcoTOTEs. SmartPour : A device for"
+    },
+    {
+      "id": "check-page-18e31c1357",
+      "url": "https://wavemaker.vc/wavemaker-portfolio/growsari/",
+      "page": "portfolio",
+      "excerpt": "Growsari - Wavemaker Ventures Skip to main content Wavemaker Ventures Get in touch About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Menu About Our Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Get in touch Portfolio / Growsari Growsari is an online platform that connects sari-sari stores (mom-and-pops) directly to manufacturers, allowing store owners to double their product margins compared to the traditional supply chain. Problem Vital yet underserved stores : There are 1 million sari-sari stores in the Philippines, generating US$20 billion in sales. Despite their importance to the economy, these stores remain the most underserved SME segment. Lack of access and bargaining power : Sari-sari stores have no direct access to suppliers and lack teh operational know-how, leaving them with limited bargaining power, low margins (around 8%), and slow restocking/shipment of products. Solution Direct supplier link : Growsari connects sari-sari stores directly to suppliers, allowing them to earn double the margins compared to traditional supply chains. Community hub expansion : The platform enables sari-sari store owners to offer ancillary services like bill payments, e-commerce drop-off points, advertising media"
+    },
+    {
+      "id": "check-page-c11873eeb5",
+      "url": "https://wavemaker.vc/wavemaker-portfolio/lhoopa/",
+      "page": "portfolio",
+      "excerpt": "�PNG IHDR � 7 ��a� PLTEGpL 'L $M %N�v %L�x �x &M�x &M ,8 @ &M &M &L &K C &M #L &L $M &M #L $L $M Q %M &L %M &M�� %A @@ ] &M q %L %K�w $I %M %M %M %M�� �w �x $J &L %L &M &L &M *@ %M %L %L &L &K %M $M &L %M $K %M &M &M�x �x %M &L $L %L &L %L $M 'N 'M $K &L %M &M %M %M &M &K $L�x �n �x �y %L�} $N %N $M�w &L &M J�w %M 'M $I &M &L %M 'O�x �w &L $L %M %M &M &M %L &M�y �y )H�w �x �f �x �x �x �y �x �y U &L %M (Q�x &N &L %M�x %M &L F�x &L &P UU %L�v %L %M &M�w %O &M %M %L�v &M %L &N� �z �u �x �x �y �x �x �y �w �x �x �y �w $L�w %M�x !N %M�x �v �w &L 'M %L (P %M�x &M %M %K &L #G &L &K %L�x �s �w #N &L &M�v &M &M %L &K &K�x �x �v �x �x �x �w �y �s �w �u �x �x �t �x 'L�y �y �x �w �u �w �w �y %M�x �z �q �x �� &L &L &M�x &K�t �w �x �y 'N %K %N 'H $N &M�x ���� �tRNS �j�p�$�� � ���s � �@�% \" q�� � xne ��I� �&!����� ��,l Q?��b·��|�])�e�(�� ��7=֜Y9� �nB b &��� C͉#��� hj�p /�z3�^! �� ���r� [v �}����� ��1 � g�lD���c�a� ;%��8��=�H�?O��L� G�5��U� Ա�cD �X�� g;�5a��}��3 ��w� �?F�,W�P��o2z��Έo � �Ű�� xد�K�.N� � �IDATh��w\\ G �W� �D�N� Q� M )\" ] E Ԉ �؈�J��Q���� D � cL�w��7��vw���%��.� � vw~;s_f�{�f � �=� c�v:��e�~����eˊ�M��f������� ;����0�,�tN gs�vZ!b�3d ��~ D �Xhm�_�$�wh üsj>��7�uK 9��كF$�ґ\\����d& < ��2����WI[ � ���[ < �\"M�fε \"B���Ç Mм %�q& 9��\\K#�9ή��Y��Fs� ��� �r ���:��� +@�Rh q�� ր���:��G �bf--�8�:�t�!2�{޷xD3�#ZC��� >І؆H�3���7�� �!� � -�)QSDy�tr��x��wl^ y� 6 �9y��8�uD�� \"V���|В��6�uD� .��nr�� ���.�"
     }
   ],
   "findings": {
@@ -47,8 +447,29 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-b5177774e5"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-adad61e79c"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-0c8d5523f4"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://wavemaker.vc/portfolio/",

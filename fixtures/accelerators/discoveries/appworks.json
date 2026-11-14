@@ -1,5 +1,46 @@
 {
   "programId": "appworks",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
-  "pages": []
+  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "pages": [
+    {
+      "url": "https://appworks.tw/accelerator/",
+      "page": "details",
+      "anchor": "Accelerator",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://appworks.tw/investments/",
+      "page": "terms",
+      "anchor": "Investments",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://appworks.tw/wistron-accelerator-faq/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://appworks.tw/wistron-faq",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://appworks.tw/wistron/",
+      "page": "details",
+      "anchor": "Wistron Accelerator",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
 }

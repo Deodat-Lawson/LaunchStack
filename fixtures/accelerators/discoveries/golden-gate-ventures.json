@@ -1,15 +1,7 @@
 {
   "programId": "golden-gate-ventures",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://www.goldengate.vc/portfolio",
-      "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://www.goldengate.vc/about",
       "page": "details",
@@ -19,17 +11,233 @@
       "origin": "official"
     },
     {
-      "url": "https://www.goldengate.vc/portfolio/infinity",
+      "url": "https://www.goldengate.vc/id/about-indonesia",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/ja/about-japanesse",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio",
       "page": "portfolio",
-      "anchor": "Infinity",
+      "anchor": "Portfolio",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/99-co",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/alodokter",
+      "page": "portfolio",
+      "anchor": "Alodokter",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/angellist",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/appota",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/aptoide",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/arkadiah",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/ayannah",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/baokim",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/biosapien",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/bootloader",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/bucketplace",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/bukuwarung",
+      "page": "portfolio",
+      "anchor": "BukuWarung",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/carousell",
+      "page": "portfolio",
+      "anchor": "Carousell",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.goldengate.vc/portfolio/ortcloud",
+      "url": "https://www.goldengate.vc/portfolio/carro",
       "page": "portfolio",
-      "anchor": "OrtCloud",
+      "anchor": "Carro",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/chilibeli",
+      "page": "portfolio",
+      "anchor": "Chilibeli",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/cho-tot",
+      "page": "portfolio",
+      "anchor": "Cho Tot",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/cinnamon",
+      "page": "portfolio",
+      "anchor": "Cinnamon",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/coda-payments",
+      "page": "portfolio",
+      "anchor": "Coda",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/fazz",
+      "page": "portfolio",
+      "anchor": "Fazz",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/finku",
+      "page": "portfolio",
+      "anchor": "Finku",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/flowaccount",
+      "page": "portfolio",
+      "anchor": "Flowaccount",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/funding-societies",
+      "page": "portfolio",
+      "anchor": "Funding Societies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/fuse",
+      "page": "portfolio",
+      "anchor": "Fuse",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/hijia",
+      "page": "portfolio",
+      "anchor": "Hijra",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/homage",
+      "page": "portfolio",
+      "anchor": "Homage",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/infinity",
+      "page": "portfolio",
+      "anchor": "Infinity",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -51,185 +259,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.goldengate.vc/portfolio/robodock",
-      "page": "portfolio",
-      "anchor": "RoboDock",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/lifepack",
-      "page": "portfolio",
-      "anchor": "Lifepack",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/tititada",
-      "page": "portfolio",
-      "anchor": "Tititada",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/finku",
-      "page": "portfolio",
-      "anchor": "Finku",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/locofy",
-      "page": "portfolio",
-      "anchor": "Locofy",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/nextpay",
-      "page": "portfolio",
-      "anchor": "NextPay",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/vui-app",
-      "page": "portfolio",
-      "anchor": "Vui",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/staffinc",
-      "page": "portfolio",
-      "anchor": "Staffinc",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/paper-id",
-      "page": "portfolio",
-      "anchor": "Paper.id",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/obviously-ai",
-      "page": "portfolio",
-      "anchor": "Obviously.AI",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.goldengate.vc/portfolio/klinik-pintar",
       "page": "portfolio",
       "anchor": "Klinik Pintar",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/homage",
-      "page": "portfolio",
-      "anchor": "Homage",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/twoplus",
-      "page": "portfolio",
-      "anchor": "twoplus",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/flowaccount",
-      "page": "portfolio",
-      "anchor": "Flowaccount",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/multiplier",
-      "page": "portfolio",
-      "anchor": "Multiplier",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/cho-tot",
-      "page": "portfolio",
-      "anchor": "Cho Tot",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/ninjavan",
-      "page": "portfolio",
-      "anchor": "Ninjavan",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/zuzu",
-      "page": "portfolio",
-      "anchor": "Zuzu",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/fazz",
-      "page": "portfolio",
-      "anchor": "Fazz",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/xendit",
-      "page": "portfolio",
-      "anchor": "Xendit",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/stripe",
-      "page": "portfolio",
-      "anchor": "Stripe",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/rukita",
-      "page": "portfolio",
-      "anchor": "Rukita",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.goldengate.vc/portfolio/moneysmart",
-      "page": "portfolio",
-      "anchor": "Moneysmart",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -243,83 +275,171 @@
       "origin": "official"
     },
     {
-      "url": "https://www.goldengate.vc/portfolio/fuse",
+      "url": "https://www.goldengate.vc/portfolio/lifepack",
       "page": "portfolio",
-      "anchor": "Fuse",
+      "anchor": "Lifepack",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.goldengate.vc/portfolio/funding-societies",
+      "url": "https://www.goldengate.vc/portfolio/locofy",
       "page": "portfolio",
-      "anchor": "Funding Societies",
+      "anchor": "Locofy",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.goldengate.vc/portfolio/coda-payments",
+      "url": "https://www.goldengate.vc/portfolio/moneysmart",
       "page": "portfolio",
-      "anchor": "Coda",
+      "anchor": "Moneysmart",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.goldengate.vc/portfolio/cinnamon",
+      "url": "https://www.goldengate.vc/portfolio/multiplier",
       "page": "portfolio",
-      "anchor": "Cinnamon",
+      "anchor": "Multiplier",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.goldengate.vc/portfolio/chilibeli",
+      "url": "https://www.goldengate.vc/portfolio/nextpay",
       "page": "portfolio",
-      "anchor": "Chilibeli",
+      "anchor": "NextPay",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.goldengate.vc/portfolio/carro",
+      "url": "https://www.goldengate.vc/portfolio/ninjavan",
       "page": "portfolio",
-      "anchor": "Carro",
+      "anchor": "Ninjavan",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.goldengate.vc/portfolio/carousell",
+      "url": "https://www.goldengate.vc/portfolio/obviously-ai",
       "page": "portfolio",
-      "anchor": "Carousell",
+      "anchor": "Obviously.AI",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.goldengate.vc/portfolio/bukuwarung",
+      "url": "https://www.goldengate.vc/portfolio/ortcloud",
       "page": "portfolio",
-      "anchor": "BukuWarung",
+      "anchor": "OrtCloud",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.goldengate.vc/portfolio/alodokter",
+      "url": "https://www.goldengate.vc/portfolio/paper-id",
       "page": "portfolio",
-      "anchor": "Alodokter",
+      "anchor": "Paper.id",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.goldengate.vc/portfolio/hijia",
+      "url": "https://www.goldengate.vc/portfolio/robodock",
       "page": "portfolio",
-      "anchor": "Hijra",
+      "anchor": "RoboDock",
       "fetched": false,
       "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/rukita",
+      "page": "portfolio",
+      "anchor": "Rukita",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/staffinc",
+      "page": "portfolio",
+      "anchor": "Staffinc",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/stripe",
+      "page": "portfolio",
+      "anchor": "Stripe",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/tititada",
+      "page": "portfolio",
+      "anchor": "Tititada",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/twoplus",
+      "page": "portfolio",
+      "anchor": "twoplus",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/vui-app",
+      "page": "portfolio",
+      "anchor": "Vui",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/xendit",
+      "page": "portfolio",
+      "anchor": "Xendit",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/portfolio/zuzu",
+      "page": "portfolio",
+      "anchor": "Zuzu",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/th/about-thai",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/vi/about-vietnamese",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.goldengate.vc/zh/about-chinesse",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     }
   ]

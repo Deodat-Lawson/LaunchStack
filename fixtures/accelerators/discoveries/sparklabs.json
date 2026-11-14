@@ -1,11 +1,91 @@
 {
   "programId": "sparklabs",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://sparklabs.co.kr/kr/program",
+      "url": "https://sparklabs.co.kr/en/bbs/login.php?url=%2Fen%2Fvisit_program",
       "page": "details",
-      "anchor": "Our Program",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/en/partnership_program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/en/program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/en/program_faq",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/en/visit_program",
+      "page": "details",
+      "anchor": "Learn More",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/application_faq",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/batch_team/christina-min/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fpartnership_program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fprogram",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/bbs/login.php?url=%2Fkr%2Fprogram_faq",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/faq",
+      "page": "terms",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -14,7 +94,7 @@
       "url": "https://sparklabs.co.kr/kr/partnership_program",
       "page": "details",
       "anchor": "Partnership Program",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -27,111 +107,7 @@
       "origin": "official"
     },
     {
-      "url": "https://sparklabs.co.kr/kr/portfolio/sparkplus/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://sparklabs.co.kr/kr/portfolio/wantedlab/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://sparklabs.co.kr/kr/portfolio/quadmedicine/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://sparklabs.co.kr/kr/portfolio/allganize/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://sparklabs.co.kr/kr/portfolio/fescaro/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://sparklabs.co.kr/kr/portfolio/muzlive/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://sparklabs.co.kr/kr/portfolio/kokozi/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://sparklabs.co.kr/kr/portfolio/genoplan/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://sparklabs.co.kr/kr/portfolio/blocko/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://sparklabs.co.kr/kr/portfolio/obzen/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://sparklabs.co.kr/kr/portfolio/reco/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://sparklabs.co.kr/kr/portfolio/swatchon/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://sparklabs.co.kr/kr/portfolio/ssenstone/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://sparklabs.co.kr/kr/portfolio/gint/",
       "page": "portfolio",
       "anchor": "",
       "fetched": false,
@@ -147,31 +123,7 @@
       "origin": "official"
     },
     {
-      "url": "https://sparklabs.co.kr/kr/portfolio/mbx/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://sparklabs.co.kr/kr/portfolio/nthing/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://sparklabs.co.kr/kr/portfolio/sentbe/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://sparklabs.co.kr/kr/portfolio/peaches/",
+      "url": "https://sparklabs.co.kr/kr/portfolio/blocko/",
       "page": "portfolio",
       "anchor": "",
       "fetched": false,
@@ -187,7 +139,23 @@
       "origin": "official"
     },
     {
-      "url": "https://sparklabs.co.kr/kr/portfolio/villagebaby/",
+      "url": "https://sparklabs.co.kr/kr/portfolio/fescaro/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/portfolio/genoplan/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/portfolio/gint/",
       "page": "portfolio",
       "anchor": "",
       "fetched": false,
@@ -203,10 +171,122 @@
       "origin": "official"
     },
     {
-      "url": "https://sparklabs.co.kr/en/visit_program",
-      "page": "details",
-      "anchor": "Learn More",
+      "url": "https://sparklabs.co.kr/kr/portfolio/kokozi/",
+      "page": "portfolio",
+      "anchor": "",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/portfolio/mbx/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/portfolio/muzlive/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/portfolio/nthing/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/portfolio/obzen/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/portfolio/peaches/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/portfolio/quadmedicine/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/portfolio/reco/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/portfolio/sentbe/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/portfolio/sparkplus/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/portfolio/ssenstone/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/portfolio/swatchon/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/portfolio/villagebaby/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/portfolio/wantedlab/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sparklabs.co.kr/kr/program",
+      "page": "details",
+      "anchor": "Our Program",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

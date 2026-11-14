@@ -1,6 +1,6 @@
 {
   "programId": "beta-i",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://beta-i.com/about.html",
@@ -14,7 +14,15 @@
       "url": "https://beta-i.com/case-ai-ignite.html",
       "page": "details",
       "anchor": "[ Drop media/cases/ai-ignite.jpg ] Building the confidence and capability to work with AI AI and technology · Adoption programme AI Ignite · José de Mello We work with teams to ide",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://beta-i.com/case-aws-clean-energy.html",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -22,7 +30,7 @@
       "url": "https://beta-i.com/case-resource.html",
       "page": "portfolio",
       "anchor": "[ Drop media/cases/resource.jpg ] 41 pilots under development Packaging · 33 countries · Value chain Re_source · Sociedade Ponto Verde Thirteen companies across the packaging value",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

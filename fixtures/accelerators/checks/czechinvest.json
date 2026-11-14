@@ -1,39 +1,563 @@
 {
   "programId": "czechinvest",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://czechinvest.gov.cz/",
-    "https://czechinvest.gov.cz/en/About-CzechInvest/About-Us/Organizational-structure",
-    "https://czechinvest.gov.cz/en/Homepage/News/July-2026/Czechia-Dealroom-The-Digital-Map-of-Czech-Innovation-Opening-Doors-to-the-World"
+    "https://czechinvest.gov.cz/en/Homepage/News/February-2019/Design-an-application-with-support-of-the-Galileo-system-and-win-EUR-100,000",
+    "https://czechinvest.gov.cz/en/Homepage/News/July-2008/Suspension-of-applications-in-the-Framework-program-for-the-support-of-Technology-centers-and-Center",
+    "https://czechinvest.gov.cz/en/Homepage/News/June-2021/Two-shelled-protective-face-shield-and-an-application-focuses-on-mental-health-Medical-startups-are",
+    "https://czechinvest.gov.cz/en/Homepage/News/March-2017/CEBIT-trade-fair-in-Germany-showcases-the-main-trends-in-digital-application-development",
+    "https://czechinvest.gov.cz/en/Homepage/News/May-2018/Students-in-Plzen-spend-54-hours-in-the-role-of-entrepreneurs,-create-applications-for-young-people",
+    "https://czechinvest.gov.cz/en/Homepage/News/May-2020/Acceptance-of-applications-to-government-visa-programmes-resumes",
+    "https://czechinvest.gov.cz/en/Homepage/Novinky/Brezen-2017/Veletrh-CEBIT-v-Nemecku-prinesl-hlavni-trendy-ve-v",
+    "https://czechinvest.gov.cz/en/Homepage/Novinky/Cerven-2021/Dvouplastovy-ochranny-stit-nebo-aplikace-pro-lepsi",
+    "https://czechinvest.gov.cz/en/Homepage/Novinky/Cervenec-2008/Zastaveni-zadosti-do-Ramcoveho-programu-pro-podpor",
+    "https://czechinvest.gov.cz/en/Homepage/Novinky/Kveten-2018/Studenti-se-v-Plzni-na-54-hodin-vzili-do-role-podn",
+    "https://czechinvest.gov.cz/en/Homepage/Novinky/Kveten-2020/Prijem-zadosti-do-vladnich-vizovych-programu-se-zn",
+    "https://czechinvest.gov.cz/en/Homepage/Novinky/Unor-2019/Navrhnete-aplikaci-s-podporou-systemu-Galileo-a-vy",
+    "https://czechinvest.gov.cz/en/About-CzechInvest/Download/General-materials/Investment-Climate-2026",
+    "https://czechinvest.gov.cz/en/About-CzechInvest/Download/General-materials/Investment-Climate-in-Czechia"
   ],
   "evidence": [
     {
+      "id": "check-deal-0016c80741",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/February-2019/Design-an-application-with-support-of-the-Galileo-system-and-win-EUR-100,000",
+      "title": "CzechInvest — application page",
+      "excerpt": "EUR 100,000, with the second- and third-place winners receiving EUR 50,000 and EUR 30,000, respectively. CzechInvest is a partner of the",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-1a656b4f34",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Unor-2019/Navrhnete-aplikaci-s-podporou-systemu-Galileo-a-vy",
+      "title": "CzechInvest — application page",
+      "excerpt": "The grand-prize winner of the MyGalileoApp competition will receive EUR 100,000, with the second- and third-place winners receiving EUR 50,000 and EUR",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-62e783a805",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/February-2019/Design-an-application-with-support-of-the-Galileo-system-and-win-EUR-100,000",
+      "title": "CzechInvest — application page",
+      "excerpt": "with the second- and third-place winners receiving EUR 50,000 and EUR 30,000, respectively. CzechInvest is a partner of the competition. More",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-b3acf93836",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Unor-2019/Navrhnete-aplikaci-s-podporou-systemu-Galileo-a-vy",
+      "title": "CzechInvest — application page",
+      "excerpt": "with the second- and third-place winners receiving EUR 50,000 and EUR 30,000, respectively. CzechInvest is a partner of the competition. More",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-be75810b2a",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/February-2019/Design-an-application-with-support-of-the-Galileo-system-and-win-EUR-100,000",
+      "title": "CzechInvest — application page",
+      "excerpt": "The grand-prize winner of the MyGalileoApp competition will receive EUR 100,000, with the second- and third-place winners receiving EUR 50,000 and EUR",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-e883d2a8de",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Unor-2019/Navrhnete-aplikaci-s-podporou-systemu-Galileo-a-vy",
+      "title": "CzechInvest — application page",
+      "excerpt": "EUR 100,000, with the second- and third-place winners receiving EUR 50,000 and EUR 30,000, respectively. CzechInvest is a partner of the",
+      "page": "application"
+    },
+    {
+      "id": "check-format-103e7fa0c9",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/February-2019/Design-an-application-with-support-of-the-Galileo-system-and-win-EUR-100,000",
+      "title": "CzechInvest — application page",
+      "excerpt": "Stavario Ullmanna VisionCraft Hunter Games Kaleido LAM-X Virtual Lab Archive of startup programs CzechStarter Czechia -",
+      "page": "application"
+    },
+    {
+      "id": "check-format-13a54329e3",
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Download/General-materials/Investment-Climate-in-Czechia",
+      "title": "CzechInvest — terms page",
+      "excerpt": "Stavario Ullmanna VisionCraft Hunter Games Kaleido LAM-X Virtual Lab Archive of startup programs CzechStarter Czechia -",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-19a0d22733",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Unor-2019/Navrhnete-aplikaci-s-podporou-systemu-Galileo-a-vy",
+      "title": "CzechInvest — application page",
+      "excerpt": "Stavario Ullmanna VisionCraft Hunter Games Kaleido LAM-X Virtual Lab Archive of startup programs CzechStarter Czechia -",
+      "page": "application"
+    },
+    {
+      "id": "check-format-1a3a6f3fca",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/June-2021/Two-shelled-protective-face-shield-and-an-application-focuses-on-mental-health-Medical-startups-are",
+      "title": "CzechInvest — application page",
+      "excerpt": "The winning projects included, among others, VirtualLab’s virtual ICU, ground-breaking PCR saliva tests from Diana",
+      "page": "application"
+    },
+    {
+      "id": "check-format-21d6f8be7c",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/May-2018/Students-in-Plzen-spend-54-hours-in-the-role-of-entrepreneurs,-create-applications-for-young-people",
+      "title": "CzechInvest — application page",
+      "excerpt": "Mebster Roletik Sharry FaceUp.com Miomove InsightART Hybrid Company Langino Motionlab Pikto Digital Retailys Stavario",
+      "page": "application"
+    },
+    {
+      "id": "check-format-350912485c",
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Download/General-materials/Investment-Climate-2026",
+      "title": "CzechInvest — terms page",
+      "excerpt": "Mebster Roletik Sharry FaceUp.com Miomove InsightART Hybrid Company Langino Motionlab Pikto Digital Retailys Stavario",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-361d3e3a7d",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/June-2021/Two-shelled-protective-face-shield-and-an-application-focuses-on-mental-health-Medical-startups-are",
+      "title": "CzechInvest — application page",
+      "excerpt": "Stavario Ullmanna VisionCraft Hunter Games Kaleido LAM-X Virtual Lab Archive of startup programs CzechStarter Czechia -",
+      "page": "application"
+    },
+    {
+      "id": "check-format-3899178eff",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Brezen-2017/Veletrh-CEBIT-v-Nemecku-prinesl-hlavni-trendy-ve-v",
+      "title": "CzechInvest — application page",
+      "excerpt": "Stavario Ullmanna VisionCraft Hunter Games Kaleido LAM-X Virtual Lab Archive of startup programs CzechStarter Czechia -",
+      "page": "application"
+    },
+    {
+      "id": "check-format-398123e8db",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/March-2017/CEBIT-trade-fair-in-Germany-showcases-the-main-trends-in-digital-application-development",
+      "title": "CzechInvest — application page",
+      "excerpt": "Stavario Ullmanna VisionCraft Hunter Games Kaleido LAM-X Virtual Lab Archive of startup programs CzechStarter Czechia -",
+      "page": "application"
+    },
+    {
+      "id": "check-format-3eade78bb8",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/July-2008/Suspension-of-applications-in-the-Framework-program-for-the-support-of-Technology-centers-and-Center",
+      "title": "CzechInvest — application page",
+      "excerpt": "Stavario Ullmanna VisionCraft Hunter Games Kaleido LAM-X Virtual Lab Archive of startup programs CzechStarter Czechia -",
+      "page": "application"
+    },
+    {
+      "id": "check-format-3f8781f66d",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/June-2021/Two-shelled-protective-face-shield-and-an-application-focuses-on-mental-health-Medical-startups-are",
+      "title": "CzechInvest — application page",
+      "excerpt": "see this in, for example, the area of telemedicine, i.e. remote transmission of medical information via telecommunications",
+      "page": "application"
+    },
+    {
+      "id": "check-format-426f9ca8aa",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Cervenec-2008/Zastaveni-zadosti-do-Ramcoveho-programu-pro-podpor",
+      "title": "CzechInvest — application page",
+      "excerpt": "Stavario Ullmanna VisionCraft Hunter Games Kaleido LAM-X Virtual Lab Archive of startup programs CzechStarter Czechia -",
+      "page": "application"
+    },
+    {
+      "id": "check-format-46c94f3ab3",
+      "url": "https://czechinvest.gov.cz/",
+      "title": "CzechInvest — homepage",
+      "excerpt": "Mebster Roletik Sharry FaceUp.com Miomove InsightART Hybrid Company Langino Motionlab Pikto Digital Retailys Stavario",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5204fbf3d0",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/May-2020/Acceptance-of-applications-to-government-visa-programmes-resumes",
+      "title": "CzechInvest — application page",
+      "excerpt": "Stavario Ullmanna VisionCraft Hunter Games Kaleido LAM-X Virtual Lab Archive of startup programs CzechStarter Czechia -",
+      "page": "application"
+    },
+    {
+      "id": "check-format-6166dace31",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/February-2019/Design-an-application-with-support-of-the-Galileo-system-and-win-EUR-100,000",
+      "title": "CzechInvest — application page",
+      "excerpt": "Mebster Roletik Sharry FaceUp.com Miomove InsightART Hybrid Company Langino Motionlab Pikto Digital Retailys Stavario",
+      "page": "application"
+    },
+    {
+      "id": "check-format-6bb60cc95e",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Cerven-2021/Dvouplastovy-ochranny-stit-nebo-aplikace-pro-lepsi",
+      "title": "CzechInvest — application page",
+      "excerpt": "Mebster Roletik Sharry FaceUp.com Miomove InsightART Hybrid Company Langino Motionlab Pikto Digital Retailys Stavario",
+      "page": "application"
+    },
+    {
+      "id": "check-format-749d0cc216",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Kveten-2020/Prijem-zadosti-do-vladnich-vizovych-programu-se-zn",
+      "title": "CzechInvest — application page",
+      "excerpt": "Stavario Ullmanna VisionCraft Hunter Games Kaleido LAM-X Virtual Lab Archive of startup programs CzechStarter Czechia -",
+      "page": "application"
+    },
+    {
+      "id": "check-format-79b46858c3",
+      "url": "https://czechinvest.gov.cz/",
+      "title": "CzechInvest — homepage",
+      "excerpt": "Stavario Ullmanna VisionCraft Hunter Games Kaleido LAM-X Virtual Lab Archive of startup programs CzechStarter Czechia -",
+      "page": "details"
+    },
+    {
+      "id": "check-format-79bbd2611c",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Cerven-2021/Dvouplastovy-ochranny-stit-nebo-aplikace-pro-lepsi",
+      "title": "CzechInvest — application page",
+      "excerpt": "see this in, for example, the area of telemedicine, i.e. remote transmission of medical information via telecommunications",
+      "page": "application"
+    },
+    {
+      "id": "check-format-7cb250b5cf",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Kveten-2018/Studenti-se-v-Plzni-na-54-hodin-vzili-do-role-podn",
+      "title": "CzechInvest — application page",
+      "excerpt": "Mebster Roletik Sharry FaceUp.com Miomove InsightART Hybrid Company Langino Motionlab Pikto Digital Retailys Stavario",
+      "page": "application"
+    },
+    {
+      "id": "check-format-7e150a82db",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/June-2021/Two-shelled-protective-face-shield-and-an-application-focuses-on-mental-health-Medical-startups-are",
+      "title": "CzechInvest — application page",
+      "excerpt": "tests from Diana Biotechnologies, and Kaleido’s use of virtual reality in senior care. CzechInvest’s ecosystem comprises",
+      "page": "application"
+    },
+    {
+      "id": "check-format-8e58e05432",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Cervenec-2008/Zastaveni-zadosti-do-Ramcoveho-programu-pro-podpor",
+      "title": "CzechInvest — application page",
+      "excerpt": "Mebster Roletik Sharry FaceUp.com Miomove InsightART Hybrid Company Langino Motionlab Pikto Digital Retailys Stavario",
+      "page": "application"
+    },
+    {
+      "id": "check-format-9724c342b9",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Unor-2019/Navrhnete-aplikaci-s-podporou-systemu-Galileo-a-vy",
+      "title": "CzechInvest — application page",
+      "excerpt": "Mebster Roletik Sharry FaceUp.com Miomove InsightART Hybrid Company Langino Motionlab Pikto Digital Retailys Stavario",
+      "page": "application"
+    },
+    {
+      "id": "check-format-9b4ec219c1",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Cerven-2021/Dvouplastovy-ochranny-stit-nebo-aplikace-pro-lepsi",
+      "title": "CzechInvest — application page",
+      "excerpt": "tests from Diana Biotechnologies, and Kaleido’s use of virtual reality in senior care. CzechInvest’s ecosystem comprises",
+      "page": "application"
+    },
+    {
+      "id": "check-format-9f4ea5e138",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Cerven-2021/Dvouplastovy-ochranny-stit-nebo-aplikace-pro-lepsi",
+      "title": "CzechInvest — application page",
+      "excerpt": "The winning projects included, among others, VirtualLab’s virtual ICU, ground-breaking PCR saliva tests from Diana",
+      "page": "application"
+    },
+    {
+      "id": "check-format-b11792e6fd",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Kveten-2018/Studenti-se-v-Plzni-na-54-hodin-vzili-do-role-podn",
+      "title": "CzechInvest — application page",
+      "excerpt": "Stavario Ullmanna VisionCraft Hunter Games Kaleido LAM-X Virtual Lab Archive of startup programs CzechStarter Czechia -",
+      "page": "application"
+    },
+    {
+      "id": "check-format-b1b523c944",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Kveten-2020/Prijem-zadosti-do-vladnich-vizovych-programu-se-zn",
+      "title": "CzechInvest — application page",
+      "excerpt": "Mebster Roletik Sharry FaceUp.com Miomove InsightART Hybrid Company Langino Motionlab Pikto Digital Retailys Stavario",
+      "page": "application"
+    },
+    {
+      "id": "check-format-c8b703a577",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/July-2008/Suspension-of-applications-in-the-Framework-program-for-the-support-of-Technology-centers-and-Center",
+      "title": "CzechInvest — application page",
+      "excerpt": "Mebster Roletik Sharry FaceUp.com Miomove InsightART Hybrid Company Langino Motionlab Pikto Digital Retailys Stavario",
+      "page": "application"
+    },
+    {
+      "id": "check-format-cda2fb4c1a",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/May-2018/Students-in-Plzen-spend-54-hours-in-the-role-of-entrepreneurs,-create-applications-for-young-people",
+      "title": "CzechInvest — application page",
+      "excerpt": "Stavario Ullmanna VisionCraft Hunter Games Kaleido LAM-X Virtual Lab Archive of startup programs CzechStarter Czechia -",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e0d01440b4",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/March-2017/CEBIT-trade-fair-in-Germany-showcases-the-main-trends-in-digital-application-development",
+      "title": "CzechInvest — application page",
+      "excerpt": "Mebster Roletik Sharry FaceUp.com Miomove InsightART Hybrid Company Langino Motionlab Pikto Digital Retailys Stavario",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e4296fde8c",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/May-2020/Acceptance-of-applications-to-government-visa-programmes-resumes",
+      "title": "CzechInvest — application page",
+      "excerpt": "Mebster Roletik Sharry FaceUp.com Miomove InsightART Hybrid Company Langino Motionlab Pikto Digital Retailys Stavario",
+      "page": "application"
+    },
+    {
+      "id": "check-format-eca088bc1f",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/June-2021/Two-shelled-protective-face-shield-and-an-application-focuses-on-mental-health-Medical-startups-are",
+      "title": "CzechInvest — application page",
+      "excerpt": "Mebster Roletik Sharry FaceUp.com Miomove InsightART Hybrid Company Langino Motionlab Pikto Digital Retailys Stavario",
+      "page": "application"
+    },
+    {
+      "id": "check-format-f042f6391a",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Cerven-2021/Dvouplastovy-ochranny-stit-nebo-aplikace-pro-lepsi",
+      "title": "CzechInvest — application page",
+      "excerpt": "Stavario Ullmanna VisionCraft Hunter Games Kaleido LAM-X Virtual Lab Archive of startup programs CzechStarter Czechia -",
+      "page": "application"
+    },
+    {
+      "id": "check-format-f5de332fb0",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Brezen-2017/Veletrh-CEBIT-v-Nemecku-prinesl-hlavni-trendy-ve-v",
+      "title": "CzechInvest — application page",
+      "excerpt": "Mebster Roletik Sharry FaceUp.com Miomove InsightART Hybrid Company Langino Motionlab Pikto Digital Retailys Stavario",
+      "page": "application"
+    },
+    {
+      "id": "check-format-f64eda9d4a",
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Download/General-materials/Investment-Climate-in-Czechia",
+      "title": "CzechInvest — terms page",
+      "excerpt": "Mebster Roletik Sharry FaceUp.com Miomove InsightART Hybrid Company Langino Motionlab Pikto Digital Retailys Stavario",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-fecbc718c7",
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Download/General-materials/Investment-Climate-2026",
+      "title": "CzechInvest — terms page",
+      "excerpt": "Stavario Ullmanna VisionCraft Hunter Games Kaleido LAM-X Virtual Lab Archive of startup programs CzechStarter Czechia -",
+      "page": "terms"
+    },
+    {
       "id": "check-name-fe47bb27e4",
       "url": "https://czechinvest.gov.cz/",
-      "title": "CzechInvest — homepage checked by scrape.py",
+      "title": "CzechInvest — homepage",
       "excerpt": "﻿ Investment and Business Development Agency - CzechInvest cz en de Business and Investment Development Agency change",
       "page": "details"
     },
     {
-      "id": "check-phone-26ebeafbb8",
-      "url": "https://czechinvest.gov.cz/en/Homepage/News/July-2026/Czechia-Dealroom-The-Digital-Map-of-Czech-Innovation-Opening-Doors-to-the-World",
-      "title": "CzechInvest — terms page checked by scrape.py",
+      "id": "check-phone-1dd78b63f9",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/July-2008/Suspension-of-applications-in-the-Framework-program-for-the-support-of-Technology-centers-and-Center",
+      "title": "CzechInvest — application page",
       "excerpt": "+420 727 850 330",
-      "page": "terms"
+      "page": "application"
+    },
+    {
+      "id": "check-phone-1df05fdb66",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/May-2020/Acceptance-of-applications-to-government-visa-programmes-resumes",
+      "title": "CzechInvest — application page",
+      "excerpt": "+420 727 850 330",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-4008665094",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/March-2017/CEBIT-trade-fair-in-Germany-showcases-the-main-trends-in-digital-application-development",
+      "title": "CzechInvest — application page",
+      "excerpt": "+420 727 850 330",
+      "page": "application"
     },
     {
       "id": "check-phone-4b6a69c199",
       "url": "https://czechinvest.gov.cz/",
-      "title": "CzechInvest — homepage checked by scrape.py",
+      "title": "CzechInvest — homepage",
       "excerpt": "+420 727 850 330",
       "page": "details"
     },
     {
-      "id": "check-phone-fbbce6891c",
-      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/About-Us/Organizational-structure",
-      "title": "CzechInvest — details page checked by scrape.py",
+      "id": "check-phone-595fa791a3",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Cervenec-2008/Zastaveni-zadosti-do-Ramcoveho-programu-pro-podpor",
+      "title": "CzechInvest — application page",
       "excerpt": "+420 727 850 330",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-phone-5e9aac514e",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Cerven-2021/Dvouplastovy-ochranny-stit-nebo-aplikace-pro-lepsi",
+      "title": "CzechInvest — application page",
+      "excerpt": "+420 727 850 330",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-7df8bc903b",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/June-2021/Two-shelled-protective-face-shield-and-an-application-focuses-on-mental-health-Medical-startups-are",
+      "title": "CzechInvest — application page",
+      "excerpt": "+420 727 850 330",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-7eba11fad9",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Unor-2019/Navrhnete-aplikaci-s-podporou-systemu-Galileo-a-vy",
+      "title": "CzechInvest — application page",
+      "excerpt": "+420 727 850 330",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-85a5e9cd59",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/February-2019/Design-an-application-with-support-of-the-Galileo-system-and-win-EUR-100,000",
+      "title": "CzechInvest — application page",
+      "excerpt": "+420 727 850 330",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-e2e727efe2",
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Download/General-materials/Investment-Climate-2026",
+      "title": "CzechInvest — terms page",
+      "excerpt": "+420 727 850 330",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-e56de243f5",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Brezen-2017/Veletrh-CEBIT-v-Nemecku-prinesl-hlavni-trendy-ve-v",
+      "title": "CzechInvest — application page",
+      "excerpt": "+420 727 850 330",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-ebb5c2b97d",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Kveten-2020/Prijem-zadosti-do-vladnich-vizovych-programu-se-zn",
+      "title": "CzechInvest — application page",
+      "excerpt": "+420 727 850 330",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-f461262d09",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Kveten-2018/Studenti-se-v-Plzni-na-54-hodin-vzili-do-role-podn",
+      "title": "CzechInvest — application page",
+      "excerpt": "+420 727 850 330",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-f8e3654c5f",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/May-2018/Students-in-Plzen-spend-54-hours-in-the-role-of-entrepreneurs,-create-applications-for-young-people",
+      "title": "CzechInvest — application page",
+      "excerpt": "+420 727 850 330",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-fc2641f0ab",
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Download/General-materials/Investment-Climate-in-Czechia",
+      "title": "CzechInvest — terms page",
+      "excerpt": "+420 727 850 330",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1f8fcdcd92",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/May-2018/Students-in-Plzen-spend-54-hours-in-the-role-of-entrepreneurs,-create-applications-for-young-people",
+      "title": "CzechInvest — application page",
+      "excerpt": "Students in Plzeň spend 54 hours in the role of entrepreneurs, create applications for young people → https://czechinvest.gov.cz/en/Homepage/Novinky/Kveten-2018/Studenti-se-v-Plzni-na-54-hodin-vzili-do-role-podn",
+      "page": "application"
+    },
+    {
+      "id": "check-route-28adb87c39",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/July-2008/Suspension-of-applications-in-the-Framework-program-for-the-support-of-Technology-centers-and-Center",
+      "title": "CzechInvest — application page",
+      "excerpt": "Suspension of applications in the Framework program for the support of Technology centers and Center → https://czechinvest.gov.cz/en/Homepage/Novinky/Cervenec-2008/Zastaveni-zadosti-do-Ramcoveho-programu-pro-podpor",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5673eb292e",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/March-2017/CEBIT-trade-fair-in-Germany-showcases-the-main-trends-in-digital-application-development",
+      "title": "CzechInvest — application page",
+      "excerpt": "CEBIT trade fair in Germany showcases the main trends in digital application development → https://czechinvest.gov.cz/en/Homepage/Novinky/Brezen-2017/Veletrh-CEBIT-v-Nemecku-prinesl-hlavni-trendy-ve-v",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6e8c7dcb42",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/June-2021/Two-shelled-protective-face-shield-and-an-application-focuses-on-mental-health-Medical-startups-are",
+      "title": "CzechInvest — application page",
+      "excerpt": "Two-shelled protective face shield and an application focuses on mental health. Medical startups are → https://czechinvest.gov.cz/en/Homepage/Novinky/Cerven-2021/Dvouplastovy-ochranny-stit-nebo-aplikace-pro-lepsi",
+      "page": "application"
+    },
+    {
+      "id": "check-route-82a82bbc3e",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/May-2020/Acceptance-of-applications-to-government-visa-programmes-resumes",
+      "title": "CzechInvest — application page",
+      "excerpt": "Acceptance of applications to government visa programmes resumes → https://czechinvest.gov.cz/en/Homepage/Novinky/Kveten-2020/Prijem-zadosti-do-vladnich-vizovych-programu-se-zn",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d4f054843b",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/February-2019/Design-an-application-with-support-of-the-Galileo-system-and-win-EUR-100,000",
+      "title": "CzechInvest — application page",
+      "excerpt": "Design an application with support of the Galileo system and win EUR 100,000 → https://czechinvest.gov.cz/en/Homepage/Novinky/Unor-2019/Navrhnete-aplikaci-s-podporou-systemu-Galileo-a-vy",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-23a0036def",
+      "url": "https://czechinvest.gov.cz/",
+      "page": "details",
+      "excerpt": "﻿ Investment and Business Development Agency - CzechInvest cz en de Business and Investment Development Agency change language | Search for: cz de en About CzechInvest About Us Organizational structure Internal projects CzechInvest management Digital Europe Program Enterprise Europe Network Investment Project Statistics History Partners Download General materials Logos Annual Reports GDPR Cookies For Investors Czech Semicon Days Czech Semicon Days 2025 Reasons to invest Stable Political and Economic Environment Educated Workforce Wages Quality of life Strong Focus on R&D Doing business in Czechia About Czechia Setting up a business Taxation system Infrastructure Investment Project Statistics Investment Incentives Manufacturing Industry Production of strategic products Technology Centres Business Support Service Centres Visa Support Key and Scientific Personnel Highly Qualified Worker Qualified Worker Programme Digital Nomad Program Long-Term Residence for the Purpose of Investing Business Properties Brownfields Database of business properties Database of Suppliers AfterCare Suppliers for BMW References Case Studies - Investors Hyundai Lego Siemens Stora Enso For Startups Technology incubation ESA BIC Czech Republic DIANA CERN Venture Connect program Structured Laser Beam Ultralight Cold Plate Single Mode Laser White Rabbit RUCIO Other activities Creative Business Cup Hack the"
+    },
+    {
+      "id": "check-page-600d351d96",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/February-2019/Design-an-application-with-support-of-the-Galileo-system-and-win-EUR-100,000",
+      "page": "application",
+      "excerpt": "﻿ Business and Investment Development Agency - CzechInvest cz en Business and Investment Development Agency change language | Search for: cz en About CzechInvest About Us Organizational structure Internal projects CzechInvest management Digital Europe Program Enterprise Europe Network Investment Project Statistics History Partners Download General materials Logos Annual Reports GDPR Cookies For Investors Czech Semicon Days Czech Semicon Days 2025 Reasons to invest Stable Political and Economic Environment Educated Workforce Wages Quality of life Strong Focus on R&D Doing business in Czechia About Czechia Setting up a business Taxation system Infrastructure Investment Project Statistics Investment Incentives Manufacturing Industry Production of strategic products Technology Centres Business Support Service Centres Visa Support Key and Scientific Personnel Highly Qualified Worker Qualified Worker Programme Digital Nomad Program Long-Term Residence for the Purpose of Investing Business Properties Brownfields Database of business properties Database of Suppliers AfterCare Suppliers for BMW References Case Studies - Investors Hyundai Lego Siemens Stora Enso For Startups Technology incubation ESA BIC Czech Republic DIANA CERN Venture Connect program Structured Laser Beam Ultralight Cold Plate Single Mode Laser White Rabbit RUCIO Other activities Creative Business Cup Hack the Crisis"
+    },
+    {
+      "id": "check-page-b2462d8ebd",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/July-2008/Suspension-of-applications-in-the-Framework-program-for-the-support-of-Technology-centers-and-Center",
+      "page": "application",
+      "excerpt": "﻿ Business and Investment Development Agency - CzechInvest cz en Business and Investment Development Agency change language | Search for: cz en About CzechInvest About Us Organizational structure Internal projects CzechInvest management Digital Europe Program Enterprise Europe Network Investment Project Statistics History Partners Download General materials Logos Annual Reports GDPR Cookies For Investors Czech Semicon Days Czech Semicon Days 2025 Reasons to invest Stable Political and Economic Environment Educated Workforce Wages Quality of life Strong Focus on R&D Doing business in Czechia About Czechia Setting up a business Taxation system Infrastructure Investment Project Statistics Investment Incentives Manufacturing Industry Production of strategic products Technology Centres Business Support Service Centres Visa Support Key and Scientific Personnel Highly Qualified Worker Qualified Worker Programme Digital Nomad Program Long-Term Residence for the Purpose of Investing Business Properties Brownfields Database of business properties Database of Suppliers AfterCare Suppliers for BMW References Case Studies - Investors Hyundai Lego Siemens Stora Enso For Startups Technology incubation ESA BIC Czech Republic DIANA CERN Venture Connect program Structured Laser Beam Ultralight Cold Plate Single Mode Laser White Rabbit RUCIO Other activities Creative Business Cup Hack the Crisis"
+    },
+    {
+      "id": "check-page-899bfe215a",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/June-2021/Two-shelled-protective-face-shield-and-an-application-focuses-on-mental-health-Medical-startups-are",
+      "page": "application",
+      "excerpt": "﻿ Two-shelled protective face shield and an application focuses on mental health. Medical startups are experiencing a boom in the Czech Republic - CzechInvest cz en Business and Investment Development Agency change language | Search for: cz en About CzechInvest About Us Organizational structure Internal projects CzechInvest management Digital Europe Program Enterprise Europe Network Investment Project Statistics History Partners Download General materials Logos Annual Reports GDPR Cookies For Investors Czech Semicon Days Czech Semicon Days 2025 Reasons to invest Stable Political and Economic Environment Educated Workforce Wages Quality of life Strong Focus on R&D Doing business in Czechia About Czechia Setting up a business Taxation system Infrastructure Investment Project Statistics Investment Incentives Manufacturing Industry Production of strategic products Technology Centres Business Support Service Centres Visa Support Key and Scientific Personnel Highly Qualified Worker Qualified Worker Programme Digital Nomad Program Long-Term Residence for the Purpose of Investing Business Properties Brownfields Database of business properties Database of Suppliers AfterCare Suppliers for BMW References Case Studies - Investors Hyundai Lego Siemens Stora Enso For Startups Technology incubation ESA BIC Czech Republic DIANA CERN Venture Connect program Structured Laser Beam Ultralight"
+    },
+    {
+      "id": "check-page-049ffecae3",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/March-2017/CEBIT-trade-fair-in-Germany-showcases-the-main-trends-in-digital-application-development",
+      "page": "application",
+      "excerpt": "﻿ Business and Investment Development Agency - CzechInvest cz en de Business and Investment Development Agency change language | Search for: cz de en About CzechInvest About Us Organizational structure Internal projects CzechInvest management Digital Europe Program Enterprise Europe Network Investment Project Statistics History Partners Download General materials Logos Annual Reports GDPR Cookies For Investors Czech Semicon Days Czech Semicon Days 2025 Reasons to invest Stable Political and Economic Environment Educated Workforce Wages Quality of life Strong Focus on R&D Doing business in Czechia About Czechia Setting up a business Taxation system Infrastructure Investment Project Statistics Investment Incentives Manufacturing Industry Production of strategic products Technology Centres Business Support Service Centres Visa Support Key and Scientific Personnel Highly Qualified Worker Qualified Worker Programme Digital Nomad Program Long-Term Residence for the Purpose of Investing Business Properties Brownfields Database of business properties Database of Suppliers AfterCare Suppliers for BMW References Case Studies - Investors Hyundai Lego Siemens Stora Enso For Startups Technology incubation ESA BIC Czech Republic DIANA CERN Venture Connect program Structured Laser Beam Ultralight Cold Plate Single Mode Laser White Rabbit RUCIO Other activities Creative Business Cup Hack the"
+    },
+    {
+      "id": "check-page-20adff0492",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/May-2018/Students-in-Plzen-spend-54-hours-in-the-role-of-entrepreneurs,-create-applications-for-young-people",
+      "page": "application",
+      "excerpt": "﻿ Business and Investment Development Agency - CzechInvest cz en Business and Investment Development Agency change language | Search for: cz en About CzechInvest About Us Organizational structure Internal projects CzechInvest management Digital Europe Program Enterprise Europe Network Investment Project Statistics History Partners Download General materials Logos Annual Reports GDPR Cookies For Investors Czech Semicon Days Czech Semicon Days 2025 Reasons to invest Stable Political and Economic Environment Educated Workforce Wages Quality of life Strong Focus on R&D Doing business in Czechia About Czechia Setting up a business Taxation system Infrastructure Investment Project Statistics Investment Incentives Manufacturing Industry Production of strategic products Technology Centres Business Support Service Centres Visa Support Key and Scientific Personnel Highly Qualified Worker Qualified Worker Programme Digital Nomad Program Long-Term Residence for the Purpose of Investing Business Properties Brownfields Database of business properties Database of Suppliers AfterCare Suppliers for BMW References Case Studies - Investors Hyundai Lego Siemens Stora Enso For Startups Technology incubation ESA BIC Czech Republic DIANA CERN Venture Connect program Structured Laser Beam Ultralight Cold Plate Single Mode Laser White Rabbit RUCIO Other activities Creative Business Cup Hack the Crisis"
+    },
+    {
+      "id": "check-page-f0770e06bd",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/May-2020/Acceptance-of-applications-to-government-visa-programmes-resumes",
+      "page": "application",
+      "excerpt": "﻿ Business and Investment Development Agency - CzechInvest cz en Business and Investment Development Agency change language | Search for: cz en About CzechInvest About Us Organizational structure Internal projects CzechInvest management Digital Europe Program Enterprise Europe Network Investment Project Statistics History Partners Download General materials Logos Annual Reports GDPR Cookies For Investors Czech Semicon Days Czech Semicon Days 2025 Reasons to invest Stable Political and Economic Environment Educated Workforce Wages Quality of life Strong Focus on R&D Doing business in Czechia About Czechia Setting up a business Taxation system Infrastructure Investment Project Statistics Investment Incentives Manufacturing Industry Production of strategic products Technology Centres Business Support Service Centres Visa Support Key and Scientific Personnel Highly Qualified Worker Qualified Worker Programme Digital Nomad Program Long-Term Residence for the Purpose of Investing Business Properties Brownfields Database of business properties Database of Suppliers AfterCare Suppliers for BMW References Case Studies - Investors Hyundai Lego Siemens Stora Enso For Startups Technology incubation ESA BIC Czech Republic DIANA CERN Venture Connect program Structured Laser Beam Ultralight Cold Plate Single Mode Laser White Rabbit RUCIO Other activities Creative Business Cup Hack the Crisis"
+    },
+    {
+      "id": "check-page-9835c71005",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Brezen-2017/Veletrh-CEBIT-v-Nemecku-prinesl-hlavni-trendy-ve-v",
+      "page": "application",
+      "excerpt": "﻿ Business and Investment Development Agency - CzechInvest cz en de Business and Investment Development Agency change language | Search for: cz de en About CzechInvest About Us Organizational structure Internal projects CzechInvest management Digital Europe Program Enterprise Europe Network Investment Project Statistics History Partners Download General materials Logos Annual Reports GDPR Cookies For Investors Czech Semicon Days Czech Semicon Days 2025 Reasons to invest Stable Political and Economic Environment Educated Workforce Wages Quality of life Strong Focus on R&D Doing business in Czechia About Czechia Setting up a business Taxation system Infrastructure Investment Project Statistics Investment Incentives Manufacturing Industry Production of strategic products Technology Centres Business Support Service Centres Visa Support Key and Scientific Personnel Highly Qualified Worker Qualified Worker Programme Digital Nomad Program Long-Term Residence for the Purpose of Investing Business Properties Brownfields Database of business properties Database of Suppliers AfterCare Suppliers for BMW References Case Studies - Investors Hyundai Lego Siemens Stora Enso For Startups Technology incubation ESA BIC Czech Republic DIANA CERN Venture Connect program Structured Laser Beam Ultralight Cold Plate Single Mode Laser White Rabbit RUCIO Other activities Creative Business Cup Hack the"
+    },
+    {
+      "id": "check-page-8b670bad3f",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Cerven-2021/Dvouplastovy-ochranny-stit-nebo-aplikace-pro-lepsi",
+      "page": "application",
+      "excerpt": "﻿ Two-shelled protective face shield and an application focuses on mental health. Medical startups are experiencing a boom in the Czech Republic - CzechInvest cz en Business and Investment Development Agency change language | Search for: cz en About CzechInvest About Us Organizational structure Internal projects CzechInvest management Digital Europe Program Enterprise Europe Network Investment Project Statistics History Partners Download General materials Logos Annual Reports GDPR Cookies For Investors Czech Semicon Days Czech Semicon Days 2025 Reasons to invest Stable Political and Economic Environment Educated Workforce Wages Quality of life Strong Focus on R&D Doing business in Czechia About Czechia Setting up a business Taxation system Infrastructure Investment Project Statistics Investment Incentives Manufacturing Industry Production of strategic products Technology Centres Business Support Service Centres Visa Support Key and Scientific Personnel Highly Qualified Worker Qualified Worker Programme Digital Nomad Program Long-Term Residence for the Purpose of Investing Business Properties Brownfields Database of business properties Database of Suppliers AfterCare Suppliers for BMW References Case Studies - Investors Hyundai Lego Siemens Stora Enso For Startups Technology incubation ESA BIC Czech Republic DIANA CERN Venture Connect program Structured Laser Beam Ultralight"
+    },
+    {
+      "id": "check-page-0d3b69afee",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Cervenec-2008/Zastaveni-zadosti-do-Ramcoveho-programu-pro-podpor",
+      "page": "application",
+      "excerpt": "﻿ Business and Investment Development Agency - CzechInvest cz en Business and Investment Development Agency change language | Search for: cz en About CzechInvest About Us Organizational structure Internal projects CzechInvest management Digital Europe Program Enterprise Europe Network Investment Project Statistics History Partners Download General materials Logos Annual Reports GDPR Cookies For Investors Czech Semicon Days Czech Semicon Days 2025 Reasons to invest Stable Political and Economic Environment Educated Workforce Wages Quality of life Strong Focus on R&D Doing business in Czechia About Czechia Setting up a business Taxation system Infrastructure Investment Project Statistics Investment Incentives Manufacturing Industry Production of strategic products Technology Centres Business Support Service Centres Visa Support Key and Scientific Personnel Highly Qualified Worker Qualified Worker Programme Digital Nomad Program Long-Term Residence for the Purpose of Investing Business Properties Brownfields Database of business properties Database of Suppliers AfterCare Suppliers for BMW References Case Studies - Investors Hyundai Lego Siemens Stora Enso For Startups Technology incubation ESA BIC Czech Republic DIANA CERN Venture Connect program Structured Laser Beam Ultralight Cold Plate Single Mode Laser White Rabbit RUCIO Other activities Creative Business Cup Hack the Crisis"
+    },
+    {
+      "id": "check-page-87fa4e25e4",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Kveten-2018/Studenti-se-v-Plzni-na-54-hodin-vzili-do-role-podn",
+      "page": "application",
+      "excerpt": "﻿ Business and Investment Development Agency - CzechInvest cz en Business and Investment Development Agency change language | Search for: cz en About CzechInvest About Us Organizational structure Internal projects CzechInvest management Digital Europe Program Enterprise Europe Network Investment Project Statistics History Partners Download General materials Logos Annual Reports GDPR Cookies For Investors Czech Semicon Days Czech Semicon Days 2025 Reasons to invest Stable Political and Economic Environment Educated Workforce Wages Quality of life Strong Focus on R&D Doing business in Czechia About Czechia Setting up a business Taxation system Infrastructure Investment Project Statistics Investment Incentives Manufacturing Industry Production of strategic products Technology Centres Business Support Service Centres Visa Support Key and Scientific Personnel Highly Qualified Worker Qualified Worker Programme Digital Nomad Program Long-Term Residence for the Purpose of Investing Business Properties Brownfields Database of business properties Database of Suppliers AfterCare Suppliers for BMW References Case Studies - Investors Hyundai Lego Siemens Stora Enso For Startups Technology incubation ESA BIC Czech Republic DIANA CERN Venture Connect program Structured Laser Beam Ultralight Cold Plate Single Mode Laser White Rabbit RUCIO Other activities Creative Business Cup Hack the Crisis"
+    },
+    {
+      "id": "check-page-c3dc1ede12",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Kveten-2020/Prijem-zadosti-do-vladnich-vizovych-programu-se-zn",
+      "page": "application",
+      "excerpt": "﻿ Business and Investment Development Agency - CzechInvest cz en Business and Investment Development Agency change language | Search for: cz en About CzechInvest About Us Organizational structure Internal projects CzechInvest management Digital Europe Program Enterprise Europe Network Investment Project Statistics History Partners Download General materials Logos Annual Reports GDPR Cookies For Investors Czech Semicon Days Czech Semicon Days 2025 Reasons to invest Stable Political and Economic Environment Educated Workforce Wages Quality of life Strong Focus on R&D Doing business in Czechia About Czechia Setting up a business Taxation system Infrastructure Investment Project Statistics Investment Incentives Manufacturing Industry Production of strategic products Technology Centres Business Support Service Centres Visa Support Key and Scientific Personnel Highly Qualified Worker Qualified Worker Programme Digital Nomad Program Long-Term Residence for the Purpose of Investing Business Properties Brownfields Database of business properties Database of Suppliers AfterCare Suppliers for BMW References Case Studies - Investors Hyundai Lego Siemens Stora Enso For Startups Technology incubation ESA BIC Czech Republic DIANA CERN Venture Connect program Structured Laser Beam Ultralight Cold Plate Single Mode Laser White Rabbit RUCIO Other activities Creative Business Cup Hack the Crisis"
+    },
+    {
+      "id": "check-page-af47e380b5",
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Unor-2019/Navrhnete-aplikaci-s-podporou-systemu-Galileo-a-vy",
+      "page": "application",
+      "excerpt": "﻿ Business and Investment Development Agency - CzechInvest cz en Business and Investment Development Agency change language | Search for: cz en About CzechInvest About Us Organizational structure Internal projects CzechInvest management Digital Europe Program Enterprise Europe Network Investment Project Statistics History Partners Download General materials Logos Annual Reports GDPR Cookies For Investors Czech Semicon Days Czech Semicon Days 2025 Reasons to invest Stable Political and Economic Environment Educated Workforce Wages Quality of life Strong Focus on R&D Doing business in Czechia About Czechia Setting up a business Taxation system Infrastructure Investment Project Statistics Investment Incentives Manufacturing Industry Production of strategic products Technology Centres Business Support Service Centres Visa Support Key and Scientific Personnel Highly Qualified Worker Qualified Worker Programme Digital Nomad Program Long-Term Residence for the Purpose of Investing Business Properties Brownfields Database of business properties Database of Suppliers AfterCare Suppliers for BMW References Case Studies - Investors Hyundai Lego Siemens Stora Enso For Startups Technology incubation ESA BIC Czech Republic DIANA CERN Venture Connect program Structured Laser Beam Ultralight Cold Plate Single Mode Laser White Rabbit RUCIO Other activities Creative Business Cup Hack the Crisis"
+    },
+    {
+      "id": "check-page-b750b27d9e",
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Download/General-materials/Investment-Climate-2026",
+      "page": "terms",
+      "excerpt": "﻿ Investment Climate 2026 - CzechInvest cz en Business and Investment Development Agency change language | Search for: cz en About CzechInvest About Us Organizational structure Internal projects CzechInvest management Digital Europe Program Enterprise Europe Network Investment Project Statistics History Partners Download General materials Logos Annual Reports GDPR Cookies For Investors Czech Semicon Days Czech Semicon Days 2025 Reasons to invest Stable Political and Economic Environment Educated Workforce Wages Quality of life Strong Focus on R&D Doing business in Czechia About Czechia Setting up a business Taxation system Infrastructure Investment Project Statistics Investment Incentives Manufacturing Industry Production of strategic products Technology Centres Business Support Service Centres Visa Support Key and Scientific Personnel Highly Qualified Worker Qualified Worker Programme Digital Nomad Program Long-Term Residence for the Purpose of Investing Business Properties Brownfields Database of business properties Database of Suppliers AfterCare Suppliers for BMW References Case Studies - Investors Hyundai Lego Siemens Stora Enso For Startups Technology incubation ESA BIC Czech Republic DIANA CERN Venture Connect program Structured Laser Beam Ultralight Cold Plate Single Mode Laser White Rabbit RUCIO Other activities Creative Business Cup Hack the Crisis Czech Republic"
+    },
+    {
+      "id": "check-page-1d3cc4884e",
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Download/General-materials/Investment-Climate-in-Czechia",
+      "page": "terms",
+      "excerpt": "﻿ Investment Climate in Czechia - CzechInvest en cz Business and Investment Development Agency change language | Search for: en cz About CzechInvest About Us Organizational structure Internal projects CzechInvest management Digital Europe Program Enterprise Europe Network Investment Project Statistics History Partners Download General materials Logos Annual Reports GDPR Cookies For Investors Czech Semicon Days Czech Semicon Days 2025 Reasons to invest Stable Political and Economic Environment Educated Workforce Wages Quality of life Strong Focus on R&D Doing business in Czechia About Czechia Setting up a business Taxation system Infrastructure Investment Project Statistics Investment Incentives Manufacturing Industry Production of strategic products Technology Centres Business Support Service Centres Visa Support Key and Scientific Personnel Highly Qualified Worker Qualified Worker Programme Digital Nomad Program Long-Term Residence for the Purpose of Investing Business Properties Brownfields Database of business properties Database of Suppliers AfterCare Suppliers for BMW References Case Studies - Investors Hyundai Lego Siemens Stora Enso For Startups Technology incubation ESA BIC Czech Republic DIANA CERN Venture Connect program Structured Laser Beam Ultralight Cold Plate Single Mode Laser White Rabbit RUCIO Other activities Creative Business Cup Hack the Crisis Czech"
     }
   ],
   "findings": {
@@ -44,13 +568,109 @@
         "evidenceId": "check-phone-4b6a69c199"
       }
     ],
-    "routes": [],
-    "applicationUrl": [],
+    "routes": [
+      {
+        "value": "https://czechinvest.gov.cz/en/Homepage/Novinky/Unor-2019/Navrhnete-aplikaci-s-podporou-systemu-Galileo-a-vy",
+        "evidenceId": "check-route-d4f054843b"
+      },
+      {
+        "value": "https://czechinvest.gov.cz/en/Homepage/Novinky/Cervenec-2008/Zastaveni-zadosti-do-Ramcoveho-programu-pro-podpor",
+        "evidenceId": "check-route-28adb87c39"
+      },
+      {
+        "value": "https://czechinvest.gov.cz/en/Homepage/Novinky/Cerven-2021/Dvouplastovy-ochranny-stit-nebo-aplikace-pro-lepsi",
+        "evidenceId": "check-route-6e8c7dcb42"
+      },
+      {
+        "value": "https://czechinvest.gov.cz/en/Homepage/Novinky/Brezen-2017/Veletrh-CEBIT-v-Nemecku-prinesl-hlavni-trendy-ve-v",
+        "evidenceId": "check-route-5673eb292e"
+      },
+      {
+        "value": "https://czechinvest.gov.cz/en/Homepage/Novinky/Kveten-2018/Studenti-se-v-Plzni-na-54-hodin-vzili-do-role-podn",
+        "evidenceId": "check-route-1f8fcdcd92"
+      },
+      {
+        "value": "https://czechinvest.gov.cz/en/Homepage/Novinky/Kveten-2020/Prijem-zadosti-do-vladnich-vizovych-programu-se-zn",
+        "evidenceId": "check-route-82a82bbc3e"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://czechinvest.gov.cz/en/Homepage/Novinky/Unor-2019/Navrhnete-aplikaci-s-podporou-systemu-Galileo-a-vy",
+        "evidenceId": "check-route-d4f054843b"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-46c94f3ab3"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-79b46858c3"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "The grand-prize winner of the MyGalileoApp competition will receive EUR 100,000, with the second- and third-place winners receiving EUR 50,000 and EUR",
+        "evidenceId": "check-deal-be75810b2a"
+      },
+      {
+        "value": "EUR 100,000, with the second- and third-place winners receiving EUR 50,000 and EUR 30,000, respectively. CzechInvest is a partner of the",
+        "evidenceId": "check-deal-0016c80741"
+      },
+      {
+        "value": "with the second- and third-place winners receiving EUR 50,000 and EUR 30,000, respectively. CzechInvest is a partner of the competition. More",
+        "evidenceId": "check-deal-62e783a805"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "100000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-be75810b2a"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "50000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-0016c80741"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "30000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-62e783a805"
+      }
+    ],
     "portfolioPages": [],
     "name": [
       {

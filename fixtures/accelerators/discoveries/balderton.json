@@ -1,7 +1,23 @@
 {
   "programId": "balderton",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://careers.balderton.com/companies",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://careers.balderton.com/jobs?__hsfp=4048727588&__hssc=51647990.23.1634215967246&__hstc=51647990.a84059ed3fe8efa2b63fe9e02c4327e1.1634027149833.1634027149833.1634027149833.1",
+      "page": "portfolio",
+      "anchor": "Portfolio Careers",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.balderton.com/about-balderton/",
       "page": "details",
@@ -14,15 +30,7 @@
       "url": "https://www.balderton.com/companies/",
       "page": "portfolio",
       "anchor": "Companies",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.balderton.com/news/category/portfolio-news/",
-      "page": "portfolio",
-      "anchor": "Portfolio News",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -30,7 +38,39 @@
       "url": "https://www.balderton.com/founder-well-being/programme-overview/",
       "page": "details",
       "anchor": "Programme Overview",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.balderton.com/news/category/portfolio-news/",
+      "page": "portfolio",
+      "anchor": "Portfolio News",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.balderton.com/news/category/portfolio-news/page/2/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.balderton.com/news/itoflow-raises-2-5-million-to-bring-institutional-grade-portfolio-management-to-every-investment-firm/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.balderton.com/news/unit1-studio-breaks-major-barrier-to-avatar-concert-adoption-secures-new-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

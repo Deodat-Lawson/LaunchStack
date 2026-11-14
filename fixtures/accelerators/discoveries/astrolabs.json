@@ -1,18 +1,58 @@
 {
   "programId": "astrolabs",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://astrolabs.com/about-us",
+      "page": "details",
+      "anchor": "About us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://astrolabs.com/corporate-innovation-programs",
+      "page": "details",
+      "anchor": "Corporate Innovation Programs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://astrolabs.com/market-entry-programs",
+      "page": "details",
+      "anchor": "Market Entry Programs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://insight.astrolabs.com/astrolabs-and-sab-accelerate-expansion-opportunities-in-saudi-arabia-for-fast-growing-international-new-economy-companies/",
       "page": "portfolio",
       "anchor": "Read more",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
       "url": "https://insight.astrolabs.com/banque-saudi-fransi-and-astrolabs-announce-2nd-cohort-of-the-banker-technologist-to-empower-saudi-arabias-next-gen-talents-in-the-financial-sector/",
       "page": "batches",
+      "anchor": "Read more",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://insight.astrolabs.com/how-can-foreign-companies-achieve-a-successful-launch-and-operational-readiness-in-saudi-arabia",
+      "page": "portfolio",
+      "anchor": "Read more",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://insight.astrolabs.com/how-to-get-a-foreign-investment-license-in-saudi-arabia/",
+      "page": "terms",
       "anchor": "Read more",
       "fetched": true,
       "blocked": null,
@@ -27,42 +67,18 @@
       "origin": "official"
     },
     {
+      "url": "https://insight.astrolabs.com/napster-incorporates-in-saudi-arabia-deepening-its-investment-in-the-kingdom-s-ai-economy",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://insight.astrolabs.com/saudization-requirements-2025-must-knows-for-companies-setting-up-a-business-in-saudi-arabia",
       "page": "portfolio",
       "anchor": "Read more",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://insight.astrolabs.com/how-can-foreign-companies-achieve-a-successful-launch-and-operational-readiness-in-saudi-arabia",
-      "page": "portfolio",
-      "anchor": "Read more",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://astrolabs.com/market-entry-programs",
-      "page": "details",
-      "anchor": "Market Entry Programs",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://astrolabs.com/corporate-innovation-programs",
-      "page": "details",
-      "anchor": "Corporate Innovation Programs",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://astrolabs.com/about-us",
-      "page": "details",
-      "anchor": "About us",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

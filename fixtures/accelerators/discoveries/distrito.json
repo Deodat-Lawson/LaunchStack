@@ -1,5 +1,70 @@
 {
   "programId": "distrito",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
-  "pages": []
+  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "pages": [
+    {
+      "url": "https://distrito.me/ai-education/mastering-ai-tech-teams?utm_source=blog&utm_medium=banner&utm_campaign=mastering-ai-tech",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://materiais.distrito.me/ai-lab?utm_source=blog&utm_medium=cta&utm_campaign=genai-lab&utm_term=cta-1&utm_content=google-for-startups-accelerator-brasil-startups-ia",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://materiais.distrito.me/ai-lab?utm_source=blog&utm_medium=cta&utm_campaign=genai-lab&utm_term=cta-final&utm_content=google-for-startups-accelerator-brasil-startups-ia",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.distrito.me/blog/claude-code-agente-de-ia-que-programa-ao-seu-lado",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.distrito.me/blog/desafios-abertos-para-startups-o-programa-do-distrito",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.distrito.me/blog/gemini-cli-conheca-e-saiba-como-usar-ferramenta-google-programacao",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.distrito.me/blog/genai-lab-distrito-lanca-programa-para-solucoes-de-genai",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.distrito.me/blog/google-for-startups-accelerator-brasil-startups-ia",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
 }

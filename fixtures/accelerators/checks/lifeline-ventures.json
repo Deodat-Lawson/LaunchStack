@@ -1,30 +1,87 @@
 {
   "programId": "lifeline-ventures",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://www.lifelineventures.com/"
+    "https://www.lifelineventures.com/",
+    "https://www.lifelineventures.com/companies/"
   ],
   "evidence": [
     {
+      "id": "check-format-21b4887263",
+      "url": "https://www.lifelineventures.com/companies/",
+      "title": "Lifeline Ventures — portfolio page",
+      "excerpt": "building tech connectivity is done. Clouder is building virtual cabling technology for commercial real estate to reduce",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-737bebfd2f",
+      "url": "https://www.lifelineventures.com/companies/",
+      "title": "Lifeline Ventures — portfolio page",
+      "excerpt": "Games was an independent Finnish developer that focused on virtual reality games. The company was founded in 2013 by avid",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-b6a972ab47",
+      "url": "https://www.lifelineventures.com/companies/",
+      "title": "Lifeline Ventures — portfolio page",
+      "excerpt": "long time industry experts. Mindfield Games released its virtual reality game P.O.L.L.E.N. in 2016. CEO: Ville Kivistö",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-c7ac852cb2",
+      "url": "https://www.lifelineventures.com/companies/",
+      "title": "Lifeline Ventures — portfolio page",
+      "excerpt": "of experience and a vision of seamlessly merging the virtual and real worlds. The Bionic Display™ in Varjo’s VR devices",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-e5f61c4edd",
+      "url": "https://www.lifelineventures.com/companies/",
+      "title": "Lifeline Ventures — portfolio page",
+      "excerpt": "Founded 2021 Series A Huuva Huuva is the next-generation virtual food court for commercial restaurants looking to optimize",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-location-72086fdde5",
+      "url": "https://www.lifelineventures.com/companies/",
+      "title": "Lifeline Ventures — portfolio page",
+      "excerpt": "is a Finnish quantum hardware company based in Espoo, originating from research at Aalto",
+      "page": "portfolio"
+    },
+    {
       "id": "check-name-45efea62d8",
       "url": "https://www.lifelineventures.com/",
-      "title": "Lifeline Ventures — homepage checked by scrape.py",
+      "title": "Lifeline Ventures — homepage",
       "excerpt": "Lifeline Ventures | Supporting resilient founders Lifeline Ventures Menu",
       "page": "details"
     },
     {
       "id": "check-portfolio-1b475ed541",
       "url": "https://www.lifelineventures.com/",
-      "title": "Lifeline Ventures — homepage checked by scrape.py",
+      "title": "Lifeline Ventures — homepage",
       "excerpt": "Companies → https://www.lifelineventures.com/companies/",
       "page": "details"
     },
     {
       "id": "check-route-0cb0272e03",
       "url": "https://www.lifelineventures.com/",
-      "title": "Lifeline Ventures — homepage checked by scrape.py",
+      "title": "Lifeline Ventures — homepage",
       "excerpt": "Lifeline Ventures → https://www.lifelineventures.com",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-97b20c8e45",
+      "url": "https://www.lifelineventures.com/",
+      "page": "details",
+      "excerpt": "Lifeline Ventures | Supporting resilient founders Lifeline Ventures Menu Home Companies Careers Contact our team Supporting resilient founders Our goal is to be the first person the entrepreneur reaches out to in times of trouble and joy. We invest in ambitious and determined teams that can one day become industry leaders. We are a sector agnostic early-stage (pre-seed and seed) investor that wants to partner with founders from the very beginning of their journey and support them throughout their growth. Our team has global experience in building and scaling companies both as founders and in various CxO roles. Follow us on Linkedin New investments Ruben Bryon Series B Verda CEO: Ruben Bryon Founders: Ruben Bryon Aashish Sah Suman Kundu Erkki Soininen Seed round Coherence Quantum CEO: Aashish Sah Founders: Aashish Sah, Suman Kundu, Erkki Soininen Markku Räsänen, Severi Tikkala, Esko Vähämäki Seed round Confidentialmind CEO: Markku Räsänen Founders: Markku Räsänen, Severi Tikkala, Esko Vähämäki Miika Nikinmaa and Tatu Miettinen Pre-seed round Elea & Lili CEO: Tatu Miettinen Founders: Tatu Miettinen, Miika Nikinmaa Harri Hallila, Prateek Singh, Tuan Nguyen Pre-seed round Proteins.1 CEO: Prateek Singh Founders: Prateek Singh, Harri Hallila, Tuan Nguyen Juho Niemi, Dennis Marttinen, Jaakko Sirén, Petteri Pulkkinen Pre-seed round CRACI Corporation CEO: Juho Niemi Founders: Juho"
+    },
+    {
+      "id": "check-page-5a082bbcb0",
+      "url": "https://www.lifelineventures.com/companies/",
+      "page": "portfolio",
+      "excerpt": "Lifeline Ventures | Companies Lifeline Ventures Menu Home Companies Careers Contact our team Companies No case is too early for us. We often help companies with their first crucial steps and continue supporting them through their growth. We look for teams that have the potential to become category leaders in fields such as climate tech, health, hardware, marketplaces, and software but we acknowledge that the most interesting opportunities can come from anywhere. We only invest in companies where we believe we can truly help. We want to be the first ones the entrepreneur reaches out to in times of trouble and joy. Filter Companies Sector All sectors B2B SAAS ClimateTech Consumer DefenceTech Energy Financial Games Hardware Health Marketplace Rental platform Social Media Software Tech TechBio Status All Current Exited 7Square CEO: Itay Parnafes Founders: Itay Parnafes, Arik Farber, Uri Gotman Visit website 2025 Founded 2026 Lifeline Ventures Seed round Aiven Aiven provides fully managed cloud database and messaging services hosted in the cloud of the customer’s choice, including Amazon Web Services, Google Cloud Platform, and Microsoft Azure. Its mission is to allow developers to focus on building awesome applications without worrying about data infrastructure management. CEO: Oskari Saarenmaa Founders: Oskari Saarenmaa, Heikki Nousiainen, Mika Eloranta, Hannu Valtonen Visit"
     }
   ],
   "findings": {
@@ -40,8 +97,25 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-21b4887263"
+      }
+    ],
+    "location": [
+      {
+        "value": "Espoo",
+        "evidenceId": "check-location-72086fdde5"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.lifelineventures.com/companies/",

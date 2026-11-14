@@ -9,14 +9,14 @@
   "websiteUrl": "https://meshcommunity.com/",
   "applyUrl": "https://meshcommunity.com/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Mesh Community - Mesh Community Skip to main content Menu Press enter to begin your search Search Close Search From Key Nordic cities, our community supports every stage of the entrepreneurial journey, from startups to international success. Our Nordic locations Explore program From key Nordic cities, our community supports every stage of the entrepreneurial journey, from startups to international success. With more than 5.000 members and over 100.000 annual users, we are one of the largest startup communities in the Nordic region. Our goal is to create the best startup locations, valuable recruiting and funding services to accelerate the Nordic startup scene. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "From Key Nordic cities, our community supports every stage of the entrepreneurial journey, from startups to international success.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "From Key Nordic cities, our community supports every stage of the entrepreneurial journey, from startups to international success.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "mesh-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://meshcommunity.com/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

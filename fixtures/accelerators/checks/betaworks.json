@@ -1,138 +1,598 @@
 {
   "programId": "betaworks",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.betaworks.com/",
-    "https://www.betaworks.com/camp",
     "https://www.betaworks.com/camp/ai-camp-native-applications",
-    "https://www.betaworks.com/writing/camp-agent-systems-spring-2026"
+    "https://www.betaworks.com/camp/application",
+    "https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
+    "https://www.betaworks.com/writing/camp-the-new-agentic-economy",
+    "https://www.betaworks.com/camp/ai-camp-agent-systems",
+    "https://www.betaworks.com/writing/spring-2026-camp-agent-systems",
+    "https://www.betaworks.com/camp",
+    "https://www.betaworks.com/companies"
   ],
   "evidence": [
     {
-      "id": "check-deal-ea497710a8",
+      "id": "check-announced-51b2163c12",
+      "url": "https://www.betaworks.com/camp/application",
+      "title": "Betaworks — application page",
+      "excerpt": "place twice annually. The first Camp session runs March through May (applications open Dec - Jan). The second session runs August through November",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-66de4d519a",
+      "url": "https://www.betaworks.com/camp/application",
+      "title": "Betaworks — application page",
+      "excerpt": "open Dec - Jan). The second session runs August through November (applications open June - July). How long is Camp? Camp runs for 12 weeks, culminating in a",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-6da610581c",
+      "url": "https://www.betaworks.com/camp",
+      "title": "Betaworks — program page",
+      "excerpt": "place twice annually. The first Camp session runs March through May (applications open Dec - Jan). The second session runs August through November",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-6dbbd2254c",
+      "url": "https://www.betaworks.com/camp",
+      "title": "Betaworks — program page",
+      "excerpt": "open Dec - Jan). The second session runs August through November (applications open June - July). What does Demo Day entail? Each team has 5min on stage, in",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-8448e1eb78",
+      "url": "https://www.betaworks.com/camp",
+      "title": "Betaworks — program page",
+      "excerpt": "place twice annually. The Spring session runs March through May (applications open Dec - Jan). The Fall session runs August through November (applications",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-da306e8959",
+      "url": "https://www.betaworks.com/camp/application",
+      "title": "Betaworks — application page",
+      "excerpt": "per team. Two Camp sessions per year. First session begins in March (applications open Dec - Jan), second session starts in August (applications open June -",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-e95d13ef9f",
+      "url": "https://www.betaworks.com/camp",
+      "title": "Betaworks — program page",
+      "excerpt": "open Dec - Jan). The Fall session runs August through November (applications open June - July). NEXT CAMP: Fall 2025 Fall '25 Camp theme is Interfaces",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-f76e4c15f7",
+      "url": "https://www.betaworks.com/camp/application",
+      "title": "Betaworks — application page",
+      "excerpt": "(applications open Dec - Jan), second session starts in August (applications open June - July) 12 weeks in-residence. IRL programming and access to the",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-2a454ef101",
+      "url": "https://www.betaworks.com/writing/camp-the-new-agentic-economy",
+      "title": "Betaworks — application page",
+      "excerpt": "specifics: Each participating company will receive investment up to $500k. Betaworks Ventures will invest up to $250k on an uncapped SAFE note",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-54cb12ae83",
+      "url": "https://www.betaworks.com/camp/application",
+      "title": "Betaworks — application page",
+      "excerpt": "Betaworks and our syndicate partners will each invest up to $250k for a total of up to $500k investment per team. Two Camp sessions",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-58695e41b2",
+      "url": "https://www.betaworks.com/writing/camp-the-new-agentic-economy",
+      "title": "Betaworks — application page",
+      "excerpt": "receive investment up to $500k. Betaworks Ventures will invest up to $250k on an uncapped SAFE note with a 25% discount, and receive a 5%",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-58e8376517",
+      "url": "https://www.betaworks.com/camp/application",
+      "title": "Betaworks — application page",
+      "excerpt": "syndicate partners will each invest up to $250k for a total of up to $500k investment per team. Two Camp sessions per year. First session",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-5a358a71fc",
       "url": "https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
-      "title": "Betaworks — batches page checked by scrape.py",
-      "excerpt": "A capstone Demo Day in front of a room of the best investors in NYC and beyond Deal specifics: Each participating company will receive investment up to $500k. Betaworks Ventures will invest up to $250k on an uncapped SAFE note with a 25% discount, and receive a 5% common stock stake in the business. Our syndicate",
+      "title": "Betaworks — batches page",
+      "excerpt": "specifics: Each participating company will receive investment up to $500k. Betaworks Ventures will invest up to $250k on an uncapped SAFE note",
       "page": "batches"
+    },
+    {
+      "id": "check-deal-623977d2c0",
+      "url": "https://www.betaworks.com/companies",
+      "title": "Betaworks — portfolio page",
+      "excerpt": "and seed stage and our typical check size ranges from $250,000 to $750,000. We also go deep into new categories through Camp , our cohort-based",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-deal-8312ae2da1",
+      "url": "https://www.betaworks.com/companies",
+      "title": "Betaworks — portfolio page",
+      "excerpt": "at pre-seed and seed stage and our typical check size ranges from $250,000 to $750,000. We also go deep into new categories through Camp , our",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-deal-dfe503b5bb",
+      "url": "https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
+      "title": "Betaworks — batches page",
+      "excerpt": "receive investment up to $500k. Betaworks Ventures will invest up to $250k on an uncapped SAFE note with a 25% discount, and receive a 5%",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-14b24d8c6e",
+      "url": "https://www.betaworks.com/writing/camp-the-new-agentic-economy",
+      "title": "Betaworks — application page",
+      "excerpt": "with any questions. How Camp Works Camp is a 12-week, in-person program at Betaworks in NYC.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-205c5cc4b8",
+      "url": "https://www.betaworks.com/camp",
+      "title": "Betaworks — program page",
+      "excerpt": "we’re excited about. Each camp consists of 12 weeks “in-residence” at Betaworks to help early stage",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-23f1b0bed8",
+      "url": "https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
+      "title": "Betaworks — batches page",
+      "excerpt": "complexity achievable by AI agents in the past 24 months has exploded. And while a ton of this is due to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-409992931e",
+      "url": "https://www.betaworks.com/camp",
+      "title": "Betaworks — program page",
+      "excerpt": "investors. How long is Camp? Camp runs for 12 weeks, culminating in a Demo Day. When can I apply to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-503d6a1faf",
+      "url": "https://www.betaworks.com/camp/application",
+      "title": "Betaworks — application page",
+      "excerpt": "June - July). How long is Camp? Camp runs for 12 weeks, culminating in a Demo Day. What does Demo Day",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-54fadb0d38",
+      "url": "https://www.betaworks.com/writing/spring-2026-camp-agent-systems",
+      "title": "Betaworks — batches page",
+      "excerpt": "— costing $699/mo or more and adding 3–6 months of compliance overhead before a healthcare or",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-5f7c2e2c86",
+      "url": "https://www.betaworks.com/camp/application",
+      "title": "Betaworks — application page",
+      "excerpt": "starts in August (applications open June - July) 12 weeks in-residence. IRL programming and access to the",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-91e64756be",
+      "url": "https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
+      "title": "Betaworks — batches page",
+      "excerpt": "12/24/25 EXTENDED deadline: Fri 1/9/26 Camp is a 12-week, in-person program at Betaworks in NYC.",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-ce94918988",
+      "url": "https://www.betaworks.com/writing/camp-the-new-agentic-economy",
+      "title": "Betaworks — application page",
+      "excerpt": "however, are substantially the same as they were 24 months ago. That’s cool, actually. It’s both a feature",
+      "page": "application"
+    },
+    {
+      "id": "check-format-168fa191aa",
+      "url": "https://www.betaworks.com/camp/application",
+      "title": "Betaworks — application page",
+      "excerpt": "encourage them to stay in NYC for the entire session, but hybrid options are available. In the final week each team will",
+      "page": "application"
+    },
+    {
+      "id": "check-format-1efe963d23",
+      "url": "https://www.betaworks.com/camp",
+      "title": "Betaworks — program page",
+      "excerpt": "team is amazing, but the real magic of Camp is the in-person and extended community that connected me with an expert in",
+      "page": "details"
+    },
+    {
+      "id": "check-format-2e12ba5572",
+      "url": "https://www.betaworks.com/camp",
+      "title": "Betaworks — program page",
+      "excerpt": "cohort of 8-12 companies. Where is Camp? Camp takes place in-person at the Betaworks offices in NYC's Meatpacking District,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-33d42cfb12",
+      "url": "https://www.betaworks.com/camp",
+      "title": "Betaworks — program page",
+      "excerpt": "encourage them to stay in NYC for the entire session, but hybrid options are available. In the final week each team will",
+      "page": "details"
+    },
+    {
+      "id": "check-format-427f923d86",
+      "url": "https://www.betaworks.com/writing/camp-the-new-agentic-economy",
+      "title": "Betaworks — application page",
+      "excerpt": "systems will increasingly escape the domain of the virtual because there’s a lot of money to be made in atoms. Of",
+      "page": "application"
+    },
+    {
+      "id": "check-format-4f8b73e0c5",
+      "url": "https://www.betaworks.com/camp",
+      "title": "Betaworks — program page",
+      "excerpt": "We will still consider your application and can discuss hybrid or remote participation options. Do I need a product to",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5ce26f2c72",
+      "url": "https://www.betaworks.com/camp",
+      "title": "Betaworks — program page",
+      "excerpt": "still consider your application and can discuss hybrid or remote participation options. Do I need a product to apply? It's",
+      "page": "details"
+    },
+    {
+      "id": "check-format-71d35fa967",
+      "url": "https://www.betaworks.com/camp/application",
+      "title": "Betaworks — application page",
+      "excerpt": "team is amazing, but the real magic of Camp is the in-person and extended community that connected me with an expert in",
+      "page": "application"
+    },
+    {
+      "id": "check-format-73ff491d39",
+      "url": "https://www.betaworks.com/camp/application",
+      "title": "Betaworks — application page",
+      "excerpt": "We will still consider your application and can discuss hybrid or remote participation options. Do I need a product to",
+      "page": "application"
+    },
+    {
+      "id": "check-format-7e10fae5ea",
+      "url": "https://www.betaworks.com/writing/camp-the-new-agentic-economy",
+      "title": "Betaworks — application page",
+      "excerpt": "with any questions. How Camp Works Camp is a 12-week, in-person program at Betaworks in NYC. International companies are",
+      "page": "application"
+    },
+    {
+      "id": "check-format-a0c7c53ee9",
+      "url": "https://www.betaworks.com/camp",
+      "title": "Betaworks — program page",
+      "excerpt": "relocate to NYC? The Camp experience is intended to be in-person – and the IRL community is where founders typically find",
+      "page": "details"
+    },
+    {
+      "id": "check-format-bf43d6b2cd",
+      "url": "https://www.betaworks.com/camp/application",
+      "title": "Betaworks — application page",
+      "excerpt": "relocate to NYC? The Camp experience is intended to be in-person – and the IRL community is where founders typically find",
+      "page": "application"
+    },
+    {
+      "id": "check-format-c74978e546",
+      "url": "https://www.betaworks.com/camp/application",
+      "title": "Betaworks — application page",
+      "excerpt": "still consider your application and can discuss hybrid or remote participation options. Do I need a product to apply? It's",
+      "page": "application"
+    },
+    {
+      "id": "check-format-cb1ed9d56b",
+      "url": "https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
+      "title": "Betaworks — batches page",
+      "excerpt": "12/24/25 EXTENDED deadline: Fri 1/9/26 Camp is a 12-week, in-person program at Betaworks in NYC. International companies are",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-ec5745ffcf",
+      "url": "https://www.betaworks.com/camp/application",
+      "title": "Betaworks — application page",
+      "excerpt": "cohort of 8-12 companies. Where is Camp? Camp takes place in-person at the Betaworks offices in NYC's Meatpacking District,",
+      "page": "application"
     },
     {
       "id": "check-name-58cf2c7b15",
       "url": "https://www.betaworks.com/",
-      "title": "Betaworks — homepage checked by scrape.py",
+      "title": "Betaworks — homepage",
       "excerpt": "Home | Betaworks Camp About Previous Camps AI Camp: Agent Systems AI Camp:",
       "page": "details"
     },
     {
       "id": "check-portfolio-0714835894",
       "url": "https://www.betaworks.com/",
-      "title": "Betaworks — homepage checked by scrape.py",
+      "title": "Betaworks — homepage",
       "excerpt": "Investing → https://www.betaworks.com/companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-506d286b16",
+      "url": "https://www.betaworks.com/camp/application",
+      "title": "Betaworks — application page",
+      "excerpt": "Companies → https://www.betaworks.com/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-6b8d89802e",
+      "url": "https://www.betaworks.com/writing/spring-2026-camp-agent-systems",
+      "title": "Betaworks — batches page",
+      "excerpt": "Companies → https://www.betaworks.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-72080f341e",
+      "url": "https://www.betaworks.com/writing/camp-the-new-agentic-economy",
+      "title": "Betaworks — application page",
+      "excerpt": "Companies → https://www.betaworks.com/companies",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-88d6b9df3b",
       "url": "https://www.betaworks.com/camp",
-      "title": "Betaworks — details page checked by scrape.py",
+      "title": "Betaworks — program page",
       "excerpt": "Companies → https://www.betaworks.com/companies",
       "page": "details"
     },
     {
       "id": "check-portfolio-b185e4d59e",
       "url": "https://www.betaworks.com/camp/ai-camp-native-applications",
-      "title": "Betaworks — application page checked by scrape.py",
+      "title": "Betaworks — application page",
       "excerpt": "Companies → https://www.betaworks.com/companies",
       "page": "application"
     },
     {
       "id": "check-portfolio-dcea8e313e",
       "url": "https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
-      "title": "Betaworks — batches page checked by scrape.py",
+      "title": "Betaworks — batches page",
+      "excerpt": "Companies → https://www.betaworks.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-e62d5a68b9",
+      "url": "https://www.betaworks.com/camp/ai-camp-agent-systems",
+      "title": "Betaworks — batches page",
       "excerpt": "Companies → https://www.betaworks.com/companies",
       "page": "batches"
     },
     {
       "id": "check-portfolio-e80a2c5ac2",
       "url": "https://www.betaworks.com/",
-      "title": "Betaworks — homepage checked by scrape.py",
+      "title": "Betaworks — homepage",
       "excerpt": "Companies → https://www.betaworks.com/companies",
       "page": "details"
     },
     {
+      "id": "check-route-0320b637e6",
+      "url": "https://www.betaworks.com/camp/ai-camp-agent-systems",
+      "title": "Betaworks — batches page",
+      "excerpt": "Apply → https://www.betaworks.com/camp/application",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-07936e3aea",
+      "url": "https://www.betaworks.com/camp/ai-camp-agent-systems",
+      "title": "Betaworks — batches page",
+      "excerpt": "Apply to Betaworks’ Spring ‘26 AI Camp: Agent Systems → https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
+      "page": "batches"
+    },
+    {
       "id": "check-route-116682e36c",
       "url": "https://www.betaworks.com/",
-      "title": "Betaworks — homepage checked by scrape.py",
+      "title": "Betaworks — homepage",
       "excerpt": "Apply → https://www.betaworks.com/camp/application",
       "page": "details"
     },
     {
       "id": "check-route-118c6ee24f",
       "url": "https://www.betaworks.com/camp/ai-camp-native-applications",
-      "title": "Betaworks — application page checked by scrape.py",
+      "title": "Betaworks — application page",
       "excerpt": "Apply → https://www.betaworks.com/camp/application",
       "page": "application"
     },
     {
+      "id": "check-route-1b546ceaf8",
+      "url": "https://www.betaworks.com/camp/ai-camp-agent-systems",
+      "title": "Betaworks — batches page",
+      "excerpt": "AI Camp: Native Applications → https://www.betaworks.com/camp/ai-camp-native-applications",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-201c1a74cf",
+      "url": "https://www.betaworks.com/writing/camp-the-new-agentic-economy",
+      "title": "Betaworks — application page",
+      "excerpt": "AI Camp: Native Applications → https://www.betaworks.com/camp/ai-camp-native-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-23e55cb38e",
+      "url": "https://www.betaworks.com/writing/spring-2026-camp-agent-systems",
+      "title": "Betaworks — batches page",
+      "excerpt": "Apply → https://www.betaworks.com/camp/application",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-2e1b9a43fc",
+      "url": "https://www.betaworks.com/companies",
+      "title": "Betaworks — portfolio page",
+      "excerpt": "AI Camp: Native Applications → https://www.betaworks.com/camp/ai-camp-native-applications",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-3517611629",
       "url": "https://www.betaworks.com/",
-      "title": "Betaworks — homepage checked by scrape.py",
+      "title": "Betaworks — homepage",
       "excerpt": "https://www.betaworks.com/",
       "page": "details"
     },
     {
       "id": "check-route-3627e8abda",
       "url": "https://www.betaworks.com/camp",
-      "title": "Betaworks — details page checked by scrape.py",
+      "title": "Betaworks — program page",
       "excerpt": "Apply → https://www.betaworks.com/camp/application",
       "page": "details"
     },
     {
+      "id": "check-route-4ee35a1eab",
+      "url": "https://www.betaworks.com/camp/application",
+      "title": "Betaworks — application page",
+      "excerpt": "AI Camp: Native Applications → https://www.betaworks.com/camp/ai-camp-native-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-60d4a505f3",
+      "url": "https://www.betaworks.com/camp",
+      "title": "Betaworks — program page",
+      "excerpt": "Read More → https://render.betaworks.com/apply-to-betaworks-fall-ai-camp-interfaces-b99a3f4ac81e",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6ae83d08ef",
+      "url": "https://www.betaworks.com/camp/ai-camp-native-applications",
+      "title": "Betaworks — application page",
+      "excerpt": "Apply to Betaworks’ Fall ‘24 AI Camp: Native Applications → https://render.betaworks.com/announcing-ai-camp-native-applications-e1358061c601",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6dbd619f37",
+      "url": "https://www.betaworks.com/writing/camp-the-new-agentic-economy",
+      "title": "Betaworks — application page",
+      "excerpt": "Apply → https://www.betaworks.com/camp/application",
+      "page": "application"
+    },
+    {
       "id": "check-route-918470e7bf",
       "url": "https://www.betaworks.com/",
-      "title": "Betaworks — homepage checked by scrape.py",
+      "title": "Betaworks — homepage",
       "excerpt": "AI Camp: Native Applications → https://www.betaworks.com/camp/ai-camp-native-applications",
       "page": "details"
     },
     {
+      "id": "check-route-9b5fc08f25",
+      "url": "https://www.betaworks.com/writing/spring-2026-camp-agent-systems",
+      "title": "Betaworks — batches page",
+      "excerpt": "Apply to Betaworks' Fall '26 AI Camp: The New Agentic Economy → https://www.betaworks.com/writing/camp-the-new-agentic-economy",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-c4ce0200ef",
+      "url": "https://www.betaworks.com/writing/spring-2026-camp-agent-systems",
+      "title": "Betaworks — batches page",
+      "excerpt": "AI Camp: Native Applications → https://www.betaworks.com/camp/ai-camp-native-applications",
+      "page": "batches"
+    },
+    {
       "id": "check-route-c66a0da5aa",
       "url": "https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
-      "title": "Betaworks — batches page checked by scrape.py",
+      "title": "Betaworks — batches page",
       "excerpt": "Apply → https://www.betaworks.com/camp/application",
       "page": "batches"
     },
     {
       "id": "check-route-cc230bc319",
       "url": "https://www.betaworks.com/camp",
-      "title": "Betaworks — details page checked by scrape.py",
+      "title": "Betaworks — program page",
       "excerpt": "AI Camp: Native Applications → https://www.betaworks.com/camp/ai-camp-native-applications",
       "page": "details"
     },
     {
       "id": "check-route-cfce05d604",
       "url": "https://www.betaworks.com/camp",
-      "title": "Betaworks — details page checked by scrape.py",
+      "title": "Betaworks — program page",
       "excerpt": "Learn more → https://www.betaworks.com/camp/ai-camp-native-applications",
       "page": "details"
     },
     {
       "id": "check-route-d590757a7d",
       "url": "https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
-      "title": "Betaworks — batches page checked by scrape.py",
+      "title": "Betaworks — batches page",
       "excerpt": "AI Camp: Native Applications → https://www.betaworks.com/camp/ai-camp-native-applications",
       "page": "batches"
     },
     {
       "id": "check-route-d96bdd292b",
       "url": "https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
-      "title": "Betaworks — batches page checked by scrape.py",
+      "title": "Betaworks — batches page",
       "excerpt": "Apply to Betaworks' Fall '26 AI Camp: The New Agentic Economy → https://www.betaworks.com/writing/camp-the-new-agentic-economy",
       "page": "batches"
     },
     {
+      "id": "check-route-df607477b0",
+      "url": "https://www.betaworks.com/companies",
+      "title": "Betaworks — portfolio page",
+      "excerpt": "Apply → https://www.betaworks.com/camp/application",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-status-cbaa63b8d8",
+      "url": "https://www.betaworks.com/camp/application",
+      "title": "Betaworks — application page",
+      "excerpt": "Native Applications Apply Companies Team Events Writing News Connect Deadline Extended! Apply to AI Camp Application now open for AI Camp: The New Agent Economy. Apply Now . AI Camp: Agentic Economy Camp is a thematic investment and",
+      "page": "application"
+    },
+    {
       "id": "check-status-d20b3e222a",
       "url": "https://www.betaworks.com/camp",
-      "title": "Betaworks — details page checked by scrape.py",
+      "title": "Betaworks — program page",
       "excerpt": "Native Applications Apply Companies Team Events Writing News Connect Deadline Extended! Apply to AI Camp Application now open for AI Camp: The New Agent Economy. Apply Now . The next Camp application will open soon, submit your",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-2d30950d01",
+      "url": "https://www.betaworks.com/",
+      "page": "details",
+      "excerpt": "Home | Betaworks Camp About Previous Camps AI Camp: Agent Systems AI Camp: Interfaces AI Camp: App Layer AI Camp: Native Applications Apply Companies Team Events Writing News Connect Deadline Extended! Apply to AI Camp Hugging Face acquired by NVIDIA for $12.9B, how we got here . Investing building and working with exceptional creators and makers since 2008. EVENTS 11.20.26 Distribution Is Your Moat ft. Rachel Schindler RSVP Contact Event Inquiries Privacy Policy © 2026 Betaworks. All rights reserved Sign up for events, news, and announcements. Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Stay connected with Betaworks Get invited to our next event, updates from the Betaworks family, and more in our newsletter. * indicates required First Name Last Name Email Address *"
+    },
+    {
+      "id": "check-page-627b88a881",
+      "url": "https://www.betaworks.com/camp/ai-camp-native-applications",
+      "page": "application",
+      "excerpt": "AI Camp: Native Applications Camp About Previous Camps AI Camp: Agent Systems AI Camp: Interfaces AI Camp: App Layer AI Camp: Native Applications Apply Companies Team Events Writing News Connect Deadline Extended! Apply to AI Camp AI Camp: Native Applications A Betaworks Accelerator Program In our brainstorming around this theme, we ended up with quite a few scribbles to depict the gap between the underlying technology capabilities, the infrastructure, and the applications we actually want to use. At Betaworks, we see AI as a phase change in technology akin to the birth of the internet. And, just like the internet, the services and products built on top of it can form wave-like patterns — replicating existing workflows, augmenting those workflows, and ultimately paving the way for truly native experiences. This camp is for people who are building at the application layer of AI to deliver net new experiences and highly valuable, engaging products for end users. timeline August 5, 2024 Camp Began October 30, 2024 Camp Ended October 30, 2024 Demo Day PARTNERS sponsored by Cohort Demos Alice Camera Autoplay Dessn ESAI Hopscotch Labs Sarama Tato Unternet Ursula Alice Camera Alice Camera is a AI-native camera built to make everyone a professional creator. Alice Camera is an AI-native Micro Four Thirds mirrorless camera that attaches to the users phone. It allows everyone to capture"
+    },
+    {
+      "id": "check-page-5de8695bf6",
+      "url": "https://www.betaworks.com/camp/application",
+      "page": "application",
+      "excerpt": "Camp Application Camp About Previous Camps AI Camp: Agent Systems AI Camp: Interfaces AI Camp: App Layer AI Camp: Native Applications Apply Companies Team Events Writing News Connect Deadline Extended! Apply to AI Camp Application now open for AI Camp: The New Agent Economy. Apply Now . AI Camp: Agentic Economy Camp is a thematic investment and in-residence program for startups building in frontier technologies. Abundant intelligence will result in radical change in both companies and our economy. Applications have now closed for AI Camp: Agentic Economy. Submissions are being reviewed and camp will begin this Fall. Applications open In December 2025 we announced Agent Systems as the theme of our next Camp, and we put out the call for teams building autonomous systems of agents that deliver complete solutions to concrete problems. More than 400 companies applied. We picked eleven. Meet the Cohort Apply to Camp Camp is a thematic investment and in-residence program for startups building in frontier technologies. Founders receive a guaranteed investment of up to $500k, access to the Betaworks space in NYC, and support from our rich network. Betaworks has been investing at the forefront of ML/AI since the launch of its first fund in 2016, with portfolio companies that include HuggingFace, Nomic, Flower, Granola, and more. About camp Up to $500k investment, guaranteed. Betaworks"
+    },
+    {
+      "id": "check-page-c795e3e55c",
+      "url": "https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
+      "page": "batches",
+      "excerpt": "Apply to Betaworks’ Spring ‘26 AI Camp: Agent Systems Camp About Previous Camps AI Camp: Agent Systems AI Camp: Interfaces AI Camp: App Layer AI Camp: Native Applications Apply Companies Team Events Writing News Connect Deadline Extended! Apply to AI Camp 12.9.2025 Apply to Betaworks’ Spring ‘26 AI Camp: Agent Systems Jordan Crook We’re excited to announce that our next Camp will be focused on Agent Systems. Apply here (but you should probably read this whole post first) An agent system is a system (that usually takes the form of a company) where agentic AI elements interact and compose an integrated whole. We’re interested in companies that have been newly designed assuming agentic AI as a core tenet. Companies built as agent systems take many of the most powerful properties of machine intelligence and embody them at the systemic level: Perception and Memory: Synthesize context from multiple sources and maintain memory across interactions Autonomous Planning: Independently develop multi-step strategies toward abstract goals End-to-end Execution: Complete entire workflows without human intervention, using whatever tools necessary Adaptability and Self Evaluation: Assess its own performance and adjust course A big “canary in the coal mine”-like signal that the era of Agent Systems is worth exploring comes from the world of agentic coding. The level of software task complexity"
+    },
+    {
+      "id": "check-page-a378db56b9",
+      "url": "https://www.betaworks.com/writing/camp-the-new-agentic-economy",
+      "page": "application",
+      "excerpt": "Apply to Betaworks' Fall '26 AI Camp: The New Agentic Economy Camp About Previous Camps AI Camp: Agent Systems AI Camp: Interfaces AI Camp: App Layer AI Camp: Native Applications Apply Companies Team Events Writing News Connect Deadline Extended! Apply to AI Camp 6.16.2026 Apply to Betaworks' Fall '26 AI Camp: The New Agentic Economy Jon Chin tl;dr: Abundant intelligence will result in radical change in both companies and our economy. ‍ Apply to H2 2026 camp if you are building: Novel forms of organization that assume AI at the core Products that are responsive to highly likely second-order effects of an AI-native economy Steering and certifying human + agentic systems — compounding effects in trusted outcomes New marketplaces for non-human consumers AI that breaks out of the computer and is given the ability to interact with the physical world ‍ It is often confusing and exhausting to observe the incongruity between innovation in the field of AI and the magnitude of the tangible impact it has had thus far in the world of work, commerce, and leisure. We’ve gotten basically everything we wanted: nearly all investment capital has realigned to ensure that GPUs are matched with power and human ingenuity such that the capability frontier (however jagged) continues to advance. We’ve seen powerful results in new mathematics and we expect that to continue and expand throughout the"
+    },
+    {
+      "id": "check-page-97f0744242",
+      "url": "https://www.betaworks.com/camp/ai-camp-agent-systems",
+      "page": "batches",
+      "excerpt": "AI Camp: Agent Systems Camp About Previous Camps AI Camp: Agent Systems AI Camp: Interfaces AI Camp: App Layer AI Camp: Native Applications Apply Companies Team Events Writing News Connect Deadline Extended! Apply to AI Camp AI Camp: Agent Systems March - May 2026 In December 2025 we announced Agent Systems as the theme of our next Camp, and we put out the call for teams building autonomous systems of agents that deliver complete solutions to concrete problems. We wanted to see products that harnessed the most powerful properties of machine intelligence and embodied them at the systemic level, combining perception, memory, autonomous planning, end-to-end execution, adaptability, and self-evaluation. timeline March 2, 2026 Camp Began May 15, 2026 Camp Ended May 5, 2024 Demo Day Cohort Demos Capsule AI Filament Inanimate Pack Pai Quome Sky Valley sol pbc weXare Capsule AI Capsule is an army of AI agents that does the work of an entire pharma strategy team in minutes instead of months. Reading millions of papers across global databases, ingesting hundreds of conferences live, and running primary research with stakeholders through a voice agent. It's the first system that reasons across public evidence, proprietary voice data, and the customer's own internal data in a single query. Turning month of strategic work into a near real-time answer. FOUNDERs Billy Wang Bill Huang Yubo"
+    },
+    {
+      "id": "check-page-f7e99e46f7",
+      "url": "https://www.betaworks.com/writing/spring-2026-camp-agent-systems",
+      "page": "batches",
+      "excerpt": "Meet the Spring 2026 Camp Cohort: Agent Systems Camp About Previous Camps AI Camp: Agent Systems AI Camp: Interfaces AI Camp: App Layer AI Camp: Native Applications Apply Companies Team Events Writing News Connect Deadline Extended! Apply to AI Camp 5.14.2026 Meet the Spring 2026 Camp Cohort: Agent Systems Jordan Crook The world is changing fast. SaaS is shrinking in breadth as a small number of winners get much more depth. Forward-deployed engineering and AI-native services businesses are appealing after venture had written that posture off for the last twenty years. Prosumer tools are being overtaken by software that is radically more flexible and personalized. And consumer is staring down its first true renaissance in more than a decade. Underneath all of it: agents are quietly, inevitably becoming a core interface for how we work, live, and play. We planted a flag in this in October of 2025 — pre-OpenAI/OpenClaw, pre-run on Mac Minis, pre-Hermes-everything. We turned our focus toward Agent Systems and got to work. That work has two parts. One: start playing with the technology. Two: launch a Camp. Last week, some 200 days later, we held Demo Day for Agent Systems Camp. More than 400 companies applied. We picked eleven. Each one is doing something different — vertical agents replacing known cost centers, infrastructure for adaptive software, ambient agentic hardware,"
+    },
+    {
+      "id": "check-page-471c3359dd",
+      "url": "https://www.betaworks.com/camp",
+      "page": "details",
+      "excerpt": "Camp | Betaworks Camp About Previous Camps AI Camp: Agent Systems AI Camp: Interfaces AI Camp: App Layer AI Camp: Native Applications Apply Companies Team Events Writing News Connect Deadline Extended! Apply to AI Camp Application now open for AI Camp: The New Agent Economy. Apply Now . The next Camp application will open soon, submit your project for early consideration here . Camp A thematic investment and in-residence program for startups building in frontier technologies. Camp takes place twice annually. The Spring session runs March through May (applications open Dec - Jan). The Fall session runs August through November (applications open June - July). NEXT CAMP: Fall 2025 Fall '25 Camp theme is Interfaces We're looking for early-stage startups that are rethinking the human-machine boundary through new interface paradigms: voice-native tools, ambient agents, novel input/output flows, multi-modal or invisible interfaces, sophisticated prompt-based interactions. We want to see products with a strong opinion, that treat the interface as fundamental. If you're designing how AI is experienced, not just what it can do, we want to talk. Read More What is Camp? Tell your story, develop your roadmap, and find your fit. Since 2016 we’ve been running sessions of Camp, our cohort-based investment and product development program that goes deep on tech modalities and themes we’re"
+    },
+    {
+      "id": "check-page-505f0c4ea2",
+      "url": "https://www.betaworks.com/companies",
+      "page": "portfolio",
+      "excerpt": "Companies Camp About Previous Camps AI Camp: Agent Systems AI Camp: Interfaces AI Camp: App Layer AI Camp: Native Applications Apply Companies Team Events Writing News Connect Deadline Extended! Apply to AI Camp Betaworks is thematic by design, with a track record of investing in AI/ML technologies across a variety of subcategories and modalities. We immerse ourselves in bleeding edge technologies and work with founders and our community to understand new user behavior. We invest at pre-seed and seed stage and our typical check size ranges from $250,000 to $750,000. We also go deep into new categories through Camp , our cohort-based investment and product development program. Get in touch current focus AI Artificial intelligence that augments human workflows, agents and tooling. Gaming Interactive entertainment, infrastructure, and metaverses. Decentralization Open source software and developer tools. Every Math Inc Era Bracket Bot Afterimage Hopscotch Labs Tato Dessn Sandbar Twin Labs Plastic Labs Stardust Campus Marker.page Ruune sol pbc weXare Quome Pai PillPilot Pack Capsule AI Sky Valley Inanimate The Residency Geometric Possibility Foundry Bear Solaya Trove Telepath Patina Primitive Aira Nubrain Intension Neurometric Overlay Feather Helivan 2389 JigsawML Trampoline NetAssist Hopper Superposition TabTabTab Decode Graze Unternet Sarama ESAI Autoplay Camera Intelligence"
     }
   ],
   "findings": {
@@ -148,8 +608,20 @@
         "evidenceId": "check-route-116682e36c"
       },
       {
+        "value": "https://render.betaworks.com/announcing-ai-camp-native-applications-e1358061c601",
+        "evidenceId": "check-route-6ae83d08ef"
+      },
+      {
         "value": "https://www.betaworks.com/writing/camp-the-new-agentic-economy",
         "evidenceId": "check-route-d96bdd292b"
+      },
+      {
+        "value": "https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
+        "evidenceId": "check-route-07936e3aea"
+      },
+      {
+        "value": "https://render.betaworks.com/apply-to-betaworks-fall-ai-camp-interfaces-b99a3f4ac81e",
+        "evidenceId": "check-route-60d4a505f3"
       }
     ],
     "applicationUrl": [
@@ -161,16 +633,151 @@
     "applicationsOpen": [
       {
         "value": true,
-        "evidenceId": "check-status-d20b3e222a"
+        "evidenceId": "check-status-cbaa63b8d8"
       }
     ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "Dec",
+        "evidenceId": "check-announced-da306e8959"
+      },
+      {
+        "value": "June",
+        "evidenceId": "check-announced-f76e4c15f7"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12",
+        "evidenceId": "check-duration-5f7c2e2c86"
+      },
+      {
+        "value": "24 months",
+        "evidenceId": "check-duration-23f1b0bed8"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-54fadb0d38"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-71d35fa967"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-168fa191aa"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-c74978e546"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "A capstone Demo Day in front of a room of the best investors in NYC and beyond Deal specifics: Each participating company will receive investment up to $500k. Betaworks Ventures will invest up to $250k on an uncapped SAFE note with a 25% discount, and receive a 5% common stock stake in the business. Our syndicate",
-        "evidenceId": "check-deal-ea497710a8"
+        "value": "Betaworks and our syndicate partners will each invest up to $250k for a total of up to $500k investment per team. Two Camp sessions",
+        "evidenceId": "check-deal-54cb12ae83"
+      },
+      {
+        "value": "syndicate partners will each invest up to $250k for a total of up to $500k investment per team. Two Camp sessions per year. First session",
+        "evidenceId": "check-deal-58e8376517"
+      },
+      {
+        "value": "specifics: Each participating company will receive investment up to $500k. Betaworks Ventures will invest up to $250k on an uncapped SAFE note",
+        "evidenceId": "check-deal-5a358a71fc"
+      },
+      {
+        "value": "receive investment up to $500k. Betaworks Ventures will invest up to $250k on an uncapped SAFE note with a 25% discount, and receive a 5%",
+        "evidenceId": "check-deal-dfe503b5bb"
+      },
+      {
+        "value": "at pre-seed and seed stage and our typical check size ranges from $250,000 to $750,000. We also go deep into new categories through Camp , our",
+        "evidenceId": "check-deal-8312ae2da1"
+      },
+      {
+        "value": "and seed stage and our typical check size ranges from $250,000 to $750,000. We also go deep into new categories through Camp , our cohort-based",
+        "evidenceId": "check-deal-623977d2c0"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "250000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-54cb12ae83"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "500000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-58e8376517"
+      },
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "500000",
+          "currency": "USD",
+          "equity": null,
+          "label": "SAFE",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-5a358a71fc"
+      },
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "250000",
+          "currency": "USD",
+          "equity": "25%",
+          "label": "SAFE",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-dfe503b5bb"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "250000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-8312ae2da1"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "750000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-623977d2c0"
       }
     ],
     "portfolioPages": [

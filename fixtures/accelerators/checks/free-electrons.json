@@ -1,102 +1,780 @@
 {
   "programId": "free-electrons",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
     "https://freeelectrons.org/",
-    "https://freeelectrons.org/2026-program/",
-    "https://freeelectrons.org/faqs/"
+    "https://freeelectrons.org/news/10-reasons-why-startups-should-apply-to-free-electrons/",
+    "https://freeelectrons.org/news/9-reasons-for-your-startup-to-apply/",
+    "https://freeelectrons.org/news/free-electrons-2019-opens-applications/",
+    "https://freeelectrons.org/news/free-electrons-2020-applications-open/",
+    "https://freeelectrons.org/news/applications/",
+    "https://freeelectrons.org/news/charting-the-future-free-electrons-2026-category-guide/",
+    "https://freeelectrons.org/news/free-electrons-a-fast-lane-for-business-to-business/",
+    "https://freeelectrons.org/news/free-electrons-reinforces-global-positioning/",
+    "https://freeelectrons.org/news/in-free-electrons-like-in-life-its-not-where-you-start-its-where-you-finish/",
+    "https://freeelectrons.org/news/introducing-the-categories-for-free-electrons-2025/",
+    "https://freeelectrons.org/faqs/",
+    "https://freeelectrons.org/news/free-electrons-impact-grows-with-more-pilots-deals-between-utilities-startups/",
+    "https://freeelectrons.org/terms-conditions/",
+    "https://freeelectrons.org/2027-program/"
   ],
   "evidence": [
     {
-      "id": "check-deadline-4a34cd6ece",
+      "id": "check-deadline-1ef477fe30",
+      "url": "https://freeelectrons.org/terms-conditions/",
+      "title": "Free Electrons — terms page",
+      "excerpt": "(Indicative only) Applications open October 16th, 2026 Application closing time February 6th, 2027, 11:59pm UTC Successful applicants notified March 24th,",
+      "page": "terms"
+    },
+    {
+      "id": "check-deadline-82f13b5430",
       "url": "https://freeelectrons.org/",
-      "title": "Free Electrons — homepage checked by scrape.py",
-      "excerpt": "More Get in touch HURRY! 19 D 03 H 01 M 55 S DAYS LEFT Apply before November 30th, 2026 and get these exclusive perks An exclusive Utility",
+      "title": "Free Electrons — homepage",
+      "excerpt": "More Get in touch HURRY! 16 D 04 H 50 M 17 S DAYS LEFT Apply before November 30th, 2026 and get these exclusive perks An exclusive Utility",
       "page": "details"
+    },
+    {
+      "id": "check-duration-1ca6947624",
+      "url": "https://freeelectrons.org/news/free-electrons-2019-opens-applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "project last year was fully completed within 8 weeks of the initial bootcamp. The 4 international",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-a3d5975d03",
+      "url": "https://freeelectrons.org/news/free-electrons-2019-opens-applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "the selection process for Bootcamp will take 2 weeks, until March 13 th , when the participating",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-c2e66856ee",
+      "url": "https://freeelectrons.org/news/free-electrons-impact-grows-with-more-pilots-deals-between-utilities-startups/",
+      "title": "Free Electrons — terms page",
+      "excerpt": "an impressive total of 43 pilots, in less than 7 months. The total value of new contracts for the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-161001ed70",
+      "url": "https://freeelectrons.org/faqs/",
+      "title": "Free Electrons — terms page",
+      "excerpt": "Attendance from both roles is mandatory for every in-person module. If your startup cannot guarantee participation",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-1dce3aeb5b",
+      "url": "https://freeelectrons.org/2027-program/",
+      "title": "Free Electrons — program page",
+      "excerpt": "nd 2026 Bootcamp Lisbon, Portugal Bootcamp marks the first in-person module of the Free Electrons journey. It’s where startups",
+      "page": "details"
+    },
+    {
+      "id": "check-format-2104ad9a82",
+      "url": "https://freeelectrons.org/faqs/",
+      "title": "Free Electrons — terms page",
+      "excerpt": "will be delivered in a hybrid format, combining online and in-person modules hosted across the utilities’ home markets.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-7f2f098e21",
+      "url": "https://freeelectrons.org/2027-program/",
+      "title": "Free Electrons — program page",
+      "excerpt": "Participants will gather globally, engaging in both in-person and virtual modules, designed to fast-track their",
+      "page": "details"
+    },
+    {
+      "id": "check-format-84884693cf",
+      "url": "https://freeelectrons.org/faqs/",
+      "title": "Free Electrons — terms page",
+      "excerpt": "network. This immersive experience enables teams to engage in-person with the full ecosystem of mentors, partners, investors,",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-8a7689a59b",
+      "url": "https://freeelectrons.org/2027-program/",
+      "title": "Free Electrons — program page",
+      "excerpt": "will gather globally, engaging in both in-person and virtual modules, designed to fast-track their progress. The",
+      "page": "details"
+    },
+    {
+      "id": "check-format-93652d438c",
+      "url": "https://freeelectrons.org/news/free-electrons-impact-grows-with-more-pilots-deals-between-utilities-startups/",
+      "title": "Free Electrons — terms page",
+      "excerpt": "world’s first peer-to-peer solar energy grid in 2015 in a remote area of Bangladesh, the home of 5 million installed solar",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-a029c64d5a",
+      "url": "https://freeelectrons.org/terms-conditions/",
+      "title": "Free Electrons — terms page",
+      "excerpt": "Program itself consists of 1 initial online module and 3 in person modules, which it is intended they take place in China,",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-bb398ec7fd",
+      "url": "https://freeelectrons.org/2027-program/",
+      "title": "Free Electrons — program page",
+      "excerpt": ". click for details W/C April 13 th 2026 Pitch Event Virtual Selected startups present their technologies and teams",
+      "page": "details"
+    },
+    {
+      "id": "check-format-bb7a062f77",
+      "url": "https://freeelectrons.org/faqs/",
+      "title": "Free Electrons — terms page",
+      "excerpt": "The 10th edition of Free Electrons will be delivered in a hybrid format, combining online and in-person modules hosted",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-bba10b2fa6",
+      "url": "https://freeelectrons.org/faqs/",
+      "title": "Free Electrons — terms page",
+      "excerpt": "of the start-up be present at each module. Participating in person allows startups to fully leverage the program’s extensive",
+      "page": "terms"
     },
     {
       "id": "check-name-99e19e45a7",
       "url": "https://freeelectrons.org/",
-      "title": "Free Electrons — homepage checked by scrape.py",
+      "title": "Free Electrons — homepage",
       "excerpt": "Free Electrons - The Global Energy Startup Program Skip to content HOME",
       "page": "details"
     },
     {
+      "id": "check-portfolio-17b1e98c05",
+      "url": "https://freeelectrons.org/news/10-reasons-why-startups-should-apply-to-free-electrons/",
+      "title": "Free Electrons — application page",
+      "excerpt": "ALUMNI → https://freeelectrons.org/our-alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3204d65759",
+      "url": "https://freeelectrons.org/news/charting-the-future-free-electrons-2026-category-guide/",
+      "title": "Free Electrons — application page",
+      "excerpt": "ALUMNI → https://freeelectrons.org/our-alumni/",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-357a7315c1",
       "url": "https://freeelectrons.org/faqs/",
-      "title": "Free Electrons — terms page checked by scrape.py",
+      "title": "Free Electrons — terms page",
       "excerpt": "ALUMNI → https://freeelectrons.org/our-alumni/",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-38cb865429",
-      "url": "https://freeelectrons.org/2026-program/",
-      "title": "Free Electrons — details page checked by scrape.py",
-      "excerpt": "Startups → https://freeelectrons.org/news/startups",
-      "page": "details"
+      "id": "check-portfolio-49c5a0e52d",
+      "url": "https://freeelectrons.org/news/free-electrons-impact-grows-with-more-pilots-deals-between-utilities-startups/",
+      "title": "Free Electrons — terms page",
+      "excerpt": "ALUMNI → https://freeelectrons.org/our-alumni/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-553719b987",
+      "url": "https://freeelectrons.org/news/free-electrons-a-fast-lane-for-business-to-business/",
+      "title": "Free Electrons — application page",
+      "excerpt": "ALUMNI → https://freeelectrons.org/our-alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-64ea777098",
+      "url": "https://freeelectrons.org/news/introducing-the-categories-for-free-electrons-2025/",
+      "title": "Free Electrons — application page",
+      "excerpt": "ALUMNI → https://freeelectrons.org/our-alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-6ce56dceeb",
+      "url": "https://freeelectrons.org/news/9-reasons-for-your-startup-to-apply/",
+      "title": "Free Electrons — application page",
+      "excerpt": "ALUMNI → https://freeelectrons.org/our-alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-713eb45873",
+      "url": "https://freeelectrons.org/news/free-electrons-2019-opens-applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "ALUMNI → https://freeelectrons.org/our-alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7f8423428c",
+      "url": "https://freeelectrons.org/terms-conditions/",
+      "title": "Free Electrons — terms page",
+      "excerpt": "ALUMNI → https://freeelectrons.org/our-alumni/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-7f8f1fbd95",
       "url": "https://freeelectrons.org/",
-      "title": "Free Electrons — homepage checked by scrape.py",
+      "title": "Free Electrons — homepage",
       "excerpt": "startups → https://freeelectrons.org/our-alumni/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-d5c0559758",
-      "url": "https://freeelectrons.org/2026-program/",
-      "title": "Free Electrons — details page checked by scrape.py",
+      "id": "check-portfolio-99427fa7b9",
+      "url": "https://freeelectrons.org/2027-program/",
+      "title": "Free Electrons — program page",
       "excerpt": "ALUMNI → https://freeelectrons.org/our-alumni/",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-a8c876278a",
+      "url": "https://freeelectrons.org/news/free-electrons-2020-applications-open/",
+      "title": "Free Electrons — application page",
+      "excerpt": "ALUMNI → https://freeelectrons.org/our-alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a8dc1fac6a",
+      "url": "https://freeelectrons.org/news/applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Startups → https://freeelectrons.org/news/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-af7ffa2323",
+      "url": "https://freeelectrons.org/news/free-electrons-reinforces-global-positioning/",
+      "title": "Free Electrons — application page",
+      "excerpt": "ALUMNI → https://freeelectrons.org/our-alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-c13c3a5026",
+      "url": "https://freeelectrons.org/news/in-free-electrons-like-in-life-its-not-where-you-start-its-where-you-finish/",
+      "title": "Free Electrons — application page",
+      "excerpt": "ALUMNI → https://freeelectrons.org/our-alumni/",
+      "page": "application"
     },
     {
       "id": "check-portfolio-d7947494e6",
       "url": "https://freeelectrons.org/",
-      "title": "Free Electrons — homepage checked by scrape.py",
+      "title": "Free Electrons — homepage",
       "excerpt": "ALUMNI → https://freeelectrons.org/our-alumni/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-ebee72733c",
+      "url": "https://freeelectrons.org/news/applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "ALUMNI → https://freeelectrons.org/our-alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-010d4d0ebe",
+      "url": "https://freeelectrons.org/news/10-reasons-why-startups-should-apply-to-free-electrons/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Applications → https://freeelectrons.org/news/applications/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-06a57b3719",
+      "url": "https://freeelectrons.org/news/applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "January 10, 2023 Applications If we have to say one thing about innovation in energy is that it keeps flowing. And fortunately, 2023 is no exception: this year will be hosting a ... Read more → https://freeelectrons.org/news/welcome-to-free-electrons-2023/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0771c9e866",
+      "url": "https://freeelectrons.org/news/in-free-electrons-like-in-life-its-not-where-you-start-its-where-you-finish/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Applications → https://freeelectrons.org/news/applications/",
+      "page": "application"
+    },
+    {
       "id": "check-route-08ad63cc7d",
       "url": "https://freeelectrons.org/",
-      "title": "Free Electrons — homepage checked by scrape.py",
+      "title": "Free Electrons — homepage",
       "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
       "page": "details"
+    },
+    {
+      "id": "check-route-0d698b8a4a",
+      "url": "https://freeelectrons.org/terms-conditions/",
+      "title": "Free Electrons — terms page",
+      "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1303480dc2",
+      "url": "https://freeelectrons.org/news/10-reasons-why-startups-should-apply-to-free-electrons/",
+      "title": "Free Electrons — application page",
+      "excerpt": "November 20, 2019 Applications Free Electrons 2020: Applications Open After three editions disrupting the energy sector, Free Electrons comes for a second edition in 2020 – and applications are already open. Free ... Read more → https://freeelectrons.org/news/free-electrons-2020-applications-open/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-14124c2af2",
+      "url": "https://freeelectrons.org/news/introducing-the-categories-for-free-electrons-2025/",
+      "title": "Free Electrons — application page",
+      "excerpt": "January 31, 2018 Applications In Free Electrons Like In Life: It’s Not Where You Start, It’s Where You Finish When Rui Beon won Free Electrons last year he made an emotional speech that he claims “rarely happens”. He wasn’t expecting, this wasn’t an Oscar ... Read more → https://freeelectrons.org/news/in-free-electrons-like-in-life-its-not-where-you-start-its-where-you-finish/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-14536e2f08",
+      "url": "https://freeelectrons.org/news/9-reasons-for-your-startup-to-apply/",
+      "title": "Free Electrons — application page",
+      "excerpt": "December 4, 2025 Applications Charting the Future: Free Electrons 2026 Category Guide Renewables now supply over 40% of global electricity1, and could reach 70% of final energy demand by 2050 – a drastic rise when compared to the 20% ... Read more → https://freeelectrons.org/news/charting-the-future-free-electrons-2026-category-guide/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1b43861cbf",
+      "url": "https://freeelectrons.org/news/free-electrons-reinforces-global-positioning/",
+      "title": "Free Electrons — application page",
+      "excerpt": "January 6, 2025 Applications What Makes Free Electrons Unique? Free Electrons: The Global Nexus for Energy Innovation In an industry as demanding as energy, innovation is not a luxury, it is a necessity. True ... Read more → https://freeelectrons.org/news/what-makes-free-electrons-unique/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2ade65eb5e",
+      "url": "https://freeelectrons.org/news/10-reasons-why-startups-should-apply-to-free-electrons/",
+      "title": "Free Electrons — application page",
+      "excerpt": "APPLY HERE → https://www.f6s.com/free-electrons-2026/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-347573cb2e",
+      "url": "https://freeelectrons.org/news/introducing-the-categories-for-free-electrons-2025/",
+      "title": "Free Electrons — application page",
+      "excerpt": "January 6, 2025 Applications What Makes Free Electrons Unique? Free Electrons: The Global Nexus for Energy Innovation In an industry as demanding as energy, innovation is not a luxury, it is a necessity. True ... Read more → https://freeelectrons.org/news/what-makes-free-electrons-unique/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-374826376a",
+      "url": "https://freeelectrons.org/news/applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "December 25, 2025 Applications For startups operating in the energy sector, progress is rarely limited by technology alone.More often, it is shaped by operational complexity, ... Read more → https://freeelectrons.org/news/10-reasons-why-startups-should-apply-to-free-electrons/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3942a33622",
+      "url": "https://freeelectrons.org/news/10-reasons-why-startups-should-apply-to-free-electrons/",
+      "title": "Free Electrons — application page",
+      "excerpt": "December 7, 2017 Applications Free Electrons Launches Second Edition of Its Global Startup Acceleration Program Free Electrons today announced the launch of the second edition of its global startup acceleration program to recruit energy startups that will drive ... Read more → https://freeelectrons.org/news/free-electrons-launches-second-edition-of-its-global-startup-acceleration-program/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-411c4d0b83",
+      "url": "https://freeelectrons.org/news/free-electrons-2019-opens-applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Applications → https://freeelectrons.org/news/applications/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-428269d9da",
+      "url": "https://freeelectrons.org/news/free-electrons-reinforces-global-positioning/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4397398d99",
+      "url": "https://freeelectrons.org/news/charting-the-future-free-electrons-2026-category-guide/",
+      "title": "Free Electrons — application page",
+      "excerpt": "November 20, 2019 Applications Free Electrons 2020: Applications Open After three editions disrupting the energy sector, Free Electrons comes for a second edition in 2020 – and applications are already open. Free ... Read more → https://freeelectrons.org/news/free-electrons-2020-applications-open/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4a4e46e1b5",
+      "url": "https://freeelectrons.org/news/10-reasons-why-startups-should-apply-to-free-electrons/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4db9a064f4",
+      "url": "https://freeelectrons.org/news/free-electrons-2020-applications-open/",
+      "title": "Free Electrons — application page",
+      "excerpt": "applications are already open → https://www.f6s.com/freeelectrons2020/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5aaa0ce881",
+      "url": "https://freeelectrons.org/news/applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
+      "page": "application"
     },
     {
       "id": "check-route-5f97fb4bd6",
       "url": "https://freeelectrons.org/",
-      "title": "Free Electrons — homepage checked by scrape.py",
+      "title": "Free Electrons — homepage",
       "excerpt": "Apply Now → https://www.f6s.com/free-electrons-2027/apply",
       "page": "details"
     },
     {
-      "id": "check-route-bd5638f7b7",
-      "url": "https://freeelectrons.org/2026-program/",
-      "title": "Free Electrons — details page checked by scrape.py",
+      "id": "check-route-5fbac9b253",
+      "url": "https://freeelectrons.org/news/in-free-electrons-like-in-life-its-not-where-you-start-its-where-you-finish/",
+      "title": "Free Electrons — application page",
+      "excerpt": "December 4, 2025 Applications Charting the Future: Free Electrons 2026 Category Guide Renewables now supply over 40% of global electricity1, and could reach 70% of final energy demand by 2050 – a drastic rise when compared to the 20% ... Read more → https://freeelectrons.org/news/charting-the-future-free-electrons-2026-category-guide/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-67d50ae52b",
+      "url": "https://freeelectrons.org/news/free-electrons-a-fast-lane-for-business-to-business/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6de8f3da61",
+      "url": "https://freeelectrons.org/news/free-electrons-2019-opens-applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "November 11, 2024 Applications Introducing the Categories for Free Electrons 2025 As the energy landscape evolves, Free Electrons is committed to leading the change in industry innovation. In 2025, we are introducing new categories ... Read more → https://freeelectrons.org/news/introducing-the-categories-for-free-electrons-2025/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7182b6fa6e",
+      "url": "https://freeelectrons.org/news/free-electrons-impact-grows-with-more-pilots-deals-between-utilities-startups/",
+      "title": "Free Electrons — terms page",
+      "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-73eee186db",
+      "url": "https://freeelectrons.org/news/free-electrons-2019-opens-applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7a203c90e2",
+      "url": "https://freeelectrons.org/news/9-reasons-for-your-startup-to-apply/",
+      "title": "Free Electrons — application page",
+      "excerpt": "February 12, 2018 Applications Free Electrons: A Fast Lane For Business-To-Business A lot as been said about Free Electrons, that’s an unique opportunity for energy startups, that eight giant utilities can change the life of those ... Read more → https://freeelectrons.org/news/free-electrons-a-fast-lane-for-business-to-business/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-84e92a38ae",
+      "url": "https://freeelectrons.org/news/in-free-electrons-like-in-life-its-not-where-you-start-its-where-you-finish/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8cc27cdf01",
+      "url": "https://freeelectrons.org/news/free-electrons-a-fast-lane-for-business-to-business/",
+      "title": "Free Electrons — application page",
+      "excerpt": "July 10, 2019 Applications Third Time’s A (Power) Charm This is arguably the most exciting Open Innovation Program for the Energy industry in the world. Free Electrons, now in its third edition, has ... Read more → https://freeelectrons.org/news/third-times-a-power-charm/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-901a5f7d23",
+      "url": "https://freeelectrons.org/news/10-reasons-why-startups-should-apply-to-free-electrons/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Applying to Free Electrons → https://www.f6s.com/free-electrons-2026/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-942495c54d",
+      "url": "https://freeelectrons.org/news/free-electrons-2020-applications-open/",
+      "title": "Free Electrons — application page",
+      "excerpt": "January 30, 2019 Applications Free Electrons 2019 opens applications Applications for Free Electrons, the first global energy startup accelerator program that connects the world’s most promising energy startup ... Read more → https://freeelectrons.org/news/free-electrons-2019-opens-applications/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-97af5645e8",
+      "url": "https://freeelectrons.org/news/applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "December 4, 2025 Applications Renewables now supply over 40% of global electricity1, and could reach 70% of final energy demand by 2050 – a drastic rise when compared to the 20% ... Read more → https://freeelectrons.org/news/charting-the-future-free-electrons-2026-category-guide/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a581a4702e",
+      "url": "https://freeelectrons.org/news/9-reasons-for-your-startup-to-apply/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a65e46016b",
+      "url": "https://freeelectrons.org/news/free-electrons-2020-applications-open/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Applications are currently open → https://www.f6s.com/freeelectrons2020/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a98e70db9b",
+      "url": "https://freeelectrons.org/news/free-electrons-2020-applications-open/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-aefdab1f23",
+      "url": "https://freeelectrons.org/news/charting-the-future-free-electrons-2026-category-guide/",
+      "title": "Free Electrons — application page",
+      "excerpt": "https://www.f6s.com/free-electrons-2026/apply → https://www.f6s.com/free-electrons-2026/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b129a31e81",
+      "url": "https://freeelectrons.org/news/free-electrons-a-fast-lane-for-business-to-business/",
+      "title": "Free Electrons — application page",
+      "excerpt": "January 31, 2018 Applications In Free Electrons Like In Life: It’s Not Where You Start, It’s Where You Finish When Rui Beon won Free Electrons last year he made an emotional speech that he claims “rarely happens”. He wasn’t expecting, this wasn’t an Oscar ... Read more → https://freeelectrons.org/news/in-free-electrons-like-in-life-its-not-where-you-start-its-where-you-finish/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b7cbe95b56",
+      "url": "https://freeelectrons.org/news/charting-the-future-free-electrons-2026-category-guide/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Applications → https://freeelectrons.org/news/applications/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-beb2cceb2a",
+      "url": "https://freeelectrons.org/news/applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "March 6, 2023 Applications Starting a business is a challenging and exciting journey. A successful pitch is just as important as a brilliant idea and is a critical part of ... Read more → https://freeelectrons.org/news/tips-and-tricks-for-a-good-pitch/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c4f81a294a",
+      "url": "https://freeelectrons.org/news/applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "February 17, 2022 Applications Free Electrons 2022 is here. 9 reasons for your Startup to Apply: 1. You’ll be giving your business a chance to grow & evolve in a unique way Free ... Read more → https://freeelectrons.org/news/9-reasons-for-your-startup-to-apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c74860ffcb",
+      "url": "https://freeelectrons.org/news/free-electrons-reinforces-global-positioning/",
+      "title": "Free Electrons — application page",
+      "excerpt": "February 12, 2018 Applications Free Electrons: A Fast Lane For Business-To-Business A lot as been said about Free Electrons, that’s an unique opportunity for energy startups, that eight giant utilities can change the life of those ... Read more → https://freeelectrons.org/news/free-electrons-a-fast-lane-for-business-to-business/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ca8fc6c986",
+      "url": "https://freeelectrons.org/news/free-electrons-2020-applications-open/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Applications → https://freeelectrons.org/news/applications/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d4a1cc0941",
+      "url": "https://freeelectrons.org/news/applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "April 12, 2021 Applications Applications for Free Electrons are officially closed (until next year of course). For those taking part in this year’s program, now is the time for ... Read more → https://freeelectrons.org/news/how-is-your-pitch-today/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-dac57d5b6a",
+      "url": "https://freeelectrons.org/news/introducing-the-categories-for-free-electrons-2025/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-dfd8f729ba",
+      "url": "https://freeelectrons.org/2027-program/",
+      "title": "Free Electrons — program page",
       "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
       "page": "details"
     },
     {
-      "id": "check-route-eae27fcbf9",
-      "url": "https://freeelectrons.org/2026-program/",
-      "title": "Free Electrons — details page checked by scrape.py",
-      "excerpt": "Applications → https://freeelectrons.org/news/applications",
+      "id": "check-route-e1a8ef6191",
+      "url": "https://freeelectrons.org/news/charting-the-future-free-electrons-2026-category-guide/",
+      "title": "Free Electrons — application page",
+      "excerpt": "February 28, 2019 Applications Free Electrons reinforces global positioning Global Energy Startup Accelerator closes applications and attracts close to 500 startups, with 90% new entries Applications for Free Electrons 2019, ... Read more → https://freeelectrons.org/news/free-electrons-reinforces-global-positioning/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e7188a8cd3",
+      "url": "https://freeelectrons.org/news/free-electrons-reinforces-global-positioning/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Applications → https://freeelectrons.org/news/applications/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e819a35974",
+      "url": "https://freeelectrons.org/news/applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "December 26, 2024 Applications For startups, the question of readiness often creates hesitation when exploring growth opportunities. Concerns about product maturity, limited ... Read more → https://freeelectrons.org/news/debunking-the-myth-am-i-ready/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e8d0f3eb20",
+      "url": "https://freeelectrons.org/news/introducing-the-categories-for-free-electrons-2025/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Applications → https://freeelectrons.org/news/applications/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ea10523a48",
+      "url": "https://freeelectrons.org/news/free-electrons-a-fast-lane-for-business-to-business/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Applications → https://freeelectrons.org/news/applications/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f1cbef80ad",
+      "url": "https://freeelectrons.org/news/in-free-electrons-like-in-life-its-not-where-you-start-its-where-you-finish/",
+      "title": "Free Electrons — application page",
+      "excerpt": "November 20, 2019 Applications Free Electrons 2020: Applications Open After three editions disrupting the energy sector, Free Electrons comes for a second edition in 2020 – and applications are already open. Free ... Read more → https://freeelectrons.org/news/free-electrons-2020-applications-open/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f290dfc23a",
+      "url": "https://freeelectrons.org/2027-program/",
+      "title": "Free Electrons — program page",
+      "excerpt": "Download - PDF File → http://freeelectrons.org/guide-to-apply-to-free-electrons/",
       "page": "details"
+    },
+    {
+      "id": "check-route-f361bf021c",
+      "url": "https://freeelectrons.org/news/applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "January 6, 2025 Applications Free Electrons: The Global Nexus for Energy Innovation In an industry as demanding as energy, innovation is not a luxury, it is a necessity. True ... Read more → https://freeelectrons.org/news/what-makes-free-electrons-unique/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f55f599158",
+      "url": "https://freeelectrons.org/news/9-reasons-for-your-startup-to-apply/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Applications → https://freeelectrons.org/news/applications/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f6d99f1d84",
+      "url": "https://freeelectrons.org/news/applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "November 11, 2024 Applications As the energy landscape evolves, Free Electrons is committed to leading the change in industry innovation. In 2025, we are introducing new categories ... Read more → https://freeelectrons.org/news/introducing-the-categories-for-free-electrons-2025/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f7577aaa1b",
+      "url": "https://freeelectrons.org/news/free-electrons-2020-applications-open/",
+      "title": "Free Electrons — application page",
+      "excerpt": "January 31, 2018 Applications In Free Electrons Like In Life: It’s Not Where You Start, It’s Where You Finish When Rui Beon won Free Electrons last year he made an emotional speech that he claims “rarely happens”. He wasn’t expecting, this wasn’t an Oscar ... Read more → https://freeelectrons.org/news/in-free-electrons-like-in-life-its-not-where-you-start-its-where-you-finish/",
+      "page": "application"
     },
     {
       "id": "check-route-f9308fba3f",
       "url": "https://freeelectrons.org/faqs/",
-      "title": "Free Electrons — terms page checked by scrape.py",
+      "title": "Free Electrons — terms page",
       "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
       "page": "terms"
     },
     {
+      "id": "check-route-fc2453ade2",
+      "url": "https://freeelectrons.org/news/applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "June 17, 2021 Applications Startups and utilities are about to enter the piloting phase, they will refine strategies, address obstacles and start working more closely together. ... Read more → https://freeelectrons.org/news/tips-tricks-collaboration-is-on/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fd5df869c5",
+      "url": "https://freeelectrons.org/news/free-electrons-2019-opens-applications/",
+      "title": "Free Electrons — application page",
+      "excerpt": "February 28, 2019 Applications Free Electrons reinforces global positioning Global Energy Startup Accelerator closes applications and attracts close to 500 startups, with 90% new entries Applications for Free Electrons 2019, ... Read more → https://freeelectrons.org/news/free-electrons-reinforces-global-positioning/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fef7338ff9",
+      "url": "https://freeelectrons.org/news/charting-the-future-free-electrons-2026-category-guide/",
+      "title": "Free Electrons — application page",
+      "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-status-13095760ab",
+      "url": "https://freeelectrons.org/2027-program/",
+      "title": "Free Electrons — program page",
+      "excerpt": "Oct. 17 th 2025 - Jan. 31 st 2026 Applications Open Worldwide From October 17th 2025, to January 31st 2026, applications are open to startups ready to scale their solutions and explore opportunities for pilots, investment, and shared",
+      "page": "details"
+    },
+    {
       "id": "check-status-b75bb3c562",
       "url": "https://freeelectrons.org/faqs/",
-      "title": "Free Electrons — terms page checked by scrape.py",
+      "title": "Free Electrons — terms page",
       "excerpt": "apply, we encourage you to explore the opportunity and see how your solution could fit within the program. Applications are closed. How can a startup show interest? We’re always interested in hearing from startups. If you’d like to",
       "page": "terms"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-9dd8b8adfa",
+      "url": "https://freeelectrons.org/",
+      "page": "details",
+      "excerpt": "Free Electrons - The Global Energy Startup Program Skip to content HOME PROGRAM 2027 Program Categories FAQS PARTNERS ALUMNI Our Alumni Startup of the year Akimoto Award ABOUT US News Research Ecosystem CONTACT Home PROGRAM Categories FAQS PARTNERS ALUMNI Startup of the year Akimoto Award RESEARCH Ecosystem News CONTACT Apply now WELCOME TO FREE ELECTRONS Connecting startups with world leading energy utilities Applications for the 2027 edition of Free Electrons are open. Building an energy solution ready for utility scale? Applications for Free Electrons 2027 are now open. Apply Now Learn More Get in touch HURRY! 16 D 04 H 50 M 17 S DAYS LEFT Apply before November 30th, 2026 and get these exclusive perks An exclusive Utility Innovation Landscape Report , detailing challenges and opportunity areas identified by Free Electrons utilities Feedback on your application , with the opportunity to strengthen it before the final deadline A chance to be featured in the Free Electrons Newsletter , reaching 1,600+ subscribers Apply Now FREE ELECTRONS 10TH EDITION The ultimate Open Innovation Program For the past decade, Free Electrons has brought together startups , utilities , and ecosystem partners to co-create the future of energy. This milestone celebrates a decade of innovation and collaboration while marking the start of a new chapter in our shared journey to advance the energy"
+    },
+    {
+      "id": "check-page-3b784be6c3",
+      "url": "https://freeelectrons.org/news/10-reasons-why-startups-should-apply-to-free-electrons/",
+      "page": "application",
+      "excerpt": "10 Reasons why Startups Should Apply to Free Electrons - Free Electrons Skip to content HOME PROGRAM 2027 Program Categories FAQS PARTNERS ALUMNI Our Alumni Startup of the year Akimoto Award ABOUT US News Research Ecosystem CONTACT Home PROGRAM Categories FAQS PARTNERS ALUMNI Startup of the year Akimoto Award RESEARCH Ecosystem News CONTACT Apply now Applications 10 Reasons why Startups Should Apply to Free Electrons December 25, 2025 freeelectrons.admin For startups operating in the energy sector, progress is rarely limited by technology alone. More often, it is shaped by operational complexity, regulatory frameworks, procurement cycles, and access to the right decision-makers at the right moment. Free Electrons was built with this context in mind. The program brings startups and utilities together around defined operational challenges, creating the conditions for structured collaboration and long-term outcomes. Below are ten reasons why startups working across energy, grids, digitalisation, and decarbonisation choose to engage with Free Electrons . 1. How can your solution be validated against utility operating constraints? Free Electrons focuses on challenges grounded in utility operations, not hypothetical use cases. Startups collaborate directly with utilities on topics shaped by operational requirements, regulatory constraints, and commercial considerations. This enables"
+    },
+    {
+      "id": "check-page-970ef33dc8",
+      "url": "https://freeelectrons.org/news/9-reasons-for-your-startup-to-apply/",
+      "page": "application",
+      "excerpt": "9 Reasons for your Startup to Apply - Free Electrons Skip to content HOME PROGRAM 2027 Program Categories FAQS PARTNERS ALUMNI Our Alumni Startup of the year Akimoto Award ABOUT US News Research Ecosystem CONTACT Home PROGRAM Categories FAQS PARTNERS ALUMNI Startup of the year Akimoto Award RESEARCH Ecosystem News CONTACT Apply now Applications 9 Reasons for your Startup to Apply February 17, 2022 freeelectrons.admin Free Electrons 2022 is here. 9 reasons for your Startup to Apply: 1. You’ll be giving your business a chance to grow & evolve in a unique way Free Electrons is an opportunity for startups to validate and fine-tune business value propositions with a dedicated community of experts. Testing solutions, gaining new insights, growing & evolving! 2. Applying is risk-free, and cost-free. It’s true, applying is free and the program does not ask for equity in your business. We also have several measures in place to deal with IP. However, should one or more of the Utility Partners be interested in investing and the time is right for your business, this is certainly a possibility and a valued outcome for many startups. Applications can be submitted here, within the applications deadline. 3. Corporate Utility Partners with a love of all things startup The Utilities leading the 6th edition of Free Electrons are: American Electric Power (AEP), CLP, Dubai Electricity and Water"
+    },
+    {
+      "id": "check-page-92649afd85",
+      "url": "https://freeelectrons.org/news/free-electrons-2019-opens-applications/",
+      "page": "application",
+      "excerpt": "Free Electrons 2019 opens applications - Free Electrons Skip to content HOME PROGRAM 2027 Program Categories FAQS PARTNERS ALUMNI Our Alumni Startup of the year Akimoto Award ABOUT US News Research Ecosystem CONTACT Home PROGRAM Categories FAQS PARTNERS ALUMNI Startup of the year Akimoto Award RESEARCH Ecosystem News CONTACT Apply now Applications Free Electrons 2019 opens applications January 30, 2019 freeelectrons.admin Applications for Free Electrons, the first global energy startup accelerator program that connects the world’s most promising energy startup companies with leading utility companies, just opened, and will last until the 22nd of February. Free Electrons is a truly global program, focused on deal facilitation and pilot-driven, and the goal in the application stage is to reach startups developing solutions in mobility, clean and smart energy and digitalization. This program perfectly matches start-ups and utilities, and the last 2 editions prove it’s a tremendous catalyst for accelerating change for all partners. After the call for startups closes, the selection process for Bootcamp will take 2 weeks, until March 13 th , when the participating startups will be announced. The Bootcamp module takes place in Dublin where from April 2 nd to 4 th the best Top 30 Startups will showcase their solutions and their teams in order to be shortlisted to the top 12. After the"
+    },
+    {
+      "id": "check-page-91653bbfa7",
+      "url": "https://freeelectrons.org/news/free-electrons-2020-applications-open/",
+      "page": "application",
+      "excerpt": "Free Electrons 2020: Applications Open - Free Electrons Skip to content HOME PROGRAM 2027 Program Categories FAQS PARTNERS ALUMNI Our Alumni Startup of the year Akimoto Award ABOUT US News Research Ecosystem CONTACT Home PROGRAM Categories FAQS PARTNERS ALUMNI Startup of the year Akimoto Award RESEARCH Ecosystem News CONTACT Apply now Applications Free Electrons 2020: Applications Open November 20, 2019 freeelectrons.admin After three editions disrupting the energy sector, Free Electrons comes for a second edition in 2020 – and applications are already open . Free Electrons has been successfully presenting the most innovative startups to a consortium of 10 global utilities . American Electric Power , AusNet Services , CLP , DEWA , ESB , EDP , innogy SE , Origin Energy , SP Group and TEPCO had the pleasure to agree on a pipeline of over 50 pilots during the last edition. This year, Free Electrons will take place in Singapore, Sydney, São Paulo and Dubai. A bootcamp and four modules of hard, yet very rewarding work. Within the course of one year, startups will participate in 1:1 meetings with utilities, developing, scoping and executing the pilot projects, working on the pitches and business proposition presentations, receiving guidance on how to refine their solution, as well as fundraising and investment opportunities. Free Electrons ends up with a pitch day and a celebration,"
+    },
+    {
+      "id": "check-page-ba884daea9",
+      "url": "https://freeelectrons.org/news/applications/",
+      "page": "application",
+      "excerpt": "Applications Archives - Free Electrons Skip to content HOME PROGRAM 2027 Program Categories FAQS PARTNERS ALUMNI Our Alumni Startup of the year Akimoto Award ABOUT US News Research Ecosystem CONTACT Home PROGRAM Categories FAQS PARTNERS ALUMNI Startup of the year Akimoto Award RESEARCH Ecosystem News CONTACT Apply now FREE ELECTRONS NEWS Applications Topics All Applications Ecosystem Partners Energy Insights Program Modules Research Startups Success Stories Utilities December 25, 2025 Applications For startups operating in the energy sector, progress is rarely limited by technology alone.More often, it is shaped by operational complexity, ... Read more December 4, 2025 Applications Renewables now supply over 40% of global electricity1, and could reach 70% of final energy demand by 2050 – a drastic rise when compared to the 20% ... Read more January 6, 2025 Applications Free Electrons: The Global Nexus for Energy Innovation In an industry as demanding as energy, innovation is not a luxury, it is a necessity. True ... Read more December 26, 2024 Applications For startups, the question of readiness often creates hesitation when exploring growth opportunities. Concerns about product maturity, limited ... Read more November 11, 2024 Applications As the energy landscape evolves, Free Electrons is committed to leading the change in industry innovation. In 2025, we are introducing new"
+    },
+    {
+      "id": "check-page-61afdcaf3d",
+      "url": "https://freeelectrons.org/news/charting-the-future-free-electrons-2026-category-guide/",
+      "page": "application",
+      "excerpt": "Charting the Future: Free Electrons 2026 Category Guide Skip to content HOME PROGRAM 2027 Program Categories FAQS PARTNERS ALUMNI Our Alumni Startup of the year Akimoto Award ABOUT US News Research Ecosystem CONTACT Home PROGRAM Categories FAQS PARTNERS ALUMNI Startup of the year Akimoto Award RESEARCH Ecosystem News CONTACT Apply now Applications Charting the Future: Free Electrons 2026 Category Guide December 4, 2025 freeelectrons.admin Renewables now supply over 40% of global electricity 1 , and could reach 70% of final energy demand by 2050 – a drastic rise when compared to the 20% that we have today 2 . As systems decentralise and demand grows, utilities face the challenge of scaling clean generation while maintaining reliability across increasingly flexible networks. Free Electrons connects startups and utilities to co-develop deployable technologies that turn ambition into progress. Over nine editions, the program has united 300+ startups and 10 leading utilities, resulting in 250+ pilots and partnerships that continue to advance the global energy transition. Now entering its 10 th edition, Free Electrons focuses on the next decade of innovation – one defined by data, flexibility, and cross-sector collaboration. The following nine categories represent where the next wave of impact will take shape. 1. Next Generation Renewables Global renewable deployment continues at"
+    },
+    {
+      "id": "check-page-acd119cf85",
+      "url": "https://freeelectrons.org/news/free-electrons-a-fast-lane-for-business-to-business/",
+      "page": "application",
+      "excerpt": "Free Electrons: A Fast Lane For Business-To-Business - Free Electrons Skip to content HOME PROGRAM 2027 Program Categories FAQS PARTNERS ALUMNI Our Alumni Startup of the year Akimoto Award ABOUT US News Research Ecosystem CONTACT Home PROGRAM Categories FAQS PARTNERS ALUMNI Startup of the year Akimoto Award RESEARCH Ecosystem News CONTACT Apply now Applications Free Electrons: A Fast Lane For Business-To-Business February 12, 2018 freeelectrons.admin A lot as been said about Free Electrons, that’s an unique opportunity for energy startups, that eight giant utilities can change the life of those who apply to the program and that the winner is winning USD200,000. All of it true but there’s more to it. There’s a “behind the scenes” that normally people don’t talk about on a program like Free Electrons, where winning is not the main goal but the opportunity to do business with the utilities. The business potential of Free Electrons is huge and startups know that, and if they don’t they should. Let’s talk numbers: the program allows the fastest business-to-business relationship ever, it’s kind of a fast lane for business-to-business. For any startup to have this kind of relationship in such a short period of time it would involve spending a lot of money and due to this program they don’t need to spend a cent. At the end of the Free Electrons 2017 third module, in Singapore, late"
+    },
+    {
+      "id": "check-page-4758c6043d",
+      "url": "https://freeelectrons.org/news/free-electrons-reinforces-global-positioning/",
+      "page": "application",
+      "excerpt": "Free Electrons reinforces global positioning - Free Electrons Skip to content HOME PROGRAM 2027 Program Categories FAQS PARTNERS ALUMNI Our Alumni Startup of the year Akimoto Award ABOUT US News Research Ecosystem CONTACT Home PROGRAM Categories FAQS PARTNERS ALUMNI Startup of the year Akimoto Award RESEARCH Ecosystem News CONTACT Apply now Applications Free Electrons reinforces global positioning February 28, 2019 freeelectrons.admin Global Energy Startup Accelerator closes applications and attracts close to 500 startups, with 90% new entries Applications for Free Electrons 2019, the first global energy startup accelerator program that connects the world’s brightest startups in the Energy scene with leading utility companies, just closed. In total, the program received 481 applications, from 62 different countries, a ‘spread’ that talks volumes about the international reach of the program. The program only had a 10% repeat rate, and that means 90% of the startups we attracted are new entries, and that talks to the global visibility of the program, and its growing appeal. This was also possible because we have a larger network, with 2 new partners helping drive quality applications. If we look at the categories of the applications, 18% are dedicated to Energy Management, 14% are focused on IoT & Digitization, 14% are looking into Energy Generation, and 9% are from the Smart"
+    },
+    {
+      "id": "check-page-ebffa22c1d",
+      "url": "https://freeelectrons.org/news/in-free-electrons-like-in-life-its-not-where-you-start-its-where-you-finish/",
+      "page": "application",
+      "excerpt": "In Free Electrons Like In Life: It’s Not Where You Start, It’s Where You Finish - Free Electrons Skip to content HOME PROGRAM 2027 Program Categories FAQS PARTNERS ALUMNI Our Alumni Startup of the year Akimoto Award ABOUT US News Research Ecosystem CONTACT Home PROGRAM Categories FAQS PARTNERS ALUMNI Startup of the year Akimoto Award RESEARCH Ecosystem News CONTACT Apply now Applications In Free Electrons Like In Life: It’s Not Where You Start, It’s Where You Finish January 31, 2018 freeelectrons.admin When Rui Beon won Free Electrons last year he made an emotional speech that he claims “rarely happens”. He wasn’t expecting, this wasn’t an Oscar night where the winners already know they’re going to win because they’ve won everything during the award season. This was the first edition of Free Electrons. None of the startups really knew what they’re getting themselves into. They only knew that eight giant utilities didn’t come knocking on their doors every day. But let’s start from the beginning. Rui was just a kid when he first started inventing gadgets, and having this passion for everything electronic and that’s why he decided to study electrical engineering. Little did he know how sealed was his fate. BeOn Energy was founded in 2014, during an innovation program from EDP and they have been working together ever since. BeOn is a company developing solar technologies and it’s"
+    },
+    {
+      "id": "check-page-5e18540b1f",
+      "url": "https://freeelectrons.org/news/introducing-the-categories-for-free-electrons-2025/",
+      "page": "application",
+      "excerpt": "Introducing the Categories for Free Electrons 2025 - Free Electrons Skip to content HOME PROGRAM 2027 Program Categories FAQS PARTNERS ALUMNI Our Alumni Startup of the year Akimoto Award ABOUT US News Research Ecosystem CONTACT Home PROGRAM Categories FAQS PARTNERS ALUMNI Startup of the year Akimoto Award RESEARCH Ecosystem News CONTACT Apply now Applications Introducing the Categories for Free Electrons 2025 November 11, 2024 freeelectrons.admin As the energy landscape evolves, Free Electrons is committed to leading the change in industry innovation. In 2025, we are introducing new categories that address the most pressing challenges and opportunities within the energy sector. These categories are designed to serve as pivotal focal points for startups and utilities to collaborate and work together as well as guide startups in their application process. In the following section, we will provide a concise overview of each category, outlining its significance and relevance to the energy industry today. By aligning with these emerging areas, we aim to facilitate partnerships that not only enhance operation efficiency but also advance the global transition towards a sustainable and resilient energy future. Next Generation Renewables The rapid advancement of next-generation renewable technologies is essential for meeting escalating global clean energy trends. As of 2023, renewable"
+    },
+    {
+      "id": "check-page-daa570b0e0",
+      "url": "https://freeelectrons.org/faqs/",
+      "page": "terms",
+      "excerpt": "FAQS - Free Electrons Skip to content HOME PROGRAM 2027 Program Categories FAQS PARTNERS ALUMNI Our Alumni Startup of the year Akimoto Award ABOUT US News Research Ecosystem CONTACT Home PROGRAM Categories FAQS PARTNERS ALUMNI Startup of the year Akimoto Award RESEARCH Ecosystem News CONTACT Apply now Free Electrons 2026 Frequently Asked Questions The 10th edition of Free Electrons will be delivered in a hybrid format, combining online and in-person modules hosted across the utilities’ home markets. Throughout the year, startups and utilities work side by side to scale solutions through hands-on collaboration, direct engagement and exposure to the right investors and industry leaders. During the journey, startups take part in pitch events, one-on-one meetings and pilot and project scoping sessions, receiving guidance to refine their solutions while exploring opportunities for funding and long-term growth. How does joining Free Electrons help a startup? Free Electrons gives startups the opportunity to test and scale solutions with some of the world’s leading utilities. Through collaboration, startups gain access to operational environments, pilot opportunities and direct engagement with industry decision-makers. What stage startup are The Utilities looking for? The Utilities support a variety of startups at different stages. Typically, the startup’s applying for Free Electrons"
+    },
+    {
+      "id": "check-page-c0ba3aab87",
+      "url": "https://freeelectrons.org/news/free-electrons-impact-grows-with-more-pilots-deals-between-utilities-startups/",
+      "page": "terms",
+      "excerpt": "Free Electrons impact grows with more Pilots/Deals between Utilities & Startups - Free Electrons Skip to content HOME PROGRAM 2027 Program Categories FAQS PARTNERS ALUMNI Our Alumni Startup of the year Akimoto Award ABOUT US News Research Ecosystem CONTACT Home PROGRAM Categories FAQS PARTNERS ALUMNI Startup of the year Akimoto Award RESEARCH Ecosystem News CONTACT Apply now Success Stories Free Electrons impact grows with more Pilots/Deals between Utilities & Startups October 5, 2018 freeelectrons.admin ME SOLshare wins Free Electrons 2018 ‘Best Energy Startup’ Award Free Electrons, the global energy accelerator program that connects the world’s most promising startups with leading utilities around the world, has wrapped up the 2018 program with an impressive total of 43 pilots, in less than 7 months. The total value of new contracts for the participating startups exceeds $3 million. The $200,000 prize for “Best Energy Startup 2018” was awarded to ME SOLshare, the revolutionary community DC solar power micro-grid. Founders Sebastian Groh, Hannes Kirchhoff, and Daniel Ciganovic were delighted to receive this award at the FREE ELECTRONS Grand Finale in Berlin on Friday night. ME SOLshare has established the world’s first peer-to-peer solar energy grid in 2015 in a remote area of Bangladesh, the home of 5 million installed solar home systems throughout the country. The"
+    },
+    {
+      "id": "check-page-ff9cebd8a1",
+      "url": "https://freeelectrons.org/terms-conditions/",
+      "page": "terms",
+      "excerpt": "Terms & Conditions - Free Electrons Skip to content HOME PROGRAM 2027 Program Categories FAQS PARTNERS ALUMNI Our Alumni Startup of the year Akimoto Award ABOUT US News Research Ecosystem CONTACT Home PROGRAM Categories FAQS PARTNERS ALUMNI Startup of the year Akimoto Award RESEARCH Ecosystem News CONTACT Apply now FREE ELECTRONS TERMS & CONDITIONS FREE ELECTRONS PROGRAM TERMS & CONDITIONS OF APPLICATION AND PARTICIPATION When you submit your application form to participate in the Free Electrons Program, you agree to the following terms and conditions ( Terms and Conditions ) in relation to your application for, and if selected, participation in the Program. SECTION ONE – CONDITIONS OF APPLICATION Eligibility Criteria In order to be eligible to apply for the Program, your start-up must: Be incorporated (in any country), and provide proof of that registration if requested by the Program Members; Offer a product or service solution in at least one of the following recruitment categories: Accelerating, Renewable Deployments Digital, AI & Computing Operations Asset Optimisation & Maintenance Industrial Electrification Grid Capacity & Resilience Customer Empowerment Other/Wildcard Have at least four full-time employees or the equivalent thereof (consultants​ and/or advisors​ do not qualify as employees or the equivalent of employees). Note that start-ups with business models that"
+    },
+    {
+      "id": "check-page-a6fa7c6bfa",
+      "url": "https://freeelectrons.org/2027-program/",
+      "page": "details",
+      "excerpt": "2027 Program - Free Electrons Skip to content HOME PROGRAM 2027 Program Categories FAQS PARTNERS ALUMNI Our Alumni Startup of the year Akimoto Award ABOUT US News Research Ecosystem CONTACT Home PROGRAM Categories FAQS PARTNERS ALUMNI Startup of the year Akimoto Award RESEARCH Ecosystem News CONTACT Apply now 2027 PROGRAM Be part of the clean energy transition with Free Electrons Free Electrons is the world’s largest open innovation program designed to bring disruptive energy solutions to market Selected startups will work alongside leading energy utilities to deliver innovative solutions that advance the energy transition. Participants will gather globally, engaging in both in-person and virtual modules, designed to fast-track their progress. The program provides an accelerated path for startups to develop and scale their businesses, pilot solutions and access potential investment opportunities. timeline A step-by-step journey from application to global impact. Oct. 17 th 2025 - Jan. 31 st 2026 Applications Open Worldwide From October 17th 2025, to January 31st 2026, applications are open to startups ready to scale their solutions and explore opportunities for pilots, investment, and shared learning alongside leading utility partners – CLP , EDP, E.ON , ESB , Hydro Québec , and Origin Energy . click for details W/C April 13 th 2026 Pitch Event Virtual Selected startups"
     }
   ],
   "findings": {
@@ -108,8 +786,24 @@
         "evidenceId": "check-route-08ad63cc7d"
       },
       {
-        "value": "https://freeelectrons.org/news/applications",
-        "evidenceId": "check-route-eae27fcbf9"
+        "value": "https://freeelectrons.org/news/applications/",
+        "evidenceId": "check-route-010d4d0ebe"
+      },
+      {
+        "value": "https://www.f6s.com/free-electrons-2026/apply",
+        "evidenceId": "check-route-901a5f7d23"
+      },
+      {
+        "value": "https://freeelectrons.org/news/free-electrons-2020-applications-open/",
+        "evidenceId": "check-route-1303480dc2"
+      },
+      {
+        "value": "https://freeelectrons.org/news/free-electrons-launches-second-edition-of-its-global-startup-acceleration-program/",
+        "evidenceId": "check-route-3942a33622"
+      },
+      {
+        "value": "https://freeelectrons.org/news/charting-the-future-free-electrons-2026-category-guide/",
+        "evidenceId": "check-route-14536e2f08"
       }
     ],
     "applicationUrl": [
@@ -122,17 +816,58 @@
       {
         "value": false,
         "evidenceId": "check-status-b75bb3c562"
+      },
+      {
+        "value": true,
+        "evidenceId": "check-status-13095760ab"
       }
     ],
     "operatingStatus": [],
     "deadlines": [
       {
         "value": "2026-11-30",
-        "evidenceId": "check-deadline-4a34cd6ece"
+        "evidenceId": "check-deadline-82f13b5430"
+      },
+      {
+        "value": "2027-02-06",
+        "evidenceId": "check-deadline-1ef477fe30"
       }
     ],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "2",
+        "evidenceId": "check-duration-a3d5975d03"
+      },
+      {
+        "value": "8",
+        "evidenceId": "check-duration-1ca6947624"
+      },
+      {
+        "value": "7 months",
+        "evidenceId": "check-duration-c2e66856ee"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-bb7a062f77"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-2104ad9a82"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-93652d438c"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://freeelectrons.org/our-alumni/",
@@ -140,7 +875,7 @@
       },
       {
         "value": "https://freeelectrons.org/news/startups",
-        "evidenceId": "check-portfolio-38cb865429"
+        "evidenceId": "check-portfolio-a8dc1fac6a"
       }
     ],
     "name": [

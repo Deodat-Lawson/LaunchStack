@@ -1,12 +1,28 @@
 {
   "programId": "tech-nexus",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.technexus.com/portfolio/",
+      "url": "https://pulse.technexus.com/",
       "page": "portfolio",
-      "anchor": "Portfolio",
+      "anchor": "Privileged access to co-invest alongside TechNexus in select portfolio companies — and serve as active mentors helping founders navigate growth, strategy, and scale.",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://secondwave.technexus.com",
+      "page": "portfolio",
+      "anchor": "Specialized in revitalizing underperforming venture portfolios and corporate venture units — turning dormant assets into active value.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/3-questions-ceos-want-to-know-about-cvc-but-dont-ask/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -14,6 +30,38 @@
       "url": "https://www.technexus.com/about/",
       "page": "details",
       "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/articles/",
+      "page": "portfolio",
+      "anchor": "More than a newsroom — an active incubation tool that tells portfolio stories, drives collaboration between ventures and corporate partners, and accelerates growth across the ecosy",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/cracking-the-enterprise-code-how-startups-can-navigate-and-win-big-deals/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/decoding-corporate-investment-a-strategic-guide-for-early-stage-ventures/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/fedex-thor-lead-160m-series-c-investment-in-harbinger/",
+      "page": "terms",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -27,10 +75,10 @@
       "origin": "official"
     },
     {
-      "url": "https://www.technexus.com/articles/",
-      "page": "portfolio",
-      "anchor": "More than a newsroom — an active incubation tool that tells portfolio stories, drives collaboration between ventures and corporate partners, and accelerates growth across the ecosy",
-      "fetched": false,
+      "url": "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -39,6 +87,78 @@
       "page": "portfolio",
       "anchor": "Learn More",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/investing-with-speed-powered-by-collaboration-announcing-our-investment-in-c360/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/kayla-dusing-hired-by-technexus-venture-collaborative-as-venture-program-manager/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/technexus-joins-venture-engine-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/technexus-venture-collaborative-joins-istc-world-business-chicagos-venture-engine-program-as-innovation-partner/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/terms/",
+      "page": "terms",
+      "anchor": "Terms & Conditions",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/the-most-expensive-decision-in-cvc-isn-t-a-bad-investment-it-s-inaction/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/the-silent-deal-killer-why-enterprise-sales-stalls-beyond-the-champion/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/with-new-355m-investment-first-due-is-revolutionizing-public-safety-with-ai-powered-tools/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

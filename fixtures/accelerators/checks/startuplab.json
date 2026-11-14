@@ -1,102 +1,514 @@
 {
   "programId": "startuplab",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.startuplab.no/",
+    "https://www.startuplab.no/accelerator",
+    "https://www.startuplab.no/apply/accelerator",
+    "https://www.startuplab.no/apply/funding",
     "https://www.startuplab.no/apply/incubator",
-    "https://www.startuplab.no/ventures"
+    "https://www.startuplab.no/apply/student",
+    "https://www.startuplab.no/apply/submission",
+    "https://www.startuplab.no/legal/terms",
+    "https://www.startuplab.no/about",
+    "https://www.startuplab.no/insights/accelerator-q-a",
+    "https://www.startuplab.no/insights/five-things-founders-wish-the-knew-before-joining-an-accelerator",
+    "https://www.startuplab.no/insights/ready-to-scale-here-s-why-accelerators-make-all-the-difference",
+    "https://www.startuplab.no/ventures",
+    "https://www.startuplab.no/companies",
+    "https://www.startuplab.no/companies-backup"
   ],
   "evidence": [
     {
+      "id": "check-announced-237e73ff55",
+      "url": "https://www.startuplab.no/accelerator",
+      "title": "Startuplab — application page",
+      "excerpt": "ARE NOW OPEN Application deadline is September 27th! Application deadline is September 27th! Apply here wHaT YOU GET wHaT YOU GET A 2 to 4 MNOK upfront",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-92898d0847",
+      "url": "https://www.startuplab.no/accelerator",
+      "title": "Startuplab — application page",
+      "excerpt": "FOR ACCELERATOR ARE NOW OPEN APPLICATIONS ARE NOW OPEN Application deadline is September 27th! Application deadline is September 27th! Apply here wHaT YOU",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-c2c54f4d88",
+      "url": "https://www.startuplab.no/insights/five-things-founders-wish-the-knew-before-joining-an-accelerator",
+      "title": "Startuplab — program page",
+      "excerpt": "out if this is the right next step for you and your company. 📅 Applications close September 14. Apply to the Startuplab Accelerator and join a community that’s",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-28707a18eb",
+      "url": "https://www.startuplab.no/",
+      "title": "Startuplab — homepage",
+      "excerpt": "Get funding Accelerator Ready, set, grow! A 3-month sprint with top founders, investors, and experts",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2eaf66d1c0",
+      "url": "https://www.startuplab.no/",
+      "title": "Startuplab — homepage",
+      "excerpt": "startups Accelerator Ready, set, grow! A 3-month sprint with top founders, investors, and experts",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-fc38a72ba4",
+      "url": "https://www.startuplab.no/",
+      "title": "Startuplab — homepage",
+      "excerpt": "bold ideas. Accelerator Ready, set, grow! A 3-month sprint with top founders, investors, and experts",
+      "page": "details"
+    },
+    {
       "id": "check-email-1c890180d0",
       "url": "https://www.startuplab.no/",
-      "title": "Startuplab — homepage checked by scrape.py",
+      "title": "Startuplab — homepage",
       "excerpt": "Get in touch (hello@startuplab.no)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-4364092edf",
+      "url": "https://www.startuplab.no/apply/accelerator",
+      "title": "Startuplab — application page",
+      "excerpt": "Get in touch (hello@startuplab.no)",
+      "page": "application"
+    },
+    {
+      "id": "check-email-6f3255a525",
+      "url": "https://www.startuplab.no/apply/funding",
+      "title": "Startuplab — application page",
+      "excerpt": "Get in touch (hello@startuplab.no)",
+      "page": "application"
+    },
+    {
+      "id": "check-email-a85751b9e3",
+      "url": "https://www.startuplab.no/accelerator",
+      "title": "Startuplab — application page",
+      "excerpt": "Get in touch (hello@startuplab.no)",
+      "page": "application"
+    },
+    {
+      "id": "check-email-aa21cd0f9c",
+      "url": "https://www.startuplab.no/legal/terms",
+      "title": "Startuplab — terms page",
+      "excerpt": "governed by Norwegian law. Contact Questions? Reach out at hello@startuplab.no Contact About Join a Startup Gaustadalléen 21 0349 Oslo",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-acb0502d9f",
+      "url": "https://www.startuplab.no/insights/accelerator-q-a",
+      "title": "Startuplab — program page",
+      "excerpt": "question, what do I do? No problem, just send a mail to hello@startuplab.no and we’ll get right back to you! Well, what are you",
       "page": "details"
     },
     {
       "id": "check-email-bbf26d5a4c",
       "url": "https://www.startuplab.no/apply/incubator",
-      "title": "Startuplab — application page checked by scrape.py",
+      "title": "Startuplab — application page",
       "excerpt": "Get in touch (hello@startuplab.no)",
       "page": "application"
     },
     {
+      "id": "check-email-d6e000ea20",
+      "url": "https://www.startuplab.no/apply/submission",
+      "title": "Startuplab — application page",
+      "excerpt": "Get in touch (hello@startuplab.no)",
+      "page": "application"
+    },
+    {
+      "id": "check-email-dd8a150d01",
+      "url": "https://www.startuplab.no/apply/student",
+      "title": "Startuplab — application page",
+      "excerpt": "Get in touch (hello@startuplab.no)",
+      "page": "application"
+    },
+    {
+      "id": "check-email-df7395520a",
+      "url": "https://www.startuplab.no/insights/five-things-founders-wish-the-knew-before-joining-an-accelerator",
+      "title": "Startuplab — program page",
+      "excerpt": "after demo day, we’re happy to chat. Send us a message at hello@startuplab.no, and we’ll help you figure out if this is the right next",
+      "page": "details"
+    },
+    {
       "id": "check-name-4f83564629",
       "url": "https://www.startuplab.no/",
-      "title": "Startuplab — homepage checked by scrape.py",
+      "title": "Startuplab — homepage",
       "excerpt": "Startuplab | Empowering Tech Founders To Go Further Apply to",
       "page": "details"
     },
     {
       "id": "check-portfolio-4d9bc8e451",
       "url": "https://www.startuplab.no/",
-      "title": "Startuplab — homepage checked by scrape.py",
+      "title": "Startuplab — homepage",
       "excerpt": "Investment that counts Investment that counts The right investment at the right time can change everything. Through Startuplab Ventures , we invest early and introduce you to investors who are actively looking for startups like yours. The right investment at the right time can change everything. Through Startuplab Ventures , we invest early and introduce you to investors who are actively looking for startups like yours. Learn more → https://www.startuplab.no/ventures",
       "page": "details"
     },
     {
+      "id": "check-portfolio-68c5efd0b9",
+      "url": "https://www.startuplab.no/accelerator",
+      "title": "Startuplab — application page",
+      "excerpt": "A 2 to 4 MNOK upfront investment from Startuplab → https://www.startuplab.no/ventures",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-a670bf948b",
       "url": "https://www.startuplab.no/ventures",
-      "title": "Startuplab — details page checked by scrape.py",
+      "title": "Startuplab — program page",
       "excerpt": "Explore our portfolio → https://www.startuplab.no/companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-ac7a8e0858",
+      "url": "https://www.startuplab.no/companies-backup",
+      "title": "Startuplab — portfolio page",
+      "excerpt": "Portfolio → https://www.startuplab.no/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-c7d2f6816d",
       "url": "https://www.startuplab.no/",
-      "title": "Startuplab — homepage checked by scrape.py",
+      "title": "Startuplab — homepage",
       "excerpt": "Funding Supporting bold ideas. We invest in teams daring to change the game, both through our programs and directly. Get funding → https://www.startuplab.no/ventures",
       "page": "details"
     },
     {
+      "id": "check-portfolio-f0c5a9784e",
+      "url": "https://www.startuplab.no/companies-backup",
+      "title": "Startuplab — portfolio page",
+      "excerpt": "Alumni → https://www.startuplab.no/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-034de35f03",
+      "url": "https://www.startuplab.no/apply/accelerator",
+      "title": "Startuplab — application page",
+      "excerpt": "Student → https://www.startuplab.no/apply/student",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0c8c872763",
+      "url": "https://www.startuplab.no/companies-backup",
+      "title": "Startuplab — portfolio page",
+      "excerpt": "Apply to incubator → https://www.startuplab.no/apply/incubator",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-0d472b52ce",
+      "url": "https://www.startuplab.no/apply/submission",
+      "title": "Startuplab — application page",
+      "excerpt": "Apply to incubator → https://www.startuplab.no/apply/incubator",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1aa4562ad1",
+      "url": "https://www.startuplab.no/apply/student",
+      "title": "Startuplab — application page",
+      "excerpt": "Incubator → https://www.startuplab.no/apply/incubator",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1ea338b3bf",
+      "url": "https://www.startuplab.no/apply/accelerator",
+      "title": "Startuplab — application page",
+      "excerpt": "Incubator → https://www.startuplab.no/apply/incubator",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2594f6f445",
+      "url": "https://www.startuplab.no/apply/funding",
+      "title": "Startuplab — application page",
+      "excerpt": "Student → https://www.startuplab.no/apply/student",
+      "page": "application"
+    },
+    {
+      "id": "check-route-260998fc26",
+      "url": "https://www.startuplab.no/apply/funding",
+      "title": "Startuplab — application page",
+      "excerpt": "Accelerator → https://www.startuplab.no/apply/accelerator",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2fb28a7e1c",
+      "url": "https://www.startuplab.no/companies",
+      "title": "Startuplab — portfolio page",
+      "excerpt": "Apply to accelerator → https://www.startuplab.no/apply/accelerator",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-35617e5921",
       "url": "https://www.startuplab.no/",
-      "title": "Startuplab — homepage checked by scrape.py",
+      "title": "Startuplab — homepage",
       "excerpt": "Apply to incubator → https://www.startuplab.no/apply/incubator",
       "page": "details"
     },
     {
+      "id": "check-route-3b9b1bab74",
+      "url": "https://www.startuplab.no/insights/accelerator-q-a",
+      "title": "Startuplab — program page",
+      "excerpt": "Apply to incubator → https://www.startuplab.no/apply/incubator",
+      "page": "details"
+    },
+    {
+      "id": "check-route-422385feeb",
+      "url": "https://www.startuplab.no/legal/terms",
+      "title": "Startuplab — terms page",
+      "excerpt": "Apply to incubator → https://www.startuplab.no/apply/incubator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-441e4e153c",
+      "url": "https://www.startuplab.no/apply/funding",
+      "title": "Startuplab — application page",
+      "excerpt": "Incubator → https://www.startuplab.no/apply/incubator",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4869a57913",
+      "url": "https://www.startuplab.no/apply/student",
+      "title": "Startuplab — application page",
+      "excerpt": "Apply to incubator → https://www.startuplab.no/apply/incubator",
+      "page": "application"
+    },
+    {
+      "id": "check-route-568d19389e",
+      "url": "https://www.startuplab.no/insights/five-things-founders-wish-the-knew-before-joining-an-accelerator",
+      "title": "Startuplab — program page",
+      "excerpt": "Apply to incubator → https://www.startuplab.no/apply/incubator",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5d978b3ea5",
+      "url": "https://www.startuplab.no/accelerator",
+      "title": "Startuplab — application page",
+      "excerpt": "Apply to incubator → https://www.startuplab.no/apply/incubator",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6703f8ac2f",
+      "url": "https://www.startuplab.no/apply/student",
+      "title": "Startuplab — application page",
+      "excerpt": "Accelerator → https://www.startuplab.no/apply/accelerator",
+      "page": "application"
+    },
+    {
       "id": "check-route-73ddefceaa",
       "url": "https://www.startuplab.no/ventures",
-      "title": "Startuplab — details page checked by scrape.py",
+      "title": "Startuplab — program page",
       "excerpt": "Apply for funding → https://www.startuplab.no/apply/funding",
       "page": "details"
     },
     {
       "id": "check-route-7a7792c671",
       "url": "https://www.startuplab.no/apply/incubator",
-      "title": "Startuplab — application page checked by scrape.py",
+      "title": "Startuplab — application page",
       "excerpt": "Student → https://www.startuplab.no/apply/student",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8d616f22be",
+      "url": "https://www.startuplab.no/insights/ready-to-scale-here-s-why-accelerators-make-all-the-difference",
+      "title": "Startuplab — program page",
+      "excerpt": "Apply to incubator → https://www.startuplab.no/apply/incubator",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8f6c4b1671",
+      "url": "https://www.startuplab.no/insights/five-things-founders-wish-the-knew-before-joining-an-accelerator",
+      "title": "Startuplab — program page",
+      "excerpt": "Apply to the Startuplab Accelerator → https://www.startuplab.no/accelerator",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9299f4c071",
+      "url": "https://www.startuplab.no/apply/accelerator",
+      "title": "Startuplab — application page",
+      "excerpt": "Funding → https://www.startuplab.no/apply/funding",
       "page": "application"
     },
     {
       "id": "check-route-93a1a51e20",
       "url": "https://www.startuplab.no/ventures",
-      "title": "Startuplab — details page checked by scrape.py",
+      "title": "Startuplab — program page",
+      "excerpt": "Apply to incubator → https://www.startuplab.no/apply/incubator",
+      "page": "details"
+    },
+    {
+      "id": "check-route-af8cba0a8e",
+      "url": "https://www.startuplab.no/insights/accelerator-q-a",
+      "title": "Startuplab — program page",
+      "excerpt": "Click here! → https://www.startuplab.no/apply/accelerator",
+      "page": "details"
+    },
+    {
+      "id": "check-route-bc127caa98",
+      "url": "https://www.startuplab.no/insights/accelerator-q-a",
+      "title": "Startuplab — program page",
+      "excerpt": "Click here to apply to Startuplab Accelerator #19 → https://www.startuplab.no/apply/accelerator",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c130552534",
+      "url": "https://www.startuplab.no/apply/accelerator",
+      "title": "Startuplab — application page",
+      "excerpt": "Apply to incubator → https://www.startuplab.no/apply/incubator",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cbeeed3a82",
+      "url": "https://www.startuplab.no/apply/funding",
+      "title": "Startuplab — application page",
+      "excerpt": "Apply to incubator → https://www.startuplab.no/apply/incubator",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d3c3875689",
+      "url": "https://www.startuplab.no/about",
+      "title": "Startuplab — program page",
       "excerpt": "Apply to incubator → https://www.startuplab.no/apply/incubator",
       "page": "details"
     },
     {
       "id": "check-route-d5445a707d",
       "url": "https://www.startuplab.no/apply/incubator",
-      "title": "Startuplab — application page checked by scrape.py",
+      "title": "Startuplab — application page",
       "excerpt": "Accelerator → https://www.startuplab.no/apply/accelerator",
       "page": "application"
     },
     {
       "id": "check-route-d87e4edb4b",
       "url": "https://www.startuplab.no/",
-      "title": "Startuplab — homepage checked by scrape.py",
+      "title": "Startuplab — homepage",
       "excerpt": "Accelerator Ready, set, grow! A 3-month sprint with top founders, investors, and experts to sharpen your edge and scale fast. Apply today → https://www.startuplab.no/accelerator",
       "page": "details"
     },
     {
+      "id": "check-route-ec37018a5c",
+      "url": "https://www.startuplab.no/accelerator",
+      "title": "Startuplab — application page",
+      "excerpt": "Apply here → https://www.startuplab.no/apply/accelerator",
+      "page": "application"
+    },
+    {
       "id": "check-route-efc0bf2edc",
       "url": "https://www.startuplab.no/apply/incubator",
-      "title": "Startuplab — application page checked by scrape.py",
+      "title": "Startuplab — application page",
       "excerpt": "Funding → https://www.startuplab.no/apply/funding",
       "page": "application"
+    },
+    {
+      "id": "check-route-fdf41beb86",
+      "url": "https://www.startuplab.no/apply/student",
+      "title": "Startuplab — application page",
+      "excerpt": "Funding → https://www.startuplab.no/apply/funding",
+      "page": "application"
+    },
+    {
+      "id": "check-status-13231dcb13",
+      "url": "https://www.startuplab.no/apply/student",
+      "title": "Startuplab — application page",
+      "excerpt": "Accelerator Accelerator Incubator Incubator Funding Funding Student Student This years student accelerator application is now closed Got questions? Get in touch Contact About Join a Startup Gaustadalléen 21 0349 Oslo Solheimsgaten 7c 5058",
+      "page": "application"
+    },
+    {
+      "id": "check-status-a345e20718",
+      "url": "https://www.startuplab.no/accelerator",
+      "title": "Startuplab — application page",
+      "excerpt": "and investor access , so you can build, scale, and grow. APPLICATIONS FOR ACCELERATOR ARE NOW OPEN APPLICATIONS ARE NOW OPEN Application deadline is September 27th! Application deadline is September 27th! Apply here wHaT YOU GET wHaT",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-a5d4db3e40",
+      "url": "https://www.startuplab.no/",
+      "page": "details",
+      "excerpt": "Startuplab | Empowering Tech Founders To Go Further Apply to incubator Apply to incubator Apply to incubator Go further, Go further, Go further, faster faster faster faster SCROLL SCROLL Startuplab is an incubator, accelerator, and early stage investor for Norway's most ambitious technology startups Accelerator Ready, set, grow! A 3-month sprint with top founders, investors, and experts to sharpen your edge and scale fast. Apply today Incubator Your launchpad. Join 110+ startups in Oslo or Bergen with office space, a strong network, and a community that’s got your back. Join our community Funding Supporting bold ideas. We invest in teams daring to change the game, both through our programs and directly. Get funding Accelerator Ready, set, grow! Incubator Your launchpad. Funding Supporting bold ideas. Accelerator Ready, set, grow! A 3-month sprint with top founders, investors, and experts to sharpen your edge and scale fast. Apply today Incubator Your launchpad. Join 110+ startups in Oslo or Bergen with office space, a strong network, and a community that’s got your back. Join our community Funding Supporting bold ideas. We invest in teams daring to change the game, both through our programs and directly. Get funding Accelerator Ready, set, grow! A 3-month sprint with top founders, investors, and experts to sharpen your edge and scale fast. Apply today Incubator Your launchpad."
+    },
+    {
+      "id": "check-page-b5f72c11a3",
+      "url": "https://www.startuplab.no/accelerator",
+      "page": "application",
+      "excerpt": "Startuplab Accelerator | From Start to Scale in Three Months Apply to incubator Apply to incubator Apply to incubator Your company accelerated A three-month program designed to give you the right connections, expert mentorship, and investor access , so you can build, scale, and grow. A three-month program designed to give you the right connections, expert mentorship, and investor access , so you can build, scale, and grow. APPLICATIONS FOR ACCELERATOR ARE NOW OPEN APPLICATIONS ARE NOW OPEN Application deadline is September 27th! Application deadline is September 27th! Apply here wHaT YOU GET wHaT YOU GET A 2 to 4 MNOK upfront investment from Startuplab Direct access to a wide network of top-tier investors, mentors, and industry experts to help you get further Intense, no-fluff training to refine your pitch, sharpen your strategy, and raise funding faster Exposure to investors, partners, and new clients WHO IT IS FOR WHO IT IS FOR You're pre-seed or early-stage You have a scalable tech startup You have global ambitions Already launched or plan to within six months Launched or plan to within six months HOW TO APPLY HOW TO APPLY 1 1 Apply online Apply online Fill out a quick application with the essentials about your startup. Fill out a quick application with the essentials about your startup. 1 Apply online Fill out a quick application with the essentials about your startup. 2 2"
+    },
+    {
+      "id": "check-page-612668817f",
+      "url": "https://www.startuplab.no/apply/accelerator",
+      "page": "application",
+      "excerpt": "Startuplab | Empowering Tech Founders To Go Further Apply to incubator Apply to incubator Apply to incubator Start your journey Accelerator Incubator Funding Student Accelerator Accelerator Incubator Incubator Funding Funding Student Student Got questions? Get in touch Contact About Join a Startup Gaustadalléen 21 0349 Oslo Solheimsgaten 7c 5058 Bergen Legal Contact About Join a Startup Legal Contact About Join a Startup Gaustadalléen 21 0349 Oslo Solheimsgaten 7c 5058 Bergen Legal Contact About Join a Startup Legal"
+    },
+    {
+      "id": "check-page-12d8b0b42d",
+      "url": "https://www.startuplab.no/apply/funding",
+      "page": "application",
+      "excerpt": "Startuplab | Empowering Tech Founders To Go Further Apply to incubator Apply to incubator Apply to incubator Start your journey Accelerator Incubator Funding Student Accelerator Accelerator Incubator Incubator Funding Funding Student Student Got questions? Get in touch Contact About Join a Startup Gaustadalléen 21 0349 Oslo Solheimsgaten 7c 5058 Bergen Legal Contact About Join a Startup Legal Contact About Join a Startup Gaustadalléen 21 0349 Oslo Solheimsgaten 7c 5058 Bergen Legal Contact About Join a Startup Legal"
+    },
+    {
+      "id": "check-page-3d9e2ee68d",
+      "url": "https://www.startuplab.no/apply/incubator",
+      "page": "application",
+      "excerpt": "Startuplab | Empowering Tech Founders To Go Further Apply to incubator Apply to incubator Apply to incubator Start your journey Accelerator Incubator Funding Student Accelerator Accelerator Incubator Incubator Funding Funding Student Student Got questions? Get in touch Contact About Join a Startup Gaustadalléen 21 0349 Oslo Solheimsgaten 7c 5058 Bergen Legal Contact About Join a Startup Legal Contact About Join a Startup Gaustadalléen 21 0349 Oslo Solheimsgaten 7c 5058 Bergen Legal Contact About Join a Startup Legal"
+    },
+    {
+      "id": "check-page-cd188604aa",
+      "url": "https://www.startuplab.no/apply/student",
+      "page": "application",
+      "excerpt": "Startuplab | Empowering Tech Founders To Go Further Apply to incubator Apply to incubator Apply to incubator Start your journey Accelerator Incubator Funding Student Accelerator Accelerator Incubator Incubator Funding Funding Student Student This years student accelerator application is now closed Got questions? Get in touch Contact About Join a Startup Gaustadalléen 21 0349 Oslo Solheimsgaten 7c 5058 Bergen Legal Contact About Join a Startup Legal Contact About Join a Startup Gaustadalléen 21 0349 Oslo Solheimsgaten 7c 5058 Bergen Legal Contact About Join a Startup Legal"
+    },
+    {
+      "id": "check-page-042ed12edb",
+      "url": "https://www.startuplab.no/apply/submission",
+      "page": "application",
+      "excerpt": "Startuplab | Empowering Tech Founders To Go Further Apply to incubator Apply to incubator Apply to incubator THANKS FOR APPLYING! Your submission has been sent! We will get back to you shortly. Got questions? Get in touch Contact About Join a Startup Gaustadalléen 21 0349 Oslo Solheimsgaten 7c 5058 Bergen Legal Contact About Join a Startup Legal Contact About Join a Startup Gaustadalléen 21 0349 Oslo Solheimsgaten 7c 5058 Bergen Legal Contact About Join a Startup Legal"
+    },
+    {
+      "id": "check-page-43941f0aa5",
+      "url": "https://www.startuplab.no/legal/terms",
+      "page": "terms",
+      "excerpt": "Startuplab | Empowering Tech Founders To Go Further Apply to incubator Apply to incubator Apply to incubator Apply to incubator Apply to incubator Apply to incubator Terms and COnditions Last updated: April 16, 2025 Welcome to startuplab.no , operated by Startuplab AS. By accessing or using our website, you agree to be bound by these Terms and Conditions. Use of website You agree to use this website only for lawful purposes and in a way that does not infringe the rights of others. Use of website You agree to use this website only for lawful purposes and in a way that does not infringe the rights of others. Intellectual property All content on this site, including logos, images, and text, is the property of Startuplab or its partners and may not be used without permission. Intellectual property All content on this site, including logos, images, and text, is the property of Startuplab or its partners and may not be used without permission. External links Our site may link to external websites. We are not responsible for their content or privacy practices. Event registration & participation If you sign up for events via this website, you agree to any terms specified for that event, including cancellation policies and attendee conduct. Limitation of Liability We make no guarantees as to the accuracy or availability of this site and shall not be liable for any damages resulting"
+    },
+    {
+      "id": "check-page-4b40cd838d",
+      "url": "https://www.startuplab.no/about",
+      "page": "details",
+      "excerpt": "Startuplab | Empowering Tech Founders To Go Further Apply to incubator Apply to incubator Apply to incubator By founders By founders for founders for founders Our STORY Our STORY From the beginning, we’ve been about people — the ones who quit their jobs to chase an idea, stay up all night debugging something no one else understands, or pitch their way through rejection until something clicks. Since 2012, we’ve been a home for these founders. First in Oslo, then also in Bergen. Today, we support over 100 active startups at any given time, have worked with more than 550 and invested in 185+ companies pushing the boundaries of what is possible. From the beginning, we’ve been about people — the ones who quit their jobs to chase an idea, stay up all night debugging something no one else understands, or pitch their way through rejection until something clicks. Since 2012, we’ve been a home for these founders. First in Oslo, then also in Bergen. Today, we support over 100 active startups at any given time, have worked with more than 550 and invested in 185+ companies pushing the boundaries of what is possible. Our Mission Our Mission We empower tech founders with the mentorship, knowledge, and resources they need to scale internationally. And we always put founders first. We empower tech founders with the mentorship, knowledge, and resources they need to scale internationally. And we"
+    },
+    {
+      "id": "check-page-3457d391dd",
+      "url": "https://www.startuplab.no/insights/accelerator-q-a",
+      "page": "details",
+      "excerpt": "Accelerator Q&A Apply to incubator Apply to incubator Apply to incubator Accelerator Q&A We are now open for applications to the 18th edition of our accelerator program! 🙌 Having run the program since 2016, we know there are a few things that people are curious about. To (potentially) save you the trouble of asking, we've answered some of the most common questions below. January 21, 2025 Category Want to submit your application right away? Click here! 1. Do you only accept software companies? No . While the majority of companies we’ve funded work with software, we’ve invested in everything from tablets and enterprise architecture to cameras, epigenetics and microphones. We work with a wide range of startups, and we’re eager to work with technology companies of all kinds. 2. Do we need to have a pitch-deck and a full business plan? No . We select companies based on what you write in your application, and then we meet with around 30 short-listed companies for an additional interview. 3. How much do you invest? Startuplab invest in all companies that are selected to the Startuplab accelerator program; typically 2-4 MNOK for targeted ownership of around 10% . But we’re flexible on both. 4. Do we have to live in Oslo or Bergen to apply? No . However, the core team should be able to travel to one of our hubs (Oslo/Bergen) during the three-month period of the program"
+    },
+    {
+      "id": "check-page-22de16756e",
+      "url": "https://www.startuplab.no/insights/five-things-founders-wish-the-knew-before-joining-an-accelerator",
+      "page": "details",
+      "excerpt": "Five Things Founders Wish They Knew Before Joining An Accelerator Apply to incubator Apply to incubator Apply to incubator Five Things Founders Wish They Knew Before Joining An Accelerator You’ve probably heard the stories of founders walk into an accelerator with a scrappy product and big dreams, and walk out with investor meetings, a sharper strategy, and a team that feels unstoppable. But here’s the thing: most founders have a few “I wish I’d known this sooner” moments along the way. We’ve collected the top five we hear most often from our alumni, so you can start your accelerator journey one step ahead. August 13, 2025 Category 1. You wear many hats.. but you don’t have to wear them all at once In the early days, you’re CEO, sales team, marketer, product manager, customer support — and the person who remembers everything from booking important meetings to buying more coffee. An accelerator doesn’t take those hats away, but it does help you prioritise which ones to wear, and when. You’ll get mentors who’ve been in your shoes, guiding you on where to focus so your time (and your sanity!) stretch further. 2. Investor access isn’t just about pitch decks Most founders think accelerator = perfecting my pitch. And yes, that's definitely part of it, but the real value is in understanding how investors think, what they care about at your stage, and how to build relationships that"
+    },
+    {
+      "id": "check-page-dc2a916e1e",
+      "url": "https://www.startuplab.no/insights/ready-to-scale-here-s-why-accelerators-make-all-the-difference",
+      "page": "details",
+      "excerpt": "Ready to Scale? Here’s Why Accelerators Make All the Difference Apply to incubator Apply to incubator Apply to incubator Ready to Scale? Here’s Why Accelerators Make All the Difference Launching a startup is exciting, but let’s be honest — it’s also incredibly nerve-wracking. You’ve got big dreams, limited resources, and a never-ending to-do list. The good news is you don't have to do it on your own! A startup accelerator is built to help your business grow faster and smarter. If you’re on the fence, here’s a quick look at why it could make all the difference. January 23, 2025 Category 1. Access to Resources Accelerators are like the startup world’s cheat code. From work spaces and amenities to legal and financial guidance, accelerators give you access to resources that might otherwise be out of reach for an early-stage startup. Why burn through your budget when you can leverage these resources to focus on building and scaling? 2. Experienced Mentors One of the greatest perks of joining an accelerator is the access to experienced mentors who’ve been there and done that. These experts can help you avoid the common pitfalls, refine your business model, and even introduce you to their networks. It’s like having a group of startup fairy godparents guiding you through your entrepreneurial journey. 3. Speed to Market Accelerators are called that for a reason — they’re all about"
+    },
+    {
+      "id": "check-page-0a93d1ae8b",
+      "url": "https://www.startuplab.no/ventures",
+      "page": "details",
+      "excerpt": "Startuplab Ventures | Investing in Founders First Apply to incubator Apply to incubator Apply to incubator Big ideas early capital Backing Norway’s most ambitious tech founders with capital, network, and support to scale Apply for funding Explore our portfolio 175 + Companies backed 175 + Companies backed 175 + Companies backed ≤ 0 M NOK per startup ≤ 0 M NOK per startup ≤ 0 M NOK per startup 350 M+ NOK invested 350 M+ NOK invested 350 M+ NOK invested 0 Funds 0 Funds 0 Funds our approach our approach We invest early in ambitious tech founders, providing capital, expertise, and hands-on support to help you scale. We invest early in ambitious founders solving real problems. We offer more than just capital — we provide strategic guidance and connections to help you succeed. Founder-friendly terms We invest NOK 2-4 MNOK in your first equity round, typically for ~10% equity, ensuring that you you maintain control while securing the funding needed to scale. Founder-friendly terms We invest NOK 2-4 MNOK in your first equity round, typically for ~10% equity, ensuring that you you maintain control while securing the funding needed to scale. Hands-on support Our team specializes in investment valuation, portfolio management, and fundraising. We help you navigate challenges, raise ambitions, and build a strong company. Hands-on support Our team specializes in investment valuation,"
+    },
+    {
+      "id": "check-page-89a7527e5f",
+      "url": "https://www.startuplab.no/companies",
+      "page": "portfolio",
+      "excerpt": "Startuplab | Empowering Tech Founders To Go Further Apply to accelerator Apply to accelerator Apply to accelerator"
+    },
+    {
+      "id": "check-page-f1c642bd77",
+      "url": "https://www.startuplab.no/companies-backup",
+      "page": "portfolio",
+      "excerpt": "Startuplab | Empowering Tech Founders To Go Further Apply to incubator Apply to incubator Apply to incubator STARTUP DIRECTORY All Members Portfolio Alumni Got questions? Got questions? Get in touch Get in touch Contact About Join a Startup Gaustadalléen 21 0349 Oslo Solheimsgaten 7c 5058 Bergen Legal Contact About Join a Startup Legal Contact About Join a Startup Gaustadalléen 21 0349 Oslo Solheimsgaten 7c 5058 Bergen Legal Contact About Join a Startup Legal"
     }
   ],
   "findings": {
@@ -118,15 +530,15 @@
       },
       {
         "value": "https://www.startuplab.no/apply/accelerator",
-        "evidenceId": "check-route-d5445a707d"
+        "evidenceId": "check-route-ec37018a5c"
       },
       {
         "value": "https://www.startuplab.no/apply/funding",
-        "evidenceId": "check-route-efc0bf2edc"
+        "evidenceId": "check-route-9299f4c071"
       },
       {
         "value": "https://www.startuplab.no/apply/student",
-        "evidenceId": "check-route-7a7792c671"
+        "evidenceId": "check-route-034de35f03"
       }
     ],
     "applicationUrl": [
@@ -135,11 +547,37 @@
         "evidenceId": "check-route-35617e5921"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-a345e20718"
+      },
+      {
+        "value": false,
+        "evidenceId": "check-status-13231dcb13"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "September",
+        "evidenceId": "check-announced-92898d0847"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-2eaf66d1c0"
+      }
+    ],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.startuplab.no/ventures",
@@ -148,6 +586,10 @@
       {
         "value": "https://www.startuplab.no/companies",
         "evidenceId": "check-portfolio-a670bf948b"
+      },
+      {
+        "value": "https://www.startuplab.no/",
+        "evidenceId": "check-portfolio-ac7a8e0858"
       }
     ],
     "name": [

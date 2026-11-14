@@ -1,12 +1,12 @@
 {
   "programId": "lightspeed-india",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://lsip.com/about/",
       "page": "details",
       "anchor": "About",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -15,6 +15,134 @@
       "page": "portfolio",
       "anchor": "Companies",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsip.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsip.com/feeds/lightspeed-india-is-leading-the-way-in-ai-ev-and-climate-tech-investments-heres-why/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsip.com/feeds/lightspeed-india-on-asias-tech-investment-opportunities/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsip.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsip.com/feeds/lightspeed-ventures-on-the-startup-ecosystem-more-investment-to-trickle-into/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsip.com/feeds/lightspeed-ventures-to-ramp-up-investments-in-climate-change-and-ai/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsip.com/feeds/our-investment-in-hubilo-bringing-the-1t-events-industry-online/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsip.com/feeds/our-investment-in-pintu/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://lsip.com/feeds/our-investment-thesis-behind-kalam-labs/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://lsip.com/feeds/state-of-venture-investments-in-india-according-to-lightspeed/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsip.com/stories/lightspeed-eyes-investments-in-climate-tech-startups-in-india-se-asia/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsip.com/stories/lightspeeds-investment-in-airbound/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsip.com/stories/lightspeeds-investment-in-cosmart/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsip.com/stories/lightspeeds-investment-in-exponent-energy/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsip.com/stories/lightspeeds-investment-in-globalbees/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsip.com/stories/lightspeeds-investment-in-marqo-ai/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

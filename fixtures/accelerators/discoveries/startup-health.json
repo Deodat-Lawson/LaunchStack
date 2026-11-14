@@ -1,19 +1,27 @@
 {
   "programId": "startup-health",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.startuphealth.com/community",
-      "page": "portfolio",
-      "anchor": "Community Companies",
-      "fetched": false,
+      "url": "http://www.startuphealth.com/apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.startuphealth.com/portfolio-dropdown",
+      "url": "https://www.startuphealth.com/alzheimers",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuphealth.com/community",
       "page": "portfolio",
-      "anchor": "Folder: Community",
+      "anchor": "Community Companies",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -27,17 +35,105 @@
       "origin": "official"
     },
     {
-      "url": "https://www.startuphealth.com/sponsorships",
-      "page": "details",
-      "anchor": "Sponsorship overview",
+      "url": "https://www.startuphealth.com/founders",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuphealth.com/membership",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuphealth.com/portfolio-dropdown",
+      "page": "portfolio",
+      "anchor": "Folder: Community",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.startuphealth.com/home",
+      "url": "https://www.startuphealth.com/sponsorships",
+      "page": "details",
+      "anchor": "Sponsorship overview",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuphealth.com/startup-health-blog/2024/01/19/10-things-you-need-to-know-about-startup-healths-alzheimers-moonshot",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuphealth.com/startup-health-blog/ai-accessibility-and-at-home-care-drive-investment-startup-health-insights-week-of-jul-23-2024",
       "page": "terms",
-      "anchor": "Frequently Asked Questions",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuphealth.com/startup-health-blog/ai-aging-amp-access-health-startups-draw-global-investment-startup-health-insights-week-of-jul-8-2025",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuphealth.com/startup-health-blog/ai-drug-discovery-amp-neurotech-lead-weeks-deals-startup-health-insights-week-of-mar-18-2025",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuphealth.com/startup-health-blog/ai-solutions-diagnostics-and-caregiver-support-see-investments-startup-health-insights-week-of-apr-9-2023",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuphealth.com/startup-health-blog/alzheimers-drug-discovery-foundations-diagnostics-accelerator-dxa-invests-10m-in-alamar-biosciences-startup-health-insights-week-of-jan-14-2025",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuphealth.com/startup-health-blog/call-for-applications-startup-health-launches-12-additional-health-moonshot-communities",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuphealth.com/startup-health-blog/dreamed-secures-3m-amp-strategic-deals-startup-health-insights-week-of-aug-20-2024",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuphealth.com/terms",
+      "page": "terms",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

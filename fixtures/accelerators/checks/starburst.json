@@ -1,65 +1,1285 @@
 {
   "programId": "starburst",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
     "https://starburst.aero/",
-    "https://starburst.aero/about/"
+    "http://starburst.aero/terms-conditions/",
+    "https://starburst.aero/investments/",
+    "https://starburst.aero/terms-conditions/",
+    "http://starburst.aero/about/",
+    "https://starburst.aero/about/",
+    "https://starburst.aero/accelerator-program/",
+    "https://starburst.aero/news/catalonia-space-accelerator-welcomes-its-new-cohort-of-space-innovators/",
+    "https://starburst.aero/startup-programs/",
+    "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
+    "http://starburst.aero/accelerator-program/",
+    "http://starburst.aero/startup-programs/",
+    "https://starburst.aero/contact/",
+    "https://starburst.aero/news/sustainable-aviation-technologies-and-energies-accelerator/",
+    "https://starburst.aero/newspace-catalonia-accelerator/"
   ],
   "evidence": [
     {
+      "id": "check-duration-00b0a5285d",
+      "url": "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
+      "title": "Starburst — application page",
+      "excerpt": "Description cookielawinfo-checbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-035fbaf9ac",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "USA 13 weeks IAI Innosphere Tel Aviv Israel 13 weeks NASA Space Health Accelerator USA 18 months",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-066ca4da7e",
+      "url": "https://starburst.aero/news/sustainable-aviation-technologies-and-energies-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "Description cookielawinfo-checbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-091c6e295d",
+      "url": "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
+      "title": "Starburst — application page",
+      "excerpt": "\"Functional\". cookielawinfo-checbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-099a6dc508",
+      "url": "https://starburst.aero/about/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Functional\". cookielawinfo-checbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-0af08438b4",
+      "url": "http://starburst.aero/accelerator-program/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-0af4711fc9",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "NewSpace Catalonia Accelerator Catalonia Spain 13 weeks Singapore Aviation Accelerator Singapore Asia 16",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-0bbe294954",
+      "url": "https://starburst.aero/terms-conditions/",
+      "title": "Starburst — terms page",
+      "excerpt": "Description cookielawinfo-checbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-0ce882c63b",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "& Energies (SATE) Accelerator Washington USA 3 Months Safran Explore Hydrogen Global 12 weeks FAST:",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-0e289f084e",
+      "url": "https://starburst.aero/contact/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Analytics\". cookielawinfo-checbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-0fcf3a99df",
+      "url": "https://starburst.aero/terms-conditions/",
+      "title": "Starburst — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-10bfd8a36b",
+      "url": "http://starburst.aero/terms-conditions/",
+      "title": "Starburst — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-13cbcd3ac8",
+      "url": "https://starburst.aero/news/sustainable-aviation-technologies-and-energies-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Functional\". cookielawinfo-checbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-15b418f1e3",
+      "url": "https://starburst.aero/",
+      "title": "Starburst — homepage",
+      "excerpt": "\"Functional\". cookielawinfo-checbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-15bc2ef951",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "3 months Starburst Accelerator Paris France 12 months Starburst Flagship Accelerator Global 7 Months",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-178511950f",
+      "url": "http://starburst.aero/about/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Functional\". cookielawinfo-checbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-19b622ee83",
+      "url": "http://starburst.aero/terms-conditions/",
+      "title": "Starburst — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-1a06473977",
+      "url": "https://starburst.aero/news/catalonia-space-accelerator-welcomes-its-new-cohort-of-space-innovators/",
+      "title": "Starburst — batches page",
+      "excerpt": "\"Functional\". cookielawinfo-checbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-1c1ae8de86",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "Global 7 Months ASTRA Tel Aviv Israel 5 Months IAI CATALYST Virginia USA 13 weeks IAI",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-1f69c65545",
+      "url": "https://starburst.aero/news/sustainable-aviation-technologies-and-energies-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "to raise their next round within the upcoming 12-18 months. Eligible companies must be currently based in",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2302968a4c",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "& Energies (SATE) Accelerator Washington USA 3 Months Safran Explore Hydrogen Global 12 weeks FAST:",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2635cef709",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "3 months ICDA San Marcos United States 3 months Starburst Accelerator Paris France 12 months",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-26f8ce2509",
+      "url": "https://starburst.aero/news/sustainable-aviation-technologies-and-energies-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2702bd1bf6",
+      "url": "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
+      "title": "Starburst — application page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-298d518848",
+      "url": "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
+      "title": "Starburst — application page",
+      "excerpt": "with the HENSOLDT Business unit within 12 weeks. HENSOLDT selected the following 5 Technology",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-31117dede8",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "Global 7 Months ASTRA Tel Aviv Israel 5 Months IAI CATALYST Virginia USA 13 weeks IAI",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-31fcf51159",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-31ff99e3d2",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "Accelerator USA 18 months BLAST Paris France 6 months Innovet Israel 3 months Starburst National",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-327fa4acfd",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "Air Systems (FCAS) Accelerator Munich Germany 3 Months SITA’s internal innovation accelerator Rotterdam",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-330b5f1ec5",
+      "url": "https://starburst.aero/accelerator-program/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Analytics\". cookielawinfo-checbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-332d6e6837",
+      "url": "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
+      "title": "Starburst — application page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-35973346d1",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "4 Months Safran Explore Flying Experience Global 4 Months NewSpace Catalonia Accelerator Catalonia Spain",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3796bdfb88",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "innovation accelerator Rotterdam Netherlands 13 weeks SCALE Los Angeles USA 13 Weeks Care In Space",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3af4d89455",
+      "url": "https://starburst.aero/",
+      "title": "Starburst — homepage",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3b5a7d1388",
+      "url": "https://starburst.aero/accelerator-program/",
+      "title": "Starburst — program page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3c256bc555",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "Aviv Israel 5 Months IAI CATALYST Virginia USA 13 weeks IAI Innosphere Tel Aviv Israel 13 weeks NASA",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3cd70d143b",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3dac2529fc",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "Netherlands 13 weeks SCALE Los Angeles USA 13 Weeks Care In Space Challenge Global NASA",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3ee02bbf38",
+      "url": "http://starburst.aero/accelerator-program/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3f7e508b0d",
+      "url": "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
+      "title": "Starburst — application page",
+      "excerpt": "\"Analytics\". cookielawinfo-checbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-3fbb97bd56",
+      "url": "https://starburst.aero/contact/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Functional\". cookielawinfo-checbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-407b3f34cf",
+      "url": "https://starburst.aero/investments/",
+      "title": "Starburst — terms page",
+      "excerpt": "Description cookielawinfo-checbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-429bf03353",
+      "url": "https://starburst.aero/",
+      "title": "Starburst — homepage",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-4b15102e44",
+      "url": "https://starburst.aero/newspace-catalonia-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "Content The NewSpace Catalonia Accelerator is a 4-month tailored NewSpace accelerator program for",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-508fc4b91e",
+      "url": "https://starburst.aero/investments/",
+      "title": "Starburst — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-50a9afa89e",
+      "url": "https://starburst.aero/accelerator-program/",
+      "title": "Starburst — program page",
+      "excerpt": "Description cookielawinfo-checbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-59d041b268",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "Air Systems (FCAS) Accelerator Munich Germany 3 Months SITA’s internal innovation accelerator Rotterdam",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-62fd288375",
+      "url": "https://starburst.aero/news/catalonia-space-accelerator-welcomes-its-new-cohort-of-space-innovators/",
+      "title": "Starburst — batches page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-64966685d4",
+      "url": "https://starburst.aero/news/sustainable-aviation-technologies-and-energies-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "opportunity that is equity-free, the 3.5-month long program is geared toward pre-seed and seed",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-670ec5f351",
+      "url": "https://starburst.aero/about/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Analytics\". cookielawinfo-checbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-680f1344a2",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "SEISMIC MSI Defense Technology Accelerator USA 4 Months Safran Explore Flying Experience Global 4 Months",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-705986b213",
+      "url": "https://starburst.aero/",
+      "title": "Starburst — homepage",
+      "excerpt": "Description cookielawinfo-checbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-70d6e26eb4",
+      "url": "http://starburst.aero/about/",
+      "title": "Starburst — program page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-732a9cd434",
+      "url": "http://starburst.aero/terms-conditions/",
+      "title": "Starburst — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-7433decb99",
+      "url": "http://starburst.aero/accelerator-program/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Analytics\". cookielawinfo-checbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-7925b2929c",
+      "url": "http://starburst.aero/terms-conditions/",
+      "title": "Starburst — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-7a9b1e3fc8",
+      "url": "https://starburst.aero/accelerator-program/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-7b48d175a6",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "12 months Starburst Flagship Accelerator Global 7 Months ASTRA Tel Aviv Israel 5 Months IAI CATALYST",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-7be9c6b39e",
+      "url": "https://starburst.aero/news/sustainable-aviation-technologies-and-energies-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-7e164bf4ea",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "4 Months Safran Explore Flying Experience Global 4 Months NewSpace Catalonia Accelerator Catalonia Spain",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-7eeb183696",
+      "url": "https://starburst.aero/contact/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-802b55e969",
+      "url": "https://starburst.aero/accelerator-program/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-8039dc71e7",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Functional\". cookielawinfo-checbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-81136259ff",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "NewSpace Catalonia Accelerator Catalonia Spain 13 weeks Singapore Aviation Accelerator Singapore Asia 16",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-8192a4e524",
+      "url": "https://starburst.aero/about/",
+      "title": "Starburst — program page",
+      "excerpt": "Description cookielawinfo-checbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-81db08eaee",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "Aviv Israel 5 Months IAI CATALYST Virginia USA 13 weeks IAI Innosphere Tel Aviv Israel 13 weeks NASA",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-82954f9fb2",
+      "url": "https://starburst.aero/terms-conditions/",
+      "title": "Starburst — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-844735f9bd",
+      "url": "http://starburst.aero/about/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Analytics\". cookielawinfo-checbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-8a00c621e8",
+      "url": "https://starburst.aero/investments/",
+      "title": "Starburst — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-8ab509b4f4",
+      "url": "https://starburst.aero/investments/",
+      "title": "Starburst — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-8c41d7c35c",
+      "url": "https://starburst.aero/terms-conditions/",
+      "title": "Starburst — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-8d1764bb2c",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "3 months ICDA San Marcos United States 3 months Starburst Accelerator Paris France 12 months",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-94662b3331",
+      "url": "https://starburst.aero/contact/",
+      "title": "Starburst — program page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-94f0f8d4c4",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "13 weeks NASA Space Health Accelerator USA 18 months BLAST Paris France 6 months Innovet Israel 3",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-961cbedb37",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "3 months Starburst Accelerator Paris France 12 months Starburst Flagship Accelerator Global 7 Months",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-98e81889fb",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "13 weeks NASA Space Health Accelerator USA 18 months BLAST Paris France 6 months Innovet Israel 3",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-98ee83932a",
+      "url": "http://starburst.aero/accelerator-program/",
+      "title": "Starburst — program page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9d3864beb6",
+      "url": "https://starburst.aero/news/sustainable-aviation-technologies-and-energies-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Analytics\". cookielawinfo-checbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9fd03fb617",
+      "url": "https://starburst.aero/investments/",
+      "title": "Starburst — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a09e7fb62f",
+      "url": "http://starburst.aero/terms-conditions/",
+      "title": "Starburst — terms page",
+      "excerpt": "Description cookielawinfo-checbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a35290e612",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "News Portfolio Contact Us Startup Accelerators 3 months ICDA San Marcos United States 3 months Starburst",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-a5e67d3561",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "BLAST Paris France 6 months Innovet Israel 3 months Starburst National Landing Launchpad Virginia",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-a9ddb87d0c",
+      "url": "https://starburst.aero/",
+      "title": "Starburst — homepage",
+      "excerpt": "\"Analytics\". cookielawinfo-checbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-aafb531a46",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "Accelerator USA 18 months BLAST Paris France 6 months Innovet Israel 3 months Starburst National",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ad5991444b",
+      "url": "http://starburst.aero/accelerator-program/",
+      "title": "Starburst — program page",
+      "excerpt": "Description cookielawinfo-checbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-adf88ea562",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-af4f7a600d",
+      "url": "https://starburst.aero/news/sustainable-aviation-technologies-and-energies-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-afc9303a2c",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "Singapore Aviation Accelerator Singapore Asia 16 weeks Sustainable Aviation Technologies & Energies",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b0895cf2ab",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "BLAST Paris France 6 months Innovet Israel 3 months Starburst National Landing Launchpad Virginia",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b258454459",
+      "url": "https://starburst.aero/contact/",
+      "title": "Starburst — program page",
+      "excerpt": "Description cookielawinfo-checbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b39d85239a",
+      "url": "https://starburst.aero/terms-conditions/",
+      "title": "Starburst — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b52d7655ad",
+      "url": "https://starburst.aero/news/catalonia-space-accelerator-welcomes-its-new-cohort-of-space-innovators/",
+      "title": "Starburst — batches page",
+      "excerpt": "Description cookielawinfo-checbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-b677884366",
+      "url": "https://starburst.aero/",
+      "title": "Starburst — homepage",
+      "excerpt": "\"Other. cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ba1c5177df",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "program for the CEA Paris France 12 weeks Future Combat Air Systems (FCAS) Accelerator",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-bfd25d96c5",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "Description cookielawinfo-checbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c07faf034f",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "USA 3 Months Safran Explore Hydrogen Global 12 weeks FAST: the intrapreneurship program for the CEA",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c0be90f738",
+      "url": "http://starburst.aero/about/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c18aacb542",
+      "url": "http://starburst.aero/about/",
+      "title": "Starburst — program page",
+      "excerpt": "Description cookielawinfo-checbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c52ba72d65",
+      "url": "http://starburst.aero/about/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c544425118",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "News Portfolio Contact Us Startup Accelerators 3 months ICDA San Marcos United States 3 months Starburst",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c9e04046b9",
+      "url": "https://starburst.aero/about/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-cb23d1073a",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "innovation accelerator Rotterdam Netherlands 13 weeks SCALE Los Angeles USA 13 Weeks Care In Space",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-cb380ebb8f",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "Netherlands 13 weeks SCALE Los Angeles USA 13 Weeks Care In Space Challenge Global NASA",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-cbba6f6c0d",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-cc9d18f1d8",
+      "url": "https://starburst.aero/news/catalonia-space-accelerator-welcomes-its-new-cohort-of-space-innovators/",
+      "title": "Starburst — batches page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-cda9d02477",
+      "url": "https://starburst.aero/investments/",
+      "title": "Starburst — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d05c8926d6",
+      "url": "https://starburst.aero/terms-conditions/",
+      "title": "Starburst — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d0b6a7b6ec",
+      "url": "https://starburst.aero/news/catalonia-space-accelerator-welcomes-its-new-cohort-of-space-innovators/",
+      "title": "Starburst — batches page",
+      "excerpt": "\"Analytics\". cookielawinfo-checbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-d1f94bf1d7",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "Description cookielawinfo-checbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-d2c0e56f77",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "12 months Starburst Flagship Accelerator Global 7 Months ASTRA Tel Aviv Israel 5 Months IAI CATALYST",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-d572f5976c",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "National Landing Launchpad Virginia USA 6 weeks SEISMIC MSI Defense Technology Accelerator USA 4",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-d6e9deeef7",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-d9435068e7",
+      "url": "https://starburst.aero/contact/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-dadd02a476",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Analytics\". cookielawinfo-checbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-db9f9bd217",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "USA 3 Months Safran Explore Hydrogen Global 12 weeks FAST: the intrapreneurship program for the CEA",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-dd7bf34335",
+      "url": "http://starburst.aero/terms-conditions/",
+      "title": "Starburst — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-dfd1a9bf98",
+      "url": "https://starburst.aero/about/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e2af3d9db7",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "SEISMIC MSI Defense Technology Accelerator USA 4 Months Safran Explore Flying Experience Global 4 Months",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e3b1c6ea73",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Functional\". cookielawinfo-checbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e6eeee1b77",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ebf95d691f",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "program for the CEA Paris France 12 weeks Future Combat Air Systems (FCAS) Accelerator",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ec7a7ca593",
+      "url": "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
+      "title": "Starburst — application page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-ed2f58ea9e",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Analytics\". cookielawinfo-checbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ee08a19a70",
+      "url": "https://starburst.aero/about/",
+      "title": "Starburst — program page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ef7b8de83b",
+      "url": "https://starburst.aero/accelerator-program/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Functional\". cookielawinfo-checbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-f50f408a48",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "National Landing Launchpad Virginia USA 6 weeks SEISMIC MSI Defense Technology Accelerator USA 4",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-f77b1d6066",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "Singapore Aviation Accelerator Singapore Asia 16 weeks Sustainable Aviation Technologies & Energies",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-f86e01cffb",
+      "url": "http://starburst.aero/accelerator-program/",
+      "title": "Starburst — program page",
+      "excerpt": "\"Functional\". cookielawinfo-checbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-f9fb94cf44",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "USA 13 weeks IAI Innosphere Tel Aviv Israel 13 weeks NASA Space Health Accelerator USA 18 months",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-fb0fed0e90",
+      "url": "https://starburst.aero/news/catalonia-space-accelerator-welcomes-its-new-cohort-of-space-innovators/",
+      "title": "Starburst — batches page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-bc5bef10f4",
+      "url": "https://starburst.aero/newspace-catalonia-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "of charge program, open to startups based in Catalonia who look forward to expanding their",
+      "page": "details"
+    },
+    {
       "id": "check-name-6268756c43",
       "url": "https://starburst.aero/",
-      "title": "Starburst — homepage checked by scrape.py",
+      "title": "Starburst — homepage",
       "excerpt": "Starburst About Startups Corporates Investors News Contact Us",
       "page": "details"
     },
     {
+      "id": "check-portfolio-0983589912",
+      "url": "https://starburst.aero/accelerator-program/",
+      "title": "Starburst — program page",
+      "excerpt": "Portfolio → https://starburst.aero/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1862af0da2",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "Portfolio → https://starburst.aero/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1b2e489946",
+      "url": "http://starburst.aero/accelerator-program/",
+      "title": "Starburst — program page",
+      "excerpt": "Portfolio → https://starburst.aero/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-22cd10f014",
+      "url": "https://starburst.aero/terms-conditions/",
+      "title": "Starburst — terms page",
+      "excerpt": "Startups → https://starburst.aero/accelerator-program/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2e6ae7350d",
+      "url": "https://starburst.aero/contact/",
+      "title": "Starburst — program page",
+      "excerpt": "Startups → https://starburst.aero/accelerator-program/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-329ab54e3b",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "Startups → https://starburst.aero/accelerator-program/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3597f628f7",
+      "url": "https://starburst.aero/investments/",
+      "title": "Starburst — terms page",
+      "excerpt": "View Our Portfolio → https://starburst.aero/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-3e9a18cfb5",
       "url": "https://starburst.aero/about/",
-      "title": "Starburst — details page checked by scrape.py",
+      "title": "Starburst — program page",
       "excerpt": "Portfolio → https://starburst.aero/portfolio/",
       "page": "details"
     },
     {
       "id": "check-portfolio-5c6e62d53a",
       "url": "https://starburst.aero/",
-      "title": "Starburst — homepage checked by scrape.py",
+      "title": "Starburst — homepage",
       "excerpt": "Portfolio → https://starburst.aero/portfolio/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-7f85da0cb9",
-      "url": "https://starburst.aero/",
-      "title": "Starburst — homepage checked by scrape.py",
+      "id": "check-portfolio-5ff36dbd4d",
+      "url": "https://starburst.aero/news/sustainable-aviation-technologies-and-energies-accelerator/",
+      "title": "Starburst — program page",
       "excerpt": "Startups → https://starburst.aero/accelerator-program/",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-6f39660951",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "Startups → https://starburst.aero/accelerator-program/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-793c218892",
+      "url": "https://starburst.aero/investments/",
+      "title": "Starburst — terms page",
+      "excerpt": "Portfolio → https://starburst.aero/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7aaf2168e0",
+      "url": "https://starburst.aero/investments/",
+      "title": "Starburst — terms page",
+      "excerpt": "Startups → https://starburst.aero/accelerator-program/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7f85da0cb9",
+      "url": "https://starburst.aero/",
+      "title": "Starburst — homepage",
+      "excerpt": "Startups → https://starburst.aero/accelerator-program/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-866464e831",
+      "url": "https://starburst.aero/news/sustainable-aviation-technologies-and-energies-accelerator/",
+      "title": "Starburst — program page",
+      "excerpt": "Portfolio → https://starburst.aero/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-88713feb73",
+      "url": "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
+      "title": "Starburst — application page",
+      "excerpt": "Startups → https://starburst.aero/accelerator-program/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-90739e8930",
+      "url": "http://starburst.aero/terms-conditions/",
+      "title": "Starburst — terms page",
+      "excerpt": "Startups → https://starburst.aero/accelerator-program/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-9564e30835",
       "url": "https://starburst.aero/about/",
-      "title": "Starburst — details page checked by scrape.py",
+      "title": "Starburst — program page",
       "excerpt": "Startups → https://starburst.aero/accelerator-program/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-a61e090f13",
+      "url": "http://starburst.aero/about/",
+      "title": "Starburst — program page",
+      "excerpt": "Startups → https://starburst.aero/accelerator-program/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a7cd830d32",
+      "url": "https://starburst.aero/news/catalonia-space-accelerator-welcomes-its-new-cohort-of-space-innovators/",
+      "title": "Starburst — batches page",
+      "excerpt": "Startups → https://starburst.aero/accelerator-program/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-afe58fb51e",
+      "url": "https://starburst.aero/terms-conditions/",
+      "title": "Starburst — terms page",
+      "excerpt": "Portfolio → https://starburst.aero/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b8c24d9663",
+      "url": "http://starburst.aero/terms-conditions/",
+      "title": "Starburst — terms page",
+      "excerpt": "Portfolio → https://starburst.aero/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-bb49289ccb",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "Portfolio → https://starburst.aero/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bf6eae3d70",
+      "url": "https://starburst.aero/contact/",
+      "title": "Starburst — program page",
+      "excerpt": "Portfolio → https://starburst.aero/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c777e87247",
+      "url": "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
+      "title": "Starburst — application page",
+      "excerpt": "Portfolio → https://starburst.aero/portfolio/",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-d31f47ed0e",
       "url": "https://starburst.aero/",
-      "title": "Starburst — homepage checked by scrape.py",
+      "title": "Starburst — homepage",
       "excerpt": "Our Portfolio → http://starburst.aero/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d484d8b99b",
+      "url": "http://starburst.aero/accelerator-program/",
+      "title": "Starburst — program page",
+      "excerpt": "Startups → https://starburst.aero/accelerator-program/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e1fb6d84bb",
+      "url": "https://starburst.aero/news/catalonia-space-accelerator-welcomes-its-new-cohort-of-space-innovators/",
+      "title": "Starburst — batches page",
+      "excerpt": "Portfolio → https://starburst.aero/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-eefcf0a67c",
+      "url": "http://starburst.aero/about/",
+      "title": "Starburst — program page",
+      "excerpt": "Portfolio → https://starburst.aero/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9e9dcea33c",
+      "url": "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
+      "title": "Starburst — application page",
+      "excerpt": "Apply as a mentor → https://starburst.typeform.com/to/PdE4smLZ",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e46f1fd6ea",
+      "url": "https://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "12 weeks Future Combat Air Systems (FCAS) Accelerator Munich Germany → https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
       "page": "details"
     },
     {
       "id": "check-route-f2fa1f1b77",
       "url": "https://starburst.aero/",
-      "title": "Starburst — homepage checked by scrape.py",
+      "title": "Starburst — homepage",
       "excerpt": "https://starburst.aero",
       "page": "details"
+    },
+    {
+      "id": "check-route-f7f3186ecb",
+      "url": "http://starburst.aero/startup-programs/",
+      "title": "Starburst — program page",
+      "excerpt": "12 weeks Future Combat Air Systems (FCAS) Accelerator Munich Germany → https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-2b4320012a",
+      "url": "https://starburst.aero/",
+      "page": "details",
+      "excerpt": "Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us Driving Global Aerospace & Defense Innovation Join us as we build a greener, safer, and more connected world. Combining three complementary activities – startup accelerators, strategy consulting, & venture investments – we help aerospace and defense stakeholders innovate, navigate and invest in the dynamic ecosystem. Learn More Accelerators Define your strategy, refine your pitch, get mentorship from industry leaders and subject matter experts, raise venture capital, and bring your product to market faster. Connect with our network of startups, corporate, government, and academic partners. Learn More Strategy Consulting Tackle critical challenges and get actionable insights for technology development, go-to-market strategy, investment and acquisition ventures. Starburst is the trusted growth advisor and counselor to the world’s leading aerospace firms. Learn More Investments Partner with us to invest in proven and validated deep tech, in products that are changing electric flight, autonomous drones, urban air mobility, future travel, climate monitoring, communication, AI, energy, national security, new materials, and so much more. Learn More INDUSTRY EXPERIENCE, MARKET RESEARCH, DEEP TECH ACCELERATORS, AND INVESTMENT Starburst is uniquely"
+    },
+    {
+      "id": "check-page-e45681a3da",
+      "url": "http://starburst.aero/terms-conditions/",
+      "page": "terms",
+      "excerpt": "Terms & Conditions - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us Terms & Conditions Intro These Website Standard Terms and Conditions written on this webpage shall manage your use of our website, Starburst accessible at www.abedin.com.bd. These Terms will be applied fully and affect to your use of this Website. By using this Website, you agreed to accept all terms and conditions written in here. You must not use this Website if you disagree with any of these Website Standard Terms and Conditions. These Terms and Conditions have been generated with the help of the Terms And Conditions Template and the Terms and Conditions Generator. Intellectual Property Rights Other than the content you own, under these Terms, Starburst and/or its licensors own all the intellectual property rights and materials contained in this Website. You are granted limited license only for purposes of viewing the material contained on this Website. Restrictions You are specifically restricted from all of the following: publishing any Website material in any other media; selling, sublicensing and/or otherwise commercializing any Website material; publicly performing and/or showing any Website material; using this Website in any way that is or may be damaging to this Website; using this Website in any way that impacts"
+    },
+    {
+      "id": "check-page-e327f1d20c",
+      "url": "https://starburst.aero/investments/",
+      "page": "terms",
+      "excerpt": "Investing in the Future of Aerospace - Seed Investment | Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us INVEST IN THE FUTURE OF AEROSPACE The age of the aerospace unicorn is here. This is a rare opportunity, where barriers to entry have decreased, competition is thriving, and the industry is being disrupted – today. JOIN US IN INVESTING IN THE FUTURE Mobility New concept designs and future travel: hypersonic and supersonic aircraft, eVTOL, drones/UAV, electric flight, autonomy Infrastructure Building the future: energy generation and storage, new fuels, manufacturing, nanotechnology, man-machine teaming, digital twins Enabling Technology Driving global advancement: Industry 4.0, new materials, additive manufacturing, quantum computing, AR, AI/ML Connectivity From space to cyberspace: resilient/mesh networks, interoperability, edge computing, cybersecurity, sensors, IoT Space The new economy: satellites, launchers, navigation, communication, surveillance and reconnaissance, data processing and application INVEST SECURELY, WITH STARBURST’S 100+ YEARS OF CUMULATIVE AEROSPACE INDUSTRY EXPERIENCE. Our global team of industry veterans, entrepreneurs and engineers know aerospace innovation. Our startups are vetted for technology feasibility and uniqueness, product-market fit, corporate partner"
+    },
+    {
+      "id": "check-page-bbfcc08040",
+      "url": "https://starburst.aero/terms-conditions/",
+      "page": "terms",
+      "excerpt": "Terms & Conditions - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us Terms & Conditions Intro These Website Standard Terms and Conditions written on this webpage shall manage your use of our website, Starburst accessible at www.abedin.com.bd. These Terms will be applied fully and affect to your use of this Website. By using this Website, you agreed to accept all terms and conditions written in here. You must not use this Website if you disagree with any of these Website Standard Terms and Conditions. These Terms and Conditions have been generated with the help of the Terms And Conditions Template and the Terms and Conditions Generator. Intellectual Property Rights Other than the content you own, under these Terms, Starburst and/or its licensors own all the intellectual property rights and materials contained in this Website. You are granted limited license only for purposes of viewing the material contained on this Website. Restrictions You are specifically restricted from all of the following: publishing any Website material in any other media; selling, sublicensing and/or otherwise commercializing any Website material; publicly performing and/or showing any Website material; using this Website in any way that is or may be damaging to this Website; using this Website in any way that impacts"
+    },
+    {
+      "id": "check-page-216e26a394",
+      "url": "http://starburst.aero/about/",
+      "page": "details",
+      "excerpt": "About Us - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us STARBURST IS THE INNOVATION CATALYST FOR THE AEROSPACE & DEFENSE INDUSTRY Founded in 2012, Starburst is the leading global Aerospace and Defense (A&D) startup accelerator and strategic advisory practice. Combining three complementary activities – startup accelerators, strategy consulting, and venture investments – we help A&D stakeholders innovate, navigate, and invest in the dynamic ecosystem. Starburst is the first and only global aerospace accelerator, connecting startups with corporates, investors and government, while providing strategic growth and investment consulting services for all. Our leading Flagship Accelerator program helps startups scale their business in aviation, space, and defense, as well as enabling technologies, with access to one of the largest groups of corporate representatives, government stakeholders, and private investors in the world to help startups win their first contracts. Starburst has grown into a global team of 60 dedicated team members across 8 offices with a portfolio of 150+ startups, 20 accelerator programs, and 1 active venture fund, Starburst Ventures . We strive to provide enabling growth services for the relentless deep tech leaders disrupting the industry and working towards a safer,"
+    },
+    {
+      "id": "check-page-9ed6a72a29",
+      "url": "https://starburst.aero/about/",
+      "page": "details",
+      "excerpt": "About Us - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us STARBURST IS THE INNOVATION CATALYST FOR THE AEROSPACE & DEFENSE INDUSTRY Founded in 2012, Starburst is the leading global Aerospace and Defense (A&D) startup accelerator and strategic advisory practice. Combining three complementary activities – startup accelerators, strategy consulting, and venture investments – we help A&D stakeholders innovate, navigate, and invest in the dynamic ecosystem. Starburst is the first and only global aerospace accelerator, connecting startups with corporates, investors and government, while providing strategic growth and investment consulting services for all. Our leading Flagship Accelerator program helps startups scale their business in aviation, space, and defense, as well as enabling technologies, with access to one of the largest groups of corporate representatives, government stakeholders, and private investors in the world to help startups win their first contracts. Starburst has grown into a global team of 60 dedicated team members across 8 offices with a portfolio of 150+ startups, 20 accelerator programs, and 1 active venture fund, Starburst Ventures . We strive to provide enabling growth services for the relentless deep tech leaders disrupting the industry and working towards a safer,"
+    },
+    {
+      "id": "check-page-449fbbd959",
+      "url": "https://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "Aviation Accelerators for Startups + Small Businesses | Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us REACH NEW HEIGHTS Accelerate your growth: as a builder, as a leader, as a business. No matter where you are in your startup journey, there is a Starburst program that is right for you. We have created unique aerospace accelerator programs that combine the best aspects of traditional startup accelerators and MBA programs with our unique industry knowledge and deep expertise. We leverage our network of corporate partners and hundreds of mentors to solve problems and open doors, to expedite contracts and fundraising. We are here to help with every step of your journey. Your success is our success. JOIN AN ACCELERATOR Build your network Join our global network of startups, corporates, academic institutes, government partners, and investors. Gain knowledge and resources Learn from industry and startup experts, get personalized guidance, and exclusive access to tools you need to build your business. Join our community Connect with other aerospace and tech entrepreneurs. Get the most out of (and contribute to) your local startup ecosystem. Develop brand equity Being a Starburst accelerator company validates your technology and business model for our corporate partners, investors, and others."
+    },
+    {
+      "id": "check-page-f26f0382b7",
+      "url": "https://starburst.aero/news/catalonia-space-accelerator-welcomes-its-new-cohort-of-space-innovators/",
+      "page": "batches",
+      "excerpt": "Catalonia Space Accelerator Welcomes Its New Cohort of Space Innovators - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us Oct 13th 2026 Catalonia Space Accelerator Welcomes Its New Cohort of Space Innovators The next chapter of the Catalonia Space Accelerator is officially underway, with the launch of its second cohort dedicated to supporting high-potential space and space-enabled start-ups. Promoted by the Government of Catalonia , coordinated by the Institute of Space Studies of Catalonia (IEEC) , and delivered by Starburst, the programme aims to help selected companies accelerate their growth, strengthen their market positioning, and connect with key players across the global space ecosystem. Meet the 2026 Cohort The new cohort brings together four innovative companies developing solutions across a wide range of space and dual-use applications: EarthPulse – Developing an end-to-end operational decision layer for asset-intensive and regulated industries by combining satellite, climate, environmental, and customer data. Zenithal Blue Technologies – Providing RF emission detection, analysis, and geolocation capabilities for defence, coastal surveillance, and telecom applications. OSMIUM – Building a post-quantum-ready cybersecurity stack, including operating systems and VPN solutions, for"
+    },
+    {
+      "id": "check-page-05f5c16c74",
+      "url": "https://starburst.aero/startup-programs/",
+      "page": "details",
+      "excerpt": "Startup Programs - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us Startup Accelerators 3 months ICDA San Marcos United States 3 months Starburst Accelerator Paris France 12 months Starburst Flagship Accelerator Global 7 Months ASTRA Tel Aviv Israel 5 Months IAI CATALYST Virginia USA 13 weeks IAI Innosphere Tel Aviv Israel 13 weeks NASA Space Health Accelerator USA 18 months BLAST Paris France 6 months Innovet Israel 3 months Starburst National Landing Launchpad Virginia USA 6 weeks SEISMIC MSI Defense Technology Accelerator USA 4 Months Safran Explore Flying Experience Global 4 Months NewSpace Catalonia Accelerator Catalonia Spain 13 weeks Singapore Aviation Accelerator Singapore Asia 16 weeks Sustainable Aviation Technologies & Energies (SATE) Accelerator Washington USA 3 Months Safran Explore Hydrogen Global 12 weeks FAST: the intrapreneurship program for the CEA Paris France 12 weeks Future Combat Air Systems (FCAS) Accelerator Munich Germany 3 Months SITA’s internal innovation accelerator Rotterdam Netherlands 13 weeks SCALE Los Angeles USA 13 Weeks Care In Space Challenge Global NASA Entrepreneurs Challenge USA Interested in expanding your potential? Starburst supports startups from ideation to growth, with dynamic accelerator programs tailored to maturity-based needs. Since 2012, we"
+    },
+    {
+      "id": "check-page-3c4fbdbcc7",
+      "url": "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
+      "page": "application",
+      "excerpt": "FCAS Accelerator 2023 by HENSOLDT & Starburst – Call for Applications & Mentors - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us Aug 22nd 2023 FCAS Accelerator 2023 by HENSOLDT & Starburst – Call for Applications & Mentors In collaboration with HENSOLDT , Starburst Aerospace launched the first ever iteration of the FCAS Accelerator in August 2023. HENSOLDT is a German champion in the defense electronics industry and a key partner of the Future Combat Air Systems (FCAS) project through the joint venture FCMS. Led by countries Germany, France, & Spain, the FCAS project is a revolutionary European program , dedicated to developing the Next Generation Weapon System (NWGS) by 2040. This system of systems program leverages the most disruptive technologies to incorporate artificial intelligence, disruptive sensors, and cutting-edge production materials into the 6 th generation fighter development program . The objective of the first ever FCAS Accelerator by HENSOLDT is to foster the dual-use ecosystem of civil technologies for European startups and to initiate a direct collaboration with HENSOLDT under the FCAS program. The program offers a time effective opportunity to a.) explore the dual-use ecosystem through various workshops in 3 module series (Business Accelerator, Ecosystem Discovery,"
+    },
+    {
+      "id": "check-page-798a07ccf4",
+      "url": "http://starburst.aero/accelerator-program/",
+      "page": "details",
+      "excerpt": "Aviation Accelerators for Startups + Small Businesses | Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us REACH NEW HEIGHTS Accelerate your growth: as a builder, as a leader, as a business. No matter where you are in your startup journey, there is a Starburst program that is right for you. We have created unique aerospace accelerator programs that combine the best aspects of traditional startup accelerators and MBA programs with our unique industry knowledge and deep expertise. We leverage our network of corporate partners and hundreds of mentors to solve problems and open doors, to expedite contracts and fundraising. We are here to help with every step of your journey. Your success is our success. JOIN AN ACCELERATOR Build your network Join our global network of startups, corporates, academic institutes, government partners, and investors. Gain knowledge and resources Learn from industry and startup experts, get personalized guidance, and exclusive access to tools you need to build your business. Join our community Connect with other aerospace and tech entrepreneurs. Get the most out of (and contribute to) your local startup ecosystem. Develop brand equity Being a Starburst accelerator company validates your technology and business model for our corporate partners, investors, and others."
+    },
+    {
+      "id": "check-page-5eb3c4bb3f",
+      "url": "http://starburst.aero/startup-programs/",
+      "page": "details",
+      "excerpt": "Startup Programs - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us Startup Accelerators 3 months ICDA San Marcos United States 3 months Starburst Accelerator Paris France 12 months Starburst Flagship Accelerator Global 7 Months ASTRA Tel Aviv Israel 5 Months IAI CATALYST Virginia USA 13 weeks IAI Innosphere Tel Aviv Israel 13 weeks NASA Space Health Accelerator USA 18 months BLAST Paris France 6 months Innovet Israel 3 months Starburst National Landing Launchpad Virginia USA 6 weeks SEISMIC MSI Defense Technology Accelerator USA 4 Months Safran Explore Flying Experience Global 4 Months NewSpace Catalonia Accelerator Catalonia Spain 13 weeks Singapore Aviation Accelerator Singapore Asia 16 weeks Sustainable Aviation Technologies & Energies (SATE) Accelerator Washington USA 3 Months Safran Explore Hydrogen Global 12 weeks FAST: the intrapreneurship program for the CEA Paris France 12 weeks Future Combat Air Systems (FCAS) Accelerator Munich Germany 3 Months SITA’s internal innovation accelerator Rotterdam Netherlands 13 weeks SCALE Los Angeles USA 13 Weeks Care In Space Challenge Global NASA Entrepreneurs Challenge USA Interested in expanding your potential? Starburst supports startups from ideation to growth, with dynamic accelerator programs tailored to maturity-based needs. Since 2012, we"
+    },
+    {
+      "id": "check-page-28c796b46d",
+      "url": "https://starburst.aero/contact/",
+      "page": "details",
+      "excerpt": "Contact - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us Contact Us. Looking to get in touch? Fill out the information in the adjacent form, and a member of our team will be in contact with you as soon as possible. OFFICES AROUND THE WORLD Los Angeles Washington DC Paris Munich Tel-Aviv Seoul Singapore Madrid CONNECT WITH US First Name * Last Name * Your Email * What is your role in the ecosystem? * Corporate / Industry Major Government Startup Investor Academia Media Service Provider Other / Ecosystem Player Company Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei Darussalam Bulgaria Burkina Faso Burundi Cambodia Cameroon Canada Cape Verde Cayman Islands Central African Republic Chad Chile China Christmas Island Cocos Islands Colombia Comoros Congo, Democratic Republic of the Congo, Republic of the Cook Islands Costa Rica Croatia Cuba Curaçao Cyprus Czech Republic Côte d'Ivoire Denmark Djibouti Dominica Dominican Republic Ecuador Egypt El Salvador Equatorial Guinea Eritrea"
+    },
+    {
+      "id": "check-page-72f9c64827",
+      "url": "https://starburst.aero/news/sustainable-aviation-technologies-and-energies-accelerator/",
+      "page": "details",
+      "excerpt": "Starburst Aerospace and Aerospace Futures Alliance (AFA) Launch the Sustainable Aviation Technologies and Energies (SATE) Accelerator - Starburst About Startups Corporates Investors News Contact Us Portfolio About Startups Corporates Investors News Portfolio Contact Us Sep 13th 2023 Starburst Aerospace and Aerospace Futures Alliance (AFA) Launch the Sustainable Aviation Technologies and Energies (SATE) Accelerator Starburst Aerospace , the leading global Aerospace and Defense (A&D) startup accelerator and strategic advisory practice, and Aerospace Futures Alliance (AFA) , Washington state’s trade association for aerospace companies and communities, have joined in an official partnership to launch the Sustainable Aviation Technologies and Energies (SATE) Accelerator , as a part of the SATE Cluster . AFA was recently awarded EDA federal funds through a Department of Commerce Innovation Cluster Accelerator Program (ICAP) to form the SATE Cluster, with the mission of leading and encouraging the research, development, and deployment of sustainable aviation fuels (SAFs) and electrified and hydrogen-powered aviation. Powered by Starburst Aerospace, the SATE Accelerator is an early-stage startup accelerator program that is designed to identify and advance the development of innovative sustainable aviation and energy technologies, products, and solutions that will help advance the"
+    },
+    {
+      "id": "check-page-9c1eacb102",
+      "url": "https://starburst.aero/newspace-catalonia-accelerator/",
+      "page": "details",
+      "excerpt": "NewSpace Catalonia Accelerator Program Timeline About Contact us Language English NewSpace Catalonia Accelerator Entrepreneurial orbit, elevating space pioneers The first and only program for the Catalan NewSpace ecosystem with exposure to global markets and international investors. NewSpace Catalonia Accelerator Promoted by the Government of Catalonia in collaboration with the IEEC and operated by Starburst, the NewSpace Catalonia Accelerator leverages the expertise of the Catalan ecosystem in numerous disciplines, including satellite manufacturing, propulsion, telecommunications, navigation, earth observation and so on. First cohort of the NewSpace Catalonia Accelerator Program Content The NewSpace Catalonia Accelerator is a 4-month tailored NewSpace accelerator program for startups based out of Catalonia, serving as a platform for disruptive space entrepreneurs to expand their business on a global scale. The program is composed of one-on-one sessions with dedicated mentors, lectures from international experts and networking opportunities, creating a vibrant ecosystem for collaboration and growth where all stakeholders can converge and find synergies. The program will wrap up with a final Demo Day taking place in June, in the dynamic city of Barcelona. 4 startups Introductions to the global space industry Tailored strategic support Access to international events How do I"
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://starburst.aero/news/fcas-accelerator-2023-by-hensoldt-starburst-call-for-applications-mentors/",
+        "evidenceId": "check-route-e46f1fd6ea"
+      },
+      {
+        "value": "https://starburst.typeform.com/to/PdE4smLZ",
+        "evidenceId": "check-route-9e9dcea33c"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://starburst.aero",
@@ -69,8 +1289,45 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "11 months",
+        "evidenceId": "check-duration-705986b213"
+      },
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-c544425118"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-15bc2ef951"
+      },
+      {
+        "value": "7 months",
+        "evidenceId": "check-duration-d2c0e56f77"
+      },
+      {
+        "value": "5 months",
+        "evidenceId": "check-duration-31117dede8"
+      },
+      {
+        "value": "13",
+        "evidenceId": "check-duration-3c256bc555"
+      }
+    ],
+    "format": [],
+    "location": [
+      {
+        "value": "Catalonia",
+        "evidenceId": "check-location-bc5bef10f4"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://starburst.aero/accelerator-program/",

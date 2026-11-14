@@ -1,19 +1,19 @@
 {
   "programId": "eit-health",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://eithealth.eu/?page_id=14",
       "page": "details",
       "anchor": "Learn About Us",
       "fetched": false,
-      "blocked": "fetch_failed",
+      "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://eithealth.eu/what-we-do/",
-      "page": "details",
-      "anchor": "Access Our Programmes",
+      "url": "https://eithealth.eu/deep-tech-venture-builder-programme-call-2025-faqs/",
+      "page": "terms",
+      "anchor": "Deep Tech Venture Builder Programme Call 2025 FAQs",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -27,25 +27,89 @@
       "origin": "official"
     },
     {
-      "url": "https://eithealth.eu/what-we-do/education/",
-      "page": "details",
-      "anchor": "Education Programmes",
-      "fetched": false,
+      "url": "https://eithealth.eu/news-article/163-applications-received-in-the-1st-call-for-food4health-expressions-of-interest/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://eithealth.eu/what-we-do/acceleration/",
-      "page": "details",
-      "anchor": "Acceleration Programmes",
-      "fetched": false,
+      "url": "https://eithealth.eu/news-article/accelerator-calls-apply-now-for-activities-assisting-start-ups-and-smes/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://eithealth.eu/deep-tech-venture-builder-programme-call-2025-faqs/",
-      "page": "terms",
-      "anchor": "Deep Tech Venture Builder Programme Call 2025 FAQs",
+      "url": "https://eithealth.eu/news-article/apply-by-15-march-for-innovation-game-gamification-based-summer-school/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eithealth.eu/news-article/call-for-ris-hubs-in-slovenia-and-estonia-apply-by-29-january/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eithealth.eu/news-article/communique-de-presse-amgen-astrazeneca-msd-pfizer-servier-et-eit-health-sallient-au-sein-de-la-coalition-innovation-sante-pour-soutenir-bulle-la-1ere-application-de-soin/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eithealth.eu/news-article/eit-health-bioentrepreneur-bootcamp-apply-now/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eithealth.eu/news-article/eit-health-investor-network-open-for-applications-from-start-ups/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eithealth.eu/news-article/f3t-initiative-to-accelerate-the-adoption-of-digital-health-applications-in-spain/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eithealth.eu/news-article/starship-innovation-fellowship-programme-accepting-applications-until-16-march/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eithealth.eu/news-article/towards-a-european-harmonisation-for-digital-health-report-accelerating-the-adoption-of-digital-health-applications-in-spain-current-panorama-and-roadmap/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eithealth.eu/news-article/wild-card-applications-open/",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -59,9 +123,57 @@
       "origin": "official"
     },
     {
+      "url": "https://eithealth.eu/opportunity/biotech-certified-innovation-path/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eithealth.eu/opportunity/bootcamps-providers/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eithealth.eu/terms-and-conditions/",
+      "page": "terms",
+      "anchor": "Terms and Conditions",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://eithealth.eu/transformative-health-instrument-call-2025-faqs/",
       "page": "terms",
       "anchor": "Transformative Health Instrument Call 2025 FAQs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eithealth.eu/what-we-do/",
+      "page": "details",
+      "anchor": "Access Our Programmes",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eithealth.eu/what-we-do/acceleration/",
+      "page": "details",
+      "anchor": "Acceleration Programmes",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eithealth.eu/what-we-do/education/",
+      "page": "details",
+      "anchor": "Education Programmes",
       "fetched": false,
       "blocked": null,
       "origin": "official"

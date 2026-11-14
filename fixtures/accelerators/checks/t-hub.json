@@ -1,102 +1,416 @@
 {
   "programId": "t-hub",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.t-hub.co/",
+    "https://www.t-hub.co/mbrdi-climate-tech-incubator-student-launchpad-program-season-2",
+    "https://www.t-hub.co/social-impact-challenge",
+    "https://www.t-hub.co/terms-and-conditions",
+    "https://www.t-hub.co/algorand-startup-lab-cohort-2",
+    "https://www.t-hub.co/news/a-total-of-23-startups-have-been-chosen-for-aic-t-hubs-sustainability-cohort-in-hyderabad",
+    "https://www.t-hub.co/news/t-hub-and-hexagon-selects-12-startups-for-lab32-cohort-driving-innovation-in-ai-and-digital-reality",
     "https://www.t-hub.co/about-us",
-    "https://www.t-hub.co/social-impact-challenge"
+    "https://www.t-hub.co/accelerator-2030-presented-by-hsbc-with-partnership-with-t-hub",
+    "https://www.t-hub.co/aic-mobility-program",
+    "https://www.t-hub.co/aic-sustainability-program",
+    "https://www.t-hub.co/aws-space-accelerator-apj",
+    "https://www.t-hub.co/aws-space-accelerator-apj-jp",
+    "https://www.t-hub.co/aws-space-accelerator-india",
+    "https://www.t-hub.co/blogs/unleashing-innovation-t--hubs-semiconductor-incubation-program"
   ],
   "evidence": [
     {
+      "id": "check-announced-31e6f841d2",
+      "url": "https://www.t-hub.co/social-impact-challenge",
+      "title": "T-Hub — application page",
+      "excerpt": "and winners 24 Nov Live demos to the jury. Three winners announced. Applications close in 13 days Opened 18 Oct Closes 15 Nov Key Dates 18 Oct 2026 Live Call for applications opens",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-ffd9acf56e",
+      "url": "https://www.t-hub.co/social-impact-challenge",
+      "title": "T-Hub — application page",
+      "excerpt": "with shortlisted teams 24 Nov 2026 Challenge Day at T-Hub, Hyderabad Apply by 15 Nov Add Challenge Day to calendar Prizes & Benefits ₹10 Lakh for Three",
+      "page": "application"
+    },
+    {
       "id": "check-deadline-5edfce8d4d",
       "url": "https://www.t-hub.co/social-impact-challenge",
-      "title": "T-Hub — application page checked by scrape.py",
+      "title": "T-Hub — application page",
       "excerpt": "at T-Hub, Hyderabad ₹10 lakh Prize pool across 3 winners 15 Nov 2026 Applications close. Shortlisting is rolling 2 to 5 Members per team, one",
+      "page": "application"
+    },
+    {
+      "id": "check-deadline-7b45526dee",
+      "url": "https://www.t-hub.co/mbrdi-climate-tech-incubator-student-launchpad-program-season-2",
+      "title": "T-Hub — application page",
+      "excerpt": "Program Timelines 1 October 2026 Applications Open Applications Close 15 November 2026 21 December 2026 Final Selection & Cohort Announcement",
       "page": "application"
     },
     {
       "id": "check-deadline-9e322dd89a",
       "url": "https://www.t-hub.co/social-impact-challenge",
-      "title": "T-Hub — application page checked by scrape.py",
+      "title": "T-Hub — application page",
       "excerpt": "reviewed as they arrive, and early teams hear back first. Applications close on 15 November 2026. 06 What happens after we are shortlisted? + Shortlisted",
       "page": "application"
     },
     {
       "id": "check-deadline-b9efd7295f",
       "url": "https://www.t-hub.co/social-impact-challenge",
-      "title": "T-Hub — application page checked by scrape.py",
+      "title": "T-Hub — application page",
       "excerpt": "2026. Real Problems Are Waiting. Build What Solves Them. Applications close 15 November 2026. Shortlisting is rolling, so apply early. Register Now",
       "page": "application"
     },
     {
       "id": "check-deadline-dcd242c576",
       "url": "https://www.t-hub.co/social-impact-challenge",
-      "title": "T-Hub — application page checked by scrape.py",
+      "title": "T-Hub — application page",
       "excerpt": "Rolling Live Screening and shortlisting 15 Nov 2026 Next Applications close 20 Nov 2026 AMA sessions with shortlisted teams 24 Nov 2026 Challenge",
       "page": "application"
     },
     {
+      "id": "check-deal-31611b6a81",
+      "url": "https://www.t-hub.co/aic-sustainability-program",
+      "title": "T-Hub — program page",
+      "excerpt": "validation. Apply Now Program Fees and Time Commitment Program fee: INR 50,000 + GST Time commitment: Minimum 4+ hours per week Apply Now Program",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-9237f1366f",
+      "url": "https://www.t-hub.co/mbrdi-climate-tech-incubator-student-launchpad-program-season-2",
+      "title": "T-Hub — application page",
+      "excerpt": "as part of Sustainability Garage – a Mercedes-Benz Initiative. Up to ₹50,000 grant per team | Mentorship from MBRDI Team and Industry Experts |",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-d033dd5ae8",
+      "url": "https://www.t-hub.co/aic-sustainability-program",
+      "title": "T-Hub — program page",
+      "excerpt": "Is the program paid? What is the program fee? The program fee is INR 50,000 + GST. Does AIC T-Hub/ T-Hub ask for a stake in the startups? No, we",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-14307be878",
+      "url": "https://www.t-hub.co/aic-sustainability-program",
+      "title": "T-Hub — program page",
+      "excerpt": "T-Hub Sustainability Accelerator – Cohort 4 is a 15-week hybrid program designed to support startups with",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-1c54aefa24",
+      "url": "https://www.t-hub.co/mbrdi-climate-tech-incubator-student-launchpad-program-season-2",
+      "title": "T-Hub — application page",
+      "excerpt": "against climate change. Through a rigorous 12-week acceleration program with mentorship,",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-7432adb972",
+      "url": "https://www.t-hub.co/mbrdi-climate-tech-incubator-student-launchpad-program-season-2",
+      "title": "T-Hub — application page",
+      "excerpt": "the MBRDI team and industry experts across the 12-week program. Maker lab access: 3D printing,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-3f1c9c4711",
+      "url": "https://www.t-hub.co/mbrdi-climate-tech-incubator-student-launchpad-program-season-2",
+      "title": "T-Hub — application page",
+      "excerpt": "in Bengaluru and Pune. The Launchpad program combines virtual sessions with in-person workshops and build days at maker",
+      "page": "application"
+    },
+    {
+      "id": "check-format-4f0b0cda8e",
+      "url": "https://www.t-hub.co/aic-sustainability-program",
+      "title": "T-Hub — program page",
+      "excerpt": "T-Hub Sustainability Accelerator – Cohort 4 is a 15-week hybrid program designed to support startups with a ready PoC or",
+      "page": "details"
+    },
+    {
+      "id": "check-format-53ced9b655",
+      "url": "https://www.t-hub.co/terms-and-conditions",
+      "title": "T-Hub — terms page",
+      "excerpt": "by browsing or becomes virtual member of T-Hub as per virtual membership policy, using the computer",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-628dc73dc8",
+      "url": "https://www.t-hub.co/",
+      "title": "T-Hub — homepage",
+      "excerpt": "T-Hub. Two tracks, teams of 3 to 5, a virtual build and an in-person finale at T-Hub. Read More Kotak BizLabs Kotak BizLabs",
+      "page": "details"
+    },
+    {
+      "id": "check-format-761ec25d4f",
+      "url": "https://www.t-hub.co/mbrdi-climate-tech-incubator-student-launchpad-program-season-2",
+      "title": "T-Hub — application page",
+      "excerpt": "Innovation Bootcamps Phase 02 Student Launchpad Program 12 in-person bootcamps across top engineering colleges in Karnataka and",
+      "page": "application"
+    },
+    {
+      "id": "check-format-7a0ae1591f",
+      "url": "https://www.t-hub.co/mbrdi-climate-tech-incubator-student-launchpad-program-season-2",
+      "title": "T-Hub — application page",
+      "excerpt": "Pune. The Launchpad program combines virtual sessions with in-person workshops and build days at maker labs in Bengaluru and",
+      "page": "application"
+    },
+    {
+      "id": "check-format-c1046a1219",
+      "url": "https://www.t-hub.co/",
+      "title": "T-Hub — homepage",
+      "excerpt": "Bhogu Founder, Monitra Health India's first comprehensive remote cardiac monitoring platform for diagnosing heart rhythm",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c2c5585a69",
+      "url": "https://www.t-hub.co/mbrdi-climate-tech-incubator-student-launchpad-program-season-2",
+      "title": "T-Hub — application page",
+      "excerpt": "has two main phases: (1) Idea Innovation Bootcamps 12 in-person bootcamps across colleges in Bengaluru and Pune covering",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e2c4e38e66",
+      "url": "https://www.t-hub.co/",
+      "title": "T-Hub — homepage",
+      "excerpt": "Hartford India and T-Hub. Two tracks, teams of 3 to 5, a virtual build and an in-person finale at T-Hub. Read More Kotak",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e96d3271fb",
+      "url": "https://www.t-hub.co/social-impact-challenge",
+      "title": "T-Hub — application page",
+      "excerpt": "Who should apply AgriTech, agri-drone, GeoAI and remote-sensing, computer-vision and farm-IoT startups. What teams",
+      "page": "application"
+    },
+    {
+      "id": "check-format-f333a46366",
+      "url": "https://www.t-hub.co/terms-and-conditions",
+      "title": "T-Hub — terms page",
+      "excerpt": "legal person who visits our Website by browsing or becomes virtual member of T-Hub as per virtual membership policy, using",
+      "page": "terms"
+    },
+    {
       "id": "check-name-08d254a9a9",
       "url": "https://www.t-hub.co/",
-      "title": "T-Hub — homepage checked by scrape.py",
+      "title": "T-Hub — homepage",
       "excerpt": "T-Hub | The World's Largest Home for Startups About About About",
       "page": "details"
     },
     {
       "id": "check-portfolio-1211f8b7ea",
       "url": "https://www.t-hub.co/",
-      "title": "T-Hub — homepage checked by scrape.py",
+      "title": "T-Hub — homepage",
       "excerpt": "Startups → https://www.t-hub.co/startups",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-4290a33c0f",
+      "url": "https://www.t-hub.co/terms-and-conditions",
+      "title": "T-Hub — terms page",
+      "excerpt": "Startups Startup Growth Enablement → https://www.t-hub.co/startups",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-4924d3cb51",
       "url": "https://www.t-hub.co/",
-      "title": "T-Hub — homepage checked by scrape.py",
+      "title": "T-Hub — homepage",
       "excerpt": "Startups Startup Growth Enablement → https://www.t-hub.co/startups",
       "page": "details"
     },
     {
-      "id": "check-portfolio-9c34c2d9fa",
-      "url": "https://www.t-hub.co/about-us",
-      "title": "T-Hub — details page checked by scrape.py",
+      "id": "check-portfolio-4ed6a63b9b",
+      "url": "https://www.t-hub.co/news/t-hub-and-hexagon-selects-12-startups-for-lab32-cohort-driving-innovation-in-ai-and-digital-reality",
+      "title": "T-Hub — batches page",
+      "excerpt": "Startups Startup Growth Enablement → https://www.t-hub.co/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-4f94d3f016",
+      "url": "https://www.t-hub.co/blogs/unleashing-innovation-t--hubs-semiconductor-incubation-program",
+      "title": "T-Hub — program page",
       "excerpt": "Startups Startup Growth Enablement → https://www.t-hub.co/startups",
       "page": "details"
     },
     {
-      "id": "check-portfolio-b4344a713a",
-      "url": "https://www.t-hub.co/",
-      "title": "T-Hub — homepage checked by scrape.py",
-      "excerpt": "Read More → https://www.t-hub.co/startups",
-      "page": "details"
+      "id": "check-portfolio-546b0a4c3c",
+      "url": "https://www.t-hub.co/news/t-hub-and-hexagon-selects-12-startups-for-lab32-cohort-driving-innovation-in-ai-and-digital-reality",
+      "title": "T-Hub — batches page",
+      "excerpt": "Startups → https://www.t-hub.co/startups",
+      "page": "batches"
     },
     {
-      "id": "check-portfolio-d968408f20",
-      "url": "https://www.t-hub.co/about-us",
-      "title": "T-Hub — details page checked by scrape.py",
+      "id": "check-portfolio-5bca86afff",
+      "url": "https://www.t-hub.co/blogs/unleashing-innovation-t--hubs-semiconductor-incubation-program",
+      "title": "T-Hub — program page",
       "excerpt": "Startups → https://www.t-hub.co/startups",
       "page": "details"
     },
     {
+      "id": "check-portfolio-7c97e11531",
+      "url": "https://www.t-hub.co/news/a-total-of-23-startups-have-been-chosen-for-aic-t-hubs-sustainability-cohort-in-hyderabad",
+      "title": "T-Hub — batches page",
+      "excerpt": "Startups → https://www.t-hub.co/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-9c34c2d9fa",
+      "url": "https://www.t-hub.co/about-us",
+      "title": "T-Hub — program page",
+      "excerpt": "Startups Startup Growth Enablement → https://www.t-hub.co/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9e1df25612",
+      "url": "https://www.t-hub.co/terms-and-conditions",
+      "title": "T-Hub — terms page",
+      "excerpt": "Startups → https://www.t-hub.co/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b4344a713a",
+      "url": "https://www.t-hub.co/",
+      "title": "T-Hub — homepage",
+      "excerpt": "Read More → https://www.t-hub.co/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d90b31c89b",
+      "url": "https://www.t-hub.co/news/a-total-of-23-startups-have-been-chosen-for-aic-t-hubs-sustainability-cohort-in-hyderabad",
+      "title": "T-Hub — batches page",
+      "excerpt": "Startups Startup Growth Enablement → https://www.t-hub.co/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-d968408f20",
+      "url": "https://www.t-hub.co/about-us",
+      "title": "T-Hub — program page",
+      "excerpt": "Startups → https://www.t-hub.co/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-rolling-c1301dad50",
+      "url": "https://www.t-hub.co/social-impact-challenge",
+      "title": "T-Hub — application page",
+      "excerpt": "submit your team's application. In progress Step 2 Screening and shortlisting Rolling Applications are reviewed as they arrive. Early teams hear back first. Up next Step 3 AMA",
+      "page": "application"
+    },
+    {
       "id": "check-route-afcec532c7",
       "url": "https://www.t-hub.co/",
-      "title": "T-Hub — homepage checked by scrape.py",
+      "title": "T-Hub — homepage",
       "excerpt": "Apply Now → https://www.t-hub.co/mbrdi-climate-tech-incubator-student-launchpad-program-season-2",
       "page": "details"
     },
     {
       "id": "check-route-d294185947",
       "url": "https://www.t-hub.co/",
-      "title": "T-Hub — homepage checked by scrape.py",
+      "title": "T-Hub — homepage",
       "excerpt": "https://www.t-hub.co/",
       "page": "details"
     },
     {
       "id": "check-route-fe1be8cbdd",
       "url": "https://www.t-hub.co/",
-      "title": "T-Hub — homepage checked by scrape.py",
+      "title": "T-Hub — homepage",
       "excerpt": "Apply Now → https://www.t-hub.co/social-impact-challenge",
       "page": "details"
+    },
+    {
+      "id": "check-status-d0ccd8e496",
+      "url": "https://www.t-hub.co/mbrdi-climate-tech-incubator-student-launchpad-program-season-2",
+      "title": "T-Hub — application page",
+      "excerpt": "also receive the ₹50K innovation grant for prototype development. Ready to Build the Future of Climate Tech? Applications are open for student teams in Karnataka and Maharashtra. Submit your climate tech idea and join the Launchpad. Apply",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-6ebe690d9d",
+      "url": "https://www.t-hub.co/",
+      "page": "details",
+      "excerpt": "T-Hub | The World's Largest Home for Startups About About About Us About T-Hub Our Leadership The T-Hub Team Incubators within T-Hub Google For Startups Hub India's First Hub AIC T-Hub Atal Innovation Mission MATH AI & ML Innovation Support T-Edge Founder Execution Platform T-Drive Defence Research Innovation Ecosystem T-Recruit Startup Hiring Support Telangana Vision 2047 Ecosystem Ecosystem Startups Startup Growth Enablement Corporates Corporate Innovation Programs Government Public Innovation Enablement Investors Startup–Investor Ecosystem T-Bridge The International Arm of T-Hub Partnership Collaborate To Scale Mentors Startup Mentor Network Value Partners Partner Support Network Academia Academia Academic Innovation Hub Kick Start Campus Innovation Catalyst Student Visit Student Visit Student Innovation Experience Programs Programs All Programs Programs at T-Hub Foundation For Founders Ready to Scale Resources News News T-Hub News Newsletter Monthly Updates Studio Founder Talk Founder Conversations Podcast Startup Podcast Videos Video Content Library Blogs Insights & Stories Case Studies Startup Success Stories White Papers Research & Reports Co-Working Co-Working Co-Working Membership Managed Workspaces Life at T-Hub Beyond the Workplace Events Events Events Calender Upcoming Events Host an Event Event Hosting Services Contact Founders Let's build. Together. T-Hub is the"
+    },
+    {
+      "id": "check-page-cafe6f8d81",
+      "url": "https://www.t-hub.co/mbrdi-climate-tech-incubator-student-launchpad-program-season-2",
+      "page": "application",
+      "excerpt": "MBRDI Climate Tech Student Launchpad Season 2 | T-Hub About Program Program Structure Focus Areas Who Should Apply What's in Store Program Modules Timeline FAQs Climate Tech Incubator Student Launchpad Program Season 2 A program developed in collaboration between Mercedes-Benz Research and Development India (MBRDI)and T-Hub, as part of Sustainability Garage – a Mercedes-Benz Initiative. Up to ₹50,000 grant per team | Mentorship from MBRDI Team and Industry Experts | Prototyping Workshop and Market Lab Access. Apply Now PROGRAM INTRODUCTION Transform Ideas into Climate Tech Prototypes The Climate Tech Incubator program is a joint initiative by Mercedes-Benz Research and Development India (MBRDI) and T-Hub, designed to empower student innovators focused on solving the world's most pressing climate and mobility challenges. We aim to harness bold new ideas to address critical challenges in the battle against climate change. Through a rigorous 12-week acceleration program with mentorship, prototyping workshops, maker lab access, and innovation grants, the Launchpad equips the next generation to lead the charge in building impactful technologies for a greener future. Apply Now What You Get: Real climate problems: Four focus areas: road safety, electric and low-carbon mobility, circular economy, and climate intelligence. Up to ₹50,000 innovation grant: For prototype materials,"
+    },
+    {
+      "id": "check-page-fe5bb54555",
+      "url": "https://www.t-hub.co/social-impact-challenge",
+      "page": "application",
+      "excerpt": "Social Impact & Sustainability Innovation Challenge 2026 | T-Hub About Challenges Eligibility Timeline Prizes FAQ Register Now Challenge Day · 24th NOVEMBER 2026 · T-Hub, Hyderabad Social Impact & Sustainability Innovation Challenge 2026 Indian startups build working solutions to three real-world challenges in disaster response, agriculture and waste. On site at T-Hub, Hyderabad. ₹10 lakh in prizes. Register Now Explore the Challenges Challenge 01 Early Disaster Awareness GeoAI · Climate risk → Challenge 02 Precision Crop Health AgriTech · Computer vision → Challenge 03 Zero-Waste Communities WasteTech · IoT → 24 Nov 2026 Challenge Day at T-Hub, Hyderabad ₹10 lakh Prize pool across 3 winners 15 Nov 2026 Applications close. Shortlisting is rolling 2 to 5 Members per team, one challenge each About the Challenge Problems That Matter Beyond the Room. A T-Hub-led Challenge for Indian startups, built around three real-world challenges. The focus is community benefit. Every challenge asks for a working prototype, a measurable result and a clear plan for adoption. Shortlisted startups build on site at T-Hub on Challenge Day, then demo live to the jury. See who can apply → The Challenges Pick One of Three Challenges. Each team applies to one challenge. Every challenge asks for a working prototype, a measured result and a plan for adoption. 01 Disaster 02 Crops 03 Waste Challenge 01"
+    },
+    {
+      "id": "check-page-743664569c",
+      "url": "https://www.t-hub.co/terms-and-conditions",
+      "page": "terms",
+      "excerpt": "Terms & Conditions — T-Hub About About About Us About T-Hub Our Leadership The T-Hub Team Incubators within T-Hub Google For Startups Hub India's First Hub AIC T-Hub Atal Innovation Mission MATH AI & ML Innovation Support T-Edge Founder Execution Platform T-Drive Defence Research Innovation Ecosystem T-Recruit Startup Hiring Support Telangana Vision 2047 Ecosystem Ecosystem Startups Startup Growth Enablement Corporates Corporate Innovation Programs Government Public Innovation Enablement Investors Startup–Investor Ecosystem T-Bridge The International Arm of T-Hub Partnership Collaborate To Scale Mentors Startup Mentor Network Value Partners Partner Support Network Academia Academia Academic Innovation Hub Kick Start Campus Innovation Catalyst Student Visit Student Visit Student Innovation Experience Programs Programs All Programs Programs at T-Hub Foundation For Founders Ready to Scale Resources News News T-Hub News Newsletter Monthly Updates Studio Founder Talk Founder Conversations Podcast Startup Podcast Videos Video Content Library Blogs Insights & Stories Case Studies Startup Success Stories White Papers Research & Reports Co-Working Co-Working Co-Working Membership Managed Workspaces Life at T-Hub Beyond the Workplace Events Events Events Calender Upcoming Events Host an Event Event Hosting Services Contact Terms And Conditions Terms of Use This Terms of Use is drafted"
+    },
+    {
+      "id": "check-page-9d664dac34",
+      "url": "https://www.t-hub.co/algorand-startup-lab-cohort-2",
+      "page": "batches",
+      "excerpt": "Algorand Startup Lab Cohort 2 | T-Hub Accelerator Program"
+    },
+    {
+      "id": "check-page-fc9b158509",
+      "url": "https://www.t-hub.co/news/a-total-of-23-startups-have-been-chosen-for-aic-t-hubs-sustainability-cohort-in-hyderabad",
+      "page": "batches",
+      "excerpt": "23 Startups Join AIC T-Hub Sustainability Cohort About About About Us About T-Hub Our Leadership The T-Hub Team Incubators within T-Hub Google For Startups Hub India's First Hub AIC T-Hub Atal Innovation Mission MATH AI & ML Innovation Support T-Edge Founder Execution Platform T-Drive Defence Research Innovation Ecosystem T-Recruit Startup Hiring Support Telangana Vision 2047 Ecosystem Ecosystem Startups Startup Growth Enablement Corporates Corporate Innovation Programs Government Public Innovation Enablement Investors Startup–Investor Ecosystem T-Bridge The International Arm of T-Hub Partnership Collaborate To Scale Mentors Startup Mentor Network Value Partners Partner Support Network Academia Academia Academic Innovation Hub Kick Start Campus Innovation Catalyst Student Visit Student Visit Student Innovation Experience Programs Programs All Programs Programs at T-Hub Foundation For Founders Ready to Scale Resources News News T-Hub News Newsletter Monthly Updates Studio Founder Talk Founder Conversations Podcast Startup Podcast Videos Video Content Library Blogs Insights & Stories Case Studies Startup Success Stories White Papers Research & Reports Co-Working Co-Working Co-Working Membership Managed Workspaces Life at T-Hub Beyond the Workplace Events Events Events Calender Upcoming Events Host an Event Event Hosting Services Contact A total of 23 startups have been chosen"
+    },
+    {
+      "id": "check-page-9f022f1279",
+      "url": "https://www.t-hub.co/news/t-hub-and-hexagon-selects-12-startups-for-lab32-cohort-driving-innovation-in-ai-and-digital-reality",
+      "page": "batches",
+      "excerpt": "T-Hub and Hexagon Select 12 Startups for LAB32 About About About Us About T-Hub Our Leadership The T-Hub Team Incubators within T-Hub Google For Startups Hub India's First Hub AIC T-Hub Atal Innovation Mission MATH AI & ML Innovation Support T-Edge Founder Execution Platform T-Drive Defence Research Innovation Ecosystem T-Recruit Startup Hiring Support Telangana Vision 2047 Ecosystem Ecosystem Startups Startup Growth Enablement Corporates Corporate Innovation Programs Government Public Innovation Enablement Investors Startup–Investor Ecosystem T-Bridge The International Arm of T-Hub Partnership Collaborate To Scale Mentors Startup Mentor Network Value Partners Partner Support Network Academia Academia Academic Innovation Hub Kick Start Campus Innovation Catalyst Student Visit Student Visit Student Innovation Experience Programs Programs All Programs Programs at T-Hub Foundation For Founders Ready to Scale Resources News News T-Hub News Newsletter Monthly Updates Studio Founder Talk Founder Conversations Podcast Startup Podcast Videos Video Content Library Blogs Insights & Stories Case Studies Startup Success Stories White Papers Research & Reports Co-Working Co-Working Co-Working Membership Managed Workspaces Life at T-Hub Beyond the Workplace Events Events Events Calender Upcoming Events Host an Event Event Hosting Services Contact T-Hub and Hexagon selects 12 Startups for"
+    },
+    {
+      "id": "check-page-ca786e3bd8",
+      "url": "https://www.t-hub.co/about-us",
+      "page": "details",
+      "excerpt": "About T-Hub | Empowering Startups & Innovation About About About Us About T-Hub Our Leadership The T-Hub Team Incubators within T-Hub Google For Startups Hub India's First Hub AIC T-Hub Atal Innovation Mission MATH AI & ML Innovation Support T-Edge Founder Execution Platform T-Drive Defence Research Innovation Ecosystem T-Recruit Startup Hiring Support Telangana Vision 2047 Ecosystem Ecosystem Startups Startup Growth Enablement Corporates Corporate Innovation Programs Government Public Innovation Enablement Investors Startup–Investor Ecosystem T-Bridge The International Arm of T-Hub Partnership Collaborate To Scale Mentors Startup Mentor Network Value Partners Partner Support Network Academia Academia Academic Innovation Hub Kick Start Campus Innovation Catalyst Student Visit Student Visit Student Innovation Experience Programs Programs All Programs Programs at T-Hub Foundation For Founders Ready to Scale Resources News News T-Hub News Newsletter Monthly Updates Studio Founder Talk Founder Conversations Podcast Startup Podcast Videos Video Content Library Blogs Insights & Stories Case Studies Startup Success Stories White Papers Research & Reports Co-Working Co-Working Co-Working Membership Managed Workspaces Life at T-Hub Beyond the Workplace Events Events Events Calender Upcoming Events Host an Event Event Hosting Services Contact The World's Largest Home for Startups T-Hub"
+    },
+    {
+      "id": "check-page-bb95cc3373",
+      "url": "https://www.t-hub.co/accelerator-2030-presented-by-hsbc-with-partnership-with-t-hub",
+      "page": "details",
+      "excerpt": "Accelerator 2030 by HSBC with T-Hub"
+    },
+    {
+      "id": "check-page-e901f48a46",
+      "url": "https://www.t-hub.co/aic-mobility-program",
+      "page": "details",
+      "excerpt": "Mobility Program | AIC T-Hub Future of Transportation About Focus Areas Benefits Criteria Program Structure Timeline FAQ's AIC T-Hub Mobility Program Revolutionising the mobility space, one mile at a time. Express Interest About the Program Charge, an initiative by AIC T-Hub Foundation, supported by Atal Innovation Mission, NITI Aayog, is a dedicated program designed to cultivate a robust Mobility ecosystem in India. The program focuses on promoting cutting-edge research, pioneering solutions, and strengthening the Mobility supply chain to fuel industry growth and innovation. With a strong emphasis on global collaboration, Charge is committed to accelerating Mobility startups, guiding them from early-stage to successful commercialisation. The program offers tailored mentorship from industry experts, access to various funding opportunities, and extensive networking support. By empowering startups with the necessary tools and connections, Charge helps them refine their commercialisation strategies, expand market reach, and engage with key stakeholders in the Mobility sector. Focus Areas Immersive Reality Tech Electric Vehicles (EVs) Autonomous Vehicles (AVs) Mobility as a Service Connectivity Service Shared Mobility Micro Mobility Autonomous Driving Assistive Technology​ Aero Mobility​ Smart Infrastructure for Mobility Immersive Reality Tech Electric Vehicles (EVs) Autonomous"
+    },
+    {
+      "id": "check-page-97203510b8",
+      "url": "https://www.t-hub.co/aic-sustainability-program",
+      "page": "details",
+      "excerpt": "Sustainability Program | AIC T-Hub Green Innovation About Benefits Focus Area Criteria Program Schedule Program Timeline FAQ's AIC T-Hub Sustainability Program Igniting sustainable innovation for a greener tomorrow Express Interest About the Program Apply Now The AIC T-Hub Sustainability Accelerator – Cohort 4 is a 15-week hybrid program designed to support startups with a ready PoC or beyond, developing high-impact sustainability solutions. The program focuses on sectors including climate tech, ocean tech, AgriTech, renewable energy, circular economy, sustainable manufacturing, green infrastructure, and more. ‍ The program offers a unique blend of expert mentorship, hands-on workshops, market access, funding opportunities, and post-program support, helping founders navigate real-world challenges in deploying sustainability tech at scale. Hosted by AIC T-Hub Foundation, supported by Atal Innovation Mission, NITI Aayog, and powered by T-Hub – the world’s largest home for startups, this cohort is curated to help mission-driven founders promote their growth in terms of scaling their solutions into the market. Program Benefits Customized milestone-based growth plan Each startup receives a personalized roadmap that is aligned with its product, market, and funding goals Weekly 1:1 mentorship sessions Dedicated expert support to resolve real-time product, GTM, or scale-up challenges."
+    },
+    {
+      "id": "check-page-d377ca22d8",
+      "url": "https://www.t-hub.co/aws-space-accelerator-apj",
+      "page": "details",
+      "excerpt": "AWS Space Accelerator APJ | Space Startups – T-Hub"
+    },
+    {
+      "id": "check-page-3440cdc45b",
+      "url": "https://www.t-hub.co/aws-space-accelerator-apj-jp",
+      "page": "details",
+      "excerpt": "AWS Space Accelerator APJ JP | Space Startups – T-Hub"
+    },
+    {
+      "id": "check-page-cb602b5c37",
+      "url": "https://www.t-hub.co/aws-space-accelerator-india",
+      "page": "details",
+      "excerpt": "AWS Space Accelerator India | T-Hub"
+    },
+    {
+      "id": "check-page-dd1e164b78",
+      "url": "https://www.t-hub.co/blogs/unleashing-innovation-t--hubs-semiconductor-incubation-program",
+      "page": "details",
+      "excerpt": "T-Hub's Semiconductor Incubation Program | T-Hub Blog About About About Us About T-Hub Our Leadership The T-Hub Team Incubators within T-Hub Google For Startups Hub India's First Hub AIC T-Hub Atal Innovation Mission MATH AI & ML Innovation Support T-Edge Founder Execution Platform T-Drive Defence Research Innovation Ecosystem T-Recruit Startup Hiring Support Telangana Vision 2047 Ecosystem Ecosystem Startups Startup Growth Enablement Corporates Corporate Innovation Programs Government Public Innovation Enablement Investors Startup–Investor Ecosystem T-Bridge The International Arm of T-Hub Partnership Collaborate To Scale Mentors Startup Mentor Network Value Partners Partner Support Network Academia Academia Academic Innovation Hub Kick Start Campus Innovation Catalyst Student Visit Student Visit Student Innovation Experience Programs Programs All Programs Programs at T-Hub Foundation For Founders Ready to Scale Resources News News T-Hub News Newsletter Monthly Updates Studio Founder Talk Founder Conversations Podcast Startup Podcast Videos Video Content Library Blogs Insights & Stories Case Studies Startup Success Stories White Papers Research & Reports Co-Working Co-Working Co-Working Membership Managed Workspaces Life at T-Hub Beyond the Workplace Events Events Events Calender Upcoming Events Host an Event Event Hosting Services Contact Unleashing Innovation:T- Hub’s"
     }
   ],
   "findings": {
@@ -118,20 +432,106 @@
         "evidenceId": "check-route-d294185947"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-d0ccd8e496"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [
       {
         "value": "2026-11-15",
-        "evidenceId": "check-deadline-5edfce8d4d"
+        "evidenceId": "check-deadline-7b45526dee"
       },
       {
         "value": "2026-11-20",
         "evidenceId": "check-deadline-dcd242c576"
       }
     ],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-c1301dad50"
+      }
+    ],
+    "announcedIntake": [
+      {
+        "value": "Oct",
+        "evidenceId": "check-announced-31e6f841d2"
+      },
+      {
+        "value": "Nov",
+        "evidenceId": "check-announced-ffd9acf56e"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12",
+        "evidenceId": "check-duration-1c54aefa24"
+      },
+      {
+        "value": "15",
+        "evidenceId": "check-duration-14307be878"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-c1046a1219"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-628dc73dc8"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-4f0b0cda8e"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "as part of Sustainability Garage – a Mercedes-Benz Initiative. Up to ₹50,000 grant per team | Mentorship from MBRDI Team and Industry Experts |",
+        "evidenceId": "check-deal-9237f1366f"
+      },
+      {
+        "value": "validation. Apply Now Program Fees and Time Commitment Program fee: INR 50,000 + GST Time commitment: Minimum 4+ hours per week Apply Now Program",
+        "evidenceId": "check-deal-31611b6a81"
+      },
+      {
+        "value": "Is the program paid? What is the program fee? The program fee is INR 50,000 + GST. Does AIC T-Hub/ T-Hub ask for a stake in the startups? No, we",
+        "evidenceId": "check-deal-d033dd5ae8"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "50000",
+          "currency": "INR",
+          "equity": null,
+          "label": "Grant",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-9237f1366f"
+      },
+      {
+        "value": {
+          "kind": "fee",
+          "amount": "50000",
+          "currency": "INR",
+          "equity": null,
+          "label": "Fee",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-31611b6a81"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://www.t-hub.co/startups",

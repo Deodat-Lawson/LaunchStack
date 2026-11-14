@@ -1,39 +1,306 @@
 {
   "programId": "liga-ventures",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://liga.ventures/"
+    "https://liga.ventures/",
+    "https://liga.ventures/insights/artigos/como-criar-a-estrategia-de-inovacao-aberta-ideal-para-sua-empresa/",
+    "https://liga.ventures/insights/artigos/qual-tamanho-ideal-e-como-estruturar-uma-equipe-de-inovacao-de-sucesso/",
+    "https://liga.ventures/insights/artigos/relatorio-investment-and-ma-autotechs-2024/",
+    "https://liga.ventures/insights/entrevistas/ana-carolina-bajarunas-ceo-da-builders-e-idealizadora-do-foodtech-movement/",
+    "https://liga.ventures/insights/entrevistas/pedro-daniel-diretor-de-esportes-midia-e-entretenimento-na-ey-e-coidealizador-do-arena-hub/",
+    "https://liga.ventures/insights/follow-on/relatorio-investment-and-mampa-proptechs-amp-construtechs/",
+    "https://liga.ventures/insights/follow-on/relatorio-investment-e-ma-fintechs-2024/",
+    "https://liga.ventures/insights/relatorios/relatorio-investment-and-ma-healthtechs/",
+    "https://liga.ventures/insights/relatorios/relatorio-investment-and-mampa-logtechs/",
+    "https://liga.ventures/insights/relatorios/relatorio-investment-e-m-a-agtechs-2024/",
+    "https://liga.ventures/insights/relatorios/relatorio-investment-e-mampa-foodtechs/",
+    "https://liga.ventures/insights/startups/relatorio-de-investment-ma-retailtechs/",
+    "https://liga.ventures/insights/artigos/aceleradora-de-startups-o-que-e-e-como-gerar-resultados-com-programa-de-aceleracao/",
+    "https://liga.ventures/insights/artigos/grandes-empresas-criam-programas-para-se-relacionar-com-startups/"
   ],
   "evidence": [
     {
+      "id": "check-format-0aab445c16",
+      "url": "https://liga.ventures/insights/startups/relatorio-de-investment-ma-retailtechs/",
+      "title": "Liga Ventures — terms page",
+      "excerpt": "análise preditiva de demandas. Realidade aumentada e virtual: experiências imersivas de compra, visualização de",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-96178ecea4",
+      "url": "https://liga.ventures/insights/follow-on/relatorio-investment-and-mampa-proptechs-amp-construtechs/",
+      "title": "Liga Ventures — terms page",
+      "excerpt": "controle e eficiência operacional. Realidade Aumentada e Virtual : Essas tecnologias estão sendo usadas para visualização",
+      "page": "terms"
+    },
+    {
       "id": "check-name-6fca082e06",
       "url": "https://liga.ventures/",
-      "title": "Liga Ventures — homepage checked by scrape.py",
+      "title": "Liga Ventures — homepage",
       "excerpt": "Liga Ventures · Consultoria, dados e ecossistema em uma coisa só Quem",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-15bba10640",
+      "url": "https://liga.ventures/insights/artigos/relatorio-investment-and-ma-autotechs-2024/",
+      "title": "Liga Ventures — terms page",
+      "excerpt": "Startups → https://liga.ventures/insights/categoria/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-19b2d0aa47",
+      "url": "https://liga.ventures/insights/artigos/como-criar-a-estrategia-de-inovacao-aberta-ideal-para-sua-empresa/",
+      "title": "Liga Ventures — terms page",
+      "excerpt": "Startups → https://liga.ventures/insights/categoria/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-28d9b975ee",
+      "url": "https://liga.ventures/insights/artigos/qual-tamanho-ideal-e-como-estruturar-uma-equipe-de-inovacao-de-sucesso/",
+      "title": "Liga Ventures — terms page",
+      "excerpt": "Startups → https://liga.ventures/insights/categoria/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2b75dd5795",
+      "url": "https://liga.ventures/insights/startups/relatorio-de-investment-ma-retailtechs/",
+      "title": "Liga Ventures — terms page",
+      "excerpt": "Startups → https://liga.ventures/insights/categoria/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2fdf356731",
+      "url": "https://liga.ventures/insights/relatorios/relatorio-investment-and-ma-healthtechs/",
+      "title": "Liga Ventures — terms page",
+      "excerpt": "Startups → https://liga.ventures/insights/categoria/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-4af6a90207",
+      "url": "https://liga.ventures/insights/relatorios/relatorio-investment-e-m-a-agtechs-2024/",
+      "title": "Liga Ventures — terms page",
+      "excerpt": "Startups → https://liga.ventures/insights/categoria/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5e1204c5c8",
+      "url": "https://liga.ventures/insights/relatorios/relatorio-investment-e-mampa-foodtechs/",
+      "title": "Liga Ventures — terms page",
+      "excerpt": "Startups → https://liga.ventures/insights/categoria/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8cf1c1156a",
+      "url": "https://liga.ventures/insights/relatorios/relatorio-investment-and-mampa-logtechs/",
+      "title": "Liga Ventures — terms page",
+      "excerpt": "#startups → https://liga.ventures/insights/tag/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9fe0772d57",
+      "url": "https://liga.ventures/insights/follow-on/relatorio-investment-e-ma-fintechs-2024/",
+      "title": "Liga Ventures — terms page",
+      "excerpt": "Startups → https://liga.ventures/insights/categoria/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-bcd1ebcef1",
+      "url": "https://liga.ventures/insights/artigos/grandes-empresas-criam-programas-para-se-relacionar-com-startups/",
+      "title": "Liga Ventures — program page",
+      "excerpt": "Startups → https://liga.ventures/insights/categoria/startups/",
       "page": "details"
     },
     {
       "id": "check-portfolio-c1a36c8832",
       "url": "https://liga.ventures/",
-      "title": "Liga Ventures — homepage checked by scrape.py",
+      "title": "Liga Ventures — homepage",
       "excerpt": "Startups → https://liga.ventures/insights/categoria/startups/",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-c40cfa19e0",
+      "url": "https://liga.ventures/insights/artigos/aceleradora-de-startups-o-que-e-e-como-gerar-resultados-com-programa-de-aceleracao/",
+      "title": "Liga Ventures — program page",
+      "excerpt": "Startups → https://liga.ventures/insights/categoria/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c9506dd4e1",
+      "url": "https://liga.ventures/insights/follow-on/relatorio-investment-and-mampa-proptechs-amp-construtechs/",
+      "title": "Liga Ventures — terms page",
+      "excerpt": "#startups → https://liga.ventures/insights/tag/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-cad71aaeb1",
+      "url": "https://liga.ventures/insights/entrevistas/pedro-daniel-diretor-de-esportes-midia-e-entretenimento-na-ey-e-coidealizador-do-arena-hub/",
+      "title": "Liga Ventures — terms page",
+      "excerpt": "Startups → https://liga.ventures/insights/categoria/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d4c6f21a3b",
+      "url": "https://liga.ventures/insights/entrevistas/ana-carolina-bajarunas-ceo-da-builders-e-idealizadora-do-foodtech-movement/",
+      "title": "Liga Ventures — terms page",
+      "excerpt": "Startups → https://liga.ventures/insights/categoria/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d8409a6928",
+      "url": "https://liga.ventures/insights/follow-on/relatorio-investment-and-mampa-proptechs-amp-construtechs/",
+      "title": "Liga Ventures — terms page",
+      "excerpt": "Startups → https://liga.ventures/insights/categoria/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e9391eaef2",
+      "url": "https://liga.ventures/insights/relatorios/relatorio-investment-and-ma-healthtechs/",
+      "title": "Liga Ventures — terms page",
+      "excerpt": "#startups → https://liga.ventures/insights/tag/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-fa5d03ead8",
+      "url": "https://liga.ventures/insights/relatorios/relatorio-investment-and-mampa-logtechs/",
+      "title": "Liga Ventures — terms page",
+      "excerpt": "Startups → https://liga.ventures/insights/categoria/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-7c74858eca",
+      "url": "https://liga.ventures/",
+      "title": "Liga Ventures — homepage",
+      "excerpt": "https://liga.ventures/",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-3ec73e0142",
+      "url": "https://liga.ventures/",
+      "page": "details",
+      "excerpt": "Liga Ventures · Consultoria, dados e ecossistema em uma coisa só Quem Somos Soluções Liga Insights Startup Scanner Fale conosco Quem Somos Soluções Liga Insights Startup Scanner Quero inovar com a Liga Transformamos juntos. Combinamos consultoria, dados e ecossistema em uma coisa só. Há 11 anos colocamos corporações e startups no mesmo time , da estratégia na diretoria à execução no dia a dia. Quero inovar com a Liga Conheça nossas soluções conheça mais Soluções Entendemos de estratégia, mas conhecemos a operação. Seis frentes que se combinam conforme o momento de cada empresa: da tese de inovação aos projetos em produção. 01 Estratégia e Governança de Inovação Tese, roadmap e governança para decidir onde inovar, por quê e com qual orçamento. 02 Criação de Novos Negócios Do conceito à operação: desenho, validação e lançamento de novas frentes de receita. 03 Educação e Cultura da Inovação Formação de times e lideranças para inovar como rotina, não como evento. 04 Inovação Aberta Desafios, scouting e provas de conceito com as startups certas para cada dor. 05 Inteligência, Dados e Tendências Estudos, radares e uma base com mais de 62 mil startups mapeadas. 06 M&A e CVC Tese de investimento, avaliação e aproximação entre corporação e startup. Cases Quem já transforma junto Mais de 150 corporações apoiadas em 11 anos. Algumas dessas histórias estão contadas no Insights. Confira"
+    },
+    {
+      "id": "check-page-4afb65dce2",
+      "url": "https://liga.ventures/insights/artigos/como-criar-a-estrategia-de-inovacao-aberta-ideal-para-sua-empresa/",
+      "page": "terms",
+      "excerpt": "Como criar a estratégia de inovação aberta da sua empresa Quem Somos Soluções Liga Insights Startup Scanner Fale conosco Quem Somos Soluções Liga Insights Startup Scanner Quero inovar com a Liga Home › Liga Insights › Artigos Artigos Como criar a estratégia de inovação aberta ideal para sua empresa Conheça um passo a passo para avaliar as oportunidades e desafios na hora de construir a estratégia de inovação aberta da sua empresa. por Liga Ventures 12 de setembro de 2022 9 min de leitura Compartilhar A importância do papel de estruturar e trabalhar uma estratégia de inovação aberta dentro das empresas já está claro e bastante evidenciado. No entanto, não é simples identificar por onde e como começar a trabalhar com este modelo e, neste processo, é natural que surjam incertezas. Dentro deste contexto, quem mais sofre é o nosso “Indiana Jones” – aquele que carrega a bandeira da inovação dentro de sua companhia . Ele tem a missão de repercutir e engajar a corporação nos processos de inovação aberta. Nesta jornada, o embaixador muitas vezes se questiona: será que vou conseguir resultados? Será que startups solucionarão, de fato, meu problema? Será que consigo encontrá-las e conseguiremos gerar negócio? Se você tem essas dúvidas então, esse material é para você , e todos aqueles que de alguma forma estão envolvidos ou gostariam de se envolver nessa empreitada. Não é difícil falhar"
+    },
+    {
+      "id": "check-page-4ab5bcbcc2",
+      "url": "https://liga.ventures/insights/artigos/qual-tamanho-ideal-e-como-estruturar-uma-equipe-de-inovacao-de-sucesso/",
+      "page": "terms",
+      "excerpt": "Como estruturar uma equipe de inovação de sucesso Quem Somos Soluções Liga Insights Startup Scanner Fale conosco Quem Somos Soluções Liga Insights Startup Scanner Quero inovar com a Liga Home › Liga Insights › Artigos Artigos Qual tamanho ideal e como estruturar uma equipe de inovação de sucesso Estruturar uma equipe de inovação é algo desafiador. Pensando nisso, explicaremos como montar uma equipe e qual tamanho ideal de uma equipe de inovação. por Liga Ventures 12 de setembro de 2022 3 min de leitura Compartilhar Para o desenvolvimento de novas ideias, novas propostas de negócios e para a percepção do futuro é fundamental contar com uma equipe de inovação. Esse time funciona como guardião da visão a longo prazo do negócio Esses profissionais são responsáveis por pensar em todas as estratégias e necessidades de desenvolvimento para que um negócio aproveita as oportunidades e consiga crescer. Mas como estruturar essa equipe? Como estruturar uma equipe de inovação? É importante começarmos este conteúdo ressaltando que uma equipe de inovação possui algumas características bem diferentes de outras equipes operacionais. As skills necessárias para os componentes da equipe, devem estar alinhadas com a proposta de gerar novas soluções, utilizando ferramentas, dispositivos e ideias inovadoras para a empresa e para o mercado. Além disso, é preciso pensar em alguns aspectos importantes"
+    },
+    {
+      "id": "check-page-66c8f02cc1",
+      "url": "https://liga.ventures/insights/artigos/relatorio-investment-and-ma-autotechs-2024/",
+      "page": "terms",
+      "excerpt": "Relatório Investment and M&A: Autotechs 2024 Quem Somos Soluções Liga Insights Startup Scanner Fale conosco Quem Somos Soluções Liga Insights Startup Scanner Quero inovar com a Liga Home › Liga Insights › Artigos Artigos Relatório Investment and M&A: Autotechs 2024 Explore as tendências e oportunidades para Autotechs em 2024, num cenário de desafios e aquisições estratégicas no setor. por Liga Ventures 12 de novembro de 2024 Receber o material Gratuito. Chega no seu e-mail. Relatório Investment and M&A Relatório Investment and M&A: Autotechs 2024 Compartilhar Baixar o Material O mercado de Autotechs (startups focadas em tecnologia automotiva) no Brasil, em 2024, revelou um cenário dinâmico e desafiador. Em meio a um contexto econômico global incerto, o setor viu uma redução significativa no volume de investimentos, enquanto as aquisições, por outro lado, cresceram, refletindo um movimento de consolidação e amadurecimento do setor. Cenário de Investimentos Até o terceiro trimestre de 2024, o setor de Autotechs registrou uma queda de 49% no volume total de investimentos captados em relação a 2023. Para alcançar o montante do ano anterior, o setor precisaria captar cerca de R$ 414 milhões no último trimestre – uma meta ambiciosa, dada a retração econômica e o cenário de cautela dos investidores. Essa queda foi ainda mais sentida nas rodadas de Mid-stage (Series A), que sofreram"
+    },
+    {
+      "id": "check-page-b0be9cccde",
+      "url": "https://liga.ventures/insights/entrevistas/ana-carolina-bajarunas-ceo-da-builders-e-idealizadora-do-foodtech-movement/",
+      "page": "terms",
+      "excerpt": "Entrevista: Ana Carolina Bajarunas, Builders Quem Somos Soluções Liga Insights Startup Scanner Fale conosco Quem Somos Soluções Liga Insights Startup Scanner Quero inovar com a Liga Home › Liga Insights › Entrevistas Entrevistas Ana Carolina Bajarunas, CEO da Builders e Idealizadora do FoodTech Movement Confira entrevista do Liga Insights com Ana Carolina Bajarunas, CEO da Builders e Idealizadora do FoodTech Movement, sobre inovação no mercado de alimentos por Liga Ventures 12 de setembro de 2022 3 min de leitura Compartilhar Ana Carolina Bajarunas, CEO da Builders e Idealizadora do FoodTech Movement, foi uma das entrevistadas para o estudo Liga Insights Food Techs, lançado em maio de 2019. Durante a entrevista, ela falou sobre as oportunidades de inovação e os desafios para implementação de tecnologia no mercado de alimentos. O estudo completo está disponível para download neste link. A Builders é uma consultoria focada no fomento da inovação, tecnologia e desenvolvimento de startups do mercado de alimentação. Criado em 2017, o FoodTech Movement busca analisar as mudanças no perfil de consumo do mercado de alimentação, identificar oportunidades e mapear desafios dentro deste segmento. Ana Carolina Bajarunas é graduada em Publicidade e Propaganda pela Universidade Metodista e possui cursos de especialização em Branding, Design Thinking e Liderança no Brasil e no exterior."
+    },
+    {
+      "id": "check-page-87a23fda25",
+      "url": "https://liga.ventures/insights/entrevistas/pedro-daniel-diretor-de-esportes-midia-e-entretenimento-na-ey-e-coidealizador-do-arena-hub/",
+      "page": "terms",
+      "excerpt": "Entrevista: Pedro Daniel, coidealizador do Arena Hub Quem Somos Soluções Liga Insights Startup Scanner Fale conosco Quem Somos Soluções Liga Insights Startup Scanner Quero inovar com a Liga Home › Liga Insights › Entrevistas Entrevistas Pedro Daniel, Diretor de Esportes, Mídia e Entretenimento na E&Y e coidealizador do Arena Hub Confira a entrevista do Liga Insights com Pedro Daniel, Diretor de Esportes, Mídia e Entretenimento na E&Y e coidealizador do Arena Hub por Liga Ventures 12 de setembro de 2022 3 min de leitura Compartilhar Pedro Daniel, Diretor de Esportes, Mídia e Entretenimento na E&Y e coidealizador do Arena Hub, foi um dos entrevistados para o estudo Liga Insights Sports Techs, lançado em março de 2020. Durante a entrevista, ele falou sobre a maturidade das sports techs brasileiras. O estudo completo está disponível para download neste link . A Arena Hub é um centro de inovação e fomento ao empreendedorismo, que visa desenvolver a indústria do Esporte, Mídia e Entretenimento. Já a EY é uma das dez maiores empresas de serviços do mundo, presente em 150 países, em 728 escritórios, e com mais de 231 mil funcionários. Com passagens por grandes empresas e pelo universo acadêmico na área de gestão esportiva, Pedro Daniel é diretor da EY desde 2018 e um dos idealizadores da Arena Hub. O executivo é graduado em administração e economia pela PUC-SP. Confira a seguir a"
+    },
+    {
+      "id": "check-page-52eed461b9",
+      "url": "https://liga.ventures/insights/follow-on/relatorio-investment-and-mampa-proptechs-amp-construtechs/",
+      "page": "terms",
+      "excerpt": "Relatório Investment and M&A: Proptechs & Construtechs 2024 Quem Somos Soluções Liga Insights Startup Scanner Fale conosco Quem Somos Soluções Liga Insights Startup Scanner Quero inovar com a Liga Home › Liga Insights › Follow-on Follow-on Relatório Investment and M&A: Proptechs & Construtechs 2024 Descubra como proptechs e construtechs estão revolucionando o setor imobiliário com tecnológicas, investimentos e tendências futuras. por Liga Ventures 22 de julho de 2024 Receber o material Gratuito. Chega no seu e-mail. Relatório Investment and M&A Relatório Investment and M&A: Proptechs & Construtechs 2024 Compartilhar Baixar o Material Nos últimos anos, o setor imobiliário tem passado por uma transformação significativa graças ao avanço das proptechs e construtechs. Essas startups estão inovando e trazendo soluções tecnológicas para diversos desafios do mercado imobiliário, desde a construção até a gestão de propriedades. Neste artigo, exploraremos a importância dessas empresas, os investimentos e tendências do setor, os desafios e oportunidades que enfrentam e o que podemos esperar para o futuro. Importância das Proptechs e Construtechs Proptechs (tecnologia para propriedades) e construtechs (tecnologia para construção) estão revolucionando a maneira como lidamos com imóveis e construção. Essas empresas estão introduzindo soluções inovadoras que aumentam a eficiência, reduzem"
+    },
+    {
+      "id": "check-page-d5f7376a8e",
+      "url": "https://liga.ventures/insights/follow-on/relatorio-investment-e-ma-fintechs-2024/",
+      "page": "terms",
+      "excerpt": "Relatório Investment & M&A: Fintechs 2024 Quem Somos Soluções Liga Insights Startup Scanner Fale conosco Quem Somos Soluções Liga Insights Startup Scanner Quero inovar com a Liga Home › Liga Insights › Follow-on Follow-on Relatório Investment & M&A: Fintechs 2024 Confira os aportes e aquisições entre as startups do setor financeiro no Brasil, no mapeamento completo e gratuito da Liga Ventures. por Liga Ventures 24 de outubro de 2024 Receber o material Gratuito. Chega no seu e-mail. Relatório Investment & M&A Relatório Investment & M&A: Fintechs 2024 Compartilhar Baixar o Material As fintechs, startups que atuam no setor financeiro, têm se consolidado como um dos pilares mais inovadores do ecossistema de tecnologia. Essas empresas têm como principal objetivo transformar e modernizar os serviços financeiros tradicionais, oferecendo soluções mais ágeis, acessíveis e personalizadas para consumidores e empresas. A importância das fintechs está no seu papel de democratizar o acesso a serviços bancários, melhorar a experiência do usuário e, ao mesmo tempo, reduzir custos operacionais através do uso de tecnologias emergentes, como inteligência artificial e blockchain. Nos últimos anos, o setor de fintechs no Brasil e no mundo experimentou um crescimento significativo, tanto em número de empresas quanto em volume de investimentos. Esse movimento se intensificou em 2024, com novas"
+    },
+    {
+      "id": "check-page-b1dc64fdf6",
+      "url": "https://liga.ventures/insights/relatorios/relatorio-investment-and-ma-healthtechs/",
+      "page": "terms",
+      "excerpt": "Relatório Investment and M&A: Healthtechs 2024 Quem Somos Soluções Liga Insights Startup Scanner Fale conosco Quem Somos Soluções Liga Insights Startup Scanner Quero inovar com a Liga Home › Liga Insights › Relatórios Relatórios Relatório Investment and M&A: Healthtechs 2024 Descubra como as healthtechs estão revolucionando a saúde, os investimentos e tendências neste setor em crescimento. por Liga Ventures 13 de agosto de 2024 Receber o material Gratuito. Chega no seu e-mail. Relatório Investment and M&A Relatório Investment and M&A: Healthtechs 2024 Compartilhar Baixar o Material A transformação digital está permeando todos os setores, e a saúde não é exceção. As healthtechs, startups que utilizam a tecnologia para criar soluções inovadoras na área da saúde, estão emergindo como forças motrizes para mudanças significativas. Este artigo explora a importância das healthtechs, os investimentos e tendências no setor, desafios e oportunidades, e como a inovação aberta pode impulsionar ainda mais esse segmento. A Importância das Healthtechs As healthtechs desempenham um papel crucial na modernização do sistema de saúde. Elas oferecem soluções que vão desde o gerenciamento de registros médicos eletrônicos até aplicativos de telemedicina e dispositivos vestíveis para monitoramento da saúde. Essas inovações melhoram a eficiência dos serviços de saúde, reduzem custos e aumentam o"
+    },
+    {
+      "id": "check-page-e9e4bb708f",
+      "url": "https://liga.ventures/insights/relatorios/relatorio-investment-and-mampa-logtechs/",
+      "page": "terms",
+      "excerpt": "Relátorio Investment and M&A: Logtechs 2024 Quem Somos Soluções Liga Insights Startup Scanner Fale conosco Quem Somos Soluções Liga Insights Startup Scanner Quero inovar com a Liga Home › Liga Insights › Relatórios Relatórios Relátorio Investment and M&A: Logtechs 2024 Baixe nosso mapeamento de aportes e aquisições para ficar por dentro das principais movimentações do mercado das logtechs. por Liga Ventures 2 de setembro de 2024 Receber o material Gratuito. Chega no seu e-mail. Relátorio Investment and M&A Relátorio Investment and M&A: Logtechs 2024 Compartilhar Baixar o Material O setor de logística, tradicionalmente visto como um dos pilares fundamentais da economia global, tem passado por transformações significativas nos últimos anos. Com o avanço da tecnologia e a digitalização de processos, surgiram as chamadas logtechs, startups e empresas inovadoras que utilizam tecnologias avançadas para otimizar e revolucionar a cadeia logística. Estas empresas têm desempenhado um papel crucial na modernização de um setor que, por muito tempo, foi marcado por práticas manuais e processos ineficientes. O que são Logtechs? As logtechs são empresas que aplicam soluções tecnológicas para enfrentar os desafios da logística. Desde o gerenciamento de frotas e rastreamento de mercadorias até o desenvolvimento de plataformas de marketplace para transporte e armazenamento, essas empresas estão"
+    },
+    {
+      "id": "check-page-f0ac130041",
+      "url": "https://liga.ventures/insights/relatorios/relatorio-investment-e-m-a-agtechs-2024/",
+      "page": "terms",
+      "excerpt": "Relatório Investment & M&A: Agtechs 2024 Quem Somos Soluções Liga Insights Startup Scanner Fale conosco Quem Somos Soluções Liga Insights Startup Scanner Quero inovar com a Liga Home › Liga Insights › Relatórios Relatórios Relatório Investment & M&A: Agtechs 2024 Confira os destaques sobre investimentos e M&As em agtechs em 2024 e descubra como o setor está transformando o agronegócio na América Latina por Liga Ventures 22 de outubro de 2024 Receber o material Gratuito. Chega no seu e-mail. Relatório Investment & M&A Relatório Investment & M&A: Agtechs 2024 Compartilhar Baixar o Material As agtechs, ou startups voltadas para o agronegócio, desempenham um papel crucial na transformação do setor agrícola. Com o uso de tecnologia e inovação, essas empresas têm promovido avanços significativos em produtividade, sustentabilidade e eficiência no campo. Desde soluções para monitoramento de culturas até tecnologias para nutrição de plantas e gestão de recursos hídricos, as agtechs ajudam a enfrentar os desafios globais de segurança alimentar e preservação ambiental. Com a crescente demanda por práticas agrícolas mais eficientes e sustentáveis, as agtechs ganharam destaque como protagonistas na modernização do agronegócio, especialmente na América Latina, onde o setor é um pilar econômico. O Brasil, em particular, é um mercado central, tanto em termos de produção agrícola quanto de"
+    },
+    {
+      "id": "check-page-05d0a51105",
+      "url": "https://liga.ventures/insights/relatorios/relatorio-investment-e-mampa-foodtechs/",
+      "page": "terms",
+      "excerpt": "Relatório Investment and M&A: Foodtechs 2024 Quem Somos Soluções Liga Insights Startup Scanner Fale conosco Quem Somos Soluções Liga Insights Startup Scanner Quero inovar com a Liga Home › Liga Insights › Relatórios Relatórios Relatório Investment and M&A: Foodtechs 2024 Descubra como as foodtechs estão revolucionando a alimentação com inovações tecnológicas e sustentabilidade. por Liga Ventures 24 de junho de 2024 Receber o material Gratuito. Chega no seu e-mail. Relatório Investment and M&A Relatório Investment and M&A: Foodtechs 2024 Compartilhar Baixar Material As foodtechs, ou tecnologias alimentares, são empresas que utilizam inovações tecnológicas para transformar a cadeia de produção, distribuição e consumo de alimentos. Estas startups estão revolucionando a forma como o mundo produz e consome alimentos, introduzindo soluções mais eficientes, sustentáveis e saudáveis. Desde o desenvolvimento de alternativas à carne, como os produtos baseados em plantas, até plataformas avançadas de entrega de alimentos e soluções para reduzir o desperdício, as foodtechs estão na vanguarda da inovação alimentar. A Importância das Foodtechs As foodtechs englobam uma vasta gama de startups que aplicam tecnologia em diversas etapas da cadeia de valor alimentar. Estas empresas estão envolvidas em áreas como agricultura de precisão, biotecnologia alimentar, novos métodos de processamento e"
+    },
+    {
+      "id": "check-page-7a88cd3dac",
+      "url": "https://liga.ventures/insights/startups/relatorio-de-investment-ma-retailtechs/",
+      "page": "terms",
+      "excerpt": "Relatório de Investment e M&A - Retailtechs 2024 Quem Somos Soluções Liga Insights Startup Scanner Fale conosco Quem Somos Soluções Liga Insights Startup Scanner Quero inovar com a Liga Home › Liga Insights › Startups Startups Relatório de Investment e M&A - Retailtechs 2024 Acesse o relatório com dados sobre captação, aquisições e categorias promissoras no setor. Prepare-se para investir no futuro do varejo! por Liga Ventures 11 de abril de 2024 Receber o material Gratuito. Chega no seu e-mail. Relatório Relatório de Investment e M&A - Retailtechs 2024 Compartilhar Baixe o material O varejo está em constante transformação, impulsionado pelas mudanças no comportamento do consumidor e pelas inovações tecnológicas. Nesse cenário, as retailtechs se destacam como protagonistas, oferecendo soluções disruptivas que otimizam processos, personalizam a experiência do cliente e impulsionam o crescimento dos negócios. O que são retailtechs? Retailtechs são startups que desenvolvem soluções tecnológicas para o setor varejista . Abrangem um amplo espectro de soluções, desde ferramentas para gestão de estoque e logística até plataformas de pagamento digital e marketing personalizado. Benefícios das retailtechs para o varejo: Aumento da eficiência: automatizam tarefas repetitivas, otimizam processos e reduzem custos operacionais. Melhora da experiência do cliente: personalizam ofertas,"
+    },
+    {
+      "id": "check-page-9d1e914a12",
+      "url": "https://liga.ventures/insights/artigos/aceleradora-de-startups-o-que-e-e-como-gerar-resultados-com-programa-de-aceleracao/",
+      "page": "details",
+      "excerpt": "Aceleradora de startups: tenha resultados com programa de aceleração Quem Somos Soluções Liga Insights Startup Scanner Fale conosco Quem Somos Soluções Liga Insights Startup Scanner Quero inovar com a Liga Home › Liga Insights › Artigos Artigos Aceleradora de startups: o que é e como gerar resultados com programa de aceleração Quer levar a inovação para dentro das empresas ou crescer sua startup e se conectar com corporações? Entenda como aceleradora de startups pode te ajudar! por Liga Ventures 12 de setembro de 2022 5 min de leitura Compartilhar O ecossistema das novas empresas relacionadas à tecnologia é formado por alguns componentes bem característicos. Podemos dizer que este nicho é composto por 3 campos de atuação: Os empreendedores, que criam novas soluções. Os investidores, que aplicam capital e recursos neste projeto. As organizações que ajudam no desenvolvimento dessas ideias, no caso uma aceleradora de startup em conjunto com grandes corporações. O que é uma aceleradora de startup? Aceleradora de startup é uma organização que tem como principal objetivo fornecer condições para que outras empresa se desenvolvam , principalmente aquelas que estão no período de crescimento, ou seja, após a etapa de ideação de um projeto. Normalmente, esse objetivo é alcançado por meio de um programa de mentoria específica sobre gestão e sobre o negócio, contribuição para encontrar"
+    },
+    {
+      "id": "check-page-8dd511bddf",
+      "url": "https://liga.ventures/insights/artigos/grandes-empresas-criam-programas-para-se-relacionar-com-startups/",
+      "page": "details",
+      "excerpt": "Grandes empresas criam programas para se relacionar com Startups Quem Somos Soluções Liga Insights Startup Scanner Fale conosco Quem Somos Soluções Liga Insights Startup Scanner Quero inovar com a Liga Home › Liga Insights › Artigos Artigos Grandes empresas criam programas para se relacionar com Startups Os programas de corporate venture estão invadindo as principais companhias brasileiras e se tornando ferramentas eficientes em agilizar e desenvolver seus. por Liga Ventures 12 de setembro de 2022 6 min de leitura Compartilhar Os programas de corporate venture estão invadindo as principais companhias brasileiras e se tornando ferramentas eficientes em agilizar e desenvolver seus processos de inovação. Essa unidade de negócio, normalmente, tem total autonomia e, principalmente, não concorre com o setor de pesquisa e desenvolvimento da corporação. Basicamente as empresas estão se aproximando do ecossistema de startup com programas de parceria com esses empreendedores inovadores. O objetivo, claro, é gerar benefícios financeiros ou de inovação, para seus produtos, serviços ou processos. Entre os modelos adotados para garimpar essas empresas nascentes está a parcerias com aceleradoras e incubadoras. Mas algumas companhias tem adotado o investimento em iniciativas independentes, lideradas por seus próprios executivos. O grupo Algar, por exemplo, criou a Algar Ventures em julho. O"
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
     "routes": [],
-    "applicationUrl": [],
+    "applicationUrl": [
+      {
+        "value": "https://liga.ventures/",
+        "evidenceId": "check-route-7c74858eca"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-96178ecea4"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://liga.ventures/insights/categoria/startups/",
         "evidenceId": "check-portfolio-c1a36c8832"
+      },
+      {
+        "value": "https://liga.ventures/insights/tag/startups/",
+        "evidenceId": "check-portfolio-c9506dd4e1"
       }
     ],
     "name": [

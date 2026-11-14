@@ -1,82 +1,437 @@
 {
   "programId": "abovea-startup-accelerator",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://abovea.tech/academy/main/",
+    "https://abovea.tech/academy/accelerator-application-form/",
     "https://abovea.tech/faq/",
+    "https://abovea.tech/investment-research-market-intelligence/",
+    "https://abovea.tech/founder-led-sales-storytelling-strategy/",
     "https://abovea.tech/about-us/",
-    "https://abovea.tech/academy/accelerator-application-form/"
+    "https://abovea.tech/how-do-startup-accelerators-work-2025/",
+    "https://abovea.tech/programmatic-seo-vs-traditional-seo-guide/",
+    "https://abovea.tech/smart-marketing-shipping-containers/",
+    "https://abovea.tech/growth-hacking-myths-2025/",
+    "https://abovea.tech/chinese-companies-global-seo/",
+    "https://abovea.tech/insights-strategies/agencies-wildfire-technology-companies/",
+    "https://abovea.tech/insights-strategies/seo-wildfire-detection-companies/",
+    "https://abovea.tech/korean-companies-seo-global/",
+    "https://abovea.tech/portfolio-startup-growth-operations/"
   ],
   "evidence": [
     {
+      "id": "check-duration-89b155b03b",
+      "url": "https://abovea.tech/programmatic-seo-vs-traditional-seo-guide/",
+      "title": "aboveA Startup Accelerator — program page",
+      "excerpt": "zero to over 200,000 monthly visits in under 12 months. The Setup The site focused on software",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-8ec9eb8b5a",
+      "url": "https://abovea.tech/programmatic-seo-vs-traditional-seo-guide/",
+      "title": "aboveA Startup Accelerator — program page",
+      "excerpt": "posts The Results 3× organic traffic growth in 6 months 40% increase in demo requests from blog users",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-a2b5b958ca",
+      "url": "https://abovea.tech/academy/main/",
+      "title": "aboveA Startup Accelerator — homepage",
+      "excerpt": "activities are designed to be finished in 12 weeks. Want to go faster? You can. Prefer to take your",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c179472719",
+      "url": "https://abovea.tech/chinese-companies-global-seo/",
+      "title": "aboveA Startup Accelerator — portfolio page",
+      "excerpt": "High, depends on CPC in each market Timeline 3–6 months for results, grows over time Immediate traffic",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-0d800997f6",
+      "url": "https://abovea.tech/programmatic-seo-vs-traditional-seo-guide/",
+      "title": "aboveA Startup Accelerator — program page",
+      "excerpt": "build trust where automation can’t. Combining Both: The Hybrid SEO Strategy Programmatic SEO vs Traditional SEO doesn’t",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1d2f28509c",
+      "url": "https://abovea.tech/programmatic-seo-vs-traditional-seo-guide/",
+      "title": "aboveA Startup Accelerator — program page",
+      "excerpt": "where they start. Google also likes clean navigation. Hybrid SEO strategies naturally create it. A blog post supports",
+      "page": "details"
+    },
+    {
+      "id": "check-format-3afff214ea",
+      "url": "https://abovea.tech/chinese-companies-global-seo/",
+      "title": "aboveA Startup Accelerator — portfolio page",
+      "excerpt": "can rely on for sustainable growth. Their team is fully remote, with specialists across Asia, Europe, and North America.",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-70be57b49e",
+      "url": "https://abovea.tech/how-do-startup-accelerators-work-2025/",
+      "title": "aboveA Startup Accelerator — program page",
+      "excerpt": "in Asia and Europe. aboveA Academy stands out for its hybrid format: part education, part execution. Founders graduate",
+      "page": "details"
+    },
+    {
+      "id": "check-format-9da7dd6cbe",
+      "url": "https://abovea.tech/programmatic-seo-vs-traditional-seo-guide/",
+      "title": "aboveA Startup Accelerator — program page",
+      "excerpt": "and help you cover more ground without wasting effort. Hybrid SEO brings reach, depth, and structure – all in one plan.",
+      "page": "details"
+    },
+    {
+      "id": "check-format-a24eb44e0e",
+      "url": "https://abovea.tech/insights-strategies/seo-wildfire-detection-companies/",
+      "title": "aboveA Startup Accelerator — portfolio page",
+      "excerpt": "company. Google requires eligible businesses to make in-person contact with customers, so an online-only platform should",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-bb7452b040",
+      "url": "https://abovea.tech/programmatic-seo-vs-traditional-seo-guide/",
+      "title": "aboveA Startup Accelerator — program page",
+      "excerpt": "precise searches to big, competitive ones. Here’s how a hybrid setup might look: Programmatic: “SEO Services in Boston,”",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c190e90ffe",
+      "url": "https://abovea.tech/how-do-startup-accelerators-work-2025/",
+      "title": "aboveA Startup Accelerator — program page",
+      "excerpt": "than ever, filled with specialized, impact-driven, and hybrid programs that help founders grow faster and smarter. These",
+      "page": "details"
+    },
+    {
+      "id": "check-format-df2db86c5b",
+      "url": "https://abovea.tech/how-do-startup-accelerators-work-2025/",
+      "title": "aboveA Startup Accelerator — program page",
+      "excerpt": "Accelerators in 2026 are evolving. Many now operate hybrid models with online mentorship, sector-specific labs, and",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f47067e301",
+      "url": "https://abovea.tech/programmatic-seo-vs-traditional-seo-guide/",
+      "title": "aboveA Startup Accelerator — program page",
+      "excerpt": "you can achieve rapid growth and long-term trust. This hybrid approach gives your SEO strategy flexibility, speed, and",
+      "page": "details"
+    },
+    {
       "id": "check-name-fae47e30c6",
       "url": "https://abovea.tech/academy/main/",
-      "title": "aboveA Startup Accelerator — homepage checked by scrape.py",
+      "title": "aboveA Startup Accelerator — homepage",
       "excerpt": "aboveA Startup Accelerator Skip to content Home Industries Industries we serve",
       "page": "details"
     },
     {
-      "id": "check-portfolio-36279f2ab2",
-      "url": "https://abovea.tech/faq/",
-      "title": "aboveA Startup Accelerator — terms page checked by scrape.py",
+      "id": "check-portfolio-007243ea09",
+      "url": "https://abovea.tech/korean-companies-seo-global/",
+      "title": "aboveA Startup Accelerator — portfolio page",
+      "excerpt": "Startups → https://abovea.tech/startup-hub/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-07ee64dd37",
+      "url": "https://abovea.tech/investment-research-market-intelligence/",
+      "title": "aboveA Startup Accelerator — terms page",
       "excerpt": "Startups → https://abovea.tech/startup-hub/",
       "page": "terms"
     },
     {
+      "id": "check-portfolio-0e3356844f",
+      "url": "https://abovea.tech/smart-marketing-shipping-containers/",
+      "title": "aboveA Startup Accelerator — terms page",
+      "excerpt": "Startups → https://abovea.tech/startup-hub/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-1019be02a8",
+      "url": "https://abovea.tech/korean-companies-seo-global/",
+      "title": "aboveA Startup Accelerator — portfolio page",
+      "excerpt": "Startups → https://abovea.tech/startup-growth-funding-readiness/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-14e3af029b",
+      "url": "https://abovea.tech/how-do-startup-accelerators-work-2025/",
+      "title": "aboveA Startup Accelerator — program page",
+      "excerpt": "Startups → https://abovea.tech/startup-hub/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1619f14823",
+      "url": "https://abovea.tech/chinese-companies-global-seo/",
+      "title": "aboveA Startup Accelerator — portfolio page",
+      "excerpt": "Startups → https://abovea.tech/startup-hub/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-237497ec2d",
+      "url": "https://abovea.tech/investment-research-market-intelligence/",
+      "title": "aboveA Startup Accelerator — terms page",
+      "excerpt": "Startups → https://abovea.tech/startup-growth-funding-readiness/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-36279f2ab2",
+      "url": "https://abovea.tech/faq/",
+      "title": "aboveA Startup Accelerator — terms page",
+      "excerpt": "Startups → https://abovea.tech/startup-hub/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-42fedc227d",
+      "url": "https://abovea.tech/how-do-startup-accelerators-work-2025/",
+      "title": "aboveA Startup Accelerator — program page",
+      "excerpt": "Startups → https://abovea.tech/startup-growth-funding-readiness/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5189d6591b",
+      "url": "https://abovea.tech/programmatic-seo-vs-traditional-seo-guide/",
+      "title": "aboveA Startup Accelerator — program page",
+      "excerpt": "Startups → https://abovea.tech/startup-hub/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5c5a6ac525",
+      "url": "https://abovea.tech/smart-marketing-shipping-containers/",
+      "title": "aboveA Startup Accelerator — terms page",
+      "excerpt": "Startups → https://abovea.tech/startup-growth-funding-readiness/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6a495584f5",
+      "url": "https://abovea.tech/insights-strategies/agencies-wildfire-technology-companies/",
+      "title": "aboveA Startup Accelerator — portfolio page",
+      "excerpt": "Startups → https://abovea.tech/startup-growth-funding-readiness/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-6ae084eaf7",
+      "url": "https://abovea.tech/insights-strategies/agencies-wildfire-technology-companies/",
+      "title": "aboveA Startup Accelerator — portfolio page",
+      "excerpt": "Startups → https://abovea.tech/startup-hub/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-6d3a6c8ec6",
       "url": "https://abovea.tech/academy/accelerator-application-form/",
-      "title": "aboveA Startup Accelerator — application page checked by scrape.py",
+      "title": "aboveA Startup Accelerator — application page",
       "excerpt": "Startups → https://abovea.tech/startup-growth-funding-readiness/",
       "page": "application"
     },
     {
       "id": "check-portfolio-71841778c5",
       "url": "https://abovea.tech/academy/main/",
-      "title": "aboveA Startup Accelerator — homepage checked by scrape.py",
+      "title": "aboveA Startup Accelerator — homepage",
       "excerpt": "Startups → https://abovea.tech/startup-growth-funding-readiness/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-7588dab690",
+      "url": "https://abovea.tech/founder-led-sales-storytelling-strategy/",
+      "title": "aboveA Startup Accelerator — terms page",
+      "excerpt": "Startups → https://abovea.tech/startup-hub/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7d70399c6c",
+      "url": "https://abovea.tech/portfolio-startup-growth-operations/",
+      "title": "aboveA Startup Accelerator — portfolio page",
+      "excerpt": "Startups → https://abovea.tech/startup-growth-funding-readiness/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-84e556976f",
+      "url": "https://abovea.tech/insights-strategies/seo-wildfire-detection-companies/",
+      "title": "aboveA Startup Accelerator — portfolio page",
+      "excerpt": "Startups → https://abovea.tech/startup-hub/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-8dadcf7c11",
+      "url": "https://abovea.tech/insights-strategies/seo-wildfire-detection-companies/",
+      "title": "aboveA Startup Accelerator — portfolio page",
+      "excerpt": "Startups → https://abovea.tech/startup-growth-funding-readiness/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-a266c752a9",
+      "url": "https://abovea.tech/growth-hacking-myths-2025/",
+      "title": "aboveA Startup Accelerator — program page",
+      "excerpt": "Startups → https://abovea.tech/startup-growth-funding-readiness/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-aef237fd14",
+      "url": "https://abovea.tech/chinese-companies-global-seo/",
+      "title": "aboveA Startup Accelerator — portfolio page",
+      "excerpt": "Startups → https://abovea.tech/startup-growth-funding-readiness/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-b5dc85836f",
+      "url": "https://abovea.tech/portfolio-startup-growth-operations/",
+      "title": "aboveA Startup Accelerator — portfolio page",
+      "excerpt": "Startups → https://abovea.tech/startup-hub/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-bd41018fb9",
       "url": "https://abovea.tech/faq/",
-      "title": "aboveA Startup Accelerator — terms page checked by scrape.py",
+      "title": "aboveA Startup Accelerator — terms page",
       "excerpt": "Startups → https://abovea.tech/startup-growth-funding-readiness/",
       "page": "terms"
     },
     {
+      "id": "check-portfolio-c0087b88e5",
+      "url": "https://abovea.tech/growth-hacking-myths-2025/",
+      "title": "aboveA Startup Accelerator — program page",
+      "excerpt": "Startups → https://abovea.tech/startup-hub/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-c8a9992959",
       "url": "https://abovea.tech/about-us/",
-      "title": "aboveA Startup Accelerator — details page checked by scrape.py",
+      "title": "aboveA Startup Accelerator — program page",
       "excerpt": "Startups → https://abovea.tech/startup-hub/",
       "page": "details"
     },
     {
       "id": "check-portfolio-cfd0a6ad96",
       "url": "https://abovea.tech/academy/accelerator-application-form/",
-      "title": "aboveA Startup Accelerator — application page checked by scrape.py",
+      "title": "aboveA Startup Accelerator — application page",
       "excerpt": "Startups → https://abovea.tech/startup-hub/",
       "page": "application"
     },
     {
       "id": "check-portfolio-d5ff9d70e5",
       "url": "https://abovea.tech/academy/main/",
-      "title": "aboveA Startup Accelerator — homepage checked by scrape.py",
+      "title": "aboveA Startup Accelerator — homepage",
       "excerpt": "Startups → https://abovea.tech/startup-hub/",
       "page": "details"
     },
     {
       "id": "check-portfolio-ec6bedb333",
       "url": "https://abovea.tech/about-us/",
-      "title": "aboveA Startup Accelerator — details page checked by scrape.py",
+      "title": "aboveA Startup Accelerator — program page",
       "excerpt": "Startups → https://abovea.tech/startup-growth-funding-readiness/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-f1d5e5947c",
+      "url": "https://abovea.tech/programmatic-seo-vs-traditional-seo-guide/",
+      "title": "aboveA Startup Accelerator — program page",
+      "excerpt": "Startups → https://abovea.tech/startup-growth-funding-readiness/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-fb6dbaa998",
+      "url": "https://abovea.tech/founder-led-sales-storytelling-strategy/",
+      "title": "aboveA Startup Accelerator — terms page",
+      "excerpt": "Startups → https://abovea.tech/startup-growth-funding-readiness/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-66c6f40d79",
       "url": "https://abovea.tech/academy/main/",
-      "title": "aboveA Startup Accelerator — homepage checked by scrape.py",
+      "title": "aboveA Startup Accelerator — homepage",
       "excerpt": "Submit application → https://abovea.tech/academy/accelerator-application-form/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-9df2a6374d",
+      "url": "https://abovea.tech/academy/main/",
+      "page": "details",
+      "excerpt": "aboveA Startup Accelerator Skip to content Home Industries Industries we serve Environmental, Energy & Sustainability Media & Creative Technology Advanced Manufacturing & Industrial Technology Enterprise Technology & Digital Transformation Services What can we do? International Expansion Startup Accelerator Startup Portfolio Growth & Operations Lifecycle Marketing B2G Entry & Tenders B2B Buyer & Procurement B2C Trust & Conversion AI Trust & Disclosure Readiness Go-To Distribution Compliance & Governance Continuity Startup Fundraising Investment Research & Market Intelligence Market Intelligence & Consulting Crisis & Issue Communication Research Communication Lead Generation Vertical SEO Services Market Diversification & New Export Routes Entity Structure & Jurisdiction Guidance Startups aboveA Startup Hub Where startups build and raise smarter aboveA Hub helps early and late stage startups move from idea to investment with real-world support. Through aboveA Accelerator, Labs, and Capital, founders gain startup advising, traction-building strategies, and investor-focused guidance. From validating ideas to refining products and securing funding, the incubator equips teams with the tools, insights, and systems needed to launch and grow successfully. aboveA Accelerator aboveA Startup Fundraising Readiness Investment Research & Market Intelligence Portfolio Startup Growth &"
+    },
+    {
+      "id": "check-page-64b0c613ae",
+      "url": "https://abovea.tech/academy/accelerator-application-form/",
+      "page": "application",
+      "excerpt": "Apply to aboveA Accelerator Skip to content Home Industries Industries we serve Environmental, Energy & Sustainability Media & Creative Technology Advanced Manufacturing & Industrial Technology Enterprise Technology & Digital Transformation Services What can we do? International Expansion Startup Accelerator Startup Portfolio Growth & Operations Lifecycle Marketing B2G Entry & Tenders B2B Buyer & Procurement B2C Trust & Conversion AI Trust & Disclosure Readiness Go-To Distribution Compliance & Governance Continuity Startup Fundraising Investment Research & Market Intelligence Market Intelligence & Consulting Crisis & Issue Communication Research Communication Lead Generation Vertical SEO Services Market Diversification & New Export Routes Entity Structure & Jurisdiction Guidance Startups aboveA Startup Hub Where startups build and raise smarter aboveA Hub helps early and late stage startups move from idea to investment with real-world support. Through aboveA Accelerator, Labs, and Capital, founders gain startup advising, traction-building strategies, and investor-focused guidance. From validating ideas to refining products and securing funding, the incubator equips teams with the tools, insights, and systems needed to launch and grow successfully. aboveA Accelerator aboveA Startup Fundraising Readiness Investment Research & Market Intelligence Portfolio Startup Growth &"
+    },
+    {
+      "id": "check-page-4e9983e9fa",
+      "url": "https://abovea.tech/faq/",
+      "page": "terms",
+      "excerpt": "Business Growth FAQs | Knowledge Center by aboveA Skip to content Home Industries Industries we serve Environmental, Energy & Sustainability Media & Creative Technology Advanced Manufacturing & Industrial Technology Enterprise Technology & Digital Transformation Services What can we do? International Expansion Startup Accelerator Startup Portfolio Growth & Operations Lifecycle Marketing B2G Entry & Tenders B2B Buyer & Procurement B2C Trust & Conversion AI Trust & Disclosure Readiness Go-To Distribution Compliance & Governance Continuity Startup Fundraising Investment Research & Market Intelligence Market Intelligence & Consulting Crisis & Issue Communication Research Communication Lead Generation Vertical SEO Services Market Diversification & New Export Routes Entity Structure & Jurisdiction Guidance Startups aboveA Startup Hub Where startups build and raise smarter aboveA Hub helps early and late stage startups move from idea to investment with real-world support. Through aboveA Accelerator, Labs, and Capital, founders gain startup advising, traction-building strategies, and investor-focused guidance. From validating ideas to refining products and securing funding, the incubator equips teams with the tools, insights, and systems needed to launch and grow successfully. aboveA Accelerator aboveA Startup Fundraising Readiness Investment Research & Market Intelligence Portfolio"
+    },
+    {
+      "id": "check-page-98f372f493",
+      "url": "https://abovea.tech/investment-research-market-intelligence/",
+      "page": "terms",
+      "excerpt": "Investment Research & Market Intelligence Skip to content Home Industries Industries we serve Environmental, Energy & Sustainability Media & Creative Technology Advanced Manufacturing & Industrial Technology Enterprise Technology & Digital Transformation Services What can we do? International Expansion Startup Accelerator Startup Portfolio Growth & Operations Lifecycle Marketing B2G Entry & Tenders B2B Buyer & Procurement B2C Trust & Conversion AI Trust & Disclosure Readiness Go-To Distribution Compliance & Governance Continuity Startup Fundraising Investment Research & Market Intelligence Market Intelligence & Consulting Crisis & Issue Communication Research Communication Lead Generation Vertical SEO Services Market Diversification & New Export Routes Entity Structure & Jurisdiction Guidance Startups aboveA Startup Hub Where startups build and raise smarter aboveA Hub helps early and late stage startups move from idea to investment with real-world support. Through aboveA Accelerator, Labs, and Capital, founders gain startup advising, traction-building strategies, and investor-focused guidance. From validating ideas to refining products and securing funding, the incubator equips teams with the tools, insights, and systems needed to launch and grow successfully. aboveA Accelerator aboveA Startup Fundraising Readiness Investment Research & Market Intelligence Portfolio Startup"
+    },
+    {
+      "id": "check-page-fe70707afb",
+      "url": "https://abovea.tech/founder-led-sales-storytelling-strategy/",
+      "page": "terms",
+      "excerpt": "Founder-Led Sales Guide for 2026 | aboveA Academy Skip to content Home Industries Industries we serve Environmental, Energy & Sustainability Media & Creative Technology Advanced Manufacturing & Industrial Technology Enterprise Technology & Digital Transformation Services What can we do? International Expansion Startup Accelerator Startup Portfolio Growth & Operations Lifecycle Marketing B2G Entry & Tenders B2B Buyer & Procurement B2C Trust & Conversion AI Trust & Disclosure Readiness Go-To Distribution Compliance & Governance Continuity Startup Fundraising Investment Research & Market Intelligence Market Intelligence & Consulting Crisis & Issue Communication Research Communication Lead Generation Vertical SEO Services Market Diversification & New Export Routes Entity Structure & Jurisdiction Guidance Startups aboveA Startup Hub Where startups build and raise smarter aboveA Hub helps early and late stage startups move from idea to investment with real-world support. Through aboveA Accelerator, Labs, and Capital, founders gain startup advising, traction-building strategies, and investor-focused guidance. From validating ideas to refining products and securing funding, the incubator equips teams with the tools, insights, and systems needed to launch and grow successfully. aboveA Accelerator aboveA Startup Fundraising Readiness Investment Research & Market Intelligence Portfolio"
+    },
+    {
+      "id": "check-page-98a046ef60",
+      "url": "https://abovea.tech/about-us/",
+      "page": "details",
+      "excerpt": "Meet Our Team at aboveA Skip to content Home Industries Industries we serve Environmental, Energy & Sustainability Media & Creative Technology Advanced Manufacturing & Industrial Technology Enterprise Technology & Digital Transformation Services What can we do? International Expansion Startup Accelerator Startup Portfolio Growth & Operations Lifecycle Marketing B2G Entry & Tenders B2B Buyer & Procurement B2C Trust & Conversion AI Trust & Disclosure Readiness Go-To Distribution Compliance & Governance Continuity Startup Fundraising Investment Research & Market Intelligence Market Intelligence & Consulting Crisis & Issue Communication Research Communication Lead Generation Vertical SEO Services Market Diversification & New Export Routes Entity Structure & Jurisdiction Guidance Startups aboveA Startup Hub Where startups build and raise smarter aboveA Hub helps early and late stage startups move from idea to investment with real-world support. Through aboveA Accelerator, Labs, and Capital, founders gain startup advising, traction-building strategies, and investor-focused guidance. From validating ideas to refining products and securing funding, the incubator equips teams with the tools, insights, and systems needed to launch and grow successfully. aboveA Accelerator aboveA Startup Fundraising Readiness Investment Research & Market Intelligence Portfolio Startup Growth & Operations"
+    },
+    {
+      "id": "check-page-6cee20dac0",
+      "url": "https://abovea.tech/how-do-startup-accelerators-work-2025/",
+      "page": "details",
+      "excerpt": "How Do Startup Accelerators Work in 2026? Skip to content Home Industries Industries we serve Environmental, Energy & Sustainability Media & Creative Technology Advanced Manufacturing & Industrial Technology Enterprise Technology & Digital Transformation Services What can we do? International Expansion Startup Accelerator Startup Portfolio Growth & Operations Lifecycle Marketing B2G Entry & Tenders B2B Buyer & Procurement B2C Trust & Conversion AI Trust & Disclosure Readiness Go-To Distribution Compliance & Governance Continuity Startup Fundraising Investment Research & Market Intelligence Market Intelligence & Consulting Crisis & Issue Communication Research Communication Lead Generation Vertical SEO Services Market Diversification & New Export Routes Entity Structure & Jurisdiction Guidance Startups aboveA Startup Hub Where startups build and raise smarter aboveA Hub helps early and late stage startups move from idea to investment with real-world support. Through aboveA Accelerator, Labs, and Capital, founders gain startup advising, traction-building strategies, and investor-focused guidance. From validating ideas to refining products and securing funding, the incubator equips teams with the tools, insights, and systems needed to launch and grow successfully. aboveA Accelerator aboveA Startup Fundraising Readiness Investment Research & Market Intelligence Portfolio Startup"
+    },
+    {
+      "id": "check-page-547a2abf01",
+      "url": "https://abovea.tech/programmatic-seo-vs-traditional-seo-guide/",
+      "page": "details",
+      "excerpt": "Programmatic SEO vs Traditional SEO (2025 Guide) Skip to content Home Industries Industries we serve Environmental, Energy & Sustainability Media & Creative Technology Advanced Manufacturing & Industrial Technology Enterprise Technology & Digital Transformation Services What can we do? International Expansion Startup Accelerator Startup Portfolio Growth & Operations Lifecycle Marketing B2G Entry & Tenders B2B Buyer & Procurement B2C Trust & Conversion AI Trust & Disclosure Readiness Go-To Distribution Compliance & Governance Continuity Startup Fundraising Investment Research & Market Intelligence Market Intelligence & Consulting Crisis & Issue Communication Research Communication Lead Generation Vertical SEO Services Market Diversification & New Export Routes Entity Structure & Jurisdiction Guidance Startups aboveA Startup Hub Where startups build and raise smarter aboveA Hub helps early and late stage startups move from idea to investment with real-world support. Through aboveA Accelerator, Labs, and Capital, founders gain startup advising, traction-building strategies, and investor-focused guidance. From validating ideas to refining products and securing funding, the incubator equips teams with the tools, insights, and systems needed to launch and grow successfully. aboveA Accelerator aboveA Startup Fundraising Readiness Investment Research & Market Intelligence Portfolio"
+    },
+    {
+      "id": "check-page-ee5d187f31",
+      "url": "https://abovea.tech/smart-marketing-shipping-containers/",
+      "page": "terms",
+      "excerpt": "Smart Marketing Tactics for Shipping Containers Skip to content Home Industries Industries we serve Environmental, Energy & Sustainability Media & Creative Technology Advanced Manufacturing & Industrial Technology Enterprise Technology & Digital Transformation Services What can we do? International Expansion Startup Accelerator Startup Portfolio Growth & Operations Lifecycle Marketing B2G Entry & Tenders B2B Buyer & Procurement B2C Trust & Conversion AI Trust & Disclosure Readiness Go-To Distribution Compliance & Governance Continuity Startup Fundraising Investment Research & Market Intelligence Market Intelligence & Consulting Crisis & Issue Communication Research Communication Lead Generation Vertical SEO Services Market Diversification & New Export Routes Entity Structure & Jurisdiction Guidance Startups aboveA Startup Hub Where startups build and raise smarter aboveA Hub helps early and late stage startups move from idea to investment with real-world support. Through aboveA Accelerator, Labs, and Capital, founders gain startup advising, traction-building strategies, and investor-focused guidance. From validating ideas to refining products and securing funding, the incubator equips teams with the tools, insights, and systems needed to launch and grow successfully. aboveA Accelerator aboveA Startup Fundraising Readiness Investment Research & Market Intelligence Portfolio"
+    },
+    {
+      "id": "check-page-eac152f251",
+      "url": "https://abovea.tech/growth-hacking-myths-2025/",
+      "page": "details",
+      "excerpt": "Growth Hacking Myths Founders Must Stop in 2025 Skip to content Home Industries Industries we serve Environmental, Energy & Sustainability Media & Creative Technology Advanced Manufacturing & Industrial Technology Enterprise Technology & Digital Transformation Services What can we do? International Expansion Startup Accelerator Startup Portfolio Growth & Operations Lifecycle Marketing B2G Entry & Tenders B2B Buyer & Procurement B2C Trust & Conversion AI Trust & Disclosure Readiness Go-To Distribution Compliance & Governance Continuity Startup Fundraising Investment Research & Market Intelligence Market Intelligence & Consulting Crisis & Issue Communication Research Communication Lead Generation Vertical SEO Services Market Diversification & New Export Routes Entity Structure & Jurisdiction Guidance Startups aboveA Startup Hub Where startups build and raise smarter aboveA Hub helps early and late stage startups move from idea to investment with real-world support. Through aboveA Accelerator, Labs, and Capital, founders gain startup advising, traction-building strategies, and investor-focused guidance. From validating ideas to refining products and securing funding, the incubator equips teams with the tools, insights, and systems needed to launch and grow successfully. aboveA Accelerator aboveA Startup Fundraising Readiness Investment Research & Market Intelligence Portfolio"
+    },
+    {
+      "id": "check-page-e14f9f5a72",
+      "url": "https://abovea.tech/chinese-companies-global-seo/",
+      "page": "portfolio",
+      "excerpt": "Global SEO Strategies for Chinese Companies Skip to content Home Industries Industries we serve Environmental, Energy & Sustainability Media & Creative Technology Advanced Manufacturing & Industrial Technology Enterprise Technology & Digital Transformation Services What can we do? International Expansion Startup Accelerator Startup Portfolio Growth & Operations Lifecycle Marketing B2G Entry & Tenders B2B Buyer & Procurement B2C Trust & Conversion AI Trust & Disclosure Readiness Go-To Distribution Compliance & Governance Continuity Startup Fundraising Investment Research & Market Intelligence Market Intelligence & Consulting Crisis & Issue Communication Research Communication Lead Generation Vertical SEO Services Market Diversification & New Export Routes Entity Structure & Jurisdiction Guidance Startups aboveA Startup Hub Where startups build and raise smarter aboveA Hub helps early and late stage startups move from idea to investment with real-world support. Through aboveA Accelerator, Labs, and Capital, founders gain startup advising, traction-building strategies, and investor-focused guidance. From validating ideas to refining products and securing funding, the incubator equips teams with the tools, insights, and systems needed to launch and grow successfully. aboveA Accelerator aboveA Startup Fundraising Readiness Investment Research & Market Intelligence Portfolio Startup"
+    },
+    {
+      "id": "check-page-790c07ef1c",
+      "url": "https://abovea.tech/insights-strategies/agencies-wildfire-technology-companies/",
+      "page": "portfolio",
+      "excerpt": "op 10 Agencies for Wildfire Technology Companies Skip to content Home Industries Industries we serve Environmental, Energy & Sustainability Media & Creative Technology Advanced Manufacturing & Industrial Technology Enterprise Technology & Digital Transformation Services What can we do? International Expansion Startup Accelerator Startup Portfolio Growth & Operations Lifecycle Marketing B2G Entry & Tenders B2B Buyer & Procurement B2C Trust & Conversion AI Trust & Disclosure Readiness Go-To Distribution Compliance & Governance Continuity Startup Fundraising Investment Research & Market Intelligence Market Intelligence & Consulting Crisis & Issue Communication Research Communication Lead Generation Vertical SEO Services Market Diversification & New Export Routes Entity Structure & Jurisdiction Guidance Startups aboveA Startup Hub Where startups build and raise smarter aboveA Hub helps early and late stage startups move from idea to investment with real-world support. Through aboveA Accelerator, Labs, and Capital, founders gain startup advising, traction-building strategies, and investor-focused guidance. From validating ideas to refining products and securing funding, the incubator equips teams with the tools, insights, and systems needed to launch and grow successfully. aboveA Accelerator aboveA Startup Fundraising Readiness Investment Research & Market Intelligence Portfolio"
+    },
+    {
+      "id": "check-page-1705aed468",
+      "url": "https://abovea.tech/insights-strategies/seo-wildfire-detection-companies/",
+      "page": "portfolio",
+      "excerpt": "SEO for Wildfire Detection Companies: Reaching Buyers Skip to content Home Industries Industries we serve Environmental, Energy & Sustainability Media & Creative Technology Advanced Manufacturing & Industrial Technology Enterprise Technology & Digital Transformation Services What can we do? International Expansion Startup Accelerator Startup Portfolio Growth & Operations Lifecycle Marketing B2G Entry & Tenders B2B Buyer & Procurement B2C Trust & Conversion AI Trust & Disclosure Readiness Go-To Distribution Compliance & Governance Continuity Startup Fundraising Investment Research & Market Intelligence Market Intelligence & Consulting Crisis & Issue Communication Research Communication Lead Generation Vertical SEO Services Market Diversification & New Export Routes Entity Structure & Jurisdiction Guidance Startups aboveA Startup Hub Where startups build and raise smarter aboveA Hub helps early and late stage startups move from idea to investment with real-world support. Through aboveA Accelerator, Labs, and Capital, founders gain startup advising, traction-building strategies, and investor-focused guidance. From validating ideas to refining products and securing funding, the incubator equips teams with the tools, insights, and systems needed to launch and grow successfully. aboveA Accelerator aboveA Startup Fundraising Readiness Investment Research & Market Intelligence"
+    },
+    {
+      "id": "check-page-00c3a6e09f",
+      "url": "https://abovea.tech/korean-companies-seo-global/",
+      "page": "portfolio",
+      "excerpt": "Korean Companies Going Abroad: Global Growth with SEO Skip to content Home Industries Industries we serve Environmental, Energy & Sustainability Media & Creative Technology Advanced Manufacturing & Industrial Technology Enterprise Technology & Digital Transformation Services What can we do? International Expansion Startup Accelerator Startup Portfolio Growth & Operations Lifecycle Marketing B2G Entry & Tenders B2B Buyer & Procurement B2C Trust & Conversion AI Trust & Disclosure Readiness Go-To Distribution Compliance & Governance Continuity Startup Fundraising Investment Research & Market Intelligence Market Intelligence & Consulting Crisis & Issue Communication Research Communication Lead Generation Vertical SEO Services Market Diversification & New Export Routes Entity Structure & Jurisdiction Guidance Startups aboveA Startup Hub Where startups build and raise smarter aboveA Hub helps early and late stage startups move from idea to investment with real-world support. Through aboveA Accelerator, Labs, and Capital, founders gain startup advising, traction-building strategies, and investor-focused guidance. From validating ideas to refining products and securing funding, the incubator equips teams with the tools, insights, and systems needed to launch and grow successfully. aboveA Accelerator aboveA Startup Fundraising Readiness Investment Research & Market Intelligence"
+    },
+    {
+      "id": "check-page-5bec6c11db",
+      "url": "https://abovea.tech/portfolio-startup-growth-operations/",
+      "page": "portfolio",
+      "excerpt": "Portfolio Startup Growth & Operations | aboveA Skip to content Home Industries Industries we serve Environmental, Energy & Sustainability Media & Creative Technology Advanced Manufacturing & Industrial Technology Enterprise Technology & Digital Transformation Services What can we do? International Expansion Startup Accelerator Startup Portfolio Growth & Operations Lifecycle Marketing B2G Entry & Tenders B2B Buyer & Procurement B2C Trust & Conversion AI Trust & Disclosure Readiness Go-To Distribution Compliance & Governance Continuity Startup Fundraising Investment Research & Market Intelligence Market Intelligence & Consulting Crisis & Issue Communication Research Communication Lead Generation Vertical SEO Services Market Diversification & New Export Routes Entity Structure & Jurisdiction Guidance Startups aboveA Startup Hub Where startups build and raise smarter aboveA Hub helps early and late stage startups move from idea to investment with real-world support. Through aboveA Accelerator, Labs, and Capital, founders gain startup advising, traction-building strategies, and investor-focused guidance. From validating ideas to refining products and securing funding, the incubator equips teams with the tools, insights, and systems needed to launch and grow successfully. aboveA Accelerator aboveA Startup Fundraising Readiness Investment Research & Market Intelligence Portfolio"
     }
   ],
   "findings": {
@@ -97,8 +452,41 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12",
+        "evidenceId": "check-duration-a2b5b958ca"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-89b155b03b"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-8ec9eb8b5a"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-c190e90ffe"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-3afff214ea"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-a24eb44e0e"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://abovea.tech/startup-growth-funding-readiness/",

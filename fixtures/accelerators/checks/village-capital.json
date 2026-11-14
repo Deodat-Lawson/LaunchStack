@@ -1,42 +1,369 @@
 {
   "programId": "village-capital",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://vilcap.com/",
-    "https://vilcap.com/about-us/story"
+    "https://vilcap.com/terms-of-service",
+    "https://vilcap.com/programs/ibm-hyper-protect-accelerator-cohort-4",
+    "https://vilcap.com/about-us",
+    "https://vilcap.com/about-us/our-team",
+    "https://vilcap.com/about-us/story",
+    "https://vilcap.com/entrepreneurs/peer-selected-investment",
+    "https://vilcap.com/eso-programs",
+    "https://vilcap.com/impactinvesting",
+    "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
+    "https://newsandviews.vilcap.com/press-releases/kenyan-based-startup-aquarech-receives-usd-350k-investment-from-village-capitals-reducing-inequalities-investment-facility",
+    "https://vilcap.com/programs",
+    "https://vilcap.com/programs/adapt-innovation-for-social-resilience",
+    "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states",
+    "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states-2024"
   ],
   "evidence": [
     {
+      "id": "check-announced-1a6d0df3b6",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states",
+      "title": "Village Capital — program page",
+      "excerpt": "for support. Program Timeline August 1 Applications Open September 1 Applications Close October to December Program Dates Virtual Workshop 1: October 17-21 Virtual",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-8d0f10f7e9",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states",
+      "title": "Village Capital — program page",
+      "excerpt": "will also receive $3,000 for support. Program Timeline August 1 Applications Open September 1 Applications Close October to December Program Dates Virtual",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-03d9ef57c0",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states-2024",
+      "title": "Village Capital — program page",
+      "excerpt": "startups selected by their peers will receive grant capital of USD $50,000 to support their operations. All companies will also receive $3,000",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-ad1128ba36",
+      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
+      "title": "Village Capital — terms page",
+      "excerpt": "170K orders, and supports over 150 active vendors on its platform. A USD 150K investment, structured as a blend of a convertible note and",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-c7ddfcd78f",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states",
+      "title": "Village Capital — program page",
+      "excerpt": "$50,000 to support their operations. All companies will also receive $3,000 for support. Program Timeline August 1 Applications Open September 1",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-dc1a9e72ff",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states-2024",
+      "title": "Village Capital — program page",
+      "excerpt": "$50,000 to support their operations. All companies will also receive $3,000 for support. Mentorship Opportunities to network and receive",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-fec31c4f79",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states",
+      "title": "Village Capital — program page",
+      "excerpt": "startups selected by their peers will receive grant capital of USD $50,000 to support their operations. All companies will also receive $3,000",
+      "page": "details"
+    },
+    {
+      "id": "check-email-7b2a9c351f",
+      "url": "https://vilcap.com/terms-of-service",
+      "title": "Village Capital — terms page",
+      "excerpt": "info@vilcap.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-bf19937a10",
+      "url": "https://vilcap.com/terms-of-service",
+      "title": "Village Capital — terms page",
+      "excerpt": "920 Washington, District of Columbia 20005 Email Address: info@vilcap.com Effective as of July 01, 2016 Home About Us Our Programs",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-0991d04df3",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states-2024",
+      "title": "Village Capital — program page",
+      "excerpt": "Close January 2024 Cohort Selection February - May, 2024 Virtual Workshops & In-Person Program Summit Virtual Workshop Week",
+      "page": "details"
+    },
+    {
+      "id": "check-format-11ad44902c",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states-2024",
+      "title": "Village Capital — program page",
+      "excerpt": "Program Summit Virtual Workshop Week 1: February 20 to 23 Virtual Workshop Week 2: March 18 to 21 Virtual Workshop Week 3:",
+      "page": "details"
+    },
+    {
+      "id": "check-format-15dbfccbfa",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states",
+      "title": "Village Capital — program page",
+      "excerpt": "December Program Dates Virtual Workshop 1: October 17-21 Virtual Workshop 2: November 14-18 Virtual Workshop 3: November",
+      "page": "details"
+    },
+    {
+      "id": "check-format-2d12edd0dc",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states-2024",
+      "title": "Village Capital — program page",
+      "excerpt": "February 20 to 23 Virtual Workshop Week 2: March 18 to 21 Virtual Workshop Week 3: April 15 to 18 In-Person Program Summit",
+      "page": "details"
+    },
+    {
+      "id": "check-format-314d0c1f7a",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states",
+      "title": "Village Capital — program page",
+      "excerpt": "1: October 17-21 Virtual Workshop 2: November 14-18 Virtual Workshop 3: November 28-December 2 In-Person Venture",
+      "page": "details"
+    },
+    {
+      "id": "check-format-4d51a9f0a6",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states-2024",
+      "title": "Village Capital — program page",
+      "excerpt": "- May, 2024 Virtual Workshops & In-Person Program Summit Virtual Workshop Week 1: February 20 to 23 Virtual Workshop Week",
+      "page": "details"
+    },
+    {
+      "id": "check-format-905d7059a2",
+      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
+      "title": "Village Capital — terms page",
+      "excerpt": "chain, strengthen our sales efforts, and deepen our virtual care capabilities,” says Isidore Kpotufe, Founder of Rivia",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-9311070b61",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states",
+      "title": "Village Capital — program page",
+      "excerpt": "1 Applications Close October to December Program Dates Virtual Workshop 1: October 17-21 Virtual Workshop 2: November",
+      "page": "details"
+    },
+    {
+      "id": "check-format-a36c5d9268",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states",
+      "title": "Village Capital — program page",
+      "excerpt": "November 14-18 Virtual Workshop 3: November 28-December 2 In-Person Venture Forum: December 5-7 in NYC Frequently Asked",
+      "page": "details"
+    },
+    {
+      "id": "check-format-a49d1c7a66",
+      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
+      "title": "Village Capital — terms page",
+      "excerpt": "clinics, offering seamless access to both virtual and in-person care through a single membership. By combining digital",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-b24c5020bc",
+      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
+      "title": "Village Capital — terms page",
+      "excerpt": "chain of branded clinics, offering seamless access to both virtual and in-person care through a single membership. By",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-c9b1d4483e",
+      "url": "https://vilcap.com/impactinvesting",
+      "title": "Village Capital — program page",
+      "excerpt": "offering flexible financing – such as equity, debt, and hybrid structures – connecting impact-creating startups with the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d7a33122bd",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states-2024",
+      "title": "Village Capital — program page",
+      "excerpt": "Cohort Selection February - May, 2024 Virtual Workshops & In-Person Program Summit Virtual Workshop Week 1: February 20 to 23",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e026da934f",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states-2024",
+      "title": "Village Capital — program page",
+      "excerpt": "2: March 18 to 21 Virtual Workshop Week 3: April 15 to 18 In-Person Program Summit (two days): May 16 and 17 in New York City",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f42fde7b68",
+      "url": "https://vilcap.com/about-us/story",
+      "title": "Village Capital — program page",
+      "excerpt": "We launched a participatory decision-making model We went virtual with our programming and reinvented our systems to enable",
+      "page": "details"
+    },
+    {
+      "id": "check-location-b407a3281f",
+      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
+      "title": "Village Capital — terms page",
+      "excerpt": "platform built for African SMEs, both based in Accra. The Facility works in partnership",
+      "page": "terms"
+    },
+    {
       "id": "check-name-ca0527c6b1",
       "url": "https://vilcap.com/",
-      "title": "Village Capital — homepage checked by scrape.py",
+      "title": "Village Capital — homepage",
       "excerpt": "Welcome to Village Capital Open Main Menu Donate Unlocking social and financial",
       "page": "details"
     },
     {
       "id": "check-route-1b2e5d0844",
       "url": "https://vilcap.com/",
-      "title": "Village Capital — homepage checked by scrape.py",
+      "title": "Village Capital — homepage",
       "excerpt": "Apply to one of our programs for startups → https://vilcap.com/programs",
+      "page": "details"
+    },
+    {
+      "id": "check-route-876f539100",
+      "url": "https://vilcap.com/about-us",
+      "title": "Village Capital — program page",
+      "excerpt": "Apply to one of our programs for startups → https://vilcap.com/programs",
+      "page": "details"
+    },
+    {
+      "id": "check-route-88b3afa963",
+      "url": "https://vilcap.com/about-us",
+      "title": "Village Capital — program page",
+      "excerpt": "Apply to one of our programs for ESOs → https://vilcap.com/eso-programs",
       "page": "details"
     },
     {
       "id": "check-route-97fbde5212",
       "url": "https://vilcap.com/",
-      "title": "Village Capital — homepage checked by scrape.py",
+      "title": "Village Capital — homepage",
       "excerpt": "Village Capital → https://vilcap.com/",
       "page": "details"
     },
     {
+      "id": "check-route-b11551219e",
+      "url": "https://vilcap.com/programs",
+      "title": "Village Capital — program page",
+      "excerpt": "APPLY NOW → https://vilcap.com/programs/vilcap-innovative-capital-facility-nwa",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c6db6a3dc9",
+      "url": "https://vilcap.com/programs/ibm-hyper-protect-accelerator-cohort-4",
+      "title": "Village Capital — batches page",
+      "excerpt": "APPLY NOW → https://vilcap.com/programs/vilcap-innovative-capital-facility-nwa",
+      "page": "batches"
+    },
+    {
       "id": "check-route-d3cc7e2716",
       "url": "https://vilcap.com/",
-      "title": "Village Capital — homepage checked by scrape.py",
+      "title": "Village Capital — homepage",
       "excerpt": "Apply to one of our programs for ESOs → https://vilcap.com/eso-programs",
+      "page": "details"
+    },
+    {
+      "id": "check-route-fa22bc87da",
+      "url": "https://vilcap.com/impactinvesting",
+      "title": "Village Capital — program page",
+      "excerpt": "Apply now. → https://vilcap.com/programs/vilcap-innovative-capital-facility-nwa",
+      "page": "details"
+    },
+    {
+      "id": "check-status-68ab4749a7",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states-2024",
+      "title": "Village Capital — program page",
+      "excerpt": "also be successful pilots, number of users, and/or strategic partnerships). Who Should Apply The call for applications is open to startups in the United States building high-growth, scalable solutions that address one or more of the",
       "page": "details"
     }
   ],
+  "pageQuotes": [
+    {
+      "id": "check-page-7f8e743387",
+      "url": "https://vilcap.com/",
+      "page": "details",
+      "excerpt": "Welcome to Village Capital Open Main Menu Donate Unlocking social and financial capital for impact-creating startups solving the world’s biggest problems. READ OUR 2025 IMPACT REPORT READ OUR ORIGIN STORY READ OUR 2025 IMPACT REPORT READ OUR ORIGIN STORY Real impact takes root when startups and ecosystems grow together. We support entrepreneurs through accelerator programs and resources across our thematic areas: Climate Innovation & Adaptation, Economic Mobility, and Equitable Access to Essential Services. Learn more about our startup programs. We strengthen ecosystems by partnering with locally-led ESOs to co-deliver programs for entrepreneurs. We also equip ESOs with tools, methodologies, and curriculum. Learn more about our ESO programs. We unlock capital by structuring, managing, and deploying funds through a variety of financing structures (such as equity, debt, and revenue-share) to connect impact-creating startups with the right type of capital for them. Learn more about our impact investing work. We reimagine the entrepreneurship support system and build tools everyone can use . Use our tools today. Say Hello to the Founders Driving Impact QuinTerra Petaling Jaya, Malaysia Food waste QuinTerra “In less than a year, we’ve successfully diverted over 1 tonne of food waste from landfills, with a target of diverting up to 12 tonnes annually.” QuinTerra transforms edible"
+    },
+    {
+      "id": "check-page-b2b7686aa7",
+      "url": "https://vilcap.com/terms-of-service",
+      "page": "terms",
+      "excerpt": "Terms of Service • Village Capital Open Main Menu Donate Terms of Service Agreement between User and http//:www.vilcap.com Welcome to http//:www.vilcap.com. The http//:www.vilcap.com website (the “Site”) is comprised of various web pages operated by VilCap, Inc. (“VilCap”). http//:www.vilcap.com is offered to you conditioned on your acceptance without modification of the terms, conditions, and notices contained herein (the “Terms”). Your use of http//:www.vilcap.com constitutes your agreement to all such Terms. Please read these terms carefully, and keep a copy of them for your reference. http//:www.vilcap.com is a Non-profit Site Village Capital finds, trains, and funds entrepreneurs solving real-world problems. Electronic Communications Visiting http//:www.vilcap.com or sending emails to VilCap constitutes electronic communications. You consent to receive electronic communications and you agree that all agreements, notices, disclosures and other communications that we provide to you electronically, via email and on the Site, satisfy any legal requirement that such communications be in writing. VilCap does not knowingly collect, either online or offline, personal information from persons under the age of thirteen. If you are under 18, you may use http//:www.vilcap.com only with permission of a parent or guardian. Links to Third Party Sites / Third Party Services"
+    },
+    {
+      "id": "check-page-e1329f8bf2",
+      "url": "https://vilcap.com/programs/ibm-hyper-protect-accelerator-cohort-4",
+      "page": "batches",
+      "excerpt": "Our Programs for Entrepreneurs • Village Capital Open Main Menu Donate Our Entrepreneur Accelerator Programs Solving big problems for people and the planet. Current Programs Past Programs Get Involved News About our Programs for Entrepreneurs We fuel the growth of sustainable and impactful businesses by unlocking capital for early-stage entrepreneurs who are building emergent solutions for social, economic, and environmental challenges around the world. We’ve run 150+ accelerators. We equip founders with unique tools to increase their efficiency, sustainability, impact, and inclusiveness. Entrepreneurs, read on for opportunities to apply to our programs. To learn more about our programs that train and support Entrepreneur Support Organizations (ESOs), click here . Open Applications VilCap Innovative Capital Facility NWA Region: United States Description Investing innovative financing instruments into early-stage, scalable businesses in Northwest Arkansas to drive mission-aligned growth and impact. APPLY NOW Current Programs Choose thematic area All Climate Innovation & Adaptation Economic Mobility Equitable Access to Essential Services Choose region All Europe Latin America Middle East & North Africa Asia Sub-Saharan Africa United States Global Choose audience All Entrepreneur Entrepreneur Support Organization Past Programs Choose a sector or region to see more. Choose"
+    },
+    {
+      "id": "check-page-e24651924e",
+      "url": "https://vilcap.com/about-us",
+      "page": "details",
+      "excerpt": "Welcome to Village Capital Open Main Menu Donate Unlocking social and financial capital for impact-creating startups solving the world’s biggest problems. READ OUR 2025 IMPACT REPORT READ OUR ORIGIN STORY READ OUR 2025 IMPACT REPORT READ OUR ORIGIN STORY Real impact takes root when startups and ecosystems grow together. We support entrepreneurs through accelerator programs and resources across our thematic areas: Climate Innovation & Adaptation, Economic Mobility, and Equitable Access to Essential Services. Learn more about our startup programs. We strengthen ecosystems by partnering with locally-led ESOs to co-deliver programs for entrepreneurs. We also equip ESOs with tools, methodologies, and curriculum. Learn more about our ESO programs. We unlock capital by structuring, managing, and deploying funds through a variety of financing structures (such as equity, debt, and revenue-share) to connect impact-creating startups with the right type of capital for them. Learn more about our impact investing work. We reimagine the entrepreneurship support system and build tools everyone can use . Use our tools today. Say Hello to the Founders Driving Impact QuinTerra Petaling Jaya, Malaysia Food waste QuinTerra “In less than a year, we’ve successfully diverted over 1 tonne of food waste from landfills, with a target of diverting up to 12 tonnes annually.” QuinTerra transforms edible"
+    },
+    {
+      "id": "check-page-bb3a29e1d2",
+      "url": "https://vilcap.com/about-us/our-team",
+      "page": "details",
+      "excerpt": "Our Team • Village Capital Open Main Menu Donate Our Team Our experienced team works across four continents to support entrepreneurs. Meet the people who make Village Capital what it is... Martin Alexis Program Manager, United States Christine Aquino Head of Team & Organizational Development Costanza Beltrame Director of Business Development Nathaly Botero Senior Manager, Learning & Innovations Ellen Brooks Chief Executive Officer Kelly Bryan Regional Director, United States Şükran Delan Calleja Employee Experience and Business Operations Manager Sofía Cándano Communications and Branding Director Sophia Fellner Senior Manager, People Operations Mariana Gonzalez Senior Associate, Programs Daniela Guerrero Senior Manager, Latin America Kasey Homol Senior Associate, Finance Michelle Jenn Finance and Grants Manager Yazmin Jumaali Senior Program Manager Jesse Karuga Investment Analyst Audrey Mate Senior Program Manager, Africa Heather Matranga Managing Director of Venture and Investments Deepak Menon Global Program Consultant Husein M. Merchant Investment Officer Alyssa Padron Program Manager, United States Robert Pryor Finance Director Luisa Salazar Technical Project Coordinator Edna Samron Senior Program Associate Emma Scarf Program Manager Cali Simmons Senior Investment Analyst, United States Meredith Storton Senior Manager, Impact Investments Eva Waweru Communications Manager"
+    },
+    {
+      "id": "check-page-4648fbb6df",
+      "url": "https://vilcap.com/about-us/story",
+      "page": "details",
+      "excerpt": "The Village Capital Story • Village Capital Open Main Menu Donate Our Story Learn about Village Capital's story, and be part of our next chapter. Learn how to get involved . 2009 Village Capital’s origin story Village Capital started with a revolutionary mission: to challenge the conventions of the traditional investment landscape. Read more in Ross Baird’s book, The Innovation Blind Spot . Village Capital began as the seed of a revolutionary idea from Ross Baird and Bob Patillo, with the pilot program co-designed by Sean Foote. Its name combined the concepts of village banking and venture capital: a more transparent, equitable version of the machine that fuels entrepreneurship. Originally a pilot initiative of First Light Ventures, an affiliate of impact investing pioneer Gray Matters Capital , Village Capital launched its first accelerator in New Orleans in collaboration with the IDEA Village. This inaugural program introduced a groundbreaking model where a cohort of entrepreneurs collectively selected a peer to receive investment , setting a precedent for future programs. 2010 Village Capital incorporates as a 501(c)3 nonprofit organization, and its peer-selected methodology expands internationally Under the Mango Tree became the first peer-selected startup outside the US, helping revive India’s declining honeybee population by selling fair trade honey. 2012 Village Capital"
+    },
+    {
+      "id": "check-page-7f0f3a2f3f",
+      "url": "https://vilcap.com/entrepreneurs/peer-selected-investment",
+      "page": "terms",
+      "excerpt": "Village Capital Open Main Menu Donate The Peer Due Diligence and Selection Model Structured, honest, peer-driven insights to grow better At Village Capital, we believe entrepreneurs closest to the problem have the best insights. Through a structured framework and facilitated peer due diligence, we create space for honest conversations that surface real organizational challenges. In our programs, founders rank one another based on these insights to help determine capital allocation. We've run this model 70+ times, with evidence it reaches entrepreneurs who might otherwise be overlooked by traditional finance. We continue refining the approach as the ecosystem evolves. The Story Behind Our Method When Village Capital was founded in 2009, the dominant investment model concentrated decision-making power among a small group of investors, often disconnected from the realities founders faced on the ground. We tested a different idea: what if entrepreneurs themselves played a central role in deciding where capital should go? This led to the creation of Village Capital's peer due diligence and selection model, first deployed through our inaugural fund, Village Capital I (VCI). Founders participate in structured feedback, diligence, and ranking processes – bringing real operating insight into investment decisions. This approach demonstrated that capital could be deployed more equitably"
+    },
+    {
+      "id": "check-page-ea8f8f6453",
+      "url": "https://vilcap.com/eso-programs",
+      "page": "details",
+      "excerpt": "ESO Programs • Village Capital Open Main Menu Donate Our ESO Accelerator Programs Supporting the organizations that empower entrepreneurs solving big problems for people and the planet. Current Programs Past Programs Get Involved News About our Programs for Entrepreneur Support Organizations (ESOs) We develop, test, and share new tools, processes, and practices that ESOs can use to unlock social and financial capital for early-stage, impact-creating entrepreneurs. The Village Capital “accelerator-for-accelerators” program model helps ESOs improve their strategy, sustainability, and impact. Ecosystem builders and ESO founders, read on for opportunities to apply to our programs. To learn more about our programs that train and support impact-creating startups, click here . Current Programs Choose thematic area All Climate Innovation & Adaptation Economic Mobility Equitable Access to Essential Services Choose region All Europe Latin America Middle East & North Africa Asia Sub-Saharan Africa United States Global Choose audience All Entrepreneur Entrepreneur Support Organization Past Programs Choose a sector or region to see more. Choose thematic area All Climate Innovation & Adaptation Economic Mobility Equitable Access to Essential Services Choose region All Europe Latin America Middle East & North Africa Asia Sub-Saharan Africa United States Global Choose audience All"
+    },
+    {
+      "id": "check-page-2f46506c1b",
+      "url": "https://vilcap.com/impactinvesting",
+      "page": "details",
+      "excerpt": "Impact Investing • Village Capital Open Main Menu Donate Impact Investing Investing in high-impact solutions with transformative potential How We Invest OUR Investment Facilities Our Partners The Latest We invest in early-stage startups advancing economic mobility and resilience. Partner with us! How We Invest We design and manage funds offering flexible financing – such as equity, debt, and hybrid structures – connecting impact-creating startups with the right capital. Our strategy builds on Village Capital’s tools and insights while pioneering new approaches that unlock capital for entrepreneurs – and the broader impact investing ecosystem. Portfolio Companies Search by Name Choose Region All Asia Latin America Middle East & North Africa Sub-Saharan Africa United States Choose Facility All Vilcap Investments Financial Health Innovation Fund Reducing Inequalities Facility Women in Tech Africa Ecosystem Catalyst Facility Choose Thematic Area All Economic Mobility Climate Innovation & Adaptation Equitable Access to Services Exited 1DocWay Exited Advocatia Solutions Andela AponTech Aquarech Arable Labs Bandhu BeMe Global Bena Care Billpocket Exited 1 2 3 4 5 » By the Numbers 116 early-stage startups globally have received direct investment 5 facilities 5 regions 11 SDGs impacted by our portfolio companies $17M USD total dollars invested $1B USD total capital raised by portfolio"
+    },
+    {
+      "id": "check-page-43238eafef",
+      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
+      "page": "terms",
+      "excerpt": "Africa Ecosystem Catalysts Facility Announces Initial Investments in Ghana-Based Startups Rivia Clinics and VDL Fulfilment Open Main Menu Close Main Menu Home About Us The Village Capital Story Our Team Careers Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) News & Publications Blogs Press Releases Reports How We Support Entrepreneurs Our Tools for Startups and ESO's Peer-Selected Investment Impact Investing Our Alumni Become a Mentor Support Our Mission Results & Impact Donate Africa Ecosystem Catalysts Facility Announces Initial Investments in Ghana-Based Startups Rivia Clinics and VDL Fulfilment Village Capital, via the Africa Ecosystem Catalysts Facility, deploys USD 350K to enterprises advancing healthcare and e-commerce logistics in Ghana Share Twitter Facebook LinkedIn Accra, Ghana (May 7, 2026) – The Africa Ecosystem Catalysts Facility , a USD 4M pilot investment facility managed by Village Capital with funding from the Dutch Entrepreneurial Development Bank ( FMO ) and the Netherlands Enterprise Agency ( RVO ), has announced its first two investments in Ghana. The Facility is deploying capital into Rivia Clinics , a tech-enabled primary healthcare startup, and VDL Fulfilment , an e-commerce logistics platform built for African SMEs, both based in Accra. The Facility works in partnership with locally-led Entrepreneur Support"
+    },
+    {
+      "id": "check-page-c3a93e6c68",
+      "url": "https://newsandviews.vilcap.com/press-releases/kenyan-based-startup-aquarech-receives-usd-350k-investment-from-village-capitals-reducing-inequalities-investment-facility",
+      "page": "terms",
+      "excerpt": "Kenyan-Based Startup Aquarech Receives USD 350K Investment From Village Capital’s Reducing Inequalities Investment Facility Open Main Menu Close Main Menu Home About Us The Village Capital Story Our Team Careers Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) News & Publications Blogs Press Releases Reports How We Support Entrepreneurs Our Tools for Startups and ESO's Peer-Selected Investment Impact Investing Our Alumni Become a Mentor Support Our Mission Results & Impact Donate Kenyan-Based Startup Aquarech Receives USD 350K Investment From Village Capital’s Reducing Inequalities Investment Facility Aquarech secures USD 350K investment to strengthen aquaculture in Kenya Share Twitter Facebook LinkedIn Village Capital has announced its latest investment in Aquarech, a Kenyan agtech startup that enables small and medium-sized fish farmers to become more productive and profitable. Nairobi, Kenya (9 July, 2024) – Village Capital has announced its latest investment in Aquarech , a Kenyan agtech startup that enables small and medium-sized fish farmers to become more productive and profitable by providing them with access to quality fish feed, credit, and buyers. This investment comes from Village Capital’s Reducing Inequalities Investment Facility, backed by FMO’s MASSIF Fund , established to support financial inclusion by supporting innovative"
+    },
+    {
+      "id": "check-page-a65e77d7f5",
+      "url": "https://vilcap.com/programs",
+      "page": "details",
+      "excerpt": "Our Programs for Entrepreneurs • Village Capital Open Main Menu Donate Our Entrepreneur Accelerator Programs Solving big problems for people and the planet. Current Programs Past Programs Get Involved News About our Programs for Entrepreneurs We fuel the growth of sustainable and impactful businesses by unlocking capital for early-stage entrepreneurs who are building emergent solutions for social, economic, and environmental challenges around the world. We’ve run 150+ accelerators. We equip founders with unique tools to increase their efficiency, sustainability, impact, and inclusiveness. Entrepreneurs, read on for opportunities to apply to our programs. To learn more about our programs that train and support Entrepreneur Support Organizations (ESOs), click here . Open Applications VilCap Innovative Capital Facility NWA Region: United States Description Investing innovative financing instruments into early-stage, scalable businesses in Northwest Arkansas to drive mission-aligned growth and impact. APPLY NOW Current Programs Choose thematic area All Climate Innovation & Adaptation Economic Mobility Equitable Access to Essential Services Choose region All Europe Latin America Middle East & North Africa Asia Sub-Saharan Africa United States Global Choose audience All Entrepreneur Entrepreneur Support Organization Past Programs Choose a sector or region to see more. Choose"
+    },
+    {
+      "id": "check-page-fd1a4301fc",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience",
+      "page": "details",
+      "excerpt": "ADAPT: Social Innovation for a More Resilient Future in Latin America • Village Capital Open Main Menu Donate ADAPT: Social Innovation for a More Resilient Future in Latin America Learn about our program supporting individual and community resilience in Latin America About the Program Lee en español Latin America is still lagging in providing financial protection to its population, as approximately 192 million Latin Americans do not have access to health care services due to financial limitations. Added to the region's latent financial and health deficiencies, it has been historically affected by climate change, natural disasters, health inequity, as well as food, energy, and economic insecurity. ADAPT: Social Innovation for a More Resilient Future is an accelerator for impact-driven startups developing bold solutions that enable equity, democratize access, and strengthen communities and individuals in the face of climate change, inequality, and other challenges to individual and community wellbeing. Startups Recruitment Disaster Preparedness - Startups that measure climate data, forecast climate needs, or offer affordable insurance solutions. We are also interested in solutions that increase access to sustainable and reliable sources of water, power, and food. Health and Wellness - Startups that help democratize access to clinical information and specialists, promote and"
+    },
+    {
+      "id": "check-page-19bfb81a30",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states",
+      "page": "details",
+      "excerpt": "ADAPT: Social Innovation for a More Resilient Future in the United States • Village Capital Open Main Menu Donate ADAPT: Social Innovation for a More Resilient Future in the United States Learn more about the initiative to help communities adapt to challenges related to climate change, healthcare, wellness, and economic mobility ABOUT THE PROGRAM FACTORS WE CONSIDER WHO SHOULD APPLY? FREQUENTLY ASKED QUESTIONS About the Program Lack of access to financial services, healthcare, employment benefits and adequate financial protection has disproportionately impacted historically excluded and underserved communities. The pandemic and the rise of natural disasters due to climate change have elevated these challenges. ADAPT: Social Innovation for a More Resilient Future in the United States The new dual-track program, with support from MetLife Foundation, will support 20-24 startups that help communities and individuals adapt to challenges related to climate change, healthcare, wellness, and economic mobility. Eligibility Legal incorporation as a for-profit entity Headquarters or operations in the US Market-based solution that tackles social resilience challenges A minimum viable product (MVP), and raised less than $1.5M in equity At least one full-time founder based in the US Meaningful customer or business validation (not limited to revenue, it can also be successful pilots, number"
+    },
+    {
+      "id": "check-page-88f5f3bc72",
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states-2024",
+      "page": "details",
+      "excerpt": "ADAPT: Social Innovation for a More Resilient Future United States 2024 • Village Capital Open Main Menu Donate ADAPT: Social Innovation for a More Resilient Future, United States 2024 An initiative to support impact-creating founders around economic mobility in the United States ABOUT THE PROGRAM FACTORS WE CONSIDER WHO SHOULD APPLY? FREQUENTLY ASKED QUESTIONS About the Program The lack of economic mobility, wealth inequality, and health disparities threaten the global population, especially historically marginalized communities, further creating systemic barriers to long-term stability. The agile startup environment is where the solutions exist to build a more resilient, confident, and financially healthy future for all. The second iteration of ADAPT: Social Innovation for a More Resilient Future will support 10 to 12 founders proximate to the issues and communities they serve, that are building solutions that address Economic Inclusion, Financial Health, and Community Resilience impacting underserved and underrepresented communities. Meet the Cohort Advisory Board Tatiana Holcomb Sr. Director, Financial Wellness Solutions, TIAA Chianoo Adrian Managing Director, Financial Wellness Solutions and Fintech Engagement, TIAA Renee King Founder & CEO, FundBlackFounders Havell Rodrigues Co-Founder & CEO, New Majority Capital Aimeelene Gaspar Chief Product Officer, CNote Elizabeth"
+    }
+  ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "info@vilcap.com",
+        "evidenceId": "check-email-7b2a9c351f"
+      }
+    ],
     "phones": [],
     "routes": [
       {
@@ -46,6 +373,10 @@
       {
         "value": "https://vilcap.com/eso-programs",
         "evidenceId": "check-route-d3cc7e2716"
+      },
+      {
+        "value": "https://vilcap.com/programs/vilcap-innovative-capital-facility-nwa",
+        "evidenceId": "check-route-c6db6a3dc9"
       }
     ],
     "applicationUrl": [
@@ -54,11 +385,104 @@
         "evidenceId": "check-route-97fbde5212"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-68ab4749a7"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "September",
+        "evidenceId": "check-announced-8d0f10f7e9"
+      },
+      {
+        "value": "October",
+        "evidenceId": "check-announced-1a6d0df3b6"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-f42fde7b68"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-c9b1d4483e"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-a49d1c7a66"
+      }
+    ],
+    "location": [
+      {
+        "value": "Accra",
+        "evidenceId": "check-location-b407a3281f"
+      }
+    ],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "170K orders, and supports over 150 active vendors on its platform. A USD 150K investment, structured as a blend of a convertible note and",
+        "evidenceId": "check-deal-ad1128ba36"
+      },
+      {
+        "value": "startups selected by their peers will receive grant capital of USD $50,000 to support their operations. All companies will also receive $3,000",
+        "evidenceId": "check-deal-fec31c4f79"
+      },
+      {
+        "value": "$50,000 to support their operations. All companies will also receive $3,000 for support. Program Timeline August 1 Applications Open September 1",
+        "evidenceId": "check-deal-c7ddfcd78f"
+      },
+      {
+        "value": "$50,000 to support their operations. All companies will also receive $3,000 for support. Mentorship Opportunities to network and receive",
+        "evidenceId": "check-deal-dc1a9e72ff"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "convertible",
+          "amount": "150000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Convertible note",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-ad1128ba36"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "50000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-fec31c4f79"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "3000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-c7ddfcd78f"
+      }
+    ],
     "portfolioPages": [],
     "name": [
       {

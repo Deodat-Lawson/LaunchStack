@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 2,
+  "id": "tech-fort-worth",
+  "name": "TECH Fort Worth",
+  "logo": {
+    "path": "/accelerators/logos/tech-fort-worth.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "http://techfortworth.org",
+  "applyUrl": "http://techfortworth.org",
+  "description": {
+    "text": "Fort Worth’s leading startup accelerator and incubator TechFW offering programs, coaching, and resources for tech founders from idea to market to scale—without taking equity.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "We help North Texas founders blaze new trails. From that spark of an idea to bootstrapping your startup, we've got the guidance, a circle of support, and the grit it takes to build something real.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "http://techfortworth.org",
+      "title": "TECH Fort Worth — official mark on the retrieved page",
+      "quote": "https://www.techfortworth.org/favicon.ico",
+      "checkedAt": "2026-11-14T20:04:58.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "http://techfortworth.org",
+      "title": "TECH Fort Worth — visible page text",
+      "quote": "TechFW | Fort Worth Startup Accelerator & Tech Incubator top of page Contact Us Programs ThinkLab ThinkLab On Demand ThinkLab on Demand Modules SmartStart FastForward & FastForward BIO Cowtown Angels MADE Manufacturing Accelerator About Team Sponsors + Partners Services News + Media Governance Events Portfolio FAQ Contact Submit an Application My Subscriptions Use tab to navigate through the menu items. Got a big idea? Let’s ride. We help North Texas founders blaze new trails. From that spark of an idea to bootstrapping your startup, we've got the guidance, a circle of support, and the grit it takes to build something real. Apply Today Explore Our Programs 300+ Startups Supported Since 1998 $3.2B Exit Dollars from Companies 100% Equity Kept by TechFW Founders Hours of Coaching and Counting 37,000+ Why is TechFW right for your startup? TechFW is a nonprofit startup hub where entrepreneurial grit meets rugged startup strategy. For the last 25 years, we have been helping founders navigate the new frontier for tech. About TechFW TechFW Entrepreneur Support Programs ThinkLab Startup Accelerator Test the waters. Validate your idea. Build a business plan with expert guidance, founder peers, and no wasted motion. Learn More >>> FastForward Startup Growth Program Scale with confidence. You’re already on the trail and we help you chart the path to grow with coaching and tools so you",
+      "checkedAt": "2026-11-14T20:04:58.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ]
+    }
+  ]
+}

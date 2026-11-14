@@ -1,7 +1,15 @@
 {
   "programId": "capital-innovators",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://capitalinnovators.com/about",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://capitalinnovators.com/about-ci",
       "page": "details",
@@ -14,6 +22,86 @@
       "url": "https://capitalinnovators.com/acceleratorprogram",
       "page": "details",
       "anchor": "Accelerator Program",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalinnovators.com/blog/2020/2/24/capital-innovators-welcomes-spring-2020-cohort-to-st-louis",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalinnovators.com/blog/2020/3/4/using-equity-crowdfunding-alongside-traditional-investment-vehicles",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalinnovators.com/blog/2021/12/1/nga-accelerator-seeks-third-cohort",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalinnovators.com/blog/2021/9/23/capital-innovators-welcomes-fall-2021-cohort-to-st-louis",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalinnovators.com/blog/2021/9/28/nga-accelerator-announces-participant-startups-for-second-cohort",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalinnovators.com/blog/tag/investments",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalinnovators.com/corporate-accelerator",
+      "page": "details",
+      "anchor": "Corporate Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalinnovators.com/fall2020cohort",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalinnovators.com/fall2021cohort",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalinnovators.com/nga-accelerator-press",
+      "page": "details",
+      "anchor": "NGA Accelerator Press",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -35,10 +123,26 @@
       "origin": "official"
     },
     {
-      "url": "https://capitalinnovators.com/about",
-      "page": "details",
-      "anchor": "About",
-      "fetched": false,
+      "url": "https://capitalinnovators.com/spring-2022-cohort",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalinnovators.com/terms-policies",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalinnovators.com/ventureinvestments",
+      "page": "terms",
+      "anchor": "Venture Investments",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

@@ -1,20 +1,20 @@
 {
   "programId": "y-combinator-startup-school",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.startupschool.org/cofounder-matching",
+      "url": "https://www.startupschool.org/about",
       "page": "details",
-      "anchor": "Learn more about co-founder matching",
+      "anchor": "About",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.startupschool.org/about",
+      "url": "https://www.startupschool.org/cofounder-matching",
       "page": "details",
-      "anchor": "About",
-      "fetched": false,
+      "anchor": "Learn more about co-founder matching",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

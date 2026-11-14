@@ -1,6 +1,6 @@
 {
   "programId": "entrepreneurs-first",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://apply.joinef.com",
@@ -11,9 +11,33 @@
       "origin": "official"
     },
     {
-      "url": "https://www.joinef.com/faqs/",
-      "page": "terms",
-      "anchor": "FAQs",
+      "url": "https://apply.joinef.com/app/bangalore-winter/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.joinef.com/app/bridge-residency-spring-27/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.joinef.com/app/san-francisco-thebridge-winter/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.joinef.com/retrieve-saved-application/",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -27,6 +51,62 @@
       "origin": "official"
     },
     {
+      "url": "https://www.joinef.com/about/careers/",
+      "page": "details",
+      "anchor": "Careers",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.joinef.com/apply-us-funding-fellowship/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.joinef.com/faqs/",
+      "page": "terms",
+      "anchor": "FAQs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.joinef.com/faqs/bangalore/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.joinef.com/faqs/europe/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.joinef.com/faqs/london/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.joinef.com/faqs/us/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.joinef.com/portfolio/",
       "page": "portfolio",
       "anchor": "Portfolio",
@@ -35,10 +115,18 @@
       "origin": "official"
     },
     {
-      "url": "https://www.joinef.com/about/careers/",
-      "page": "details",
-      "anchor": "Careers",
-      "fetched": false,
+      "url": "https://www.joinef.com/posts/category/updates/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.joinef.com/posts/updating-our-global-pre-seed-investment-offer/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

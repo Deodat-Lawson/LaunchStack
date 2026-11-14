@@ -1,0 +1,14 @@
+{
+  "programId": "chain-reaction",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "pages": [
+    {
+      "url": "https://chainreaction.anl.gov/",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    }
+  ]
+}

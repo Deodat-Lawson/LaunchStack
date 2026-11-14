@@ -1,11 +1,75 @@
 {
   "programId": "cyclotron-road",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "url": "https://cyclotronroad.lbl.gov/2018/05/10/cyclotron-road-introduces-fourth-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cyclotronroad.lbl.gov/2021/06/07/cyclotron-road-announces-cohort-2021/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cyclotronroad.lbl.gov/2022/06/07/cyclotron-road-announces-2022-cohort-of-fellows/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cyclotronroad.lbl.gov/2022/07/18/leep-summit-features-cyclotron-road-doe-lab-embedded-entrepreneurship-programs/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cyclotronroad.lbl.gov/2022/10/07/cyclotron-road-program-update/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cyclotronroad.lbl.gov/2023/06/22/cyclotron-road-announces-2023-cohort-of-entrepreneurial-fellows/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cyclotronroad.lbl.gov/2024/07/10/introducing-the-10th-cohort-of-cyclotron-road-entrepreneurial-fellows/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cyclotronroad.lbl.gov/2024/09/04/applications-open-for-two-year-fellowships-at-cyclotron-road/",
       "page": "application",
-      "anchor": "Apply now",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cyclotronroad.lbl.gov/2026/05/29/cyclotron-road-celebrates-graduating-cohort/",
+      "page": "batches",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -19,18 +83,10 @@
       "origin": "official"
     },
     {
-      "url": "https://cyclotronroad.lbl.gov/about-us/team/",
-      "page": "details",
-      "anchor": "Team",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://cyclotronroad.lbl.gov/about-us/contact/",
       "page": "details",
       "anchor": "Contact",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -38,7 +94,31 @@
       "url": "https://cyclotronroad.lbl.gov/about-us/scientific-resources/",
       "page": "details",
       "anchor": "Scientific Resources",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cyclotronroad.lbl.gov/about-us/team/",
+      "page": "details",
+      "anchor": "Team",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cyclotronroad.lbl.gov/engage/eligibility-selection-criteria/",
+      "page": "details",
+      "anchor": "Eligibility and Selection Criteria",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "application",
+      "anchor": "Apply now",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

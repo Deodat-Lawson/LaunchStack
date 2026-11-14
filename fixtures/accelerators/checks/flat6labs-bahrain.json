@@ -1,67 +1,311 @@
 {
   "programId": "flat6labs-bahrain",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://flat6labs.com/Location/bahrain/",
+    "https://flat6labs.com/apply-now/",
+    "https://flat6labs.com/ar/apply-now/",
+    "https://flat6labs.com/fr/apply-now/",
+    "https://flat6labs.com/about/",
+    "https://flat6labs.com/programs-type/advisory/",
+    "https://flat6labs.com/programs-type/programs-for-entrepreneurs/",
+    "https://flat6labs.com/programs-type/programs-for-esos/",
     "https://flat6labs.com/programs/",
-    "https://flat6labs.com/apply-now/"
+    "https://flat6labs.com/ar/about/",
+    "https://flat6labs.com/ar/programs-type/accelerator-ar/",
+    "https://flat6labs.com/ar/programs-type/ecosystem-development-programs-ar/",
+    "https://flat6labs.com/ar/programs/",
+    "https://flat6labs.com/fr/about/",
+    "https://flat6labs.com/fr/programs-type/accelerator-fr/"
   ],
   "evidence": [
     {
       "id": "check-name-8ac276042a",
       "url": "https://flat6labs.com/Location/bahrain/",
-      "title": "Flat6Labs Bahrain — homepage checked by scrape.py",
+      "title": "Flat6Labs Bahrain — homepage",
       "excerpt": "Locations keyboard_arrow_right Bahrain FLAT6LABS Bahrain The Kingdom of Bahrain offers startup founders plenty of",
+      "page": "details"
+    },
+    {
+      "id": "check-route-14cb29fd65",
+      "url": "https://flat6labs.com/programs-type/programs-for-esos/",
+      "title": "Flat6Labs Bahrain — program page",
+      "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1c60b6ae20",
+      "url": "https://flat6labs.com/ar/about/",
+      "title": "Flat6Labs Bahrain — program page",
+      "excerpt": "قدم الآن → https://flat6labs.com/ar/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1e00ebac1e",
+      "url": "https://flat6labs.com/fr/apply-now/",
+      "title": "Flat6Labs Bahrain — application page",
+      "excerpt": "English → https://flat6labs.com/apply-now/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2bcaf403b2",
+      "url": "https://flat6labs.com/programs-type/programs-for-entrepreneurs/",
+      "title": "Flat6Labs Bahrain — program page",
+      "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
       "page": "details"
     },
     {
       "id": "check-route-3b558bf554",
       "url": "https://flat6labs.com/apply-now/",
-      "title": "Flat6Labs Bahrain — application page checked by scrape.py",
+      "title": "Flat6Labs Bahrain — application page",
       "excerpt": "العربية → https://flat6labs.com/ar/apply-now/",
       "page": "application"
     },
     {
+      "id": "check-route-3ece76e8b0",
+      "url": "https://flat6labs.com/fr/programs-type/accelerator-fr/",
+      "title": "Flat6Labs Bahrain — program page",
+      "excerpt": "Postuler Aujourd’hui → https://flat6labs.com/fr/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-49a1f86c05",
+      "url": "https://flat6labs.com/about/",
+      "title": "Flat6Labs Bahrain — program page",
+      "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4fa62d1ce8",
+      "url": "https://flat6labs.com/ar/programs/",
+      "title": "Flat6Labs Bahrain — program page",
+      "excerpt": "قدم الآن → https://flat6labs.com/ar/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-527dc57c8b",
+      "url": "https://flat6labs.com/programs-type/programs-for-esos/",
+      "title": "Flat6Labs Bahrain — program page",
+      "excerpt": "apply now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5f334b805a",
+      "url": "https://flat6labs.com/programs-type/advisory/",
+      "title": "Flat6Labs Bahrain — program page",
+      "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
       "id": "check-route-6085f3d16b",
       "url": "https://flat6labs.com/apply-now/",
-      "title": "Flat6Labs Bahrain — application page checked by scrape.py",
+      "title": "Flat6Labs Bahrain — application page",
       "excerpt": "Français → https://flat6labs.com/fr/apply-now/",
       "page": "application"
     },
     {
+      "id": "check-route-61df71f40b",
+      "url": "https://flat6labs.com/ar/programs-type/ecosystem-development-programs-ar/",
+      "title": "Flat6Labs Bahrain — program page",
+      "excerpt": "قدم الآن → https://flat6labs.com/ar/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-695d99fc6c",
+      "url": "https://flat6labs.com/about/",
+      "title": "Flat6Labs Bahrain — program page",
+      "excerpt": "apply now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6e4caad763",
+      "url": "https://flat6labs.com/ar/apply-now/",
+      "title": "Flat6Labs Bahrain — application page",
+      "excerpt": "English → https://flat6labs.com/apply-now/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7c9acae5f8",
+      "url": "https://flat6labs.com/fr/about/",
+      "title": "Flat6Labs Bahrain — program page",
+      "excerpt": "apply now → https://flat6labs.com/fr/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7f0c861f7d",
+      "url": "https://flat6labs.com/programs-type/advisory/",
+      "title": "Flat6Labs Bahrain — program page",
+      "excerpt": "apply now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
       "id": "check-route-8c5c1b5a30",
       "url": "https://flat6labs.com/programs/",
-      "title": "Flat6Labs Bahrain — details page checked by scrape.py",
+      "title": "Flat6Labs Bahrain — program page",
       "excerpt": "Apply Now → https://forms.gle/rF21muP8dLm2qWHQ9",
+      "page": "details"
+    },
+    {
+      "id": "check-route-985af86442",
+      "url": "https://flat6labs.com/programs-type/programs-for-entrepreneurs/",
+      "title": "Flat6Labs Bahrain — program page",
+      "excerpt": "apply now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9c9c58c5a0",
+      "url": "https://flat6labs.com/ar/programs-type/accelerator-ar/",
+      "title": "Flat6Labs Bahrain — program page",
+      "excerpt": "قدم الآن → https://flat6labs.com/ar/apply-now/",
       "page": "details"
     },
     {
       "id": "check-route-abc3ef4d9f",
       "url": "https://flat6labs.com/Location/bahrain/",
-      "title": "Flat6Labs Bahrain — homepage checked by scrape.py",
+      "title": "Flat6Labs Bahrain — homepage",
       "excerpt": "apply now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b748eb2496",
+      "url": "https://flat6labs.com/fr/programs-type/accelerator-fr/",
+      "title": "Flat6Labs Bahrain — program page",
+      "excerpt": "apply now → https://flat6labs.com/fr/apply-now/",
       "page": "details"
     },
     {
       "id": "check-route-b937c3ecec",
       "url": "https://flat6labs.com/Location/bahrain/",
-      "title": "Flat6Labs Bahrain — homepage checked by scrape.py",
+      "title": "Flat6Labs Bahrain — homepage",
       "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
       "page": "details"
     },
     {
       "id": "check-route-c8994b53db",
       "url": "https://flat6labs.com/programs/",
-      "title": "Flat6Labs Bahrain — details page checked by scrape.py",
+      "title": "Flat6Labs Bahrain — program page",
       "excerpt": "apply now → https://flat6labs.com/apply-now/",
       "page": "details"
     },
     {
+      "id": "check-route-d7813d2b0a",
+      "url": "https://flat6labs.com/fr/apply-now/",
+      "title": "Flat6Labs Bahrain — application page",
+      "excerpt": "العربية → https://flat6labs.com/ar/apply-now/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f2ac0f4aa8",
+      "url": "https://flat6labs.com/ar/apply-now/",
+      "title": "Flat6Labs Bahrain — application page",
+      "excerpt": "Français → https://flat6labs.com/fr/apply-now/",
+      "page": "application"
+    },
+    {
       "id": "check-route-f7feee7457",
       "url": "https://flat6labs.com/programs/",
-      "title": "Flat6Labs Bahrain — details page checked by scrape.py",
+      "title": "Flat6Labs Bahrain — program page",
       "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
       "page": "details"
+    },
+    {
+      "id": "check-route-f8504dd365",
+      "url": "https://flat6labs.com/fr/about/",
+      "title": "Flat6Labs Bahrain — program page",
+      "excerpt": "Postuler Aujourd’hui → https://flat6labs.com/fr/apply-now/",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-0513f986c8",
+      "url": "https://flat6labs.com/Location/bahrain/",
+      "page": "details",
+      "excerpt": "Flat6Labs - Bahrain Bahrain - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English العربية Français close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now Home keyboard_arrow_right Locations keyboard_arrow_right Bahrain FLAT6LABS Bahrain The Kingdom of Bahrain offers startup founders plenty of unique opportunities to grow and tap into new markets. It is among the world’s top five fastest-growing ecosystems with fewer than 1,000 startups. Flat6Labs expanded to Bahrain in 2018 with programs dedicated to serving both local and global entrepreneurs in the kingdom. Bahrain PARTNERS expand Flat6Labs is the leading entrepreneurship platform in emerging markets, empowering entrepreneurs to build, launch and grow transformative ideas through acceleration programs, ecosystem development, and tailored innovation services. Home About us Programs Locations Become a Partner News & Insights Jobs FAQs Stay Connected F6 Group: Holding Company of Flat6Labs JOIN 2026 Copyrights to Flat6Labs Website Design by MitchDesigns"
+    },
+    {
+      "id": "check-page-30dcdea341",
+      "url": "https://flat6labs.com/apply-now/",
+      "page": "application",
+      "excerpt": "Flat6Labs - Apply Now Apply Now - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English العربية Français close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now APPLY NOW We understand the challenges you face as an entrepreneur; navigating uncertainty, building from scratch, and turning ideas into impact. That’s why our programs are designed with you in mind. Explore our open and upcoming applications, and find the support that fits the stage of your startup, its industry, and location. We’re here to be part of your journey to success! WHAT TO KNOW BEFORE APPLYING Once selected to join a Flat6Labs-affiliated program, you gain access to strategic mentorship, entrepreneurship-focused business training, personalised one-on-one sessions with subject matter experts, and a wide range of perks and services offered by our partners. Each program is carefully designed to support specific types of startups based on stage, industry focus, or geographic location. We strongly recommend reviewing the program details to ensure alignment before applying. You may apply to more than one program,"
+    },
+    {
+      "id": "check-page-70f1689062",
+      "url": "https://flat6labs.com/ar/apply-now/",
+      "page": "application",
+      "excerpt": "Flat6Labs - قدم الآن قدم الآن - Flat6Labs انطلق نحو المستقبل انطلق نحو المستقبل البرامج arrow_drop_down برامج مسرعات الأعمال برنامج ريادة أعمال تنموي برامج حاضنات الأعمال برامج التمويل الأولي أفكار العربية English Français close الصناديق صندوق TECH ACCELERATOR صندوق الأردن للتمويل الأساسي (JSF) flat6labs تمكين لتسريع الأعمال صندوق أنافا للتمويل الأساسي لبانون سيد فنَد شركة FLAT6LABS لتسريع الأعمال البرامج برامج مسرعات الأعمال برنامج ريادة أعمال تنموي برامج حاضنات الأعمال برامج التمويل الأولي معلومات عنا الابتكار المؤسسي قدم الآن فريقنا أفكار Reports البيانات الصحفية الأسئلة الشائعة الوظائف اتصل بنا قدم الآن قدم الآن Flat6Labs هو برنامج إقليمي لتسريع الشركات الناشئة يعزز ويستثمر في رواد الأعمال الأذكياء والمتحمسين بأفكارهم المتطورة. نحن نقدم التمويل الأولي ، والإرشاد الاستراتيجي ، ومساحة عمل إبداعية ، والعديد من الامتيازات ، والتدريب على الأعمال التي تركز على ريادة الأعمال. ما يجب معرفته قبل التقديم بمجرد اختيارك للمشاركة في برامج Flat6Labs للتمويل الأساسي، ستحصل على تمويل نقدي مرتبط ببرنامج التمويل الأساسي الذي ستشارك فيه، وذلك بالإضافة إلى الإرشاد الاستراتيجي، ومكاتب للعمل، والدورات التدريبية التي تركز على ريادة الأعمال، والجلسات الفردية المتخصصة علاوة على العديد من الامتيازات والخدمات المقدمة من الشركاء. هناك أمران يجب أن تضعهما في اعتبارك: -يجب أن يكون المتقدم متفرغًا بالكامل لحضور برنامج مدته 4 أشهر. -يجب أن تكون مقيمًا في نفس المدينة التي سينعقد فيها برنامج Flat6Labs الذي"
+    },
+    {
+      "id": "check-page-6e504e366b",
+      "url": "https://flat6labs.com/fr/apply-now/",
+      "page": "application",
+      "excerpt": "Flat6Labs - Postuler Aujourd’hui Postuler Aujourd'hui - Flat6Labs NOUS ACCÉLÉRONS LE FUTUR NOUS ACCÉLÉRONS LE FUTUR Programmes arrow_drop_down Programmes d'accélération LES PROGRAMMES DE DÉVELOPPEMENT DE L'ÉCOSYSTÈME Programmes D'Incubateurs programmes d'amorçage Insights Français العربية English close Funds Jordan Seed Fund (JSF) Tech Accelerator Fund Flat6Labs Tamkeen Accelerator Anava Seed Fund Lebanon Seed Fund Flat6Labs Accelerator Company Programs Programmes d'accélération LES PROGRAMMES DE DÉVELOPPEMENT DE L'ÉCOSYSTÈME Programmes D'Incubateurs programmes d'amorçage À propos L’Innovation Dans Les Entreprises Postuler Aujourd’hui Notre équipe Insights Reports De Presse FAQs Emplois Contactez-nous apply now Postuler Aujourd'hui Ici, vous pouvez consulter toutes nos applications ouvertes et à venir pour les programmes accélérateurs, les programmes d'amorçage, les programmes d'incubation ou les bootcamps. Choisissez le programme qui correspond à l'étape de votre startup ou idée de démarrage et nous sommes là pour faire partie de votre cheminement vers le succès! CE QU'IL FAUT SAVOIR AVANT DE POSTULER Une fois que vous êtes sélectionné pour rejoindre le Flat6Labs Accelerator ou le Seed Program, vous recevez un financement en espèces correspondant au Flat6Labs Accelerator ou au Seed Program auquel vous avez adhéré, un mentorat stratégique, un espace de bureau, une formation"
+    },
+    {
+      "id": "check-page-8369a0fdbd",
+      "url": "https://flat6labs.com/about/",
+      "page": "details",
+      "excerpt": "Flat6Labs - About Flat6Labs About Flat6Labs - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English العربية Français close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now Home keyboard_arrow_right About Flat6Labs MEA’s leading entrepreneurship platform in emerging markets WE ARE ACCELERATING THE FUTURE Flat6Labs is the Middle East and Africa’s leading entrepreneurial ecosystem platform with operations across 15 countries. Supporting entrepreneurs across different stages, Flat6Labs collaborates with leading partners to run renowned startup programs, strengthen entrepreneurship within emerging markets, and offer expert advisory services to startups, ESOs, corporates, and governments. Since its launch in 2011 in Cairo, Flat6Labs has supported more than 10,000 founders in the Africa, Levant, and the GCC regions through tailored programs and extensive support services, partnering with global stakeholders. Deeply committed to inclusivity and opportunity, Flat6Labs actively supports underserved entrepreneurs, with a vast track record supporting women and forcibly displaced"
+    },
+    {
+      "id": "check-page-8e77a4f187",
+      "url": "https://flat6labs.com/programs-type/advisory/",
+      "page": "details",
+      "excerpt": "Flat6Labs - Programs Advisory Archives - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now Flat6Labs Advisory Flat6Labs offers expert consulting solutions that empower partners, corporates, and governments to design and implement effective innovation and startup support strategies. WHAT TO KNOW BEFORE APPLYING Our experience expanding to new markets, conceptualizing and executing Seed and Ecosystem Development Programs, positions us as your innovation partner of choice. Innovation as a Service With our Innovation-as-a-Service platform, we help stakeholders by identifying the most innovative startups for investment opportunities based on specific needs, mandates, and scope. Digital Transformation Our Digital Strategy and Transformation services are not about producing slideware, but instead focus on inspiring people to take the wheel in their digital transformation. Stakeholder Capacity Building We provide capacity-building support to ESOs (Enterprise Support Organizations), including incubators, accelerators, and fund"
+    },
+    {
+      "id": "check-page-af88869e77",
+      "url": "https://flat6labs.com/programs-type/programs-for-entrepreneurs/",
+      "page": "details",
+      "excerpt": "Flat6Labs - Programs Programs for Entrepreneurs Archives - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English العربية Français close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now Programs for Entrepreneurs Flat6Labs collaborates with leading national, regional, and global partners to deliver programs that help startups scale and expand. With over a decade of expertise and a powerful network, we empower entrepreneurs through strategic exposure, meaningful partnerships, market access, best practices, and more. WHAT TO KNOW BEFORE APPLYING Once you are accepted into one of our programs, you will receive a magnitude of benefits, ranging from mentorship, coaching, and business development to a regional network of investors, entrepreneurs, and experts who can help you kick off your startup. A couple of pointers you should keep in mind: You will need to be fully committed and available for all the program’s sessions to get the most out of the program. We strongly recommend you review the specific selection criteria and application deadlines for the program you are interested in"
+    },
+    {
+      "id": "check-page-ae7d36ff24",
+      "url": "https://flat6labs.com/programs-type/programs-for-esos/",
+      "page": "details",
+      "excerpt": "Flat6Labs - Programs Programs for Entrepreneur Support Organizations (ESOs) Archives - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English العربية Français close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now Programs for Entrepreneur Support Organizations (ESOs) Flat6Labs offers organizations and governmnets dedicated programs to aid them in building the ecosystem of emerging markets. Each program includes advanced training on how to support entrepreneurs and investment strategies. Throughout the program, we offer organizations resources and tools to support their missions and develop their ecosystems. WHAT TO KNOW BEFORE APPLYING Once you are accepted into one of our programs, you will receive a magnitude of benefits, ensuring targeted support that meets their evolving business needs. A couple of pointers you should keep in mind: You will need to be fully committed and available for all the program’s sessions to get the most out of the program. We strongly recommend you review the specific selection criteria and application deadlines for the program you are interested in"
+    },
+    {
+      "id": "check-page-44378148c0",
+      "url": "https://flat6labs.com/programs/",
+      "page": "details",
+      "excerpt": "Flat6Labs - Programs Programs - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English العربية Français close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now MEA Region Programs We are constantly adapting to the startup ecosystem's needs around the MEA region, and we're bound by our vision to help accelerate the growth and scalability of the startups that join any of our programs. Hence, we curate our programs across the MEA region to suit the needs of the ever-evolving and innovative entrepreneurs who need our support to get what they need. Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Nawah Pre-Accelerator Program Palestine Program Starts: 15 Nov 2025 Program Ends: 03 Mar 2027 Nawah Pre-Accelerator Program by Flat6Labs, supported by Google for Startups, aims to support early-stage tech startups in Palestine. Apply Now Deadline: 26 Sep 2026 Circular Industry Support Program for Egyptian SMEs (Tadweer) Egypt Program Starts: 01 Sep 2026 Program Ends: 15 Dec 2026 Circular Industry Support Program for Egyptian SMEs (Tadweer) is"
+    },
+    {
+      "id": "check-page-1bdddca815",
+      "url": "https://flat6labs.com/ar/about/",
+      "page": "details",
+      "excerpt": "Flat6Labs - معلومات عنا معلومات عنا - Flat6Labs انطلق نحو المستقبل انطلق نحو المستقبل البرامج arrow_drop_down برامج مسرعات الأعمال برنامج ريادة أعمال تنموي برامج حاضنات الأعمال برامج التمويل الأولي أفكار العربية English Français close الصناديق صندوق TECH ACCELERATOR صندوق الأردن للتمويل الأساسي (JSF) flat6labs تمكين لتسريع الأعمال صندوق أنافا للتمويل الأساسي لبانون سيد فنَد شركة FLAT6LABS لتسريع الأعمال البرامج برامج مسرعات الأعمال برنامج ريادة أعمال تنموي برامج حاضنات الأعمال برامج التمويل الأولي معلومات عنا الابتكار المؤسسي قدم الآن فريقنا أفكار Reports البيانات الصحفية الأسئلة الشائعة الوظائف اتصل بنا قدم الآن الرئيسية keyboard_arrow_right معلومات عنا نبذة عن Flat6Labs رواد الأعمال المبتكرون والشغوفون ارتقت Flat6Labs منذ تأسيسها في عام 2011 بمستويات الابتكار في عدد كبير من المجالات وفي العديد من الدول. فقد ساعدت في منح الفرصة للمستثمرين ورواد الأعمال والشركات الناشئة وبيئة الشركات الناشئة بشكل عام في الشرق الأوسط وشمال أفريقيا، لإحياء الابتكار وإعادته لدوره كقوة دافعة للعديد من الاقتصادات. وذلك من خلال كوكبة من البرامج المنتشرة في جميع أنحاء منطقة الشرق الأوسط وشمال أفريقيا، حيث عملنا على تسريع نمو المئات من الشركات الناشئة، وساعدنا الشركات الناشئة في مرحلة الأفكار على تطوير نماذج أولية للعمل، فضلاً عن تدريبنا للعديد من المؤسسين ورواد الأعمال من خلال معسكراتنا التدريبية. arrow_right close رواد الاستثمار الأولي و مسرعات الأعمال في منطقة الشرق الأوسط و شمال أفريقيا أكثر من"
+    },
+    {
+      "id": "check-page-f868cdf8c7",
+      "url": "https://flat6labs.com/ar/programs-type/accelerator-ar/",
+      "page": "details",
+      "excerpt": "Flat6Labs - البرامج برامج التمويل الأولي Archives - Flat6Labs انطلق نحو المستقبل انطلق نحو المستقبل البرامج arrow_drop_down برامج مسرعات الأعمال برنامج ريادة أعمال تنموي برامج حاضنات الأعمال برامج التمويل الأولي أفكار العربية English Français close الصناديق صندوق TECH ACCELERATOR صندوق الأردن للتمويل الأساسي (JSF) flat6labs تمكين لتسريع الأعمال صندوق أنافا للتمويل الأساسي لبانون سيد فنَد شركة FLAT6LABS لتسريع الأعمال البرامج برامج مسرعات الأعمال برنامج ريادة أعمال تنموي برامج حاضنات الأعمال برامج التمويل الأولي معلومات عنا الابتكار المؤسسي قدم الآن فريقنا أفكار Reports البيانات الصحفية الأسئلة الشائعة الوظائف اتصل بنا قدم الآن برامج التمويل الأولي تُدير Flat6Labs برنامج مسرعة أعمال لمدة 4 أشهر يُعقد مرتين سنويًا، وذلك بهدف دعم رواد الأعمال في تطوير مهاراتهم في مجال الأعمال وتوفير بيئة دعم تُمكنهم من إنشاء منتجاتهم، واختبار مدى ملاءمتها للسوق، ذلك فضلاً عن تحسين نماذج أعمالهم، وتقديم العروض للمستثمرين الخارجيين. ما يجب معرفته قبل التقديم بمجرد اختيارك للمشاركة في برنامج مسرعة أعمال Flat6Labs أو برنامج التمويل الأساسي، ستحصل على تمويل نقدي مرتبط ببرنامج مسرعة أعمال Flat6Labs أو برنامج التمويل الأساسي الذي ستشارك فيه، وذلك بالإضافة إلى الإرشاد الاستراتيجي، ومكاتب للعمل، والدورات التدريبية التي تركز على ريادة الأعمال، والجلسات الفردية المتخصصة علاوة على العديد من الامتيازات والخدمات المقدمة من الشركاء. هناك أمران يجب أن تضعهما في اعتبارك: -يجب أن يكون المتقدم متفرغًا بالكامل لحضور"
+    },
+    {
+      "id": "check-page-3e034a93f5",
+      "url": "https://flat6labs.com/ar/programs-type/ecosystem-development-programs-ar/",
+      "page": "details",
+      "excerpt": "Flat6Labs - البرامج برنامج ريادة أعمال تنموي Archives - Flat6Labs انطلق نحو المستقبل انطلق نحو المستقبل البرامج arrow_drop_down برامج مسرعات الأعمال برنامج ريادة أعمال تنموي برامج حاضنات الأعمال برامج التمويل الأولي أفكار العربية English Français close الصناديق صندوق TECH ACCELERATOR صندوق الأردن للتمويل الأساسي (JSF) flat6labs تمكين لتسريع الأعمال صندوق أنافا للتمويل الأساسي لبانون سيد فنَد شركة FLAT6LABS لتسريع الأعمال البرامج برامج مسرعات الأعمال برنامج ريادة أعمال تنموي برامج حاضنات الأعمال برامج التمويل الأولي معلومات عنا الابتكار المؤسسي قدم الآن فريقنا أفكار Reports البيانات الصحفية الأسئلة الشائعة الوظائف اتصل بنا قدم الآن برنامج ريادة أعمال تنموي تستضيف Flat6Labs فعاليات الهاكاثون والمعسكرات التدريبية وبرامج حاضنات الأعمال لجذب الموهوبين في مجال ريادة الأعمال وإبداع أفكار ثورية جديدة. ما يجب معرفته قبل التقديم بمجرد قبولك في أحد برامجنا لريادة الأعمال التنمويه، ستحظى بقدر كبير من المميزات، بدءًا من التوجيه والتدريب وتطوير الأعمال وصولاً إلى شبكة إقليمية من المستثمرين ورواد الأعمال والخبراء الذين يمكنهم مساعدتك في إطلاق شركتك الناشئة. هناك أمران يجب أن تضعهما في اعتبارك: عليك الالتزام التام وحضور جميع جلسات البرامج للحصول على أقصى استفادة من برامجنا. يُفضل أن تكون متواجدًا في إحدى الدول/المدن التي يُعقد بها البرنامج. مصر السعودية الإمارات العربية المتحدة فلسطين نشط برنامج ابتكار الوكالة الألمانية للتعاون الدولي (جي أي زد) مصر و بالشراكة مع Flat6Labs يطلقان برنامج"
+    },
+    {
+      "id": "check-page-59ee956ecd",
+      "url": "https://flat6labs.com/ar/programs/",
+      "page": "details",
+      "excerpt": "Flat6Labs - البرامج البرامج - Flat6Labs انطلق نحو المستقبل انطلق نحو المستقبل البرامج arrow_drop_down برامج مسرعات الأعمال برنامج ريادة أعمال تنموي برامج حاضنات الأعمال برامج التمويل الأولي أفكار العربية English Français close الصناديق صندوق TECH ACCELERATOR صندوق الأردن للتمويل الأساسي (JSF) flat6labs تمكين لتسريع الأعمال صندوق أنافا للتمويل الأساسي لبانون سيد فنَد شركة FLAT6LABS لتسريع الأعمال البرامج برامج مسرعات الأعمال برنامج ريادة أعمال تنموي برامج حاضنات الأعمال برامج التمويل الأولي معلومات عنا الابتكار المؤسسي قدم الآن فريقنا أفكار Reports البيانات الصحفية الأسئلة الشائعة الوظائف اتصل بنا قدم الآن منطقة الشرق الأوسط و شمال أفريقيا البرامج نتأقلم دائمًا مع الاحتياجات المتغيرة التي تطرأ على النظام البيئي للشركات الناشئة في منطقة الشرق الأوسط وشمال إفريقيا، ونلتزم بتنفيذ رؤيتنا في تسريع نمو وتطوير الشركات الناشئة التابعة لأي من برامجنا. ومن ثم، نحن نصمم برامجنا في منطقة الشرق الأوسط وشمال إفريقيا حتى تلائم احتياجات رواد الأعمال المبتكرين، والذين يحتاجون الكثير من الدعم من جانبنا ليستطيعوا تحقيق أهدافهم. برامج مسرعات الأعمال برنامج ريادة أعمال تنموي برامج حاضنات الأعمال برامج التمويل الأولي expand تفخر Flat6Labs بكونها GAN ، وهو مجتمع منظم للغاية من المسرّعين والشركاء والمستثمرين. اشترك 2026 Copyrights to Flat6Labs Website Design by MitchDesigns"
+    },
+    {
+      "id": "check-page-9478032285",
+      "url": "https://flat6labs.com/fr/about/",
+      "page": "details",
+      "excerpt": "Flat6Labs - À propos À propos - Flat6Labs NOUS ACCÉLÉRONS LE FUTUR NOUS ACCÉLÉRONS LE FUTUR Programmes arrow_drop_down Programmes d'accélération LES PROGRAMMES DE DÉVELOPPEMENT DE L'ÉCOSYSTÈME Programmes D'Incubateurs programmes d'amorçage Insights Français العربية English close Funds Jordan Seed Fund (JSF) Tech Accelerator Fund Flat6Labs Tamkeen Accelerator Anava Seed Fund Lebanon Seed Fund Flat6Labs Accelerator Company Programs Programmes d'accélération LES PROGRAMMES DE DÉVELOPPEMENT DE L'ÉCOSYSTÈME Programmes D'Incubateurs programmes d'amorçage À propos L’Innovation Dans Les Entreprises Postuler Aujourd’hui Notre équipe Insights Reports De Presse FAQs Emplois Contactez-nous apply now Home keyboard_arrow_right À propos Leader dans la région Mena, investisseur dans les phases d'amorçage et de capital risque Nous Accélérons le Futur Flat6Labs est la principale société de capital-risque d'amorçage de la région MENA. Elle gère actuellement les programmes de démarrage les plus réputés de la région. Chaque année, Flat6Labs investit dans plus de 100 startups innovantes et axées sur la technologie, permettant ainsi à des milliers d'entrepreneurs passionnés de réaliser leurs ambitions audacieuses et de devenir finalement leurs cofondateurs institutionnels. Flat6Labs gère plusieurs fonds d'amorçage dont le total des actifs sous gestion dépasse 85 millions de dollars. Plus de 25"
+    },
+    {
+      "id": "check-page-2c5a4551dc",
+      "url": "https://flat6labs.com/fr/programs-type/accelerator-fr/",
+      "page": "details",
+      "excerpt": "Flat6Labs - Programs programmes d'amorçage Archives - Flat6Labs NOUS ACCÉLÉRONS LE FUTUR NOUS ACCÉLÉRONS LE FUTUR Programmes arrow_drop_down Programmes d'accélération LES PROGRAMMES DE DÉVELOPPEMENT DE L'ÉCOSYSTÈME Programmes D'Incubateurs programmes d'amorçage Insights Français العربية English close Funds Jordan Seed Fund (JSF) Tech Accelerator Fund Flat6Labs Tamkeen Accelerator Anava Seed Fund Lebanon Seed Fund Flat6Labs Accelerator Company Programs Programmes d'accélération LES PROGRAMMES DE DÉVELOPPEMENT DE L'ÉCOSYSTÈME Programmes D'Incubateurs programmes d'amorçage À propos L’Innovation Dans Les Entreprises Postuler Aujourd’hui Notre équipe Insights Reports De Presse FAQs Emplois Contactez-nous apply now programmes d'amorçage Flat6Labs gère un programme d'amorçage de 4 mois, deux fois par an, pour aider les entrepreneurs à développer leurs compétences commerciales et leur fournir un environnement de soutien pour construire leurs produits, tester leur adéquation au marché, améliorer leurs modèles commerciaux et présenter leurs produits à des investisseurs externes. CE QU'IL FAUT SAVOIR AVANT DE POSTULER Une fois que vous êtes sélectionné pour rejoindre le Flat6Labs Accelerator ou le Seed Program, vous recevez un financement en espèces correspondant au Flat6Labs Accelerator ou au Seed Program auquel vous avez adhéré, un mentorat stratégique, un espace de bureau, une"
     }
   ],
   "findings": {
@@ -73,16 +317,16 @@
         "evidenceId": "check-route-b937c3ecec"
       },
       {
-        "value": "https://forms.gle/rF21muP8dLm2qWHQ9",
-        "evidenceId": "check-route-8c5c1b5a30"
-      },
-      {
         "value": "https://flat6labs.com/ar/apply-now/",
         "evidenceId": "check-route-3b558bf554"
       },
       {
         "value": "https://flat6labs.com/fr/apply-now/",
         "evidenceId": "check-route-6085f3d16b"
+      },
+      {
+        "value": "https://forms.gle/rF21muP8dLm2qWHQ9",
+        "evidenceId": "check-route-8c5c1b5a30"
       }
     ],
     "applicationUrl": [
@@ -94,8 +338,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

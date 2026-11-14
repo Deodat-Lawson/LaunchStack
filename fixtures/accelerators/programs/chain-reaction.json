@@ -3,20 +3,20 @@
   "id": "chain-reaction",
   "name": "Chain Reaction Innovations",
   "logo": {
-    "path": "/accelerators/logos/chain-reaction.png",
+    "path": "/accelerators/logos/none.png",
     "sourceId": "official-logo"
   },
   "websiteUrl": "https://chainreaction.anl.gov/",
   "applyUrl": "https://chainreaction.anl.gov/apply/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Secretary of Energy Meets with CRI and Innovators More A More Powerful Program for Transformational Ideas in Energy and Science Chain Reaction Innovations, now in its tenth year, understands that developing a great idea into a technology that impacts the market remains challenging. Doing so with an energy- or science-based technology can seem nearly impossible. Complex technical challenges, long development cycles, expensive lab equipment, and impatient investors create high hurdles for even the most determined innovators to overcome. It leaves innovators feeling isolated. But they don’t have to be. Chain Reaction Innovations (CRI) is a two-year fellowship program at Argonne National Laboratory for innovators focused on energy and science technologies. Through an annual call, four to six individuals are selected to join CRI. It is part of the U.S. Department of Energy’s Office of Technology Commercialization’s Lab-Embedded Entrepreneurship Program (LEEP), one of four ‘nodes’. The others are located at Oak Ridge National Laboratory, Lawrence Berkeley National Laboratory and the National Laboratory of the Rockies. Neither the U.S. Department of Energy, Argonne nor its employees take equity in CRI startups. Argonne operates as a steward of federal funds and takes seriously any actual or perceived conflicts of interest. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Not published on the official page.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Not published on the official page.",
     "sourceIds": [
       "homepage"
     ],
@@ -26,9 +26,9 @@
     {
       "id": "official-logo",
       "url": "https://chainreaction.anl.gov/",
-      "title": "Chain Reaction Innovations — official mark on the retrieved page",
-      "quote": "https://chainreaction.anl.gov/wp-content/uploads/sites/68/2016/06/cropped-CRIsite-Icon-192x192.png",
-      "checkedAt": "2026-11-03T00:18:31.000Z"
+      "title": "Chain Reaction Innovations — no rule-validated official mark",
+      "quote": "no-validated-logo",
+      "checkedAt": "2026-11-14T20:18:03.000Z"
     },
     {
       "id": "homepage",
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "chain-reaction-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://chainreaction.anl.gov/apply/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

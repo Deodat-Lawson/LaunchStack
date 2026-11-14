@@ -1,130 +1,864 @@
 {
   "programId": "founders-factory",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://foundersfactory.com/",
+    "https://foundersfactory.com/aviva/",
+    "https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
+    "https://foundersfactory.com/rio-tinto-mining-tech-accelerator/",
+    "https://foundersfactory.com/western-australia-government-nature-tech-accelerator/",
+    "https://foundersfactory.com/articles/investing-in-qi4m-s-orchextra-the-agentic-ecosystem-to-manage-investment-cycles-with-precision/",
+    "https://foundersfactory.com/articles/founders-factory-nature-tech-cohort-press-release/",
+    "https://foundersfactory.com/articles/founders-factory-neurological-care-cohort-press-release/",
+    "https://foundersfactory.com/articles/northwestern-healthcare-cohort-press-release/",
     "https://foundersfactory.com/about-us/",
-    "https://foundersfactory.com/aviva/"
+    "https://foundersfactory.com/accelerator/",
+    "https://foundersfactory.com/fastweb/",
+    "https://foundersfactory.com/pico/",
+    "https://foundersfactory.com/accelerator/beauty/",
+    "https://foundersfactory.com/accelerator/media/"
   ],
   "evidence": [
     {
-      "id": "check-deal-ef259c50e5",
-      "url": "https://foundersfactory.com/aviva/",
-      "title": "Founders Factory — application page checked by scrape.py",
-      "excerpt": "to our global network. Join the program GO FURTHER, FASTER Raise capital and grow your startup with the backing of Founders Factory and Aviva Capital Receive £50k cash investment. Our investment team will support your capital raise requirements in-program and in years to come. Operational Support Co-founder level",
+      "id": "check-deal-41ed5a67f8",
+      "url": "https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "of Northwestern Medicine and Founders Factory $150k Capital Receive $150k c ash investment and opportunities for follow-on funding through our",
       "page": "application"
+    },
+    {
+      "id": "check-deal-628270a064",
+      "url": "https://foundersfactory.com/accelerator/media/",
+      "title": "Founders Factory — program page",
+      "excerpt": "objectives. Startups joining the accelerator program also receive £30k in cash. A team of functional experts Our team are individuals with",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-8952906c0f",
+      "url": "https://foundersfactory.com/accelerator/beauty/",
+      "title": "Founders Factory — program page",
+      "excerpt": "objectives. Startups joining the accelerator program also receive £30k in cash. A team of functional experts Our team are individuals with",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-a10e5397a1",
+      "url": "https://foundersfactory.com/pico/",
+      "title": "Founders Factory — terms page",
+      "excerpt": "with the backing of Founders Factory and Pico Capital Receive $80k cash investment. Our investment team will support your capital raise",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-a96ebe0eb7",
+      "url": "https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "with the backing of Northwestern Medicine and Founders Factory $150k Capital Receive $150k c ash investment and opportunities for",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-ad8a258aec",
+      "url": "https://foundersfactory.com/aviva/",
+      "title": "Founders Factory — application page",
+      "excerpt": "with the backing of Founders Factory and Aviva Capital Receive £50k cash investment. Our investment team will support your capital raise",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-df8e9b4191",
+      "url": "https://foundersfactory.com/fastweb/",
+      "title": "Founders Factory — terms page",
+      "excerpt": "with the backing of Founders Factory and Fastweb Capital Receive € 80k cash investment. Our investment team will support your capital raise",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-166767d5a3",
+      "url": "https://foundersfactory.com/rio-tinto-mining-tech-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "Mining Tech Program Applications open Capital • 4 months operational support • Perth & Remote Apply now",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-185f22e3b3",
+      "url": "https://foundersfactory.com/aviva/",
+      "title": "Founders Factory — application page",
+      "excerpt": "Accelerator Applications open £50k capital • 4 months operational support • London & Global Apply now",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-2a0ee3bc53",
+      "url": "https://foundersfactory.com/articles/northwestern-healthcare-cohort-press-release/",
+      "title": "Founders Factory — batches page",
+      "excerpt": "from cancer diagnosis to treatment from approx. 10 weeks down to 10 days (San Francisco, USA) Matricis :",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-2fb78a55ba",
+      "url": "https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "Our programme offers founders $150k capital, 16 weeks support across product development, fundraising,",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-33a510d8b8",
+      "url": "https://foundersfactory.com/accelerator/beauty/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Stepping through the Beauty accelerator program 6-months of bespoke support + £30k We design and",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-411a519b31",
+      "url": "https://foundersfactory.com/western-australia-government-nature-tech-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "Nature Tech Program Applications open Capital • 4 months operational support • Perth & Remote Apply now",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-50a5fed03b",
+      "url": "https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "time from cancer diagnosis to treatment from ~10 weeks down to 10 days. AI diagnostics Matricis",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-6d18be4dc7",
+      "url": "https://foundersfactory.com/pico/",
+      "title": "Founders Factory — terms page",
+      "excerpt": "Program Applications open $80k investment • 4 months operational support • Singapore & Remote Apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a503707fe0",
+      "url": "https://foundersfactory.com/fastweb/",
+      "title": "Founders Factory — terms page",
+      "excerpt": "Program Applications closed €80k investment • 4 months operational support • Milan & Remote program",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b1e8e9413c",
+      "url": "https://foundersfactory.com/accelerator/media/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Media startups in the UK and internationally 6-months of bespoke support + £30k We design and",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-fbe647845e",
+      "url": "https://foundersfactory.com/rio-tinto-mining-tech-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "in Western Australia, in addition to a 4 month cohort-based support program led by expert",
+      "page": "application"
+    },
+    {
+      "id": "check-format-02fbe827fb",
+      "url": "https://foundersfactory.com/fastweb/",
+      "title": "Founders Factory — terms page",
+      "excerpt": "€80k investment • 4 months operational support • Milan & Remote program overview Investing in startups globally from our",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-066ccd6c31",
+      "url": "https://foundersfactory.com/accelerator/media/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Factory Home & Hygiene Investment Program Singapore & Remote Media & Telecoms Open Pico & Founders Factory Live Events",
+      "page": "details"
+    },
+    {
+      "id": "check-format-06b5b80e0a",
+      "url": "https://foundersfactory.com/rio-tinto-mining-tech-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "decarbonisation. Operating from our hub in Perth and remote, the program offers founders access to Rio Tinto's",
+      "page": "application"
+    },
+    {
+      "id": "check-format-0769e7355d",
+      "url": "https://foundersfactory.com/accelerator/media/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Open G-Force Sustainability Pre/Seed Program Bahamas & Remote Industrials Open Blue Action Accelerator Investment",
+      "page": "details"
+    },
+    {
+      "id": "check-format-0b8bed0ff7",
+      "url": "https://foundersfactory.com/rio-tinto-mining-tech-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "community of founders, operators and investors at private in-person and online events. Playbooks & Resources Leverage our",
+      "page": "application"
+    },
+    {
+      "id": "check-format-13d7fc1552",
+      "url": "https://foundersfactory.com/about-us/",
+      "title": "Founders Factory — program page",
+      "excerpt": "will support up to 10 early stage startups working on remote monitoring, at-home diagnostics, new community care",
+      "page": "details"
+    },
+    {
+      "id": "check-format-15a5d51880",
+      "url": "https://foundersfactory.com/accelerator/media/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Sector All Status All List View Grid View London & Remote Fintech Open Aviva & Founders Factory Fintech Investment",
+      "page": "details"
+    },
+    {
+      "id": "check-format-2ffb94eee6",
+      "url": "https://foundersfactory.com/accelerator/",
+      "title": "Founders Factory — program page",
+      "excerpt": "program Sector All Status All List View Grid View London & Remote Fintech Open Aviva & Founders Factory Fintech Investment",
+      "page": "details"
+    },
+    {
+      "id": "check-format-3da14989c0",
+      "url": "https://foundersfactory.com/accelerator/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Government Nature Tech Investment Program Perth & Remote Industrials & Climate Open Rio Tinto & Founders Factory",
+      "page": "details"
+    },
+    {
+      "id": "check-format-412a30bb6d",
+      "url": "https://foundersfactory.com/accelerator/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Tech Open HSBC Future Industries Partnership Singapore & Remote Media & Telecoms Open Pico & Founders Factory Media Tech",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5f90789d68",
+      "url": "https://foundersfactory.com/accelerator/media/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Open Blue Action Accelerator Investment Program Milan & Remote Media & Telecoms Open Fastweb & Founders Factory",
+      "page": "details"
+    },
+    {
+      "id": "check-format-6dae44e741",
+      "url": "https://foundersfactory.com/articles/northwestern-healthcare-cohort-press-release/",
+      "title": "Founders Factory — batches page",
+      "excerpt": "diagnosis to treatment, hospital operations, and long-term remote monitoring. The accelerator offers participating companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-8604d2ea7c",
+      "url": "https://foundersfactory.com/accelerator/media/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Engineering Meet the full team Investment Themes Future of Remote Work How do we collaborate seamlessly across time zones",
+      "page": "details"
+    },
+    {
+      "id": "check-format-8812a972e5",
+      "url": "https://foundersfactory.com/accelerator/media/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Media Accelerator Program Applications closed • London & Remote Explore live programs Backing Media startups in the UK and",
+      "page": "details"
+    },
+    {
+      "id": "check-format-887a46622c",
+      "url": "https://foundersfactory.com/accelerator/media/",
+      "title": "Founders Factory — program page",
+      "excerpt": "is your complete tech stack to build, deploy, and monetize virtual world experiences. Web3 Vidsy Vidsy / Series A Landvault",
+      "page": "details"
+    },
+    {
+      "id": "check-format-9b22052173",
+      "url": "https://foundersfactory.com/accelerator/",
+      "title": "Founders Factory — program page",
+      "excerpt": "& Founders Factory Fintech Investment Program Canada & Remote Industrials Open Blue Action Canada Accelerator Global",
+      "page": "details"
+    },
+    {
+      "id": "check-format-a470693c6b",
+      "url": "https://foundersfactory.com/accelerator/media/",
+      "title": "Founders Factory — program page",
+      "excerpt": "is your complete tech stack to build, deploy, and monetize virtual world experiences. Media Media accelerator operations team",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b0446abcdb",
+      "url": "https://foundersfactory.com/accelerator/media/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Open Fastweb & Founders Factory Investment Program Milan & Remote Fintech Open Mediobanca & Founders Factory Investment",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b32ef95213",
+      "url": "https://foundersfactory.com/accelerator/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Open Blue Action Accelerator Investment Program Milan & Remote Fintech Open Mediobanca & Founders Factory Fintech",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b8f7962ec8",
+      "url": "https://foundersfactory.com/accelerator/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Zebox Maritime & Logistics Accelerator Partnership Milan & Remote Media & Telecoms Closed Fastweb & Founders Factory",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c03c97ed83",
+      "url": "https://foundersfactory.com/accelerator/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Open Northwestern Medicine Healthcare Accelerator Perth & Remote Nature Open Western Australia Government Nature Tech",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c1787a05bc",
+      "url": "https://foundersfactory.com/pico/",
+      "title": "Founders Factory — terms page",
+      "excerpt": "investment • 4 months operational support • Singapore & Remote Apply now program overview Shaping the future of media,",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-c7b929827b",
+      "url": "https://foundersfactory.com/rio-tinto-mining-tech-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "open Capital • 4 months operational support • Perth & Remote Apply now program overview Investing in technologies to",
+      "page": "application"
+    },
+    {
+      "id": "check-format-d0424d77ec",
+      "url": "https://foundersfactory.com/western-australia-government-nature-tech-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "open Capital • 4 months operational support • Perth & Remote Apply now program overview Accelerating nature &",
+      "page": "application"
+    },
+    {
+      "id": "check-format-d3382a2469",
+      "url": "https://foundersfactory.com/accelerator/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Tech Closed HSBC Industrial Innovator Programme Bahamas & Remote Industrials Open Blue Action Accelerator Investment",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f1be754fd8",
+      "url": "https://foundersfactory.com/accelerator/media/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Factory Live Events Investment Program Bratislava & Remote Industrials Open G-Force Sustainability Pre/Seed Program",
+      "page": "details"
+    },
+    {
+      "id": "check-format-fe8a8a7f61",
+      "url": "https://foundersfactory.com/accelerator/media/",
+      "title": "Founders Factory — program page",
+      "excerpt": "& Founders Factory Fintech Investment Program London & Remote Home & Hygiene Open Reckitt & Founders Factory Home &",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ffba26d4e9",
+      "url": "https://foundersfactory.com/",
+      "title": "Founders Factory — homepage",
+      "excerpt": "B An immersive training simulation for surgery using virtual reality and haptics. Health Iris AI Iris AI / Series A AI",
+      "page": "details"
     },
     {
       "id": "check-name-c781b7ce04",
       "url": "https://foundersfactory.com/",
-      "title": "Founders Factory — homepage checked by scrape.py",
+      "title": "Founders Factory — homepage",
       "excerpt": "Founders Factory: Venture Studio and Startup Accelerator - Founders Factory",
       "page": "details"
     },
     {
-      "id": "check-portfolio-4cd0820937",
-      "url": "https://foundersfactory.com/aviva/",
-      "title": "Founders Factory — application page checked by scrape.py",
+      "id": "check-portfolio-015e2c406e",
+      "url": "https://foundersfactory.com/articles/founders-factory-neurological-care-cohort-press-release/",
+      "title": "Founders Factory — batches page",
+      "excerpt": "Our companies → https://foundersfactory.com/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-05d9674bb0",
+      "url": "https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
+      "title": "Founders Factory — application page",
       "excerpt": "Our companies → https://foundersfactory.com/portfolio/",
       "page": "application"
     },
     {
+      "id": "check-portfolio-17666eb218",
+      "url": "https://foundersfactory.com/pico/",
+      "title": "Founders Factory — terms page",
+      "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-1a283ab436",
+      "url": "https://foundersfactory.com/articles/founders-factory-nature-tech-cohort-press-release/",
+      "title": "Founders Factory — batches page",
+      "excerpt": "Our companies → https://foundersfactory.com/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-1bd3cc0a23",
+      "url": "https://foundersfactory.com/articles/northwestern-healthcare-cohort-press-release/",
+      "title": "Founders Factory — batches page",
+      "excerpt": "Our companies → https://foundersfactory.com/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-2d8ea68d33",
+      "url": "https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3c9c608549",
+      "url": "https://foundersfactory.com/rio-tinto-mining-tech-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "Our companies → https://foundersfactory.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3e90c40546",
+      "url": "https://foundersfactory.com/fastweb/",
+      "title": "Founders Factory — terms page",
+      "excerpt": "Our companies → https://foundersfactory.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-4cd0820937",
+      "url": "https://foundersfactory.com/aviva/",
+      "title": "Founders Factory — application page",
+      "excerpt": "Our companies → https://foundersfactory.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5a3d531989",
+      "url": "https://foundersfactory.com/western-australia-government-nature-tech-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7f4392ec1e",
+      "url": "https://foundersfactory.com/fastweb/",
+      "title": "Founders Factory — terms page",
+      "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-813e1c969f",
+      "url": "https://foundersfactory.com/articles/founders-factory-neurological-care-cohort-press-release/",
+      "title": "Founders Factory — batches page",
+      "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-899670b1fc",
+      "url": "https://foundersfactory.com/accelerator/media/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8a5b0bd59f",
+      "url": "https://foundersfactory.com/western-australia-government-nature-tech-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "Our companies → https://foundersfactory.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-8aab819778",
+      "url": "https://foundersfactory.com/articles/investing-in-qi4m-s-orchextra-the-agentic-ecosystem-to-manage-investment-cycles-with-precision/",
+      "title": "Founders Factory — terms page",
+      "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8b0031b1ac",
+      "url": "https://foundersfactory.com/accelerator/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-919edac762",
+      "url": "https://foundersfactory.com/accelerator/beauty/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Our companies → https://foundersfactory.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-92980d67ca",
+      "url": "https://foundersfactory.com/articles/northwestern-healthcare-cohort-press-release/",
+      "title": "Founders Factory — batches page",
+      "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-94e0330d81",
       "url": "https://foundersfactory.com/",
-      "title": "Founders Factory — homepage checked by scrape.py",
+      "title": "Founders Factory — homepage",
       "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
       "page": "details"
     },
     {
       "id": "check-portfolio-9a973af552",
       "url": "https://foundersfactory.com/about-us/",
-      "title": "Founders Factory — details page checked by scrape.py",
+      "title": "Founders Factory — program page",
       "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-a343e8049c",
+      "url": "https://foundersfactory.com/accelerator/media/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Our companies → https://foundersfactory.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a965ed704f",
+      "url": "https://foundersfactory.com/rio-tinto-mining-tech-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-ad0a66c151",
+      "url": "https://foundersfactory.com/articles/founders-factory-nature-tech-cohort-press-release/",
+      "title": "Founders Factory — batches page",
+      "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-c66cff184a",
       "url": "https://foundersfactory.com/about-us/",
-      "title": "Founders Factory — details page checked by scrape.py",
+      "title": "Founders Factory — program page",
       "excerpt": "Our companies → https://foundersfactory.com/portfolio/",
       "page": "details"
     },
     {
       "id": "check-portfolio-d8c23ea474",
       "url": "https://foundersfactory.com/aviva/",
-      "title": "Founders Factory — application page checked by scrape.py",
+      "title": "Founders Factory — application page",
       "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
       "page": "application"
     },
     {
+      "id": "check-portfolio-e282a9c880",
+      "url": "https://foundersfactory.com/pico/",
+      "title": "Founders Factory — terms page",
+      "excerpt": "Our companies → https://foundersfactory.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e4e7e1f8e1",
+      "url": "https://foundersfactory.com/articles/investing-in-qi4m-s-orchextra-the-agentic-ecosystem-to-manage-investment-cycles-with-precision/",
+      "title": "Founders Factory — terms page",
+      "excerpt": "Our companies → https://foundersfactory.com/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-e834cff7b5",
       "url": "https://foundersfactory.com/",
-      "title": "Founders Factory — homepage checked by scrape.py",
+      "title": "Founders Factory — homepage",
       "excerpt": "Our companies → https://foundersfactory.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f3464f1a11",
+      "url": "https://foundersfactory.com/accelerator/beauty/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ff5a02d2df",
+      "url": "https://foundersfactory.com/accelerator/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Our companies → https://foundersfactory.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-12ac3917ec",
+      "url": "https://foundersfactory.com/fastweb/",
+      "title": "Founders Factory — terms page",
+      "excerpt": "Applications closed → https://foundersfactory.com/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1c5d2bf4f3",
+      "url": "https://foundersfactory.com/",
+      "title": "Founders Factory — homepage",
+      "excerpt": "Open Health Northwestern Medicine Healthcare Accelerator Apply → https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-27b5307cc5",
+      "url": "https://foundersfactory.com/accelerator/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
       "page": "details"
     },
     {
       "id": "check-route-281f3db2f8",
       "url": "https://foundersfactory.com/aviva/",
-      "title": "Founders Factory — application page checked by scrape.py",
+      "title": "Founders Factory — application page",
       "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
       "page": "application"
     },
     {
       "id": "check-route-2d621ee4cf",
       "url": "https://foundersfactory.com/",
-      "title": "Founders Factory — homepage checked by scrape.py",
+      "title": "Founders Factory — homepage",
       "excerpt": "Open Nature WA Government Nature Tech Accelerator Apply → https://foundersfactory.com/western-australia-government-nature-tech-accelerator/",
       "page": "details"
     },
     {
-      "id": "check-route-39cc3e420f",
-      "url": "https://foundersfactory.com/",
-      "title": "Founders Factory — homepage checked by scrape.py",
-      "excerpt": "Open Health MSWA MS & Neurological Care Accelerator Apply → https://foundersfactory.com/mswa-ms-neurological-care-accelerator/",
+      "id": "check-route-3340a7b466",
+      "url": "https://foundersfactory.com/accelerator/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Apply now → https://form.typeform.com/to/XdvluIs5",
       "page": "details"
+    },
+    {
+      "id": "check-route-3fe6ee8945",
+      "url": "https://foundersfactory.com/articles/founders-factory-neurological-care-cohort-press-release/",
+      "title": "Founders Factory — batches page",
+      "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
+      "page": "batches"
     },
     {
       "id": "check-route-414c547108",
       "url": "https://foundersfactory.com/",
-      "title": "Founders Factory — homepage checked by scrape.py",
+      "title": "Founders Factory — homepage",
       "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
       "page": "details"
     },
     {
       "id": "check-route-43673c7b61",
       "url": "https://foundersfactory.com/aviva/",
-      "title": "Founders Factory — application page checked by scrape.py",
+      "title": "Founders Factory — application page",
+      "excerpt": "Apply now → https://form.typeform.com/to/XdvluIs5",
+      "page": "application"
+    },
+    {
+      "id": "check-route-451fc23e6d",
+      "url": "https://foundersfactory.com/pico/",
+      "title": "Founders Factory — terms page",
+      "excerpt": "Apply now → https://form.typeform.com/to/XdvluIs5",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-5e3f7e5564",
+      "url": "https://foundersfactory.com/accelerator/beauty/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6c14912426",
+      "url": "https://foundersfactory.com/accelerator/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Apply Now → https://form.typeform.com/to/XdvluIs5",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6cee5fe18b",
+      "url": "https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
+      "page": "application"
+    },
+    {
+      "id": "check-route-70553c1e4c",
+      "url": "https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "Apply now → https://form.typeform.com/to/msm6uEkP",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8250b08406",
+      "url": "https://foundersfactory.com/accelerator/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Apply now → https://form.typeform.com/to/WlDiIsRh",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8d83a8b897",
+      "url": "https://foundersfactory.com/rio-tinto-mining-tech-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "Apply now → https://form.typeform.com/to/XdvluIs5",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9cd6210949",
+      "url": "https://foundersfactory.com/western-australia-government-nature-tech-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9e11486156",
+      "url": "https://foundersfactory.com/western-australia-government-nature-tech-accelerator/",
+      "title": "Founders Factory — application page",
       "excerpt": "Apply now → https://form.typeform.com/to/XdvluIs5",
       "page": "application"
     },
     {
       "id": "check-route-a8f23a188b",
       "url": "https://foundersfactory.com/",
-      "title": "Founders Factory — homepage checked by scrape.py",
+      "title": "Founders Factory — homepage",
       "excerpt": "Open Industrials Rio Tinto Mining Tech Accelerator Apply → https://foundersfactory.com/rio-tinto-mining-tech-accelerator/",
       "page": "details"
     },
     {
+      "id": "check-route-b1ce9e8212",
+      "url": "https://foundersfactory.com/articles/investing-in-qi4m-s-orchextra-the-agentic-ecosystem-to-manage-investment-cycles-with-precision/",
+      "title": "Founders Factory — terms page",
+      "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
+      "page": "terms"
+    },
+    {
       "id": "check-route-b62ec7ae7d",
       "url": "https://foundersfactory.com/about-us/",
-      "title": "Founders Factory — details page checked by scrape.py",
+      "title": "Founders Factory — program page",
       "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
       "page": "details"
     },
     {
       "id": "check-route-bb3d52c8c6",
       "url": "https://foundersfactory.com/",
-      "title": "Founders Factory — homepage checked by scrape.py",
+      "title": "Founders Factory — homepage",
       "excerpt": "Accelerator → https://foundersfactory.com/accelerator/",
       "page": "details"
     },
     {
+      "id": "check-route-cce174e523",
+      "url": "https://foundersfactory.com/fastweb/",
+      "title": "Founders Factory — terms page",
+      "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-cd5c4c55f3",
+      "url": "https://foundersfactory.com/articles/founders-factory-nature-tech-cohort-press-release/",
+      "title": "Founders Factory — batches page",
+      "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-dd92218a0b",
+      "url": "https://foundersfactory.com/articles/northwestern-healthcare-cohort-press-release/",
+      "title": "Founders Factory — batches page",
+      "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-de3bef15be",
+      "url": "https://foundersfactory.com/accelerator/media/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e36288a7b1",
+      "url": "https://foundersfactory.com/rio-tinto-mining-tech-accelerator/",
+      "title": "Founders Factory — application page",
+      "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
+      "page": "application"
+    },
+    {
       "id": "check-route-ef81173244",
       "url": "https://foundersfactory.com/",
-      "title": "Founders Factory — homepage checked by scrape.py",
+      "title": "Founders Factory — homepage",
       "excerpt": "Open Fintech Aviva Fintech Accelerator Apply → https://foundersfactory.com/aviva/",
       "page": "details"
+    },
+    {
+      "id": "check-route-fb55bc6f77",
+      "url": "https://foundersfactory.com/pico/",
+      "title": "Founders Factory — terms page",
+      "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
+      "page": "terms"
+    },
+    {
+      "id": "check-status-977d0f4324",
+      "url": "https://foundersfactory.com/accelerator/beauty/",
+      "title": "Founders Factory — program page",
+      "excerpt": "Stories & Insights Apply We're investing in technology shaping the future of the beauty industry We're no longer accepting applications Stepping through the Beauty accelerator program 6-months of bespoke support + £30k We design and implement a",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-693699cc69",
+      "url": "https://foundersfactory.com/",
+      "page": "details",
+      "excerpt": "Founders Factory: Venture Studio and Startup Accelerator - Founders Factory Founders Venture Studio Accelerator Venture Funds Partners Focus areas Fintech Industrials Health Deep Tech Portfolio Careers Company About us Team Our partners Stories & Insights Apply Power to founders We build and fund startups together with exceptional entrepreneurs and the world’s leading companies Apply GO FURTHER, FASTER Founders Factory backs visionary founders with capital, dedicated support from a team of 60+ operators, and unrivalled access to a coalition of industry leading corporate partners. 500+ startups 60+ operators 5 continents BUILDERS & INVESTORS Shaping the future of Fintech :: Health :: Industrials :: Deep Tech Venture Studio Co-found a new company with the backing of our team and partners Build with us Accelerator Raise capital and grow your startup in our pre-seed and seed stage investment programs Explore programs PLATFORM We back founders from idea to seed - and beyond Capital We fund startups at idea, pre-seed and seed, combining capital with the full backing of Founders Factory through our investment programs. Our programs Operational Support We'll help you commercialise your technology, build your company and raise your next round. Meet the team Corporate Partners & Pilots Access to industry leading corporates is what we call our unfair advantage: from pilots, distribution"
+    },
+    {
+      "id": "check-page-62f051600a",
+      "url": "https://foundersfactory.com/aviva/",
+      "page": "application",
+      "excerpt": "Fintech Startup Accelerator | Aviva & Founders Factory - Founders Factory Founders Venture Studio Accelerator Venture Funds Partners Focus areas Fintech Industrials Health Deep Tech Portfolio Careers Company About us Team Our partners Stories & Insights Apply ACCELERATOR - Fintech Aviva & Founders Factory Fintech Accelerator Applications open £50k capital • 4 months operational support • London & Global Apply now program overview Partnering with founders to build and fund the next generation of fintech startups Our Fintech sector is backed by Aviva, the UK's largest insurer and commercial property investor with 18M customers across UK, Ireland and Canada. Together, we're investing in Pre-Seed to Series A startups, providing entrepreneurs access to Aviva's technology and commercial scale, combined with capital, bespoke operational support and access to our global network. Join the program program overview Partnering with founders to build and fund the next generation of fintech startups Our Fintech sector is backed by Aviva, the UK's largest insurer and commercial property investor with 18M customers across UK, Ireland and Canada. Together, we're investing in Pre-Seed to Series A startups, providing entrepreneurs access to Aviva's technology and commercial scale, combined with capital, bespoke operational support and access to our global network. Join the program GO FURTHER,"
+    },
+    {
+      "id": "check-page-f9ea70fb04",
+      "url": "https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
+      "page": "application",
+      "excerpt": "Northwestern Medicine & Founders Factory Healthcare Accelerator - Founders Factory Founders Venture Studio Accelerator Venture Funds Partners Focus areas Fintech Industrials Health Deep Tech Portfolio Careers Company About us Team Our partners Stories & Insights Apply ACCELERATOR - Health Northwestern Medicine & Founders Factory Healthcare Accelerator Applications open $150k Investment • Commercial & funding opportunities • London & Chicago Apply now program overview Backing and scaling European AI technologies with a US healthcare leader Northwestern Medicine , one of America’s premier, academic healthcare systems, is partnering with Founders Factory to bring the UK’s and Europe’s top AI founders to the US health market. This programme reflects Northwestern Medicine’s strategy to embrace innovations that advance new models of patient care, advance research and deliver operational efficiencies. AI-enabled technologies are instrumental to improving healthcare. From detection and chronic disease management to treatment optimism, systems-wide change and expediting research, AI delivers far-reaching benefits across health systems. Our programme offers founders $150k capital, 16 weeks support across product development, fundraising, GTM and commercialisation. The programme includes a partner track to accelerate customer discovery, use case development and pilot execution with"
+    },
+    {
+      "id": "check-page-56f54f6c22",
+      "url": "https://foundersfactory.com/rio-tinto-mining-tech-accelerator/",
+      "page": "application",
+      "excerpt": "Rio Tinto & Founders Factory Mining Tech Accelerator - Founders Factory Founders Venture Studio Accelerator Venture Funds Partners Focus areas Fintech Industrials Health Deep Tech Portfolio Careers Company About us Team Our partners Stories & Insights Apply ACCELERATOR - deep tech Rio Tinto & Founders Factory Mining Tech Program Applications open Capital • 4 months operational support • Perth & Remote Apply now program overview Investing in technologies to provide the materials the world needs Rio Tinto is a leading global mining group that focuses on finding, mining, and processing the Earth's mineral resources. Founders Factory and Rio Tinto have partnered to fund and accelerate technologies shaping the future of mining and expediting the path to industrial decarbonisation. Operating from our hub in Perth and remote, the program offers founders access to Rio Tinto's industrial expertise and advanced mining facilities in Western Australia, in addition to a 4 month cohort-based support program led by expert operators. Join the program program overview Investing in technologies to provide the materials the world needs Rio Tinto is a leading global mining group that focuses on finding, mining, and processing the Earth's mineral resources. Founders Factory and Rio Tinto have partnered to fund and accelerate technologies shaping the future of mining and expediting the path to"
+    },
+    {
+      "id": "check-page-c3eed6b586",
+      "url": "https://foundersfactory.com/western-australia-government-nature-tech-accelerator/",
+      "page": "application",
+      "excerpt": "Western Australia Government & Founders Factory Nature Tech Program - Founders Factory Founders Venture Studio Accelerator Venture Funds Partners Focus areas Fintech Industrials Health Deep Tech Portfolio Careers Company About us Team Our partners Stories & Insights Apply ACCELERATOR - Climate Western Australia Government & Founders Factory Nature Tech Program Applications open Capital • 4 months operational support • Perth & Remote Apply now program overview Accelerating nature & biodiversity startups to support diversification and decarbonisation Operating from Perth, the Founders Factory and WA Nature Tech Accelerator backs early stage startups (pre-seed to seed) with capital and a four-month program designed to support the development and validation of new environmental technologies . Launched in partnership with the Western Australian Government, the program offers founders guidance from regional government, and operational support across product development, strategy and operations, commercialisation, data science, partnerships, and fundraising. Apply now program overview Accelerating nature & biodiversity startups to support diversification and decarbonisation Operating from Perth, the Founders Factory and WA Nature Tech Accelerator backs early stage startups (pre-seed to seed) with capital and a four-month program designed to support the development and validation of"
+    },
+    {
+      "id": "check-page-b2fd7a1b1b",
+      "url": "https://foundersfactory.com/articles/investing-in-qi4m-s-orchextra-the-agentic-ecosystem-to-manage-investment-cycles-with-precision/",
+      "page": "terms",
+      "excerpt": "Investing in Qi4M’s OrcheXtra: The Agentic Ecosystem to Manage Investment Cycles with Precision - Founders Factory Founders Venture Studio Accelerator Venture Funds Partners Focus areas Fintech Industrials Health Deep Tech Portfolio Careers Company About us Team Our partners Stories & Insights Apply Investing in Qi4M’s OrcheXtra: The Agentic Ecosystem to Manage Investment Cycles with Precision The problem The solution The team Why We’re Excited to Invest What Qi4M is getting From the Programme Share We’re excited to announce our latest MBSpeedUp fintech investment - Qi4M . The problem In finance, bringing an investment product from concept to client involves a long chain of specialised teams; from product design and portfolio management to risk, compliance, marketing, and distribution, each using different tools and terminologies. This results in a fragmented ecosystem where information flows slowly and is often inconsistent. Without a shared infrastructure, departments maintain separate versions of data and processes, creating digital silos and operational friction. And while AI tools hold promise, they often add complexity; layering new models and tools on top of an already overloaded stack, rather than simplifying it. The solution Qi4M ’s answer is OrcheXtra, an AI-native, agentic ecosystem that connects data, processes, and people across the investment value chain. At"
+    },
+    {
+      "id": "check-page-c619772793",
+      "url": "https://foundersfactory.com/articles/founders-factory-nature-tech-cohort-press-release/",
+      "page": "batches",
+      "excerpt": "Founders Factory and WA Government to back biofuels, reforestation, and nature-based technologies - Founders Factory Founders Venture Studio Accelerator Venture Funds Partners Focus areas Fintech Industrials Health Deep Tech Portfolio Careers Company About us Team Our partners Stories & Insights Apply Founders Factory and WA Government to back biofuels, reforestation, and nature-based technologies About Founders Factory Share The latest cohort of Founders Factory’s Western Australia Nature Tech Accelerator, backed by the WA Cook Government, includes six startups across biodiversity, oceans and water, land and forests, and nature-based industry WA startups feature prominently, including Indigenous-owned oceanic innovator Tidal Moon and sustainable biofuel producer Ecogas, while international startups include prominent UK conservation fundraising platform Earthly, who will expand their operations to WA Perth, April 10th 2025: Global venture builder and investor Founders Factory, in partnership with the Government of Western Australia, have selected six new startups innovating in nature, biodiversity, and industry’s impact on the environment to join their Nature Tech Accelerator . Launched in 2024 and now in its second cohort, Founders Factory’s latest Nature Tech cohort includes four early stage startups from Western Australia, as well as startups from the UK and Canada. The six"
+    },
+    {
+      "id": "check-page-1b58711f4e",
+      "url": "https://foundersfactory.com/articles/founders-factory-neurological-care-cohort-press-release/",
+      "page": "batches",
+      "excerpt": "Five emerging tech startups join MSWA and Founders Factory’s global push to improve outcomes in neurological care - Founders Factory Founders Venture Studio Accelerator Venture Funds Partners Focus areas Fintech Industrials Health Deep Tech Portfolio Careers Company About us Team Our partners Stories & Insights Apply Five emerging tech startups join MSWA and Founders Factory’s global push to improve outcomes in neurological care About Founders Factory Share Breakthroughs transforming quality of life: From textiles acting as monitoring tools, sub-surface brain interfaces for speech decoding, and robotic support for basic tasks, those selected offer new modes of care management and patient empowerment. Accelerating time to market: This programme is critically important as the innovations chosen can be validated and deployed by connecting solutions directly to the thousands of people with MS. Perth, 1st June 2026 - MSWA and global accelerator and venture studio Founders Factory have today announced the first startups joining their MS & Neurological Care Accelerator , the world’s first dedicated startup programme, fast-tracking cutting-edge technologies to improve quality of life for people affected by neurological conditions like multiple sclerosis, stroke, Parkinson’s, Huntington’s, motor neurone disease, and acquired brain injury. The accelerator programme is designed to help"
+    },
+    {
+      "id": "check-page-708b75f3ee",
+      "url": "https://foundersfactory.com/articles/northwestern-healthcare-cohort-press-release/",
+      "page": "batches",
+      "excerpt": "Northwestern Medicine and Founders Factory back European AI health startups - Founders Factory Founders Venture Studio Accelerator Venture Funds Partners Focus areas Fintech Industrials Health Deep Tech Portfolio Careers Company About us Team Our partners Stories & Insights Apply Northwestern Medicine and Founders Factory back European AI health startups About Founders Factory Share The new cohort from across the UK, US and France offer AI-powered technologies that can transform care across cancer, stroke and endometriosis - from earlier diagnosis to treatment and recovery Those selected will have the chance to test, deploy, and scale their tech with Northwestern Medicine and its ecosystem of partners, unlocking access to the world’s largest healthcare market. London and Chicago, 16th July, 2026 : Northwestern Medicine, one of the United States’ leading academic healthcare systems, and global accelerator Founders Factory have unveiled the first cohort of leading AI founders from the UK and Europe as part of a new cross-border healthcare accelerator, aimed at shaping the future of health systems and modes of patient care through technological advancements. The Northwestern Medicine and Founders Factory healthcare accelerator aims to connect world-class European AI talent with one of America’s leading academic health systems to scale next-generation, AI-enabled health"
+    },
+    {
+      "id": "check-page-6f663599e1",
+      "url": "https://foundersfactory.com/about-us/",
+      "page": "details",
+      "excerpt": "About Us | Founders Factory - Founders Factory Founders Venture Studio Accelerator Venture Funds Partners Focus areas Fintech Industrials Health Deep Tech Portfolio Careers Company About us Team Our partners Stories & Insights Apply ABOUT US We're venture builders and investors. Our mission is to power founders to go further, faster. 500+ companies 60+ operators 5 continents OUR STORY We believe the future is built through technology and entrepreneurship Founded by serial entrepreneurs Brent Hoberman, Henry Lane Fox and George Northcott, Founders Factory builds and funds startups across industries and geographies. Our vision is to be the most impactful co-founder for early stage founders: backing entrepreneurs with capital, an expert operations team, a global network, and access to our constellation of industry-leading corporate partners. Our venture studio partners with entrepreneurs to build, fund and launch new ventures from inception. We also operate sector-focused accelerator programmes and venture funds, investing in talented founding teams across four continents. Meet the team OUR STORY We believe the future is built through technology and entrepreneurship Founded by serial entrepreneurs Brent Hoberman, Henry Lane Fox and George Northcott, Founders Factory builds and funds startups across industries and geographies. Our vision is to be the most impactful co-founder for"
+    },
+    {
+      "id": "check-page-8eebbc1771",
+      "url": "https://foundersfactory.com/accelerator/",
+      "page": "details",
+      "excerpt": "Startup Accelerator | Founders Factory - Founders Factory Founders Venture Studio Accelerator Venture Funds Partners Focus areas Fintech Industrials Health Deep Tech Portfolio Careers Company About us Team Our partners Stories & Insights Apply Accelerator Elevate your startup with the backing of our team and partners Apply Now Find a program OUR PROGRAMS We're co-pilots in your entrepreneurial journey. Our goal is to drive exponential progress in your venture, and increase the odds of success. Raise Capital Operational Support Corporate Partnerships & Pilots Community & Network Raise Capital We invest capital together with a four-month cohort-based program of expert operational support. During the program, you'll be given the opportunity to pitch at our investor showcase events, along with warm introductions to our global investor networks. To date, our portfolio have raised capital from a roster of the most notable investors in technology. Apply now Raise Capital We invest capital together with a four-month cohort-based program of expert operational support. During the program, you'll be given the opportunity to pitch at our investor showcase events, along with warm introductions to our global investor networks. To date, our portfolio have raised capital from a roster of the most notable investors in technology. Operational Support Corporate Partnerships & Pilots Community &"
+    },
+    {
+      "id": "check-page-65447b5d29",
+      "url": "https://foundersfactory.com/fastweb/",
+      "page": "terms",
+      "excerpt": "Fastweb x Founders Factory Accelerator Program - Founders Factory Founders Venture Studio Accelerator Venture Funds Partners Focus areas Fintech Industrials Health Deep Tech Portfolio Careers Company About us Team Our partners Stories & Insights Apply ACCELERATOR - Media & Telecoms Fastweb x Founders Factory Investment Program Applications closed €80k investment • 4 months operational support • Milan & Remote program overview Investing in startups globally from our hub in Milan Fastweb is the fastest growing Italian telecommunications operator with more than 2.7 million wireline and more than 2.9 million mobile customers. Together, we're investing in Pre-Seed to Series A startups in our office operating from Milan. We provide entrepreneurs access to Fastweb's technology and commercial scale, combined with capital, bespoke operational support and access to our global network. program overview Investing in startups globally from our hub in Milan Fastweb is the fastest growing Italian telecommunications operator with more than 2.7 million wireline and more than 2.9 million mobile customers. Together, we're investing in Pre-Seed to Series A startups in our office operating from Milan. We provide entrepreneurs access to Fastweb's technology and commercial scale, combined with capital, bespoke operational support and access to our global network. GO FURTHER, FASTER Raise capital and"
+    },
+    {
+      "id": "check-page-4da6411adc",
+      "url": "https://foundersfactory.com/pico/",
+      "page": "terms",
+      "excerpt": "Pico x Founders Factory | Media & Live Events Startup Accelerator - Founders Factory Founders Venture Studio Accelerator Venture Funds Partners Focus areas Fintech Industrials Health Deep Tech Portfolio Careers Company About us Team Our partners Stories & Insights Apply ACCELERATOR - MEDIA & LIVE EVENTS Pico x Founders Factory Investment Program Applications open $80k investment • 4 months operational support • Singapore & Remote Apply now program overview Shaping the future of media, live events & web3 Pico is a global leader in total brand activation with a track record of more than 50 years of innovation and experience. With its ‘Experience-Led, Digital-First’ strategy, Pico aims to create a vibrant brand activation ecosystem for start-ups and foster innovations with the potential to move the industry forward. We are combining Pico’s expertise, scale and resources with access to our team, capital and network to build and invest in breakthrough technology solutions across Asia. Join the program program overview Shaping the future of media, live events & web3 Pico is a global leader in total brand activation with a track record of more than 50 years of innovation and experience. With its ‘Experience-Led, Digital-First’ strategy, Pico aims to create a vibrant brand activation ecosystem for start-ups and foster innovations with the potential to move the industry forward. We are"
+    },
+    {
+      "id": "check-page-770ac36c25",
+      "url": "https://foundersfactory.com/accelerator/beauty/",
+      "page": "details",
+      "excerpt": "Work with us on the future of Beauty - Founders Factory Founders Venture Studio Accelerator Venture Funds Partners Focus areas Fintech Industrials Health Deep Tech Portfolio Careers Company About us Team Our partners Stories & Insights Apply We're investing in technology shaping the future of the beauty industry We're no longer accepting applications Stepping through the Beauty accelerator program 6-months of bespoke support + £30k We design and implement a six-month program completely tailored to your startup's needs and growth objectives. Startups joining the accelerator program also receive £30k in cash. A team of functional experts Our team are individuals with deep industry, investment and entrepreneurship experience. They will be on hand to support across growth, product, fundraising, design, talent, engineering, PR and more. Access to the world's most influential companies We're partnered with the world's largest corporates across sectors. Depending on your company and it’s needs, corporate support could range from distribution, pilots, commercial partnerships, product validation through to investment and more. In partnership with L'Oreal When you join, we'll work with you and the team at L'Oreal to design a bespoke engagement plan. This will include all the ways that you could partner. Think sessions with their data and insights teams, mentorship and expertise from"
+    },
+    {
+      "id": "check-page-acfa888542",
+      "url": "https://foundersfactory.com/accelerator/media/",
+      "page": "details",
+      "excerpt": "Media Startup Accelerator with GMG Ventures | Founders Factory - Founders Factory Founders Venture Studio Accelerator Venture Funds Partners Focus areas Fintech Industrials Health Deep Tech Portfolio Careers Company About us Team Our partners Stories & Insights Apply ACCELERATOR - Media GMG Ventures x Founders Factory Media Accelerator Program Applications closed • London & Remote Explore live programs Backing Media startups in the UK and internationally 6-months of bespoke support + £30k We design and implement a six-month program completely tailored to your startup's needs and growth objectives. Startups joining the accelerator program also receive £30k in cash. A team of functional experts Our team are individuals with deep industry, investment and entrepreneurship experience. They will be on hand to support across growth, product, fundraising, design, talent, engineering, PR and more. Access to the world's most influential companies We're partnered with the world's largest corporates across sectors. Depending on your company and it’s needs, corporate support could range from distribution, pilots, commercial partnerships, product validation through to investment and more. FEATURED PORTFOLIO Our global media startup portfolio Flourish Flourish / Exit Beautiful and easy data-visualization and storytelling. Acquired by Canva in 2022. Media Storyblok Storyblok / Series B"
     }
   ],
   "findings": {
@@ -134,6 +868,10 @@
       {
         "value": "https://form.typeform.com/to/XdvluIs5",
         "evidenceId": "check-route-414c547108"
+      },
+      {
+        "value": "https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
+        "evidenceId": "check-route-1c5d2bf4f3"
       },
       {
         "value": "https://foundersfactory.com/aviva/",
@@ -148,8 +886,8 @@
         "evidenceId": "check-route-2d621ee4cf"
       },
       {
-        "value": "https://foundersfactory.com/mswa-ms-neurological-care-accelerator/",
-        "evidenceId": "check-route-39cc3e420f"
+        "value": "https://form.typeform.com/to/msm6uEkP",
+        "evidenceId": "check-route-70553c1e4c"
       }
     ],
     "applicationUrl": [
@@ -158,14 +896,133 @@
         "evidenceId": "check-route-bb3d52c8c6"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": false,
+        "evidenceId": "check-status-977d0f4324"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "4 months",
+        "evidenceId": "check-duration-185f22e3b3"
+      },
+      {
+        "value": "16",
+        "evidenceId": "check-duration-2fb78a55ba"
+      },
+      {
+        "value": "10",
+        "evidenceId": "check-duration-50a5fed03b"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-33a510d8b8"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-ffba26d4e9"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-0b8bed0ff7"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "to our global network. Join the program GO FURTHER, FASTER Raise capital and grow your startup with the backing of Founders Factory and Aviva Capital Receive £50k cash investment. Our investment team will support your capital raise requirements in-program and in years to come. Operational Support Co-founder level",
-        "evidenceId": "check-deal-ef259c50e5"
+        "value": "with the backing of Founders Factory and Aviva Capital Receive £50k cash investment. Our investment team will support your capital raise",
+        "evidenceId": "check-deal-ad8a258aec"
+      },
+      {
+        "value": "with the backing of Northwestern Medicine and Founders Factory $150k Capital Receive $150k c ash investment and opportunities for",
+        "evidenceId": "check-deal-a96ebe0eb7"
+      },
+      {
+        "value": "of Northwestern Medicine and Founders Factory $150k Capital Receive $150k c ash investment and opportunities for follow-on funding through our",
+        "evidenceId": "check-deal-41ed5a67f8"
+      },
+      {
+        "value": "with the backing of Founders Factory and Fastweb Capital Receive € 80k cash investment. Our investment team will support your capital raise",
+        "evidenceId": "check-deal-df8e9b4191"
+      },
+      {
+        "value": "with the backing of Founders Factory and Pico Capital Receive $80k cash investment. Our investment team will support your capital raise",
+        "evidenceId": "check-deal-a10e5397a1"
+      },
+      {
+        "value": "objectives. Startups joining the accelerator program also receive £30k in cash. A team of functional experts Our team are individuals with",
+        "evidenceId": "check-deal-8952906c0f"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "50000",
+          "currency": "GBP",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-ad8a258aec"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "150000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-a96ebe0eb7"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "80000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-df8e9b4191"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "80000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-a10e5397a1"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "30000",
+          "currency": "GBP",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-8952906c0f"
       }
     ],
     "portfolioPages": [

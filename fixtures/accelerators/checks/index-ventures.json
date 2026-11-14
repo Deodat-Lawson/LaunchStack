@@ -1,51 +1,486 @@
 {
   "programId": "index-ventures",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://www.indexventures.com/"
+    "https://www.indexventures.com/",
+    "https://www.indexventures.com/perspectives/processing-ppp-loan-applications-at-scale-instabases-anant-bhardwaj-on-leading-during-covid-19/",
+    "https://www.indexventures.com/perspectives/relationship/applyboard-inc/",
+    "https://www.indexventures.com/perspectives/see-hear-speak-investing-in-livekit-and-the-future-of-realtime-applications/",
+    "https://www.indexventures.com/perspectives/superlinked-raises-95m-in-seed-funding-to-enable-enterprise-scale-ai-applications/",
+    "https://www.indexventures.com/index-io-terms-and-conditions/",
+    "https://www.indexventures.com/perspectives/a-new-era-for-electronics-design-our-investment-in-quilter/",
+    "https://www.indexventures.com/perspectives/a-new-way-to-see-the-world-our-investment-in-kindred/",
+    "https://www.indexventures.com/perspectives/achieving-the-sublime-in-email-security-announcing-our-20m-series-a-investment/",
+    "https://www.indexventures.com/perspectives/ai-that-owns-business-outcomes-our-investment-in-hone/",
+    "https://www.indexventures.com/perspectives/bringing-ai-to-the-fashion-industry-our-investment-in-daydream/",
+    "https://www.indexventures.com/perspectives/building-a-new-energy-model-for-europe-our-investment-in-nomos/",
+    "https://www.indexventures.com/perspectives/building-the-first-intelligence-layer-for-industrial-assets-our-investment-in-scope/",
+    "https://www.indexventures.com/perspectives/building-the-next-generation-of-real-time-ai-models-our-investment-in-cartesia/",
+    "https://www.indexventures.com/perspectives/built-technologies-announces-series-b-financing-led-by-goldman-sachs-investment/"
   ],
   "evidence": [
     {
+      "id": "check-duration-0403570ecf",
+      "url": "https://www.indexventures.com/perspectives/a-new-way-to-see-the-world-our-investment-in-kindred/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "We use hubspot for managing our newsletter 6 months HTTPS Save preferences Accept all cookies",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-0f984d1f59",
+      "url": "https://www.indexventures.com/perspectives/building-the-first-intelligence-layer-for-industrial-assets-our-investment-in-scope/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "years to qualify for and it takes an average of 10 months to fill a lost role. 40% of inspectors are set",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-420ace2386",
+      "url": "https://www.indexventures.com/index-io-terms-and-conditions/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "We use hubspot for managing our newsletter 6 months HTTPS Save preferences Accept all cookies",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-4556d971fd",
+      "url": "https://www.indexventures.com/perspectives/bringing-ai-to-the-fashion-industry-our-investment-in-daydream/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "We use hubspot for managing our newsletter 6 months HTTPS Save preferences Accept all cookies",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-78257b39f6",
+      "url": "https://www.indexventures.com/perspectives/built-technologies-announces-series-b-financing-led-by-goldman-sachs-investment/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "We use hubspot for managing our newsletter 6 months HTTPS Save preferences Accept all cookies",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-7915d9b003",
+      "url": "https://www.indexventures.com/perspectives/ai-that-owns-business-outcomes-our-investment-in-hone/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "We use hubspot for managing our newsletter 6 months HTTPS Save preferences Accept all cookies",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-87241f668d",
+      "url": "https://www.indexventures.com/perspectives/processing-ppp-loan-applications-at-scale-instabases-anant-bhardwaj-on-leading-during-covid-19/",
+      "title": "Index Ventures — application page",
+      "excerpt": "We use hubspot for managing our newsletter 6 months HTTPS Save preferences Accept all cookies",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-94d80a050b",
+      "url": "https://www.indexventures.com/perspectives/building-the-first-intelligence-layer-for-industrial-assets-our-investment-in-scope/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "We use hubspot for managing our newsletter 6 months HTTPS Save preferences Accept all cookies",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-9c382762b9",
+      "url": "https://www.indexventures.com/perspectives/building-the-next-generation-of-real-time-ai-models-our-investment-in-cartesia/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "We use hubspot for managing our newsletter 6 months HTTPS Save preferences Accept all cookies",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-acf797cc26",
+      "url": "https://www.indexventures.com/perspectives/a-new-era-for-electronics-design-our-investment-in-quilter/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "We use hubspot for managing our newsletter 6 months HTTPS Save preferences Accept all cookies",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d34e3cb47e",
+      "url": "https://www.indexventures.com/perspectives/achieving-the-sublime-in-email-security-announcing-our-20m-series-a-investment/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "We use hubspot for managing our newsletter 6 months HTTPS Save preferences Accept all cookies",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d4d9fa24f9",
+      "url": "https://www.indexventures.com/perspectives/building-a-new-energy-model-for-europe-our-investment-in-nomos/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "We use hubspot for managing our newsletter 6 months HTTPS Save preferences Accept all cookies",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d6fe9de9d7",
+      "url": "https://www.indexventures.com/",
+      "title": "Index Ventures — homepage",
+      "excerpt": "We use hubspot for managing our newsletter 6 months HTTPS Save preferences Accept all cookies",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e34969629f",
+      "url": "https://www.indexventures.com/perspectives/building-a-new-energy-model-for-europe-our-investment-in-nomos/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "not the easiest, path. In a little more than 24 months, Stefan and his co-founder Nils have built a",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e36728a9a0",
+      "url": "https://www.indexventures.com/perspectives/see-hear-speak-investing-in-livekit-and-the-future-of-realtime-applications/",
+      "title": "Index Ventures — application page",
+      "excerpt": "We use hubspot for managing our newsletter 6 months HTTPS Save preferences Accept all cookies",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-f04df79a9a",
+      "url": "https://www.indexventures.com/perspectives/relationship/applyboard-inc/",
+      "title": "Index Ventures — application page",
+      "excerpt": "We use hubspot for managing our newsletter 6 months HTTPS Save preferences Accept all cookies",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-f46b2843e8",
+      "url": "https://www.indexventures.com/perspectives/superlinked-raises-95m-in-seed-funding-to-enable-enterprise-scale-ai-applications/",
+      "title": "Index Ventures — application page",
+      "excerpt": "We use hubspot for managing our newsletter 6 months HTTPS Save preferences Accept all cookies",
+      "page": "application"
+    },
+    {
+      "id": "check-format-7f5637e184",
+      "url": "https://www.indexventures.com/perspectives/processing-ppp-loan-applications-at-scale-instabases-anant-bhardwaj-on-leading-during-covid-19/",
+      "title": "Index Ventures — application page",
+      "excerpt": "able to continue to work productively when everyone is remote. That has had its own challenges, but we’ve tried to host",
+      "page": "application"
+    },
+    {
+      "id": "check-location-187a3e42ed",
+      "url": "https://www.indexventures.com/perspectives/built-technologies-announces-series-b-financing-led-by-goldman-sachs-investment/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Vimeo sends data collected to a server located in USA. 1 year HTTPS Youtube youtube.com If",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-1a759d45be",
+      "url": "https://www.indexventures.com/perspectives/superlinked-raises-95m-in-seed-funding-to-enable-enterprise-scale-ai-applications/",
+      "title": "Index Ventures — application page",
+      "excerpt": "Vimeo sends data collected to a server located in USA. 1 year HTTPS Youtube youtube.com If",
+      "page": "application"
+    },
+    {
+      "id": "check-location-269fc1225b",
+      "url": "https://www.indexventures.com/perspectives/building-a-new-energy-model-for-europe-our-investment-in-nomos/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Vimeo sends data collected to a server located in USA. 1 year HTTPS Youtube youtube.com If",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-3a64163439",
+      "url": "https://www.indexventures.com/perspectives/bringing-ai-to-the-fashion-industry-our-investment-in-daydream/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Vimeo sends data collected to a server located in USA. 1 year HTTPS Youtube youtube.com If",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-509ebd8bbe",
+      "url": "https://www.indexventures.com/perspectives/building-the-first-intelligence-layer-for-industrial-assets-our-investment-in-scope/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Vimeo sends data collected to a server located in USA. 1 year HTTPS Youtube youtube.com If",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-65ffd244de",
+      "url": "https://www.indexventures.com/",
+      "title": "Index Ventures — homepage",
+      "excerpt": "Vimeo sends data collected to a server located in USA. 1 year HTTPS Youtube youtube.com If",
+      "page": "details"
+    },
+    {
+      "id": "check-location-6ac067100e",
+      "url": "https://www.indexventures.com/index-io-terms-and-conditions/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Vimeo sends data collected to a server located in USA. 1 year HTTPS Youtube youtube.com If",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-9541b202de",
+      "url": "https://www.indexventures.com/perspectives/building-the-next-generation-of-real-time-ai-models-our-investment-in-cartesia/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Vimeo sends data collected to a server located in USA. 1 year HTTPS Youtube youtube.com If",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-98820e931c",
+      "url": "https://www.indexventures.com/perspectives/a-new-era-for-electronics-design-our-investment-in-quilter/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Vimeo sends data collected to a server located in USA. 1 year HTTPS Youtube youtube.com If",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-be108efa96",
+      "url": "https://www.indexventures.com/perspectives/relationship/applyboard-inc/",
+      "title": "Index Ventures — application page",
+      "excerpt": "Vimeo sends data collected to a server located in USA. 1 year HTTPS Youtube youtube.com If",
+      "page": "application"
+    },
+    {
+      "id": "check-location-c83dac8e5e",
+      "url": "https://www.indexventures.com/perspectives/a-new-way-to-see-the-world-our-investment-in-kindred/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Vimeo sends data collected to a server located in USA. 1 year HTTPS Youtube youtube.com If",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-dfecba366d",
+      "url": "https://www.indexventures.com/perspectives/achieving-the-sublime-in-email-security-announcing-our-20m-series-a-investment/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Vimeo sends data collected to a server located in USA. 1 year HTTPS Youtube youtube.com If",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-e4c68f4956",
+      "url": "https://www.indexventures.com/perspectives/ai-that-owns-business-outcomes-our-investment-in-hone/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Vimeo sends data collected to a server located in USA. 1 year HTTPS Youtube youtube.com If",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-e7ff3da7d2",
+      "url": "https://www.indexventures.com/perspectives/see-hear-speak-investing-in-livekit-and-the-future-of-realtime-applications/",
+      "title": "Index Ventures — application page",
+      "excerpt": "Vimeo sends data collected to a server located in USA. 1 year HTTPS Youtube youtube.com If",
+      "page": "application"
+    },
+    {
+      "id": "check-location-eb9c8797ed",
+      "url": "https://www.indexventures.com/perspectives/processing-ppp-loan-applications-at-scale-instabases-anant-bhardwaj-on-leading-during-covid-19/",
+      "title": "Index Ventures — application page",
+      "excerpt": "Vimeo sends data collected to a server located in USA. 1 year HTTPS Youtube youtube.com If",
+      "page": "application"
+    },
+    {
       "id": "check-name-eaa9902cd4",
       "url": "https://www.indexventures.com/",
-      "title": "Index Ventures — homepage checked by scrape.py",
+      "title": "Index Ventures — homepage",
       "excerpt": "Index Ventures Skip to main content Team Philosophy Companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-08eb8b626b",
+      "url": "https://www.indexventures.com/perspectives/a-new-way-to-see-the-world-our-investment-in-kindred/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Companies → https://www.indexventures.com/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-0d43d89e5a",
+      "url": "https://www.indexventures.com/perspectives/relationship/applyboard-inc/",
+      "title": "Index Ventures — application page",
+      "excerpt": "Companies → https://www.indexventures.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-32c89a9769",
+      "url": "https://www.indexventures.com/perspectives/see-hear-speak-investing-in-livekit-and-the-future-of-realtime-applications/",
+      "title": "Index Ventures — application page",
+      "excerpt": "Companies → https://www.indexventures.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3d75548b8c",
+      "url": "https://www.indexventures.com/perspectives/built-technologies-announces-series-b-financing-led-by-goldman-sachs-investment/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Companies → https://www.indexventures.com/companies/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-46a0fc3a6d",
       "url": "https://www.indexventures.com/",
-      "title": "Index Ventures — homepage checked by scrape.py",
+      "title": "Index Ventures — homepage",
       "excerpt": "Browse companies → https://www.indexventures.com/companies/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-5196fc8f14",
+      "url": "https://www.indexventures.com/perspectives/achieving-the-sublime-in-email-security-announcing-our-20m-series-a-investment/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Companies → https://www.indexventures.com/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-531857a2da",
+      "url": "https://www.indexventures.com/perspectives/ai-that-owns-business-outcomes-our-investment-in-hone/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Companies → https://www.indexventures.com/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5a85d5d113",
+      "url": "https://www.indexventures.com/perspectives/building-a-new-energy-model-for-europe-our-investment-in-nomos/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Companies → https://www.indexventures.com/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7a4788afdc",
+      "url": "https://www.indexventures.com/perspectives/processing-ppp-loan-applications-at-scale-instabases-anant-bhardwaj-on-leading-during-covid-19/",
+      "title": "Index Ventures — application page",
+      "excerpt": "Companies → https://www.indexventures.com/companies/",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-92f014468d",
       "url": "https://www.indexventures.com/",
-      "title": "Index Ventures — homepage checked by scrape.py",
+      "title": "Index Ventures — homepage",
       "excerpt": "And many others → https://www.indexventures.com/companies/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-955e53ddab",
+      "url": "https://www.indexventures.com/perspectives/building-the-first-intelligence-layer-for-industrial-assets-our-investment-in-scope/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Companies → https://www.indexventures.com/companies/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-95fe2120af",
       "url": "https://www.indexventures.com/",
-      "title": "Index Ventures — homepage checked by scrape.py",
+      "title": "Index Ventures — homepage",
       "excerpt": "founders we work with → https://www.indexventures.com/companies/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-9ca09b0dae",
+      "url": "https://www.indexventures.com/perspectives/superlinked-raises-95m-in-seed-funding-to-enable-enterprise-scale-ai-applications/",
+      "title": "Index Ventures — application page",
+      "excerpt": "Companies → https://www.indexventures.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-9f240113d1",
+      "url": "https://www.indexventures.com/index-io-terms-and-conditions/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Companies → https://www.indexventures.com/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b739e6497e",
+      "url": "https://www.indexventures.com/perspectives/building-the-next-generation-of-real-time-ai-models-our-investment-in-cartesia/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Companies → https://www.indexventures.com/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d04af23b93",
+      "url": "https://www.indexventures.com/perspectives/bringing-ai-to-the-fashion-industry-our-investment-in-daydream/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Companies → https://www.indexventures.com/companies/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-f91f874d54",
       "url": "https://www.indexventures.com/",
-      "title": "Index Ventures — homepage checked by scrape.py",
+      "title": "Index Ventures — homepage",
       "excerpt": "Companies → https://www.indexventures.com/companies/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-fe4e56809c",
+      "url": "https://www.indexventures.com/perspectives/a-new-era-for-electronics-design-our-investment-in-quilter/",
+      "title": "Index Ventures — terms page",
+      "excerpt": "Companies → https://www.indexventures.com/companies/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-91c72599b5",
       "url": "https://www.indexventures.com/",
-      "title": "Index Ventures — homepage checked by scrape.py",
+      "title": "Index Ventures — homepage",
       "excerpt": "https://www.indexventures.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-b619cf8fc8",
+      "url": "https://www.indexventures.com/",
+      "page": "details",
+      "excerpt": "Index Ventures Skip to main content Team Philosophy Companies Perspectives Resources Team Philosophy Companies Perspectives Resources Search Submit Search Find a team member, company, Perspectives piece or Index Press resource Back Perspectives Companies Index Press Team Startup Jobs We invest in who you are, not just what you do. We invest in who you are, not just what you do. Sorry, your browser doesn't support playback for this video Asher, Aidan and Ben Pathologically curious. Tireless debaters. Cheerful contrarians. Read more Asher, Aidan and Ben Flapping Airplanes Sorry, your browser doesn't support playback for this video Scott Morton Launch pad veteran. Chaser of open waters. Hardware's software renegade. Read more Scott Morton Revel Sorry, your browser doesn't support playback for this video Joon Sung Park Multidisciplinary artist. Agent architect. Simulator of worlds. Read more Joon Sung Park Simile Sorry, your browser doesn't support playback for this video Lin Qiao AI torchbearer. Inference innovator. Open-source evangelist. Read more Lin Qiao Fireworks Sorry, your browser doesn't support playback for this video Jean-Charles Samuelian-Werve Grandchild of refugees. Methodic optimist. Global health maverick. Read more Jean-Charles Samuelian-Werve Alan Sorry, your browser doesn't support playback for this video Julie Bornstein Weekend mallrat. Champion of women."
+    },
+    {
+      "id": "check-page-c0c627457a",
+      "url": "https://www.indexventures.com/perspectives/processing-ppp-loan-applications-at-scale-instabases-anant-bhardwaj-on-leading-during-covid-19/",
+      "page": "application",
+      "excerpt": "Processing PPP Loan Applications at... | Index Ventures Skip to main content Team Philosophy Companies Perspectives Resources Team Philosophy Companies Perspectives Resources Search Submit Search Find a team member, company, Perspectives piece or Index Press resource Back Perspectives Companies Index Press Team Startup Jobs Navigate back to Perspectives Navigate back to Insights Processing PPP Loan Applications at Scale: Instabase’s Anant Bhardwaj on Leading During COVID-19 X.com Facebook Linkedin Share Instabase has spent five years building out its vision to become the operating system for business apps. But its engineering team was tested to the max during the Covid-19 pandemic when banking customers urgently requested an app that could automatically process hundreds of thousands of applications for emergency federal loans. Instabase’s founder and CEO Anant Bhardwaj tells Index how their stellar engineering team turned a daunting technical challenge into a massive win. About this series: As we navigate the evolving landscape of the world today, it's been powerful to see many organizations taking on new initiatives to engage with their employees, customers, and communities. We spoke with leaders at our portfolio companies about the meaningful actions they’ve taken to continue moving forward through the COVID-19 pandemic. We hope the insights, advice, and best practices"
+    },
+    {
+      "id": "check-page-096f42c0a7",
+      "url": "https://www.indexventures.com/perspectives/relationship/applyboard-inc/",
+      "page": "application",
+      "excerpt": "ApplyBoard Inc. | Perspectives | Index Ventures Skip to main content Team Philosophy Companies Perspectives Resources Team Philosophy Companies Perspectives Resources Search Submit Search Find a team member, company, Perspectives piece or Index Press resource Back Perspectives Companies Index Press Team Startup Jobs Perspectives ApplyBoard Inc. Perspectives on ApplyBoard Inc. Accessing an International Education Just Got Easier by Index Ventures This link opens the post, \"Accessing an International Education Just Got Easier\" Index Ventures We chose the hand as our mark symbolizing the humility, care and effort of entrepreneurs building their businesses. It also stands for our commitment to them as partners in realizing their vision. San Francisco New York London CONTACT Offices Team X.com LinkedIn RESOURCES Startup Jobs Stock Options Winning in the US Scaling Through Chaos Not Optional LP Login Disclaimers & Disclosures Modern Slavery Act TCFD Diclosure Privacy Copyright ©2026 Index Ventures This website uses cookies This website uses cookies and other tracking technologies for functional and analytical purposes. To improve your browsing experience on our site, we would also like to place tracking cookies. If you prefer to reject the cookies, please use this link to access the video: www.indexventures.com Manage cookies Necessary Name Domain Purpose Expiration Security"
+    },
+    {
+      "id": "check-page-29648a5726",
+      "url": "https://www.indexventures.com/perspectives/see-hear-speak-investing-in-livekit-and-the-future-of-realtime-applications/",
+      "page": "application",
+      "excerpt": "See, Hear, Speak: Investing in LiveKit... | by Sahir Azam | Index Ventures Skip to main content Team Philosophy Companies Perspectives Resources Team Philosophy Companies Perspectives Resources Search Submit Search Find a team member, company, Perspectives piece or Index Press resource Back Perspectives Companies Index Press Team Startup Jobs Navigate back to Perspectives Navigate back to News See, Hear, Speak: Investing in LiveKit and the Future of Realtime Applications by Sahir Azam X.com Facebook Linkedin Share LiveKit co-founders Russ d'Sa and David Zhao The nature of software is changing. As models become more capable, they're enabling applications that simply weren't possible before: agents that can see, speak, and act in the physical world. At the same time, how we interact with technology is shifting from clicks and screens toward voice, video, augmented reality, and robotics. But these new interaction paradigms demand a different kind of infrastructure that’s built for the low-latency, continuity, and reliability these experiences require. Last year, through friends of Index, I got connected with LiveKit founders Russ d’Sa and David Zhao. I knew they were building developer tools for adding voice and video to applications like OpenAI’s ChatGPT voice mode, but I didn’t fully grasp the scope of their vision until I sat down with them. Having spent years around"
+    },
+    {
+      "id": "check-page-43155bdbba",
+      "url": "https://www.indexventures.com/perspectives/superlinked-raises-95m-in-seed-funding-to-enable-enterprise-scale-ai-applications/",
+      "page": "application",
+      "excerpt": "Superlinked Raises $9.5M in Seed... | Index Ventures Skip to main content Team Philosophy Companies Perspectives Resources Team Philosophy Companies Perspectives Resources Search Submit Search Find a team member, company, Perspectives piece or Index Press resource Back Perspectives Companies Index Press Team Startup Jobs Navigate back to Perspectives Navigate back to News Superlinked Raises $9.5M in Seed Funding to Enable Enterprise-Scale AI Applications by Index Ventures X.com Facebook Linkedin Share The Superlinked founding team, Ben Gutkovich and Daniel Svonava. QUICK TAKE Superlinked enables companies to build machine learning-powered software using their complex data faster than ever before. Bridging the gap between data and vector databases, Superlinked can transform everything from text to video into vector embeddings (how AI processes data) at scale. The company has raised $9.5 million in seed funding led by Index Ventures and Tomasz Tunguz to meet market demand and expand product capabilities. Superlinked was founded by a team with deep experience in machine learning and enterprise applications. Daniel Svonava spent years at YouTube building ML infrastructure and Ben Gutkovich, a former software engineer, previously supported corporations with digital transformation. INDEX PERSPECTIVE By Bryan Offutt, Partner at Index When new technologies are created, they typically"
+    },
+    {
+      "id": "check-page-336d5653e1",
+      "url": "https://www.indexventures.com/index-io-terms-and-conditions/",
+      "page": "terms",
+      "excerpt": "Index IO Terms and Conditions | Index Ventures Skip to main content Team Philosophy Companies Perspectives Resources Team Philosophy Companies Perspectives Resources Search Submit Search Find a team member, company, Perspectives piece or Index Press resource Back Perspectives Companies Index Press Team Startup Jobs Index IO Terms and Conditions Security Index IO is a secure platform proprietary to the Index Ventures group. The contents of this platform are private and confidential and users agree to these stated terms of and conditions of usage and in particular that matters discussed between users of the platform should be not shared outside the platform without Index Ventures’ express permission. The platform is accessible solely via interfaces created by Index Ventures and includes user authentication, access controls, user permissions, data encryption and a secure protected database. Although these facilities provide a high level of protection, total security of the website cannot be guaranteed. Access to the platform via these interfaces, which is not in accordance with user permissions granted, shall constitute an infringement of Index Ventures proprietary rights, who shall be entitled to take appropriate action as necessary against the concerned infringer. Disclosure Information held on Index IO will not be protected from the normal rules of disclosure in legal"
+    },
+    {
+      "id": "check-page-4d46996143",
+      "url": "https://www.indexventures.com/perspectives/a-new-era-for-electronics-design-our-investment-in-quilter/",
+      "page": "terms",
+      "excerpt": "A New Era for Electronics Design: Our... | by Nina Achadjian | Index Ventures Skip to main content Team Philosophy Companies Perspectives Resources Team Philosophy Companies Perspectives Resources Search Submit Search Find a team member, company, Perspectives piece or Index Press resource Back Perspectives Companies Index Press Team Startup Jobs Navigate back to Perspectives Navigate back to News A New Era for Electronics Design: Our Investment in Quilter by Nina Achadjian X.com Facebook Linkedin Share In 2014, Sergiy Nesterenko was an avionics intern at SpaceX. One of his first assignments was to design a printed circuit board, or PCB, the backbone of every modern electronic device. A recent UC Berkeley grad with a triple major in math, physics, and chemistry, he assumed it would be straightforward. Instead, it turned into weeks of painstaking manual work and, at one point, a board that literally caught fire in his hands. “That’s when I realized, not only is this process really slow and painful,” he told us, “it’s also extremely error-prone.” Today, we’re in the midst of a hardware renaissance. From semiconductors and EVs to aerospace, robotics, and defense, the pace of innovation in physical products has never been faster. Every new car, drone, satellite, and smartphone needs PCBs that are smaller, denser, and more reliable with each generation. As the race to innovate gets"
+    },
+    {
+      "id": "check-page-a261052da4",
+      "url": "https://www.indexventures.com/perspectives/a-new-way-to-see-the-world-our-investment-in-kindred/",
+      "page": "terms",
+      "excerpt": "A New Way to See the World: Our... | by Vlad Loktev | Index Ventures Skip to main content Team Philosophy Companies Perspectives Resources Team Philosophy Companies Perspectives Resources Search Submit Search Find a team member, company, Perspectives piece or Index Press resource Back Perspectives Companies Index Press Team Startup Jobs Navigate back to Perspectives Navigate back to News A New Way to See the World: Our Investment in Kindred by Vlad Loktev X.com Facebook Linkedin Share Two years ago, I learned about Kindred , the home-swapping platform Justine Palefsky and Tasneem Amina were building, after my friend Blake Armstrong mentioned it to me in passing. I was intrigued with slight hesitation – not because home swapping lacked appeal, but because I’d seen other companies try it and fail to scale. What stood out, though, was how differently Kindred operated. It felt less like a marketplace and more like a community: members were thoroughly vetted, most homes were primary residences, and guests treated them with real care. Justine and I met at a coffee shop in Jackson Square. Right away, I could tell she was special. She distilled in five seconds a problem I’d been grappling with in home sharing for much of my career: trust . It’s fundamentally hard to invite a stranger into your home, and a lot of people don’t consider it because it’s scary. Justine believed that if you"
+    },
+    {
+      "id": "check-page-f7aa8c2b1c",
+      "url": "https://www.indexventures.com/perspectives/achieving-the-sublime-in-email-security-announcing-our-20m-series-a-investment/",
+      "page": "terms",
+      "excerpt": "Achieving the Sublime in Email... | by Jahanvi Sardana, Shardul Shah | Index Ventures Skip to main content Team Philosophy Companies Perspectives Resources Team Philosophy Companies Perspectives Resources Search Submit Search Find a team member, company, Perspectives piece or Index Press resource Back Perspectives Companies Index Press Team Startup Jobs Navigate back to Perspectives Navigate back to News Achieving the Sublime in Email Security: Announcing Our $20M Series A Investment by Jahanvi Sardana , Shardul Shah X.com Facebook Linkedin Share The Sublime founding team, Joshua Kamdjou and Ian Thiel . It used to be easy to spot a phishing email. Littered with poor grammar, awkward syntax, and dubious sender details, the average internet user could quickly identify and clear spam from their inbox and move on to “real” emails worthy of their attention. However, the email security landscape is changing. Now, attackers can input the same email into ChatGPT or Gemini, create sophisticated phishing campaigns that are almost indistinguishable from trustworthy emails, and launch them at an unprecedented scale. In 2023, according to the FBI’s Internet Crime Report, Business Email Compromise (BEC) accounted for nearly $3 billion in losses. The strength of email — its universal reach and essential role in business communications — makes it a prime target for the most advanced cyber"
+    },
+    {
+      "id": "check-page-ad1f8deb92",
+      "url": "https://www.indexventures.com/perspectives/ai-that-owns-business-outcomes-our-investment-in-hone/",
+      "page": "terms",
+      "excerpt": "AI That Owns Entire Business Outcomes:... | Index Ventures Skip to main content Team Philosophy Companies Perspectives Resources Team Philosophy Companies Perspectives Resources Search Submit Search Find a team member, company, Perspectives piece or Index Press resource Back Perspectives Companies Index Press Team Startup Jobs Navigate back to Perspectives Navigate back to News AI That Owns Business Outcomes: Our Investment in Hone by Shardul Shah , Mark Xu X.com Facebook Linkedin Share Founders of Hone. A year ago, a friend introduced us to Moritz Stephan as one of the most impressive all-around talents at Cognition. As we got to know him better, we could see why Moritz was so beloved in the company. In particular, we were struck by his integrity and technical depth, and by his ability to hold seemingly contradictory traits: truth-seeking yet imaginative, adventurous yet commercially minded, impatient yet fully committed once he decides on a path. Originally from Austria, Moritz studied computer science at Stanford, where he did agent research in Chelsea Finn’s lab. He later joined Cognition as an early employee, where he was part of a small team of “brain engineers” who built the core of Devin, owning the planning-and-execution harness at the heart of the product and much of the company’s work on long-horizon agents. Widely regarded as an execution machine, he was a one-man"
+    },
+    {
+      "id": "check-page-4b40b5ea76",
+      "url": "https://www.indexventures.com/perspectives/bringing-ai-to-the-fashion-industry-our-investment-in-daydream/",
+      "page": "terms",
+      "excerpt": "Bringing AI to the Fashion Industry:... | by Vlad Loktev, Danny Rimer | Index Ventures Skip to main content Team Philosophy Companies Perspectives Resources Team Philosophy Companies Perspectives Resources Search Submit Search Find a team member, company, Perspectives piece or Index Press resource Back Perspectives Companies Index Press Team Startup Jobs Navigate back to Perspectives Navigate back to News Bringing AI to the Fashion Industry: Our Investment in Daydream by Vlad Loktev , Danny Rimer X.com Facebook Linkedin Share The Daydream co-founding team (from left): Dan Cary, Julie Bornstein, Richard Kim, and Lisa Green At Index, we love fashion. Over the last decade, we’ve invested in and partnered with the founders of Anine Bing , Farfetch , END Clothing, ASOS , NET-A-PORTER , GOAT , and many others. But while this industry has seen progress with the shift from physical to online shopping, we believe AI is about to bring a whole new level of disruption. Gone are the days of search-based discovery and inspiration, with online shoppers scratching their heads for the right keywords and clicking through pages of irrelevant results. Imagine instead a world where discovering brands online is as easy as walking into your favorite store. You see carefully curated tables and racks of new and familiar labels. You talk to a sales associate and get personalized recommendations just"
+    },
+    {
+      "id": "check-page-58648decd7",
+      "url": "https://www.indexventures.com/perspectives/building-a-new-energy-model-for-europe-our-investment-in-nomos/",
+      "page": "terms",
+      "excerpt": "Building A New Energy Model For Europe:... | Index Ventures Skip to main content Team Philosophy Companies Perspectives Resources Team Philosophy Companies Perspectives Resources Search Submit Search Find a team member, company, Perspectives piece or Index Press resource Back Perspectives Companies Index Press Team Startup Jobs Navigate back to Perspectives Navigate back to News Building A New Energy Model For Europe: Our Investment In Nomos by Bastian Hasslinger , Jan Hammer X.com Facebook Linkedin Share Nomos co-founders Stefan Gerbes and Nils Bitzer AI has fundamentally transformed how tech firms are built, but the essential ingredient of the best companies has remained the same: the talent of the founders and those they recruit. It’s why we continue to invest in people, just as we did in 1996. This belief in people is the main reason we’re backing Nomos. I first met co-founder Stefan almost a decade ago, when he was interning at a company I worked at, and it was clear then that he was special. He not only has the raw IQ found in the most exceptional founders, but total determination backed by first-principles thinking – he’s laser-focused on taking the best, not the easiest, path. In a little more than 24 months, Stefan and his co-founder Nils have built a fully integrated, AI-native power company with a team of eight. They could have launched sooner by using third-party"
+    },
+    {
+      "id": "check-page-77bf7ccd31",
+      "url": "https://www.indexventures.com/perspectives/building-the-first-intelligence-layer-for-industrial-assets-our-investment-in-scope/",
+      "page": "terms",
+      "excerpt": "Building the first intelligence layer... | by Stephane Kurgan, Bastian Hasslinger | Index Ventures Skip to main content Team Philosophy Companies Perspectives Resources Team Philosophy Companies Perspectives Resources Search Submit Search Find a team member, company, Perspectives piece or Index Press resource Back Perspectives Companies Index Press Team Startup Jobs Navigate back to Perspectives Navigate back to News Building the first intelligence layer for industrial assets: Our investment in Scope by Stephane Kurgan , Bastian Hasslinger X.com Facebook Linkedin Share Scope cofounders Jakob Cassiman and Jonny Low There's a type of founder we keep coming back to at Index: someone who works so obsessively to fix a problem they’ve identified that it becomes their only calling. Rather than a market to be sized, it’s a challenge they feel compelled to solve. That's how it felt the first time we sat down with Jonny Low, Scope’s CEO and co-founder. When we met Jonny, it immediately became clear that he had an intimate knowledge of the industry he wanted to make more efficient. Jonny and his co-founder Jakob had spent months cold-calling Testing, Investigations and Certifications (TIC) companies, visiting sites and joining inspections themselves. The result is a product that TIC firms love. Inspectors at 6 of the top 10 global inspection companies are using the platform. The company"
+    },
+    {
+      "id": "check-page-f27a56205a",
+      "url": "https://www.indexventures.com/perspectives/building-the-next-generation-of-real-time-ai-models-our-investment-in-cartesia/",
+      "page": "terms",
+      "excerpt": "Building the Next Generation of... | Index Ventures Skip to main content Team Philosophy Companies Perspectives Resources Team Philosophy Companies Perspectives Resources Search Submit Search Find a team member, company, Perspectives piece or Index Press resource Back Perspectives Companies Index Press Team Startup Jobs Navigate back to Perspectives Navigate back to News Building the Next Generation of Real-Time AI Models: Our Investment in Cartesia by Index Ventures X.com Facebook Linkedin Share Cartesia co-founding team: Brandon Yang, Karan Goel, Albert Gu, and Arjun Desai QUICK TAKE Cartesia has created a new type of AI architecture that can match transformer performance with fewer resources. The company’s state-space models (SSMs) are more efficient, with better long-term memory and lower latency than the dominant transformer-based models. Founded by a group of researchers from the Stanford AI Lab, Cartesia has announced $22 million in new funding led by Index Ventures, bringing total capital raised to $27 million. Cartesia’s first product, Sonic, is already the world’s fastest text-to-speech model. It can operate locally on any device without an internet connection and outperforms the best existing models across voice quality, stability, and accuracy. “Transformers have provided a step-change in model performance, but given their limitations there is opportunity for a"
+    },
+    {
+      "id": "check-page-72b999bd8d",
+      "url": "https://www.indexventures.com/perspectives/built-technologies-announces-series-b-financing-led-by-goldman-sachs-investment/",
+      "page": "terms",
+      "excerpt": "Built Technologies Announces Series B | Index Ventures Skip to main content Team Philosophy Companies Perspectives Resources Team Philosophy Companies Perspectives Resources Search Submit Search Find a team member, company, Perspectives piece or Index Press resource Back Perspectives Companies Index Press Team Startup Jobs Navigate back to Perspectives Navigate back to News Built Technologies Announces Series B by Index Ventures X.com Facebook Linkedin Share The Built team Investment will help accelerate the company's mission to reshape construction lending ecosystem. Built Technologies , a leading FinTech company propelling construction lending into the digital age, today announced it has completed its Series B financing round of $31 million led by Goldman Sachs Investment Partners. The round included existing investors Index Ventures and Nyca Partners, as well as Regions Bank, Canapi Ventures and Nine Four Ventures, and brings Built’s total funding to $55 million. Founded in 2014, Built has been on a rapid growth trajectory. Since 2017, the company has tripled its customer base, which includes a number of leading banks and other key non-bank construction lenders. The platform has helped lenders service more than $24 billion of construction loans since its launch in 2015. We started Built with the desire to bring modern technology and risk management to an area of lending"
     }
   ],
   "findings": {
@@ -61,8 +496,38 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-d6fe9de9d7"
+      },
+      {
+        "value": "24 months",
+        "evidenceId": "check-duration-e34969629f"
+      },
+      {
+        "value": "10 months",
+        "evidenceId": "check-duration-0f984d1f59"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-7f5637e184"
+      }
+    ],
+    "location": [
+      {
+        "value": "USA",
+        "evidenceId": "check-location-65ffd244de"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.indexventures.com/companies/",

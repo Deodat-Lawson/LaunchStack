@@ -1,15 +1,7 @@
 {
   "programId": "contrary",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://contrary.com/companies",
-      "page": "portfolio",
-      "anchor": "Companies",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://applications.contrary.com",
       "page": "application",
@@ -19,10 +11,106 @@
       "origin": "official"
     },
     {
+      "url": "https://contrary.com/blog/first-check-program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://contrary.com/blog/venture-partner-apps-2026",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://contrary.com/companies",
+      "page": "portfolio",
+      "anchor": "Companies",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://contrary.com/deals",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://contrary.com/investments",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://jobs.contrary.com/",
       "page": "portfolio",
       "anchor": "Portfolio Jobs",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://jobs.contrary.com/$/jobs",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://research.contrary.com/about",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://research.contrary.com/company/openai",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://research.contrary.com/deep-dive/anthropic-ipo-timeline-endangered",
+      "page": "batches",
+      "anchor": "Anthropic IPO Timeline Endangered Claire Schultz Read more",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://research.contrary.com/deep-dive/data-centers-lose-the-midterms",
+      "page": "terms",
+      "anchor": "Data Centers Lose the Midterms Sachin Maini Read more",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://research.contrary.com/report/anthropic-ipo-timeline-endangered",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://research.contrary.com/report/data-centers-lose-the-midterms",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

@@ -1,70 +1,277 @@
 {
   "programId": "sginnovate",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.sginnovate.com/",
     "https://www.sginnovate.com/faq",
-    "https://www.sginnovate.com/deep-tech-community"
+    "https://www.sginnovate.com/career-development-jobs",
+    "https://www.sginnovate.com/deep-tech-community",
+    "https://www.sginnovate.com/apprenticeship/helix-programme",
+    "https://www.sginnovate.com/dtc?tab=companies",
+    "https://www.sginnovate.com/our-portfolio",
+    "https://www.sginnovate.com/investments/aidtech",
+    "https://www.sginnovate.com/investments/aireverie",
+    "https://www.sginnovate.com/investments/atomionics",
+    "https://www.sginnovate.com/startup-growth-funding",
+    "https://www.sginnovate.com/full-portfolio"
   ],
   "evidence": [
     {
+      "id": "check-duration-66d38233a4",
+      "url": "https://www.sginnovate.com/apprenticeship/helix-programme",
+      "title": "SGInnovate — program page",
+      "excerpt": "the fellowships to selected candidates within 3 months after the closing of applications. Post",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-70764fe3a4",
+      "url": "https://www.sginnovate.com/apprenticeship/helix-programme",
+      "title": "SGInnovate — program page",
+      "excerpt": "to a full-time fellowship role over a period of 12 months to enrol in the Helix Immersion Programme. What",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-79291fa11a",
+      "url": "https://www.sginnovate.com/apprenticeship/helix-programme",
+      "title": "SGInnovate — program page",
+      "excerpt": "it this far, congratulations! Throughout your 12-month fellowship, we will ensure a smooth integration",
+      "page": "details"
+    },
+    {
       "id": "check-name-a36c69caa1",
       "url": "https://www.sginnovate.com/",
-      "title": "SGInnovate — homepage checked by scrape.py",
+      "title": "SGInnovate — homepage",
       "excerpt": "Home | SGInnovate × About SGInnovate Our Mission Growing Singapore’s Deep",
       "page": "details"
     },
     {
-      "id": "check-portfolio-5531b72f83",
-      "url": "https://www.sginnovate.com/faq",
-      "title": "SGInnovate — terms page checked by scrape.py",
+      "id": "check-portfolio-2ecc289e0c",
+      "url": "https://www.sginnovate.com/investments/atomionics",
+      "title": "SGInnovate — terms page",
       "excerpt": "Our Portfolio Explore our portfolio companies → https://www.sginnovate.com/our-portfolio",
       "page": "terms"
     },
     {
+      "id": "check-portfolio-5531b72f83",
+      "url": "https://www.sginnovate.com/faq",
+      "title": "SGInnovate — terms page",
+      "excerpt": "Our Portfolio Explore our portfolio companies → https://www.sginnovate.com/our-portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-66c2d8d6c8",
+      "url": "https://www.sginnovate.com/startup-growth-funding",
+      "title": "SGInnovate — portfolio page",
+      "excerpt": "Our Portfolio Explore our portfolio companies → https://www.sginnovate.com/our-portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-67426cd832",
+      "url": "https://www.sginnovate.com/investments/aidtech",
+      "title": "SGInnovate — terms page",
+      "excerpt": "Our Portfolio Explore our portfolio companies → https://www.sginnovate.com/our-portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-76fb30ba7c",
+      "url": "https://www.sginnovate.com/full-portfolio",
+      "title": "SGInnovate — portfolio page",
+      "excerpt": "Our Portfolio Explore our portfolio companies → https://www.sginnovate.com/our-portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-7a2534c5c3",
       "url": "https://www.sginnovate.com/",
-      "title": "SGInnovate — homepage checked by scrape.py",
+      "title": "SGInnovate — homepage",
+      "excerpt": "Our Portfolio Explore our portfolio companies → https://www.sginnovate.com/our-portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7c3c980adc",
+      "url": "https://www.sginnovate.com/investments/aireverie",
+      "title": "SGInnovate — terms page",
+      "excerpt": "Our Portfolio Explore our portfolio companies → https://www.sginnovate.com/our-portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-98a20a4f56",
+      "url": "https://www.sginnovate.com/apprenticeship/helix-programme",
+      "title": "SGInnovate — program page",
+      "excerpt": "Our Portfolio Explore our portfolio companies → https://www.sginnovate.com/our-portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bb8c68ca14",
+      "url": "https://www.sginnovate.com/career-development-jobs",
+      "title": "SGInnovate — program page",
       "excerpt": "Our Portfolio Explore our portfolio companies → https://www.sginnovate.com/our-portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-d9abe63cbd",
       "url": "https://www.sginnovate.com/deep-tech-community",
-      "title": "SGInnovate — details page checked by scrape.py",
+      "title": "SGInnovate — program page",
       "excerpt": "Our Portfolio Explore our portfolio companies → https://www.sginnovate.com/our-portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-e57173bc73",
+      "url": "https://www.sginnovate.com/dtc?tab=companies",
+      "title": "SGInnovate — portfolio page",
+      "excerpt": "Our Portfolio Explore our portfolio companies → https://www.sginnovate.com/our-portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-feef9878c1",
       "url": "https://www.sginnovate.com/",
-      "title": "SGInnovate — homepage checked by scrape.py",
+      "title": "SGInnovate — homepage",
       "excerpt": "Explore our portfolio → https://www.sginnovate.com/our-portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5519aac2d8",
+      "url": "https://www.sginnovate.com/apprenticeship/helix-programme",
+      "title": "SGInnovate — program page",
+      "excerpt": "Apply Now → https://central.sginnovate.com/hub/programmes/helix/projects",
       "page": "details"
     },
     {
       "id": "check-route-a0425473ae",
       "url": "https://www.sginnovate.com/",
-      "title": "SGInnovate — homepage checked by scrape.py",
+      "title": "SGInnovate — homepage",
       "excerpt": "https://www.sginnovate.com/",
       "page": "details"
+    },
+    {
+      "id": "check-route-cf83eb9247",
+      "url": "https://www.sginnovate.com/apprenticeship/helix-programme",
+      "title": "SGInnovate — program page",
+      "excerpt": "APPLY NOW → https://central.sginnovate.com/hub/programmes/helix/projects",
+      "page": "details"
+    },
+    {
+      "id": "check-status-3ef68e976f",
+      "url": "https://www.sginnovate.com/apprenticeship/helix-programme",
+      "title": "SGInnovate — program page",
+      "excerpt": "assist fellow in their search for appropriate placements through its Talent network and resources. See All Applications are now open. Check out featured jobs in the next tab, \"Roles Available\". When you are ready, click apply now. APPLY NOW",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-fba0928311",
+      "url": "https://www.sginnovate.com/",
+      "page": "details",
+      "excerpt": "Home | SGInnovate × About SGInnovate Our Mission Growing Singapore’s Deep Tech Landscape Our Leadership Board Members & Management Our Partners SGInnovate’s Global Network Press Room Latest Announcements Need Help? Contact Us FAQs What We Do Deep Tech Central Our ecosystem approach to developing talent Deep Tech Community Learn more about emerging tech trends and opportunities Career Development & Jobs Discover Deep Tech jobs and development programmes Startup Growth & Funding Access resources and support dedicated to Deep Tech companies Need Help? Contact Us FAQs Our Investments Our Portfolio Explore our portfolio companies Our Approach Building startups at the frontiers of emerging tech Our Team Connect with our team Need Help? Contact Us FAQs Experience Events Connect with Singapore's vibrant Deep Tech Community Learn @ Deep Tech Central Explore and develop skills in Deep Tech Need Help? Contact Us FAQs Resources Insights Trends & perspectives on emerging tech FAQs Have a question? Let us help! Contact Us Get in touch with us Need Help? Contact Us FAQs × Login/Sign up 190,000+ Deep Tech Community 1,000+ Community Activities 2,000+ Industry Partners Empowering innovators and talent We Invest in Deep Tech Startups Growing some of Singapore's most exciting emerging tech domains, tackling important challenges. Learn More We Develop Deep Tech Talent Nurturing talent at every"
+    },
+    {
+      "id": "check-page-954b00cba9",
+      "url": "https://www.sginnovate.com/faq",
+      "page": "terms",
+      "excerpt": "FAQ | SGInnovate × About SGInnovate Our Mission Growing Singapore’s Deep Tech Landscape Our Leadership Board Members & Management Our Partners SGInnovate’s Global Network Press Room Latest Announcements Need Help? Contact Us FAQs What We Do Deep Tech Central Our ecosystem approach to developing talent Deep Tech Community Learn more about emerging tech trends and opportunities Career Development & Jobs Discover Deep Tech jobs and development programmes Startup Growth & Funding Access resources and support dedicated to Deep Tech companies Need Help? Contact Us FAQs Our Investments Our Portfolio Explore our portfolio companies Our Approach Building startups at the frontiers of emerging tech Our Team Connect with our team Need Help? Contact Us FAQs Experience Events Connect with Singapore's vibrant Deep Tech Community Learn @ Deep Tech Central Explore and develop skills in Deep Tech Need Help? Contact Us FAQs Resources Insights Trends & perspectives on emerging tech FAQs Have a question? Let us help! Contact Us Get in touch with us Need Help? Contact Us FAQs × Login/Sign up Frequently Asked Questions - Any - Alumni Scholarships Blueprint Helix Programme PowerX Programme - Organisation PowerX Programme - Talent Summation Programme - For Foreign Talent Summation Programme - For Local Talent Summation Programme - For Organisation Select any filter or search with any text to see"
+    },
+    {
+      "id": "check-page-2c5f43b2c6",
+      "url": "https://www.sginnovate.com/career-development-jobs",
+      "page": "details",
+      "excerpt": "Career development jobs | SGInnovate × About SGInnovate Our Mission Growing Singapore’s Deep Tech Landscape Our Leadership Board Members & Management Our Partners SGInnovate’s Global Network Press Room Latest Announcements Need Help? Contact Us FAQs What We Do Deep Tech Central Our ecosystem approach to developing talent Deep Tech Community Learn more about emerging tech trends and opportunities Career Development & Jobs Discover Deep Tech jobs and development programmes Startup Growth & Funding Access resources and support dedicated to Deep Tech companies Need Help? Contact Us FAQs Our Investments Our Portfolio Explore our portfolio companies Our Approach Building startups at the frontiers of emerging tech Our Team Connect with our team Need Help? Contact Us FAQs Experience Events Connect with Singapore's vibrant Deep Tech Community Learn @ Deep Tech Central Explore and develop skills in Deep Tech Need Help? Contact Us FAQs Resources Insights Trends & perspectives on emerging tech FAQs Have a question? Let us help! Contact Us Get in touch with us Need Help? Contact Us FAQs × Login/Sign up Career Development & Jobs Explore development programmes and opportunities to chart your Deep Tech career pathway SGInnovate Talent Programmes Job Marketplace Courses Events Join our network SGInnovate Talent programmes SGInnovate’s flagship talent programmes offer multiple pathways to"
+    },
+    {
+      "id": "check-page-57f3a6a6e0",
+      "url": "https://www.sginnovate.com/deep-tech-community",
+      "page": "details",
+      "excerpt": "Deep Tech Community | SGInnovate × About SGInnovate Our Mission Growing Singapore’s Deep Tech Landscape Our Leadership Board Members & Management Our Partners SGInnovate’s Global Network Press Room Latest Announcements Need Help? Contact Us FAQs What We Do Deep Tech Central Our ecosystem approach to developing talent Deep Tech Community Learn more about emerging tech trends and opportunities Career Development & Jobs Discover Deep Tech jobs and development programmes Startup Growth & Funding Access resources and support dedicated to Deep Tech companies Need Help? Contact Us FAQs Our Investments Our Portfolio Explore our portfolio companies Our Approach Building startups at the frontiers of emerging tech Our Team Connect with our team Need Help? Contact Us FAQs Experience Events Connect with Singapore's vibrant Deep Tech Community Learn @ Deep Tech Central Explore and develop skills in Deep Tech Need Help? Contact Us FAQs Resources Insights Trends & perspectives on emerging tech FAQs Have a question? Let us help! Contact Us Get in touch with us Need Help? Contact Us FAQs × Login/Sign up Deep Tech Community Learn more about emerging tech trends and opportunities Events Insights & Resources Courses Join our network Upcoming Events See All NVIDIA Certification: Your Roadmap Across the AI Stack Artificial Intelligence Nov 19, 2026 Register NVIDIA Training Labs at SIGGRAPH Asia 2026"
+    },
+    {
+      "id": "check-page-0d4a7d77cc",
+      "url": "https://www.sginnovate.com/apprenticeship/helix-programme",
+      "page": "details",
+      "excerpt": "Helix | SGInnovate × About SGInnovate Our Mission Growing Singapore’s Deep Tech Landscape Our Leadership Board Members & Management Our Partners SGInnovate’s Global Network Press Room Latest Announcements Need Help? Contact Us FAQs What We Do Deep Tech Central Our ecosystem approach to developing talent Deep Tech Community Learn more about emerging tech trends and opportunities Career Development & Jobs Discover Deep Tech jobs and development programmes Startup Growth & Funding Access resources and support dedicated to Deep Tech companies Need Help? Contact Us FAQs Our Investments Our Portfolio Explore our portfolio companies Our Approach Building startups at the frontiers of emerging tech Our Team Connect with our team Need Help? Contact Us FAQs Experience Events Connect with Singapore's vibrant Deep Tech Community Learn @ Deep Tech Central Explore and develop skills in Deep Tech Need Help? Contact Us FAQs Resources Insights Trends & perspectives on emerging tech FAQs Have a question? Let us help! Contact Us Get in touch with us Need Help? Contact Us FAQs × Login/Sign up Programme Overview Roles Available FAQs Programme Overview Discover your biomedical aspirations The Helix Immersion Programme (HIP) is a one year, full time on-job-training fellowship designed for individuals looking to grow their careers in the life science industry. Through this programme, you can look"
+    },
+    {
+      "id": "check-page-b29431e5f2",
+      "url": "https://www.sginnovate.com/dtc?tab=companies",
+      "page": "portfolio",
+      "excerpt": "Deep Tech Central | SGInnovate × About SGInnovate Our Mission Growing Singapore’s Deep Tech Landscape Our Leadership Board Members & Management Our Partners SGInnovate’s Global Network Press Room Latest Announcements Need Help? Contact Us FAQs What We Do Deep Tech Central Our ecosystem approach to developing talent Deep Tech Community Learn more about emerging tech trends and opportunities Career Development & Jobs Discover Deep Tech jobs and development programmes Startup Growth & Funding Access resources and support dedicated to Deep Tech companies Need Help? Contact Us FAQs Our Investments Our Portfolio Explore our portfolio companies Our Approach Building startups at the frontiers of emerging tech Our Team Connect with our team Need Help? Contact Us FAQs Experience Events Connect with Singapore's vibrant Deep Tech Community Learn @ Deep Tech Central Explore and develop skills in Deep Tech Need Help? Contact Us FAQs Resources Insights Trends & perspectives on emerging tech FAQs Have a question? Let us help! Contact Us Get in touch with us Need Help? Contact Us FAQs × Login/Sign up Your one-stop access to Singapore’s emerging tech ecosystem serving companies, students, and professionals at every stage of their career. Create your account For Talent From jobs and talent programmes to courses and events, explore multiple pathways for new opportunities, growth and learning. For"
+    },
+    {
+      "id": "check-page-8bf14698a4",
+      "url": "https://www.sginnovate.com/our-portfolio",
+      "page": "portfolio",
+      "excerpt": "Meet our Portfolio | SGInnovate × About SGInnovate Our Mission Growing Singapore’s Deep Tech Landscape Our Leadership Board Members & Management Our Partners SGInnovate’s Global Network Press Room Latest Announcements Need Help? Contact Us FAQs What We Do Deep Tech Central Our ecosystem approach to developing talent Deep Tech Community Learn more about emerging tech trends and opportunities Career Development & Jobs Discover Deep Tech jobs and development programmes Startup Growth & Funding Access resources and support dedicated to Deep Tech companies Need Help? Contact Us FAQs Our Investments Our Portfolio Explore our portfolio companies Our Approach Building startups at the frontiers of emerging tech Our Team Connect with our team Need Help? Contact Us FAQs Experience Events Connect with Singapore's vibrant Deep Tech Community Learn @ Deep Tech Central Explore and develop skills in Deep Tech Need Help? Contact Us FAQs Resources Insights Trends & perspectives on emerging tech FAQs Have a question? Let us help! Contact Us Get in touch with us Need Help? Contact Us FAQs × Login/Sign up Meet our portfolio From Agrifood to Advanced Manufacturing, Cleantech to Quantum Computing SGInnovate focuses on early-stage Deep Tech startups focused on building solutions to tackle the world’s biggest challenges. We invest, partner in their development, and accelerate their growth through our"
+    },
+    {
+      "id": "check-page-b4fbcfbdec",
+      "url": "https://www.sginnovate.com/investments/aidtech",
+      "page": "terms",
+      "excerpt": "AID:Tech | SGInnovate × About SGInnovate Our Mission Growing Singapore’s Deep Tech Landscape Our Leadership Board Members & Management Our Partners SGInnovate’s Global Network Press Room Latest Announcements Need Help? Contact Us FAQs What We Do Deep Tech Central Our ecosystem approach to developing talent Deep Tech Community Learn more about emerging tech trends and opportunities Career Development & Jobs Discover Deep Tech jobs and development programmes Startup Growth & Funding Access resources and support dedicated to Deep Tech companies Need Help? Contact Us FAQs Our Investments Our Portfolio Explore our portfolio companies Our Approach Building startups at the frontiers of emerging tech Our Team Connect with our team Need Help? Contact Us FAQs Experience Events Connect with Singapore's vibrant Deep Tech Community Learn @ Deep Tech Central Explore and develop skills in Deep Tech Need Help? Contact Us FAQs Resources Insights Trends & perspectives on emerging tech FAQs Have a question? Let us help! Contact Us Get in touch with us Need Help? Contact Us FAQs × Login/Sign up Finance AID:Tech Digital identity solutions for global development and financial inclusion Founded 2016 Location Ireland Stage Series A Website aid.technology AID:Tech provides enterprise-level Blockchain and digital identity solutions to international NGOs, governments, and corporates to address some of"
+    },
+    {
+      "id": "check-page-903ba5d844",
+      "url": "https://www.sginnovate.com/investments/aireverie",
+      "page": "terms",
+      "excerpt": "AI.Reverie | SGInnovate × About SGInnovate Our Mission Growing Singapore’s Deep Tech Landscape Our Leadership Board Members & Management Our Partners SGInnovate’s Global Network Press Room Latest Announcements Need Help? Contact Us FAQs What We Do Deep Tech Central Our ecosystem approach to developing talent Deep Tech Community Learn more about emerging tech trends and opportunities Career Development & Jobs Discover Deep Tech jobs and development programmes Startup Growth & Funding Access resources and support dedicated to Deep Tech companies Need Help? Contact Us FAQs Our Investments Our Portfolio Explore our portfolio companies Our Approach Building startups at the frontiers of emerging tech Our Team Connect with our team Need Help? Contact Us FAQs Experience Events Connect with Singapore's vibrant Deep Tech Community Learn @ Deep Tech Central Explore and develop skills in Deep Tech Need Help? Contact Us FAQs Resources Insights Trends & perspectives on emerging tech FAQs Have a question? Let us help! Contact Us Get in touch with us Need Help? Contact Us FAQs × Login/Sign up AI - B2B AI.Reverie Synthetic data generation and simulation platform Founded 2016 Location USA Stage Pre-Series A Website AI.Reverie is a New York-headquartered, early-stage company that provides Computer Vision algorithms and synthetically generated data at scale for the security and surveillance"
+    },
+    {
+      "id": "check-page-24df3cb02b",
+      "url": "https://www.sginnovate.com/investments/atomionics",
+      "page": "terms",
+      "excerpt": "Atomionics | SGInnovate × About SGInnovate Our Mission Growing Singapore’s Deep Tech Landscape Our Leadership Board Members & Management Our Partners SGInnovate’s Global Network Press Room Latest Announcements Need Help? Contact Us FAQs What We Do Deep Tech Central Our ecosystem approach to developing talent Deep Tech Community Learn more about emerging tech trends and opportunities Career Development & Jobs Discover Deep Tech jobs and development programmes Startup Growth & Funding Access resources and support dedicated to Deep Tech companies Need Help? Contact Us FAQs Our Investments Our Portfolio Explore our portfolio companies Our Approach Building startups at the frontiers of emerging tech Our Team Connect with our team Need Help? Contact Us FAQs Experience Events Connect with Singapore's vibrant Deep Tech Community Learn @ Deep Tech Central Explore and develop skills in Deep Tech Need Help? Contact Us FAQs Resources Insights Trends & perspectives on emerging tech FAQs Have a question? Let us help! Contact Us Get in touch with us Need Help? Contact Us FAQs × Login/Sign up Quantum Atomionics Atom-Interferometry based sensing systems Founded 2018 Location Singapore Stage Seed Website atomionics.com/ Atomionics - A SGInnovate Portfolio Company More than SGD$50 billion has been spent on sensing solutions for critical needs like navigation and positioning, pinpointing oil and"
+    },
+    {
+      "id": "check-page-d494cd3ae2",
+      "url": "https://www.sginnovate.com/startup-growth-funding",
+      "page": "portfolio",
+      "excerpt": "Startup Growth & Funding | SGInnovate × About SGInnovate Our Mission Growing Singapore’s Deep Tech Landscape Our Leadership Board Members & Management Our Partners SGInnovate’s Global Network Press Room Latest Announcements Need Help? Contact Us FAQs What We Do Deep Tech Central Our ecosystem approach to developing talent Deep Tech Community Learn more about emerging tech trends and opportunities Career Development & Jobs Discover Deep Tech jobs and development programmes Startup Growth & Funding Access resources and support dedicated to Deep Tech companies Need Help? Contact Us FAQs Our Investments Our Portfolio Explore our portfolio companies Our Approach Building startups at the frontiers of emerging tech Our Team Connect with our team Need Help? Contact Us FAQs Experience Events Connect with Singapore's vibrant Deep Tech Community Learn @ Deep Tech Central Explore and develop skills in Deep Tech Need Help? Contact Us FAQs Resources Insights Trends & perspectives on emerging tech FAQs Have a question? Let us help! Contact Us Get in touch with us Need Help? Contact Us FAQs × Login/Sign up Startup Growth & Funding Access resources and support dedicated to Deep Tech companies SGInnovate Talent Programmes Hire & Connect Community Events Resources Join our network Join our flagship talent programmes as a partner Gain access to networking and branding opportunities through our"
+    },
+    {
+      "id": "check-page-bbdc51e139",
+      "url": "https://www.sginnovate.com/full-portfolio",
+      "page": "portfolio",
+      "excerpt": "Meet our Portfolio | SGInnovate × About SGInnovate Our Mission Growing Singapore’s Deep Tech Landscape Our Leadership Board Members & Management Our Partners SGInnovate’s Global Network Press Room Latest Announcements Need Help? Contact Us FAQs What We Do Deep Tech Central Our ecosystem approach to developing talent Deep Tech Community Learn more about emerging tech trends and opportunities Career Development & Jobs Discover Deep Tech jobs and development programmes Startup Growth & Funding Access resources and support dedicated to Deep Tech companies Need Help? Contact Us FAQs Our Investments Our Portfolio Explore our portfolio companies Our Approach Building startups at the frontiers of emerging tech Our Team Connect with our team Need Help? Contact Us FAQs Experience Events Connect with Singapore's vibrant Deep Tech Community Learn @ Deep Tech Central Explore and develop skills in Deep Tech Need Help? Contact Us FAQs Resources Insights Trends & perspectives on emerging tech FAQs Have a question? Let us help! Contact Us Get in touch with us Need Help? Contact Us FAQs × Login/Sign up Meet our portfolio From Agrifood to Advanced Manufacturing, Cleantech to Quantum Computing SGInnovate focuses on early-stage Deep Tech startups focused on building solutions to tackle the world’s biggest challenges. We invest, partner in their development, and accelerate their growth through our"
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://central.sginnovate.com/hub/programmes/helix/projects",
+        "evidenceId": "check-route-cf83eb9247"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://www.sginnovate.com/",
         "evidenceId": "check-route-a0425473ae"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-3ef68e976f"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-79291fa11a"
+      },
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-66d38233a4"
+      }
+    ],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.sginnovate.com/our-portfolio",

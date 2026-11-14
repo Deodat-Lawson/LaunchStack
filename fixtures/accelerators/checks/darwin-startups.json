@@ -1,51 +1,108 @@
 {
   "programId": "darwin-startups",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
-    "https://www.darwinstartups.com/"
+    "https://www.darwinstartups.com/",
+    "https://www.darwinstartups.com/batch15",
+    "https://www.darwinstartups.com/portfolio",
+    "https://www.darwinstartups.com/s/_Portfolio-Darwin-Startups-2026.pdf"
   ],
   "evidence": [
     {
       "id": "check-name-df02877976",
       "url": "https://www.darwinstartups.com/",
-      "title": "Darwin Startups — homepage checked by scrape.py",
+      "title": "Darwin Startups — homepage",
       "excerpt": "Darwin Startups 0 Pular para conteúdo Home A Darwin Para Corporações Para",
       "page": "details"
     },
     {
       "id": "check-portfolio-375ac4c450",
       "url": "https://www.darwinstartups.com/",
-      "title": "Darwin Startups — homepage checked by scrape.py",
+      "title": "Darwin Startups — homepage",
       "excerpt": "Portfólio → https://www.darwinstartups.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-6a10593afe",
+      "url": "https://www.darwinstartups.com/batch15",
+      "title": "Darwin Startups — batches page",
+      "excerpt": "CONHEÇA NOSSO PORTFÓLIO → https://www.darwinstartups.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-7749cebe1c",
+      "url": "https://www.darwinstartups.com/portfolio",
+      "title": "Darwin Startups — portfolio page",
+      "excerpt": "Para Startups → https://www.darwinstartups.com/startups",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-7d7480d460",
+      "url": "https://www.darwinstartups.com/batch15",
+      "title": "Darwin Startups — batches page",
+      "excerpt": "Portfólio → https://www.darwinstartups.com/portfolio",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-848a30ac36",
       "url": "https://www.darwinstartups.com/",
-      "title": "Darwin Startups — homepage checked by scrape.py",
+      "title": "Darwin Startups — homepage",
       "excerpt": "Confira nosso portfólio completo → https://www.darwinstartups.com/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-8cf910dd5d",
       "url": "https://www.darwinstartups.com/",
-      "title": "Darwin Startups — homepage checked by scrape.py",
+      "title": "Darwin Startups — homepage",
       "excerpt": "Para Startups → https://www.darwinstartups.com/startups",
       "page": "details"
     },
     {
       "id": "check-portfolio-dd46d01052",
       "url": "https://www.darwinstartups.com/",
-      "title": "Darwin Startups — homepage checked by scrape.py",
+      "title": "Darwin Startups — homepage",
       "excerpt": "conheça nossos serviços → https://www.darwinstartups.com/startups",
       "page": "details"
     },
     {
+      "id": "check-portfolio-eeeec1058c",
+      "url": "https://www.darwinstartups.com/batch15",
+      "title": "Darwin Startups — batches page",
+      "excerpt": "Para Startups → https://www.darwinstartups.com/startups",
+      "page": "batches"
+    },
+    {
       "id": "check-route-7745b61438",
       "url": "https://www.darwinstartups.com/",
-      "title": "Darwin Startups — homepage checked by scrape.py",
+      "title": "Darwin Startups — homepage",
       "excerpt": "https://www.darwinstartups.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-4c6c9eec4f",
+      "url": "https://www.darwinstartups.com/",
+      "page": "details",
+      "excerpt": "Darwin Startups 0 Pular para conteúdo Home A Darwin Para Corporações Para Startups Portfólio Darwin News Contato Abrir menu Fechar menu Home A Darwin Para Corporações Para Startups Portfólio Darwin News Contato Abrir menu Fechar menu Home A Darwin Para Corporações Para Startups Portfólio Darwin News Contato Desenvolvemos relacionamentos estratégicos entre investidores, corporações e startups. Nossa missão é desenvolver o ecossistema empreendedor, transformando a vida de pessoas e empresas. Para startups oferecemos: acesso a grandes corporações do mercado com foco em desenvolver negócios de acordo com os objetivos da startup e facilitação dos processos de experimentação, PoCs e/ou novos negócios. Desenvolvimento de Negócios Estratégicos fazer parte de uma comunidade de pessoas investidas pela Darwin Startups e que passam ou passaram pelos desafios de empreender. Trocas e conexões com pares para, além de conversar sobre suas experiências, conhecer pessoas estratégicas e fazer muitos negócios. Comunidade alumni Darwin time de especialistas da Darwin Startups com experiência auxiliando mais de 1000 startups a validarem produto e mercado, levantar capital e crescer em vendas. Nosso trabalho é ajudá-los e encontrar as respostas que buscam. Acompanhamento com especialistas Acesso à rede de mentoria para desafios extraordinários e específicos que vão além do time Darwin Startups, nós"
+    },
+    {
+      "id": "check-page-e851e1ce71",
+      "url": "https://www.darwinstartups.com/batch15",
+      "page": "batches",
+      "excerpt": "Batch #15 - Darwin Startups — Darwin Startups 0 Pular para conteúdo Home A Darwin Para Corporações Para Startups Portfólio Darwin News Contato Abrir menu Fechar menu Home A Darwin Para Corporações Para Startups Portfólio Darwin News Contato Abrir menu Fechar menu Home A Darwin Para Corporações Para Startups Portfólio Darwin News Contato Programa de aceleração Darwin Startups com foco em investimento, acesso ao mercado e suporte personalizado a startups early-stage com alto potencial. INSCRIÇÕES ENCERRADAS PRÉ-INSCRIÇÃO BATCH #16 Sobre o programa Grandes negócios não nascem prontos, eles evoluem. São fruto da inquietude de quem recusa o lugar comum e decide transformar o mercado na prática. É esse espírito adaptativo que guia o manifesto da Darwin Startups e é com ele que anunciamos a retomada oficial do nosso programa de aceleração com o Batch #15. A cada geração, um grupo seleto de fundadores entra no mesmo ambiente. Acessam capital, conhecimento e conexões, cada empresa segue sua própria trajetória evolutiva. Algumas desaparecem. Algumas encontram seu nicho. Algumas transformam mercados. Nosso trabalho é encontrar as espécies dominantes do futuro. O que buscamos Buscamos prioritariamente startups early stage, nas quais possamos atuar de forma próxima e gerar valor. Não há uma régua rígida de maturidade ou valuation: clientes, pilotos e casos de uso são diferenciais, mas não"
+    },
+    {
+      "id": "check-page-fb7e0bc283",
+      "url": "https://www.darwinstartups.com/portfolio",
+      "page": "portfolio",
+      "excerpt": "Portfólio — Darwin Startups 0 Pular para conteúdo Home A Darwin Para Corporações Para Startups Portfólio Darwin News Contato Abrir menu Fechar menu Home A Darwin Para Corporações Para Startups Portfólio Darwin News Contato Abrir menu Fechar menu Home A Darwin Para Corporações Para Startups Portfólio Darwin News Contato Nosso portfólio de investidas Startups investidas pelo Programa de Aceleração da Darwin Startups Startups Exits Startups investidas pelo Programa de Aceleração da Darwin Startups que foram vendidas Conheça melhor alguns dos empreendedores e empreendedoras que evoluíram junto com a Darwin: Quer saber mais? Baixe o material sobre as startups do nosso portfólio: BAIXE O MATERIAL AQUI Darwin News, a newsletter oficial da Darwin Startups. INSCREVA-SE AQUI Home A Darwin Para Corporações Para Startups Portfólio Contato SC-401, Km 04, s/n Saco Grande, Florianópolis/SC CEP 88032-005"
+    },
+    {
+      "id": "check-page-40f966b726",
+      "url": "https://www.darwinstartups.com/s/_Portfolio-Darwin-Startups-2026.pdf",
+      "page": "portfolio",
+      "excerpt": "%PDF-1.4 % ���� 3 0 obj < < /Type /Catalog /Names < < >> /PageLabels < < /Nums [ 0 < < /S /D /St 1 >> ] >> /Outlines 2 0 R /Pages 1 0 R >> endobj 4 0 obj < < /Creator (�� G o o g l e) /Title (�� P o r t f � l i o D a r w i n S t a r t u p s 2 0 2 6) >> endobj 5 0 obj < < /Type /Page /Parent 1 0 R /MediaBox [ 0 0 720 405 ] /Contents 6 0 R /Resources 7 0 R /Annots 9 0 R /Group < < /S /Transparency /CS /DeviceRGB >> >> endobj 6 0 obj < < /Filter /FlateDecode /Length 8 0 R >> stream x��V�n E �Y� �g�k����� ��� ) �JYD �n��h � � )+/Ɋ�� � D2��8�3�3� '6 ���ܩ>���S��}B�j��v/�v�� �t�5' ��2�b ��琬w��2�� F� Y��B#� � z %'�s�;>x�i����� ����9x ���� =ۿ�� �ۢ��� rQX ,kY[�:2!xi� 9 �A� E �C� �ʲ: Gz'�p;6� =�f ���6 ����$�� �e�u���Y�s��v� ��\"� O������ ��8�d�9 N� No} ����j+��� F�a����Jo������J� ��46ֲ��Gv r+y�X FZ ��� Rp �fO�l／� l�*� �C��-\\� ܦ$kf�������� ���r���ZX#V��� �� �� < ��dz %�LE���^v��B�bĈt �n}Eb@�j���V� 1�'$J�C�a���I�pYy�f A�� k ��w�=ػ��t )��6Yh�� =��l�`q Vխ u�� ٙ־��jJ�Y��3�'�~���P�a��ᮦ�e ��7_} �{ ɷo �$i��8N�X��8x��X���닚\\*j�� �{&N�5�d^ԚW� ͟͹ڸu[m�֫毱��X'Ty �V�;��)�^ ���@EJ�� ֎���+� D,�(]� F � B c 5�� � �OԈ� �iM 25pY�G�l S ��Hp�`�s5̀���e������F 4��y �]�� YM.V�� Q���i���^���0�d�ו� �� �u� cp۳�g�0,oQb� � �y����ox -���� /�\\ݚ�q�+�:k����_q��/ug�|�k� ����?S/��0n �z=/U� ��[ �c���U��� ��k endstream endobj 8 0 obj 932 endobj 9 0 obj [ ] endobj 10 0 obj < < /CA 1.0 /ca 1.0 >> endobj 11 0 obj < < /CA 0 /ca 0"
     }
   ],
   "findings": {
@@ -61,8 +118,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.darwinstartups.com/startups",

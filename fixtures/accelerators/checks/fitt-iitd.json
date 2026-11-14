@@ -1,32 +1,262 @@
 {
   "programId": "fitt-iitd",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://fitt-iitd.in/web/home",
+    "https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
+    "https://fitt-iitd.in/web/terms-conditions",
     "https://fitt-iitd.in/web/aboutus",
-    "https://accubate.fitt-iitd.in/ext/form/3403/1/apply"
+    "https://fitt-iitd.in/web/corporate-program",
+    "https://fitt-iitd.in/web/event-overview?id=evt_id106",
+    "https://fitt-iitd.in/web/event-overview?id=evt_id109",
+    "https://fitt-iitd.in/web/event-overview?id=evt_id110",
+    "https://fitt-iitd.in/web/fitt-program",
+    "https://fitt-iitd.in/web/government-program",
+    "https://fitt-iitd.in/web/programs",
+    "https://fitt-iitd.in/web/sona-comstar-iit-delhi-innovation-program-scidip",
+    "https://fitt-iitd.in/web/document/Programs/Spark_Program.pdf"
   ],
   "evidence": [
     {
+      "id": "check-duration-3921f1421d",
+      "url": "https://fitt-iitd.in/web/sona-comstar-iit-delhi-innovation-program-scidip",
+      "title": "FITT IIT Delhi — program page",
+      "excerpt": "support will be provided over a period of 24 months in determined installments against milestones",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-a126c41dde",
+      "url": "https://fitt-iitd.in/web/sona-comstar-iit-delhi-innovation-program-scidip",
+      "title": "FITT IIT Delhi — program page",
+      "excerpt": "that the startup formation is completed within 6 months of joining the incubation program, failing",
+      "page": "details"
+    },
+    {
+      "id": "check-format-01d5856a67",
+      "url": "https://fitt-iitd.in/web/home",
+      "title": "FITT IIT Delhi — homepage",
+      "excerpt": "On Platter 04 Oct | 09:00 AM Co-creating Code... Others | Hybrid (In Person and Virtual) Event Duration - 04 Oct 2026 to 05",
+      "page": "details"
+    },
+    {
+      "id": "check-format-080fbf87d3",
+      "url": "https://fitt-iitd.in/web/home",
+      "title": "FITT IIT Delhi — homepage",
+      "excerpt": "04 Oct | 09:00 AM Co-creating Code... Others | Hybrid (In Person and Virtual) Event Duration - 04 Oct 2026 to 05 Oct",
+      "page": "details"
+    },
+    {
+      "id": "check-format-0f9854c27f",
+      "url": "https://fitt-iitd.in/web/home",
+      "title": "FITT IIT Delhi — homepage",
+      "excerpt": "the entire Indian and Global Startup community through virtual connects, mentorship and showcase opportunities. 170 +",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5173581afd",
+      "url": "https://fitt-iitd.in/web/event-overview?id=evt_id109",
+      "title": "FITT IIT Delhi — program page",
+      "excerpt": "Co-creating Code Others | 04 Oct 2026 09:00 AM | Hybrid (In Person and Virtual) Home Events Event Duration - 04 Oct 2026 to",
+      "page": "details"
+    },
+    {
+      "id": "check-format-52093cb54d",
+      "url": "https://fitt-iitd.in/web/event-overview?id=evt_id109",
+      "title": "FITT IIT Delhi — program page",
+      "excerpt": "Dellhi Co-creating Code Others | 04 Oct 2026 09:00 AM | Hybrid (In Person and Virtual) Home Events Event Duration - 04",
+      "page": "details"
+    },
+    {
+      "id": "check-format-8648a6c771",
+      "url": "https://fitt-iitd.in/web/event-overview?id=evt_id109",
+      "title": "FITT IIT Delhi — program page",
+      "excerpt": "Delhi Campus, Hauz Khas, New Delhi, India Mode: In Person/Virtual Organised by: Foundation for Innovation and Technology",
+      "page": "details"
+    },
+    {
+      "id": "check-format-9a4f307c75",
+      "url": "https://fitt-iitd.in/web/event-overview?id=evt_id109",
+      "title": "FITT IIT Delhi — program page",
+      "excerpt": "Park, IIT Delhi Campus, Hauz Khas, New Delhi, India Mode: In Person/Virtual Organised by: Foundation for Innovation and",
+      "page": "details"
+    },
+    {
+      "id": "check-format-dc6cd0ed33",
+      "url": "https://fitt-iitd.in/web/home",
+      "title": "FITT IIT Delhi — homepage",
+      "excerpt": "AM Co-creating Code... Others | Hybrid (In Person and Virtual) Event Duration - 04 Oct 2026 to 05 Oct 2026... View More",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ef870e79aa",
+      "url": "https://fitt-iitd.in/web/event-overview?id=evt_id109",
+      "title": "FITT IIT Delhi — program page",
+      "excerpt": "Code Others | 04 Oct 2026 09:00 AM | Hybrid (In Person and Virtual) Home Events Event Duration - 04 Oct 2026 to 05 Oct 2026 A",
+      "page": "details"
+    },
+    {
       "id": "check-name-9f4a20df9b",
       "url": "https://fitt-iitd.in/web/home",
-      "title": "FITT IIT Delhi — homepage checked by scrape.py",
+      "title": "FITT IIT Delhi — homepage",
       "excerpt": "| Offline FICCI, in collaboration with FICCLI FLO and FITT IIT Delhi... View More View More Stakeholders We handhold startups",
       "page": "details"
     },
     {
+      "id": "check-route-18c29c911c",
+      "url": "https://fitt-iitd.in/web/fitt-program",
+      "title": "FITT IIT Delhi — program page",
+      "excerpt": "Apply for Incubation → https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1fd852c524",
+      "url": "https://fitt-iitd.in/web/event-overview?id=evt_id109",
+      "title": "FITT IIT Delhi — program page",
+      "excerpt": "Apply for Incubation → https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-377d87dc60",
+      "url": "https://fitt-iitd.in/web/event-overview?id=evt_id110",
+      "title": "FITT IIT Delhi — program page",
+      "excerpt": "Apply for Incubation → https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-51c6c87584",
+      "url": "https://fitt-iitd.in/web/terms-conditions",
+      "title": "FITT IIT Delhi — terms page",
+      "excerpt": "Apply for Incubation → https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
+      "page": "terms"
+    },
+    {
       "id": "check-route-8851ef7fea",
       "url": "https://fitt-iitd.in/web/aboutus",
-      "title": "FITT IIT Delhi — details page checked by scrape.py",
+      "title": "FITT IIT Delhi — program page",
+      "excerpt": "Apply for Incubation → https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9c59c888d5",
+      "url": "https://fitt-iitd.in/web/corporate-program",
+      "title": "FITT IIT Delhi — program page",
+      "excerpt": "Apply for Incubation → https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-af01240a2a",
+      "url": "https://fitt-iitd.in/web/government-program",
+      "title": "FITT IIT Delhi — program page",
+      "excerpt": "Apply for Incubation → https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-bdb2511dd7",
+      "url": "https://fitt-iitd.in/web/sona-comstar-iit-delhi-innovation-program-scidip",
+      "title": "FITT IIT Delhi — program page",
       "excerpt": "Apply for Incubation → https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
       "page": "details"
     },
     {
       "id": "check-route-c69ece602a",
       "url": "https://fitt-iitd.in/web/home",
-      "title": "FITT IIT Delhi — homepage checked by scrape.py",
+      "title": "FITT IIT Delhi — homepage",
       "excerpt": "Apply for Incubation → https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
       "page": "details"
+    },
+    {
+      "id": "check-route-cf2ba99a66",
+      "url": "https://fitt-iitd.in/web/programs",
+      "title": "FITT IIT Delhi — program page",
+      "excerpt": "Apply for Incubation → https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e213537e66",
+      "url": "https://fitt-iitd.in/web/event-overview?id=evt_id106",
+      "title": "FITT IIT Delhi — program page",
+      "excerpt": "Apply for Incubation → https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-f681020f60",
+      "url": "https://fitt-iitd.in/web/home",
+      "page": "details",
+      "excerpt": "» FITT Startup Login Home About FITT About Us Governance FITT Team R & D Partnership Contract R & D R&D Partners Corporate Membership Professional Development Courses/Trainings Workshop | Conferences Capacity Development IP & Technology Transfer Intellectual Property Management Technology Transfer & Licensing IPR Policy IIT Delhi Latest Filed IP Compendium Of Technologies Research Park Innovation & Entrepreneurship Incubation Offerings Mentoring Co-working space & Idea Lounge Conference Rooms & Suites Startup Job Board Third-party service providers Startup Community Current Startups Graduated Startups Success Stories Stakeholders Programs FITT Government Corporate Infrastructure NIDHI CoE BioNEST Funding Schemes/Initiatives Atal Incubation Centre (AIC) Events Careers Contact About FITT Governance FITT Team Partners Media Technologies & Publications Careers CSR Contact Enquiry Contract R & D Register for Membership Membership Membership Fees PCR/Trainings Trainings Workshop | Conferences Conferences Capacity Development Compendium Of Technologies Licensing Technology Transfer & Licensing Technology Transfer Latest Filed IP Research and Innovation Park Science Park Infrastructure Atal Incubation Centre (AIC) Mentors Innovation Technology Transfer Office TIDE 2.0 BIRAC Big Biotechnology Ignition Grant SPARSH Social Innovation Program for Products SCIDIP SONA-COMSTAR INNOVATION"
+    },
+    {
+      "id": "check-page-d5dc671cbd",
+      "url": "https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
+      "page": "application",
+      "excerpt": "Foundation for Innovation and Technology Transfer (FITT)"
+    },
+    {
+      "id": "check-page-73fc3e49c8",
+      "url": "https://fitt-iitd.in/web/terms-conditions",
+      "page": "terms",
+      "excerpt": "» Terms & Conditions Startup Login Home About FITT About Us Governance FITT Team R & D Partnership Contract R & D R&D Partners Corporate Membership Professional Development Courses/Trainings Workshop | Conferences Capacity Development IP & Technology Transfer Intellectual Property Management Technology Transfer & Licensing IPR Policy IIT Delhi Latest Filed IP Compendium Of Technologies Research Park Innovation & Entrepreneurship Incubation Offerings Mentoring Co-working space & Idea Lounge Conference Rooms & Suites Startup Job Board Third-party service providers Startup Community Current Startups Graduated Startups Success Stories Stakeholders Programs FITT Government Corporate Infrastructure NIDHI CoE BioNEST Funding Schemes/Initiatives Atal Incubation Centre (AIC) Events Careers Contact About FITT Governance FITT Team Partners Media Technologies & Publications Careers CSR Contact Enquiry Contract R & D Register for Membership Membership Membership Fees PCR/Trainings Trainings Workshop | Conferences Conferences Capacity Development Compendium Of Technologies Licensing Technology Transfer & Licensing Technology Transfer Latest Filed IP Research and Innovation Park Science Park Infrastructure Atal Incubation Centre (AIC) Mentors Innovation Technology Transfer Office TIDE 2.0 BIRAC Big Biotechnology Ignition Grant SPARSH Social Innovation Program for Products SCIDIP SONA-COMSTAR"
+    },
+    {
+      "id": "check-page-87c8c8cd76",
+      "url": "https://fitt-iitd.in/web/aboutus",
+      "page": "details",
+      "excerpt": "FITT » About Us Startup Login Home About FITT About Us Governance FITT Team R & D Partnership Contract R & D R&D Partners Corporate Membership Professional Development Courses/Trainings Workshop | Conferences Capacity Development IP & Technology Transfer Intellectual Property Management Technology Transfer & Licensing IPR Policy IIT Delhi Latest Filed IP Compendium Of Technologies Research Park Innovation & Entrepreneurship Incubation Offerings Mentoring Co-working space & Idea Lounge Conference Rooms & Suites Startup Job Board Third-party service providers Startup Community Current Startups Graduated Startups Success Stories Stakeholders Programs FITT Government Corporate Infrastructure NIDHI CoE BioNEST Funding Schemes/Initiatives Atal Incubation Centre (AIC) Events Careers Contact About FITT Governance FITT Team Partners Media Technologies & Publications Careers CSR Contact Enquiry Contract R & D Register for Membership Membership Membership Fees PCR/Trainings Trainings Workshop | Conferences Conferences Capacity Development Compendium Of Technologies Licensing Technology Transfer & Licensing Technology Transfer Latest Filed IP Research and Innovation Park Science Park Infrastructure Atal Incubation Centre (AIC) Mentors Innovation Technology Transfer Office TIDE 2.0 BIRAC Big Biotechnology Ignition Grant SPARSH Social Innovation Program for Products SCIDIP SONA-COMSTAR"
+    },
+    {
+      "id": "check-page-d0f1da334d",
+      "url": "https://fitt-iitd.in/web/corporate-program",
+      "page": "details",
+      "excerpt": "» Corporate Incubation Programs Startup Login Home About FITT About Us Governance FITT Team R & D Partnership Contract R & D R&D Partners Corporate Membership Professional Development Courses/Trainings Workshop | Conferences Capacity Development IP & Technology Transfer Intellectual Property Management Technology Transfer & Licensing IPR Policy IIT Delhi Latest Filed IP Compendium Of Technologies Research Park Innovation & Entrepreneurship Incubation Offerings Mentoring Co-working space & Idea Lounge Conference Rooms & Suites Startup Job Board Third-party service providers Startup Community Current Startups Graduated Startups Success Stories Stakeholders Programs FITT Government Corporate Infrastructure NIDHI CoE BioNEST Funding Schemes/Initiatives Atal Incubation Centre (AIC) Events Careers Contact About FITT Governance FITT Team Partners Media Technologies & Publications Careers CSR Contact Enquiry Contract R & D Register for Membership Membership Membership Fees PCR/Trainings Trainings Workshop | Conferences Conferences Capacity Development Compendium Of Technologies Licensing Technology Transfer & Licensing Technology Transfer Latest Filed IP Research and Innovation Park Science Park Infrastructure Atal Incubation Centre (AIC) Mentors Innovation Technology Transfer Office TIDE 2.0 BIRAC Big Biotechnology Ignition Grant SPARSH Social Innovation Program for Products SCIDIP"
+    },
+    {
+      "id": "check-page-09b8de13ae",
+      "url": "https://fitt-iitd.in/web/event-overview?id=evt_id106",
+      "page": "details",
+      "excerpt": "» Events Startup Login Home About FITT About Us Governance FITT Team R & D Partnership Contract R & D R&D Partners Corporate Membership Professional Development Courses/Trainings Workshop | Conferences Capacity Development IP & Technology Transfer Intellectual Property Management Technology Transfer & Licensing IPR Policy IIT Delhi Latest Filed IP Compendium Of Technologies Research Park Innovation & Entrepreneurship Incubation Offerings Mentoring Co-working space & Idea Lounge Conference Rooms & Suites Startup Job Board Third-party service providers Startup Community Current Startups Graduated Startups Success Stories Stakeholders Programs FITT Government Corporate Infrastructure NIDHI CoE BioNEST Funding Schemes/Initiatives Atal Incubation Centre (AIC) Events Careers Contact About FITT Governance FITT Team Partners Media Technologies & Publications Careers CSR Contact Enquiry Contract R & D Register for Membership Membership Membership Fees PCR/Trainings Trainings Workshop | Conferences Conferences Capacity Development Compendium Of Technologies Licensing Technology Transfer & Licensing Technology Transfer Latest Filed IP Research and Innovation Park Science Park Infrastructure Atal Incubation Centre (AIC) Mentors Innovation Technology Transfer Office TIDE 2.0 BIRAC Big Biotechnology Ignition Grant SPARSH Social Innovation Program for Products SCIDIP SONA-COMSTAR INNOVATION"
+    },
+    {
+      "id": "check-page-03e79c8964",
+      "url": "https://fitt-iitd.in/web/event-overview?id=evt_id109",
+      "page": "details",
+      "excerpt": "» Events Startup Login Home About FITT About Us Governance FITT Team R & D Partnership Contract R & D R&D Partners Corporate Membership Professional Development Courses/Trainings Workshop | Conferences Capacity Development IP & Technology Transfer Intellectual Property Management Technology Transfer & Licensing IPR Policy IIT Delhi Latest Filed IP Compendium Of Technologies Research Park Innovation & Entrepreneurship Incubation Offerings Mentoring Co-working space & Idea Lounge Conference Rooms & Suites Startup Job Board Third-party service providers Startup Community Current Startups Graduated Startups Success Stories Stakeholders Programs FITT Government Corporate Infrastructure NIDHI CoE BioNEST Funding Schemes/Initiatives Atal Incubation Centre (AIC) Events Careers Contact About FITT Governance FITT Team Partners Media Technologies & Publications Careers CSR Contact Enquiry Contract R & D Register for Membership Membership Membership Fees PCR/Trainings Trainings Workshop | Conferences Conferences Capacity Development Compendium Of Technologies Licensing Technology Transfer & Licensing Technology Transfer Latest Filed IP Research and Innovation Park Science Park Infrastructure Atal Incubation Centre (AIC) Mentors Innovation Technology Transfer Office TIDE 2.0 BIRAC Big Biotechnology Ignition Grant SPARSH Social Innovation Program for Products SCIDIP SONA-COMSTAR INNOVATION"
+    },
+    {
+      "id": "check-page-f405a5bcf4",
+      "url": "https://fitt-iitd.in/web/event-overview?id=evt_id110",
+      "page": "details",
+      "excerpt": "» Events Startup Login Home About FITT About Us Governance FITT Team R & D Partnership Contract R & D R&D Partners Corporate Membership Professional Development Courses/Trainings Workshop | Conferences Capacity Development IP & Technology Transfer Intellectual Property Management Technology Transfer & Licensing IPR Policy IIT Delhi Latest Filed IP Compendium Of Technologies Research Park Innovation & Entrepreneurship Incubation Offerings Mentoring Co-working space & Idea Lounge Conference Rooms & Suites Startup Job Board Third-party service providers Startup Community Current Startups Graduated Startups Success Stories Stakeholders Programs FITT Government Corporate Infrastructure NIDHI CoE BioNEST Funding Schemes/Initiatives Atal Incubation Centre (AIC) Events Careers Contact About FITT Governance FITT Team Partners Media Technologies & Publications Careers CSR Contact Enquiry Contract R & D Register for Membership Membership Membership Fees PCR/Trainings Trainings Workshop | Conferences Conferences Capacity Development Compendium Of Technologies Licensing Technology Transfer & Licensing Technology Transfer Latest Filed IP Research and Innovation Park Science Park Infrastructure Atal Incubation Centre (AIC) Mentors Innovation Technology Transfer Office TIDE 2.0 BIRAC Big Biotechnology Ignition Grant SPARSH Social Innovation Program for Products SCIDIP SONA-COMSTAR INNOVATION"
+    },
+    {
+      "id": "check-page-8eb46bffca",
+      "url": "https://fitt-iitd.in/web/fitt-program",
+      "page": "details",
+      "excerpt": "» Corporate Incubation Programs Startup Login Home About FITT About Us Governance FITT Team R & D Partnership Contract R & D R&D Partners Corporate Membership Professional Development Courses/Trainings Workshop | Conferences Capacity Development IP & Technology Transfer Intellectual Property Management Technology Transfer & Licensing IPR Policy IIT Delhi Latest Filed IP Compendium Of Technologies Research Park Innovation & Entrepreneurship Incubation Offerings Mentoring Co-working space & Idea Lounge Conference Rooms & Suites Startup Job Board Third-party service providers Startup Community Current Startups Graduated Startups Success Stories Stakeholders Programs FITT Government Corporate Infrastructure NIDHI CoE BioNEST Funding Schemes/Initiatives Atal Incubation Centre (AIC) Events Careers Contact About FITT Governance FITT Team Partners Media Technologies & Publications Careers CSR Contact Enquiry Contract R & D Register for Membership Membership Membership Fees PCR/Trainings Trainings Workshop | Conferences Conferences Capacity Development Compendium Of Technologies Licensing Technology Transfer & Licensing Technology Transfer Latest Filed IP Research and Innovation Park Science Park Infrastructure Atal Incubation Centre (AIC) Mentors Innovation Technology Transfer Office TIDE 2.0 BIRAC Big Biotechnology Ignition Grant SPARSH Social Innovation Program for Products SCIDIP"
+    },
+    {
+      "id": "check-page-10237094a2",
+      "url": "https://fitt-iitd.in/web/government-program",
+      "page": "details",
+      "excerpt": "» Government Incubation Programs Startup Login Home About FITT About Us Governance FITT Team R & D Partnership Contract R & D R&D Partners Corporate Membership Professional Development Courses/Trainings Workshop | Conferences Capacity Development IP & Technology Transfer Intellectual Property Management Technology Transfer & Licensing IPR Policy IIT Delhi Latest Filed IP Compendium Of Technologies Research Park Innovation & Entrepreneurship Incubation Offerings Mentoring Co-working space & Idea Lounge Conference Rooms & Suites Startup Job Board Third-party service providers Startup Community Current Startups Graduated Startups Success Stories Stakeholders Programs FITT Government Corporate Infrastructure NIDHI CoE BioNEST Funding Schemes/Initiatives Atal Incubation Centre (AIC) Events Careers Contact About FITT Governance FITT Team Partners Media Technologies & Publications Careers CSR Contact Enquiry Contract R & D Register for Membership Membership Membership Fees PCR/Trainings Trainings Workshop | Conferences Conferences Capacity Development Compendium Of Technologies Licensing Technology Transfer & Licensing Technology Transfer Latest Filed IP Research and Innovation Park Science Park Infrastructure Atal Incubation Centre (AIC) Mentors Innovation Technology Transfer Office TIDE 2.0 BIRAC Big Biotechnology Ignition Grant SPARSH Social Innovation Program for Products SCIDIP"
+    },
+    {
+      "id": "check-page-3a8bd5c4c0",
+      "url": "https://fitt-iitd.in/web/programs",
+      "page": "details",
+      "excerpt": "» Incubation Startup Login Home About FITT About Us Governance FITT Team R & D Partnership Contract R & D R&D Partners Corporate Membership Professional Development Courses/Trainings Workshop | Conferences Capacity Development IP & Technology Transfer Intellectual Property Management Technology Transfer & Licensing IPR Policy IIT Delhi Latest Filed IP Compendium Of Technologies Research Park Innovation & Entrepreneurship Incubation Offerings Mentoring Co-working space & Idea Lounge Conference Rooms & Suites Startup Job Board Third-party service providers Startup Community Current Startups Graduated Startups Success Stories Stakeholders Programs FITT Government Corporate Infrastructure NIDHI CoE BioNEST Funding Schemes/Initiatives Atal Incubation Centre (AIC) Events Careers Contact About FITT Governance FITT Team Partners Media Technologies & Publications Careers CSR Contact Enquiry Contract R & D Register for Membership Membership Membership Fees PCR/Trainings Trainings Workshop | Conferences Conferences Capacity Development Compendium Of Technologies Licensing Technology Transfer & Licensing Technology Transfer Latest Filed IP Research and Innovation Park Science Park Infrastructure Atal Incubation Centre (AIC) Mentors Innovation Technology Transfer Office TIDE 2.0 BIRAC Big Biotechnology Ignition Grant SPARSH Social Innovation Program for Products SCIDIP SONA-COMSTAR"
+    },
+    {
+      "id": "check-page-752b7828ad",
+      "url": "https://fitt-iitd.in/web/sona-comstar-iit-delhi-innovation-program-scidip",
+      "page": "details",
+      "excerpt": "» SONA-COMSTAR-IIT Delhi Innovation Program (SCIDIP) Startup Login Home About FITT About Us Governance FITT Team R & D Partnership Contract R & D R&D Partners Corporate Membership Professional Development Courses/Trainings Workshop | Conferences Capacity Development IP & Technology Transfer Intellectual Property Management Technology Transfer & Licensing IPR Policy IIT Delhi Latest Filed IP Compendium Of Technologies Research Park Innovation & Entrepreneurship Incubation Offerings Mentoring Co-working space & Idea Lounge Conference Rooms & Suites Startup Job Board Third-party service providers Startup Community Current Startups Graduated Startups Success Stories Stakeholders Programs FITT Government Corporate Infrastructure NIDHI CoE BioNEST Funding Schemes/Initiatives Atal Incubation Centre (AIC) Events Careers Contact About FITT Governance FITT Team Partners Media Technologies & Publications Careers CSR Contact Enquiry Contract R & D Register for Membership Membership Membership Fees PCR/Trainings Trainings Workshop | Conferences Conferences Capacity Development Compendium Of Technologies Licensing Technology Transfer & Licensing Technology Transfer Latest Filed IP Research and Innovation Park Science Park Infrastructure Atal Incubation Centre (AIC) Mentors Innovation Technology Transfer Office TIDE 2.0 BIRAC Big Biotechnology Ignition Grant SPARSH Social Innovation Program"
+    },
+    {
+      "id": "check-page-b0ad451b66",
+      "url": "https://fitt-iitd.in/web/document/Programs/Spark_Program.pdf",
+      "page": "details",
+      "excerpt": "%PDF-1.4 %���� 1 0 obj < < /Type /Catalog /Version /1.4 /Pages 2 0 R /StructTreeRoot 3 0 R /MarkInfo 4 0 R /Lang (en) /ViewerPreferences 5 0 R >> endobj 6 0 obj < < /Creator (Canva) /Producer (Canva) /CreationDate (D:20230623120832+00'00') /ModDate (D:20230623120832+00'00') /Keywords (DAFlyhuWeb4,BAFjnIZXOZw) /Author (Deepika Chaudhary) /Title (Final brochure: SPARK) >> endobj 2 0 obj < < /Type /Pages /Kids [7 0 R 8 0 R 9 0 R 10 0 R 11 0 R 12 0 R] /Count 6 >> endobj 3 0 obj < < /Type /StructTreeRoot /ParentTree 13 0 R /ParentTreeNextKey 6 /K 14 0 R /IDTree 15 0 R >> endobj 4 0 obj < < /Marked true /Suspects false >> endobj 5 0 obj < < /DisplayDocTitle true >> endobj 7 0 obj < < /Type /Page /Resources 16 0 R /MediaBox [0.0 6.63003 594.95996 848.88] /Contents 17 0 R /StructParents 0 /Parent 2 0 R /Tabs /S /BleedBox [0.0 6.63003 594.95996 848.88] /TrimBox [0.0 6.63003 594.95996 848.88] /CropBox [0.0 6.63003 594.95996 848.88] /Rotate 0 /Annots [] >> endobj 8 0 obj < < /Type /Page /Resources 18 0 R /MediaBox [0.0 6.63003 594.95996 848.88] /Contents 19 0 R /StructParents 1 /Parent 2 0 R /Tabs /S /BleedBox [0.0 6.63003 594.95996 848.88] /TrimBox [0.0 6.63003 594.95996 848.88] /CropBox [0.0 6.63003 594.95996 848.88] /Rotate 0 /Annots [] >> endobj 9 0 obj < < /Type /Page /Resources 20 0 R /MediaBox [0.0 6.63003 594.95996 848.88] /Contents 21 0 R /StructParents 2 /Parent 2 0 R /Tabs /S"
     }
   ],
   "findings": {
@@ -47,8 +277,37 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-a126c41dde"
+      },
+      {
+        "value": "24 months",
+        "evidenceId": "check-duration-3921f1421d"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-0f9854c27f"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-01d5856a67"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-080fbf87d3"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

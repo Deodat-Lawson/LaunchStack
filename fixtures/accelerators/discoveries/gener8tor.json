@@ -1,12 +1,44 @@
 {
   "programId": "gener8tor",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://www.gener8tor.com/about-us",
       "page": "details",
       "anchor": "ABOUT US",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/accelerators",
+      "page": "details",
+      "anchor": "Folder: Accelerators",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/apply",
+      "page": "application",
+      "anchor": "Apply",
       "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/corporate-innovation",
+      "page": "details",
+      "anchor": "Corporate innovation Corporations Innovation Support: Engaging with startups while developing corporate venture capital or corporate innovation practices. Explore programs →",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/creatives",
+      "page": "details",
+      "anchor": "Creative Accelerators",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -19,10 +51,106 @@
       "origin": "official"
     },
     {
-      "url": "https://www.gener8tor.com/apply",
+      "url": "https://www.gener8tor.com/free-accelerators",
+      "page": "details",
+      "anchor": "Free Accelerators",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/gener8tor-accelerators-application-thank-you",
       "page": "application",
-      "anchor": "Apply",
+      "anchor": "",
       "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/investment-accelerators",
+      "page": "terms",
+      "anchor": "Investment Accelerators",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/investment-accelerators/cincinnati/thank-you",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas/thank-you",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/investment-accelerators/m-spire",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/news/applications-now-open-for-michigan-founders-fund-pre-accelerator-program-underrepresented-founders-eligible-for-15k-in-grants",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/portfolio",
+      "page": "portfolio",
+      "anchor": "portfolio companies.",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -43,49 +171,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.gener8tor.com/investment-accelerators",
-      "page": "details",
-      "anchor": "Capital + mentorship Investment Accelerators Capital and Mentorship Support: Investing $100K and helping high-growth startups gain business knowledge through a nationally ranked sy",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.gener8tor.com/free-accelerators",
-      "page": "details",
-      "anchor": "Coaching + community Free Accelerators Coaching Support: Enabling startups to identify, build, and grow through a 4- or 7-week free program to create wealth and jobs in the communi",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.gener8tor.com/skills",
       "page": "details",
-      "anchor": "Career growth Skills Accelerators Career Support: Offering workshop-style courses so career seekers can become proficient in new skills for a growing digital economy. Explore progr",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.gener8tor.com/corporate-innovation",
-      "page": "details",
-      "anchor": "Corporate innovation Corporations Innovation Support: Engaging with startups while developing corporate venture capital or corporate innovation practices. Explore programs →",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.gener8tor.com/creatives",
-      "page": "details",
-      "anchor": "Creative economy Creative Accelerators Mentorship Support: Creating space where artists build business acumen through workshops, speakers, and industry series for visual and music ",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.gener8tor.com/portfolio",
-      "page": "portfolio",
-      "anchor": "portfolio companies.",
+      "anchor": "Skills Accelerators",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -94,6 +182,22 @@
       "url": "https://www.gener8tor.com/skills-program-participation-agreement",
       "page": "details",
       "anchor": "Skills Participation Agreement",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/skills/learn-how-to-apply-ai",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.gener8tor.com/sustainability",
+      "page": "details",
+      "anchor": "Sustainability Accelerators",
       "fetched": false,
       "blocked": null,
       "origin": "official"

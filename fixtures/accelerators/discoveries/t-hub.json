@@ -1,11 +1,75 @@
 {
   "programId": "t-hub",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://www.t-hub.co/about-us",
       "page": "details",
       "anchor": "About Us About T-Hub",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.t-hub.co/accelerator-2030-presented-by-hsbc-with-partnership-with-t-hub",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.t-hub.co/aic-mobility-program",
+      "page": "details",
+      "anchor": "Read More",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.t-hub.co/aic-sustainability-program",
+      "page": "details",
+      "anchor": "Read More",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.t-hub.co/algorand-startup-lab-cohort-2",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.t-hub.co/aws-space-accelerator-apj",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.t-hub.co/aws-space-accelerator-apj-jp",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.t-hub.co/aws-space-accelerator-india",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.t-hub.co/blogs/unleashing-innovation-t--hubs-semiconductor-incubation-program",
+      "page": "details",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -19,25 +83,41 @@
       "origin": "official"
     },
     {
+      "url": "https://www.t-hub.co/mbrdi-climate-tech-incubator-student-launchpad-program-season-2",
+      "page": "application",
+      "anchor": "Apply Now",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.t-hub.co/mit-pro-quantum-executive-leadership-program",
+      "page": "details",
+      "anchor": "Read More",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.t-hub.co/news/a-total-of-23-startups-have-been-chosen-for-aic-t-hubs-sustainability-cohort-in-hyderabad",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.t-hub.co/news/t-hub-and-hexagon-selects-12-startups-for-lab32-cohort-driving-innovation-in-ai-and-digital-reality",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.t-hub.co/programs",
       "page": "details",
       "anchor": "Programs",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.t-hub.co/aic-mobility-program",
-      "page": "details",
-      "anchor": "Read More",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.t-hub.co/aic-sustainability-program",
-      "page": "details",
-      "anchor": "Read More",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -51,18 +131,10 @@
       "origin": "official"
     },
     {
-      "url": "https://www.t-hub.co/mbrdi-climate-tech-incubator-student-launchpad-program-season-2",
-      "page": "application",
-      "anchor": "Apply Now",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.t-hub.co/mit-pro-quantum-executive-leadership-program",
-      "page": "details",
-      "anchor": "Read More",
-      "fetched": false,
+      "url": "https://www.t-hub.co/terms-and-conditions",
+      "page": "terms",
+      "anchor": "Terms and Conditions",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

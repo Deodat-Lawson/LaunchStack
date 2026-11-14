@@ -1,7 +1,47 @@
 {
   "programId": "catalyst-fund",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://www.thecatalystfund.com/catalyst-climate-champions",
+      "page": "details",
+      "anchor": "Catalyst Climate Champions A 12-month program empowering individuals",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/community-overview",
+      "page": "details",
+      "anchor": "Overview Learn more about our community",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/faqs",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/inclusive-digital-commerce",
+      "page": "portfolio",
+      "anchor": "Inclusive Digital Commerce Scaled digital commerce companies in Ghana",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/insight/our-investment-thesis",
+      "page": "terms",
+      "anchor": "Learn more",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.thecatalystfund.com/our-story",
       "page": "details",
@@ -11,49 +51,65 @@
       "origin": "official"
     },
     {
-      "url": "https://www.thecatalystfund.com/portfolio",
-      "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.thecatalystfund.com/community-overview",
-      "page": "details",
-      "anchor": "Overview Learn more about our community",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.thecatalystfund.com/catalyst-climate-champions",
-      "page": "details",
-      "anchor": "Catalyst Climate Champions A 12-month program empowering individuals",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.thecatalystfund.com/past-accelerators-overview",
       "page": "details",
       "anchor": "Overview Learn more about our Past Accelerators",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.thecatalystfund.com/inclusive-digital-commerce",
+      "url": "https://www.thecatalystfund.com/portfolio",
       "page": "portfolio",
-      "anchor": "Inclusive Digital Commerce Scaled digital commerce companies in Ghana",
-      "fetched": false,
+      "anchor": "Portfolio",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.thecatalystfund.com/faqs",
-      "page": "terms",
-      "anchor": "FAQ",
+      "url": "https://www.thecatalystfund.com/portfolio?94232af5_page=2",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/portfolio?aa42568c_page=2",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/portfolios/abalobi",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/portfolios/agrails",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/portfolios/agro-supply",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/portfolios/aquarech",
+      "page": "portfolio",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

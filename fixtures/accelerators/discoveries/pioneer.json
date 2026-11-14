@@ -1,5 +1,14 @@
 {
   "programId": "pioneer",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
-  "pages": []
+  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "pages": [
+    {
+      "url": "https://pioneer.app/blog/pioneer/",
+      "page": "terms",
+      "anchor": "stopped making new investments",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
 }

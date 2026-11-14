@@ -1,59 +1,290 @@
 {
   "programId": "afore-capital",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
     "https://www.afore.vc/",
-    "https://www.afore.vc/residence"
+    "https://www.afore.vc/residence",
+    "https://www.afore.vc/portfolio",
+    "https://www.afore.vc/portfolio?6e013cc4_page=2"
   ],
   "evidence": [
     {
-      "id": "check-deal-bb84dd6600",
+      "id": "check-deal-23153c62c8",
       "url": "https://www.afore.vc/",
-      "title": "Afore Capital — homepage checked by scrape.py",
-      "excerpt": "raise later. Have an idea but not sure if it’s VC-ready? CHECK OUT OUR FOUNDERS-IN-RESIDENCE PROGRAM Learn more We don’t just say we invest Pre-Seed. We’re a $500M fund investing $500k - $2M+ with high conviction in pre-traction, pre-everything companies! We don’t focus on what can go wrong. We look for what can go",
+      "title": "Afore Capital — homepage",
+      "excerpt": "just say we invest Pre-Seed. We’re a $500M fund investing $500k - $2M+ with high conviction in pre-traction, pre-everything companies! We",
       "page": "details"
+    },
+    {
+      "id": "check-deal-e2f1ecfa2a",
+      "url": "https://www.afore.vc/",
+      "title": "Afore Capital — homepage",
+      "excerpt": "We don’t just say we invest Pre-Seed. We’re a $500M fund investing $500k - $2M+ with high conviction in pre-traction, pre-everything",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-297c835217",
+      "url": "https://www.afore.vc/residence",
+      "title": "Afore Capital — program page",
+      "excerpt": "like. You are then eligible to join the full 2-month programming for the next cohort, whenever it",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2cfb4c9105",
+      "url": "https://www.afore.vc/residence",
+      "title": "Afore Capital — program page",
+      "excerpt": "Founders-in-Residence Program: Lock in for 2 months alongside 10 teams of ambitious peers. Raise",
+      "page": "details"
+    },
+    {
+      "id": "check-format-082504cb6e",
+      "url": "https://www.afore.vc/portfolio",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "D Series E IPO Candor Consumer Candor is the tool for remote managers to track wins, feedback, and more, all in one",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-11e45a69fa",
+      "url": "https://www.afore.vc/portfolio?6e013cc4_page=2",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "Series a Series b Series c Series D Series E IPO HeySam AI Virtual sales engineer powered by AI. Bay Area Pre-Seed Series a",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-2170eb4b43",
+      "url": "https://www.afore.vc/portfolio",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "white-labeled subscription solutions to their customers. Remote Pre-Seed Series a Series b Series c Series D Series E IPO",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-679e6012f4",
+      "url": "https://www.afore.vc/portfolio",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "Series a Series b Series c Series D Series E IPO HeySam AI Virtual sales engineer powered by AI. Bay Area Pre-Seed Series a",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-759eee1045",
+      "url": "https://www.afore.vc/portfolio",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "AFORE PRE-SEED Co-Investors: Follow-On Investors: Remote ALL other-false SaaS ALL Pre-Seed Series a Series b Series",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-7b6f37985b",
+      "url": "https://www.afore.vc/portfolio?6e013cc4_page=2",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "parents. AFORE PRE-SEED Co-Investors: Follow-On Investors: Remote ALL other-false Web3 ALL Pre-Seed Series a Series b Series",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-7cae996b8b",
+      "url": "https://www.afore.vc/portfolio?6e013cc4_page=2",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "a Series b Series c Series D Series E IPO Florida St. Remote Web3 Decentralized P2P NFT lending platform with instant",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-7d16432ed5",
+      "url": "https://www.afore.vc/portfolio",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "to track wins, feedback, and more, all in one place. Remote Pre-Seed Series a Series b Series c Series D Series E IPO",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-7f93d40efd",
+      "url": "https://www.afore.vc/portfolio?6e013cc4_page=2",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "data, and customer stories to the center of their pitch. Remote Pre-Seed Series a Series b Series c Series D Series E IPO",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-86cb349213",
+      "url": "https://www.afore.vc/portfolio?6e013cc4_page=2",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "white-labeled subscription solutions to their customers. Remote Pre-Seed Series a Series b Series c Series D Series E IPO",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-9909e00388",
+      "url": "https://www.afore.vc/portfolio?6e013cc4_page=2",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "to track wins, feedback, and more, all in one place. Remote Pre-Seed Series a Series b Series c Series D Series E IPO",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-a95f08b05f",
+      "url": "https://www.afore.vc/portfolio?6e013cc4_page=2",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "P2P NFT lending platform with instant refinancing. Remote Pre-Seed Series a Series b Series c Series D Series E IPO",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-b6b83e7228",
+      "url": "https://www.afore.vc/portfolio",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "P2P NFT lending platform with instant refinancing. Remote Pre-Seed Series a Series b Series c Series D Series E IPO",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-bb51f49566",
+      "url": "https://www.afore.vc/residence",
+      "title": "Afore Capital — program page",
+      "excerpt": "next cohort, whenever it begins. Is the Afore residency in-person? Yes — we’ll be sitting side by side with our FIRs ready",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c60383d75c",
+      "url": "https://www.afore.vc/portfolio",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "1 Link 1 LOCATIONS LOCATIONS ALL Bay Area NYC LA Canada Remote Other Link 1 Link 1 Thank you! Your submission has been",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-d1c61b7280",
+      "url": "https://www.afore.vc/portfolio?6e013cc4_page=2",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "D Series E IPO Candor Consumer Candor is the tool for remote managers to track wins, feedback, and more, all in one",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-d5696ab269",
+      "url": "https://www.afore.vc/portfolio",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "a Series b Series c Series D Series E IPO UserEvidence Remote SaaS UserEvidence helps B2B companies unlock customer love",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-e01a31a661",
+      "url": "https://www.afore.vc/portfolio",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "data, and customer stories to the center of their pitch. Remote Pre-Seed Series a Series b Series c Series D Series E IPO",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-e05651d3a1",
+      "url": "https://www.afore.vc/portfolio?6e013cc4_page=2",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "Amicus Law AI A vertical AI solution for the legal space. Remote Pre-Seed Series a Series b Series c Series D Series E IPO",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-e33f282ccd",
+      "url": "https://www.afore.vc/portfolio",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "Amicus Law AI A vertical AI solution for the legal space. Remote Pre-Seed Series a Series b Series c Series D Series E IPO",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-eb004421d0",
+      "url": "https://www.afore.vc/portfolio?6e013cc4_page=2",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "1 Link 1 LOCATIONS LOCATIONS ALL Bay Area NYC LA Canada Remote Other Link 1 Link 1 Thank you! Your submission has been",
+      "page": "portfolio"
     },
     {
       "id": "check-name-fbdc203181",
       "url": "https://www.afore.vc/",
-      "title": "Afore Capital — homepage checked by scrape.py",
+      "title": "Afore Capital — homepage",
       "excerpt": "Afore Capital Portfolio Founders-In-Residence FIR University Investing",
       "page": "details"
     },
     {
+      "id": "check-portfolio-212dcc4abc",
+      "url": "https://www.afore.vc/portfolio?6e013cc4_page=2",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "Previous → https://www.afore.vc/portfolio?6e013cc4_page=1",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-2fa9a90079",
       "url": "https://www.afore.vc/",
-      "title": "Afore Capital — homepage checked by scrape.py",
+      "title": "Afore Capital — homepage",
       "excerpt": "Portfolio → https://www.afore.vc/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a79950d519",
+      "url": "https://www.afore.vc/portfolio",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "Load More → https://www.afore.vc/portfolio?6e013cc4_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-bd497e6b8f",
+      "url": "https://www.afore.vc/portfolio?6e013cc4_page=2",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "Portfolio → https://www.afore.vc/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-cd91909c27",
+      "url": "https://www.afore.vc/portfolio?6e013cc4_page=2",
+      "title": "Afore Capital — portfolio page",
+      "excerpt": "Load More → https://www.afore.vc/portfolio?6e013cc4_page=3",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-rolling-1e30bfc16c",
+      "url": "https://www.afore.vc/residence",
+      "title": "Afore Capital — program page",
+      "excerpt": "of 100,000+ enterprise buyers to land your first 5 design customers. We invest on a rolling basis year-round. Our founders have raised $3B+in follow-on capital with a combined",
       "page": "details"
     },
     {
       "id": "check-route-08bbaf7957",
       "url": "https://www.afore.vc/residence",
-      "title": "Afore Capital — details page checked by scrape.py",
+      "title": "Afore Capital — program page",
       "excerpt": "Apply now for Founders-in-residence → https://airtable.com/apprAAsE4JhFBd8nL/pagGsh6fhh1fzZv6t/form",
       "page": "details"
     },
     {
       "id": "check-route-2cca24c32f",
       "url": "https://www.afore.vc/residence",
-      "title": "Afore Capital — details page checked by scrape.py",
+      "title": "Afore Capital — program page",
       "excerpt": "Apply Now → https://airtable.com/apprAAsE4JhFBd8nL/pagGsh6fhh1fzZv6t/form",
       "page": "details"
     },
     {
       "id": "check-route-9403c88f96",
       "url": "https://www.afore.vc/residence",
-      "title": "Afore Capital — details page checked by scrape.py",
+      "title": "Afore Capital — program page",
       "excerpt": "Apply now → https://airtable.com/apprAAsE4JhFBd8nL/pagGsh6fhh1fzZv6t/form",
       "page": "details"
     },
     {
       "id": "check-route-c5780faeba",
       "url": "https://www.afore.vc/",
-      "title": "Afore Capital — homepage checked by scrape.py",
+      "title": "Afore Capital — homepage",
       "excerpt": "https://www.afore.vc/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-4bb92d2888",
+      "url": "https://www.afore.vc/",
+      "page": "details",
+      "excerpt": "Afore Capital Portfolio Founders-In-Residence FIR University Investing outside the lines Proven product and investment expertise, on your side on Day 0 — helping you build now and raise later. Have an idea but not sure if it’s VC-ready? CHECK OUT OUR FOUNDERS-IN-RESIDENCE PROGRAM Learn more We don’t just say we invest Pre-Seed. We’re a $500M fund investing $500k - $2M+ with high conviction in pre-traction, pre-everything companies! We don’t focus on what can go wrong. We look for what can go right. Just like you, we’re risk-takers — not risk-mitigators. All-in with you! We play to win. We don’t tell you something’s awesome just to be nice. We have your back and ask the tough questions. Think of us as your SWAT team. We don’t mind if your idea is raw. We’re product people who see your vision. Bring on the sushi-grade. We don’t wait 'til Monday morning. We work fast to make our decisions. We’re founders too — and waiting is the worst. MEET YOUR NEW SWAT TEAM GAURAV JAIN Co-founder, Managing Partner ANAMITRA BANERJI Co-founder, Managing Partner Jared Luttrell VP of Finance KAYLA KAVANAUGH Investor Nathan Yu Investor Laura Du Investor Yulia Urs Program & Events Manager HOME Portfolio Blog Careers © Afore 2026. All Rights Reserved."
+    },
+    {
+      "id": "check-page-afa851717a",
+      "url": "https://www.afore.vc/residence",
+      "page": "details",
+      "excerpt": "Afore | Founders in Residence Founders-in-Residence FIR Apply Now Link One Link Two Link Three Link Four Link Five Link Six Link Seven People Before Ideas. No traction, no idea — no problem. We invest in you. Apply now for Founders-in-residence Build alongside our founder & operator network who it’s for Are you technical with a bias for speed? Our Founders-in-Residence typically... 01 Have 2+ years of work experience 02 Have some ideas and want to validate whether there's real customer opportunity 03 Are about to leave or just left previous job to start full-time The TLDR Meet Afore's Founders-in-Residence Program: Lock in for 2 months alongside 10 teams of ambitious peers. Raise $250-750k on customized terms. Sign your first 5 design customers. Fundraise like a beast: For every $1 Afore invests, 25x follows. Apply now founder stories Afore founders have built iconic companies from nothing. We invested in Kashish as a solo founder, pre-idea. Afore always gets to the most important question in your business. Once you de-risk the hardest thing, everything becomes easier. And they will help you raise an insane series A. Kashish Co-founder & CEO @ Hightouch The World's Most Popular AI Presentation Tool Afore invested pre-product, zero users. $2.1B Valuation From College Dropouts to Training the World's Frontier AI Taking on ChatGPT with Agents that Never Sleep AI Copilot for"
+    },
+    {
+      "id": "check-page-b78f072d9b",
+      "url": "https://www.afore.vc/portfolio",
+      "page": "portfolio",
+      "excerpt": "Portfolio Portfolio Founders-In-Residence FIR University Our FOUNDERS We've been fortunate to partner with exceptional product-centric founders just when they were getting going Canada ALL other-false SaaS ALL SaaS Pre-Seed Series a Series b Series c Series D Series E IPO Canada Machine learning platform that empowers biomedical scientists to plan and execute more successful experiments. AFORE PRE-SEED Follow-On Investors: Bay Area ALL other-false SaaS ALL SaaS Pre-Seed Series a Series b Series c Series D Series E IPO Bay Area Emotional well-being benefits platform for employers. AFORE PRE-SEED Follow-On Investors: NYC ALL other-false Consumer ALL Consumer Pre-Seed Series a Series b Series c Series D Series E IPO NYC This generation's sports network. AFORE PRE-SEED Follow-On Investors: Canada ALL other-false FinTech ALL FinTech Pre-Seed Series a Series b Series c Series D Series E IPO Canada Next-generation banking with spending, savings, and rewards built for Canadians. AFORE PRE-SEED Follow-On Investors: Bay Area ALL other-false AI ALL AI Pre-Seed Series a Series b Series c Series D Series E IPO Bay Area Hightouch helps businesses sync their customer data across sales and marketing tools. AFORE PRE-SEED Follow-On Investors: Bay Area ALL other-false SaaS ALL SaaS Pre-Seed Series a Series b Series c Series D Series E IPO Bay Area Executive coaching for everyone. AFORE PRE-SEED"
+    },
+    {
+      "id": "check-page-0da6b0f11d",
+      "url": "https://www.afore.vc/portfolio?6e013cc4_page=2",
+      "page": "portfolio",
+      "excerpt": "Portfolio Portfolio Founders-In-Residence FIR University Our FOUNDERS We've been fortunate to partner with exceptional product-centric founders just when they were getting going Canada ALL other-false SaaS ALL SaaS Pre-Seed Series a Series b Series c Series D Series E IPO Canada Machine learning platform that empowers biomedical scientists to plan and execute more successful experiments. AFORE PRE-SEED Follow-On Investors: Bay Area ALL other-false SaaS ALL SaaS Pre-Seed Series a Series b Series c Series D Series E IPO Bay Area Emotional well-being benefits platform for employers. AFORE PRE-SEED Follow-On Investors: NYC ALL other-false Consumer ALL Consumer Pre-Seed Series a Series b Series c Series D Series E IPO NYC This generation's sports network. AFORE PRE-SEED Follow-On Investors: Canada ALL other-false FinTech ALL FinTech Pre-Seed Series a Series b Series c Series D Series E IPO Canada Next-generation banking with spending, savings, and rewards built for Canadians. AFORE PRE-SEED Follow-On Investors: Bay Area ALL other-false AI ALL AI Pre-Seed Series a Series b Series c Series D Series E IPO Bay Area Hightouch helps businesses sync their customer data across sales and marketing tools. AFORE PRE-SEED Follow-On Investors: Bay Area ALL other-false SaaS ALL SaaS Pre-Seed Series a Series b Series c Series D Series E IPO Bay Area Executive coaching for everyone. AFORE PRE-SEED"
     }
   ],
   "findings": {
@@ -74,17 +305,84 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-1e30bfc16c"
+      }
+    ],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "2 months",
+        "evidenceId": "check-duration-2cfb4c9105"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-bb51f49566"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-c60383d75c"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "raise later. Have an idea but not sure if it’s VC-ready? CHECK OUT OUR FOUNDERS-IN-RESIDENCE PROGRAM Learn more We don’t just say we invest Pre-Seed. We’re a $500M fund investing $500k - $2M+ with high conviction in pre-traction, pre-everything companies! We don’t focus on what can go wrong. We look for what can go",
-        "evidenceId": "check-deal-bb84dd6600"
+        "value": "We don’t just say we invest Pre-Seed. We’re a $500M fund investing $500k - $2M+ with high conviction in pre-traction, pre-everything",
+        "evidenceId": "check-deal-e2f1ecfa2a"
+      },
+      {
+        "value": "just say we invest Pre-Seed. We’re a $500M fund investing $500k - $2M+ with high conviction in pre-traction, pre-everything companies! We",
+        "evidenceId": "check-deal-23153c62c8"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "500000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-e2f1ecfa2a"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "2000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-23153c62c8"
       }
     ],
     "portfolioPages": [
       {
         "value": "https://www.afore.vc/portfolio",
         "evidenceId": "check-portfolio-2fa9a90079"
+      },
+      {
+        "value": "https://www.afore.vc/portfolio?6e013cc4_page=2",
+        "evidenceId": "check-portfolio-a79950d519"
+      },
+      {
+        "value": "https://www.afore.vc/portfolio?6e013cc4_page=1",
+        "evidenceId": "check-portfolio-212dcc4abc"
+      },
+      {
+        "value": "https://www.afore.vc/portfolio?6e013cc4_page=3",
+        "evidenceId": "check-portfolio-cd91909c27"
       }
     ],
     "name": [

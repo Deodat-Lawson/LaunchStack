@@ -1,19 +1,75 @@
 {
   "programId": "eit-urban-mobility",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.eiturbanmobility.eu/our-impact/startup-portfolio/",
-      "page": "portfolio",
-      "anchor": "READ MORE",
+      "url": "https://www.eiturbanmobility.eu/applications-are-open-for-the-eit-urban-mobility-market-readiness-accelerators-2024/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eiturbanmobility.eu/apply-to-our-innovative-masters-programmes-in-urban-mobility-by-1-february-2022/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eiturbanmobility.eu/call-for-applications-to-eit-ris-joint-innovation-incubator-programme/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eiturbanmobility.eu/eit-urban-mobility-master-school-is-now-open-for-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eiturbanmobility.eu/eit-urban-mobility-master-school-launches-second-round-of-applications-until-16-april/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eiturbanmobility.eu/eit-urban-mobility-master-school-opens-applications-on-15-november-2024/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eiturbanmobility.eu/eit-urban-mobility-master-school-opens-applications-on-15-november/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eiturbanmobility.eu/highlights-report-2026-showcases-a-year-of-impactful-projects-and-programmes/",
+      "page": "details",
+      "anchor": "Oct 28, 2026 Highlights Report 2026 showcases a year of impactful projects and programmes",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.eiturbanmobility.eu/who-we-are/about-us/",
-      "page": "details",
-      "anchor": "About us",
+      "url": "https://www.eiturbanmobility.eu/innovation-challenges-electromobility-apply-for-the-challenge/",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -27,10 +83,42 @@
       "origin": "official"
     },
     {
-      "url": "https://www.eiturbanmobility.eu/highlights-report-2026-showcases-a-year-of-impactful-projects-and-programmes/",
-      "page": "details",
-      "anchor": "Oct 28, 2026 Highlights Report 2026 showcases a year of impactful projects and programmes",
+      "url": "https://www.eiturbanmobility.eu/nearly-750-partners-apply-for-the-eits-hei-initiatives-pilot-call-for-proposals/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eiturbanmobility.eu/netzerocities-twin-cities-programme-open-for-applications-now/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eiturbanmobility.eu/our-impact/startup-portfolio/",
+      "page": "portfolio",
+      "anchor": "READ MORE",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eiturbanmobility.eu/raptor-pilot-2-programme-now-open-for-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eiturbanmobility.eu/successful-application-opening-kick-off-event/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -38,6 +126,30 @@
       "url": "https://www.eiturbanmobility.eu/sustainable-urban-mobility-cee-cities/",
       "page": "details",
       "anchor": "Match & Connect Oct 27, 2026 Sprint to 2027: what a new study reveals about CEE cities’ mobility readiness",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eiturbanmobility.eu/tandem-women-in-cycling-programme-applications-open/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eiturbanmobility.eu/what-we-offer/education-and-training/doctoral-training-programme/doctoral-training-network-applications-procedure/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eiturbanmobility.eu/who-we-are/about-us/",
+      "page": "details",
+      "anchor": "About us",
       "fetched": false,
       "blocked": null,
       "origin": "official"

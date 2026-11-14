@@ -1,54 +1,157 @@
 {
   "programId": "startx",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://web.startx.com/",
     "https://web.startx.com/fellows?utm_source=website&utm_medium=notification_bar&utm_campaign=fellows_application_2026",
+    "https://web.startx.com/faqs",
+    "https://web.startx.com/tos",
+    "https://web.startx.com/faqs?09569da8_page=2",
     "https://web.startx.com/programs",
-    "https://web.startx.com/faqs"
+    "https://web.startx.com/community"
   ],
   "evidence": [
     {
-      "id": "check-deal-cc82b3584d",
+      "id": "check-announced-5b5d0085ac",
+      "url": "https://web.startx.com/faqs",
+      "title": "StartX — terms page",
+      "excerpt": "are open from mid-January to mid-February for the Summer cohort, from mid-May to mid-June for the Fall cohort, and from early September to early",
+      "page": "terms"
+    },
+    {
+      "id": "check-announced-6034b3c1ca",
+      "url": "https://web.startx.com/faqs",
+      "title": "StartX — terms page",
+      "excerpt": "for the Summer cohort, from mid-May to mid-June for the Fall cohort, and from early September to early October for the Spring cohort. Pre-register on",
+      "page": "terms"
+    },
+    {
+      "id": "check-announced-6721070b30",
+      "url": "https://web.startx.com/faqs",
+      "title": "StartX — terms page",
+      "excerpt": "Who Can Apply What are the deadlines to apply and dates for the next batch? Applications are open from mid-January to mid-February for the Summer cohort, from mid-May to mid-June for",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-4bddfe913a",
+      "url": "https://web.startx.com/faqs?09569da8_page=2",
+      "title": "StartX — terms page",
+      "excerpt": "of advisors, fundraising coach, etc. Plus, all companies receive $1M+ of free resources, as well as drop-in office space, legal advice,",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f6a5dedc4f",
       "url": "https://web.startx.com/programs",
-      "title": "StartX — details page checked by scrape.py",
-      "excerpt": "your startup in a safe environment, alongside experienced entrepreneurs. Participate in a fundraising sprint and investor pitch opportunities. Pitch for $10K in non-dilutive grant funding. Learn best practices for applying to the full-time accelerator post graduation. Gain first-hand insight into the power of the",
+      "title": "StartX — program page",
+      "excerpt": "in a fundraising sprint and investor pitch opportunities. Pitch for $10K in non-dilutive grant funding. Learn best practices for applying to",
       "page": "details"
+    },
+    {
+      "id": "check-duration-eccccdf487",
+      "url": "https://web.startx.com/programs",
+      "title": "StartX — program page",
+      "excerpt": "required. Student Immersive 3-Day Intensive + 2-Month Support Program Accelerate and pressure-test",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-faae41eb98",
+      "url": "https://web.startx.com/programs",
+      "title": "StartX — program page",
+      "excerpt": "of the StartX ecosystem. Full-Time Accelerator 3-Month Program + Lifelong Community Support from a",
+      "page": "details"
+    },
+    {
+      "id": "check-format-12a76f0b26",
+      "url": "https://web.startx.com/faqs?09569da8_page=2",
+      "title": "StartX — terms page",
+      "excerpt": "groups and dinners with members of your batch and various in-person and virtual community events. Program(s) What criteria do",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-5fd78ded31",
+      "url": "https://web.startx.com/faqs?09569da8_page=2",
+      "title": "StartX — terms page",
+      "excerpt": "with members of your batch and various in-person and virtual community events. Program(s) What criteria do judges look",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-4d7963f14a",
+      "url": "https://web.startx.com/tos",
+      "title": "StartX — terms page",
+      "excerpt": "Tools must be resolved by a court located in Delaware, except as otherwise agreed by the",
+      "page": "terms"
     },
     {
       "id": "check-name-050f497814",
       "url": "https://web.startx.com/",
-      "title": "StartX — homepage checked by scrape.py",
+      "title": "StartX — homepage",
       "excerpt": "Home Want to break into startups or VC? Apply to StartX Fellows by Nov 1 → PROGRAMS AI Verticals Med / Biotech",
       "page": "details"
     },
     {
       "id": "check-route-2d331842ff",
       "url": "https://web.startx.com/",
-      "title": "StartX — homepage checked by scrape.py",
+      "title": "StartX — homepage",
       "excerpt": "Apply to StartX Fellows by Nov 1 → → https://web.startx.com/fellows?utm_source=website&utm_medium=notification_bar&utm_campaign=fellows_application_2026",
       "page": "details"
     },
     {
       "id": "check-route-a921d212ad",
       "url": "https://web.startx.com/fellows?utm_source=website&utm_medium=notification_bar&utm_campaign=fellows_application_2026",
-      "title": "StartX — application page checked by scrape.py",
+      "title": "StartX — application page",
       "excerpt": "Click here to apply. → https://forms.gle/eJTPhvfzyzShaVXf7",
       "page": "application"
     },
     {
-      "id": "check-route-bd1024f70c",
-      "url": "https://web.startx.com/",
-      "title": "StartX — homepage checked by scrape.py",
-      "excerpt": "https://web.startx.com/",
-      "page": "details"
-    },
-    {
       "id": "check-status-faa50c2eb9",
       "url": "https://web.startx.com/faqs",
-      "title": "StartX — terms page checked by scrape.py",
+      "title": "StartX — terms page",
       "excerpt": "StartX community.​ Eligibility & Who Can Apply What are the deadlines to apply and dates for the next batch? Applications are open from mid-January to mid-February for the Summer cohort, from mid-May to mid-June for the Fall cohort, and",
       "page": "terms"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-74d812050a",
+      "url": "https://web.startx.com/",
+      "page": "details",
+      "excerpt": "Home Want to break into startups or VC? Apply to StartX Fellows by Nov 1 → PROGRAMS AI Verticals Med / Biotech Verticals COMMUNITY FOUNDERS mentors investors PARTNERS Dashboard APPLY The Premier Community for Stanford Founders StartX is a trusted, founder-led community built on deep collaboration, shared experience, and long-term support. We take no equity and charge no fees. Instead, we invest in the potential of people and their ideas. ‍ APPLY NOW The World's Top Founders StartX is dedicated to empowering Stanford’s most accomplished and visionary entrepreneurs. $200B Total Valuation $44M Raised on Average 144 Companies valued at over $100M 29 Companies valued at over $1B 85+ Tenured Stanford Professors 3000+ Founders How to Join the StartX Community Our Accelerator Program is the first step in joining the StartX Community. We provide founders with mentorship, resources and tools to help them accelerate and sustain their growth. Why Join our Exclusive Community No equity or fees required Mentorship and networking events Access to vetted partners and investors Peer-to-peer learning and support Specialized resources for industry verticals Stanford alumni network Learn More Our Values Fuel Innovation Community This is not a solo sport. Our exclusive community is a force multiplier, and what sets us apart. Founder-First StartX takes no equity and charges no fees. It’s not about"
+    },
+    {
+      "id": "check-page-146927e819",
+      "url": "https://web.startx.com/fellows?utm_source=website&utm_medium=notification_bar&utm_campaign=fellows_application_2026",
+      "page": "application",
+      "excerpt": "Fellows Taking you to the Fellows application… Not redirected? Click here to apply."
+    },
+    {
+      "id": "check-page-68dae50ba9",
+      "url": "https://web.startx.com/faqs",
+      "page": "terms",
+      "excerpt": "FAQs PROGRAMS AI Verticals Med / Biotech Verticals COMMUNITY FOUNDERS mentors investors PARTNERS Dashboard APPLY You got questions? We've got answers! Lorem ipsum dolor sit amet, consectetur adipiscing elit. In elementum ornare diam, et ornare lectus porttitor vel. Curabitur ac sapien nulla. Ut interdum iaculis nunc, eleifend fermentum sapien ullamcorper non. Categories All About StartX Eligibility & Who Can Apply Application Process Program(s) How to Give Back What counts as a Stanford-affiliated founder? A Stanford-affiliated founder is someone who is or was one of the following and holds a meaningful equity stake in the company:​ Degree-seeking student (undergraduate, master’s, MBA, PhD).​ Stanford alumnus/alumna who completed at least three academic quarters.​ Stanford faculty member (including assistant and clinical assistant professors).​ Postdoctoral scholar.​ Academic staff or research scientist with a qualifying Stanford appointment.​ Fellow in a recognized Stanford fellowship or scholars program (for example, Knight-Hennessy, Biodesign, DCI, Sloan, or similar programs that confer campus privileges).​ StartX may consider exceptions on a case-by-case basis when applicants receive strong recommendations from multiple members of the StartX community.​ Eligibility & Who Can Apply What does not count as a Stanford affiliation for eligibility? Non-degree certificates,"
+    },
+    {
+      "id": "check-page-95e12baf00",
+      "url": "https://web.startx.com/tos",
+      "page": "terms",
+      "excerpt": "Terms of Service PROGRAMS AI Verticals Med / Biotech Verticals COMMUNITY FOUNDERS mentors investors PARTNERS Dashboard APPLY Terms of Service Revised: June 13, 2018 Welcome to the StartX Founder Tools website (the “Site”) operated by Affinity Hive Inc. (“Affinity Hive”). StartX Founder Tools provides tools for founders to access each others networks and resources according to the following terms. For the purposes of this agreement, Customer (“You”) are entering into an agreement with Affinity Hive (“Company”). “Users” are defined as any person who logs into the Site. PLEASE READ CAREFULLY THE FOLLOWING AGREEMENT. BY ACCESSING, BROWSING, AND/OR OTHERWISE USING THE SITE, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO BE BOUND BY THE FOLLOWING TERMS, INCLUDING THE GUIDELINES (AS DEFINED BELOW), AND ANY FUTURE MODIFICATIONS (COLLECTIVELY, THE “TERMS”). IF YOU DO NOT AGREE TO THESE TERMS, THEN PLEASE DO NOT USE THE SITE. 1. Site Access THE SITE IS NOT AVAILABLE TO PERSONS UNDER THE AGE OF 13 OR TO ANY USERS SUSPENDED OR REMOVED FROM THE SITE BY STARTX FOUNDER TOOLS. BY USING THE SITE, YOU REPRESENT THAT YOU ARE AT LEAST 13 YEARS OF AGE AND HAVE NOT BEEN PREVIOUSLY SUSPENDED OR REMOVED FROM THE SITE. You agree that the information you provide to StartX Founder Tools on registration and at all other times will be accurate. You are responsible for restricting access to"
+    },
+    {
+      "id": "check-page-85d897b099",
+      "url": "https://web.startx.com/faqs?09569da8_page=2",
+      "page": "terms",
+      "excerpt": "FAQs PROGRAMS AI Verticals Med / Biotech Verticals COMMUNITY FOUNDERS mentors investors PARTNERS Dashboard APPLY You got questions? We've got answers! Lorem ipsum dolor sit amet, consectetur adipiscing elit. In elementum ornare diam, et ornare lectus porttitor vel. Curabitur ac sapien nulla. Ut interdum iaculis nunc, eleifend fermentum sapien ullamcorper non. Categories All About StartX Eligibility & Who Can Apply Application Process Program(s) How to Give Back I am a first-time founder. How can I benefit from StartX? If you’re an especially high-potential first-time founder that we’ve admitted into the StartX Community, we’ll start you out right away with 1-1 mentorship and educational seminars on the topics that affect you most. First-time founders also greatly benefit from our community of founders of different stages, board of advisors, fundraising coach, etc. Plus, all companies receive $1M+ of free resources, as well as drop-in office space, legal advice, etc. Eligibility & Who Can Apply I'm an experienced founder. What will StartX offer me? Experienced founders often rely on StartX's ability to provide access to industry & domain experts. Founders are given a peer group of other experienced founders in the same stage/role/industry to compare notes with. Repeat founders often appreciate the value of community, and the program is customized each time and a different and"
+    },
+    {
+      "id": "check-page-272f48cc37",
+      "url": "https://web.startx.com/programs",
+      "page": "details",
+      "excerpt": "StartX Programs PROGRAMS AI Verticals Med / Biotech Verticals COMMUNITY FOUNDERS mentors investors PARTNERS Dashboard APPLY Our Programs StartX programs are designed to accelerate Stanford’s most promising entrepreneurs through a uniquely founder-led model. We combine deep mentorship, peer-to-peer accountability, and a trusted community that moves fast and shares honestly. Whether you’re refining your product, raising capital, or leading at scale, StartX gives you the structure, resources, and space to grow—on your own terms. Apply TODAY Who Can Apply We have designed programs to cater to the needs and schedules of all different types of Stanford University founders. Students Full-Time Founders Professors We offer two programs for Stanford founders that serve as the entry point into our lifelong founder community Our programs vary based on the needs of the founder. We provide founders with useful mentorship and resources to help you build your company and education about how to make the most of the StartX ecosystem. Full-Time Accelerator 3-Month Program + Lifelong Community Support from a trusted peer-to-peer community of fellow founders. Access to resources worth over $1 million. Receive tailored mentorship and guidance from industry experts and successul founders. Collaborate and form strategic partnerships. Direct access to vetted investors through curated events, panels,"
+    },
+    {
+      "id": "check-page-865e12644b",
+      "url": "https://web.startx.com/community",
+      "page": "portfolio",
+      "excerpt": "Community New page PROGRAMS AI Verticals Med / Biotech Verticals COMMUNITY FOUNDERS mentors investors PARTNERS Dashboard APPLY Our Community StartX is home to a community of over 3,000 Stanford-affiliated founders building the future across every industry. With $200B+ in total valuation, 29 unicorns and 144 startups valued at over $100M, our founders don’t just start companies—they scale world-changing ventures. Explore the StartX network. Filter by Industry All Industry Dating Non Profit Med Enterprise consumer hardware Auctions Finance Video Music Translation Games Search Engine Fashion HR Design Recruiting Retail Career Photos Advertising Photo Media Insurance Sports Real Estate Productivity Healthcare IT Legal Food Wearable Biotech Sales Education Developer Tool Chat Travel Mobile Location Social Activities Events Transportation Device Construction Materials Cleantech Big Data Automobile See all Options Session All Session Spring 2026 Spring 2025 Fall 2025 Summer 2025 Spring 2024 Fall 2024 Summer 2024 Spring 2023 Fall 2023 Summer 2023 Fall 2022 Spring 2022 Summer 2022 Spring 2021 Fall 2021 Summer 2021 Summer 2020 Fall 2020 Spring 2020 Fall 2019 Summer 2019 Spring 2019 Spring 2018 Summer 2018 Fall 2018 Fall 2017 Summer 2017 Spring 2017 Summer 2016 Fall 2016 Spring 2016 Fall 2015 Summer 2015 Spring 2015 Fall 2014 Summer 2014 Spring 2013 Summer 2013 Fall 2013 Fall 2012 Summer"
     }
   ],
   "findings": {
@@ -66,8 +169,8 @@
     ],
     "applicationUrl": [
       {
-        "value": "https://web.startx.com/",
-        "evidenceId": "check-route-bd1024f70c"
+        "value": "https://web.startx.com/fellows?utm_source=website&utm_medium=notification_bar&utm_campaign=fellows_application_2026",
+        "evidenceId": "check-route-2d331842ff"
       }
     ],
     "applicationsOpen": [
@@ -78,11 +181,83 @@
     ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "January",
+        "evidenceId": "check-announced-6721070b30"
+      },
+      {
+        "value": "May",
+        "evidenceId": "check-announced-5b5d0085ac"
+      },
+      {
+        "value": "September",
+        "evidenceId": "check-announced-6034b3c1ca"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-faae41eb98"
+      },
+      {
+        "value": "2 months",
+        "evidenceId": "check-duration-eccccdf487"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-12a76f0b26"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-5fd78ded31"
+      }
+    ],
+    "location": [
+      {
+        "value": "Delaware",
+        "evidenceId": "check-location-4d7963f14a"
+      }
+    ],
     "selectivity": [],
     "dealText": [
       {
-        "value": "your startup in a safe environment, alongside experienced entrepreneurs. Participate in a fundraising sprint and investor pitch opportunities. Pitch for $10K in non-dilutive grant funding. Learn best practices for applying to the full-time accelerator post graduation. Gain first-hand insight into the power of the",
-        "evidenceId": "check-deal-cc82b3584d"
+        "value": "of advisors, fundraising coach, etc. Plus, all companies receive $1M+ of free resources, as well as drop-in office space, legal advice,",
+        "evidenceId": "check-deal-4bddfe913a"
+      },
+      {
+        "value": "in a fundraising sprint and investor pitch opportunities. Pitch for $10K in non-dilutive grant funding. Learn best practices for applying to",
+        "evidenceId": "check-deal-f6a5dedc4f"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "1000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-4bddfe913a"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "10000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-f6a5dedc4f"
       }
     ],
     "portfolioPages": [],

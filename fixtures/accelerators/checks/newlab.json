@@ -1,53 +1,402 @@
 {
   "programId": "newlab",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.newlab.com/",
+    "https://www.newlab.com/apply",
+    "https://www.newlab.com/case-studies/verizon-and-newlab-partnered-to-support-next-generation-industry-applications-of-5g-b704d",
+    "https://www.newlab.com/post/apply-to-use-detroits-advanced-aerial-innovation-region",
+    "https://www.newlab.com/post/open-call-5g-applications-for-industrial-automation",
+    "https://www.newlab.com/post/fords-michigan-central-and-newlab-collaborate-to-drive-sustained-mobility-innovation-investment-in-detroit-2",
+    "https://www.newlab.com/post/founder-fellowship-detroit-inaugural-cohort",
+    "https://www.newlab.com/post/invest-puerto-rico-startups-pilot-cohort",
+    "https://www.newlab.com/post/nycedc-and-newlab-announce-new-resilient-energy-cohort-advancing-urban-energy-storage",
+    "https://www.newlab.com/post/nycedc-and-newlabs-founder-fellowship-announces-inaugural-cohort-of-startups-led-by-women-and-bipoc-founders",
+    "https://www.newlab.com/post/verizon-and-newlab-unveil-results-of-5g-studios-third-startup-cohort",
     "https://www.newlab.com/about",
-    "https://www.newlab.com/apply"
+    "https://www.newlab.com/open-calls/mining-innovation-studio-program",
+    "https://www.newlab.com/post/civilized-cycles-launches-pilot-program-with-lime-scooters",
+    "https://www.newlab.com/post/ford-and-newlab-announce-startups-to-pilot-new-electric-vehicle-tech-in-mobility-innovation-program"
   ],
   "evidence": [
     {
+      "id": "check-announced-42cf7802ae",
+      "url": "https://www.newlab.com/post/verizon-and-newlab-unveil-results-of-5g-studios-third-startup-cohort",
+      "title": "Newlab — batches page",
+      "excerpt": "to create real solutions with potentially far-reaching impact.” This cohort’s 5G Studio, launched in September, follows the second cohort’s successful Studio, which saw the",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-eca36ce05a",
+      "url": "https://www.newlab.com/post/nycedc-and-newlabs-founder-fellowship-announces-inaugural-cohort-of-startups-led-by-women-and-bipoc-founders",
+      "title": "Newlab — batches page",
+      "excerpt": "realization resources. The program includes 12 months of curated programming, introductions to",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-295d4c3209",
+      "url": "https://www.newlab.com/apply",
+      "title": "Newlab — application page",
+      "excerpt": "NY Detroit, MI Riyadh, Saudi Arabia Montevideo, Uruguay Remote/Unsure Thank you! Your submission has been received! Oops!",
+      "page": "application"
+    },
+    {
+      "id": "check-format-ba6616c406",
+      "url": "https://www.newlab.com/post/open-call-5g-applications-for-industrial-automation",
+      "title": "Newlab — application page",
+      "excerpt": "brings processing capabilities within devices and remote locations. This shift opens up new possibilities for",
+      "page": "application"
+    },
+    {
+      "id": "check-format-c6cd3efcb5",
+      "url": "https://www.newlab.com/apply",
+      "title": "Newlab — application page",
+      "excerpt": "NY Detroit, MI Riyadh, Saudi Arabia Montevideo, Uruguay Remote/Unsure Investment: Pre-Seed Seed Pre-Series-A Series A",
+      "page": "application"
+    },
+    {
+      "id": "check-format-f63ccf4df3",
+      "url": "https://www.newlab.com/post/fords-michigan-central-and-newlab-collaborate-to-drive-sustained-mobility-innovation-investment-in-detroit-2",
+      "title": "Newlab — terms page",
+      "excerpt": "thrive here.” Julie Roscini and Shaun Stewart will hold a virtual, live-streamed fireside chat on June 26, 2020 as part of",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-14b4be0d52",
+      "url": "https://www.newlab.com/post/fords-michigan-central-and-newlab-collaborate-to-drive-sustained-mobility-innovation-investment-in-detroit-2",
+      "title": "Newlab — terms page",
+      "excerpt": "Ford Motor Company is a global company based in Dearborn, Michigan. The company designs,",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-9b5850cbf1",
+      "url": "https://www.newlab.com/post/ford-and-newlab-announce-startups-to-pilot-new-electric-vehicle-tech-in-mobility-innovation-program",
+      "title": "Newlab — program page",
+      "excerpt": "Company (NYSE: F) is a global company based in Dearborn, Michigan, that is committed to",
+      "page": "details"
+    },
+    {
+      "id": "check-location-fcf9b779d8",
+      "url": "https://www.newlab.com/post/invest-puerto-rico-startups-pilot-cohort",
+      "title": "Newlab — batches page",
+      "excerpt": "focused on climate and deep tech based in Brooklyn, NY. Sargassum is a seaweed whose",
+      "page": "batches"
+    },
+    {
       "id": "check-name-c9a1cf3de1",
       "url": "https://www.newlab.com/",
-      "title": "Newlab — homepage checked by scrape.py",
+      "title": "Newlab — homepage",
       "excerpt": "Newlab | Venture Platform for Critical Technology About platform",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b5edc6f6fa",
+      "url": "https://www.newlab.com/post/verizon-and-newlab-unveil-results-of-5g-studios-third-startup-cohort",
+      "title": "Newlab — batches page",
+      "excerpt": "Startups → https://www.newlab.com/key-areas/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-b8c5e8f3f7",
+      "url": "https://www.newlab.com/post/civilized-cycles-launches-pilot-program-with-lime-scooters",
+      "title": "Newlab — program page",
+      "excerpt": "Startups → https://www.newlab.com/key-areas/startups",
       "page": "details"
     },
     {
       "id": "check-route-04e7f767a6",
       "url": "https://www.newlab.com/about",
-      "title": "Newlab — details page checked by scrape.py",
+      "title": "Newlab — program page",
+      "excerpt": "JOIN → https://www.newlab.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-137d86b28e",
+      "url": "https://www.newlab.com/post/ford-and-newlab-announce-startups-to-pilot-new-electric-vehicle-tech-in-mobility-innovation-program",
+      "title": "Newlab — program page",
+      "excerpt": "join newlab → https://www.newlab.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1582260df6",
+      "url": "https://www.newlab.com/case-studies/verizon-and-newlab-partnered-to-support-next-generation-industry-applications-of-5g-b704d",
+      "title": "Newlab — application page",
+      "excerpt": "JOIN → https://www.newlab.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1c07cb0521",
+      "url": "https://www.newlab.com/post/apply-to-use-detroits-advanced-aerial-innovation-region",
+      "title": "Newlab — application page",
+      "excerpt": "JOIN → https://www.newlab.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-32c1928b0e",
+      "url": "https://www.newlab.com/post/verizon-and-newlab-unveil-results-of-5g-studios-third-startup-cohort",
+      "title": "Newlab — batches page",
+      "excerpt": "join newlab → https://www.newlab.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-34c4810229",
+      "url": "https://www.newlab.com/post/apply-to-use-detroits-advanced-aerial-innovation-region",
+      "title": "Newlab — application page",
+      "excerpt": "join newlab → https://www.newlab.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4419759cd7",
+      "url": "https://www.newlab.com/post/open-call-5g-applications-for-industrial-automation",
+      "title": "Newlab — application page",
+      "excerpt": "JOIN → https://www.newlab.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-457c76261c",
+      "url": "https://www.newlab.com/post/nycedc-and-newlabs-founder-fellowship-announces-inaugural-cohort-of-startups-led-by-women-and-bipoc-founders",
+      "title": "Newlab — batches page",
+      "excerpt": "JOIN → https://www.newlab.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-46118021a6",
+      "url": "https://www.newlab.com/post/ford-and-newlab-announce-startups-to-pilot-new-electric-vehicle-tech-in-mobility-innovation-program",
+      "title": "Newlab — program page",
+      "excerpt": "JOIN → https://www.newlab.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4b8a974c81",
+      "url": "https://www.newlab.com/post/nycedc-and-newlabs-founder-fellowship-announces-inaugural-cohort-of-startups-led-by-women-and-bipoc-founders",
+      "title": "Newlab — batches page",
+      "excerpt": "join newlab → https://www.newlab.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-56230d8141",
+      "url": "https://www.newlab.com/open-calls/mining-innovation-studio-program",
+      "title": "Newlab — program page",
       "excerpt": "JOIN → https://www.newlab.com/apply",
       "page": "details"
     },
     {
       "id": "check-route-5c03c6a313",
       "url": "https://www.newlab.com/",
-      "title": "Newlab — homepage checked by scrape.py",
+      "title": "Newlab — homepage",
       "excerpt": "JOIN → https://www.newlab.com/apply",
       "page": "details"
     },
     {
+      "id": "check-route-61b86b2e59",
+      "url": "https://www.newlab.com/post/fords-michigan-central-and-newlab-collaborate-to-drive-sustained-mobility-innovation-investment-in-detroit-2",
+      "title": "Newlab — terms page",
+      "excerpt": "join newlab → https://www.newlab.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-710d619c79",
+      "url": "https://www.newlab.com/post/civilized-cycles-launches-pilot-program-with-lime-scooters",
+      "title": "Newlab — program page",
+      "excerpt": "join newlab → https://www.newlab.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-717de13302",
+      "url": "https://www.newlab.com/post/open-call-5g-applications-for-industrial-automation",
+      "title": "Newlab — application page",
+      "excerpt": "join newlab → https://www.newlab.com/apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-7f23f4ad93",
       "url": "https://www.newlab.com/about",
-      "title": "Newlab — details page checked by scrape.py",
+      "title": "Newlab — program page",
       "excerpt": "join newlab → https://www.newlab.com/apply",
       "page": "details"
     },
     {
       "id": "check-route-94d3f8444d",
       "url": "https://www.newlab.com/",
-      "title": "Newlab — homepage checked by scrape.py",
+      "title": "Newlab — homepage",
       "excerpt": "Join newlab → https://www.newlab.com/apply",
       "page": "details"
     },
     {
       "id": "check-route-986c6f3f4f",
       "url": "https://www.newlab.com/",
-      "title": "Newlab — homepage checked by scrape.py",
+      "title": "Newlab — homepage",
       "excerpt": "join newlab → https://www.newlab.com/apply",
       "page": "details"
+    },
+    {
+      "id": "check-route-a94edf337c",
+      "url": "https://www.newlab.com/post/invest-puerto-rico-startups-pilot-cohort",
+      "title": "Newlab — batches page",
+      "excerpt": "join newlab → https://www.newlab.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-a99eb56d96",
+      "url": "https://www.newlab.com/post/civilized-cycles-launches-pilot-program-with-lime-scooters",
+      "title": "Newlab — program page",
+      "excerpt": "JOIN → https://www.newlab.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-aea1909d92",
+      "url": "https://www.newlab.com/post/nycedc-and-newlab-announce-new-resilient-energy-cohort-advancing-urban-energy-storage",
+      "title": "Newlab — batches page",
+      "excerpt": "join newlab → https://www.newlab.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-afb7069502",
+      "url": "https://www.newlab.com/post/founder-fellowship-detroit-inaugural-cohort",
+      "title": "Newlab — batches page",
+      "excerpt": "join newlab → https://www.newlab.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-b1ba8bccd2",
+      "url": "https://www.newlab.com/case-studies/verizon-and-newlab-partnered-to-support-next-generation-industry-applications-of-5g-b704d",
+      "title": "Newlab — application page",
+      "excerpt": "join newlab → https://www.newlab.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b8fd9a883f",
+      "url": "https://www.newlab.com/post/fords-michigan-central-and-newlab-collaborate-to-drive-sustained-mobility-innovation-investment-in-detroit-2",
+      "title": "Newlab — terms page",
+      "excerpt": "JOIN → https://www.newlab.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-be6d66b913",
+      "url": "https://www.newlab.com/post/invest-puerto-rico-startups-pilot-cohort",
+      "title": "Newlab — batches page",
+      "excerpt": "JOIN → https://www.newlab.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-c3aaf13137",
+      "url": "https://www.newlab.com/post/nycedc-and-newlab-announce-new-resilient-energy-cohort-advancing-urban-energy-storage",
+      "title": "Newlab — batches page",
+      "excerpt": "JOIN → https://www.newlab.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-d5bf2e08fc",
+      "url": "https://www.newlab.com/post/founder-fellowship-detroit-inaugural-cohort",
+      "title": "Newlab — batches page",
+      "excerpt": "JOIN → https://www.newlab.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-e665f21de9",
+      "url": "https://www.newlab.com/open-calls/mining-innovation-studio-program",
+      "title": "Newlab — program page",
+      "excerpt": "join newlab → https://www.newlab.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e9647b554e",
+      "url": "https://www.newlab.com/post/verizon-and-newlab-unveil-results-of-5g-studios-third-startup-cohort",
+      "title": "Newlab — batches page",
+      "excerpt": "JOIN → https://www.newlab.com/apply",
+      "page": "batches"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-b5f7a97fe6",
+      "url": "https://www.newlab.com/",
+      "page": "details",
+      "excerpt": "Newlab | Venture Platform for Critical Technology About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN venture platform for critical technology Startups are building the critical technologies that will define our future economy, but 90% of them never make it to market. Newlab unblocks commercialization for critical technology startups through infrastructure, projects, and capital in the geographies focused on rapid industrialization; so the right ideas don’t just survive, they scale. $ 17B + startup valuation GROWTH 150+ COMMERCIAL PROJECTS $ 9.5B+ EXTERNAL INVESTED CAPITAL $ 13.5B+ LOCAL ECONOMIC IMPACT INFRASTRUCTURE TECHNICAL labs, shops, PILOT SITES, & workspaces PROJECTS STARTUP COMMERCIALIZATION PROJECTS WITH INDUSTRY & GOVERNMENT PARTNERS CAPITAL ALIGNED NETWORK OF VENTURE & NON-DILUTIVE CAPITAL LOCATIONS GLOBAL HUBS IN GEOGRAPHIES PRIORITIZING REINDUSTRIALIZATION DETROIT Newlab Detroit channels the raw energy of a city that built the automobile, and now leads the charge to redefine mobility, manufacturing, and the industrial economy"
+    },
+    {
+      "id": "check-page-12f9d7f37f",
+      "url": "https://www.newlab.com/apply",
+      "page": "application",
+      "excerpt": "Apply About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN apply apply I AM: A STARTUP FOUNDER Looking to join newlab. Apply for startup membership at Newlab - unlocking access to office space, community, and potential pilots, capital, and customers via our network. Tell us what you’re working on. I AM: Looking to partner or invest with Newlab. Reach out to discuss how Newlab can accelerate your innovation goals through our strategic expertise and global network of startups, industry, and government. First Name Last Name email* LINKED IN URL* Your Role* Select one... First choice Second choice Third choice Why do you want to join Newlab?* how did you hear about Newlab?* company name* company website* company deck URL* startup sector (Select) First choice Second choice Third choice I’m interested in: Joining a Newlab ecosystem in: Brooklyn, NY Detroit, MI Riyadh, Saudi Arabia Montevideo, Uruguay Remote/Unsure Investment: Pre-Seed Seed Pre-Series-A Series A Series B Series C+ How much are you raising?* What is your target valuation?* Thank you!"
+    },
+    {
+      "id": "check-page-6b63ba7d3a",
+      "url": "https://www.newlab.com/case-studies/verizon-and-newlab-partnered-to-support-next-generation-industry-applications-of-5g-b704d",
+      "page": "application",
+      "excerpt": "Verizon and Newlab partnered to support next-generation industry applications of 5G About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN case studies Mobility Energy Industry Artificial Intelligence Brooklyn Partners Verizon and Newlab partnered to support next-generation industry applications of 5G Startups focusing on industrial automation, mobility, and energy leveraged Verizon’s 5G network and Newlab’s infrastructure to demo their products About Launched in 2020, Newlab and Verizon collaborated to create a 5G innovation program to support the next generation of applications in mobility, energy, and industrial automation. The program’s goal was to uncover high impact startups working on products that could be further enabled by 5G technology. The selected startups used Verizon’s 5G network to test a wide range of solutions in areas including industrial robotics, drone delivery, enhanced GPS, vehicle connectivity, and technology enabling Vehicle-to-X systems. Ultimately, Verizon and Newlab sought to uncover solutions that could drive clean"
+    },
+    {
+      "id": "check-page-0bb5bfde4c",
+      "url": "https://www.newlab.com/post/apply-to-use-detroits-advanced-aerial-innovation-region",
+      "page": "application",
+      "excerpt": "Coalition of Partners Request Expressions of Interest for Advanced Aerial Innovation Region About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN Mobility Detroit Newlab News March 11, 2025 BY Newlab Coalition of Partners Request Expressions of Interest for Advanced Aerial Innovation Region Newlab and partners will launch a multi-million dollar Challenge that will leverage this first-of-a-kind urban unmanned aerial systems proving zone. Michigan Central and the Michigan Department of Transportation (MDOT) have launched Detroit’s Advanced Aerial Innovation Region - a first-of-a-kind UAS proving zone enabling persistent flight across key use cases including cross-board routes. If you are interested in working with us in the Advanced Aerial Innovation Region, register your interest here . About the Advanced Aerial Innovation Region Covering a 3-mile radius around Michigan Central, the two-year project will provide open, shared infrastructure and services that enable commercial drone development while ensuring safety in the air and on the ground."
+    },
+    {
+      "id": "check-page-ef31f91ada",
+      "url": "https://www.newlab.com/post/open-call-5g-applications-for-industrial-automation",
+      "page": "application",
+      "excerpt": "OPEN CALL: 5G Applications for Industrial Automation About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN Brooklyn Studios May 26, 2025 BY Newlab OPEN CALL: 5G Applications for Industrial Automation Newlab and Verizon’s 5G Studio invite startups to pilot 5G‐powered innovations in manufacturing and warehousing—think edge computing, autonomous robotics, industrial sensors, and AI‐driven automation—to create smarter, more energy-efficient factories and logistics systems. Apply now for grant funding, pilot design support, and access to Newlab’s global infrastructure and expert network. Now in its third cohort of startups, Newlab and Verizon’s 5G Studio continues its aim of addressing the challenges and opportunities presented by the advent of 5G technology, this time with a specific focus on manufacturing and warehouse processes. Leveraging the capabilities of 5G, the program aims to foster the development of innovative technologies that have the potential to revolutionize manufacturing processes, logistics, and operational workflows that can lead"
+    },
+    {
+      "id": "check-page-73d8052880",
+      "url": "https://www.newlab.com/post/fords-michigan-central-and-newlab-collaborate-to-drive-sustained-mobility-innovation-investment-in-detroit-2",
+      "page": "terms",
+      "excerpt": "Ford’s Michigan Central and Newlab Collaborate to Drive Sustained Mobility Innovation Investment in Detroit About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN Mobility Detroit Partners March 11, 2025 BY Newlab Ford’s Michigan Central and Newlab Collaborate to Drive Sustained Mobility Innovation Investment in Detroit Together, the companies will create an innovation ecosystem committed to helping shape the future of mobility. Launch two new studios aimed at solving tomorrow’s transportation challenges and preparing cities, regions and industries for a connected, autonomous and electrified future The studios will work together with Detroit and Michigan-based accelerators and incubators, helping to grow the local startup ecosystem and add new talent, businesses and capital Julie Roscini, Ford’s ​head of external engagement for Michigan Central, ​and Shaun Stewart, Newlab CEO, to hold fireside chat on June 26 as part of Detroit Startup Week DEARBORN, Mich., June 25, 2020 – Michigan Central, Ford Motor Company’s development in Corktown, ​and"
+    },
+    {
+      "id": "check-page-dcb1332da4",
+      "url": "https://www.newlab.com/post/founder-fellowship-detroit-inaugural-cohort",
+      "page": "batches",
+      "excerpt": "Founder Fellowship in Detroit Announces Inaugural Cohort About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN Detroit Founder Fellowship March 11, 2025 BY Kristine Colosimo Founder Fellowship in Detroit Announces Inaugural Cohort Meet the five founders selected for the first Newlab Founder Fellowship in Detroit. Newlab launched its first Founder Fellowship program in Detroit in collaboration with the State of Michigan and Michigan Central. The Fellowship supports a cohort of 5 climate tech founders from underrepresented backgrounds with the resources they need to scale their companies. In addition to Newlab, Michigan Central, and the State of Michigan; Newlab’s ‘Community Builders in Residence’ have played a pivotal role in building the Founder Fellowship program. They include Johnnie Turnage, with a focus on Black Founders, and Meagan Ward, with a focus on Women Founders. Both Johnnie and Meagan are founders themselves and passionate about building equity in tech. ‍ Meet the Founders: ‍ Sheri Washington, Michigan Mobility & Logistics Michigan"
+    },
+    {
+      "id": "check-page-71e669d929",
+      "url": "https://www.newlab.com/post/invest-puerto-rico-startups-pilot-cohort",
+      "page": "batches",
+      "excerpt": "Invest Puerto Rico and Newlab Select 5 Startups to Pilot Solutions for Converting Unmanaged and Landfilled Items into New Value-Added Products About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN Materials Studios Government Latin America Montevideo May 27, 2025 BY Kristine Colosimo Invest Puerto Rico and Newlab Select 5 Startups to Pilot Solutions for Converting Unmanaged and Landfilled Items into New Value-Added Products The startup cohort for the Puerto Rico project will aim to identify renewable life cycles for disposed tires, plastic waste and sargassum seaweed. CarbonCycle, SOS Carbon, Sway, Thalasso Ocean, and PANGAIA have been selected to pilot solutions to convert Puerto Rico’s sargassum seaweed, plastic waste, and end-of-life tires into new value-added products. The cohort was created in partnership between Invest Puerto Rico (InvestPR), the island's business attraction organization, and Newlab, a venture platform focused on climate and deep tech based in Brooklyn, NY. Sargassum is a seaweed whose excess accumulation in recent years"
+    },
+    {
+      "id": "check-page-d631dcc2df",
+      "url": "https://www.newlab.com/post/nycedc-and-newlab-announce-new-resilient-energy-cohort-advancing-urban-energy-storage",
+      "page": "batches",
+      "excerpt": "NYCEDC and Newlab Announce New Resilient Energy Cohort Advancing Urban Energy Storage About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN Energy New York City Government Brooklyn May 27, 2025 BY Newlab NYCEDC and Newlab Announce New Resilient Energy Cohort Advancing Urban Energy Storage The partners hosted leaders from the energy storage industry, city government and community organizations at Newlab to introduce the startups participating in the new Resilient Energy cohort to advance pilot projects across New York City. ‍ The New York City Economic Development Corporation (NYCEDC) and Newlab , in collaboration with Con Edison , announced the five startups participating in the Resilient Energy Studio , a program designed to cultivate local energy storage capacity across New York City through entrepreneur-led pilot projects and collaboration with community organizations, energy experts, and leading industry stakeholders. The cohort members and pilot projects were introduced at an event held at Newlab today, highlighting the vision for"
+    },
+    {
+      "id": "check-page-f6bac38943",
+      "url": "https://www.newlab.com/post/nycedc-and-newlabs-founder-fellowship-announces-inaugural-cohort-of-startups-led-by-women-and-bipoc-founders",
+      "page": "batches",
+      "excerpt": "NYCEDC and Newlab's Founder Fellowship Announces Inaugural Cohort of Startups Led by Women and BIPOC Founders About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN Founder Fellowship New York City Government Brooklyn May 27, 2025 BY Newlab NYCEDC and Newlab's Founder Fellowship Announces Inaugural Cohort of Startups Led by Women and BIPOC Founders The Founder Fellowship supports urban tech startup founders from underrepresented backgrounds and looks to build more equity in tech. New York City Economic Development Corporation (NYCEDC) and Newlab unveiled the eight companies selected to participate in the inaugural cohort of the Founder Fellowship program. This initiative will provide urban tech startup founders from underrepresented backgrounds with the resources to build and scale their companies in NYC. The program builds upon the Urbantech NYC partnership between NYCEDC and Newlab and was developed in partnership with NYCEDC’s Venture Access NYC Initiative. The companies will benefit from access to Newlab’s 84,000 square foot space in the"
+    },
+    {
+      "id": "check-page-a41743eebd",
+      "url": "https://www.newlab.com/post/verizon-and-newlab-unveil-results-of-5g-studios-third-startup-cohort",
+      "page": "batches",
+      "excerpt": "Verizon and Newlab Unveil Results of 5G Studio’s Third Startup Cohort About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN Startups Mobility Energy New York City Partners Studios Brooklyn May 27, 2025 BY Newlab Verizon and Newlab Unveil Results of 5G Studio’s Third Startup Cohort 5G Studio enables leading innovators to leverage Verizon’s 5G Ultra Wideband network and mobile edge compute at Newlab to develop transformative technologies applied to industries such as mobility, energy, and industrial automation. Verizon and Newlab today announced the results from the latest cohort of startups in the 5G Studio . First launched in 2020, the 5G Studio supports the development of next-generation applications transforming a variety of industries including mobility, energy, and industrial automation. The four startups selected to participate in the third cohort leveraged Verizon’s Ultra Wideband 5G network and mobile edge compute capabilities, installed at Newlab, to test their technologies. The four selected companies used 5G and edge compute to"
+    },
+    {
+      "id": "check-page-b15064afb6",
+      "url": "https://www.newlab.com/about",
+      "page": "details",
+      "excerpt": "Newlab | About | Venture Platform for Critical Technology About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN the venture platform VENTURE PLATFORM 1000 + members across 300+ member startups 60 + industry and government partners 400 + syndicate investors $ 17B + STARTUP valuation growth FOCUSING ON CRITICAL TECHNOLOGIES \"Critical technologies\" are strategically significant techologies to a geography’s economic resilience, security, and competitiveness based on the vital role they play in a region’s foundational industries, infrastructure, and supply chains. The concept of critical technologies first emerged in the post-World War II era, as the U.S. and the Soviet Union raced for technological supremacy across defense, space exploration and nuclear weapons. Later, as Japan emerged as a technology powerhouse in the 1980s, the concept of critical technologies took on increased importance as nations began to recognize the strong link between technological superiority and economic competitiveness and national security. Today, critical technology"
+    },
+    {
+      "id": "check-page-fa1c90da70",
+      "url": "https://www.newlab.com/open-calls/mining-innovation-studio-program",
+      "page": "details",
+      "excerpt": "Commercialization Projects to Advance the Mining Sector About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN OPEN CALL Riyadh No items found. Commercialization Projects to Advance the Mining Sector BACKGROUND The global energy transition is driving an unprecedented demand for critical minerals, with clean energy technologies requiring significantly more material and mineral inputs than traditional hydrocarbon systems. However, global supply and investment in critical minerals fall short, exacerbated by declining ore quality, concentrated production in a few countries, and rising environmental and cost pressures. Innovation and technology adoption across the mining value chain is essential to identify new resources, enhance efficiency, reduce environmental impacts, and diversify supply. Accelerating innovation to unlock transformative change and progress in the mining industry will require systematic support to engage startups and de-risk early-stage technologies. – The Kingdom of Saudi Arabia’s vision 2030 aims to leverage the Kingdom’s unique"
+    },
+    {
+      "id": "check-page-f39f05b38b",
+      "url": "https://www.newlab.com/post/civilized-cycles-launches-pilot-program-with-lime-scooters",
+      "page": "details",
+      "excerpt": "Newlab Member Civilized Cycles Launches Pilot Program with Lime Scooters About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN Mobility Startups Detroit March 11, 2025 BY Newlab Newlab Member Civilized Cycles Launches Pilot Program with Lime Scooters Civilized Cycles has initiated a pilot program in collaboration with Lime Scooters, Newlab, and Michigan Central. This initiative aims to assess the impact of its light electric commercial vehicle, the Semi-Trike, on decarbonizing the transportation industry. Currently in the United States, approximately 2.9 million semi-trucks are operational, transporting essential goods nationwide. While vital to modern life, these vehicles are creating an adverse effect on our climate. Collectively, they emit around 413 million metric tons of carbon dioxide annually, contributing to the 23% of total greenhouse gas emissions coming from the transportation sector. Zach Schieffelin, Founder & CEO of Civilized Cycles , and his team are developing the critical technology needed to address this challenge at Newlab in"
+    },
+    {
+      "id": "check-page-e88a62cdae",
+      "url": "https://www.newlab.com/post/ford-and-newlab-announce-startups-to-pilot-new-electric-vehicle-tech-in-mobility-innovation-program",
+      "page": "details",
+      "excerpt": "Ford and Newlab Announce Startups to Pilot New Electric Vehicle Tech in Mobility Innovation Program About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN Mobility Energy Detroit Studios Partners March 11, 2025 BY Newlab Ford and Newlab Announce Startups to Pilot New Electric Vehicle Tech in Mobility Innovation Program In its first year, the Mobility Studio will support startups in developing transformative technologies and services to help accelerate commercial fleet electrification. DETROIT, Oct. 28, 2021 – Ford Motor Company and Newlab , a community of experts and innovators applying transformative technology to solve the world’s biggest challenges, today announced the six startups that will participate in the inaugural cohort of the Mobility Studio – a new program focused on supporting the advancement of technologies, product collaborations and business models that drive a cleaner transportation future. The program lives within Michigan Central , a new mobility innovation district being developed by Ford. This is the second of two studios"
     }
   ],
   "findings": {
@@ -68,9 +417,45 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "September",
+        "evidenceId": "check-announced-42cf7802ae"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-eca36ce05a"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-c6cd3efcb5"
+      }
+    ],
+    "location": [
+      {
+        "value": "Dearborn",
+        "evidenceId": "check-location-14b4be0d52"
+      },
+      {
+        "value": "Brooklyn",
+        "evidenceId": "check-location-fcf9b779d8"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
-    "portfolioPages": [],
+    "dealComponents": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.newlab.com/key-areas/startups",
+        "evidenceId": "check-portfolio-b5edc6f6fa"
+      }
+    ],
     "name": [
       {
         "value": "Newlab",

@@ -1,12 +1,12 @@
 {
   "programId": "lifeline-ventures",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://www.lifelineventures.com/companies/",
       "page": "portfolio",
       "anchor": "Companies",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

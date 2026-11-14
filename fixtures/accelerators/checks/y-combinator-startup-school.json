@@ -1,18 +1,66 @@
 {
   "programId": "y-combinator-startup-school",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.startupschool.org/",
-    "https://www.startupschool.org/cofounder-matching",
-    "https://www.startupschool.org/faq"
+    "https://www.startupschool.org/faq",
+    "https://www.startupschool.org/about",
+    "https://www.startupschool.org/cofounder-matching"
   ],
   "evidence": [
     {
+      "id": "check-duration-147422cfee",
+      "url": "https://www.startupschool.org/faq",
+      "title": "Startup School — terms page",
+      "excerpt": "determining fit? We recommend starting with 2-4 weeks of close work. If you're not excited about the",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-46733cf90c",
+      "url": "https://www.startupschool.org/",
+      "title": "Startup School — homepage",
+      "excerpt": "Go at your own pace. It will take approximately 7 weeks if you spend 1-2 hours/week. Who is Startup",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d1c90e4d44",
+      "url": "https://www.startupschool.org/cofounder-matching",
+      "title": "Startup School — program page",
+      "excerpt": "700 Paris 700 Seattle 600 Singapore We also run exclusive in-person co-founder matching meetups for founders in SF and NYC",
+      "page": "details"
+    },
+    {
       "id": "check-name-6e2bf33e09",
       "url": "https://www.startupschool.org/",
-      "title": "Startup School — homepage checked by scrape.py",
+      "title": "Startup School — homepage",
       "excerpt": "Startup School - The Best Resource for Founders Startup School Learn how",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-50d682b570",
+      "url": "https://www.startupschool.org/",
+      "page": "details",
+      "excerpt": "Startup School - The Best Resource for Founders Startup School Learn how to start a company, with help from the world's top startup accelerator - Y Combinator. Startup School is a free online course on how to start a startup. Sign up Sign in Get advice based on 15 years of YC's knowledge, stay accountable for weekly progress, and find your co-founder. How Startup School works Get the essential advice for ambitious startup founders, taught by Y Combinator partners and industry leaders. Go at your own pace. It will take approximately 7 weeks if you spend 1-2 hours/week. Who is Startup School for? It's for anyone at the early stages of building a startup, turning a side project into a company, or anyone curious to learn about becoming a founder. The YC Curriculum Learn how to build a top startup - from the same people who helped Airbnb, Doordash, Stripe, Reddit, and Coinbase get started. How to Plan your MVP Michael Seibel, YC Partner & Co-Founder of Twitch Modern Startup Funding Carolynn Levy, inventor of the SAFE How to Launch your Company in the Press Kat Manalac, YC Head of Outreach How to Get Users and Grow Gustaf Alstromer, YC Partner & Former Head of Growth at Airbnb How to Lead Teams Ali Rowghani, CFO of Pixar & COO of Twitter How and When to Apply to Y Combinator Dalton Caldwell, YC Partner & Head of Admissions The Founding Story of Facebook Mark Zuckerberg, Founder and"
+    },
+    {
+      "id": "check-page-8b06f42c19",
+      "url": "https://www.startupschool.org/faq",
+      "page": "terms",
+      "excerpt": "FAQ | Startup School - The Best Resource for Founders Frequently asked questions Startup School Is there a cost to Startup School? Startup School is completely free. All you need is a device with access to the internet. We believe that all founders should have access to the best startup advice - no matter where in the world you're building your company. Startup School is the compilation of the best advice that YC partners have offered themselves or gathered from experts in the field. We offer this for free so that founders can use this advice while focusing on building your startup. We also hope that more founders from Startup School will apply to YC! Who should sign up for Startup School? You should sign up for Startup School if you are at the early stages of building a startup, considering turning a side project into a company, or just curious to learn about becoming a founder. My startup is already launched and we have customers, is there value for later stage founders? You can still sign up for Startup School, but if you have launched, have customers, and are actively working on your startup,the YC batch program is probably a better fit. You can learn more about and apply here . How does this relate to Y Combinator? Does it replace YC? Will it improve my chances of getting into YC? Startup School is a free resource created by YC for anyone considering starting their own"
+    },
+    {
+      "id": "check-page-75a10e0dc7",
+      "url": "https://www.startupschool.org/about",
+      "page": "details",
+      "excerpt": "About | Startup School - The Best Resource for Founders About Startup School provides free resources to early stage and future founders. Our goals Throughout the course, we aim to accomplish the following: Encourage and inspire people to consider starting a company as a way to positively impact the world. Teach people how to start a startup, and equip them with the resources and tools best-suited for the earliest stages of their company. Encourage great founding teams to dedicate time to work on their startups and apply to Y Combinator for funding. Participation By signing up for Startup School, you gain access to: Advice that is delivered and curated by YC partners YC's Co-Founder Matching Platform if you're looking for a co-founder A weekly update tool to track your startup's growth and remain accountable for progress We expect founders to focus on the early steps necessary to build their startups, while using these tools and resources when they are helpful. Sign up if you are ready to participate! About Privacy FAQ Help Make something people want Apply to YC"
+    },
+    {
+      "id": "check-page-7e7bd4ef86",
+      "url": "https://www.startupschool.org/cofounder-matching",
+      "page": "details",
+      "excerpt": "Y Combinator Co-Founder Matching Platform - find a co-founder through YC | Y Combinator Open menu About What Happens at YC? Apply YC Interview Guide FAQ People YC Software YC Blog Companies Startup Directory Founder Directory Launch YC Library Partners Resources Startup School Newsletter Requests for Startups For Investors Verify Founders Hacker News Bookface SAFE Find a Co-Founder Events Startup Jobs Log in Apply Y Combinator Co‑Founder Matching Where savvy founders go to meet potential co‑founders Sign up Sign in (Actual founders who met on this site and got funded by YC.) We know even the best founders don't always have people in their network who are ready to start a company That's why we built co-founder matching. Good for all stages Whether you're getting to know people for the future, or ready to go now. Come with or without an idea Don't have the right idea yet? This is a great place to find it. Explore on your own terms No commitment, no equity, no strings attached. World-class founders are on co-founder matching I built and managed the Visa platform that powers the Chase Sapphire Reserve. Vrinda Haas Visa Scored a perfect 180 (99.99 percentile) on my LSAT and was on law review at Harvard Law School. Bryant Harvard Microsoft Youngest engineer to be promoted to E7 (Senior Staff) at DoorDash. Saba Berkeley Doordash Built Appetas, an instant website builders for SMBs."
     }
   ],
   "findings": {
@@ -23,8 +71,29 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "7",
+        "evidenceId": "check-duration-46733cf90c"
+      },
+      {
+        "value": "4",
+        "evidenceId": "check-duration-147422cfee"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-d1c90e4d44"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

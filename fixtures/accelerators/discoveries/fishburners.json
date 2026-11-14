@@ -1,6 +1,6 @@
 {
   "programId": "fishburners",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://fishburners.org/about-fishburners",
@@ -11,10 +11,34 @@
       "origin": "official"
     },
     {
+      "url": "https://fishburners.org/blog/sip-ventures-partnership-program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fishburners.org/founders-hub-terms",
+      "page": "terms",
+      "anchor": "Founders Hub Terms",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://fishburners.org/residency",
       "page": "details",
       "anchor": "Go to Residency Program",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fishburners.org/terms",
+      "page": "terms",
+      "anchor": "Terms",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

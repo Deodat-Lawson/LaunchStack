@@ -1,12 +1,12 @@
 {
   "programId": "localglobe",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://www.phoenixcourt.vc/about",
       "page": "details",
       "anchor": "About Us",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -19,17 +19,17 @@
       "origin": "official"
     },
     {
-      "url": "https://www.phoenixcourt.vc/companies?fund=localglobe",
+      "url": "https://www.phoenixcourt.vc/companies/comind",
       "page": "portfolio",
-      "anchor": "LocalGlobe Companies",
+      "anchor": "CoMind Health 2019",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.phoenixcourt.vc/companies/olix",
+      "url": "https://www.phoenixcourt.vc/companies/cuspai",
       "page": "portfolio",
-      "anchor": "Olix AI & Machine Learning 2024",
+      "anchor": "CuspAI AI & Machine Learning 2024",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -51,25 +51,17 @@
       "origin": "official"
     },
     {
-      "url": "https://www.phoenixcourt.vc/companies/cuspai",
+      "url": "https://www.phoenixcourt.vc/companies/modelml",
       "page": "portfolio",
-      "anchor": "CuspAI AI & Machine Learning 2024",
+      "anchor": "ModelML Finance & Payments 2024",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.phoenixcourt.vc/companies/comind",
+      "url": "https://www.phoenixcourt.vc/companies/olix",
       "page": "portfolio",
-      "anchor": "CoMind Health 2019",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.phoenixcourt.vc/companies/wonder-studios",
-      "page": "portfolio",
-      "anchor": "Wonder Studios AI & Machine Learning 2025",
+      "anchor": "Olix AI & Machine Learning 2024",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -83,10 +75,130 @@
       "origin": "official"
     },
     {
-      "url": "https://www.phoenixcourt.vc/companies/modelml",
+      "url": "https://www.phoenixcourt.vc/companies/wonder-studios",
       "page": "portfolio",
-      "anchor": "ModelML Finance & Payments 2024",
+      "anchor": "Wonder Studios AI & Machine Learning 2025",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.phoenixcourt.vc/companies?fund=localglobe",
+      "page": "portfolio",
+      "anchor": "LocalGlobe Companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.phoenixcourt.vc/news/4-investment-themes",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.phoenixcourt.vc/news/a-new-financial-system-of-record-our-investment-in-translucent",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.phoenixcourt.vc/news/latitudes-investment-in-flow",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.phoenixcourt.vc/news/latitudes-investment-in-goodlord",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.phoenixcourt.vc/news/making-banking-open-our-investment-in-yapily",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-comind-redefining-how-the-brain-is-measured",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-condense",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-cuspai",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-early-making-the-invisible-detectable",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-echo",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-ers",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-foondamate",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-gospel-technology",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.phoenixcourt.vc/news/our-investment-in-gotrade",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

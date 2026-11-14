@@ -1,202 +1,689 @@
 {
   "programId": "startmate",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.startmate.com/",
-    "https://www.startmate.com/accelerator",
-    "https://www.startmate.com/writing/meet-our-winter-26-accelerator-cohort",
-    "https://www.startmate.com/about-us",
-    "https://www.startmate.com/faq"
+    "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
+    "https://www.startmate.com/writing/moonshot-co-founders-learnt-applying-y-combinator",
+    "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+    "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+    "https://www.startmate.com/faq",
+    "https://www.startmate.com/terms-and-conditions",
+    "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
+    "https://www.startmate.com/writing/how-to-make-your-first-startup-investment",
+    "https://www.startmate.com/writing/investment-notes-andromeda",
+    "https://www.startmate.com/writing/investment-notes-aquila",
+    "https://www.startmate.com/writing/investment-notes-butter",
+    "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+    "https://www.startmate.com/writing/investment-notes-dexta",
+    "https://www.startmate.com/writing/investment-notes-eggy"
   ],
   "evidence": [
     {
-      "id": "check-deadline-5ce885221f",
-      "url": "https://www.startmate.com/accelerator",
-      "title": "Startmate — application page checked by scrape.py",
-      "excerpt": "want, and raise their next round. Apply now Last chance – applications close 8 November Program dates Feb 1 – May 7, 2027 14 weeks tailored to your stage Investment $120k AUD at a",
+      "id": "check-announced-3619d06503",
+      "url": "https://www.startmate.com/faq",
+      "title": "Startmate — terms page",
+      "excerpt": "accepted into our Accelerator program receive an investment of 120k. Applications open Sep-Nov & May-June. Check out the program and our investment terms . We",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-41ee5a011a",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "title": "Startmate — application page",
+      "excerpt": "terms too? Yes. From Summer22 onward, Startmate will invest $120,000 on a $1.5m post-money SAFE* for founders without a prior valuation,",
       "page": "application"
     },
     {
-      "id": "check-deadline-ef17a2ad13",
-      "url": "https://www.startmate.com/accelerator",
-      "title": "Startmate — application page checked by scrape.py",
-      "excerpt": "6–12 months since your last application. Summer ’27 cohort Applications close 8 November. 14 weeks, Feb 1 to May 7, 2027. Remote-first, with three weeks together in person and our",
+      "id": "check-deal-60e846ad42",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "title": "Startmate — application page",
+      "excerpt": "too? Yes. From Summer22 onward, Startmate will invest $120,000 on a $1.5m post-money SAFE* for founders without a prior valuation, and",
       "page": "application"
     },
     {
-      "id": "check-deal-68ca9c811c",
-      "url": "https://www.startmate.com/accelerator",
-      "title": "Startmate — application page checked by scrape.py",
-      "excerpt": "week and Demo Day week. Does a founder need to be full-time? Yes. At least one founder must already be full-time or go full-time for the program. We invest $120k so you can focus 100% on your company. Can I apply as a solo founder? Yes. We love solo founders just as much as teams. What matters is showing us why you're",
+      "id": "check-duration-3704b5d732",
+      "url": "https://www.startmate.com/writing/how-to-make-your-first-startup-investment",
+      "title": "Startmate — terms page",
+      "excerpt": ": Melbourne or Sydney ‍ 💻 Go deep online : 3-week virtual intensive ‍ 🧠 Hands-on learning : 700+",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-38addc4173",
+      "url": "https://www.startmate.com/writing/moonshot-co-founders-learnt-applying-y-combinator",
+      "title": "Startmate — application page",
+      "excerpt": "with our fast algorithms and predictions for 6-12 months, and keep the world simulation as a longer term",
       "page": "application"
     },
     {
-      "id": "check-deal-dd5ffac3cd",
-      "url": "https://www.startmate.com/accelerator",
-      "title": "Startmate — application page checked by scrape.py",
-      "excerpt": "with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Startmate Summer ’27 Accelerator Get $120k and ANZ's best mentors behind your startup For 14 weeks, we help Australia and New Zealand's most ambitious founders move faster, build something people want,",
+      "id": "check-duration-4b70693b08",
+      "url": "https://www.startmate.com/terms-and-conditions",
+      "title": "Startmate — terms page",
+      "excerpt": "Fees, unless the cancellation: (a) is at least 1 week prior to the commencement of the Startmate",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-50bc6513eb",
+      "url": "https://www.startmate.com/faq",
+      "title": "Startmate — terms page",
+      "excerpt": "from short in-person bootcamps through to the 14-week Accelerator. They are high impact and high",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e8eed47ca0",
+      "url": "https://www.startmate.com/terms-and-conditions",
+      "title": "Startmate — terms page",
+      "excerpt": "participation in the Startmate Program at least 1 week prior to its commencement; subject to your",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f14ba57797",
+      "url": "https://www.startmate.com/faq",
+      "title": "Startmate — terms page",
+      "excerpt": "license (AFSL) but raise our own funds every 6 months. Since ~2016, Startmate has become the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-3900f8807c",
+      "url": "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+      "title": "Startmate — terms page",
+      "excerpt": "‘touching’ and ‘holding’ experiences in the fast-growing virtual reality (VR), augmented reality (AR) and mixed reality",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-56e6e584dd",
+      "url": "https://www.startmate.com/writing/how-to-make-your-first-startup-investment",
+      "title": "Startmate — terms page",
+      "excerpt": ": Melbourne or Sydney ‍ 💻 Go deep online : 3-week virtual intensive ‍ 🧠 Hands-on learning : 700+ startups, real",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-7d47f2e88b",
+      "url": "https://www.startmate.com/faq",
+      "title": "Startmate — terms page",
+      "excerpt": "Startmate programs run over a sprint period, from short in-person bootcamps through to the 14-week Accelerator. They are",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-88aedf574e",
+      "url": "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+      "title": "Startmate — terms page",
+      "excerpt": "see amazing transformation and growth. he ability to hold virtual objects and obtain a sense of touch to complement sight",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-8e1267fdf2",
+      "url": "https://www.startmate.com/writing/how-to-make-your-first-startup-investment",
+      "title": "Startmate — terms page",
+      "excerpt": "their first real steps into startup investing. 📍 Kick off in-person : Melbourne or Sydney ‍ 💻 Go deep online : 3-week virtual",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-dc93c6d1d1",
+      "url": "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
+      "title": "Startmate — application page",
+      "excerpt": "you’ll join the Student Founder Bootcamp: two days in person in Sydney or Melbourne in March 2027. You’ll meet your",
+      "page": "application"
+    },
+    {
+      "id": "check-format-f6ad6b9a83",
+      "url": "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
+      "title": "Startmate — application page",
+      "excerpt": "2025 Updated October 2026: the Bootcamp is now two days in person in Sydney and Melbourne. This article reflects the March",
       "page": "application"
     },
     {
       "id": "check-name-b567602998",
       "url": "https://www.startmate.com/",
-      "title": "Startmate — homepage checked by scrape.py",
+      "title": "Startmate — homepage",
       "excerpt": "Startmate offerings offerings Founders Founders Accelerator",
       "page": "details"
     },
     {
+      "id": "check-portfolio-0a0077d40e",
+      "url": "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+      "title": "Startmate — terms page",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-0c126d514c",
+      "url": "https://www.startmate.com/terms-and-conditions",
+      "title": "Startmate — terms page",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-13f334f69c",
+      "url": "https://www.startmate.com/writing/moonshot-co-founders-learnt-applying-y-combinator",
+      "title": "Startmate — application page",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-22060fe513",
+      "url": "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
+      "title": "Startmate — application page",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-26218b70d3",
       "url": "https://www.startmate.com/",
-      "title": "Startmate — homepage checked by scrape.py",
+      "title": "Startmate — homepage",
       "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
       "page": "details"
     },
     {
-      "id": "check-portfolio-2db8087ec3",
-      "url": "https://www.startmate.com/writing/meet-our-winter-26-accelerator-cohort",
-      "title": "Startmate — batches page checked by scrape.py",
-      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
-      "page": "batches"
+      "id": "check-portfolio-31caf52033",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "title": "Startmate — application page",
+      "excerpt": "alumni → https://www.startmate.com/accelerator#Alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3913ec75d4",
+      "url": "https://www.startmate.com/writing/investment-notes-aquila",
+      "title": "Startmate — terms page",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-3a9926b529",
       "url": "https://www.startmate.com/",
-      "title": "Startmate — homepage checked by scrape.py",
+      "title": "Startmate — homepage",
       "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-3cf3d146d3",
+      "url": "https://www.startmate.com/writing/investment-notes-butter",
+      "title": "Startmate — terms page",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-41db699826",
+      "url": "https://www.startmate.com/writing/investment-notes-eggy",
+      "title": "Startmate — terms page",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-4673e55257",
       "url": "https://www.startmate.com/faq",
-      "title": "Startmate — terms page checked by scrape.py",
+      "title": "Startmate — terms page",
       "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-5cdc09f091",
-      "url": "https://www.startmate.com/accelerator",
-      "title": "Startmate — application page checked by scrape.py",
+      "id": "check-portfolio-4e68a5d4a6",
+      "url": "https://www.startmate.com/writing/investment-notes-eggy",
+      "title": "Startmate — terms page",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-528af65f6e",
+      "url": "https://www.startmate.com/writing/investment-notes-aquila",
+      "title": "Startmate — terms page",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-59515d8487",
+      "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+      "title": "Startmate — application page",
       "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
       "page": "application"
     },
     {
-      "id": "check-portfolio-5d70f85c06",
-      "url": "https://www.startmate.com/about-us",
-      "title": "Startmate — details page checked by scrape.py",
-      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
-      "page": "details"
+      "id": "check-portfolio-66f4bcf3f9",
+      "url": "https://www.startmate.com/writing/investment-notes-andromeda",
+      "title": "Startmate — terms page",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
     },
     {
-      "id": "check-portfolio-8cf1b809fb",
-      "url": "https://www.startmate.com/accelerator",
-      "title": "Startmate — application page checked by scrape.py",
-      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "id": "check-portfolio-6a41f20642",
+      "url": "https://www.startmate.com/writing/moonshot-co-founders-learnt-applying-y-combinator",
+      "title": "Startmate — application page",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
       "page": "application"
     },
     {
-      "id": "check-portfolio-93e318998a",
-      "url": "https://www.startmate.com/about-us",
-      "title": "Startmate — details page checked by scrape.py",
+      "id": "check-portfolio-8cf6a200ae",
+      "url": "https://www.startmate.com/writing/how-to-make-your-first-startup-investment",
+      "title": "Startmate — terms page",
       "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
-      "page": "details"
+      "page": "terms"
     },
     {
       "id": "check-portfolio-95101606e4",
       "url": "https://www.startmate.com/faq",
-      "title": "Startmate — terms page checked by scrape.py",
+      "title": "Startmate — terms page",
       "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-994317e082",
-      "url": "https://www.startmate.com/writing/meet-our-winter-26-accelerator-cohort",
-      "title": "Startmate — batches page checked by scrape.py",
+      "id": "check-portfolio-a29fb662cf",
+      "url": "https://www.startmate.com/writing/investment-notes-dexta",
+      "title": "Startmate — terms page",
       "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
-      "page": "batches"
+      "page": "terms"
     },
     {
-      "id": "check-route-239132daaf",
-      "url": "https://www.startmate.com/",
-      "title": "Startmate — homepage checked by scrape.py",
-      "excerpt": "Apply to Accelerator → Apply to Accelerator → → https://www.startmate.com/accelerator",
-      "page": "details"
+      "id": "check-portfolio-a6667724c5",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "title": "Startmate — application page",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
+      "page": "application"
     },
     {
-      "id": "check-route-4523c23783",
-      "url": "https://www.startmate.com/about-us",
-      "title": "Startmate — details page checked by scrape.py",
+      "id": "check-portfolio-ac53ffec78",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "title": "Startmate — application page",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b86f21ea48",
+      "url": "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
+      "title": "Startmate — application page",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-bdc5c735b1",
+      "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
+      "title": "Startmate — terms page",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ce860fe387",
+      "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+      "title": "Startmate — application page",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-deff003610",
+      "url": "https://www.startmate.com/writing/investment-notes-dexta",
+      "title": "Startmate — terms page",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-dfb0640bdd",
+      "url": "https://www.startmate.com/writing/how-to-make-your-first-startup-investment",
+      "title": "Startmate — terms page",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e335f8f9bf",
+      "url": "https://www.startmate.com/terms-and-conditions",
+      "title": "Startmate — terms page",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f4ab6aa33a",
+      "url": "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+      "title": "Startmate — terms page",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f5eafdb18d",
+      "url": "https://www.startmate.com/writing/investment-notes-butter",
+      "title": "Startmate — terms page",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f743a0f783",
+      "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
+      "title": "Startmate — terms page",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-fcc80608f3",
+      "url": "https://www.startmate.com/writing/investment-notes-andromeda",
+      "title": "Startmate — terms page",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-0c28ec9c0a",
+      "url": "https://www.startmate.com/writing/investment-notes-eggy",
+      "title": "Startmate — terms page",
       "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
-      "page": "details"
+      "page": "terms"
     },
     {
-      "id": "check-route-64a5c13d19",
-      "url": "https://www.startmate.com/about-us",
-      "title": "Startmate — details page checked by scrape.py",
+      "id": "check-route-109f7b1092",
+      "url": "https://www.startmate.com/terms-and-conditions",
+      "title": "Startmate — terms page",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1279b443e0",
+      "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+      "title": "Startmate — application page",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "application"
+    },
+    {
+      "id": "check-route-160be1513e",
+      "url": "https://www.startmate.com/terms-and-conditions",
+      "title": "Startmate — terms page",
       "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1bf343b370",
+      "url": "https://www.startmate.com/writing/investment-notes-aquila",
+      "title": "Startmate — terms page",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1cd0472355",
+      "url": "https://www.startmate.com/writing/investment-notes-andromeda",
+      "title": "Startmate — terms page",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1df5f5575f",
+      "url": "https://www.startmate.com/writing/investment-notes-dexta",
+      "title": "Startmate — terms page",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-2abecac467",
+      "url": "https://www.startmate.com/writing/moonshot-co-founders-learnt-applying-y-combinator",
+      "title": "Startmate — application page",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "application"
+    },
+    {
+      "id": "check-route-35d93c1e3f",
+      "url": "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
+      "title": "Startmate — application page",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3cd5432f74",
+      "url": "https://www.startmate.com/writing/investment-notes-dexta",
+      "title": "Startmate — terms page",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-48550a5c26",
+      "url": "https://www.startmate.com/writing/investment-notes-butter",
+      "title": "Startmate — terms page",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-506bd0bd80",
+      "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
+      "title": "Startmate — terms page",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-6deebb11ad",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "title": "Startmate — application page",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6e654f2f0e",
+      "url": "https://www.startmate.com/writing/investment-notes-eggy",
+      "title": "Startmate — terms page",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "terms"
     },
     {
       "id": "check-route-6fd0716bd5",
       "url": "https://www.startmate.com/",
-      "title": "Startmate — homepage checked by scrape.py",
+      "title": "Startmate — homepage",
       "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
       "page": "details"
     },
     {
-      "id": "check-route-8045e79590",
-      "url": "https://www.startmate.com/writing/meet-our-winter-26-accelerator-cohort",
-      "title": "Startmate — batches page checked by scrape.py",
-      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
-      "page": "batches"
+      "id": "check-route-71978dc9a9",
+      "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
+      "title": "Startmate — terms page",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-75d071ad37",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "title": "Startmate — application page",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "application"
     },
     {
       "id": "check-route-81e17ea157",
       "url": "https://www.startmate.com/",
-      "title": "Startmate — homepage checked by scrape.py",
+      "title": "Startmate — homepage",
       "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
       "page": "details"
     },
     {
+      "id": "check-route-824548c6eb",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "title": "Startmate — application page",
+      "excerpt": "If you’re wildly ambitious and doing your life’s work, please apply. → https://blackbirdventures.typeform.com/to/AeeCwGTn?utm_source=Website&typeform-source=www.startmate.com",
+      "page": "application"
+    },
+    {
       "id": "check-route-898ae4bc4f",
       "url": "https://www.startmate.com/faq",
-      "title": "Startmate — terms page checked by scrape.py",
+      "title": "Startmate — terms page",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-97fb6f3441",
+      "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+      "title": "Startmate — application page",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "application"
+    },
+    {
+      "id": "check-route-990c9585b9",
+      "url": "https://www.startmate.com/writing/investment-notes-aquila",
+      "title": "Startmate — terms page",
       "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
       "page": "terms"
     },
     {
       "id": "check-route-9ab89cc508",
       "url": "https://www.startmate.com/faq",
-      "title": "Startmate — terms page checked by scrape.py",
+      "title": "Startmate — terms page",
       "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
       "page": "terms"
     },
     {
-      "id": "check-route-a18cf10700",
-      "url": "https://www.startmate.com/accelerator",
-      "title": "Startmate — application page checked by scrape.py",
-      "excerpt": "Read the application guide → https://www.startmate.com/writing/your-ultimate-guide-for-getting-through-the-first-round-of-the-startmate-accelerator",
+      "id": "check-route-9bb65d0c23",
+      "url": "https://www.startmate.com/writing/moonshot-co-founders-learnt-applying-y-combinator",
+      "title": "Startmate — application page",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
       "page": "application"
     },
     {
-      "id": "check-route-b0f3b30293",
-      "url": "https://www.startmate.com/writing/meet-our-winter-26-accelerator-cohort",
-      "title": "Startmate — batches page checked by scrape.py",
+      "id": "check-route-9df647108a",
+      "url": "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+      "title": "Startmate — terms page",
       "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
-      "page": "batches"
+      "page": "terms"
+    },
+    {
+      "id": "check-route-a9e5eddee4",
+      "url": "https://www.startmate.com/writing/investment-notes-andromeda",
+      "title": "Startmate — terms page",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b1b8c095d7",
+      "url": "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+      "title": "Startmate — terms page",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b3739a5a89",
+      "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+      "title": "Startmate — application page",
+      "excerpt": "You can check out our written application here. → https://steppen.notion.site/Steppen-SM-22-Written-Application-36f36ef2535b498bac948e852ba6c36f",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bf072ebb8e",
+      "url": "https://www.startmate.com/writing/how-to-make-your-first-startup-investment",
+      "title": "Startmate — terms page",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-cc1b773d12",
+      "url": "https://www.startmate.com/writing/how-to-make-your-first-startup-investment",
+      "title": "Startmate — terms page",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "terms"
     },
     {
       "id": "check-route-d85f4f7ef4",
       "url": "https://www.startmate.com/",
-      "title": "Startmate — homepage checked by scrape.py",
+      "title": "Startmate — homepage",
       "excerpt": "https://www.startmate.com/",
       "page": "details"
     },
     {
+      "id": "check-route-e1564df8fb",
+      "url": "https://www.startmate.com/writing/investment-notes-butter",
+      "title": "Startmate — terms page",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
       "id": "check-route-e4fa3108db",
       "url": "https://www.startmate.com/faq",
-      "title": "Startmate — terms page checked by scrape.py",
+      "title": "Startmate — terms page",
       "excerpt": "Apply to the Accelerator → https://www.startmate.com/accelerator",
       "page": "terms"
+    },
+    {
+      "id": "check-route-e7db081b72",
+      "url": "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
+      "title": "Startmate — application page",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-c7d2d47f1a",
+      "url": "https://www.startmate.com/",
+      "page": "details",
+      "excerpt": "Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a"
+    },
+    {
+      "id": "check-page-2f154f8c5a",
+      "url": "https://www.startmate.com/writing/how-to-write-a-killer-application-for-the-student-founder-bootcamp",
+      "page": "application",
+      "excerpt": "How to Write a Killer Application for the Student Founder Bootcamp | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Student Founder Bootcamp How to Write a Killer Application for the Student Founder Bootcamp You don’t need to sound like a startup veteran to get into the Student Founder Bootcamp. In fact, you’ll stand out more if you don’t. Spoiler: we ain't looking for your CV. Share: By Bell Allen Bell Allen October 14, 2025 Updated October 2026: the Bootcamp is now two days in person in Sydney and Melbourne. This article reflects the March 2027 Bootcamp. You don’t need to sound like a startup veteran to get into the Student Founder Bootcamp."
+    },
+    {
+      "id": "check-page-d55ae62dbd",
+      "url": "https://www.startmate.com/writing/moonshot-co-founders-learnt-applying-y-combinator",
+      "page": "application",
+      "excerpt": "Everything Moonshot's co-founders learnt from applying for Y Combinator | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Launch Club Everything Moonshot's co-founders learnt from applying for Y Combinator \"I wasn’t expecting anything; I was sure we had a horrible application.\" Share: By Daniel Han-Chen February 1, 2022 ‍ ‘Y Combinator? What’s that?' That was my first reaction in September 2021 when my fellow founders in Startmate Founder’s Fellowship posted about applying to YC! So I did some research, and OH MY, September 9 was the deadline for the Winter 2022 batch. It was already September 8, so I quickly cobbled up an application in the"
+    },
+    {
+      "id": "check-page-a455cde267",
+      "url": "https://www.startmate.com/writing/startmate-open-house-office-hours-accelerator-application-changes",
+      "page": "application",
+      "excerpt": "We've made changes to Open House, Office Hours and the Accelerator application process: Here's everything you need to know | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator We've made changes to Open House, Office Hours and the Accelerator application process: Here's everything you need to know Here is the what, why and how of our changes to Open House and the Accelerator application process. Share: By Bronte McHenry Bronte McHenry November 4, 2021 ‍ One of our values is ‘we’re a startup too’. What this means is we tend to move fast, experiment, test, and ditch what isn’t working. It’s for this reason we’ve made changes to Open House"
+    },
+    {
+      "id": "check-page-d16c9310ec",
+      "url": "https://www.startmate.com/writing/steppen-startmate-accelerator-application",
+      "page": "application",
+      "excerpt": "How Steppen got into the Accelerator (after being rejected) | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator How Steppen got into the Accelerator (after being rejected) In this article, Steppen Founder Cara Davies reflects on both of her Startmate Accelerator applications. Share: By Cara Davies May 3, 2022 In June 2021, we applied for Startmate's Winter21 Accelerator cohort. We did not get in. In December 2021, however, we applied again — and heard the exciting news that we were selected for the Summer22 cohort! In this article I will highlight the changes we made between applying in June and November, and explain the process of"
+    },
+    {
+      "id": "check-page-2c9e4562b7",
+      "url": "https://www.startmate.com/faq",
+      "page": "terms",
+      "excerpt": "FAQs | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR FAQ Frequently asked questions Got questions? We’ve got answers! Dive into our FAQ to find everything you need to know about Startmate. All Get to know Startmate Getting investment Our offerings How to get involved Other Can you explain what Startmate does? Startmate is building the ecosystem that startups need to thrive in Australia and New Zealand. ‍ We bring the most ambitious founders , operators and investors together in our programs. Founders - we help you get started and invest in your company Operators - we help you launch and perform in your career in startups Investors - we help you work through"
+    },
+    {
+      "id": "check-page-338d0a6a3f",
+      "url": "https://www.startmate.com/terms-and-conditions",
+      "page": "terms",
+      "excerpt": "Terms and Conditions TERMS & CONDITIONS 1. Our Disclosures 2 Welcome to the Startmate Program! 3 Startmate Program 4 Opportunities and introductions 5 Fees and payment 6 Code of conduct 7 General 1. Our Disclosures Our complete terms and conditions are contained below, but some important points for you to know before you become a customer are set out below:we will handle your personal information in accordance with our privacy policy, available at www.startmate.com.au ; to the maximum extent permitted by law, the Fees are non-refundable unless you cancel participation in the Startmate Program at least 1 week prior to its commencement; subject to your rights as a consumer under the Australian Consumer Law, you have not relied on any representations or warranties made by us prior to accepting these Terms that are not included in these Terms; and subject to your rights as a consumer under the Australian Consumer Law, our liability under these Terms is limited to the value of the Fees paid by you to us, and we will not be liable for Consequential Loss.Nothing in these terms limit your rights under the Australian Consumer Law. 2. Welcome to the Startmate Program! [2.1] These terms and conditions ( Terms ) are entered into between Startmate Ops Pty Ltd ABN 11 618 178 957 ( we , us or our ) and you , together the Parties and each a Party . [2.2] You have registered, or will register,"
+    },
+    {
+      "id": "check-page-effaa670a4",
+      "url": "https://www.startmate.com/writing/bec-rozencwajg-landed-job-launchvic-alice-anderson-fund-investment-manager",
+      "page": "terms",
+      "excerpt": "How Bec Rozencwajg landed a job as LaunchVic's Alice Anderson Fund Investment Manager | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Startmate Collective Career How Bec Rozencwajg landed a job as LaunchVic's Alice Anderson Fund Investment Manager When re-entering the workforce after maternity leave, Bec Rozencwajg found herself seeking a role with a tangible, positive impact. Share: By Bronte McHenry Bronte McHenry February 28, 2022 ‍ Bec Rozencwajg is frank, warm and reflective — and has had a career that surprises, delights and impresses. It's filled with international travel, cultural immersion, government relations and a relentless"
+    },
+    {
+      "id": "check-page-26e8017635",
+      "url": "https://www.startmate.com/writing/how-to-make-your-first-startup-investment",
+      "page": "terms",
+      "excerpt": "How to Make Your First Startup Investment | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing First Believers How to Make Your First Startup Investment This article shares a cheat sheet for making your first startup investment: how to build confidence, why community matters, and why getting started is more important than being perfect. Share: By Bell Allen Bell Allen August 26, 2025 ‍ Here’s the truth about angel investing: ‍ It’s not always about spreadsheets or perfect timing. It’s about believing in ambitious founders early and learning as you go. But building that 'gut feel' takes years of reviewing startups, meeting founders and making the"
+    },
+    {
+      "id": "check-page-8bd6666c34",
+      "url": "https://www.startmate.com/writing/investment-notes-andromeda",
+      "page": "terms",
+      "excerpt": "Investment notes: Andromeda | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator Investment notes: Andromeda We're proud to invest in Andromeda as part of our Winter22 Accelerator cohort. Here's why. Share: By Frederic LeForestier September 26, 2022 Using advanced robotic technology to solve the universal problem of loneliness Co-founded by University of Melbourne robotics graduates Grace Brown and Tasmin Ahmed in early-2022, Andromeda is building robots that resonate with people. Grace and Tasmin’s first robot Abi is an endearing, multi-talented humanoid robot who can help people maintain their independence, learn and socialise."
+    },
+    {
+      "id": "check-page-4a03e7ef0f",
+      "url": "https://www.startmate.com/writing/investment-notes-aquila",
+      "page": "terms",
+      "excerpt": "Investment notes: Aquila | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator Investment notes: Aquila We're proud to invest in Aquila as part of our Winter22 Accelerator cohort. Here's why. Share: By Tom McLeod September 26, 2022 Beaming renewable energy anywhere on (or off) earth using lasers Decarbonising the planet is the greatest challenge of our lifetime. Renewable energy sources hold the key to reducing carbon in the atmosphere to a sustainable level where we can keep earth inhabitable and prosperous for many generations to come. However, while the planet has access to more energy from renewable sources than it could possibly"
+    },
+    {
+      "id": "check-page-3c243c5c26",
+      "url": "https://www.startmate.com/writing/investment-notes-butter",
+      "page": "terms",
+      "excerpt": "Investment notes: Butter | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator Investment notes: Butter We're proud to invest in Butter as part of our Winter22 Accelerator cohort. Here's why. Share: By Zak Islam September 26, 2022 Providing a safety net for your important assets Butter is an insurtech startup like no other. Founded by Cassie Bell and Steph Skevington, Butter boasts flexible, single-item policies that can be taken out online and managed like any other subscription. Together, this founding pair are on a mission to bring much-needed energy and creativity to the insurance industry, and of course, help people easily protect"
+    },
+    {
+      "id": "check-page-18edf25f75",
+      "url": "https://www.startmate.com/writing/investment-notes-dennisson-technologies",
+      "page": "terms",
+      "excerpt": "Investment notes: Dennisson Technologies | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator Investment notes: Dennisson Technologies We're proud to invest in Dennisson as part of our Winter22 Accelerator cohort. Here's why. Share: By John Wood September 26, 2022 Unlocking full VR immersion, redefining human capability, and beyond Dennisson is creating the most low-profile, affordable Force Feedback Haptic Gloves on the market in order to deliver natural ‘touching’ and ‘holding’ experiences in the fast-growing virtual reality (VR), augmented reality (AR) and mixed reality (MR) worlds. Dennisson’s co-founders Anvil and Kim are"
+    },
+    {
+      "id": "check-page-eee79d9b00",
+      "url": "https://www.startmate.com/writing/investment-notes-dexta",
+      "page": "terms",
+      "excerpt": "Investment notes: Dexta | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator Investment notes: Dexta We're proud to invest in Dexta as part of our Winter22 Accelerator cohort. Here's why. Share: By Gaby Howard September 26, 2022 Find, filter and hire production pros at scale Dexta is a new way for agencies to find and book vetted production professionals. Founded by Jack Phillips, Dexta aims to take advantage of the gig economy’s growth and reshape how businesses find creative talent, by bringing a new streamlined marketplace solution to source and book crew. The team’s Startmate mentor squad includes Rain Hsu , Luke Howes , Felix Wong"
+    },
+    {
+      "id": "check-page-7e5cc08cfa",
+      "url": "https://www.startmate.com/writing/investment-notes-eggy",
+      "page": "terms",
+      "excerpt": "Investment notes: Eggy | Startmate offerings offerings Founders Founders Accelerator Accelerator OPEN HOUSE OPEN HOUSE Investors Investors First Believers First Believers Operators Operators Student Founder Bootcamp Student Founder Bootcamp Explore all SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. featured writing Meet our Winter ’26 Accelerator Cohort Read more Read more From $0 to $4.5 Billion: How the Startmate Pay-It-Forward Mentorship Model Built a Startup Powerhouse Read more Read more invest invest COMMUNITY COMMUNITY Get inspired Writing Writing events events Merch Merch Get involved mentorS mentors refer a founder refer a founder partner with us partner with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Back to writing Accelerator Investment notes: Eggy We're proud to invest in Eggy as part of our Winter22 Accelerator cohort. Here's why. Share: By Michael Stocks September 26, 2022 Helping families unscramble life admin Life admin. The office work of life. Billions of people all over the world have to do it every single day. Paying bills, making appointments, storing documents and keeping to-do lists. The experience is unrelenting, overwhelming and fragmented. Parents feel this pain the most acutely — which is why Eggy is the all-in-one life-management tool for busy families. The team’s"
     }
   ],
   "findings": {
@@ -208,8 +695,12 @@
         "evidenceId": "check-route-6fd0716bd5"
       },
       {
-        "value": "https://www.startmate.com/writing/your-ultimate-guide-for-getting-through-the-first-round-of-the-startmate-accelerator",
-        "evidenceId": "check-route-a18cf10700"
+        "value": "https://blackbirdventures.typeform.com/to/AeeCwGTn?utm_source=Website&typeform-source=www.startmate.com",
+        "evidenceId": "check-route-824548c6eb"
+      },
+      {
+        "value": "https://steppen.notion.site/Steppen-SM-22-Written-Application-36f36ef2535b498bac948e852ba6c36f",
+        "evidenceId": "check-route-b3739a5a89"
       }
     ],
     "applicationUrl": [
@@ -220,27 +711,93 @@
     ],
     "applicationsOpen": [],
     "operatingStatus": [],
-    "deadlines": [
+    "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
       {
-        "value": "2027-05-07",
-        "evidenceId": "check-deadline-5ce885221f"
+        "value": "Sep",
+        "evidenceId": "check-announced-3619d06503"
       }
     ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-38addc4173"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-f14ba57797"
+      },
+      {
+        "value": "14",
+        "evidenceId": "check-duration-50bc6513eb"
+      },
+      {
+        "value": "1",
+        "evidenceId": "check-duration-e8eed47ca0"
+      },
+      {
+        "value": "3",
+        "evidenceId": "check-duration-3704b5d732"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-f6ad6b9a83"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-56e6e584dd"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Startmate Summer ’27 Accelerator Get $120k and ANZ's best mentors behind your startup For 14 weeks, we help Australia and New Zealand's most ambitious founders move faster, build something people want,",
-        "evidenceId": "check-deal-dd5ffac3cd"
+        "value": "terms too? Yes. From Summer22 onward, Startmate will invest $120,000 on a $1.5m post-money SAFE* for founders without a prior valuation,",
+        "evidenceId": "check-deal-41ee5a011a"
       },
       {
-        "value": "week and Demo Day week. Does a founder need to be full-time? Yes. At least one founder must already be full-time or go full-time for the program. We invest $120k so you can focus 100% on your company. Can I apply as a solo founder? Yes. We love solo founders just as much as teams. What matters is showing us why you're",
-        "evidenceId": "check-deal-68ca9c811c"
+        "value": "too? Yes. From Summer22 onward, Startmate will invest $120,000 on a $1.5m post-money SAFE* for founders without a prior valuation, and",
+        "evidenceId": "check-deal-60e846ad42"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "120000",
+          "currency": "USD",
+          "equity": null,
+          "label": "SAFE",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-41ee5a011a"
+      },
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "1500000",
+          "currency": "USD",
+          "equity": null,
+          "label": "SAFE",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-60e846ad42"
       }
     ],
     "portfolioPages": [
       {
         "value": "https://www.startmate.com/portfolio",
         "evidenceId": "check-portfolio-3a9926b529"
+      },
+      {
+        "value": "https://www.startmate.com/accelerator#Alumni",
+        "evidenceId": "check-portfolio-31caf52033"
       }
     ],
     "name": [

@@ -1,37 +1,291 @@
 {
   "programId": "climate-kic-accelerator",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.climate-kic.org/programmes/climate-entrepreneurship/",
-    "https://www.climate-kic.org/who-we-are/about-climate-kic/"
+    "https://www.climate-kic.org/events/apply-for-accelerator-programme-in-germany-switzerland-austria/",
+    "https://www.climate-kic.org/news/call-for-applications-climate-kic-accelerator-programme-recruits-new-start-ups-in-france/",
+    "https://www.climate-kic.org/news/climathon-opens-applications-2017-city-hosts/",
+    "https://www.climate-kic.org/open-call/design-and-run-your-own-circular-economy-programme-applications-open-for-entrepreneurship-support-organisations-esos-in-india-and-kenya/",
+    "https://www.climate-kic.org/open-call/eit-community-new-european-bauhaus-call-for-applications-2027-catalyse-neb/",
+    "https://www.climate-kic.org/open-call/start-ups-applications-for-climatelaunchpad-2026/",
+    "https://www.climate-kic.org/events/circular-investment-readiness-network-cirn-cities-enabling-local-start-ups/",
+    "https://www.climate-kic.org/events/community-connect-unpacking-the-eu-clean-industrial-deal/",
+    "https://www.climate-kic.org/events/eucirculartalks-industrial-symbiosis-a-tool-for-the-green-deal/",
+    "https://www.climate-kic.org/events/idealab-our-future-after-coal/",
+    "https://www.climate-kic.org/events/innovation-and-investment-in-the-energy-transition/",
+    "https://www.climate-kic.org/events/innovation-entrepreneurship-investment-climate-solutions/",
+    "https://www.climate-kic.org/events/masterclass-sales-hacking-deal-closing-with-steli-efti/",
+    "https://www.climate-kic.org/events/msca-eu-green-deal-cluster-event/"
   ],
   "evidence": [
     {
+      "id": "check-deadline-b4b98030b2",
+      "url": "https://www.climate-kic.org/open-call/eit-community-new-european-bauhaus-call-for-applications-2027-catalyse-neb/",
+      "title": "Climate-KIC Accelerator — application page",
+      "excerpt": "for Applications: 2027 Catalyse NEB CALL FOR Start-ups DEADLINE 2027-01-15 17:00: CET CONTACT neb@eitcommunity.eu HOW TO APPLY",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-1998fb6137",
+      "url": "https://www.climate-kic.org/open-call/design-and-run-your-own-circular-economy-programme-applications-open-for-entrepreneurship-support-organisations-esos-in-india-and-kenya/",
+      "title": "Climate-KIC Accelerator — application page",
+      "excerpt": "masterclasses, the ESOs are eligible to apply for a grant of up to 50.000 EUR (per city) to design and run a dedicated entrepreneurship programme",
+      "page": "application"
+    },
+    {
+      "id": "check-format-5d3ff36795",
+      "url": "https://www.climate-kic.org/open-call/eit-community-new-european-bauhaus-call-for-applications-2027-catalyse-neb/",
+      "title": "Climate-KIC Accelerator — application page",
+      "excerpt": "communications and New European Bauhaus values. Online and in-person networking activities. Visibility opportunities throughout",
+      "page": "application"
+    },
+    {
+      "id": "check-format-7d1bdebdba",
+      "url": "https://www.climate-kic.org/open-call/design-and-run-your-own-circular-economy-programme-applications-open-for-entrepreneurship-support-organisations-esos-in-india-and-kenya/",
+      "title": "Climate-KIC Accelerator — application page",
+      "excerpt": "– 30 April 2026 Final cohort announced: 30 April 2026 Remote kick-off session: First or second week of May 2026 (date",
+      "page": "application"
+    },
+    {
+      "id": "check-format-dd095eabdc",
+      "url": "https://www.climate-kic.org/events/msca-eu-green-deal-cluster-event/",
+      "title": "Climate-KIC Accelerator — terms page",
+      "excerpt": "pollution, climate action and green transport. A Virtual Exhibition will showcase a great variety of additional R&I",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-20fc9e710f",
+      "url": "https://www.climate-kic.org/events/eucirculartalks-industrial-symbiosis-a-tool-for-the-green-deal/",
+      "title": "Climate-KIC Accelerator — terms page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-428c485678",
+      "url": "https://www.climate-kic.org/open-call/design-and-run-your-own-circular-economy-programme-applications-open-for-entrepreneurship-support-organisations-esos-in-india-and-kenya/",
+      "title": "Climate-KIC Accelerator — application page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-4e6f584d64",
+      "url": "https://www.climate-kic.org/events/innovation-entrepreneurship-investment-climate-solutions/",
+      "title": "Climate-KIC Accelerator — terms page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-52da33d7d2",
+      "url": "https://www.climate-kic.org/events/circular-investment-readiness-network-cirn-cities-enabling-local-start-ups/",
+      "title": "Climate-KIC Accelerator — terms page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5f5859e325",
+      "url": "https://www.climate-kic.org/events/community-connect-unpacking-the-eu-clean-industrial-deal/",
+      "title": "Climate-KIC Accelerator — terms page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-605d0a95ac",
+      "url": "https://www.climate-kic.org/open-call/start-ups-applications-for-climatelaunchpad-2026/",
+      "title": "Climate-KIC Accelerator — application page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-71982c8405",
+      "url": "https://www.climate-kic.org/events/innovation-and-investment-in-the-energy-transition/",
+      "title": "Climate-KIC Accelerator — terms page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-851b93a373",
+      "url": "https://www.climate-kic.org/news/climathon-opens-applications-2017-city-hosts/",
+      "title": "Climate-KIC Accelerator — application page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-861a19274f",
+      "url": "https://www.climate-kic.org/news/call-for-applications-climate-kic-accelerator-programme-recruits-new-start-ups-in-france/",
+      "title": "Climate-KIC Accelerator — application page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-882952764b",
+      "url": "https://www.climate-kic.org/open-call/eit-community-new-european-bauhaus-call-for-applications-2027-catalyse-neb/",
+      "title": "Climate-KIC Accelerator — application page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-94051d370b",
       "url": "https://www.climate-kic.org/programmes/climate-entrepreneurship/",
-      "title": "Climate-KIC Accelerator — homepage checked by scrape.py",
+      "title": "Climate-KIC Accelerator — homepage",
       "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-eed6c5c1d6",
-      "url": "https://www.climate-kic.org/who-we-are/about-climate-kic/",
-      "title": "Climate-KIC Accelerator — details page checked by scrape.py",
+      "id": "check-portfolio-ab7f0776ad",
+      "url": "https://www.climate-kic.org/events/apply-for-accelerator-programme-in-germany-switzerland-austria/",
+      "title": "Climate-KIC Accelerator — application page",
       "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-af57cfc725",
+      "url": "https://www.climate-kic.org/events/masterclass-sales-hacking-deal-closing-with-steli-efti/",
+      "title": "Climate-KIC Accelerator — terms page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ba5120e142",
+      "url": "https://www.climate-kic.org/events/msca-eu-green-deal-cluster-event/",
+      "title": "Climate-KIC Accelerator — terms page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d070d8022a",
+      "url": "https://www.climate-kic.org/events/idealab-our-future-after-coal/",
+      "title": "Climate-KIC Accelerator — terms page",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-6921d5c7db",
+      "url": "https://www.climate-kic.org/news/call-for-applications-climate-kic-accelerator-programme-recruits-new-start-ups-in-france/",
+      "title": "Climate-KIC Accelerator — application page",
+      "excerpt": "Call for Application → https://www.climate-kic.org/wp-content/uploads/2017/04/Call-for-Application_CO.doc",
+      "page": "application"
     },
     {
       "id": "check-route-c6f344d311",
       "url": "https://www.climate-kic.org/programmes/climate-entrepreneurship/",
-      "title": "Climate-KIC Accelerator — homepage checked by scrape.py",
+      "title": "Climate-KIC Accelerator — homepage",
       "excerpt": "Climate entrepreneurship → https://www.climate-kic.org/programmes/climate-entrepreneurship/",
       "page": "details"
+    },
+    {
+      "id": "check-route-e6cd0508ee",
+      "url": "https://www.climate-kic.org/news/call-for-applications-climate-kic-accelerator-programme-recruits-new-start-ups-in-france/",
+      "title": "Climate-KIC Accelerator — application page",
+      "excerpt": "Application template → https://www.climate-kic.org/wp-content/uploads/2017/04/Start-up-Acceleration-Application-Template-2017.docx",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-c1533306cd",
+      "url": "https://www.climate-kic.org/programmes/climate-entrepreneurship/",
+      "page": "details",
+      "excerpt": "Climate entrepreneurship | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content What we do Climate entrepreneurship What we do Climate entrepreneurship Climate entrepreneurship Realising the full potential of climate solutions requires a concerted global effort, a shift in mindsets, and a stronger focus on demand-driven initiatives. At Climate KIC, we prioritise bridging the gap between the supply of climate innovation and the demand for them, thereby accelerating this change across the globe. Our aim is to transform the start-up support landscape , ensuring that climate action is deeply embedded in the fabric of the entrepreneurial ecosystem. We are developing a pipeline of innovation We work in support of both demand-side (government agencies, corporates and investors) and supply-side (start-ups,"
+    },
+    {
+      "id": "check-page-648ff3c103",
+      "url": "https://www.climate-kic.org/events/apply-for-accelerator-programme-in-germany-switzerland-austria/",
+      "page": "application",
+      "excerpt": "Apply for our Accelerator Programme in Germany, Switzerland and Austria! | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Event Apply for our Accelerator Programme in Germany, Switzerland and Austria! LOCATION Germany, Switzerland, Austria DATE 29 Jul 2018 REGISTER FOR THIS EVENT Our Call for Applications for a new intake of cleantech start-ups into the Climate KIC Accelerator Winter 2018 Programme is now open. Are you a cleantech or green technology start-up? If so, you are encouraged to visit our new website and apply to the next critical stage of your start-up journey. You have from now until 29 July 23:59 CET 2018 to apply. Alternatively, do you know of good cleantech or green technology start-ups within your network? If so, please share the details of the call with them – our website is"
+    },
+    {
+      "id": "check-page-c6bc473f82",
+      "url": "https://www.climate-kic.org/news/call-for-applications-climate-kic-accelerator-programme-recruits-new-start-ups-in-france/",
+      "page": "application",
+      "excerpt": "Call for applications: Climate-KIC Accelerator Programme recruits new start-ups in France | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Call for applications: Climate-KIC Accelerator Programme recruits new start-ups in France News 02 May 2017 Climate-KIC France is seeking highly motivated and committed climate entrepreneurs for its start-up Accelerator programme . Cleantech and greentech projects are welcome. Candidates to this call just need to have a breakthrough business idea with a substantial impact on climate mitigation and/or adaptation. The Climate-KIC France Accelerator Programme offers support to start-ups development towards their first customers, during one year. The selected entrepreneurs benefit from coaching, consulting, networking and financial support. Through the"
+    },
+    {
+      "id": "check-page-07f336320c",
+      "url": "https://www.climate-kic.org/news/climathon-opens-applications-2017-city-hosts/",
+      "page": "application",
+      "excerpt": "Climathon opens applications for 2017 city hosts | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Climathon opens applications for 2017 city hosts News 19 Apr 2017 Climate-KIC’s hugely successful Climathon programme opens for city host applications this week. Climate-KIC is looking for city’s around the world to join the climathon movement, and drive climate action. [xyz-ihs snippet=”Climathon-2017-CTA”] What is Climathon? Climathon is a global 24-hour climate change hackathon which will take place simultaneously in major cities around the world on 27 October 2017. It brings together the challenges of the world’s cities with the people who have the passion and ability to solve them. Climathon attracts innovators, entrepreneurs, students and professionals to create innovative solutions to"
+    },
+    {
+      "id": "check-page-e32ce78d64",
+      "url": "https://www.climate-kic.org/open-call/design-and-run-your-own-circular-economy-programme-applications-open-for-entrepreneurship-support-organisations-esos-in-india-and-kenya/",
+      "page": "application",
+      "excerpt": "Design and run your own circular economy programme; applications open for Entrepreneurship Support Organisations (ESOs) in India and Kenya | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content OPEN CALL Design and run your own circular economy programme; applications open for Entrepreneurship Support Organisations (ESOs) in India and Kenya CALL FOR Entrepreneurship Support Organisations in India and Kenya DEADLINE 2026-04-16 00:00: Midnight, CET CONTACT eva.ros@climate-kic.org HOW TO APPLY Details The Circular Economy Innovation Cluster (CEIC) is a multi-year programme led by Climate KIC and partners GrowthAfrica (Nairobi, Kenya) and SecondMuse (Bengaluru, India) and funded by IKEA Foundation. We are inviting Entrepreneurship Support Organisations (ESOs) in Bengaluru, India, and Nairobi, Kenya, to"
+    },
+    {
+      "id": "check-page-5f562fa676",
+      "url": "https://www.climate-kic.org/open-call/eit-community-new-european-bauhaus-call-for-applications-2027-catalyse-neb/",
+      "page": "application",
+      "excerpt": "EIT Community New European Bauhaus Call for Applications: 2027 Catalyse NEB | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content OPEN CALL EIT Community New European Bauhaus Call for Applications: 2027 Catalyse NEB CALL FOR Start-ups DEADLINE 2027-01-15 17:00: CET CONTACT neb@eitcommunity.eu HOW TO APPLY Details This is a call for applicants to be part of the 2027 cohort of the EIT Community New European Bauhaus (NEB)’s Catalyse NEB programme, a start-up accelerator for ventures working to implement NEB values across Europe. Catalyse NEB is the EIT Community New European Bauhaus accelerator for start-ups integrating sustainability, aesthetics and inclusion into their businesses, products and services. Built on the foundation of the New European Bauhaus (NEB) – Europe’s creative engine for turning"
+    },
+    {
+      "id": "check-page-90ad89f179",
+      "url": "https://www.climate-kic.org/open-call/start-ups-applications-for-climatelaunchpad-2026/",
+      "page": "application",
+      "excerpt": "Start-ups: Applications for ClimateLaunchpad 2026 | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content OPEN CALL Start-ups: Applications for ClimateLaunchpad 2026 CALL FOR Start-ups DEADLINE 2026-05-15 23:59: CET CONTACT info@climatelaunchpad.org HOW TO APPLY Details Since 2014, ClimateLaunchpad has operated across 97 countries as the world’s largest green business ideas competition. We do not just talk about change; we are actively co-creating the next economy by providing the expertise, skills, and validation required to turn climate concepts into formidable ventures. Through our year-round programme and global pitching events, we have helped over 5,000 teams perfect their business models and sharpen their pitches. Our track record is defined by real world impact, with 500 training bootcamps"
+    },
+    {
+      "id": "check-page-b394b4dc76",
+      "url": "https://www.climate-kic.org/events/circular-investment-readiness-network-cirn-cities-enabling-local-start-ups/",
+      "page": "terms",
+      "excerpt": "Circular Investment Readiness Network (CIRN) – Cities enabling local start-ups | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Event Circular Investment Readiness Network (CIRN) – Cities enabling local start-ups LOCATION Online DATE 12 Jun 2025 REGISTER FOR THIS EVENT Cities have the power to shape the future of circular entrepreneurship, but how can they turn ambition into real support? Join us on 12 June for the next session of the Circular Investment Readiness Network: Cities enabling local start-ups 10:00–11:30 CEST | Online | Free to join In this session, we’ll explore how local governments, incubators, and entrepreneurs can work together to build stronger circular ecosystems — from funding and policy frameworks to practical incubation strategies. Hear real stories, share challenges,"
+    },
+    {
+      "id": "check-page-8bb85fc226",
+      "url": "https://www.climate-kic.org/events/community-connect-unpacking-the-eu-clean-industrial-deal/",
+      "page": "terms",
+      "excerpt": "Community CONNECT: Unpacking the EU Clean Industrial Deal | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Event Community CONNECT: Unpacking the EU Clean Industrial Deal LOCATION Zoom DATE 16h-17h30 CET REGISTER FOR THIS EVENT The European Commission has just unveiled two proposals meant to impact the European industrial landscape: the Clean Industrial Deal and the Omnibus Simplification Package . Both highly anticipated, they propose a shift in direction of Europe and the EU Commission’s work in years to come. Being a community of climate action, we ask ourselves how this will affect our work and impact? Where does this leave businesses, innovators, universities and key stakeholders who are committed to the green transformation of Europe? Join our Community CONNECT on Thursday 20 March! We"
+    },
+    {
+      "id": "check-page-955793441f",
+      "url": "https://www.climate-kic.org/events/eucirculartalks-industrial-symbiosis-a-tool-for-the-green-deal/",
+      "page": "terms",
+      "excerpt": "#EUCircularTalks: Industrial symbiosis: A tool for the Green Deal | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Event #EUCircularTalks: Industrial symbiosis: A tool for the Green Deal LOCATION Online DATE 16 Jun 2021 REGISTER FOR THIS EVENT Moving to more circular economy models is one of the European circular economic community’s main objectives today. This transition promises a brighter future for the European economy. By helping to decouple economic growth from resource use and its impacts, the circular economy offers the prospect of real sustainable development. Industrial Symbiosis is a way to achieve a more sustainable and integrated industrial system, which identifies business opportunities that leverage underutilised resources. Stakeholders in related sectors collaborate in order"
+    },
+    {
+      "id": "check-page-660f718fdf",
+      "url": "https://www.climate-kic.org/events/idealab-our-future-after-coal/",
+      "page": "terms",
+      "excerpt": "IdeaLab: Our Future After Coal | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Event IdeaLab: Our Future After Coal LOCATION Online DATE 24-26 November from 10:00 to 16:00 CET REGISTER FOR THIS EVENT Ideation of experiments for coal regions – online sandpit workshop & funding competition The IdeaLab is a highly interactive 3-day online workshop with ideation of experiments for coal regions and a funding competition for grants. The event is organized as part of the CEE Climate Community Lab. During this event, participants will form international teams and collaborate with the help of experienced facilitators and mentors to co-develop projects that: Build positive attitudes towards the decarbonisation process in coal regions, Help coal region residents define a new identity that meets to the"
+    },
+    {
+      "id": "check-page-04d93d05b7",
+      "url": "https://www.climate-kic.org/events/innovation-and-investment-in-the-energy-transition/",
+      "page": "terms",
+      "excerpt": "Innovation and Investment in the Energy Transition | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Event Innovation and Investment in the Energy Transition LOCATION Helsinki DATE 20 November, 8:30 - 11:00 (GMT+2) REGISTER FOR THIS EVENT Climate KIC will be co-hosting an official Slush side event: Innovation and Investment in the Energy Transition at the Energy Shift Forum Helsinki . The event brings together a global room of investors, innovators, and energy operators to explore how collaboration between scale-ups, corporates, and capital can accelerate innovation in the clean energy transition. ​Participants gain behind-the-scenes insights into how energy scale-ups secure transformative investment and meet the leading investors shaping the future of the energy transition. ​​The program"
+    },
+    {
+      "id": "check-page-960aa994a5",
+      "url": "https://www.climate-kic.org/events/innovation-entrepreneurship-investment-climate-solutions/",
+      "page": "terms",
+      "excerpt": "Innovation, Entrepreneurship and Investment for Climate Solutions | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Event Innovation, Entrepreneurship and Investment for Climate Solutions DATE 11 Nov 2017 11 November | 9.30am – 10.30am Fiji Pavilion Innovation is integral to building a greater resilience of vulnerable nations to the impacts of climate change, and infusing entrepreneurship and investment with the right climate innovations will fast-track the development and deployment of climate solutions. The international community is working together to further strengthen the innovation & entrepreneurship “ecosystems” that have the potential to not only provide climate solutions but further catalyze next steps to future economies with net zero greenhouse gas emissions, in an effort to limit"
+    },
+    {
+      "id": "check-page-0fb6cf6da0",
+      "url": "https://www.climate-kic.org/events/masterclass-sales-hacking-deal-closing-with-steli-efti/",
+      "page": "terms",
+      "excerpt": "FULLY BOOKED Masterclass: Sales Hacking & Deal Closing with Steli Efti | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Event FULLY BOOKED Masterclass: Sales Hacking & Deal Closing with Steli Efti DATE 28 Sep 2015 This masterclass is fully booked, so registration is closed! Close more deals & make more sales! Programme Outline What you will learn in this workshop: Why engineers speak a different language than sales people; How one can get over the reluctance to do sales to sell more software (without selling their souls); Tactics for getting over the pain of rejection when doing sales calls (and sales generally); How to qualify prospects so they don’t waste time pursuing deals which they’d never, ever close and can instead concentrate on the deals which their personal attention will cause to"
+    },
+    {
+      "id": "check-page-800f24bd64",
+      "url": "https://www.climate-kic.org/events/msca-eu-green-deal-cluster-event/",
+      "page": "terms",
+      "excerpt": "MSCA - EU Green Deal Cluster event | Climate KIC Initiated by the EIT News & stories • Podcast • Media & press • Contact us Search for: Who we are Who we are BACK About Climate KIC Our governance Leadership team Board members How we work How we work BACK Our approach to MEL Our strategy Our community Our community BACK About our Community Our alumni Our members What we do What we do BACK Place-based transformations Learning by doing Climate entrepreneurship Europe 2030 missions Inclusive climate innovation Climate KIC Academy Our portfolio Get involved Get involved BACK Attend an event Join our team Open calls Procurement Invest with us Join the Community Skip to content Event MSCA – EU Green Deal Cluster event LOCATION Online DATE 6-7 July 2021 REGISTER FOR THIS EVENT The European Commission and the European Research Executive Agency (REA) are organising a “European Green Deal Cluster Event” on 6-7 July 2021 . The event will bring together projects and researchers funded under the Marie Skłodowska-Curie Actions (MSCA), as well as other research and innovation initiatives under the remit of the European Commission’s Directorate-General for Education, Culture, Youth and Sport. These include the European Institute of Innovation and Technology (EIT), European University Alliances , Erasmus+ and Creative Europe projects. The Green Deal cluster event is part of the EU’s"
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://www.climate-kic.org/wp-content/uploads/2017/04/Start-up-Acceleration-Application-Template-2017.docx",
+        "evidenceId": "check-route-e6cd0508ee"
+      },
+      {
+        "value": "https://www.climate-kic.org/wp-content/uploads/2017/04/Call-for-Application_CO.doc",
+        "evidenceId": "check-route-6921d5c7db"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://www.climate-kic.org/programmes/climate-entrepreneurship/",
@@ -40,9 +294,48 @@
     ],
     "applicationsOpen": [],
     "operatingStatus": [],
-    "deadlines": [],
+    "deadlines": [
+      {
+        "value": "2027-01-15",
+        "evidenceId": "check-deadline-b4b98030b2"
+      }
+    ],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-7d1bdebdba"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-5d3ff36795"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "masterclasses, the ESOs are eligible to apply for a grant of up to 50.000 EUR (per city) to design and run a dedicated entrepreneurship programme",
+        "evidenceId": "check-deal-1998fb6137"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "50",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Grant",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-1998fb6137"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://www.climate-kic.org/programmes/our-portfolio/",

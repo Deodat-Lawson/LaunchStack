@@ -1,12 +1,52 @@
 {
   "programId": "nexus-venture-partners",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://www.nexusvp.com/companies",
       "page": "portfolio",
       "anchor": "companies",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nexusvp.com/companies/abcoffee",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nexusvp.com/companies/aemon-ai",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nexusvp.com/companies/agilitas-sports",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nexusvp.com/companies/allo-health",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nexusvp.com/companies/animall",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -14,7 +54,47 @@
       "url": "https://www.nexusvp.com/companies/apollo-io",
       "page": "portfolio",
       "anchor": "",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nexusvp.com/companies/arkin-net",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nexusvp.com/companies/aryaka",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nexusvp.com/companies/asknicely",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nexusvp.com/companies/assetplus",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nexusvp.com/companies/aurva-io",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -71,6 +151,22 @@
       "page": "portfolio",
       "anchor": "",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nexusvp.com/in/terms-of-service",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nexusvp.com/terms-of-service",
+      "page": "terms",
+      "anchor": "Terms of Service",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

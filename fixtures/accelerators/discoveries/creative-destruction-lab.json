@@ -1,12 +1,156 @@
 {
   "programId": "creative-destruction-lab",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://creativedestructionlab.com/about/",
       "page": "details",
       "anchor": "About",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/application-triage/",
+      "page": "application",
+      "anchor": "Apply",
       "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/blockchain-application/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/blog/applications-launch-2023-24/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/blog/applications-open-2022/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/blog/cdl-oxford-announce-new-mentors-makes-call-for-ai-start-up-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/blog/cleveland/",
+      "page": "details",
+      "anchor": "Announcements Creative Destruction Lab Launches CDL-Cleveland in Partnership with University Hospitals and Case Western Reserve University CDL-Cleveland is the first site in the CD",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/blog/doha/",
+      "page": "terms",
+      "anchor": "Announcements Creative Destruction Lab Connects Entrepreneurs to Global Network with CDL-Doha With funding from the Qatar Investment Authority and the Qatar Research, Development, ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/blog/founders-find-practical-applications-for-quantum-computing-at-cdls-2021-quantum-hackathon/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/blog/quantum-applications-2023-24/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/blog/thinking-about-applying-to-the-creative-destruction-labs-2018-19-program-read-this-first/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/companies/",
+      "page": "portfolio",
+      "anchor": "Companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/faq/",
+      "page": "terms",
+      "anchor": "FAQs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/fr/application-triage/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/fr/blockchain-application/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/fr/blog/applications-launch-2023-24/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/fr/blog/applications-open-2022/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/fr/blog/cdl-oxford-announce-new-mentors-makes-call-for-ai-start-up-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/partners-program/",
+      "page": "details",
+      "anchor": "Partners",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -27,41 +171,9 @@
       "origin": "official"
     },
     {
-      "url": "https://creativedestructionlab.com/companies/",
-      "page": "portfolio",
-      "anchor": "Companies",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://creativedestructionlab.com/partners-program/",
-      "page": "details",
-      "anchor": "Partners",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://creativedestructionlab.com/application-triage/",
+      "url": "https://creativedestructionlab.com/quantum-application/",
       "page": "application",
-      "anchor": "Apply",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://creativedestructionlab.com/blog/cleveland/",
-      "page": "details",
-      "anchor": "Announcements Creative Destruction Lab Launches CDL-Cleveland in Partnership with University Hospitals and Case Western Reserve University CDL-Cleveland is the first site in the CD",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://creativedestructionlab.com/faq/",
-      "page": "terms",
-      "anchor": "FAQs",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

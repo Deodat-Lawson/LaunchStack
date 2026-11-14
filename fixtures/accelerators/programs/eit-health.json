@@ -9,14 +9,14 @@
   "websiteUrl": "https://eithealth.eu/",
   "applyUrl": "https://eithealth.eu/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Deep Tech Venture Builder Programme Call 2025 FAQs European Taskforce for Harmonised Evaluations of Digital Medical Devices (DMDs) Life-changing ideas become reality right here. We bring together the brightest minds from the worlds of business, research, education and healthcare delivery to answer some of the biggest health challenges facing Europe. Watch our story Europe faces a turning point in health. An ageing population, the rising burden of chronic disease, and growing multi-morbidity are all placing pressure on health systems across Europe. Find out more Our vast community, including approximately 100 world-class member organisations, works across borders to connect the three worlds of business, research and education. We call this meeting point the ‘knowledge triangle’ because it’s where life-changing innovation happens. Find out more Our ambition is to enable people in Europe to live longer, healthier lives. Our work goes beyond conventional approaches to disease management and disease prevention. We are building and growing businesses to create products and services that progress healthcare in Europe, while strengthening our economy. Find out more No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "EIT Health is a network of best-in-class health innovators backed by the EU. We deliver solutions to enable European citizens to live longer, healthier lives.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Not published on the official page.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "eit-health-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://eithealth.eu/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

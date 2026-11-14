@@ -1,79 +1,290 @@
 {
   "programId": "nxtp",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://www.nxtp.vc/"
+    "https://www.nxtp.vc/",
+    "https://nxtp.vc/portfolio",
+    "https://nxtp.vc/portfolio-company/123-seguro",
+    "https://nxtp.vc/portfolio-company/aloi",
+    "https://nxtp.vc/portfolio-company/arcus",
+    "https://nxtp.vc/portfolio-company/asteras",
+    "https://nxtp.vc/portfolio-company/auth0",
+    "https://nxtp.vc/portfolio-company/avra",
+    "https://nxtp.vc/portfolio-company/axenya",
+    "https://nxtp.vc/portfolio-company/barte",
+    "https://nxtp.vc/portfolio-company/betterfly",
+    "https://nxtp.vc/portfolio-company/capim",
+    "https://nxtp.vc/portfolio-company/cargo-sapiens",
+    "https://nxtp.vc/portfolio-company/chazki",
+    "https://nxtp.vc/portfolio-company/cobli"
   ],
   "evidence": [
     {
       "id": "check-email-51df37f564",
       "url": "https://www.nxtp.vc/",
-      "title": "NXTP — homepage checked by scrape.py",
+      "title": "NXTP — homepage",
       "excerpt": "Newsletter Subscribe Buenos Aires Sao Paulo Mexico City info@nxtp.vc © YEAR NXTP. All rights reserved.",
       "page": "details"
     },
     {
       "id": "check-email-5c2fdccfe8",
       "url": "https://www.nxtp.vc/",
-      "title": "NXTP — homepage checked by scrape.py",
+      "title": "NXTP — homepage",
       "excerpt": "Condesa Cuauhtémoc, 06100, CDMX México General inquiries info@nxtp.vc X - CLOSE Sao Paulo Alameda Vicente Pinzon, 54 Vila",
       "page": "details"
     },
     {
       "id": "check-email-5cf9f68829",
       "url": "https://www.nxtp.vc/",
-      "title": "NXTP — homepage checked by scrape.py",
+      "title": "NXTP — homepage",
       "excerpt": "Cdad. Autónoma de Buenos Aires Argentina General inquiries info@nxtp.vc X - CLOSE Buenos Aires Sao Paulo Mexico City NXTP is Latin",
       "page": "details"
     },
     {
+      "id": "check-email-78e7dbbf93",
+      "url": "https://nxtp.vc/portfolio",
+      "title": "NXTP — portfolio page",
+      "excerpt": "Newsletter Subscribe Buenos Aires Sao Paulo Mexico City info@nxtp.vc © YEAR NXTP. All rights reserved.",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-a39458a170",
+      "url": "https://nxtp.vc/portfolio",
+      "title": "NXTP — portfolio page",
+      "excerpt": "info@nxtp.vc",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-a98af0745e",
       "url": "https://www.nxtp.vc/",
-      "title": "NXTP — homepage checked by scrape.py",
+      "title": "NXTP — homepage",
       "excerpt": "info@nxtp.vc",
       "page": "details"
     },
     {
       "id": "check-email-d912d1668c",
       "url": "https://www.nxtp.vc/",
-      "title": "NXTP — homepage checked by scrape.py",
+      "title": "NXTP — homepage",
       "excerpt": "São Paulo - SP, 04547-130 Brazil General inquiries info@nxtp.vc ‍ X - CLOSE Argentina Sucre 1530, of. 404 C1428 Cdad.",
       "page": "details"
     },
     {
       "id": "check-name-a94adefc6e",
       "url": "https://www.nxtp.vc/",
-      "title": "NXTP — homepage checked by scrape.py",
+      "title": "NXTP — homepage",
       "excerpt": "NXTP | Pioneers of early-stage B2B technology investing in",
       "page": "details"
     },
     {
+      "id": "check-portfolio-0d9b63b19e",
+      "url": "https://nxtp.vc/portfolio-company/axenya",
+      "title": "NXTP — portfolio page",
+      "excerpt": "< BACK TO PORTFOLIO → https://nxtp.vc/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-1c1a66a2c8",
+      "url": "https://nxtp.vc/portfolio-company/betterfly",
+      "title": "NXTP — portfolio page",
+      "excerpt": "< BACK TO PORTFOLIO → https://nxtp.vc/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-24ae1b78d6",
+      "url": "https://nxtp.vc/portfolio-company/cobli",
+      "title": "NXTP — portfolio page",
+      "excerpt": "< BACK TO PORTFOLIO → https://nxtp.vc/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-2b21677fdc",
+      "url": "https://nxtp.vc/portfolio-company/cargo-sapiens",
+      "title": "NXTP — portfolio page",
+      "excerpt": "< BACK TO PORTFOLIO → https://nxtp.vc/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-2f8fb52927",
       "url": "https://www.nxtp.vc/",
-      "title": "NXTP — homepage checked by scrape.py",
+      "title": "NXTP — homepage",
       "excerpt": "Our PORTFOLIO → https://www.nxtp.vc/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-30e87e744c",
+      "url": "https://nxtp.vc/portfolio-company/capim",
+      "title": "NXTP — portfolio page",
+      "excerpt": "< BACK TO PORTFOLIO → https://nxtp.vc/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-50e3ba24cf",
       "url": "https://www.nxtp.vc/",
-      "title": "NXTP — homepage checked by scrape.py",
+      "title": "NXTP — homepage",
       "excerpt": "Portfolio → https://www.nxtp.vc/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-59ddd5f575",
+      "url": "https://nxtp.vc/portfolio-company/asteras",
+      "title": "NXTP — portfolio page",
+      "excerpt": "< BACK TO PORTFOLIO → https://nxtp.vc/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-64fc9a2e55",
+      "url": "https://nxtp.vc/portfolio-company/auth0",
+      "title": "NXTP — portfolio page",
+      "excerpt": "< BACK TO PORTFOLIO → https://nxtp.vc/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-69763c90e8",
       "url": "https://www.nxtp.vc/",
-      "title": "NXTP — homepage checked by scrape.py",
+      "title": "NXTP — homepage",
       "excerpt": "PORTFOLIO → https://www.nxtp.vc/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-6a12847172",
+      "url": "https://nxtp.vc/portfolio-company/123-seguro",
+      "title": "NXTP — portfolio page",
+      "excerpt": "< BACK TO PORTFOLIO → https://nxtp.vc/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-c6a4665568",
+      "url": "https://nxtp.vc/portfolio-company/aloi",
+      "title": "NXTP — portfolio page",
+      "excerpt": "< BACK TO PORTFOLIO → https://nxtp.vc/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-c87a7b2d73",
+      "url": "https://nxtp.vc/portfolio-company/avra",
+      "title": "NXTP — portfolio page",
+      "excerpt": "< BACK TO PORTFOLIO → https://nxtp.vc/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-d37bec5a7e",
+      "url": "https://nxtp.vc/portfolio-company/arcus",
+      "title": "NXTP — portfolio page",
+      "excerpt": "< BACK TO PORTFOLIO → https://nxtp.vc/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-d8ad9377a2",
+      "url": "https://nxtp.vc/portfolio-company/barte",
+      "title": "NXTP — portfolio page",
+      "excerpt": "< BACK TO PORTFOLIO → https://nxtp.vc/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-f8167d4bc8",
+      "url": "https://nxtp.vc/portfolio-company/chazki",
+      "title": "NXTP — portfolio page",
+      "excerpt": "< BACK TO PORTFOLIO → https://nxtp.vc/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-91caf68386",
       "url": "https://www.nxtp.vc/",
-      "title": "NXTP — homepage checked by scrape.py",
+      "title": "NXTP — homepage",
       "excerpt": "https://www.nxtp.vc/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-e8bd097e6b",
+      "url": "https://www.nxtp.vc/",
+      "page": "details",
+      "excerpt": "NXTP | Pioneers of early-stage B2B technology investing in Latin America and globally. Philosophy TEAM PORTFOLIO X CLOSE MENU Philosophy TEAM PORTFOLIO Pioneers of early-stage B2B technology investing in Latin America and globally. 15+ Years Investing in Latin America & Globally $100M Current Fund Size NXTP Fund III $2.5B+ Capital Raised by NXTP Companies 275 Founders 122 Investments 32 Exits to Date 15+ Years Investing in Latin America & Globally $100M Current Fund Size NXTP Fund III 275 Founders Buenos Aires Sao Paulo Mexico City Argentina NOTABLE INVESTMENTS X - CLOSE USA NOTABLE INVESTMENTS X - CLOSE Mexico NOTABLE INVESTMENTS X - CLOSE Colombia NOTABLE INVESTMENTS X - CLOSE Peru NOTABLE INVESTMENTS X - CLOSE Chile NOTABLE INVESTMENTS X - CLOSE Brazil NOTABLE INVESTMENTS X - CLOSE Uruguay NOTABLE INVESTMENTS X - CLOSE México Ámsterdam 255 Hipódromo Condesa Cuauhtémoc, 06100, CDMX México General inquiries info@nxtp.vc X - CLOSE Sao Paulo Alameda Vicente Pinzon, 54 Vila Olímpia, São Paulo - SP, 04547-130 Brazil General inquiries info@nxtp.vc ‍ X - CLOSE Argentina Sucre 1530, of. 404 C1428 Cdad. Autónoma de Buenos Aires Argentina General inquiries info@nxtp.vc X - CLOSE Buenos Aires Sao Paulo Mexico City NXTP is Latin America's leading early-stage venture capital firm focused on B2B innovation. Our PORTFOLIO Backing category-defining founders. Auth0 is an enterprise identity"
+    },
+    {
+      "id": "check-page-3bc1310dea",
+      "url": "https://nxtp.vc/portfolio",
+      "page": "portfolio",
+      "excerpt": "NXTP | Portfolio Philosophy TEAM PORTFOLIO X CLOSE MENU Philosophy TEAM PORTFOLIO We are proud to serve these pioneering founders. Geographies Global Argentina Brazil Chile Colombia Mexico Peru Uruguay Vertical Enterprise AI/ML Fintech & Payments E-commerce & B2B Platforms Logistics Vertical SaaS Infrastructure & Security PLG & Dev Tools Information Services Status Active Exit Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. X - CLOSE Fintech & Payments Digital insurance broker for top auto insurers. GEOGRAPHY: Argentina , FOUNDERS: Bruno Ferrari, Martín Ferrari STATUS: Active X - CLOSE Enterprise AI / Information Services AI-enabled tax compliance for Mexican enterprise. GEOGRAPHY: Mexico , FOUNDERS: Pedro Guerrero STATUS: Active X - CLOSE Fintech & Payments Management and payment tool offered to end-consumer by financial institutions for recurring services such as bills, credit cards, and subscription services. GEOGRAPHY: Global , Mexico , FOUNDERS: Edrizio De La Cruz, Inigo Rumayor Belausteguigoitia, Juan Jose Maldonado STATUS: Exit X - CLOSE AI/ML Enterprise AI / Information Services An applied AI lab for domain-specific models and agents. GEOGRAPHY: Brazil , FOUNDERS: Thiago Tergolino, Leonardo Borges, Bruno Lerner, Matheus Secco STATUS: Active X - CLOSE Enterprise Infrastructure & Security PLG & Dev Tools Auth0 is an"
+    },
+    {
+      "id": "check-page-ccc874b8d6",
+      "url": "https://nxtp.vc/portfolio-company/123-seguro",
+      "page": "portfolio",
+      "excerpt": "NXTP _ V2 < BACK TO PORTFOLIO Fintech & Payments Digital insurance broker for top auto insurers. GEOGRAPHY: Argentina , FOUNDERS: Bruno Ferrari, Martín Ferrari STATUS: Active"
+    },
+    {
+      "id": "check-page-2f9b614dfd",
+      "url": "https://nxtp.vc/portfolio-company/aloi",
+      "page": "portfolio",
+      "excerpt": "NXTP _ V2 < BACK TO PORTFOLIO Enterprise AI / Information Services AI-enabled tax compliance for Mexican enterprise. GEOGRAPHY: Mexico , FOUNDERS: Pedro Guerrero STATUS: Active"
+    },
+    {
+      "id": "check-page-b793a8dd1a",
+      "url": "https://nxtp.vc/portfolio-company/arcus",
+      "page": "portfolio",
+      "excerpt": "NXTP _ V2 < BACK TO PORTFOLIO Fintech & Payments Management and payment tool offered to end-consumer by financial institutions for recurring services such as bills, credit cards, and subscription services. GEOGRAPHY: Global , Mexico , FOUNDERS: Edrizio De La Cruz, Inigo Rumayor Belausteguigoitia, Juan Jose Maldonado STATUS: Exit"
+    },
+    {
+      "id": "check-page-78d81f5513",
+      "url": "https://nxtp.vc/portfolio-company/asteras",
+      "page": "portfolio",
+      "excerpt": "NXTP _ V2 < BACK TO PORTFOLIO AI/ML Enterprise AI / Information Services An applied AI lab for domain-specific models and agents. GEOGRAPHY: Brazil , FOUNDERS: Thiago Tergolino, Leonardo Borges, Bruno Lerner, Matheus Secco STATUS: Active"
+    },
+    {
+      "id": "check-page-f8daa01e81",
+      "url": "https://nxtp.vc/portfolio-company/auth0",
+      "page": "portfolio",
+      "excerpt": "NXTP _ V2 < BACK TO PORTFOLIO Enterprise Infrastructure & Security PLG & Dev Tools Auth0 is an enterprise identity & authentication platform. Developer-centric and product-led, they exemplify what we find so attractive in B2B SaaS startups. They were acquired by Okta in May 2021 for $6.5bn. We are proud to have been their first check back in 2014. GEOGRAPHY: Global , Argentina , FOUNDERS: Eugenio Pace, Matias Woloski STATUS: Exit"
+    },
+    {
+      "id": "check-page-f98f2257f3",
+      "url": "https://nxtp.vc/portfolio-company/avra",
+      "page": "portfolio",
+      "excerpt": "NXTP _ V2 < BACK TO PORTFOLIO AI/ML Enterprise Foundational AI models to optimize decision-making for enterprises serving SMEs. ‍ GEOGRAPHY: Brazil , FOUNDERS: Viviane Meister, Bruno Alano STATUS: Active"
+    },
+    {
+      "id": "check-page-05eb8ef58a",
+      "url": "https://nxtp.vc/portfolio-company/axenya",
+      "page": "portfolio",
+      "excerpt": "NXTP _ V2 < BACK TO PORTFOLIO Vertical SaaS Digital health platform company that empowers Latin-American physicians and patients to plug into the future of medicine. GEOGRAPHY: Brazil , Uruguay , FOUNDERS: Mariano García-Valiño, Renato De Giorgi STATUS: Active"
+    },
+    {
+      "id": "check-page-71c830a632",
+      "url": "https://nxtp.vc/portfolio-company/barte",
+      "page": "portfolio",
+      "excerpt": "NXTP _ V2 < BACK TO PORTFOLIO Fintech & Payments B2B payments and cash flow management platform with embedded financing serving SMBs and mid-sized enterprises in Brazil. GEOGRAPHY: Brazil , FOUNDERS: Caetano Lacerda & Raphael Dyxklay STATUS: Active"
+    },
+    {
+      "id": "check-page-a109b74653",
+      "url": "https://nxtp.vc/portfolio-company/betterfly",
+      "page": "portfolio",
+      "excerpt": "NXTP _ V2 < BACK TO PORTFOLIO Fintech & Payments Purpose-driven benefits platform that rewards your team’s healthy habits with charitable donations and no-cost life insurance coverage that grows every day. GEOGRAPHY: Mexico , Chile , FOUNDERS: Eduardo della Maggiora, Cristóbal della Maggiora STATUS: Active"
+    },
+    {
+      "id": "check-page-ae47be50bc",
+      "url": "https://nxtp.vc/portfolio-company/capim",
+      "page": "portfolio",
+      "excerpt": "NXTP _ V2 < BACK TO PORTFOLIO Fintech & Payments Vertical SaaS Point-of-sale buy-now-pay-later fintech solution focused on healthcare and essential needs. GEOGRAPHY: Brazil , FOUNDERS: Marcelo Lutz, Roberto Biselli STATUS: Active"
+    },
+    {
+      "id": "check-page-260ccd463a",
+      "url": "https://nxtp.vc/portfolio-company/cargo-sapiens",
+      "page": "portfolio",
+      "excerpt": "NXTP _ V2 < BACK TO PORTFOLIO Enterprise AI/ML Logistics Cloud-based SaaS platform that digitizes and optimizes freight purchasing and quoting, connecting companies with logistics providers to reduce costs and improve transparency. GEOGRAPHY: Brazil , FOUNDERS: David Pinheiro STATUS: Active"
+    },
+    {
+      "id": "check-page-9537523378",
+      "url": "https://nxtp.vc/portfolio-company/chazki",
+      "page": "portfolio",
+      "excerpt": "NXTP _ V2 < BACK TO PORTFOLIO Logistics Last-mile urban delivery platform distributing and dispatching of packages and real-time order tracking, enabling users to receive faster. GEOGRAPHY: Peru , FOUNDERS: Gonzalo Begazo, Luis Miguel Frisancho STATUS: Active"
+    },
+    {
+      "id": "check-page-a3842145a9",
+      "url": "https://nxtp.vc/portfolio-company/cobli",
+      "page": "portfolio",
+      "excerpt": "NXTP _ V2 < BACK TO PORTFOLIO Enterprise AI/ML Logistics Vertical SaaS Cobli is a fleet management and telematics platform offering vehicle monitoring and analytics. 91% of LatAm’s 27m commercial fleets are still offline and Cobli intends to change that. They announced their Series B led by Softbank in July 2021. GEOGRAPHY: Brazil , FOUNDERS: Parker Treacy, Rodrigo Mourad STATUS: Active"
     }
   ],
   "findings": {
@@ -94,12 +305,23 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.nxtp.vc/portfolio",
         "evidenceId": "check-portfolio-69763c90e8"
+      },
+      {
+        "value": "https://nxtp.vc/portfolio",
+        "evidenceId": "check-portfolio-6a12847172"
       }
     ],
     "name": [

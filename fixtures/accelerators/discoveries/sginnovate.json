@@ -1,11 +1,19 @@
 {
   "programId": "sginnovate",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.sginnovate.com/faq",
-      "page": "terms",
-      "anchor": "FAQs",
+      "url": "https://www.sginnovate.com/apprenticeship/helix-programme",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sginnovate.com/career-development-jobs",
+      "page": "details",
+      "anchor": "Career Development & Jobs Discover Deep Tech jobs and development programmes",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -19,18 +27,58 @@
       "origin": "official"
     },
     {
-      "url": "https://www.sginnovate.com/career-development-jobs",
-      "page": "details",
-      "anchor": "Career Development & Jobs Discover Deep Tech jobs and development programmes",
-      "fetched": false,
+      "url": "https://www.sginnovate.com/dtc?tab=companies",
+      "page": "portfolio",
+      "anchor": "For Organisation",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.sginnovate.com/startup-growth-funding",
-      "page": "portfolio",
-      "anchor": "Startup Growth & Funding Access resources and support dedicated to Deep Tech companies",
+      "url": "https://www.sginnovate.com/event/5-day-operational-technology-ot-cyber-security-training-programme",
+      "page": "details",
+      "anchor": "",
       "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sginnovate.com/faq",
+      "page": "terms",
+      "anchor": "FAQs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sginnovate.com/full-portfolio",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sginnovate.com/investments/aidtech",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sginnovate.com/investments/aireverie",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sginnovate.com/investments/atomionics",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -38,15 +86,15 @@
       "url": "https://www.sginnovate.com/our-portfolio",
       "page": "portfolio",
       "anchor": "Our Portfolio Explore our portfolio companies",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.sginnovate.com/dtc?tab=companies",
+      "url": "https://www.sginnovate.com/startup-growth-funding",
       "page": "portfolio",
-      "anchor": "For Organisation",
-      "fetched": false,
+      "anchor": "Startup Growth & Funding Access resources and support dedicated to Deep Tech companies",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

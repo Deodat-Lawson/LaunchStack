@@ -1,119 +1,992 @@
 {
   "programId": "bethnal-green-ventures",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
     "https://www.bethnalgreenventures.com/",
-    "https://www.bethnalgreenventures.com/apply",
-    "https://www.bethnalgreenventures.com/about-us",
-    "https://www.bethnalgreenventures.com/blog/meet-the-j-starx-impact-uk-accelerator-cohort"
+    "https://bethnalgreenventures.com/apply",
+    "https://bethnalgreenventures.com/blog/applications-are-open-for-bgvs-autumn-2026-programme",
+    "https://bethnalgreenventures.com/blog/applications-are-open-for-our-autumn-2024-tech-for-good-programme",
+    "https://bethnalgreenventures.com/blog/applications-are-open-for-our-spring-2026-tech-for-good-programme",
+    "https://bethnalgreenventures.com/blog/applications-for-bgv-2012-are-open",
+    "https://bethnalgreenventures.com/blog/applications-for-our-spring-2022-tech-for-good-programme-are-open",
+    "https://bethnalgreenventures.com/blog/applications-open-for-spring-2024-tech-for-good-programme",
+    "https://bethnalgreenventures.com/blog/apply-for-the-bgv-autumn-2025-tech-for-good-programme",
+    "https://bethnalgreenventures.com/blog/apply-to-our-spring-2018-accelerator",
+    "https://bethnalgreenventures.com/blog/applying-technology-to-the-worlds-biggest-problems",
+    "https://bethnalgreenventures.com/blog/everything-you-need-to-know-about-applying-to-bgvs-tech-for-good-programme",
+    "https://bethnalgreenventures.com/blog/three-tips-to-apply-for-bgvs-spring-2025-programme",
+    "https://bethnalgreenventures.com/seis-eis-fund-5-apply",
+    "https://www.bethnalgreenventures.com/apply"
   ],
   "evidence": [
     {
-      "id": "check-deal-7e16a22762",
+      "id": "check-deal-0b2ccbb59f",
       "url": "https://www.bethnalgreenventures.com/apply",
-      "title": "Bethnal Green Ventures — application page checked by scrape.py",
-      "excerpt": "a fit with BGV and a fit for you. Talk to BGV Get notified Our renowned programme gives you the best start to launching your tech for good venture. We offer £60,000 investment and six weeks of intensive learning for prototype stage ventures. But the programme is just the beginning of your journey with us. View our full",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "you the best start to launching your tech for good venture. We offer £60,000 investment and six weeks of intensive learning for prototype stage",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-120c32d66c",
+      "url": "https://bethnalgreenventures.com/blog/apply-for-the-bgv-autumn-2025-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "programme for Autumn 2025 are open! Successful ventures will receive £60,000 investment (in return for 7% equity), as well as expert support and",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-38b17ceba5",
+      "url": "https://bethnalgreenventures.com/blog/apply-to-our-spring-2018-accelerator",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "do we offer? Our spring accelerator commences in April and offers £20,000 investment and an intensive 12-week programme of mentoring and",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-4638e0ade4",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-bgvs-autumn-2026-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "and navigate the next steps in your path to grow. You’ll receive: £60,000 investment in exchange for 7% equity Six weeks of intensive learning",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-5e12ce10f4",
+      "url": "https://bethnalgreenventures.com/blog/everything-you-need-to-know-about-applying-to-bgvs-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "! There has never been a better time to join – you’ll receive £60,000 for 7% equity from BGV’s new £33m fund , meet a community of",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-69171c3d4f",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-autumn-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "programme for Autumn 2024 are open! Successful ventures will receive £60,000 investment (in return for 7% equity), as well as expert support and",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-6dc6638db7",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-bgv-2012-are-open",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "looking for have a read of this .The deal is that we'll invest up to £15,000 in your company (in return for 6% of shares) and provide you with a",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-83847f37dd",
+      "url": "https://bethnalgreenventures.com/blog/three-tips-to-apply-for-bgvs-spring-2025-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "BGV’s Spring 2025 programme are now open! We’re looking to invest £60,000 into 10-15 businesses using technology to drive positive outcomes for",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-9bf3eede7e",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-our-spring-2022-tech-for-good-programme-are-open",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "of experience and 18 programmes behind us, you will not only receive £30,000 investment, but also expert support and mentorship from the people",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-a8d58f11bd",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-spring-2026-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "programme for Spring 2026 are open! Successful ventures will receive £60,000 investment (in return for 7% equity), as well as expert support and",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-b0989a36b4",
+      "url": "https://bethnalgreenventures.com/blog/applications-open-for-spring-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "programme for Spring 2024 are open! Successful ventures will receive £60,000 investment (in return for 7% equity), as well as expert support and",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-d8102ac5eb",
+      "url": "https://bethnalgreenventures.com/apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "you the best start to launching your tech for good venture. We offer £60,000 investment and six weeks of intensive learning for prototype stage",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-0c9827c304",
+      "url": "https://bethnalgreenventures.com/blog/applying-technology-to-the-worlds-biggest-problems",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "we work with at such an early stage. Our 12-week intensive support program runs twice a year,",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-0f0a55313b",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-autumn-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "helps you launch your early-stage venture with 6 weeks of intensive learning – the start of every BGV",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-2659763fe3",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-our-spring-2022-tech-for-good-programme-are-open",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "to announce that applications for our flagship 12-week Tech for Good programme are open! You’ll be",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-2e75c0f7ea",
+      "url": "https://bethnalgreenventures.com/blog/apply-to-our-spring-2018-accelerator",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "and offers £20,000 investment and an intensive 12-week programme of mentoring and support to help grow",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-5fb9f3ee9b",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-spring-2026-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "helps you launch your early-stage venture with 6 weeks of intensive learning – the start of every BGV",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-9a767fec9e",
+      "url": "https://bethnalgreenventures.com/blog/applying-technology-to-the-worlds-biggest-problems",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "pain to patients. They raised a seed round 18 months ago (led by Connect Ventures ) and have just",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-b68f20630d",
+      "url": "https://bethnalgreenventures.com/blog/apply-for-the-bgv-autumn-2025-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "helps you launch your early-stage venture with 6 weeks of intensive learning – the start of every BGV",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-dca4d30382",
+      "url": "https://bethnalgreenventures.com/blog/applications-open-for-spring-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "helps you launch your early-stage venture with 6 weeks of intensive learning – the start of every BGV",
+      "page": "application"
+    },
+    {
+      "id": "check-email-1accd6dd06",
+      "url": "https://bethnalgreenventures.com/blog/apply-to-our-spring-2018-accelerator",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "check out our application page and drop us an email at hello@bethnalgreenventures.com , if you have any questions. Subscribe to newsletter",
+      "page": "application"
+    },
+    {
+      "id": "check-email-39150a512c",
+      "url": "https://bethnalgreenventures.com/blog/everything-you-need-to-know-about-applying-to-bgvs-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "hello@bethnalgreenventures.com",
+      "page": "application"
+    },
+    {
+      "id": "check-email-a6969eabd1",
+      "url": "https://bethnalgreenventures.com/blog/apply-to-our-spring-2018-accelerator",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "hello@bethnalgreenventures.com",
+      "page": "application"
+    },
+    {
+      "id": "check-email-c2119d46db",
+      "url": "https://bethnalgreenventures.com/blog/everything-you-need-to-know-about-applying-to-bgvs-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "can improve the process further, so please do reach out to hello@bethnalgreenventures.com if you have any suggestions. ‍ Before you apply… Visit our",
+      "page": "application"
+    },
+    {
+      "id": "check-format-137236d70f",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-autumn-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "hybrid, with some parts of the programme online and others in-person in central London. The programme will run from 7th October",
+      "page": "application"
+    },
+    {
+      "id": "check-format-1b9f0abfed",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-spring-2026-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "hybrid, with some parts of the programme online and others in-person in central London. The programme will run from 17th April",
+      "page": "application"
+    },
+    {
+      "id": "check-format-1dfdabd810",
+      "url": "https://bethnalgreenventures.com/blog/applications-open-for-spring-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "hybrid, with some parts of the programme online and others in-person in central London. The programme will run from 18th March",
+      "page": "application"
+    },
+    {
+      "id": "check-format-2f04919ea6",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-our-spring-2022-tech-for-good-programme-are-open",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "socialising and networking. Find out more about our remote programme here. If you’re a WorkerTech founder, check out",
+      "page": "application"
+    },
+    {
+      "id": "check-format-34896bcbae",
+      "url": "https://www.bethnalgreenventures.com/apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "building and peer learning Coaching from the BGV team In-person talks and social events Followed by investor mentoring ‍",
+      "page": "application"
+    },
+    {
+      "id": "check-format-499f802ce2",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-our-spring-2022-tech-for-good-programme-are-open",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "2022 programme will be remote, with some opportunities for in-person socialising and networking. Find out more about our remote",
+      "page": "application"
+    },
+    {
+      "id": "check-format-561d309d59",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-autumn-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "the application form. Our Autumn 2024 programme will be hybrid, with some parts of the programme online and others",
+      "page": "application"
+    },
+    {
+      "id": "check-format-62bcb8b2a1",
+      "url": "https://bethnalgreenventures.com/blog/applications-open-for-spring-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "the application form. Our Spring 2024 programme will be hybrid, with some parts of the programme online and others",
+      "page": "application"
+    },
+    {
+      "id": "check-format-6569de8a59",
+      "url": "https://bethnalgreenventures.com/apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "from your BGV-team lead scroll down to learn more Six week hybrid programme: Focus on product, impact, business models,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-724ae1c0f6",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-our-spring-2022-tech-for-good-programme-are-open",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "YouTube and our blog . Our Spring 2022 programme will be remote, with some opportunities for in-person socialising and",
+      "page": "application"
+    },
+    {
+      "id": "check-format-79306587bc",
+      "url": "https://www.bethnalgreenventures.com/apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "from your BGV-team lead scroll down to learn more Six week hybrid programme: Focus on product, impact, business models,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-a371e679ac",
+      "url": "https://bethnalgreenventures.com/apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Your team is available to take part in our six-week hybrid programme run online and from our offices in London. Your",
+      "page": "application"
+    },
+    {
+      "id": "check-format-b3ee730eb9",
+      "url": "https://www.bethnalgreenventures.com/apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "with morning online sessions on Wednesday and afternoon in-person sessions on Fridays. ‍ We understand that not everyone is",
+      "page": "application"
+    },
+    {
+      "id": "check-format-b3fc7fa5be",
+      "url": "https://www.bethnalgreenventures.com/apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Your team is available to take part in our six-week hybrid programme run online and from our offices in London. Your",
+      "page": "application"
+    },
+    {
+      "id": "check-format-b85762539d",
+      "url": "https://bethnalgreenventures.com/blog/apply-for-the-bgv-autumn-2025-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "the application form. Our Autumn 2025 programme will be hybrid, with some parts of the programme online and others",
+      "page": "application"
+    },
+    {
+      "id": "check-format-ce2ab26b05",
+      "url": "https://bethnalgreenventures.com/blog/everything-you-need-to-know-about-applying-to-bgvs-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "(or soon will be) in the UK and can participate in our hybrid programme. Assuming that is you, we will then assess the",
+      "page": "application"
+    },
+    {
+      "id": "check-format-cfbc4d227a",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-our-spring-2022-tech-for-good-programme-are-open",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "who we’ve invested in so far here . Sign up to our monthly virtual Q&A events to ask any questions you have and meet some of",
+      "page": "application"
+    },
+    {
+      "id": "check-format-d29ed08676",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-spring-2026-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "the application form. Our Spring 2026 programme will be hybrid, with some parts of the programme online and others",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e15ae1c50b",
+      "url": "https://bethnalgreenventures.com/blog/apply-for-the-bgv-autumn-2025-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "hybrid, with some parts of the programme online and others in-person in central London. The programme will run from 8th",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e220bd3df1",
+      "url": "https://bethnalgreenventures.com/apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "building and peer learning Coaching from the BGV team In-person talks and social events Followed by investor mentoring ‍",
+      "page": "application"
+    },
+    {
+      "id": "check-format-f6dc381b84",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-bgvs-autumn-2026-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "we’d love to hear from you. What’s on offer Our six-week hybrid programme is designed to help founders bring impact to the",
+      "page": "application"
+    },
+    {
+      "id": "check-format-fd47600fed",
+      "url": "https://bethnalgreenventures.com/apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "with morning online sessions on Wednesday and afternoon in-person sessions on Fridays. ‍ We understand that not everyone is",
+      "page": "application"
+    },
+    {
+      "id": "check-location-33e91b90dd",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-bgv-2012-are-open",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "July through to the end of September based in Bethnal Green. You can find out what the programme",
       "page": "application"
     },
     {
       "id": "check-name-03f5e69aed",
       "url": "https://www.bethnalgreenventures.com/",
-      "title": "Bethnal Green Ventures — homepage checked by scrape.py",
+      "title": "Bethnal Green Ventures — homepage",
       "excerpt": "Home - We're Bethnal Green Ventures We’re glad you want to join our family! We have three",
       "page": "details"
     },
     {
-      "id": "check-portfolio-1058131c64",
-      "url": "https://www.bethnalgreenventures.com/about-us",
-      "title": "Bethnal Green Ventures — details page checked by scrape.py",
-      "excerpt": "Portfolio → https://www.bethnalgreenventures.com/portfolio",
-      "page": "details"
+      "id": "check-portfolio-09688f43b8",
+      "url": "https://bethnalgreenventures.com/blog/everything-you-need-to-know-about-applying-to-bgvs-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "here → https://www.bethnalgreenventures.com/portfolio",
+      "page": "application"
     },
     {
-      "id": "check-portfolio-122af96c85",
-      "url": "https://www.bethnalgreenventures.com/blog/meet-the-j-starx-impact-uk-accelerator-cohort",
-      "title": "Bethnal Green Ventures — batches page checked by scrape.py",
-      "excerpt": "Portfolio → https://www.bethnalgreenventures.com/portfolio",
-      "page": "batches"
+      "id": "check-portfolio-1025c4f1ff",
+      "url": "https://bethnalgreenventures.com/blog/everything-you-need-to-know-about-applying-to-bgvs-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Portfolio → https://bethnalgreenventures.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-2c1adef5fa",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-our-spring-2022-tech-for-good-programme-are-open",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "here → https://bethnalgreenventures.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-2cbec66437",
+      "url": "https://bethnalgreenventures.com/seis-eis-fund-5-apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Portfolio → https://bethnalgreenventures.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-2d3b0ad3c0",
+      "url": "https://bethnalgreenventures.com/blog/apply-for-the-bgv-autumn-2025-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "here → http://www.bethnalgreenventures.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-385caafc16",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-our-spring-2022-tech-for-good-programme-are-open",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Portfolio → https://bethnalgreenventures.com/portfolio",
+      "page": "application"
     },
     {
       "id": "check-portfolio-4582b3044c",
       "url": "https://www.bethnalgreenventures.com/apply",
-      "title": "Bethnal Green Ventures — application page checked by scrape.py",
+      "title": "Bethnal Green Ventures — application page",
       "excerpt": "Portfolio → https://www.bethnalgreenventures.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5e087c157c",
+      "url": "https://bethnalgreenventures.com/blog/applying-technology-to-the-worlds-biggest-problems",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Portfolio → https://bethnalgreenventures.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-683f6188d6",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-bgv-2012-are-open",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Portfolio → https://bethnalgreenventures.com/portfolio",
       "page": "application"
     },
     {
       "id": "check-portfolio-70c5638385",
       "url": "https://www.bethnalgreenventures.com/",
-      "title": "Bethnal Green Ventures — homepage checked by scrape.py",
+      "title": "Bethnal Green Ventures — homepage",
       "excerpt": "Portfolio → https://www.bethnalgreenventures.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-818e251d07",
+      "url": "https://bethnalgreenventures.com/blog/apply-to-our-spring-2018-accelerator",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "100 startups → http://www.bethnalgreenventures.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-86371d746f",
+      "url": "https://bethnalgreenventures.com/blog/apply-to-our-spring-2018-accelerator",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Portfolio → https://bethnalgreenventures.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-8ca6c3361e",
+      "url": "https://bethnalgreenventures.com/blog/applications-open-for-spring-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "here → https://bethnalgreenventures.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-8d2be550f8",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-bgvs-autumn-2026-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Portfolio → https://bethnalgreenventures.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-9b54e143eb",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-autumn-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "here → http://www.bethnalgreenventures.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a7d2143601",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-autumn-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Portfolio → https://bethnalgreenventures.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b1fd0790f4",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-spring-2026-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Portfolio → https://bethnalgreenventures.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b74bb31b5c",
+      "url": "https://bethnalgreenventures.com/apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Portfolio → https://bethnalgreenventures.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b859e28ac9",
+      "url": "https://bethnalgreenventures.com/blog/apply-for-the-bgv-autumn-2025-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Portfolio → https://bethnalgreenventures.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-cbe624a9ae",
+      "url": "https://bethnalgreenventures.com/blog/applications-open-for-spring-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Portfolio → https://bethnalgreenventures.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-cf4d076b38",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-spring-2026-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "here → http://www.bethnalgreenventures.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-dc4a8ff70e",
+      "url": "https://bethnalgreenventures.com/blog/three-tips-to-apply-for-bgvs-spring-2025-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Portfolio → https://bethnalgreenventures.com/portfolio",
+      "page": "application"
+    },
+    {
       "id": "check-route-0211a096fd",
       "url": "https://www.bethnalgreenventures.com/",
-      "title": "Bethnal Green Ventures — homepage checked by scrape.py",
+      "title": "Bethnal Green Ventures — homepage",
       "excerpt": "Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme → https://www.bethnalgreenventures.com/apply",
       "page": "details"
     },
     {
-      "id": "check-route-2418886e0f",
-      "url": "https://www.bethnalgreenventures.com/blog/meet-the-j-starx-impact-uk-accelerator-cohort",
-      "title": "Bethnal Green Ventures — batches page checked by scrape.py",
-      "excerpt": "Apply for our Programme → https://www.bethnalgreenventures.com/apply",
-      "page": "batches"
-    },
-    {
-      "id": "check-route-498ff87377",
-      "url": "https://www.bethnalgreenventures.com/about-us",
-      "title": "Bethnal Green Ventures — details page checked by scrape.py",
+      "id": "check-route-05e6ffa92c",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-autumn-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
       "excerpt": "Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme → https://www.bethnalgreenventures.com/apply",
-      "page": "details"
+      "page": "application"
     },
     {
-      "id": "check-route-6f69935e64",
-      "url": "https://www.bethnalgreenventures.com/about-us",
-      "title": "Bethnal Green Ventures — details page checked by scrape.py",
-      "excerpt": "Apply for our Programme → https://www.bethnalgreenventures.com/apply",
-      "page": "details"
+      "id": "check-route-080f4acbe7",
+      "url": "https://bethnalgreenventures.com/blog/apply-for-the-bgv-autumn-2025-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme → https://www.bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-12562a5627",
+      "url": "https://bethnalgreenventures.com/blog/everything-you-need-to-know-about-applying-to-bgvs-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "we just opened applications for our Autumn 2024 Tech for Good programme → https://www.bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-15fef629a7",
+      "url": "https://bethnalgreenventures.com/blog/applying-technology-to-the-worlds-biggest-problems",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme → https://www.bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-22419d4efe",
+      "url": "https://bethnalgreenventures.com/blog/apply-to-our-spring-2018-accelerator",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Apply for our Programme → https://bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2256c58892",
+      "url": "https://bethnalgreenventures.com/blog/applying-technology-to-the-worlds-biggest-problems",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "find out more and apply → https://bethnalgreenventures.com/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2af44e0e1b",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-autumn-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "application page → http://www.bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-30738cf353",
+      "url": "https://bethnalgreenventures.com/blog/applications-open-for-spring-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Apply for our Programme → https://bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-319ce34aee",
+      "url": "https://bethnalgreenventures.com/blog/apply-for-the-bgv-autumn-2025-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "application page → http://www.bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-31eee83c41",
+      "url": "https://bethnalgreenventures.com/blog/three-tips-to-apply-for-bgvs-spring-2025-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Apply for our Programme → https://bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4183a590d0",
+      "url": "https://bethnalgreenventures.com/blog/everything-you-need-to-know-about-applying-to-bgvs-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme → https://www.bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4b06abc768",
+      "url": "https://bethnalgreenventures.com/blog/apply-to-our-spring-2018-accelerator",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme → https://www.bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5c0bc71964",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-our-spring-2022-tech-for-good-programme-are-open",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "founders page → https://bethnalgreenventures.com/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-647b97f5c4",
+      "url": "https://bethnalgreenventures.com/seis-eis-fund-5-apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme → https://www.bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-69228d2084",
+      "url": "https://bethnalgreenventures.com/blog/three-tips-to-apply-for-bgvs-spring-2025-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "apply before 5th January 2025 → https://www.bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6a2991a4b8",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-bgvs-autumn-2026-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme → https://www.bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6d25aaac4c",
+      "url": "https://bethnalgreenventures.com/blog/applications-open-for-spring-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "application page → https://bethnalgreenventures.com/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-70ad1c6a1b",
+      "url": "https://bethnalgreenventures.com/blog/applications-open-for-spring-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme → https://www.bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-74db0efc16",
+      "url": "https://bethnalgreenventures.com/seis-eis-fund-5-apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Register to apply → https://bethnalgreenventures.typeform.com/to/uUr0icOr?utm_source=landing+page&utm_medium=web&utm_campaign=fund+5+promo&utm_id=fund5",
+      "page": "application"
+    },
+    {
+      "id": "check-route-79fd364b50",
+      "url": "https://bethnalgreenventures.com/seis-eis-fund-5-apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Apply for our Programme → https://bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7eb5815e76",
+      "url": "https://bethnalgreenventures.com/blog/applications-open-for-spring-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "are open! → https://bethnalgreenventures.com/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-809ea34929",
+      "url": "https://bethnalgreenventures.com/blog/three-tips-to-apply-for-bgvs-spring-2025-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme → https://www.bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-964ed7887b",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-bgvs-autumn-2026-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Apply for our Programme → https://bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-974e27863a",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-spring-2026-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Apply for our Programme → https://bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-99d9962f77",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-bgv-2012-are-open",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme → https://www.bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9c8ae1d9a3",
+      "url": "https://bethnalgreenventures.com/apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme → https://www.bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b7d81928e5",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-bgv-2012-are-open",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "applications → https://bethnalgreenventures.com/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b97db1cc49",
+      "url": "https://bethnalgreenventures.com/blog/applying-technology-to-the-worlds-biggest-problems",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Apply for our Programme → https://bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-be6e5be159",
+      "url": "https://bethnalgreenventures.com/blog/apply-for-the-bgv-autumn-2025-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Apply for our Programme → https://bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c992f8479a",
+      "url": "https://bethnalgreenventures.com/seis-eis-fund-5-apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Register to apply here ‍ → https://bethnalgreenventures.typeform.com/to/uUr0icOr?utm_source=landing+page&utm_medium=web&utm_campaign=fund+5+promo&utm_id=fund5",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cba9e658a6",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-bgv-2012-are-open",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Apply for our Programme → https://bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cdfa9977c3",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-autumn-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Apply for our Programme → https://bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d15bb3d9ce",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-spring-2026-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme → https://www.bethnalgreenventures.com/apply",
+      "page": "application"
     },
     {
       "id": "check-route-d3d0c43cd9",
       "url": "https://www.bethnalgreenventures.com/",
-      "title": "Bethnal Green Ventures — homepage checked by scrape.py",
+      "title": "Bethnal Green Ventures — homepage",
       "excerpt": "Apply for our Programme → https://www.bethnalgreenventures.com/apply",
       "page": "details"
     },
     {
-      "id": "check-route-f75d0d7b99",
-      "url": "https://www.bethnalgreenventures.com/blog/meet-the-j-starx-impact-uk-accelerator-cohort",
-      "title": "Bethnal Green Ventures — batches page checked by scrape.py",
+      "id": "check-route-e026b7df9c",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-our-spring-2022-tech-for-good-programme-are-open",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Apply for our Programme → https://bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e52de038bd",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-our-spring-2022-tech-for-good-programme-are-open",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "are open! → https://bethnalgreenventures.com/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e852cfbf81",
+      "url": "https://bethnalgreenventures.com/blog/three-tips-to-apply-for-bgvs-spring-2025-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "apply → https://www.bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-eb591821e5",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-our-spring-2022-tech-for-good-programme-are-open",
+      "title": "Bethnal Green Ventures — application page",
       "excerpt": "Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme → https://www.bethnalgreenventures.com/apply",
-      "page": "batches"
+      "page": "application"
+    },
+    {
+      "id": "check-route-f82ea477f7",
+      "url": "https://bethnalgreenventures.com/blog/everything-you-need-to-know-about-applying-to-bgvs-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "Apply for our Programme → https://bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fd8140390e",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-spring-2026-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "application page → http://www.bethnalgreenventures.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-selectivity-6466e84652",
+      "url": "https://bethnalgreenventures.com/apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "established product or service with paying customers or pilots. On average, over 70% of applicants to our programme have at least a prototype or MVP. ‍ Whatever stage you’re at,",
+      "page": "application"
+    },
+    {
+      "id": "check-selectivity-9dd9f1c3d4",
+      "url": "https://bethnalgreenventures.com/apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "we work with, we’re often our portfolio companies’ first investor. On average, roughly 80% of applicants haven’t received funding prior to BGV. But we’re still happy to invest if",
+      "page": "application"
     },
     {
       "id": "check-selectivity-b49daac6ae",
       "url": "https://www.bethnalgreenventures.com/apply",
-      "title": "Bethnal Green Ventures — application page checked by scrape.py",
+      "title": "Bethnal Green Ventures — application page",
       "excerpt": "established product or service with paying customers or pilots. On average, over 70% of applicants to our programme have at least a prototype or MVP. ‍ Whatever stage you’re at,",
       "page": "application"
     },
     {
       "id": "check-selectivity-bc525baf52",
       "url": "https://www.bethnalgreenventures.com/apply",
-      "title": "Bethnal Green Ventures — application page checked by scrape.py",
+      "title": "Bethnal Green Ventures — application page",
       "excerpt": "we work with, we’re often our portfolio companies’ first investor. On average, roughly 80% of applicants haven’t received funding prior to BGV. But we’re still happy to invest if",
+      "page": "application"
+    },
+    {
+      "id": "check-start-5f565ba935",
+      "url": "https://www.bethnalgreenventures.com/apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "offers will be made at the end of July 2026. The Autumn programme starts in September 2026. Sign up to get notified about future programmes. scroll",
+      "page": "application"
+    },
+    {
+      "id": "check-start-eb123a1a4d",
+      "url": "https://bethnalgreenventures.com/apply",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "offers will be made at the end of July 2026. The Autumn programme starts in September 2026. Sign up to get notified about future programmes. scroll",
+      "page": "application"
+    },
+    {
+      "id": "check-status-3e5cd8ec66",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-spring-2026-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "BGV Blog - Applications are open for our Spring 2026 Tech for Good Programme We’re glad you want to join our family! We have three",
+      "page": "application"
+    },
+    {
+      "id": "check-status-7cee3ba5e4",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-autumn-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "BGV Blog - Applications are open for our Autumn 2024 Tech for Good Programme We’re glad you want to join our family! We have three",
+      "page": "application"
+    },
+    {
+      "id": "check-status-a2f7a5b7ab",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-bgvs-autumn-2026-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "BGV Blog - Applications are open for BGV’s Autumn 2026 programme We’re glad you want to join our family! We have three newsletters at BGV.",
+      "page": "application"
+    },
+    {
+      "id": "check-status-da6265f674",
+      "url": "https://bethnalgreenventures.com/blog/applications-open-for-spring-2024-tech-for-good-programme",
+      "title": "Bethnal Green Ventures — application page",
+      "excerpt": "BGV Blog - Applications are open for our Spring 2024 Tech for Good Programme We’re glad you want to join our family! We have three",
       "page": "application"
     }
   ],
+  "pageQuotes": [
+    {
+      "id": "check-page-cd2c894da2",
+      "url": "https://www.bethnalgreenventures.com/",
+      "page": "details",
+      "excerpt": "Home - We're Bethnal Green Ventures We’re glad you want to join our family! We have three newsletters at BGV. BGV News, The Practical Optimist and the Tech for Good Compass. Let us know below, how you want to hear from us. First name Last name Email What would you like to receive? BGV News Practical Optimis Tech for Good Compass Thank you for subscribing! Oops! Something went wrong. Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact menu close Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact Europe’s leading early-stage tech for good VC We invest in ambitious founders using technology to tackle big social and environmental problems that aim to radically improve millions of lives. By using this website, you agree to the storing of cookies on your device to enhance site navigation, analyze site usage, and assist in our marketing efforts. View our Cookie Policy for more information. Okay, thanks tech for good Tech for good is about practical optimism. It’s about being committed to a problem and ambitious enough to find a solution. It’s about leveraging the functions of business"
+    },
+    {
+      "id": "check-page-396b2b6a51",
+      "url": "https://bethnalgreenventures.com/apply",
+      "page": "application",
+      "excerpt": "Apply for investment - Apply to our Tech For Good Programme We’re glad you want to join our family! We have three newsletters at BGV. BGV News, The Practical Optimist and the Tech for Good Compass. Let us know below, how you want to hear from us. First name Last name Email What would you like to receive? BGV News Practical Optimis Tech for Good Compass Thank you for subscribing! Oops! Something went wrong. Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact menu close Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact Europe’s leading early-stage tech for good VC We invest in ambitious founders using technology to tackle big social and environmental problems that aim to radically improve millions of lives. By using this website, you agree to the storing of cookies on your device to enhance site navigation, analyze site usage, and assist in our marketing efforts. View our Cookie Policy for more information. Okay, thanks The Tech For Good Programme Twice a year we select 10-15 companies investing £60,000 upfront and take them through our six-week programme. Applications for our"
+    },
+    {
+      "id": "check-page-ec3732b2eb",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-bgvs-autumn-2026-programme",
+      "page": "application",
+      "excerpt": "BGV Blog - Applications are open for BGV’s Autumn 2026 programme We’re glad you want to join our family! We have three newsletters at BGV. BGV News, The Practical Optimist and the Tech for Good Compass. Let us know below, how you want to hear from us. First name Last name Email What would you like to receive? BGV News Practical Optimis Tech for Good Compass Thank you for subscribing! Oops! Something went wrong. Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact menu close Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact Europe’s leading early-stage tech for good VC We invest in ambitious founders using technology to tackle big social and environmental problems that aim to radically improve millions of lives. Back to overview No items found. Applications are open for BGV’s Autumn 2026 programme Written by Dama Sathianathan Posted on May 14, 2026 We’re excited to announce that we’re now open for applications for our Autumn 2026 programme. If you’re working on a tech venture that could genuinely lead to better outcomes for people and planet, and are looking for investment to help"
+    },
+    {
+      "id": "check-page-70c363ec0a",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-autumn-2024-tech-for-good-programme",
+      "page": "application",
+      "excerpt": "BGV Blog - Applications are open for our Autumn 2024 Tech for Good Programme We’re glad you want to join our family! We have three newsletters at BGV. BGV News, The Practical Optimist and the Tech for Good Compass. Let us know below, how you want to hear from us. First name Last name Email What would you like to receive? BGV News Practical Optimis Tech for Good Compass Thank you for subscribing! Oops! Something went wrong. Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact menu close Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact Europe’s leading early-stage tech for good VC We invest in ambitious founders using technology to tackle big social and environmental problems that aim to radically improve millions of lives. Back to overview News A Sustainable Planet An Inclusive Society Healthy Lives Applications are open for our Autumn 2024 Tech for Good Programme Written by Paul Miller Posted on June 10, 2024 We’re very pleased to announce that applications for our flagship Tech for Good programme for Autumn 2024 are open! Successful ventures will receive £60,000 investment (in"
+    },
+    {
+      "id": "check-page-88ed8f23a5",
+      "url": "https://bethnalgreenventures.com/blog/applications-are-open-for-our-spring-2026-tech-for-good-programme",
+      "page": "application",
+      "excerpt": "BGV Blog - Applications are open for our Spring 2026 Tech for Good Programme We’re glad you want to join our family! We have three newsletters at BGV. BGV News, The Practical Optimist and the Tech for Good Compass. Let us know below, how you want to hear from us. First name Last name Email What would you like to receive? BGV News Practical Optimis Tech for Good Compass Thank you for subscribing! Oops! Something went wrong. Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact menu close Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact Europe’s leading early-stage tech for good VC We invest in ambitious founders using technology to tackle big social and environmental problems that aim to radically improve millions of lives. Back to overview News A Sustainable Planet An Inclusive Society Healthy Lives Applications are open for our Spring 2026 Tech for Good Programme Written by Paul Miller Posted on November 17, 2025 Applications for our flagship Tech for Good programme for Spring 2026 are open! Successful ventures will receive £60,000 investment (in return for 7% equity), as well"
+    },
+    {
+      "id": "check-page-27b7aecd82",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-bgv-2012-are-open",
+      "page": "application",
+      "excerpt": "BGV Blog - Applications for BGV 2012 are open We’re glad you want to join our family! We have three newsletters at BGV. BGV News, The Practical Optimist and the Tech for Good Compass. Let us know below, how you want to hear from us. First name Last name Email What would you like to receive? BGV News Practical Optimis Tech for Good Compass Thank you for subscribing! Oops! Something went wrong. Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact menu close Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact Europe’s leading early-stage tech for good VC We invest in ambitious founders using technology to tackle big social and environmental problems that aim to radically improve millions of lives. Back to overview No items found. Applications for BGV 2012 are open Written by Paul Miller Posted on March 12, 2012 We're very pleased to be able to open up applications for the Bethnal Green Ventures 2012 programme. We're looking for ambitious early stage technology startups that are trying to solve social or environmental problems. For some hints about what we're looking for have a read of"
+    },
+    {
+      "id": "check-page-4f1281a5c3",
+      "url": "https://bethnalgreenventures.com/blog/applications-for-our-spring-2022-tech-for-good-programme-are-open",
+      "page": "application",
+      "excerpt": "BGV Blog - Applications for our Spring 2022 Tech for Good programme are open! We’re glad you want to join our family! We have three newsletters at BGV. BGV News, The Practical Optimist and the Tech for Good Compass. Let us know below, how you want to hear from us. First name Last name Email What would you like to receive? BGV News Practical Optimis Tech for Good Compass Thank you for subscribing! Oops! Something went wrong. Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact menu close Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact Europe’s leading early-stage tech for good VC We invest in ambitious founders using technology to tackle big social and environmental problems that aim to radically improve millions of lives. Back to overview News An Inclusive Society A Sustainable Planet Healthy Lives Applications for our Spring 2022 Tech for Good programme are open! Written by Olivia Wasson Posted on November 24, 2021 At BGV we try to keep our fingers on the pulse of the world’s biggest social and environmental problems that aspiring tech for good founders could help solve. This"
+    },
+    {
+      "id": "check-page-20e2f4f54a",
+      "url": "https://bethnalgreenventures.com/blog/applications-open-for-spring-2024-tech-for-good-programme",
+      "page": "application",
+      "excerpt": "BGV Blog - Applications are open for our Spring 2024 Tech for Good Programme We’re glad you want to join our family! We have three newsletters at BGV. BGV News, The Practical Optimist and the Tech for Good Compass. Let us know below, how you want to hear from us. First name Last name Email What would you like to receive? BGV News Practical Optimis Tech for Good Compass Thank you for subscribing! Oops! Something went wrong. Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact menu close Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact Europe’s leading early-stage tech for good VC We invest in ambitious founders using technology to tackle big social and environmental problems that aim to radically improve millions of lives. Back to overview News No items found. Applications are open for our Spring 2024 Tech for Good Programme Written by Paul Miller Posted on November 20, 2023 We’re excited to announce that applications for our flagship Tech for Good programme for Spring 2024 are open! Successful ventures will receive £60,000 investment (in return for 7% equity), as well as expert"
+    },
+    {
+      "id": "check-page-f4e190c796",
+      "url": "https://bethnalgreenventures.com/blog/apply-for-the-bgv-autumn-2025-tech-for-good-programme",
+      "page": "application",
+      "excerpt": "BGV Blog - Apply for the BGV Autumn 2025 Tech for Good Programme We’re glad you want to join our family! We have three newsletters at BGV. BGV News, The Practical Optimist and the Tech for Good Compass. Let us know below, how you want to hear from us. First name Last name Email What would you like to receive? BGV News Practical Optimis Tech for Good Compass Thank you for subscribing! Oops! Something went wrong. Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact menu close Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact Europe’s leading early-stage tech for good VC We invest in ambitious founders using technology to tackle big social and environmental problems that aim to radically improve millions of lives. Back to overview News No items found. Apply for the BGV Autumn 2025 Tech for Good Programme Written by Paul Miller Posted on May 1, 2025 Applications for our flagship Tech for Good programme for Autumn 2025 are open! Successful ventures will receive £60,000 investment (in return for 7% equity), as well as expert support and mentorship from the people who pioneered tech for"
+    },
+    {
+      "id": "check-page-22515c2f28",
+      "url": "https://bethnalgreenventures.com/blog/apply-to-our-spring-2018-accelerator",
+      "page": "application",
+      "excerpt": "BGV Blog - Apply to our spring 2018 accelerator We’re glad you want to join our family! We have three newsletters at BGV. BGV News, The Practical Optimist and the Tech for Good Compass. Let us know below, how you want to hear from us. First name Last name Email What would you like to receive? BGV News Practical Optimis Tech for Good Compass Thank you for subscribing! Oops! Something went wrong. Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact menu close Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact Europe’s leading early-stage tech for good VC We invest in ambitious founders using technology to tackle big social and environmental problems that aim to radically improve millions of lives. Back to overview No items found. Apply to our spring 2018 accelerator Written by Dama Sathianathan Posted on December 20, 2017 Applications for our spring 2018 accelerator programme are now open! We’re on the lookout for our next batch of talented teams using technology for good. We’re here to help you grow your tech for good idea into a hugely successful business that positively impacts"
+    },
+    {
+      "id": "check-page-e7ec068dd9",
+      "url": "https://bethnalgreenventures.com/blog/applying-technology-to-the-worlds-biggest-problems",
+      "page": "application",
+      "excerpt": "BGV Blog - Applying technology to the world’s biggest problems We’re glad you want to join our family! We have three newsletters at BGV. BGV News, The Practical Optimist and the Tech for Good Compass. Let us know below, how you want to hear from us. First name Last name Email What would you like to receive? BGV News Practical Optimis Tech for Good Compass Thank you for subscribing! Oops! Something went wrong. Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact menu close Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact Europe’s leading early-stage tech for good VC We invest in ambitious founders using technology to tackle big social and environmental problems that aim to radically improve millions of lives. Back to overview No items found. Applying technology to the world’s biggest problems Written by Will Spurr Posted on May 21, 2020 This is an excerpt from Melanie's interview with Soldo - which you can read in full here . Is there not always a trade-off between good and bad in technology? It’s really important to be aware of the unintended consequences of the technology that"
+    },
+    {
+      "id": "check-page-dcfd4acc4e",
+      "url": "https://bethnalgreenventures.com/blog/everything-you-need-to-know-about-applying-to-bgvs-tech-for-good-programme",
+      "page": "application",
+      "excerpt": "BGV Blog - Everything you need to know about applying to BGV’s Tech for Good programme We’re glad you want to join our family! We have three newsletters at BGV. BGV News, The Practical Optimist and the Tech for Good Compass. Let us know below, how you want to hear from us. First name Last name Email What would you like to receive? BGV News Practical Optimis Tech for Good Compass Thank you for subscribing! Oops! Something went wrong. Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact menu close Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact Europe’s leading early-stage tech for good VC We invest in ambitious founders using technology to tackle big social and environmental problems that aim to radically improve millions of lives. Back to overview Insight A Sustainable Planet An Inclusive Society Healthy Lives Everything you need to know about applying to BGV’s Tech for Good programme Written by Yumi Tsoy Posted on June 17, 2024 It’s June, which means we just opened applications for our Autumn 2024 Tech for Good programme ! There has never been a better time to join – you’ll"
+    },
+    {
+      "id": "check-page-f0c19b0584",
+      "url": "https://bethnalgreenventures.com/blog/three-tips-to-apply-for-bgvs-spring-2025-programme",
+      "page": "application",
+      "excerpt": "BGV Blog - Three tips to apply for BGV’s Spring 2025 Programme We’re glad you want to join our family! We have three newsletters at BGV. BGV News, The Practical Optimist and the Tech for Good Compass. Let us know below, how you want to hear from us. First name Last name Email What would you like to receive? BGV News Practical Optimis Tech for Good Compass Thank you for subscribing! Oops! Something went wrong. Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact menu close Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact Europe’s leading early-stage tech for good VC We invest in ambitious founders using technology to tackle big social and environmental problems that aim to radically improve millions of lives. Back to overview News No items found. Three tips to apply for BGV’s Spring 2025 Programme Written by Dama Sathianathan Posted on November 28, 2024 We’re excited to announce that applications for BGV’s Spring 2025 programme are now open! We’re looking to invest £60,000 into 10-15 businesses using technology to drive positive outcomes for people and planet. So if that’s you or"
+    },
+    {
+      "id": "check-page-e8e6faab23",
+      "url": "https://bethnalgreenventures.com/seis-eis-fund-5-apply",
+      "page": "application",
+      "excerpt": "BGV's Tech for Good SEIS/EIS Fund 5 We’re glad you want to join our family! We have three newsletters at BGV. BGV News, The Practical Optimist and the Tech for Good Compass. Let us know below, how you want to hear from us. First name Last name Email What would you like to receive? BGV News Practical Optimis Tech for Good Compass Thank you for subscribing! Oops! Something went wrong. Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact menu close Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact Europe’s leading early-stage tech for good VC We invest in ambitious founders using technology to tackle big social and environmental problems that aim to radically improve millions of lives. By using this website, you agree to the storing of cookies on your device to enhance site navigation, analyze site usage, and assist in our marketing efforts. View our Cookie Policy for more information. Okay, thanks The Tech for Good SEIS & EIS Fund 5 ‍ Target final close: 5th April 2023 Register to apply Don’t invest unless you’re prepared to lose all the money you invest. This is a high-risk"
+    },
+    {
+      "id": "check-page-49939d65d7",
+      "url": "https://www.bethnalgreenventures.com/apply",
+      "page": "application",
+      "excerpt": "Apply for investment - Apply to our Tech For Good Programme We’re glad you want to join our family! We have three newsletters at BGV. BGV News, The Practical Optimist and the Tech for Good Compass. Let us know below, how you want to hear from us. First name Last name Email What would you like to receive? BGV News Practical Optimis Tech for Good Compass Thank you for subscribing! Oops! Something went wrong. Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact menu close Home About Us About BGV Team Impact Investment Our Offer Apply for our Programme Mentor Network Portfolio Resources Blog For Founders For Investors Contact Europe’s leading early-stage tech for good VC We invest in ambitious founders using technology to tackle big social and environmental problems that aim to radically improve millions of lives. By using this website, you agree to the storing of cookies on your device to enhance site navigation, analyze site usage, and assist in our marketing efforts. View our Cookie Policy for more information. Okay, thanks The Tech For Good Programme Twice a year we select 10-15 companies investing £60,000 upfront and take them through our six-week programme. Applications for our"
+    }
+  ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "hello@bethnalgreenventures.com",
+        "evidenceId": "check-email-a6969eabd1"
+      }
+    ],
     "phones": [],
     "routes": [
       {
         "value": "https://www.bethnalgreenventures.com/apply",
         "evidenceId": "check-route-0211a096fd"
+      },
+      {
+        "value": "https://bethnalgreenventures.com/apply",
+        "evidenceId": "check-route-964ed7887b"
+      },
+      {
+        "value": "http://www.bethnalgreenventures.com/apply",
+        "evidenceId": "check-route-2af44e0e1b"
+      },
+      {
+        "value": "https://bethnalgreenventures.com/apply/",
+        "evidenceId": "check-route-b7d81928e5"
+      },
+      {
+        "value": "https://bethnalgreenventures.typeform.com/to/uUr0icOr?utm_source=landing+page&utm_medium=web&utm_campaign=fund+5+promo&utm_id=fund5",
+        "evidenceId": "check-route-74db0efc16"
       }
     ],
     "applicationUrl": [
@@ -122,28 +995,169 @@
         "evidenceId": "check-route-0211a096fd"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-a2f7a5b7ab"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [
+      {
+        "value": "September 2026",
+        "evidenceId": "check-start-eb123a1a4d"
+      }
+    ],
+    "durationWeeks": [
+      {
+        "value": "6",
+        "evidenceId": "check-duration-0f0a55313b"
+      },
+      {
+        "value": "12",
+        "evidenceId": "check-duration-2659763fe3"
+      },
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-9a767fec9e"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-6569de8a59"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-e220bd3df1"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-724ae1c0f6"
+      }
+    ],
+    "location": [
+      {
+        "value": "Bethnal Green",
+        "evidenceId": "check-location-33e91b90dd"
+      }
+    ],
     "selectivity": [
       {
         "value": {
           "rate": null,
           "bounded": true
         },
-        "evidenceId": "check-selectivity-b49daac6ae"
+        "evidenceId": "check-selectivity-6466e84652"
       }
     ],
     "dealText": [
       {
-        "value": "a fit with BGV and a fit for you. Talk to BGV Get notified Our renowned programme gives you the best start to launching your tech for good venture. We offer £60,000 investment and six weeks of intensive learning for prototype stage ventures. But the programme is just the beginning of your journey with us. View our full",
-        "evidenceId": "check-deal-7e16a22762"
+        "value": "you the best start to launching your tech for good venture. We offer £60,000 investment and six weeks of intensive learning for prototype stage",
+        "evidenceId": "check-deal-d8102ac5eb"
+      },
+      {
+        "value": "and navigate the next steps in your path to grow. You’ll receive: £60,000 investment in exchange for 7% equity Six weeks of intensive learning",
+        "evidenceId": "check-deal-4638e0ade4"
+      },
+      {
+        "value": "programme for Autumn 2024 are open! Successful ventures will receive £60,000 investment (in return for 7% equity), as well as expert support and",
+        "evidenceId": "check-deal-69171c3d4f"
+      },
+      {
+        "value": "programme for Spring 2026 are open! Successful ventures will receive £60,000 investment (in return for 7% equity), as well as expert support and",
+        "evidenceId": "check-deal-a8d58f11bd"
+      },
+      {
+        "value": "looking for have a read of this .The deal is that we'll invest up to £15,000 in your company (in return for 6% of shares) and provide you with a",
+        "evidenceId": "check-deal-6dc6638db7"
+      },
+      {
+        "value": "of experience and 18 programmes behind us, you will not only receive £30,000 investment, but also expert support and mentorship from the people",
+        "evidenceId": "check-deal-9bf3eede7e"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "60000",
+          "currency": "GBP",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-d8102ac5eb"
+      },
+      {
+        "value": {
+          "kind": "equity",
+          "amount": "60000",
+          "currency": "GBP",
+          "equity": "7%",
+          "label": "Equity",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-4638e0ade4"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "15000",
+          "currency": "GBP",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-6dc6638db7"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "30000",
+          "currency": "GBP",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-9bf3eede7e"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "20000",
+          "currency": "GBP",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-38b17ceba5"
       }
     ],
     "portfolioPages": [
       {
         "value": "https://www.bethnalgreenventures.com/portfolio",
         "evidenceId": "check-portfolio-70c5638385"
+      },
+      {
+        "value": "https://bethnalgreenventures.com/portfolio",
+        "evidenceId": "check-portfolio-b74bb31b5c"
+      },
+      {
+        "value": "http://www.bethnalgreenventures.com/portfolio",
+        "evidenceId": "check-portfolio-9b54e143eb"
+      },
+      {
+        "value": "https://bethnalgreenventures.com/portfolio/",
+        "evidenceId": "check-portfolio-2c1adef5fa"
       }
     ],
     "name": [

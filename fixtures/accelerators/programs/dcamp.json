@@ -9,14 +9,14 @@
   "websiteUrl": "https://dcamp.kr/",
   "applyUrl": "https://dcamp.kr/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: growth coaching 디캠프 그로스 코칭 2026-01-01 ~ 2026-11-30 dcamp global Startup Banking System 2026-01-01 ~ 2026-12-31 News View More 대기업 임원, 엑싯 창업가, 30년 베테랑… 42:1 뚫은 배치 8기 딥테크 창업가 10인 공개 — 배치 8기 OT 후기 2026.09.16 창업 한 달 만에 아마존 사로잡은, 글로벌 커머스 버티컬 AI 펄스애드 2026.09.15 내 AI 에이전트를 일잘러로, AI 노트테이커 더플레이토(티로) 2026.09.01 전화와 수기 장부로 움직이던 1,700조 도매시장의 디지털 표준을 만드는 남도마켓 2026.08.27 30년 된 낡은 유통을 바꾸는, 렌탈 플랫폼 렌트리 2026.09.08 전통시장부터 글로벌 SaaS까지, 평균 매출 3배 이상 성장한 배치 3기 팀의 공통점은? 2026.08.27 11개 유니콘을 발굴한 VC, 남태희 대표와 스톰벤처스가 말하는 ‘미국에서 통하는 스타트업’ 2026.08.26 / 축적된 경험으로 체계화된 성장 프로그램 성장 프로그램 참여 기업 0 개 *2025년 12월 기준 놓치면 아쉬운 소식과 스타트업 뉴스, 디캠프 가 알려드려요 33,560 명의 구독자가 읽고 있어요 이메일 * 이름 개인정보 수집·이용 (보기) , 광고성 정보 수신 동의 (보기) 에 동의합니다. [필수] 개인정보 수집∙이용 동의서 디캠프(재단법인 은행권청년창업재단)의 개인정보 수집 이용 목적은 다음과 같습니다. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "디캠프는 전방위적인 투자 및 육성 인프라를 기반으로 창업자의 압도적인 기업 성장을 지원하는 스타트업 성장 파트너입니다",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Not published on the official page.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "dcamp-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://dcamp.kr/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

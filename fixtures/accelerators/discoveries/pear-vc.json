@@ -1,12 +1,124 @@
 {
   "programId": "pear-vc",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "http://pear.vc/pearx-application",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://pear.vc/announcing-pears-investment-in-dealops-the-gtm-finance-platform-reimagining-deal-execution/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://pear.vc/apply-to-pear-founder-circles-for-female-engineers/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://pear.vc/come-join-pear-as-our-director-of-accelerator-operations/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://pear.vc/companies/",
       "page": "portfolio",
       "anchor": "Companies",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://pear.vc/debunking-common-myths-what-technical-founders-need-to-know-about-sales/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://pear.vc/events/ai-for-climate-todays-machine-learning-applications-with-pachama-floodbase-streamline-and-climatechangeai/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://pear.vc/events/everything-you-need-to-know-about-making-your-first-hire/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://pear.vc/introducing-pearx-a-new-era-of-the-pear-accelerator/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://pear.vc/pear-fellows-2022-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://pear.vc/pearx-application/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://pear.vc/pearx-s25-applications-are-now-open/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://pear.vc/pearx-s26-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://pear.vc/pearx-w25-applications-are-now-open/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://pear.vc/using-ai-to-spot-investment-trends-how-chatgpt-surprised-me-and-why-im-on-the-hunt-for-the-next-big-ai-startup/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

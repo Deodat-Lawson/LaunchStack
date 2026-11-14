@@ -1,67 +1,479 @@
 {
   "programId": "greentown-labs",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:59:02.000Z",
   "pagesRead": [
     "https://greentown.org/",
-    "https://greentown.org/about",
-    "https://greentown.org/apply-now"
+    "https://greentown.org/apply-now",
+    "https://greentown.org/members/moonflower-farms",
+    "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
+    "https://greentown.org/news/announcing-go-make-2026-with-shell-and-technip-energies-apply-now",
+    "https://greentown.org/news/announcing-go-make-2027-advanced-carbon-materials-apply-now",
+    "https://greentown.org/news/applications-are-open-for-accel-an-accelerator-for-bipoc-led-startups",
+    "https://greentown.org/news/applications-open-for-inclusive-cleantech-accelerator",
+    "https://greentown.org/news/carbon-to-value-initiative-opens-applications-for-year-6-accelerator-to-help-carbontech-startups-build-partnerships",
+    "https://greentown.org/news/greentown-labs-and-browning-the-green-space-open-applications-for-year-2-of-the-accel-program-to-support-bipoc-founders",
+    "https://greentown.org/news/greentown-labs-and-browning-the-green-space-open-applications-for-year-3-of-the-accel-program-to-support-bipoc-entrepreneurs",
+    "https://greentown.org/news/heti-collaborators-open-pitch-competition-applications-for-annual-ceraweek-event",
+    "https://greentown.org/news/nona-technologies-electrifies-water-desalination-with-industrial-and-resiliency-applications",
+    "https://greentown.org/news/opportunities-to-engage-with-greentown-startups-open-applications-more",
+    "https://greentown.org/news/the-carbon-to-value-initiative-opens-applications-for-year-5-of-the-carbontech-accelerator-program"
   ],
   "evidence": [
     {
+      "id": "check-deal-07d78001e3",
+      "url": "https://greentown.org/news/carbon-to-value-initiative-opens-applications-for-year-6-accelerator-to-help-carbontech-startups-build-partnerships",
+      "title": "Greentown Labs — application page",
+      "excerpt": ". The accelerator may provide each selected startup up to a $10,000 stipend , customized programming, and facilitated engagement with the",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-0fa2887b00",
+      "url": "https://greentown.org/news/greentown-labs-and-browning-the-green-space-open-applications-for-year-2-of-the-accel-program-to-support-bipoc-founders",
+      "title": "Greentown Labs — application page",
+      "excerpt": "founders Working alongside fellow BIPOC founders Receiving $25k in non-dilutive grant funding Gaining valuable mentorship from",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-7e826172c9",
+      "url": "https://greentown.org/news/the-carbon-to-value-initiative-opens-applications-for-year-5-of-the-carbontech-accelerator-program",
+      "title": "Greentown Labs — application page",
+      "excerpt": ". The accelerator will provide each selected startup with a $10,000 stipend , customized programming, and facilitated engagement with the",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-b3e5280dea",
+      "url": "https://greentown.org/news/greentown-labs-and-browning-the-green-space-open-applications-for-year-3-of-the-accel-program-to-support-bipoc-entrepreneurs",
+      "title": "Greentown Labs — application page",
+      "excerpt": "from the accelerator by: Receiving non-dilutive grant funding up to $25,000 to support their development Participating in trainings led by",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-b5a8474192",
+      "url": "https://greentown.org/news/greentown-labs-and-browning-the-green-space-open-applications-for-year-3-of-the-accel-program-to-support-bipoc-entrepreneurs",
+      "title": "Greentown Labs — application page",
+      "excerpt": "more than a dozen early-stage climatetech startups, supplying $325k in grant funding, hosting more than 50 workshop sessions, and",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-439291e611",
+      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
+      "title": "Greentown Labs — application page",
+      "excerpt": "for example, take at least 9 months altogether: 3 months to apply, 3 months to hear whether you won the",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-4efaa7e050",
+      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
+      "title": "Greentown Labs — application page",
+      "excerpt": "to hear whether you won the award, and another 3 months to receive the funding. After receiving the",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-bb6cf8dc16",
+      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
+      "title": "Greentown Labs — application page",
+      "excerpt": "funds. SBIR grants, for example, take at least 9 months altogether: 3 months to apply, 3 months to hear",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-cf4bfd953e",
+      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
+      "title": "Greentown Labs — application page",
+      "excerpt": "at least 9 months altogether: 3 months to apply, 3 months to hear whether you won the award, and another 3",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-daff96241e",
+      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
+      "title": "Greentown Labs — application page",
+      "excerpt": "to Phase I Awards, which award up to $150K for 6 months, Phase II awards can fund up to $1M for 2 years,",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-ef0aeeb05f",
+      "url": "https://greentown.org/apply-now",
+      "title": "Greentown Labs — application page",
+      "excerpt": "& review process typically completes in 2 weeks. Step 01 Online Application Submit your",
+      "page": "application"
+    },
+    {
+      "id": "check-format-12b5f05948",
+      "url": "https://greentown.org/apply-now",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Visit our Boston or Houston campus and see the incubator in person. Step 04 Committee Review Our review committee makes a",
+      "page": "application"
+    },
+    {
+      "id": "check-format-20acc8a614",
+      "url": "https://greentown.org/news/carbon-to-value-initiative-opens-applications-for-year-6-accelerator-to-help-carbontech-startups-build-partnerships",
+      "title": "Greentown Labs — application page",
+      "excerpt": "events in Boston, New York, and Houston , alongside virtual programming. Learn more and apply at www.c2vinitiative.com",
+      "page": "application"
+    },
+    {
+      "id": "check-format-775e29409a",
+      "url": "https://greentown.org/news/the-carbon-to-value-initiative-opens-applications-for-year-5-of-the-carbontech-accelerator-program",
+      "title": "Greentown Labs — application page",
+      "excerpt": "for measurement, reporting, and verification (MRV) (e.g. remote sensing, IOT/sensors, continuous emissions monitoring,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-ab461f4e45",
+      "url": "https://greentown.org/news/the-carbon-to-value-initiative-opens-applications-for-year-5-of-the-carbontech-accelerator-program",
+      "title": "Greentown Labs — application page",
+      "excerpt": "events in Boston, New York, and Houston , alongside virtual programming. Learn more and apply at www.c2vinitiative.com",
+      "page": "application"
+    },
+    {
+      "id": "check-location-3d80abd890",
+      "url": "https://greentown.org/news/greentown-labs-and-browning-the-green-space-open-applications-for-year-3-of-the-accel-program-to-support-bipoc-entrepreneurs",
+      "title": "Greentown Labs — application page",
+      "excerpt": "consideration given to applicants based in Greater Boston and Greater Houston, where Greentown’s",
+      "page": "application"
+    },
+    {
+      "id": "check-location-551cfac257",
+      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Anzu Partners , an investment firm located in Washington DC that teams with entrepreneurs and",
+      "page": "application"
+    },
+    {
+      "id": "check-location-914baa4226",
+      "url": "https://greentown.org/news/greentown-labs-and-browning-the-green-space-open-applications-for-year-2-of-the-accel-program-to-support-bipoc-founders",
+      "title": "Greentown Labs — application page",
+      "excerpt": "consideration given to applicants based in Greater Boston and Greater Houston, where Greentown’s",
+      "page": "application"
+    },
+    {
       "id": "check-name-6fc40cc26e",
       "url": "https://greentown.org/",
-      "title": "Greentown Labs — homepage checked by scrape.py",
+      "title": "Greentown Labs — homepage",
       "excerpt": "01 ] How we support founders Entrepreneurs move faster at Greentown Labs Equipment. Workshops. Warm introductions. We connect",
       "page": "details"
     },
     {
-      "id": "check-portfolio-66a6b20ada",
-      "url": "https://greentown.org/apply-now",
-      "title": "Greentown Labs — application page checked by scrape.py",
+      "id": "check-portfolio-0a8d5eac2d",
+      "url": "https://greentown.org/members/moonflower-farms",
+      "title": "Greentown Labs — application page",
       "excerpt": "Startups → https://greentown.org/members",
       "page": "application"
     },
     {
-      "id": "check-portfolio-7988407345",
-      "url": "https://greentown.org/about",
-      "title": "Greentown Labs — details page checked by scrape.py",
+      "id": "check-portfolio-2a710c5839",
+      "url": "https://greentown.org/news/opportunities-to-engage-with-greentown-startups-open-applications-more",
+      "title": "Greentown Labs — application page",
       "excerpt": "Startups → https://greentown.org/members",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3e293f8a27",
+      "url": "https://greentown.org/news/announcing-go-make-2027-advanced-carbon-materials-apply-now",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Startups → https://greentown.org/members",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-62d4fce637",
+      "url": "https://greentown.org/news/greentown-labs-and-browning-the-green-space-open-applications-for-year-3-of-the-accel-program-to-support-bipoc-entrepreneurs",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Startups → https://greentown.org/members",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-66a6b20ada",
+      "url": "https://greentown.org/apply-now",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Startups → https://greentown.org/members",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-6a56377d39",
+      "url": "https://greentown.org/news/announcing-go-make-2026-with-shell-and-technip-energies-apply-now",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Startups → https://greentown.org/members",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7743e763e6",
+      "url": "https://greentown.org/news/greentown-labs-and-browning-the-green-space-open-applications-for-year-2-of-the-accel-program-to-support-bipoc-founders",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Startups → https://greentown.org/members",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-831a567c03",
+      "url": "https://greentown.org/news/applications-are-open-for-accel-an-accelerator-for-bipoc-led-startups",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Startups → https://greentown.org/members",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-8d7fd21579",
+      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Startups → https://greentown.org/members",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a0d9a956a1",
+      "url": "https://greentown.org/news/applications-open-for-inclusive-cleantech-accelerator",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Startups → https://greentown.org/members",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-bb6863c603",
+      "url": "https://greentown.org/news/nona-technologies-electrifies-water-desalination-with-industrial-and-resiliency-applications",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Startups → https://greentown.org/members",
+      "page": "application"
     },
     {
       "id": "check-portfolio-bd186b5d53",
       "url": "https://greentown.org/",
-      "title": "Greentown Labs — homepage checked by scrape.py",
+      "title": "Greentown Labs — homepage",
       "excerpt": "Startups → https://greentown.org/members",
       "page": "details"
     },
     {
+      "id": "check-portfolio-d111204d24",
+      "url": "https://greentown.org/news/carbon-to-value-initiative-opens-applications-for-year-6-accelerator-to-help-carbontech-startups-build-partnerships",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Startups → https://greentown.org/members",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-e6d284d779",
+      "url": "https://greentown.org/news/the-carbon-to-value-initiative-opens-applications-for-year-5-of-the-carbontech-accelerator-program",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Startups → https://greentown.org/members",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f68f570d91",
+      "url": "https://greentown.org/news/heti-collaborators-open-pitch-competition-applications-for-annual-ceraweek-event",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Startups → https://greentown.org/members",
+      "page": "application"
+    },
+    {
+      "id": "check-route-02e7ade2ec",
+      "url": "https://greentown.org/news/nona-technologies-electrifies-water-desalination-with-industrial-and-resiliency-applications",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Apply for Membership → https://greentown.org/apply-now",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0324d77cba",
+      "url": "https://greentown.org/news/greentown-labs-and-browning-the-green-space-open-applications-for-year-3-of-the-accel-program-to-support-bipoc-entrepreneurs",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Apply for Membership → https://greentown.org/apply-now",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2146ba96bf",
+      "url": "https://greentown.org/news/the-carbon-to-value-initiative-opens-applications-for-year-5-of-the-carbontech-accelerator-program",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Apply for Membership → https://greentown.org/apply-now",
+      "page": "application"
+    },
+    {
+      "id": "check-route-28fe193585",
+      "url": "https://greentown.org/news/heti-collaborators-open-pitch-competition-applications-for-annual-ceraweek-event",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Apply for Membership → https://greentown.org/apply-now",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3d24ee6874",
+      "url": "https://greentown.org/news/applications-are-open-for-accel-an-accelerator-for-bipoc-led-startups",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Apply for Membership → https://greentown.org/apply-now",
+      "page": "application"
+    },
+    {
       "id": "check-route-5d589fb96e",
       "url": "https://greentown.org/",
-      "title": "Greentown Labs — homepage checked by scrape.py",
+      "title": "Greentown Labs — homepage",
       "excerpt": "Join Greentown Join Greentown → https://greentown.org/apply-now",
       "page": "details"
     },
     {
-      "id": "check-route-dad641aa64",
-      "url": "https://greentown.org/about",
-      "title": "Greentown Labs — details page checked by scrape.py",
+      "id": "check-route-7f17a8feaf",
+      "url": "https://greentown.org/news/announcing-go-make-2027-advanced-carbon-materials-apply-now",
+      "title": "Greentown Labs — application page",
       "excerpt": "Apply for Membership → https://greentown.org/apply-now",
+      "page": "application"
+    },
+    {
+      "id": "check-route-84a455039d",
+      "url": "https://greentown.org/news/carbon-to-value-initiative-opens-applications-for-year-6-accelerator-to-help-carbontech-startups-build-partnerships",
+      "title": "Greentown Labs — application page",
+      "excerpt": "request for applications → https://docs.google.com/document/d/1fnG_Nh-UaNeLa8qHOGfynLxssUt5PzhWwmqQyUlbqvg/edit?usp=sharing",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9a21b6b2c1",
+      "url": "https://greentown.org/news/greentown-labs-and-browning-the-green-space-open-applications-for-year-2-of-the-accel-program-to-support-bipoc-founders",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Apply for Membership → https://greentown.org/apply-now",
+      "page": "application"
+    },
+    {
+      "id": "check-route-aef00f9734",
+      "url": "https://greentown.org/news/announcing-go-make-2026-with-shell-and-technip-energies-apply-now",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Apply for Membership → https://greentown.org/apply-now",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c96f54aaf1",
+      "url": "https://greentown.org/news/opportunities-to-engage-with-greentown-startups-open-applications-more",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Apply for Membership → https://greentown.org/apply-now",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d711c69557",
+      "url": "https://greentown.org/",
+      "title": "Greentown Labs — homepage",
+      "excerpt": "Moonflower Farms Food, Water, & Land Greenhouse gas reduction solutions for agriculture, energy storage, and industrial heat applications → https://greentown.org/members/moonflower-farms",
       "page": "details"
+    },
+    {
+      "id": "check-route-e31454a6fa",
+      "url": "https://greentown.org/members/moonflower-farms",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Apply for Membership → https://greentown.org/apply-now",
+      "page": "application"
     },
     {
       "id": "check-route-e58b424fe4",
       "url": "https://greentown.org/",
-      "title": "Greentown Labs — homepage checked by scrape.py",
+      "title": "Greentown Labs — homepage",
       "excerpt": "Apply for Membership → https://greentown.org/apply-now",
       "page": "details"
     },
     {
-      "id": "check-route-fbc9b7bfc6",
+      "id": "check-route-ea8f9e707e",
+      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Apply for Membership → https://greentown.org/apply-now",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f37aca8c2f",
+      "url": "https://greentown.org/news/applications-open-for-inclusive-cleantech-accelerator",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Apply for Membership → https://greentown.org/apply-now",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fd05fa3fe1",
+      "url": "https://greentown.org/news/carbon-to-value-initiative-opens-applications-for-year-6-accelerator-to-help-carbontech-startups-build-partnerships",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Apply for Membership → https://greentown.org/apply-now",
+      "page": "application"
+    },
+    {
+      "id": "check-status-aede4c36e0",
+      "url": "https://greentown.org/news/applications-are-open-for-accel-an-accelerator-for-bipoc-led-startups",
+      "title": "Greentown Labs — application page",
+      "excerpt": "Applications are open for ACCEL, an accelerator for BIPOC-led startups | Greentown Labs Supporting Startups Startups Industry",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-a40ff73da8",
       "url": "https://greentown.org/",
-      "title": "Greentown Labs — homepage checked by scrape.py",
-      "excerpt": "Applied Bioplastics Food, Water, & Land Plant-based polymers engineered to replace conventional petrochemical plastics in packaging and consumer applications → https://greentown.org/members/applied-bioplastics",
-      "page": "details"
+      "page": "details",
+      "excerpt": "Greentown - Where Entrepreneurs Move Faster Supporting Startups Startups Industry Engage About Apply for Membership Helping climate & energy startups Transform industries faster Membership Benefits Membership Benefits [ 01 ] How we support founders Entrepreneurs move faster at Greentown Labs Equipment. Workshops. Warm introductions. We connect companies with the people and resources they need to scale, at the pace the world needs. Build Faster Machine shops, prototyping labs, specialized equipment, and more for rapid R&D. Get Customers Faster Customer discovery, technical validation, field trials, pilots, and more to bridge tech to market. Raise Capital Faster Investor introductions, pitch coaching, grant support, and fundraising guidance. Scale Faster Partner with international industry giants and take your ground-breaking tech to the global level. [ 02 ] Our Startups Our Member Companies View All Startups View All Startups Immedia Power Energy & Power Compact multi-fuel generator with software dispatch for grid capacity on space-constrained sites Interface Polymers Manufacturing & Processing Enhancing polyolefin performance with additives for better compatibility and cost efficiency Topl Infrastructure & Construction Blockchain platform tracking supply chain provenance for product verification, producer financing, and transparency DrinKicks Food, Water, & Land Footwear and"
+    },
+    {
+      "id": "check-page-bdc2e96693",
+      "url": "https://greentown.org/apply-now",
+      "page": "application",
+      "excerpt": "Apply Now | Greentown Labs Supporting Startups Startups Industry Engage About Apply for Membership [ 01 ] Membership Ready to join the community? Climate and energy entrepreneurs build faster here. At Greentown Labs, founders find the labs, community, first customers, and shared momentum to turn bold ideas into companies that can change the world. [ 02 ] What We Look For Climate & Energy Ambition You’re developing an innovation that boosts efficiency, reduces emissions, promotes smarter use of resources, or otherwise brings us a step closer to a sustainable future. If your work makes the planet more livable and the economy stronger, you belong here! Ready to Build Most of our members are developing a prototype and working to enter their market. We typically support founders from early R&D through commercialization. Community Fit Innovation is a team sport! The founders who thrive here are ready to become active members of our community: they show up for each other, sharing equipment tips, warm intros, hard-won lessons, and celebrations, all in the name of our shared mission. [ 03 ] Apply Start Your Application Fill out the form below to begin the membership process. Questions? Reach out to recruitment@greentownlabs.com The Process The application & review process typically completes in 2 weeks. Step 01 Online Application Submit your application through the form below. Step 02"
+    },
+    {
+      "id": "check-page-5461785e16",
+      "url": "https://greentown.org/members/moonflower-farms",
+      "page": "application",
+      "excerpt": "Moonflower Farms - Greentown Houston Alumni Supporting Startups Startups Industry Engage About Apply for Membership Back to directory Moonflower Farms Greenhouse gas reduction solutions for agriculture, energy storage, and industrial heat applications Greentown Houston Alumni Founded 2019 Visit website Moonflower Farms on Facebook Food, Water, & Land Mining and Minerals [ 01 ] About Moonflower uses space age technology to solve real world problems to provide our communities year-round access to safe, high-quality produce with as little environmental impact as possible. [ 02 ] Leadership Federico Marques Founder and CEO Carrie Criado Co-Founder, VP Communications/Marketing [ 03 ] In The News Hydroponic Farming to Feed America | Farms Across America youtube.com / Sep 15, 2026 Greentown Labs is a 501(c)(3) nonprofit We help climate and energy entrepreneurs build faster, connecting them to the labs, community, capital, customers, talent, and partners they need to build, deploy, and scale new technologies. Donate Donate Take Action Take Action Stay in the loop Subscribe for startup stories, events, and announcements from the ecosystem. Email address Next Next Boston 444 Somerville Ave. Somerville, MA 02143 Houston 4200 San Jacinto St. Houston, TX 77004 Member Benefits Become a Member Current Members About & Impact Team Board of Directors History Partnerships Mentor a Startup"
+    },
+    {
+      "id": "check-page-2866ef003f",
+      "url": "https://greentown.org/news/5-tips-entrepreneurs-keep-mind-applying-government-grants",
+      "page": "application",
+      "excerpt": "5 Tips Entrepreneurs Should Keep in Mind When Applying for Government Grants | Greentown Labs Supporting Startups Startups Industry Engage About Apply for Membership Stories 5 Tips Entrepreneurs Should Keep in Mind When Applying for Government Grants March 14, 2017 / Greentown Labs The Greentown Labs community recently gleaned great insight from Anzu Partners , an investment firm located in Washington DC that teams with entrepreneurs and strategic players to transform their industries with investment and expertise. Anzu’s Technology Partnerships Team provides grant advisory support to internal and external companies. Their recent presentation focused on Small Business Innovation Research (SBIR) grants , what entrepreneurs need to know, how to be successful, and what to plan for, particularly in the new political environment. Plan and be patient. When applying for government grants, you need to plan ahead. There are long wait times and delays associated with application submissions and receiving funds. SBIR grants, for example, take at least 9 months altogether: 3 months to apply, 3 months to hear whether you won the award, and another 3 months to receive the funding. After receiving the money, you will need to continuously share data and milestones with the award agency. Plant the seed of your innovation by submitting a white paper. A helpful way to receive funding is to write"
+    },
+    {
+      "id": "check-page-f6b41002cd",
+      "url": "https://greentown.org/news/announcing-go-make-2026-with-shell-and-technip-energies-apply-now",
+      "page": "application",
+      "excerpt": "Announcing Go Make 2026 with Shell and Technip Energies—Apply Now! | Greentown Labs Supporting Startups Startups Industry Engage About Apply for Membership Newsletters Announcing Go Make 2026 with Shell and Technip Energies—Apply Now! January 6, 2026 / Greentown Labs Back to News Greentown Labs is a 501(c)(3) nonprofit We help climate and energy entrepreneurs build faster, connecting them to the labs, community, capital, customers, talent, and partners they need to build, deploy, and scale new technologies. Donate Donate Take Action Take Action Stay in the loop Subscribe for startup stories, events, and announcements from the ecosystem. Email address Next Next Boston 444 Somerville Ave. Somerville, MA 02143 Houston 4200 San Jacinto St. Houston, TX 77004 Member Benefits Become a Member Current Members About & Impact Team Board of Directors History Partnerships Mentor a Startup Resource Network News Events Careers Go Programs First Valley Fellowship Carbon to Value Initiative Contact GRID (Member Login) Privacy Policy Terms of Service Your Privacy Choices © 2026 Greentown"
+    },
+    {
+      "id": "check-page-c53923384c",
+      "url": "https://greentown.org/news/announcing-go-make-2027-advanced-carbon-materials-apply-now",
+      "page": "application",
+      "excerpt": "Announcing Go Make 2027: Advanced Carbon Materials—Apply Now! | Greentown Labs Supporting Startups Startups Industry Engage About Apply for Membership Newsletters Announcing Go Make 2027: Advanced Carbon Materials—Apply Now! July 14, 2026 / Greentown Labs Back to News Greentown Labs is a 501(c)(3) nonprofit We help climate and energy entrepreneurs build faster, connecting them to the labs, community, capital, customers, talent, and partners they need to build, deploy, and scale new technologies. Donate Donate Take Action Take Action Stay in the loop Subscribe for startup stories, events, and announcements from the ecosystem. Email address Next Next Boston 444 Somerville Ave. Somerville, MA 02143 Houston 4200 San Jacinto St. Houston, TX 77004 Member Benefits Become a Member Current Members About & Impact Team Board of Directors History Partnerships Mentor a Startup Resource Network News Events Careers Go Programs First Valley Fellowship Carbon to Value Initiative Contact GRID (Member Login) Privacy Policy Terms of Service Your Privacy Choices © 2026 Greentown"
+    },
+    {
+      "id": "check-page-c7b045a1fa",
+      "url": "https://greentown.org/news/applications-are-open-for-accel-an-accelerator-for-bipoc-led-startups",
+      "page": "application",
+      "excerpt": "Applications are open for ACCEL, an accelerator for BIPOC-led startups | Greentown Labs Supporting Startups Startups Industry Engage About Apply for Membership Greentown In The News Applications are open for ACCEL, an accelerator for BIPOC-led startups December 19, 2023 Read the full article at houston.innovationmap.com Back to News Greentown Labs is a 501(c)(3) nonprofit We help climate and energy entrepreneurs build faster, connecting them to the labs, community, capital, customers, talent, and partners they need to build, deploy, and scale new technologies. Donate Donate Take Action Take Action Stay in the loop Subscribe for startup stories, events, and announcements from the ecosystem. Email address Next Next Boston 444 Somerville Ave. Somerville, MA 02143 Houston 4200 San Jacinto St. Houston, TX 77004 Member Benefits Become a Member Current Members About & Impact Team Board of Directors History Partnerships Mentor a Startup Resource Network News Events Careers Go Programs First Valley Fellowship Carbon to Value Initiative Contact GRID (Member Login) Privacy Policy Terms of Service Your Privacy Choices © 2026 Greentown"
+    },
+    {
+      "id": "check-page-e19f852053",
+      "url": "https://greentown.org/news/applications-open-for-inclusive-cleantech-accelerator",
+      "page": "application",
+      "excerpt": "Applications open for inclusive cleantech accelerator | Greentown Labs Supporting Startups Startups Industry Engage About Apply for Membership Greentown In The News Applications open for inclusive cleantech accelerator November 29, 2023 Read the full article at energycapitalhtx.com Back to News Greentown Labs is a 501(c)(3) nonprofit We help climate and energy entrepreneurs build faster, connecting them to the labs, community, capital, customers, talent, and partners they need to build, deploy, and scale new technologies. Donate Donate Take Action Take Action Stay in the loop Subscribe for startup stories, events, and announcements from the ecosystem. Email address Next Next Boston 444 Somerville Ave. Somerville, MA 02143 Houston 4200 San Jacinto St. Houston, TX 77004 Member Benefits Become a Member Current Members About & Impact Team Board of Directors History Partnerships Mentor a Startup Resource Network News Events Careers Go Programs First Valley Fellowship Carbon to Value Initiative Contact GRID (Member Login) Privacy Policy Terms of Service Your Privacy Choices © 2026 Greentown"
+    },
+    {
+      "id": "check-page-c5d37e803d",
+      "url": "https://greentown.org/news/carbon-to-value-initiative-opens-applications-for-year-6-accelerator-to-help-carbontech-startups-build-partnerships",
+      "page": "application",
+      "excerpt": "Carbon to Value Initiative Opens Applications for Year 6 Accelerator to Help Carbontech Startups Build Partnerships | Greentown Labs Supporting Startups Startups Industry Engage About Apply for Membership Press Releases Carbon to Value Initiative Opens Applications for Year 6 Accelerator to Help Carbontech Startups Build Partnerships June 30, 2026 / Greentown Labs The accelerator seeks next cohort of carbontech startups Somerville, Mass.; Houston, Texas; and Brooklyn, N.Y., June 30 , 2026 — The Carbon to Value Initiative (C2V Initiative)—a unique collaboration among the Urban Future Lab at NYU Tandon School of Engineering, Greentown Labs , and Fraunhofer USA —today announced the sixth year of its world-class carbontech accelerator program. The window to act on climate is narrowing, yet emissions continue to outpace the progress needed to reach net-zero. Carbontech remains one of the most powerful levers available—cutting emissions through carbon reuse and delivering durable carbon removal at the scale the climate demands. Deploying these technologies at gigaton scale is not optional; it is essential to holding warming below 2°C. Now in its sixth year, the C2V Initiative is building on a proven track record of accelerating the most promising carbontech innovations and connecting them with the capital, partners, and markets they need to grow—urgently and at scale. Since its"
+    },
+    {
+      "id": "check-page-b195147d6e",
+      "url": "https://greentown.org/news/greentown-labs-and-browning-the-green-space-open-applications-for-year-2-of-the-accel-program-to-support-bipoc-founders",
+      "page": "application",
+      "excerpt": "Greentown Labs and Browning the Green Space Open Applications for Year 2 of the ACCEL Program to Support BIPOC Founders | Greentown Labs Supporting Startups Startups Industry Engage About Apply for Membership Press Releases Greentown Labs and Browning the Green Space Open Applications for Year 2 of the ACCEL Program to Support BIPOC Founders November 14, 2023 / Greentown Labs The recurring, year-long program is accepting applications from BIPOC entrepreneurs developing solutions to the climate crisis Somerville, Mass. and Houston, Texas, Nov. 14, 2023 — Greentown Labs , the largest climatetech incubator in North America, and Browning the Green Space (BGS), a nonprofit dedicated to making clean energy and other climate-related fields more diverse, equitable, and inclusive, are accepting applications from BIPOC-led climatetech startups for Year 2 of the Advancing Climatetech and Clean Energy Leaders Program (ACCEL) . ACCEL bolsters startups as they develop critical climatetech solutions by offering access to funding, networking connections, resources, and opportunities that structural inequities put out of reach. The year-long program combines acceleration with a curated curriculum, incubation at Greentown, and extensive mentorship from Greentown and BGS’s networks of industry experts. Startups selected for ACCEL will benefit from the accelerator by: Engaging in a curated"
+    },
+    {
+      "id": "check-page-031c01ad0c",
+      "url": "https://greentown.org/news/greentown-labs-and-browning-the-green-space-open-applications-for-year-3-of-the-accel-program-to-support-bipoc-entrepreneurs",
+      "page": "application",
+      "excerpt": "Greentown Labs and Browning the Green Space Open Applications for Year 3 of the ACCEL Program to Support BIPOC Entrepreneurs | Greentown Labs Supporting Startups Startups Industry Engage About Apply for Membership Press Releases Greentown Labs and Browning the Green Space Open Applications for Year 3 of the ACCEL Program to Support BIPOC Entrepreneurs November 19, 2024 / Greentown Labs The year-long accelerator is accepting applications from BIPOC founders developing climatetech solutions Somerville, Mass. and Houston, Texas, Nov. 19, 2024 — Greentown Labs , the largest climatetech incubator in North America, and Browning the Green Space (BGS), a nonprofit dedicated to advancing diversity, equity, and inclusion in clean energy and climatetech, are accepting applications from BIPOC-led climatetech startups for Year 3 of the Advancing Climatetech and Clean Energy Leaders Program (ACCEL) . ACCEL bolsters startups as they develop critical climatetech solutions by offering access to funding, networking connections, resources, and opportunities that structural inequities put out of reach. The year-long program combines acceleration with a curated curriculum, incubation at Greentown, and extensive mentorship from Greentown and BGS’s networks of industry experts. Startups selected for ACCEL will benefit from the accelerator by: Receiving non-dilutive grant funding up to $25,000 to"
+    },
+    {
+      "id": "check-page-ec4987793c",
+      "url": "https://greentown.org/news/heti-collaborators-open-pitch-competition-applications-for-annual-ceraweek-event",
+      "page": "application",
+      "excerpt": "HETI, collaborators open pitch competition applications for annual CERAWeek event | Greentown Labs Supporting Startups Startups Industry Engage About Apply for Membership Greentown In The News HETI, collaborators open pitch competition applications for annual CERAWeek event January 25, 2024 Read the full article at energycapitalhtx.com Back to News Greentown Labs is a 501(c)(3) nonprofit We help climate and energy entrepreneurs build faster, connecting them to the labs, community, capital, customers, talent, and partners they need to build, deploy, and scale new technologies. Donate Donate Take Action Take Action Stay in the loop Subscribe for startup stories, events, and announcements from the ecosystem. Email address Next Next Boston 444 Somerville Ave. Somerville, MA 02143 Houston 4200 San Jacinto St. Houston, TX 77004 Member Benefits Become a Member Current Members About & Impact Team Board of Directors History Partnerships Mentor a Startup Resource Network News Events Careers Go Programs First Valley Fellowship Carbon to Value Initiative Contact GRID (Member Login) Privacy Policy Terms of Service Your Privacy Choices © 2026 Greentown"
+    },
+    {
+      "id": "check-page-a99b0e6b4c",
+      "url": "https://greentown.org/news/nona-technologies-electrifies-water-desalination-with-industrial-and-resiliency-applications",
+      "page": "application",
+      "excerpt": "NONA Technologies Electrifies Water Desalination, with Industrial and Resiliency Applications | Greentown Labs Supporting Startups Startups Industry Engage About Apply for Membership Stories NONA Technologies Electrifies Water Desalination, with Industrial and Resiliency Applications March 19, 2025 / Reena Karasin Today’s primary desalination methods—distillation and membrane filtration—are insufficient to completely combat the fresh-water crisis . Both are energy and maintenance intensive, rendering them cost prohibitive in a wide array of potential water-saving applications. NONA Technologies is electrifying water desalination with a technology that works at room temperature without high pressure—requiring just three pounds per square inch (known as PSI). “We have an electro-membrane approach,” explains Bruce Crawford , the startup’s CEO and co-founder. “Instead of using heat or a filter, we use an electrical field to pull impurities out of the water.” NONA Technologies’s energy-efficient solution is also low maintenance and simple to operate. The company’s first product is a compact, portable unit that can serve as a climate-adaptation device for NGO work and disaster relief, and will also be used by sailors. NONA Technologies has co-developed this device with the U.S. Army Natick Soldier Systems Center, generating revenue from delivering prototypes. The product will launch"
+    },
+    {
+      "id": "check-page-de8f0a6c5a",
+      "url": "https://greentown.org/news/opportunities-to-engage-with-greentown-startups-open-applications-more",
+      "page": "application",
+      "excerpt": "Opportunities to Engage with Greentown Startups, Open Applications, + More! | Greentown Labs Supporting Startups Startups Industry Engage About Apply for Membership Newsletters Opportunities to Engage with Greentown Startups, Open Applications, + More! February 23, 2023 / Greentown Labs Back to News Greentown Labs is a 501(c)(3) nonprofit We help climate and energy entrepreneurs build faster, connecting them to the labs, community, capital, customers, talent, and partners they need to build, deploy, and scale new technologies. Donate Donate Take Action Take Action Stay in the loop Subscribe for startup stories, events, and announcements from the ecosystem. Email address Next Next Boston 444 Somerville Ave. Somerville, MA 02143 Houston 4200 San Jacinto St. Houston, TX 77004 Member Benefits Become a Member Current Members About & Impact Team Board of Directors History Partnerships Mentor a Startup Resource Network News Events Careers Go Programs First Valley Fellowship Carbon to Value Initiative Contact GRID (Member Login) Privacy Policy Terms of Service Your Privacy Choices © 2026 Greentown"
+    },
+    {
+      "id": "check-page-ce05db15a4",
+      "url": "https://greentown.org/news/the-carbon-to-value-initiative-opens-applications-for-year-5-of-the-carbontech-accelerator-program",
+      "page": "application",
+      "excerpt": "The Carbon to Value Initiative Opens Applications for Year 5 of the Carbontech Accelerator Program | Greentown Labs Supporting Startups Startups Industry Engage About Apply for Membership Press Releases The Carbon to Value Initiative Opens Applications for Year 5 of the Carbontech Accelerator Program June 17, 2025 / Greentown Labs The accelerator seeks next cohort of carbontech startups and announces new Carbontech Leadership Council members Somerville, Mass.; Houston, Texas; and Brooklyn, N.Y., June 17, 2025 — The Carbon to Value Initiative (C2V Initiative)—a unique collaboration among the Urban Future Lab at NYU Tandon School of Engineering, Greentown Labs , and Fraunhofer USA —today announced the fifth year of its world-class carbontech accelerator program and an expansion of its Carbontech Leadership Council (CLC). Global energy demand is rising, but emissions must fall to meet net-zero goals. Carbontech offers a critical set of solutions—reducing emissions through carbon reuse and enabling durable carbon removal. These technologies are essential to deploy at the gigaton scale to stay within 2°C of warming, but widespread support is required to help them scale. The C2V Initiative exists to meet this need: unlocking the trillion-dollar opportunity of carbontech by accelerating the most promising innovations and connecting them with the ecosystem they need to thrive—and"
     }
   ],
   "findings": {
@@ -73,8 +485,12 @@
         "evidenceId": "check-route-e58b424fe4"
       },
       {
-        "value": "https://greentown.org/members/applied-bioplastics",
-        "evidenceId": "check-route-fbc9b7bfc6"
+        "value": "https://greentown.org/members/moonflower-farms",
+        "evidenceId": "check-route-d711c69557"
+      },
+      {
+        "value": "https://docs.google.com/document/d/1fnG_Nh-UaNeLa8qHOGfynLxssUt5PzhWwmqQyUlbqvg/edit?usp=sharing",
+        "evidenceId": "check-route-84a455039d"
       }
     ],
     "applicationUrl": [
@@ -83,11 +499,140 @@
         "evidenceId": "check-route-e58b424fe4"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-aede4c36e0"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "2",
+        "evidenceId": "check-duration-ef0aeeb05f"
+      },
+      {
+        "value": "9 months",
+        "evidenceId": "check-duration-bb6cf8dc16"
+      },
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-439291e611"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-daff96241e"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-12b5f05948"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-20acc8a614"
+      }
+    ],
+    "location": [
+      {
+        "value": "Washington DC",
+        "evidenceId": "check-location-551cfac257"
+      },
+      {
+        "value": "Greater Boston",
+        "evidenceId": "check-location-914baa4226"
+      }
+    ],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": ". The accelerator may provide each selected startup up to a $10,000 stipend , customized programming, and facilitated engagement with the",
+        "evidenceId": "check-deal-07d78001e3"
+      },
+      {
+        "value": "founders Working alongside fellow BIPOC founders Receiving $25k in non-dilutive grant funding Gaining valuable mentorship from",
+        "evidenceId": "check-deal-0fa2887b00"
+      },
+      {
+        "value": "from the accelerator by: Receiving non-dilutive grant funding up to $25,000 to support their development Participating in trainings led by",
+        "evidenceId": "check-deal-b3e5280dea"
+      },
+      {
+        "value": "more than a dozen early-stage climatetech startups, supplying $325k in grant funding, hosting more than 50 workshop sessions, and",
+        "evidenceId": "check-deal-b5a8474192"
+      },
+      {
+        "value": ". The accelerator will provide each selected startup with a $10,000 stipend , customized programming, and facilitated engagement with the",
+        "evidenceId": "check-deal-7e826172c9"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "10000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-07d78001e3"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "25000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-0fa2887b00"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "25000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-b3e5280dea"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "325000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-b5a8474192"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "10000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-7e826172c9"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://greentown.org/members",

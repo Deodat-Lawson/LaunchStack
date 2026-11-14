@@ -1,12 +1,92 @@
 {
   "programId": "angelpad",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T20:59:02.000Z",
   "pages": [
     {
-      "url": "https://angelpad.com/portfolio/",
+      "url": "https://angelpad.com/a/cat/faq-2/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://angelpad.com/a/cat/faq/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://angelpad.com/a/cat/portfolio/",
       "page": "portfolio",
-      "anchor": "portfolio",
-      "fetched": false,
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://angelpad.com/about/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://angelpad.com/b/accelerator-rankings-2015/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://angelpad.com/b/accelerator-terms-sheet/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://angelpad.com/b/best-accelerator-rankings/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://angelpad.com/b/can-i-apply-if-i-am-from-outside-the-us/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://angelpad.com/b/companies-of-angelpad-8/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://angelpad.com/b/gatik-valued-at-over-700-million-after-investment-from-microsoft/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://angelpad.com/b/p/clipabout/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -19,8 +99,24 @@
       "origin": "official"
     },
     {
-      "url": "https://angelpad.com/#apply",
-      "page": "application",
+      "url": "https://angelpad.com/more/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://angelpad.com/portfolio/",
+      "page": "portfolio",
+      "anchor": "portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://angelpad.com/top",
+      "page": "other",
       "anchor": "",
       "fetched": true,
       "blocked": null,

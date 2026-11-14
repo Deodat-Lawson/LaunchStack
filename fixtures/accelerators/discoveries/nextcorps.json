@@ -1,0 +1,134 @@
+{
+  "programId": "nextcorps",
+  "checkedAt": "2026-11-14T20:04:58.000Z",
+  "pages": [
+    {
+      "url": "https://nextcorps.org/about-us/",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/application-deadline-approaching-for-startups-to-participate-in-luminate-ny-competition-and-business-accelerator/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/apply-to-nextcorps/",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/empire-state-development-announces-10-startups-selected-to-take-part-in-cohort-ii-of-luminate-ny/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/event/application-deadline-fuzehub-commercialization-competition/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/event/application-deadline-i-corps-regional-course-for-startups-hosted-by-rochester-institute-of-technology/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/event/tips-for-applying-to-luminate-increase-your-chances-for-consideration/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/event/tips-for-applying-to-luminate-increase-your-chances-for-consideration/?ical=1",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/governor-cuomo-announces-applications-are-now-being-accepted-for-round-ii-of-luminate-ny/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/podcast-download/4220/navigating-investment.m4a?ref=download",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/podcast-download/4220/navigating-investment.m4a?ref=new_window",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/podcast-player/4220/navigating-investment.m4a",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/podcast/navigating-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/venture-for-climatetech-opens-application-period/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/your-startups-codebase-has-rules-what-founders-should-know-about-software-licensing/",
+      "page": "details",
+      "anchor": "Read the blog",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

@@ -1,94 +1,213 @@
 {
   "programId": "passion-capital",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://passioncapital.com/",
-    "https://passioncapital.com/about/"
+    "https://passioncapital.com/about/",
+    "https://passioncapital.com/fund-portfolio/",
+    "https://passioncapital.com/fund-portfolio/gocardless/",
+    "https://passioncapital.com/fund-portfolio/lassie/"
   ],
   "evidence": [
     {
-      "id": "check-deal-dbaa2ae643",
+      "id": "check-deal-410d7d7010",
       "url": "https://passioncapital.com/about/",
-      "title": "Passion Capital — details page checked by scrape.py",
-      "excerpt": "as their first investor. We invest at the idea stage – before revenue or product exist. Average Ticket Size Average Ticket Size We invest an average of £400k – £500k in new opportunities, with strong capacity to follow-on and support our founders over the long term. Annual New Investment Rate Annual New Investment",
+      "title": "Passion Capital — program page",
+      "excerpt": "product exist. Average Ticket Size We invest an average of £400k – £500k in new opportunities, with strong capacity to follow-on and support",
       "page": "details"
     },
     {
-      "id": "check-deal-def82952da",
+      "id": "check-deal-6087ea5b84",
       "url": "https://passioncapital.com/about/",
-      "title": "Passion Capital — details page checked by scrape.py",
-      "excerpt": "founders early, typically as their first investor. We invest at the idea stage – before revenue or product exist. Average Ticket Size We invest an average of £400k – £500k in new opportunities, with strong capacity to follow-on and support our founders over the long term. Annual New Investment Rate Annually, we support",
+      "title": "Passion Capital — program page",
+      "excerpt": "Ticket Size Average Ticket Size We invest an average of £400k – £500k in new opportunities, with strong capacity to follow-on and support",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-b56e272147",
+      "url": "https://passioncapital.com/about/",
+      "title": "Passion Capital — program page",
+      "excerpt": "Average Ticket Size Average Ticket Size We invest an average of £400k – £500k in new opportunities, with strong capacity to follow-on and",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-b71c128179",
+      "url": "https://passioncapital.com/about/",
+      "title": "Passion Capital — program page",
+      "excerpt": "or product exist. Average Ticket Size We invest an average of £400k – £500k in new opportunities, with strong capacity to follow-on and",
       "page": "details"
     },
     {
       "id": "check-email-1395a83db8",
       "url": "https://passioncapital.com/about/",
-      "title": "Passion Capital — details page checked by scrape.py",
+      "title": "Passion Capital — program page",
       "excerpt": "57 Bermondsey Street, London SE1 3XJ, United Kingdom Email info@passioncapital.com Copyright © Passion Capital. Site by MILK Close Menu Home",
       "page": "details"
     },
     {
+      "id": "check-email-2f1853a2d6",
+      "url": "https://passioncapital.com/fund-portfolio/lassie/",
+      "title": "Passion Capital — portfolio page",
+      "excerpt": "info@passioncapital.com",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-44a27d7213",
       "url": "https://passioncapital.com/about/",
-      "title": "Passion Capital — details page checked by scrape.py",
+      "title": "Passion Capital — program page",
       "excerpt": "info@passioncapital.com",
       "page": "details"
     },
     {
       "id": "check-email-785beb8a24",
       "url": "https://passioncapital.com/",
-      "title": "Passion Capital — homepage checked by scrape.py",
+      "title": "Passion Capital — homepage",
       "excerpt": "57 Bermondsey Street, London SE1 3XJ, United Kingdom Email info@passioncapital.com Copyright © Passion Capital. Site by MILK Close Menu Home",
       "page": "details"
     },
     {
+      "id": "check-email-83e506afb3",
+      "url": "https://passioncapital.com/fund-portfolio/",
+      "title": "Passion Capital — portfolio page",
+      "excerpt": "info@passioncapital.com",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-8633c55f18",
       "url": "https://passioncapital.com/",
-      "title": "Passion Capital — homepage checked by scrape.py",
+      "title": "Passion Capital — homepage",
       "excerpt": "info@passioncapital.com",
       "page": "details"
     },
     {
+      "id": "check-email-a5f633c60c",
+      "url": "https://passioncapital.com/fund-portfolio/gocardless/",
+      "title": "Passion Capital — portfolio page",
+      "excerpt": "info@passioncapital.com",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-a784798b0d",
+      "url": "https://passioncapital.com/fund-portfolio/gocardless/",
+      "title": "Passion Capital — portfolio page",
+      "excerpt": "57 Bermondsey Street, London SE1 3XJ, United Kingdom Email info@passioncapital.com Copyright © Passion Capital. Site by MILK Close Menu Home",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-c13626516e",
+      "url": "https://passioncapital.com/fund-portfolio/",
+      "title": "Passion Capital — portfolio page",
+      "excerpt": "57 Bermondsey Street, London SE1 3XJ, United Kingdom Email info@passioncapital.com Copyright © Passion Capital. Site by MILK Close Menu Home",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-cf8413ca83",
+      "url": "https://passioncapital.com/fund-portfolio/lassie/",
+      "title": "Passion Capital — portfolio page",
+      "excerpt": "57 Bermondsey Street, London SE1 3XJ, United Kingdom Email info@passioncapital.com Copyright © Passion Capital. Site by MILK Close Menu Home",
+      "page": "portfolio"
+    },
+    {
       "id": "check-name-2a56e76401",
       "url": "https://passioncapital.com/",
-      "title": "Passion Capital — homepage checked by scrape.py",
+      "title": "Passion Capital — homepage",
       "excerpt": "Home - Passion Capital Skip to main content Hit enter to search or ESC to close",
       "page": "details"
     },
     {
       "id": "check-portfolio-52443d9806",
       "url": "https://passioncapital.com/about/",
-      "title": "Passion Capital — details page checked by scrape.py",
+      "title": "Passion Capital — program page",
       "excerpt": "Our Portfolio → https://passioncapital.com/fund-portfolio/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-566fc92cc5",
+      "url": "https://passioncapital.com/fund-portfolio/lassie/",
+      "title": "Passion Capital — portfolio page",
+      "excerpt": "Our Portfolio → https://passioncapital.com/fund-portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-57a6c8df5f",
+      "url": "https://passioncapital.com/fund-portfolio/lassie/",
+      "title": "Passion Capital — portfolio page",
+      "excerpt": "Portfolio → https://passioncapital.com/fund-portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-590dccbeeb",
+      "url": "https://passioncapital.com/fund-portfolio/gocardless/",
+      "title": "Passion Capital — portfolio page",
+      "excerpt": "Our Portfolio → https://passioncapital.com/fund-portfolio/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-7f77b6ae04",
       "url": "https://passioncapital.com/",
-      "title": "Passion Capital — homepage checked by scrape.py",
+      "title": "Passion Capital — homepage",
       "excerpt": "Portfolio → https://passioncapital.com/fund-portfolio/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-7ffd0e385f",
+      "url": "https://passioncapital.com/fund-portfolio/gocardless/",
+      "title": "Passion Capital — portfolio page",
+      "excerpt": "Portfolio → https://passioncapital.com/fund-portfolio/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-801362b9d1",
       "url": "https://passioncapital.com/",
-      "title": "Passion Capital — homepage checked by scrape.py",
+      "title": "Passion Capital — homepage",
       "excerpt": "Our Portfolio → https://passioncapital.com/fund-portfolio/",
       "page": "details"
     },
     {
       "id": "check-portfolio-d68c8b4d64",
       "url": "https://passioncapital.com/about/",
-      "title": "Passion Capital — details page checked by scrape.py",
+      "title": "Passion Capital — program page",
       "excerpt": "Portfolio → https://passioncapital.com/fund-portfolio/",
       "page": "details"
     },
     {
-      "id": "check-route-5c6b05a836",
+      "id": "check-route-48703b572e",
       "url": "https://passioncapital.com/",
-      "title": "Passion Capital — homepage checked by scrape.py",
-      "excerpt": "https://passioncapital.com",
+      "title": "Passion Capital — homepage",
+      "excerpt": "Close Search → https://passioncapital.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-9b3695b0eb",
+      "url": "https://passioncapital.com/",
+      "page": "details",
+      "excerpt": "Home - Passion Capital Skip to main content Hit enter to search or ESC to close Close Search Menu Home Portfolio About Us ESG & Impact Resources News & Views Contact Backing Outstanding European Founders We are a partnership of entrepreneurs and operators who are applying our experiences to helping founders build great technology companies across AI, FinTech & Risk. PORTFOLIO Our success stories View Portfolio Monzo A bank built for your smartphone. GoCardless GoCardless lets businesses send and receive payments directly between bank accounts. Tide Mobile-first banking services for small and medium-sized enterprises. Marshmallow Digital insurance company using data to offer better car insurance to expats. Butternut Box A subscription-based service that delivers fresh, high-quality dog meals directly to your door. Digital Shadows Enterprise monitoring service of digital footprints and for data vulnerabilities. PolyAI Provider of AI based voice assistants to automate customer solutions in a natural way. Tray.ai AI-powered iPaaS that speeds time-to-integration from months to days, in a single platform. Building the next European success story? Pitch us Building the next European success story? Pitch us Building the next European success story? Pitch us Building the next European success story? Pitch us Building the next European success story? Pitch us Building the next European"
+    },
+    {
+      "id": "check-page-fe66b1868c",
+      "url": "https://passioncapital.com/about/",
+      "page": "details",
+      "excerpt": "About - Passion Capital Skip to main content Hit enter to search or ESC to close Close Search Menu Home Portfolio About Us ESG & Impact Resources News & Views Contact About Us OUR PURPOSE We are committed to helping entrepreneurs and early-stage teams build great businesses. We feel privileged to partner with European founders who possess the ambition and vision to shape our future. We’re a “founder first” investor across AI, FinTech & Risk. Passion Capital established itself as the first operator-led VC fund in Europe. We introduced Plain English term sheets, marking a significant industry development. OUR FOCUS One of Europe’s leading seed funds UK / Europe Pre-seed Average Ticket Size Annual New Investment Rate AI, FinTech & Risk Investment Approach UK / Europe Based in London, we actively invest in startups across the UK and Europe. Pre-seed We love backing founders early, typically as their first investor. We invest at the idea stage – before revenue or product exist. Average Ticket Size We invest an average of £400k – £500k in new opportunities, with strong capacity to follow-on and support our founders over the long term. Annual New Investment Rate Annually, we support approximately 10 startups, prioritising close partnerships with a select group of founders whom we deeply align with and believe in. AI, Enterprise & Fin Tech We’re focused on backing outstanding founders"
+    },
+    {
+      "id": "check-page-868a22450c",
+      "url": "https://passioncapital.com/fund-portfolio/",
+      "page": "portfolio",
+      "excerpt": "Fund Portfolio - Passion Capital Skip to main content Hit enter to search or ESC to close Close Search Menu Home Portfolio About Us ESG & Impact Resources News & Views Contact Status All Active Alumni Industry All Consumer Deep Tech Enterprise Fintech Health Fund All Passion Fund I Passion Fund II Passion Fund III Passion Fund IV Passion SPV AbraTax Adludio Adzuna Aloft Atoa Attio backbone BirdBack Bonfire BoomFi Burrow Butternut Box Car & Classic CarThrottle Causal ChAI ClusterFudge Coinfloor Cordless CultureAI Dashbird data.to.design Daybridge Digital Shadows Duego Effra Emblematic Enso EyeEm Fertifa Finimize Flattr FocalPoint Fronted FullCircl geoSurge Ginmon GoCardless GoSquared GRNDHOUSE HomeTouch Hullabalook Juritas LangWatch Lassie laZook Lendable Life Supplies Limejump Loopcam Lulu Marshmallow Mendeley MindGreens Mixlr Monzo Narrative Native Nested OnDevice Open Risk Exchange Open Signal patients.app Paypercut PickLive Pinipa PolyAI Property.Works Pusher Quix Ravelin Reach Robotics Readmill Remato Round Safi Salv SAPI Satchel Screenloop Secondmind Sequence Smarkets Spill Spotahome Sugar Swipe Tapaya Teal Thread Tide Tillo Toothpick Tradologics Tray.ai Trip Birds Truck Track Tuune Uberchord Unison Urban ViCampo Vinaya VineTrade V&ME Warren Weav wedo Wine In Black WireWax Xelix Xihelm Zesty Pitch us, let's build something together Pitch Us Company ESG & Impact"
+    },
+    {
+      "id": "check-page-d86e827208",
+      "url": "https://passioncapital.com/fund-portfolio/gocardless/",
+      "page": "portfolio",
+      "excerpt": "GoCardless - Passion Capital Skip to main content Hit enter to search or ESC to close Close Search Menu Home Portfolio About Us ESG & Impact Resources News & Views Contact Passion Fund I Passion SPV GoCardless GoCardless lets businesses send and receive payments directly between bank accounts. Status active Founded 2011 Industry Enterprise Fintech Passion Initial Investment 2011 Visit Website Our Journey with GoCardless: From Seed to Unicorn Founded in 2011 by Hiroki Takeuchi, Tom Blomfield, and Matt Robinson, the company originally started under the name Groupay, with a vision to facilitate group payments more easily. As one of the first British teams to graduate from the Y Combinator accelerator programme, the founders realised the broader potential of simplifying recurring payments using Direct Debit, pivoted and rebranded the company as GoCardless. Returning to London, the founders needed desk space and were quickly pointed in the direction of White Bear Yard, London’s first tech co-working space, managed by the Passion team as a separate project to provide a home for many of their investments as well as other interesting start-ups. Passion Capital became one of the company’s earliest and most important investors with Passion partner Robert Dighero playing a key role in backing the company during this formative stage. His experience in scaling early stage companies"
+    },
+    {
+      "id": "check-page-d30ddd4fce",
+      "url": "https://passioncapital.com/fund-portfolio/lassie/",
+      "page": "portfolio",
+      "excerpt": "Lassie - Passion Capital Skip to main content Hit enter to search or ESC to close Close Search Menu Home Portfolio About Us ESG & Impact Resources News & Views Contact Passion Fund III Passion SPV Lassie Digital insurance for pets Status active Founded 2020 Industry Consumer Fintech Passion Initial Investment 2021 Visit Website Lassie and a Passion for Pets Passion first invested in Lassie in June 2021, drawn by the strength and vision of the founding team: Hedda, Sophie, and Johan. Hedda, the daughter of a veterinarian, began with a powerful insight — that many pet injuries could simply be prevented. Alongside Sophie and Johan, the trio brought a rare combination of deep expertise in pet insurance, technology, branding, and marketing. Together, they shared an ambition to build a lean, customer-centric, and profitable business in a competitive and mature market. Lassie’s key differentiator has always been its focus on preventative care — encouraging health and wellness rather than simply reacting to illness or injury. This vision came to life through a seamless digital experience, with an app that uses reminders, prompts, and gamification to help pet owners develop healthier petcare habits and generally take better care of their animals. At the same time, recognising that insurance claims are an inevitable part of the business, the team built one of the most streamlined and"
     }
   ],
   "findings": {
@@ -102,22 +221,62 @@
     "routes": [],
     "applicationUrl": [
       {
-        "value": "https://passioncapital.com",
-        "evidenceId": "check-route-5c6b05a836"
+        "value": "https://passioncapital.com/",
+        "evidenceId": "check-route-48703b572e"
       }
     ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "founders early, typically as their first investor. We invest at the idea stage – before revenue or product exist. Average Ticket Size We invest an average of £400k – £500k in new opportunities, with strong capacity to follow-on and support our founders over the long term. Annual New Investment Rate Annually, we support",
-        "evidenceId": "check-deal-def82952da"
+        "value": "or product exist. Average Ticket Size We invest an average of £400k – £500k in new opportunities, with strong capacity to follow-on and",
+        "evidenceId": "check-deal-b71c128179"
       },
       {
-        "value": "as their first investor. We invest at the idea stage – before revenue or product exist. Average Ticket Size Average Ticket Size We invest an average of £400k – £500k in new opportunities, with strong capacity to follow-on and support our founders over the long term. Annual New Investment Rate Annual New Investment",
-        "evidenceId": "check-deal-dbaa2ae643"
+        "value": "product exist. Average Ticket Size We invest an average of £400k – £500k in new opportunities, with strong capacity to follow-on and support",
+        "evidenceId": "check-deal-410d7d7010"
+      },
+      {
+        "value": "Average Ticket Size Average Ticket Size We invest an average of £400k – £500k in new opportunities, with strong capacity to follow-on and",
+        "evidenceId": "check-deal-b56e272147"
+      },
+      {
+        "value": "Ticket Size Average Ticket Size We invest an average of £400k – £500k in new opportunities, with strong capacity to follow-on and support",
+        "evidenceId": "check-deal-6087ea5b84"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "400000",
+          "currency": "GBP",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-b71c128179"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "500000",
+          "currency": "GBP",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-410d7d7010"
       }
     ],
     "portfolioPages": [

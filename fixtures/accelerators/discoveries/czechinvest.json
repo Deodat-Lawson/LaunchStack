@@ -1,19 +1,11 @@
 {
   "programId": "czechinvest",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/About-Us/Organizational-structure",
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/About-Us",
       "page": "details",
-      "anchor": "Organizational structure",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/About-Us/Internal-projects",
-      "page": "details",
-      "anchor": "Internal projects",
+      "anchor": "About us",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -27,49 +19,17 @@
       "origin": "official"
     },
     {
-      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Enterprise-Europe-Network",
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/About-Us/Internal-projects",
       "page": "details",
-      "anchor": "Enterprise Europe Network",
+      "anchor": "Internal projects",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Investment-Project-Statistics",
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/About-Us/Organizational-structure",
       "page": "details",
-      "anchor": "Investment Project Statistics",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/History",
-      "page": "details",
-      "anchor": "History",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Partners",
-      "page": "details",
-      "anchor": "Partners",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Download/General-materials",
-      "page": "details",
-      "anchor": "General materials",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Download/Logos",
-      "page": "details",
-      "anchor": "Logos",
+      "anchor": "Organizational structure",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -83,9 +43,121 @@
       "origin": "official"
     },
     {
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Download/General-materials",
+      "page": "details",
+      "anchor": "General materials",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Download/General-materials/Investment-Climate-2026",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Download/General-materials/Investment-Climate-in-Czechia",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Download/Logos",
+      "page": "details",
+      "anchor": "Logos",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Enterprise-Europe-Network",
+      "page": "details",
+      "anchor": "Enterprise Europe Network",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/History",
+      "page": "details",
+      "anchor": "History",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Investment-Project-Statistics",
+      "page": "terms",
+      "anchor": "Investment Project Statistics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Partners",
+      "page": "details",
+      "anchor": "Partners",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/Czechia-data-reports/Basic-Data-about-Czechia",
+      "page": "details",
+      "anchor": "Basic Data about Czechia",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://czechinvest.gov.cz/en/For-Investors/Doing-business-in-Czechia/About-Czechia",
       "page": "details",
       "anchor": "About Czechia",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/For-Investors/Investment-Incentives/Business-Support-Service-Centres",
+      "page": "terms",
+      "anchor": "Business Support Service Centres",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/For-Investors/Investment-Incentives/Manufacturing-Industry",
+      "page": "terms",
+      "anchor": "Manufacturing Industry",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/For-Investors/Investment-Incentives/Production-of-strategic-products",
+      "page": "terms",
+      "anchor": "Production of strategic products",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/For-Investors/Investment-Incentives/Technology-Centres",
+      "page": "terms",
+      "anchor": "Technology Centres",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/For-Investors/Visa-Support/Digital-Nomad-Program",
+      "page": "details",
+      "anchor": "Digital Nomad Program",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -99,9 +171,25 @@
       "origin": "official"
     },
     {
-      "url": "https://czechinvest.gov.cz/en/For-Investors/Visa-Support/Digital-Nomad-Program",
+      "url": "https://czechinvest.gov.cz/en/For-Startups/Archive-of-startup-programs/CzechStarter",
       "page": "details",
-      "anchor": "Digital Nomad Program",
+      "anchor": "CzechStarter",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/For-Startups/CERN-Venture-Connect-program/RUCIO",
+      "page": "details",
+      "anchor": "RUCIO",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/For-Startups/CERN-Venture-Connect-program/Single-Mode-Laser",
+      "page": "details",
+      "anchor": "Single Mode Laser",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -123,14 +211,6 @@
       "origin": "official"
     },
     {
-      "url": "https://czechinvest.gov.cz/en/For-Startups/CERN-Venture-Connect-program/Single-Mode-Laser",
-      "page": "details",
-      "anchor": "Single Mode Laser",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://czechinvest.gov.cz/en/For-Startups/CERN-Venture-Connect-program/White-Rabbit",
       "page": "details",
       "anchor": "White Rabbit",
@@ -139,40 +219,32 @@
       "origin": "official"
     },
     {
-      "url": "https://czechinvest.gov.cz/en/For-Startups/CERN-Venture-Connect-program/RUCIO",
-      "page": "details",
-      "anchor": "RUCIO",
-      "fetched": false,
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/February-2019/Design-an-application-with-support-of-the-Galileo-system-and-win-EUR-100,000",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://czechinvest.gov.cz/en/For-Startups/Archive-of-startup-programs/CzechStarter",
-      "page": "details",
-      "anchor": "CzechStarter",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://czechinvest.gov.cz/en/Czechia-data-reports/Basic-Data-about-Czechia",
-      "page": "details",
-      "anchor": "Basic Data about Czechia",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://czechinvest.gov.cz/en/Homepage/News/May-2026/Thinking-about-working-in-the-Czech-Republic-CzechInvest-will-show-you-how",
-      "page": "details",
-      "anchor": "more info",
-      "fetched": false,
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/July-2008/Suspension-of-applications-in-the-Framework-program-for-the-support-of-Technology-centers-and-Center",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
       "url": "https://czechinvest.gov.cz/en/Homepage/News/July-2026/Czechia-Dealroom-The-Digital-Map-of-Czech-Innovation-Opening-Doors-to-the-World",
       "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/June-2021/Two-shelled-protective-face-shield-and-an-application-focuses-on-mental-health-Medical-startups-are",
+      "page": "application",
       "anchor": "",
       "fetched": true,
       "blocked": null,
@@ -187,10 +259,98 @@
       "origin": "official"
     },
     {
-      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/About-Us",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/March-2017/CEBIT-trade-fair-in-Germany-showcases-the-main-trends-in-digital-application-development",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/May-2018/Students-in-Plzen-spend-54-hours-in-the-role-of-entrepreneurs,-create-applications-for-young-people",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/May-2020/Acceptance-of-applications-to-government-visa-programmes-resumes",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/May-2026/Thinking-about-working-in-the-Czech-Republic-CzechInvest-will-show-you-how",
       "page": "details",
-      "anchor": "About us",
+      "anchor": "more info",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/September-2018/Czech-firm’s-didactic-application-impresses-in-Asia",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/September-2020/Developer-of-anti-bullying-application-named-Czech-Republic’s-most-creative-startup",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Brezen-2017/Veletrh-CEBIT-v-Nemecku-prinesl-hlavni-trendy-ve-v",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Cerven-2021/Dvouplastovy-ochranny-stit-nebo-aplikace-pro-lepsi",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Cervenec-2008/Zastaveni-zadosti-do-Ramcoveho-programu-pro-podpor",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Kveten-2018/Studenti-se-v-Plzni-na-54-hodin-vzili-do-role-podn",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Kveten-2020/Prijem-zadosti-do-vladnich-vizovych-programu-se-zn",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/Homepage/Novinky/Unor-2019/Navrhnete-aplikaci-s-podporou-systemu-Galileo-a-vy",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

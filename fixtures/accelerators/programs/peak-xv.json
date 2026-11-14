@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.peakxv.com/",
   "applyUrl": "https://www.peakxv.com/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Peak XV Partners | Global Venture Capital Firm Investing Across Seed to Growth Stages Team Companies Surge News & Insights About Deep partnerships. Lalit Keshre Co-Founder , Groww Hande Cilingir Co-Founder , Insider One Paul Copplestone Co-Founder , Supabase Vidit Aatrey Co-Founder , Meesho Prukalpa Sankar Co-Founder , Atlan Kunal Shah Founder , CRED Amrish Rau CEO , Pine Labs Edward Tirtanata Co-Founder , Kopi Kenangan Hosam Arab‏ ‏Co-Founder , Tabby‏ Ghazal Alagh Co-Founder , Mamaearth Deepinder Goyal Founder , Eternal Lalit Keshre Co-Founder , Groww Hande Cilingir Co-Founder , Insider One Paul Copplestone Co-Founder , Supabase Vidit Aatrey Co-Founder , Meesho Prukalpa Sankar Co-Founder , Atlan Kunal Shah Founder , CRED Amrish Rau CEO , Pine Labs Edward Tirtanata Co-Founder , Kopi Kenangan Hosam Arab‏ ‏Co-Founder , Tabby‏ Ghazal Alagh Co-Founder , Mamaearth Deepinder Goyal Founder , Eternal We’re a partner across stages, borders, and breakthroughs. See More View more Airalo is the world’s first eSIM store that solves the pain of high roaming bills by giving you access to eSIMs (digital SIM cards). Read more CRED is a members-only credit card payment app. Read more GoTo Group is the largest digital ecosystem in Indonesia, with a mission to “empower progress” by offering technology infrastructure and solutions that help everyone to access and thrive in the digital economy. Read No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Peak XV is a global Venture Capital firm with over 20 years of experience partnering deeply with founders to build enduring companies.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "“For us this partnership has been more about the people than the brand… I know many founders who will say the same about this amazing team.”",
     "sourceIds": [
       "homepage"
     ],
@@ -26,9 +26,9 @@
     {
       "id": "official-logo",
       "url": "https://www.peakxv.com/",
-      "title": "Peak XV — official mark on the retrieved page",
-      "quote": "https://cdn.prod.website-files.com/69187967ccd7c46fc1aaf24a/6a4f8e8643ab01deafcf6575_6a4f8e828aa23689ac41b1ac_airalo-logo-inline-opt.webp",
-      "checkedAt": "2026-11-03T00:18:31.000Z"
+      "title": "Peak XV — no rule-validated official mark",
+      "quote": "https://cdn.prod.website-files.com/69183d51704ed8e1b1c250fc/691c62dcfd08ee46e049e3d7_peak%20kv.avif",
+      "checkedAt": "2026-11-14T20:18:03.000Z"
     },
     {
       "id": "homepage",
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "peak-xv-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.peakxv.com/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

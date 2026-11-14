@@ -1,47 +1,435 @@
 {
   "programId": "backstage-capital",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://backstagecapital.com/",
-    "https://backstagecapital.com/apply-2/"
+    "https://backstagecapital.com/apply-2/",
+    "https://backstagecapital.com/apply-2/mentor/",
+    "https://backstagecapital.com/terms/",
+    "https://backstagecapital.com/headliners/where-top-creators-teach-cohort-based-courses/",
+    "https://backstagecapital.com/accelerator/",
+    "https://backstagecapital.com/apply",
+    "https://backstagecapital.com/accelerator/5yr/",
+    "https://backstagecapital.com/accelerator/about/",
+    "https://backstagecapital.com/accelerator/apply/",
+    "https://backstagecapital.com/accelerator/c1/",
+    "https://backstagecapital.com/accelerator/cities/",
+    "https://backstagecapital.com/accelerator/cities/detroit/",
+    "https://backstagecapital.com/accelerator/cities/london/",
+    "https://backstagecapital.com/accelerator/cities/los-angeles/"
   ],
   "evidence": [
     {
+      "id": "check-deal-614a296c0c",
+      "url": "https://backstagecapital.com/accelerator/about/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "their investors, and their local communities. Benefits Get Funding $100k USD capital in exchange for 5% equity. Learn Fast Invaluable content",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9b343aafd0",
+      "url": "https://backstagecapital.com/accelerator/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Detroit The Program Backstage Accelerator is a 3-month program designed to give founders the support",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c5ae4512e5",
+      "url": "https://backstagecapital.com/accelerator/about/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Come Together Free city co-work space during the 3-month program. We're a world-class team building",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-f1d447e7c9",
+      "url": "https://backstagecapital.com/accelerator/c1/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "What would have taken me a year or more took me 3 months.\" Gwen Jimmere, Naturalicious \"A year ago I",
+      "page": "details"
+    },
+    {
+      "id": "check-email-383fb56a5d",
+      "url": "https://backstagecapital.com/terms/",
+      "title": "Backstage Capital — terms page",
+      "excerpt": "please contact Backstage Capital in the United States at contact@backstagecapital.com Effective September 5, 2018. Backstage Capital may make",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-b48050525f",
+      "url": "https://backstagecapital.com/terms/",
+      "title": "Backstage Capital — terms page",
+      "excerpt": "particular Site is governed by these terms, please contact contact@backstagecapital.com. If you do not agree with these terms you may not use the",
+      "page": "terms"
+    },
+    {
       "id": "check-name-08141cc593",
       "url": "https://backstagecapital.com/",
-      "title": "Backstage Capital — homepage checked by scrape.py",
+      "title": "Backstage Capital — homepage",
       "excerpt": "Backstage Capital Home For Founders For Investors Portfolio Green Room For",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0a9d319c24",
+      "url": "https://backstagecapital.com/accelerator/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1725698b05",
+      "url": "https://backstagecapital.com/headliners/where-top-creators-teach-cohort-based-courses/",
+      "title": "Backstage Capital — batches page",
+      "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-1fbcf76bb4",
+      "url": "https://backstagecapital.com/terms/",
+      "title": "Backstage Capital — terms page",
+      "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-21d842f5e3",
+      "url": "https://backstagecapital.com/accelerator/cities/detroit/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-45d2832119",
+      "url": "https://backstagecapital.com/accelerator/apply/",
+      "title": "Backstage Capital — application page",
+      "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-52a44a2dde",
+      "url": "https://backstagecapital.com/accelerator/5yr/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-624649c83d",
+      "url": "https://backstagecapital.com/accelerator/cities/los-angeles/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6a3479a9c7",
+      "url": "https://backstagecapital.com/apply",
+      "title": "Backstage Capital — application page",
+      "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a46335fd67",
+      "url": "https://backstagecapital.com/accelerator/cities/london/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
       "page": "details"
     },
     {
       "id": "check-portfolio-b32c73317e",
       "url": "https://backstagecapital.com/",
-      "title": "Backstage Capital — homepage checked by scrape.py",
+      "title": "Backstage Capital — homepage",
+      "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-cdf7768527",
+      "url": "https://backstagecapital.com/accelerator/about/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ebb597ebbb",
+      "url": "https://backstagecapital.com/accelerator/cities/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f14c4283b2",
+      "url": "https://backstagecapital.com/apply-2/mentor/",
+      "title": "Backstage Capital — application page",
+      "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f36846b495",
+      "url": "https://backstagecapital.com/accelerator/c1/",
+      "title": "Backstage Capital — program page",
       "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
       "page": "details"
     },
     {
       "id": "check-portfolio-fad84a9aad",
       "url": "https://backstagecapital.com/apply-2/",
-      "title": "Backstage Capital — application page checked by scrape.py",
+      "title": "Backstage Capital — application page",
       "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
       "page": "application"
     },
     {
-      "id": "check-route-b1095909fc",
-      "url": "https://backstagecapital.com/",
-      "title": "Backstage Capital — homepage checked by scrape.py",
+      "id": "check-route-11e61f15d1",
+      "url": "https://backstagecapital.com/accelerator/cities/detroit/",
+      "title": "Backstage Capital — program page",
       "excerpt": "Apply → https://backstagecapital.com/apply-2/",
       "page": "details"
+    },
+    {
+      "id": "check-route-24c9f85f81",
+      "url": "https://backstagecapital.com/headliners/where-top-creators-teach-cohort-based-courses/",
+      "title": "Backstage Capital — batches page",
+      "excerpt": "Apply → https://backstagecapital.com/apply-2/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-2934ee49bf",
+      "url": "https://backstagecapital.com/accelerator/cities/los-angeles/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Apply → https://backstagecapital.com/apply-2/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2f98613319",
+      "url": "https://backstagecapital.com/terms/",
+      "title": "Backstage Capital — terms page",
+      "excerpt": "Apply → https://backstagecapital.com/apply-2/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-30e10f8fc7",
+      "url": "https://backstagecapital.com/accelerator/apply/",
+      "title": "Backstage Capital — application page",
+      "excerpt": "https://backstagecapital.com/apply-2/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-37020f19b9",
+      "url": "https://backstagecapital.com/accelerator/5yr/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Apply → https://backstagecapital.com/apply-2/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4fe91d67bf",
+      "url": "https://backstagecapital.com/apply-2/mentor/",
+      "title": "Backstage Capital — application page",
+      "excerpt": "Apply Now → https://backstagecapital.typeform.com/to/DAeBaX",
+      "page": "application"
+    },
+    {
+      "id": "check-route-59f4397ffd",
+      "url": "https://backstagecapital.com/accelerator/about/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Apply → https://backstagecapital.com/accelerator/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6a45d39c6b",
+      "url": "https://backstagecapital.com/apply",
+      "title": "Backstage Capital — application page",
+      "excerpt": "https://backstagecapital.com/apply-2/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-78314c01fc",
+      "url": "https://backstagecapital.com/accelerator/cities/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Apply → https://backstagecapital.com/apply-2/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7eec861580",
+      "url": "https://backstagecapital.com/apply",
+      "title": "Backstage Capital — application page",
+      "excerpt": "Apply → https://backstagecapital.com/apply-2/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-92c46c85f4",
+      "url": "https://backstagecapital.com/accelerator/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Apply → https://backstagecapital.com/apply-2/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9b3d18f960",
+      "url": "https://backstagecapital.com/accelerator/about/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Apply → https://backstagecapital.com/apply-2/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9df93db73f",
+      "url": "https://backstagecapital.com/accelerator/cities/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Apply → https://backstagecapital.com/accelerator/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a1c9d75c6d",
+      "url": "https://backstagecapital.com/apply-2/mentor/",
+      "title": "Backstage Capital — application page",
+      "excerpt": "Apply → https://backstagecapital.com/apply-2/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-abd9eaf698",
+      "url": "https://backstagecapital.com/accelerator/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "See all funding opportunities. → https://backstagecapital.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-af466fc339",
+      "url": "https://backstagecapital.com/accelerator/cities/london/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Apply → https://backstagecapital.com/apply-2/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b1095909fc",
+      "url": "https://backstagecapital.com/",
+      "title": "Backstage Capital — homepage",
+      "excerpt": "Apply → https://backstagecapital.com/apply-2/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c4a0a37982",
+      "url": "https://backstagecapital.com/accelerator/c1/",
+      "title": "Backstage Capital — program page",
+      "excerpt": "Apply → https://backstagecapital.com/apply-2/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f8d719aeb2",
+      "url": "https://backstagecapital.com/accelerator/apply/",
+      "title": "Backstage Capital — application page",
+      "excerpt": "Apply → https://backstagecapital.com/apply-2/",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-1323d7786f",
+      "url": "https://backstagecapital.com/",
+      "page": "details",
+      "excerpt": "Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Less than 10% of all venture capital deals go to Women, People of Color, and LGBT founders. Other VCs may see this as a pipeline problem. For years, we have seen it as the biggest opportunity in investment. Backstage Capital has invested in 200 companies led by underrepresented founders. Meet The Headliners \"We invest in the very best founders who identify as women, People of Color, or LGBTQ. I personally identify as all three.\" Arlan Hamilton , Managing Partner About Home Portfolio Team Mentors Investors Contact Opportunities Apply Resources Help Center Frequently Asked Questions COVID-19 Resources Form C-AR © Backstage Capital. Get Backstage news in your inbox. Subscribe Subscribe to our Newsletter Get on The List The Mixtape – our weekly email newsletter — brings you news, opportunities, and stories to help underrepresented founders succeed. 👊🏾 Email * What best describes your focus at work?"
+    },
+    {
+      "id": "check-page-4ebe79009b",
+      "url": "https://backstagecapital.com/apply-2/",
+      "page": "application",
+      "excerpt": "Apply | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Apply We are not accepting new funding applications at this time. Check back in 2025 for any new announcements here! About Home Portfolio Team Mentors Investors Contact Opportunities Apply Resources Help Center Frequently Asked Questions COVID-19 Resources Form C-AR © Backstage Capital. Get Backstage news in your inbox. Subscribe Subscribe to our Newsletter Get on The List The Mixtape – our weekly email newsletter — brings you news, opportunities, and stories to help underrepresented founders succeed. 👊🏾 Email * What best describes your focus at work?"
+    },
+    {
+      "id": "check-page-9f78e5c3b2",
+      "url": "https://backstagecapital.com/apply-2/mentor/",
+      "page": "application",
+      "excerpt": "Mentor Application | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Mentor Application We’re looking for operators, founders, and investors excited to help founders learn quickly, tackle challenges, and scale. Apply Now About Home Portfolio Team Mentors Investors Contact Opportunities Apply Resources Help Center Frequently Asked Questions COVID-19 Resources Form C-AR © Backstage Capital. Get Backstage news in your inbox. Subscribe Subscribe to our Newsletter Get on The List The Mixtape – our weekly email newsletter — brings you news, opportunities, and stories to help underrepresented founders succeed. 👊🏾 Email * What best describes your focus at work?"
+    },
+    {
+      "id": "check-page-29c02a1886",
+      "url": "https://backstagecapital.com/terms/",
+      "page": "terms",
+      "excerpt": "Terms of Service | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Terms of Service These are the terms governing your use of this website (“Site”). If in doubt as to whether a particular Site is governed by these terms, please contact contact@backstagecapital.com. If you do not agree with these terms you may not use the Site. This Terms of Service (this “Agreement”) sets forth the terms and conditions governing your use of the Site and your access to and use of the information, content and services offered on the Site (collectively with the Site, the “Services”). By accessing or using the Services, you agree to be legally bound by this Agreement, as it may be amended from time to time. Backstage Capital (Backstage Capital, Backstage Studio, and their affiliates together referred to as “Backstage Capital”) provides investment services only to privately offered Backstage Capital funds. Note all content provided on this Site is provided for general informational or educational purposes only. Backstage Capital makes no representations as to the accuracy or information contained on any page on this Site. 1. USE OF SITE Backstage Capital has established the Site to provide information about its operations and investment activities. As a condition to your use of the Services, you will not, directly or indirectly:"
+    },
+    {
+      "id": "check-page-35bb68fd2e",
+      "url": "https://backstagecapital.com/headliners/where-top-creators-teach-cohort-based-courses/",
+      "page": "batches",
+      "excerpt": "Maven | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Maven Where top creators teach cohort-based courses. Maven empowers the world’s experts to offer cohort-based courses directly to their audience. Removing the limitations of geography means that anyone in the world can access the best instructors while learning through hands-on, interactive projects. At Maven, we believe community is the cornerstone of learning online—going through a course alongside a group of peers is the best way to achieve transformation. Founders: Gagan Biyani + Wes Kao + Shreyans Bhansali About Home Portfolio Team Mentors Investors Contact Opportunities Apply Resources Help Center Frequently Asked Questions COVID-19 Resources Form C-AR © Backstage Capital. Get Backstage news in your inbox. Subscribe Subscribe to our Newsletter Get on The List The Mixtape – our weekly email newsletter — brings you news, opportunities, and stories to help underrepresented founders succeed. 👊🏾 Email * What best describes your focus at work?"
+    },
+    {
+      "id": "check-page-e04193fcb9",
+      "url": "https://backstagecapital.com/accelerator/",
+      "page": "details",
+      "excerpt": "Accelerator | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Backstage Accelerator supports underrepresented founders in local programs around the world. Cohort 1 Report Discover key insights we learned working with 24 companies led by outstanding underrepresented founders. Read the Report Los Angeles Philadelphia London Detroit The Program Backstage Accelerator is a 3-month program designed to give founders the support they need to reach their next critical milestone. Founders will work with a team of experienced, passionate facilitators and will grow through mentorship, investment capital, and access to resources + networks. Values Diversity is strength Underestimated founders exemplify grit. They do more with less. Diverse teams have stronger business outcomes and more innovative ideas. It takes a village Startups don't succeed in isolation. Companies need strong local ecosystems to start, and strong global networks to grow. Success for all Representation matters because everyone deserves the chance to succeed. We're working to create a future where success is shared by founders, their teams, their investors, and their local communities. Partners Applications are currently closed for Accelerator. See all funding opportunities. About Home Portfolio Team Mentors Investors Contact Opportunities Apply"
+    },
+    {
+      "id": "check-page-56ab9a4f25",
+      "url": "https://backstagecapital.com/apply",
+      "page": "application",
+      "excerpt": "Apply | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Apply We are not accepting new funding applications at this time. Check back in 2025 for any new announcements here! About Home Portfolio Team Mentors Investors Contact Opportunities Apply Resources Help Center Frequently Asked Questions COVID-19 Resources Form C-AR © Backstage Capital. Get Backstage news in your inbox. Subscribe Subscribe to our Newsletter Get on The List The Mixtape – our weekly email newsletter — brings you news, opportunities, and stories to help underrepresented founders succeed. 👊🏾 Email * What best describes your focus at work?"
+    },
+    {
+      "id": "check-page-1c080f5395",
+      "url": "https://backstagecapital.com/accelerator/5yr/",
+      "page": "details",
+      "excerpt": "Backstage Capital 5 Year Impact Report | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Backstage Capital 5-Year Impact Report Commissioned by Backstage and prepared by TP Insights , our 5-Year report delves into our impact on our founders, tech, finance and venture capital. What's Inside? The details of our impact Highlights from our portfolio Updates from our team on what's next How Backstage Crowd may shape our firm's future Complete this form to download the report. Subscribe me to the Backstage newsletter About Home Portfolio Team Mentors Investors Contact Opportunities Apply Resources Help Center Frequently Asked Questions COVID-19 Resources Form C-AR © Backstage Capital. Get Backstage news in your inbox. Subscribe Subscribe to our Newsletter Get on The List The Mixtape – our weekly email newsletter — brings you news, opportunities, and stories to help underrepresented founders succeed. 👊🏾 Email * What best describes your focus at work?"
+    },
+    {
+      "id": "check-page-764f5c2d3e",
+      "url": "https://backstagecapital.com/accelerator/about/",
+      "page": "details",
+      "excerpt": "About Backstage Accelerator | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Backstage Accelerator / About Backstage invests in startup founders who identify as a Woman, Person of Color, and/or LGBTQ. We believe these founders are underestimated, and have the most potential for unlocking innovation and creating valuable businesses. To support more founders, we're growing a global community of local accelerator programs. Introducing Backstage Accelerator Read More on Medium Values Diversity is strength Underestimated founders exemplify grit. They do more with less. Diverse teams have stronger business outcomes and more innovative ideas. It takes a village Startups don't succeed in isolation. Companies need strong local ecosystems to start, and strong global networks to grow. Success for all Representation matters because everyone deserves the chance to succeed. We're working to create a future where success is shared by founders, their teams, their investors, and their local communities. Benefits Get Funding $100k USD capital in exchange for 5% equity. Learn Fast Invaluable content from experienced entrepreneurs, investors, operators, global executives, and leaders from prestigious educational institutions. Build Community Support from cohort founders, city teams, and access to the Backstage network. Come"
+    },
+    {
+      "id": "check-page-e023b08717",
+      "url": "https://backstagecapital.com/accelerator/apply/",
+      "page": "application",
+      "excerpt": "Apply | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Apply We are not accepting new funding applications at this time. Check back in 2025 for any new announcements here! About Home Portfolio Team Mentors Investors Contact Opportunities Apply Resources Help Center Frequently Asked Questions COVID-19 Resources Form C-AR © Backstage Capital. Get Backstage news in your inbox. Subscribe Subscribe to our Newsletter Get on The List The Mixtape – our weekly email newsletter — brings you news, opportunities, and stories to help underrepresented founders succeed. 👊🏾 Email * What best describes your focus at work?"
+    },
+    {
+      "id": "check-page-4a4c9ecef4",
+      "url": "https://backstagecapital.com/accelerator/c1/",
+      "page": "details",
+      "excerpt": "Backstage Accelerator – Cohort 1 Report 2019 | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room What happens when you invest in the future? What's Inside? Key learnings + program overview 24 global company features Meet our investors, speakers, team Cohort 1 Report Complete this form to download the 50-page report for free. Subscribe me to the Backstage newsletter The pipeline is not the issue. It's access. There are untapped investment opportunities across many verticals. From Our Founders \"I truly accelerated my business. What would have taken me a year or more took me 3 months.\" Gwen Jimmere, Naturalicious \"A year ago I didn’t even know what Detroit Demo Day was. With the help of Backstage Accelerator, a year later I pitched on stage as a top finalist.\" Curtis Mckinnon, Crowd Freak \"I got support like no other from the Directors of Backstage London. I’ll never forget the love they showed us.\" Darren, CEO of Trim-it FAQs What's next? We're taking August to work behind the scenes to see what a Cohort 2 could look like, and to confirm that we have the resources to do the next cohort as early as 2020. We'll make announcements around application and programming dates after Labor Day. What's Backstage? Learn more. What's Backstage Accelerator? Learn more. How do I get involved? Corporations, investors,"
+    },
+    {
+      "id": "check-page-c1bec3c47e",
+      "url": "https://backstagecapital.com/accelerator/cities/",
+      "page": "details",
+      "excerpt": "Backstage Accelerator Cities | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Backstage Accelerator / Locations Los Angeles Philadelphia London Detroit ← Accelerator Get Involved Founders Apply Contact Get in touch About Home Portfolio Team Mentors Investors Contact Opportunities Apply Resources Help Center Frequently Asked Questions COVID-19 Resources Form C-AR © Backstage Capital. Get Backstage news in your inbox. Subscribe Subscribe to our Newsletter Get on The List The Mixtape – our weekly email newsletter — brings you news, opportunities, and stories to help underrepresented founders succeed. 👊🏾 Email * What best describes your focus at work?"
+    },
+    {
+      "id": "check-page-282ff5c3a7",
+      "url": "https://backstagecapital.com/accelerator/cities/detroit/",
+      "page": "details",
+      "excerpt": "Backstage Detroit | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Accelerator / Locations Detroit Cohort 1 Naturalicious Naturalicious Timesaving beauty solutions for busy women A clever collection of patented, multi-tasking, non-toxic hair care that helps busy women rock fabulous hair in a fraction of the usual time by combining 12 processes for boss-babe-worthy hair into just 3 simple steps. Founders: Gwen Jimmere Tags: B2C, Beauty Foodstand Foodstand Healthy eating behavior change Healthy eating and wellness information at your fingertips, Foodstand helps individuals and organizations joyfully turn wellness goals into lifelong habits through team challenges and behavior change. The company was acquired by DietID during the Cohort 1 Backstage Accelerator. Founders: Rachna Govani + Udi Falkson Tags: B2B, B2C, Health, Mobile Gildform Gildform Jewelry manufacturing + design High-quality, on-demand jewelry design and manufacturing that takes your ideas through concept, CAD, 3D printing and casting, and assembly, redefining the relationship between brands and manufacturers. Founders: Karissma Yve + Robert Webb Tags: B2C, Fashion Bippy Bippy Eco-friendly personal wellness brand Bippy is a modern personal care line exclusively for the butt that’s on a mission to preserve forests from the bottom up. Toilet"
+    },
+    {
+      "id": "check-page-d3d62d2a81",
+      "url": "https://backstagecapital.com/accelerator/cities/london/",
+      "page": "details",
+      "excerpt": "Backstage London | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Accelerator / Locations London Cohort 1 Vitae London Vitae London A watch brand with a mission to change lives A stunning watch brand that uses part of their profits to support education for children in Sub-Saharan Africa. Vitae has an influential following and is worn by the likes of Sir Richard Branson, Ava DuVernay, and Wretch 32. Founders: William Adoasi Tags: B2C, Fashion, Hardware Trim-it Trim-it The modern mobile barbershop The first app-powered mobile barbershop, delivering the highest quality haircuts straight to your doorstep in a high-tech barbershop in a van. Founders: Darren Tenkoorang Tags: B2C, Beauty Tambua Health Tambua Health Using smartphones to improve health A medical technology software and service company using AI, Machine Learning, and Spectral Analysis to turn any smartphone into a powerful, non-invasive screening tool for respiratory diseases. Founders: Lewis Wanjohi Wanyeki + Daniel Gathigai Warui Tags: B2C, Health, Mobile Gal-dem Gal-dem A new media publication A media company committed to spotlighting the creative talents of women and non-binary people of colour. You can find online and print versions of their highly-read magazine. Founders: Liv Little Tags: B2C Afrocenchix Afrocenchix Healthy products for Afro +"
+    },
+    {
+      "id": "check-page-c1ee62c831",
+      "url": "https://backstagecapital.com/accelerator/cities/los-angeles/",
+      "page": "details",
+      "excerpt": "Backstage Los Angeles | Backstage Capital Home For Founders For Investors Portfolio Green Room For Founders For Investors Portfolio Green Room Accelerator / Locations Los Angeles Cohort 1 Unomi Unomi SaaS for animators + video game developers Unomi’s mission is to automate the most complex tasks in the digital content creation industry. Founders: Obi Onyejekwe Tags: B2C, AI, Media SnapStays SnapStays Furnished homes for business travelers A marketplace of thousands of furnished homes for business travelers — professionally managed with great value and available coast-to-coast. Founders: Ed Hsieh + Eric Dominguez Tags: B2B, B2C, Travel, Marketplace Optimal Solar Optimal Solar The most efficient solar power ever The most efficient solar module available, providing optimal clean, affordable, and reliable electric solutions. Founders: Dr. Reginald Parker Tags: B2B, Hardware Lorals Lorals Consumer tech to close the pleasure gap A feminine care brand that helps women across the world have more frequent — and more pleasurable — intimate experiences. Founders: Melanie Cristol Tags: B2C, Health Lacquerbar Lacquerbar Offline salon experiences + online technician education A feminist-focused salon experience that’s powered by their elite nail technician education platform, Lacquerbar U, overhauling the $20B antiquated nail salon industry. Founders: Heli Prilliman Tags: B2C, Beauty,"
     }
   ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "contact@backstagecapital.com",
+        "evidenceId": "check-email-b48050525f"
+      }
+    ],
     "phones": [],
     "routes": [
       {
         "value": "https://backstagecapital.com/apply-2/",
         "evidenceId": "check-route-b1095909fc"
+      },
+      {
+        "value": "https://backstagecapital.typeform.com/to/DAeBaX",
+        "evidenceId": "check-route-4fe91d67bf"
+      },
+      {
+        "value": "https://backstagecapital.com/apply",
+        "evidenceId": "check-route-abd9eaf698"
+      },
+      {
+        "value": "https://backstagecapital.com/accelerator/apply/",
+        "evidenceId": "check-route-59f4397ffd"
       }
     ],
     "applicationUrl": [
@@ -53,8 +441,38 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-9b343aafd0"
+      }
+    ],
+    "format": [],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "their investors, and their local communities. Benefits Get Funding $100k USD capital in exchange for 5% equity. Learn Fast Invaluable content",
+        "evidenceId": "check-deal-614a296c0c"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "equity",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": "5%",
+          "label": "Equity",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-614a296c0c"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://backstagecapital.com/headliners/",

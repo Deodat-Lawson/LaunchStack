@@ -1,15 +1,7 @@
 {
   "programId": "urban-us",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://thirdsphere.com/portfolio/",
-      "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://thirdsphere.com/about/",
       "page": "details",
@@ -19,9 +11,25 @@
       "origin": "official"
     },
     {
-      "url": "https://thirdsphere.com/updates/",
+      "url": "https://thirdsphere.com/category/updates/",
       "page": "batches",
-      "anchor": "Updates",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://thirdsphere.com/contact/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://thirdsphere.com/portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -30,6 +38,78 @@
       "url": "https://thirdsphere.com/portfolio/affordable-clean-energy/",
       "page": "portfolio",
       "anchor": "Affordable & Clean Energy",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://thirdsphere.com/portfolio/air-water-food/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://thirdsphere.com/portfolio/all/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://thirdsphere.com/portfolio/clean-water-sanitation/",
+      "page": "portfolio",
+      "anchor": "Clean Water & Sanitation",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://thirdsphere.com/portfolio/climate-action/",
+      "page": "portfolio",
+      "anchor": "Climate Action",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://thirdsphere.com/portfolio/connected-transportation-logistics/",
+      "page": "portfolio",
+      "anchor": "Connected Transportation & Logistics",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://thirdsphere.com/portfolio/exited/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://thirdsphere.com/portfolio/industry-innovation-infrastructure/",
+      "page": "portfolio",
+      "anchor": "Industry, Innovation & Infrastructure",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://thirdsphere.com/portfolio/pre-seed/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://thirdsphere.com/portfolio/responsible-consumption-production/",
+      "page": "portfolio",
+      "anchor": "Responsible Consumption & Production",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -43,50 +123,18 @@
       "origin": "official"
     },
     {
-      "url": "https://thirdsphere.com/portfolio/industry-innovation-infrastructure/",
-      "page": "portfolio",
-      "anchor": "Industry, Innovation & Infrastructure",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://thirdsphere.com/portfolio/clean-water-sanitation/",
-      "page": "portfolio",
-      "anchor": "Clean Water & Sanitation",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://thirdsphere.com/portfolio/responsible-consumption-production/",
-      "page": "portfolio",
-      "anchor": "Responsible Consumption & Production",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://thirdsphere.com/portfolio/connected-transportation-logistics/",
-      "page": "portfolio",
-      "anchor": "Connected Transportation & Logistics",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://thirdsphere.com/portfolio/climate-action/",
-      "page": "portfolio",
-      "anchor": "Climate Action",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://thirdsphere.com/portfolio/systems-evolution/",
       "page": "portfolio",
       "anchor": "Systems Evolution",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://thirdsphere.com/updates/",
+      "page": "batches",
+      "anchor": "Updates",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

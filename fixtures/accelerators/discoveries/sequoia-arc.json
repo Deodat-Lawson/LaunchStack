@@ -1,0 +1,14 @@
+{
+  "programId": "sequoia-arc",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "pages": [
+    {
+      "url": "https://sequoiacap.com/arc",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    }
+  ]
+}

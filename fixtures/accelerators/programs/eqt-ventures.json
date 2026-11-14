@@ -9,14 +9,14 @@
   "websiteUrl": "https://eqtgroup.com/private-capital/eqt-ventures",
   "applyUrl": "https://eqtgroup.com/private-capital/eqt-ventures",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Striving to Be the Most Impactful Partner | EQT Skip to main content We are an early-stage venture fund, partnering with founders from Seed and supporting companies on their journey to scale. We've backed AI native companies such as Parloa, Sana, Cleo, 1X, Wolt, Flow Engineering and Small Giant Games. We've backed category-defining companies across other sectors, including The Exploration Company, Heart Aerospace, Handshake and Natural Cycles. As early-stage lead investors, operational advisors, and high-conviction capital providers, our goal is to be the most impactful partner for the founders we team up with. We’re here to help you scale fast, break through barriers with the support of the global EQT platform, and turn bold ideas into reality while building long-term resilience in your business. Most of our team is made up of ex-founders and operators, so we’ve been in your shoes. We know what it takes to build a company – the good, the bad, and everything in between. We've been through the trenches, and we get it. We use the disproportionate scale of EQT's platform, and give you access to customers and advisors at a scale and level that is unmatched. EQT Ventures is domiciled in Luxembourg, with investment advisors located in Europe and the US. Focused on European companies, we have backed over 140 founding teams to date. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "EQT Ventures partner with founders building Generation-Defining Companies (GDCs) – the ones who dream big and aim to shape the next decade.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "We are an early-stage venture fund, partnering with founders from Seed and supporting companies on their journey to scale.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "eqt-ventures-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://eqtgroup.com/private-capital/eqt-ventures",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

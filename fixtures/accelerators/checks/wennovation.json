@@ -1,6 +1,6 @@
 {
   "programId": "wennovation",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://wennovationhub.org/"
   ],
@@ -8,23 +8,31 @@
     {
       "id": "check-email-803c1d0689",
       "url": "https://wennovationhub.org/",
-      "title": "Wennovation Hub — homepage checked by scrape.py",
+      "title": "Wennovation Hub — homepage",
       "excerpt": "Adeogun street Victoria Island Lagos. +234 912 797 2803 support@wennovationhub.org Mon-Fri: 9AM - 6PM © 2026 WennovationHub. All rights",
       "page": "details"
     },
     {
       "id": "check-name-34e41edbfd",
       "url": "https://wennovationhub.org/",
-      "title": "Wennovation Hub — homepage checked by scrape.py",
+      "title": "Wennovation Hub — homepage",
       "excerpt": "Home - wennovation hub Home Services Co-working and Training Startups/SMEs",
       "page": "details"
     },
     {
-      "id": "check-route-193cb77863",
+      "id": "check-route-650ec2489d",
       "url": "https://wennovationhub.org/",
-      "title": "Wennovation Hub — homepage checked by scrape.py",
-      "excerpt": "Home → https://wennovationhub.org/",
+      "title": "Wennovation Hub — homepage",
+      "excerpt": "https://wennovationhub.org/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-7b4e5b1966",
+      "url": "https://wennovationhub.org/",
+      "page": "details",
+      "excerpt": "Home - wennovation hub Home Services Co-working and Training Startups/SMEs Business Services Private and Public Sector Innovation Partnerships Become a wennovator Impact Our Work Contact Get Started Your browser does not support the video tag. An African Frontier Enterprise Support Organization — Enabling Sustainable Ventures Grow businesses. Create jobs. Drive prosperity. Consult with us Book a Space WHO WE ARE We're Dreamers , Doers , and Difference-Makers Innovative We challenge the status quo Collaborative Stronger together Driven Results that matter ⁠Wennovation Hub is a venture development company that supports early stage startups and growing teams across emerging sectors, giving them access to incubation, acceleration, investment opportunities, market access and mentorship to build thriving startups. \"We are Empowering African Entrepreneurs and building commercially viable businesses.\" Meet Our Team 50+ Innovation Programs 20,000+ People Empowered 40% Women-Led Startups 450+ Startup Teams Supported $15m+ Raised by Startups Directly 180+ Diverse Portfolio Startups Our Services At Wennovation Hub, we are committed to empowering innovation, accelerating business growth, and creating meaningful impact through tailored services designed for entrepreneurs, startups, SMEs, and institutions. Co-working and Training Learn more Startups/SMEs Business Services Learn more Private"
     }
   ],
   "findings": {
@@ -39,14 +47,21 @@
     "applicationUrl": [
       {
         "value": "https://wennovationhub.org/",
-        "evidenceId": "check-route-193cb77863"
+        "evidenceId": "check-route-650ec2489d"
       }
     ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

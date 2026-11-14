@@ -1,96 +1,479 @@
 {
   "programId": "alchemist",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.alchemist.vc/",
-    "https://www.alchemist.vc/founders",
+    "https://www.alchemist.vc/apply",
+    "https://www.alchemist.vc/blog/startups-stop-acting-like-consultants-set-up-pocs-that-lead-to-real-deals",
     "https://www.alchemist.vc/faq",
-    "https://www.alchemist.vc/apply"
+    "https://www.alchemist.vc/podcasts-archive/amali-dealwis",
+    "https://www.alchemist.vc/podcasts-archive/amazon-pr-faq-innovation-framework-marcelo-calbucci",
+    "https://www.alchemist.vc/podcasts-archive/jobs-act-investment-crowdfunding-customer-investors",
+    "https://www.alchemist.vc/terms",
+    "https://www.alchemist.vc/blog/meet-the-inaugural-alchemist-chicago-cohort",
+    "https://www.alchemist.vc/about",
+    "https://www.alchemist.vc/blog/alchemist-and-the-university-of-chicago-launch-alchemist-chicago-a-premier-deep-tech-accelerator-for-foundational-innovation",
+    "https://www.alchemist.vc/blog/influencer-series-are-machines-already-conscious-what-founders-need-to-know-about-the-future-of-intelligence",
+    "https://www.alchemist.vc/blog/influencer-series-why-quantum-computing-is-about-to-get-very-real",
+    "https://www.alchemist.vc/blog/scaling-ai-across-borders-how-bitgrit-leveraged-alchemist-programs-to-enter-the-us-market",
+    "https://www.alchemist.vc/flagship-program"
   ],
   "evidence": [
     {
-      "id": "check-deal-bd5cfd2017",
+      "id": "check-deal-20aa95b46b",
+      "url": "https://www.alchemist.vc/",
+      "title": "Alchemist — homepage",
+      "excerpt": "Pre-seed and seed. Sector Sector agnostic. Check size $60,000 to $1 million. Geography Founders from 60+ countries in the portfolio. The founder",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-620023138d",
       "url": "https://www.alchemist.vc/faq",
-      "title": "Alchemist — terms page checked by scrape.py",
-      "excerpt": "seed. We back founders who are ready to commercialize and get in front of enterprise customers now. How much does Alchemist invest? Our check size ranges from $60,000 to $1 million, depending on the company and the program. See how we invest . What sectors does Alchemist invest in? We are sector agnostic. Our portfolio spans",
+      "title": "Alchemist — terms page",
+      "excerpt": "much does Alchemist invest? Our check size ranges from $60,000 to $1 million, depending on the company and the program. See how we invest . What",
       "page": "terms"
     },
     {
-      "id": "check-deal-fcbaca0a3d",
+      "id": "check-deal-b7250e989e",
       "url": "https://www.alchemist.vc/",
-      "title": "Alchemist — homepage checked by scrape.py",
-      "excerpt": "and domain experts building the next generation of enterprise infrastructure and technology. Stage Pre-seed and seed. Sector Sector agnostic. Check size $60,000 to $1 million. Geography Founders from 60+ countries in the portfolio. The founder experience What you get as an Alchemist founder The day you join, you get a",
+      "title": "Alchemist — homepage",
+      "excerpt": "Stage Pre-seed and seed. Sector Sector agnostic. Check size $60,000 to $1 million. Geography Founders from 60+ countries in the",
       "page": "details"
+    },
+    {
+      "id": "check-deal-e61a7fe0d5",
+      "url": "https://www.alchemist.vc/faq",
+      "title": "Alchemist — terms page",
+      "excerpt": "now. How much does Alchemist invest? Our check size ranges from $60,000 to $1 million, depending on the company and the program. See how we",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-001e22d043",
+      "url": "https://www.alchemist.vc/podcasts-archive/jobs-act-investment-crowdfunding-customer-investors",
+      "title": "Alchemist — terms page",
+      "excerpt": "typically if it's a venture funded, it might be 18 months, if not longer before a round of financing in",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-027b0496c1",
+      "url": "https://www.alchemist.vc/flagship-program",
+      "title": "Alchemist — program page",
+      "excerpt": "About 3 months A typical enterprise sale 9 to 12 months Alchemist support As long as you are building",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-189c327598",
+      "url": "https://www.alchemist.vc/podcasts-archive/amazon-pr-faq-innovation-framework-marcelo-calbucci",
+      "title": "Alchemist — terms page",
+      "excerpt": "I've worked with enterprises that it take 6 to 12 months to get on board as a vendor. But be along the",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-204217524f",
+      "url": "https://www.alchemist.vc/flagship-program",
+      "title": "Alchemist — program page",
+      "excerpt": "before your first enterprise deal closes. Month 0 Month 12+ Typical accelerator support About 3 months A",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-65a26282bd",
+      "url": "https://www.alchemist.vc/flagship-program",
+      "title": "Alchemist — program page",
+      "excerpt": "0 Month 12+ Typical accelerator support About 3 months A typical enterprise sale 9 to 12 months",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-6ae13667d4",
+      "url": "https://www.alchemist.vc/podcasts-archive/amazon-pr-faq-innovation-framework-marcelo-calbucci",
+      "title": "Alchemist — terms page",
+      "excerpt": "start what you want to get done in the next 3 to 6 months, right, and build from there. You know, too many",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-7494631f3c",
+      "url": "https://www.alchemist.vc/podcasts-archive/amazon-pr-faq-innovation-framework-marcelo-calbucci",
+      "title": "Alchemist — terms page",
+      "excerpt": "know, any contract would take, you know, 3 to 6 months after, you know, everyone is in agreement. What",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-8848b9b556",
+      "url": "https://www.alchemist.vc/podcasts-archive/amazon-pr-faq-innovation-framework-marcelo-calbucci",
+      "title": "Alchemist — terms page",
+      "excerpt": "team because any new vendor is going to take 12 months. 00:54:20:16 - 00:54:36:04 Marcelo Calbucci",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-af90bec00d",
+      "url": "https://www.alchemist.vc/podcasts-archive/jobs-act-investment-crowdfunding-customer-investors",
+      "title": "Alchemist — terms page",
+      "excerpt": "were, but you know, what's happened in the last 18 months? Health care, technology, life sciences, biotech",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d8e8feac54",
+      "url": "https://www.alchemist.vc/faq",
+      "title": "Alchemist — terms page",
+      "excerpt": "business goals together over your first 12 months. Alchemist assigns part of its equity to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-daaa154334",
+      "url": "https://www.alchemist.vc/podcasts-archive/amazon-pr-faq-innovation-framework-marcelo-calbucci",
+      "title": "Alchemist — terms page",
+      "excerpt": "- 01:00:34:13 Marcelo Calbucci So you take 3 to 6 months just to, you know, to get a contract sign. So",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-fb4e23621e",
+      "url": "https://www.alchemist.vc/podcasts-archive/jobs-act-investment-crowdfunding-customer-investors",
+      "title": "Alchemist — terms page",
+      "excerpt": "it's usually, you know, ten months to, you know, 15 months. And so you've got these wee valuations",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-6d8f83d8e9",
+      "url": "https://www.alchemist.vc/terms",
+      "title": "Alchemist — terms page",
+      "excerpt": "infringes your copyright, send a written notice to support@alchemist.vc including: (a) your signature (electronic or physical);",
+      "page": "terms"
     },
     {
       "id": "check-email-80a76d1e28",
       "url": "https://www.alchemist.vc/faq",
-      "title": "Alchemist — terms page checked by scrape.py",
+      "title": "Alchemist — terms page",
       "excerpt": "to get involved. How do I reach Alchemist for press? Email press@alchemist.vc , or reach out through our contact form and choose",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-9c5fae93dd",
+      "url": "https://www.alchemist.vc/terms",
+      "title": "Alchemist — terms page",
+      "excerpt": "Ste 715 PMB 5087 Miami, FL 33131, United States Email: support@alchemist.vc Phone: +1 (415) 275-1419 Expertise into enterprise",
       "page": "terms"
     },
     {
       "id": "check-email-de0af1e885",
       "url": "https://www.alchemist.vc/faq",
-      "title": "Alchemist — terms page checked by scrape.py",
+      "title": "Alchemist — terms page",
       "excerpt": "press@alchemist.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-f5b6709dee",
+      "url": "https://www.alchemist.vc/terms",
+      "title": "Alchemist — terms page",
+      "excerpt": "Privacy Choices On this page Questions about these Terms support@alchemist.vc Last Updated: November 2026 1. Agreement to These Terms",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-fa76c7403d",
+      "url": "https://www.alchemist.vc/terms",
+      "title": "Alchemist — terms page",
+      "excerpt": "support@alchemist.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-01be49481a",
+      "url": "https://www.alchemist.vc/flagship-program",
+      "title": "Alchemist — program page",
+      "excerpt": "Fall Investor Feedback Summit Practice before it counts. A virtual summit designed to simulate your first meetings with VCs.",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1c1f3ba9e4",
+      "url": "https://www.alchemist.vc/blog/scaling-ai-across-borders-how-bitgrit-leveraged-alchemist-programs-to-enter-the-us-market",
+      "title": "Alchemist — program page",
+      "excerpt": "the US market.\" Saksham also highlights the advantages of in-person programming: \"One of the most interesting aspects of the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-84e70ca87d",
+      "url": "https://www.alchemist.vc/blog/meet-the-inaugural-alchemist-chicago-cohort",
+      "title": "Alchemist — batches page",
+      "excerpt": "a US–Canada–Korea deep-tech startup developing quantum–AI hybrid computing solutions for precision medical imaging and",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-9ad32646ea",
+      "url": "https://www.alchemist.vc/terms",
+      "title": "Alchemist — terms page",
+      "excerpt": "Alchemist meetings, sessions, events, and calls — whether in person or on platforms such as Zoom or Google Meet — may be",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-f330f4f4ad",
+      "url": "https://www.alchemist.vc/blog/scaling-ai-across-borders-how-bitgrit-leveraged-alchemist-programs-to-enter-the-us-market",
+      "title": "Alchemist — program page",
+      "excerpt": "aspects of the Alchemist Japan program was that it was in-person. All of the companies were operating out of one office in",
+      "page": "details"
+    },
+    {
+      "id": "check-location-32fa66a7cd",
+      "url": "https://www.alchemist.vc/about",
+      "title": "Alchemist — program page",
+      "excerpt": "founders. An early-stage venture firm based in San Francisco, with founders from more than 60",
+      "page": "details"
+    },
+    {
+      "id": "check-location-5d67c31602",
+      "url": "https://www.alchemist.vc/faq",
+      "title": "Alchemist — terms page",
+      "excerpt": "founded by Ravi Belani in 2012 and is based in San Francisco. We have made more than 750",
       "page": "terms"
     },
     {
       "id": "check-name-253a31558f",
       "url": "https://www.alchemist.vc/",
-      "title": "Alchemist — homepage checked by scrape.py",
+      "title": "Alchemist — homepage",
       "excerpt": "Alchemist | Venture Firm for Deeply Technical Founders How we invest",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-008bdbcd33",
+      "url": "https://www.alchemist.vc/flagship-program",
+      "title": "Alchemist — program page",
+      "excerpt": "Portfolio → https://www.alchemist.vc/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-13f83b897c",
+      "url": "https://www.alchemist.vc/blog/influencer-series-are-machines-already-conscious-what-founders-need-to-know-about-the-future-of-intelligence",
+      "title": "Alchemist — program page",
+      "excerpt": "Portfolio → https://www.alchemist.vc/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-1720f7c1ea",
       "url": "https://www.alchemist.vc/faq",
-      "title": "Alchemist — terms page checked by scrape.py",
+      "title": "Alchemist — terms page",
       "excerpt": "Portfolio → https://www.alchemist.vc/portfolio",
       "page": "terms"
     },
     {
+      "id": "check-portfolio-341d4bcecf",
+      "url": "https://www.alchemist.vc/blog/startups-stop-acting-like-consultants-set-up-pocs-that-lead-to-real-deals",
+      "title": "Alchemist — terms page",
+      "excerpt": "Portfolio → https://www.alchemist.vc/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-369ceb72c7",
+      "url": "https://www.alchemist.vc/blog/meet-the-inaugural-alchemist-chicago-cohort",
+      "title": "Alchemist — batches page",
+      "excerpt": "Portfolio → https://www.alchemist.vc/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-44d468dde0",
+      "url": "https://www.alchemist.vc/blog/alchemist-and-the-university-of-chicago-launch-alchemist-chicago-a-premier-deep-tech-accelerator-for-foundational-innovation",
+      "title": "Alchemist — program page",
+      "excerpt": "Portfolio → https://www.alchemist.vc/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-67a82ee809",
+      "url": "https://www.alchemist.vc/flagship-program",
+      "title": "Alchemist — program page",
+      "excerpt": "See the portfolio → https://www.alchemist.vc/portfolio#all-companies",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-6cf2b13ee4",
       "url": "https://www.alchemist.vc/faq",
-      "title": "Alchemist — terms page checked by scrape.py",
+      "title": "Alchemist — terms page",
       "excerpt": "portfolio page → https://www.alchemist.vc/portfolio",
       "page": "terms"
     },
     {
       "id": "check-portfolio-6d64ca60f8",
       "url": "https://www.alchemist.vc/",
-      "title": "Alchemist — homepage checked by scrape.py",
+      "title": "Alchemist — homepage",
       "excerpt": "See the portfolio → https://www.alchemist.vc/portfolio#all-companies",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-71c586fd12",
+      "url": "https://www.alchemist.vc/podcasts-archive/amali-dealwis",
+      "title": "Alchemist — terms page",
+      "excerpt": "Portfolio → https://www.alchemist.vc/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-756ce2ecdf",
+      "url": "https://www.alchemist.vc/podcasts-archive/jobs-act-investment-crowdfunding-customer-investors",
+      "title": "Alchemist — terms page",
+      "excerpt": "Portfolio → https://www.alchemist.vc/portfolio",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-8df8ec9f3f",
       "url": "https://www.alchemist.vc/",
-      "title": "Alchemist — homepage checked by scrape.py",
+      "title": "Alchemist — homepage",
       "excerpt": "Portfolio → https://www.alchemist.vc/portfolio",
       "page": "details"
     },
     {
-      "id": "check-portfolio-9609ab39b5",
-      "url": "https://www.alchemist.vc/founders",
-      "title": "Alchemist — details page checked by scrape.py",
-      "excerpt": "See the portfolio → https://www.alchemist.vc/portfolio#all-companies",
+      "id": "check-portfolio-9664cc692a",
+      "url": "https://www.alchemist.vc/blog/scaling-ai-across-borders-how-bitgrit-leveraged-alchemist-programs-to-enter-the-us-market",
+      "title": "Alchemist — program page",
+      "excerpt": "Portfolio → https://www.alchemist.vc/portfolio",
       "page": "details"
     },
     {
-      "id": "check-portfolio-afad12d757",
-      "url": "https://www.alchemist.vc/founders",
-      "title": "Alchemist — details page checked by scrape.py",
+      "id": "check-portfolio-aca9436bd9",
+      "url": "https://www.alchemist.vc/about",
+      "title": "Alchemist — program page",
+      "excerpt": "Portfolio → https://www.alchemist.vc/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bbe66ccd6c",
+      "url": "https://www.alchemist.vc/blog/influencer-series-why-quantum-computing-is-about-to-get-very-real",
+      "title": "Alchemist — program page",
       "excerpt": "Portfolio → https://www.alchemist.vc/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-c536a4692d",
       "url": "https://www.alchemist.vc/apply",
-      "title": "Alchemist — application page checked by scrape.py",
+      "title": "Alchemist — application page",
       "excerpt": "Portfolio → https://www.alchemist.vc/portfolio",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-d4bff52941",
+      "url": "https://www.alchemist.vc/terms",
+      "title": "Alchemist — terms page",
+      "excerpt": "Portfolio → https://www.alchemist.vc/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ebbc2db337",
+      "url": "https://www.alchemist.vc/podcasts-archive/amazon-pr-faq-innovation-framework-marcelo-calbucci",
+      "title": "Alchemist — terms page",
+      "excerpt": "Portfolio → https://www.alchemist.vc/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-19cea1f488",
+      "url": "https://www.alchemist.vc/blog/meet-the-inaugural-alchemist-chicago-cohort",
+      "title": "Alchemist — batches page",
+      "excerpt": "Alchemist Insights 11 min read Why Quantum Computing Is About to Get Real | Hayk Tepanyan, BlueQubit Hayk Tepanyan of BlueQubit explains scientific quantum advantage, the road to commercial applications, why the field's biggest moment is much closer. June 8, 2026 Read → https://www.alchemist.vc/blog/influencer-series-why-quantum-computing-is-about-to-get-very-real",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-d62b628420",
+      "url": "https://www.alchemist.vc/blog/influencer-series-are-machines-already-conscious-what-founders-need-to-know-about-the-future-of-intelligence",
+      "title": "Alchemist — program page",
+      "excerpt": "Alchemist Insights 11 min read Why Quantum Computing Is About to Get Real | Hayk Tepanyan, BlueQubit Hayk Tepanyan of BlueQubit explains scientific quantum advantage, the road to commercial applications, why the field's biggest moment is much closer. June 8, 2026 Read → https://www.alchemist.vc/blog/influencer-series-why-quantum-computing-is-about-to-get-very-real",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d9ffbe9a77",
+      "url": "https://www.alchemist.vc/blog/alchemist-and-the-university-of-chicago-launch-alchemist-chicago-a-premier-deep-tech-accelerator-for-foundational-innovation",
+      "title": "Alchemist — program page",
+      "excerpt": "Alchemist Insights 11 min read Why Quantum Computing Is About to Get Real | Hayk Tepanyan, BlueQubit Hayk Tepanyan of BlueQubit explains scientific quantum advantage, the road to commercial applications, why the field's biggest moment is much closer. June 8, 2026 Read → https://www.alchemist.vc/blog/influencer-series-why-quantum-computing-is-about-to-get-very-real",
+      "page": "details"
+    },
+    {
+      "id": "check-status-2cd0149885",
+      "url": "https://www.alchemist.vc/blog/alchemist-and-the-university-of-chicago-launch-alchemist-chicago-a-premier-deep-tech-accelerator-for-foundational-innovation",
+      "title": "Alchemist — program page",
+      "excerpt": "breakthroughs — from quantum computing and AI to cleantech, advanced materials, and robotics. The program is now accepting applications for its inaugural cohort. “We’re thrilled to encourage entrepreneurship around foundational technology,”",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-af0766af3f",
+      "url": "https://www.alchemist.vc/",
+      "page": "details",
+      "excerpt": "Alchemist | Venture Firm for Deeply Technical Founders How we invest Founder experience Overview How it works Partner bench The method Resources Perks The Vault Community Portfolio About Overview Our story Team Partners Press Insights Careers FAQ Pitch us Early-stage venture firm Backing deeply technical founders in AI. Our founder experience goes well beyond a check: a proven commercialization method, a top-tier Partner matched to your business, tested playbooks and a community of founders building alongside you. Pitch us See the portfolio 750+ Investments 5 Unicorns 3 Public listings 80+ Acquisitions $5B+ Raised downstream 60+ Countries represented Your path to traction Enterprise traction has a method. Enterprise deals are won by building relationships across the buyer's team and learning from every conversation. Our method, refined across more than 750 companies since 2012, turns those lessons into pipeline: you find champions inside the account, then turn them into buyers. It's a skill your technical team can learn, practice and use to close seven-figure contracts. Meaningful enterprise deals take time. Alchemist is with you for the long haul. How we invest Is Alchemist right for you? Who you are Deeply technical researchers, engineers and domain experts building the next generation of enterprise infrastructure and technology. Stage Pre-seed and seed. Sector Sector"
+    },
+    {
+      "id": "check-page-beb6dffb66",
+      "url": "https://www.alchemist.vc/apply",
+      "page": "application",
+      "excerpt": "Pitch Us | Alchemist How we invest Founder experience Overview How it works Partner bench The method Resources Perks The Vault Community Portfolio About Overview Our story Team Partners Press Insights Careers FAQ Pitch us For founders Pitch Alchemist. Thank you for your interest in Alchemist. We're excited to learn more about you and your company. Loading the founder form… Open the form Form not loading? Open it in a new tab . Expertise into enterprise traction. Firm About FAQ Founder experience How we invest Investors Portfolio Press Sponsors Team Global Partners Alchemist Chicago Alchemist Doha Alchemist Japan Connect Careers Contact Insights Podcast Vault login © Copyright 2026, Alchemist Accelerator, LLC. DBA Alchemist. All rights reserved. Privacy Policy Legal Imprint Cookie Preferences Your Privacy Choices Questions? ×"
+    },
+    {
+      "id": "check-page-e1d6f7b852",
+      "url": "https://www.alchemist.vc/blog/startups-stop-acting-like-consultants-set-up-pocs-that-lead-to-real-deals",
+      "page": "terms",
+      "excerpt": "Stop Acting Like Consultants: POCs That Close Deals | Laurent Rains How we invest Founder experience Overview How it works Partner bench The method Resources Perks The Vault Community Portfolio About Overview Our story Team Partners Press Insights Careers FAQ Pitch us Insights / Blog / Commercialization Stop Acting Like Consultants: POCs That Close Deals | Laurent Rains Learn how to take control of the process, ask sharper questions, and set clear expectations that turn proof of concept into proof of value. Laurent Rains Managing Director, Alchemist May 8, 2025 7 min read Contents Share Startups often fall into the trap of running aimless POCs that go nowhere. Learn how to take control of the process, ask sharper questions, and set clear expectations that turn proof of concept into proof of value. By Laurent Rains , Director of Global Access, Alchemist Accelerator Startups: Stop Acting Like Consultants — Set Up POCs That Lead to Real Deals When operating within enterprise technology's high-stakes environment, proof of concepts (POCs) are critical validation points for startups. For companies building complex solutions, these aren't small undertakings—often requiring massive investments of time and money, sometimes stretching across multiple quarters. This article explores how to structure effective POCs that demonstrate product value without falling into the consulting trap."
+    },
+    {
+      "id": "check-page-c950fa3203",
+      "url": "https://www.alchemist.vc/faq",
+      "page": "terms",
+      "excerpt": "FAQ | Alchemist How we invest Founder experience Overview How it works Partner bench The method Resources Perks The Vault Community Portfolio About Overview Our story Team Partners Press Insights Careers FAQ Pitch us FAQ Questions, answered. What founders, investors and partners ask us most about Alchemist. Popular What is Alchemist? What is the Alchemist founder experience? How much does Alchemist invest? How do I pitch Alchemist? Topics About Alchemist How we invest The founder experience Pitching Alchemist Partners, press and careers Can't find it? Ask us directly. We reply within a few business days. Ask a question About Alchemist What is Alchemist? Alchemist is an early-stage venture firm that backs deeply technical teams building for the enterprise, then guides them to enterprise traction. We invest at pre-seed and seed. Every founder in our portfolio benefits from our Founder experience . Highlights include an equity-aligned Partner matched to their company, a proven enterprise method built on playbooks refined over fourteen years, the Vault with our network of 40,000 mentors, over $500K in perks, and a community of founders that stays with them for the long haul. Alchemist was founded by Ravi Belani in 2012 and is based in San Francisco. We have made more than 750 investments, with founders from 60+ countries. How is Alchemist different from Techstars, Y Combinator and"
+    },
+    {
+      "id": "check-page-c2a6d78805",
+      "url": "https://www.alchemist.vc/podcasts-archive/amali-dealwis",
+      "page": "terms",
+      "excerpt": "Driving Change and Breaking Barriers with Amali de Alwis How we invest Founder experience Overview How it works Partner bench The method Resources Perks The Vault Community Portfolio About Overview Our story Team Partners Press Insights Careers FAQ Pitch us Insights / Innovators Inside Innovators Inside Driving Change and Breaking Barriers with Amali de Alwis This episode traverses through Amali's diverse career path, leading her to discover her true passion in the principles behind design and research. Spotify Apple Podcasts YouTube Host Ian Bergman Share In the latest episode of AlchemistX Innovators Inside, host Ian Bergman sits down with Amali de Alwis, a dynamic figure in the world of technology and innovation. Amali's eclectic journey from engineering to shoe design, and ultimately to leading roles in technology, paints a vivid picture of how unconventional paths can lead to significant impacts in innovation. This episode offers a deep dive into her unique approach to problem-solving, her commitment to bridging gender gaps in tech, and her insights on how breaking rules can often be a pathway to creating a fairer society. Here are five key takeaways from this enlightening conversation, showcasing Amali's contributions to the world of innovation and entrepreneurship. 1. Embracing a Non-linear Career Path: Amali's journey is a testament to the power and potential of a"
+    },
+    {
+      "id": "check-page-a2ecc23aa5",
+      "url": "https://www.alchemist.vc/podcasts-archive/amazon-pr-faq-innovation-framework-marcelo-calbucci",
+      "page": "terms",
+      "excerpt": "How Amazon’s Innovation Framework Can Transform Your Startup How we invest Founder experience Overview How it works Partner bench The method Resources Perks The Vault Community Portfolio About Overview Our story Team Partners Press Insights Careers FAQ Pitch us Insights / Innovators Inside Innovators Inside How Amazon’s Innovation Framework Can Transform Your Startup The Takeaways from Marcelo Calbucci on how Amazon’s PR FAQ framework drives faster iteration stronger decision making & better innovation for leaders. Spotify Apple Podcasts YouTube Host Ian Bergman Share In this episode of the Innovators Inside Podcast, Marcelo Calbucci joins the show to break down how Amazon’s PR FAQ framework and a narrative-driven innovation culture can help founders, corporate innovators, and product leaders make smarter decisions and build solutions customers truly care about. With experience at Microsoft, Amazon, and six startups, Marcelo offers practical insights that apply to anyone trying to innovate in today’s fast-changing environment. Here are the five key takeaways from their conversation: 1. Start With Real Customer Problems, Not Ideas Marcelo emphasizes a core truth that many innovators skip. Successful innovation begins with understanding a real customer problem. That means going deeper than surface-level assumptions and quantifying frequency, urgency, alternatives, and the value"
+    },
+    {
+      "id": "check-page-384cd87a6b",
+      "url": "https://www.alchemist.vc/podcasts-archive/jobs-act-investment-crowdfunding-customer-investors",
+      "page": "terms",
+      "excerpt": "How the JOBS Act and Investment Crowdfunding Sparked the Rise of the Customer-Investor How we invest Founder experience Overview How it works Partner bench The method Resources Perks The Vault Community Portfolio About Overview Our story Team Partners Press Insights Careers FAQ Pitch us Insights / Innovators Inside Innovators Inside How the JOBS Act and Investment Crowdfunding Sparked the Rise of the Customer-Investor Discover how the JOBS Act and investment crowdfunding empowered customer-investors, democratized capital, and reshaped startup funding with Sherwood Neiss. Spotify Apple Podcasts YouTube Host Ian Bergman Share In this episode of the AlchemistX Innovators Inside, Ian Bergman , Layne Fawns and Sherwood “Woody” Neiss , author of Investomers , break down how the JOBS Act and investment crowdfunding changed the way founders raise money — and how customers, communities, and experts are becoming the new investors powering early-stage innovation. Here are the five key takeaways from their conversation: 1. Customers Can Now Become Investors The biggest shift: your users can fund your company. The JOBS Act opened the door for everyday people — not just accredited investors — to invest in startups they believe in. Why it matters: Your best customers can also be your biggest advocates Stronger alignment between product, feedback, and capital Early believers get to share in"
+    },
+    {
+      "id": "check-page-e31f350263",
+      "url": "https://www.alchemist.vc/terms",
+      "page": "terms",
+      "excerpt": "Terms of Use | Alchemist How we invest Founder experience Overview How it works Partner bench The method Resources Perks The Vault Community Portfolio About Overview Our story Team Partners Press Insights Careers FAQ Pitch us Legal Terms of Use. Last updated November 2026. The agreement between you and Alchemist Accelerator, LLC for using alchemist.vc, AlchemistX, the Vault and our other services. Privacy Notice Your Privacy Choices On this page Questions about these Terms support@alchemist.vc Last Updated: November 2026 1. Agreement to These Terms These Terms of Use (“Terms”) are a binding agreement between you (“you,” “your,” or “Client”) and Alchemist Accelerator, LLC , a Delaware limited liability company with its principal place of business at 1000 Brickell Ave, Ste 715 PMB 5087, Miami, FL 33131, United States (“Alchemist,” “we,” “us,” or “our”). They govern your access to and use of https://alchemist.vc/, Alchemist, AlchemistX, the Vault (as defined below), and any other website, application, platform, event, or service that references or links to these Terms (the “Services”). By accessing or using the Services, or by clicking to accept these Terms where that option is offered, you agree to these Terms and acknowledge that you have read our Privacy Notice , which explains how we collect and use Personal Data. If you do not agree, do not use the Services. If you use the"
+    },
+    {
+      "id": "check-page-292df1320a",
+      "url": "https://www.alchemist.vc/blog/meet-the-inaugural-alchemist-chicago-cohort",
+      "page": "batches",
+      "excerpt": "Meet the First Alchemist Chicago Deep Tech Startups How we invest Founder experience Overview How it works Partner bench The method Resources Perks The Vault Community Portfolio About Overview Our story Team Partners Press Insights Careers FAQ Pitch us Insights / Blog / Deep Tech Meet the First Alchemist Chicago Deep Tech Startups Alchemist Chicago supports early-stage ventures across quantum, AI, cleantech, robotics, & other deep tech industries, transforming discovery into impact. Alchemist Team October 23, 2025 6 min read Contents Share Alchemist Chicago will support early-stage ventures across quantum, AI, cleantech, robotics, and other deep tech industries, transforming discovery into impact. Meet the Inaugural Alchemist Chicago Cohort Alchemist Accelerator and the University of Chicago’s Polsky Center for Entrepreneurship and Innovation are excited to announce the inaugural cohort of Alchemist Chicago, officially launching Phase 1 on October 20, 2025. This first-of-its-kind collaboration brings Alchemist’s global accelerator platform to the Midwest’s deeptech hub, uniting world-class research, commercialization expertise, and investor networks to fuel deep tech innovation. “Alchemist Chicago represents a defining moment for the region’s innovation landscape,\" says Samir Mayekar, Managing Director, Polsky Center for Entrepreneurship and Innovation. \"Our partnership with"
+    },
+    {
+      "id": "check-page-4be12f0d3a",
+      "url": "https://www.alchemist.vc/about",
+      "page": "details",
+      "excerpt": "About | Alchemist How we invest Founder experience Overview How it works Partner bench The method Resources Perks The Vault Community Portfolio About Overview Our story Team Partners Press Insights Careers FAQ Pitch us About Alchemist Fourteen years backing deeply technical founders. An early-stage venture firm based in San Francisco, with founders from more than 60 countries in the portfolio. On this page Our story Partners Team Recognition News Insights The firm Built on 750+ companies. Demo Day, Class 4 It started in 2012 with Ravi Belani, then a venture capitalist at DFJ, hosting founder events in San Francisco. Enterprise founders kept telling him the same thing: they did not need millions of dollars to get started. They needed a small check and a program built for them, at a time when the best-known accelerators were designed for consumer apps. So he carved out a home for that group: Alchemist, an accelerator built only for enterprise founders and backed by DFJ, Khosla Ventures, US Venture Partners, Cisco and SAP. Alchemist strength in community Danielle D'Agostaro joined as co-founder in 2013. Together they brought in the best Partners in the industry to keep developing sales methodologies built specifically for the enterprise, work that became our playbooks and, later, published books. As that methodology evolved and we followed deeply technical founders through their"
+    },
+    {
+      "id": "check-page-9dcc884afb",
+      "url": "https://www.alchemist.vc/blog/alchemist-and-the-university-of-chicago-launch-alchemist-chicago-a-premier-deep-tech-accelerator-for-foundational-innovation",
+      "page": "details",
+      "excerpt": "Alchemist and the University of Chicago Launch Alchemist Chicago for Deep Tech How we invest Founder experience Overview How it works Partner bench The method Resources Perks The Vault Community Portfolio About Overview Our story Team Partners Press Insights Careers FAQ Pitch us Insights / Blog / Deep Tech Alchemist and the University of Chicago Launch Alchemist Chicago for Deep Tech Alchemist and the University of Chicago have launched Alchemist Chicago. Here's how the deep tech program works, key dates, and how to apply in 2025 Alchemist Team July 21, 2025 3 min read Contents Share Alchemist Chicago will support early-stage ventures across quantum, AI, cleantech, robotics, and other deep tech industries, transforming discovery into impact. Alchemist and the University of Chicago Launch Alchemist Chicago: A Premier Deep Tech Accelerator for Foundational Innovation We’re thrilled to share the launch of Alchemist Chicago — a brand new deep tech accelerator created through a powerful partnership between Alchemist Accelerator and the University of Chicago’s Polsky Center for Entrepreneurship and Innovation . Alchemist Chicago is built for early-stage startups commercializing cutting-edge breakthroughs — from quantum computing and AI to cleantech, advanced materials, and robotics. The program is now accepting applications for its inaugural cohort. “We’re thrilled to encourage"
+    },
+    {
+      "id": "check-page-1268cf1355",
+      "url": "https://www.alchemist.vc/blog/influencer-series-are-machines-already-conscious-what-founders-need-to-know-about-the-future-of-intelligence",
+      "page": "details",
+      "excerpt": "Are Machines Already Conscious? Joscha Bach on the Future of Intelligence How we invest Founder experience Overview How it works Partner bench The method Resources Perks The Vault Community Portfolio About Overview Our story Team Partners Press Insights Careers FAQ Pitch us Insights / Blog / AI Are Machines Already Conscious? Joscha Bach on the Future of Intelligence Are machines becoming conscious? What founders need to know about AI, human agency, and building in an era of rapid technological change. Joscha Bach Executive Director, CIMC April 23, 2026 8 min read Contents Share What if consciousness isn’t as complex—or as far away—as we think? Joscha Bach challenges how we define intelligence, and what that means for founders building in the age of AI. The Influencer Series is an intimate, invite-only gathering of influential, good-energy leaders. The intent is to have fun, high-impact, “dinner table” conversations with people you don't know but should. The Influencer Series has connected over 4,000 participants and 15,000 influencers in our community over the last decade. These roundtable conversations provide a space for prominent VC funds, corporate leaders, start-up founders, academics, and other influencers to explore new ideas through an authentic and connective experience. What Founders Need to Know About the Future of Intelligence Most conversations around AI and"
+    },
+    {
+      "id": "check-page-d44823d1bc",
+      "url": "https://www.alchemist.vc/blog/influencer-series-why-quantum-computing-is-about-to-get-very-real",
+      "page": "details",
+      "excerpt": "Why Quantum Computing Is About to Get Real | Hayk Tepanyan, BlueQubit How we invest Founder experience Overview How it works Partner bench The method Resources Perks The Vault Community Portfolio About Overview Our story Team Partners Press Insights Careers FAQ Pitch us Insights / Blog / Deep Tech Why Quantum Computing Is About to Get Real | Hayk Tepanyan, BlueQubit Hayk Tepanyan of BlueQubit explains scientific quantum advantage, the road to commercial applications, why the field's biggest moment is much closer. Hayk Tepanyan Founder and CTO, BlueQubit June 8, 2026 11 min read Contents Share In this Influencer Series conversation, Ravi Belani speaks with Hayk Tepanyan, co-founder of BlueQubit, about why quantum computing is on the verge of real-world impact. Hayk explains what scientific quantum advantage actually means, why the field's benchmarks have often been misleading, and how BlueQubit's recent breakthrough differs from the quantum hype that came before it. The conversation also covers what a \"ChatGPT moment\" for quantum might look like, how AI fits into the picture, and what it takes to stay laser focused while building a company at the frontier of science. The Influencer Series is an intimate, invite-only gathering of influential, good-energy leaders. The intent is to have fun, high-impact, “dinner table” conversations with people you don't know but should. The"
+    },
+    {
+      "id": "check-page-61bfc2ffc4",
+      "url": "https://www.alchemist.vc/blog/scaling-ai-across-borders-how-bitgrit-leveraged-alchemist-programs-to-enter-the-us-market",
+      "page": "details",
+      "excerpt": "How Bitgrit Used Alchemist to Enter the US Market How we invest Founder experience Overview How it works Partner bench The method Resources Perks The Vault Community Portfolio About Overview Our story Team Partners Press Insights Careers FAQ Pitch us Insights / Blog / AI How Bitgrit Used Alchemist to Enter the US Market How Bitgrit leveraged three Alchemist programs to refine its strategy, accelerate US market entry, and scale its AI-powered enterprise solutions. Saksham Kukreja Co-Founder, Bitgrit March 6, 2025 8 min read Contents Share Discover how Bitgrit leveraged three Alchemist programs to refine its strategy, accelerate US market entry, and scale its AI-powered enterprise solutions. Saksham Kukreja, co-founder of Bitgrit (founded in 2017), along with his co-founders, has successfully navigated the company through the intersection of AI, enterprise solutions, and global expansion. With a foundation in Japan and Abu Dhabi, Bitgrit has grown into a platform that leverages crowdsourced AI development for enterprise clients. Having participated in three Alchemist programs— JETRO Commercial Traction Program , Alchemist Japan , and now the Alchemist US program (Class 39)—Bitgrit has immersed itself in Alchemist’s ecosystem, uniquely positioning the company to enter the US market with success. The Power of Community and Technology Bitgrit's community of 37,000 developers spans"
+    },
+    {
+      "id": "check-page-c94b052b36",
+      "url": "https://www.alchemist.vc/flagship-program",
+      "page": "details",
+      "excerpt": "Founder experience | Alchemist How we invest Founder experience Overview How it works Partner bench The method Resources Perks The Vault Community Portfolio About Overview Our story Team Partners Press Insights Careers FAQ Pitch us The founder experience What you get as an Alchemist founder. You get a proven methodology, refined over fourteen years: hands-on support from top-tier operators, regular time with your peers, tested playbooks and access to the investors you need to scale. From the day we invest, you are part of this community. Pitch us See the portfolio On this page Onboarding Partners Methodology Resources The Vault Community Fundraising How it works From day one to your first deals. As long as you are building toward a venture-scale outcome, our team, network and resources are yours. In your first year, we roll up our sleeves and build with you. Start 01 Your Founder Plan A senior team member reviews your company with you and sets your priorities. Ongoing 02 Your Partner An operator matched to your business and equity-aligned with you. They work with you as an advisor, not in office hours. Ongoing 03 The method, applied An enterprise sales playbook for how you sell, from your first ten deals through procurement and pricing. When you need it 04 Intros and fundraising Introductions to customers and investors through the Vault, plus support from our team when you"
     }
   ],
   "findings": {
@@ -98,23 +481,125 @@
       {
         "value": "press@alchemist.vc",
         "evidenceId": "check-email-de0af1e885"
+      },
+      {
+        "value": "support@alchemist.vc",
+        "evidenceId": "check-email-fa76c7403d"
       }
     ],
     "phones": [],
-    "routes": [],
-    "applicationUrl": [],
-    "applicationsOpen": [],
+    "routes": [
+      {
+        "value": "https://www.alchemist.vc/blog/influencer-series-why-quantum-computing-is-about-to-get-very-real",
+        "evidenceId": "check-route-19cea1f488"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.alchemist.vc/blog/influencer-series-why-quantum-computing-is-about-to-get-very-real",
+        "evidenceId": "check-route-19cea1f488"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-2cd0149885"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-d8e8feac54"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-7494631f3c"
+      },
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-af90bec00d"
+      },
+      {
+        "value": "15 months",
+        "evidenceId": "check-duration-fb4e23621e"
+      },
+      {
+        "value": "0 months",
+        "evidenceId": "check-duration-204217524f"
+      },
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-65a26282bd"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-9ad32646ea"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-84e70ca87d"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-01be49481a"
+      }
+    ],
+    "location": [
+      {
+        "value": "San Francisco",
+        "evidenceId": "check-location-5d67c31602"
+      }
+    ],
     "selectivity": [],
     "dealText": [
       {
-        "value": "and domain experts building the next generation of enterprise infrastructure and technology. Stage Pre-seed and seed. Sector Sector agnostic. Check size $60,000 to $1 million. Geography Founders from 60+ countries in the portfolio. The founder experience What you get as an Alchemist founder The day you join, you get a",
-        "evidenceId": "check-deal-fcbaca0a3d"
+        "value": "Stage Pre-seed and seed. Sector Sector agnostic. Check size $60,000 to $1 million. Geography Founders from 60+ countries in the",
+        "evidenceId": "check-deal-b7250e989e"
       },
       {
-        "value": "seed. We back founders who are ready to commercialize and get in front of enterprise customers now. How much does Alchemist invest? Our check size ranges from $60,000 to $1 million, depending on the company and the program. See how we invest . What sectors does Alchemist invest in? We are sector agnostic. Our portfolio spans",
-        "evidenceId": "check-deal-bd5cfd2017"
+        "value": "Pre-seed and seed. Sector Sector agnostic. Check size $60,000 to $1 million. Geography Founders from 60+ countries in the portfolio. The founder",
+        "evidenceId": "check-deal-20aa95b46b"
+      },
+      {
+        "value": "now. How much does Alchemist invest? Our check size ranges from $60,000 to $1 million, depending on the company and the program. See how we",
+        "evidenceId": "check-deal-e61a7fe0d5"
+      },
+      {
+        "value": "much does Alchemist invest? Our check size ranges from $60,000 to $1 million, depending on the company and the program. See how we invest . What",
+        "evidenceId": "check-deal-620023138d"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "60000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-b7250e989e"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "1000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-20aa95b46b"
       }
     ],
     "portfolioPages": [

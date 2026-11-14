@@ -1,11 +1,19 @@
 {
   "programId": "venturelab",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.venturelab.swiss/programs",
-      "page": "details",
-      "anchor": "Programs",
+      "url": "https://www.venturelab.swiss/AIT",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.venturelab.swiss/SwissPrimeSite",
+      "page": "other",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -14,7 +22,23 @@
       "url": "https://www.venturelab.swiss/about",
       "page": "details",
       "anchor": "About",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.venturelab.swiss/newsletter",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.venturelab.swiss/programs",
+      "page": "details",
+      "anchor": "Programs",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

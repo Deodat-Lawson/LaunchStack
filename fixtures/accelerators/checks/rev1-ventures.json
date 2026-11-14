@@ -1,38 +1,381 @@
 {
   "programId": "rev1-ventures",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.rev1ventures.com/",
-    "https://www.rev1ventures.com/about/"
+    "https://www.rev1ventures.com/accelerator-application/",
+    "https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-1-get-prepared/",
+    "https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-2-prepare-and-submit-your-proposal/",
+    "https://www.rev1ventures.com/blog/developing-competitive-sbir-sttr-applications-biographical-sketch-template/",
+    "https://www.rev1ventures.com/blog/developing-competitive-sbir-sttr-applications-registration-template/",
+    "https://www.rev1ventures.com/blog/developing-competitive-sbir-sttr-applications-starts-here/",
+    "https://www.rev1ventures.com/blog/fully-refundable-tax-credit-information-that-may-apply-to-your-startup/",
+    "https://www.rev1ventures.com/blog/tag/applications/",
+    "https://www.rev1ventures.com/blog/zeovations-unique-nanotechnology-attracts-battery-industry-federal-government-departments-and-beverage-leader-for-advanced-applications/",
+    "https://www.rev1ventures.com/bootcamp-application/",
+    "https://www.rev1ventures.com/r1-press/prevedere-makes-wing-data-first-50-ai-powered-business-applications-list/",
+    "https://www.rev1ventures.com/blog/20-biggest-vc-deal-makers-great-lakes/",
+    "https://www.rev1ventures.com/blog/5-sticky-customer-situations-and-how-to-deal-with-them/",
+    "https://www.rev1ventures.com/blog/7-ways-make-deal-appealing-angel-investors/"
   ],
   "evidence": [
     {
+      "id": "check-duration-35e419e44e",
+      "url": "https://www.rev1ventures.com/blog/7-ways-make-deal-appealing-angel-investors/",
+      "title": "Rev1 Ventures — terms page",
+      "excerpt": "have been less than two dozen IPOs in the last 24 months?” Express a willingness to IPO, but lead off the",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-59600fdac7",
+      "url": "https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-1-get-prepared/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "development and validation, span about six to 18 months. Phase II amounts up to approximately $1.7",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-975ae4dbba",
+      "url": "https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-2-prepare-and-submit-your-proposal/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "COMPANY REGISTRATION APPROVAL PROCESS MAY TAKE 6-8 weeks. START EARLY! Every program requires at least",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-c1bc96007a",
+      "url": "https://www.rev1ventures.com/accelerator-application/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "to a real problem in a growing market, the 14-week Customer to Capital Accelerator program is",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-fc4c94aef0",
+      "url": "https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-1-get-prepared/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "timeline. Given your talent, capital, and 12-month priorities, can you assemble the resources and",
+      "page": "application"
+    },
+    {
+      "id": "check-example-5f26f362c1",
+      "url": "https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-1-get-prepared/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "NIAID Sample SBIR/STTR Applications → https://www.niaid.nih.gov/grants-contracts/sample-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-example-91b0ccdb92",
+      "url": "https://www.rev1ventures.com/blog/developing-competitive-sbir-sttr-applications-biographical-sketch-template/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "NIAID Sample SBIR/STTR Applications → https://www.niaid.nih.gov/grants-contracts/sample-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-example-ab51f03151",
+      "url": "https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-2-prepare-and-submit-your-proposal/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "NIAID Sample SBIR/STTR Applications → https://www.niaid.nih.gov/grants-contracts/sample-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-example-f0656c7e3c",
+      "url": "https://www.rev1ventures.com/blog/developing-competitive-sbir-sttr-applications-registration-template/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "NIAID Sample SBIR/STTR Applications → https://www.niaid.nih.gov/grants-contracts/sample-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e1663d7a80",
+      "url": "https://www.rev1ventures.com/blog/5-sticky-customer-situations-and-how-to-deal-with-them/",
+      "title": "Rev1 Ventures — terms page",
+      "excerpt": "Once you know that for sure, you have to tell the customer—in person. Not in a text, an email, or in a voice message. You must",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-ef6dbf81b7",
+      "url": "https://www.rev1ventures.com/blog/fully-refundable-tax-credit-information-that-may-apply-to-your-startup/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "over 1,000 customers, Clarus R+D is headquartered in Columbus, Ohio. For more information, visit",
+      "page": "application"
+    },
+    {
       "id": "check-name-a99f0a05e5",
       "url": "https://www.rev1ventures.com/",
-      "title": "Rev1 Ventures — homepage checked by scrape.py",
+      "title": "Rev1 Ventures — homepage",
       "excerpt": "Venture Studio - Columbus, Ohio | Rev1 Ventures Search for Menu About + Overview Impact Partners Team Blog",
       "page": "details"
     },
     {
-      "id": "check-phone-46db2b76d3",
-      "url": "https://www.rev1ventures.com/about/",
-      "title": "Rev1 Ventures — details page checked by scrape.py",
+      "id": "check-phone-18f5fdd61b",
+      "url": "https://www.rev1ventures.com/accelerator-application/",
+      "title": "Rev1 Ventures — application page",
       "excerpt": "(614) 487-3700",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-phone-1a5d80adf0",
+      "url": "https://www.rev1ventures.com/blog/developing-competitive-sbir-sttr-applications-biographical-sketch-template/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "(614) 487-3700",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-2af5442bda",
+      "url": "https://www.rev1ventures.com/r1-press/prevedere-makes-wing-data-first-50-ai-powered-business-applications-list/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "(614) 487-3700",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-40064bca4e",
+      "url": "https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-1-get-prepared/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "(614) 487-3700",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-467794014b",
+      "url": "https://www.rev1ventures.com/blog/fully-refundable-tax-credit-information-that-may-apply-to-your-startup/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "(614) 487-3700",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-4aa482d12b",
+      "url": "https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-2-prepare-and-submit-your-proposal/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "(614) 487-3700",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-54cd4fa488",
+      "url": "https://www.rev1ventures.com/blog/tag/applications/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "(614) 487-3700",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-6893197031",
+      "url": "https://www.rev1ventures.com/blog/7-ways-make-deal-appealing-angel-investors/",
+      "title": "Rev1 Ventures — terms page",
+      "excerpt": "(614) 487-3700",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-6ce6a99880",
+      "url": "https://www.rev1ventures.com/blog/developing-competitive-sbir-sttr-applications-starts-here/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "(614) 487-3700",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-869b0ac797",
+      "url": "https://www.rev1ventures.com/blog/zeovations-unique-nanotechnology-attracts-battery-industry-federal-government-departments-and-beverage-leader-for-advanced-applications/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "(614) 487-3700",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-8d58a77cbb",
+      "url": "https://www.rev1ventures.com/blog/developing-competitive-sbir-sttr-applications-registration-template/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "(614) 487-3700",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-907346c224",
+      "url": "https://www.rev1ventures.com/blog/5-sticky-customer-situations-and-how-to-deal-with-them/",
+      "title": "Rev1 Ventures — terms page",
+      "excerpt": "(614) 487-3700",
+      "page": "terms"
     },
     {
       "id": "check-phone-b63f9df41b",
       "url": "https://www.rev1ventures.com/",
-      "title": "Rev1 Ventures — homepage checked by scrape.py",
+      "title": "Rev1 Ventures — homepage",
       "excerpt": "(614) 487-3700",
       "page": "details"
     },
     {
+      "id": "check-phone-ed3610a645",
+      "url": "https://www.rev1ventures.com/bootcamp-application/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "(614) 487-3700",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-edbca6ba4d",
+      "url": "https://www.rev1ventures.com/blog/20-biggest-vc-deal-makers-great-lakes/",
+      "title": "Rev1 Ventures — terms page",
+      "excerpt": "(614) 487-3700",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-38e874960a",
+      "url": "https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-2-prepare-and-submit-your-proposal/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "Here’s a tool to help → https://www.rev1ventures.com/blog/developing-competitive-sbir-sttr-applications-registration-template/",
+      "page": "application"
+    },
+    {
       "id": "check-route-416166fa38",
       "url": "https://www.rev1ventures.com/",
-      "title": "Rev1 Ventures — homepage checked by scrape.py",
+      "title": "Rev1 Ventures — homepage",
       "excerpt": "https://www.rev1ventures.com",
       "page": "details"
+    },
+    {
+      "id": "check-route-639bf5bb15",
+      "url": "https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-2-prepare-and-submit-your-proposal/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "please review Part 1 – Getting Prepared here → https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-1-get-prepared/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6f6aad4198",
+      "url": "https://www.rev1ventures.com/blog/developing-competitive-sbir-sttr-applications-starts-here/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "Part 1: Get Prepared → https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-1-get-prepared/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-93f0965940",
+      "url": "https://www.rev1ventures.com/blog/developing-competitive-sbir-sttr-applications-starts-here/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "Part 2: Prepare and Submit Your Proposal → https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-2-prepare-and-submit-your-proposal/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bd46c40008",
+      "url": "https://www.rev1ventures.com/blog/developing-competitive-sbir-sttr-applications-registration-template/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "Part 1; Get Prepared → https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-1-get-prepared/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bed7b2253d",
+      "url": "https://www.rev1ventures.com/blog/developing-competitive-sbir-sttr-applications-biographical-sketch-template/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "Part 1; Get Prepared → https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-1-get-prepared/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c7f942f882",
+      "url": "https://www.rev1ventures.com/blog/developing-competitive-sbir-sttr-applications-starts-here/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "Small Business Innovation Research (SBIR) and Small Business Technology Transfer—(STTR) → https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-1-get-prepared/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cfa674f908",
+      "url": "https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-1-get-prepared/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "Part 2 Prepare and Submit Your Proposal → https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-2-prepare-and-submit-your-proposal/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d52f9782fa",
+      "url": "https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-1-get-prepared/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "Part 2 here → https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-2-prepare-and-submit-your-proposal/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-edbb55c438",
+      "url": "https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-2-prepare-and-submit-your-proposal/",
+      "title": "Rev1 Ventures — application page",
+      "excerpt": "Part 1; Get Prepared → https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-1-get-prepared/",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-9c740d4adf",
+      "url": "https://www.rev1ventures.com/",
+      "page": "details",
+      "excerpt": "Venture Studio - Columbus, Ohio | Rev1 Ventures Search for Menu About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More Search for Where founders go to build. As a Midwest venture studio, we partner with innovators in Saas/AI, deep tech and life sciences to turn bold ideas into scalable companies. People + Passion + Battle Scars We’re a team of builders, investors, operators, and corporate innovators. From day one, we help startups move faster and grow smarter by validating markets, gaining traction, and becoming venture ready. Our team has helped hundreds of startups build and scale. Meet the Team Where brilliant solutions become reality. Want to change the world? We can help. We’ve built a best-in-breed venture studio with a vision of making the Midwest a powerful magnet for diverse, high-growth startups. Our clients are building products that solve real problems for markets in need of real solutions. We Deliver Where others Can’t. Learn More about Scioto Agritech The Standard for Energy Payments."
+    },
+    {
+      "id": "check-page-8f7e5bebe6",
+      "url": "https://www.rev1ventures.com/accelerator-application/",
+      "page": "application",
+      "excerpt": "Get your Startup Started with Rev1 Ventures Search for Menu About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More Search for Let’s build something great, together. Apply to the Customer to Capital Accelerator If you’re building a technology-driven solution to a real problem in a growing market, the 14-week Customer to Capital Accelerator program is designed to help founders like you gain customers, build traction, and prepare to raise capital. Successful applicants: Pre-seed and seed-stage startups Focus on software, SaaS, advanced technology, medical devices, and life sciences Have early market research or customer validation that confirms the problem they’re solving and/or supports their MVP concept Based in Ohio or planning to locate here Dates to know: Applications for the fall accelerator have now closed. Spring 2027 applications will open in the winter. Sign up to be notified when applications for the Spring 2027 cohort are live: Email Contact Information Get the latest updates to your inbox."
+    },
+    {
+      "id": "check-page-8e0fc672ef",
+      "url": "https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-1-get-prepared/",
+      "page": "application",
+      "excerpt": "7 Tips to Developing Competitive SBIR/STTR Applications – Part 1: Get Prepared Search for Menu About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More Search for Capital By Rev1 Staff on 09/08/2020 Developing Competitive SBIR/STTR Applications – Part 1: Get Prepared Developing Competitive SBIR/STTR Applications – Part 1: Get Prepared This SBIR/STTR series consists of five tools: Part 1; Get Prepared ; Part 2 Prepare and Submit Your Proposal ; Registration Tool ; Budget Tool , and Biosketch Tool . The funding is the primary source of publicly funded research and development (R&D) and commercialization available to U.S. startups. The National Science Foundation (NSF) first founded SBIR in 1977 to support cutting-edge technologies developed by small businesses. Since then, the program has expanded to include all government agencies, with the total grants and contracts in the billions of dollars. Why Pursue SBIR/STTR? SBIR/STTR funding is among the most desirable capital that an advanced technology startup"
+    },
+    {
+      "id": "check-page-9f55b6947a",
+      "url": "https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-2-prepare-and-submit-your-proposal/",
+      "page": "application",
+      "excerpt": "7 Tips to Developing Competitive SBIR/STTR Applications - Part 2: Prepare and Submit Your Proposal Search for Menu About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More Search for Capital By Rev1 Staff on 09/16/2020 Developing Competitive SBIR/STTR Applications – Part 2: Prepare and Submit Your Proposal Developing Competitive SBIR/STTR Applications – Part 2: Prepare and Submit Your Proposal This SBIR/STTR series consists of five tools: Part 1; Get Prepared ; Part 2 Prepare and Submit Your Proposal ; Registration Tool ; Budget Tool , and Biosketch Tool . The Small Business Innovation Research (SBIR) and Small Business Technology Transfer—(STTR) funding is the primary source of publicly funded research and development (R&D) and commercialization available to U.S. startups. This is Part 2 of our “7 Tips” on creating competitive SBIR/STTR applications. Before using this tool, please review Part 1 – Getting Prepared here . The National Science Foundation (NSF) first founded SBIR in 1977 to support"
+    },
+    {
+      "id": "check-page-02111a05d8",
+      "url": "https://www.rev1ventures.com/blog/developing-competitive-sbir-sttr-applications-biographical-sketch-template/",
+      "page": "application",
+      "excerpt": "Developing Competitive SBIR/STTR Applications – Biographical Sketch Template | Rev1 Ventures Search for Menu About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More Search for Capital By Rev1 Staff on 10/09/2020 Developing Competitive SBIR/STTR Applications – Biographical Sketch Template Developing Competitive SBIR/STTR Applications – Biographical Sketch Template This SBIR/STTR series consists of five tools: Part 1; Get Prepared ; Part 2 Prepare and Submit Your Proposal ; Registration Tool ; Budget Tool , and Biosketch Tool . The Small Business Innovation Research (SBIR) and Small Business Technology Transfer—(STTR) funding is the primary source of publicly funded research and development (R&D) and commercialization available to U.S. startups. The single most important step in building a proposal is to explicitly follow an agency’s guidelines and timeline. There is no flexibility. Applications for all agencies* require biographical sketches for the senior/key personnel and other significant"
+    },
+    {
+      "id": "check-page-102f4b7a90",
+      "url": "https://www.rev1ventures.com/blog/developing-competitive-sbir-sttr-applications-registration-template/",
+      "page": "application",
+      "excerpt": "Developing Competitive SBIR/STTR Applications – Registration Template Search for Menu About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More Search for Capital By Rev1 Staff on 09/23/2020 Developing Competitive SBIR/STTR Applications – Registration Template Developing Competitive SBIR/STTR Applications – Registration Template This SBIR/STTR series consists of five tools: Part 1; Get Prepared ; Part 2 Prepare and Submit Your Proposal ; Registration Tool ; Budget Tool , and Biosketch Tool . The Small Business Innovation Research (SBIR) and Small Business Technology Transfer—(STTR) funding is the primary source of publicly funded research and development (R&D) and commercialization available to U.S. startups. The single most important step in building a proposal is to explicitly follow an agency’s guidelines and timeline. There is no flexibility. Every agency program requires at least three registrations. Depending on the agency, more registrations that could be required. Read Tutorial 1 – Required"
+    },
+    {
+      "id": "check-page-8d64c710dd",
+      "url": "https://www.rev1ventures.com/blog/developing-competitive-sbir-sttr-applications-starts-here/",
+      "page": "application",
+      "excerpt": "Developing Competitive SBIR/STTR Applications Starts Here | Rev1 Ventures Search for Menu About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More Search for Capital, Getting Funding By Rev1 Staff on 10/27/2020 Developing Competitive SBIR/STTR Applications Starts Here Developing Competitive SBIR/STTR Applications Starts Here Small Business Innovation Research (SBIR) and Small Business Technology Transfer—(STTR) funding is among the most desirable capital that an advanced technology startup can secure. Every entrepreneur needs to have a basic understanding of this vital source of non-dilutive capital, whether you recognize an immediate match or not. 6 Reasons to Pursue SBIR/STTR Funding SBIR/STTR funding is the primary source of publicly funded research and development (R&D) and commercialization available to U.S. startups. SBIR/STTR awards and grants do not have to be repaid. SBIR/STTR grants and awards start at about $100,000 and can reach $1 to $2 million or more. It is hard to imagine a product the"
+    },
+    {
+      "id": "check-page-1fc2ed52f2",
+      "url": "https://www.rev1ventures.com/blog/fully-refundable-tax-credit-information-that-may-apply-to-your-startup/",
+      "page": "application",
+      "excerpt": "Clarus CEO Jeff Haskett Explains Available ERTC Tax Credits in Ohio Search for Menu About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More Search for Getting Started By Rev1 Staff on 07/22/2021 Fully Refundable Tax Credit Information that May Apply to Your Startup Fully Refundable Tax Credit Information that May Apply to Your Startup Fully Refundable ERTC Tax Credit Information that May Apply to Your Startup By Jeff Haskett, CEO, and Co-Founder of Clarus R+D ERTC (Employee Retention Tax Credit) is a refundable tax credit that encourages businesses to keep employees on their payroll. Recently, ERTC was extended and expanded with a Recovery Startup provision , and companies may now retroactively claim the ERTC in addition to the Paycheck Protection Program loan. Companies that received PPP loans may now also claim the ERTC. Additionally, nearly every aspect of the credit has been liberalized and extended through 2021. Expanded Opportunity to Keep Employees and Offset Expenses Suppose a business was"
+    },
+    {
+      "id": "check-page-a4bd0d10a0",
+      "url": "https://www.rev1ventures.com/blog/tag/applications/",
+      "page": "application",
+      "excerpt": "applications Archives | Rev1 Ventures Search for Menu About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More Search for Tag: applications Categories Categories Filter by Topics Business Capital Getting Customers Getting Funding Getting Started Inclusive Entrepreneurship Market Press Product Rev1 News Startup Buzz Team The Hard Stuff Uncategorized VC Trends Ask an Entrepreneur: What are your best tips for successfully hiring the right people? The Hard Stuff By Rev1 Staff on 09/29/2014 The Hard Stuff Ask an Entrepreneur: What are your best tips for successfully hiring the right people? By Rev1 Staff on 09/29/2014 Search for All Blogs Topics Business Capital Getting Customers Getting Funding Getting Started Inclusive Entrepreneurship Market Press Product Rev1 News Startup Buzz Team The Hard Stuff Uncategorized VC Trends Get the latest updates to your inbox. Email Contact Information facebook linkedin instagram Rev1 at The Peninsula 330 Rush Alley Suite 100 Columbus OH 43215 Get Directions Rev1 Labs 1275"
+    },
+    {
+      "id": "check-page-896145fd72",
+      "url": "https://www.rev1ventures.com/blog/zeovations-unique-nanotechnology-attracts-battery-industry-federal-government-departments-and-beverage-leader-for-advanced-applications/",
+      "page": "application",
+      "excerpt": "ZeoVation’s Unique Nanotechnology Attracts Battery Industry, Federal Government Departments, and Beverage Leader for Advanced Applications | Rev1 Ventures Search for Menu About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More Search for Business By David Bergeron on 10/06/2022 ZeoVation’s Unique Nanotechnology Attracts Battery Industry, Federal Government Departments, and Beverage Leader for Advanced Applications ZeoVation’s Unique Nanotechnology Attracts Battery Industry, Federal Government Departments, and Beverage Leader for Advanced Applications What do bacteria, batteries, caffeine, and carbon dioxide reduction all have in common? Each has technology requirements and challenges that may be contributed by ZeoVation ’s “smart” zeolite particles—advanced materials that improve the effectiveness and safety of everyday products while reducing environmental impact. Zeovation, a spinout from The Ohio State University, started with innovation and scaled through a deliberate, practical focus on"
+    },
+    {
+      "id": "check-page-06735eb455",
+      "url": "https://www.rev1ventures.com/bootcamp-application/",
+      "page": "application",
+      "excerpt": "Get your Startup Started with Rev1 Ventures Search for Menu About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More Search for Let’s build something great – together. Ready to validate your idea? Sign up below to be notified when the next Concept to Customer Bootcamp application goes live Proving that your product, idea, or solution meets a market need is the first step in a successful startup journey. For business-to-business innovators in software, AI, advanced technologies, and life sciences: Rev1’s upcoming Bootcamp is built with you in mind! Sign up to receive word when the Spring 2027 application goes live: Email Contact Information Get the latest updates to your inbox. Email Contact Information facebook linkedin instagram Rev1 at The Peninsula 330 Rush Alley Suite 100 Columbus OH 43215 Get Directions Rev1 Labs 1275 Kinnear Rd. Columbus, Ohio 43212 Get Directions tel. (614) 487-3700 Contact Us ©2026 Rev1 Ventures. All rights reserved. Privacy Policy"
+    },
+    {
+      "id": "check-page-044fe1551a",
+      "url": "https://www.rev1ventures.com/r1-press/prevedere-makes-wing-data-first-50-ai-powered-business-applications-list/",
+      "page": "application",
+      "excerpt": "Prevedere Makes The Wing Data-First 50: AI-Powered Business Applications List | Rev1 Ventures Search for Menu About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More Search for Prevedere Makes The Wing Data-First 50: AI-Powered Business Applications List By Rev1 Staff on 06/21/2017 Prevedere Makes The Wing Data-First 50: AI-Powered Business Applications List Prevedere Makes The Wing Data-First 50: AI-Powered Business Applications List Get the latest updates to your inbox. Email Contact Information facebook linkedin instagram Rev1 at The Peninsula 330 Rush Alley Suite 100 Columbus OH 43215 Get Directions Rev1 Labs 1275 Kinnear Rd. Columbus, Ohio 43212 Get Directions tel. (614) 487-3700 Contact Us ©2026 Rev1 Ventures. All rights reserved. Privacy Policy"
+    },
+    {
+      "id": "check-page-3ded8143cc",
+      "url": "https://www.rev1ventures.com/blog/20-biggest-vc-deal-makers-great-lakes/",
+      "page": "terms",
+      "excerpt": "Here Are the 20 Biggest VC Deal Makers in the Great Lakes Search for Menu About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More Search for Rev1 News By Kristy Campbell on 11/04/2015 Here Are the 20 Biggest VC Deal Makers in the Great Lakes Here Are the 20 Biggest VC Deal Makers in the Great Lakes Venture capital research firm PitchBook had some somewhat sobering news about investing in the Great Lakes region in a report published this week. For the first time in six years, the number of VC deal makers in the Greak Lakes is on pace to fall short of the previous year’s number, according to PitchBook. In fact, VC investors have completed only 183 deals so far in the US Great Lakes region (Illinois, Indiana, Michigan, Minnesota, Ohio and Wisconsin) in 2015. To read more and to see where Rev1 Ventures is ranked among other VC Deal-Makers in the Great Lakes region, see the full story here. Get the latest updates to your inbox. Email Contact Information facebook linkedin instagram Rev1 at The Peninsula 330"
+    },
+    {
+      "id": "check-page-0456f5e576",
+      "url": "https://www.rev1ventures.com/blog/5-sticky-customer-situations-and-how-to-deal-with-them/",
+      "page": "terms",
+      "excerpt": "5 Sticky Customer Situations and How to Deal with Them Search for Menu About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More Search for Getting Customers By Tom Walker on 08/07/2023 5 Sticky Customer Situations and How to Deal with Them 5 Sticky Customer Situations and How to Deal with Them For startups, engaging early adopters can be like grabbing a tiger by the tail. You’re dealing with product issues, operational issues, and cash flow (never enough), and yet you need to make the customer experience the best it can possibly be. Engaging early adopters can be like grabbing the proverbial tiger by the tail. You need to make the customer experience the best it can possibly be. At the same time, enduring customer relationships are two-way. It’s your job to represent the customers, but not at the expense of your company. There are many things you won’t have to face until your company begins to scale, but when it comes to customers, the moment you sign up even one, there will be sticky issues you must"
+    },
+    {
+      "id": "check-page-aa7a26c5a0",
+      "url": "https://www.rev1ventures.com/blog/7-ways-make-deal-appealing-angel-investors/",
+      "page": "terms",
+      "excerpt": "7 Ways to Make Your Deal More Appealing to Angel Investors Search for Menu About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More About + Overview Impact Partners Team Blog Entrepreneurs + Venture Studio Our Mentors Startup Resources Entrepreneur Toolkit Jobs Events Corporates Capital Clients Locations + Rev1 at The Peninsula Rev1 Labs Learn More Search for Capital By Tom Walker on 05/15/2017 7 Ways to Make Your Deal More Appealing to Angel Investors 7 Ways to Make Your Deal More Appealing to Angel Investors Practical advice from an angel investor As an angel investor and fund manager, over the last 25 years, I’ve been in the audience of more business plan presentations that I can possibly count. The other day, someone asked me what is the single most important thing an entrepreneur should do to prepare for a business plan/investor pitch. My answer: Learn to think like an angel investor or VC. Investors often judge the quality of the business by the quality of the pitch. When the opportunity to make a formal business plan presentation arrives, be ready with a thoughtful, well-rehearsed pitch that captures investors’ attention at the very start. Your delivery and content counts—and your understanding of your"
     }
   ],
   "findings": {
@@ -43,7 +386,20 @@
         "evidenceId": "check-phone-b63f9df41b"
       }
     ],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-2-prepare-and-submit-your-proposal/",
+        "evidenceId": "check-route-cfa674f908"
+      },
+      {
+        "value": "https://www.rev1ventures.com/blog/7-tips-to-developing-competitive-sbir-sttr-applications-part-1-get-prepared/",
+        "evidenceId": "check-route-edbb55c438"
+      },
+      {
+        "value": "https://www.rev1ventures.com/blog/developing-competitive-sbir-sttr-applications-registration-template/",
+        "evidenceId": "check-route-38e874960a"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://www.rev1ventures.com",
@@ -53,8 +409,46 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "14",
+        "evidenceId": "check-duration-c1bc96007a"
+      },
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-59600fdac7"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-fc4c94aef0"
+      },
+      {
+        "value": "8",
+        "evidenceId": "check-duration-975ae4dbba"
+      },
+      {
+        "value": "24 months",
+        "evidenceId": "check-duration-35e419e44e"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-e1663d7a80"
+      }
+    ],
+    "location": [
+      {
+        "value": "Columbus",
+        "evidenceId": "check-location-ef6dbf81b7"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {
@@ -62,6 +456,11 @@
         "evidenceId": "check-name-a99f0a05e5"
       }
     ],
-    "examplePages": []
+    "examplePages": [
+      {
+        "value": "https://www.niaid.nih.gov/grants-contracts/sample-applications",
+        "evidenceId": "check-example-5f26f362c1"
+      }
+    ]
   }
 }

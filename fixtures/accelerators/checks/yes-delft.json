@@ -1,68 +1,255 @@
 {
   "programId": "yes-delft",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:59:02.000Z",
   "pagesRead": [
     "https://yesdelft.com/",
     "https://yesdelft.com/support/",
-    "https://yesdelft.com/about/",
-    "https://yesdelft.com/faq/"
+    "https://yesdelft.com/vacancies/open-application/",
+    "https://yesdelft.com/faq/",
+    "https://yesdelft.com/news/agridata-innovations-adi-closes-investment-round/",
+    "https://yesdelft.com/news/arceon-receives-an-investment/",
+    "https://yesdelft.com/news/decipher-received-pre-seed-investment-from-graduate-ventures/",
+    "https://yesdelft.com/news/deep-breath-received-an-pre-seed-investment-from-graduate-entrepreneur-fund/",
+    "https://yesdelft.com/news/fiducial-secures-e2m-seed-investment-to-advance-autonomous-drone-technology/",
+    "https://yesdelft.com/news/liion-power-selected-for-european-investment-platform-invesdor/",
+    "https://yesdelft.com/news/lyla-receives-pre-seed-investment-from-graduate-entrepreneur/",
+    "https://yesdelft.com/news/merqato-has-secured-an-investment-from-smarter-ventures/",
+    "https://yesdelft.com/news/nextdriver-receives-logistics-investment-to-scale-data-driven-driver-coaching-platform/",
+    "https://yesdelft.com/news/nurtio-technologies-investment-round-is-open/",
+    "https://yesdelft.com/news/perciv-ai-secures-e2-5m-seed-investment/"
   ],
   "evidence": [
     {
-      "id": "check-deal-944ed8d1a4",
+      "id": "check-deal-1748580899",
       "url": "https://yesdelft.com/faq/",
-      "title": "YES!Delft — terms page checked by scrape.py",
-      "excerpt": "place in our incubator in Delft. What are the costs for participating in the Validation program? The Validation Program has a participation contribution of € 900,- (excl. VAT) per team of two founders. Why should I join the Validation Program? By participating in the Validation Program , you acquire the right skills,",
+      "title": "YES!Delft — terms page",
+      "excerpt": "€3,500 excl. VAT per team. The Accelerator contract also includes a €25,000 excl. VAT success fee, payable once the company reaches either",
       "page": "terms"
     },
     {
-      "id": "check-deal-aeb0ff69c6",
+      "id": "check-deal-4862d6294f",
       "url": "https://yesdelft.com/faq/",
-      "title": "YES!Delft — terms page checked by scrape.py",
-      "excerpt": "small success fee based on revenue milestones which is reinvested into the incubator. What are the costs for joining the Accelerator? The participation fee is €3,500 excl. VAT per team. The Accelerator contract also includes a €25,000 excl. VAT success fee, payable once the company reaches either €1,000,000 in additional",
+      "title": "YES!Delft — terms page",
+      "excerpt": "per team of two founders. The Accelerator has a participation fee of €3,500 (excl. VAT) per team, plus a €25,000 (excl. VAT) success fee that",
       "page": "terms"
     },
     {
-      "id": "check-deal-dcdd0d5d33",
+      "id": "check-deal-8abb527820",
       "url": "https://yesdelft.com/faq/",
-      "title": "YES!Delft — terms page checked by scrape.py",
-      "excerpt": "in or willing to relocate to the Netherlands. How much do the YES!Delft programs cost? The Incubator (Validation Program) has a participation contribution of €900 (excl. VAT) per team of two founders. The Accelerator has a participation fee of €3,500 (excl. VAT) per team, plus a €25,000 (excl. VAT) success fee that",
+      "title": "YES!Delft — terms page",
+      "excerpt": "program? The Validation Program has a participation contribution of € 900,- (excl. VAT) per team of two founders. Why should I join the",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-ab00d9a9f1",
+      "url": "https://yesdelft.com/faq/",
+      "title": "YES!Delft — terms page",
+      "excerpt": "Incubator (Validation Program) has a participation contribution of €900 (excl. VAT) per team of two founders. The Accelerator has a",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-e83f0f6e6a",
+      "url": "https://yesdelft.com/faq/",
+      "title": "YES!Delft — terms page",
+      "excerpt": "has a participation fee of €3,500 (excl. VAT) per team, plus a €25,000 (excl. VAT) success fee that becomes payable only once the company",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f148661d2e",
+      "url": "https://yesdelft.com/faq/",
+      "title": "YES!Delft — terms page",
+      "excerpt": "are the costs for joining the Accelerator? The participation fee is €3,500 excl. VAT per team. The Accelerator contract also includes a €25,000",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-036189a9ff",
+      "url": "https://yesdelft.com/faq/",
+      "title": "YES!Delft — terms page",
+      "excerpt": "Program structured? The Validation Program is a 10-week program. The first two weeks help you understand",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-2523988aa7",
+      "url": "https://yesdelft.com/faq/",
+      "title": "YES!Delft — terms page",
+      "excerpt": "weeks on a part-time basis. The Accelerator is a 3-month structured program, after which startups remain",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-47691649f9",
+      "url": "https://yesdelft.com/faq/",
+      "title": "YES!Delft — terms page",
+      "excerpt": "operate, an IP patent and a runway of at least 6 months. How is the Accelerator structured and what",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-53b955597c",
+      "url": "https://yesdelft.com/faq/",
+      "title": "YES!Delft — terms page",
+      "excerpt": "last? The Incubator (Validation) runs for 10 weeks on a part-time basis. The Accelerator is a",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-658e19a488",
+      "url": "https://yesdelft.com/faq/",
+      "title": "YES!Delft — terms page",
+      "excerpt": "what topics are covered? The Accelerator is a 3-month program that includes 5 years of support and",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-8e1fa35129",
+      "url": "https://yesdelft.com/faq/",
+      "title": "YES!Delft — terms page",
+      "excerpt": "structured program. YES!Delft does both: the 10-week Validation Program acts as the incubator stage",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-9b7063e2e3",
+      "url": "https://yesdelft.com/faq/",
+      "title": "YES!Delft — terms page",
+      "excerpt": "for founders still testing their idea, and the 3-month Accelerator is the structured scale-up program",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-243bdb6efa",
+      "url": "https://yesdelft.com/faq/",
+      "title": "YES!Delft — terms page",
+      "excerpt": "is a startup incubator and accelerator based in Delft, Netherlands, founded in 2005,",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-f16b02a664",
+      "url": "https://yesdelft.com/news/perciv-ai-secures-e2-5m-seed-investment/",
+      "title": "YES!Delft — terms page",
+      "excerpt": "Partners, a pan-European venture fund based in Amsterdam and London with a focus on",
       "page": "terms"
     },
     {
       "id": "check-name-ddbc05d848",
       "url": "https://yesdelft.com/",
-      "title": "YES!Delft — homepage checked by scrape.py",
+      "title": "YES!Delft — homepage",
       "excerpt": "YES!Delft | Tech Startup Incubator YES!Delft Search Menu Building",
       "page": "details"
     },
     {
       "id": "check-route-56618b8a5b",
       "url": "https://yesdelft.com/support/",
-      "title": "YES!Delft — application page checked by scrape.py",
+      "title": "YES!Delft — application page",
       "excerpt": "Apply → https://yes-delft.typeform.com/to/h6xUfXYv",
       "page": "application"
     },
     {
       "id": "check-route-8cf80a78c9",
       "url": "https://yesdelft.com/",
-      "title": "YES!Delft — homepage checked by scrape.py",
+      "title": "YES!Delft — homepage",
       "excerpt": "Apply → https://yesdelft.com/support/",
       "page": "details"
     },
     {
       "id": "check-route-9bb19f4a27",
       "url": "https://yesdelft.com/support/",
-      "title": "YES!Delft — application page checked by scrape.py",
+      "title": "YES!Delft — application page",
       "excerpt": "Apply now → https://yes-delft.typeform.com/to/h6xUfXYv",
       "page": "application"
     },
     {
       "id": "check-route-c5cdf5f4be",
       "url": "https://yesdelft.com/",
-      "title": "YES!Delft — homepage checked by scrape.py",
+      "title": "YES!Delft — homepage",
       "excerpt": "YES!Delft → https://yesdelft.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-68eeb44b4e",
+      "url": "https://yesdelft.com/",
+      "page": "details",
+      "excerpt": "YES!Delft | Tech Startup Incubator YES!Delft Search Menu Building tomorrow’s leading deeptech firms Turning breakthrough technologies into global companies. Apply YES!Delft transforms scientific breakthroughs into globally scalable deeptech companies. About YES!Delft 600+ 600+ Startups More than 600 startups supported already, and counting. 82% 82% Still in business Most of the accelerated startups are still in business or acquired. >€1B >€1B Capital More than one billion euros raised by our startups. Latest news More news Strong comeback for Hardt Hyperloop with multi-million euro investment Unfiltered feedback, big ambitions, and a Silicon Valley mindset: Wibe Wagemans at YES!Delft We are looking for a Program Coordinator More news Startups Tech startups thrive at the YES!Delft incubator. Elephate.ai VYTL QPhoton Gyromotics Lobster Mainblades Inspections Delft Circuits perClass Tarnoc VIKTOR Somnox Binkies 3D SenTech AI BV PerfectXL (Infotron) Atmos UAV We got your back Our experienced mentors offer you their expert support throughout your entire startup journey. Pavel Cholakov Wanda Stevens Jin Han Francesca Devrient Haiyan Che Josefien Groot Jan Willem Deutekom David Cerda Salzmann Geert van Kuyck Engbert Wilmink Charles de Monchy Simon van der Jagt Ian Wachters Paul de Backker Incubator & accelerator Validate your startup idea. Accelerate growth. Become a successful tech"
+    },
+    {
+      "id": "check-page-d23b78bd65",
+      "url": "https://yesdelft.com/support/",
+      "page": "application",
+      "excerpt": "Join the best tech startup incubator and accelerator in Europe | YES!Delft YES!Delft Search Menu Support for startups Apply for our startup incubator support. Apply Contact us Entry requirements At least two co-founders * A clear business idea An innovative technology Based in or moving to The Netherlands *If you're a single entrepreneur, then find your co-founder first by joining the Meet your co-founder workshop . What you get Once accepted at the YES!Delft incubator, startups enjoy many benefits, including: Apply now Access to mentors, experts and partners A vibrant community of entrepreneurs Programs that help you grow and succeed Access to funding support Access to talent to grow your team Access to facilities, offices, workspaces and makerspaces Incubator & accelerator Validate your startup idea. Accelerate growth. Become a successful tech company. Validate Validate your business idea, find your market. Test your assumptions, meet your first customers, and acquire the right skills and connections to run your company. Accelerate Grow your startup into a successful business. The accelerator strengthens your startup’s foundation and connects you to a large network, without taking equity. Deep-dive Validate and accelerate with focus on your sector. Targeted programs to validate or accelerate your path to market with more precision and greater confidence. Info session Get a"
+    },
+    {
+      "id": "check-page-3675ed2204",
+      "url": "https://yesdelft.com/vacancies/open-application/",
+      "page": "application",
+      "excerpt": "Open application | YES!Delft YES!Delft Search Menu Vacancies Open application Would you like to join our team, but you did not find a suitable vacancy? We welcome you to reach out to us and send us your open application. Even if we don’t currently have any vacancies here at YES!Delft, or none that you think would be a perfect fit for you, you can always contact us and send us your CV. We are a small and driven team and love to get in touch with tech enthusiasts who want to strengthen our organization. Contact us The Accelerator Program brought us valuable insights into growing our startup in a structured manner - plus introducing us to a strong network of like minded innovators. Iskandar Tange Co-Founder at Coding the Curbs The YES!Delft Accelerator Program helped us navigate unknowns and prioritise the essentials offering access to a network of partners always ready to assist. The program is structured yet flexible, a perfect combination for startups looking to grow! Teun van ’t Veer Founder & CEO at Renset The YES!Delft Validation Program is a must-have crash course on starting your business without reinventing the wheel! Iskander Hannivoort Founder at Manukai The Accelerator Program armed us with the tools to ask the right questions, empowering us to define our own strategic plan for bringing our service to market. Maxim & Tristan Founders at Arkmon The accelerator brought"
+    },
+    {
+      "id": "check-page-2896da7879",
+      "url": "https://yesdelft.com/faq/",
+      "page": "terms",
+      "excerpt": "FAQ | YES!Delft YES!Delft Search Menu Frequently Asked Questions Search Category All General Joining the incubator Validation Program Accelerator Program Startup Jobs Funding and investments Partners and collaborations Office and locations News and events Contacting YES!Delft General How many startups has YES!Delft supported? As of 2026, YES!Delft has supported more than 600 startups, 82% of which are still active or have been acquired, collectively raising over €1 billion in funding. What happens to startups after they finish a YES!Delft program? After completing the Accelerator, a startup becomes a YES!Delft alumni and keeps access to mentors, experts, investors, and partners for at least 5 years. This long-term support is reflected in the outcomes: of the 560+ startups YES!Delft has supported, 83% are still active or have been acquired. YES!Delft is widely regarded as one of the leading deeptech incubators & accelerators in Europe. What is the difference between the Validation Program, the Accelerator, and the Deep-dive tracks? The Validation Program helps early-stage founders test their business idea and reach first customers. The Accelerator supports startups that already have a validated idea and helps them scale, without taking equity. The Deep-dive (sector-focused) modules are targeted, industry-specific tracks layered on top of the Incubator (Validation) and"
+    },
+    {
+      "id": "check-page-9a90cc45eb",
+      "url": "https://yesdelft.com/news/agridata-innovations-adi-closes-investment-round/",
+      "page": "terms",
+      "excerpt": "AgriData Innovations (ADI) closes investment round | YES!Delft YES!Delft Search Menu Latest AgriData Innovations (ADI) closes investment round Published February 1st, 2024 AgriData Innovations (ADI) closes investment round to accelerate market expansion and technology development. Investment round ADI concluded last year on a high note, marking significant milestones that underscore the success of our innovative technology for agriculture. We are thrilled to share the exciting news that our angel investors, who have been a driving force behind our journey, have demonstrated their unwavering confidence in our vision by doubling down on their investments. This is a testament to the potential they see in ADI’s transformative role in the agricultural sector. Breaking even and beyond: A pivotal moment Closing the fiscal year right on the edge of breaking even is a monumental achievement for any startup, and for ADI, it represents a pivotal moment in our growth trajectory. It showcases the market potential of our technology. The investment round allows us to scale up our operations, which in turn enables further development of our camera systems and crop monitoring AI software. Unveiling our growth blueprint ADI’s imaging technology is operational in 4 countries across Europe. It is used in different crop types and for different applications ranging from germination analysis for"
+    },
+    {
+      "id": "check-page-8aea7a7c0d",
+      "url": "https://yesdelft.com/news/arceon-receives-an-investment/",
+      "page": "terms",
+      "excerpt": "Arceon receives an investment | YES!Delft YES!Delft Search Menu Latest Arceon receives an investment Published October 28th, 2024 Tenzing Alpha invests in material science startup Arceon, founded by TU Delft alumni, to support the development of their advanced materials for extreme environments. Tenzing Alpha has invested in Arceon , an emerging leader in advanced engineering materials designed for extreme environments. The investment highlights Tenzing Alpha’s confidence in Arceon’s future potential as they develop groundbreaking technologies. A follow-on investment is also being considered to support Arceon’s next phase of growth. Arceon’s technical strength lies in its team’s deep expertise in creating advanced materials for extreme and harsh environments, such as aerospace and high-performance industries. With Tenzing Alpha’s assistance, the company will focus on expanding its commercial capabilities, market reach, and operational efficiency to transform its technical success into a strong business presence. About Arceon Arceon specializes in creating advanced materials designed to withstand extreme environments. Their team is dedicated to pioneering technologies that address complex engineering challenges, setting the stage for future leadership in their sector. About Tenzing Alpha Tenzing Alpha is a venture capital firm that invests in early-stage and high-growth"
+    },
+    {
+      "id": "check-page-8fd79f2a2d",
+      "url": "https://yesdelft.com/news/decipher-received-pre-seed-investment-from-graduate-ventures/",
+      "page": "terms",
+      "excerpt": "DecipHER received Pre-Seed investment from Graduate Ventures | YES!Delft YES!Delft Search Menu Latest DecipHER received Pre-Seed investment from Graduate Ventures Published June 22nd, 2026 DecipHER women secures investment to advance AI-driven early detection and prevention of peripartum and postpartum depression. Women’s health startup DecipHER women has secured new pre-seed investment from Graduate Ventures to accelerate the development of its AI-driven platform for the early detection and prevention of peripartum and postpartum depression. The investment marks an important milestone in the company’s mission to transform maternal mental healthcare through earlier intervention and more personalised care. Peripartum and postpartum depression affects an estimated 10–20% of mothers worldwide, yet care pathways remain largely reactive, with intervention often occurring only after symptoms become severe. With approximately 130 million births globally each year, the need for earlier, more precise detection has become increasingly urgent. DecipHER is addressing this challenge by developing a diagnostic platform designed to identify women at risk before symptoms escalate into crisis. By enabling healthcare providers to intervene earlier, the company aims to improve outcomes for mothers while reducing long-term healthcare burdens. At the core of DecipHER’s innovation is a proprietary"
+    },
+    {
+      "id": "check-page-d37ee870d3",
+      "url": "https://yesdelft.com/news/deep-breath-received-an-pre-seed-investment-from-graduate-entrepreneur-fund/",
+      "page": "terms",
+      "excerpt": "Deep Breath received an pre-seed investment from graduate entrepreneur fund | YES!Delft YES!Delft Search Menu Latest Deep Breath received pre-seed investment from Graduate Entrepreneur Fund Published August 30th, 2024 YES!Delft startup Deep Breath received pre-seed funding from Graduate Entrepreneur Deep Breath is a cutting-edge MedTech startup on a mission to transform the landscape of intensive care unit (ICU) treatment. They specialize in software as a medical device that detects unsafe modes during mechanical lung ventilation with AI algorithms, offering critical insights to optimize treatment and improve patient outcomes. The startup joined YES!Delft accelerator program in 2023 October. The potential of Deep Breaths technology is considerable. With up to 20 million people requiring ICU admission annually and 40-50% of them needing mechanical ventilation annually, the need for optimized lung ventilation support is critical. By providing timely and precise adjustments to ventilator settings, Deep Breath can ICU stays by up to 20% on average, increasing hospital capacity and easing the load on medical staff. Traditionally, managing mechanical ventilation in ICUs has been a complex and labour-intensive. This increases the risk of errors and places a heavy burden on medical staff. Deep breath recognized these challenges during Covid-19 and set out to develop an intelligent"
+    },
+    {
+      "id": "check-page-92b2cf6214",
+      "url": "https://yesdelft.com/news/fiducial-secures-e2m-seed-investment-to-advance-autonomous-drone-technology/",
+      "page": "terms",
+      "excerpt": "Fiducial Secures €2M+ Seed Investment to Advance Autonomous Drone Technology | YES!Delft YES!Delft Search Menu Latest Fiducial secures €2M+ seed investment to advance autonomous drone technology Published April 30th, 2026 Fiducial, a dual-use technology company developing advanced computer vision software for autonomous drone operations, has announced the successful closing of a seed funding round exceeding €2 million. The round was led by Graduate Ventures and supported by SecFund, with additional debt financing provided by Rabobank . Addressing complex operational environments Fiducial focuses on enabling drones to operate autonomously in challenging and high-pressure environments. Its software allows aerial systems to navigate and respond effectively where conventional GPS-based navigation or radar systems may be unreliable or ineffective. The company’s platform is designed to support both defence and civilian applications, including drone detection, infrastructure inspection, and security monitoring, reflecting growing demand for resilient autonomous systems across sectors. Strategic position in a growing market The investment comes at a time when Europe is accelerating efforts to strengthen defence capabilities while also expanding the use of autonomous technologies in civil infrastructure. Fiducial’s dual-use positioning places it at the intersection of these"
+    },
+    {
+      "id": "check-page-ed22835cc9",
+      "url": "https://yesdelft.com/news/liion-power-selected-for-european-investment-platform-invesdor/",
+      "page": "terms",
+      "excerpt": "Liion Power selected for European investment platform Invesdor | YES!Delft YES!Delft Search Menu Latest Liion Power selected for European investment platform Invesdor Published November 27th, 2025 The greentech startup Liion Power was selected for Invesdor, the largest European platform for impact investments in startups Liion Power, founded by Jardo Stammeshaus, who was named ‘Most Innovative Student Entrepreneur of the Netherlands’ in 2021 during his physics studies for this idea, has been selected for Invesdor, the largest European platform for impact investments in startups, after a year of discussions. This marks an important step in Liion Power’s ambition to make smart charging technology widely available, not only for consumers but also, in the future, as AI-trained software integration for manufacturers of electronics and light electric vehicles. The first product from Liion Power is Leo, a device that extends the lifespan of users’ electronics by charging smarter. In 2024, Liion Power raised over 250,000 euros in pre-orders with Leo and won several international innovation awards, including the CES Las Vegas Innovation Award 2025 and the Postcode Lottery Green Challenge. The selection by Invesdor now opens the door to European investors, from professional funds to private individuals, who can participate in the company’s further growth under the same conditions. Leo,"
+    },
+    {
+      "id": "check-page-0e2362d4ca",
+      "url": "https://yesdelft.com/news/lyla-receives-pre-seed-investment-from-graduate-entrepreneur/",
+      "page": "terms",
+      "excerpt": "LYLA receives pre-seed investment from Graduate Entrepreneur | YES!Delft YES!Delft Search Menu Latest LYLA receives pre-seed investment from Graduate Entrepreneur Published June 11th, 2025 Graduate Entrepreneur invested in LYLA, a medtech startup that helps curing cancer through transforming quality control (QC) of radiopharmaceuticals. We are pleased to announce that Graduate Entrepreneur invested in LYLA , a medtech startup that helps curing cancer through transforming quality control (QC) of radiopharmaceuticals. Radiopharmaceuticals are an emerging cancer treatment with high potential, but their widespread adoption is hindered by quality control. LYLA’s compact scanner streamlines the QC workflow of this next-generation cancer therapy, making it more accessible and reliable. ‍Radiopharmaceuticals offer a promising treatment for metastatic cancers, targeting cancer cells while sparing healthy tissue. However, current QC methods are inefficient, requiring a four-hour waiting period to measure isotope effectiveness, reducing treatment potency. This delay complicates scheduling and limits flexibility. Additionally, existing QC technologies are unsuitable for newer therapies like Target Alpha Therapy (TAT), leading to unreliable results. ‍To overcome these challenges, LYLA is developing a compact, automated scanner that radically simplifies and accelerates QC for"
+    },
+    {
+      "id": "check-page-6fca2cdf8a",
+      "url": "https://yesdelft.com/news/merqato-has-secured-an-investment-from-smarter-ventures/",
+      "page": "terms",
+      "excerpt": "Merqato has secured an investment from Smarter Ventures | YES!Delft YES!Delft Search Menu Latest Merqato has secured an investment from Smarter Ventures Published October 4th, 2024 Merqato is excited to announce an investment from Smarter Ventures, marking a key milestone in the company's growth. This partnership will drive Merqato’s mission to help fruit and vegetable businesses across Europe reduce costs and minimize food waste. With a strong presence in the Netherlands, Germany, Spain, the UK, Italy, and Peru, Merqato looks forward to continued innovation and collaboration with trusted partners. About Merqato Merqato is an AI-powered platform with all the software, data, and resources you need to optimize your operational planning. Merqato’s connected platform enables you to grow your business faster by improving the accuracy and process of matching supply and demand. The Validation Program of YES!Delft helped us establish our initial market presence, and their continued support proved invaluable afterwards. They filled in essential gaps that every early-stage startup encounters, making a real difference for us at Fluxthor. Jesse van der Linden Co-Founder at Fluxthor The accelerator brought us in contact with the right people at the moment we needed them, and gave us the theoretical knowledge and practical tools to grow as a person and company. Ernst van der Wal Founder at"
+    },
+    {
+      "id": "check-page-ab371e392a",
+      "url": "https://yesdelft.com/news/nextdriver-receives-logistics-investment-to-scale-data-driven-driver-coaching-platform/",
+      "page": "terms",
+      "excerpt": "NEXTdriver Receives Logistics Investment to Scale Data-Driven Driver Coaching Platform | YES!Delft YES!Delft Search Menu Latest NEXTdriver receives logistics investment to scale data-driven driver coaching platform Published February 20th, 2025 NEXTdriver, the leading platform for coaching and supporting professional drivers and delivery personnel, has received a strategic investment from several logistics companies. This capital injection will support the further growth of the platform. NEXTdriver differentiates itself by combining data-driven coaching with a personalized approach for drivers. The platform allows coaches to efficiently support over 100 drivers daily. It integrates seamlessly with various onboard computer systems and remains system-agnostic, enabling fair driver comparisons. This data-driven approach helps drivers adopt safer and more sustainable driving behaviors—without requiring additional hardware. Measurable sustainability and cost savings On average, NEXTdriver customers reduce fuel consumption by nearly 4.5%, leading to an annual saving of around 1,150 liters per truck and a reduction of 3 tons of CO₂ emissions. This translates into direct fuel cost savings of over €1,500 per driver per year and a lower CO₂ tax burden for businesses. The more logistics companies promote the platform’s benefits among drivers and within their organizations, the greater"
+    },
+    {
+      "id": "check-page-c104da8cd6",
+      "url": "https://yesdelft.com/news/nurtio-technologies-investment-round-is-open/",
+      "page": "terms",
+      "excerpt": "Nurtio Technologies: investment round is open! | YES!Delft YES!Delft Search Menu Latest Nurtio Technologies: Investment Round is Open! Published November 27th, 2023 Nurtio Technologies is opening an investment round. The round is open to both institutional investors with a minimal ticket of 500K, and individual investors via a CLA with a ticket as small as 50K. With their products, Nurtio Technologies is reinventing the whole commercial plantscaping industry (or, to put it simply: the companies that take care of the plants in commercial real estate), which is a very steadily growing yet often overlooked market. One of the products of the company, Nurtio Insight, is the software technology to digitalize the field operations of plantscaping companies, save them a lot of time (and cost) that goes into admin tasks, and bring transparency to their cost structure. The second product of the company is Nurtio Protect, a connected plant care technology that allows plantscaping companies to remotely monitor their most valuable plant assets (specimen trees, winter gardens, living walls) and take action before it’s too late. Finally, the third product that the company is currently making is Nurtio Assist, another connected technology that leverages plant data to dramatically reduce the number of service visits required and eventually make indoor plants more affordable and more available"
+    },
+    {
+      "id": "check-page-ee0e321380",
+      "url": "https://yesdelft.com/news/perciv-ai-secures-e2-5m-seed-investment/",
+      "page": "terms",
+      "excerpt": "Perciv AI Secures €2.5M Seed Investment | YES!Delft YES!Delft Search Menu Latest Perciv AI Secures €2.5M Seed Investment Published December 12th, 2024 Perciv AI has raised a €2.5 million seed round led by DayOne Capital and Keen Venture Partners, joined by Vinci Venture Capital, to deliver AI-driven radar perception software for autonomous systems across various industries. Perciv AI, a deep-tech startup pioneering dedicated AI for radar perception, has secured €2.5 million in a seed funding round led by DayOne Capital and Keen Venture Partners, joined by Vinci Venture Capital. The investment supports Perciv AI’s mission to democratize autonomous technology by making perception safe, reliable, and affordable. Already in production with select partners, Perciv AI will use the funding to expand its operations further and scale its radar-based perception solutions across various industries such as automotive, robotics, and aerospace. Automation in these industries is costly due to expensive LiDAR sensors, or technically challenging due to limitations of traditional radar perception. Perciv AI addresses these challenges by delivering LiDAR-like performance at a fraction of the cost through next-generation AI-driven radar and radar-camera fusion technology. This approach enables automated systems, robots, and vehicles to perceive their environment reliably under any conditions,"
     }
   ],
   "findings": {
@@ -87,19 +274,97 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "10",
+        "evidenceId": "check-duration-8e1fa35129"
+      },
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-9b7063e2e3"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-47691649f9"
+      }
+    ],
+    "format": [],
+    "location": [
+      {
+        "value": "Delft",
+        "evidenceId": "check-location-243bdb6efa"
+      },
+      {
+        "value": "Amsterdam",
+        "evidenceId": "check-location-f16b02a664"
+      }
+    ],
     "selectivity": [],
     "dealText": [
       {
-        "value": "in or willing to relocate to the Netherlands. How much do the YES!Delft programs cost? The Incubator (Validation Program) has a participation contribution of €900 (excl. VAT) per team of two founders. The Accelerator has a participation fee of €3,500 (excl. VAT) per team, plus a €25,000 (excl. VAT) success fee that",
-        "evidenceId": "check-deal-dcdd0d5d33"
+        "value": "Incubator (Validation Program) has a participation contribution of €900 (excl. VAT) per team of two founders. The Accelerator has a",
+        "evidenceId": "check-deal-ab00d9a9f1"
       },
       {
-        "value": "place in our incubator in Delft. What are the costs for participating in the Validation program? The Validation Program has a participation contribution of € 900,- (excl. VAT) per team of two founders. Why should I join the Validation Program? By participating in the Validation Program , you acquire the right skills,",
-        "evidenceId": "check-deal-944ed8d1a4"
+        "value": "per team of two founders. The Accelerator has a participation fee of €3,500 (excl. VAT) per team, plus a €25,000 (excl. VAT) success fee that",
+        "evidenceId": "check-deal-4862d6294f"
       },
       {
-        "value": "small success fee based on revenue milestones which is reinvested into the incubator. What are the costs for joining the Accelerator? The participation fee is €3,500 excl. VAT per team. The Accelerator contract also includes a €25,000 excl. VAT success fee, payable once the company reaches either €1,000,000 in additional",
-        "evidenceId": "check-deal-aeb0ff69c6"
+        "value": "has a participation fee of €3,500 (excl. VAT) per team, plus a €25,000 (excl. VAT) success fee that becomes payable only once the company",
+        "evidenceId": "check-deal-e83f0f6e6a"
+      },
+      {
+        "value": "program? The Validation Program has a participation contribution of € 900,- (excl. VAT) per team of two founders. Why should I join the",
+        "evidenceId": "check-deal-8abb527820"
+      },
+      {
+        "value": "are the costs for joining the Accelerator? The participation fee is €3,500 excl. VAT per team. The Accelerator contract also includes a €25,000",
+        "evidenceId": "check-deal-f148661d2e"
+      },
+      {
+        "value": "€3,500 excl. VAT per team. The Accelerator contract also includes a €25,000 excl. VAT success fee, payable once the company reaches either",
+        "evidenceId": "check-deal-1748580899"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "900",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-ab00d9a9f1"
+      },
+      {
+        "value": {
+          "kind": "fee",
+          "amount": "3500",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Fee",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-4862d6294f"
+      },
+      {
+        "value": {
+          "kind": "fee",
+          "amount": "25000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Fee",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-e83f0f6e6a"
       }
     ],
     "portfolioPages": [],

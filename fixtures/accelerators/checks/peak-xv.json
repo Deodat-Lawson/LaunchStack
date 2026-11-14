@@ -1,102 +1,556 @@
 {
   "programId": "peak-xv",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.peakxv.com/",
+    "https://www.peakxv.com/faqs",
+    "https://www.peakxv.com/insight/would-it-help-the-3-words-to-deal-with-anxiety",
+    "https://www.peakxv.com/newsletter/peak-xv-ups-surge-seed-investment-ceiling-to-5m-unveils-18-startup-cohort",
+    "https://www.peakxv.com/announcement/surge-10-kicks-off-with-our-most-global-sector-diverse-cohort-yet",
+    "https://www.peakxv.com/insight/meet-the-first-cohort-of-the-sequoia-spark-fellowship-for-female-founders",
     "https://www.peakxv.com/about-us",
-    "https://www.peakxv.com/faqs"
+    "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
+    "https://www.peakxv.com/insight/cursor-co-founder-aman-sanger-on-the-journey-from-0--100m-in-12-months-the-future-of-programming",
+    "https://www.peakxv.com/insight/southeast-asian-saas-is-about-to-hit-prime-time",
+    "https://www.peakxv.com/insight/vercel-s-malte-ubl-on-agent-era-self-driving-infra-and-how-vercel-thinks-about-the-next-decade",
+    "https://www.peakxv.com/companies/10-minute-school",
+    "https://www.peakxv.com/companies/1mg",
+    "https://www.peakxv.com/companies/aampe",
+    "https://www.peakxv.com/companies/absolute-foods"
   ],
   "evidence": [
     {
+      "id": "check-deal-f8262a833e",
+      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
+      "title": "Peak XV — program page",
+      "excerpt": "soon after. Key highlights include: Capital : Surge will invest $1.5M in every start-up that is a part of Surge, before the start of the",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-28908f897f",
+      "url": "https://www.peakxv.com/insight/cursor-co-founder-aman-sanger-on-the-journey-from-0--100m-in-12-months-the-future-of-programming",
+      "title": "Peak XV — program page",
+      "excerpt": "Aman Sanger on the Journey from 0-$100M in 12 Months • 5 min read copy “A lot of the work for Cursor",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-8fef912ad4",
+      "url": "https://www.peakxv.com/insight/cursor-co-founder-aman-sanger-on-the-journey-from-0--100m-in-12-months-the-future-of-programming",
+      "title": "Peak XV — program page",
+      "excerpt": "Aman Sanger on the Journey from 0-$100M in 12 Months Team Companies Surge News & Insights About ←",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9552900c90",
+      "url": "https://www.peakxv.com/insight/meet-the-first-cohort-of-the-sequoia-spark-fellowship-for-female-founders",
+      "title": "Peak XV — batches page",
+      "excerpt": "portfolio, who will mentor them over the next 12 months. We believe mentorship will be a critical wedge",
+      "page": "batches"
+    },
+    {
       "id": "check-email-0553ca9a27",
       "url": "https://www.peakxv.com/about-us",
-      "title": "Peak XV — details page checked by scrape.py",
+      "title": "Peak XV — program page",
       "excerpt": "contactus@peakxv.com",
       "page": "details"
+    },
+    {
+      "id": "check-email-057fb797cc",
+      "url": "https://www.peakxv.com/insight/southeast-asian-saas-is-about-to-hit-prime-time",
+      "title": "Peak XV — program page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-110a50192b",
+      "url": "https://www.peakxv.com/companies/absolute-foods",
+      "title": "Peak XV — portfolio page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "portfolio"
     },
     {
       "id": "check-email-16a894f126",
       "url": "https://www.peakxv.com/faqs",
-      "title": "Peak XV — terms page checked by scrape.py",
+      "title": "Peak XV — terms page",
       "excerpt": "contactus@peakxv.com",
       "page": "terms"
+    },
+    {
+      "id": "check-email-2679342ada",
+      "url": "https://www.peakxv.com/insight/vercel-s-malte-ubl-on-agent-era-self-driving-infra-and-how-vercel-thinks-about-the-next-decade",
+      "title": "Peak XV — program page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-29f3a3547d",
+      "url": "https://www.peakxv.com/insight/cursor-co-founder-aman-sanger-on-the-journey-from-0--100m-in-12-months-the-future-of-programming",
+      "title": "Peak XV — program page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
+      "page": "details"
+    },
+    {
+      "id": "check-email-54a5063913",
+      "url": "https://www.peakxv.com/companies/absolute-foods",
+      "title": "Peak XV — portfolio page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
+      "page": "portfolio"
     },
     {
       "id": "check-email-554d3ab1f4",
       "url": "https://www.peakxv.com/about-us",
-      "title": "Peak XV — details page checked by scrape.py",
+      "title": "Peak XV — program page",
       "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
       "page": "details"
+    },
+    {
+      "id": "check-email-57f4cee5cc",
+      "url": "https://www.peakxv.com/companies/10-minute-school",
+      "title": "Peak XV — portfolio page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-5e82741ed3",
+      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
+      "title": "Peak XV — program page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
+      "page": "details"
+    },
+    {
+      "id": "check-email-61509f6cb1",
+      "url": "https://www.peakxv.com/announcement/surge-10-kicks-off-with-our-most-global-sector-diverse-cohort-yet",
+      "title": "Peak XV — batches page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-81ff4e45fa",
+      "url": "https://www.peakxv.com/newsletter/peak-xv-ups-surge-seed-investment-ceiling-to-5m-unveils-18-startup-cohort",
+      "title": "Peak XV — terms page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-8272491ac3",
+      "url": "https://www.peakxv.com/insight/would-it-help-the-3-words-to-deal-with-anxiety",
+      "title": "Peak XV — terms page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "terms"
     },
     {
       "id": "check-email-85426d8091",
       "url": "https://www.peakxv.com/faqs",
-      "title": "Peak XV — terms page checked by scrape.py",
+      "title": "Peak XV — terms page",
       "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
       "page": "terms"
     },
     {
-      "id": "check-email-9cfb8ef038",
-      "url": "https://www.peakxv.com/",
-      "title": "Peak XV — homepage checked by scrape.py",
+      "id": "check-email-971af4011a",
+      "url": "https://www.peakxv.com/insight/vercel-s-malte-ubl-on-agent-era-self-driving-infra-and-how-vercel-thinks-about-the-next-decade",
+      "title": "Peak XV — program page",
       "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
       "page": "details"
     },
     {
+      "id": "check-email-98b53a7b7e",
+      "url": "https://www.peakxv.com/companies/aampe",
+      "title": "Peak XV — portfolio page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-9cfb8ef038",
+      "url": "https://www.peakxv.com/",
+      "title": "Peak XV — homepage",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
+      "page": "details"
+    },
+    {
+      "id": "check-email-aab13063b7",
+      "url": "https://www.peakxv.com/insight/cursor-co-founder-aman-sanger-on-the-journey-from-0--100m-in-12-months-the-future-of-programming",
+      "title": "Peak XV — program page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-adb3cf7790",
+      "url": "https://www.peakxv.com/insight/meet-the-first-cohort-of-the-sequoia-spark-fellowship-for-female-founders",
+      "title": "Peak XV — batches page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-ba90162ce3",
+      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
+      "title": "Peak XV — program page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-cb5cbe775b",
+      "url": "https://www.peakxv.com/companies/aampe",
+      "title": "Peak XV — portfolio page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-cb9f38737c",
+      "url": "https://www.peakxv.com/companies/1mg",
+      "title": "Peak XV — portfolio page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-d61bcc8ca4",
+      "url": "https://www.peakxv.com/newsletter/peak-xv-ups-surge-seed-investment-ceiling-to-5m-unveils-18-startup-cohort",
+      "title": "Peak XV — terms page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-de79d4e13f",
+      "url": "https://www.peakxv.com/insight/would-it-help-the-3-words-to-deal-with-anxiety",
+      "title": "Peak XV — terms page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-e10e1e7c55",
+      "url": "https://www.peakxv.com/insight/southeast-asian-saas-is-about-to-hit-prime-time",
+      "title": "Peak XV — program page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e39e39e97a",
+      "url": "https://www.peakxv.com/companies/10-minute-school",
+      "title": "Peak XV — portfolio page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-e74ba8f828",
+      "url": "https://www.peakxv.com/companies/1mg",
+      "title": "Peak XV — portfolio page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-e7d3408f22",
+      "url": "https://www.peakxv.com/announcement/surge-10-kicks-off-with-our-most-global-sector-diverse-cohort-yet",
+      "title": "Peak XV — batches page",
+      "excerpt": "contactus@peakxv.com",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-f6b7051ef8",
+      "url": "https://www.peakxv.com/insight/meet-the-first-cohort-of-the-sequoia-spark-fellowship-for-female-founders",
+      "title": "Peak XV — batches page",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
+      "page": "batches"
+    },
+    {
       "id": "check-email-fc69b5a4de",
       "url": "https://www.peakxv.com/",
-      "title": "Peak XV — homepage checked by scrape.py",
+      "title": "Peak XV — homepage",
       "excerpt": "contactus@peakxv.com",
+      "page": "details"
+    },
+    {
+      "id": "check-format-19f4f90bba",
+      "url": "https://www.peakxv.com/announcement/surge-10-kicks-off-with-our-most-global-sector-diverse-cohort-yet",
+      "title": "Peak XV — batches page",
+      "excerpt": "run from October 2024 to February 2025, featuring a mix of in-person and online sessions, and events focused on founder",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-48f0d744bc",
+      "url": "https://www.peakxv.com/insight/southeast-asian-saas-is-about-to-hit-prime-time",
+      "title": "Peak XV — program page",
+      "excerpt": "has already created multiple US-based unicorns like Deel, Remote, and Papaya Global, and Southeast Asia and the broader",
+      "page": "details"
+    },
+    {
+      "id": "check-format-57516de7e7",
+      "url": "https://www.peakxv.com/insight/southeast-asian-saas-is-about-to-hit-prime-time",
+      "title": "Peak XV — program page",
+      "excerpt": "digitization, and open banking–just to name a few. The remote work category, for example, has already created multiple",
+      "page": "details"
+    },
+    {
+      "id": "check-format-851e0702f7",
+      "url": "https://www.peakxv.com/insight/southeast-asian-saas-is-about-to-hit-prime-time",
+      "title": "Peak XV — program page",
+      "excerpt": "are being shaped by the same underlying trends, such as remote work, supply chain digitization, and open banking–just to",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e4d00fcb45",
+      "url": "https://www.peakxv.com/insight/southeast-asian-saas-is-about-to-hit-prime-time",
+      "title": "Peak XV — program page",
+      "excerpt": "and the broader APAC region’s popularity as a source for remote talent underscores the opportunity for a homegrown player",
       "page": "details"
     },
     {
       "id": "check-name-a08f4adf80",
       "url": "https://www.peakxv.com/",
-      "title": "Peak XV — homepage checked by scrape.py",
+      "title": "Peak XV — homepage",
       "excerpt": "Peak XV Partners | Global Venture Capital Firm Investing Across",
       "page": "details"
     },
     {
+      "id": "check-portfolio-011c024be6",
+      "url": "https://www.peakxv.com/companies/10-minute-school",
+      "title": "Peak XV — portfolio page",
+      "excerpt": "Companies → https://www.peakxv.com/our-companies",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-0a7cfe555e",
       "url": "https://www.peakxv.com/faqs",
-      "title": "Peak XV — terms page checked by scrape.py",
+      "title": "Peak XV — terms page",
       "excerpt": "Companies → https://www.peakxv.com/our-companies",
       "page": "terms"
     },
     {
+      "id": "check-portfolio-170a206368",
+      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
+      "title": "Peak XV — program page",
+      "excerpt": "Companies → https://www.peakxv.com/our-companies",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-23a99b849f",
       "url": "https://www.peakxv.com/",
-      "title": "Peak XV — homepage checked by scrape.py",
+      "title": "Peak XV — homepage",
       "excerpt": "See More → https://www.peakxv.com/our-companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-33f6459705",
+      "url": "https://www.peakxv.com/insight/would-it-help-the-3-words-to-deal-with-anxiety",
+      "title": "Peak XV — terms page",
+      "excerpt": "Companies → https://www.peakxv.com/our-companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-402fdd5812",
+      "url": "https://www.peakxv.com/companies/absolute-foods",
+      "title": "Peak XV — portfolio page",
+      "excerpt": "Companies → https://www.peakxv.com/our-companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-430dae3d6f",
+      "url": "https://www.peakxv.com/insight/cursor-co-founder-aman-sanger-on-the-journey-from-0--100m-in-12-months-the-future-of-programming",
+      "title": "Peak XV — program page",
+      "excerpt": "Companies → https://www.peakxv.com/our-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-67322cf377",
+      "url": "https://www.peakxv.com/companies/aampe",
+      "title": "Peak XV — portfolio page",
+      "excerpt": "← Back → https://www.peakxv.com/our-companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-6a092c492b",
+      "url": "https://www.peakxv.com/announcement/surge-10-kicks-off-with-our-most-global-sector-diverse-cohort-yet",
+      "title": "Peak XV — batches page",
+      "excerpt": "here → https://surge.peakxv.com/startups/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-6bdb8e178c",
+      "url": "https://www.peakxv.com/insight/vercel-s-malte-ubl-on-agent-era-self-driving-infra-and-how-vercel-thinks-about-the-next-decade",
+      "title": "Peak XV — program page",
+      "excerpt": "Companies → https://www.peakxv.com/our-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-700813f705",
+      "url": "https://www.peakxv.com/companies/absolute-foods",
+      "title": "Peak XV — portfolio page",
+      "excerpt": "← Back → https://www.peakxv.com/our-companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-73af473974",
+      "url": "https://www.peakxv.com/companies/aampe",
+      "title": "Peak XV — portfolio page",
+      "excerpt": "Companies → https://www.peakxv.com/our-companies",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-8df2f3c06f",
       "url": "https://www.peakxv.com/",
-      "title": "Peak XV — homepage checked by scrape.py",
+      "title": "Peak XV — homepage",
       "excerpt": "View more → https://www.peakxv.com/our-companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-93500d91be",
+      "url": "https://www.peakxv.com/insight/meet-the-first-cohort-of-the-sequoia-spark-fellowship-for-female-founders",
+      "title": "Peak XV — batches page",
+      "excerpt": "Companies → https://www.peakxv.com/our-companies",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-a212c0c0c7",
       "url": "https://www.peakxv.com/about-us",
-      "title": "Peak XV — details page checked by scrape.py",
+      "title": "Peak XV — program page",
       "excerpt": "Companies → https://www.peakxv.com/our-companies",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-acec3de461",
+      "url": "https://www.peakxv.com/companies/10-minute-school",
+      "title": "Peak XV — portfolio page",
+      "excerpt": "← Back → https://www.peakxv.com/our-companies",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-d1071ceb04",
       "url": "https://www.peakxv.com/",
-      "title": "Peak XV — homepage checked by scrape.py",
+      "title": "Peak XV — homepage",
       "excerpt": "Companies → https://www.peakxv.com/our-companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-d464643aee",
+      "url": "https://www.peakxv.com/newsletter/peak-xv-ups-surge-seed-investment-ceiling-to-5m-unveils-18-startup-cohort",
+      "title": "Peak XV — terms page",
+      "excerpt": "Companies → https://www.peakxv.com/our-companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d873e3a301",
+      "url": "https://www.peakxv.com/companies/1mg",
+      "title": "Peak XV — portfolio page",
+      "excerpt": "Companies → https://www.peakxv.com/our-companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-da861109e5",
+      "url": "https://www.peakxv.com/announcement/surge-10-kicks-off-with-our-most-global-sector-diverse-cohort-yet",
+      "title": "Peak XV — batches page",
+      "excerpt": "Companies → https://www.peakxv.com/our-companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-f55c1929d9",
+      "url": "https://www.peakxv.com/insight/southeast-asian-saas-is-about-to-hit-prime-time",
+      "title": "Peak XV — program page",
+      "excerpt": "Companies → https://www.peakxv.com/our-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-fe63b22da3",
+      "url": "https://www.peakxv.com/companies/1mg",
+      "title": "Peak XV — portfolio page",
+      "excerpt": "← Back → https://www.peakxv.com/our-companies",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-601d0e0716",
       "url": "https://www.peakxv.com/",
-      "title": "Peak XV — homepage checked by scrape.py",
+      "title": "Peak XV — homepage",
       "excerpt": "https://www.peakxv.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-da15d4ed5d",
+      "url": "https://www.peakxv.com/",
+      "page": "details",
+      "excerpt": "Peak XV Partners | Global Venture Capital Firm Investing Across Seed to Growth Stages Team Companies Surge News & Insights About More than capital. Deep partnerships. Lalit Keshre Co-Founder , Groww Hande Cilingir Co-Founder , Insider One Paul Copplestone Co-Founder , Supabase Vidit Aatrey Co-Founder , Meesho Prukalpa Sankar Co-Founder , Atlan Kunal Shah Founder , CRED Amrish Rau CEO , Pine Labs Edward Tirtanata Co-Founder , Kopi Kenangan Hosam Arab‏ ‏Co-Founder , Tabby‏ Ghazal Alagh Co-Founder , Mamaearth Deepinder Goyal Founder , Eternal Lalit Keshre Co-Founder , Groww Hande Cilingir Co-Founder , Insider One Paul Copplestone Co-Founder , Supabase Vidit Aatrey Co-Founder , Meesho Prukalpa Sankar Co-Founder , Atlan Kunal Shah Founder , CRED Amrish Rau CEO , Pine Labs Edward Tirtanata Co-Founder , Kopi Kenangan Hosam Arab‏ ‏Co-Founder , Tabby‏ Ghazal Alagh Co-Founder , Mamaearth Deepinder Goyal Founder , Eternal Seed. Venture. Growth. Beyond. We’re a partner across stages, borders, and breakthroughs. See More View more Airalo is the world’s first eSIM store that solves the pain of high roaming bills by giving you access to eSIMs (digital SIM cards). Read more CRED is a members-only credit card payment app. Read more GoTo Group is the largest digital ecosystem in Indonesia, with a mission to “empower progress” by offering technology infrastructure and solutions that help"
+    },
+    {
+      "id": "check-page-c163c0d777",
+      "url": "https://www.peakxv.com/faqs",
+      "page": "terms",
+      "excerpt": "Peak XV Partners FAQs | Investment Thesis, Team & Programmes Team Companies Surge News & Insights About FAQs What does this rebrand mean for Sequoia India/SEA founders, what changes? Going forward, Sequoia India/SEA will be known as Peak XV Partners globally. If you’re the founder of Sequoia India/SEA portfolio, you can continue to mention across your website and other public facing assets that your startup is backed by Sequoia India/SEA as applicable. Follow-on investments out of Sequoia branded funds can use “Sequoia India/SEA, now known as Peak XV Partners.” We are grateful for our founders’ continued partnership and there will be no change in the way we engage with them. Will there be any changes to the team that engages with founders? There will be no change in our investment strategy or team or in our operating team that will continue to support company building. We will continue to serve the founders and ecosystems where they operate with the flexibility that comes with an independent brand. As before, we will do everything in our power to help you succeed. You will find us switched on and ready to serve. Will there be any changes to existing fund sizes or terms? No, we do not have any plans to do so. What will happen to new startup investments? How will they get addressed? New company investments out of past and current Sequoia branded funds can use “Peak XV Partners,"
+    },
+    {
+      "id": "check-page-fdef0ae1c0",
+      "url": "https://www.peakxv.com/insight/would-it-help-the-3-words-to-deal-with-anxiety",
+      "page": "terms",
+      "excerpt": "Would It Help? The 3 Words to Deal With Anxiety￼ Team Companies Surge News & Insights About ← Back Newsletter Would It Help? The 3 Words to Deal With Anxiety￼ By GV Ravishankar April 24, 2021 • 5 min read copy As a way of achieving high performance through better decisions and answers, the team at Sequoia India tries hard to not have any “intellectual hierarchy” when it comes to where ideas and opinions can come from. What’s more, the person closest to the facts is typically the young analyst who has made more calls to people in the market than the senior people on the team. Scott Eck, author of the book “The Status Solution: Five Simple Steps to Total Workforce Transformation”, argues that a leader who lifts the status of an individual in their team, lifts the status of the entire team and of the organization. He goes on to argue that rapid growth is possible only when all parties involved are operating on an equal, high-status basis. Personally, I have learnt that by giving importance to the voices of the younger people, organisations can benefit from fresh thinking, innovative ideas (that challenge status quo) and unbiased views. I recently heard a great example of this on a podcast where the host recalled an anecdote Scott once shared at a conference. In the early days of the space shuttle development at NASA, they could not figure out how to get the weight of the booster"
+    },
+    {
+      "id": "check-page-215901efb1",
+      "url": "https://www.peakxv.com/newsletter/peak-xv-ups-surge-seed-investment-ceiling-to-5m-unveils-18-startup-cohort",
+      "page": "terms",
+      "excerpt": "Peak XV ups Surge seed investment ceiling to $5M, unveils 18-startup cohort Team Companies Surge News & Insights About ← Back CONNECTING THE DOTS Peak XV ups Surge seed investment ceiling to $5M, unveils 18-startup cohort By September 28, 2026 • 5 min read copy Share this post copy Related newsletters Read the latest from our leadership team. Newsletter News POST Video PODCAST Case study Read AI Is Leaving The Screen: Rajan Anandan On The Next Wave Of Startups News September 29, 2026 Date Newsletter News POST Video PODCAST Case study Read Model companies have to ensure unsafe models are not released: Rajan Anandan News September 29, 2026 Date Newsletter News POST Video PODCAST Case study Read Peak XV sees India’s next big bets in wealth, wellness and premium consumer businesses News September 16, 2026 Date Learning is becoming. For media inquiries, please email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies News & Insights About Surge Jobs FAQ Follow Us X LinkedIn YouTube © 2026 Peak XV. All rights reserved. Legal Cookies Settings"
+    },
+    {
+      "id": "check-page-3c1e3a709d",
+      "url": "https://www.peakxv.com/announcement/surge-10-kicks-off-with-our-most-global-sector-diverse-cohort-yet",
+      "page": "batches",
+      "excerpt": "Surge 10 Kicks off With Our Most Global & Sector-Diverse Cohort Yet | Peak XV Team Companies Surge News & Insights About ← Back Announcements Surge 10 Kicks off With Our Most Global & Sector-Diverse Cohort Yet By Team Peak XV October 22, 2024 • 5 min read copy Founders from our tenth cohort met in Bengaluru and spent three days getting to know us – and each other – as we chart the beginning of another chapter at Surge, Peak XV’s seed-stage platform for founders. Surge 10 is special for many reasons: Comprising startups building from India, Singapore, the Philippines, UAE, Australia, UK, and the US, the new cohort of 14 companies brings together a mix of innovative startups with continued focus on AI, developer tools, consumer brands, next-generation fintech, healthcare and more. We kicked off with some insightful sessions, including deep dives with Shailendra Singh and Rajan Anandan on Founder’s DNA and Making the Most of Surge. We also had Peak XV founders—CRED’s Kunal Shah, Meesho’s Vidit Aatrey, Whatfix’s Khadim Batti—join us to share their reflections, along with sector focused roundtables with founders such as Mokobara’s Sangeet Agrawal and Navin Parwal. Founders from previous cohorts—Skillmatics’ Dhvanil Sheth, Khatabook’s Ravish Naresh and Plum’s Abhishek Poddar—also joined us to share their zero-to-one journeys with new founders in the Surge community. Much like the"
+    },
+    {
+      "id": "check-page-fcc7b8480b",
+      "url": "https://www.peakxv.com/insight/meet-the-first-cohort-of-the-sequoia-spark-fellowship-for-female-founders",
+      "page": "batches",
+      "excerpt": "Meet the first cohort of the Sequoia Spark Fellowship for female founders Sequoia Spark Team Companies Surge News & Insights About ← Back Blog Meet the first cohort of the Sequoia Spark Fellowship for female founders Sequoia Spark December 8, 2021 • 5 min read copy In July, we put out a call for applications for the Sequoia Spark Fellowship , a $100,000 grant-plus-mentorship program we launched this year to help encourage more women in India and Southeast Asia to become entrepreneurs. The idea was simple: by offering in-depth, hands-on mentorship to 15 women-led startups per year and enough capital to cover some of the early costs of starting up, we hoped to make a small but meaningful step toward rectifying the massive gender imbalance that exists today in the startup world. Just 12% of venture-backed startups in India and 20% in Southeast Asia have at least one female founder, as of 2020, according to data sourced from Tracxn and Crunchbase. The data tells our industry that something needs to change. Applications for the first Spark Fellowship closed in September, and our team has spent hundreds of hours over the last few months meeting women from across the region. And just – WOW! The volume and quality of these applications dispel the myth that there’s a shortage of female founders out there. An overwhelming number of women applied, and we personally met over 250 of them."
+    },
+    {
+      "id": "check-page-e7e73b9b88",
+      "url": "https://www.peakxv.com/about-us",
+      "page": "details",
+      "excerpt": "About Peak XV Partners | Our Story & Investment Approach Team Companies Surge News & Insights About Made for the ascent. Our story Our values Our causes Before it was Everest, before anyone had climbed it, the world's highest mountain was called Peak XV (Peak Fifteen). Our name reflects the spirit of our firm. We see value before consensus forms around it. We back founders before the world agrees. And when we commit, we stay for the long climb to the summit. Who we are A global VC firm with 20+ years of experience partnering deeply with founders to build enduring companies. EXPAND [+] COLLAPSE [+] $10B+ assets under management, 450+ investments, 36 IPOs in 5 countries. We began our journey in 2006 as Sequoia Capital India, later expanding into Southeast Asia. In 2023, Sequoia Capital restructured its global business into independent entities, leading to the creation of Peak XV. ‍ Today, as Peak XV, we invest across India, APAC, the United States, and other global innovation hubs. We are global not by aspiration, but by conviction, because building category-defining companies increasingly requires ambition, talent, and markets that transcend borders. We invest across stages and remain deeply committed through every phase of the journey, because enduring companies are built over decades, not cycles. WHAT WE DO Founders come to us for a platform that multiplies value across every"
+    },
+    {
+      "id": "check-page-b690413462",
+      "url": "https://www.peakxv.com/announcement/introducing-surge-a-rapid-scale-up-program-for-early-stage-startups-in-india-southeast-asia",
+      "page": "details",
+      "excerpt": "Introducing Surge, a rapid scale-up program for early-stage startups in India & Southeast Asia | Peak XV Team Companies Surge News & Insights About ← Back Announcements Introducing Surge, a rapid scale-up program for early-stage startups in India & Southeast Asia By Shailendra Singh 5 min read copy Being an early-stage founder is possibly the toughest job in the world. At a time when very few believe in a founder’s dreams, when there is little proof of concept and few resources, the most critical decisions have to be made. These early design choices – the first few hires, the early product features, finding the early-adopting customers – can make or break a company. This stage also coincides with the most challenging fund raises. The process can be draining for founders, who typically go through pre-seed, seed and multiple bridges before getting to Series A. At Sequoia India, we always ask ourselves – are we making the right choices to best serve our founders? Can we do more to give them an ‘unfair advantage’ on the road to success? Born out of our desire to take a big leap forward for early-stage start-ups in India & SEA, we are thrilled to announce an ambitious new program, called Surge . Last November, we did a series of Twitter polls to gauge how founders in our region are faring. Here’s what we learned: Seed start-ups are under-capitalized. While CB Insights reports that"
+    },
+    {
+      "id": "check-page-ad9af3e6f9",
+      "url": "https://www.peakxv.com/insight/cursor-co-founder-aman-sanger-on-the-journey-from-0--100m-in-12-months-the-future-of-programming",
+      "page": "details",
+      "excerpt": "Cursor's Aman Sanger on the Journey from 0-$100M in 12 Months Team Companies Surge News & Insights About ← Back Video Cursor's Aman Sanger on the Journey from 0-$100M in 12 Months • 5 min read copy “A lot of the work for Cursor has been just experimenting with what is possible.” ​ Aman Sanger started coding when he was 14. Fascinated by the potential of AI, Aman co-founded Cursor, scaling it to $100 million in its first year, and making it one of the fastest growing SaaS companies. In this conversation with Peak XV Managing Director Rajan Anandan, Aman shares the origins and DNA of Cursor. He breaks down how a lean team, a relentless shipping culture, and an obsession with user experience gave Cursor its edge. Aman also lays out his bold vision for the future—building the engineer of tomorrow. ​ This conversation was recorded as part of our Surge Immersion in the Bay Area in February 2025. Related articles Read the latest from our leadership team. Newsletter News POST Video PODCAST Case study Read 10-Steps to a Friction-Free App By Team Peak XV Blog June 8, 2021 Date Newsletter News POST Video PODCAST Case study Read 2021 to mark a new era for the Indian startup ecosystem By Rajan Anandan Blog December 30, 2020 Date Newsletter News POST Video PODCAST Case study Read 22 Things We Learned at SaaStr 2022 Blog October 18, 2022 Date Learning is becoming. For media inquiries, please"
+    },
+    {
+      "id": "check-page-1a34b54794",
+      "url": "https://www.peakxv.com/insight/southeast-asian-saas-is-about-to-hit-prime-time",
+      "page": "details",
+      "excerpt": "Southeast Asian SaaS Is About To Hit Prime Time Team Companies Surge News & Insights About ← Back Blog Southeast Asian SaaS Is About To Hit Prime Time December 10, 2021 • 5 min read copy The US and Europe minted 149 new SaaS unicorns last year. India boasts 10 SaaS unicorns¹, including Freshworks, the first to IPO on Nasdaq. Meanwhile, Southeast Asia only has three SaaS unicorns, and fewer than 20 SaaS startups at Series C and beyond². But that’s about to change. We believe Southeast Asia’s SaaS sector is at an inflection point, with enormous opportunity opening up from three key drivers. 1. Localization of global models . While not every model that’s winning in other regions will have the same relevance in SEA, there is room to adapt or localize global models in spaces that are being shaped by the same underlying trends, such as remote work, supply chain digitization, and open banking–just to name a few. The remote work category, for example, has already created multiple US-based unicorns like Deel, Remote, and Papaya Global, and Southeast Asia and the broader APAC region’s popularity as a source for remote talent underscores the opportunity for a homegrown player like Multiplier with deeper regional knowledge and network. 2. e-commerce enablement. Southeast Asia is home to a large, young, digitally native population, and the region’s online economy, which was valued at over"
+    },
+    {
+      "id": "check-page-9d291234ee",
+      "url": "https://www.peakxv.com/insight/vercel-s-malte-ubl-on-agent-era-self-driving-infra-and-how-vercel-thinks-about-the-next-decade",
+      "page": "details",
+      "excerpt": "Vercel's Malte Ubl on Agent Era, Self-Driving Infra, and the Next Decade Team Companies Surge News & Insights About ← Back Video Vercel's Malte Ubl on Agent Era, Self-Driving Infra, and the Next Decade • 5 min read copy Malte Ubl shares insights from Peak XV & Surge Immersion 2026 on scaling engineering across multiple products, validating internal product-market fit before launch, and the critical security challenges many teams are getting wrong in agent architecture. For founders and builders working on developer tools or AI agents, this session offers practical lessons that can reshape how you design and ship products. Related articles Read the latest from our leadership team. Newsletter News POST Video PODCAST Case study Read 10-Steps to a Friction-Free App By Team Peak XV Blog June 8, 2021 Date Newsletter News POST Video PODCAST Case study Read 2021 to mark a new era for the Indian startup ecosystem By Rajan Anandan Blog December 30, 2020 Date Newsletter News POST Video PODCAST Case study Read 22 Things We Learned at SaaStr 2022 Blog October 18, 2022 Date Learning is becoming. For media inquiries, please email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies News & Insights About Surge Jobs FAQ Follow Us X LinkedIn YouTube © 2026 Peak XV. All rights reserved. Legal Cookies Settings"
+    },
+    {
+      "id": "check-page-5e144ad5ee",
+      "url": "https://www.peakxv.com/companies/10-minute-school",
+      "page": "portfolio",
+      "excerpt": "10 Minute School | Peak XV Partners Portfolio Company Team Companies Surge News & Insights About ← Back 10 Minute School 10 Minute School provides affordable and accessible education for K-12 school and college students, university admission test candidates, and job-seekers in Bangladesh. Website https://10minuteschool.com/ social media LinkedIn sector Consumer Founded 2013 Partnered 2021 current Stage Seed investment stage Seed ; region APAC Founders Abdullah Raied Ayman Sadiq For media inquiries, please email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies News & Insights About Surge Jobs FAQ Follow Us X LinkedIn YouTube © 2026 Peak XV. All rights reserved. Legal Cookies Settings"
+    },
+    {
+      "id": "check-page-902be1939e",
+      "url": "https://www.peakxv.com/companies/1mg",
+      "page": "portfolio",
+      "excerpt": "1mg | Peak XV Partners Portfolio Company Team Companies Surge News & Insights About ← Back 1mg Indian online pharmacy and healthcare marketplace selling prescription and OTC medicines, vitamins, and health products, with home delivery, lab tests, and doctor consultations across India. Website https://www.1mg.com/ social media LinkedIn sector Consumer Founded 2015 Partnered 2016 current Stage Growth investment stage Venture ; Growth ; region India Founders Prashant Tandon Gaurav Agarwal For media inquiries, please email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies News & Insights About Surge Jobs FAQ Follow Us X LinkedIn YouTube © 2026 Peak XV. All rights reserved. Legal Cookies Settings"
+    },
+    {
+      "id": "check-page-3a1c98ddaf",
+      "url": "https://www.peakxv.com/companies/aampe",
+      "page": "portfolio",
+      "excerpt": "Aampe | Peak XV Partners Portfolio Company Team Companies Surge News & Insights About ← Back Aampe Aampe turns customer communication into a retention growth engine. Website https://www.aampe.com/ social media LinkedIn sector AI Founded 2020 Partnered 2020 current Stage Seed investment stage Seed ; region India Founders Paul Meinshausen Sami Abboud Schaun Wheeler Kate Field For media inquiries, please email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies News & Insights About Surge Jobs FAQ Follow Us X LinkedIn YouTube © 2026 Peak XV. All rights reserved. Legal Cookies Settings"
+    },
+    {
+      "id": "check-page-1496451ed3",
+      "url": "https://www.peakxv.com/companies/absolute-foods",
+      "page": "portfolio",
+      "excerpt": "Absolute | Peak XV Partners Portfolio Company Team Companies Surge News & Insights About ← Back Absolute Absolute Foods intersects technology, science, and agriculture to go beyond organic food - focusing on produce that is 100% natural and Non-GMO. Website https://www.absolute.bio/ social media LinkedIn sector DeepTech Enterprise Founded 2015 Partnered 2021 current Stage Growth investment stage Seed ; Venture ; Growth ; region India Founders Agam Khare Prateek Rawat For media inquiries, please email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies News & Insights About Surge Jobs FAQ Follow Us X LinkedIn YouTube © 2026 Peak XV. All rights reserved. Legal Cookies Settings"
     }
   ],
   "findings": {
@@ -117,12 +571,55 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-9552900c90"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-19f4f90bba"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-851e0702f7"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "soon after. Key highlights include: Capital : Surge will invest $1.5M in every start-up that is a part of Surge, before the start of the",
+        "evidenceId": "check-deal-f8262a833e"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "1500000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-f8262a833e"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://www.peakxv.com/our-companies",
         "evidenceId": "check-portfolio-d1071ceb04"
+      },
+      {
+        "value": "https://surge.peakxv.com/startups/",
+        "evidenceId": "check-portfolio-6a092c492b"
       }
     ],
     "name": [

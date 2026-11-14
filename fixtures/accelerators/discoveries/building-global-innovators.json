@@ -1,9 +1,105 @@
 {
   "programId": "building-global-innovators",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
+      "url": "https://bgi.pt/about",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://bgi.pt/archive/about",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://bgi.pt/archive/our-programs",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://bgi.pt/bgi-accelerator",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://bgi.pt/eit-food/agrifoods-investment-launchpad",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://bgi.pt/eit-food/healthysoil4food-summer-school-2026",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://bgi.pt/eit-urban-mobility/mobility-data-hackathon",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://bgi.pt/eit-urban-mobility/mobility-mentoring-program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://bgi.pt/eitclimatekic/accelerator",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://bgi.pt/eitdigital/venture-program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://bgi.pt/programs",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.bgi.pt/about",
+      "page": "details",
+      "anchor": "About us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bgi.pt/contact",
       "page": "details",
       "anchor": "About us",
       "fetched": true,
@@ -14,15 +110,7 @@
       "url": "https://www.bgi.pt/programs",
       "page": "details",
       "anchor": "Programs",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.bgi.pt/contact",
-      "page": "details",
-      "anchor": "About us",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

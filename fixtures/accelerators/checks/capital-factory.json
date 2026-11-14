@@ -1,46 +1,752 @@
 {
   "programId": "capital-factory",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://capitalfactory.com/",
     "https://apply.workable.com/capital-factory/",
-    "https://capitalfactory.com/about"
+    "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+    "https://apply.workable.com/capital-factory/j/ABA27178DF/",
+    "https://apply.workable.com/capital-factory/j/B130D7306A/",
+    "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+    "https://apply.workable.com/capital-factory/j/E29CBF1F2D/",
+    "https://apply.workable.com/capital-factory/j/E8319084FF/",
+    "https://apply.workable.com/capital-factory/j/F9F816206D/",
+    "https://capitalfactory.com/terms",
+    "https://capitalfactory.com/texas-fund",
+    "https://capitalfactory.com/about",
+    "https://capitalfactory.com/portfolio",
+    "https://capitalfactory.com/portfolio/1-true-health-care-management-inc",
+    "https://capitalfactory.com/portfolio/2a-biosciences"
   ],
   "evidence": [
     {
+      "id": "check-duration-12f0b1733d",
+      "url": "https://apply.workable.com/capital-factory/",
+      "title": "Capital Factory — application page",
+      "excerpt": "United States Account Executive (STATION) Posted 5 months ago On-site Full time Austin, Texas, United",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-15b30e0f7e",
+      "url": "https://apply.workable.com/capital-factory/j/E8319084FF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Week. We get to Inbox Zero every day. Benefits 4 weeks paid time off (one week is between Christmas and",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-30e417757b",
+      "url": "https://apply.workable.com/capital-factory/j/E29CBF1F2D/",
+      "title": "Capital Factory — application page",
+      "excerpt": "10 Weeks of paid leave for birthing parents, and 4 weeks paid leave for non-birthing parents Coworking",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-31d5948e44",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "title": "Capital Factory — application page",
+      "excerpt": "leave including 12 weeks paid maternity and 2 weeks for paternity leave or adoptive parents $1,000",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-35e9b7f123",
+      "url": "https://apply.workable.com/capital-factory/j/E8319084FF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "10 weeks paid leave for birthing parents and 4 weeks paid leave for non-birthing parents $1,000",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-4b3d4fdf2e",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "title": "Capital Factory — application page",
+      "excerpt": "10 weeks paid leave for birthing parents and 4 weeks paid leave for non-birthing parents $1,000",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-562b128d5e",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "leave including 12 weeks paid maternity and 2 weeks for paternity leave or adoptive parents $1,000",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-5a6f311a96",
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "title": "Capital Factory — application page",
+      "excerpt": "assistance program Parental leave including 12 weeks paid maternity and 2 weeks for paternity leave",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-6507052209",
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "title": "Capital Factory — application page",
+      "excerpt": "leave including 12 weeks paid maternity and 2 weeks for paternity leave or adoptive parents $1,000",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-6ca63cc021",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "hours and never more than 24 hours. Benefits 4 weeks paid time off (one week is between Christmas and",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-79cace8b3c",
+      "url": "https://apply.workable.com/capital-factory/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Columbia, United States Venture Associate Posted 2 months ago Hybrid Ventures St. Petersburg, Florida,",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-8c3ec6c451",
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "title": "Capital Factory — application page",
+      "excerpt": "hours and never more than 24 hours. Benefits 4 weeks paid time off (one week is between Christmas and",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-97167b8669",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "assistance program Parental leave including 12 weeks paid maternity and 2 weeks for paternity leave",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-a7c7a47ba6",
+      "url": "https://apply.workable.com/capital-factory/j/E8319084FF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "assistance program Parental leave including 10 weeks paid leave for birthing parents and 4 weeks paid",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-aec46b91aa",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "title": "Capital Factory — application page",
+      "excerpt": "assistance program Parental leave including 12 weeks paid maternity and 2 weeks for paternity leave",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-be303497b2",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "title": "Capital Factory — application page",
+      "excerpt": "rather than wait for instructions. Benefits 4 weeks paid time off (one week is between Christmas and",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-c43e6be242",
+      "url": "https://apply.workable.com/capital-factory/",
+      "title": "Capital Factory — application page",
+      "excerpt": "States Guest Experience Coordinator Posted 2 months ago On-site Part time Austin, Texas, United",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d0643190f7",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "title": "Capital Factory — application page",
+      "excerpt": "assistance program Parental leave including 10 weeks paid leave for birthing parents and 4 weeks paid",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-e466f0c5fe",
+      "url": "https://apply.workable.com/capital-factory/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Texas, United States Venture Associate Posted 2 months ago On-site Ventures Full time Washington,",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-e56c23b137",
+      "url": "https://apply.workable.com/capital-factory/j/E29CBF1F2D/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Houston, Dallas, and San Antonio. Benefits 4 weeks paid time off (one week is between Christmas and",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-e577286eca",
+      "url": "https://apply.workable.com/capital-factory/j/E29CBF1F2D/",
+      "title": "Capital Factory — application page",
+      "excerpt": "an additional $500 each anniversary thereafter 10 Weeks of paid leave for birthing parents, and 4 weeks",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-e99381501a",
+      "url": "https://apply.workable.com/capital-factory/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Relations & Partnership Specialist Posted 2 months ago On-site Community Engagement Full time",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-f16247d999",
+      "url": "https://apply.workable.com/capital-factory/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Texas, United States Venture Associate Posted 2 months ago On-site Ventures Full time Austin, Texas,",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-f824ed7a3a",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "title": "Capital Factory — application page",
+      "excerpt": "hours and never more than 24 hours. Benefits 4 weeks paid time off (one week is between Christmas and",
+      "page": "application"
+    },
+    {
+      "id": "check-format-20569b8b2c",
+      "url": "https://apply.workable.com/capital-factory/",
+      "title": "Capital Factory — application page",
+      "excerpt": "United States Venture Associate Posted 2 months ago Hybrid Ventures St. Petersburg, Florida, United States Account",
+      "page": "application"
+    },
+    {
+      "id": "check-format-50e8821fce",
+      "url": "https://apply.workable.com/capital-factory/j/ABA27178DF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "programmers, and designers gather day and night, in-person and online for meetups, classes, and coworking. With boots",
+      "page": "application"
+    },
+    {
+      "id": "check-format-55ddf7015c",
+      "url": "https://capitalfactory.com/portfolio",
+      "title": "Capital Factory — portfolio page",
+      "excerpt": "after an enterprise’s best-performing people - helping hybrid teams maximize business outcomes, boost productivity and",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-5e606fb619",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Venture Associate - Capital Factory Venture Associate Hybrid Ventures St. Petersburg, Florida, United States Overview",
+      "page": "application"
+    },
+    {
+      "id": "check-format-64595f8357",
+      "url": "https://apply.workable.com/capital-factory/",
+      "title": "Capital Factory — application page",
+      "excerpt": "programmers and designers gathered day and night, in-person and online for meetups, mentorship, classes and coworking.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-cfc182072b",
+      "url": "https://capitalfactory.com/portfolio/1-true-health-care-management-inc",
+      "title": "Capital Factory — portfolio page",
+      "excerpt": "Coordination allows us to provide Chronic Care Management, Remote Patient Monitoring, and Transitional Care Management at",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-d415db45b5",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Venture Team reporting to Venture Principal This is a hybrid role The next generation of American industry is being",
+      "page": "application"
+    },
+    {
+      "id": "check-format-d475b939d2",
+      "url": "https://capitalfactory.com/portfolio/1-true-health-care-management-inc",
+      "title": "Capital Factory — portfolio page",
+      "excerpt": "← Portfolio 1 True Health - Care Management, Inc. Virtual-First Preventative Care through delightful services and",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-d96c1791ed",
+      "url": "https://capitalfactory.com/texas-fund",
+      "title": "Capital Factory — terms page",
+      "excerpt": "after an enterprise’s best-performing people - helping hybrid teams maximize business outcomes, boost productivity and",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-deba586d04",
+      "url": "https://apply.workable.com/capital-factory/j/E29CBF1F2D/",
+      "title": "Capital Factory — application page",
+      "excerpt": "programmers, and designers gather day and night, in-person and online for meetups, classes, and coworking. With boots",
+      "page": "application"
+    },
+    {
+      "id": "check-location-1827e23d82",
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "title": "Capital Factory — application page",
+      "excerpt": "leading deep tech venture capital firm headquartered in Austin, Texas. We back the most ambitious",
+      "page": "application"
+    },
+    {
+      "id": "check-location-77aaf90cdf",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "leading deep tech venture capital firm headquartered in Austin, Texas. We back the most ambitious",
+      "page": "application"
+    },
+    {
+      "id": "check-location-b44e346453",
+      "url": "https://capitalfactory.com/terms",
+      "title": "Capital Factory — terms page",
+      "excerpt": "of the state and federal courts located in Travis County, Texas. Severability and entire",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-f8d88798f5",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "title": "Capital Factory — application page",
+      "excerpt": "leading deep tech venture capital firm headquartered in Austin, Texas. We back the most ambitious",
+      "page": "application"
+    },
+    {
       "id": "check-name-9626e8f2d0",
       "url": "https://capitalfactory.com/",
-      "title": "Capital Factory — homepage checked by scrape.py",
+      "title": "Capital Factory — homepage",
       "excerpt": "Capital Factory — Startups advancing civilization Skip to content",
       "page": "details"
     },
     {
+      "id": "check-portfolio-3c7fdc29d7",
+      "url": "https://capitalfactory.com/texas-fund",
+      "title": "Capital Factory — terms page",
+      "excerpt": "Browse the full portfolio → → https://capitalfactory.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-4dfeac40e6",
+      "url": "https://capitalfactory.com/portfolio/1-true-health-care-management-inc",
+      "title": "Capital Factory — portfolio page",
+      "excerpt": "Portfolio → https://capitalfactory.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-570532fcf0",
       "url": "https://capitalfactory.com/about",
-      "title": "Capital Factory — details page checked by scrape.py",
+      "title": "Capital Factory — program page",
       "excerpt": "Portfolio → https://capitalfactory.com/portfolio",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-771710aeff",
+      "url": "https://capitalfactory.com/terms",
+      "title": "Capital Factory — terms page",
+      "excerpt": "Portfolio → https://capitalfactory.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7fd8b95277",
+      "url": "https://capitalfactory.com/portfolio/2a-biosciences",
+      "title": "Capital Factory — portfolio page",
+      "excerpt": "Portfolio → https://capitalfactory.com/portfolio",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-87e7542e5c",
       "url": "https://capitalfactory.com/",
-      "title": "Capital Factory — homepage checked by scrape.py",
+      "title": "Capital Factory — homepage",
       "excerpt": "Portfolio → https://capitalfactory.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-d682cd5f83",
+      "url": "https://capitalfactory.com/texas-fund",
+      "title": "Capital Factory — terms page",
+      "excerpt": "Portfolio → https://capitalfactory.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d8b0db7b09",
+      "url": "https://capitalfactory.com/portfolio/1-true-health-care-management-inc",
+      "title": "Capital Factory — portfolio page",
+      "excerpt": "← Portfolio → https://capitalfactory.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-dd80ca07b9",
+      "url": "https://capitalfactory.com/portfolio/2a-biosciences",
+      "title": "Capital Factory — portfolio page",
+      "excerpt": "← Portfolio → https://capitalfactory.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-0bbf84a136",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "title": "Capital Factory — application page",
+      "excerpt": "View all jobs → https://apply.workable.com/capital-factory/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0bc3bbdba5",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "https://apply.workable.com/capital-factory/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0da163fa8d",
+      "url": "https://apply.workable.com/capital-factory/j/E29CBF1F2D/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Apply for this job → https://apply.workable.com/capital-factory/j/C49AADAAA2/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0f5e275f1e",
+      "url": "https://apply.workable.com/capital-factory/",
+      "title": "Capital Factory — application page",
+      "excerpt": "https://apply.workable.com/capital-factory/j/E8319084FF/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2280a14f9b",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "title": "Capital Factory — application page",
+      "excerpt": "https://apply.workable.com/capital-factory/",
+      "page": "application"
+    },
+    {
       "id": "check-route-23e7fbfcae",
       "url": "https://capitalfactory.com/",
-      "title": "Capital Factory — homepage checked by scrape.py",
+      "title": "Capital Factory — homepage",
       "excerpt": "Careers → https://apply.workable.com/capital-factory/",
       "page": "details"
     },
     {
+      "id": "check-route-29a99533d1",
+      "url": "https://apply.workable.com/capital-factory/j/E29CBF1F2D/",
+      "title": "Capital Factory — application page",
+      "excerpt": "https://apply.workable.com/capital-factory/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-369c498373",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Application → https://apply.workable.com/capital-factory/j/F9F816206D/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3cca0c2ead",
+      "url": "https://apply.workable.com/capital-factory/",
+      "title": "Capital Factory — application page",
+      "excerpt": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4a63e47e92",
+      "url": "https://apply.workable.com/capital-factory/j/ABA27178DF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Apply for this job → https://apply.workable.com/capital-factory/j/ABA27178DF/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4aaf177355",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "View all jobs → https://apply.workable.com/capital-factory/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4b702b8d7a",
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Apply for this job → https://apply.workable.com/capital-factory/j/2C7B6C92E9/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4d1789b23a",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "title": "Capital Factory — application page",
+      "excerpt": "https://apply.workable.com/capital-factory/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4d590a4310",
+      "url": "https://apply.workable.com/capital-factory/",
+      "title": "Capital Factory — application page",
+      "excerpt": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4e2e0be72b",
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Application → https://apply.workable.com/capital-factory/j/2C7B6C92E9/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5213bf1092",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Application → https://apply.workable.com/capital-factory/j/BD171C8EDF/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5579d167ba",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "title": "Capital Factory — application page",
+      "excerpt": "View all jobs → https://apply.workable.com/capital-factory/",
+      "page": "application"
+    },
+    {
       "id": "check-route-55b83db491",
       "url": "https://capitalfactory.com/about",
-      "title": "Capital Factory — details page checked by scrape.py",
+      "title": "Capital Factory — program page",
       "excerpt": "Careers → https://apply.workable.com/capital-factory/",
       "page": "details"
+    },
+    {
+      "id": "check-route-6a8d4f7ef7",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Application → https://apply.workable.com/capital-factory/j/B130D7306A/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6e1d2053de",
+      "url": "https://apply.workable.com/capital-factory/",
+      "title": "Capital Factory — application page",
+      "excerpt": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6f9eb2f9a3",
+      "url": "https://apply.workable.com/capital-factory/",
+      "title": "Capital Factory — application page",
+      "excerpt": "https://apply.workable.com/capital-factory/j/E29CBF1F2D/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-71485e2fc9",
+      "url": "https://apply.workable.com/capital-factory/j/E8319084FF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "https://apply.workable.com/capital-factory/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-76e262ca90",
+      "url": "https://capitalfactory.com/terms",
+      "title": "Capital Factory — terms page",
+      "excerpt": "Careers → https://apply.workable.com/capital-factory/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-7a20d17830",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Apply for this job → https://apply.workable.com/capital-factory/j/BD171C8EDF/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7d911c8abd",
+      "url": "https://apply.workable.com/capital-factory/",
+      "title": "Capital Factory — application page",
+      "excerpt": "https://apply.workable.com/capital-factory/j/ABA27178DF/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7ece6f7957",
+      "url": "https://capitalfactory.com/portfolio/1-true-health-care-management-inc",
+      "title": "Capital Factory — portfolio page",
+      "excerpt": "Careers → https://apply.workable.com/capital-factory/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-82151c77d1",
+      "url": "https://apply.workable.com/capital-factory/j/E8319084FF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Apply for this job → https://apply.workable.com/capital-factory/j/E8319084FF/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-872ddaacfd",
+      "url": "https://apply.workable.com/capital-factory/j/ABA27178DF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Application → https://apply.workable.com/capital-factory/j/ABA27178DF/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-891b7f297a",
+      "url": "https://apply.workable.com/capital-factory/",
+      "title": "Capital Factory — application page",
+      "excerpt": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-967a0012b9",
+      "url": "https://apply.workable.com/capital-factory/j/E8319084FF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Application → https://apply.workable.com/capital-factory/j/E8319084FF/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-aacd486728",
+      "url": "https://apply.workable.com/capital-factory/j/E29CBF1F2D/",
+      "title": "Capital Factory — application page",
+      "excerpt": "View all jobs → https://apply.workable.com/capital-factory/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b49ff8fff9",
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "title": "Capital Factory — application page",
+      "excerpt": "View all jobs → https://apply.workable.com/capital-factory/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b8956887ac",
+      "url": "https://apply.workable.com/capital-factory/j/E29CBF1F2D/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Apply for this job → https://apply.workable.com/capital-factory/j/E29CBF1F2D/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bb6d118c0d",
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "title": "Capital Factory — application page",
+      "excerpt": "https://apply.workable.com/capital-factory/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bde6d28815",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Apply for this job → https://apply.workable.com/capital-factory/j/B130D7306A/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c37441283a",
+      "url": "https://apply.workable.com/capital-factory/j/ABA27178DF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "View all jobs → https://apply.workable.com/capital-factory/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c834311376",
+      "url": "https://capitalfactory.com/portfolio/2a-biosciences",
+      "title": "Capital Factory — portfolio page",
+      "excerpt": "Careers → https://apply.workable.com/capital-factory/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-caad0e831f",
+      "url": "https://capitalfactory.com/texas-fund",
+      "title": "Capital Factory — terms page",
+      "excerpt": "Careers → https://apply.workable.com/capital-factory/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-d95db1ee61",
+      "url": "https://capitalfactory.com/portfolio",
+      "title": "Capital Factory — portfolio page",
+      "excerpt": "Careers → https://apply.workable.com/capital-factory/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-df408a548f",
+      "url": "https://apply.workable.com/capital-factory/j/ABA27178DF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "https://apply.workable.com/capital-factory/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e0d0fd5675",
+      "url": "https://apply.workable.com/capital-factory/j/E29CBF1F2D/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Application → https://apply.workable.com/capital-factory/j/E29CBF1F2D/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ee272374be",
+      "url": "https://apply.workable.com/capital-factory/j/E8319084FF/",
+      "title": "Capital Factory — application page",
+      "excerpt": "View all jobs → https://apply.workable.com/capital-factory/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f459a0b6aa",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "title": "Capital Factory — application page",
+      "excerpt": "Apply for this job → https://apply.workable.com/capital-factory/j/F9F816206D/apply/",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-37339516de",
+      "url": "https://capitalfactory.com/",
+      "page": "details",
+      "excerpt": "Capital Factory — Startups advancing civilization Skip to content Portfolio Texas Fund Fellowship Fund All Access Government Team Investors Est. 2009 · Austin, Texas Startups advancing civilization. We back the most ambitious founders in Texas — humanoid robots, autonomous ships, neural interfaces, rockets to the Moon — with cash, customers, and the most powerful network in the state. First investor in Apptronik · Cemvita · Colossal · Multicoin · Wander Early investor in Allen Control Systems · Firefly · ICON 3D · Paradromics · Saronic · X-Bow Apptronik Saronic Technologies Paradromics Inc. Colossal Biosciences Casimir Space Multicoin Capital Aceable Wander.com Firefly Aerospace ICON Living Security Pipedream TRAXyL, Inc. Intuitive Machines Voyager Space Storable (formerly SpareFoot) Apptronik Saronic Technologies Paradromics Inc. Colossal Biosciences Casimir Space Multicoin Capital Aceable Wander.com Firefly Aerospace ICON Living Security Pipedream TRAXyL, Inc. Intuitive Machines Voyager Space Storable (formerly SpareFoot) The most active early-stage investor backing America’s most ambitious founders — and we bring Texas to the table. 0 + Companies backed 0 Texas Fund I 0 Texas Fund II 0 All Access companies Portfolio by vehicle Texas Fund I · 133 Texas Fund II · 8 All Access · 559 Texas Fund We write the first check into the hardest problems. Cash investments in Texas deep"
+    },
+    {
+      "id": "check-page-6631a7ad2b",
+      "url": "https://apply.workable.com/capital-factory/",
+      "page": "application",
+      "excerpt": "Capital Factory - Current Openings Careers at Capital Factory Capital Factory is the center of gravity for entrepreneurs in Austin, the number one startup city in the U.S. Last year more than 100,000 entrepreneurs, programmers and designers gathered day and night, in-person and online for meetups, mentorship, classes and coworking. We meet the best entrepreneurs in Austin and introduce them to their first investors, employees, mentors and customers. According to Pitchbook, Capital Factory has been the most active investor in Texas since 2013. Job Openings 7 jobs Workplace type Location Work type Government Relations & Partnership Specialist Posted 2 months ago On-site Community Engagement Full time Austin, Texas, United States Guest Experience Coordinator Posted 2 months ago On-site Part time Austin, Texas, United States Venture Associate Posted 2 months ago On-site Ventures Full time Austin, Texas, United States Venture Associate Posted 2 months ago On-site Ventures Full time Washington, District of Columbia, United States Venture Associate Posted 2 months ago Hybrid Ventures St. Petersburg, Florida, United States Account Executive (STATION) Posted 5 months ago On-site Full time Austin, Texas, United States Your Dream Job Posted 4 years ago On-site Austin, Texas, United States This website uses cookies to improve user’s experience, personalise ads and analyse traffic. You can"
+    },
+    {
+      "id": "check-page-ab0e8ff962",
+      "url": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+      "page": "application",
+      "excerpt": "Venture Associate - Capital Factory Venture Associate On-site Ventures Full time Austin, Texas, United States Overview Application Share this job Description Austin, Texas Venture Team reporting to Venture Principal Full-time, on site The next generation of American industry is being built by engineers, scientists, and operators who left the lab, the prime, or the program to start something. Your job is to find them first. As a Venture Associate at Capital Factory, you bring the technical credibility these founders want on their cap table. You’ll meet new founders everyday, determine the true breakthrough ventures and recruit the real ones into CF’s All Access Fund. Requirements What you will do… Meet the best technology entrepreneurs and recruit them into CF’s All Access Fund. Participate in startup community events & programs as a speaker. Use Twitter, LinkedIn, and other digital platforms to discover new startups and connect with the founders. Develop relationships with CEOs, Angel Investors, and Venture Capitalists and connect them with startups that matter. Read all of the local startup news and engage in social media. Use a suite of AI tools provided by Capital Factory to manage deal flow, publish deal memos and perform at a high level. Get ten years of venture capital experience in three years time! You'll know you're successful if.... You sponsor 25+ Austin startups"
+    },
+    {
+      "id": "check-page-975f1b1f39",
+      "url": "https://apply.workable.com/capital-factory/j/ABA27178DF/",
+      "page": "application",
+      "excerpt": "Guest Experience Coordinator - Capital Factory Guest Experience Coordinator On-site Part time Austin, Texas, United States Overview Application Share this job Description Austin, Texas, United States Workplace Team reporting to Workplace Manager This is an on-site role Ever wondered what it’s like to be the heartbeat of an innovation hub? At STATION Austin , you’re not just the friendly face who greets everyone with a smile—you’re the ultimate connector! From helping visitors find their way to their next big meeting to giving them the insider scoop on our vibrant community, you’re the go-to person for all things STATION Austin . Your knack for striking up conversations and your love for stellar customer service make every interaction memorable. Plus, you’re the behind-the-scenes pro supporting our gift shop that’s buzzing with sales and inventory magic. About STATION Austin STATION Austin is the center of gravity for entrepreneurs in Texas, the number one startup state in the U.S. Hundreds of thousands of entrepreneurs, programmers, and designers gather day and night, in-person and online for meetups, classes, and coworking. With boots on the ground in Austin, Dallas, Houston and San Antonio, we meet the best entrepreneurs in Texas and introduce them to their first investors, employees, mentors, and customers. According to Pitchbook, STATION Austin has been the most active"
+    },
+    {
+      "id": "check-page-78d865ff6e",
+      "url": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+      "page": "application",
+      "excerpt": "Venture Associate - Capital Factory Venture Associate On-site Ventures Full time Washington, District of Columbia, United States Overview Application Share this job Description Washington, DC, United States Venture Team reporting to Venture Principal This is an on-site role The next generation of American industry is being built by engineers, scientists, and operators who left the lab, the prime, or the program to start something. Your job is to find them first. As a Venture Associate at Capital Factory, you bring the technical credibility these founders want on their cap table. You’ll meet new founders everyday, determine the true breakthrough ventures and recruit the real ones into CF’s All Access Fund. What you will do… Meet the best technology entrepreneurs and recruit them into CF’s All Access Fund. Participate in startup community events & programs as a speaker. Use Twitter, LinkedIn, and other digital platforms to discover new startups and connect with the founders. Develop relationships with CEOs, Angel Investors, and Venture Capitalists and connect them with startups that matter. Read all of the local startup news and engage in social media. Use a suite of AI tools provided by Capital Factory to manage deal flow, publish deal memos and perform at a high level. Get ten years of venture capital experience in three years time! Requirements You'll know you're successful"
+    },
+    {
+      "id": "check-page-58e0a24088",
+      "url": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+      "page": "application",
+      "excerpt": "Venture Associate - Capital Factory Venture Associate Hybrid Ventures St. Petersburg, Florida, United States Overview Application Share this job Description St. Petersburg, Florida United States Venture Team reporting to Venture Principal This is a hybrid role The next generation of American industry is being built by engineers, scientists, and operators who left the lab, the prime, or the program to start something. Your job is to find them first. As a Venture Associate at Capital Factory, you bring the technical credibility these founders want on their cap table. You’ll meet new founders everyday, determine the true breakthrough ventures and recruit the real ones into CF’s All Access Fund. What you will do… Meet the best technology entrepreneurs and recruit them into CF’s All Access Fund. Participate in startup community events & programs as a speaker. Use Twitter, LinkedIn, and other digital platforms to discover new startups and connect with the founders. Develop relationships with CEOs, Angel Investors, and Venture Capitalists and connect them with startups that matter. Read all of the local startup news and engage in social media. Use a suite of AI tools provided by Capital Factory to manage deal flow, publish deal memos and perform at a high level. Get ten years of venture capital experience in three years time! Requirements You'll know you're successful if.... You"
+    },
+    {
+      "id": "check-page-03cdf5a824",
+      "url": "https://apply.workable.com/capital-factory/j/E29CBF1F2D/",
+      "page": "application",
+      "excerpt": "Your Dream Job - Capital Factory Your Dream Job On-site Austin, Texas, United States Overview Application Share this job Description Don't see your role listed? No problem! Feel free to submit your Resume and Cover Letter for review. We hire great people in Austin, Houston, Dallas, and San Antonio. Benefits 4 weeks paid time off (one week is between Christmas and New Year’s) Personal health, vision and dental insurance paid 100% by Capital Factory Additional benefits such as 401k program (50% company matching), life insurance, short & long term disability and and employee assistance program $1,000 personal innovation budget on your first year anniversary and then an additional $500 each anniversary thereafter 10 Weeks of paid leave for birthing parents, and 4 weeks paid leave for non-birthing parents Coworking membership at Capital Factory with garage parking space, metro pass, or rideshare credits and access to the onsite gym A priceless network About Capital Factory Capital Factory is the center of gravity for entrepreneurs in Texas, the number one startup state in the U.S. Hundreds of thousands of entrepreneurs, programmers, and designers gather day and night, in-person and online for meetups, classes, and coworking. With boots on the ground in Austin, Dallas, Houston and San Antonio, we meet the best entrepreneurs in Texas and introduce them to their first investors,"
+    },
+    {
+      "id": "check-page-c43c507221",
+      "url": "https://apply.workable.com/capital-factory/j/E8319084FF/",
+      "page": "application",
+      "excerpt": "Account Executive (STATION) - Capital Factory Account Executive (STATION) On-site Full time Austin, Texas, United States Overview Application Share this job Description Austin, Texas, United States Sales Team reporting to VP of Sales This is an on-site role Are you a sales guru who excels at building relationships and closing mutually beneficial deals in a fast-paced environment? Do you want to take your skill set and strengthen it with one of the most active venture capital firms investing in technology startups? The Account Executive is a quota carrying sales professional selling Capital Factory program sponsorships. This is completed by driving inbound and outbound sales activities to identify new prospective sponsors, presenting program solutions, negotiating sponsorships up to $100,000, creating sponsorship proposals, and managing sponsorship deliverables for all CF partners. All of our partners are understaffed and can be hard to work with at times. It’s up to us to make them successful – that’s a big reason they choose to keep working with us. Our goal is to provide the type of service you might expect from the Four Seasons or Tiffany’s. We sweat the small stuff. We respect their time. We do whatever it takes and do it with style. Requirements What you will do… Identify and develop relationships with potential community sponsors for Capital Factory events ranging from"
+    },
+    {
+      "id": "check-page-21a6ec4415",
+      "url": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+      "page": "application",
+      "excerpt": "Government Relations & Partnership Specialist - Capital Factory Government Relations & Partnership Specialist On-site Community Engagement Full time Austin, Texas, United States Overview Application Share this job Description The Government Relations & Partnerships Specialist serves as a key connector between STATION Austin and government, defense, and national security innovation partners. This role is responsible for developing and maintaining strong relationships with government partners, understanding their priorities and objectives, and translating those needs into meaningful engagement across the STATION Austin ecosystem. You’ll work closely with government innovation organizations, founders, mentors, investors, industry partners, and the broader STATION Austin team to create opportunities for collaboration—from curated introductions and roundtables to office hours, programming, events, and strategic partnerships. Success in this role means our government partners see STATION Austin not simply as a place to attend events, but as a year-round resource for accessing founders, technology, expertise, capital, and the broader innovation ecosystem. STATION Austin’s Community Engagement Team connects the defense innovation ecosystem in Texas (and beyond) to the most innovative startups and technology in Texas. Defense Secretaries, Four-Star Generals, Presidents, and delegations"
+    },
+    {
+      "id": "check-page-74ed3043ea",
+      "url": "https://capitalfactory.com/terms",
+      "page": "terms",
+      "excerpt": "Terms of Service — Capital Factory Skip to content Portfolio Texas Fund Fellowship Fund All Access Government Team Investors Legal Terms of Service Last updated: 2026-06-13 Capital Factory (“Capital Factory,” “we,” “us”) operates capitalfactory.com . These Terms govern your use of the site and the services offered through it. By using the site, you agree to these Terms. Use of the site You may use the site for lawful purposes only. You agree not to interfere with its operation, attempt unauthorized access, scrape it in violation of these Terms, or use it to transmit unlawful or harmful content. Applications and submissions If you submit an application (to the Texas Fund, All Access, or any program) or other materials, you represent that the information is accurate and that you have the right to share it. Submitting an application does not create any obligation on our part to invest, admit, or respond, and does not form an investor, advisory, or fiduciary relationship. No investment advice or offer Nothing on this site is an offer to sell or a solicitation to buy any security, nor investment, legal, tax, or financial advice. Fund participation is offered only to qualified investors through separate definitive documents, and past performance does not guarantee future results. Intellectual property The site’s content, marks, and design are owned by Capital Factory or its"
+    },
+    {
+      "id": "check-page-b61936346c",
+      "url": "https://capitalfactory.com/texas-fund",
+      "page": "terms",
+      "excerpt": "Texas Fund — Capital Factory Skip to content Portfolio Texas Fund Fellowship Fund All Access Government Team Investors The flagship venture fund We write the first check into the future. The Texas Fund backs founders building deep and frontier technology — from seed through Series C, in cash, with conviction. Most firms wait for the proof. We write the check that creates it. The Texas Fund goes early into the companies solving problems at the edge of what's possible — autonomy, robotics, space, defense, neurotech, energy — and stays in for the long build. Our founders don't just raise from us; they raise through us. We fill rounds, open doors at the Pentagon and the Fortune 500, and put the full weight of Texas's densest network behind every company we back. Apptronik, Saronic, Paradromics, Colossal, Firefly — they all have one thing in common, and we were in the room early. If you're building something the world isn't ready for yet, pitch us. Pitch the Texas Fund → Featured Apptronik Saronic Technologies Paradromics Inc. In the Texas Fund portfolio Browse the full portfolio → All Texas Fund Fellowship Fund All Access Exited All frontiers Space Energy Bio & Health Defense AI & Robotics Hardware More Showing 1–24 of 131 companies Aalo Atomics ★ We build mass-manufactured nuclear plants that will power anything from a datacenter to a city. Texas Fund I Allen Control Systems ★"
+    },
+    {
+      "id": "check-page-81d5f48a45",
+      "url": "https://capitalfactory.com/about",
+      "page": "details",
+      "excerpt": "About — Capital Factory Skip to content Portfolio Texas Fund Fellowship Fund All Access Government Team Investors About We bet on the hardest problems — early. Capital Factory is the venture firm at the center of Texas. We've been the most active early-stage investor in the state since 2010, and we back founders building things most people think are impossible. We do it two ways. The Texas Fund writes the first cash check into deep and frontier technology — national security, healthcare, next-generation industrial. All Access plugs 800+ companies into the introductions, customers, and capital that turn an idea into an outcome. We started as a software accelerator in 2009 and grew into the firm those founders choose first. The portfolio tells the story: Apptronik's humanoids on the factory floor, Saronic's autonomous ships, Paradromics in the human brain, Firefly on the surface of the Moon. The common thread is nerve — and a network that shows up when it counts. If you're building something ambitious in Texas, this is where you start. How we got here. From a five-companies-a-year accelerator in the downturn to the venture firm at the center of Texas — here's the path. 2009 Capital Factory is founded Joshua Baer starts Capital Factory in Austin as a mentorship-driven software accelerator — five companies a year, in the teeth of the downturn. 2010 Texas' most active investor Per"
+    },
+    {
+      "id": "check-page-399674adb1",
+      "url": "https://capitalfactory.com/portfolio",
+      "page": "portfolio",
+      "excerpt": "Portfolio — Capital Factory Skip to content Portfolio Texas Fund Fellowship Fund All Access Government Team Investors Portfolio 800+ companies, reshaping civilization. From humanoid robots to autonomous ships to neurotech — we back the founders working on the hardest problems. Filter by sector, fund, or exit. ● Watch Featured Apptronik Robots for Humans Texas Fund I View → Also featured Saronic Technologies Paradromics Inc. All Texas Fund Fellowship Fund All Access Exited All frontiers Space Energy Bio & Health Defense AI & Robotics Hardware More Showing 1–24 of 775 companies Aalo Atomics ★ We build mass-manufactured nuclear plants that will power anything from a datacenter to a city. Texas Fund I Advanced Bifurcation Systems Inc. ★ First dedicated platform for the treatment of coronary bifurcation lesions. All Access Airloom Energy ★ The Next Era of Resilient Energy All Access Allen Control Systems ★ Autonomous weapon stations and drone detection systems for defense applications Texas Fund I AmplifAI ★ AmplifAI transforms employee data into actions modeled after an enterprise’s best-performing people - helping hybrid teams maximize business outcomes, boost productivity and improve engagement. Texas Fund I Andromeda ★ Turn enterprise documents into enterprise knowledge Texas Fund I Apptronik ★ Robots for Humans Texas Fund I Asylon ★ Robotic Perimeter Security All Access"
+    },
+    {
+      "id": "check-page-d734e8b4a9",
+      "url": "https://capitalfactory.com/portfolio/1-true-health-care-management-inc",
+      "page": "portfolio",
+      "excerpt": "1 True Health - Care Management, Inc. — Capital Factory Portfolio Skip to content Portfolio Texas Fund Fellowship Fund All Access Government Team Investors ← Portfolio 1 True Health - Care Management, Inc. Virtual-First Preventative Care through delightful services and intelligent software Our Technology Platform combined with skillful Care Coordination allows us to provide Chronic Care Management, Remote Patient Monitoring, and Transitional Care Management at scale, including both the patient and their care network (family/caregivers/physicians) via multiple communication methods. We offer literally a private labeled, turnkey service delivered to patients on behalf of our clinical partners (practices, hospitals, senior communities). Sector Healthcare, Hospitals & Health IT, Patient Engagement Based in Austin Founded 2020 Team 14 Visit 1 True Health - Care Management, Inc. → Careers ↗ Backing the most ambitious founders working on the hardest problems. Texas Fund Fellowship Fund All Access Investors Team Careers Partners Government Events News About Terms Privacy Code of Conduct For agents © 2026 Capital Factory · The most active investor in Texas"
+    },
+    {
+      "id": "check-page-9788da0c2b",
+      "url": "https://capitalfactory.com/portfolio/2a-biosciences",
+      "page": "portfolio",
+      "excerpt": "2A Biosciences — Capital Factory Portfolio Skip to content Portfolio Texas Fund Fellowship Fund All Access Government Team Investors ← Portfolio 2A Biosciences Neuroregenerative Serotonergic Agonists Texas Fund I 2A Biosciences develops next-generation antibiotics to address drug-resistant bacterial infections, focusing on innovative therapies for unmet medical needs in infectious diseases. Sector Healthcare, Mental Health & Wellness, Biotech Stage Seed Founded 2022 Team 10 Backed by Texas Fund I Visit 2A Biosciences → Careers ↗ Backing the most ambitious founders working on the hardest problems. Texas Fund Fellowship Fund All Access Investors Team Careers Partners Government Events News About Terms Privacy Code of Conduct For agents © 2026 Capital Factory · The most active investor in Texas"
     }
   ],
   "findings": {
@@ -50,6 +756,26 @@
       {
         "value": "https://apply.workable.com/capital-factory/",
         "evidenceId": "check-route-23e7fbfcae"
+      },
+      {
+        "value": "https://apply.workable.com/capital-factory/j/F9F816206D/",
+        "evidenceId": "check-route-3cca0c2ead"
+      },
+      {
+        "value": "https://apply.workable.com/capital-factory/j/ABA27178DF/",
+        "evidenceId": "check-route-7d911c8abd"
+      },
+      {
+        "value": "https://apply.workable.com/capital-factory/j/2C7B6C92E9/",
+        "evidenceId": "check-route-4d590a4310"
+      },
+      {
+        "value": "https://apply.workable.com/capital-factory/j/B130D7306A/",
+        "evidenceId": "check-route-891b7f297a"
+      },
+      {
+        "value": "https://apply.workable.com/capital-factory/j/BD171C8EDF/",
+        "evidenceId": "check-route-6e1d2053de"
       }
     ],
     "applicationUrl": [
@@ -61,8 +787,62 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "2 months",
+        "evidenceId": "check-duration-e99381501a"
+      },
+      {
+        "value": "5 months",
+        "evidenceId": "check-duration-12f0b1733d"
+      },
+      {
+        "value": "4",
+        "evidenceId": "check-duration-8c3ec6c451"
+      },
+      {
+        "value": "12",
+        "evidenceId": "check-duration-5a6f311a96"
+      },
+      {
+        "value": "2",
+        "evidenceId": "check-duration-6507052209"
+      },
+      {
+        "value": "10",
+        "evidenceId": "check-duration-e577286eca"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-64595f8357"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-20569b8b2c"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-d475b939d2"
+      }
+    ],
+    "location": [
+      {
+        "value": "Austin",
+        "evidenceId": "check-location-1827e23d82"
+      },
+      {
+        "value": "Travis County",
+        "evidenceId": "check-location-b44e346453"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://capitalfactory.com/portfolio",

@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.howtoweb.co/",
   "applyUrl": "https://www.howtoweb.co/apply-for-startup-tickets",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: How to Web Conference | October 5-7, 2027 - How to Web Conference Hey Builders, we're back! Venture Report 2025 Partner with us Buy Tickets Bucharest · Oct 5–7, 2027 Eastern Europe's leading startup & technology conference. Three days in Bucharest for tech professionals and leaders, founders, investors, and anyone who wants a sharper read on the year ahead. Buy 2027 Tickets Partner with us 3,000+ Attendees 9,000+ Meetings 500+ Founders 250+ Investors 100+ Speakers 50+ Side events 2026 In Review To every speaker, founder, investor and attendee who brought their clarity and drive to Bucharest for the 2026 edition – thank you for making How to Web Conference unforgettable. As we begin building the 2027 experience, we let it be guided by a reflection shared on stage by Nicoleta-Ramona Dinu (State Adviser for Economic and Social Policies, Presidential Administration of Romania): “Romania must become a place where startups scale into global companies, drive innovation and build cutting-edge technology. A resilient ecosystem requires time, trust and true collaboration across industries, generations and the public sector. The future belongs to those willing to build it.” No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "How to Web Conference is the leading startup and technology conference in Eastern Europe. Join us in Bucharest, Romania, for 3 days of innovation.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Eastern Europe's leading startup & technology conference. Three days in Bucharest for tech professionals and leaders, founders, investors, and anyone who wants a sharper read on the year ahead.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "how-to-web-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.howtoweb.co/apply-for-startup-tickets",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

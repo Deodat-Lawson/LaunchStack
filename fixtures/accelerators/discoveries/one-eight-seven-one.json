@@ -1,7 +1,15 @@
 {
   "programId": "one-eight-seven-one",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://1871.com/about/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://1871.com/about/our-board/",
       "page": "details",
@@ -14,7 +22,47 @@
       "url": "https://1871.com/about/our-team/",
       "page": "details",
       "anchor": "Our team",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://1871.com/event/blktech-founders-cohort-5-info-sessions/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://1871.com/event/taxing-times-what-you-need-to-know-about-recent-tax-changes-those-on-the-horizon/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://1871.com/event/tech-talk-chatting-about-chatgpt-effects-of-ai/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://1871.com/event/wistem-cohort-14-public-info-session/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://1871.com/event/wmntech-founders-cohort-17-info-sessions/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

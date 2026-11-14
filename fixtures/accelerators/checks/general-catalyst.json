@@ -1,44 +1,374 @@
 {
   "programId": "general-catalyst",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://www.generalcatalyst.com/"
+    "https://www.generalcatalyst.com/",
+    "https://www.generalcatalyst.com/stories/prosimo-delivering-application-experience-across-multi-cloud",
+    "https://www.generalcatalyst.com/stories/announcing-chief-investment",
+    "https://www.generalcatalyst.com/stories/combating-the-mounting-addiction-mental-health-crisis-with-compassionate-evidenced-based-care-our-investment-in-eleanor-health",
+    "https://www.generalcatalyst.com/stories/focusing-on-europe-a-conversation-with-gcs-london-based-investment-team",
+    "https://www.generalcatalyst.com/stories/global-resilience-in-india-announcing-our-investment-in-jeh-aerospace",
+    "https://www.generalcatalyst.com/stories/our-investment-fivetran-making-data-flow",
+    "https://www.generalcatalyst.com/stories/our-investment-in-accrual",
+    "https://www.generalcatalyst.com/stories/our-investment-in-adept-empowering-knowledge-workers-with-ai",
+    "https://www.generalcatalyst.com/stories/our-investment-in-alpha-9-oncology",
+    "https://www.generalcatalyst.com/stories/our-investment-in-apiiro-expanding-visibility-in-application-security",
+    "https://www.generalcatalyst.com/stories/our-investment-in-applied-intuition",
+    "https://www.generalcatalyst.com/stories/our-investment-in-arca",
+    "https://www.generalcatalyst.com/stories/our-investment-in-argmax",
+    "https://www.generalcatalyst.com/stories/our-investment-in-armis"
   ],
   "evidence": [
     {
       "id": "check-email-10de222952",
       "url": "https://www.generalcatalyst.com/",
-      "title": "General Catalyst — homepage checked by scrape.py",
+      "title": "General Catalyst — homepage",
       "excerpt": "\"email\": \"info@generalcatalyst.com\"",
       "page": "details"
     },
     {
+      "id": "check-format-1cfc7196aa",
+      "url": "https://www.generalcatalyst.com/stories/combating-the-mounting-addiction-mental-health-crisis-with-compassionate-evidenced-based-care-our-investment-in-eleanor-health",
+      "title": "General Catalyst — terms page",
+      "excerpt": "and severe mental illness. Eleanor delivers in-person and virtual care in a deeply personalized and humane manner, rooted in",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-665bc1c2fb",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-armis",
+      "title": "General Catalyst — terms page",
+      "excerpt": "and more, is their North Star. Illustratively, our first in-person meeting with Yevgeny was over an early breakfast near San",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-c1934e9fb9",
+      "url": "https://www.generalcatalyst.com/stories/combating-the-mounting-addiction-mental-health-crisis-with-compassionate-evidenced-based-care-our-investment-in-eleanor-health",
+      "title": "General Catalyst — terms page",
+      "excerpt": "with addiction and severe mental illness. Eleanor delivers in-person and virtual care in a deeply personalized and humane",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-dfdb78fad6",
+      "url": "https://www.generalcatalyst.com/stories/focusing-on-europe-a-conversation-with-gcs-london-based-investment-team",
+      "title": "General Catalyst — terms page",
+      "excerpt": "focused on fintech and crypto, based in London. “We will be there at the ideation",
+      "page": "terms"
+    },
+    {
       "id": "check-name-84679d2a5e",
       "url": "https://www.generalcatalyst.com/",
-      "title": "General Catalyst — homepage checked by scrape.py",
+      "title": "General Catalyst — homepage",
       "excerpt": "General Catalyst Portfolio Capital Create Seed Grow Customer Value Fund",
       "page": "details"
     },
     {
       "id": "check-phone-9e5f14e0c3",
       "url": "https://www.generalcatalyst.com/",
-      "title": "General Catalyst — homepage checked by scrape.py",
+      "title": "General Catalyst — homepage",
       "excerpt": "\"telephone\": \"+12127754000\"",
       "page": "details"
     },
     {
+      "id": "check-portfolio-0bfe43fb6f",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-armis",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-186901a88f",
+      "url": "https://www.generalcatalyst.com/stories/focusing-on-europe-a-conversation-with-gcs-london-based-investment-team",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-20a0504589",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-accrual",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-256916e9e0",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-arca",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2b28d4d379",
+      "url": "https://www.generalcatalyst.com/stories/announcing-chief-investment",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Careers → https://jobs.generalcatalyst.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-3002598609",
+      "url": "https://www.generalcatalyst.com/stories/combating-the-mounting-addiction-mental-health-crisis-with-compassionate-evidenced-based-care-our-investment-in-eleanor-health",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Careers → https://jobs.generalcatalyst.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-35e0cd1f27",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-argmax",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Careers → https://jobs.generalcatalyst.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-4049925888",
+      "url": "https://www.generalcatalyst.com/stories/combating-the-mounting-addiction-mental-health-crisis-with-compassionate-evidenced-based-care-our-investment-in-eleanor-health",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-57a6ca6f05",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-apiiro-expanding-visibility-in-application-security",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5960455c8a",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-adept-empowering-knowledge-workers-with-ai",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Careers → https://jobs.generalcatalyst.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5aea53e84d",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-argmax",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-632b3dc7ec",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-arca",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Careers → https://jobs.generalcatalyst.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8468762d54",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-applied-intuition",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Careers → https://jobs.generalcatalyst.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9118f8e92b",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-apiiro-expanding-visibility-in-application-security",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Careers → https://jobs.generalcatalyst.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9910ba8d50",
+      "url": "https://www.generalcatalyst.com/stories/prosimo-delivering-application-experience-across-multi-cloud",
+      "title": "General Catalyst — application page",
+      "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-9b2ebd5abb",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-applied-intuition",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a4e9063058",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-armis",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Careers → https://jobs.generalcatalyst.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-aa7e96ff76",
+      "url": "https://www.generalcatalyst.com/stories/global-resilience-in-india-announcing-our-investment-in-jeh-aerospace",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-b01f7f9e13",
       "url": "https://www.generalcatalyst.com/",
-      "title": "General Catalyst — homepage checked by scrape.py",
+      "title": "General Catalyst — homepage",
       "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-b278bf5c05",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-accrual",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Careers → https://jobs.generalcatalyst.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c548acae3b",
+      "url": "https://www.generalcatalyst.com/stories/prosimo-delivering-application-experience-across-multi-cloud",
+      "title": "General Catalyst — application page",
+      "excerpt": "Careers → https://jobs.generalcatalyst.com/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-cbb0cf7f54",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-fivetran-making-data-flow",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Careers → https://jobs.generalcatalyst.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d7ff438a77",
+      "url": "https://www.generalcatalyst.com/stories/announcing-chief-investment",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-dc53244461",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-fivetran-making-data-flow",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-dec9af93d0",
+      "url": "https://www.generalcatalyst.com/stories/global-resilience-in-india-announcing-our-investment-in-jeh-aerospace",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Careers → https://jobs.generalcatalyst.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e095e20e9a",
+      "url": "https://www.generalcatalyst.com/stories/focusing-on-europe-a-conversation-with-gcs-london-based-investment-team",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Careers → https://jobs.generalcatalyst.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e1da25f1ad",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-alpha-9-oncology",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ee4bb0c0de",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-adept-empowering-knowledge-workers-with-ai",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-fa02e72b00",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-alpha-9-oncology",
+      "title": "General Catalyst — terms page",
+      "excerpt": "Careers → https://jobs.generalcatalyst.com/companies",
+      "page": "terms"
+    },
+    {
       "id": "check-route-8417810681",
       "url": "https://www.generalcatalyst.com/",
-      "title": "General Catalyst — homepage checked by scrape.py",
+      "title": "General Catalyst — homepage",
       "excerpt": "https://www.generalcatalyst.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-636de35388",
+      "url": "https://www.generalcatalyst.com/",
+      "page": "details",
+      "excerpt": "General Catalyst Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Announcements Quadrupling DOWN ON ANTHROPIC We are early in an AI transformation that will touch every industry, institution, and life. Dario Amodei and team are building Anthropic with the ambition and seriousness this moment demands. 01 - 07 <div>https://www.youtube.com/embed/YykkqujifPE?si=2Nxk18cOoxhAhSXb&amp;autoplay=1&amp;mute=1&amp;playsinline=1</div> Announcements A Blueprint for Healthcare Transformation In 2024, we made the unprecedented decision to acquire a hospital system and build a blueprint for proactive, accessible, affordable American healthcare. Now Summa Health and our Health Assurance Transformation Company (HATCo) have revealed their technology transformation stack, built with our portfolio companies Aidoc, Clarium, Commure, Fabric, Hippocratic AI, Judi Health, Transcarent, and Verse Medical, and unified by Percepta into a seamless AI-native operating system. 02 - 07 Conversations Moving First in an Era of Low Trust Scott Wu joins Hemant Taneja to talk about “tight-aggressive” leadership, first-generation entrepreneurship, the prisoner’s dilemma at the"
+    },
+    {
+      "id": "check-page-a9c4251481",
+      "url": "https://www.generalcatalyst.com/stories/prosimo-delivering-application-experience-across-multi-cloud",
+      "page": "application",
+      "excerpt": "Our Investment in Prosimo Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Our Investment in Prosimo April 6, 2021 Example H2 Example H3 Responsive, secure, and universally available software is critical to the digital transformation so many companies are going through today. Furthermore, companies are going cloud first to scale these applications and to quickly develop and deliver them to their employees and customers. While there has been a lot of focus on application modernization techniques (e.g. microservices and open-source technologies), there has been less on operationalizing them at a truly global scale. And while newer, born-in-the-cloud companies have fully adopted cloud-native capabilities, most enterprises do not have that luxury. They have one leg in the legacy world and one leg in the modern world, struggling to satisfy the demands of each. Throw in a desire to make these applications portable across clouds, and you have quite a big challenge to confront. COVID has made this even more of a challenge. We have seen companies from all verticals struggling to meet the application scale and security challenges of work-at-home"
+    },
+    {
+      "id": "check-page-c8ef6b0a0f",
+      "url": "https://www.generalcatalyst.com/stories/announcing-chief-investment",
+      "page": "terms",
+      "excerpt": "Our Investment in Chief Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Our Investment in Chief Ken Chenault June 25, 2019 Example H2 Example H3 Throughout my career, I’ve felt a deep sense of responsibility to develop teams and cultures that focus on integrity and embrace diversity and inclusion. This commitment is rooted in a core belief that opportunity and advancement should be available to everyone, and that representation at senior levels of companies today needs to undergo dramatic transformation. Chief is changing the fabric of leadership today by empowering women and accelerating and elevating the trajectories of their careers. A January 2019 study published by the National Academy of Sciences shows that women with a large, female centric inner circle have expected job placement levels that are 2.5x greater than those who don’t have such networks. Chief is a private network designed specifically for senior female leaders — VP-level through CEO — to strengthen their journey into the C-suite and keep them there. For organizations committed to gender parity, Chief can play an important role in helping these companies attract,"
+    },
+    {
+      "id": "check-page-f9c1e23004",
+      "url": "https://www.generalcatalyst.com/stories/combating-the-mounting-addiction-mental-health-crisis-with-compassionate-evidenced-based-care-our-investment-in-eleanor-health",
+      "page": "terms",
+      "excerpt": "Our Investment in Eleanor Health Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Our Investment in Eleanor Health April 8, 2022 Example H2 Example H3 It’s hard to ignore the harrowing statistics on the deteriorating state of mental health across the country. With over 40M Americans from all walks of life struggling from addiction and serious mental illness and only 1 in 10 people seeking treatment, this crisis is more than numbers in a headline – it touches us all (1). At General Catalyst we believe there is a tremendous opportunity to humanize these illnesses and show that recovery is possible with compassionate, evidence-based care. For this reason, we are pleased to announce our Series C investment in Eleanor Health, a provider specializing in addressing the unique complexities of individuals and populations with addiction and severe mental illness. Eleanor delivers in-person and virtual care in a deeply personalized and humane manner, rooted in harm-reduction . By meeting people where they are, Eleanor’s approach opens the door for people to receive care who otherwise wouldn’t seek help or respond well to traditional methods of"
+    },
+    {
+      "id": "check-page-e93fd92570",
+      "url": "https://www.generalcatalyst.com/stories/focusing-on-europe-a-conversation-with-gcs-london-based-investment-team",
+      "page": "terms",
+      "excerpt": "Focusing on Europe Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Focusing on Europe Zeynep Yavuz-Willson Mark Crane Alexandre Momeni December 19, 2022 Example H2 Example H3 On an early December afternoon, a team of investors convened around a table at General Catalyst's central London office. They represent varied sector expertise — healthcare, fintech and crypto, and consumer and enterprise technology — seniority levels, and lived experiences. Their diversity of thought, background and perspective is a unique mix within venture capital, but one GC purposely — and strategically — pulled together to build their office in one of top tech hubs and expand their European footprint, with a focus on early stage startups. “We want to make it very clear to European founders: We are a truly multistage firm and we want to be your first check-in,” says Zeynep Yavuz, an investor at General Catalyst focused on fintech and crypto, based in London. “We will be there at the ideation stage, partner with you to build a business together, and be there until you IPO, maybe even after.” London is an epicenter of innovation, with more than 38,000 tech companies,"
+    },
+    {
+      "id": "check-page-d68cde94e6",
+      "url": "https://www.generalcatalyst.com/stories/global-resilience-in-india-announcing-our-investment-in-jeh-aerospace",
+      "page": "terms",
+      "excerpt": "Global Resilience in India & Announcing Our Investment in Jeh Aerospace Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Global Resilience in India & Announcing Our Investment in Jeh Aerospace Paul Kwan Anand Chandrasekaran January 18, 2024 Example H2 Example H3 We have written extensively about our Global Resilience thesis and how we see the new geopolitical realignment impacting innovation. In our recent piece Building Globally Resilient Systems For A New World Order , we described how today’s new world order requires building more dynamic, resilient systems across industries and geographies. There is no question in our view that India has and will continue to be a key winner in this newly aligned world. Our CEO Hemant Taneja and CNN journalist Fareed Zakaria also called for a re-energized US-India corridor in their HBS piece, “The U.S.–India Relationship Is Key to the Future of Tech” : “Business leaders in the United States must move beyond the mindset of doing business in India purely as a result of labor arbitrage. Instead, they should view India as being a genuine hub of innovation, and they should encourage increased collaboration with"
+    },
+    {
+      "id": "check-page-a913aaf46f",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-fivetran-making-data-flow",
+      "page": "terms",
+      "excerpt": "Our Investment in Fivetran Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Our Investment in Fivetran June 30, 2020 Example H2 Example H3 Technologies for connecting systems and moving data have always been a critical component of enterprise infrastructure. Since the emergence of packaged enterprise apps and data warehouses in the 1990s and 2000s, a handful of important companies have been built to integrate systems and move data. SaaS and their APIs have caused an explosion in data sources and have significantly expanded the challenge of building and maintaining connectors to what are hundreds of data stores and SaaS applications, each with its own nuances. Every company needs to be data-informed to be competitive. Fivetran has taken a novel approach to the problem of pipelining and centralizing their data by making the process transparent, self-service, and cloud native. Today, we’re excited to announce our investment in Fivetran . Fivetran platform lets data flow freely from source to use. (Image Source: Fivetran) The Technology Fivetran has built a platform that allows them to create and maintain connectors with idempotence (as a"
+    },
+    {
+      "id": "check-page-02360a24d4",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-accrual",
+      "page": "terms",
+      "excerpt": "Our Investment in Accrual Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Our Investment in Accrual Marc Bhargava Christopher Kauffman February 5, 2026 Example H2 Example H3 Cosmin Nicolaescu and Siddarth Chandrasekaran became best friends at Stripe, bonding over building financial infrastructure and finding beauty in the mechanics everyone else ignores: the flows of capital, the regulations governing it, and the frameworks businesses build to navigate both. Nearly a decade later, after Cos served as CTO of Brex and Sidd led financial infrastructure at Stripe, they reunited to build together. Among their first believers were the founders of Stripe and Brex. They approached accounting with the same curiosity. Where everyone else saw an industry too complex, too regulated, and too resistant to change, they saw an opportunity to build a new operating system for CPAs. Their commitment became undeniable when they enrolled in community college courses to qualify for the CPA exam. Then they took our personal tax returns home as a test case and came back understanding our finances as well as any advisor. Today, they're launching Accrual. We're proud"
+    },
+    {
+      "id": "check-page-b09fc8c426",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-adept-empowering-knowledge-workers-with-ai",
+      "page": "terms",
+      "excerpt": "Our Investment in Adept Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Our Investment in Adept March 14, 2023 Example H2 Example H3 As we see it there is no question that we’re on the cusp of a new technology inflection point. Mobile, cloud, and the internet itself all fundamentally changed the way we live and work, but the advent of this new AI era we believe will eclipse them in scale, scope and speed of change. While exciting AI developments in text and image generation have captivated the world in recent months, we’ve been particularly excited about technologies that transcend the novelty of composing sonnets, generating artwork and writing essays on our behalf. In our view the real game changing moment will come when we enable knowledge workers to escape mundanity by giving them the power to seamlessly execute any task they can put into words…effectively enabling anyone to do what formerly only a handful of experts previously could. In Adept we found a brilliant team that is thoughtfully working toward constructing exactly that—an AI teammate to assist with many of the tasks we do on a computer. Rather than suggesting action, Adept’s"
+    },
+    {
+      "id": "check-page-f51dcbcb58",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-alpha-9-oncology",
+      "page": "terms",
+      "excerpt": "Our Investment in Alpha-9 Oncology Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Our Investment in Alpha-9 Oncology Elena Viboch Rachit Neupane October 23, 2024 Example H2 Example H3 Today, we are excited to announce our investment in Alpha-9 Oncology ’s $175M Series C funding round. Radiopharmaceuticals have the potential to harness the power of targeted therapeutics combined with the effectiveness of radiation as an anti-cancer therapy. With a strong team, diversified toolbox of building blocks and isotopes, and robust discovery capabilities, Alpha-9 is working to create radiopharmaceuticals that are highly optimized to selectively deliver radiation to tumor sites while minimizing off-target effects. We believe Alpha-9’s pipeline has the potential to substantially advance cancer treatment, particularly for patients with high unmet needs. Dr. David Hirsch , Alpha-9’s CEO, leads a deeply experienced team of drug developers dedicated to building a differentiated portfolio of what we believe can be best-in-class and first-in-class drugs—advancing multiple programs in parallel. With this financing, Alpha-9 Oncology aims to support further"
+    },
+    {
+      "id": "check-page-50e16cc554",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-apiiro-expanding-visibility-in-application-security",
+      "page": "terms",
+      "excerpt": "Our Investment in Apiiro Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Our Investment in Apiiro Quentin Clark Mark Crane November 3, 2022 Example H2 Example H3 Apiiro started for us like most investments start at GC: with incredible founders. We have known Idan for years and have been searching for the right time and opportunity to work with him after he created and sold Aorato. That’s why when we caught up with him this Summer around what he and Yonatan are building at Apiiro we jumped at the chance to lead their Series B. Outside of growing quickly and becoming a trusted partner for their growing list of customers, Apiiro sits at the intersection of multiple waves of change in the enterprise and security. Some of these waves are well established, while we can barely see what the crest could be for others. Every company is a software company and even large enterprises are expanding their software development teams. - JP Morgan announced in 2021 1 it added 2,000 developers. As both digitally native and traditional companies respond to consumers demanding experiences mirroring what they get every day through consumer applications, the end"
+    },
+    {
+      "id": "check-page-2392d48a65",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-applied-intuition",
+      "page": "terms",
+      "excerpt": "Our Investment in Applied Intuition Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Our Investment in Applied Intuition Hemant Taneja Jeannette zu Fürstenberg Paul Kwan The Global Resilience Team March 12, 2024 Example H2 Example H3 Applied Intuition is on a mission to make it faster and easier to bring autonomy to sectors across Global Resilience. Nearly every sector of the economy, from healthcare to industrials, is undergoing a massive transformation driven by AI innovation. The role of software within vehicles has increased and will continue to grow dramatically over the next decade. Deloitte estimates that software-defined vehicle (SDV) market penetration will reach 90% by 2029. In 2019, we had conviction that a Tier-1 software supplier will emerge to support this shift. That’s why we led Applied Intuition’s Series B to meet this need, not only for automotive—but for all vehicles. Today, we’re thrilled to further our partnership with Qasar Younis, Peter Ludwig, and the Applied Intuition team by investing in its $250M Series E round. We are in the midst of a fascinating era where tech is building modern versions of iconic companies from"
+    },
+    {
+      "id": "check-page-12681d6539",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-arca",
+      "page": "terms",
+      "excerpt": "Our Investment in Arca Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Our Investment in Arca Alex Tran Nat Levy-Westhead June 25, 2026 Example H2 Example H3 The institutions that built American wealth management are household names. The most valuable thing they offer is also their most exclusive: A real human advisor who understands your whole financial life and steers you through it has long been reserved for the wealthiest households. Everyone else gets an app or generic advice. Arca is built to change that, and the team building it is an unlikely pairing. In one room, engineers in New York from leading technology companies. In another, a wealth advisory team up in Portsmouth, New Hampshire with decades of experience running their own business. On a recent trip the engineers stayed up for several nights to get it right, Claude Coding on the train ride up. Then everyone partied together. That mix works because Arca builds its product for its own team. The people using it and the people building it are never more than a Slack message apart. Joining this unique team is a roster of industry luminaries who sit on the board, drawn to the same"
+    },
+    {
+      "id": "check-page-7ad8a78260",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-argmax",
+      "page": "terms",
+      "excerpt": "Our Investment in Argmax Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Our Investment in Argmax Quentin Clark Alexandre Momeni February 20, 2024 Example H2 Example H3 We are thrilled to join forces with the Argmax team to bring frontier AI models to the edge. Argmax converges our vision of Responsible AI and Global Resilience to drive AI adoption in critical industries of our economy and society through high trust, high integrity open source infrastructure. Despite recent advancements in AI, companies deploying frontier models in production are still largely constrained to server-side inference. Large models are too large to run on commodity hardware, while today’s compression techniques currently yield models below production-grade quality. This presents several hurdles for developers and enterprises looking to deploy foundation models in their products, including non-zero marginal cost for inference, privacy and security, latency and connectivity. And yet, similar to how web developers capitalized on Electron to harness client hardware and build more sophisticated applications, we are witnessing growing enthusiasm within the open source"
+    },
+    {
+      "id": "check-page-6c88758d40",
+      "url": "https://www.generalcatalyst.com/stories/our-investment-in-armis",
+      "page": "terms",
+      "excerpt": "Our Investment in Armis Portfolio Capital Create Seed Grow Customer Value Fund Famiglia General Catalyst Institute GC Wealth Transformations Percepta Health Assurance Transformation Company News & Content Our Team Search Search The Future of Services Portfolio Copy Logo as SVG Copy Wordmark as SVG Brand Assets Our Investment in Armis Mark Crane November 7, 2024 Example H2 Example H3 We’re thrilled to announce our $200M co-lead Series D investment in Armis to bolster global resilience by securing the enterprise’s most essential assets — on the ground and in the cloud. Our global resilience thesis underlines our commitment to investing in dynamic, resilient systems across the most critical industries — defense and intelligence, industrials, healthcare, fintech, and climate and energy — to meet the moment of burgeoning global power competition. In tandem, our worldview posits that applied AI will drive this wave of innovation and adoption, ushering in transformation at scale. In our hyperconnected and perpetually evolving world, how can we ensure our assets — from physical assets like nuclear power plants and planes to digital assets like IT systems, operational technology, medical devices, or cloud infrastructure — are protected at all times? We believe this exponentially growing web of connectivity will only expand over the AI era, increasing the surface area for potential"
     }
   ],
   "findings": {
@@ -64,12 +394,37 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-c1934e9fb9"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-1cfc7196aa"
+      }
+    ],
+    "location": [
+      {
+        "value": "London",
+        "evidenceId": "check-location-dfdb78fad6"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.generalcatalyst.com/portfolio",
         "evidenceId": "check-portfolio-b01f7f9e13"
+      },
+      {
+        "value": "https://jobs.generalcatalyst.com/companies",
+        "evidenceId": "check-portfolio-c548acae3b"
       }
     ],
     "name": [

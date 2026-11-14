@@ -1,15 +1,7 @@
 {
   "programId": "epfl-innovation",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://www.epfl-innovationpark.ch/companies",
-      "page": "portfolio",
-      "anchor": "Community",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://www.epfl-innovationpark.ch/about/mission",
       "page": "details",
@@ -22,7 +14,15 @@
       "url": "https://www.epfl-innovationpark.ch/about/who-we-are",
       "page": "details",
       "anchor": "Who we are",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.epfl-innovationpark.ch/companies",
+      "page": "portfolio",
+      "anchor": "Community",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -30,7 +30,7 @@
       "url": "https://www.epfl-innovationpark.ch/corporates/partnering/knova",
       "page": "details",
       "anchor": "/corporates/partnering/knova Partnership program Join our acceleration program to enable your business to leverage academia and uncover future innovation",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

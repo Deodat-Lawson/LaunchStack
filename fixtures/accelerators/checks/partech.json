@@ -1,49 +1,381 @@
 {
   "programId": "partech",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://partechpartners.com/"
+    "https://partechpartners.com/",
+    "https://partechpartners.com/news/ava-lapplication-utilis%C3%A9e-sur-le-tournage-du-film-oscaris%C3%A9-coda-l%C3%A8ve-usd-10m-et-acc%C3%A9l%C3%A8re-la-transformation-vers-un-monde-totalement-inclusif",
+    "https://partechpartners.com/news/barom%C3%A8tre-foxintelligence-semaine-3-de-confinement-les-baby-boomers-nouveaux-acheteurs-en-ligne-les-applications-mobiles-en-dernier-recours-pour-soccuper",
+    "https://partechpartners.com/news/odaseva-closes-117-million-in-funding-to-accelerate-delivery-of-data-protection-data-compliance-and-data-operations-for-enterprises-running-business-applications-in-the-cloud",
+    "https://partechpartners.com/news/ubble-submits-its-application-pvid-certification-anssi",
+    "https://partechpartners.com/news/200m-investment-secured-by-ecovadis",
+    "https://partechpartners.com/news/almentor-secures-10mn-investment-round-led-e-capital-bridge-education-gap-10-million-arabic-speakers",
+    "https://partechpartners.com/news/billogram-set-enter-6-new-markets-45m-investment-partech",
+    "https://partechpartners.com/news/dating-group-acquires-once-app-18-million-deal",
+    "https://partechpartners.com/news/digital-real-estate-investments-are-highly-attractive-exporo-successfully-concludes-financing-round-487-miliion",
+    "https://partechpartners.com/news/ecovadis-secures-c-200m-investment-from-cvc-growth-partners-to-accelerate-adoption-of-sustainability-ratings-throughout-the-globalized-economy",
+    "https://partechpartners.com/news/exporo-launches-new-investment-platform-propvest",
+    "https://partechpartners.com/news/gebeya-inc-closes-2-million-dollars-seed-round-investment",
+    "https://partechpartners.com/news/gebeya-inc-raises-2-million-in-seed-round-investment",
+    "https://partechpartners.com/news/imp-software-secures-investment"
   ],
   "evidence": [
     {
+      "id": "check-format-08d8ef3b57",
+      "url": "https://partechpartners.com/news/ubble-submits-its-application-pvid-certification-anssi",
+      "title": "Partech — application page",
+      "excerpt": "strengthening the level of security when entering into a remote relationship with their users, and taking advantage of the",
+      "page": "application"
+    },
+    {
+      "id": "check-format-14502962ea",
+      "url": "https://partechpartners.com/news/ubble-submits-its-application-pvid-certification-anssi",
+      "title": "Partech — application page",
+      "excerpt": "the reliability of identity verification. The hosting of a remote identity verification service should be highly secure and",
+      "page": "application"
+    },
+    {
+      "id": "check-format-207ac66f2c",
+      "url": "https://partechpartners.com/news/ubble-submits-its-application-pvid-certification-anssi",
+      "title": "Partech — application page",
+      "excerpt": "for PVID certification is the first milestone for remote identity verification providers wishing to meet the",
+      "page": "application"
+    },
+    {
+      "id": "check-format-2955fd713b",
+      "url": "https://partechpartners.com/news/ubble-submits-its-application-pvid-certification-anssi",
+      "title": "Partech — application page",
+      "excerpt": "trust services towards the adoption of new standards of remote access, ubble teams have submitted their application for",
+      "page": "application"
+    },
+    {
+      "id": "check-format-3a3413799f",
+      "url": "https://partechpartners.com/news/gebeya-inc-closes-2-million-dollars-seed-round-investment",
+      "title": "Partech — terms page",
+      "excerpt": "to building the next generation workforce pipeline for a virtual 21st-century African Digital economy. Gebeya has graduated",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-89fbb28449",
+      "url": "https://partechpartners.com/news/ubble-submits-its-application-pvid-certification-anssi",
+      "title": "Partech — application page",
+      "excerpt": "This certification is critical for the entry into remote relationships in many sectors: financial services",
+      "page": "application"
+    },
+    {
+      "id": "check-format-96f7c9e304",
+      "url": "https://partechpartners.com/news/ubble-submits-its-application-pvid-certification-anssi",
+      "title": "Partech — application page",
+      "excerpt": "here . About ubble ubble is the leader in face-to-face remote identity verification. The company verifies thousands of",
+      "page": "application"
+    },
+    {
+      "id": "check-format-984aa3c2ff",
+      "url": "https://partechpartners.com/news/ubble-submits-its-application-pvid-certification-anssi",
+      "title": "Partech — application page",
+      "excerpt": "economic relationships, brought on by the health crisis, remote identity verification is becoming a priority and strategic",
+      "page": "application"
+    },
+    {
+      "id": "check-format-b10a97577f",
+      "url": "https://partechpartners.com/news/ubble-submits-its-application-pvid-certification-anssi",
+      "title": "Partech — application page",
+      "excerpt": "teams have submitted their application for the ‘PVID’ (Remote Identity Verification Provider) certification, as of April",
+      "page": "application"
+    },
+    {
+      "id": "check-format-cbbe8c0692",
+      "url": "https://partechpartners.com/news/ubble-submits-its-application-pvid-certification-anssi",
+      "title": "Partech — application page",
+      "excerpt": "approach to standardising the entry into trusted remote relationships, and welcomes a new set of relevant and",
+      "page": "application"
+    },
+    {
+      "id": "check-format-db76517365",
+      "url": "https://partechpartners.com/news/ubble-submits-its-application-pvid-certification-anssi",
+      "title": "Partech — application page",
+      "excerpt": "and digital identity schemes. In a context of widespread remote social and economic relationships, brought on by the",
+      "page": "application"
+    },
+    {
+      "id": "check-location-1038ddd018",
+      "url": "https://partechpartners.com/news/imp-software-secures-investment",
+      "title": "Partech — terms page",
+      "excerpt": "is a global tech investment firm headquartered in Paris, with offices in Berlin, Dakar, Dubai,",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-e0572035a7",
+      "url": "https://partechpartners.com/news/gebeya-inc-closes-2-million-dollars-seed-round-investment",
+      "title": "Partech — terms page",
+      "excerpt": "Ed Tech and online Marketplace Company headquartered in Addis Ababa, Ethiopia. The company focuses on",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-f2ca1c66df",
+      "url": "https://partechpartners.com/news/gebeya-inc-raises-2-million-in-seed-round-investment",
+      "title": "Partech — terms page",
+      "excerpt": "Investment Managers. Gebeya, headquartered in Ethiopia, is a Pan African Ed Tech company",
+      "page": "terms"
+    },
+    {
       "id": "check-name-4684a64455",
       "url": "https://partechpartners.com/",
-      "title": "Partech — homepage checked by scrape.py",
+      "title": "Partech — homepage",
       "excerpt": "Homepage | Partech INDEPENDENT IN THOUGHT. Putting ambition in motion.",
       "page": "details"
     },
     {
+      "id": "check-phone-81300a56eb",
+      "url": "https://partechpartners.com/news/imp-software-secures-investment",
+      "title": "Partech — terms page",
+      "excerpt": "01778 218180",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-c10ca34ed6",
+      "url": "https://partechpartners.com/news/imp-software-secures-investment",
+      "title": "Partech — terms page",
+      "excerpt": "07866 436159",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-0106d7a8b0",
+      "url": "https://partechpartners.com/news/gebeya-inc-closes-2-million-dollars-seed-round-investment",
+      "title": "Partech — terms page",
+      "excerpt": "Portfolio → https://partechpartners.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-1545fe2c23",
+      "url": "https://partechpartners.com/news/imp-software-secures-investment",
+      "title": "Partech — terms page",
+      "excerpt": "Portfolio → https://partechpartners.com/companies",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-3d811753cf",
       "url": "https://partechpartners.com/",
-      "title": "Partech — homepage checked by scrape.py",
+      "title": "Partech — homepage",
       "excerpt": "( All Portfolio ) → https://partechpartners.com/companies",
       "page": "details"
     },
     {
       "id": "check-portfolio-421eae1902",
       "url": "https://partechpartners.com/",
-      "title": "Partech — homepage checked by scrape.py",
+      "title": "Partech — homepage",
       "excerpt": "Portfolio → https://partechpartners.com/companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-46a304e193",
+      "url": "https://partechpartners.com/news/billogram-set-enter-6-new-markets-45m-investment-partech",
+      "title": "Partech — terms page",
+      "excerpt": "Portfolio → https://partechpartners.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-62b4fcb4d0",
+      "url": "https://partechpartners.com/news/digital-real-estate-investments-are-highly-attractive-exporo-successfully-concludes-financing-round-487-miliion",
+      "title": "Partech — terms page",
+      "excerpt": "Portfolio → https://partechpartners.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-63c32ceeff",
+      "url": "https://partechpartners.com/news/ubble-submits-its-application-pvid-certification-anssi",
+      "title": "Partech — application page",
+      "excerpt": "Portfolio → https://partechpartners.com/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-654b4a1543",
+      "url": "https://partechpartners.com/news/barom%C3%A8tre-foxintelligence-semaine-3-de-confinement-les-baby-boomers-nouveaux-acheteurs-en-ligne-les-applications-mobiles-en-dernier-recours-pour-soccuper",
+      "title": "Partech — application page",
+      "excerpt": "Portfolio → https://partechpartners.com/companies",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-7383c50acf",
       "url": "https://partechpartners.com/",
-      "title": "Partech — homepage checked by scrape.py",
+      "title": "Partech — homepage",
       "excerpt": "( Discover Portfolio ) → https://partechpartners.com/companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-792d551a19",
+      "url": "https://partechpartners.com/news/200m-investment-secured-by-ecovadis",
+      "title": "Partech — terms page",
+      "excerpt": "Portfolio → https://partechpartners.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8a694f8172",
+      "url": "https://partechpartners.com/news/ava-lapplication-utilis%C3%A9e-sur-le-tournage-du-film-oscaris%C3%A9-coda-l%C3%A8ve-usd-10m-et-acc%C3%A9l%C3%A8re-la-transformation-vers-un-monde-totalement-inclusif",
+      "title": "Partech — application page",
+      "excerpt": "Portfolio → https://partechpartners.com/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-90260c4641",
+      "url": "https://partechpartners.com/news/almentor-secures-10mn-investment-round-led-e-capital-bridge-education-gap-10-million-arabic-speakers",
+      "title": "Partech — terms page",
+      "excerpt": "Portfolio → https://partechpartners.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-993c93d7c3",
+      "url": "https://partechpartners.com/news/odaseva-closes-117-million-in-funding-to-accelerate-delivery-of-data-protection-data-compliance-and-data-operations-for-enterprises-running-business-applications-in-the-cloud",
+      "title": "Partech — application page",
+      "excerpt": "Portfolio → https://partechpartners.com/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-9bd9fff373",
+      "url": "https://partechpartners.com/news/odaseva-closes-117-million-in-funding-to-accelerate-delivery-of-data-protection-data-compliance-and-data-operations-for-enterprises-running-business-applications-in-the-cloud",
+      "title": "Partech — application page",
+      "excerpt": "our current portfolio → https://partechpartners.com/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b93ebbd8c4",
+      "url": "https://partechpartners.com/news/ecovadis-secures-c-200m-investment-from-cvc-growth-partners-to-accelerate-adoption-of-sustainability-ratings-throughout-the-globalized-economy",
+      "title": "Partech — terms page",
+      "excerpt": "Portfolio → https://partechpartners.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-cdbacf161f",
+      "url": "https://partechpartners.com/news/dating-group-acquires-once-app-18-million-deal",
+      "title": "Partech — terms page",
+      "excerpt": "Portfolio → https://partechpartners.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-deed361fa0",
+      "url": "https://partechpartners.com/news/gebeya-inc-raises-2-million-in-seed-round-investment",
+      "title": "Partech — terms page",
+      "excerpt": "Portfolio → https://partechpartners.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-fc1aac9c56",
+      "url": "https://partechpartners.com/news/exporo-launches-new-investment-platform-propvest",
+      "title": "Partech — terms page",
+      "excerpt": "Portfolio → https://partechpartners.com/companies",
+      "page": "terms"
+    },
+    {
       "id": "check-route-fdef6d862d",
       "url": "https://partechpartners.com/",
-      "title": "Partech — homepage checked by scrape.py",
+      "title": "Partech — homepage",
       "excerpt": "https://partechpartners.com/",
       "page": "details"
     }
   ],
+  "pageQuotes": [
+    {
+      "id": "check-page-7bb6814b92",
+      "url": "https://partechpartners.com/",
+      "page": "details",
+      "excerpt": "Homepage | Partech INDEPENDENT IN THOUGHT. Putting ambition in motion. Partech harnesses broad expertise from a collective of experts to deliver the best support for founders across the globe. ( Discover Portfolio ) ALLIED IN ACTION. Partech Funds ( Explore Strategies ) Some of the family ( All Portfolio ) The latest stories €131.7M FOR METYCLE, TWO AWARDS, AND THREE RANKINGS It’s fair to say our portfolio companies pulled their weight this month, and a great deal of it came in copper and aluminum. Metycle secured a €131.7M credit facility to keep recycled metal moving to industrial buyers ... TWO NEW UNICORNS, A $450M LIFT-OFF AND 3 NEW COMPANIES Autumn is here, and while the leaves may be falling, our portfolio is doing quite the opposite! The Exploration Company closed a $450M Series C, the largest round ever announced by a European space company... NETSEC RAISES MORE THAN $10M TO GROW ITS AI-NATIVE SOLUTION FOR CYBERSECURITY AND IT Paris, October 6th, 2026 - Netsec, the European company that manages IT and cybersecurity end to end as a single operator, today announced it has raised more than $10 million in equity funding led by Partech with... ( Stay Informed ) Meet the team ( View All ) A Commitment to investing responsibly Global in scope and driven by individuals. Partech's dedicated teams and funds are designed to effectively serve the needs of founders at every stage."
+    },
+    {
+      "id": "check-page-0a2df0dcd2",
+      "url": "https://partechpartners.com/news/ava-lapplication-utilis%C3%A9e-sur-le-tournage-du-film-oscaris%C3%A9-coda-l%C3%A8ve-usd-10m-et-acc%C3%A9l%C3%A8re-la-transformation-vers-un-monde-totalement-inclusif",
+      "page": "application",
+      "excerpt": "Ava, l’application utilisée sur le tournage du film Oscarisé CODA, lève USD 10M, et accélère la transformation vers un monde totalement inclusif. | Partech News / Archive / Ava, l’application utilisée sur le tournage du film Oscarisé CODA, lève USD 10M, et accélère la transformation vers un monde totalement inclusif. Ava, l’application utilisée sur le tournage du film Oscarisé CODA, lève USD 10M, et accélère la transformation vers un monde totalement inclusif. April 6th, 2022 Also available in: Share Share SUBSCRIBE TO OUR NEWSLETTER Submit Portfolio Funds Team Story The Outlier Press Sustainability Regulatory Disclosure SFDR Contact Legal Privacy Settings Sitemap © 2026 Partech Partners Developed by"
+    },
+    {
+      "id": "check-page-d0d4f1b7f5",
+      "url": "https://partechpartners.com/news/barom%C3%A8tre-foxintelligence-semaine-3-de-confinement-les-baby-boomers-nouveaux-acheteurs-en-ligne-les-applications-mobiles-en-dernier-recours-pour-soccuper",
+      "page": "application",
+      "excerpt": "Baromètre Foxintelligence: Semaine 3 de confinement : les baby-boomers nouveaux acheteurs en ligne ; les applications mobiles en dernier recours pour s’occuper! | Partech News / Archive / Baromètre Foxintelligence: Semaine 3 de confinement : les baby-boomers nouveaux acheteurs en ligne ; les applications mobiles en dernier recours pour s’occuper! Baromètre Foxintelligence: Semaine 3 de confinement : les baby-boomers nouveaux acheteurs en ligne ; les applications mobiles en dernier recours pour s’occuper! April 9th, 2020 Also available in: Share Share SUBSCRIBE TO OUR NEWSLETTER Submit Portfolio Funds Team Story The Outlier Press Sustainability Regulatory Disclosure SFDR Contact Legal Privacy Settings Sitemap © 2026 Partech Partners Developed by"
+    },
+    {
+      "id": "check-page-4e8da3e730",
+      "url": "https://partechpartners.com/news/odaseva-closes-117-million-in-funding-to-accelerate-delivery-of-data-protection-data-compliance-and-data-operations-for-enterprises-running-business-applications-in-the-cloud",
+      "page": "application",
+      "excerpt": "Odaseva Closes $11.7 Million in Funding to Accelerate Delivery of Data Protection, Data Compliance and Data Operations for Enterprises Running Business Applications in the Cloud | Partech News / Archive / Odaseva Closes $11.7 Million in Funding to Accelerate Delivery of Data Protection, Data Compliance and Data Operations for Enterprises Running Business Applications in the Cloud Odaseva Closes $11.7 Million in Funding to Accelerate Delivery of Data Protection, Data Compliance and Data Operations for Enterprises Running Business Applications in the Cloud February 28th, 2019 Also available in: Share Share SAN FRANCISCO, Feb. 28, 2019 – Odaseva, the all-in-one cloud data management platform for enterprises running critical business applications in the cloud such as Salesforce, today announced a Series A funding round of $11.7 million. The round, led by Partech with participation from new investor Salesforce Ventures and existing investor Serena, will help the company accelerate its go-to-market strategy and build on successes with global customers that include General Electric, Heineken, Orange Bank, Robert Half, Schneider Electric and Toyota. The new round, in addition to the original seed funding, brings the total funding to $14 million. “No organization has the luxury of taking months or years to comply with the data privacy and protection requirements of its customers – most"
+    },
+    {
+      "id": "check-page-0f1ab10bd6",
+      "url": "https://partechpartners.com/news/ubble-submits-its-application-pvid-certification-anssi",
+      "page": "application",
+      "excerpt": "ubble submits its application for PVID certification to the ANSSI | Partech News / Archive / ubble submits its application for PVID certification to the ANSSI ubble submits its application for PVID certification to the ANSSI April 15th, 2021 Also available in: Share Share PARIS - 15/04/2021 // In order to accompany banking and trust services towards the adoption of new standards of remote access, ubble teams have submitted their application for the ‘PVID’ (Remote Identity Verification Provider) certification, as of April 6th 2021. The ANSSI is yet to confirm that the application has been accepted. With applications open since April 1, 2021, an the application for PVID certification is the first milestone for remote identity verification providers wishing to meet the requirements of the new ANSSI standard. ubble aims to be the first in Europe to receive PVID certification. This certification is critical for the entry into remote relationships in many sectors: financial services (banking, insurance, credit, cryptocurrencies), trust services (electronic signatures and registered documents), and digital identity schemes. In a context of widespread remote social and economic relationships, brought on by the health crisis, remote identity verification is becoming a priority and strategic issue. The new ANSSI requirements’ framework is a fundamental asset in the fight against fraud,"
+    },
+    {
+      "id": "check-page-f7586327a2",
+      "url": "https://partechpartners.com/news/200m-investment-secured-by-ecovadis",
+      "page": "terms",
+      "excerpt": "$200m Investment Secured by EcoVadis | Partech News / Archive / $200m Investment Secured by EcoVadis $200m Investment Secured by EcoVadis January 9th, 2020 Share Share EcoVadis has announced today that they have secured $200 million USD from CVC Growth Partners, an investment that is the largest of its kind, and reflects a shared long-term vision for the importance of ESG to business success. The company is the world's most trusted provider of business sustainability ratings, intelligence and collaborative performance improvement tools for global supply chains, reflected by more than 450 enterprises, representing over $2.5 trillion in business spending, who rely on EcoVadis. Providing detailed insight into environmental, social and ethical risks through a powerful technology platform and a global team of domain experts, EcoVadis runs across 198 purchasing categories and 155 countries. EcoVadis recognizes the progression of society into being more environmentally and societally focused, and therefore will use this investment to further invest not only in its technology platform and network of rated companies, but also in its sustainability intelligence solutions. The company also plans to leverage the funding to expand internationally and break into new countries, increasing its global presence. Omri Benayoun, General Partner at Partech and a board member of EcoVadis since"
+    },
+    {
+      "id": "check-page-1d6be9f435",
+      "url": "https://partechpartners.com/news/almentor-secures-10mn-investment-round-led-e-capital-bridge-education-gap-10-million-arabic-speakers",
+      "page": "terms",
+      "excerpt": "Almentor secures a $10mn investment round led by e& capital to bridge the education gap for 10 million Arabic speakers | Partech News / Archive / Almentor secures a $10mn investment round led by e& capital to bridge the education gap for 10 million Arabic speakers Almentor secures a $10mn investment round led by e& capital to bridge the education gap for 10 million Arabic speakers March 16th, 2023 Share Share Dubai and Cairo, March 16th 2022 . almentor , the leading online video learning platform in Arabic, has raised $10mn in growth capital in a pre-series C round led by e& capital , the tech investment arm of e&. The proceeds will be used to accelerate almentor’s growth towards its goal of serving ten million learners in the MENA region. In particular, the company will use the funds to increase its investment in the B2C segment and to expand in Saudi Arabia. e& capital joins existing investors Partech, Sawari Ventures, Egypt Ventures, Sango Capital and Endure Capital. almentor targets a market of more than 400 million Arabic speakers with underserved educational needs. The MENA region’s population is growing at a faster pace than the populations of developed markets, however the region remains lagging in its spending and investment in education. It suffers from a high ratio of students to teachers – 16.5 in the UAE, 19.6 in KSA, and 24.2 in Egypt, relative to 15.1 in the US"
+    },
+    {
+      "id": "check-page-f4a15d9ad1",
+      "url": "https://partechpartners.com/news/billogram-set-enter-6-new-markets-45m-investment-partech",
+      "page": "terms",
+      "excerpt": "Billogram set to enter 6 new markets with $45M investment from Partech | Partech News / Archive / Billogram set to enter 6 new markets with $45M investment from Partech Billogram set to enter 6 new markets with $45M investment from Partech September 13th, 2021 Also available in: Share Share September 13, 2021 // Following a year of record growth, Billogram just closed a $45M round of funding. This capital will help Billogram expand into six new markets and double its workforce. The investor is global tech investment firm Partech, known for investing in global European-born software leaders Ecovadis, M-Files or Sendinblue, unicorns such as Jellysmack, Rohlik, Sorare, Toss or Swedish digital native fashion brand NA-KD. “We are excited to partner with Jonas and the team at Billogram.” says Omri Benayoun, General Partner at Partech. “Having spotted a gap in the market, they have quietly built the most advanced platform for large B2C enterprises looking to integrate billing, payment, and collection in one single solution. In our discussion with leading utilities, telecom, e-health, and all other clients across Europe, we realized how valuable Billogram was for them in order to engage with their end-users through a top-notch billing and payment experience. The outstanding commercial traction demonstrated by Billogram has further cemented our conviction, and we can’t wait to support"
+    },
+    {
+      "id": "check-page-b5f43d3ec2",
+      "url": "https://partechpartners.com/news/dating-group-acquires-once-app-18-million-deal",
+      "page": "terms",
+      "excerpt": "Dating Group Acquires Once App in a $18 Million Deal | Partech News / Archive / Dating Group Acquires Once App in a $18 Million Deal Dating Group Acquires Once App in a $18 Million Deal January 19th, 2021 Also available in: Share Share Malta, January 19 — Dating Group, one of the largest companies in the dating industry with 73 million registered users across its portfolio, today announced the acquisition of Once , the leading app for quality dating in Western Europe. The deal values the company at up to $18 million and is made via a combination of cash and Dating Group stock. Once leverages AI algorithms to provide just one match per day to each user. Each pair has 24 hours of each other’s attention and can continue chatting if they “like” each other. The AI looks at the account’s info, dating preferences and previous history in order to find the best possible match. Users can also rate each particular profile to let the AI better understand their taste. Once championed the “slow” dating model focusing on quality matches over competing for the user’s attention. It is a leading app in the dating category in its core countries in Western Europe and has built a profitable business with over 10 million users. Now it becomes a part of Dating Group, one of the largest global holdings in the dating and social discovery markets. Clémentine Lalande, Co-founder and CEO of Once, will"
+    },
+    {
+      "id": "check-page-70576f8260",
+      "url": "https://partechpartners.com/news/digital-real-estate-investments-are-highly-attractive-exporo-successfully-concludes-financing-round-487-miliion",
+      "page": "terms",
+      "excerpt": "Digital real estate investments are highly attractive: Exporo successfully concludes financing round of $48.7 million | Partech News / Archive / Digital real estate investments are highly attractive: Exporo successfully concludes financing round of $48.7 million Digital real estate investments are highly attractive: Exporo successfully concludes financing round of $48.7 million June 14th, 2019 Also available in: Share Share Hamburg, June 14th 2019 – The Hamburg-based Fintech Exporo has completed a financing round of $48.7 million. The new lead investor Partech and previous investors e.ventures, Heartcore and HV Holtzbrinck Ventures are participating in the financing round. Exporo is Germany’s leading platform for digital real estate investments and enables everyone to invest easily, transparently and with small amounts in individual properties and thus build up a widely diversified digital real estate portfolio. Exporo will invest the additional capital primarily in strategic activities: The clear market leadership in digital investments in real estate in Germany is to be further expanded. To achieve this, the exporo.de platform will be further developed and supplemented with new offerings such as a portfolio builder and a trading platform in real time. With a clear focus on neighbouring European countries, the company is also pushing ahead with its international expansion."
+    },
+    {
+      "id": "check-page-dad0cf9d18",
+      "url": "https://partechpartners.com/news/ecovadis-secures-c-200m-investment-from-cvc-growth-partners-to-accelerate-adoption-of-sustainability-ratings-throughout-the-globalized-economy",
+      "page": "terms",
+      "excerpt": "EcoVadis Secures c. $200M Investment from CVC Growth Partners | Partech News / Archive / EcoVadis Secures c. $200M Investment from CVC Growth Partners EcoVadis Secures c. $200M Investment from CVC Growth Partners January 9th, 2020 Also available in: Share Share NEW YORK, LONDON and PARIS – EcoVadis SAS , (“EcoVadis” or the “Company”), the world leader in business sustainability ratings for global supply chains, today announced that it has agreed a c. $200m investment from CVC Growth Partners II (“CVC Growth Partners”). This transaction represents one of the largest investments in the ESG space to date and reflects a shared long-term vision for the importance of ESG to business success. EcoVadis will leverage the funding to scale globally and engrain sustainability, fair labor practices and ethics into enterprise supply chains and business commerce. “The combination of global sustainability initiatives, evolving compliance regulations and corporate purpose commitments are putting a new and urgent spotlight on the supply chain – and creating an immense and growing market for our solutions,” said Frédéric Trinel, co-founder and co-CEO of EcoVadis. “CVC’s global network and reach will play a critical role in helping us scale and change the way businesses operate.” “Momentum towards a more environmentally and societally focused economy has been building for years. Today’s"
+    },
+    {
+      "id": "check-page-0e2a4161a0",
+      "url": "https://partechpartners.com/news/exporo-launches-new-investment-platform-propvest",
+      "page": "terms",
+      "excerpt": "Exporo launches new investment platform with PROPVEST | Partech News / Archive / Exporo launches new investment platform with PROPVEST Exporo launches new investment platform with PROPVEST July 14th, 2021 Also available in: Share Share Hamburg, 14.07.2021 – The Hamburg-based fintech Exporo aims to permanently change the market for real estate investments with its new platform. With PROPVEST, investors are given the opportunity to either invest in a real estate savings plan with small amounts in an automated way with the help of an algorithm or to invest independently in various existing properties. Exporo obtained a licence for financial portfolio management for PROPVEST already last year and will thus introduce the new platform to the broad market for wealth accumulation and expansion. By being able to invest in existing real estate with small amounts, investors can use PROPVEST to diversify their investment portfolio broadly in real estate in order to further diversify the risk of their portfolio. \"PROPVEST is the first roboadvisor for real estate investments. The offer is aimed at every investor -from trainees to dentists - who wants to focus on long-term real estate investments when building up and expanding their wealth. In order to ensure that investors have access to a wide range of opportunities, we want to bring up to ten new properties onto the platform every month"
+    },
+    {
+      "id": "check-page-bc6964fa21",
+      "url": "https://partechpartners.com/news/gebeya-inc-closes-2-million-dollars-seed-round-investment",
+      "page": "terms",
+      "excerpt": "Gebeya Inc. Closes $2 Million Dollars Seed Round Investment | Partech News / Archive / Gebeya Inc. Closes $2 Million Dollars Seed Round Investment Gebeya Inc. Closes $2 Million Dollars Seed Round Investment February 6th, 2020 Share Share Pan African Ed Tech and online Marketplace Company secures seed round funding Addis Ababa, Ethiopia, February 06, 2020 : Gebeya Inc, an Ed Tech and online software outsourcing Marketplace company geared towards the development of Africa’s technological scene, announced today that it closed a $2 million seed round investment co-led by Partech and Orange Digital Ventures and followed by Consonance Investment Managers . Headquartered in Addis Ababa, Ethiopia since its inception in 2016, Gebeya has been committed to building the next generation workforce pipeline for a virtual 21st-century African Digital economy. Gebeya has graduated over 600 tech talents, more than a third of whom have been matched with startups across Africa and the World. From E-commerce and Telecommunication to Finance, Gebeya has built a reputable portfolio working with global companies and startups driven towards creating sustainable change. Many of Gebeya graduates also go on to start their own companies and products. In 2019, the International Finance Corporation granted $500,000 in funding to Gebeya to provide scholarships to aspiring female software engineers. Through"
+    },
+    {
+      "id": "check-page-f0133b31b9",
+      "url": "https://partechpartners.com/news/gebeya-inc-raises-2-million-in-seed-round-investment",
+      "page": "terms",
+      "excerpt": "Gebeya inc. Raises $2 Million in Seed Round Investment | Partech News / Archive / Gebeya inc. Raises $2 Million in Seed Round Investment Gebeya inc. Raises $2 Million in Seed Round Investment February 6th, 2020 Share Share Encouraging further development of the African tech scene, the online software outsourcing Marketplace company Gebeya have secured a $2 Million dollar seed round investment co-led by Partech and Orange Digital Ventures and followed by Consonance Investment Managers. Gebeya, headquartered in Ethiopia, is a Pan African Ed Tech company which focuses on encouraging the next generation of African youth, preparing them for the demands of the global market. The investment that they have secured will go towards strengthening their mission to support those aiming to enter the tech world, by scaling up its training and marketplace services in Francophone Africa as well as launching their online African talent marketplaces. The investment follows a previous funding round in which Gebeya secured $500 000 from the International Finance Corporation in 2019 to support their efforts in balancing the gender gap in the African tech sphere. Through the Digital Gender Ethiopia program, Gebeya vowed to train a total of 250 aspiring female software engineers in Back-End/Front-End Engineering, Business Analysis, DevOps, Mobile Application and UX/UI Engineering. The evident"
+    },
+    {
+      "id": "check-page-6d4439b5e2",
+      "url": "https://partechpartners.com/news/imp-software-secures-investment",
+      "page": "terms",
+      "excerpt": "IMP SOFTWARE SECURES INVESTMENT TO ACCELERATE INNOVATION AND BROADEN THEIR UNIFIED FINANCIAL MANAGEMENT PLATFORM FOR THE EDUCATION SECTOR News / Archive / IMP SOFTWARE SECURES INVESTMENT TO ACCELERATE INNOVATION AND BROADEN THEIR UNIFIED FINANCIAL MANAGEMENT PLATFORM FOR THE EDUCATION SECTOR IMP SOFTWARE SECURES INVESTMENT TO ACCELERATE INNOVATION AND BROADEN THEIR UNIFIED FINANCIAL MANAGEMENT PLATFORM FOR THE EDUCATION SECTOR September 25th, 2025 Share Share Exeter, September 25, 2025 - IMP Software , the leading platform helping Multi-Academy Trusts to strengthen their budget forecasting and financial management, today announced a significant minority investment from Partech Growth fund to support its next stage of development. The partnership with Partech, a focused technology growth investor, will allow IMP to more than double its R&D investment — evolving its product suite and launching new solutions for Multi-Academy Trusts. Just as importantly, it ensures IMP’s best-in class customer support remains front and centre. Will Jordan, CEO and Co-Founder of IMP Software, said: “Our growth has always come from a simple approach: attract the best and brightest team that we can find, listen carefully to our customers, build solutions that genuinely help, and positively surprise customers with the level of support that we provide. This new investment will give customers comfort"
+    }
+  ],
   "findings": {
     "emails": [],
-    "phones": [],
+    "phones": [
+      {
+        "value": "01778 218180",
+        "evidenceId": "check-phone-81300a56eb"
+      },
+      {
+        "value": "07866 436159",
+        "evidenceId": "check-phone-c10ca34ed6"
+      }
+    ],
     "routes": [],
     "applicationUrl": [
       {
@@ -54,8 +386,33 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-2955fd713b"
+      }
+    ],
+    "location": [
+      {
+        "value": "Addis Ababa",
+        "evidenceId": "check-location-e0572035a7"
+      },
+      {
+        "value": "Ethiopia",
+        "evidenceId": "check-location-f2ca1c66df"
+      },
+      {
+        "value": "Paris",
+        "evidenceId": "check-location-1038ddd018"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://partechpartners.com/companies",

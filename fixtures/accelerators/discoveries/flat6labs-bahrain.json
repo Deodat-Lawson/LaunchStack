@@ -1,44 +1,20 @@
 {
   "programId": "flat6labs-bahrain",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://flat6labs.com/programs/",
-      "page": "details",
-      "anchor": "Programs arrow_drop_down",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://flat6labs.com/programs-type/programs-for-entrepreneurs/",
-      "page": "details",
-      "anchor": "Programs for Entrepreneurs",
+      "url": "https://flat6labs.com/?page_id=1829",
+      "page": "terms",
+      "anchor": "FAQs",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://flat6labs.com/programs-type/programs-for-esos/",
-      "page": "details",
-      "anchor": "Programs for Entrepreneur Support Organizations (ESOs)",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://flat6labs.com/programs-type/advisory/",
-      "page": "details",
-      "anchor": "Advisory",
-      "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://flat6labs.com/about/",
       "page": "details",
       "anchor": "About Flat6Labs",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -51,11 +27,43 @@
       "origin": "official"
     },
     {
-      "url": "https://flat6labs.com/?page_id=1829",
-      "page": "terms",
-      "anchor": "FAQs",
-      "fetched": false,
-      "blocked": "fetch_failed",
+      "url": "https://flat6labs.com/ar/about/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://flat6labs.com/ar/apply-now/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://flat6labs.com/ar/programs-type/accelerator-ar/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://flat6labs.com/ar/programs-type/ecosystem-development-programs-ar/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://flat6labs.com/ar/programs/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
       "origin": "official"
     },
     {
@@ -63,6 +71,62 @@
       "page": "terms",
       "anchor": "FAQs",
       "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://flat6labs.com/fr/about/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://flat6labs.com/fr/apply-now/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://flat6labs.com/fr/programs-type/accelerator-fr/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://flat6labs.com/programs-type/advisory/",
+      "page": "details",
+      "anchor": "Advisory",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://flat6labs.com/programs-type/programs-for-entrepreneurs/",
+      "page": "details",
+      "anchor": "Programs for Entrepreneurs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://flat6labs.com/programs-type/programs-for-esos/",
+      "page": "details",
+      "anchor": "Programs for Entrepreneur Support Organizations (ESOs)",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://flat6labs.com/programs/",
+      "page": "details",
+      "anchor": "Programs arrow_drop_down",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

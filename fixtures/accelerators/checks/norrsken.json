@@ -1,24 +1,108 @@
 {
   "programId": "norrsken",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.norrsken.org/",
+    "https://norrsken.org/",
     "https://www.norrsken.org/about"
   ],
   "evidence": [
     {
+      "id": "check-duration-8f0025c3f1",
+      "url": "https://www.norrsken.org/about",
+      "title": "Norrsken — program page",
+      "excerpt": "by Norrsken portfolio companies over the past 12 months. 2020 Norrsken VC Impact Report Download 2021",
+      "page": "details"
+    },
+    {
+      "id": "check-format-00dea5e54a",
+      "url": "https://norrsken.org/",
+      "title": "Norrsken — terms page",
+      "excerpt": "norrskenlauncher.vc Norrsken Evolve is an investment fund, in-person sprint and global community for founders building Europe’s",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-0dd74473f7",
+      "url": "https://www.norrsken.org/",
+      "title": "Norrsken — homepage",
+      "excerpt": "Norrsken Evolve Norrsken Evolve is an investment fund, in-person sprint and global community for founders building Europe’s",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1f797b7f20",
+      "url": "https://norrsken.org/",
+      "title": "Norrsken — terms page",
+      "excerpt": "and sustainable future. Europe Pre-seed/early seed In-person sprint norrskenevolve.vc For exceptional founders building",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6a66f13091",
+      "url": "https://www.norrsken.org/",
+      "title": "Norrsken — homepage",
+      "excerpt": "Evolve Purpose Norrsken Evolve is an investment fund, in-person sprint and global community for founders building Europe’s",
+      "page": "details"
+    },
+    {
+      "id": "check-format-99c5e6965d",
+      "url": "https://norrsken.org/",
+      "title": "Norrsken — terms page",
+      "excerpt": "Norrsken Evolve Norrsken Evolve is an investment fund, in-person sprint and global community for founders building Europe’s",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-a340b7dd8a",
+      "url": "https://www.norrsken.org/",
+      "title": "Norrsken — homepage",
+      "excerpt": "norrskenlauncher.vc Norrsken Evolve is an investment fund, in-person sprint and global community for founders building Europe’s",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c1ef8784c7",
+      "url": "https://norrsken.org/",
+      "title": "Norrsken — terms page",
+      "excerpt": "Evolve Purpose Norrsken Evolve is an investment fund, in-person sprint and global community for founders building Europe’s",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-f147075eec",
+      "url": "https://www.norrsken.org/",
+      "title": "Norrsken — homepage",
+      "excerpt": "and sustainable future. Europe Pre-seed/early seed In-person sprint norrskenevolve.vc For exceptional founders building",
+      "page": "details"
+    },
+    {
       "id": "check-name-953a33bd0f",
       "url": "https://www.norrsken.org/",
-      "title": "Norrsken — homepage checked by scrape.py",
+      "title": "Norrsken — homepage",
       "excerpt": "Norrsken - Be part of the solution Close Houses Investments Good",
       "page": "details"
     },
     {
-      "id": "check-route-e16dac6c26",
+      "id": "check-route-40cc15b167",
       "url": "https://www.norrsken.org/",
-      "title": "Norrsken — homepage checked by scrape.py",
-      "excerpt": "Home → https://www.norrsken.org/",
+      "title": "Norrsken — homepage",
+      "excerpt": "Close → https://www.norrsken.org/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-dd94447c36",
+      "url": "https://www.norrsken.org/",
+      "page": "details",
+      "excerpt": "Norrsken - Be part of the solution Close Houses Investments Good News Your browser doesn't support HTML5 video. Download it About Your browser doesn't support HTML5 video. Download it Initiatives Your browser doesn't support HTML5 video. Download it Events Your browser doesn't support HTML5 video. Download it Careers Norrsken/100 Stockholm AI Lab Amsterdam Brussels Barcelona Kigali Stockholm Work at Norrsken Job board Talent Network Learn more Menu Close Cookie Popup Cookie Preferences We use cookies to make our site work smoothly and understand how you interact with it. Curious? Check our Privacy Policy . Strictly Necessary (Always Active) Cookies required to enable basic website functionality. Analytics Cookies helping us understand how this website performs, how visitors interact with the site, and whether there may be technical issues. Marketing Cookies used to deliver advertising that is more relevant to you and your interests. Personalization Cookies allowing the website to remember choices you make (such as your user name, language, or the region you are in). Customize Save Decline All Accept All View video Close video NEWS norrsken100 2026 Read more Get your tickets Good News View all articles The Norrsken100 is Electric Article October 14, 2026 / Sara Kappelmark Europtimism is Rising: European Impact Index 2026 Article October 8, 2026 / Norrsken 5 Stages of Grief"
+    },
+    {
+      "id": "check-page-b3b8cfd4e3",
+      "url": "https://norrsken.org/",
+      "page": "terms",
+      "excerpt": "Norrsken - Be part of the solution Close Houses Investments Good News Your browser doesn't support HTML5 video. Download it About Your browser doesn't support HTML5 video. Download it Initiatives Your browser doesn't support HTML5 video. Download it Events Your browser doesn't support HTML5 video. Download it Careers Norrsken/100 Stockholm AI Lab Amsterdam Brussels Barcelona Kigali Stockholm Work at Norrsken Job board Talent Network Learn more Menu Close Cookie Popup Cookie Preferences We use cookies to make our site work smoothly and understand how you interact with it. Curious? Check our Privacy Policy . Strictly Necessary (Always Active) Cookies required to enable basic website functionality. Analytics Cookies helping us understand how this website performs, how visitors interact with the site, and whether there may be technical issues. Marketing Cookies used to deliver advertising that is more relevant to you and your interests. Personalization Cookies allowing the website to remember choices you make (such as your user name, language, or the region you are in). Customize Save Decline All Accept All View video Close video NEWS norrsken100 2026 Read more Get your tickets Good News View all articles The Norrsken100 is Electric Article October 14, 2026 / Sara Kappelmark Europtimism is Rising: European Impact Index 2026 Article October 8, 2026 / Norrsken 5 Stages of Grief"
+    },
+    {
+      "id": "check-page-c927b52470",
+      "url": "https://www.norrsken.org/about",
+      "page": "details",
+      "excerpt": "Norrsken | About Close Houses Investments Good News Your browser doesn't support HTML5 video. Download it About Your browser doesn't support HTML5 video. Download it Initiatives Your browser doesn't support HTML5 video. Download it Events Your browser doesn't support HTML5 video. Download it Careers Norrsken/100 Stockholm AI Lab Amsterdam Brussels Barcelona Kigali Stockholm Work at Norrsken Job board Talent Network Learn more Menu Close Cookie Popup Cookie Preferences We use cookies to make our site work smoothly and understand how you interact with it. Curious? Check our Privacy Policy . Strictly Necessary (Always Active) Cookies required to enable basic website functionality. Analytics Cookies helping us understand how this website performs, how visitors interact with the site, and whether there may be technical issues. Marketing Cookies used to deliver advertising that is more relevant to you and your interests. Personalization Cookies allowing the website to remember choices you make (such as your user name, language, or the region you are in). Customize Save Decline All Accept All Norrsken is a non-profit foundation born out of a belief in entrepreneurship and new technology as powerful forces for positive change. Your browser doesn't support HTML5 video. Download it About Our Ecosystem About Our Ecosystem About Our Ecosystem About Our Ecosystem About Our Ecosystem About"
     }
   ],
   "findings": {
@@ -28,14 +112,31 @@
     "applicationUrl": [
       {
         "value": "https://www.norrsken.org/",
-        "evidenceId": "check-route-e16dac6c26"
+        "evidenceId": "check-route-40cc15b167"
       }
     ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-8f0025c3f1"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-a340b7dd8a"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

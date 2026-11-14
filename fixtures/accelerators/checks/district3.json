@@ -1,88 +1,549 @@
 {
   "programId": "district3",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.district3.co/",
-    "https://www.district3.co/about",
-    "https://www.district3.co/apply"
+    "https://www.district3.co/apply",
+    "https://www.district3.co/fr/apply",
+    "https://www.district3.co/fr/success-stories/canapply",
+    "https://www.district3.co/success-stories/canapply",
+    "https://www.district3.co/event/leveraging-data-r-d-grants-to-get-investments-for-your-medical-device",
+    "https://www.district3.co/fr/event/leveraging-data-r-d-grants-to-get-investments-for-your-medical-device",
+    "https://www.district3.co/fr/internal/self-host-news/news/diamond-edge-ventures-announces-strategic-investment-in-food-packaging-startup-freshr-sustainable-technologies",
+    "https://www.district3.co/internal/self-host-news/news/diamond-edge-ventures-announces-strategic-investment-in-food-packaging-startup-freshr-sustainable-technologies",
+    "https://www.district3.co/event/meet-greet-info-session---winter-2025-cohort",
+    "https://www.district3.co/fr/event/meet-greet-info-session---winter-2025-cohort",
+    "https://www.district3.co/fr/internal/self-host-news/news/modulari-t-selected-for-the-2nd-merck-digital-sciences-studio-mdss-cohort-in-montreal",
+    "https://www.district3.co/fr/internal/self-host-news/news/nanofacile-and-simmunome-have-been-invited-to-join-the-first-ever-canadian-cohort-of-the-merck-digital-sciences-studio-mdss",
+    "https://www.district3.co/fr/internal/self-host-news/news/our-winter-validation-cohorts-have-officially-kicked-off-their-12-week-journey",
+    "https://www.district3.co/fr/internal/self-host-news/news/the-alan-shepard-residency-summer-2024-cohort"
   ],
   "evidence": [
     {
+      "id": "check-duration-3bda0d2957",
+      "url": "https://www.district3.co/",
+      "title": "District 3 — homepage",
+      "excerpt": "equity taken. learn more validation A free 12-week intensive for early-stage startups ready to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9636252182",
+      "url": "https://www.district3.co/",
+      "title": "District 3 — homepage",
+      "excerpt": "Explore build grow scale Systems mapping A free 6-week program for aspiring entrepreneurs tackling",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ba62a7fcc3",
+      "url": "https://www.district3.co/event/meet-greet-info-session---winter-2025-cohort",
+      "title": "District 3 — batches page",
+      "excerpt": "members. About the Validation Program: In this 10-week, cohort-based program, you'll work through a",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-14586db8bd",
+      "url": "https://www.district3.co/apply",
+      "title": "District 3 — application page",
+      "excerpt": "Quebec-based entrepreneurship, and our programs require in-person participation. To be considered for D3 support, you need",
+      "page": "application"
+    },
+    {
+      "id": "check-format-51506aff79",
+      "url": "https://www.district3.co/apply",
+      "title": "District 3 — application page",
+      "excerpt": "applications on an on-going basis. Programs require in-person participation. apply now Not ready to apply? ‍ Sign up to",
+      "page": "application"
+    },
+    {
+      "id": "check-format-8919431a87",
+      "url": "https://www.district3.co/",
+      "title": "District 3 — homepage",
+      "excerpt": "provided new skills, making me feel like I belong. Their virtual and physical spaces offer mentorship and inspiration from",
+      "page": "details"
+    },
+    {
       "id": "check-name-7149fb85cd",
       "url": "https://www.district3.co/",
-      "title": "District 3 — homepage checked by scrape.py",
+      "title": "District 3 — homepage",
       "excerpt": "District 3 | Montreal Startup Incubator for Bio, Health, Tech &",
       "page": "details"
     },
     {
-      "id": "check-portfolio-6b2fa43ee3",
-      "url": "https://www.district3.co/about",
-      "title": "District 3 — details page checked by scrape.py",
+      "id": "check-portfolio-075e960f88",
+      "url": "https://www.district3.co/internal/self-host-news/news/diamond-edge-ventures-announces-strategic-investment-in-food-packaging-startup-freshr-sustainable-technologies",
+      "title": "District 3 — terms page",
       "excerpt": "Startup portfolio → https://www.district3.co/startups",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-1e878a4cf2",
+      "url": "https://www.district3.co/fr/success-stories/canapply",
+      "title": "District 3 — application page",
+      "excerpt": "Portfolio → https://www.district3.co/fr/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-28c2963c46",
+      "url": "https://www.district3.co/fr/success-stories/canapply",
+      "title": "District 3 — application page",
+      "excerpt": "portfolio → https://www.district3.co/fr/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-2aebb9f97f",
+      "url": "https://www.district3.co/fr/apply",
+      "title": "District 3 — application page",
+      "excerpt": "Portfolio → https://www.district3.co/fr/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-381c02b4db",
+      "url": "https://www.district3.co/success-stories/canapply",
+      "title": "District 3 — application page",
+      "excerpt": "startup directory → https://www.district3.co/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3aac6dedea",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/the-alan-shepard-residency-summer-2024-cohort",
+      "title": "District 3 — batches page",
+      "excerpt": "Portfolio → https://www.district3.co/fr/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-67957ba25f",
+      "url": "https://www.district3.co/fr/apply",
+      "title": "District 3 — application page",
+      "excerpt": "portfolio → https://www.district3.co/fr/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7be6c7d23b",
+      "url": "https://www.district3.co/fr/event/meet-greet-info-session---winter-2025-cohort",
+      "title": "District 3 — batches page",
+      "excerpt": "portfolio → https://www.district3.co/fr/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-85179fe192",
+      "url": "https://www.district3.co/event/meet-greet-info-session---winter-2025-cohort",
+      "title": "District 3 — batches page",
+      "excerpt": "Startup portfolio → https://www.district3.co/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-85ed078a52",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/our-winter-validation-cohorts-have-officially-kicked-off-their-12-week-journey",
+      "title": "District 3 — batches page",
+      "excerpt": "Portfolio → https://www.district3.co/fr/startups",
+      "page": "batches"
     },
     {
       "id": "check-portfolio-8ae90d5960",
       "url": "https://www.district3.co/",
-      "title": "District 3 — homepage checked by scrape.py",
+      "title": "District 3 — homepage",
       "excerpt": "Startup portfolio → https://www.district3.co/startups",
       "page": "details"
     },
     {
-      "id": "check-portfolio-93b7d2d39e",
-      "url": "https://www.district3.co/about",
-      "title": "District 3 — details page checked by scrape.py",
+      "id": "check-portfolio-8b4c6355ca",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/our-winter-validation-cohorts-have-officially-kicked-off-their-12-week-journey",
+      "title": "District 3 — batches page",
+      "excerpt": "portfolio → https://www.district3.co/fr/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-9537bd07f7",
+      "url": "https://www.district3.co/fr/event/leveraging-data-r-d-grants-to-get-investments-for-your-medical-device",
+      "title": "District 3 — terms page",
+      "excerpt": "portfolio → https://www.district3.co/fr/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-99d742b07c",
+      "url": "https://www.district3.co/event/leveraging-data-r-d-grants-to-get-investments-for-your-medical-device",
+      "title": "District 3 — terms page",
+      "excerpt": "Startup portfolio → https://www.district3.co/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9b2b1c031e",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/nanofacile-and-simmunome-have-been-invited-to-join-the-first-ever-canadian-cohort-of-the-merck-digital-sciences-studio-mdss",
+      "title": "District 3 — batches page",
+      "excerpt": "portfolio → https://www.district3.co/fr/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-a1bf4b82ae",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/diamond-edge-ventures-announces-strategic-investment-in-food-packaging-startup-freshr-sustainable-technologies",
+      "title": "District 3 — terms page",
+      "excerpt": "portfolio → https://www.district3.co/fr/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a1ecb701c6",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/modulari-t-selected-for-the-2nd-merck-digital-sciences-studio-mdss-cohort-in-montreal",
+      "title": "District 3 — batches page",
+      "excerpt": "portfolio → https://www.district3.co/fr/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-a1f137d3a9",
+      "url": "https://www.district3.co/internal/self-host-news/news/diamond-edge-ventures-announces-strategic-investment-in-food-packaging-startup-freshr-sustainable-technologies",
+      "title": "District 3 — terms page",
       "excerpt": "startup directory → https://www.district3.co/startups",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a6f6f1b73c",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/nanofacile-and-simmunome-have-been-invited-to-join-the-first-ever-canadian-cohort-of-the-merck-digital-sciences-studio-mdss",
+      "title": "District 3 — batches page",
+      "excerpt": "Portfolio → https://www.district3.co/fr/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-acc0458a4c",
+      "url": "https://www.district3.co/success-stories/canapply",
+      "title": "District 3 — application page",
+      "excerpt": "Startup portfolio → https://www.district3.co/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-ad331807a2",
+      "url": "https://www.district3.co/event/meet-greet-info-session---winter-2025-cohort",
+      "title": "District 3 — batches page",
+      "excerpt": "startup directory → https://www.district3.co/startups",
+      "page": "batches"
     },
     {
       "id": "check-portfolio-b59b9c508d",
       "url": "https://www.district3.co/apply",
-      "title": "District 3 — application page checked by scrape.py",
+      "title": "District 3 — application page",
       "excerpt": "Startup portfolio → https://www.district3.co/startups",
       "page": "application"
     },
     {
       "id": "check-portfolio-c6dfe5c91e",
       "url": "https://www.district3.co/apply",
-      "title": "District 3 — application page checked by scrape.py",
+      "title": "District 3 — application page",
       "excerpt": "startup directory → https://www.district3.co/startups",
       "page": "application"
     },
     {
+      "id": "check-portfolio-db78937900",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/the-alan-shepard-residency-summer-2024-cohort",
+      "title": "District 3 — batches page",
+      "excerpt": "portfolio → https://www.district3.co/fr/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-dbb0054b83",
+      "url": "https://www.district3.co/event/leveraging-data-r-d-grants-to-get-investments-for-your-medical-device",
+      "title": "District 3 — terms page",
+      "excerpt": "startup directory → https://www.district3.co/startups",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-dc894012da",
       "url": "https://www.district3.co/",
-      "title": "District 3 — homepage checked by scrape.py",
+      "title": "District 3 — homepage",
       "excerpt": "startup directory → https://www.district3.co/startups",
       "page": "details"
     },
     {
-      "id": "check-route-206c0e165f",
-      "url": "https://www.district3.co/about",
-      "title": "District 3 — details page checked by scrape.py",
-      "excerpt": "apply now → https://www.district3.co/apply",
-      "page": "details"
+      "id": "check-portfolio-dee996b13a",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/diamond-edge-ventures-announces-strategic-investment-in-food-packaging-startup-freshr-sustainable-technologies",
+      "title": "District 3 — terms page",
+      "excerpt": "Portfolio → https://www.district3.co/fr/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e228ff74f6",
+      "url": "https://www.district3.co/fr/event/meet-greet-info-session---winter-2025-cohort",
+      "title": "District 3 — batches page",
+      "excerpt": "Portfolio → https://www.district3.co/fr/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-f6a794118c",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/modulari-t-selected-for-the-2nd-merck-digital-sciences-studio-mdss-cohort-in-montreal",
+      "title": "District 3 — batches page",
+      "excerpt": "Portfolio → https://www.district3.co/fr/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-f6ce8f4555",
+      "url": "https://www.district3.co/fr/event/leveraging-data-r-d-grants-to-get-investments-for-your-medical-device",
+      "title": "District 3 — terms page",
+      "excerpt": "Portfolio → https://www.district3.co/fr/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-01f834bc3c",
+      "url": "https://www.district3.co/event/leveraging-data-r-d-grants-to-get-investments-for-your-medical-device",
+      "title": "District 3 — terms page",
+      "excerpt": "apply → https://www.district3.co/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-0945142163",
+      "url": "https://www.district3.co/fr/apply",
+      "title": "District 3 — application page",
+      "excerpt": "EN → https://www.district3.co/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1d92b0c7ac",
+      "url": "https://www.district3.co/fr/event/leveraging-data-r-d-grants-to-get-investments-for-your-medical-device",
+      "title": "District 3 — terms page",
+      "excerpt": "postuler → https://www.district3.co/fr/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-2818feb8da",
+      "url": "https://www.district3.co/fr/event/meet-greet-info-session---winter-2025-cohort",
+      "title": "District 3 — batches page",
+      "excerpt": "postuler → https://www.district3.co/fr/apply",
+      "page": "batches"
     },
     {
       "id": "check-route-310dc3e02e",
       "url": "https://www.district3.co/apply",
-      "title": "District 3 — application page checked by scrape.py",
+      "title": "District 3 — application page",
       "excerpt": "FR → https://www.district3.co/fr/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3302d54272",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/modulari-t-selected-for-the-2nd-merck-digital-sciences-studio-mdss-cohort-in-montreal",
+      "title": "District 3 — batches page",
+      "excerpt": "apply → https://www.district3.co/fr/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-37f5bc28e6",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/nanofacile-and-simmunome-have-been-invited-to-join-the-first-ever-canadian-cohort-of-the-merck-digital-sciences-studio-mdss",
+      "title": "District 3 — batches page",
+      "excerpt": "postuler → https://www.district3.co/fr/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-47786242a1",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/the-alan-shepard-residency-summer-2024-cohort",
+      "title": "District 3 — batches page",
+      "excerpt": "apply → https://www.district3.co/fr/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-51efe3e8f2",
+      "url": "https://www.district3.co/fr/success-stories/canapply",
+      "title": "District 3 — application page",
+      "excerpt": "apply → https://www.district3.co/fr/apply",
       "page": "application"
     },
     {
       "id": "check-route-54b7b25b88",
       "url": "https://www.district3.co/",
-      "title": "District 3 — homepage checked by scrape.py",
+      "title": "District 3 — homepage",
       "excerpt": "apply → https://www.district3.co/apply",
       "page": "details"
     },
     {
-      "id": "check-route-db76d8234c",
-      "url": "https://www.district3.co/about",
-      "title": "District 3 — details page checked by scrape.py",
+      "id": "check-route-6bb8a0b9d6",
+      "url": "https://www.district3.co/success-stories/canapply",
+      "title": "District 3 — application page",
+      "excerpt": "FR → https://www.district3.co/fr/success-stories/canapply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7a73c65282",
+      "url": "https://www.district3.co/fr/event/leveraging-data-r-d-grants-to-get-investments-for-your-medical-device",
+      "title": "District 3 — terms page",
+      "excerpt": "apply → https://www.district3.co/fr/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-8161849ddd",
+      "url": "https://www.district3.co/fr/success-stories/canapply",
+      "title": "District 3 — application page",
+      "excerpt": "EN → https://www.district3.co/success-stories/canapply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9965593c9f",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/diamond-edge-ventures-announces-strategic-investment-in-food-packaging-startup-freshr-sustainable-technologies",
+      "title": "District 3 — terms page",
+      "excerpt": "apply → https://www.district3.co/fr/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-9c8dc0ea0f",
+      "url": "https://www.district3.co/fr/success-stories/canapply",
+      "title": "District 3 — application page",
+      "excerpt": "postuler → https://www.district3.co/fr/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b09fb13ca3",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/modulari-t-selected-for-the-2nd-merck-digital-sciences-studio-mdss-cohort-in-montreal",
+      "title": "District 3 — batches page",
+      "excerpt": "postuler → https://www.district3.co/fr/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-b7045e29ac",
+      "url": "https://www.district3.co/success-stories/canapply",
+      "title": "District 3 — application page",
       "excerpt": "apply → https://www.district3.co/apply",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-route-bcaa847512",
+      "url": "https://www.district3.co/internal/self-host-news/news/diamond-edge-ventures-announces-strategic-investment-in-food-packaging-startup-freshr-sustainable-technologies",
+      "title": "District 3 — terms page",
+      "excerpt": "apply → https://www.district3.co/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-c2053bc257",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/our-winter-validation-cohorts-have-officially-kicked-off-their-12-week-journey",
+      "title": "District 3 — batches page",
+      "excerpt": "postuler → https://www.district3.co/fr/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-ccacb7ee57",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/nanofacile-and-simmunome-have-been-invited-to-join-the-first-ever-canadian-cohort-of-the-merck-digital-sciences-studio-mdss",
+      "title": "District 3 — batches page",
+      "excerpt": "apply → https://www.district3.co/fr/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-cf818c2c30",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/our-winter-validation-cohorts-have-officially-kicked-off-their-12-week-journey",
+      "title": "District 3 — batches page",
+      "excerpt": "apply → https://www.district3.co/fr/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-d86aaa0d72",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/the-alan-shepard-residency-summer-2024-cohort",
+      "title": "District 3 — batches page",
+      "excerpt": "postuler → https://www.district3.co/fr/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-d879f6638b",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/diamond-edge-ventures-announces-strategic-investment-in-food-packaging-startup-freshr-sustainable-technologies",
+      "title": "District 3 — terms page",
+      "excerpt": "postuler → https://www.district3.co/fr/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-dc19ac89e1",
+      "url": "https://www.district3.co/fr/event/meet-greet-info-session---winter-2025-cohort",
+      "title": "District 3 — batches page",
+      "excerpt": "apply → https://www.district3.co/fr/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-fc049c0c1f",
+      "url": "https://www.district3.co/event/meet-greet-info-session---winter-2025-cohort",
+      "title": "District 3 — batches page",
+      "excerpt": "apply → https://www.district3.co/apply",
+      "page": "batches"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-e221266ef5",
+      "url": "https://www.district3.co/",
+      "page": "details",
+      "excerpt": "District 3 | Montreal Startup Incubator for Bio, Health, Tech & Social What's happening next at D3? learn more about us about news annual reports partners biohub Programs Residency sectors all sectors Biotech Healthcare High Tech Social Innovation startups startup directory success stories startup jobs events connect Instagram linkedin youtube facebook mentorconnect get directions contact us apply EN FR EN FR about us about news annual reports partners biohub Programs Residency sectors all sectors Biotech Healthcare High Tech Social Innovation startups startup directory success stories startup jobs events connect Instagram linkedin youtube facebook mentorconnect get directions contact us apply from idea to impact Transform your ideas into startups and companies with global impact. discover how what we do Everything you need to ideate, build, grow, and scale At District 3, we create an environment where innovation thrives. We equip our community with the essential tools, expertise, and connections needed to drive change and make a lasting impact. apply sector specific expertise Gain access to industry-specific events, partners, networks, funding, coaching, and knowledge in health, bio, high tech, and social innovation. investment ready support Fundraising strategies, pitch practice, introduction to key global investors. world class coaching Benefit from personalized guidance"
+    },
+    {
+      "id": "check-page-c01bee611e",
+      "url": "https://www.district3.co/apply",
+      "page": "application",
+      "excerpt": "Apply to District 3 | Montreal Startup Incubator What's happening next at D3? learn more about us about news annual reports partners biohub Programs Residency sectors all sectors Biotech Healthcare High Tech Social Innovation startups startup directory success stories startup jobs events connect Instagram linkedin youtube facebook mentorconnect get directions contact us apply EN FR EN FR about us about news annual reports partners biohub Programs Residency sectors all sectors Biotech Healthcare High Tech Social Innovation startups startup directory success stories startup jobs events connect Instagram linkedin youtube facebook mentorconnect get directions contact us apply apply to district 3 District 3 is accepting applications on an on-going basis. Programs require in-person participation. apply now Not ready to apply? ‍ Sign up to our newsletter to receive updates. D3 Application & Selection Process how do i apply? Startups apply through District 3's online application form. The form requires thoughtful consideration so we recommend taking the time to prepare before submitting. You may download PDF copies of this application to prepare: ENGLISH | FRANÇAIS How is my application evaluated? We review applications to ensure founders and their startups will benefit from D3's programs. Eligibility criteria vary by program, but common elements include: Actively building in or"
+    },
+    {
+      "id": "check-page-e92fadb1da",
+      "url": "https://www.district3.co/fr/apply",
+      "page": "application",
+      "excerpt": "Postulez à District 3 | Incubateur de startups à Montréal Quoi de neuf a venir chez D3? en savoir plus À propos À propos news rapports annuel partenaires biohub Programmes Residency secteurs tous les secteurs Biotech Santé Haute technologie Innovation sociale startups portfolio Histoires de réussite Emplois en startup Événements connecter Instagram linkedin youtube facebook mentorconnect adresse nous joindre postuler EN FR EN FR À propos À propos nouvelles rapports annuels partenaires biohub Programs Residency secteurs tous les secteurs Biotech Santé Haute technologie Innovation sociale startups portfolio Histoires de réussite Emplois en startup Événements connecter Instagram linkedin youtube facebook mentorconnect addresse nous joindre apply apply to district 3 District 3 accepte les candidatures tout au long de l'année. Les programmes nécessitent une participation en personne. appliquer Vous n'êtes pas prêt à postuler ? ‍ Inscrivez-vous à notre newsletter pour recevoir les dernières informations. PROCESSUS DE CANDIDATURE ET DE SÉLECTION D3 COMMENT POSTULER? Les startups postulent via le formulaire de candidature en ligne de District 3. Le formulaire nécessite une réflexion approfondie, nous vous recommandons donc de prendre le temps de vous préparer avant de soumettre. Vous pouvez télécharger des copies PDF de cette candidature pour vous préparer : ANGLAIS | FRANÇAIS COMMENT"
+    },
+    {
+      "id": "check-page-c606dadb33",
+      "url": "https://www.district3.co/fr/success-stories/canapply",
+      "page": "application",
+      "excerpt": "CanApply - EdTech et apprentissage en ligne | Une histoire de réussite à District 3 Quoi de neuf a venir chez D3? en savoir plus À propos À propos news rapports annuel partenaires biohub Programmes Residency secteurs tous les secteurs Biotech Santé Haute technologie Innovation sociale startups portfolio Histoires de réussite Emplois en startup Événements connecter Instagram linkedin youtube facebook mentorconnect adresse nous joindre postuler EN FR EN FR À propos À propos nouvelles rapports annuels partenaires biohub Programs Residency secteurs tous les secteurs Biotech Santé Haute technologie Innovation sociale startups portfolio Histoires de réussite Emplois en startup Événements connecter Instagram linkedin youtube facebook mentorconnect addresse nous joindre apply CanApply Ouvrir les portes de l'éducation canadienne aux étudiants internationaux Fondé par Behnam Farsi Innovation sociale EdTech et apprentissage en ligne Pré-amorçage CanApply est une entreprise innovante en pré-amorçage dans le secteur de l'Innovation Sociale, fondée par Behnam Farsi. Cet entrepreneur avant-gardiste crée de nouvelles solutions dans le domaine de l'EdTech et de l'apprentissage en ligne pour répondre aux défis importants rencontrés par les étudiants internationaux. Un défi personnel Le parcours de Behnam a commencé avec ses propres difficultés en tant que nouveau venu au Québec en provenance"
+    },
+    {
+      "id": "check-page-e65f274a62",
+      "url": "https://www.district3.co/success-stories/canapply",
+      "page": "application",
+      "excerpt": "CanApply - EdTech & Online Learning | A District 3 Success Story What's happening next at D3? learn more about us about news annual reports partners biohub Programs Residency sectors all sectors Biotech Healthcare High Tech Social Innovation startups startup directory success stories startup jobs events connect Instagram linkedin youtube facebook mentorconnect get directions contact us apply EN FR EN FR about us about news annual reports partners biohub Programs Residency sectors all sectors Biotech Healthcare High Tech Social Innovation startups startup directory success stories startup jobs events connect Instagram linkedin youtube facebook mentorconnect get directions contact us apply CanApply Simplifying the University Application Process with AI Founded by Behnam Farsi Social Innovation EdTech & Online Learning Pre-seed ‍ CanApply is an innovative pre-seed venture in the Social Innovation sector founded by Behnam Farsi . This forward-thinking entrepreneur is creating new solutions in EdTech & Online Learning to address significant challenges faced by international students. ‍ The Personal Challenge Behnam's journey began with his own struggles as a newcomer to Quebec from Iran. During this transition, he encountered numerous obstacles that many international students face: Navigating complex college application processes Overcoming language barriers Understanding and"
+    },
+    {
+      "id": "check-page-e210a212c1",
+      "url": "https://www.district3.co/event/leveraging-data-r-d-grants-to-get-investments-for-your-medical-device",
+      "page": "terms",
+      "excerpt": "Leveraging Data & R&D Grants to get Investments for Your Medical Device | District 3 Events What's happening next at D3? learn more about us about news annual reports partners biohub Programs Residency sectors all sectors Biotech Healthcare High Tech Social Innovation startups startup directory success stories startup jobs events connect Instagram linkedin youtube facebook mentorconnect get directions contact us apply EN FR EN FR about us about news annual reports partners biohub Programs Residency sectors all sectors Biotech Healthcare High Tech Social Innovation startups startup directory success stories startup jobs events connect Instagram linkedin youtube facebook mentorconnect get directions contact us apply September 30, 2024 Leveraging Data & R&D Grants to get Investments for Your Medical Device In this workshop, we’ll explore how trustworthy data is crucial for enhancing your medical/ diagnostic device and convincing key stakeholders. District 3 is pleased to welcome Medteq+ as part of our collaborative efforts with ecosystem partners, aimed at supporting the growth and success of our health science startups. In this workshop, we’ll explore how trustworthy data is crucial for enhancing your medical/ diagnostic device and convincing key stakeholders, including potential investors. We’ll also discuss how R&D grants, such as those offered by MEDTEQ+, can significantly"
+    },
+    {
+      "id": "check-page-09bd41feb3",
+      "url": "https://www.district3.co/fr/event/leveraging-data-r-d-grants-to-get-investments-for-your-medical-device",
+      "page": "terms",
+      "excerpt": "Tirer parti des subventions de données et de R-D pour obtenir des investissements pour votre instrument médical | District 3 Events Quoi de neuf a venir chez D3? en savoir plus À propos À propos news rapports annuel partenaires biohub Programmes Residency secteurs tous les secteurs Biotech Santé Haute technologie Innovation sociale startups portfolio Histoires de réussite Emplois en startup Événements connecter Instagram linkedin youtube facebook mentorconnect adresse nous joindre postuler EN FR EN FR À propos À propos nouvelles rapports annuels partenaires biohub Programs Residency secteurs tous les secteurs Biotech Santé Haute technologie Innovation sociale startups portfolio Histoires de réussite Emplois en startup Événements connecter Instagram linkedin youtube facebook mentorconnect addresse nous joindre apply September 30, 2024 Tirer parti des subventions de données et de R-D pour obtenir des investissements pour votre instrument médical Dans cet atelier, nous explorerons comment des données fiables sont cruciales pour améliorer votre appareil médical/diagnostique et convaincre les principaux intervenants. Le District 3 est heureux d'accueillir Medteq+ dans le cadre de nos efforts de collaboration avec les partenaires de l'écosystème, visant à soutenir la croissance et le succès de nos entreprises en démarrage dans le domaine des sciences de la santé. Au cours de cet"
+    },
+    {
+      "id": "check-page-d11142a24c",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/diamond-edge-ventures-announces-strategic-investment-in-food-packaging-startup-freshr-sustainable-technologies",
+      "page": "terms",
+      "excerpt": "Diamond Edge Ventures Announces Strategic Investment in Food Packaging Startup, Freshr Sustainable Technologies | District 3 News Quoi de neuf a venir chez D3? en savoir plus À propos À propos news rapports annuel partenaires biohub Programmes Residency secteurs tous les secteurs Biotech Santé Haute technologie Innovation sociale startups portfolio Histoires de réussite Emplois en startup Événements connecter Instagram linkedin youtube facebook mentorconnect adresse nous joindre postuler EN FR EN FR À propos À propos nouvelles rapports annuels partenaires biohub Programs Residency secteurs tous les secteurs Biotech Santé Haute technologie Innovation sociale startups portfolio Histoires de réussite Emplois en startup Événements connecter Instagram linkedin youtube facebook mentorconnect addresse nous joindre apply Diamond Edge Ventures Announces Strategic Investment in Food Packaging Startup, Freshr Sustainable Technologies Big milestone for Freshr, a D3-backed startup and MentorConnect alum (2018–2023). Diamond Edge Ventures, the venture arm of Mitsubishi Chemical Group, has joined Freshr’s oversubscribed Seed round as a strategic investor—a powerful endorsement of the company’s breakthrough FreshrPack™ technology. Actus Quoi de neuf? toutes les nouvelles 1 janvier 1970 District 3 participe au Shuffle de Concordia 2026 L'équipe de District 3 a participé au Shuffle de"
+    },
+    {
+      "id": "check-page-6aa8a79e75",
+      "url": "https://www.district3.co/internal/self-host-news/news/diamond-edge-ventures-announces-strategic-investment-in-food-packaging-startup-freshr-sustainable-technologies",
+      "page": "terms",
+      "excerpt": "Diamond Edge Ventures Announces Strategic Investment in Food Packaging Startup, Freshr Sustainable Technologies | District 3 News What's happening next at D3? learn more about us about news annual reports partners biohub Programs Residency sectors all sectors Biotech Healthcare High Tech Social Innovation startups startup directory success stories startup jobs events connect Instagram linkedin youtube facebook mentorconnect get directions contact us apply EN FR EN FR about us about news annual reports partners biohub Programs Residency sectors all sectors Biotech Healthcare High Tech Social Innovation startups startup directory success stories startup jobs events connect Instagram linkedin youtube facebook mentorconnect get directions contact us apply Diamond Edge Ventures Announces Strategic Investment in Food Packaging Startup, Freshr Sustainable Technologies Big milestone for Freshr, a D3-backed startup and MentorConnect alum (2018–2023). Diamond Edge Ventures, the venture arm of Mitsubishi Chemical Group, has joined Freshr’s oversubscribed Seed round as a strategic investor—a powerful endorsement of the company’s breakthrough FreshrPack™ technology. news News from District 3's ecosystem all news January 1, 1970 District 3 Joins Concordia Shuffle 2026 The District 3 team joined the Concordia Shuffle, helping raise funds that support students through scholarships and"
+    },
+    {
+      "id": "check-page-7c8c5d1161",
+      "url": "https://www.district3.co/event/meet-greet-info-session---winter-2025-cohort",
+      "page": "batches",
+      "excerpt": "Meet & Greet Info Session - Winter 2025 Cohort | District 3 Events What's happening next at D3? learn more about us about news annual reports partners biohub Programs Residency sectors all sectors Biotech Healthcare High Tech Social Innovation startups startup directory success stories startup jobs events connect Instagram linkedin youtube facebook mentorconnect get directions contact us apply EN FR EN FR about us about news annual reports partners biohub Programs Residency sectors all sectors Biotech Healthcare High Tech Social Innovation startups startup directory success stories startup jobs events connect Instagram linkedin youtube facebook mentorconnect get directions contact us apply January 14, 2025 Meet & Greet Info Session - Winter 2025 Cohort Join the D3 community and accelerate your startup journey. Hear from alumni and coaches in high tech, bio, and health Level Up Your Business Model! Join our upcoming Meet & Greet to gain invaluable insights and learn directly from our program Alumni. They’ll be leading an info session on the highly anticipated Validation Program. You'll also have the chance to hear from District 3 Coaches and network with fellow community members. About the Validation Program: In this 10-week, cohort-based program, you'll work through a robust, interview-based process to validate your business model. Learn the key competencies needed to build a"
+    },
+    {
+      "id": "check-page-77bdf362a7",
+      "url": "https://www.district3.co/fr/event/meet-greet-info-session---winter-2025-cohort",
+      "page": "batches",
+      "excerpt": "Séance d'information « Rencontre et accueil » - Cohorte de l'hiver 2025 | District 3 Events Quoi de neuf a venir chez D3? en savoir plus À propos À propos news rapports annuel partenaires biohub Programmes Residency secteurs tous les secteurs Biotech Santé Haute technologie Innovation sociale startups portfolio Histoires de réussite Emplois en startup Événements connecter Instagram linkedin youtube facebook mentorconnect adresse nous joindre postuler EN FR EN FR À propos À propos nouvelles rapports annuels partenaires biohub Programs Residency secteurs tous les secteurs Biotech Santé Haute technologie Innovation sociale startups portfolio Histoires de réussite Emplois en startup Événements connecter Instagram linkedin youtube facebook mentorconnect addresse nous joindre apply January 14, 2025 Séance d'information « Rencontre et accueil » - Cohorte de l'hiver 2025 Rejoignez la communauté D3 et accélérez votre parcours de démarrage. Écoutez les anciens et les entraîneurs en haute technologie, en biographie et en santé Faites monter votre modèle d'affaires au niveau supérieur ! Joignez-vous à notre prochain rendez-vous pour recevoir des informations inestimables et apprendre directement de notre programme Alumni. Ils animeront une séance d'information sur le très attendu Programme de validation. Vous aurez également la chance d'entendre les entraîneurs du district 3 et de"
+    },
+    {
+      "id": "check-page-68e5456bdc",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/modulari-t-selected-for-the-2nd-merck-digital-sciences-studio-mdss-cohort-in-montreal",
+      "page": "batches",
+      "excerpt": "Modulari-T a été sélectionné pour la deuxième promotion du Merck Digital Sciences Studio (MDSS) à Montréal | District 3 News Quoi de neuf a venir chez D3? en savoir plus À propos À propos news rapports annuel partenaires biohub Programmes Residency secteurs tous les secteurs Biotech Santé Haute technologie Innovation sociale startups portfolio Histoires de réussite Emplois en startup Événements connecter Instagram linkedin youtube facebook mentorconnect adresse nous joindre postuler EN FR EN FR À propos À propos nouvelles rapports annuels partenaires biohub Programs Residency secteurs tous les secteurs Biotech Santé Haute technologie Innovation sociale startups portfolio Histoires de réussite Emplois en startup Événements connecter Instagram linkedin youtube facebook mentorconnect addresse nous joindre apply Modulari-T a été sélectionné pour la deuxième promotion du Merck Digital Sciences Studio (MDSS) à Montréal Cette étape importante s'accompagne d'un investissement conjoint du Merck Global Health Innovation Fund et du CQDM, ainsi que d'un accompagnement de premier ordre assuré par des experts issus de Merck, de The Venture Collective (TVC) et de l'écosystème plus large de l'innovation biopharmaceutique. Biotech Actus Quoi de neuf? toutes les nouvelles 1 janvier 1970 District 3 participe au Shuffle de Concordia 2026 L'équipe de District 3 a participé au Shuffle de Concordia,"
+    },
+    {
+      "id": "check-page-e6ad55860e",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/nanofacile-and-simmunome-have-been-invited-to-join-the-first-ever-canadian-cohort-of-the-merck-digital-sciences-studio-mdss",
+      "page": "batches",
+      "excerpt": "Nanofacile et Simmunome ont été invitées à rejoindre la toute première cohorte canadienne du Merck Digital Sciences Studio (MDSS) | District 3 News Quoi de neuf a venir chez D3? en savoir plus À propos À propos news rapports annuel partenaires biohub Programmes Residency secteurs tous les secteurs Biotech Santé Haute technologie Innovation sociale startups portfolio Histoires de réussite Emplois en startup Événements connecter Instagram linkedin youtube facebook mentorconnect adresse nous joindre postuler EN FR EN FR À propos À propos nouvelles rapports annuels partenaires biohub Programs Residency secteurs tous les secteurs Biotech Santé Haute technologie Innovation sociale startups portfolio Histoires de réussite Emplois en startup Événements connecter Instagram linkedin youtube facebook mentorconnect addresse nous joindre apply Nanofacile et Simmunome ont été invitées à rejoindre la toute première cohorte canadienne du Merck Digital Sciences Studio (MDSS) Ils s'attaquent à certains des défis les plus complexes du secteur de la santé grâce à des approches axées sur la science et soutenues par le numérique. Healthcare Actus Quoi de neuf? toutes les nouvelles 1 janvier 1970 District 3 participe au Shuffle de Concordia 2026 L'équipe de District 3 a participé au Shuffle de Concordia, contribuant à amasser des fonds pour soutenir les étudiants par le biais de bourses et de"
+    },
+    {
+      "id": "check-page-6602556cfd",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/our-winter-validation-cohorts-have-officially-kicked-off-their-12-week-journey",
+      "page": "batches",
+      "excerpt": "Nos cohortes de validation hivernale ont officiellement lancé leur voyage de 12 semaines | District 3 News Quoi de neuf a venir chez D3? en savoir plus À propos À propos news rapports annuel partenaires biohub Programmes Residency secteurs tous les secteurs Biotech Santé Haute technologie Innovation sociale startups portfolio Histoires de réussite Emplois en startup Événements connecter Instagram linkedin youtube facebook mentorconnect adresse nous joindre postuler EN FR EN FR À propos À propos nouvelles rapports annuels partenaires biohub Programs Residency secteurs tous les secteurs Biotech Santé Haute technologie Innovation sociale startups portfolio Histoires de réussite Emplois en startup Événements connecter Instagram linkedin youtube facebook mentorconnect addresse nous joindre apply Nos cohortes de validation hivernale ont officiellement lancé leur voyage de 12 semaines La semaine dernière, les fondateurs de nos programmes de validation technique et sociale se sont réunis dans notre espace de travail au centre-ville pour entamer leur voyage de 12 semaines à D3. Au cours des trois prochains mois, les fondateurs discuteront avec des utilisateurs réels, mettront à l'essai des hypothèses et façonneront des solutions qui auront un impact significatif. High Tech La semaine dernière, les fondateurs de nos programmes de validation technique et sociale se sont réunis dans notre"
+    },
+    {
+      "id": "check-page-eaceec91ef",
+      "url": "https://www.district3.co/fr/internal/self-host-news/news/the-alan-shepard-residency-summer-2024-cohort",
+      "page": "batches",
+      "excerpt": "La résidence d’été Alan-Shepard s’attaque aux défis du monde réel | District 3 News Quoi de neuf a venir chez D3? en savoir plus À propos À propos news rapports annuel partenaires biohub Programmes Residency secteurs tous les secteurs Biotech Santé Haute technologie Innovation sociale startups portfolio Histoires de réussite Emplois en startup Événements connecter Instagram linkedin youtube facebook mentorconnect adresse nous joindre postuler EN FR EN FR À propos À propos nouvelles rapports annuels partenaires biohub Programs Residency secteurs tous les secteurs Biotech Santé Haute technologie Innovation sociale startups portfolio Histoires de réussite Emplois en startup Événements connecter Instagram linkedin youtube facebook mentorconnect addresse nous joindre apply La résidence d’été Alan-Shepard s’attaque aux défis du monde réel Dans le domaine des beaux-arts, le concept de résidence est bien connu : véritable expérience immersive, elle offre aux artistes un espace de création propice à l’exploration, à l’expérimentation et au tissage de liens. Et si une telle expérience pouvait transcender les disciplines? Actus Quoi de neuf? toutes les nouvelles 1 janvier 1970 District 3 participe au Shuffle de Concordia 2026 L'équipe de District 3 a participé au Shuffle de Concordia, contribuant à amasser des fonds pour soutenir les étudiants par le biais de bourses et de services. lire"
     }
   ],
   "findings": {
@@ -96,6 +557,14 @@
       {
         "value": "https://www.district3.co/fr/apply",
         "evidenceId": "check-route-310dc3e02e"
+      },
+      {
+        "value": "https://www.district3.co/success-stories/canapply",
+        "evidenceId": "check-route-8161849ddd"
+      },
+      {
+        "value": "https://www.district3.co/fr/success-stories/canapply",
+        "evidenceId": "check-route-6bb8a0b9d6"
       }
     ],
     "applicationUrl": [
@@ -107,12 +576,45 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6",
+        "evidenceId": "check-duration-9636252182"
+      },
+      {
+        "value": "12",
+        "evidenceId": "check-duration-3bda0d2957"
+      },
+      {
+        "value": "10",
+        "evidenceId": "check-duration-ba62a7fcc3"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-8919431a87"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-51506aff79"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.district3.co/startups",
         "evidenceId": "check-portfolio-dc894012da"
+      },
+      {
+        "value": "https://www.district3.co/fr/startups",
+        "evidenceId": "check-portfolio-67957ba25f"
       }
     ],
     "name": [

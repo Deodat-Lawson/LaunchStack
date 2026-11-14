@@ -1,7 +1,31 @@
 {
   "programId": "startx",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://web.startx.com/community",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://web.startx.com/faqs",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://web.startx.com/faqs?09569da8_page=2",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://web.startx.com/fellows?utm_source=website&utm_medium=notification_bar&utm_campaign=fellows_application_2026",
       "page": "application",
@@ -19,9 +43,9 @@
       "origin": "official"
     },
     {
-      "url": "https://web.startx.com/faqs",
+      "url": "https://web.startx.com/tos",
       "page": "terms",
-      "anchor": "FAQ",
+      "anchor": "Terms of Service",
       "fetched": true,
       "blocked": null,
       "origin": "official"

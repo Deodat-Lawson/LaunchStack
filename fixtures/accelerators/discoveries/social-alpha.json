@@ -1,19 +1,115 @@
 {
   "programId": "social-alpha",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.socialalpha.org/our-portfolio/",
+      "url": "https://www.socialalpha.org/about-us-draft/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/about-us/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/announcement/india-innovation-growth-programme-iigp-2-0-2018-to-bring-funding-of-usd-2-million-in-social-and-industrial-innovations/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/announcement/social-alpha-announces-investment-in-healthtech-start-up-medprime-technologies-along-with-mumbai-angels-sine-iit-bombay-riso-capital-lavni-ventures-and-keiretsu-forum-in-seed-round/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/announcement/social-alpha-backed-phool-co-has-received-investment-hindi-actor-alia-bhatt-invests-in-social-alpha-backed-d2c-start-up-phool-co-that-makes-natural-incense-and-bio-leather/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/announcement/social-alpha-backed-phool-co-has-received-investment-hindi-actor-alia-bhatt-invests-in-social-alpha-backed-d2c-start-up-phool-co-that-makes-natural-incense-and-bio-leather/Hello@phool.co",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/announcement/social-alpha-backed-phool-co-has-received-investment-hindi-actor-alia-bhatt-invests-in-social-alpha-backed-d2c-start-up-phool-co-that-makes-natural-incense-and-bio-leather/www.socialalpha.org",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/announcement/tata-trusts-and-social-alpha-launch-fellowship-program-to-empower-entrepreneurs-with-deep-science-and-technology-focus/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/announcement/tata-trusts-foundation-for-innovation-and-social-entrepreneurship-joins-lockheed-martin-and-department-of-science-and-technologys-india-innovation-growth-programme-2-0-to-foster-sus/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/announcement/unhie-birac-and-social-alpha-announce-india-accelerator-platform-for-healthcare-innovations/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/careers-portfolio/",
       "page": "portfolio",
-      "anchor": "Portfolio",
+      "anchor": "WORK AT A PORTFOLIO COMPANY",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.socialalpha.org/programs-accelerators/",
-      "page": "details",
-      "anchor": "Accelerators",
+      "url": "https://www.socialalpha.org/category/investment-stories/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/faq_terms-temp/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/investment-model/",
+      "page": "terms",
+      "anchor": "INVESTMENT MODEL",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -27,17 +123,33 @@
       "origin": "official"
     },
     {
-      "url": "https://www.socialalpha.org/about-us/",
-      "page": "details",
-      "anchor": "About",
+      "url": "https://www.socialalpha.org/optimising-investment-instruments-for-early-stage-climate-tech-founders/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/our-portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.socialalpha.org/careers-portfolio/",
-      "page": "portfolio",
-      "anchor": "WORK AT A PORTFOLIO COMPANY",
+      "url": "https://www.socialalpha.org/press-releasae/through-the-use-of-technology-kitablet-application-is-taking-homegrown-childrens-literature-to-a-wider-audience/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/programs-accelerators/",
+      "page": "details",
+      "anchor": "Accelerators",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -47,6 +159,14 @@
       "page": "details",
       "anchor": "Programs",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/timeline/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

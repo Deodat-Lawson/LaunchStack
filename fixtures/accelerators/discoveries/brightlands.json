@@ -1,5 +1,142 @@
 {
   "programId": "brightlands",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
-  "pages": []
+  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "pages": [
+    {
+      "url": "https://www.brightlands.com/brightlands-chemelot-campus/trainee-program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.brightlands.com/campus-greenport-venlo/bedrijven-kennisinstellingen/bedrijven/bedrijf/dealingreen",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.brightlands.com/campus-greenport-venlo/nieuws/oogstfeest-regio-deal-noord-limburg-i",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.brightlands.com/chemelot-campus/nieuws/eu1-million-seed-investment-fuels-resolved-technologies-mission-sustainable",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.brightlands.com/chemelot-campus/nieuws/eu6m-investment-scaling-sustainable-solution-plastics-recycling",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.brightlands.com/en/campus-greenport-venlo/news/harvest-festival-regio-deal-noord-limburg-i",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.brightlands.com/en/chemelot-campus/nieuws/eu1-million-seed-investment-fuels-resolved-technologies-mission-sustainable",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.brightlands.com/en/chemelot-campus/nieuws/eu6m-investment-scaling-sustainable-solution-plastics-recycling",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.brightlands.com/en/maastricht-health-campus/event/discovery-deal-negotiation-essentials",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.brightlands.com/en/maastricht-health-campus/facilities/office-space/ideal-workplace-brightlands-maastricht-health",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.brightlands.com/en/wat-brightlands/bright-stories/overview-bright-stories/ideal-place-follow-bachelor",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.brightlands.com/evenement/brightlands-startup-league-masterclass-investment-landscape",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.brightlands.com/evenement/masterclass-brightlands-startup-league-investment-landscape",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.brightlands.com/maastricht-health-campus/de-ideale-werkplek-op-brightlands-maastricht-health-campus",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.brightlands.com/maastricht-health-campus/evenement/brightlands-impact-award-deadline-pre-application",
+      "page": "batches",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.brightlands.com/maastricht-health-campus/evenement/discovery-deal-negotiation-essentials",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.brightlands.com/wat-brightlands/inspirerende-verhalen/overzicht-bright-stories/de-ideale-studieplek-voor-megan",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
 }

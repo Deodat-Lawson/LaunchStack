@@ -1,159 +1,1494 @@
 {
   "programId": "dmz",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://dmz.torontomu.ca/",
-    "https://dmz.torontomu.ca/our-programs",
+    "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
+    "https://dmz.torontomu.ca/thank-you-for-applying",
+    "https://mydmz.torontomu.ca/portal/apply",
     "https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
-    "https://dmz.torontomu.ca/faq"
+    "http://mydmz.torontomu.ca/portal/apply/dmzyyz",
+    "https://dmz.torontomu.ca/faq",
+    "https://dmz.torontomu.ca/post/one-pitch-a-year-of-progress-what-happened-after-house-beat-secured-investment-at-wis",
+    "https://dmz.torontomu.ca/post/zero-hero-crowdfunding-first-investment",
+    "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+    "https://dmz.torontomu.ca/press-releases/dmzs-2024-women-innovation-summit-to-award-100000-in-cash-investments-from-the-firehood-and-honour-trailblazing-women-in-tech-across-canada",
+    "https://dmz.torontomu.ca/press-releases/dmzs-black-innovation-summit-returns-for-year-five-with-over-300-000-in-grants-and-investments-to-back-canadas-most-promising-black-tech-founders",
+    "https://dmz.torontomu.ca/press-releases/dmzs-women-innovation-summit-returns-for-year-three-with-100-000-in-cash-investments-from-the-firehood-to-back-the-visionaries-transforming-the-tech-landscape",
+    "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+    "https://dmz.torontomu.ca/post/ashu-and-andrew-met-in-dmz-first-sandbox-cohort-in-2018-now-theyre-revolutionizing-the-mortgage-industry"
   ],
   "evidence": [
     {
+      "id": "check-announced-121de9cd03",
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+      "title": "DMZ — terms page",
+      "excerpt": "technology are invited to apply to DMZ's Fall 2026 Incubator cohort. Applications are open until September 1. Visit dmz.to/programs to learn more. ‍ -30- ‍ Media contact: Luvy",
+      "page": "terms"
+    },
+    {
+      "id": "check-announced-1234b42451",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "All Validator 10 Weeks Greater Toronto Area See Details Start Date Apply By Event Date Start Date Nov 30 Now Start Date Start Date Event Date Closed Course Program Event",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-143f8e458a",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "Next up Instructor John Doe Start Date Start Date Event Date Apply by Nov 30 Course Program Workshop Event CHI Accelerator - Cohort 4 Starts",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-4f8742c715",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "Oops! Something went wrong while submitting the form. Start Date Apply By Event Date Start Date Nov 20 Now Start Date Start Date Event Date Closed Course Program Event",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-8b33361b74",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "Details Next up Instructor John Doe Start Date Start Date Event Date Apply by Nov 20 Course Program Workshop Event Validator 10 Weeks Greater Toronto",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-6c4e4a94e6",
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+      "title": "DMZ — terms page",
+      "excerpt": "active defence contracts with the U.S. Navy. ‍ The award includes a $100,000 investment from DMZ Ventures, subject to finalizing investment terms,",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-ae294d71a4",
+      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+      "title": "DMZ — terms page",
+      "excerpt": "20 → Apply to our CHI Program now! Growth Women-led startups receive $535,000 in cash investments at DMZ’s 2025 Women Innovation Summit Amidst the",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-ed1c2d022f",
+      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+      "title": "DMZ — terms page",
+      "excerpt": "Women-led startups receive $535,000 in cash investments at DMZ’s 2025 Women Innovation Summit | DMZ",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-035c37385d",
+      "url": "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
+      "title": "DMZ — application page",
+      "excerpt": "scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-05705e4aa1",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-2024-women-innovation-summit-to-award-100000-in-cash-investments-from-the-firehood-and-honour-trailblazing-women-in-tech-across-canada",
+      "title": "DMZ — terms page",
+      "excerpt": "scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-06e91e0bf9",
+      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+      "title": "DMZ — terms page",
+      "excerpt": "scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-072bfae471",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "the program that fits your needs. Incubator 18-month program to scale and become investor-ready.",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-078133365b",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-women-innovation-summit-returns-for-year-three-with-100-000-in-cash-investments-from-the-firehood-to-back-the-visionaries-transforming-the-tech-landscape",
+      "title": "DMZ — terms page",
+      "excerpt": "in classrooms. Backing Canadian Small Businesses 15-week mentorship program with $10K grants from Amex",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-0c106b88ab",
+      "url": "https://dmz.torontomu.ca/post/one-pitch-a-year-of-progress-what-happened-after-house-beat-secured-investment-at-wis",
+      "title": "DMZ — terms page",
+      "excerpt": "to shape smarter travel. Siakam EdTech Engine 12-week accelerator to transform education in",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-0e4c4d1471",
+      "url": "https://dmz.torontomu.ca/post/ashu-and-andrew-met-in-dmz-first-sandbox-cohort-in-2018-now-theyre-revolutionizing-the-mortgage-industry",
+      "title": "DMZ — batches page",
+      "excerpt": "the program that fits your needs. Incubator 18-month program to scale and become investor-ready.",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-158adce157",
+      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+      "title": "DMZ — terms page",
+      "excerpt": "the program that fits your needs. Incubator 18-month program to scale and become investor-ready.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-264e2b09d3",
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+      "title": "DMZ — terms page",
+      "excerpt": "and skill building initiatives. Validator 10-week program for Black founders to validate an idea",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-265b2e7440",
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+      "title": "DMZ — terms page",
+      "excerpt": "in classrooms. Backing Canadian Small Businesses 15-week mentorship program with $10K grants from Amex",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-2e0308f6d9",
+      "url": "https://dmz.torontomu.ca/thank-you-for-applying",
+      "title": "DMZ — application page",
+      "excerpt": "in classrooms. Backing Canadian Small Businesses 15-week mentorship program with $10K grants from Amex",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-30f021a785",
+      "url": "https://dmz.torontomu.ca/thank-you-for-applying",
+      "title": "DMZ — application page",
+      "excerpt": "the program that fits your needs. Incubator 18-month program to scale and become investor-ready.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-33d4eb435d",
+      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+      "title": "DMZ — terms page",
+      "excerpt": "and skill building initiatives. Validator 10-week program for Black founders to validate an idea",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-3b2c917a8c",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "Event CHI Accelerator - Cohort 4 Starts Jan 2027 6 months Virtual or in-person See Details Next up",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3e6b57cb1f",
+      "url": "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
+      "title": "DMZ — application page",
+      "excerpt": "in classrooms. Backing Canadian Small Businesses 15-week mentorship program with $10K grants from Amex",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-3e74a74aca",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-2024-women-innovation-summit-to-award-100000-in-cash-investments-from-the-firehood-and-honour-trailblazing-women-in-tech-across-canada",
+      "title": "DMZ — terms page",
+      "excerpt": "and skill building initiatives. Validator 10-week program for Black founders to validate an idea",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-42a9ac5a48",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-2024-women-innovation-summit-to-award-100000-in-cash-investments-from-the-firehood-and-honour-trailblazing-women-in-tech-across-canada",
+      "title": "DMZ — terms page",
+      "excerpt": "the program that fits your needs. Incubator 18-month program to scale and become investor-ready.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-471e834795",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-black-innovation-summit-returns-for-year-five-with-over-300-000-in-grants-and-investments-to-back-canadas-most-promising-black-tech-founders",
+      "title": "DMZ — terms page",
+      "excerpt": "and skill building initiatives. Validator 10-week program for Black founders to validate an idea",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-49f719e89d",
+      "url": "https://dmz.torontomu.ca/post/zero-hero-crowdfunding-first-investment",
+      "title": "DMZ — terms page",
+      "excerpt": "to shape smarter travel. Siakam EdTech Engine 12-week accelerator to transform education in",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-4e5f67236d",
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+      "title": "DMZ — terms page",
+      "excerpt": "the program that fits your needs. Incubator 18-month program to scale and become investor-ready.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-584710c9e8",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "and skill building initiatives. Validator 10-week program for Black founders to validate an idea",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-5b00d9710b",
+      "url": "https://dmz.torontomu.ca/faq",
+      "title": "DMZ — terms page",
+      "excerpt": "the program that fits your needs. Incubator 18-month program to scale and become investor-ready.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-5b0bfa4bf2",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell.",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-5d01132c88",
+      "url": "https://dmz.torontomu.ca/post/one-pitch-a-year-of-progress-what-happened-after-house-beat-secured-investment-at-wis",
+      "title": "DMZ — terms page",
+      "excerpt": "and skill building initiatives. Validator 10-week program for Black founders to validate an idea",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-6509c40e64",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-2024-women-innovation-summit-to-award-100000-in-cash-investments-from-the-firehood-and-honour-trailblazing-women-in-tech-across-canada",
+      "title": "DMZ — terms page",
+      "excerpt": "in classrooms. Backing Canadian Small Businesses 15-week mentorship program with $10K grants from Amex",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-66821a9511",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-black-innovation-summit-returns-for-year-five-with-over-300-000-in-grants-and-investments-to-back-canadas-most-promising-black-tech-founders",
+      "title": "DMZ — terms page",
+      "excerpt": "the program that fits your needs. Incubator 18-month program to scale and become investor-ready.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-6aa697dc27",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "Program Event Workshop Program All Validator 10 Weeks Greater Toronto Area See Details Start Date",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-6dceae9f3d",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "All CHI Accelerator - Cohort 4 Starts Jan 2027 6 months Virtual or in-person See Details Start Date",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-6f1e17f86e",
+      "url": "https://dmz.torontomu.ca/faq",
+      "title": "DMZ — terms page",
+      "excerpt": "in classrooms. Backing Canadian Small Businesses 15-week mentorship program with $10K grants from Amex",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-7169494ef4",
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+      "title": "DMZ — terms page",
+      "excerpt": "scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-72f253a934",
+      "url": "https://dmz.torontomu.ca/faq",
+      "title": "DMZ — terms page",
+      "excerpt": "and skill building initiatives. Validator 10-week program for Black founders to validate an idea",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-74cc202207",
+      "url": "https://dmz.torontomu.ca/post/zero-hero-crowdfunding-first-investment",
+      "title": "DMZ — terms page",
+      "excerpt": "and skill building initiatives. Validator 10-week program for Black founders to validate an idea",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-7ca2432f4a",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-women-innovation-summit-returns-for-year-three-with-100-000-in-cash-investments-from-the-firehood-to-back-the-visionaries-transforming-the-tech-landscape",
+      "title": "DMZ — terms page",
+      "excerpt": "the program that fits your needs. Incubator 18-month program to scale and become investor-ready.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-7e1437c53e",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-black-innovation-summit-returns-for-year-five-with-over-300-000-in-grants-and-investments-to-back-canadas-most-promising-black-tech-founders",
+      "title": "DMZ — terms page",
+      "excerpt": "scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-8367c5db8e",
+      "url": "https://dmz.torontomu.ca/faq",
+      "title": "DMZ — terms page",
+      "excerpt": "to shape smarter travel. Siakam EdTech Engine 12-week accelerator to transform education in",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-8aa81c67b4",
+      "url": "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
+      "title": "DMZ — application page",
+      "excerpt": "and skill building initiatives. Validator 10-week program for Black founders to validate an idea",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-8f58673ebb",
+      "url": "https://dmz.torontomu.ca/post/one-pitch-a-year-of-progress-what-happened-after-house-beat-secured-investment-at-wis",
+      "title": "DMZ — terms page",
+      "excerpt": "scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-947962e90f",
+      "url": "https://dmz.torontomu.ca/post/ashu-and-andrew-met-in-dmz-first-sandbox-cohort-in-2018-now-theyre-revolutionizing-the-mortgage-industry",
+      "title": "DMZ — batches page",
+      "excerpt": "to shape smarter travel. Siakam EdTech Engine 12-week accelerator to transform education in",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-9659d8b671",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "Program All Pre-Incubator Two intakes annually 9 months Program accessible virtually or in-person See",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9849c48adf",
+      "url": "https://dmz.torontomu.ca/faq",
+      "title": "DMZ — terms page",
+      "excerpt": "in – for example, our flagship Incubator is 18 months long. Once a part of DMZ, you always remain a",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-9a139aec29",
+      "url": "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
+      "title": "DMZ — application page",
+      "excerpt": "to shape smarter travel. Siakam EdTech Engine 12-week accelerator to transform education in",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-9a3626c315",
+      "url": "https://dmz.torontomu.ca/thank-you-for-applying",
+      "title": "DMZ — application page",
+      "excerpt": "to shape smarter travel. Siakam EdTech Engine 12-week accelerator to transform education in",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-9d66c0d5fc",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-black-innovation-summit-returns-for-year-five-with-over-300-000-in-grants-and-investments-to-back-canadas-most-promising-black-tech-founders",
+      "title": "DMZ — terms page",
+      "excerpt": "in classrooms. Backing Canadian Small Businesses 15-week mentorship program with $10K grants from Amex",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a3d0881624",
+      "url": "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
+      "title": "DMZ — application page",
+      "excerpt": "the program that fits your needs. Incubator 18-month program to scale and become investor-ready.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-a5ce5cc631",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-black-innovation-summit-returns-for-year-five-with-over-300-000-in-grants-and-investments-to-back-canadas-most-promising-black-tech-founders",
+      "title": "DMZ — terms page",
+      "excerpt": "to shape smarter travel. Siakam EdTech Engine 12-week accelerator to transform education in",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a74715b1ac",
+      "url": "https://dmz.torontomu.ca/post/one-pitch-a-year-of-progress-what-happened-after-house-beat-secured-investment-at-wis",
+      "title": "DMZ — terms page",
+      "excerpt": "the program that fits your needs. Incubator 18-month program to scale and become investor-ready.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a9be6b90a9",
+      "url": "https://dmz.torontomu.ca/post/zero-hero-crowdfunding-first-investment",
+      "title": "DMZ — terms page",
+      "excerpt": "scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ab95a841af",
+      "url": "https://dmz.torontomu.ca/post/zero-hero-crowdfunding-first-investment",
+      "title": "DMZ — terms page",
+      "excerpt": "in classrooms. Backing Canadian Small Businesses 15-week mentorship program with $10K grants from Amex",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-af82fb624c",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "Workshop Event Incubator Spring 2027 Cohort 18 Months DMZ Toronto (Virtual Available) See Details Next",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b90d6a22fa",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-women-innovation-summit-returns-for-year-three-with-100-000-in-cash-investments-from-the-firehood-to-back-the-visionaries-transforming-the-tech-landscape",
+      "title": "DMZ — terms page",
+      "excerpt": "and skill building initiatives. Validator 10-week program for Black founders to validate an idea",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-c0f492cc6a",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-women-innovation-summit-returns-for-year-three-with-100-000-in-cash-investments-from-the-firehood-to-back-the-visionaries-transforming-the-tech-landscape",
+      "title": "DMZ — terms page",
+      "excerpt": "scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-c2c075217a",
+      "url": "https://dmz.torontomu.ca/thank-you-for-applying",
+      "title": "DMZ — application page",
+      "excerpt": "scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-cb91ff6769",
+      "url": "https://dmz.torontomu.ca/post/ashu-and-andrew-met-in-dmz-first-sandbox-cohort-in-2018-now-theyre-revolutionizing-the-mortgage-industry",
+      "title": "DMZ — batches page",
+      "excerpt": "in classrooms. Backing Canadian Small Businesses 15-week mentorship program with $10K grants from Amex",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-d0ca077d47",
+      "url": "https://dmz.torontomu.ca/faq",
+      "title": "DMZ — terms page",
+      "excerpt": "scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d4bd74ac64",
+      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+      "title": "DMZ — terms page",
+      "excerpt": "in classrooms. Backing Canadian Small Businesses 15-week mentorship program with $10K grants from Amex",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d7e030dce4",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "Nov 20 Course Program Workshop Event Validator 10 Weeks Greater Toronto Area See Details Next up",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e5e90cabb6",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "Event Pre-Incubator Two intakes annually 9 months Program accessible virtually or in-person See",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e6b48c6fa7",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-women-innovation-summit-returns-for-year-three-with-100-000-in-cash-investments-from-the-firehood-to-back-the-visionaries-transforming-the-tech-landscape",
+      "title": "DMZ — terms page",
+      "excerpt": "to shape smarter travel. Siakam EdTech Engine 12-week accelerator to transform education in",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-eb9e1028d4",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "to shape smarter travel. Siakam EdTech Engine 12-week accelerator to transform education in",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-f0954bbe0a",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-2024-women-innovation-summit-to-award-100000-in-cash-investments-from-the-firehood-and-honour-trailblazing-women-in-tech-across-canada",
+      "title": "DMZ — terms page",
+      "excerpt": "to shape smarter travel. Siakam EdTech Engine 12-week accelerator to transform education in",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f3b759b8fe",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "in classrooms. Backing Canadian Small Businesses 15-week mentorship program with $10K grants from Amex",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-f5d241bfab",
+      "url": "https://dmz.torontomu.ca/post/one-pitch-a-year-of-progress-what-happened-after-house-beat-secured-investment-at-wis",
+      "title": "DMZ — terms page",
+      "excerpt": "in classrooms. Backing Canadian Small Businesses 15-week mentorship program with $10K grants from Amex",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f899e64224",
+      "url": "https://dmz.torontomu.ca/post/ashu-and-andrew-met-in-dmz-first-sandbox-cohort-in-2018-now-theyre-revolutionizing-the-mortgage-industry",
+      "title": "DMZ — batches page",
+      "excerpt": "and skill building initiatives. Validator 10-week program for Black founders to validate an idea",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-f8d665da21",
+      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+      "title": "DMZ — terms page",
+      "excerpt": "to shape smarter travel. Siakam EdTech Engine 12-week accelerator to transform education in",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f985aaf762",
+      "url": "https://dmz.torontomu.ca/thank-you-for-applying",
+      "title": "DMZ — application page",
+      "excerpt": "and skill building initiatives. Validator 10-week program for Black founders to validate an idea",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-fbe6414608",
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+      "title": "DMZ — terms page",
+      "excerpt": "to shape smarter travel. Siakam EdTech Engine 12-week accelerator to transform education in",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-fc267c5734",
+      "url": "https://dmz.torontomu.ca/post/zero-hero-crowdfunding-first-investment",
+      "title": "DMZ — terms page",
+      "excerpt": "the program that fits your needs. Incubator 18-month program to scale and become investor-ready.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ffa735e7b9",
+      "url": "https://dmz.torontomu.ca/post/ashu-and-andrew-met-in-dmz-first-sandbox-cohort-in-2018-now-theyre-revolutionizing-the-mortgage-industry",
+      "title": "DMZ — batches page",
+      "excerpt": "scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell.",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-0188684737",
+      "url": "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
+      "title": "DMZ — application page",
+      "excerpt": "entrepreneurs develop key skills. Women's Launchpad Free, virtual platform to help aspiring women entrepreneurs build key",
+      "page": "application"
+    },
+    {
+      "id": "check-format-03d79241a3",
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+      "title": "DMZ — terms page",
+      "excerpt": "entrepreneurs build key skills. Indigenous Launchpad Free, virtual platform to help Indigenous entrepreneurs develop key",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-064ee7fe41",
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+      "title": "DMZ — terms page",
+      "excerpt": "entrepreneurs develop key skills. Women's Launchpad Free, virtual platform to help aspiring women entrepreneurs build key",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-11d134ea04",
+      "url": "https://dmz.torontomu.ca/thank-you-for-applying",
+      "title": "DMZ — application page",
+      "excerpt": "entrepreneurs build key skills. Indigenous Launchpad Free, virtual platform to help Indigenous entrepreneurs develop key",
+      "page": "application"
+    },
+    {
+      "id": "check-format-27061038c7",
+      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+      "title": "DMZ — terms page",
+      "excerpt": "entrepreneurs build key skills. Indigenous Launchpad Free, virtual platform to help Indigenous entrepreneurs develop key",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-2d9c9fcff7",
+      "url": "https://dmz.torontomu.ca/post/ashu-and-andrew-met-in-dmz-first-sandbox-cohort-in-2018-now-theyre-revolutionizing-the-mortgage-industry",
+      "title": "DMZ — batches page",
+      "excerpt": "entrepreneurs develop key skills. Women's Launchpad Free, virtual platform to help aspiring women entrepreneurs build key",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-34bd29f4ec",
+      "url": "https://dmz.torontomu.ca/post/zero-hero-crowdfunding-first-investment",
+      "title": "DMZ — terms page",
+      "excerpt": "entrepreneurs develop key skills. Women's Launchpad Free, virtual platform to help aspiring women entrepreneurs build key",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-3845ac6c72",
+      "url": "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
+      "title": "DMZ — application page",
+      "excerpt": "entrepreneurs build key skills. Indigenous Launchpad Free, virtual platform to help Indigenous entrepreneurs develop key",
+      "page": "application"
+    },
+    {
+      "id": "check-format-3db15da33d",
+      "url": "https://dmz.torontomu.ca/post/ashu-and-andrew-met-in-dmz-first-sandbox-cohort-in-2018-now-theyre-revolutionizing-the-mortgage-industry",
+      "title": "DMZ — batches page",
+      "excerpt": "to help you grow. Launchpad for entrepreneurs Free, virtual platform to help aspiring entrepreneurs build key skills.",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-441dac3e49",
+      "url": "https://dmz.torontomu.ca/post/ashu-and-andrew-met-in-dmz-first-sandbox-cohort-in-2018-now-theyre-revolutionizing-the-mortgage-industry",
+      "title": "DMZ — batches page",
+      "excerpt": "entrepreneurs build key skills. Indigenous Launchpad Free, virtual platform to help Indigenous entrepreneurs develop key",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-45c8922e0a",
+      "url": "https://dmz.torontomu.ca/post/zero-hero-crowdfunding-first-investment",
+      "title": "DMZ — terms page",
+      "excerpt": "entrepreneurs build key skills. Indigenous Launchpad Free, virtual platform to help Indigenous entrepreneurs develop key",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-47cea93e50",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-2024-women-innovation-summit-to-award-100000-in-cash-investments-from-the-firehood-and-honour-trailblazing-women-in-tech-across-canada",
+      "title": "DMZ — terms page",
+      "excerpt": "entrepreneurs develop key skills. Women's Launchpad Free, virtual platform to help aspiring women entrepreneurs build key",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-59141aab71",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "to help you grow. Launchpad for entrepreneurs Free, virtual platform to help aspiring entrepreneurs build key skills.",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5965aadaf2",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "entrepreneurs develop key skills. Women's Launchpad Free, virtual platform to help aspiring women entrepreneurs build key",
+      "page": "details"
+    },
+    {
+      "id": "check-format-59bf9be6b4",
+      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+      "title": "DMZ — terms page",
+      "excerpt": "entrepreneurs develop key skills. Women's Launchpad Free, virtual platform to help aspiring women entrepreneurs build key",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-59ff68a1a3",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "Event Incubator Spring 2027 Cohort 18 Months DMZ Toronto (Virtual Available) See Details Next up Instructor John Doe Start",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5f56108f51",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-women-innovation-summit-returns-for-year-three-with-100-000-in-cash-investments-from-the-firehood-to-back-the-visionaries-transforming-the-tech-landscape",
+      "title": "DMZ — terms page",
+      "excerpt": "entrepreneurs build key skills. Indigenous Launchpad Free, virtual platform to help Indigenous entrepreneurs develop key",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-66532285b6",
+      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+      "title": "DMZ — terms page",
+      "excerpt": "Evolve Advisory Services Bobbie Racette, Founder & CEO, Virtual Gurus Noura Sakkhija, CEO & Co-Founder, Mejuri Sarah",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-761f9096d4",
+      "url": "https://dmz.torontomu.ca/thank-you-for-applying",
+      "title": "DMZ — application page",
+      "excerpt": "to help you grow. Launchpad for entrepreneurs Free, virtual platform to help aspiring entrepreneurs build key skills.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-78d2341ecb",
+      "url": "https://dmz.torontomu.ca/post/one-pitch-a-year-of-progress-what-happened-after-house-beat-secured-investment-at-wis",
+      "title": "DMZ — terms page",
+      "excerpt": "entrepreneurs build key skills. Indigenous Launchpad Free, virtual platform to help Indigenous entrepreneurs develop key",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-7c215b2f98",
+      "url": "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
+      "title": "DMZ — application page",
+      "excerpt": "to help you grow. Launchpad for entrepreneurs Free, virtual platform to help aspiring entrepreneurs build key skills.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-89b615fe36",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-2024-women-innovation-summit-to-award-100000-in-cash-investments-from-the-firehood-and-honour-trailblazing-women-in-tech-across-canada",
+      "title": "DMZ — terms page",
+      "excerpt": "to help you grow. Launchpad for entrepreneurs Free, virtual platform to help aspiring entrepreneurs build key skills.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-8a1a3548b2",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-black-innovation-summit-returns-for-year-five-with-over-300-000-in-grants-and-investments-to-back-canadas-most-promising-black-tech-founders",
+      "title": "DMZ — terms page",
+      "excerpt": "entrepreneurs build key skills. Indigenous Launchpad Free, virtual platform to help Indigenous entrepreneurs develop key",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-8aa5008afd",
+      "url": "https://dmz.torontomu.ca/faq",
+      "title": "DMZ — terms page",
+      "excerpt": "entrepreneurs build key skills. Indigenous Launchpad Free, virtual platform to help Indigenous entrepreneurs develop key",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-9338f4fc6f",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-women-innovation-summit-returns-for-year-three-with-100-000-in-cash-investments-from-the-firehood-to-back-the-visionaries-transforming-the-tech-landscape",
+      "title": "DMZ — terms page",
+      "excerpt": "to help you grow. Launchpad for entrepreneurs Free, virtual platform to help aspiring entrepreneurs build key skills.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-9a4f39ecda",
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+      "title": "DMZ — terms page",
+      "excerpt": "to help you grow. Launchpad for entrepreneurs Free, virtual platform to help aspiring entrepreneurs build key skills.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-a8c2d3d71a",
+      "url": "https://dmz.torontomu.ca/post/one-pitch-a-year-of-progress-what-happened-after-house-beat-secured-investment-at-wis",
+      "title": "DMZ — terms page",
+      "excerpt": "entrepreneurs develop key skills. Women's Launchpad Free, virtual platform to help aspiring women entrepreneurs build key",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-ac4718d4c5",
+      "url": "https://dmz.torontomu.ca/post/one-pitch-a-year-of-progress-what-happened-after-house-beat-secured-investment-at-wis",
+      "title": "DMZ — terms page",
+      "excerpt": "to help you grow. Launchpad for entrepreneurs Free, virtual platform to help aspiring entrepreneurs build key skills.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-ad9bf37322",
+      "url": "https://dmz.torontomu.ca/thank-you-for-applying",
+      "title": "DMZ — application page",
+      "excerpt": "entrepreneurs develop key skills. Women's Launchpad Free, virtual platform to help aspiring women entrepreneurs build key",
+      "page": "application"
+    },
+    {
+      "id": "check-format-afe7d9d5d0",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "intakes annually 9 months Program accessible virtually or in-person See Details Load more 1 / 3 Check back later! Building a",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b5161b85b1",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "Accelerator - Cohort 4 Starts Jan 2027 6 months Virtual or in-person See Details Next up Instructor John Doe Start Date Start",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b75120f1e4",
+      "url": "https://dmz.torontomu.ca/post/zero-hero-crowdfunding-first-investment",
+      "title": "DMZ — terms page",
+      "excerpt": "to help you grow. Launchpad for entrepreneurs Free, virtual platform to help aspiring entrepreneurs build key skills.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-bbc87688ba",
+      "url": "https://dmz.torontomu.ca/faq",
+      "title": "DMZ — terms page",
+      "excerpt": "entrepreneurs develop key skills. Women's Launchpad Free, virtual platform to help aspiring women entrepreneurs build key",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-c2552627ac",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "entrepreneurs build key skills. Indigenous Launchpad Free, virtual platform to help Indigenous entrepreneurs develop key",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c5314c57b4",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "Event CHI Accelerator - Cohort 4 Starts Jan 2027 6 months Virtual or in-person See Details Next up Instructor John Doe Start",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c6b3131ca3",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "intakes annually 9 months Program accessible virtually or in-person See Details Trusted by 5270+ entrepreneurs. $3.25B raised",
+      "page": "details"
+    },
+    {
+      "id": "check-format-cff53d961f",
+      "url": "https://dmz.torontomu.ca/faq",
+      "title": "DMZ — terms page",
+      "excerpt": "to help you grow. Launchpad for entrepreneurs Free, virtual platform to help aspiring entrepreneurs build key skills.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d501ec1a41",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "Accelerator - Cohort 4 Starts Jan 2027 6 months Virtual or in-person See Details Start Date Apply By Event Date Start Date",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d62ce9774f",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "All CHI Accelerator - Cohort 4 Starts Jan 2027 6 months Virtual or in-person See Details Start Date Apply By Event Date",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e71f903a40",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-women-innovation-summit-returns-for-year-three-with-100-000-in-cash-investments-from-the-firehood-to-back-the-visionaries-transforming-the-tech-landscape",
+      "title": "DMZ — terms page",
+      "excerpt": "entrepreneurs develop key skills. Women's Launchpad Free, virtual platform to help aspiring women entrepreneurs build key",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-e8854d3146",
+      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+      "title": "DMZ — terms page",
+      "excerpt": "to help you grow. Launchpad for entrepreneurs Free, virtual platform to help aspiring entrepreneurs build key skills.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-f816171cbc",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-2024-women-innovation-summit-to-award-100000-in-cash-investments-from-the-firehood-and-honour-trailblazing-women-in-tech-across-canada",
+      "title": "DMZ — terms page",
+      "excerpt": "entrepreneurs build key skills. Indigenous Launchpad Free, virtual platform to help Indigenous entrepreneurs develop key",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-fe81843e66",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-black-innovation-summit-returns-for-year-five-with-over-300-000-in-grants-and-investments-to-back-canadas-most-promising-black-tech-founders",
+      "title": "DMZ — terms page",
+      "excerpt": "to help you grow. Launchpad for entrepreneurs Free, virtual platform to help aspiring entrepreneurs build key skills.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-ffd0c23850",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-black-innovation-summit-returns-for-year-five-with-over-300-000-in-grants-and-investments-to-back-canadas-most-promising-black-tech-founders",
+      "title": "DMZ — terms page",
+      "excerpt": "entrepreneurs develop key skills. Women's Launchpad Free, virtual platform to help aspiring women entrepreneurs build key",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-492d88a3b4",
+      "url": "https://dmz.torontomu.ca/post/zero-hero-crowdfunding-first-investment",
+      "title": "DMZ — terms page",
+      "excerpt": "by Massolutions , a research firm based in New York City, crowdfunding platforms raised $16.2",
+      "page": "terms"
+    },
+    {
       "id": "check-name-bfb91ebdd2",
       "url": "https://dmz.torontomu.ca/",
-      "title": "DMZ — homepage checked by scrape.py",
+      "title": "DMZ — homepage",
       "excerpt": "World-Leading Tech Incubator & Startup Ecosystem | DMZ Webflow Homepage View dashboard Founders CORE PROGRAMS",
       "page": "details"
     },
     {
-      "id": "check-portfolio-04673e3f6b",
-      "url": "https://dmz.torontomu.ca/our-programs",
-      "title": "DMZ — details page checked by scrape.py",
+      "id": "check-portfolio-0e5b0e1a7f",
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+      "title": "DMZ — terms page",
       "excerpt": "Our startups → https://dmz.torontomu.ca/startup-directory",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-0f1cad9c68",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-2024-women-innovation-summit-to-award-100000-in-cash-investments-from-the-firehood-and-honour-trailblazing-women-in-tech-across-canada",
+      "title": "DMZ — terms page",
+      "excerpt": "Our startups → https://dmz.torontomu.ca/startup-directory",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-27b052ef9d",
       "url": "https://dmz.torontomu.ca/",
-      "title": "DMZ — homepage checked by scrape.py",
+      "title": "DMZ — homepage",
       "excerpt": "Our startups → https://dmz.torontomu.ca/startup-directory",
       "page": "details"
     },
     {
+      "id": "check-portfolio-3b68f2a445",
+      "url": "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
+      "title": "DMZ — application page",
+      "excerpt": "Our startups → https://dmz.torontomu.ca/startup-directory",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3f46ce2f2f",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-women-innovation-summit-returns-for-year-three-with-100-000-in-cash-investments-from-the-firehood-to-back-the-visionaries-transforming-the-tech-landscape",
+      "title": "DMZ — terms page",
+      "excerpt": "Our startups → https://dmz.torontomu.ca/startup-directory",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-46326602f9",
+      "url": "https://dmz.torontomu.ca/post/zero-hero-crowdfunding-first-investment",
+      "title": "DMZ — terms page",
+      "excerpt": "Our startups → https://dmz.torontomu.ca/startup-directory",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-4918ffb377",
+      "url": "https://dmz.torontomu.ca/post/one-pitch-a-year-of-progress-what-happened-after-house-beat-secured-investment-at-wis",
+      "title": "DMZ — terms page",
+      "excerpt": "Our startups → https://dmz.torontomu.ca/startup-directory",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-67f17bf4ae",
+      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+      "title": "DMZ — terms page",
+      "excerpt": "Our startups → https://dmz.torontomu.ca/startup-directory",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-74206cdcd0",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-black-innovation-summit-returns-for-year-five-with-over-300-000-in-grants-and-investments-to-back-canadas-most-promising-black-tech-founders",
+      "title": "DMZ — terms page",
+      "excerpt": "Our startups → https://dmz.torontomu.ca/startup-directory",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a92505fdf1",
+      "url": "https://dmz.torontomu.ca/thank-you-for-applying",
+      "title": "DMZ — application page",
+      "excerpt": "Our startups → https://dmz.torontomu.ca/startup-directory",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-b710a324da",
       "url": "https://dmz.torontomu.ca/faq",
-      "title": "DMZ — terms page checked by scrape.py",
+      "title": "DMZ — terms page",
       "excerpt": "Our startups → https://dmz.torontomu.ca/startup-directory",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ef56f85b43",
+      "url": "https://dmz.torontomu.ca/post/ashu-and-andrew-met-in-dmz-first-sandbox-cohort-in-2018-now-theyre-revolutionizing-the-mortgage-industry",
+      "title": "DMZ — batches page",
+      "excerpt": "Our startups → https://dmz.torontomu.ca/startup-directory",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-03a98e0527",
+      "url": "https://dmz.torontomu.ca/thank-you-for-applying",
+      "title": "DMZ — application page",
+      "excerpt": "Apply to our Black Innovation Validator program by Nov. 20 → → https://dmz.torontomu.ca/validator",
+      "page": "application"
+    },
+    {
+      "id": "check-route-05ecca0660",
+      "url": "https://dmz.torontomu.ca/post/zero-hero-crowdfunding-first-investment",
+      "title": "DMZ — terms page",
+      "excerpt": "Request sponsorship → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-082eaeedbd",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-2024-women-innovation-summit-to-award-100000-in-cash-investments-from-the-firehood-and-honour-trailblazing-women-in-tech-across-canada",
+      "title": "DMZ — terms page",
+      "excerpt": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form. → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
       "page": "terms"
     },
     {
       "id": "check-route-091321935f",
       "url": "https://dmz.torontomu.ca/",
-      "title": "DMZ — homepage checked by scrape.py",
+      "title": "DMZ — homepage",
       "excerpt": "Apply to our CHI Program now! → https://dmz.torontomu.ca/chi",
       "page": "details"
     },
     {
-      "id": "check-route-2451d6b5d5",
-      "url": "https://dmz.torontomu.ca/our-programs",
-      "title": "DMZ — details page checked by scrape.py",
+      "id": "check-route-0c73a914bc",
+      "url": "https://dmz.torontomu.ca/post/ashu-and-andrew-met-in-dmz-first-sandbox-cohort-in-2018-now-theyre-revolutionizing-the-mortgage-industry",
+      "title": "DMZ — batches page",
+      "excerpt": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form. → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-132eb7da3b",
+      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+      "title": "DMZ — terms page",
+      "excerpt": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form. → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-14cf321701",
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+      "title": "DMZ — terms page",
       "excerpt": "Apply to our Black Innovation Validator program by Nov. 20 → → https://dmz.torontomu.ca/validator",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-route-2250a2f97c",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-2024-women-innovation-summit-to-award-100000-in-cash-investments-from-the-firehood-and-honour-trailblazing-women-in-tech-across-canada",
+      "title": "DMZ — terms page",
+      "excerpt": "Apply → https://mydmz.torontomu.ca/portal/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-2756244c43",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-women-innovation-summit-returns-for-year-three-with-100-000-in-cash-investments-from-the-firehood-to-back-the-visionaries-transforming-the-tech-landscape",
+      "title": "DMZ — terms page",
+      "excerpt": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form. → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "terms"
     },
     {
       "id": "check-route-2b5ed90213",
       "url": "https://dmz.torontomu.ca/",
-      "title": "DMZ — homepage checked by scrape.py",
+      "title": "DMZ — homepage",
       "excerpt": "Apply to our Black Innovation Validator program by Nov. 20 → → https://dmz.torontomu.ca/validator",
       "page": "details"
     },
     {
-      "id": "check-route-37dec491ff",
-      "url": "https://dmz.torontomu.ca/faq",
-      "title": "DMZ — terms page checked by scrape.py",
-      "excerpt": "Apply to our Black Innovation Validator program by Nov. 20 → → https://dmz.torontomu.ca/validator",
-      "page": "terms"
-    },
-    {
-      "id": "check-route-3a490eb3d7",
-      "url": "https://dmz.torontomu.ca/our-programs",
-      "title": "DMZ — details page checked by scrape.py",
-      "excerpt": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form. → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
-      "page": "details"
-    },
-    {
-      "id": "check-route-4b532564a6",
-      "url": "https://dmz.torontomu.ca/",
-      "title": "DMZ — homepage checked by scrape.py",
-      "excerpt": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form. → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
-      "page": "details"
-    },
-    {
-      "id": "check-route-52b72aa20f",
-      "url": "https://dmz.torontomu.ca/faq",
-      "title": "DMZ — terms page checked by scrape.py",
+      "id": "check-route-2e680a6699",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-black-innovation-summit-returns-for-year-five-with-over-300-000-in-grants-and-investments-to-back-canadas-most-promising-black-tech-founders",
+      "title": "DMZ — terms page",
       "excerpt": "Request sponsorship → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
       "page": "terms"
     },
     {
-      "id": "check-route-65cf6323c8",
-      "url": "https://dmz.torontomu.ca/our-programs",
-      "title": "DMZ — details page checked by scrape.py",
+      "id": "check-route-2f6a4d065d",
+      "url": "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
+      "title": "DMZ — application page",
+      "excerpt": "Apply → https://mydmz.torontomu.ca/portal/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-37dec491ff",
+      "url": "https://dmz.torontomu.ca/faq",
+      "title": "DMZ — terms page",
+      "excerpt": "Apply to our Black Innovation Validator program by Nov. 20 → → https://dmz.torontomu.ca/validator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-3c3257c46a",
+      "url": "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
+      "title": "DMZ — application page",
+      "excerpt": "APPLY NOW → http://mydmz.torontomu.ca/portal/apply/dmzyyz",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4475246c90",
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+      "title": "DMZ — terms page",
+      "excerpt": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form. → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-45fc6913eb",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-black-innovation-summit-returns-for-year-five-with-over-300-000-in-grants-and-investments-to-back-canadas-most-promising-black-tech-founders",
+      "title": "DMZ — terms page",
       "excerpt": "Apply to our CHI Program now! → https://dmz.torontomu.ca/chi",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-48884bdc2c",
+      "url": "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
+      "title": "DMZ — application page",
+      "excerpt": "Apply to our Black Innovation Validator program by Nov. 20 → → https://dmz.torontomu.ca/validator",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4b532564a6",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage",
+      "excerpt": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form. → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
       "page": "details"
+    },
+    {
+      "id": "check-route-52074c4f1c",
+      "url": "https://dmz.torontomu.ca/post/one-pitch-a-year-of-progress-what-happened-after-house-beat-secured-investment-at-wis",
+      "title": "DMZ — terms page",
+      "excerpt": "Apply to our CHI Program now! → https://dmz.torontomu.ca/chi",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-52b72aa20f",
+      "url": "https://dmz.torontomu.ca/faq",
+      "title": "DMZ — terms page",
+      "excerpt": "Request sponsorship → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-56c5f6470f",
+      "url": "https://dmz.torontomu.ca/post/ashu-and-andrew-met-in-dmz-first-sandbox-cohort-in-2018-now-theyre-revolutionizing-the-mortgage-industry",
+      "title": "DMZ — batches page",
+      "excerpt": "Request sponsorship → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-640d1d37b8",
+      "url": "https://dmz.torontomu.ca/thank-you-for-applying",
+      "title": "DMZ — application page",
+      "excerpt": "Apply to our CHI Program now! → https://dmz.torontomu.ca/chi",
+      "page": "application"
+    },
+    {
+      "id": "check-route-65449bbbc7",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-black-innovation-summit-returns-for-year-five-with-over-300-000-in-grants-and-investments-to-back-canadas-most-promising-black-tech-founders",
+      "title": "DMZ — terms page",
+      "excerpt": "Apply → https://mydmz.torontomu.ca/portal/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-659172b937",
+      "url": "https://dmz.torontomu.ca/thank-you-for-applying",
+      "title": "DMZ — application page",
+      "excerpt": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form. → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "application"
+    },
+    {
+      "id": "check-route-67c700cd3b",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-women-innovation-summit-returns-for-year-three-with-100-000-in-cash-investments-from-the-firehood-to-back-the-visionaries-transforming-the-tech-landscape",
+      "title": "DMZ — terms page",
+      "excerpt": "Request sponsorship → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-689c9c44e7",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-women-innovation-summit-returns-for-year-three-with-100-000-in-cash-investments-from-the-firehood-to-back-the-visionaries-transforming-the-tech-landscape",
+      "title": "DMZ — terms page",
+      "excerpt": "Apply to our CHI Program now! → https://dmz.torontomu.ca/chi",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-6db8e6f04b",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-2024-women-innovation-summit-to-award-100000-in-cash-investments-from-the-firehood-and-honour-trailblazing-women-in-tech-across-canada",
+      "title": "DMZ — terms page",
+      "excerpt": "Apply to our CHI Program now! → https://dmz.torontomu.ca/chi",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-6ec6968613",
+      "url": "https://dmz.torontomu.ca/post/one-pitch-a-year-of-progress-what-happened-after-house-beat-secured-investment-at-wis",
+      "title": "DMZ — terms page",
+      "excerpt": "Apply → https://mydmz.torontomu.ca/portal/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-70e4948157",
+      "url": "https://dmz.torontomu.ca/post/zero-hero-crowdfunding-first-investment",
+      "title": "DMZ — terms page",
+      "excerpt": "Apply → https://mydmz.torontomu.ca/portal/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-7127406df1",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-women-innovation-summit-returns-for-year-three-with-100-000-in-cash-investments-from-the-firehood-to-back-the-visionaries-transforming-the-tech-landscape",
+      "title": "DMZ — terms page",
+      "excerpt": "Apply to our Black Innovation Validator program by Nov. 20 → → https://dmz.torontomu.ca/validator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-77620528e4",
+      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+      "title": "DMZ — terms page",
+      "excerpt": "Apply → https://mydmz.torontomu.ca/portal/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-7a42ddfe67",
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+      "title": "DMZ — terms page",
+      "excerpt": "Apply to our CHI Program now! → https://dmz.torontomu.ca/chi",
+      "page": "terms"
     },
     {
       "id": "check-route-7b9f34580d",
       "url": "https://dmz.torontomu.ca/faq",
-      "title": "DMZ — terms page checked by scrape.py",
+      "title": "DMZ — terms page",
       "excerpt": "Apply → https://mydmz.torontomu.ca/portal/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-7bccf29e6d",
+      "url": "https://dmz.torontomu.ca/post/one-pitch-a-year-of-progress-what-happened-after-house-beat-secured-investment-at-wis",
+      "title": "DMZ — terms page",
+      "excerpt": "Request sponsorship → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
       "page": "terms"
     },
     {
       "id": "check-route-7eaf17ea2d",
       "url": "https://dmz.torontomu.ca/faq",
-      "title": "DMZ — terms page checked by scrape.py",
+      "title": "DMZ — terms page",
       "excerpt": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form. → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
       "page": "terms"
     },
     {
-      "id": "check-route-82646bcbc3",
-      "url": "https://dmz.torontomu.ca/our-programs",
-      "title": "DMZ — details page checked by scrape.py",
-      "excerpt": "Apply → https://mydmz.torontomu.ca/portal/login",
-      "page": "details"
+      "id": "check-route-838d5cedef",
+      "url": "https://dmz.torontomu.ca/post/zero-hero-crowdfunding-first-investment",
+      "title": "DMZ — terms page",
+      "excerpt": "Apply to our Black Innovation Validator program by Nov. 20 → → https://dmz.torontomu.ca/validator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-8496a4094e",
+      "url": "https://dmz.torontomu.ca/post/ashu-and-andrew-met-in-dmz-first-sandbox-cohort-in-2018-now-theyre-revolutionizing-the-mortgage-industry",
+      "title": "DMZ — batches page",
+      "excerpt": "Apply to our CHI Program now! → https://dmz.torontomu.ca/chi",
+      "page": "batches"
     },
     {
       "id": "check-route-8e08f6907b",
       "url": "https://dmz.torontomu.ca/",
-      "title": "DMZ — homepage checked by scrape.py",
+      "title": "DMZ — homepage",
       "excerpt": "Apply → https://mydmz.torontomu.ca/portal/apply",
       "page": "details"
     },
     {
-      "id": "check-route-aab6f1d3da",
-      "url": "https://dmz.torontomu.ca/faq",
-      "title": "DMZ — terms page checked by scrape.py",
+      "id": "check-route-91c6810e68",
+      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+      "title": "DMZ — terms page",
       "excerpt": "Apply to our CHI Program now! → https://dmz.torontomu.ca/chi",
       "page": "terms"
     },
     {
-      "id": "check-route-b4f8ad7033",
-      "url": "https://dmz.torontomu.ca/our-programs",
-      "title": "DMZ — details page checked by scrape.py",
-      "excerpt": "Request sponsorship → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
-      "page": "details"
+      "id": "check-route-930165830d",
+      "url": "https://dmz.torontomu.ca/post/zero-hero-crowdfunding-first-investment",
+      "title": "DMZ — terms page",
+      "excerpt": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form. → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "terms"
     },
     {
-      "id": "check-route-e33a92c8b6",
-      "url": "https://dmz.torontomu.ca/our-programs",
-      "title": "DMZ — details page checked by scrape.py",
-      "excerpt": "Now Closed → https://mydmz.torontomu.ca/portal/apply",
-      "page": "details"
+      "id": "check-route-985c7438d2",
+      "url": "https://dmz.torontomu.ca/post/ashu-and-andrew-met-in-dmz-first-sandbox-cohort-in-2018-now-theyre-revolutionizing-the-mortgage-industry",
+      "title": "DMZ — batches page",
+      "excerpt": "Apply to our Black Innovation Validator program by Nov. 20 → → https://dmz.torontomu.ca/validator",
+      "page": "batches"
     },
     {
-      "id": "check-route-f34e5e44ea",
-      "url": "https://dmz.torontomu.ca/our-programs",
-      "title": "DMZ — details page checked by scrape.py",
+      "id": "check-route-9d1b1bc522",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-black-innovation-summit-returns-for-year-five-with-over-300-000-in-grants-and-investments-to-back-canadas-most-promising-black-tech-founders",
+      "title": "DMZ — terms page",
+      "excerpt": "Apply to our Black Innovation Validator program by Nov. 20 → → https://dmz.torontomu.ca/validator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-a08ea2cb0c",
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+      "title": "DMZ — terms page",
       "excerpt": "Apply → https://mydmz.torontomu.ca/portal/apply",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-route-a33fdb1216",
+      "url": "https://dmz.torontomu.ca/post/ashu-and-andrew-met-in-dmz-first-sandbox-cohort-in-2018-now-theyre-revolutionizing-the-mortgage-industry",
+      "title": "DMZ — batches page",
+      "excerpt": "Apply → https://mydmz.torontomu.ca/portal/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-aab6f1d3da",
+      "url": "https://dmz.torontomu.ca/faq",
+      "title": "DMZ — terms page",
+      "excerpt": "Apply to our CHI Program now! → https://dmz.torontomu.ca/chi",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-ab6a78c7b8",
+      "url": "https://dmz.torontomu.ca/post/one-pitch-a-year-of-progress-what-happened-after-house-beat-secured-investment-at-wis",
+      "title": "DMZ — terms page",
+      "excerpt": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form. → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-acf599533c",
+      "url": "https://dmz.torontomu.ca/thank-you-for-applying",
+      "title": "DMZ — application page",
+      "excerpt": "Apply → https://mydmz.torontomu.ca/portal/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ae58439f7b",
+      "url": "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
+      "title": "DMZ — application page",
+      "excerpt": "Apply to our CHI Program now! → https://dmz.torontomu.ca/chi",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b2cd9dd0aa",
+      "url": "https://dmz.torontomu.ca/post/one-pitch-a-year-of-progress-what-happened-after-house-beat-secured-investment-at-wis",
+      "title": "DMZ — terms page",
+      "excerpt": "Apply to our Black Innovation Validator program by Nov. 20 → → https://dmz.torontomu.ca/validator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b7aea08488",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-women-innovation-summit-returns-for-year-three-with-100-000-in-cash-investments-from-the-firehood-to-back-the-visionaries-transforming-the-tech-landscape",
+      "title": "DMZ — terms page",
+      "excerpt": "Apply → https://mydmz.torontomu.ca/portal/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-c0f4f3fb36",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-2024-women-innovation-summit-to-award-100000-in-cash-investments-from-the-firehood-and-honour-trailblazing-women-in-tech-across-canada",
+      "title": "DMZ — terms page",
+      "excerpt": "Apply to our Black Innovation Validator program by Nov. 20 → → https://dmz.torontomu.ca/validator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-c6442cf50d",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-black-innovation-summit-returns-for-year-five-with-over-300-000-in-grants-and-investments-to-back-canadas-most-promising-black-tech-founders",
+      "title": "DMZ — terms page",
+      "excerpt": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form. → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-d11caaa4a2",
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+      "title": "DMZ — terms page",
+      "excerpt": "Request sponsorship → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-e18188d78b",
+      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+      "title": "DMZ — terms page",
+      "excerpt": "Request sponsorship → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-e841ca084b",
+      "url": "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
+      "title": "DMZ — application page",
+      "excerpt": "Request sponsorship → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "application"
+    },
+    {
+      "id": "check-route-eff2abb29c",
+      "url": "https://dmz.torontomu.ca/thank-you-for-applying",
+      "title": "DMZ — application page",
+      "excerpt": "Request sponsorship → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f1511245c6",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-2024-women-innovation-summit-to-award-100000-in-cash-investments-from-the-firehood-and-honour-trailblazing-women-in-tech-across-canada",
+      "title": "DMZ — terms page",
+      "excerpt": "Request sponsorship → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "terms"
     },
     {
       "id": "check-route-f539fe3d57",
       "url": "https://dmz.torontomu.ca/",
-      "title": "DMZ — homepage checked by scrape.py",
+      "title": "DMZ — homepage",
       "excerpt": "Request sponsorship → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
       "page": "details"
+    },
+    {
+      "id": "check-route-f59b66f146",
+      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+      "title": "DMZ — terms page",
+      "excerpt": "Apply to our Black Innovation Validator program by Nov. 20 → → https://dmz.torontomu.ca/validator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-f955558fa1",
+      "url": "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
+      "title": "DMZ — application page",
+      "excerpt": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form. → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ff9642a6ea",
+      "url": "https://dmz.torontomu.ca/post/zero-hero-crowdfunding-first-investment",
+      "title": "DMZ — terms page",
+      "excerpt": "Apply to our CHI Program now! → https://dmz.torontomu.ca/chi",
+      "page": "terms"
+    },
+    {
+      "id": "check-status-a07c4deb03",
+      "url": "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
+      "title": "DMZ — application page",
+      "excerpt": "DMZYYZ applications now open. | DMZ Founders OUR PROGRAMS Find your program Incubator Pre-Incubator PARTNER PROGRAMS Centre for Housing",
+      "page": "application"
+    },
+    {
+      "id": "check-status-d947bfc531",
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+      "title": "DMZ — terms page",
+      "excerpt": "the next generation of Canadian technology are invited to apply to DMZ's Fall 2026 Incubator cohort. Applications are open until September 1. Visit dmz.to/programs to learn more. ‍ -30- ‍ Media contact: Luvy Hardy DMZ",
+      "page": "terms"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-3eb99d655a",
+      "url": "https://dmz.torontomu.ca/",
+      "page": "details",
+      "excerpt": "World-Leading Tech Incubator & Startup Ecosystem | DMZ Webflow Homepage View dashboard Founders CORE PROGRAMS Find your program Discover the program that fits your needs. Incubator 18-month program to scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell. FOUNDER SUPPORT Equity & diversity Learn how we’re advancing and supporting diverse founders. Startup Legal Support Centre Get legal support tailored to startups at every stage of growth. Our Experts-in-Residence Real-world experts, advisors, and partners to guide startup growth. PARTNER PROGRAMS Centre for Housing Innovation Accelerator program and skill building initiatives. Validator 10-week program for Black founders to validate an idea and test demand. Toronto Pearson Innovation Program Collaborating with startups to shape smarter travel. Siakam EdTech Engine 12-week accelerator to transform education in classrooms. Backing Canadian Small Businesses 15-week mentorship program with $10K grants from Amex Canada. DISCOVER Startup Directory Explore our startups. Startup Job Board Explore job opportunities with Canada’s top startups. Professionals & Students UPSKILL & LEARN Find your path Discover courses and workshops to help you grow. Launchpad for entrepreneurs Free, virtual platform to help aspiring entrepreneurs build key skills. Indigenous Launchpad Free, virtual platform to"
+    },
+    {
+      "id": "check-page-854b2bf494",
+      "url": "https://dmz.torontomu.ca/post/dmzyyz-applications-now-open",
+      "page": "application",
+      "excerpt": "DMZYYZ applications now open. | DMZ Founders OUR PROGRAMS Find your program Incubator Pre-Incubator PARTNER PROGRAMS Centre for Housing Innovation Toronto Pearson Innovation Program Siakam EdTech Engine Backing Canadian Small Businesses FOUNDER SUPPORT Equity & diversity Startup Legal Support Centre DISCOVER Startup Directory Startup Job Board Professionals & Students For Professionals and Students Find your program Launchpad Indigenous Launchpad YOUTH PROGRAMMING Basecamp Embark Business Academy FOR TMU STUDENTS Startup Certified Request sponsorship Enterprise ABOUT Enterprise overview OFFERINGS Corporate partnerships Advisory services Franchise DMZ VENTURES DMZ Ventures Angel Investor Network About THE PEOPLE Our team Our Experts-in-Residence Our Advisory Council Our startups DISCOVER & REACH US About DMZ Events Blog Press FAQs Contact us CoWork Login Apply Apply to our Black Innovation Validator program by Nov. 20 → Apply to our CHI Program now! Webflow Homepage View dashboard Founders CORE PROGRAMS Find your program Discover the program that fits your needs. Incubator 18-month program to scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell. FOUNDER SUPPORT Equity & diversity Learn how we’re advancing and supporting diverse founders. Startup Legal Support Centre Get legal support tailored to startups at every stage of growth."
+    },
+    {
+      "id": "check-page-93a976b55f",
+      "url": "https://dmz.torontomu.ca/thank-you-for-applying",
+      "page": "application",
+      "excerpt": "Thank You for Applying to DMZ Programs | DMZ Founders OUR PROGRAMS Find your program Incubator Pre-Incubator PARTNER PROGRAMS Centre for Housing Innovation Toronto Pearson Innovation Program Siakam EdTech Engine Backing Canadian Small Businesses FOUNDER SUPPORT Equity & diversity Startup Legal Support Centre DISCOVER Startup Directory Startup Job Board Professionals & Students For Professionals and Students Find your program Launchpad Indigenous Launchpad YOUTH PROGRAMMING Basecamp Embark Business Academy FOR TMU STUDENTS Startup Certified Request sponsorship Enterprise ABOUT Enterprise overview OFFERINGS Corporate partnerships Advisory services Franchise DMZ VENTURES DMZ Ventures Angel Investor Network About THE PEOPLE Our team Our Experts-in-Residence Our Advisory Council Our startups DISCOVER & REACH US About DMZ Events Blog Press FAQs Contact us CoWork Login Apply Apply to our Black Innovation Validator program by Nov. 20 → Apply to our CHI Program now! Webflow Homepage View dashboard Founders CORE PROGRAMS Find your program Discover the program that fits your needs. Incubator 18-month program to scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell. FOUNDER SUPPORT Equity & diversity Learn how we’re advancing and supporting diverse founders. Startup Legal Support Centre Get legal support tailored to startups at every stage of"
+    },
+    {
+      "id": "check-page-e562c3217c",
+      "url": "https://mydmz.torontomu.ca/portal/apply",
+      "page": "application",
+      "excerpt": "There is an error Success Login to resume application or access portal. Register Log In Email Address: Password: Forgot your password? Click here Didn't get a validation link? Click here Already a DMZ member? Click here © 2025 DMZ at Toronto Metropolitan University There is an error Success Register an account to begin your application. Register Log In Email Address: Password: Confirm Password: © 2025 DMZ at Toronto Metropolitan University Reset Password Email Address: Back to Login | Register an Account © 2025 DMZ at Toronto Metropolitan University Resend Validation Link Email Address: Back to Login | Register an Account © 2026 DMZ at Toronto Metropolitan University Let’s see if we’re a good fit together. DMZ has helped 2000+ startups attract funding, transform industries and scale their ventures. Ready to join them? Welcome back. Access your programs, applications and community right here. © 2026 DMZ at Toronto Metropolitan University © 2025 DMZ at Toronto Metropolitan University"
+    },
+    {
+      "id": "check-page-d17436eddd",
+      "url": "https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "application",
+      "excerpt": "DMZ Student Sponsorship Application DMZ Student Sponsorship Application Your application has already been submitted. Thank you for your interest in partnering with DMZ. This form is for all students/student groups to request any kind of sponsorship from DMZ for events and conferences. We will respond to your inquiry as soon as we can. Please note: DMZ is not able to provide monetary support at this time. In the meantime, please contact dmz@torontomu.ca if you have any questions about your submission. Organization/Group Name School Name What is the name of your primary contact (the person from your team you would like DMZ to reach out to)? What is the email of your primary contact? What is the phone number of your primary contact? What is the name of your event Please provide a description of your event Expected number of attendees Event Location Event Start Date Event End Date Describe the main goals and objectives of your organization Has DMZ previously sponsored an event for this group? What type of sponsorship are you requesting? Financial Event Support Marketing Requesting a Speaker or Company Other If other, please specify: (Please note: we may not be able to provide support for items not listed above. But as always we will try our best, and contact you as to whether it is within or out of our scope.) Describe the type of sponsorship that you are requesting (Ex: I am"
+    },
+    {
+      "id": "check-page-d3e45d1520",
+      "url": "http://mydmz.torontomu.ca/portal/apply/dmzyyz",
+      "page": "application",
+      "excerpt": "There is an error Success Login to resume application or access portal. Register Log In Email Address: Password: Forgot your password? Click here Didn't get a validation link? Click here Already a DMZ member? Click here © 2025 DMZ at Toronto Metropolitan University There is an error Success Register an account to begin your application. Register Log In Email Address: Password: Confirm Password: © 2025 DMZ at Toronto Metropolitan University Reset Password Email Address: Back to Login | Register an Account © 2025 DMZ at Toronto Metropolitan University Resend Validation Link Email Address: Back to Login | Register an Account © 2026 DMZ at Toronto Metropolitan University Let’s see if we’re a good fit together. DMZ has helped 2000+ startups attract funding, transform industries and scale their ventures. Ready to join them? Welcome back. Access your programs, applications and community right here. © 2026 DMZ at Toronto Metropolitan University © 2025 DMZ at Toronto Metropolitan University"
+    },
+    {
+      "id": "check-page-e796bce9c6",
+      "url": "https://dmz.torontomu.ca/faq",
+      "page": "terms",
+      "excerpt": "Frequently Asked Questions | DMZ Founders OUR PROGRAMS Find your program Incubator Pre-Incubator PARTNER PROGRAMS Centre for Housing Innovation Toronto Pearson Innovation Program Siakam EdTech Engine Backing Canadian Small Businesses FOUNDER SUPPORT Equity & diversity Startup Legal Support Centre DISCOVER Startup Directory Startup Job Board Professionals & Students For Professionals and Students Find your program Launchpad Indigenous Launchpad YOUTH PROGRAMMING Basecamp Embark Business Academy FOR TMU STUDENTS Startup Certified Request sponsorship Enterprise ABOUT Enterprise overview OFFERINGS Corporate partnerships Advisory services Franchise DMZ VENTURES DMZ Ventures Angel Investor Network About THE PEOPLE Our team Our Experts-in-Residence Our Advisory Council Our startups DISCOVER & REACH US About DMZ Events Blog Press FAQs Contact us CoWork Login Apply Apply to our Black Innovation Validator program by Nov. 20 → Apply to our CHI Program now! Webflow Homepage View dashboard Founders CORE PROGRAMS Find your program Discover the program that fits your needs. Incubator 18-month program to scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell. FOUNDER SUPPORT Equity & diversity Learn how we’re advancing and supporting diverse founders. Startup Legal Support Centre Get legal support tailored to startups at every stage of growth. Our"
+    },
+    {
+      "id": "check-page-3daca7e788",
+      "url": "https://dmz.torontomu.ca/post/one-pitch-a-year-of-progress-what-happened-after-house-beat-secured-investment-at-wis",
+      "page": "terms",
+      "excerpt": "One pitch, a year of progress: What happened after House Beat secured investment at WIS | DMZ Founders OUR PROGRAMS Find your program Incubator Pre-Incubator PARTNER PROGRAMS Centre for Housing Innovation Toronto Pearson Innovation Program Siakam EdTech Engine Backing Canadian Small Businesses FOUNDER SUPPORT Equity & diversity Startup Legal Support Centre DISCOVER Startup Directory Startup Job Board Professionals & Students For Professionals and Students Find your program Launchpad Indigenous Launchpad YOUTH PROGRAMMING Basecamp Embark Business Academy FOR TMU STUDENTS Startup Certified Request sponsorship Enterprise ABOUT Enterprise overview OFFERINGS Corporate partnerships Advisory services Franchise DMZ VENTURES DMZ Ventures Angel Investor Network About THE PEOPLE Our team Our Experts-in-Residence Our Advisory Council Our startups DISCOVER & REACH US About DMZ Events Blog Press FAQs Contact us CoWork Login Apply Apply to our Black Innovation Validator program by Nov. 20 → Apply to our CHI Program now! Webflow Homepage View dashboard Founders CORE PROGRAMS Find your program Discover the program that fits your needs. Incubator 18-month program to scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell. FOUNDER SUPPORT Equity & diversity Learn how we’re advancing and supporting diverse founders. Startup Legal Support Centre Get"
+    },
+    {
+      "id": "check-page-436a4e7b69",
+      "url": "https://dmz.torontomu.ca/post/zero-hero-crowdfunding-first-investment",
+      "page": "terms",
+      "excerpt": "From Zero to Hero: Crowdfunding your first investment | DMZ Founders OUR PROGRAMS Find your program Incubator Pre-Incubator PARTNER PROGRAMS Centre for Housing Innovation Toronto Pearson Innovation Program Siakam EdTech Engine Backing Canadian Small Businesses FOUNDER SUPPORT Equity & diversity Startup Legal Support Centre DISCOVER Startup Directory Startup Job Board Professionals & Students For Professionals and Students Find your program Launchpad Indigenous Launchpad YOUTH PROGRAMMING Basecamp Embark Business Academy FOR TMU STUDENTS Startup Certified Request sponsorship Enterprise ABOUT Enterprise overview OFFERINGS Corporate partnerships Advisory services Franchise DMZ VENTURES DMZ Ventures Angel Investor Network About THE PEOPLE Our team Our Experts-in-Residence Our Advisory Council Our startups DISCOVER & REACH US About DMZ Events Blog Press FAQs Contact us CoWork Login Apply Apply to our Black Innovation Validator program by Nov. 20 → Apply to our CHI Program now! Webflow Homepage View dashboard Founders CORE PROGRAMS Find your program Discover the program that fits your needs. Incubator 18-month program to scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell. FOUNDER SUPPORT Equity & diversity Learn how we’re advancing and supporting diverse founders. Startup Legal Support Centre Get legal support tailored to startups at"
+    },
+    {
+      "id": "check-page-cf39ff6964",
+      "url": "https://dmz.torontomu.ca/press-releases/dmz-ventures-awards-inaugural-100k-dual-use-and-sovereign-tech-investment-prize-to-3dbiofibr-at-startupfest",
+      "page": "terms",
+      "excerpt": "DMZ Ventures awards inaugural $100K Dual-Use and Sovereign Tech Investment Prize to 3DBioFibR at Startupfest | DMZ Founders OUR PROGRAMS Find your program Incubator Pre-Incubator PARTNER PROGRAMS Centre for Housing Innovation Toronto Pearson Innovation Program Siakam EdTech Engine Backing Canadian Small Businesses FOUNDER SUPPORT Equity & diversity Startup Legal Support Centre DISCOVER Startup Directory Startup Job Board Professionals & Students For Professionals and Students Find your program Launchpad Indigenous Launchpad YOUTH PROGRAMMING Basecamp Embark Business Academy FOR TMU STUDENTS Startup Certified Request sponsorship Enterprise ABOUT Enterprise overview OFFERINGS Corporate partnerships Advisory services Franchise DMZ VENTURES DMZ Ventures Angel Investor Network About THE PEOPLE Our team Our Experts-in-Residence Our Advisory Council Our startups DISCOVER & REACH US About DMZ Events Blog Press FAQs Contact us CoWork Login Apply Apply to our Black Innovation Validator program by Nov. 20 → Apply to our CHI Program now! Webflow Homepage View dashboard Founders CORE PROGRAMS Find your program Discover the program that fits your needs. Incubator 18-month program to scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell. FOUNDER SUPPORT Equity & diversity Learn how we’re advancing and supporting diverse founders. Startup Legal"
+    },
+    {
+      "id": "check-page-c8f14b6e8d",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-2024-women-innovation-summit-to-award-100000-in-cash-investments-from-the-firehood-and-honour-trailblazing-women-in-tech-across-canada",
+      "page": "terms",
+      "excerpt": "DMZ’s 2024 Women Innovation Summit to award $100,000 in cash investments from The Firehood and honour trailblazing women in tech across Canada | DMZ Founders OUR PROGRAMS Find your program Incubator Pre-Incubator PARTNER PROGRAMS Centre for Housing Innovation Toronto Pearson Innovation Program Siakam EdTech Engine Backing Canadian Small Businesses FOUNDER SUPPORT Equity & diversity Startup Legal Support Centre DISCOVER Startup Directory Startup Job Board Professionals & Students For Professionals and Students Find your program Launchpad Indigenous Launchpad YOUTH PROGRAMMING Basecamp Embark Business Academy FOR TMU STUDENTS Startup Certified Request sponsorship Enterprise ABOUT Enterprise overview OFFERINGS Corporate partnerships Advisory services Franchise DMZ VENTURES DMZ Ventures Angel Investor Network About THE PEOPLE Our team Our Experts-in-Residence Our Advisory Council Our startups DISCOVER & REACH US About DMZ Events Blog Press FAQs Contact us CoWork Login Apply Apply to our Black Innovation Validator program by Nov. 20 → Apply to our CHI Program now! Webflow Homepage View dashboard Founders CORE PROGRAMS Find your program Discover the program that fits your needs. Incubator 18-month program to scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell. FOUNDER SUPPORT Equity & diversity Learn how we’re advancing and supporting"
+    },
+    {
+      "id": "check-page-ccdf865bf5",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-black-innovation-summit-returns-for-year-five-with-over-300-000-in-grants-and-investments-to-back-canadas-most-promising-black-tech-founders",
+      "page": "terms",
+      "excerpt": "DMZ’s Black Innovation Summit returns for year five with over $300,000 in grants and investments to back Canada’s most promising Black tech founders | DMZ Founders OUR PROGRAMS Find your program Incubator Pre-Incubator PARTNER PROGRAMS Centre for Housing Innovation Toronto Pearson Innovation Program Siakam EdTech Engine Backing Canadian Small Businesses FOUNDER SUPPORT Equity & diversity Startup Legal Support Centre DISCOVER Startup Directory Startup Job Board Professionals & Students For Professionals and Students Find your program Launchpad Indigenous Launchpad YOUTH PROGRAMMING Basecamp Embark Business Academy FOR TMU STUDENTS Startup Certified Request sponsorship Enterprise ABOUT Enterprise overview OFFERINGS Corporate partnerships Advisory services Franchise DMZ VENTURES DMZ Ventures Angel Investor Network About THE PEOPLE Our team Our Experts-in-Residence Our Advisory Council Our startups DISCOVER & REACH US About DMZ Events Blog Press FAQs Contact us CoWork Login Apply Apply to our Black Innovation Validator program by Nov. 20 → Apply to our CHI Program now! Webflow Homepage View dashboard Founders CORE PROGRAMS Find your program Discover the program that fits your needs. Incubator 18-month program to scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell. FOUNDER SUPPORT Equity & diversity Learn how we’re advancing and"
+    },
+    {
+      "id": "check-page-c71a762f66",
+      "url": "https://dmz.torontomu.ca/press-releases/dmzs-women-innovation-summit-returns-for-year-three-with-100-000-in-cash-investments-from-the-firehood-to-back-the-visionaries-transforming-the-tech-landscape",
+      "page": "terms",
+      "excerpt": "DMZ’s Women Innovation Summit returns for year three, with $100,000 in cash investments from The Firehood to back the visionaries transforming the tech landscape | DMZ Founders OUR PROGRAMS Find your program Incubator Pre-Incubator PARTNER PROGRAMS Centre for Housing Innovation Toronto Pearson Innovation Program Siakam EdTech Engine Backing Canadian Small Businesses FOUNDER SUPPORT Equity & diversity Startup Legal Support Centre DISCOVER Startup Directory Startup Job Board Professionals & Students For Professionals and Students Find your program Launchpad Indigenous Launchpad YOUTH PROGRAMMING Basecamp Embark Business Academy FOR TMU STUDENTS Startup Certified Request sponsorship Enterprise ABOUT Enterprise overview OFFERINGS Corporate partnerships Advisory services Franchise DMZ VENTURES DMZ Ventures Angel Investor Network About THE PEOPLE Our team Our Experts-in-Residence Our Advisory Council Our startups DISCOVER & REACH US About DMZ Events Blog Press FAQs Contact us CoWork Login Apply Apply to our Black Innovation Validator program by Nov. 20 → Apply to our CHI Program now! Webflow Homepage View dashboard Founders CORE PROGRAMS Find your program Discover the program that fits your needs. Incubator 18-month program to scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell. FOUNDER SUPPORT Equity & diversity Learn how we’re"
+    },
+    {
+      "id": "check-page-55276284db",
+      "url": "https://dmz.torontomu.ca/press-releases/women-led-startups-receive-535-000-in-cash-investments-at-dmzs-2025-women-innovation-summit",
+      "page": "terms",
+      "excerpt": "Women-led startups receive $535,000 in cash investments at DMZ’s 2025 Women Innovation Summit | DMZ Founders OUR PROGRAMS Find your program Incubator Pre-Incubator PARTNER PROGRAMS Centre for Housing Innovation Toronto Pearson Innovation Program Siakam EdTech Engine Backing Canadian Small Businesses FOUNDER SUPPORT Equity & diversity Startup Legal Support Centre DISCOVER Startup Directory Startup Job Board Professionals & Students For Professionals and Students Find your program Launchpad Indigenous Launchpad YOUTH PROGRAMMING Basecamp Embark Business Academy FOR TMU STUDENTS Startup Certified Request sponsorship Enterprise ABOUT Enterprise overview OFFERINGS Corporate partnerships Advisory services Franchise DMZ VENTURES DMZ Ventures Angel Investor Network About THE PEOPLE Our team Our Experts-in-Residence Our Advisory Council Our startups DISCOVER & REACH US About DMZ Events Blog Press FAQs Contact us CoWork Login Apply Apply to our Black Innovation Validator program by Nov. 20 → Apply to our CHI Program now! Webflow Homepage View dashboard Founders CORE PROGRAMS Find your program Discover the program that fits your needs. Incubator 18-month program to scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell. FOUNDER SUPPORT Equity & diversity Learn how we’re advancing and supporting diverse founders. Startup Legal Support Centre"
+    },
+    {
+      "id": "check-page-78b17d1cf4",
+      "url": "https://dmz.torontomu.ca/post/ashu-and-andrew-met-in-dmz-first-sandbox-cohort-in-2018-now-theyre-revolutionizing-the-mortgage-industry",
+      "page": "batches",
+      "excerpt": "Ashu and Andrew met in DMZ’s first Sandbox cohort in 2018. Now, they're revolutionizing the mortgage industry. | DMZ Founders OUR PROGRAMS Find your program Incubator Pre-Incubator PARTNER PROGRAMS Centre for Housing Innovation Toronto Pearson Innovation Program Siakam EdTech Engine Backing Canadian Small Businesses FOUNDER SUPPORT Equity & diversity Startup Legal Support Centre DISCOVER Startup Directory Startup Job Board Professionals & Students For Professionals and Students Find your program Launchpad Indigenous Launchpad YOUTH PROGRAMMING Basecamp Embark Business Academy FOR TMU STUDENTS Startup Certified Request sponsorship Enterprise ABOUT Enterprise overview OFFERINGS Corporate partnerships Advisory services Franchise DMZ VENTURES DMZ Ventures Angel Investor Network About THE PEOPLE Our team Our Experts-in-Residence Our Advisory Council Our startups DISCOVER & REACH US About DMZ Events Blog Press FAQs Contact us CoWork Login Apply Apply to our Black Innovation Validator program by Nov. 20 → Apply to our CHI Program now! Webflow Homepage View dashboard Founders CORE PROGRAMS Find your program Discover the program that fits your needs. Incubator 18-month program to scale and become investor-ready. Pre-Incubator 9-month program to get your first customers and sell. FOUNDER SUPPORT Equity & diversity Learn how we’re advancing and supporting diverse founders. Startup Legal"
     }
   ],
   "findings": {
@@ -177,8 +1512,8 @@
         "evidenceId": "check-route-091321935f"
       },
       {
-        "value": "https://mydmz.torontomu.ca/portal/login",
-        "evidenceId": "check-route-82646bcbc3"
+        "value": "http://mydmz.torontomu.ca/portal/apply/dmzyyz",
+        "evidenceId": "check-route-3c3257c46a"
       }
     ],
     "applicationUrl": [
@@ -187,11 +1522,109 @@
         "evidenceId": "check-route-4b532564a6"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-a07c4deb03"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "Nov",
+        "evidenceId": "check-announced-143f8e458a"
+      },
+      {
+        "value": "September",
+        "evidenceId": "check-announced-121de9cd03"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-072bfae471"
+      },
+      {
+        "value": "9 months",
+        "evidenceId": "check-duration-5b0bfa4bf2"
+      },
+      {
+        "value": "10",
+        "evidenceId": "check-duration-584710c9e8"
+      },
+      {
+        "value": "12",
+        "evidenceId": "check-duration-eb9e1028d4"
+      },
+      {
+        "value": "15",
+        "evidenceId": "check-duration-f3b759b8fe"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-3b2c917a8c"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-59141aab71"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-b5161b85b1"
+      }
+    ],
+    "location": [
+      {
+        "value": "New York City",
+        "evidenceId": "check-location-492d88a3b4"
+      }
+    ],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "active defence contracts with the U.S. Navy. ‍ The award includes a $100,000 investment from DMZ Ventures, subject to finalizing investment terms,",
+        "evidenceId": "check-deal-6c4e4a94e6"
+      },
+      {
+        "value": "Women-led startups receive $535,000 in cash investments at DMZ’s 2025 Women Innovation Summit | DMZ",
+        "evidenceId": "check-deal-ed1c2d022f"
+      },
+      {
+        "value": "20 → Apply to our CHI Program now! Growth Women-led startups receive $535,000 in cash investments at DMZ’s 2025 Women Innovation Summit Amidst the",
+        "evidenceId": "check-deal-ae294d71a4"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-6c4e4a94e6"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "535000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-ed1c2d022f"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://dmz.torontomu.ca/startup-directory",

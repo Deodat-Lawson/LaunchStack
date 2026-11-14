@@ -1,46 +1,353 @@
 {
   "programId": "ihub",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
     "https://ihub.co.ke/",
-    "https://ihub.co.ke/about-us/",
-    "https://ihub.co.ke/blog-news-and-updates/"
+    "https://ihub.co.ke/https-ihub-co-ke-apply-for-campbuni-4th-edition-a-young-adults-design-camp/",
+    "https://ihub.co.ke/https-ihub-co-ke-ihub-women-in-business-programme-call-for-applications-open/",
+    "https://ihub.co.ke/https-ihub-co-ke-pivot-east-call-for-application-for-startups-opened/",
+    "https://ihub.co.ke/https-ihub-co-ke-safaricom-m-pesa-africa-and-sumitomo-corporation-launch-spark-accelerator-program-call-for-applications/",
+    "https://ihub.co.ke/around-investment-2024-in-review-outlook-on-2025-and-beyond/",
+    "https://ihub.co.ke/investment-q1-2025-review-q2-outlook/",
+    "https://ihub.co.ke/report/around-investment-h12025-in-review-outlook-on-h2-2025/",
+    "https://ihub.co.ke/report/investment-q1-2025-review-q2-outlook/",
+    "https://ihub.co.ke/wp-content/uploads/2025/06/Investment-Q1-2025-Review-Q2-Outlook-.pdf",
+    "https://ihub.co.ke/blog-news-and-updates/",
+    "https://ihub.co.ke/https-ihub-co-ke-announcement-cohort-2-ihub-kenya-2024-mastercard-foundation-edtech-fellowship/",
+    "https://ihub.co.ke/https-ihub-co-ke-cchub-ihub-unveils-the-15-startups-in-women-in-business-cohort-2/",
+    "https://ihub.co.ke/https-ihub-co-ke-meet-the-ihubs-women-in-business-cohort-1/",
+    "https://ihub.co.ke/https-ihub-co-ke-women-in-business-cohort-2/"
   ],
   "evidence": [
     {
+      "id": "check-deal-5d0508bf84",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-announcement-cohort-2-ihub-kenya-2024-mastercard-foundation-edtech-fellowship/",
+      "title": "iHub — batches page",
+      "excerpt": "through various initiatives. The Fellows will also receive up to USD 100,000 equity-free funding and post-program advisory support of up to 12",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-70ab9b785a",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-announcement-cohort-2-ihub-kenya-2024-mastercard-foundation-edtech-fellowship/",
+      "title": "iHub — batches page",
+      "excerpt": "and post-program advisory support of up to 12 months. For more information about the Mastercard",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-9d5e64fddf",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-ihub-women-in-business-programme-call-for-applications-open/",
+      "title": "iHub — application page",
+      "excerpt": "will get priority access to iHub networks, 6 months of customized support, mentorship and coaching.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-aee77ca119",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-safaricom-m-pesa-africa-and-sumitomo-corporation-launch-spark-accelerator-program-call-for-applications/",
+      "title": "iHub — application page",
+      "excerpt": "at KES 393 billion ($ 3.1 billion) for the 12 months through March 2022. Listed on the Nairobi",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-f59ecd50f0",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-cchub-ihub-unveils-the-15-startups-in-women-in-business-cohort-2/",
+      "title": "iHub — batches page",
+      "excerpt": "mechanics, as well as set expectations for the 6-month period of the program. Program participants are",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-0183d45e3e",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-women-in-business-cohort-2/",
+      "title": "iHub — batches page",
+      "excerpt": "startups@ihub.co.ke",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-033ada0664",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-safaricom-m-pesa-africa-and-sumitomo-corporation-launch-spark-accelerator-program-call-for-applications/",
+      "title": "iHub — application page",
+      "excerpt": "more, every month directly to your email. Email Subscribe info@ihub.co.ke +254798985410 Jahazi Building, 154 James Gichuru Road,",
+      "page": "application"
+    },
+    {
+      "id": "check-email-0d73149609",
+      "url": "https://ihub.co.ke/investment-q1-2025-review-q2-outlook/",
+      "title": "iHub — terms page",
+      "excerpt": "more, every month directly to your email. Email Subscribe info@ihub.co.ke +254798985410 Jahazi Building, 154 James Gichuru Road,",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-0f7ce7973f",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-women-in-business-cohort-2/",
+      "title": "iHub — batches page",
+      "excerpt": "any questions during the process, please send an email startups@ihub.co.ke or ask a question on the application platform. On 3rd",
+      "page": "batches"
+    },
+    {
       "id": "check-email-1a68b0d2e4",
       "url": "https://ihub.co.ke/",
-      "title": "iHub — homepage checked by scrape.py",
+      "title": "iHub — homepage",
       "excerpt": "more, every month directly to your email. Email Subscribe info@ihub.co.ke +254798985410 Jahazi Building, 154 James Gichuru Road,",
       "page": "details"
+    },
+    {
+      "id": "check-email-213a5d343c",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-pivot-east-call-for-application-for-startups-opened/",
+      "title": "iHub — application page",
+      "excerpt": "more, every month directly to your email. Email Subscribe info@ihub.co.ke +254798985410 Jahazi Building, 154 James Gichuru Road,",
+      "page": "application"
+    },
+    {
+      "id": "check-email-2c910f44d8",
+      "url": "https://ihub.co.ke/report/investment-q1-2025-review-q2-outlook/",
+      "title": "iHub — terms page",
+      "excerpt": "more, every month directly to your email. Email Subscribe info@ihub.co.ke +254798985410 Jahazi Building, 154 James Gichuru Road,",
+      "page": "terms"
     },
     {
       "id": "check-email-35dee2e8a3",
       "url": "https://ihub.co.ke/blog-news-and-updates/",
-      "title": "iHub — batches page checked by scrape.py",
+      "title": "iHub — batches page",
       "excerpt": "more, every month directly to your email. Email Subscribe info@ihub.co.ke +254798985410 Jahazi Building, 154 James Gichuru Road,",
       "page": "batches"
     },
     {
-      "id": "check-email-7fea961a10",
-      "url": "https://ihub.co.ke/about-us/",
-      "title": "iHub — details page checked by scrape.py",
+      "id": "check-email-5d602c8c88",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-women-in-business-cohort-2/",
+      "title": "iHub — batches page",
       "excerpt": "more, every month directly to your email. Email Subscribe info@ihub.co.ke +254798985410 Jahazi Building, 154 James Gichuru Road,",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-6ae68d1426",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-apply-for-campbuni-4th-edition-a-young-adults-design-camp/",
+      "title": "iHub — application page",
+      "excerpt": "more, every month directly to your email. Email Subscribe info@ihub.co.ke +254798985410 Jahazi Building, 154 James Gichuru Road,",
+      "page": "application"
+    },
+    {
+      "id": "check-email-7a0695bfbd",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-announcement-cohort-2-ihub-kenya-2024-mastercard-foundation-edtech-fellowship/",
+      "title": "iHub — batches page",
+      "excerpt": "more, every month directly to your email. Email Subscribe info@ihub.co.ke +254798985410 Jahazi Building, 154 James Gichuru Road,",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-81e84e35eb",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-ihub-women-in-business-programme-call-for-applications-open/",
+      "title": "iHub — application page",
+      "excerpt": "more, every month directly to your email. Email Subscribe info@ihub.co.ke +254798985410 Jahazi Building, 154 James Gichuru Road,",
+      "page": "application"
+    },
+    {
+      "id": "check-email-af2ab974c8",
+      "url": "https://ihub.co.ke/report/around-investment-h12025-in-review-outlook-on-h2-2025/",
+      "title": "iHub — terms page",
+      "excerpt": "more, every month directly to your email. Email Subscribe info@ihub.co.ke +254798985410 Jahazi Building, 154 James Gichuru Road,",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-b624061eec",
+      "url": "https://ihub.co.ke/around-investment-2024-in-review-outlook-on-2025-and-beyond/",
+      "title": "iHub — terms page",
+      "excerpt": "more, every month directly to your email. Email Subscribe info@ihub.co.ke +254798985410 Jahazi Building, 154 James Gichuru Road,",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-bbb3fe16b9",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-meet-the-ihubs-women-in-business-cohort-1/",
+      "title": "iHub — batches page",
+      "excerpt": "more, every month directly to your email. Email Subscribe info@ihub.co.ke +254798985410 Jahazi Building, 154 James Gichuru Road,",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-f53bb86d8c",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-cchub-ihub-unveils-the-15-startups-in-women-in-business-cohort-2/",
+      "title": "iHub — batches page",
+      "excerpt": "more, every month directly to your email. Email Subscribe info@ihub.co.ke +254798985410 Jahazi Building, 154 James Gichuru Road,",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-1adb706613",
+      "url": "https://ihub.co.ke/blog-news-and-updates/",
+      "title": "iHub — batches page",
+      "excerpt": "May 15, 2020 What does it take to implement an effective virtual learning solution in Africa? iHUB Features 4 min read May",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-48806a3e1e",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-meet-the-ihubs-women-in-business-cohort-1/",
+      "title": "iHub — batches page",
+      "excerpt": "this talent but also nurture it. They are working on a virtual platform to give home grown tech talent the exposure they",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-811fa0fe5f",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-cchub-ihub-unveils-the-15-startups-in-women-in-business-cohort-2/",
+      "title": "iHub — batches page",
+      "excerpt": "to market opportunities The program kicked off with a virtual workshop on Thursday, October 1, and Friday, October 2,",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-a77ecbd83d",
+      "url": "https://ihub.co.ke/",
+      "title": "iHub — homepage",
+      "excerpt": "Never stop learning! we regularly host online and in-person insightful events all year round. Join any of our events",
       "page": "details"
+    },
+    {
+      "id": "check-format-bcbee04f34",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-meet-the-ihubs-women-in-business-cohort-1/",
+      "title": "iHub — batches page",
+      "excerpt": "They source top talent for short-term, full-time, and remote work positions, and have a wide network of various talent",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-f1a9b8d89c",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-meet-the-ihubs-women-in-business-cohort-1/",
+      "title": "iHub — batches page",
+      "excerpt": "from around the world through short-term fellowships, remote work programs, and full-time job opportunities. Afrijob",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-80796fccf6",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-announcement-cohort-2-ihub-kenya-2024-mastercard-foundation-edtech-fellowship/",
+      "title": "iHub — batches page",
+      "excerpt": "hub and tech community center based in Nairobi, Kenya. iHub is a nexus point for",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-9c460568f7",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-meet-the-ihubs-women-in-business-cohort-1/",
+      "title": "iHub — batches page",
+      "excerpt": "Africa is a sales technology startup headquartered in Nairobi, Kenya with focus on the adoption of",
+      "page": "batches"
     },
     {
       "id": "check-name-8a96630315",
       "url": "https://ihub.co.ke/",
-      "title": "iHub — homepage checked by scrape.py",
+      "title": "iHub — homepage",
       "excerpt": "Home - iHUB Security Verification Please verify you're human to",
       "page": "details"
     },
     {
+      "id": "check-rolling-107782d6e0",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-ihub-women-in-business-programme-call-for-applications-open/",
+      "title": "iHub — application page",
+      "excerpt": "that surface through this program so apply now ! Applications will be reviewed on a rolling basis. This program is being implemented with the support of our mentors and",
+      "page": "application"
+    },
+    {
+      "id": "check-route-08b4371399",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-meet-the-ihubs-women-in-business-cohort-1/",
+      "title": "iHub — batches page",
+      "excerpt": "call for applications → https://ihub.co.ke/blogs/34339/ihub-women-in-business-programme-call-for-applications-open",
+      "page": "batches"
+    },
+    {
       "id": "check-route-1a701aec31",
       "url": "https://ihub.co.ke/",
-      "title": "iHub — homepage checked by scrape.py",
+      "title": "iHub — homepage",
       "excerpt": "https://ihub.co.ke",
       "page": "details"
+    },
+    {
+      "id": "check-route-f7af2ea768",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-ihub-women-in-business-programme-call-for-applications-open/",
+      "title": "iHub — application page",
+      "excerpt": "here → http://wib.ihub.co.ke/apply/",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-b2decfc4ac",
+      "url": "https://ihub.co.ke/",
+      "page": "details",
+      "excerpt": "Home - iHUB Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently Skip to content About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community Driven by people, enabled by We are the leading pan-African creative and innovation ecosystem enabler. Our vision is to accelerate the application of social capital and technology for economic prosperity across Africa. Our programs Learn more Who we are iHUB is a globally recognized innovation center that’s part of the Co-Creation Hub, dedicated to accelerating the application of social capital and technology to enhance economic prosperity in Kenya and across the continent. We are committed to leapfrogging the African tech & entrepreneurship scene by creating an environment of experimentation, helping innovators build market-relevant solutions and connecting organizations and people More about us What we do We work closely with stakeholders, including entrepreneurs, innovators, civil society organizations, the government, and the private sector, in Africa in these areas: Startup Support & Incubation We support early-stage entrepreneurs in"
+    },
+    {
+      "id": "check-page-05bb19cdc0",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-apply-for-campbuni-4th-edition-a-young-adults-design-camp/",
+      "page": "application",
+      "excerpt": "Apply for CampBuni (4th Edition): A young adults' design camp - iHUB Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently Skip to content About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community Apply for CampBuni (4th Edition): A young adults’ design camp iHUB In the HUB 4 min read July 30, 2019 For the fourth time, we are coming back with our annual creative camp, a haven for leaders, designers and makers! CampBuni has a unique focus on creative design thinking for youth between 18 – 23 years of age. We work with select partners to offer inclusive,specially facilitated creative problem solving sessions. File photo from one of CampBuni 2.0’s sessions This year’s design camp – The Creative Economy 2019, a programme that supports Kenya’s next generation of creative innovators – will take place in Nairobi, Kenya, August 13 -17, 2019. We believe that providing young people in Kenya with the ability to address their own needs and foster a positive problem-solving mentality is one of the most important priorities in ensuring sustainable and progressive development in the country."
+    },
+    {
+      "id": "check-page-0dd00bcf42",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-ihub-women-in-business-programme-call-for-applications-open/",
+      "page": "application",
+      "excerpt": "iHub Women In Business Programme: CALL FOR APPLICATIONS OPEN! - iHUB Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently Skip to content About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community iHub Women In Business Programme: CALL FOR APPLICATIONS OPEN! iHUB In the HUB 4 min read July 25, 2019 On International Women’s Day , we announced our plans to grow the number of socially and economically empowered women entrepreneurs who run women-owned/women-led sustainable businesses working in the tech sector. Women running tech businesses can now apply for our women in business program here . Through this program we want to strengthen the capacity of women entrepreneurs to own and lead sustainable business working in the tech sector, increase the number of women-owned and women-led companies working in the tech space that can handle big money projects and strengthen collaboration between different actors in the tech and innovation sector in order to utilise the learning and perspectives generated by the Women in Business programme to make evidence-based and credible contributions"
+    },
+    {
+      "id": "check-page-e0d5ba2e7b",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-pivot-east-call-for-application-for-startups-opened/",
+      "page": "application",
+      "excerpt": "Pivot East call for application for startups opened - iHUB Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently Skip to content About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community Pivot East call for application for startups opened iHUB In the HUB 4 min read March 12, 2019 PIVOT East , one of the most prestigious startup competitions and conferences is now open for entries through its PIVOT East Startups Community Network. The competition officially opens its application portal for entries on March 12th 2019 and will continue to accept applications until midnight EAT on April 13th 2019. PIVOT East is organised by iHub . The competition aims to catalyse the growth of East Africa startups, so as to amplify and consolidate the gains of East Africa’s entrepreneurship ecosystem. The key objective for this year’s event is to ensure that we provide maximum opportunities for all stakeholders to engage before, during and after the competition. It is only through this open engagement that we can surface learnings, which will go into ensuring a more robust ecosystem. Applications to"
+    },
+    {
+      "id": "check-page-cd22653bc1",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-safaricom-m-pesa-africa-and-sumitomo-corporation-launch-spark-accelerator-program-call-for-applications/",
+      "page": "application",
+      "excerpt": "Safaricom, M-PESA Africa and Sumitomo Corporation launch Spark Accelerator Program Call for Applications - iHUB Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently Skip to content About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community Safaricom, M-PESA Africa and Sumitomo Corporation launch Spark Accelerator Program Call for Applications iHUB In the HUB 4 min read January 16, 2024 The three-month program will support early-stage Fintech and Content startups to accelerate growth Nairobi, Kenya – 15 th January 2024 … Safaricom (NSE: SCOM ) , M-PESA Africa and Sumitomo Corporation – a leading Fortune 500 global trading and business investment company – have announced calls for tech startups looking to join the Spark Accelerator program, which aims at accelerating early stage startups to grow and scale their businesses. The three-month accelerator program will provide a blend of training, mentorship, funding and go-to-market support to spark the growth and scale of ventures that come into the accelerator and set them up for long-term success. “The Spark Accelerator program is in"
+    },
+    {
+      "id": "check-page-a90997f1e1",
+      "url": "https://ihub.co.ke/around-investment-2024-in-review-outlook-on-2025-and-beyond/",
+      "page": "terms",
+      "excerpt": "Around Investment- 2024 In Review; Outlook on 2025 and Beyond - iHUB Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently Skip to content About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community Around Investment- 2024 In Review; Outlook on 2025 and Beyond iHUB In the HUB 4 min read January 10, 2025 Introduction The African investment landscape has undergone significant transformations in 2024, marked by both opportunities and challenges. As we reflect on the year’s developments and prepare for 2025 and beyond, this report provides a comprehensive analysis of the investment ecosystem across Africa. It highlights key trends, sectoral insights, regional dynamics, and emerging opportunities that continue to shape the continent’s economic trajectory. From the dominance of fintech and the growth of climate tech to the persistent gender funding gap and the rise of venture debt, the report delves into the critical drivers influencing investment decisions. It also examines the performance of leading countries, such as Nigeria, South Africa, Kenya, and Egypt, while exploring the"
+    },
+    {
+      "id": "check-page-41c42e377b",
+      "url": "https://ihub.co.ke/investment-q1-2025-review-q2-outlook/",
+      "page": "terms",
+      "excerpt": "Investment Q1 2025 Review Q2 Outlook - iHUB Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently Skip to content About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community Investment Q1 2025 Review Q2 Outlook iHUB In the HUB 4 min read June 16, 2025 Africa’s investment landscape in the first quarter showcases resilience, innovation, and sectoral diversification. This report analyses the quarter’s developments, spotlighting Nigeria as a key market, while providing a broader view of the continental funding environment. H2 2025 outlook is cautiously optimistic, with growing interest in impact-driven sectors, including renewable energy and digital financial services. The report provides essential insights for stakeholders navigating Africa’s dynamic investment environment. Investment Q1 2025 Review Q2 Outlook- Download Share on: Recommended iHUB Edtech 4 min read July 24, 2026 The Mastercard Foundation EdTech Fellowship Backs 12 Early-Stage Kenyan Startups Advancing Inclusive Education for Learners with Disabilities, Girls and Young Women, and Underserved Communities iHUB Mastercard"
+    },
+    {
+      "id": "check-page-2ddf8bc0bf",
+      "url": "https://ihub.co.ke/report/around-investment-h12025-in-review-outlook-on-h2-2025/",
+      "page": "terms",
+      "excerpt": "Around Investment: H12025 in Review, Outlook on H2 2025 - iHUB Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently Skip to content About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community Around Investment: H12025 in Review, Outlook on H2 2025 By Segun Samuel / September 16, 2025 In the first half of 2025, Africa’s investment landscape has seen notable fundraises, key trends and activities worth paying attention to. In this H1 overview, we take a closer look at where funding is flowing, the shift happening across sectors, and some regional highlights. Africa’s investment landscape in 2025 is marked by shifting market leadership, growing deal sizes, and expanding investor interest beyond traditional sectors like fintech. While activity remains concentrated in a few key markets, there is rising momentum in areas such as Energy, Healthcare, Logistics, and PropTech. At the same time, persistent gaps in gender representation and uneven deal distribution across the continent highlight the need for more inclusive and geographically diverse investment flows. Additionally, in the"
+    },
+    {
+      "id": "check-page-bbed0e78a5",
+      "url": "https://ihub.co.ke/report/investment-q1-2025-review-q2-outlook/",
+      "page": "terms",
+      "excerpt": "Investment Q1 2025 Review Q2 Outlook (Syndicate) - iHUB Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently Skip to content About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community Investment Q1 2025 Review Q2 Outlook (Syndicate) By Segun Samuel / June 16, 2025 Africa’s investment landscape in the first quarter showcases resilience, innovation, and sectoral diversification. This report analyses the quarter’s developments, spotlighting Nigeria as a key market, while providing a broader view of the continental funding environment. H2 2025 outlook is cautiously optimistic, with growing interest in impact-driven sectors, including renewable energy and digital financial services. The report provides essential insights for stakeholders navigating Africa’s dynamic investment environment. Post navigation Previous Financial Technology Busineses in Kenya Next Around Investment: H12025 in Review, Outlook on H2 2025 We share game-changing opportunities and updates on exciting events, exclusive Pan African initiatives, and more, every month directly to your email. Email Subscribe"
+    },
+    {
+      "id": "check-page-27e7f13684",
+      "url": "https://ihub.co.ke/wp-content/uploads/2025/06/Investment-Q1-2025-Review-Q2-Outlook-.pdf",
+      "page": "terms",
+      "excerpt": "%PDF-1.4 %���� 22 0 obj < < /BM /Normal /ca 1 >> endobj 24 0 obj < < /Filter /FlateDecode /Length 61441 /N 3 >> stream H���S�i � �s�tΑ��&4Mh��$ H �, � �(*�Ȏ`@ ǰ*�*& ` �Qa u 㠃 ��`@�mvk����� �� �[u��=u �� p � �Ņ������� D? r� )3�� �s9\\�n��{M�?| &���w�A @I���_� J &��hux�� x���_��3j��i�yŎ;Z @.��S� ��}��k� � �b���� &x����8���� ���-6N ������:� ώ �� ( o � � �� � � � !A �'h ( � � � z ƃ��Dp x'� � \"��A* -�GP&4 � z � f��Úa/�:x � >� F�\"� U�Rd ��*D]@ Х�� #� 3��Ǟ� pU���t|7����(\"֓ �*2��� P�P�ԕ4 ��.� f�3�1s�cNkY � v. ��� � � �A�A�Va� *j HT��� ��r����r�ʦ�� : Ӭ�f��z������e�� �x� �����\"{c}��p � m%�3 ā� �-&8׾0dC衰��7��(�謘ձmqO�� щUI �_R|R��Φ�2�27g���S��d�uƦ���S���K j�|,�V|sn�� ��# Me-��OWؖ^Y�Q9X�l ��HM�__���s]۷��޸�~�M!�A[Nn+��c��cw�� �I�� �th[˂�I���X'�O �����q�s��M �_���Y��puۯ�7N������ �=��Gs ꟶ? ��&b�b�Ļ���Oş[�ǿ����o��_�?�V K � V`� ( J� U� ӿ�E�>sB�s�%\" b ��� � )�,@=��6�c��Y CX � �f�dXN�t�bؽP1� >%�.� ~;��4�HL� �E 3 �a�p)t n�����s� V������8�%�j�^�nt � � �E � G 4}�K� �6B z���8 # ғ�1�C��Oc��M� �M �4 ��ʁ��!� � L � �Ecw�L�Jr : a�0�r�o؝�1�:\\ ~�2 ?� ѡ� B��y� �y 9�8�ϛ��8 ��z�45�0�:�?&������d ɷS \"o ��>���\" G0 R . J�ST� r'� ~ ���J8E9-I!ާ�U 2�zLw����\\k��h ��R�� B�J�c��q�! /e�`�-֕Ef� ߰=�?��ż�� ��� \"r ޛ� �F�b�(��*�r�f�~'0 :�W�r��2��Iu�&`��7�m�a�x�l� o\"�������ʙ \\ɺ� ��r ���1��۟�ʋ�N)\" 8� D � ʟ Ǎ� !�p/Q�([x��b�9�Y�����'}� �O���� OC�S���;��Th����# < �_ǹ,R�#�#�ݑ(>[,�� X�ے˅�$�t3�/�C�(A�:4�:KL ��ՊW� ӏK�lo� �r�{'� $;�RJ"
+    },
+    {
+      "id": "check-page-5140bdbfa8",
+      "url": "https://ihub.co.ke/blog-news-and-updates/",
+      "page": "batches",
+      "excerpt": "Blog, News and Updates - iHUB Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently Skip to content About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community Blog, News and Update Blog, News and Update We’re thrilled to share our progress, insights, and exciting updates with you. View all In the Hub Features Newsletters View all iHUB Edtech 4 min read July 24, 2026 The Mastercard Foundation EdTech Fellowship Backs 12 Early-Stage Kenyan Startups Advancing Inclusive Education for Learners with Disabilities, Girls and Young Women, and Underserved Communities iHUB Mastercard Foundation EdTech 4 min read November 25, 2025 Kenya’s Mastercard Foundation EdTech Fellowship Startups Reach Over Half a Million Learners, Expanding Access to Underserved Communities iHUB Featured 4 min read October 2, 2025 The Spark Accelerator Program unveils the Second Cohort to Drive Innovation and Scale in Africa. iHUB Event 4 min read August 28, 2025 Bridging Innovation and Impact: Introducing the SUPARTech Program iHUB Syndicate 4 min read June 16, 2025 Investment Q1 2025 Review Q2 Outlook iHUB Edtech 4"
+    },
+    {
+      "id": "check-page-edc53e1a1e",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-announcement-cohort-2-ihub-kenya-2024-mastercard-foundation-edtech-fellowship/",
+      "page": "batches",
+      "excerpt": "Announcement Cohort 2 iHUB Kenya 2024 Mastercard Foundation EdTech Fellowship - iHUB Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently Skip to content About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community Announcement Cohort 2 iHUB Kenya 2024 Mastercard Foundation EdTech Fellowship iHUB In the HUB 4 min read May 23, 2024 [ Thursday, May 23, 2024 —Nairobi, Kenya]—iHUB Kenya has announced twelve innovative EdTech start-ups joining the second cohort of the Mastercard Foundation EdTech Fellowship. Launched in 2023, the EdTech Fellowship program, in partnership with the Mastercard Foundation, is an acceleration program that provides industry support, scalability support, and funding to technology-driven education solutions that transform learning across Kenya and Africa. It is designed to support EdTech companies across Africa that are addressing learning challenges across K-12, tertiary education, vocational training and out-of-school learning. This year’s call for applications to the second cohort received diverse technologies and solutions from those seeking to improve"
+    },
+    {
+      "id": "check-page-724992757d",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-cchub-ihub-unveils-the-15-startups-in-women-in-business-cohort-2/",
+      "page": "batches",
+      "excerpt": "Meet Cohort 2 of the Women in Business Program - iHUB Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently Skip to content About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community Meet Cohort 2 of the Women in Business Program iHUB In the HUB 4 min read October 15, 2020 Following the success and impact of the first cohort of the Women in Business program, which supported women-led technology businesses in Kenya, CcHUB and iHub have launched cohort two which opened up to women-led businesses as a whole, both in Kenya and Nigeria, and how these women can better leverage technology to scale their solutions in the African market. The program will support businesses in Nigeria, in addition to Kenya. The program received over 270 applications, which were narrowed down to a cohort of 15. The program will aim to: Enhance how women-led businesses leverage technology to better serve their market. Build the capacity of women-led businesses to secure capital Catalyze the expansion efforts of women-led businesses in the African market Build the capacity of female entrepreneurs to attract,"
+    },
+    {
+      "id": "check-page-755c21d9e8",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-meet-the-ihubs-women-in-business-cohort-1/",
+      "page": "batches",
+      "excerpt": "Meet the iHub’s Women in Business Cohort 1 - iHUB Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently Skip to content About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community Meet the iHub’s Women in Business Cohort 1 iHUB In the HUB 4 min read November 20, 2019 At the iHub, we are on a mission to grow the number of socially and economically empowered women entrepreneurs who run sustainable businesses working in the technology sector in Kenya. We’ve initially announced this during International Women’s Day this year, opened our call for applications in July and the program kicked off in September. The iHub Women In Business program has three key objectives: To strengthen the capacity of women entrepreneurs to own and lead sustainable businesses working in the tech sector To increase the number of women-owned and women-led companies working in the tech sector that can handle big money projects To strengthen collaboration between different actors in the tech and innovation sector in order to utilise the learning and perspectives generated by the Women in Business program to make"
+    },
+    {
+      "id": "check-page-1edc445a47",
+      "url": "https://ihub.co.ke/https-ihub-co-ke-women-in-business-cohort-2/",
+      "page": "batches",
+      "excerpt": "Women In Business Cohort 2 - iHUB Security Verification Please verify you're human to continue Loading verification... One-time verification: This verification will be remembered permanently Skip to content About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community About Us Coworking Programs Resources Blog, News and Updates Podcast Reports Careers Future of learning Nyota Events & Community Women In Business Cohort 2 iHUB In the HUB 4 min read July 13, 2020 Background With the rise of technology innovation in Africa, multiple sectors such as energy, agriculture, finance, and healthcare are undergoing rapid changes. We’re starting to see African solutions that have global applications in areas such as digital payments and drone delivery for instance. Africa’s population currently consists of 50% men and 50% women. There is a growing conversation on the disparity in the number of men and women in technology and a growth in interventions to combat the ‘leaky pipeline’ phenomenon that sees women deviating from careers in STEM due to structural barriers such as poor support networks for childcare amongst others. In 2019, we launched the Women in Business program, to grow the number of socially and economically empowered women who run sustainable businesses working in the technology sector in Kenya. The"
     }
   ],
   "findings": {
@@ -48,10 +355,23 @@
       {
         "value": "info@ihub.co.ke",
         "evidenceId": "check-email-1a68b0d2e4"
+      },
+      {
+        "value": "startups@ihub.co.ke",
+        "evidenceId": "check-email-0183d45e3e"
       }
     ],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "http://wib.ihub.co.ke/apply/",
+        "evidenceId": "check-route-f7af2ea768"
+      },
+      {
+        "value": "https://ihub.co.ke/blogs/34339/ihub-women-in-business-programme-call-for-applications-open",
+        "evidenceId": "check-route-08b4371399"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://ihub.co.ke",
@@ -61,8 +381,61 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-107782d6e0"
+      }
+    ],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-9d5e64fddf"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-aee77ca119"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-a77ecbd83d"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-1adb706613"
+      }
+    ],
+    "location": [
+      {
+        "value": "Nairobi",
+        "evidenceId": "check-location-80796fccf6"
+      }
+    ],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "through various initiatives. The Fellows will also receive up to USD 100,000 equity-free funding and post-program advisory support of up to 12",
+        "evidenceId": "check-deal-5d0508bf84"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-5d0508bf84"
+      }
+    ],
     "portfolioPages": [],
     "name": [
       {

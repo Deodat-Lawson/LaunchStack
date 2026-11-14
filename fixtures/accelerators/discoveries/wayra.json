@@ -1,6 +1,6 @@
 {
   "programId": "wayra",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://wayra.com/about-us",
@@ -11,10 +11,10 @@
       "origin": "official"
     },
     {
-      "url": "https://www.activationprogramme.wayra.com/",
-      "page": "details",
-      "anchor": "Activation Programme",
-      "fetched": false,
+      "url": "https://wayra.com/investment",
+      "page": "terms",
+      "anchor": "investment",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -22,8 +22,16 @@
       "url": "https://wayra.com/news/sycai-medical-to-develop-the-hospital-pilot-of-the-accion-programme-by-astrazeneca-wayra-and-kunsen",
       "page": "details",
       "anchor": "Read more",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.activationprogramme.wayra.com/",
+      "page": "details",
+      "anchor": "Activation Programme",
+      "fetched": false,
+      "blocked": "robots",
       "origin": "official"
     }
   ]

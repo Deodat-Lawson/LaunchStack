@@ -1,59 +1,437 @@
 {
   "programId": "stellaris-vp",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.stellarisvp.com/",
-    "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing"
+    "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
+    "https://www.stellarisvp.com/blog/spectrum-is-just-the-start-how-5g-will-enable-a-wave-of-new-applications",
+    "https://www.stellarisvp.com/blog/accelerating-ai-adoption-in-radiology-our-investment-in-carpl",
+    "https://www.stellarisvp.com/blog/announcing-our-first-investment---wydr",
+    "https://www.stellarisvp.com/blog/building-a-co-pilot-for-front-end-developers---our-investment-in-kombai",
+    "https://www.stellarisvp.com/blog/building-an-operating-system-for-enterprise-sales-process---our-investment-in-buyerassist",
+    "https://www.stellarisvp.com/blog/catalyzing-indias-move-to-electric---our-investment-in-turno",
+    "https://www.stellarisvp.com/blog/creating-the-discussion-platform-for-bharat--our-investment-in-manch",
+    "https://www.stellarisvp.com/blog/decoding-our-investment-in-limechat",
+    "https://www.stellarisvp.com/blog/disrupting-social-commerce---our-investment-in-shop101",
+    "https://www.stellarisvp.com/blog/empowering-next--gen-b2b-marketers---announcing-our-investment-in-factorsai",
+    "https://www.stellarisvp.com/blog/from-plastic-to-sustainable-alternatives-our-investment-in-cirkla",
+    "https://www.stellarisvp.com/blog/future-of-creator-monetization-is-direct-our-investment-in-rigi",
+    "https://www.stellarisvp.com/blog/our-investment-in-noticeboard"
   ],
   "evidence": [
     {
+      "id": "check-duration-2171007a82",
+      "url": "https://www.stellarisvp.com/blog/building-an-operating-system-for-enterprise-sales-process---our-investment-in-buyerassist",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "a few. The process typically goes on for 6 to 12 months and then transitions into implementation,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-6db6b50964",
+      "url": "https://www.stellarisvp.com/blog/building-an-operating-system-for-enterprise-sales-process---our-investment-in-buyerassist",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "for such a solution has only gone up in the last 18 months with the pandemic as buyers and sellers have",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-8623fb8d11",
+      "url": "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
+      "title": "Stellaris Venture Partners — application page",
+      "excerpt": "Salesforce have increased by 25% over the last 12 months. These pre-built software solutions offer high",
+      "page": "application"
+    },
+    {
+      "id": "check-format-2f05c98d43",
+      "url": "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
+      "title": "Stellaris Venture Partners — application page",
+      "excerpt": "these players as “legacy”, “not user friendly”, they are virtual monopolies. Market caps of Oracle, SAP and Salesforce have",
+      "page": "application"
+    },
+    {
+      "id": "check-format-456e02b32f",
+      "url": "https://www.stellarisvp.com/blog/building-an-operating-system-for-enterprise-sales-process---our-investment-in-buyerassist",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "as buyers and sellers have become more comfortable in remote collaboration. L-R: Shyam HN, Amit Dugar, Shankar",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-bbaa368dde",
+      "url": "https://www.stellarisvp.com/blog/announcing-our-first-investment---wydr",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "revenue streams kicking in including lead generation, virtual exhibitions, sponsored listings, credit financing, etc.",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-ddd5151877",
+      "url": "https://www.stellarisvp.com/blog/catalyzing-indias-move-to-electric---our-investment-in-turno",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "of platform BPOs Copied! Nagesh is 27, based in Mysore, and has been driving vehicles to",
+      "page": "terms"
+    },
+    {
       "id": "check-name-41879eaab4",
       "url": "https://www.stellarisvp.com/",
-      "title": "Stellaris Venture Partners — homepage checked by scrape.py",
+      "title": "Stellaris Venture Partners — homepage",
       "excerpt": "Stellaris Venture Partners Why Lumio Started Premium When Everyone Went Cheap WATCH",
       "page": "details"
     },
     {
+      "id": "check-portfolio-03b01d8634",
+      "url": "https://www.stellarisvp.com/blog/future-of-creator-monetization-is-direct-our-investment-in-rigi",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-0d82642836",
+      "url": "https://www.stellarisvp.com/blog/announcing-our-first-investment---wydr",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-104b7d2cda",
+      "url": "https://www.stellarisvp.com/blog/decoding-our-investment-in-limechat",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-194b802196",
+      "url": "https://www.stellarisvp.com/blog/from-plastic-to-sustainable-alternatives-our-investment-in-cirkla",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-1ef0363c71",
+      "url": "https://www.stellarisvp.com/blog/spectrum-is-just-the-start-how-5g-will-enable-a-wave-of-new-applications",
+      "title": "Stellaris Venture Partners — application page",
+      "excerpt": "Portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-358a3eb3de",
       "url": "https://www.stellarisvp.com/",
-      "title": "Stellaris Venture Partners — homepage checked by scrape.py",
+      "title": "Stellaris Venture Partners — homepage",
       "excerpt": "Portfolio → https://www.stellarisvp.com/portfolio",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-46e491f8d2",
+      "url": "https://www.stellarisvp.com/blog/building-an-operating-system-for-enterprise-sales-process---our-investment-in-buyerassist",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-4c17de01da",
+      "url": "https://www.stellarisvp.com/blog/accelerating-ai-adoption-in-radiology-our-investment-in-carpl",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-566de8b774",
+      "url": "https://www.stellarisvp.com/blog/catalyzing-indias-move-to-electric---our-investment-in-turno",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-56c27da6fa",
+      "url": "https://www.stellarisvp.com/blog/announcing-our-first-investment---wydr",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6173bdb7d0",
+      "url": "https://www.stellarisvp.com/blog/creating-the-discussion-platform-for-bharat--our-investment-in-manch",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-628730b65a",
+      "url": "https://www.stellarisvp.com/blog/disrupting-social-commerce---our-investment-in-shop101",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-670965e040",
+      "url": "https://www.stellarisvp.com/blog/accelerating-ai-adoption-in-radiology-our-investment-in-carpl",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6c7cc6f764",
+      "url": "https://www.stellarisvp.com/blog/creating-the-discussion-platform-for-bharat--our-investment-in-manch",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-86124fa64d",
+      "url": "https://www.stellarisvp.com/blog/catalyzing-indias-move-to-electric---our-investment-in-turno",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8fe45dc8c0",
+      "url": "https://www.stellarisvp.com/blog/our-investment-in-noticeboard",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-93fa7b6af2",
+      "url": "https://www.stellarisvp.com/blog/spectrum-is-just-the-start-how-5g-will-enable-a-wave-of-new-applications",
+      "title": "Stellaris Venture Partners — application page",
+      "excerpt": "portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "application"
     },
     {
       "id": "check-portfolio-96dfca2884",
       "url": "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
-      "title": "Stellaris Venture Partners — application page checked by scrape.py",
+      "title": "Stellaris Venture Partners — application page",
       "excerpt": "Portfolio → https://www.stellarisvp.com/portfolio",
       "page": "application"
     },
     {
+      "id": "check-portfolio-98b44ec060",
+      "url": "https://www.stellarisvp.com/blog/empowering-next--gen-b2b-marketers---announcing-our-investment-in-factorsai",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a5f143addf",
+      "url": "https://www.stellarisvp.com/blog/disrupting-social-commerce---our-investment-in-shop101",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-af8fc473b9",
+      "url": "https://www.stellarisvp.com/blog/building-an-operating-system-for-enterprise-sales-process---our-investment-in-buyerassist",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-bccf8b2e19",
+      "url": "https://www.stellarisvp.com/blog/decoding-our-investment-in-limechat",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-c5af4d68bc",
       "url": "https://www.stellarisvp.com/",
-      "title": "Stellaris Venture Partners — homepage checked by scrape.py",
+      "title": "Stellaris Venture Partners — homepage",
       "excerpt": "portfolio → https://www.stellarisvp.com/portfolio",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-cd4c278ae6",
+      "url": "https://www.stellarisvp.com/blog/empowering-next--gen-b2b-marketers---announcing-our-investment-in-factorsai",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d2a3437bdd",
+      "url": "https://www.stellarisvp.com/blog/our-investment-in-noticeboard",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e26b294b7c",
+      "url": "https://www.stellarisvp.com/blog/building-a-co-pilot-for-front-end-developers---our-investment-in-kombai",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e505cee5c5",
+      "url": "https://www.stellarisvp.com/blog/from-plastic-to-sustainable-alternatives-our-investment-in-cirkla",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ee6a1445f5",
+      "url": "https://www.stellarisvp.com/blog/future-of-creator-monetization-is-direct-our-investment-in-rigi",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-f59cb4a041",
       "url": "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
-      "title": "Stellaris Venture Partners — application page checked by scrape.py",
+      "title": "Stellaris Venture Partners — application page",
       "excerpt": "portfolio → https://www.stellarisvp.com/portfolio",
       "page": "application"
     },
     {
+      "id": "check-portfolio-fbf94ae3d9",
+      "url": "https://www.stellarisvp.com/blog/building-a-co-pilot-for-front-end-developers---our-investment-in-kombai",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-3d105c6ed9",
+      "url": "https://www.stellarisvp.com/blog/our-investment-in-noticeboard",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-6266c82fa2",
+      "url": "https://www.stellarisvp.com/blog/empowering-next--gen-b2b-marketers---announcing-our-investment-in-factorsai",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
+      "page": "terms"
+    },
+    {
       "id": "check-route-9de0b9a471",
       "url": "https://www.stellarisvp.com/",
-      "title": "Stellaris Venture Partners — homepage checked by scrape.py",
+      "title": "Stellaris Venture Partners — homepage",
       "excerpt": "https://www.stellarisvp.com/",
       "page": "details"
     },
     {
+      "id": "check-route-cca7f07bf4",
+      "url": "https://www.stellarisvp.com/blog/decoding-our-investment-in-limechat",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-d0b380cb8f",
+      "url": "https://www.stellarisvp.com/blog/spectrum-is-just-the-start-how-5g-will-enable-a-wave-of-new-applications",
+      "title": "Stellaris Venture Partners — application page",
+      "excerpt": "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d8557364dd",
+      "url": "https://www.stellarisvp.com/blog/building-an-operating-system-for-enterprise-sales-process---our-investment-in-buyerassist",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
+      "page": "terms"
+    },
+    {
       "id": "check-route-d9f293bdcd",
       "url": "https://www.stellarisvp.com/",
-      "title": "Stellaris Venture Partners — homepage checked by scrape.py",
+      "title": "Stellaris Venture Partners — homepage",
       "excerpt": "READ MORE → https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
       "page": "details"
+    },
+    {
+      "id": "check-route-f0437694ad",
+      "url": "https://www.stellarisvp.com/blog/building-a-co-pilot-for-front-end-developers---our-investment-in-kombai",
+      "title": "Stellaris Venture Partners — terms page",
+      "excerpt": "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
+      "page": "terms"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-04f54849dc",
+      "url": "https://www.stellarisvp.com/",
+      "page": "details",
+      "excerpt": "Stellaris Venture Partners Why Lumio Started Premium When Everyone Went Cheap WATCH HERE AI Native Services Thesis (3/5) READ HERE Physical AI - The Last 35 Points READ HERE Portfolio Approach Team Insights FUNDAMENTALS from ideas to infinity backing stellar founders building iconic businesses ENTRY STAGE Series A THEME Brands India’s first D2C brand to go public Why we invested ENTRY STAGE Seed THEME Fintech Tech-driven education financing NBFC Why we invested ENTRY STAGE Series A THEME Software Global Digital Adoption Platform (DAP) leader Why we invested ENTRY STAGE Seed THEME Consumer Tech, AI AI-powered entertainment platform Why we invested ENTRY STAGE Seed THEME Fintech Credit card platform powered with Credit on UPI Why we invested ENTRY STAGE Seed THEME Healthcare, AI Accelerating AI adoption in radiology Why we invested ENTRY STAGE Series A THEME Brands 100% vegan lifestyle brand for bags, wallets and luggage READ MORE ENTRY STAGE Seed THEME Sustainability, Fintech Commercial EV adoption through discovery and financing Why we invested it's never too early to talk to us We commit early. Whether you're ideating or nearing your first revenue milestone, we’re here to back your vision of building resilient businesses. LEARN HOW WE INVEST 60% IDEA STAGE INVESTMENTS from our founders . Stellaris has really built a balanced relationship with us from day one . It's one thing"
+    },
+    {
+      "id": "check-page-246406d0c1",
+      "url": "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
+      "page": "application",
+      "excerpt": "Building the next generation 'Tricentis': Thesis on packaged application testing Why Lumio Started Premium When Everyone Went Cheap WATCH HERE AI Native Services Thesis (3/5) READ HERE Physical AI - The Last 35 Points READ HERE Portfolio Approach Team Insights FUNDAMENTALS back to insights page back to fundamentals page Thesis Software blog 20 January , 2025 4 mins Building the next generation 'Tricentis': Thesis on packaged application testing Author Sayantan Sarkar Naman Jain EXPERT HOST TABLE OF CONTENTS Emergence of Platform BPOs Economics of platform BPOs Copied! Packaged applications like SAP, Salesforce, and Workday have been indispensable for enterprises, enabling streamlined operations across key functions such as finance, HR, and CRM. Despite continuous reference to these players as “legacy”, “not user friendly”, they are virtual monopolies. Market caps of Oracle, SAP and Salesforce have increased by 25% over the last 12 months. These pre-built software solutions offer high scalability and configurability, allowing organisations to adapt them to their specific needs. However, the implementation of these applications is far from straightforward, requiring significant customization, integration, and rigorous testing before going live. Take SAP, for example—its $37 billion annual revenue supports a massive downstream ecosystem valued at $100-200 billion annually,"
+    },
+    {
+      "id": "check-page-196b2764f8",
+      "url": "https://www.stellarisvp.com/blog/spectrum-is-just-the-start-how-5g-will-enable-a-wave-of-new-applications",
+      "page": "application",
+      "excerpt": "Spectrum is just the start: How 5G will enable a wave of new applications Why Lumio Started Premium When Everyone Went Cheap WATCH HERE AI Native Services Thesis (3/5) READ HERE Physical AI - The Last 35 Points READ HERE Portfolio Approach Team Insights FUNDAMENTALS back to insights page back to fundamentals page Thesis Software blog 8 August , 2022 4 mins Spectrum is just the start: How 5G will enable a wave of new applications Author Alok Goyal Mainak Ghosh EXPERT HOST TABLE OF CONTENTS Emergence of Platform BPOs Economics of platform BPOs Copied! Imagine a world where drones deliver your Swiggy order to your home, where you can play Fortnite with your buddies as if they were sitting right next to you and instantly stream Netflix at 4K resolution on your phone during your morning commute. With the latest 5G spectrum auction on 26th July, India is poised to enter a world where all this and more is possible. The 5G spectrum auction and allocation caused a buzz in the entire industry, especially with the Adani group entering the fray. The auction netted more than Rs 1.5 lakh crore and will usher in a new era in telecommunications in India. But is 5G any more than an incremental development over previous technologies like 4G? While 5G certainly enables higher Internet speeds for more devices, we believe 5G is a meaningful breakthrough from both the technology and business"
+    },
+    {
+      "id": "check-page-f8791545c2",
+      "url": "https://www.stellarisvp.com/blog/accelerating-ai-adoption-in-radiology-our-investment-in-carpl",
+      "page": "terms",
+      "excerpt": "Accelerating AI adoption in Radiology: Our Investment in Carpl Why Lumio Started Premium When Everyone Went Cheap WATCH HERE AI Native Services Thesis (3/5) READ HERE Physical AI - The Last 35 Points READ HERE Portfolio Approach Team Insights FUNDAMENTALS back to insights page back to fundamentals page Why we invested AI blog 1 February , 2024 4 mins Accelerating AI adoption in Radiology: Our Investment in Carpl Author Sayantan Sarkar EXPERT HOST TABLE OF CONTENTS Emergence of Platform BPOs Economics of platform BPOs Copied! In the last decade, the evolution of AI algorithms has significantly enhanced their capability to analyze medical images with remarkable precision. This progress has been particularly noteworthy in the detection and classification of abnormalities within various imaging modalities, including X-rays, CT scans, and MRIs. Despite these advancements, the landscape of AI solutions in the medical imaging market remains fragmented, marked by the existence of over 700 FDA-approved AI solutions. The FDA’s approval process is stringent, focusing on specific findings in particular body parts for distinct types of images such as X-rays, PET scans, or MRIs. The expectation is that this number will see a substantial increase in the coming years. Introducing an AI solution into a Healthcare Provider’s (HCP) environment poses several challenges. Typically, when an AI"
+    },
+    {
+      "id": "check-page-97330610cf",
+      "url": "https://www.stellarisvp.com/blog/announcing-our-first-investment---wydr",
+      "page": "terms",
+      "excerpt": "Announcing our first investment - Wydr Why Lumio Started Premium When Everyone Went Cheap WATCH HERE AI Native Services Thesis (3/5) READ HERE Physical AI - The Last 35 Points READ HERE Portfolio Approach Team Insights FUNDAMENTALS back to insights page back to fundamentals page Why we invested Commerce blog 21 March , 2017 4 mins Announcing our first investment - Wydr Author Rahul Chowdhri EXPERT HOST TABLE OF CONTENTS Emergence of Platform BPOs Economics of platform BPOs Copied! India trades around $300 billion of retail products every year. While people talk about companies owning distribution chains, more than 70-80% of retail goes via the wholesale route. In addition, we are home to more than 12 million retailers and 1 million sellers. Due to fragmentation on both ends and multiple layers of distribution, middlemen end up taking a 30-50% margin in the value chain. These margins exist since these middlemen help develop trust, breaking of bulk and financing to the next intermediary in the chain or to the retailer. “Higher price, limited discovery, lack of trust are critical pain points in the wholesale business—making way for technology to be a disrupter in the sector” Let’s not forget, that the current channels for trade have multiple pain points for both buyers and sellers. On the buyer side, the intermediary system leads to higher prices and limited discovery. On the"
+    },
+    {
+      "id": "check-page-ba08fcbbb8",
+      "url": "https://www.stellarisvp.com/blog/building-a-co-pilot-for-front-end-developers---our-investment-in-kombai",
+      "page": "terms",
+      "excerpt": "Building a Co-pilot for Front-end Developers - Our Investment in Kombai Why Lumio Started Premium When Everyone Went Cheap WATCH HERE AI Native Services Thesis (3/5) READ HERE Physical AI - The Last 35 Points READ HERE Portfolio Approach Team Insights FUNDAMENTALS back to insights page back to fundamentals page Why we invested Software blog 23 August , 2023 4 mins Building a Co-pilot for Front-end Developers - Our Investment in Kombai Author Alok Goyal Sayantan Sarkar EXPERT HOST TABLE OF CONTENTS Emergence of Platform BPOs Economics of platform BPOs Copied! Demand for software is growing twice as fast as the supply of software developers. As every business strives to become a software business, the demand will grow even more rapidly. However, there are only so many developers that the world can produce every year, leading to a continuous need for an increase in developer productivity. Front-end developers are no exception to this, and in many ways, the need there is even more pronounced than in other areas. Front-end development automation isn’t a niche; it’s a sprawling, horizontal market. According to Stack Overflow, approximately 75% of all software developers work in front-end development, representing around 20M developers globally. Projections suggest this number will soar to approximately 33.5M by 2030. Front-end developers play an important role in crafting user"
+    },
+    {
+      "id": "check-page-8cbb9838fc",
+      "url": "https://www.stellarisvp.com/blog/building-an-operating-system-for-enterprise-sales-process---our-investment-in-buyerassist",
+      "page": "terms",
+      "excerpt": "Building an Operating System for Enterprise Sales Process - Our Investment in BuyerAssist Why Lumio Started Premium When Everyone Went Cheap WATCH HERE AI Native Services Thesis (3/5) READ HERE Physical AI - The Last 35 Points READ HERE Portfolio Approach Team Insights FUNDAMENTALS back to insights page back to fundamentals page Why we invested Software blog 9 June , 2021 4 mins Building an Operating System for Enterprise Sales Process - Our Investment in BuyerAssist Author Naman Lahoty Alok Goyal EXPERT HOST TABLE OF CONTENTS Emergence of Platform BPOs Economics of platform BPOs Copied! Enterprise sales is a journey, not just a transaction. It involves complex project management spread across 100s of emails, telephonic conversations, project management tools and many ad-hoc documents. Add to this, the extensive collaboration and alignment that is required between multiple stakeholders in buyer and seller organizations. The sales closing process involves multiple steps like demo, RFP, ROI calculation, feasibility review, solutioning, security assessment, vendor onboarding, deal structuring, etc. to name a few. The process typically goes on for 6 to 12 months and then transitions into implementation, onboarding and training processes to ensure that value is delivered to the buyer. To traverse this complex journey smoothly, the sellers create a Mutual Close Plan – aka Mutual"
+    },
+    {
+      "id": "check-page-6a758251bd",
+      "url": "https://www.stellarisvp.com/blog/catalyzing-indias-move-to-electric---our-investment-in-turno",
+      "page": "terms",
+      "excerpt": "Catalyzing India’s Move to Electric - Our Investment in Turno Why Lumio Started Premium When Everyone Went Cheap WATCH HERE AI Native Services Thesis (3/5) READ HERE Physical AI - The Last 35 Points READ HERE Portfolio Approach Team Insights FUNDAMENTALS back to insights page back to fundamentals page Why we invested Sustainability blog 29 June , 2022 4 mins Catalyzing India’s Move to Electric - Our Investment in Turno Author Arpit Maheshwari EXPERT HOST TABLE OF CONTENTS Emergence of Platform BPOs Economics of platform BPOs Copied! Nagesh is 27, based in Mysore, and has been driving vehicles to distribute FMCG products to distributors for the past few years. He is the proud owner of two Light Commercial Vehicles (LCVs) – a Tata Ace and a Piaggio Ape; he drives one himself, and has hired a driver for the other. He has been hearing about electric vehicles for the past couple of years, and some of his friends have bought them already. The top manufacturers have launched electric vehicles, and there’s good feedback on their reliability, capacity and range. Plus diesel prices are so high that EVs are looking more and more attractive. However, he still has several concerns before he can take the plunge. Finding the right vehicle is far from simple: there are too many products with various combinations of range, battery life, load capacity and charging time, and nobody to help him"
+    },
+    {
+      "id": "check-page-3fc9e121aa",
+      "url": "https://www.stellarisvp.com/blog/creating-the-discussion-platform-for-bharat--our-investment-in-manch",
+      "page": "terms",
+      "excerpt": "Creating the discussion platform for Bharat : Our investment in Manch Why Lumio Started Premium When Everyone Went Cheap WATCH HERE AI Native Services Thesis (3/5) READ HERE Physical AI - The Last 35 Points READ HERE Portfolio Approach Team Insights FUNDAMENTALS back to insights page back to fundamentals page Why we invested Consumer tech blog 23 January , 2019 4 mins Creating the discussion platform for Bharat : Our investment in Manch Author Aditi Gupta EXPERT HOST TABLE OF CONTENTS Emergence of Platform BPOs Economics of platform BPOs Copied! “Indians are an opinionated lot” – so much so that Mr. Narendra Modi made ‘Chai pe charcha’ as the key publicity drive of his last election campaign. But you don’t need to take anyone’s word for it – you just need to attend an Indian wedding or visit the corner tapri (chai shop) to be convinced! Early signs of this chatty nature of Indians in the tech world is evident in the fact that Indians are one of the largest community of Quora. But as with everything in our amalgamated nation, there is a contrarian side to this – a very small percentage of Indians are contributors across social media platforms. This made us think – what enables a person to speak up/ express what they truly feel and think? Our interviews with hundreds of new age internet users in cities like Surat, Ajmer, Jaipur etc. revealed that WhatsApp, Facebook and Youtube"
+    },
+    {
+      "id": "check-page-abe9ffa397",
+      "url": "https://www.stellarisvp.com/blog/decoding-our-investment-in-limechat",
+      "page": "terms",
+      "excerpt": "Decoding our Investment in LimeChat Why Lumio Started Premium When Everyone Went Cheap WATCH HERE AI Native Services Thesis (3/5) READ HERE Physical AI - The Last 35 Points READ HERE Portfolio Approach Team Insights FUNDAMENTALS back to insights page back to fundamentals page Why we invested Software blog 11 April , 2022 4 mins Decoding our Investment in LimeChat Author Alok Goyal Arpit Maheshwari EXPERT HOST TABLE OF CONTENTS Emergence of Platform BPOs Economics of platform BPOs Copied! As a consumer, I (Arpit) have had several shopping experiences I remember fondly – our local grocer reminding me of adding something to my list by virtue of knowing my family and our preferences, a retail associate helping find the right skin product for my mother which also happened to be ~50% less expensive than what she would have bought otherwise, a footwear shop owner suggesting better boots to my brother, and many more. All these instances had one thing in common – the merchant leveraged an understanding of our context to provide better solutions to our problems. In its purest form, commerce is about problem solving. Two parties come together, one with a problem (the buyer) and another with a solution (the seller). When not done well, which is very often, buyers experience frustration during a purchase; when done well, however, buyers experience satisfaction, and sometimes delight."
+    },
+    {
+      "id": "check-page-c24b9f865b",
+      "url": "https://www.stellarisvp.com/blog/disrupting-social-commerce---our-investment-in-shop101",
+      "page": "terms",
+      "excerpt": "Disrupting Social Commerce - our investment in Shop101 Why Lumio Started Premium When Everyone Went Cheap WATCH HERE AI Native Services Thesis (3/5) READ HERE Physical AI - The Last 35 Points READ HERE Portfolio Approach Team Insights FUNDAMENTALS back to insights page back to fundamentals page Why we invested Commerce blog 11 July , 2018 4 mins Disrupting Social Commerce - our investment in Shop101 Author Rahul Chowdhri EXPERT HOST TABLE OF CONTENTS Emergence of Platform BPOs Economics of platform BPOs Copied! I hail from a town called Kota which is now famous for being the education capital of India. Back when I was young, it was a sleepy town with a population of 5 lakh. In our colony, I remember, there used to be these entrepreneurial women who would use their sourcing, curation and selling skills to put up exhibitions showcasing items from their respective hometowns. Many of them generated a good amount of side income with this activity. Fast forward three decades later (yes I am that old), all of them have moved to selling these items using their own website and, Facebook, Instagram and Whatsapp handles. In addition to this, we are witnessing a new set of entrepreneurs – students and fresh college graduates – leveraging their social media accounts to build their own ‘shops’. According to our estimates, there are over 2 million people already selling on these platforms"
+    },
+    {
+      "id": "check-page-f8ba554cde",
+      "url": "https://www.stellarisvp.com/blog/empowering-next--gen-b2b-marketers---announcing-our-investment-in-factorsai",
+      "page": "terms",
+      "excerpt": "Empowering Next- Gen B2B Marketers - Announcing Our Investment in Factors.ai Why Lumio Started Premium When Everyone Went Cheap WATCH HERE AI Native Services Thesis (3/5) READ HERE Physical AI - The Last 35 Points READ HERE Portfolio Approach Team Insights FUNDAMENTALS back to insights page back to fundamentals page Why we invested Software blog 18 July , 2023 4 mins Empowering Next- Gen B2B Marketers - Announcing Our Investment in Factors.ai Author Alok Goyal Arpit Maheshwari EXPERT HOST TABLE OF CONTENTS Emergence of Platform BPOs Economics of platform BPOs Copied! B2B buying is moving online, particularly so since the pandemic. Thanks to the wealth of information available online, buyers today prefer to do their own research independently instead of relying on sellers to educate them – estimates suggest a third of all B2B purchases could happen online by 2025. Consequently, the importance of the marketing function is steadily increasing in B2B companies. As B2B marketing has become more digital, it is more data-driven as well, akin to what happened to B2C marketing as consumer purchases started moving online. Unlike most B2C journeys, B2B journeys through the marketing funnel can be much more complex. This is driven by three factors. T here are likely to be a lot more touches with the prospect before they become an opportunity . For example, a prospect may discover you on a"
+    },
+    {
+      "id": "check-page-ae959352ad",
+      "url": "https://www.stellarisvp.com/blog/from-plastic-to-sustainable-alternatives-our-investment-in-cirkla",
+      "page": "terms",
+      "excerpt": "From plastic to sustainable alternatives: Our investment in Cirkla Why Lumio Started Premium When Everyone Went Cheap WATCH HERE AI Native Services Thesis (3/5) READ HERE Physical AI - The Last 35 Points READ HERE Portfolio Approach Team Insights FUNDAMENTALS back to insights page back to fundamentals page Why we invested Sustainability blog 5 September , 2023 4 mins From plastic to sustainable alternatives: Our investment in Cirkla Author No items found. EXPERT HOST TABLE OF CONTENTS Emergence of Platform BPOs Economics of platform BPOs Copied! The global packaging industry, valued at a staggering trillion dollars, has long relied on plastic (41%) and cardboard (36%) as its primary raw materials. However, as the world shifts its focus towards climate initiatives, a significant transformation is underway within the packaging market. Leading brands are making bold commitments to move away from plastic packaging to sustainable alternatives. Sustainable packaging refers to packaging that is sourced responsibly, designed to be effective and safe throughout its life cycle, meets market criteria for performance and cost, is made entirely using renewable energy, and once used, is recycled efficiently. We believe sustainable packaging will revolutionize the packaging landscape globally and will become a substantial market in a decade’s time. Governments worldwide are implementing"
+    },
+    {
+      "id": "check-page-966283ee81",
+      "url": "https://www.stellarisvp.com/blog/future-of-creator-monetization-is-direct-our-investment-in-rigi",
+      "page": "terms",
+      "excerpt": "Future of Creator Monetization is Direct: Our Investment in Rigi Why Lumio Started Premium When Everyone Went Cheap WATCH HERE AI Native Services Thesis (3/5) READ HERE Physical AI - The Last 35 Points READ HERE Portfolio Approach Team Insights FUNDAMENTALS back to insights page back to fundamentals page Why we invested Commerce blog 20 April , 2022 4 mins Future of Creator Monetization is Direct: Our Investment in Rigi Author Rahul Chowdhri EXPERT HOST TABLE OF CONTENTS Emergence of Platform BPOs Economics of platform BPOs Copied! Emergence of the creator economy, i.e. people earning from creating/distributing content online, was one of the defining decadal themes of 2010s. Today, there are 50M+ creators in the world (2M+ of which do it full time), making up a $100B+ global market. Even with that impressive statistic, however, we believe that much of the market is yet to be unlocked when it comes to the creator economy. The main reason for our belief? The platforms that led to the emergence & growth of the global creator population are not necessarily the ones that let them monetize to their true potential. The world’s largest social platforms, be it Instagram, YouTube, TikTok, Snapchat, or Twitter, are designed to be distribution-first; that is, based on an ads-centered business model that relies on maximizing viewership and/or user attention. What it means, for the large"
+    },
+    {
+      "id": "check-page-3563ce5d36",
+      "url": "https://www.stellarisvp.com/blog/our-investment-in-noticeboard",
+      "page": "terms",
+      "excerpt": "Our investment in Noticeboard Why Lumio Started Premium When Everyone Went Cheap WATCH HERE AI Native Services Thesis (3/5) READ HERE Physical AI - The Last 35 Points READ HERE Portfolio Approach Team Insights FUNDAMENTALS back to insights page back to fundamentals page Why we invested Software blog 25 July , 2017 4 mins Our investment in Noticeboard Author Alok Goyal EXPERT HOST TABLE OF CONTENTS Emergence of Platform BPOs Economics of platform BPOs Copied! If you look at the history of great B2B products, they all have an underlying theme – they have taken a business that was fundamentally (and inevitably) changing and built a product that would facilitate this transformation. In hindsight, all those products look blindingly obvious, but the reality is far from it. The existing tools and methods are usually so ingrained that it’s hard to say what could be done differently. But if you look closely, the businesses/processes that are about to be transformed show the tell-tale signs of the impending change. The most obvious is their users who are already using other tools and hacks to achieve their objectives in the new world order. Noticeboard is a product that is at the cusp of one such transformation – communication. More specifically, communication for the blue-collared workers or field staff. While their counterparts in the offices, desk workers, have had their fair share"
     }
   ],
   "findings": {
@@ -74,8 +452,34 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-8623fb8d11"
+      },
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-6db6b50964"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-2f05c98d43"
+      }
+    ],
+    "location": [
+      {
+        "value": "Mysore",
+        "evidenceId": "check-location-ddd5151877"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.stellarisvp.com/portfolio",

@@ -1,23 +1,143 @@
 {
   "programId": "greylock",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://greylock.com/"
+    "https://greylock.com/",
+    "https://greylock.com/blog/next-generation-application-security/",
+    "https://greylock.com/change-agents/pioneering-agentic-application/",
+    "https://greylock.com/blog/experts-on-day-one-our-investment-in-cresta/",
+    "https://greylock.com/blog/greylock-our-investment-in-gem/",
+    "https://greylock.com/blog/our-investment-in-abnormal-security/",
+    "https://greylock.com/blog/our-investment-in-blend/",
+    "https://greylock.com/blog/our-investment-in-cato-networks/",
+    "https://greylock.com/blog/our-investment-in-chronosphere/",
+    "https://greylock.com/blog/our-investment-in-clubhouse/",
+    "https://greylock.com/blog/our-investment-in-coda/",
+    "https://greylock.com/blog/our-investment-in-coinbase/",
+    "https://greylock.com/blog/our-investment-in-discord/",
+    "https://greylock.com/blog/our-investment-in-innovium-next-generation-cloud-data-center-networks/",
+    "https://greylock.com/blog/our-investment-in-lyra-health/"
   ],
   "evidence": [
     {
+      "id": "check-duration-10c7e269e4",
+      "url": "https://greylock.com/blog/experts-on-day-one-our-investment-in-cresta/",
+      "title": "Greylock — terms page",
+      "excerpt": "ramped, and have short average tenures (only 11 months) with expertise scattered across the team. The",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-2ea2e402fb",
+      "url": "https://greylock.com/blog/experts-on-day-one-our-investment-in-cresta/",
+      "title": "Greylock — terms page",
+      "excerpt": "Yet agents at contact centers can take up to 7 months to be fully ramped, and have short average",
+      "page": "terms"
+    },
+    {
       "id": "check-name-b9b301d7e1",
       "url": "https://greylock.com/",
-      "title": "Greylock — homepage checked by scrape.py",
+      "title": "Greylock — homepage",
       "excerpt": "Greylock Partners Skip to main content Portfolio Edge Team Firm",
       "page": "details"
     },
     {
       "id": "check-route-cc459a52c8",
       "url": "https://greylock.com/",
-      "title": "Greylock — homepage checked by scrape.py",
+      "title": "Greylock — homepage",
       "excerpt": "https://greylock.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-1c831e33c8",
+      "url": "https://greylock.com/",
+      "page": "details",
+      "excerpt": "Greylock Partners Skip to main content Portfolio Edge Team Firm Blog Jobs The map is blank again The map is blank again Your first believer in what doesn’t exist yet. We back category-defining teams. Figma was just seven people when we partnered with Dylan and Evan. Evan Wallace Dylan Field We backed Tuhin, Amir, and Phil to build AI infrastructure before ChatGPT made it obvious. Phil Howes Tuhin Srivastava Amir Haghighat Nir started Palo Alto Networks from a desk inside Greylock's office. Nir Zuk When we partnered with Mark, Facebook was still only for college students. Mark Zuckerberg Evan and Sanjay turned an improbable idea into Abnormal at Greylock's office. Sanjay Jeyakumar Evan Reiser Builders backing outliers Each Greylock partner makes only one or two new investments a year because the work demands depth. We bring our full attention, network, and resources to every partnership. Asheem Chandna with Rubrik cofounders Bipul Sinha, Arvind Nithrakashyap, Arvind Jain, and Soham Mazumdar Jerry Chen with Chronosphere cofounders Martin Mao and Rob Skillington “A Greylock partner should aspire to win the Oscar for the best supporting actor . That reputation must be earned every day.” Henry McCance Chairman Emeritus Your first believer in what doesn’t exist yet. Stay connected with us Email address Sign up Company Company Team Specialists Perspective Blog Contact us Programs"
+    },
+    {
+      "id": "check-page-6c50267180",
+      "url": "https://greylock.com/blog/next-generation-application-security/",
+      "page": "application",
+      "excerpt": "Next Generation Application Security | Greylock Skip to main content Portfolio Edge Team Firm Blog Jobs Return to Blog Portfolio News Next Generation Application Security Article written by: Asheem Chandna Published: June 13, 2023 We are excited to announce that Greylock led a $18 million Series A in Kodem . Founded by three exceptional technologists, Aviv Mussinger, Idan Bartura, and Pavel Furman, Kodem is officially launching today: a next generation application security platform that leverages deep runtime intelligence to understand true application risk. We co-led the seed round at company founding with our friends at TPY Capital, and subsequently led Kodem’s Series A. As enterprises continue to shift their workloads to the cloud, application security has climbed the priority stack for IT cybersecurity teams. And as more and more companies outside of technology are building significant in-house software development teams, application security has become one of the fastest growing markets in security. Yet it also suffers from one of the largest gaps between evolving customer needs and the capabilities provided by existing vendors. Most security teams do not have visibility into vulnerabilities introduced by the components used in their software, and those that do are often left with an enormous list of potential vulnerabilities devoid of context. Given the limited"
+    },
+    {
+      "id": "check-page-043fb0afe8",
+      "url": "https://greylock.com/change-agents/pioneering-agentic-application/",
+      "page": "application",
+      "excerpt": "Pioneering Agentic Application | Greylock Skip to main content Portfolio Edge Team Firm Blog Jobs Pioneering Agentic Application “The reality is that building a demo in the agentic world is the easiest thing, but building a production-grade app is probably the hardest thing.” Jesse Zhang Co-founder and CEO Jesse Zhang Spiros Xanthos Co-founder and CEO Spiros Xanthos Varun Mohan Co-founder and CEO Varun Mohan We're seeing a rapid proliferation of agentic-first companies, as founders reimagine products from the ground up—built with autonomous, goal-driven agents at their core. In this conversation, Jesse Zhang (Decagon), Spiros Xanthos (Resolve AI), and Varun Mohan (Windsurf) dive into the evolution of copilot to agents, the \"build vs. buy\" debate, customizing agents, humans-in-the-loop, and agent-to-agent collaboration. Watch the Panel Discussion Corinne Riley Partner Corinne works with early-stage founders who are creating data and AI products at the infrastructure and application layers. Corinne Riley Your first believer in what doesn’t exist yet. Stay connected with us Email address Sign up Company Company Team Specialists Perspective Blog Contact us Programs Greylock Edge Greylock X Jobs Talent Network University Connect LinkedIn X YouTube Login LP Login © 2026 Greylock Partners Privacy Policy"
+    },
+    {
+      "id": "check-page-f0400acf7c",
+      "url": "https://greylock.com/blog/experts-on-day-one-our-investment-in-cresta/",
+      "page": "terms",
+      "excerpt": "Experts on Day One: Our Investment in Cresta | Greylock Skip to main content Portfolio Edge Team Firm Blog Jobs Return to Blog Portfolio News Experts on Day One: Our Investment in Cresta Article written by: Saam Motamedi Published: February 3, 2020 With the personal computer and then the mobile phone, the past 40+ years have brought incredible technological advances to office work around the world. But despite these new computing platforms, basic tasks like data entry and fragmented expertise in functions like sales persist and strain worker productivity. There’s a real opportunity for AI to transform the way humans work through a combination of automation and augmentation , which can help workers spend less time on repetitive tasks, and more time on higher value work. This powerful duo can ultimately lead to step-function changes in productivity, and upskilled workers. Enter Cresta , which is pioneering a new expertise management platform that leverages state of the art AI techniques to make every employee an Expert on Day One. Cresta’s unique approach to using both automation and augmentation drives worker efficiency and effectiveness. Cresta’s initial target market for their expertise management platform is contact centers in retail, SaaS, financial services, and telecom verticals, which are undergoing significant technological transformations. There is an explosion in the"
+    },
+    {
+      "id": "check-page-281e618f55",
+      "url": "https://greylock.com/blog/greylock-our-investment-in-gem/",
+      "page": "terms",
+      "excerpt": "Modern Recruiting | Greylock Skip to main content Portfolio Edge Team Firm Blog Jobs Return to Blog Portfolio News Modern Recruiting Article written by: David Wadhwani Published: July 16, 2020 A company is as good as the people who work there. That’s why companies spend hundreds of billions of dollars every year looking for top talent. I know this first hand from my time at AppDynamics and Adobe; both companies spent an enormous amount of time and money finding, engaging and closing top candidates. Despite this, I was struck by our inability to comprehensively track recruiting activities and ROI on time or dollars spent. That’s why I’m excited to announce that we led the Series B investment in Gem , an amazing three-year-old company revolutionizing how talent teams source, engage and optimize their recruiting activities across multiple channels. And why I’m thrilled to be joining the Board. Gem is a software platform for modern recruiting that sits between LinkedIn and Workday , and leverages a data-driven approach commonly seen in marketing and sales. Their Talent Candidate Relationship Management (Talent CRM) platform transforms the way talent acquisition teams source, nurture, track, and manage passive talent. Gem can be used by an individual recruiter who can start to see the benefit in minutes. It doesn’t change the core tools and platforms recruiters use today, but"
+    },
+    {
+      "id": "check-page-0c65a70910",
+      "url": "https://greylock.com/blog/our-investment-in-abnormal-security/",
+      "page": "terms",
+      "excerpt": "Our Investment in Abnormal AI | Greylock Skip to main content Portfolio Edge Team Firm Blog Jobs Return to Blog Portfolio News Our Investment in Abnormal AI Article written by: Saam Motamedi Published: November 19, 2019 Abnormal AI co-founders Evan Reiser and Sanjay Jeyakumar We are excited to announce that Greylock led a $24M Series A investment in Abnormal AI , a company initiated and incubated in 2018 at Greylock offices. Founded by Evan Reiser and Sanjay Jeyakumar, two exceptional technologists and entrepreneurs, Abnormal is officially launching their product today: a next generation cloud email security platform that leverages data science to protect organizations from sophisticated targeted email attacks, including unknown threats that existing solutions miss. Large and Evolving Market, New Cloud-Native Architecture Email continues to be the primary channel for business communication, and a significant point of egress for sensitive content. The email vulnerability landscape has evolved from volume-driven spam and phishing attacks to sophisticated spear-phishing and business email compromise attacks. The volumetric and signature based approaches used by incumbent email security vendors do not effectively prevent these highly targeted attacks — which require a semantic understanding of user and organizational behavior to prevent. As a result, customers have a significant"
+    },
+    {
+      "id": "check-page-d5f15c2796",
+      "url": "https://greylock.com/blog/our-investment-in-blend/",
+      "page": "terms",
+      "excerpt": "Our Investment in Blend | Greylock Skip to main content Portfolio Edge Team Firm Blog Jobs Return to Blog Portfolio News Our Investment in Blend Article written by: Jerry Chen Published: August 24, 2017 In 2016, there was more than $2.1 trillion dollars in mortgages issued in the U.S. alone. Despite the staggering size of the mortgage market, it still runs on decade old technology and processes. As anyone who has ever applied for a mortgage can tell you, applications are completed using pen and paper, a patchwork of legacy software point solutions and involve 1,000 page long loan files. Mortgage lenders spend more than $8,000 in processing costs on each origination. Cost aside, the process results in significant redundant manual work and is highly error prone. The inadequacy of the software stack powering mortgages was most apparent during the 2008 financial crisis — where the lack of comprehensive origination data concealed the risk in the system. It was during the throes of this crisis that Nima Ghamsari and Eugene Marinelli first came face to face with the hairy mortgage problem. At the time, they were working very closely with the big banks at Palantir, where they built the Palantir for financial services organization. In 2012, seeing the opportunity to transform the consumer lending industry with software and data, they left Palantir and partnered with Erin Collard to"
+    },
+    {
+      "id": "check-page-fff6eecc22",
+      "url": "https://greylock.com/blog/our-investment-in-cato-networks/",
+      "page": "terms",
+      "excerpt": "Our Investment in Cato Networks | Greylock Skip to main content Portfolio Edge Team Firm Blog Jobs Return to Blog Portfolio News Our Investment in Cato Networks Article written by: Jerry Chen Published: September 13, 2016 The security landscape dramatically changed in the past several years due to two major secular trends: cloud and mobile. A decade ago, enterprises could easily protect their employees, data centers, and applications with a traditional network perimeter because everything and everyone was neatly packed in one area. But as personal devices entered the workforce, people began to work from their phones and tablets, in and outside of the office. Coupled with data and applications going to the cloud, the traditional network perimeter started to evolve. Today, enterprises need to think about how to protect corporate networks and office locations beyond headquarters and in the cloud. In 2015, Shlomo Kramer and his team launched Cato Networks , a security-as-a-service solution with an incredibly bold ambition — replace wide area networking (WAN) and perimeter security equipment with a dedicated cloud service. The current security appliance model is costly, inefficient and hard to manage. However, the convergence of multiple security appliances into a single service as well as the convergence of WAN and security together in the cloud presented a window of opportunity."
+    },
+    {
+      "id": "check-page-b9d00c17a0",
+      "url": "https://greylock.com/blog/our-investment-in-chronosphere/",
+      "page": "terms",
+      "excerpt": "Our Investment in Chronosphere | Greylock Skip to main content Portfolio Edge Team Firm Blog Jobs Return to Blog Portfolio News Our Investment in Chronosphere Article written by: Jerry Chen Published: November 5, 2019 One of my favorite stories about time and data is the 18th century quest to solve the longitude problem. Hundreds of years before measuring cloud metrics became the infrastructure problem of our time, the best scientists and engineers of the world were trying to figure out how to determine longitude at sea. Latitude (north/south) was relatively easy but longitude (east/west) was nearly impossible. On land, an engineer could use a clock and measure the time the sun hit “noon,” its highest point in the sky, and then calculate the time difference from “noon” at an origin city. The earth takes 24 hours to rotate 360 degrees so each hour difference is 1/24th or a change of 15 degrees longitude. In the early 1700s, clocks needed pendulums to keep time and on the rolling ocean they were useless. It was impossible for ship captains to measure longitude resulting in lost lives, lost ships, longer routes, and incredible costs. The expense was so great that the British government (and other nations) offered the equivalent of millions of dollars for the Longitude Prize , sort of an X Prize of its day, to anyone who could solve this riddle. It was one of the most difficult"
+    },
+    {
+      "id": "check-page-997607eb8d",
+      "url": "https://greylock.com/blog/our-investment-in-clubhouse/",
+      "page": "terms",
+      "excerpt": "Our Investment in Clubhouse | Greylock Skip to main content Portfolio Edge Team Firm Blog Jobs Return to Blog Portfolio News Our Investment in Clubhouse Article written by: Sarah Guo Published: January 23, 2020 Software is deep into a multi-decade process of invading every industry. Building great software and integrating that software with the rest of the value chain of a business is increasingly the most important basis of competition in large swaths of the economy. Better Tools to Enable the Software Revolution Yet, a minority of companies would claim today to be “great at building software.” What makes writing amazing software hard? The core of it is certainly having the right talent — but the other is the task itself. Creating software is still a relatively young, fast-evolving team endeavor that requires heavy communication, high context, and complex task partitioning. The standards for, complexity of, and volume of software produced are inexorably increasing. At the same time, engineering teams are becoming more distributed, faster-moving, and more tightly integrated with other teams, from sales and marketing, to logistics and support. It’s a hard problem. GitHub has become a beloved home for source code, and modern communication tools such as Slack and Zoom have increased the fidelity and ease with which we talk to one another in freeform. But the collaboration around"
+    },
+    {
+      "id": "check-page-5b4cebebb2",
+      "url": "https://greylock.com/blog/our-investment-in-coda/",
+      "page": "terms",
+      "excerpt": "Our Investment in Coda | Greylock Skip to main content Portfolio Edge Team Firm Blog Jobs Return to Blog Portfolio News Our Investment in Coda Article written by: Reid Hoffman Published: October 19, 2017 Technology has dramatically and quickly reshaped the workplace; work processes and project management look nothing like they did 20 years ago. Web 2.0 ushered in a wave of apps which gave teams the ability to share files, compile to-do lists, and set deadlines. Today, the emergence of new productivity tools promises to meet the needs of any team, improving workflow, group organization and collaboration. Despite the explosion of collaboration in workplace applications, we’re still doing the majority of our work on the same technology built two decades ago. As technology continues to change the workforce, the workforce demands changes in technology. Time and again, I have seen innovative startups set out on a mission to change the world, ironically running their entire businesses on siloed tools created to improve productivity for the individual — not for a team. People build spreadsheets from scratch, customizing formulas for each project. They use separate documents to write product specifications and create business plans. For the most sophisticated companies, they may add one or two collaborative project management tools. But, by and large, the nuts and bolts of actually"
+    },
+    {
+      "id": "check-page-94c567b6cb",
+      "url": "https://greylock.com/blog/our-investment-in-coinbase/",
+      "page": "terms",
+      "excerpt": "Our Investment in Coinbase | Greylock Skip to main content Portfolio Edge Team Firm Blog Jobs Return to Blog Portfolio News Our Investment in Coinbase Article written by: Greylock Partners Published: August 10, 2017 I’ve been a customer of Coinbase since the fall of 2013, after a late night dinner with friends, wherein Chamath Palihapitiya waxed poetic about Bitcoin and its future as the world’s reserve currency. Whether it was the economist in me or the Pinot Noir, I opened an account and made my first purchase. To be honest, it’s a bit laughable to hint at any prescience-in-hindsight, and even now I wince slightly at the air quotes used in my tweet. As I studied the market, however, I became more convinced of the role that cryptocurrencies would play in our future. Shortly thereafter, I made additional purchases (including one following a particularly bad experience with a major US bank that led me to close my account and move all of my funds into BTC in protest), and today, I’m excited to announce that my first investment as a GP at Greylock is in Coinbase. Much has happened over the past four years. Alongside Bitcoin having reached >10x its then value, the total market cap of digital currencies has grown to over $100 Billion, with almost half of that from currencies which didn’t exist at the time. Ethereum alone has grown to roughly half the value of Bitcoin in the less"
+    },
+    {
+      "id": "check-page-390fd8f493",
+      "url": "https://greylock.com/blog/our-investment-in-discord/",
+      "page": "terms",
+      "excerpt": "Our Investment in Discord | Greylock Skip to main content Portfolio Edge Team Firm Blog Jobs Return to Blog Portfolio News Our Investment in Discord Article written by: David Sze Published: January 27, 2016 People play games. They play a lot of games. For example, over 67M people play League of Legends every month. This isn’t just a teenager side hobby anymore. The video games industry is at massive scale — the market is currently over $90B, up 9% in the last year. And PC Gaming represents around 1/3 of this. It is now bigger than the movie industry, and is only predicted to grow and expand with new emerging platforms like VR. More importantly, most people no longer play alone. They play with their friends. They play games like Counterstrike, Dota, World of Warcraft, and many many more across PCs, consoles, VR (soon), and even tablets and mobile. The time spent playing isn’t only about shooting or strategy, but about enjoying quality social time. If you were to be listening in, you would hear about everyone’s day alongside comments on the game. It would feel very similar to a group of friends around a poker table, playing board games, or competing in bridge and talking about life. But the tools haven’t kept up. The primary tools gamers use to communicate live over voice and text today were first built 10–15 years ago. They mostly look like it too. Most great live tools are"
+    },
+    {
+      "id": "check-page-1a8a12dbbc",
+      "url": "https://greylock.com/blog/our-investment-in-innovium-next-generation-cloud-data-center-networks/",
+      "page": "terms",
+      "excerpt": "Our Investment in Innovium: Next-Generation Cloud Data Center Networks | Greylock Skip to main content Portfolio Edge Team Firm Blog Jobs Return to Blog Portfolio News Our Investment in Innovium: Next-Generation Cloud Data Center Networks Article written by: Asheem Chandna Published: May 31, 2016 The secular move to cloud has created a multi-billion dollar market opportunity for the next generation of cloud-focused networking technologies. Imagine a future with new levels of networking bandwidth, performance, scalability, and in-built support for cloud management and security. Innovium has assembled one of the industry’s strongest Ethernet networking silicon teams to help make that future a reality. Today Innovium is announcing that the company has raised over $50 million in funding, across two over-subscribed rounds. Greylock Partners led Innovium’s Series B financing in October 2015, and we joined their board of directors. Innovium was founded in December 2014 by three very talented and experienced semiconductor executives: Rajiv Khemani, Puneet Agarwal and Mohammad Issa. Puneet and Mohammad were the lead architect and head of engineering, respectively, for Broadcom’s Ethernet switching business. They successfully delivered multiple generations of products and played key roles in helping build Broadcom’s product leadership in this area. Rajiv was at Cavium for a decade from"
+    },
+    {
+      "id": "check-page-48d9a6653d",
+      "url": "https://greylock.com/blog/our-investment-in-lyra-health/",
+      "page": "terms",
+      "excerpt": "Our Investment In Lyra Health | Greylock Skip to main content Portfolio Edge Team Firm Blog Jobs Return to Blog Portfolio News Our Investment In Lyra Health Article written by: James Slavet Published: October 15, 2015 We’re excited about today’s announcement that we’re co-leading the Series A financing round for Lyra Health. We love backing great people early, and helping them tackle big, important problems. When we get a chance to do this, it’s the best part of our job. The Lyra team is special, starting with founder/CEO David Ebersman. David is extremely talented, intelligent, driven and results-oriented. And he also has a lot of heart. He’s the kind of leader who others are inspired to follow. And he’s on a mission with Lyra — an inexorable march to build an important and lasting company. David and his team are focused on transforming mental health care through technology with a human touch — to get more patients the care they need, when they need it. We have an unprecedented decades and decades of combined due diligence on this guy! Starting with my Partner David Sze, who went to summer camp with David Ebersman when they were 9 and 12 respectively. Turns out that David Sze had an eye for deal flow even as a Counselor in Training. I first met David in college at Brown, and then got to know him after college when we both moved to the Bay Area. David distinguished himself"
     }
   ],
   "findings": {
@@ -33,8 +153,24 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "7 months",
+        "evidenceId": "check-duration-2ea2e402fb"
+      },
+      {
+        "value": "11 months",
+        "evidenceId": "check-duration-10c7e269e4"
+      }
+    ],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

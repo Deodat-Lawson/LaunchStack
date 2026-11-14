@@ -1,31 +1,7 @@
 {
   "programId": "masschallenge",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://masschallenge.org/traction-program/",
-      "page": "details",
-      "anchor": "Traction",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://masschallenge.org/challenge-program/",
-      "page": "details",
-      "anchor": "Challenge",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://masschallenge.org/about-us/",
-      "page": "details",
-      "anchor": "ABOUT US",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://accelerate.masschallenge.org/accounts/login/?next=/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav&_gl=1*100wh1d*_ga*MTM2NDEwNjc0NS4xNzU3NjQzMzg4*_ga_THNYBZVCTM*czE3NTc2NDMzODckbzEkZzEkdDE3NTc2NDM5MjUkajU2JGwwJGgw",
       "page": "application",
@@ -35,9 +11,137 @@
       "origin": "official"
     },
     {
-      "url": "https://masschallenge.org/programs-early-stage",
+      "url": "https://accelerate.masschallenge.org/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerate.masschallenge.org/dashboard/universal-navigation/getting-started/",
+      "page": "other",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerate.masschallenge.org/program-wizard/?wizard=startup&program=254",
       "page": "details",
-      "anchor": "Early Stage",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2026?hsLang=es-mx",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2027",
+      "page": "application",
+      "anchor": "NOW ACCEPTING APPLICATIONS",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2026?hsLang=en-us",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2027",
+      "page": "application",
+      "anchor": "NOW ACCEPTING APPLICATIONS",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "page": "application",
+      "anchor": "LEARN HOW TO APPLY →",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://masschallenge.org/about-us/",
+      "page": "details",
+      "anchor": "ABOUT US",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://masschallenge.org/challenge-program/",
+      "page": "details",
+      "anchor": "Challenge",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://masschallenge.org/heba-2027/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://masschallenge.org/mission",
+      "page": "details",
+      "anchor": "About Us / Mission",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://masschallenge.org/news/masschallenge-ranked-number-2-us-accelerator-time-statista/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://masschallenge.org/news/yes-boston-inaugural-cohort-announcement/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://masschallenge.org/our-accelerators/",
+      "page": "details",
+      "anchor": "OUR ACCELERATORS",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://masschallenge.org/programs-all",
+      "page": "details",
+      "anchor": "Additional Programs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://masschallenge.org/programs-bridge",
+      "page": "details",
+      "anchor": "Bridge to MC",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -51,49 +155,9 @@
       "origin": "official"
     },
     {
-      "url": "https://masschallenge.org/programs-all",
+      "url": "https://masschallenge.org/programs-early-stage",
       "page": "details",
-      "anchor": "Additional Programs",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://masschallenge.org/programs-bridge",
-      "page": "details",
-      "anchor": "Bridge to MC",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://masschallenge.org/mission",
-      "page": "details",
-      "anchor": "About Us / Mission",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://accelerate.masschallenge.org/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav",
-      "page": "application",
-      "anchor": "Apply",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://masschallenge.org/our-accelerators/",
-      "page": "application",
-      "anchor": "APPLY TO AN ACCELERATOR",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
-      "page": "application",
-      "anchor": "LEARN HOW TO APPLY →",
+      "anchor": "Early Stage",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -102,14 +166,14 @@
       "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
       "page": "application",
       "anchor": "NOW ACCEPTING APPLICATIONS",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2027",
-      "page": "application",
-      "anchor": "NOW ACCEPTING APPLICATIONS",
+      "url": "https://masschallenge.org/traction-program/",
+      "page": "details",
+      "anchor": "Traction",
       "fetched": false,
       "blocked": null,
       "origin": "official"

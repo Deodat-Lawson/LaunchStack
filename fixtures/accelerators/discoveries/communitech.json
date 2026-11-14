@@ -1,11 +1,75 @@
 {
   "programId": "communitech",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.communitech.ca/programs/",
+      "url": "https://communitech.ca/about/policies/terms-of-service.html",
+      "page": "terms",
+      "anchor": "Terms of Service",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://communitech.ca/about/policies/terms-of-service/agreement.html",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://communitech.ca/content/downloads/pdfs/communitech-membership-terms-of-service-faq.pdf",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://communitech.ca/content/downloads/pdfs/terms-of-service-may.pdf",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://communitech.ca/faq.html",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://communitech.ca/founders/apply/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://communitech.ca/partners/apply.html",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.communitech.ca/about/board-of-directors.html",
       "page": "details",
-      "anchor": "Programs",
+      "anchor": "Our Team",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.communitech.ca/about/careers.html",
+      "page": "details",
+      "anchor": "Careers",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -14,47 +78,7 @@
       "url": "https://www.communitech.ca/about/our-story.html",
       "page": "details",
       "anchor": "About Us",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.communitech.ca/about/board-of-directors.html",
-      "page": "details",
-      "anchor": "Our Team",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.communitech.ca/about/careers.html",
-      "page": "details",
-      "anchor": "Careers",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.communitech.ca/partners/apply.html",
-      "page": "application",
-      "anchor": "Partner with us",
       "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.communitech.ca/founders/apply/",
-      "page": "application",
-      "anchor": "Join the Community",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.communitech.ca/programs/ai-at-work/",
-      "page": "details",
-      "anchor": "AI@Work",
-      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -62,6 +86,14 @@
       "url": "https://www.communitech.ca/about/policies/",
       "page": "details",
       "anchor": "Policies",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.communitech.ca/about/policies/accessibility.html",
+      "page": "details",
+      "anchor": "Accessibility",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -75,9 +107,33 @@
       "origin": "official"
     },
     {
-      "url": "https://www.communitech.ca/about/policies/accessibility.html",
+      "url": "https://www.communitech.ca/founders/apply/",
+      "page": "application",
+      "anchor": "Join the Community",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.communitech.ca/partners/apply.html",
+      "page": "application",
+      "anchor": "Partner with us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.communitech.ca/programs/",
       "page": "details",
-      "anchor": "Accessibility",
+      "anchor": "Programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.communitech.ca/programs/ai-at-work/",
+      "page": "details",
+      "anchor": "AI@Work",
       "fetched": false,
       "blocked": null,
       "origin": "official"

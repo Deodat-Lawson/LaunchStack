@@ -1,286 +1,969 @@
 {
   "programId": "harvard-innovation-labs",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://innovationlabs.harvard.edu/",
+    "https://innovationlabs.harvard.edu/articles/2020-presidents-innovation-challenge-opens-applications",
+    "https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
+    "https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
     "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
-    "https://innovationlabs.harvard.edu/about/about-us",
+    "http://apply.innovationlabs.harvard.edu/prog/student_membership_program",
+    "http://apply.innovationlabs.harvard.edu/prog/team_member_program",
+    "https://apply.innovationlabs.harvard.edu/",
+    "https://innovationlabs.harvard.edu/how-to/put-forth-the-best-pic-application",
+    "https://innovationlabs.harvard.edu/login?redirect=https%3A%2F%2Fwww.eventbrite.com%2Fe%2Ftips-tricks-for-applying-to-the-2027-presidents-innovation-challenge-tickets-2003682998787",
+    "https://innovationlabs.harvard.edu/presidents-innovation-challenge/ingenuity-awards",
     "https://innovationlabs.harvard.edu/about/help-center",
-    "https://innovationlabs.harvard.edu/venture/care-hero-2"
+    "https://innovationlabs.harvard.edu/funding-opportunities/social-impact",
+    "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab/apply",
+    "https://innovationlabs.harvard.edu/articles/2023-2024-launch-lab-x-geo-cohort"
   ],
   "evidence": [
     {
+      "id": "check-announced-01bf5d4ed0",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page",
+      "excerpt": "student i-lab members. Apply by Dec. 8. There will be an additional deadline in the spring. President’s Innovation Challenge Now accepting student applications",
+      "page": "terms"
+    },
+    {
+      "id": "check-announced-6760128e38",
+      "url": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "with all the details including your member type, staff advisor, and cohort. Registered ventures may apply for additional opportunities like the Navab Social Impact",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-7c766c3073",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page",
+      "excerpt": "applications for the 2027 Harvard President's Innovation Challenge. Apply by Dec. 8 . Explore Student i-lab Membership Explore the Navab Social",
+      "page": "terms"
+    },
+    {
+      "id": "check-announced-8e61ba2ba2",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "for the 2027 President's Innovation Challenge! Students: Apply by Dec. 8 Resources for Applicants No Venture Yet? Apply for an Ingenuity",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-bc5fa06a93",
+      "url": "https://innovationlabs.harvard.edu/articles/2023-2024-launch-lab-x-geo-cohort",
+      "title": "Harvard Innovation Labs — batches page",
+      "excerpt": "in 2023-2024 Launch Lab X GEO Cohort The 2023-2024 Launch Lab X GEO cohort during their fall orientation. (Credit: Susan Young) Published Oct 12, 2023 By Staff",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-de5d0b6abc",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page",
+      "excerpt": "Awards which recognize innovative ideas from student i-lab members. Apply by Dec. 8. There will be an additional deadline in the spring. President’s",
+      "page": "terms"
+    },
+    {
+      "id": "check-announced-fcfaf85735",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge/ingenuity-awards",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "for the 2027 President's Innovation Challenge! Students: Apply by Dec. 8 Resources for Applicants No Venture Yet? Apply for an Ingenuity",
+      "page": "application"
+    },
+    {
+      "id": "check-deadline-2154de1789",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/student_membership_program",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Membership Program Opens Aug 17 2026 02:00 PM (EDT) Deadline Jul 17 2027 11:00 AM (EDT) Description Student Membership Program",
+      "page": "application"
+    },
+    {
+      "id": "check-deadline-2822cb8006",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/team_member_program",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "and offerings. Apply Opens Aug 24 2026 10:00 AM (EDT) Deadline Jul 10 2027 05:00 PM (EDT) Copyright © SurveyMonkey | Help | Privacy |",
+      "page": "application"
+    },
+    {
+      "id": "check-deadline-57d533bd49",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/student_membership_program",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Questions page. Apply Opens Aug 17 2026 02:00 PM (EDT) Deadline Jul 17 2027 11:00 AM (EDT) Copyright © SurveyMonkey | Help | Privacy |",
+      "page": "application"
+    },
+    {
+      "id": "check-deadline-cf0f89452d",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/team_member_program",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Labs Team Member Program Opens Aug 24 2026 10:00 AM (EDT) Deadline Jul 10 2027 05:00 PM (EDT) Description All team members of ventures",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-483c98f5b3",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge/ingenuity-awards",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "idea and the motivation to work on it. Winners will receive up to $2,500 in funding, and recognition at the President’s Innovation Challenge",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-c582edcb40",
+      "url": "https://innovationlabs.harvard.edu/how-to/put-forth-the-best-pic-application",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "more than just a chance to win significant financial support (up to $75,000 in non-dilutive funding for your venture). It's a way to propel your",
+      "page": "application"
+    },
+    {
+      "id": "check-format-148ecee578",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page",
+      "excerpt": "circumstances that prevent you from attending an in-person meeting, please contact us as soon as possible to request",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-2bec59c51d",
+      "url": "https://innovationlabs.harvard.edu/articles/2023-2024-launch-lab-x-geo-cohort",
+      "title": "Harvard Innovation Labs — batches page",
+      "excerpt": "and disruptive businesses. “When we recently gathered in person for the Launch Lab X GEO kickoff, I had the pleasure of",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-3c1fe0d63a",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page",
+      "excerpt": "resources do I have access to as a remote learner? As a remote learner, you have access to a range of i-lab resources",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-565fd0f441",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page",
+      "excerpt": "expert office hours? Office hours are hosted either in-person or virtually. Pay close attention to the meeting location",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-62729cf4ca",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page",
+      "excerpt": "On-Demand Learning What resources do I have access to as a remote learner? As a remote learner, you have access to a range",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6d73a83378",
+      "url": "https://innovationlabs.harvard.edu/funding-opportunities/social-impact",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "impact entrepreneurs, funders, and operators. After the virtual pitch day, the SIFF judges determine the number of grants",
+      "page": "application"
+    },
+    {
+      "id": "check-format-8211942c6c",
+      "url": "https://innovationlabs.harvard.edu/articles/2023-2024-launch-lab-x-geo-cohort",
+      "title": "Harvard Innovation Labs — batches page",
+      "excerpt": "Providing universities with personalized, data-driven, 1:1 virtual advising resources to cost effectively reduce student",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-c482694033",
+      "url": "https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "welcomes attendees of all abilities to our events, both in person and online. Requests for American Sign Language",
+      "page": "application"
+    },
+    {
+      "id": "check-format-de01155a7c",
+      "url": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "on when you join, we'll invite you to participate in an in-person, virtual, or on-demand orientation session to introduce",
+      "page": "application"
+    },
+    {
+      "id": "check-format-eb8d1c46ca",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page",
+      "excerpt": "meeting, please contact us as soon as possible to request virtual accommodation. If you can no longer attend your session,",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-f689903b80",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge/ingenuity-awards",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Innovation Challenge award ceremony on May 5, 2027, in-person to receive their award. Past PIC or Ingenuity Award",
+      "page": "application"
+    },
+    {
+      "id": "check-format-faccbb2b4d",
+      "url": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "you join, we'll invite you to participate in an in-person, virtual, or on-demand orientation session to introduce you to our",
+      "page": "application"
+    },
+    {
       "id": "check-name-a62af181df",
       "url": "https://innovationlabs.harvard.edu/",
-      "title": "Harvard Innovation Labs — homepage checked by scrape.py",
+      "title": "Harvard Innovation Labs — homepage",
       "excerpt": "Harvard Innovation Labs Skip to content 2027 Harvard President's Innovation",
       "page": "details"
     },
     {
-      "id": "check-portfolio-10b4a3a668",
-      "url": "https://innovationlabs.harvard.edu/about/about-us",
-      "title": "Harvard Innovation Labs — details page checked by scrape.py",
+      "id": "check-portfolio-131d4a6d29",
+      "url": "https://innovationlabs.harvard.edu/articles/2020-presidents-innovation-challenge-opens-applications",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Our Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-163aa6b9dc",
+      "url": "https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
+      "title": "Harvard Innovation Labs — application page",
       "excerpt": "Ventures → https://innovationlabs.harvard.edu/ventures",
-      "page": "details"
+      "page": "application"
     },
     {
       "id": "check-portfolio-1a69a8b9cb",
       "url": "https://innovationlabs.harvard.edu/about/help-center",
-      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "title": "Harvard Innovation Labs — terms page",
       "excerpt": "Select Venture Profiles → https://innovationlabs.harvard.edu/ventures",
       "page": "terms"
+    },
+    {
+      "id": "check-portfolio-1cf1b49d7c",
+      "url": "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab/apply",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
     },
     {
       "id": "check-portfolio-21f262c2a5",
       "url": "https://innovationlabs.harvard.edu/",
-      "title": "Harvard Innovation Labs — homepage checked by scrape.py",
+      "title": "Harvard Innovation Labs — homepage",
       "excerpt": "Our Ventures → https://innovationlabs.harvard.edu/ventures",
       "page": "details"
     },
     {
-      "id": "check-portfolio-28d140a389",
-      "url": "https://innovationlabs.harvard.edu/venture/care-hero-2",
-      "title": "Harvard Innovation Labs — batches page checked by scrape.py",
-      "excerpt": "Ventures → https://innovationlabs.harvard.edu/ventures",
-      "page": "batches"
-    },
-    {
-      "id": "check-portfolio-2ff6c17881",
-      "url": "https://innovationlabs.harvard.edu/about/help-center",
-      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
-      "excerpt": "Ventures → https://innovationlabs.harvard.edu/ventures",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-49ef57daa2",
-      "url": "https://innovationlabs.harvard.edu/venture/care-hero-2",
-      "title": "Harvard Innovation Labs — batches page checked by scrape.py",
+      "id": "check-portfolio-2b08fda2a5",
+      "url": "https://innovationlabs.harvard.edu/articles/2023-2024-launch-lab-x-geo-cohort",
+      "title": "Harvard Innovation Labs — batches page",
       "excerpt": "Select Venture Profiles → https://innovationlabs.harvard.edu/ventures",
       "page": "batches"
     },
     {
+      "id": "check-portfolio-2cdbffb8d6",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge/ingenuity-awards",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Our Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-2ff6c17881",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page",
+      "excerpt": "Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-377e502f1f",
+      "url": "https://innovationlabs.harvard.edu/how-to/put-forth-the-best-pic-application",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3a77a442bd",
+      "url": "https://innovationlabs.harvard.edu/articles/2020-presidents-innovation-challenge-opens-applications",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Select Venture Profiles → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-4057bcf543",
+      "url": "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab/apply",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Meet Our Ventures → https://innovationlabs.harvard.edu/ventures?program=pagliuca-harvard-life-lab",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-494842fdc8",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge/ingenuity-awards",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Select Venture Profiles → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-4be0de986b",
       "url": "https://innovationlabs.harvard.edu/about/help-center",
-      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "title": "Harvard Innovation Labs — terms page",
       "excerpt": "Our Ventures → https://innovationlabs.harvard.edu/ventures",
       "page": "terms"
     },
     {
+      "id": "check-portfolio-55ee60801f",
+      "url": "https://innovationlabs.harvard.edu/how-to/put-forth-the-best-pic-application",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Our Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-59b43281c3",
+      "url": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Select Venture Profiles → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-61db90d120",
       "url": "https://innovationlabs.harvard.edu/",
-      "title": "Harvard Innovation Labs — homepage checked by scrape.py",
+      "title": "Harvard Innovation Labs — homepage",
       "excerpt": "Explore Current Ventures → https://innovationlabs.harvard.edu/ventures",
       "page": "details"
     },
     {
-      "id": "check-portfolio-669e07ed79",
-      "url": "https://innovationlabs.harvard.edu/venture/care-hero-2",
-      "title": "Harvard Innovation Labs — batches page checked by scrape.py",
-      "excerpt": "Our Ventures → https://innovationlabs.harvard.edu/ventures",
+      "id": "check-portfolio-62600184b0",
+      "url": "https://innovationlabs.harvard.edu/articles/2023-2024-launch-lab-x-geo-cohort",
+      "title": "Harvard Innovation Labs — batches page",
+      "excerpt": "Ventures → https://innovationlabs.harvard.edu/ventures",
       "page": "batches"
     },
     {
       "id": "check-portfolio-69685a3246",
       "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
-      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-78169b7b7a",
+      "url": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7d27ef9574",
+      "url": "https://innovationlabs.harvard.edu/articles/2020-presidents-innovation-challenge-opens-applications",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7d5d790f8c",
+      "url": "https://innovationlabs.harvard.edu/funding-opportunities/social-impact",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Our Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-8c8f57847f",
+      "url": "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab/apply",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Select Venture Profiles → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a23556fd43",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge/ingenuity-awards",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a6b4dde057",
+      "url": "https://innovationlabs.harvard.edu/funding-opportunities/social-impact",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Select Venture Profiles → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-ae7a6e92c0",
+      "url": "https://innovationlabs.harvard.edu/funding-opportunities/social-impact",
+      "title": "Harvard Innovation Labs — application page",
       "excerpt": "Ventures → https://innovationlabs.harvard.edu/ventures",
       "page": "application"
     },
     {
       "id": "check-portfolio-aec6209d5d",
       "url": "https://innovationlabs.harvard.edu/",
-      "title": "Harvard Innovation Labs — homepage checked by scrape.py",
+      "title": "Harvard Innovation Labs — homepage",
       "excerpt": "Ventures → https://innovationlabs.harvard.edu/ventures",
       "page": "details"
     },
     {
       "id": "check-portfolio-b4a7d034fa",
       "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
-      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "title": "Harvard Innovation Labs — application page",
       "excerpt": "Our Ventures → https://innovationlabs.harvard.edu/ventures",
       "page": "application"
     },
     {
-      "id": "check-portfolio-ca4f26981e",
-      "url": "https://innovationlabs.harvard.edu/about/about-us",
-      "title": "Harvard Innovation Labs — details page checked by scrape.py",
+      "id": "check-portfolio-b8e90093e0",
+      "url": "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab/apply",
+      "title": "Harvard Innovation Labs — application page",
       "excerpt": "Our Ventures → https://innovationlabs.harvard.edu/ventures",
-      "page": "details"
+      "page": "application"
     },
     {
-      "id": "check-portfolio-d95556d69c",
-      "url": "https://innovationlabs.harvard.edu/about/about-us",
-      "title": "Harvard Innovation Labs — details page checked by scrape.py",
+      "id": "check-portfolio-d3b14de9e5",
+      "url": "https://innovationlabs.harvard.edu/articles/2023-2024-launch-lab-x-geo-cohort",
+      "title": "Harvard Innovation Labs — batches page",
+      "excerpt": "Our Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-d5dfaf23c7",
+      "url": "https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Our Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-dcc806d202",
+      "url": "https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
+      "title": "Harvard Innovation Labs — application page",
       "excerpt": "Select Venture Profiles → https://innovationlabs.harvard.edu/ventures",
-      "page": "details"
+      "page": "application"
     },
     {
       "id": "check-portfolio-de06a99e56",
       "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
-      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Select Venture Profiles → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-ec9b7a06c0",
+      "url": "https://innovationlabs.harvard.edu/how-to/put-forth-the-best-pic-application",
+      "title": "Harvard Innovation Labs — application page",
       "excerpt": "Select Venture Profiles → https://innovationlabs.harvard.edu/ventures",
       "page": "application"
     },
     {
       "id": "check-portfolio-f6df8fa375",
       "url": "https://innovationlabs.harvard.edu/",
-      "title": "Harvard Innovation Labs — homepage checked by scrape.py",
+      "title": "Harvard Innovation Labs — homepage",
       "excerpt": "Select Venture Profiles → https://innovationlabs.harvard.edu/ventures",
       "page": "details"
     },
     {
+      "id": "check-portfolio-fe77b6dc66",
+      "url": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Our Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-1a98616421",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page",
+      "excerpt": "Life Lab? Applications for residency at the Harvard Life Labs are reviewed on a rolling basis. There is only one application for both the Pagliuca Harvard Life Lab and the",
+      "page": "terms"
+    },
+    {
+      "id": "check-rolling-9e839fd555",
+      "url": "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab/apply",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "lab, the Blavatnik Harvard Life Lab Longwood. Applications are reviewed on a rolling basis. Apply Today Meet Our Ventures Our selection committee reviews applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-00bdbdd90f",
+      "url": "https://innovationlabs.harvard.edu/login?redirect=https%3A%2F%2Fwww.eventbrite.com%2Fe%2Ftips-tricks-for-applying-to-the-2027-presidents-innovation-challenge-tickets-2003682998787",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Log in with HarvardKey → https://innovationlabs.harvard.edu/sso/login/request/d725ad5c-ca94-43f7-ae5e-f47f6576a065?RelayState=https://www.eventbrite.com/e/tips-tricks-for-applying-to-the-2027-presidents-innovation-challenge-tickets-2003682998787",
+      "page": "application"
+    },
+    {
+      "id": "check-route-01e7557eb4",
+      "url": "https://innovationlabs.harvard.edu/articles/2020-presidents-innovation-challenge-opens-applications",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 → https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "page": "application"
+    },
+    {
       "id": "check-route-04dee8c975",
       "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
-      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "title": "Harvard Innovation Labs — application page",
       "excerpt": "Resources for Applicants → https://innovationlabs.harvard.edu/how-to/put-forth-the-best-pic-application",
       "page": "application"
     },
     {
       "id": "check-route-0537552906",
       "url": "https://innovationlabs.harvard.edu/about/help-center",
-      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "title": "Harvard Innovation Labs — terms page",
       "excerpt": "Become a student member. → https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
       "page": "terms"
     },
     {
-      "id": "check-route-100ca8992b",
-      "url": "https://innovationlabs.harvard.edu/about/about-us",
-      "title": "Harvard Innovation Labs — details page checked by scrape.py",
+      "id": "check-route-068325d053",
+      "url": "https://apply.innovationlabs.harvard.edu/",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Sign Up → https://apply.innovationlabs.harvard.edu/acc/r/?g=2398",
+      "page": "application"
+    },
+    {
+      "id": "check-route-076740253f",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/team_member_program",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Register → https://apply.innovationlabs.harvard.edu/acc/r/?g=2398",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1a384f3aea",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/student_membership_program",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "HarvardKey Okta → https://apply.innovationlabs.harvard.edu/sso/oauth/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1ae01a4e2f",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/team_member_program",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Apply → https://apply.innovationlabs.harvard.edu/prog/3931/apply/?next=/prog/team_member_program/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1bd17b18d9",
+      "url": "https://apply.innovationlabs.harvard.edu/",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Register → https://apply.innovationlabs.harvard.edu/acc/r/?g=2398",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1d79423db5",
+      "url": "https://innovationlabs.harvard.edu/articles/2023-2024-launch-lab-x-geo-cohort",
+      "title": "Harvard Innovation Labs — batches page",
       "excerpt": "2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 → https://innovationlabs.harvard.edu/presidents-innovation-challenge",
-      "page": "details"
+      "page": "batches"
     },
     {
       "id": "check-route-2036bf1e49",
       "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
-      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "title": "Harvard Innovation Labs — application page",
       "excerpt": "Tips for Applicants → https://innovationlabs.harvard.edu/how-to/put-forth-the-best-pic-application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-228988b087",
+      "url": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Join as a Venture (Harvard Team Leads Only) → http://apply.innovationlabs.harvard.edu/prog/student_membership_program",
+      "page": "application"
+    },
+    {
+      "id": "check-route-249c62e9bf",
+      "url": "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab/apply",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Apply Today → https://innovationlab.wufoo.com/forms/q1r4a9271px9afp/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-254766f493",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge/ingenuity-awards",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Join today → https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-30005c4add",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/team_member_program",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "SurveyMonkey Apply → https://apply.innovationlabs.harvard.edu/acc/l/",
       "page": "application"
     },
     {
       "id": "check-route-32e62afce3",
       "url": "https://innovationlabs.harvard.edu/about/help-center",
-      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "title": "Harvard Innovation Labs — terms page",
       "excerpt": "Learn more and sign up → https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
       "page": "terms"
     },
     {
       "id": "check-route-3a76b8e832",
       "url": "https://innovationlabs.harvard.edu/about/help-center",
-      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "title": "Harvard Innovation Labs — terms page",
       "excerpt": "update your information → https://apply.innovationlabs.harvard.edu/",
       "page": "terms"
     },
     {
+      "id": "check-route-3ea844a898",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge/ingenuity-awards",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 → https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "page": "application"
+    },
+    {
+      "id": "check-route-44495b59d0",
+      "url": "https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 → https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "page": "application"
+    },
+    {
       "id": "check-route-4abc732ad5",
       "url": "https://innovationlabs.harvard.edu/about/help-center",
-      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "title": "Harvard Innovation Labs — terms page",
       "excerpt": "2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 → https://innovationlabs.harvard.edu/presidents-innovation-challenge",
       "page": "terms"
     },
     {
+      "id": "check-route-55c35867be",
+      "url": "https://apply.innovationlabs.harvard.edu/",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "SurveyMonkey Apply → https://apply.innovationlabs.harvard.edu/acc/l/",
+      "page": "application"
+    },
+    {
       "id": "check-route-5807ef6c1f",
       "url": "https://innovationlabs.harvard.edu/about/help-center",
-      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "title": "Harvard Innovation Labs — terms page",
       "excerpt": "Join as Team Member of Existing Venture → http://apply.innovationlabs.harvard.edu/prog/team_member_program",
       "page": "terms"
     },
     {
+      "id": "check-route-5ab6de9281",
+      "url": "https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "You must log in to register → https://innovationlabs.harvard.edu/login?redirect=https%3A%2F%2Fwww.eventbrite.com%2Fe%2Ftips-tricks-for-applying-to-the-2027-presidents-innovation-challenge-tickets-2003682998787",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5c34e5d20c",
+      "url": "https://innovationlabs.harvard.edu/how-to/put-forth-the-best-pic-application",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 → https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "page": "application"
+    },
+    {
+      "id": "check-route-617d2033dd",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/team_member_program",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "HarvardKey Okta → https://apply.innovationlabs.harvard.edu/sso/oauth/",
+      "page": "application"
+    },
+    {
       "id": "check-route-68c2c1a10b",
       "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
-      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "title": "Harvard Innovation Labs — application page",
       "excerpt": "Wed, Nov 18 Tips + Tricks for Applying to the 2027 President's Innovation Challenge Online 4:30 PM → https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6dc5a4090d",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/student_membership_program",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "https://apply.innovationlabs.harvard.edu/prog/student_membership_program/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-72f43c69d9",
+      "url": "https://innovationlabs.harvard.edu/how-to/put-forth-the-best-pic-application",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Wed, Nov 18 Tips + Tricks for Applying to the 2027 President's Innovation Challenge Online 4:30 PM → https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
+      "page": "application"
+    },
+    {
+      "id": "check-route-74c4e49697",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge/ingenuity-awards",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Resources for Applicants → https://innovationlabs.harvard.edu/how-to/put-forth-the-best-pic-application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-76f9384a07",
+      "url": "https://apply.innovationlabs.harvard.edu/",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "HarvardKey Okta → https://apply.innovationlabs.harvard.edu/sso/oauth/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7768f5b46c",
+      "url": "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab/apply",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 → https://innovationlabs.harvard.edu/presidents-innovation-challenge",
       "page": "application"
     },
     {
       "id": "check-route-777d59a91b",
       "url": "https://innovationlabs.harvard.edu/",
-      "title": "Harvard Innovation Labs — homepage checked by scrape.py",
+      "title": "Harvard Innovation Labs — homepage",
       "excerpt": "Become a Student i-lab Member → https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
       "page": "details"
     },
     {
+      "id": "check-route-7b589828ac",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/student_membership_program",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Skip to Main Content → https://apply.innovationlabs.harvard.edu/prog/student_membership_program/#maincontent",
+      "page": "application"
+    },
+    {
       "id": "check-route-80fac9072f",
       "url": "https://innovationlabs.harvard.edu/about/help-center",
-      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "title": "Harvard Innovation Labs — terms page",
       "excerpt": "Apply by Dec. 8 → https://innovationlabs.harvard.edu/presidents-innovation-challenge",
       "page": "terms"
     },
     {
+      "id": "check-route-8578364002",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/student_membership_program",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Register → https://apply.innovationlabs.harvard.edu/acc/r/?g=2398",
+      "page": "application"
+    },
+    {
       "id": "check-route-85ad2afd8c",
       "url": "https://innovationlabs.harvard.edu/about/help-center",
-      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "title": "Harvard Innovation Labs — terms page",
       "excerpt": "Team Member Form → http://apply.innovationlabs.harvard.edu/prog/team_member_program",
       "page": "terms"
     },
     {
+      "id": "check-route-8d2b2629af",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/student_membership_program",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "SurveyMonkey Apply → https://apply.innovationlabs.harvard.edu/acc/l/",
+      "page": "application"
+    },
+    {
       "id": "check-route-8e9c92e9e1",
       "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
-      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "title": "Harvard Innovation Labs — application page",
       "excerpt": "Learn More + Apply → https://innovationlabs.harvard.edu/presidents-innovation-challenge/ingenuity-awards",
       "page": "application"
     },
     {
       "id": "check-route-8f843dc1e6",
       "url": "https://innovationlabs.harvard.edu/about/help-center",
-      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "title": "Harvard Innovation Labs — terms page",
       "excerpt": "Learn more and apply → https://innovationlabs.harvard.edu/funding-opportunities/social-impact",
       "page": "terms"
     },
     {
       "id": "check-route-99d21e69ed",
       "url": "https://innovationlabs.harvard.edu/",
-      "title": "Harvard Innovation Labs — homepage checked by scrape.py",
+      "title": "Harvard Innovation Labs — homepage",
       "excerpt": "Confirm Eligibility + Apply → https://innovationlabs.harvard.edu/presidents-innovation-challenge",
       "page": "details"
     },
     {
+      "id": "check-route-9d5e589a68",
+      "url": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Join as an Explorer → http://apply.innovationlabs.harvard.edu/prog/student_membership_program",
+      "page": "application"
+    },
+    {
       "id": "check-route-a0e0f67780",
       "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
-      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "title": "Harvard Innovation Labs — application page",
       "excerpt": "tips for PIC applicants → https://innovationlabs.harvard.edu/how-to/put-forth-the-best-pic-application",
       "page": "application"
     },
     {
+      "id": "check-route-a19d065683",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/team_member_program",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Skip to Main Content → https://apply.innovationlabs.harvard.edu/prog/team_member_program/#maincontent",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bc24730e6c",
+      "url": "https://innovationlabs.harvard.edu/funding-opportunities/social-impact",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 → https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bc745e1236",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge/ingenuity-awards",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Members: Log In to Apply → https://innovationlabs.harvard.edu/login?redirect=%2Fpresidents-innovation-challenge%2Fingenuity-awards",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bdd2b82836",
+      "url": "https://innovationlabs.harvard.edu/",
+      "title": "Harvard Innovation Labs — homepage",
+      "excerpt": "Wed, Nov 18 Tips + Tricks for Applying to the 2027 President's Innovation Challenge Online 4:30 PM → https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
+      "page": "details"
+    },
+    {
       "id": "check-route-bf0233ee29",
       "url": "https://innovationlabs.harvard.edu/",
-      "title": "Harvard Innovation Labs — homepage checked by scrape.py",
+      "title": "Harvard Innovation Labs — homepage",
       "excerpt": "2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 → https://innovationlabs.harvard.edu/presidents-innovation-challenge",
       "page": "details"
     },
     {
-      "id": "check-route-cfeb3a0698",
-      "url": "https://innovationlabs.harvard.edu/venture/care-hero-2",
-      "title": "Harvard Innovation Labs — batches page checked by scrape.py",
+      "id": "check-route-c21f37569f",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/team_member_program",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Log In → https://apply.innovationlabs.harvard.edu/prog/team_member_program/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c34c177054",
+      "url": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Join as a Team Member of an Existing Venture﻿ → http://apply.innovationlabs.harvard.edu/prog/team_member_program",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c5a87c6723",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/student_membership_program",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Log In → https://apply.innovationlabs.harvard.edu/prog/student_membership_program/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cb4fd0308a",
+      "url": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "sign up → https://apply.innovationlabs.harvard.edu/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d91627d243",
+      "url": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
+      "title": "Harvard Innovation Labs — application page",
       "excerpt": "2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 → https://innovationlabs.harvard.edu/presidents-innovation-challenge",
-      "page": "batches"
+      "page": "application"
+    },
+    {
+      "id": "check-route-dab60ab2a2",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/team_member_program",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "https://apply.innovationlabs.harvard.edu/prog/team_member_program/",
+      "page": "application"
     },
     {
       "id": "check-route-dd728e7ff8",
       "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
-      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "title": "Harvard Innovation Labs — application page",
       "excerpt": "Confirm Eligibility + Apply → https://innovationlabs.harvard.edu/presidents-innovation-challenge/eligibility",
       "page": "application"
     },
     {
       "id": "check-route-e419603143",
       "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
-      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "title": "Harvard Innovation Labs — application page",
       "excerpt": "No Venture Yet? Apply for an Ingenuity Award → https://innovationlabs.harvard.edu/presidents-innovation-challenge/ingenuity-awards",
       "page": "application"
     },
     {
       "id": "check-route-e495b40d11",
       "url": "https://innovationlabs.harvard.edu/about/help-center",
-      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "title": "Harvard Innovation Labs — terms page",
       "excerpt": "Apply to the Pagliuca Harvard Life Lab. → https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab/apply",
       "page": "terms"
     },
     {
       "id": "check-route-e8d2be196f",
       "url": "https://innovationlabs.harvard.edu/about/help-center",
-      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "title": "Harvard Innovation Labs — terms page",
       "excerpt": "Update Your Membership/Venture Information → https://apply.innovationlabs.harvard.edu/",
       "page": "terms"
+    },
+    {
+      "id": "check-route-ef2015b0bf",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/student_membership_program",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Apply → https://apply.innovationlabs.harvard.edu/prog/3718/apply/?next=/prog/student_membership_program/",
+      "page": "application"
+    },
+    {
+      "id": "check-status-382a5bb937",
+      "url": "https://innovationlabs.harvard.edu/articles/2020-presidents-innovation-challenge-opens-applications",
+      "title": "Harvard Innovation Labs — application page",
+      "excerpt": "Innovation Challenge Published Nov 18, 2019 By Staff The Harvard Innovation Labs today announced that applications are now open for the 2020 President’s Innovation Challenge, an annual event designed to bring together the Harvard",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-8711bd8e27",
+      "url": "https://innovationlabs.harvard.edu/",
+      "page": "details",
+      "excerpt": "Harvard Innovation Labs Skip to content 2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 Home Harvard Innovation Labs Search hil About ↓ Open menu for About About Us Explore Our Ecosystem Meet Our Team Visit Us Getting Started for Students Help Center + FAQs Labs + Programs ↓ Open menu for Labs + Programs Student i-lab Alumni Launch Lab Pagliuca Harvard Life Lab Climate Entrepreneurship Ventures ↓ Open menu for Ventures Select Venture Profiles Navab Social Impact Fellows Pagliuca Harvard Life Lab Residents President's Innovation Challenge Winners Member Directory (Login Required) Stories ↓ Open menu for Stories Latest News Press Mentions All Stories Events ↓ Open menu for Events Upcoming Events + Workshops President’s Innovation Challenge Resources ↓ Open menu for Resources Advising Expert Office Hours Innovation Resource Hub On-Demand Learning Navab Social Impact Fellowship Perks + Discounts Spaces + Studios Log In Welcome to the Harvard Innovation Labs! Unprompted: This year's President's Innovation Challenge celebrates innovators who have the curiosity to imagine something different, the conviction to pursue it, and the courage to begin. Confirm Eligibility + Apply Students from all 13 Harvard schools are invited to submit their boldest solutions to the world’s toughest challenges. What’s New Read All Stories Two"
+    },
+    {
+      "id": "check-page-2e73e04a1b",
+      "url": "https://innovationlabs.harvard.edu/articles/2020-presidents-innovation-challenge-opens-applications",
+      "page": "application",
+      "excerpt": "Harvard Innovation Labs Opens Applications for 2020 President’s… Skip to content 2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 Home Harvard Innovation Labs Search hil About ↓ Open menu for About About Us Explore Our Ecosystem Meet Our Team Visit Us Getting Started for Students Help Center + FAQs Labs + Programs ↓ Open menu for Labs + Programs Student i-lab Alumni Launch Lab Pagliuca Harvard Life Lab Climate Entrepreneurship Ventures ↓ Open menu for Ventures Select Venture Profiles Navab Social Impact Fellows Pagliuca Harvard Life Lab Residents President's Innovation Challenge Winners Member Directory (Login Required) Stories ↓ Open menu for Stories Latest News Press Mentions All Stories Events ↓ Open menu for Events Upcoming Events + Workshops President’s Innovation Challenge Resources ↓ Open menu for Resources Advising Expert Office Hours Innovation Resource Hub On-Demand Learning Navab Social Impact Fellowship Perks + Discounts Spaces + Studios Log In i-lab Stories Harvard Innovation Labs Opens Applications for 2020 President’s Innovation Challenge Published Nov 18, 2019 By Staff The Harvard Innovation Labs today announced that applications are now open for the 2020 President’s Innovation Challenge, an annual event designed to bring together the Harvard community to work on compelling solutions to some of the"
+    },
+    {
+      "id": "check-page-5d6cfee342",
+      "url": "https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
+      "page": "application",
+      "excerpt": "Event: Tips + Tricks for Applying to the 2027 President's Innovation… Skip to content 2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 Home Harvard Innovation Labs Search hil About ↓ Open menu for About About Us Explore Our Ecosystem Meet Our Team Visit Us Getting Started for Students Help Center + FAQs Labs + Programs ↓ Open menu for Labs + Programs Student i-lab Alumni Launch Lab Pagliuca Harvard Life Lab Climate Entrepreneurship Ventures ↓ Open menu for Ventures Select Venture Profiles Navab Social Impact Fellows Pagliuca Harvard Life Lab Residents President's Innovation Challenge Winners Member Directory (Login Required) Stories ↓ Open menu for Stories Latest News Press Mentions All Stories Events ↓ Open menu for Events Upcoming Events + Workshops President’s Innovation Challenge Resources ↓ Open menu for Resources Advising Expert Office Hours Innovation Resource Hub On-Demand Learning Navab Social Impact Fellowship Perks + Discounts Spaces + Studios Log In Wed, Nov 18 Tips + Tricks for Applying to the 2027 President's Innovation Challenge Virtual Event Details Date Wednesday, Nov 18, 2026 Time 4:30pm Audience Harvard Students Location Online Add To Calendar Google Outlook iCal You must log in to register Loading Thinking of applying to our flagship venture competition? This hands-on workshop is designed to help"
+    },
+    {
+      "id": "check-page-49e51b51f0",
+      "url": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
+      "page": "application",
+      "excerpt": "How to Join | Harvard Innovation Labs Skip to content 2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 Home Harvard Innovation Labs Search hil About ↓ Open menu for About About Us Explore Our Ecosystem Meet Our Team Visit Us Getting Started for Students Help Center + FAQs Labs + Programs ↓ Open menu for Labs + Programs Student i-lab Alumni Launch Lab Pagliuca Harvard Life Lab Climate Entrepreneurship Ventures ↓ Open menu for Ventures Select Venture Profiles Navab Social Impact Fellows Pagliuca Harvard Life Lab Residents President's Innovation Challenge Winners Member Directory (Login Required) Stories ↓ Open menu for Stories Latest News Press Mentions All Stories Events ↓ Open menu for Events Upcoming Events + Workshops President’s Innovation Challenge Resources ↓ Open menu for Resources Advising Expert Office Hours Innovation Resource Hub On-Demand Learning Navab Social Impact Fellowship Perks + Discounts Spaces + Studios Log In For Current Students Student i-lab Student i-lab Overview Member Journey Member Benefits Venture Incubation Program Venture Acceleration How to Join When you're ready to turn your ideas into impact, become a student i-lab member. Join as an Explorer Join as a Venture (Harvard Team Leads Only) Join as a Team Member of an Existing Venture﻿ How to Join 01 Complete our signup form We're"
+    },
+    {
+      "id": "check-page-675a28422c",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "page": "application",
+      "excerpt": "PIC 2027 Skip to content 2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 Home Harvard Innovation Labs Search hil About ↓ Open menu for About About Us Explore Our Ecosystem Meet Our Team Visit Us Getting Started for Students Help Center + FAQs Labs + Programs ↓ Open menu for Labs + Programs Student i-lab Alumni Launch Lab Pagliuca Harvard Life Lab Climate Entrepreneurship Ventures ↓ Open menu for Ventures Select Venture Profiles Navab Social Impact Fellows Pagliuca Harvard Life Lab Residents President's Innovation Challenge Winners Member Directory (Login Required) Stories ↓ Open menu for Stories Latest News Press Mentions All Stories Events ↓ Open menu for Events Upcoming Events + Workshops President’s Innovation Challenge Resources ↓ Open menu for Resources Advising Expert Office Hours Innovation Resource Hub On-Demand Learning Navab Social Impact Fellowship Perks + Discounts Spaces + Studios Log In 2027 President’s Innovation Challenge PIC 2027 Overview Eligibility + Timeline Selection + Scoring 2026-27 Ingenuity Awards Past Winners Impact Stories Unprompted: This year's President's Innovation Challenge celebrates innovators who have the curiosity to imagine something different, the conviction to pursue it, and the courage to begin. Confirm Eligibility + Apply RSVP for Launch Party Tips for Applicants Students"
+    },
+    {
+      "id": "check-page-e9edb6ca87",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/student_membership_program",
+      "page": "application",
+      "excerpt": "Student Membership Program - Harvard Innovation Labs Skip to Main Content Log In HarvardKey Okta SurveyMonkey Apply Register Contact the site administrator (opens your email application) Ask questions about a program or application on this site (opens your email application) Visit the Help Center (opens in a new tab) Browse and search help content (opens in a new tab) Contact support (opens in a new tab) Get help or report issues (opens in a new tab) Log In HarvardKey Okta SurveyMonkey Apply Skip to left navigation Harvard Innovation Labs Student Membership Program Opens Aug 17 2026 02:00 PM (EDT) Deadline Jul 17 2027 11:00 AM (EDT) Description Student Membership Program Welcome to the Student i-lab Membership Intake Form and thank you for your interest in the Student i-lab Membership. Please review the information and tips below before you get started: Before accessing the application for the first time, you will be asked to complete a short eligibility profile to ensure you can access the correct application(s). The Eligibility profile can be edited in the future by clicking on your name in the top right corner > My Account > Eligibility. Upon opening the application you will be prompted to let us know how you would like to engage in the i-lab. All members (new and returning) must complete and submit an application in order to activate their membership. For new members , you"
+    },
+    {
+      "id": "check-page-739236a848",
+      "url": "http://apply.innovationlabs.harvard.edu/prog/team_member_program",
+      "page": "application",
+      "excerpt": "Team Member Program - Harvard Innovation Labs Skip to Main Content Log In HarvardKey Okta SurveyMonkey Apply Register Contact the site administrator (opens your email application) Ask questions about a program or application on this site (opens your email application) Visit the Help Center (opens in a new tab) Browse and search help content (opens in a new tab) Contact support (opens in a new tab) Get help or report issues (opens in a new tab) Log In HarvardKey Okta SurveyMonkey Apply Skip to left navigation Harvard Innovation Labs Team Member Program Opens Aug 24 2026 10:00 AM (EDT) Deadline Jul 10 2027 05:00 PM (EDT) Description All team members of ventures must complete this application by adding their own information and linking themselves to their existing venture. You must be part of a venture in order to complete this form. You will need your Team Lead's full name and the venture name handy. Completion of this form is required to gain access to member resources. Once you submit your information, you will receive information from us about getting started. Access Details Harvard affiliated team members: Receive access to the I-lab space, website login, office hours, workshops, and more through their membership. Non-Harvard team members : Receive access to the space only through their membership. However, by being on a team led by a Harvard student, they will be able to"
+    },
+    {
+      "id": "check-page-a52317c9ff",
+      "url": "https://apply.innovationlabs.harvard.edu/",
+      "page": "application",
+      "excerpt": "Harvard Innovation Labs Skip to Main Content Log In HarvardKey Okta SurveyMonkey Apply Register Contact the site administrator (opens your email application) Ask questions about a program or application on this site (opens your email application) Visit the Help Center (opens in a new tab) Browse and search help content (opens in a new tab) Contact support (opens in a new tab) Get help or report issues (opens in a new tab) Log In HarvardKey Okta SurveyMonkey Apply Skip to left navigation Harvard Innovation Labs Welcome to the Harvard Innovation Labs Application Portal. To get started, select a log in. HarvardKey Login (Students, Faculty, Staff) or Guest Login (Non-Harvard Team Members) Sign Up Copyright © SurveyMonkey | Help | Privacy | Terms |"
+    },
+    {
+      "id": "check-page-00af24bfa9",
+      "url": "https://innovationlabs.harvard.edu/how-to/put-forth-the-best-pic-application",
+      "page": "application",
+      "excerpt": "Put Forth a Strong Application for the President's Innovation… Skip to content 2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 Home Harvard Innovation Labs Search hil About ↓ Open menu for About About Us Explore Our Ecosystem Meet Our Team Visit Us Getting Started for Students Help Center + FAQs Labs + Programs ↓ Open menu for Labs + Programs Student i-lab Alumni Launch Lab Pagliuca Harvard Life Lab Climate Entrepreneurship Ventures ↓ Open menu for Ventures Select Venture Profiles Navab Social Impact Fellows Pagliuca Harvard Life Lab Residents President's Innovation Challenge Winners Member Directory (Login Required) Stories ↓ Open menu for Stories Latest News Press Mentions All Stories Events ↓ Open menu for Events Upcoming Events + Workshops President’s Innovation Challenge Resources ↓ Open menu for Resources Advising Expert Office Hours Innovation Resource Hub On-Demand Learning Navab Social Impact Fellowship Perks + Discounts Spaces + Studios Log In How To Put Forth a Strong Application for the President's Innovation Challenge The Harvard President's Innovation Challenge is a unique opportunity for student founders to get valuable advice, feedback, and funding to advance their ventures. But first you have to apply. Here's how to put your best foot forward. Understand the PIC and Why You Should Apply The"
+    },
+    {
+      "id": "check-page-f009f41dcb",
+      "url": "https://innovationlabs.harvard.edu/login?redirect=https%3A%2F%2Fwww.eventbrite.com%2Fe%2Ftips-tricks-for-applying-to-the-2027-presidents-innovation-challenge-tickets-2003682998787",
+      "page": "application",
+      "excerpt": "Harvard Innovation Labs Skip to content Home My i-lab log in You must log in to access that page. Log in with HarvardKey Don’t have a HarvardKey? Log in with your i-lab account. Trouble logging in? Read our login FAQs . Username or email Password Show Remember me Submit Log in with HarvardKey Forgot or reset password? Copyright © 2011–2026 President and Fellows of Harvard College. All rights reserved"
+    },
+    {
+      "id": "check-page-641827a201",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge/ingenuity-awards",
+      "page": "application",
+      "excerpt": "2026-27 Ingenuity Awards Skip to content 2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 Home Harvard Innovation Labs Search hil About ↓ Open menu for About About Us Explore Our Ecosystem Meet Our Team Visit Us Getting Started for Students Help Center + FAQs Labs + Programs ↓ Open menu for Labs + Programs Student i-lab Alumni Launch Lab Pagliuca Harvard Life Lab Climate Entrepreneurship Ventures ↓ Open menu for Ventures Select Venture Profiles Navab Social Impact Fellows Pagliuca Harvard Life Lab Residents President's Innovation Challenge Winners Member Directory (Login Required) Stories ↓ Open menu for Stories Latest News Press Mentions All Stories Events ↓ Open menu for Events Upcoming Events + Workshops President’s Innovation Challenge Resources ↓ Open menu for Resources Advising Expert Office Hours Innovation Resource Hub On-Demand Learning Navab Social Impact Fellowship Perks + Discounts Spaces + Studios Log In 2027 President’s Innovation Challenge PIC 2027 Overview Eligibility + Timeline Selection + Scoring 2026-27 Ingenuity Awards Past Winners Impact Stories Impact starts with an idea. Harvard students with an innovative solution to a pressing problem — even if it's not yet a venture — are invited to apply for a 2027 Ingenuity Award! Celebrating idea-stage innovations from student i-lab members. Loading"
+    },
+    {
+      "id": "check-page-bd32c51417",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "page": "terms",
+      "excerpt": "Help Center | Harvard Innovation Labs Skip to content 2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 Home Harvard Innovation Labs Search hil About ↓ Open menu for About About Us Explore Our Ecosystem Meet Our Team Visit Us Getting Started for Students Help Center + FAQs Labs + Programs ↓ Open menu for Labs + Programs Student i-lab Alumni Launch Lab Pagliuca Harvard Life Lab Climate Entrepreneurship Ventures ↓ Open menu for Ventures Select Venture Profiles Navab Social Impact Fellows Pagliuca Harvard Life Lab Residents President's Innovation Challenge Winners Member Directory (Login Required) Stories ↓ Open menu for Stories Latest News Press Mentions All Stories Events ↓ Open menu for Events Upcoming Events + Workshops President’s Innovation Challenge Resources ↓ Open menu for Resources Advising Expert Office Hours Innovation Resource Hub On-Demand Learning Navab Social Impact Fellowship Perks + Discounts Spaces + Studios Log In Help Center Browse quick links and get answers to frequently asked questions about our innovation offerings for Harvard students, alumni, and affiliates. More in About About Us Our Ecosystem Meet Our Team Visit Careers Volunteer Help Center How Can We Help? 01 Quick Links Use the quick links below to access member resources, express interest in programs, and more. 02 Frequently Asked"
+    },
+    {
+      "id": "check-page-6654407215",
+      "url": "https://innovationlabs.harvard.edu/funding-opportunities/social-impact",
+      "page": "application",
+      "excerpt": "Navab Social Impact Fellowship Fund | Harvard Innovation Labs Skip to content 2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 Home Harvard Innovation Labs Search hil About ↓ Open menu for About About Us Explore Our Ecosystem Meet Our Team Visit Us Getting Started for Students Help Center + FAQs Labs + Programs ↓ Open menu for Labs + Programs Student i-lab Alumni Launch Lab Pagliuca Harvard Life Lab Climate Entrepreneurship Ventures ↓ Open menu for Ventures Select Venture Profiles Navab Social Impact Fellows Pagliuca Harvard Life Lab Residents President's Innovation Challenge Winners Member Directory (Login Required) Stories ↓ Open menu for Stories Latest News Press Mentions All Stories Events ↓ Open menu for Events Upcoming Events + Workshops President’s Innovation Challenge Resources ↓ Open menu for Resources Advising Expert Office Hours Innovation Resource Hub On-Demand Learning Navab Social Impact Fellowship Perks + Discounts Spaces + Studios Log In Navab Social Impact Fellowship Fund Non-dilutive grants, expert advice, and community for ventures led by Harvard students with a focus on social impact. More in Funding Opportunities High Potential (HiPo) Navab Social Impact Fellowship Fund The Mary Kathryn and Alexander (MBA 1991) Navab Social Impact Fellowship Fund provides grants to social impact ventures led by"
+    },
+    {
+      "id": "check-page-b9772fed53",
+      "url": "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab/apply",
+      "page": "application",
+      "excerpt": "Application | Harvard Innovation Labs Skip to content 2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 Home Harvard Innovation Labs Search hil About ↓ Open menu for About About Us Explore Our Ecosystem Meet Our Team Visit Us Getting Started for Students Help Center + FAQs Labs + Programs ↓ Open menu for Labs + Programs Student i-lab Alumni Launch Lab Pagliuca Harvard Life Lab Climate Entrepreneurship Ventures ↓ Open menu for Ventures Select Venture Profiles Navab Social Impact Fellows Pagliuca Harvard Life Lab Residents President's Innovation Challenge Winners Member Directory (Login Required) Stories ↓ Open menu for Stories Latest News Press Mentions All Stories Events ↓ Open menu for Events Upcoming Events + Workshops President’s Innovation Challenge Resources ↓ Open menu for Resources Advising Expert Office Hours Innovation Resource Hub On-Demand Learning Navab Social Impact Fellowship Perks + Discounts Spaces + Studios Log In For Biotech + Life Science Ventures Pagliuca Harvard Life Lab Pagliuca Harvard Life Lab Overview Space + Equipment Member Benefits Application Apply today to join the Pagliuca Harvard Life Lab or our sibling lab, the Blavatnik Harvard Life Lab Longwood. Applications are reviewed on a rolling basis. Apply Today Meet Our Ventures Our selection committee reviews applications three to four times"
+    },
+    {
+      "id": "check-page-1750ede5c1",
+      "url": "https://innovationlabs.harvard.edu/articles/2023-2024-launch-lab-x-geo-cohort",
+      "page": "batches",
+      "excerpt": "Harvard Innovation Labs Announces Alumni Startups in 2023-2024 Launch… Skip to content 2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 Home Harvard Innovation Labs Search hil About ↓ Open menu for About About Us Explore Our Ecosystem Meet Our Team Visit Us Getting Started for Students Help Center + FAQs Labs + Programs ↓ Open menu for Labs + Programs Student i-lab Alumni Launch Lab Pagliuca Harvard Life Lab Climate Entrepreneurship Ventures ↓ Open menu for Ventures Select Venture Profiles Navab Social Impact Fellows Pagliuca Harvard Life Lab Residents President's Innovation Challenge Winners Member Directory (Login Required) Stories ↓ Open menu for Stories Latest News Press Mentions All Stories Events ↓ Open menu for Events Upcoming Events + Workshops President’s Innovation Challenge Resources ↓ Open menu for Resources Advising Expert Office Hours Innovation Resource Hub On-Demand Learning Navab Social Impact Fellowship Perks + Discounts Spaces + Studios Log In i-lab Stories Harvard Innovation Labs Announces Alumni Startups in 2023-2024 Launch Lab X GEO Cohort The 2023-2024 Launch Lab X GEO cohort during their fall orientation. (Credit: Susan Young) Published Oct 12, 2023 By Staff Featuring Aperture Bio , Archslate Inc. , Beaver Health, Inc. , Bitmal , CartaBio Inc and 18 more. The Harvard Innovation Labs is"
     }
   ],
   "findings": {
@@ -292,41 +975,131 @@
         "evidenceId": "check-route-bf0233ee29"
       },
       {
+        "value": "https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
+        "evidenceId": "check-route-bdd2b82836"
+      },
+      {
         "value": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
         "evidenceId": "check-route-777d59a91b"
       },
       {
-        "value": "https://innovationlabs.harvard.edu/presidents-innovation-challenge/eligibility",
-        "evidenceId": "check-route-dd728e7ff8"
+        "value": "https://innovationlabs.harvard.edu/login?redirect=https%3A%2F%2Fwww.eventbrite.com%2Fe%2Ftips-tricks-for-applying-to-the-2027-presidents-innovation-challenge-tickets-2003682998787",
+        "evidenceId": "check-route-5ab6de9281"
       },
       {
-        "value": "https://innovationlabs.harvard.edu/how-to/put-forth-the-best-pic-application",
-        "evidenceId": "check-route-2036bf1e49"
+        "value": "http://apply.innovationlabs.harvard.edu/prog/student_membership_program",
+        "evidenceId": "check-route-9d5e589a68"
       },
       {
-        "value": "https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
-        "evidenceId": "check-route-68c2c1a10b"
-      },
-      {
-        "value": "https://innovationlabs.harvard.edu/presidents-innovation-challenge/ingenuity-awards",
-        "evidenceId": "check-route-8e9c92e9e1"
+        "value": "http://apply.innovationlabs.harvard.edu/prog/team_member_program",
+        "evidenceId": "check-route-c34c177054"
       }
     ],
     "applicationUrl": [
       {
-        "value": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
-        "evidenceId": "check-route-777d59a91b"
+        "value": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+        "evidenceId": "check-route-bf0233ee29"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-382a5bb937"
+      }
+    ],
     "operatingStatus": [],
-    "deadlines": [],
+    "deadlines": [
+      {
+        "value": "2027-07-17",
+        "evidenceId": "check-deadline-2154de1789"
+      },
+      {
+        "value": "2027-07-10",
+        "evidenceId": "check-deadline-cf0f89452d"
+      }
+    ],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-1a98616421"
+      }
+    ],
+    "announcedIntake": [
+      {
+        "value": "may",
+        "evidenceId": "check-announced-6760128e38"
+      },
+      {
+        "value": "Dec",
+        "evidenceId": "check-announced-8e61ba2ba2"
+      },
+      {
+        "value": "spring",
+        "evidenceId": "check-announced-01bf5d4ed0"
+      },
+      {
+        "value": "fall",
+        "evidenceId": "check-announced-bc5fa06a93"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-c482694033"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-faccbb2b4d"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "more than just a chance to win significant financial support (up to $75,000 in non-dilutive funding for your venture). It's a way to propel your",
+        "evidenceId": "check-deal-c582edcb40"
+      },
+      {
+        "value": "idea and the motivation to work on it. Winners will receive up to $2,500 in funding, and recognition at the President’s Innovation Challenge",
+        "evidenceId": "check-deal-483c98f5b3"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "75000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-c582edcb40"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "2500",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-483c98f5b3"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://innovationlabs.harvard.edu/ventures",
         "evidenceId": "check-portfolio-aec6209d5d"
+      },
+      {
+        "value": "https://innovationlabs.harvard.edu/ventures?program=pagliuca-harvard-life-lab",
+        "evidenceId": "check-portfolio-4057bcf543"
       }
     ],
     "name": [

@@ -1,12 +1,28 @@
 {
   "programId": "darwin-startups",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://www.darwinstartups.com/batch15",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.darwinstartups.com/portfolio",
       "page": "portfolio",
       "anchor": "Portfólio",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.darwinstartups.com/s/_Portfolio-Darwin-Startups-2026.pdf",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

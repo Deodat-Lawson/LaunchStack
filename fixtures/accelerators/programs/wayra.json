@@ -9,14 +9,14 @@
   "websiteUrl": "https://wayra.com/",
   "applyUrl": "https://wayra.com/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Wayra | Telefónica's Corporate Venture Capital Perks Reports About us en EN ES PT Home investment services startups News contact Perks Activation Programme About Us Link Investment is just the beginning. Growth is the goal. OUTLIERS 2026: Discover the startups that are already shaping the future Our mission is to foster innovation and drive progress by investing in startups and connecting them with organisations to generate impact in Spain, Germany, the United Kingdom and Brazil. We invest in startups with the potential to generate real impact within Telefónica and help them scale through commercial collaboration. Our venture-client model connects startups with Telefónica’s business units, opening access to global markets and one of the largest customer bases in the world. Our experience allows us to design and deliver open innovation and corporate venture programmes for Telefónica and other corporations, either directly or through our open innovation platforms. Explore how we can build your innovation strategy together. Ready to scale, collaborate or just get to know us ? Let´s talk! No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Wayra is Telefónica's Corporate Venture Capital and open innovation platform. We invest in AI, connectivity and cybersecurity startups.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "We invest in startups with the potential to generate real impact within Telefónica and help them scale through commercial collaboration. Our venture-client model connects startups with Telefónica’s business units, opening access to global markets and one of the largest customer bases in the world. Discover how we can grow together.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "wayra-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://wayra.com/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

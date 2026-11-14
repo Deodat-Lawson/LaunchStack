@@ -1,37 +1,388 @@
 {
   "programId": "mit-delta-v",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
-    "https://entrepreneurship.mit.edu/accelerator/program/"
+    "https://entrepreneurship.mit.edu/accelerator/program/",
+    "https://entrepreneurship.mit.edu/accelerator/apply/",
+    "https://entrepreneurship.mit.edu/accelerator/faq/",
+    "https://entrepreneurship.mit.edu/tag/investment/",
+    "https://entrepreneurship.mit.edu/easter-2021-basket-of-updates/",
+    "https://entrepreneurship.mit.edu/news/designx-selects-first-cohort/",
+    "https://entrepreneurship.mit.edu/news/twoxar-announces-series-quest-collapse-drug-discovery-timelines/",
+    "https://entrepreneurship.mit.edu/accelerator/",
+    "https://entrepreneurship.mit.edu/accelerator/2016-delta-v/",
+    "https://entrepreneurship.mit.edu/accelerator/2017-delta-v/",
+    "https://entrepreneurship.mit.edu/wp-content/uploads/2017-delta-v-Cohort-Infographic-1024x791.jpg",
+    "https://entrepreneurship.mit.edu/accelerator/2018-delta-v/",
+    "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
+    "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
+    "https://entrepreneurship.mit.edu/wp-content/uploads/delta-v-2020-cohort-FINAL-infographic-copy.png"
   ],
   "evidence": [
     {
-      "id": "check-deal-96f460d159",
-      "url": "https://entrepreneurship.mit.edu/accelerator/program/",
-      "title": "MIT delta v — homepage checked by scrape.py",
-      "excerpt": "across multiple industries. Each Partner will provide a range of monthly office hours, workshops, and mentorship. delta v Perks & Partnerships We unlock over $200K in value per team in perks & partnerships that help startups scale! Critical services you’ll have access to include analytics & business intelligence,",
+      "id": "check-announced-50b95d2f30",
+      "url": "https://entrepreneurship.mit.edu/accelerator/faq/",
+      "title": "MIT delta v — terms page",
+      "excerpt": "31 – Drop in Office Hours (11:00am – 4:00pm) Wednesday April 1 – Applications close at 5:00pm Eastern Monday April 27 – interviews with finalist teams first week of May – acceptance",
+      "page": "terms"
+    },
+    {
+      "id": "check-announced-7cc590d2a8",
+      "url": "https://entrepreneurship.mit.edu/accelerator/",
+      "title": "MIT delta v — program page",
+      "excerpt": "Canva Google Figma and many more! delta v Timeline Sunday March 1 – Applications open Wednesday March 4 – 1st Info Session (6:00 – 7:00pm) Wednesday March 11 –",
       "page": "details"
     },
     {
-      "id": "check-deal-b80b42637e",
+      "id": "check-announced-8dd2b53116",
       "url": "https://entrepreneurship.mit.edu/accelerator/program/",
-      "title": "MIT delta v — homepage checked by scrape.py",
-      "excerpt": "the webcast Meet Our Teams! $75K equity-free funding MIT’s Flagship Accelerator for Builders Network & Community: High-Value Partners, Mentors, Investors Over $200K in Value Per Team in Perks & Partnerships delta v Inaugural Partner Network Meet Our Partners Our delta v Partners are key components of the accelerator",
+      "title": "MIT delta v — homepage",
+      "excerpt": "Canva Google Figma and many more! delta v Timeline Sunday March 1 – Applications open Wednesday March 4 – 1st Info Session (6:00 – 7:00pm) Wednesday March 11 –",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-96b4ce2bad",
+      "url": "https://entrepreneurship.mit.edu/accelerator/apply/",
+      "title": "MIT delta v — application page",
+      "excerpt": "Canva Google Figma and many more! delta v Timeline Sunday March 1 – Applications open Wednesday March 4 – 1st Info Session (6:00 – 7:00pm) Wednesday March 11 –",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-ad4b99249d",
+      "url": "https://entrepreneurship.mit.edu/accelerator/",
+      "title": "MIT delta v — program page",
+      "excerpt": "31 – Drop in Office Hours (11:00am – 4:00pm) Wednesday April 1 – Applications close at 5:00pm Eastern Monday April 27 – interviews with finalist teams first week of May – acceptance",
+      "page": "details"
+    },
+    {
+      "id": "check-announced-e76c12cd3d",
+      "url": "https://entrepreneurship.mit.edu/accelerator/apply/",
+      "title": "MIT delta v — application page",
+      "excerpt": "31 – Drop in Office Hours (11:00am – 4:00pm) Wednesday April 1 – Applications close at 5:00pm Eastern Monday April 27 – interviews with finalist teams first week of May – acceptance",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-e8232ee93d",
+      "url": "https://entrepreneurship.mit.edu/accelerator/faq/",
+      "title": "MIT delta v — terms page",
+      "excerpt": "Canva Google Figma and many more! delta v Timeline Sunday March 1 – Applications open Wednesday March 4 – 1st Info Session (6:00 – 7:00pm) Wednesday March 11 –",
+      "page": "terms"
+    },
+    {
+      "id": "check-announced-f602162706",
+      "url": "https://entrepreneurship.mit.edu/accelerator/program/",
+      "title": "MIT delta v — homepage",
+      "excerpt": "31 – Drop in Office Hours (11:00am – 4:00pm) Wednesday April 1 – Applications close at 5:00pm Eastern Monday April 27 – interviews with finalist teams first week of May – acceptance",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-03fbf77dce",
+      "url": "https://entrepreneurship.mit.edu/accelerator/program/",
+      "title": "MIT delta v — homepage",
+      "excerpt": "Network & Community: High-Value Partners, Mentors, Investors Over $200K in Value Per Team in Perks & Partnerships delta v Inaugural Partner",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-0efd816879",
+      "url": "https://entrepreneurship.mit.edu/accelerator/apply/",
+      "title": "MIT delta v — application page",
+      "excerpt": "and mentorship. delta v Perks & Partnerships We unlock over $200K in value per team in perks & partnerships that help startups scale!",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-1b7fd385d0",
+      "url": "https://entrepreneurship.mit.edu/accelerator/apply/",
+      "title": "MIT delta v — application page",
+      "excerpt": "Network & Community: High-Value Partners, Mentors, Investors Over $200K in Value Per Team in Perks & Partnerships delta v Inaugural Partner",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-36fe89cd2d",
+      "url": "https://entrepreneurship.mit.edu/news/designx-selects-first-cohort/",
+      "title": "MIT delta v — batches page",
+      "excerpt": "will provide support via targeted courses, external mentorship, $15,000 in equity-free seed funding, and a robust network to help students",
+      "page": "batches"
+    },
+    {
+      "id": "check-deal-4bfbce9325",
+      "url": "https://entrepreneurship.mit.edu/accelerator/apply/",
+      "title": "MIT delta v — application page",
+      "excerpt": "Watch the livestream! Register for the webcast Meet Our Teams! $75K equity-free funding MIT’s Flagship Accelerator for Builders Network",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-5820f0c440",
+      "url": "https://entrepreneurship.mit.edu/accelerator/faq/",
+      "title": "MIT delta v — terms page",
+      "excerpt": "Network & Community: High-Value Partners, Mentors, Investors Over $200K in Value Per Team in Perks & Partnerships delta v Inaugural Partner",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-64965581c3",
+      "url": "https://entrepreneurship.mit.edu/accelerator/",
+      "title": "MIT delta v — program page",
+      "excerpt": "Network & Community: High-Value Partners, Mentors, Investors Over $200K in Value Per Team in Perks & Partnerships delta v Inaugural Partner",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-7949a1da41",
+      "url": "https://entrepreneurship.mit.edu/accelerator/program/",
+      "title": "MIT delta v — homepage",
+      "excerpt": "and mentorship. delta v Perks & Partnerships We unlock over $200K in value per team in perks & partnerships that help startups scale!",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-9a38c6a06b",
+      "url": "https://entrepreneurship.mit.edu/accelerator/program/",
+      "title": "MIT delta v — homepage",
+      "excerpt": "Watch the livestream! Register for the webcast Meet Our Teams! $75K equity-free funding MIT’s Flagship Accelerator for Builders Network",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-c10426b559",
+      "url": "https://entrepreneurship.mit.edu/accelerator/faq/",
+      "title": "MIT delta v — terms page",
+      "excerpt": "and mentorship. delta v Perks & Partnerships We unlock over $200K in value per team in perks & partnerships that help startups scale!",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-c77ebe24a7",
+      "url": "https://entrepreneurship.mit.edu/accelerator/",
+      "title": "MIT delta v — program page",
+      "excerpt": "and mentorship. delta v Perks & Partnerships We unlock over $200K in value per team in perks & partnerships that help startups scale!",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-e40777dff7",
+      "url": "https://entrepreneurship.mit.edu/accelerator/faq/",
+      "title": "MIT delta v — terms page",
+      "excerpt": "Watch the livestream! Register for the webcast Meet Our Teams! $75K equity-free funding MIT’s Flagship Accelerator for Builders Network",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-e5529b2c7c",
+      "url": "https://entrepreneurship.mit.edu/accelerator/",
+      "title": "MIT delta v — program page",
+      "excerpt": "Watch the livestream! Register for the webcast Meet Our Teams! $75K equity-free funding MIT’s Flagship Accelerator for Builders Network",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-76a17c393a",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "emotional, and baby care needs in the critical 8 weeks postpartum through a combination of in-home and",
+      "page": "details"
+    },
+    {
+      "id": "check-format-10ba487574",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "with limited data and the pandemic- induced elimination of in-person hiring events, recruiters need a better way to predict",
+      "page": "details"
+    },
+    {
+      "id": "check-format-37da4e3dd5",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "management, starting with hypothyroidism, by building a virtual care clinic that is data-driven, comprehensive and",
+      "page": "details"
+    },
+    {
+      "id": "check-format-385fb4aa85",
+      "url": "https://entrepreneurship.mit.edu/easter-2021-basket-of-updates/",
+      "title": "MIT delta v — batches page",
+      "excerpt": "the pandemic. Don’t get me wrong, I miss seeing people in person and that is even better, but this is not back and the ROI",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-3a18b3fc4c",
+      "url": "https://entrepreneurship.mit.edu/easter-2021-basket-of-updates/",
+      "title": "MIT delta v — batches page",
+      "excerpt": "and the ROI might be even higher. There will be a mix of virtual and in person in the future, but we will never go back to",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-5f01242e9b",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2018-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "Ayna and Nneka. Beyond their resumes, Swappl’s team is a hybrid between urban planning, technology, and economics.",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5f7b9032cc",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2016-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "cognitive decline. Rendever is building a research-based virtual reality platform to improve the aging process by providing",
+      "page": "details"
+    },
+    {
+      "id": "check-format-65d679470b",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "8 weeks postpartum through a combination of in-home and remote care, supported by a curated provider network, and 24/7",
+      "page": "details"
+    },
+    {
+      "id": "check-format-74b0382fe4",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "— we pivoted our accelerator into a high-touch, fully-remote experience by thinking like entrepreneurs ourselves. Why",
+      "page": "details"
+    },
+    {
+      "id": "check-format-7b50ba0fe6",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2017-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "one–on–one phone consultations, written response Q&A, or in-person interviews. DeepBench’s vision is to help every person",
+      "page": "details"
+    },
+    {
+      "id": "check-format-895dbbeaba",
+      "url": "https://entrepreneurship.mit.edu/easter-2021-basket-of-updates/",
+      "title": "MIT delta v — batches page",
+      "excerpt": "might be even higher. There will be a mix of virtual and in person in the future, but we will never go back to the old way.",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-91b7130061",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "specialists closer to patients by enabling an automated, remote eye exam. Our device, Ocular-1, automates a traditional",
+      "page": "details"
+    },
+    {
+      "id": "check-format-99f4aa05a2",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "Carballo SM ’20, and Trang Luu SM ’20. delta v as in Virtual When MIT closed in March — in the middle of applications —",
+      "page": "details"
+    },
+    {
+      "id": "check-format-be42f2f794",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "built our IoT system to operate and last even in the most remote, toughest conditions. By integrating edge computing with",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ea152629e1",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "based on generalized measurement algorithms. With MYAVA virtual try-on, the customer can see how the clothes will fit on",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ed2de38f62",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2018-delta-v/",
+      "title": "MIT delta v — program page",
+      "excerpt": "minds with their peers and thoughtful instructors. In virtual seminars, they explore their interests and build enduring",
       "page": "details"
     },
     {
       "id": "check-name-7f229f7383",
       "url": "https://entrepreneurship.mit.edu/accelerator/program/",
-      "title": "MIT delta v — homepage checked by scrape.py",
+      "title": "MIT delta v — homepage",
       "excerpt": "MIT delta v Skip to content Twitter LinkedIn Instagram Facebook Orbit",
       "page": "details"
     },
     {
-      "id": "check-route-1c558a50df",
+      "id": "check-route-60b617a912",
       "url": "https://entrepreneurship.mit.edu/accelerator/program/",
-      "title": "MIT delta v — homepage checked by scrape.py",
-      "excerpt": "MIT delta v → https://entrepreneurship.mit.edu/accelerator/program/",
+      "title": "MIT delta v — homepage",
+      "excerpt": "https://entrepreneurship.mit.edu/accelerator/program/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-b64169a74c",
+      "url": "https://entrepreneurship.mit.edu/accelerator/program/",
+      "page": "details",
+      "excerpt": "MIT delta v Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match MIT delta v Greg Wymer 2026-08-19T15:30:11-04:00 Friday September 11 4:00 pm – 5:30pm (doors at 3:30) MIT Kresge Auditorium Get Your Tickets Now! Won’t be in Cambridge? Watch the livestream! Register for the webcast Meet Our Teams! $75K equity-free funding MIT’s Flagship Accelerator for Builders Network & Community: High-Value Partners, Mentors, Investors Over $200K in Value Per Team in Perks & Partnerships delta v Inaugural Partner Network Meet Our Partners Our delta v Partners are key components of the accelerator program. Partners are C-suite executives, founders, VCs, and domain experts across multiple industries. Each Partner will provide a range of monthly office hours, workshops, and mentorship. delta v Perks & Partnerships We"
+    },
+    {
+      "id": "check-page-4b42bdfa3f",
+      "url": "https://entrepreneurship.mit.edu/accelerator/apply/",
+      "page": "application",
+      "excerpt": "MIT delta v Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match MIT delta v Greg Wymer 2026-08-19T15:30:11-04:00 Friday September 11 4:00 pm – 5:30pm (doors at 3:30) MIT Kresge Auditorium Get Your Tickets Now! Won’t be in Cambridge? Watch the livestream! Register for the webcast Meet Our Teams! $75K equity-free funding MIT’s Flagship Accelerator for Builders Network & Community: High-Value Partners, Mentors, Investors Over $200K in Value Per Team in Perks & Partnerships delta v Inaugural Partner Network Meet Our Partners Our delta v Partners are key components of the accelerator program. Partners are C-suite executives, founders, VCs, and domain experts across multiple industries. Each Partner will provide a range of monthly office hours, workshops, and mentorship. delta v Perks & Partnerships We"
+    },
+    {
+      "id": "check-page-abc10f2566",
+      "url": "https://entrepreneurship.mit.edu/accelerator/faq/",
+      "page": "terms",
+      "excerpt": "MIT delta v Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match MIT delta v Greg Wymer 2026-08-19T15:30:11-04:00 Friday September 11 4:00 pm – 5:30pm (doors at 3:30) MIT Kresge Auditorium Get Your Tickets Now! Won’t be in Cambridge? Watch the livestream! Register for the webcast Meet Our Teams! $75K equity-free funding MIT’s Flagship Accelerator for Builders Network & Community: High-Value Partners, Mentors, Investors Over $200K in Value Per Team in Perks & Partnerships delta v Inaugural Partner Network Meet Our Partners Our delta v Partners are key components of the accelerator program. Partners are C-suite executives, founders, VCs, and domain experts across multiple industries. Each Partner will provide a range of monthly office hours, workshops, and mentorship. delta v Perks & Partnerships We"
+    },
+    {
+      "id": "check-page-73bcc1ec9c",
+      "url": "https://entrepreneurship.mit.edu/tag/investment/",
+      "page": "terms",
+      "excerpt": "investment Archives - The Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match investment MIT Innovators: Aline Oliveira and Fabricio Pezente [Proventus] Gallery 5 04, 2018 MIT Innovators: Aline Oliveira and Fabricio Pezente [Proventus] Martin Trust Center 2018-04-05T13:08:41-04:00 We chat to Aline Oliveira (CEO) and Fabricio Pezente (Head of Product Development) of Proventus about their goals to support America’s farming community with their new start-up venture. … MIT Innovators: Aline Oliveira and Fabricio Pezente [Proventus] Martin Trust Center 2018-04-05T13:08:41-04:00 Click to Subscribe to Our Newsletter Martin Trust Center for MIT Entrepreneurship One Amherst Street E40-160 Cambridge MA 02142 617.253.8653 trustcenter@mit.edu Accessibility Follow About"
+    },
+    {
+      "id": "check-page-3781005885",
+      "url": "https://entrepreneurship.mit.edu/easter-2021-basket-of-updates/",
+      "page": "batches",
+      "excerpt": "Easter 2021 Basket of Updates - The Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match Easter 2021 Basket of Updates Author: Bill Aulet An Easter 2021 basket full of random updates: Trish Cotter Moves On : After over 5 years of complete dedication to the Martin Trust Center for MIT Entrepreneurship, Executive Director Trish Cotter has decided to transition out to find her next challenge. Trish’s spectacular contributions in running delta v, operations, teaching, mentoring, and overseeing the myriad of other programs like EDP has brought the center to a whole new level. She has been a gift to the students, the staff, MIT Sloan, MIT, and the entire entrepreneurial community, and while we hate to lose her, we understand and are so grateful for the time we"
+    },
+    {
+      "id": "check-page-79db14b9c2",
+      "url": "https://entrepreneurship.mit.edu/news/designx-selects-first-cohort/",
+      "page": "batches",
+      "excerpt": "DesignX Selects First Cohort - The Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match DesignX Selects First Cohort DesignX Selects First Cohort Eight student-led teams hoping to launch ventures ranging from real estate development, to urban diagnostics, to novel design solutions for schoolchildren have been selected as the inaugural cohort for DesignX, the new entrepreneurship accelerator from MIT’s School of Architecture and Planning (SA+P). Fifteen teams gathered at the MIT Media Lab on Saturday to present their ideas to a selection panel drawn largely from outside MIT. The teams included students, faculty, and alumni from every unit of SA+P, joined by others specializing in engineering, business, and computer science. Of these, eight teams were chosen"
+    },
+    {
+      "id": "check-page-6f3897d908",
+      "url": "https://entrepreneurship.mit.edu/news/twoxar-announces-series-quest-collapse-drug-discovery-timelines/",
+      "page": "batches",
+      "excerpt": "twoXAR Announces Series A in Quest to Collapse Drug Discovery Timelines - The Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match twoXAR Announces Series A in Quest to Collapse Drug Discovery Timelines twoXAR Announces Series A in Quest to Collapse Drug Discovery Timelines from MIT Sloan News by Edward Mason The pharmaceutical industry’s traditional plodding path for discovering drugs can cost billions of dollars, require more than a dozen years from concept to consumer, and in the end result in a product with a jaw-dropping price tag. Enter twoXAR , a Palo Alto, California, startup that hopes to apply artificial intelligence to big data to reduce the timeline of drug discovery and cut health care costs. This week, the MIT-alumnus led company announced it"
+    },
+    {
+      "id": "check-page-701ec7d6ac",
+      "url": "https://entrepreneurship.mit.edu/accelerator/",
+      "page": "details",
+      "excerpt": "MIT delta v Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match MIT delta v Greg Wymer 2026-08-19T15:30:11-04:00 Friday September 11 4:00 pm – 5:30pm (doors at 3:30) MIT Kresge Auditorium Get Your Tickets Now! Won’t be in Cambridge? Watch the livestream! Register for the webcast Meet Our Teams! $75K equity-free funding MIT’s Flagship Accelerator for Builders Network & Community: High-Value Partners, Mentors, Investors Over $200K in Value Per Team in Perks & Partnerships delta v Inaugural Partner Network Meet Our Partners Our delta v Partners are key components of the accelerator program. Partners are C-suite executives, founders, VCs, and domain experts across multiple industries. Each Partner will provide a range of monthly office hours, workshops, and mentorship. delta v Perks & Partnerships We"
+    },
+    {
+      "id": "check-page-d726e41002",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2016-delta-v/",
+      "page": "details",
+      "excerpt": "MIT delta v Demo Day 2016 Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match 2016 delta v Teams 2016 delta v Teams Greg Wymer 2022-07-25T20:38:50-04:00 Alfie Alfie: created by students for students! Alfie knows student debt makes pursuing your dreams difficult. So they work with universities to offer an income-based financing solution. Alfie predicts future income profiles and invests in students for a fixed percentage of income over a set period of time. Students get greater flexibility and never have to worry about debt again! Armoire www.armoire.style Armoire is pioneering ‘wardrobe-as-a-service’. They offer their customer an endless stream of high-end clothes to rent, which Armoire personalizes to her style and fit preferences using machine learning algorithms. With door-to-door pickup and"
+    },
+    {
+      "id": "check-page-eb48cdb02a",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2017-delta-v/",
+      "page": "details",
+      "excerpt": "2017 MIT delta v Teams - Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match 2017 delta v 2017 delta v Greg Wymer 2023-07-11T14:40:30-04:00 (click to enlarge) 2017 Teams Alba Focused on empowering women to achieve their goals, Alba has developed a care giving marketplace for parents in Latin America. Its founders have seen just how difficult it is for Latin American families to balance work, life, and child care, especially with an increasing amount of qualified women joining the workforce. Lack of traditional home help, due to changes in labor laws, has made finding help at home an even more difficult task. Furthermore, there are thousands of unemployed students with a flexible schedule that are looking to earn a fair salary while focusing on their"
+    },
+    {
+      "id": "check-page-86abb311eb",
+      "url": "https://entrepreneurship.mit.edu/wp-content/uploads/2017-delta-v-Cohort-Infographic-1024x791.jpg",
+      "page": "batches",
+      "excerpt": "���� JFIF �� ;CREATOR: gd-jpeg v1.0 (using IJG JPEG v62), quality = 82 �� C ! ' \"#%%% ),($+!$%$�� C $ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$�� \" �� �� � } !1A Qa \"q 2��� #B�� R��$3br� %&'()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz��������������������������������������������������������������������������� �� � w !1 AQ aq \"2� B���� #3R� br� $4�%� &'()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz�������������������������������������������������������������������������� ? ���(� �(� �(� ��E ~4Q@ Q@ � P R�E � � P E P E P E P E P E P G�E QE QE QE � � Q@ � P ��E QEr� �m ��AxUe��A �$���I� '���ݵ. �� ��QY� �k� \"�T�`a�@�wS�O�9 vq!��%D�N��#=�L��vc� +ϛǚ�r� �ۤ��GR�*G�I� ��� < ����4 �*+� �>�?睷�� Ə�O�O��m� |�� B�h�=� ��T� �v���� ?�=�?睷�� ƀ= ����O�O��m� |��� �S�y� �'�h п +� �=�?睷�� Ə�O�O��m� |�� B��m+� ���Ac v��9b ��:��w4 QE QE QE QE QE QE Q�(� �Ɗ( ��( �� JZ(� �� (�� (�� (�� (�� (�� (�h�� (�� (�� (�� �( �� ? (�� (�� (�� Ɗ(� �(� �( ��( �h�� (�� (�� (�� (�� (�� (�� (�� (�� (�� (�� (�� (�� (�� (�� (�� (�� (�� (�� (�� (�� (�� (�� (�� (�� (�� FeE,�*��I� �K� � Ǟ3���Bt� m� f�� ď� 꿴'���^ %��o�@Q�� ?�}��? ��D�ʱV#�%� ��ǿ�ay`�ˮ��=��w�� �u&��䘶�;�� _O� �G�{�|m �[̓D�$��+ �#�k�O��,�� ��� I��� �����h�.�>i�嗵�]�/��+�L������ w�o��W- � ���l��% Al�>�O�~2> � -Ña{�g �y�_�?�5���Ic1G S�[� ^���R � �>� 0 ��� � ÿ�zh� L�� � Z>�����g�� �A�� f]˺�O 9 < � �ç�^�@`A �+�.���֤�M�] ���^�M�Ӹ���fI� ���Q�_ � � �� ��HO`;���"
+    },
+    {
+      "id": "check-page-a243dc6250",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2018-delta-v/",
+      "page": "details",
+      "excerpt": "2018 delta v - The Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match 2018 delta v 2018 delta v Greg Wymer 2022-07-25T20:23:19-04:00 (click to enlarge) 2018 Teams Aavia The pill on time, every time Aavia is empowering women by improving the Birth Control Pill experience with IoT and behavioral science. Our solution is a patent-pending smart device and app that actually know if she’s taken her Birth Control Pill so she can take on her day with confidence. The smart device contains sensors that recognize Pill count and position, and sends persistent and customizable reminders to her phone app via Bluetooth. The phone app automatically logs the time of intake and boasts of several features, including time zone adjustments, proactive educational tips, symptom"
+    },
+    {
+      "id": "check-page-11dabd64dd",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2019-delta-v/",
+      "page": "details",
+      "excerpt": "2019 delta v - The Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match 2019 delta v 2019 delta v Greg Wymer 2023-07-17T17:27:30-04:00 (click to enlarge) “Take the First Step” Abound Early learning, without the screens By fourth grade, roughly 1 in 3 children in the U.S. is a proficient reader, and 1 in 10 possesses the advanced reading skills needed to succeed in the 21st century economy. As a nation, we have spent billions of dollars trying to ensure that all children can read well, but we have never substantively engaged the stakeholder who is there the most—and cares the most—about an individual child’s reading success: the parent. Most parents don’t realize what it takes to read well, or understand that language and literacy skills accumulate over time,"
+    },
+    {
+      "id": "check-page-582157a8e3",
+      "url": "https://entrepreneurship.mit.edu/accelerator/2020-delta-v/",
+      "page": "details",
+      "excerpt": "2020 delta v - The Martin Trust Center for MIT Entrepreneurship Skip to content Twitter LinkedIn Instagram Facebook Orbit Podcast Knowledge Base Blog News Donate Search for: ABOUT Our Mission Guiding Principles Our Space Membership Team Annual Report Awards COURSES Eship Courses MIT Sloan E+I Certificate Engineering Entrepreneurship Certificate Courseorama Affiliated Faculty edX Executive Education STUDENT RESOURCES Entrepreneurs in Residence Student Organizations Campus Partners DIY MTC BU/MIT Student Innovations Law Clinic Meeting Rooms ACCELERATOR MIT delta v Partner Network 2026 delta v Past Teams 10 Years Impact Study Demo Day PROGRAMS Events MIT Fuse StartMIT Pozen Internship Pitch2Match 2020 delta v 2020 delta v Greg Wymer 2023-07-11T14:51:47-04:00 2020 Demo Day Webcast (click to enlarge) 2020 Teams Aimvest Technologies, Inc. Goal-based investing 2.0 Aimvest Technologies provides an asset management platform to financial planners. We allow them to set precise targets for their clients’ portfolios and our quantitative risk-management models manage risk in real time to optimize for the probability of hitting these targets. In contrast to tedious risk-tolerance questionnaires and arbitrary risk scores that fail to maximize such probabilities, our scientific approach to risk-taking helps planners have a meaningful and trusted dialogue with clients, and reconciles budgeting"
+    },
+    {
+      "id": "check-page-0548ff9da2",
+      "url": "https://entrepreneurship.mit.edu/wp-content/uploads/delta-v-2020-cohort-FINAL-infographic-copy.png",
+      "page": "batches",
+      "excerpt": "�PNG IHDR � � �i3� gAMA �� �a cHRM z& �� � �� u0 �` :� p��Q < �eXIfMM * J R ( �i Z � � � � �� � m2�p pHYs � � n�u> YiTXtXML:com.adobe.xmp 1 L�'Y @ IDATx ����-�y ��˅�F ��1� �`Ȥ M �4� < � � B < � ��IC�~� i߽��ﵿ������ @� @� @� @� � �/6��L� @� @� @� @� Ll @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @� L� @� @� @� @� ��� �,�� @� @� @� @�"
     }
   ],
   "findings": {
@@ -41,21 +392,100 @@
     "applicationUrl": [
       {
         "value": "https://entrepreneurship.mit.edu/accelerator/program/",
-        "evidenceId": "check-route-1c558a50df"
+        "evidenceId": "check-route-60b617a912"
       }
     ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "March",
+        "evidenceId": "check-announced-8dd2b53116"
+      },
+      {
+        "value": "April",
+        "evidenceId": "check-announced-f602162706"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "8",
+        "evidenceId": "check-duration-76a17c393a"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-385fb4aa85"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-3a18b3fc4c"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-5f01242e9b"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "the webcast Meet Our Teams! $75K equity-free funding MIT’s Flagship Accelerator for Builders Network & Community: High-Value Partners, Mentors, Investors Over $200K in Value Per Team in Perks & Partnerships delta v Inaugural Partner Network Meet Our Partners Our delta v Partners are key components of the accelerator",
-        "evidenceId": "check-deal-b80b42637e"
+        "value": "Watch the livestream! Register for the webcast Meet Our Teams! $75K equity-free funding MIT’s Flagship Accelerator for Builders Network",
+        "evidenceId": "check-deal-9a38c6a06b"
       },
       {
-        "value": "across multiple industries. Each Partner will provide a range of monthly office hours, workshops, and mentorship. delta v Perks & Partnerships We unlock over $200K in value per team in perks & partnerships that help startups scale! Critical services you’ll have access to include analytics & business intelligence,",
-        "evidenceId": "check-deal-96f460d159"
+        "value": "Network & Community: High-Value Partners, Mentors, Investors Over $200K in Value Per Team in Perks & Partnerships delta v Inaugural Partner",
+        "evidenceId": "check-deal-03fbf77dce"
+      },
+      {
+        "value": "and mentorship. delta v Perks & Partnerships We unlock over $200K in value per team in perks & partnerships that help startups scale!",
+        "evidenceId": "check-deal-7949a1da41"
+      },
+      {
+        "value": "will provide support via targeted courses, external mentorship, $15,000 in equity-free seed funding, and a robust network to help students",
+        "evidenceId": "check-deal-36fe89cd2d"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "75000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-9a38c6a06b"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "200000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-03fbf77dce"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "15000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-36fe89cd2d"
       }
     ],
     "portfolioPages": [],

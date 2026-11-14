@@ -1,88 +1,339 @@
 {
   "programId": "clean-energy-trust",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://evergreeninno.org/",
+    "https://evergreeninno.org/explore/article/2017-cet-challenge-application-launch",
     "https://evergreeninno.org/apply",
-    "https://evergreeninno.org/about-us"
+    "https://evergreeninno.org/events/fall-2026-investment-cycle-info-session",
+    "https://evergreeninno.org/events/november-18-spring-investment-cycle-information-session",
+    "https://evergreeninno.org/events/spring-investment-cycle-information-session-2025",
+    "https://evergreeninno.org/explore/article/2020-new-investment-spotlight-renewance",
+    "https://evergreeninno.org/explore/article/an-environmentally-and-socially-conscious-food-supply-our-investment-in-agricycle",
+    "https://evergreeninno.org/explore/article/august-cleantech-roundup-new-investments-corporate-renewables",
+    "https://evergreeninno.org/explore/article/clean-energy-trust-announces-970000-in-seed-investments-benefiting-midwest-cleantech-startups-at-co_invest-cleantech-event",
+    "https://evergreeninno.org/explore/article/clean-energy-trust-selects-finalists-2017-cet-challenge-investments",
+    "https://evergreeninno.org/explore/article/clean-energy-trusts-investment-in-varunas-vision",
+    "https://evergreeninno.org/explore/article/february-2025-cleantech-roundup-trade-war-evolving-generation-mix-climate-tech-investment-data",
+    "https://evergreeninno.org/explore/article/investment-committee-formation-brings-additional-rigor-clean-energy-trusts-investment-model",
+    "https://evergreeninno.org/explore/article/may-cleantech-roundup-covid-evs-enormous-storage-investments-scooter-consolidation-insanely-cheap-solar"
   ],
   "evidence": [
     {
-      "id": "check-deal-7411313c52",
-      "url": "https://evergreeninno.org/",
-      "title": "Clean Energy Trust — homepage checked by scrape.py",
-      "excerpt": "Invest Our Portfolio 49 portfolio companies 57 % female / minority founders 5 exits $ 561 M follow-on funding catalyzed 947 jobs $ 54 in follow-on funding per $1 invested Discover our portfolio of startups tackling climate change We provide climate tech startups with more than just early-stage funding. We work to ensure",
-      "page": "details"
+      "id": "check-deal-eb1caed3f6",
+      "url": "https://evergreeninno.org/explore/article/2017-cet-challenge-application-launch",
+      "title": "Clean Energy Trust — application page",
+      "excerpt": "that Evergreen Climate Innovations is committing to invest up to $1M in early stage cleantech companies. Entrepreneurs and researchers",
+      "page": "application"
+    },
+    {
+      "id": "check-format-2c8cd4762d",
+      "url": "https://evergreeninno.org/events/november-18-spring-investment-cycle-information-session",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "Thursday, November 18, 3:00 pm - November 18, 4:00 pm | Virtual Watch a recording of this past event here Learn about",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-655b7a1a26",
+      "url": "https://evergreeninno.org/explore/article/an-environmentally-and-socially-conscious-food-supply-our-investment-in-agricycle",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "smallholder plots , and most of them are scattered across remote, rural regions that are far away from ports and other",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-b958b042ad",
+      "url": "https://evergreeninno.org/explore/article/clean-energy-trust-selects-finalists-2017-cet-challenge-investments",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "KS Idle Smart provides fleet efficiency and real-time remote vehicle management solutions to Class 8 fleets in the US",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-c7ab4856ac",
+      "url": "https://evergreeninno.org/events/fall-2026-investment-cycle-info-session",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "Session Thursday, July 30, 1:00 pm - July 30, 2:00 pm | Virtual Join Us Evergreen Climate Innovations is accepting",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-ceda1ab104",
+      "url": "https://evergreeninno.org/events/spring-investment-cycle-information-session-2025",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "Thursday, January 30, 11:00 am - January 30, 12:00 pm | Virtual Add to Calendar Register Now Join Us Join Evergreen",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-cf3f9e1054",
+      "url": "https://evergreeninno.org/explore/article/clean-energy-trust-announces-970000-in-seed-investments-benefiting-midwest-cleantech-startups-at-co_invest-cleantech-event",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "patented, next-generation acoustic measurement technology, remote telemetry, and a cloud platform to collect",
+      "page": "terms"
     },
     {
       "id": "check-name-0525fbb2c0",
       "url": "https://evergreeninno.org/",
-      "title": "Clean Energy Trust — homepage checked by scrape.py",
+      "title": "Clean Energy Trust — homepage",
       "excerpt": "and compounding impact on the climate emergency. Formerly Clean Energy Trust Evergreen Climate Innovations addresses the capital gap",
       "page": "details"
     },
     {
+      "id": "check-portfolio-03a933dd99",
+      "url": "https://evergreeninno.org/events/fall-2026-investment-cycle-info-session",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "Portfolio → https://evergreeninno.org/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-0450fb7bfd",
+      "url": "https://evergreeninno.org/explore/article/may-cleantech-roundup-covid-evs-enormous-storage-investments-scooter-consolidation-insanely-cheap-solar",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "Portfolio → https://evergreeninno.org/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-0971ead0d7",
       "url": "https://evergreeninno.org/",
-      "title": "Clean Energy Trust — homepage checked by scrape.py",
+      "title": "Clean Energy Trust — homepage",
       "excerpt": "Our Portfolio → https://evergreeninno.org/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-203116a04f",
+      "url": "https://evergreeninno.org/explore/article/investment-committee-formation-brings-additional-rigor-clean-energy-trusts-investment-model",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "Portfolio → https://evergreeninno.org/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-24d83509b8",
+      "url": "https://evergreeninno.org/explore/article/february-2025-cleantech-roundup-trade-war-evolving-generation-mix-climate-tech-investment-data",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "Portfolio → https://evergreeninno.org/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-48a725e74a",
+      "url": "https://evergreeninno.org/explore/article/clean-energy-trust-announces-970000-in-seed-investments-benefiting-midwest-cleantech-startups-at-co_invest-cleantech-event",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "Portfolio → https://evergreeninno.org/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-6b2ef5c152",
       "url": "https://evergreeninno.org/",
-      "title": "Clean Energy Trust — homepage checked by scrape.py",
+      "title": "Clean Energy Trust — homepage",
       "excerpt": "Portfolio Companies → https://evergreeninno.org/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-73704a604c",
       "url": "https://evergreeninno.org/apply",
-      "title": "Clean Energy Trust — application page checked by scrape.py",
+      "title": "Clean Energy Trust — terms page",
       "excerpt": "Our Portfolio → https://evergreeninno.org/portfolio",
-      "page": "application"
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7b351cc254",
+      "url": "https://evergreeninno.org/events/spring-investment-cycle-information-session-2025",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "Portfolio → https://evergreeninno.org/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8bed2f912f",
+      "url": "https://evergreeninno.org/explore/article/an-environmentally-and-socially-conscious-food-supply-our-investment-in-agricycle",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "Portfolio → https://evergreeninno.org/portfolio",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-9c8b2eaedf",
       "url": "https://evergreeninno.org/",
-      "title": "Clean Energy Trust — homepage checked by scrape.py",
+      "title": "Clean Energy Trust — homepage",
       "excerpt": "Portfolio → https://evergreeninno.org/portfolio",
       "page": "details"
     },
     {
-      "id": "check-portfolio-9df822c1b9",
-      "url": "https://evergreeninno.org/about-us",
-      "title": "Clean Energy Trust — details page checked by scrape.py",
+      "id": "check-portfolio-cb4380c83b",
+      "url": "https://evergreeninno.org/explore/article/august-cleantech-roundup-new-investments-corporate-renewables",
+      "title": "Clean Energy Trust — terms page",
       "excerpt": "Portfolio → https://evergreeninno.org/portfolio",
-      "page": "details"
+      "page": "terms"
     },
     {
-      "id": "check-portfolio-fa820475e9",
-      "url": "https://evergreeninno.org/apply",
-      "title": "Clean Energy Trust — application page checked by scrape.py",
+      "id": "check-portfolio-ce2733a077",
+      "url": "https://evergreeninno.org/explore/article/clean-energy-trusts-investment-in-varunas-vision",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "Portfolio → https://evergreeninno.org/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-dd1c628fa6",
+      "url": "https://evergreeninno.org/explore/article/2017-cet-challenge-application-launch",
+      "title": "Clean Energy Trust — application page",
       "excerpt": "Portfolio → https://evergreeninno.org/portfolio",
       "page": "application"
     },
     {
-      "id": "check-route-1cb7ab9ca3",
-      "url": "https://evergreeninno.org/about-us",
-      "title": "Clean Energy Trust — details page checked by scrape.py",
-      "excerpt": "Apply for Investment → https://evergreeninno.org/apply",
+      "id": "check-portfolio-e596d95c7e",
+      "url": "https://evergreeninno.org/events/november-18-spring-investment-cycle-information-session",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "Portfolio → https://evergreeninno.org/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e8d60cd997",
+      "url": "https://evergreeninno.org/explore/article/clean-energy-trust-selects-finalists-2017-cet-challenge-investments",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "Portfolio → https://evergreeninno.org/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f725e21280",
+      "url": "https://evergreeninno.org/explore/article/an-environmentally-and-socially-conscious-food-supply-our-investment-in-agricycle",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "the best and brightest entrepreneurs → https://www.evergreeninno.org/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-fa820475e9",
+      "url": "https://evergreeninno.org/apply",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "Portfolio → https://evergreeninno.org/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-fed6146e17",
+      "url": "https://evergreeninno.org/explore/article/2020-new-investment-spotlight-renewance",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "Portfolio → https://evergreeninno.org/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-rolling-0bbfa1316b",
+      "url": "https://evergreeninno.org/",
+      "title": "Clean Energy Trust — homepage",
+      "excerpt": "part of the climate solution Apply Now We accept applications for investment on a rolling basis. Get Involved You can make a positive and compounding impact on the climate",
       "page": "details"
+    },
+    {
+      "id": "check-rolling-ed87dd57c6",
+      "url": "https://evergreeninno.org/apply",
+      "title": "Clean Energy Trust — terms page",
+      "excerpt": "MO, OH, TN, KY, ND, SD, CO, NE, and western PA) Applications are considered on a rolling basis. Once you submit the investment application form, we will reach out during our",
+      "page": "terms"
     },
     {
       "id": "check-route-d0e9aee78e",
       "url": "https://evergreeninno.org/",
-      "title": "Clean Energy Trust — homepage checked by scrape.py",
+      "title": "Clean Energy Trust — homepage",
       "excerpt": "Apply Now → https://evergreeninno.org/apply",
       "page": "details"
     },
     {
       "id": "check-route-ea5387809f",
       "url": "https://evergreeninno.org/",
-      "title": "Clean Energy Trust — homepage checked by scrape.py",
+      "title": "Clean Energy Trust — homepage",
       "excerpt": "Apply for Investment → https://evergreeninno.org/apply",
       "page": "details"
+    },
+    {
+      "id": "check-status-0bc3f959c5",
+      "url": "https://evergreeninno.org/explore/article/2017-cet-challenge-application-launch",
+      "title": "Clean Energy Trust — application page",
+      "excerpt": "$1M of of cleantech investments and new Evergreen Climate Innovations Portfolio companies will be announced. Applications are now open for the 2017 Evergreen Climate Innovations Challenge ! We invite all Midwest-based cleantech startups to",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-cf9233452b",
+      "url": "https://evergreeninno.org/",
+      "page": "details",
+      "excerpt": "Catalyzing climate innovation | Evergreen Climate Innovations Skip to main content Donate Apply for Investment Why We Invest 501vc® Investment Fund Portfolio Opportunities About Us Our Impact People Careers Supporters Get Involved Contact Us Explore Blog News Events Donate Apply for Investment Catalyzing climate innovation Evergreen advances climate tech in the Greater Midwest We support startups bringing impactful climate technologies to market. We make seed investments and provide hands-on support to entrepreneurs. We expand access to innovation by cultivating an ecosystem of investors, corporate partners, donors, and collaborators. About this image SEM image of NanoGraf Corporation's G6 Powder, which reduces swelling and capacity loss during battery cycling. Our portfolio provides solutions for the climate emergency For over a decade, we’ve worked to help climate innovators connect to funding, demo opportunities, customers, and investors. Why We Invest Our Portfolio 49 portfolio companies 57 % female / minority founders 5 exits $ 561 M follow-on funding catalyzed 947 jobs $ 54 in follow-on funding per $1 invested Discover our portfolio of startups tackling climate change We provide climate tech startups with more than just early-stage funding. We work to ensure their success. Portfolio Company Testimonial from Kadeya At Kadeya, we live our mission to “drink local” – we"
+    },
+    {
+      "id": "check-page-e2d19a91d0",
+      "url": "https://evergreeninno.org/explore/article/2017-cet-challenge-application-launch",
+      "page": "application",
+      "excerpt": "2017 Evergreen Climate Innovations Challenge Application Launch | Evergreen Climate Innovations Skip to main content Donate Apply for Investment Why We Invest 501vc® Investment Fund Portfolio Opportunities About Us Our Impact People Careers Supporters Get Involved Contact Us Explore Blog News Events Donate Apply for Investment December 13, 2016 2017 Evergreen Climate Innovations Challenge Application Launch The Evergreen Climate Innovations Challenge is a nationally-recognized investment program that culminates in a high profile event where $1M of of cleantech investments and new Evergreen Climate Innovations Portfolio companies will be announced. Applications are now open for the 2017 Evergreen Climate Innovations Challenge ! We invite all Midwest-based cleantech startups to apply for this nationally-recognized cleantech investment program. This year will mark the 3rd consecutive year that Evergreen Climate Innovations is committing to invest up to $1M in early stage cleantech companies. Entrepreneurs and researchers throughout the Midwest are invited to submit their cleantech startups for the opportunity to join Evergreen Climate Innovation’s growing investment portfolio. The 2017 investments and the new cohort of Evergreen Climate Innovations Portfolio Companies will be announced at the Evergreen Climate Innovations Challenge event in Chicago on May 9, 2017. What began in"
+    },
+    {
+      "id": "check-page-ff1e049598",
+      "url": "https://evergreeninno.org/apply",
+      "page": "terms",
+      "excerpt": "Apply for Investment | Evergreen Climate Innovations Skip to main content Donate Apply for Investment Why We Invest 501vc® Investment Fund Portfolio Opportunities About Us Our Impact People Careers Supporters Get Involved Contact Us Explore Blog News Events Donate Apply for Investment Investment Application Apply for investment today Evergreen Climate Innovations' 501vc® Investment Fund invests in early-stage climate tech startups in the Greater Midwest region of the United States. Investment Criteria Focus: Climate tech across mitigation, adaptation, and other environmental challenges Stage: Pre-Seed and Seed Geography: Based in the Greater Midwest region of the United States (IA, IL, IN, WI, MI, MN, KS, MO, OH, TN, KY, ND, SD, CO, NE, and western PA) Applications are considered on a rolling basis. Once you submit the investment application form, we will reach out during our application review period. The fall and spring application deadlines mark the beginning of our approximately five-month-long investment cycle. If you have any questions, please reach out to Program Director, Dylan O’Reilly ( dylan@evergreeninno.org ). Learn more about our 501vc® Investment Fund and get help with your pitch deck using our guide. Investment Application Form Climate innovations making a global impact Discover impactful climate tech startups from the Greater Midwest. Our Portfolio Formerly"
+    },
+    {
+      "id": "check-page-a34a6dbfe2",
+      "url": "https://evergreeninno.org/events/fall-2026-investment-cycle-info-session",
+      "page": "terms",
+      "excerpt": "Fall 2026 Investment Cycle Info Session | Evergreen Climate Innovations Skip to main content Donate Apply for Investment Why We Invest 501vc® Investment Fund Portfolio Opportunities About Us Our Impact People Careers Supporters Get Involved Contact Us Explore Blog News Events Donate Apply for Investment Fall 2026 Investment Cycle Info Session Thursday, July 30, 1:00 pm - July 30, 2:00 pm | Virtual Join Us Evergreen Climate Innovations is accepting applications for its Fall 2026 Investment Cycle through Monday, August 17 . Early-stage, Greater Midwest-based companies developing innovations to solve environmental challenges are encouraged to apply for Pre-Seed to Seed Investment from Evergreen’s 501vc® Investment Fund . Evergreen is hosting an information session on Thursday, July 30 at 1pm CT. The Evergreen team will review the process, share what they’re looking for and what it means to be an Evergreen portfolio company, and answer any questions. Interested startups should register here . Add to Calendar Register Now You can be part of the climate solution Curious how you can make a positive and compounding impact on the climate emergency? Get Involved Formerly Clean Energy Trust Evergreen Climate Innovations addresses the capital gap that exists for early-stage climate tech companies. Our Impact Evergreen Climate Innovations supports entrepreneurs and startups that are"
+    },
+    {
+      "id": "check-page-9088750611",
+      "url": "https://evergreeninno.org/events/november-18-spring-investment-cycle-information-session",
+      "page": "terms",
+      "excerpt": "Spring Investment Cycle Information Session | November 18 | Evergreen Climate Innovations Skip to main content Donate Apply for Investment Why We Invest 501vc® Investment Fund Portfolio Opportunities About Us Our Impact People Careers Supporters Get Involved Contact Us Explore Blog News Events Donate Apply for Investment Spring Investment Cycle Information Session | November 18 Hear the latest on our Investment Cycle and learn about other opportunities for climate tech startups. Thursday, November 18, 3:00 pm - November 18, 4:00 pm | Virtual Watch a recording of this past event here Learn about Evergreen Climate Innovations’ Investment Cycle and other opportunities for climate tech startups. Speakers will include members of the Evergreen Investment Team – Venture Associate, Tony Zhu, and Senior Program Manager, Dylan O’Reilly. During the event, Dylan and Tony will: provide an overview of our Spring Investment Cycle, announce the latest on our DEI Award Opportunities, and share other opportunities with which your startup may be eligible. Add to Calendar Dylan O’Reilly Senior Program Manager, Evergreen Climate Innovations Tony Zhu Venture Associate, Evergreen Climate Innovations Let’s bring impactful climate tech to market We’re your guide to climate innovation in the Greater Midwest. About Us Formerly Clean Energy Trust Evergreen Climate Innovations addresses the capital gap"
+    },
+    {
+      "id": "check-page-9ba2bef8e6",
+      "url": "https://evergreeninno.org/events/spring-investment-cycle-information-session-2025",
+      "page": "terms",
+      "excerpt": "Spring Opportunities Information Session | January 30, 2025 | Evergreen Climate Innovations Skip to main content Donate Apply for Investment Why We Invest 501vc® Investment Fund Portfolio Opportunities About Us Our Impact People Careers Supporters Get Involved Contact Us Explore Blog News Events Donate Apply for Investment Spring Opportunities Information Session | January 30, 2025 Discover investment opportunities for climate startups Thursday, January 30, 11:00 am - January 30, 12:00 pm | Virtual Add to Calendar Register Now Join Us Join Evergreen Climate Innovations in January to explore available funding opportunities and other exciting opportunities for climate tech startups. Speakers include members of the Evergreen Investment Team – Venture Associate, Shashank Churukanti, and Senior Program Manager, Dylan O’Reilly. During the event, Dylan and Shashank will provide an overview of our Spring Investment Cycle and answer any questions you may have. Dylan O’Reilly Senior Program Manager, Evergreen Climate Innovations Shashank Churukanti Venture Associate, Evergreen Climate Innovations You can be part of the climate solution Curious how you can make a positive and compounding impact on the climate emergency? Get Involved Formerly Clean Energy Trust Evergreen Climate Innovations addresses the capital gap that exists for early-stage climate tech companies. Our Impact Evergreen"
+    },
+    {
+      "id": "check-page-f2837ef68f",
+      "url": "https://evergreeninno.org/explore/article/2020-new-investment-spotlight-renewance",
+      "page": "terms",
+      "excerpt": "2020 New Investment Spotlight: Renewance | Evergreen Climate Innovations Skip to main content Donate Apply for Investment Why We Invest 501vc® Investment Fund Portfolio Opportunities About Us Our Impact People Careers Supporters Get Involved Contact Us Explore Blog News Events Donate Apply for Investment May 21, 2020 2020 New Investment Spotlight: Renewance Evergreen Climate Innovations Venture Associate Tony Zhu shares how our latest investment, Renewance, caught our attention with its potential to unlock an imminent market by introducing a new standard of waste management for battery assets everywhere. Batteries have become ubiquitous in our daily lives. From mobile phones to computers to electric vehicles, the convenience of on-demand power is driving demand for batteries of all shapes and sizes. As such, significant resources are being put to work in improving battery performance and exploring new battery chemistries. However, batteries are also being made with increasingly hazardous materials that pose serious environmental risk. Lithium ion batteries, today’s most widely used type of rechargeable batteries, can release highly toxic gases if disposed of improperly. While localized resources are available for recycling and processing small household batteries, large batteries are much harder to manage. Some battery systems for utility-scale energy storage are becoming so"
+    },
+    {
+      "id": "check-page-519bd62c62",
+      "url": "https://evergreeninno.org/explore/article/an-environmentally-and-socially-conscious-food-supply-our-investment-in-agricycle",
+      "page": "terms",
+      "excerpt": "An Environmentally and Socially Conscious Food Supply: Our Investment in Agricycle | Evergreen Climate Innovations Skip to main content Donate Apply for Investment Why We Invest 501vc® Investment Fund Portfolio Opportunities About Us Our Impact People Careers Supporters Get Involved Contact Us Explore Blog News Events Donate Apply for Investment September 21, 2021 An Environmentally and Socially Conscious Food Supply: Our Investment in Agricycle Venture Associate Tony Zhu reveals Evergreen Climate Innovations' latest climate tech investment and explains how that company uses preservation technologies and a global supply chain to reduce food loss and more. Photo by Jeremy Zero on Unsplash Ever have that moment when you realize your yogurt in the fridge has expired and feel bad that you have to throw it out? Or maybe it’s the strawberries you bought a week ago, or the chicken that somehow found its way to the back of the shelf. Whatever it is, chances are that many other people have the same problem. Across the globe, there is one pound of food lost or wasted for every two pounds that makes its journey all the way through the supply chain and the digestive tracts of consumers. That’s right, one-third of all the food produced in the world fails to fulfill its nutritional destiny. That’s 2.8 trillion pounds each year . All that unconsumed food also accounts for vast amounts of"
+    },
+    {
+      "id": "check-page-ce687e124c",
+      "url": "https://evergreeninno.org/explore/article/august-cleantech-roundup-new-investments-corporate-renewables",
+      "page": "terms",
+      "excerpt": "August Cleantech Roundup: New Investments and Corporate Renewables | Evergreen Climate Innovations Skip to main content Donate Apply for Investment Why We Invest 501vc® Investment Fund Portfolio Opportunities About Us Our Impact People Careers Supporters Get Involved Contact Us Explore Blog News Events Donate Apply for Investment September 7, 2016 August Cleantech Roundup: New Investments and Corporate Renewables Evergreen Climate Innovations' monthly cleantech roundup recaps the most relevant information on the cleantech sector, from policy changes to technology updates and investment news. Technology There has been a lot of talk about solar changing the energy industry, but what you might have missed is the rise of LED’s . LEDs have quickly become the standard after proving out the technology and demonstrating clear financial benefits. Solar, while growing impressively quickly, still has many hurdles to cross before reaching such massive adoption. It is important to note that while LEDs simply replaced previous technology, solar requires big shifts in many parts of the energy industry to be viable. Lots of funding news for fascinating cleantech this August. Round 2 of the Small Business Voucher Pilot program were announced. This included companies developing new technologies in wind, solar, geothermal, fuel cells, building technology, advanced manufacturing, and advanced"
+    },
+    {
+      "id": "check-page-029e3b8b94",
+      "url": "https://evergreeninno.org/explore/article/clean-energy-trust-announces-970000-in-seed-investments-benefiting-midwest-cleantech-startups-at-co_invest-cleantech-event",
+      "page": "terms",
+      "excerpt": "Evergreen Climate Innovations announces $970,000 in seed investments benefiting Midwest cleantech startups at Co_Invest Cleantech event | Evergreen Climate Innovations Skip to main content Donate Apply for Investment Why We Invest 501vc® Investment Fund Portfolio Opportunities About Us Our Impact People Careers Supporters Get Involved Contact Us Explore Blog News Events Donate Apply for Investment May 24, 2018 Evergreen Climate Innovations announces $970,000 in seed investments benefiting Midwest cleantech startups at Co_Invest Cleantech event Evergreen Climate Innovations, a nonprofit cleantech seed investor, announced a new round of early-stage investments totaling $970,000 at their startup demo day event, Co_Invest Cleantech. Over 300 entrepreneurs, investors, executives, and students gathered in Chicago for a day that celebrated a shared belief in the power of entrepreneurs to take on the hardest challenges of decarbonization and environmental sustainability. “Evergreen Climate Innovations helps ensure that clean energy entrepreneurs and technologies have a path for growth and success here in the Midwest” reflected Evergreen Climate Innovations’s CEO, Erik Birkerts. “We provide critical early-stage funding and strategic support which allows these impactful technologies to scale. As these early startups grow and deploy their technology, not only are carbon emissions cut and"
+    },
+    {
+      "id": "check-page-b75338a008",
+      "url": "https://evergreeninno.org/explore/article/clean-energy-trust-selects-finalists-2017-cet-challenge-investments",
+      "page": "terms",
+      "excerpt": "Evergreen Climate Innovations Selects Finalists for 2017 Investments | Evergreen Climate Innovations Skip to main content Donate Apply for Investment Why We Invest 501vc® Investment Fund Portfolio Opportunities About Us Our Impact People Careers Supporters Get Involved Contact Us Explore Blog News Events Donate Apply for Investment March 2, 2017 Evergreen Climate Innovations Selects Finalists for 2017 Investments Eight early-stage cleantech startups from across the Midwest have been selected to present as finalists in the 2017 Evergreen Climate Innovations Challenge. Up to $1M in funding will be distributed in investment awards ranging from $50,000 - $500,000 - making this one of the largest cleantech funding events in the country. Entrepreneurs and researchers from throughout the Midwest were invited to submit their cleantech startups for the opportunity to join Evergreen Climate Innovations’ growing investment portfolio . Our definition of “cleantech” encompasses technologies that positively impact how the world generates, consumes, and reuses energy and natural resources . This includes renewable energy generation, but also technologies focused on microgrids, Internet of Things, building technologies, transportation solutions, water, and AgTech. Eight finalist companies were selected from over 70 applications throughout the region. A robust due diligence process utilizing"
+    },
+    {
+      "id": "check-page-7bc8d5d063",
+      "url": "https://evergreeninno.org/explore/article/clean-energy-trusts-investment-in-varunas-vision",
+      "page": "terms",
+      "excerpt": "Evergreen Climate Innovation’s Investment in Varuna’s Vision | Evergreen Climate Innovations Skip to main content Donate Apply for Investment Why We Invest 501vc® Investment Fund Portfolio Opportunities About Us Our Impact People Careers Supporters Get Involved Contact Us Explore Blog News Events Donate Apply for Investment November 4, 2020 Evergreen Climate Innovation’s Investment in Varuna’s Vision Managing Director Paul Seidler shares why Evergreen Climate Innovations invested in an IoT solution for utilities to monitor water quality in real-time. Here’s why Evergreen Climate Innovations is excited to invest in Varuna Tech , a Chicago-based startup providing distribution system monitoring for water utilities. Tap water: a marvel and a mystery Municipal water systems are incredible. Think about it. They’re an impressive engineering feat that extracts water from a source, runs it through a treatment plant to filter and disinfect the water, and then pushes it out through a massive distribution system of underground pipes to homes and businesses so we can all enjoy pure, clean water 24/7. Do I take that for granted? Of course, I do. We all do. As impressive as modern water systems are, exactly how pure and clean is that water? Certainly clean enough to shower in and clean enough to do the dishes and laundry. Is it clean enough to drink? I think so. Maybe. Is it pure water?"
+    },
+    {
+      "id": "check-page-9b57250194",
+      "url": "https://evergreeninno.org/explore/article/february-2025-cleantech-roundup-trade-war-evolving-generation-mix-climate-tech-investment-data",
+      "page": "terms",
+      "excerpt": "February 2025 Cleantech Roundup: Trade War | Evolving Generation Mix | Climate Tech Investment Data | Evergreen Climate Innovations Skip to main content Donate Apply for Investment Why We Invest 501vc® Investment Fund Portfolio Opportunities About Us Our Impact People Careers Supporters Get Involved Contact Us Explore Blog News Events Donate Apply for Investment March 13, 2025 February 2025 Cleantech Roundup: Trade War | Evolving Generation Mix | Climate Tech Investment Data This month, we are unfortunately again talking about federal policy uncertainty and brewing trade war activities, how the US generation mix continues to evolve, and the climate tech startup investment data Evergreen tracks. The Swamp I was in DC a couple weeks ago – one thing that seems different is that no one knows anything. There have always been strong divergent perspectives on Capitol Hill, but usually most stakeholders have a shared understanding of what is actually happening – that was out this window. Staff from both parties were visibly frustrated/annoyed/dumbfounded by things. This was in the context of the federal budget cycle, but seems to be a throughline throughout federal policymaking currently, especially as it relates to tariff announcements and pauses/exceptions/delays ( here’s a timeline ). One of the sectors that has had the most tariff volatility is autos, who have deeply intermeshed"
+    },
+    {
+      "id": "check-page-7dad0e06e0",
+      "url": "https://evergreeninno.org/explore/article/investment-committee-formation-brings-additional-rigor-clean-energy-trusts-investment-model",
+      "page": "terms",
+      "excerpt": "Investment Committee Formation Brings Additional Rigor to Cleantech Investment Model | Evergreen Climate Innovations Skip to main content Donate Apply for Investment Why We Invest 501vc® Investment Fund Portfolio Opportunities About Us Our Impact People Careers Supporters Get Involved Contact Us Explore Blog News Events Donate Apply for Investment April 7, 2017 Investment Committee Formation Brings Additional Rigor to Cleantech Investment Model Today, Evergreen Climate Innovations announced the formation of its Investment Committee, comprised of world-class investors from leading venture capital funds and executives from global corporations active in energy technologies. The Investment Committee will assist Evergreen Climate Innovations in making investments in high-potential cleantech startups from the Midwest. Evergreen Climate Innovations operates a revolving, evergreen investment fund that has, to date, made over $3 million in seed investments in 19 companies from the Midwest. “The Midwest has a deep reservoir of innovation assets, but promising cleantech startups still face difficulties securing the capital and business support they need to become successful,” commented Erik G. Birkerts, CEO of Evergreen Climate Innovations . “Seed investments from Evergreen Climate Innovations help address this issue and the experts on the Investment Committee help us determine how best"
+    },
+    {
+      "id": "check-page-979b0d2cb9",
+      "url": "https://evergreeninno.org/explore/article/may-cleantech-roundup-covid-evs-enormous-storage-investments-scooter-consolidation-insanely-cheap-solar",
+      "page": "terms",
+      "excerpt": "May Cleantech Roundup: COVID & EVs | Enormous Storage Investments | Scooter Consolidation | Insanely Cheap Solar | Evergreen Climate Innovations Skip to main content Donate Apply for Investment Why We Invest 501vc® Investment Fund Portfolio Opportunities About Us Our Impact People Careers Supporters Get Involved Contact Us Explore Blog News Events Donate Apply for Investment June 9, 2020 May Cleantech Roundup: COVID & EVs | Enormous Storage Investments | Scooter Consolidation | Insanely Cheap Solar Evergreen Climate Innovations' Managing Director Ian Adam’s cleantech roundup highlights interesting cleantech news and perspective, across industry, technology, policy, and investing. Note: There is a lot happening in the world. This roundup focuses on the cleantech space, but should not suggest that other crises do not deserve our attention and efforts. With that caveat, here’s what I found most interesting in cleantech over the past month: Analysts disagree on how COVID will impact electric vehicles in the US. In this article , one argues that lower fuel prices will dampen the appeal of electric vehicles. The other points out that fuel prices aren’t why people buy electric vehicles — they tend to be technology early adopters, climate enthusiasts, or people interested in the highest performance luxury cars; he argues sales will take off when automakers build electric vehicles"
     }
   ],
   "findings": {
@@ -91,7 +342,7 @@
     "routes": [
       {
         "value": "https://evergreeninno.org/apply",
-        "evidenceId": "check-route-ea5387809f"
+        "evidenceId": "check-route-d0e9aee78e"
       }
     ],
     "applicationUrl": [
@@ -100,20 +351,59 @@
         "evidenceId": "check-route-ea5387809f"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-0bc3f959c5"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-0bbfa1316b"
+      }
+    ],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-c7ab4856ac"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "Invest Our Portfolio 49 portfolio companies 57 % female / minority founders 5 exits $ 561 M follow-on funding catalyzed 947 jobs $ 54 in follow-on funding per $1 invested Discover our portfolio of startups tackling climate change We provide climate tech startups with more than just early-stage funding. We work to ensure",
-        "evidenceId": "check-deal-7411313c52"
+        "value": "that Evergreen Climate Innovations is committing to invest up to $1M in early stage cleantech companies. Entrepreneurs and researchers",
+        "evidenceId": "check-deal-eb1caed3f6"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "1000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-eb1caed3f6"
       }
     ],
     "portfolioPages": [
       {
         "value": "https://evergreeninno.org/portfolio",
         "evidenceId": "check-portfolio-9c8b2eaedf"
+      },
+      {
+        "value": "https://www.evergreeninno.org/portfolio/",
+        "evidenceId": "check-portfolio-f725e21280"
       }
     ],
     "name": [

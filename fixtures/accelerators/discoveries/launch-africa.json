@@ -1,7 +1,127 @@
 {
   "programId": "launch-africa",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://www.launchafrica.vc/faqs",
+      "page": "terms",
+      "anchor": "FAQs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.launchafrica.vc/news/african-fintech-investment-outlook-and-insights",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.launchafrica.vc/news/leading-the-charge-with-12-investments-in-h1-2024",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.launchafrica.vc/news/new-investment-bosso",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.launchafrica.vc/news/new-investment-credit-circuit",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.launchafrica.vc/news/new-investment-kredete",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.launchafrica.vc/news/new-investment-lengo",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.launchafrica.vc/news/new-investment-meditect",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.launchafrica.vc/news/new-investment-paps-logistics",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.launchafrica.vc/news/new-investment-servisor",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.launchafrica.vc/news/new-investment-shiprazor",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.launchafrica.vc/news/new-investment-solarbox",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.launchafrica.vc/news/new-investment-viebeg",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.launchafrica.vc/news/new-investment-zuri",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.launchafrica.vc/portfolio-2",
+      "page": "portfolio",
+      "anchor": "Folder: Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.launchafrica.vc/seed-fund-i-portfolio",
       "page": "portfolio",
@@ -14,22 +134,6 @@
       "url": "https://www.launchafrica.vc/seed-fund-ii-portfolio",
       "page": "portfolio",
       "anchor": "Seed Fund II Portfolio",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.launchafrica.vc/faqs",
-      "page": "terms",
-      "anchor": "FAQs",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.launchafrica.vc/portfolio-2",
-      "page": "portfolio",
-      "anchor": "Folder: Portfolio",
       "fetched": false,
       "blocked": null,
       "origin": "official"

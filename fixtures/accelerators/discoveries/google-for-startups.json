@@ -1,11 +1,11 @@
 {
   "programId": "google-for-startups",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://startup.google.com/programs/",
+      "url": "https://startup.google.com/about-us/",
       "page": "details",
-      "anchor": "Programs",
+      "anchor": "About us",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -19,14 +19,6 @@
       "origin": "official"
     },
     {
-      "url": "https://startup.google.com/alumni/stories/",
-      "page": "portfolio",
-      "anchor": "Stories",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://startup.google.com/alumni/directory/",
       "page": "portfolio",
       "anchor": "Directory",
@@ -35,9 +27,17 @@
       "origin": "official"
     },
     {
-      "url": "https://startup.google.com/about-us/",
-      "page": "details",
-      "anchor": "About us",
+      "url": "https://startup.google.com/alumni/stories/",
+      "page": "portfolio",
+      "anchor": "Stories",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/alumni/stories/botco-ai/",
+      "page": "portfolio",
+      "anchor": "Case study Botco.ai Botco.ai prioritizes universal access to on-demand support Read their story",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -59,18 +59,114 @@
       "origin": "official"
     },
     {
-      "url": "https://startup.google.com/alumni/stories/botco-ai/",
-      "page": "portfolio",
-      "anchor": "Case study Botco.ai Botco.ai prioritizes universal access to on-demand support Read their story",
-      "fetched": false,
+      "url": "https://startup.google.com/intl/es/programs/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://startup.google.com/programs/accelerator/",
-      "page": "application",
+      "url": "https://startup.google.com/intl/es/programs/accelerator/",
+      "page": "details",
       "anchor": "",
       "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/es/programs/accelerator/americas/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/es/programs/accelerator/asia-pacific/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/es/programs/accelerator/europe-middle-east-africa/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/es/programs/ai-academy/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/es/programs/black-founders-fund/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/es/programs/cloud-academy/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/es/programs/directory/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/es/programs/forum/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/es/programs/founders-academy/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/es/programs/founders-funds/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/intl/es/programs/gemini-api-sprints/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startup.google.com/programs/",
+      "page": "details",
+      "anchor": "Programs",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     }

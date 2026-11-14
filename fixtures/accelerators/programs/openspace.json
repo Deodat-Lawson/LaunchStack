@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.openspacecapital.com/",
   "applyUrl": "https://www.openspacecapital.com/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Multi-strategy asset manager focused on Southeast Asia Contact Investor Login Team Companies Strategies Responsibility Reports Careers Team Companies Strategies Responsibility Reports Contact Careers Investor Login Openspace Capital is a multi-strategy asset manager with a long-established specialist We fund tech-native and tech-enabled businesses across multiple stages and product needs. We are an investment firm with US$800M in committed capital across 6 funds. We focus on Southeast Asia, investing in tech native and tech-enabled companies at the early and growth stage, within different sectors. By harnessing Active Intelligence we have worked with our portfolio companies to realize bolder visions, and accelerate their progress in a responsible and viable way. through a singular focus on Southeast Asia. MEET OUR TEAM → GET IN TOUCH → No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Openspace Capital is a multi-strategy asset manager with a long-established specialist focus on Southeast Asia",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "The 2nd edition of the Coalesce Index measures the extent to which Southeast Asia has become more interconnected since our inaugural report. It includes key learnings for investors, founders and observers of the region. To download the reports, please visit: www.coalesceindex.org",
     "sourceIds": [
       "homepage"
     ],
@@ -26,9 +26,9 @@
     {
       "id": "official-logo",
       "url": "https://www.openspacecapital.com/",
-      "title": "Openspace Ventures — official mark on the retrieved page",
-      "quote": "https://cdn.prod.website-files.com/60c0219fe0d4854b05980079/68c7abc971f37f8ab35144ab_IMG_9094.png",
-      "checkedAt": "2026-11-03T00:18:31.000Z"
+      "title": "Openspace Ventures — no rule-validated official mark",
+      "quote": "https://cdn.prod.website-files.com/60c0219fe0d4854b05980079/6156a22ec1b70725d6278fb4_openspace%20logo%20small.png",
+      "checkedAt": "2026-11-14T20:18:03.000Z"
     },
     {
       "id": "homepage",
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "openspace-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.openspacecapital.com/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

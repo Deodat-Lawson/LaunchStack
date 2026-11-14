@@ -1,138 +1,535 @@
 {
   "programId": "communitech",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.communitech.ca/",
-    "https://www.communitech.ca/programs/",
+    "https://www.communitech.ca/founders/apply/",
     "https://www.communitech.ca/partners/apply.html",
-    "https://www.communitech.ca/faq.html"
+    "https://communitech.ca/about/policies/terms-of-service.html",
+    "https://communitech.ca/founders/apply/",
+    "https://communitech.ca/partners/apply.html",
+    "https://www.communitech.ca/faq.html",
+    "https://communitech.ca/about/policies/terms-of-service/agreement.html",
+    "https://communitech.ca/content/downloads/pdfs/communitech-membership-terms-of-service-faq.pdf",
+    "https://communitech.ca/content/downloads/pdfs/terms-of-service-may.pdf",
+    "https://communitech.ca/faq.html",
+    "https://www.communitech.ca/about/board-of-directors.html",
+    "https://www.communitech.ca/about/careers.html",
+    "https://www.communitech.ca/about/our-story.html",
+    "https://www.communitech.ca/about/policies/"
   ],
   "evidence": [
     {
+      "id": "check-duration-0b207a866b",
+      "url": "https://communitech.ca/about/policies/terms-of-service/agreement.html",
+      "title": "Communitech — terms page",
+      "excerpt": "the total amounts you paid to us (if any) in the 6 months immediately preceding the date of the most",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-30b365e3bf",
+      "url": "https://communitech.ca/founders/apply/",
+      "title": "Communitech — application page",
+      "excerpt": "expected to incorporate their business within 12 months of joining. Incorporation is a requirement for",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-3f7abbac41",
+      "url": "https://communitech.ca/about/policies/terms-of-service.html",
+      "title": "Communitech — terms page",
+      "excerpt": "the total amounts you paid to us (if any) in the 6 months immediately preceding the date of the most",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-4378bb9af8",
+      "url": "https://communitech.ca/about/policies/terms-of-service.html",
+      "title": "Communitech — terms page",
+      "excerpt": "services to which the claims relate during the 12 months immediately preceding the date of the most",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-acc7dae2a4",
+      "url": "https://www.communitech.ca/founders/apply/",
+      "title": "Communitech — application page",
+      "excerpt": "expected to incorporate their business within 12 months of joining. Incorporation is a requirement for",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-e463c4241b",
+      "url": "https://communitech.ca/about/policies/terms-of-service/agreement.html",
+      "title": "Communitech — terms page",
+      "excerpt": "services to which the claims relate during the 12 months immediately preceding the date of the most",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-172e334c03",
+      "url": "https://www.communitech.ca/about/careers.html",
+      "title": "Communitech — program page",
+      "excerpt": "Communitech Hub® and Data Hub, or at home in our current virtual world, you're encouraged to work in a way that works best",
+      "page": "details"
+    },
+    {
+      "id": "check-location-6f8ee1ecc6",
+      "url": "https://communitech.ca/founders/apply/",
+      "title": "Communitech — application page",
+      "excerpt": "To qualify, your company must: Be headquartered in Ontario, or Have plans to establish a",
+      "page": "application"
+    },
+    {
+      "id": "check-location-b1622b0c0d",
+      "url": "https://www.communitech.ca/founders/apply/",
+      "title": "Communitech — application page",
+      "excerpt": "To qualify, your company must: Be headquartered in Ontario, or Have plans to establish a",
+      "page": "application"
+    },
+    {
       "id": "check-name-c114eeb14b",
       "url": "https://www.communitech.ca/",
-      "title": "Communitech — homepage checked by scrape.py",
+      "title": "Communitech — homepage",
       "excerpt": "Home - Communitech Skip to content Events Programs Membership Pro Squad About",
       "page": "details"
     },
     {
+      "id": "check-phone-196e0103e5",
+      "url": "https://communitech.ca/faq.html",
+      "title": "Communitech — terms page",
+      "excerpt": "+1 (519) 888-9944",
+      "page": "terms"
+    },
+    {
       "id": "check-phone-3124ae20af",
       "url": "https://www.communitech.ca/partners/apply.html",
-      "title": "Communitech — application page checked by scrape.py",
+      "title": "Communitech — application page",
       "excerpt": "+1 (519) 888-9944",
       "page": "application"
     },
     {
       "id": "check-phone-3621ef53c3",
       "url": "https://www.communitech.ca/faq.html",
-      "title": "Communitech — terms page checked by scrape.py",
+      "title": "Communitech — terms page",
       "excerpt": "+1 (519) 888-9944",
       "page": "terms"
     },
     {
-      "id": "check-phone-cb722e4b4a",
-      "url": "https://www.communitech.ca/programs/",
-      "title": "Communitech — details page checked by scrape.py",
+      "id": "check-phone-49018c6282",
+      "url": "https://www.communitech.ca/about/board-of-directors.html",
+      "title": "Communitech — program page",
+      "excerpt": "+1 (519) 888-9944",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-499ce81af8",
+      "url": "https://communitech.ca/about/policies/terms-of-service/agreement.html",
+      "title": "Communitech — terms page",
+      "excerpt": "+1 (519) 888-9944",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-5ccc5c3ab6",
+      "url": "https://www.communitech.ca/about/policies/",
+      "title": "Communitech — program page",
+      "excerpt": "+1 (519) 888-9944",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-91c735a5f3",
+      "url": "https://communitech.ca/partners/apply.html",
+      "title": "Communitech — application page",
+      "excerpt": "+1 (519) 888-9944",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-980b513177",
+      "url": "https://communitech.ca/founders/apply/",
+      "title": "Communitech — application page",
+      "excerpt": "+1 (519) 888-9944",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-a629bfa40e",
+      "url": "https://communitech.ca/about/policies/terms-of-service.html",
+      "title": "Communitech — terms page",
+      "excerpt": "+1 (519) 888-9944",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-c045f01184",
+      "url": "https://www.communitech.ca/about/our-story.html",
+      "title": "Communitech — program page",
       "excerpt": "+1 (519) 888-9944",
       "page": "details"
     },
     {
       "id": "check-phone-ccbca6a1fb",
       "url": "https://www.communitech.ca/",
-      "title": "Communitech — homepage checked by scrape.py",
+      "title": "Communitech — homepage",
+      "excerpt": "+1 (519) 888-9944",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-d1836aba57",
+      "url": "https://www.communitech.ca/founders/apply/",
+      "title": "Communitech — application page",
+      "excerpt": "+1 (519) 888-9944",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-ea06874a8c",
+      "url": "https://www.communitech.ca/about/careers.html",
+      "title": "Communitech — program page",
       "excerpt": "+1 (519) 888-9944",
       "page": "details"
     },
     {
       "id": "check-route-0fcb698b61",
       "url": "https://www.communitech.ca/",
-      "title": "Communitech — homepage checked by scrape.py",
+      "title": "Communitech — homepage",
       "excerpt": "Find Your Place → https://www.communitech.ca/founders/apply/",
       "page": "details"
     },
     {
+      "id": "check-route-10ea3cd600",
+      "url": "https://communitech.ca/faq.html",
+      "title": "Communitech — terms page",
+      "excerpt": "Join the Community → https://communitech.ca/founders/apply/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-19aab2e4e6",
       "url": "https://www.communitech.ca/faq.html",
-      "title": "Communitech — terms page checked by scrape.py",
+      "title": "Communitech — terms page",
       "excerpt": "Join the Community → https://www.communitech.ca/founders/apply/",
       "page": "terms"
     },
     {
-      "id": "check-route-1c20e65c67",
-      "url": "https://www.communitech.ca/programs/",
-      "title": "Communitech — details page checked by scrape.py",
+      "id": "check-route-221d0b6d3d",
+      "url": "https://www.communitech.ca/founders/apply/",
+      "title": "Communitech — application page",
+      "excerpt": "Partner With Us → https://www.communitech.ca/partners/apply.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-23e062456a",
+      "url": "https://www.communitech.ca/about/our-story.html",
+      "title": "Communitech — program page",
       "excerpt": "Partner with us → https://www.communitech.ca/partners/apply.html",
       "page": "details"
+    },
+    {
+      "id": "check-route-29bbd37ca5",
+      "url": "https://communitech.ca/founders/apply/",
+      "title": "Communitech — application page",
+      "excerpt": "Partner With Us → https://communitech.ca/partners/apply.html",
+      "page": "application"
     },
     {
       "id": "check-route-2e42c8c19c",
       "url": "https://www.communitech.ca/partners/apply.html",
-      "title": "Communitech — application page checked by scrape.py",
+      "title": "Communitech — application page",
       "excerpt": "Go to Startup Form → https://www.communitech.ca/founders/apply/",
       "page": "application"
     },
     {
+      "id": "check-route-2fee564c9d",
+      "url": "https://communitech.ca/faq.html",
+      "title": "Communitech — terms page",
+      "excerpt": "Partner With Us → https://communitech.ca/partners/apply.html",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-33397728bd",
+      "url": "https://communitech.ca/partners/apply.html",
+      "title": "Communitech — application page",
+      "excerpt": "Join the Community → https://communitech.ca/founders/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-34d1134d76",
+      "url": "https://www.communitech.ca/about/board-of-directors.html",
+      "title": "Communitech — program page",
+      "excerpt": "Join the Community → https://www.communitech.ca/founders/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-34edb827a8",
+      "url": "https://www.communitech.ca/about/careers.html",
+      "title": "Communitech — program page",
+      "excerpt": "Join the Community → https://www.communitech.ca/founders/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-44070024e7",
+      "url": "https://communitech.ca/about/policies/terms-of-service.html",
+      "title": "Communitech — terms page",
+      "excerpt": "Partner with us → https://communitech.ca/partners/apply.html",
+      "page": "terms"
+    },
+    {
       "id": "check-route-492f144f0b",
       "url": "https://www.communitech.ca/",
-      "title": "Communitech — homepage checked by scrape.py",
+      "title": "Communitech — homepage",
       "excerpt": "Partner with us → https://www.communitech.ca/partners/apply.html",
       "page": "details"
     },
     {
-      "id": "check-route-56a3b4376e",
-      "url": "https://www.communitech.ca/programs/",
-      "title": "Communitech — details page checked by scrape.py",
+      "id": "check-route-4cc2e22817",
+      "url": "https://communitech.ca/faq.html",
+      "title": "Communitech — terms page",
+      "excerpt": "Partner with us → https://communitech.ca/partners/apply.html",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-56332b2056",
+      "url": "https://www.communitech.ca/about/our-story.html",
+      "title": "Communitech — program page",
       "excerpt": "Join the Community → https://www.communitech.ca/founders/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5be9798b30",
+      "url": "https://www.communitech.ca/about/policies/",
+      "title": "Communitech — program page",
+      "excerpt": "Partner With Us → https://www.communitech.ca/partners/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5d7dec8cd9",
+      "url": "https://www.communitech.ca/about/careers.html",
+      "title": "Communitech — program page",
+      "excerpt": "Partner with us → https://www.communitech.ca/partners/apply.html",
       "page": "details"
     },
     {
       "id": "check-route-5fde7deeee",
       "url": "https://www.communitech.ca/",
-      "title": "Communitech — homepage checked by scrape.py",
+      "title": "Communitech — homepage",
       "excerpt": "Partner With Us → https://www.communitech.ca/partners/apply.html",
       "page": "details"
     },
     {
-      "id": "check-route-66b3c97430",
-      "url": "https://www.communitech.ca/programs/",
-      "title": "Communitech — details page checked by scrape.py",
-      "excerpt": "Let's Talk → https://www.communitech.ca/partners/apply.html",
-      "page": "details"
+      "id": "check-route-6c37d8f603",
+      "url": "https://www.communitech.ca/founders/apply/",
+      "title": "Communitech — application page",
+      "excerpt": "Partner with us → https://www.communitech.ca/partners/apply.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6cbd3d0761",
+      "url": "https://communitech.ca/about/policies/terms-of-service.html",
+      "title": "Communitech — terms page",
+      "excerpt": "Partner With Us → https://communitech.ca/partners/apply.html",
+      "page": "terms"
     },
     {
       "id": "check-route-7085804f98",
       "url": "https://www.communitech.ca/faq.html",
-      "title": "Communitech — terms page checked by scrape.py",
+      "title": "Communitech — terms page",
       "excerpt": "Partner With Us → https://www.communitech.ca/partners/apply.html",
       "page": "terms"
     },
     {
-      "id": "check-route-9653900809",
-      "url": "https://www.communitech.ca/",
-      "title": "Communitech — homepage checked by scrape.py",
+      "id": "check-route-76aed5a090",
+      "url": "https://www.communitech.ca/about/board-of-directors.html",
+      "title": "Communitech — program page",
+      "excerpt": "Partner with us → https://www.communitech.ca/partners/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7c3c4153c6",
+      "url": "https://www.communitech.ca/about/policies/",
+      "title": "Communitech — program page",
+      "excerpt": "Partner with us → https://www.communitech.ca/partners/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8862a5e716",
+      "url": "https://communitech.ca/about/policies/terms-of-service.html",
+      "title": "Communitech — terms page",
+      "excerpt": "Join the Community → https://communitech.ca/founders/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-8aafff694e",
+      "url": "https://www.communitech.ca/about/policies/",
+      "title": "Communitech — program page",
       "excerpt": "Join the Community → https://www.communitech.ca/founders/apply/",
       "page": "details"
     },
     {
-      "id": "check-route-b0d0a63149",
-      "url": "https://www.communitech.ca/programs/",
-      "title": "Communitech — details page checked by scrape.py",
+      "id": "check-route-9653900809",
+      "url": "https://www.communitech.ca/",
+      "title": "Communitech — homepage",
+      "excerpt": "Join the Community → https://www.communitech.ca/founders/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9a757ccf89",
+      "url": "https://communitech.ca/partners/apply.html",
+      "title": "Communitech — application page",
+      "excerpt": "Go to Startup Form → https://communitech.ca/founders/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a5f88e17d8",
+      "url": "https://www.communitech.ca/about/careers.html",
+      "title": "Communitech — program page",
       "excerpt": "Partner With Us → https://www.communitech.ca/partners/apply.html",
       "page": "details"
     },
     {
+      "id": "check-route-a989ce0376",
+      "url": "https://communitech.ca/about/policies/terms-of-service/agreement.html",
+      "title": "Communitech — terms page",
+      "excerpt": "Partner With Us → https://communitech.ca/partners/apply.html",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-ade57e3fd8",
+      "url": "https://communitech.ca/founders/apply/",
+      "title": "Communitech — application page",
+      "excerpt": "Partner with us → https://communitech.ca/partners/apply.html",
+      "page": "application"
+    },
+    {
       "id": "check-route-b933476f55",
       "url": "https://www.communitech.ca/faq.html",
-      "title": "Communitech — terms page checked by scrape.py",
+      "title": "Communitech — terms page",
       "excerpt": "Partner with us → https://www.communitech.ca/partners/apply.html",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b9e958f460",
+      "url": "https://www.communitech.ca/about/board-of-directors.html",
+      "title": "Communitech — program page",
+      "excerpt": "Partner With Us → https://www.communitech.ca/partners/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-bcdae8d20a",
+      "url": "https://www.communitech.ca/about/our-story.html",
+      "title": "Communitech — program page",
+      "excerpt": "Become a member → https://www.communitech.ca/founders/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e829d07a6e",
+      "url": "https://www.communitech.ca/about/our-story.html",
+      "title": "Communitech — program page",
+      "excerpt": "Partner With Us → https://www.communitech.ca/partners/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ebbcbdc9f2",
+      "url": "https://communitech.ca/about/policies/terms-of-service/agreement.html",
+      "title": "Communitech — terms page",
+      "excerpt": "Join the Community → https://communitech.ca/founders/apply/",
       "page": "terms"
     },
     {
       "id": "check-route-f1839451db",
       "url": "https://www.communitech.ca/partners/apply.html",
-      "title": "Communitech — application page checked by scrape.py",
+      "title": "Communitech — application page",
       "excerpt": "Join the Community → https://www.communitech.ca/founders/apply/",
       "page": "application"
+    },
+    {
+      "id": "check-route-f2667f5638",
+      "url": "https://communitech.ca/about/policies/terms-of-service/agreement.html",
+      "title": "Communitech — terms page",
+      "excerpt": "Partner with us → https://communitech.ca/partners/apply.html",
+      "page": "terms"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-0f360e21fa",
+      "url": "https://www.communitech.ca/",
+      "page": "details",
+      "excerpt": "Home - Communitech Skip to content Events Programs Membership Pro Squad About Us Our Story Our Team Careers Partner with us Show Site menu Close Site menu Events Programs Membership Pro Squad About Us Our Story Our Team Meet Our Experts Careers Partner with us Join the Community Connect with us We help tech companies start, grow and succeed We are a membership organization shaped by the people building in Waterloo Region. Find Your Place Events Where Waterloo Region's tech community comes together. Nov 17 Coworking Day ​Whether you’re scaling a startup, leading a dev team or looking to plug into Waterloo Region tech ecosystem, the doors to the Communitech Hub are open for you to drop-in and work. 9:00 a.m. – 5:00 p.m. Communitech Hub Founders, Tech Workers, Executives/Leaders, Students, Early Talent, Partners, Investors Register Now Nov 18 The State of Intellectual Property, Cyber and National Security Explore the risks of foreign interference, espionage and IP theft. Hear from former CSIS officer Andrew Kirsch on protecting Canadian technology and what's at stake for national and economic security. 5:00 – 9:00 p.m. Tannery Event Centre Founders, Tech Workers, Executives/Leaders Register Now Nov 26 Tannery Holiday Market Shopping for the holiday season? Join us at the Tannery Event Centre to support local vendors at the Tannery Holiday Market! Skip the malls and support local"
+    },
+    {
+      "id": "check-page-428ee8eff1",
+      "url": "https://www.communitech.ca/founders/apply/",
+      "page": "application",
+      "excerpt": "Apply - Communitech Skip to content Events Programs Membership Pro Squad About Us Our Story Our Team Careers Partner with us Show Site menu Close Site menu Events Programs Membership Pro Squad About Us Our Story Our Team Meet Our Experts Careers Partner with us Join the Community Connect with us Communitech helps tech companies start, grow and succeed in Waterloo Region. Founder Membership is available to companies building and selling their own technology products or platforms. Agencies, consultancies and service-based businesses are not eligible. To qualify, your company must: Be headquartered in Ontario, or Have plans to establish a headquarters in Ontario, or Have senior leadership based in Ontario. If you're planning to expand into Ontario or have questions about your eligibility, contact membership@communitech.ca . Founder Members are expected to incorporate their business within 12 months of joining. Incorporation is a requirement for ongoing membership. Questions about this application? Email membership@communitech.ca . First name * Please enter your first name. Last name * Please enter your last name. Email address * Please enter your email address. Company name * Please enter your company name. Company website Please enter company website. Company Address * Please enter a street address. Please enter a city. Please enter a province. Please enter a country. Please"
+    },
+    {
+      "id": "check-page-194ac019e0",
+      "url": "https://www.communitech.ca/partners/apply.html",
+      "page": "application",
+      "excerpt": "Apply - Communitech Skip to content Events Programs Membership Pro Squad About Us Our Story Our Team Careers Partner with us Show Site menu Close Site menu Events Programs Membership Pro Squad About Us Our Story Our Team Meet Our Experts Careers Partner with us Join the Community Connect with us Support Canadian Tech Join us in backing Canada’s tech innovators—share your details below and explore how we can build something together. First name * Please enter your first name. Last name * Please enter your last name. Email address * Please enter your email address. Phone number * Please enter your phone number. Company name * Please enter your company name. Company website URL * Please enter a valid URL starting with http:// or https://. Company description * Please enter your response. Employees Worldwide * (Including those in Canada) Please enter number of employees. Which best describes your company’s primary interest in connecting with us? a. We are a startup seeking programming, resources, or connections to grow b. We provide services and/or tools that support startup growth c. We want to grow brand awareness and establish thought leadership among the startup community d. Other (please specify) Please select a response. What are your goals for collaborating with us? * Boost brand visibility and credibility Solve business challenges through startup collaboration Secure"
+    },
+    {
+      "id": "check-page-7098fec928",
+      "url": "https://communitech.ca/about/policies/terms-of-service.html",
+      "page": "terms",
+      "excerpt": "Terms of Service - Communitech Skip to content Events Programs Membership Pro Squad About Us Our Story Our Team Careers Partner with us Show Site menu Close Site menu Events Programs Membership Pro Squad About Us Our Story Our Team Meet Our Experts Careers Partner with us Join the Community Connect with us Founder Services Terms of Service Communitech’s mission and mandate is to help startups and scale-ups start, grow and succeed. Our team is here to guide you on your entrepreneurial journey, assist with commercializing your product and get you to where you want to go. In order to provide you with programming and advisory services, there are various pieces of information that we’ll need from you. These requests help us to improve our service and promote the strength of the tech ecosystem. Details about what we both give and get are included in the agreement below. If you agree with everything you read, please fill out the terms of service agreement. Review Terms of Service An Overview of the Terms of service Communitech Founder Services Terms of Service Communitech’s mission and mandate is to help startups and scale-ups start, grow and succeed. Our team is here to guide you on your entrepreneurial journey, assist with commercializing your product and get you to where you want to go. In order to provide you with programming and advisory services, there are various pieces of"
+    },
+    {
+      "id": "check-page-ddcb131498",
+      "url": "https://communitech.ca/founders/apply/",
+      "page": "application",
+      "excerpt": "Apply - Communitech Skip to content Events Programs Membership Pro Squad About Us Our Story Our Team Careers Partner with us Show Site menu Close Site menu Events Programs Membership Pro Squad About Us Our Story Our Team Meet Our Experts Careers Partner with us Join the Community Connect with us Communitech helps tech companies start, grow and succeed in Waterloo Region. Founder Membership is available to companies building and selling their own technology products or platforms. Agencies, consultancies and service-based businesses are not eligible. To qualify, your company must: Be headquartered in Ontario, or Have plans to establish a headquarters in Ontario, or Have senior leadership based in Ontario. If you're planning to expand into Ontario or have questions about your eligibility, contact membership@communitech.ca . Founder Members are expected to incorporate their business within 12 months of joining. Incorporation is a requirement for ongoing membership. Questions about this application? Email membership@communitech.ca . First name * Please enter your first name. Last name * Please enter your last name. Email address * Please enter your email address. Company name * Please enter your company name. Company website Please enter company website. Company Address * Please enter a street address. Please enter a city. Please enter a province. Please enter a country. Please"
+    },
+    {
+      "id": "check-page-0a037ccd73",
+      "url": "https://communitech.ca/partners/apply.html",
+      "page": "application",
+      "excerpt": "Apply - Communitech Skip to content Events Programs Membership Pro Squad About Us Our Story Our Team Careers Partner with us Show Site menu Close Site menu Events Programs Membership Pro Squad About Us Our Story Our Team Meet Our Experts Careers Partner with us Join the Community Connect with us Support Canadian Tech Join us in backing Canada’s tech innovators—share your details below and explore how we can build something together. First name * Please enter your first name. Last name * Please enter your last name. Email address * Please enter your email address. Phone number * Please enter your phone number. Company name * Please enter your company name. Company website URL * Please enter a valid URL starting with http:// or https://. Company description * Please enter your response. Employees Worldwide * (Including those in Canada) Please enter number of employees. Which best describes your company’s primary interest in connecting with us? a. We are a startup seeking programming, resources, or connections to grow b. We provide services and/or tools that support startup growth c. We want to grow brand awareness and establish thought leadership among the startup community d. Other (please specify) Please select a response. What are your goals for collaborating with us? * Boost brand visibility and credibility Solve business challenges through startup collaboration Secure"
+    },
+    {
+      "id": "check-page-243b2639a2",
+      "url": "https://www.communitech.ca/faq.html",
+      "page": "terms",
+      "excerpt": "FAQ - Communitech Skip to content Events Programs Membership Pro Squad About Us Our Story Our Team Careers Partner with us Show Site menu Close Site menu Events Programs Membership Pro Squad About Us Our Story Our Team Meet Our Experts Careers Partner with us Join the Community Connect with us Frequently Asked Questions Communitech What is Communitech? Communitech is a membership network shaped by the people building tech companies in Waterloo Region. Supporting Waterloo Region tech since 1997. Who is Communitech for? Communitech is for founders and teams building and growing tech companies in Waterloo Region. It's also for people working in tech who want to build relationships, keep learning and stay connected to the local tech community. What can Communitech offer for tech workers in Waterloo Region? Communitech offers opportunities to learn, connect and stay involved in Waterloo Region tech. Attend events and workshops, meet people from local tech companies, explore career opportunities and make use of flexible workspace at the Hub. We also share the stories and celebrate the people and companies helping more people discover what's being built in Waterloo Region. Programs & services Does Communitech offer programs for startups and scaling companies? Yes. Communitech offers programs for companies at every stage, from early-stage startups to scaling to established businesses."
+    },
+    {
+      "id": "check-page-fb662b3421",
+      "url": "https://communitech.ca/about/policies/terms-of-service/agreement.html",
+      "page": "terms",
+      "excerpt": "Terms of Service - Communitech Skip to content Events Programs Membership Pro Squad About Us Our Story Our Team Careers Partner with us Show Site menu Close Site menu Events Programs Membership Pro Squad About Us Our Story Our Team Meet Our Experts Careers Partner with us Join the Community Connect with us Founder Services Terms of Service Communitech’s mission and mandate is to help startups and scale-ups start, grow and succeed. Our team is here to guide you on your entrepreneurial journey, assist with commercializing your product and get you to where you want to go. In order to provide you with programming and advisory services, there are various pieces of information that we’ll need from you. These requests help us to improve our service and promote the strength of the tech ecosystem. Details about what we both give and get are included in the agreement below. If you agree to everything you read, please click submit below. First name * Please enter your first name. Last name * Please enter your last name. Email address * Please enter your email address. Company name * Please enter your company name. Job title * Please enter your role. Please take a moment to review our Terms of Service . If you have any questions, email the Founder Services Team . Yes, I agree to Communitech's terms of service. An Overview of the Terms of service Communitech Founder Services Terms of"
+    },
+    {
+      "id": "check-page-6937be891c",
+      "url": "https://communitech.ca/content/downloads/pdfs/communitech-membership-terms-of-service-faq.pdf",
+      "page": "terms",
+      "excerpt": "%PDF-1.4 %���� 1 0 obj < > endobj 3 0 obj < > endobj 7 0 obj < > stream x����J�` ��Ԃ(�� 28�h��mRpi# �V!�S�� �IHS� tspu+.ހ�e( ��%���| �:t����� �� � @V�� G�zM�� < ���$*�xÐ�!��K�����c�� z� G�� � �� > �&|)�4 c�Ƃ��� � �ٛbw��0 �o�Π?�һY���M� ֩ УO� > stream x���r�8 E�\"������Xq�+��~~��FS�lK��n|�Bmm͌% A\\�F�f p������������u ��F d����4 ���A ȃ�� ��8J� (� ��I �� �argJk =�� ^ǿ�B � �� =B �� : y� R3�+���� z� � �|2�¿���z`�M�( ���6������� �%aX{�z��z@�k� �䒐t��� �*�� H z 9Va /�& �������\"��� �Z= @.�,�*� j� ��D� dBW�ŵ � �\" �� ��ĝA�� E{`�H= @ 0 ��J*��!d ��Q V��E m�=�E P 1h8QXZ ��a ?Q(N � ȯ 9E P��ԣ���.�_N � � IXJ nу @�(� � `�lO� � �a �{ݾ 2 P �A��6�����ң ��U:ʈ �\" X! ˇ � ��� � ! @�` � �[�� f� p I��\" u0y� �DW�(#z � `�h\\� ��� �!� � � %��\" 9E ЄQ V�(�-V) ! �� C� ��A,B � �(��_4z�S� �c��z4�ND���@ǿ � ��( �-���� )��'�@ ��� ��8���y��9� >� �g�������{� {8���(}�u1�?�oGis� ��ퟷ�g����ߌ� �qQ�! + I� �*.��N�v �x���R(���5��t�il� v�z�_�l �z ���MT�iT?��}= �8��~����;6q��L�O�[?H��]7�����q�1H�k�O�?� ��' h����H��A ։�r�? �� ���� 9�kk�a D�iu'�q�� � 9 V��ij;QOA* �m��� cU���$aT�n�F�6�����퓇ǧ��0����[��03 = :᰸� �? Z������� �!p�9���0��c{x O��B,���oU F�� � f @ ,��Ġ:bw� �_��t(f��-��ix|ҋ�A��ͻ�g�� #�i� � �Z 1} ��������N�R�����R�Z��[�D\\ۉC����L� �ϋ컼�LW\"�"
+    },
+    {
+      "id": "check-page-9b53c9c437",
+      "url": "https://communitech.ca/content/downloads/pdfs/terms-of-service-may.pdf",
+      "page": "terms",
+      "excerpt": "%PDF-1.4 %���� 1 0 obj < > endobj 3 0 obj < > endobj 7 0 obj < > stream x����J�` ��Ԃ(�� 28�h��mRpi# �V!�S�� �IHS� tspu+.ހ�e( ��%���| �:t����� �� � @V�� G�zM�� < ���$*�xÐ�!��K�����c�� z� G�� � �� > �&|)�4 c�Ƃ��� � �ٛbw��0 �o�Π?�һY���M� ֩ УO� > stream x����r�6׮m Fb��l)�f�N�Yso ��(ǖ8NUN�/`�h A \\4[��b���� ��|����� �[���X6 �[_a �� ���� N�?H�������?��޾s � qz����w �Y6 jBx � $ &{�3���5 � �ݟ>�� ��@���#p�k � ��#�J �ʄ�~��� ��� � A��s < < | S O� X���?�^���� ��O |�� !��!�I7��� �������E�� �=����u ���[W�ͲI � � �AIJL ������O��)� ��L�� R �� ����O����� ����|ze>֕ ������׿�� �����V�+ ��L < ��A���hD��j� �� �; ��������� ��/ ��� O��� ɍOo �!���Ǣ�_ ȳ �{���������o'���p �ު�ע�\\�/O�_��/���[�?�Y����� �9��Ѫ�*Η��\\U��䀁 �xu��g�> J? X0�?��xx � ?����_�Ηӳ,_F~x�� /���s�� ��k�3tz�� P x5PE{)� �U 7T < 幬ڪnj{�ڪ < ��sq˃ ��P�Uը�����Z� � ܑ� ��/���υ� �^� /�� ��t�x�1��,���#ܶ�V��t�M �˗������ ��� B�����g� /��R�r�!�Z�x԰�\"aZlk�� �$ O��� j�327�� ��E-���f�F[-�2�� v ��1�$��w� K��%�O�iW8���o�Ͽ�x��o�Z$C.T��~ZO�� x�?%��~}z���/y "
+    },
+    {
+      "id": "check-page-06b5d074a6",
+      "url": "https://communitech.ca/faq.html",
+      "page": "terms",
+      "excerpt": "FAQ - Communitech Skip to content Events Programs Membership Pro Squad About Us Our Story Our Team Careers Partner with us Show Site menu Close Site menu Events Programs Membership Pro Squad About Us Our Story Our Team Meet Our Experts Careers Partner with us Join the Community Connect with us Frequently Asked Questions Communitech What is Communitech? Communitech is a membership network shaped by the people building tech companies in Waterloo Region. Supporting Waterloo Region tech since 1997. Who is Communitech for? Communitech is for founders and teams building and growing tech companies in Waterloo Region. It's also for people working in tech who want to build relationships, keep learning and stay connected to the local tech community. What can Communitech offer for tech workers in Waterloo Region? Communitech offers opportunities to learn, connect and stay involved in Waterloo Region tech. Attend events and workshops, meet people from local tech companies, explore career opportunities and make use of flexible workspace at the Hub. We also share the stories and celebrate the people and companies helping more people discover what's being built in Waterloo Region. Programs & services Does Communitech offer programs for startups and scaling companies? Yes. Communitech offers programs for companies at every stage, from early-stage startups to scaling to established businesses."
+    },
+    {
+      "id": "check-page-8d4886e345",
+      "url": "https://www.communitech.ca/about/board-of-directors.html",
+      "page": "details",
+      "excerpt": "Board of Directors - Communitech Skip to content Events Programs Membership Pro Squad About Us Our Story Our Team Careers Partner with us Show Site menu Close Site menu Events Programs Membership Pro Squad About Us Our Story Our Team Meet Our Experts Careers Partner with us Join the Community Connect with us Leadership and Board of Directors At Communitech, you'll work alongside people committed to helping Waterloo Region tech companies start, scale and stay here. We bring founders, leaders and teams together, help companies move forward and amplify the people and companies building what's next. Senior Leadership Sheldon McCormick Chief Executive Officer LinkedIn Jennifer Gruber Chief Financial Officer LinkedIn Board of Directors The people who help guide Communitech are experienced founders, operators and executives who understand what building in Waterloo Region really looks like. Peter Barr Chief Strategy Officer, AltaML LinkedIn Adam Belsher CEO, Magnet Forensics LinkedIn Ruth Casselman CEO, Accelerator Centre LinkedIn Michael Doughty President & CEO, Manulife Canada (Retired) Board Chair, Communitech LinkedIn Catherine Graham CEO of commonsku Former Board Chair, Communitech LinkedIn Hongwei Liu Founder & CEO, Mappedin LinkedIn Andrew MacLeod President & CEO, Postmedia Network Inc LinkedIn Brandon Nussey CFO, Coveo LinkedIn Christopher Runstedler General Counsel &"
+    },
+    {
+      "id": "check-page-ded88bd469",
+      "url": "https://www.communitech.ca/about/careers.html",
+      "page": "details",
+      "excerpt": "Careers - Communitech Skip to content Events Programs Membership Pro Squad About Us Our Story Our Team Careers Partner with us Show Site menu Close Site menu Events Programs Membership Pro Squad About Us Our Story Our Team Meet Our Experts Careers Partner with us Join the Community Connect with us Working at Communitech So, what’s it like to be part of the Communitech team? As a team, our focus is great customer service and helping tech-driven companies overcome barriers to success. We stand behind our mission of 25+ years and execute it with passion, persistence and care. It's pulling together We work hard and we work together. We work to solve problems as a collective that companies face individually. We aren’t afraid to roll up our sleeves and tackle the tough stuff; and we do it free of ego, all pulling together toward our mission. It's personal well-being We’re given the tools to lead healthy and balanced lives. From competitive benefits and insurance coverage, fitness allowance and professional development funds, our hard work is balanced with a high regard for workplace happiness and personal wellbeing. It's fair, flexible compensation We have incredible benefits with no wait period. Already have benefits? Invest the spend into your RRSP! On top of respected, paid vacation we also enjoy a paid holiday shutdown. Access to an education spend allows you to choose your path"
+    },
+    {
+      "id": "check-page-4987dabd66",
+      "url": "https://www.communitech.ca/about/our-story.html",
+      "page": "details",
+      "excerpt": "Our Story - Communitech Skip to content Events Programs Membership Pro Squad About Us Our Story Our Team Careers Partner with us Show Site menu Close Site menu Events Programs Membership Pro Squad About Us Our Story Our Team Meet Our Experts Careers Partner with us Join the Community Connect with us COMMUNITECH Waterloo Region’s tech community since 1997. Helping Waterloo Region tech companies start, scale and stay here. 1164 Members (as of FY26) 104 Events hosted (as of FY26) $400,782,429 CAD Capital raised (as of FY26) 23 Peer Groups (as of FY26) 28 Years in business 916 AI Adoption Hours (as of FY26) Who we are Communitech is a membership organization shaped by the people building tech companies in Waterloo Region. Since 1997, we've brought founders, leaders and teams together to help more companies start here, scale here and stay here. We're working toward a stronger Waterloo Region tech community, one with more founders, more growing companies and more reasons for talented people to build their careers here. A place where companies choose to stay and others choose to put down roots. Today, more than 1,100 companies are part of the Communitech network. What we do We bring Waterloo Region tech together. Through programs, events and membership, founders, leaders and the people working across local tech companies come together to learn from one another, share what’s working"
+    },
+    {
+      "id": "check-page-5ccfcfa256",
+      "url": "https://www.communitech.ca/about/policies/",
+      "page": "details",
+      "excerpt": "Policies - Communitech Skip to content Events Programs Membership Pro Squad About Us Our Story Our Team Careers Partner with us Show Site menu Close Site menu Events Programs Membership Pro Squad About Us Our Story Our Team Meet Our Experts Careers Partner with us Join the Community Connect with us Policies We’re all about having fun at Communitech, but we do it responsibly. We adhere to policies and procedures that ensure the protection of our team, our customers and our partners. Accessibility Communitech aims to provide a barrier-free environment for anyone who accesses our information. Accessibility Policy Multi-Year Accessibility Plan Collaboration It’s important to us that everyone’s interests are protected when collaborating. Collaboration policy Guest Wifi Acceptable Use Policy We provide free public access to all Communitech visitors. You can use the Service (don’t worry, it’s free), but only if you agree to our terms of service each time you connect! Wifi policy Privacy Communitech is committed to protecting your personal information, which is exactly why we created this policy. Privacy policy Founder Services Terms of Service In order to provide you with programming and advisory services, there are various pieces of information that we’ll need from you. These requests help us to improve our service and promote the strength of the tech ecosystem. Terms of Service"
     }
   ],
   "findings": {
@@ -151,6 +548,14 @@
       {
         "value": "https://www.communitech.ca/founders/apply/",
         "evidenceId": "check-route-9653900809"
+      },
+      {
+        "value": "https://communitech.ca/partners/apply.html",
+        "evidenceId": "check-route-44070024e7"
+      },
+      {
+        "value": "https://communitech.ca/founders/apply/",
+        "evidenceId": "check-route-8862a5e716"
       }
     ],
     "applicationUrl": [
@@ -162,8 +567,34 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-acc7dae2a4"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-3f7abbac41"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-172e334c03"
+      }
+    ],
+    "location": [
+      {
+        "value": "Ontario",
+        "evidenceId": "check-location-b1622b0c0d"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

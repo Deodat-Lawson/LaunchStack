@@ -9,14 +9,14 @@
   "websiteUrl": "https://business.esa.int/",
   "applyUrl": "https://business.esa.int/how-to-apply",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: ESA Space Solutions Skip to main content Main navigation ESA Business Applications and Space Solutions (BASS) transforms European businesses through the power of commercialising space data and technology. We have invested €500 million in more than 1,200 businesses – and counting. Could you be next? Watch the video to learn more about what you can do with space-related assets! Space technologies relieve the pressure for patients and care providers DecubiMat, developed and tested by German company BLACKPIN with support from ESA’s Business Applications and Space Solutions (BASS), provides a real-time… Read more Keeping the lights on – guarding the grid from space Secure and resilient electricity supplies rely on utility companies maintaining grids and regularly inspecting millions of kilometres of power lines.… Read more URB!Talks 2026: the urban future starts in orbit Whether you are a city leader, policymaker, urban planner, architect, innovator or an entrepreneur curious about the future of urban living and space-… Read more No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Our mission is to support companies in Europe in the development of products and services using satellite applications and space technologies.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Whether you are a city leader, policymaker, urban planner, architect, innovator or an entrepreneur curious about the future of urban…",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "esa-space-solutions-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://business.esa.int/how-to-apply",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

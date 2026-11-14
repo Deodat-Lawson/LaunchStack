@@ -1,58 +1,528 @@
 {
   "programId": "congruent-ventures",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://www.congruentvc.com/"
+    "https://www.congruentvc.com/",
+    "https://www.congruentvc.com/50-by-2050-2025",
+    "https://www.congruentvc.com/50-by-2050-2026",
+    "https://www.congruentvc.com/portfolio",
+    "https://www.congruentvc.com/50-by-2050-2024",
+    "https://www.congruentvc.com/portfolio/AMP",
+    "https://www.congruentvc.com/portfolio/Adapt",
+    "https://www.congruentvc.com/portfolio/Alloy-Enterprises",
+    "https://www.congruentvc.com/portfolio/Amply-Power",
+    "https://www.congruentvc.com/portfolio/Avalanche-Energy",
+    "https://www.congruentvc.com/portfolio/Bellwether-Coffee",
+    "https://www.congruentvc.com/portfolio/Blueprint-Power",
+    "https://www.congruentvc.com/portfolio/Climate-Robotics",
+    "https://www.congruentvc.com/portfolio/Dispatch-Goods",
+    "https://www.congruentvc.com/portfolio/Ebb-Carbon"
   ],
   "evidence": [
     {
+      "id": "check-email-076a9f4a67",
+      "url": "https://www.congruentvc.com/portfolio/Dispatch-Goods",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com TWITTER",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-2439dddcca",
       "url": "https://www.congruentvc.com/",
-      "title": "Congruent Ventures — homepage checked by scrape.py",
+      "title": "Congruent Ventures — homepage",
       "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com TWITTER",
       "page": "details"
     },
     {
+      "id": "check-email-29512a8120",
+      "url": "https://www.congruentvc.com/portfolio/Ebb-Carbon",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com TWITTER",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-2b7767f0f1",
+      "url": "https://www.congruentvc.com/portfolio/Climate-Robotics",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com TWITTER",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-315db86717",
+      "url": "https://www.congruentvc.com/portfolio/Avalanche-Energy",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com © 2023 Relume.",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-31a7d16e23",
+      "url": "https://www.congruentvc.com/50-by-2050-2026",
+      "title": "Congruent Ventures — terms page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com TWITTER",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-356e3e1284",
+      "url": "https://www.congruentvc.com/portfolio/Adapt",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com © 2023 Relume.",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-5997e690ed",
+      "url": "https://www.congruentvc.com/portfolio/AMP",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com © 2023 Relume.",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-61eca49d13",
+      "url": "https://www.congruentvc.com/portfolio/Bellwether-Coffee",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com © 2023 Relume.",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-693f353876",
       "url": "https://www.congruentvc.com/",
-      "title": "Congruent Ventures — homepage checked by scrape.py",
+      "title": "Congruent Ventures — homepage",
       "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com HOME TEAM",
       "page": "details"
     },
     {
+      "id": "check-email-70819a7e96",
+      "url": "https://www.congruentvc.com/portfolio/Adapt",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com TWITTER",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-72d8ae55bf",
+      "url": "https://www.congruentvc.com/portfolio/Amply-Power",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com © 2023 Relume.",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-733e26f9f0",
+      "url": "https://www.congruentvc.com/portfolio",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com © 2023 Relume.",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-7c6e377a55",
+      "url": "https://www.congruentvc.com/50-by-2050-2025",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com TWITTER",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-8ed481526c",
+      "url": "https://www.congruentvc.com/portfolio/Dispatch-Goods",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com © 2023 Relume.",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-99cc60a7c0",
+      "url": "https://www.congruentvc.com/portfolio/Blueprint-Power",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com © 2023 Relume.",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-9a905f1462",
+      "url": "https://www.congruentvc.com/portfolio/Alloy-Enterprises",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com TWITTER",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-a291aa0425",
+      "url": "https://www.congruentvc.com/50-by-2050-2026",
+      "title": "Congruent Ventures — terms page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com © 2023 Relume.",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-a34b174fa6",
+      "url": "https://www.congruentvc.com/50-by-2050-2024",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com © 2023 Relume.",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-b5e540bac9",
       "url": "https://www.congruentvc.com/",
-      "title": "Congruent Ventures — homepage checked by scrape.py",
+      "title": "Congruent Ventures — homepage",
       "excerpt": "info@congruentvc.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c41c81a438",
+      "url": "https://www.congruentvc.com/portfolio/Amply-Power",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com TWITTER",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-c509823a58",
+      "url": "https://www.congruentvc.com/portfolio/Climate-Robotics",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com © 2023 Relume.",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-c7790e9ec8",
+      "url": "https://www.congruentvc.com/50-by-2050-2024",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com TWITTER",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-cf02808333",
+      "url": "https://www.congruentvc.com/portfolio/Bellwether-Coffee",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com TWITTER",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-d0c0fc8012",
+      "url": "https://www.congruentvc.com/portfolio/Ebb-Carbon",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com © 2023 Relume.",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-dfbe5e529f",
+      "url": "https://www.congruentvc.com/50-by-2050-2025",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com © 2023 Relume.",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-dfc205ceef",
+      "url": "https://www.congruentvc.com/portfolio/Alloy-Enterprises",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com © 2023 Relume.",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-e35c47d89c",
+      "url": "https://www.congruentvc.com/portfolio",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com TWITTER",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-e6c0d7faab",
+      "url": "https://www.congruentvc.com/portfolio/Avalanche-Energy",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com TWITTER",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-ea6261d930",
+      "url": "https://www.congruentvc.com/portfolio/Blueprint-Power",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com TWITTER",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-f0741cdaf6",
+      "url": "https://www.congruentvc.com/portfolio/AMP",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com TWITTER",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-location-fcc8a2fecc",
+      "url": "https://www.congruentvc.com/",
+      "title": "Congruent Ventures — homepage",
+      "excerpt": "more with less. We back teams that are based in North America who are innovating across atoms, bits,",
       "page": "details"
     },
     {
       "id": "check-name-63c83b626f",
       "url": "https://www.congruentvc.com/",
-      "title": "Congruent Ventures — homepage checked by scrape.py",
+      "title": "Congruent Ventures — homepage",
       "excerpt": "Congruent Ventures Website This Year’s 50 by 2050 List is Live! Meet the 50",
       "page": "details"
     },
     {
+      "id": "check-portfolio-00e7484bd0",
+      "url": "https://www.congruentvc.com/portfolio/Blueprint-Power",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "PORTFOLIO → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-0a6feecea7",
+      "url": "https://www.congruentvc.com/portfolio/Avalanche-Energy",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "PORTFOLIO → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-0dbbb205e1",
+      "url": "https://www.congruentvc.com/50-by-2050-2026",
+      "title": "Congruent Ventures — terms page",
+      "excerpt": "Portfolio → https://www.congruentvc.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-1ad3fbe373",
+      "url": "https://www.congruentvc.com/portfolio/Amply-Power",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "PORTFOLIO → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-20f6de9452",
+      "url": "https://www.congruentvc.com/portfolio/Bellwether-Coffee",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "PORTFOLIO → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-248d542a26",
+      "url": "https://www.congruentvc.com/portfolio/Ebb-Carbon",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "PORTFOLIO → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-24c67a037e",
+      "url": "https://www.congruentvc.com/portfolio/Amply-Power",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "Portfolio → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-374447c718",
+      "url": "https://www.congruentvc.com/portfolio/Adapt",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "Portfolio → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-448e23835d",
+      "url": "https://www.congruentvc.com/portfolio/Climate-Robotics",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "PORTFOLIO → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-48ce02d197",
+      "url": "https://www.congruentvc.com/portfolio/Dispatch-Goods",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "PORTFOLIO → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-4f97f59423",
+      "url": "https://www.congruentvc.com/portfolio/Bellwether-Coffee",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "Portfolio → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-60b017c53e",
+      "url": "https://www.congruentvc.com/portfolio/Climate-Robotics",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "Portfolio → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-63a9794e5d",
+      "url": "https://www.congruentvc.com/portfolio/Avalanche-Energy",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "Portfolio → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-87d3878a28",
+      "url": "https://www.congruentvc.com/portfolio/Blueprint-Power",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "Portfolio → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-95bd49ad0f",
+      "url": "https://www.congruentvc.com/50-by-2050-2024",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "Portfolio → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-ac931c9c35",
+      "url": "https://www.congruentvc.com/50-by-2050-2025",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "Portfolio → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-ad4583eb0b",
+      "url": "https://www.congruentvc.com/portfolio/Alloy-Enterprises",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "PORTFOLIO → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-e3c34fee49",
+      "url": "https://www.congruentvc.com/portfolio/Adapt",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "PORTFOLIO → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-e530b605b5",
       "url": "https://www.congruentvc.com/",
-      "title": "Congruent Ventures — homepage checked by scrape.py",
+      "title": "Congruent Ventures — homepage",
       "excerpt": "Portfolio → https://www.congruentvc.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-e7b7a1b415",
+      "url": "https://www.congruentvc.com/portfolio/Ebb-Carbon",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "Portfolio → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-e7d84b7a77",
+      "url": "https://www.congruentvc.com/portfolio/AMP",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "Portfolio → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-ebd03eafc2",
       "url": "https://www.congruentvc.com/",
-      "title": "Congruent Ventures — homepage checked by scrape.py",
+      "title": "Congruent Ventures — homepage",
       "excerpt": "transformative companies → https://www.congruentvc.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-f05361bb0a",
+      "url": "https://www.congruentvc.com/portfolio/Alloy-Enterprises",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "Portfolio → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-f480e3b325",
+      "url": "https://www.congruentvc.com/portfolio/Dispatch-Goods",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "Portfolio → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-fa6a099da8",
+      "url": "https://www.congruentvc.com/portfolio/AMP",
+      "title": "Congruent Ventures — portfolio page",
+      "excerpt": "PORTFOLIO → https://www.congruentvc.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-6ccc3023cd",
       "url": "https://www.congruentvc.com/",
-      "title": "Congruent Ventures — homepage checked by scrape.py",
+      "title": "Congruent Ventures — homepage",
       "excerpt": "https://www.congruentvc.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-09ab3c3e7f",
+      "url": "https://www.congruentvc.com/",
+      "page": "details",
+      "excerpt": "Congruent Ventures Website This Year’s 50 by 2050 List is Live! Meet the 50 companies powering tomorrow. Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Passionate climate investors partnering with audacious founders Passionate climate investors partnering with audacious founders. Leveraging decades of climate tech investing experience, we support early-stage entrepreneurs building transformative companies that do more with less. We back teams that are based in North America who are innovating across atoms, bits, or business models. Our initial investments range from formation capital to Series A, and we support companies as they scale. Leveraging decades of climate tech investing experience, we support early-stage entrepreneurs building transformative companies that do more with less. We back teams that are based in North America who are innovating across atoms, bits, or business models. Our initial investments range from formation capital to Series A, and we support companies as they scale. Leveraging decades of climate tech investing experience, we support early-stage entrepreneurs building transformative companies that do more with less. We back teams that are based in North America who are innovating across atoms, bits, or business models."
+    },
+    {
+      "id": "check-page-40efe90d75",
+      "url": "https://www.congruentvc.com/50-by-2050-2025",
+      "page": "portfolio",
+      "excerpt": "50 by 2050 2026 Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn 50 Companies Powering Tomorrow ‍ Congruent Ventures and Silicon Valley Bank are excited to return with the 2026 edition of our list: 50 companies with the vision, technology, and scale to become the next set of billion-dollar market leaders. These businesses sit at the intersection of energy, technology, and climate impact, and are redefining industries as they advance global decarbonization. The list is non-exhaustive, and we hope it sparks conversation and collaboration around the pace of climate innovation. → View the full report here 50 Companies Powering Tomorrow ‍ Congruent Ventures and Silicon Valley Bank are excited to return with the 2026 edition of our list: 50 companies with the vision, technology, and scale to become the next set of billion-dollar market leaders. These businesses sit at the intersection of energy, technology, and climate impact, and are redefining industries as they advance global decarbonization. The list is non-exhaustive, and we hope it sparks conversation and collaboration around the pace of climate innovation. → View the full report here FILTER BY ALL THEMES How We Power Our Lives How We Source + Nourish + Fortify How We Move + Build + Live How We"
+    },
+    {
+      "id": "check-page-db40682ec4",
+      "url": "https://www.congruentvc.com/50-by-2050-2026",
+      "page": "terms",
+      "excerpt": "50 by 2050 2026 Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn 50 Companies Powering Tomorrow ‍ Congruent Ventures and Silicon Valley Bank are excited to return with the 2026 edition of our list: 50 companies with the vision, technology, and scale to become the next set of billion-dollar market leaders. These businesses sit at the intersection of energy, technology, and climate impact, and are redefining industries as they advance global decarbonization. The list is non-exhaustive, and we hope it sparks conversation and collaboration around the pace of climate innovation. → View the full report here 50 Companies Powering Tomorrow ‍ Congruent Ventures and Silicon Valley Bank are excited to return with the 2026 edition of our list: 50 companies with the vision, technology, and scale to become the next set of billion-dollar market leaders. These businesses sit at the intersection of energy, technology, and climate impact, and are redefining industries as they advance global decarbonization. The list is non-exhaustive, and we hope it sparks conversation and collaboration around the pace of climate innovation. → View the full report here FILTER BY ALL THEMES How We Power Our Lives How We Source + Nourish + Fortify How We Move + Build + Live How We"
+    },
+    {
+      "id": "check-page-85cd72ed00",
+      "url": "https://www.congruentvc.com/portfolio",
+      "page": "portfolio",
+      "excerpt": "Portfolio This Year’s 50 by 2050 List is Live! Meet the 50 companies powering tomorrow. Congruent Ventures and SVB announce our inaugural 50 by 2050 List to highlight companies pioneering technology for carbon reduction. View Congruent x SVB's 50 by 2050 List . Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn PORTFOLIO FILTER BITS ATOMS BIO EXITED Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Mobility + Urbanization Mobility + Urbanization Mobility + Urbanization Mobility + Urbanization Amply Power (Acquired by BP) Outsourched charging for electric fleets Filters Here Bright Harbor Disaster resilience and recovery support Filters Here Coastal Assembly Intelligent, nature-based coastal infrastructure Filters Here Fleet Commuter benefits platform Filters Here Hopthru (Acquired by Swiftly) Operational efficiency for public transit Filters Here Lightship All-electric sustainable and efficient towable RVs Filters Here Lydian Sustainable alternatives for fuels and chemicals Filters Here OptimoRoute Next generation last mile route optimization Filters Here Parallel Systems Autonomous electric infrastructure for moving freight over rail Filters Here Presto EV charging platform for high mileage fleets"
+    },
+    {
+      "id": "check-page-2ae7b8e2b6",
+      "url": "https://www.congruentvc.com/50-by-2050-2024",
+      "page": "portfolio",
+      "excerpt": "50 by 2050 2026 Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn 50 Companies Powering Tomorrow ‍ Congruent Ventures and Silicon Valley Bank are excited to return with the 2026 edition of our list: 50 companies with the vision, technology, and scale to become the next set of billion-dollar market leaders. These businesses sit at the intersection of energy, technology, and climate impact, and are redefining industries as they advance global decarbonization. The list is non-exhaustive, and we hope it sparks conversation and collaboration around the pace of climate innovation. → View the full report here 50 Companies Powering Tomorrow ‍ Congruent Ventures and Silicon Valley Bank are excited to return with the 2026 edition of our list: 50 companies with the vision, technology, and scale to become the next set of billion-dollar market leaders. These businesses sit at the intersection of energy, technology, and climate impact, and are redefining industries as they advance global decarbonization. The list is non-exhaustive, and we hope it sparks conversation and collaboration around the pace of climate innovation. → View the full report here FILTER BY ALL THEMES How We Power Our Lives How We Source + Nourish + Fortify How We Move + Build + Live How We"
+    },
+    {
+      "id": "check-page-6b4176d141",
+      "url": "https://www.congruentvc.com/portfolio/AMP",
+      "page": "portfolio",
+      "excerpt": "Congruent Ventures Website This Year’s 50 by 2050 List is Live! Meet the 50 companies powering tomorrow. Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Sustainable Production + Consumption AMP Automated waste and recycling facilities AMP’s technology is waste sortation’s permanent solution. As the leader in AI-powered sortation, we give waste and recycling leaders the power to reduce labor costs, increase resource recovery, and deliver more reliable operations. The Company builds automated material recovery facilities (MRFs) and Municipal Solid Waste (MSW) facilities at a lower cost and much higher operational performance than traditional technoogy in the industry. News AMP Robotics raises $91m funding for AI-powered waste sortation Packaging Gateway Dec 6 AMP Robotics grabs $91M to accelerate AI-powered waste sortation tech Tech Funding News Dec 6 1 big thing: Waste-sorting exclusive Axios Dec 5 TEAM Tim Stuart CONGRUENT Abe Yokell Tanuj Dutta Website https://ampsortation.com/ News AMP Robotics raises $91m funding for AI-powered waste sortation Packaging Gateway Dec 6 AMP Robotics grabs $91M to accelerate AI-powered waste sortation tech Tech Funding News Dec 6 1 big thing: Waste-sorting exclusive Axios Dec 5 OFFICE ADDRESS 201 Mission St Suite"
+    },
+    {
+      "id": "check-page-55604b75c1",
+      "url": "https://www.congruentvc.com/portfolio/Adapt",
+      "page": "portfolio",
+      "excerpt": "Congruent Ventures Website This Year’s 50 by 2050 List is Live! Meet the 50 companies powering tomorrow. Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Food + Agriculture Heartee Containerized mushroom ag Heartee Foods builds and operates vertical farming containers that grow specialty and gourmet mushrooms. They also manage the delivery and sale of the products to local grocery stores and restaurants. Their operations enable sales of locally grown produce that consumers have previously been unable to access due to the poor shelf life of mushrooms. News TEAM Jonathan Murray CONGRUENT Tanuj Dutta Abe Yokell Website https://hearteefoods.com/ News OFFICE ADDRESS 201 Mission St Suite 650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com TWITTER SUBSTACK LINKEDIN HOME TEAM PORTFOLIO NEWS THINKING IMPACT CAREERS ‍ LP LOGIN PRIVACY POLICY OFFICE ADDRESS 201 Mission St Suite 650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com © 2023 Relume. All rights reserved. Privacy Policy Terms of Service Cookies Settings Atoms Bio"
+    },
+    {
+      "id": "check-page-90f1b355d4",
+      "url": "https://www.congruentvc.com/portfolio/Alloy-Enterprises",
+      "page": "portfolio",
+      "excerpt": "Congruent Ventures Website This Year’s 50 by 2050 List is Live! Meet the 50 companies powering tomorrow. Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Sustainable Production + Consumption Alloy Enterprises (Acquired by JCI) Copper & aluminum manufacturing Alloy Enterprises is building the next generation aluminum and copper advanced manufacturing technology that can replace energy intensive casting and forging processes with high-performance parts for a fraction of the cost and lead-time. They deliver leak-tight, single-piece thermal management components engineered for maximum heat transfer and low pressure drop, built to perform under the most crushing thermal loads and solve the industry’s toughest thermal challenges. News Alloy Enterprises Launches Aluminum Cold Plate Components PR Newswire Oct 24 Ali Forsyth on making Alloy Enterprises the 'backbone for aluminium additive manufacturing.' TCT Magazine Jul 24 [INTERVIEW] METAL 3D PRINTING WITHOUT POWDER? ALLOY ENTERPRISES CEO ALI FORSYTH ON DISRUPTING A $75 BILLION INDUSTRY 3D Printing Industry May 30 TEAM Ali Forsythe CONGRUENT Joshua Posamentier Website https://www.alloyenterprises.co News Alloy Enterprises Launches Aluminum Cold Plate Components PR Newswire Oct 24 Ali Forsyth on making"
+    },
+    {
+      "id": "check-page-0b95cb6f9a",
+      "url": "https://www.congruentvc.com/portfolio/Amply-Power",
+      "page": "portfolio",
+      "excerpt": "Congruent Ventures Website This Year’s 50 by 2050 List is Live! Meet the 50 companies powering tomorrow. Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Mobility + Urbanization Amply Power (Acquired by BP) Outsourched charging for electric fleets Amply Power is a services company focused on managing the charging of EV fleets, with a focus on public transit, delivery, and autonomous passenger vehicle fleets. Amply’s core expertise is using internally designed and third party hardware and software components to offer fleet charging services by assuming responsibility of the management of the utility meter, managing charging schedules, demand charges, and in some cases CAPEX and day-today charging facility management. News BP teaming up with Hertz to build national network of EV charging stations NWI Times Oct 3 AMPLY Power rebrands as bp pulse, sets sights on global expansion BP Pulse Sep 7 BP Acquires Fleet Charging Provider Amply Power Charged Fleet Dec 7 TEAM Vic Shao CONGRUENT Abe Yokell Website https://www.amplypower.com/ News BP teaming up with Hertz to build national network of EV charging stations NWI Times Oct 3 AMPLY Power rebrands as bp pulse, sets sights on global expansion BP Pulse Sep 7 BP Acquires Fleet Charging Provider Amply Power"
+    },
+    {
+      "id": "check-page-7578b62726",
+      "url": "https://www.congruentvc.com/portfolio/Avalanche-Energy",
+      "page": "portfolio",
+      "excerpt": "Congruent Ventures Website This Year’s 50 by 2050 List is Live! Meet the 50 companies powering tomorrow. Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Energy Transition Avalanche Energy Micro-fusion reactors Avalanche is developing the world’s smallest fusion reactors that produce energy. It plans to power tough to decarbonize industries such as maritime shipping, long-haul trucking, aviation, off-grid data centers, and distributed power grids. News The most promising companies in climate tech Latitude Media Sep 11 Hardware companies dominate a list of promising climate tech startups TechCrunch Sep 10 Avalanche raises $40M to pursue vision of tiny nuclear fusion reactor Canary Media Apr 27 TEAM Robin Langtry CONGRUENT Joshua Posamentier Website https://www.avalanche.energy/ News The most promising companies in climate tech Latitude Media Sep 11 Hardware companies dominate a list of promising climate tech startups TechCrunch Sep 10 Avalanche raises $40M to pursue vision of tiny nuclear fusion reactor Canary Media Apr 27 OFFICE ADDRESS 201 Mission St Suite 650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com TWITTER SUBSTACK LINKEDIN HOME TEAM PORTFOLIO NEWS THINKING IMPACT CAREERS"
+    },
+    {
+      "id": "check-page-84c509eb12",
+      "url": "https://www.congruentvc.com/portfolio/Bellwether-Coffee",
+      "page": "portfolio",
+      "excerpt": "Congruent Ventures Website This Year’s 50 by 2050 List is Live! Meet the 50 companies powering tomorrow. Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Food + Agriculture Bellwether Coffee Sustainable distributed coffee roasters Bellwether Coffee designs and builds electric, ventless, cloud-connected coffee roasting systems while providing inventory management software to manage the green coffee supply chain. The refrigerator-sized machine enables high quality, sustainable in-café point of use coffee roasting, disrupting the centralized roasting practices prevalent in the industry. By managing the supply chain and roasting recipes, the company enables any specialty café to roast coffee in-house resulting in a lower cost, higher quality customizable coffee experience. Bellwether’s focus on managing the coffee supply chain including café patrons’ tips-to- farmers, importing green coffee, and logistics allow the company to influence farming practices, facilitating a shift from clear-cutting to sustainable shade-growing which has extensive positive environmental impacts. News Bellwether Coffee Partners with Kijeong International to Expand Micro-Roastery Movement in South Korea with New Electric Roaster PR Newswire May 7 How to Roast Coffee Without"
+    },
+    {
+      "id": "check-page-6f24aacb0f",
+      "url": "https://www.congruentvc.com/portfolio/Blueprint-Power",
+      "page": "portfolio",
+      "excerpt": "Congruent Ventures Website This Year’s 50 by 2050 List is Live! Meet the 50 companies powering tomorrow. Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Energy Transition Blueprint Power (Acquired by BP) Turning CRE into VPPs Blueprint Power is a software and services company that provides a platform to commercial real estate owners to monetize and optimize behind-the-meter distributed energy resources (DERs) including solar, storage, CHP, generation. Aggregated DERs will be connected, coordinated, and controlled to optimize individual rate tariffs while participating in wholesale energy markets. News 40 Under 40: Kayla Young, Phase Genomics Bizjournals Apr 10 BP buys power startup in latest diversification Axios Oct 7 BP broadens renewables accelerator with Blueprint buy Rethink Research Oct 7 TEAM Robyn Beavers CONGRUENT Abe Yokell Website https://www.blueprintpower.com/ News 40 Under 40: Kayla Young, Phase Genomics Bizjournals Apr 10 BP buys power startup in latest diversification Axios Oct 7 BP broadens renewables accelerator with Blueprint buy Rethink Research Oct 7 OFFICE ADDRESS 201 Mission St Suite 650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com TWITTER SUBSTACK"
+    },
+    {
+      "id": "check-page-b0fd788342",
+      "url": "https://www.congruentvc.com/portfolio/Climate-Robotics",
+      "page": "portfolio",
+      "excerpt": "Congruent Ventures Website This Year’s 50 by 2050 List is Live! Meet the 50 companies powering tomorrow. Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Food + Agriculture Applied Carbon In-field biochar processing Applied Carbon (fka Climate Robotics) is an agricultural robotics company that creates biochar directly in-field from agricultural residue and is used as a soil amendment to address soil acidification, moisture retention, and nutrient bioavailability. The biochar is cost-competitive with soil amendments that are typically used to treat the ~20%+ of US acreage that is experiencing acidification. This can boost yield and reduce nitrogen requirements over time without additional inputs while restoring the carbon content of the soil. This biochar also displaces GHG emissions from ag lime and directly sequesters carbon with thousand-year durability, something that will be separately monetized as carbon credits. News Biochar farm robots win $500K Wilkes Climate Launch Prize Utah University Sep 18 The most promising companies in climate tech Latitude Media Sep 11 Hardware companies dominate a list of promising climate tech startups TechCrunch Sep 10 TEAM Jason Aramburu CONGRUENT Joshua Posamentier Eliza Cushman Website"
+    },
+    {
+      "id": "check-page-37ec838d4f",
+      "url": "https://www.congruentvc.com/portfolio/Dispatch-Goods",
+      "page": "portfolio",
+      "excerpt": "Congruent Ventures Website This Year’s 50 by 2050 List is Live! Meet the 50 companies powering tomorrow. Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Sustainable Production + Consumption Dispatch Goods Circular commerce for packaging Dispatch Goods has created a reusable packaging platform by building a network of regional logistics hubs. Dispatch’s zero-waste packaging system will be the circular marketplace for all single-use packaging for direct-to-consumer brands. In addition to improving average order values and customer retention, Dispatch's solution ultimately reduces customer costs. News I rushed from bank to bank with my infant daughter when SVB collapsed to figure out how my startup could make payroll on time Business Insider Mar 18 Bay Area Reusable Packaging Startup Announces $3.7M Seed Raise Progressive Grocer Dec 7 Dispatch Goods takes in $3.7M for restaurant, food delivery container reuse | TechCrunch TechCrunch Dec 7 TEAM Lindsey Hoell CONGRUENT Abe Yokell Eliza Cushman Website https://dispatchgoods.com/ News I rushed from bank to bank with my infant daughter when SVB collapsed to figure out how my startup could make payroll on time Business Insider Mar 18 Bay Area Reusable Packaging Startup Announces $3.7M Seed Raise"
+    },
+    {
+      "id": "check-page-e192665a13",
+      "url": "https://www.congruentvc.com/portfolio/Ebb-Carbon",
+      "page": "portfolio",
+      "excerpt": "Congruent Ventures Website This Year’s 50 by 2050 List is Live! Meet the 50 companies powering tomorrow. Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Team Portfolio News Thinking Impact 50 by 2050 Careers Lp Login Twitter Substack LinkedIn Sustainable Production + Consumption Ebb Carbon Water treatment tech to generate carbon credits Ebb Carbon is pioneering a new carbon removal solution by enhancing the ocean’s natural ability to safely store CO2. Their electrochemical ocean alkalinity enhancement method has the potential to be one of the largest scale and lowest cost approaches to removing excess CO2, while reducing ocean acidity. News Electrochemical removal of ocean CO2 offers potential — and concerns Mongabay News Dec 20 Microsoft Inks Monumental Marine CDR Deal With Ebb Carbon Carbon Herald Oct 24 CleanTech Alliance awarded $2.5M to create carbon-focused business hub in Washington state Geekwire Oct 8 TEAM Benjamin Tarbell CONGRUENT Marianne Wu Joshua Posamentier Website https://www.ebbcarbon.com/ News Electrochemical removal of ocean CO2 offers potential — and concerns Mongabay News Dec 20 Microsoft Inks Monumental Marine CDR Deal With Ebb Carbon Carbon Herald Oct 24 CleanTech Alliance awarded $2.5M to create carbon-focused business hub in Washington state Geekwire Oct 8 OFFICE ADDRESS 201 Mission St Suite 650 San Francisco,"
     }
   ],
   "findings": {
@@ -73,8 +543,20 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [
+      {
+        "value": "North America",
+        "evidenceId": "check-location-fcc8a2fecc"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.congruentvc.com/portfolio",

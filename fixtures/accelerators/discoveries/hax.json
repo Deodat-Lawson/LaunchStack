@@ -1,12 +1,116 @@
 {
   "programId": "hax",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://hax.co/company_news/10-retail-technology-investments-that-should-be-on-your-radar/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://hax.co/company_news/20-best-prime-day-pet-deals-for-dogs-cats-and-more-nbc-news/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://hax.co/company_news/all-the-best-pet-deals-as-of-sept-9-cameras-toys-and-more-mashable/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://hax.co/company_news/arcis-opentrons-sign-sample-prep-product-distribution-deal/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://hax.co/company_news/best-black-friday-robot-kit-deals-for-kids-and-adults-toms-hardware/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://hax.co/company_news/bet-early-and-exit-often-how-iima-ventures-creates-a-healthy-investment-cycle-mint/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://hax.co/company_news/canadian-robotics-council-creates-committee-to-boost-investment-in-domestic-robots/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://hax.co/company_news/china-water-jet-cutter-market-2017-recent-study-including-growth-factors-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://hax.co/company_news/know-about-the-future-of-robotics-education-with-application-technology-growth-factors-trends/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://hax.co/faq/",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://hax.co/iq-motion-control-launches-new-line-of-servo-motors-with-wide-range-of-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://hax.co/program/",
       "page": "details",
       "anchor": "Program",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -15,6 +119,22 @@
       "page": "portfolio",
       "anchor": "Companies",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/about/",
+      "page": "details",
+      "anchor": "SOSV",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -31,22 +151,6 @@
       "page": "details",
       "anchor": "35,000 sq. ft Newark HQ headquarters",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://sosv.com/about/",
-      "page": "details",
-      "anchor": "SOSV",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://hax.co/faq/",
-      "page": "terms",
-      "anchor": "FAQ",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

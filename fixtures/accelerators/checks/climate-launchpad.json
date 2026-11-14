@@ -1,159 +1,458 @@
 {
   "programId": "climate-launchpad",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
     "https://climatelaunchpad.org/",
-    "https://climatelaunchpad.org/competition/",
     "https://climatelaunchpad.org/application-form/",
-    "https://climatelaunchpad.org/frequently-asked-questions/"
+    "https://climatelaunchpad.org/blog/press-release-global-green-business-ideas-competition-open-for-applications/",
+    "https://climatelaunchpad.org/blog/yes-were-back-applications-2018-now-open-in-35-countries/",
+    "https://climatelaunchpad.org/meet-our-trainers/",
+    "https://climatelaunchpad.org/thank-you-for-your-application/",
+    "https://climatelaunchpad.org/wp-content/uploads/2026/02/PR-Applications-open-2021-CLP-575A7347.jpg",
+    "https://climatelaunchpad.org/blog/estonian-deals-were-sealed-in-the-sauna/",
+    "https://climatelaunchpad.org/blog/how-cleantech-start-ups-are-dealing-with-the-pandemic/",
+    "https://climatelaunchpad.org/blog/how-will-europes-green-deal-benefit-entrepreneurs/",
+    "https://climatelaunchpad.org/blog/ligo-krasi-ligo-thalassa-and-state-your-deal/",
+    "https://climatelaunchpad.org/blog/the-european-green-deal-offers-massive-opportunities-for-green-business/",
+    "https://climatelaunchpad.org/blog/up-high-on-the-mountains-of-cyprus-you-make-your-deal/",
+    "https://climatelaunchpad.org/frequently-asked-questions/",
+    "https://climatelaunchpad.org/terms-conditions/"
   ],
   "evidence": [
     {
+      "id": "check-announced-04eb875921",
+      "url": "https://climatelaunchpad.org/frequently-asked-questions/",
+      "title": "ClimateLaunchpad — terms page",
+      "excerpt": "What’s the deadline for submitting my idea? In most countries, applications open in early March, however exact dates may vary by country. To make sure, please check",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-15672b52a2",
+      "url": "https://climatelaunchpad.org/blog/how-cleantech-start-ups-are-dealing-with-the-pandemic/",
+      "title": "ClimateLaunchpad — terms page",
+      "excerpt": "and apply for some incentives. For the next 18 months we have been able to secure a mix of incentives",
+      "page": "terms"
+    },
+    {
       "id": "check-email-07773267fd",
       "url": "https://climatelaunchpad.org/frequently-asked-questions/",
-      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "title": "ClimateLaunchpad — terms page",
       "excerpt": "you’re unsure whether your idea fits, reach out to us at info@climatelaunchpad.org —we’d love to help! What are the judging criteria? For the",
       "page": "terms"
     },
     {
       "id": "check-email-0c9db0d150",
       "url": "https://climatelaunchpad.org/frequently-asked-questions/",
-      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "title": "ClimateLaunchpad — terms page",
       "excerpt": "Not a fan of forms? No worries—just send us an email at info@climatelaunchpad.org and tell us why you’d make a great local organiser! In",
       "page": "terms"
     },
     {
       "id": "check-email-3928f83822",
       "url": "https://climatelaunchpad.org/frequently-asked-questions/",
-      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "title": "ClimateLaunchpad — terms page",
       "excerpt": "have any concerns or questions, feel free to reach out at info@climatelaunchpad.org . How will my application be handled? Your application",
       "page": "terms"
     },
     {
       "id": "check-email-4fd418deba",
       "url": "https://climatelaunchpad.org/frequently-asked-questions/",
-      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "title": "ClimateLaunchpad — terms page",
       "excerpt": "idea. Not sure if you should enter? Drop us an email at info@climatelaunchpad.org . How does the competition work? The ClimateLaunchpad",
       "page": "terms"
     },
     {
       "id": "check-email-5422f1833e",
       "url": "https://climatelaunchpad.org/frequently-asked-questions/",
-      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "title": "ClimateLaunchpad — terms page",
       "excerpt": "If you have any questions, feel free to contact us at info@climatelaunchpad.org . What does it take to win the competition? Winning",
       "page": "terms"
     },
     {
       "id": "check-email-5665c67ed1",
       "url": "https://climatelaunchpad.org/frequently-asked-questions/",
-      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "title": "ClimateLaunchpad — terms page",
       "excerpt": "to join. If you’re interested, drop us an email at info@climatelaunchpad.org . Why do I have to choose an impact category for my",
       "page": "terms"
     },
     {
       "id": "check-email-aaaef3a6dd",
       "url": "https://climatelaunchpad.org/frequently-asked-questions/",
-      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "title": "ClimateLaunchpad — terms page",
       "excerpt": "concerns or wish to opt-out, you can do so in writing at info@climatelaunchpad.org . I would like to organise ClimateLaunchpad in my country.",
       "page": "terms"
     },
     {
       "id": "check-email-b501af93e8",
       "url": "https://climatelaunchpad.org/frequently-asked-questions/",
-      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "title": "ClimateLaunchpad — terms page",
       "excerpt": "your idea along the way. Still unsure? Reach out to us at info@climatelaunchpad.org —we’re happy to help! What happens to my idea when I",
       "page": "terms"
     },
     {
       "id": "check-email-c0ee637c51",
       "url": "https://climatelaunchpad.org/frequently-asked-questions/",
-      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "title": "ClimateLaunchpad — terms page",
       "excerpt": "info@climatelaunchpad.org",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-ccaf05089b",
+      "url": "https://climatelaunchpad.org/terms-conditions/",
+      "title": "ClimateLaunchpad — terms page",
+      "excerpt": "further questions, contact the ClimateLaunchpad team at info@climatelaunchpad.org. —- Plain Language Summary This summary explains the key",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-3a041e6ce5",
+      "url": "https://climatelaunchpad.org/blog/how-cleantech-start-ups-are-dealing-with-the-pandemic/",
+      "title": "ClimateLaunchpad — terms page",
+      "excerpt": "of our co-founders is based in the US, so we are used to virtual meetings. The main concern is the development of the tech",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-3c7339b0c4",
+      "url": "https://climatelaunchpad.org/blog/how-cleantech-start-ups-are-dealing-with-the-pandemic/",
+      "title": "ClimateLaunchpad — terms page",
+      "excerpt": "customers changed? Pedro: “We were already working remote on a large scale, so nothing new there within the team.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-3f78515960",
+      "url": "https://climatelaunchpad.org/blog/estonian-deals-were-sealed-in-the-sauna/",
+      "title": "ClimateLaunchpad — terms page",
+      "excerpt": "and book the produce in real time. 9. Eco Coins offers new virtual currency to reward eco activists for their actions. Their",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-a58ee83aa1",
+      "url": "https://climatelaunchpad.org/blog/estonian-deals-were-sealed-in-the-sauna/",
+      "title": "ClimateLaunchpad — terms page",
+      "excerpt": "that stimulates eco-friendly behavior. 10. RING is a virtual warehouse and an information centre that promotes the",
       "page": "terms"
     },
     {
       "id": "check-name-61c054b7cc",
       "url": "https://climatelaunchpad.org/",
-      "title": "ClimateLaunchpad — homepage checked by scrape.py",
+      "title": "ClimateLaunchpad — homepage",
       "excerpt": "ClimateLaunchpad Facebook – Instagram – LinkedIn – YouTube About the",
       "page": "details"
     },
     {
+      "id": "check-route-034464cb48",
+      "url": "https://climatelaunchpad.org/blog/yes-were-back-applications-2018-now-open-in-35-countries/",
+      "title": "ClimateLaunchpad — application page",
+      "excerpt": "Application form → https://climatelaunchpad.org/application-form/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3303c11e82",
+      "url": "https://climatelaunchpad.org/meet-our-trainers/",
+      "title": "ClimateLaunchpad — application page",
+      "excerpt": "Application form → https://climatelaunchpad.org/application-form/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3645c9df03",
+      "url": "https://climatelaunchpad.org/blog/how-will-europes-green-deal-benefit-entrepreneurs/",
+      "title": "ClimateLaunchpad — terms page",
+      "excerpt": "Apply now → https://climatelaunchpad.org/application-form/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-36615f632b",
+      "url": "https://climatelaunchpad.org/blog/the-european-green-deal-offers-massive-opportunities-for-green-business/",
+      "title": "ClimateLaunchpad — terms page",
+      "excerpt": "Apply now → https://climatelaunchpad.org/application-form/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-3e958b8dd6",
       "url": "https://climatelaunchpad.org/",
-      "title": "ClimateLaunchpad — homepage checked by scrape.py",
+      "title": "ClimateLaunchpad — homepage",
       "excerpt": "Apply now → https://climatelaunchpad.org/application-form/",
       "page": "details"
     },
     {
+      "id": "check-route-3fc3f16005",
+      "url": "https://climatelaunchpad.org/blog/yes-were-back-applications-2018-now-open-in-35-countries/",
+      "title": "ClimateLaunchpad — application page",
+      "excerpt": "Apply now → https://climatelaunchpad.org/application-form/",
+      "page": "application"
+    },
+    {
       "id": "check-route-4404e9f02d",
       "url": "https://climatelaunchpad.org/frequently-asked-questions/",
-      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "title": "ClimateLaunchpad — terms page",
       "excerpt": "application form → https://climatelaunchpad.org/application-form/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-57c52d6f5e",
+      "url": "https://climatelaunchpad.org/blog/how-cleantech-start-ups-are-dealing-with-the-pandemic/",
+      "title": "ClimateLaunchpad — terms page",
+      "excerpt": "Application form → https://climatelaunchpad.org/application-form/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-6fadf9104d",
+      "url": "https://climatelaunchpad.org/blog/up-high-on-the-mountains-of-cyprus-you-make-your-deal/",
+      "title": "ClimateLaunchpad — terms page",
+      "excerpt": "Apply now → https://climatelaunchpad.org/application-form/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-71ed8b30d2",
+      "url": "https://climatelaunchpad.org/blog/press-release-global-green-business-ideas-competition-open-for-applications/",
+      "title": "ClimateLaunchpad — application page",
+      "excerpt": "Application form → https://climatelaunchpad.org/application-form/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-79161deb16",
+      "url": "https://climatelaunchpad.org/blog/estonian-deals-were-sealed-in-the-sauna/",
+      "title": "ClimateLaunchpad — terms page",
+      "excerpt": "Application form → https://climatelaunchpad.org/application-form/",
       "page": "terms"
     },
     {
       "id": "check-route-8eaa23c828",
       "url": "https://climatelaunchpad.org/frequently-asked-questions/",
-      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "title": "ClimateLaunchpad — terms page",
       "excerpt": "Apply now → https://climatelaunchpad.org/application-form/",
       "page": "terms"
     },
     {
+      "id": "check-route-93fe7e0af0",
+      "url": "https://climatelaunchpad.org/blog/press-release-global-green-business-ideas-competition-open-for-applications/",
+      "title": "ClimateLaunchpad — application page",
+      "excerpt": "https://climatelaunchpad.org/wp-content/uploads/2026/02/PR-Applications-open-2021-CLP-575A7347.jpg",
+      "page": "application"
+    },
+    {
       "id": "check-route-9d8e828b20",
       "url": "https://climatelaunchpad.org/frequently-asked-questions/",
-      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "title": "ClimateLaunchpad — terms page",
       "excerpt": "Application form → https://climatelaunchpad.org/application-form/",
       "page": "terms"
     },
     {
       "id": "check-route-a23a330435",
       "url": "https://climatelaunchpad.org/",
-      "title": "ClimateLaunchpad — homepage checked by scrape.py",
+      "title": "ClimateLaunchpad — homepage",
       "excerpt": "https://climatelaunchpad.org",
       "page": "details"
     },
     {
+      "id": "check-route-a3358340ca",
+      "url": "https://climatelaunchpad.org/blog/the-european-green-deal-offers-massive-opportunities-for-green-business/",
+      "title": "ClimateLaunchpad — terms page",
+      "excerpt": "Application form → https://climatelaunchpad.org/application-form/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-a661cdfd34",
+      "url": "https://climatelaunchpad.org/thank-you-for-your-application/",
+      "title": "ClimateLaunchpad — application page",
+      "excerpt": "Application form → https://climatelaunchpad.org/application-form/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b34f89d154",
+      "url": "https://climatelaunchpad.org/blog/ligo-krasi-ligo-thalassa-and-state-your-deal/",
+      "title": "ClimateLaunchpad — terms page",
+      "excerpt": "Application form → https://climatelaunchpad.org/application-form/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-ba9a12886b",
+      "url": "https://climatelaunchpad.org/thank-you-for-your-application/",
+      "title": "ClimateLaunchpad — application page",
+      "excerpt": "Apply now → https://climatelaunchpad.org/application-form/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c2afdd6b97",
+      "url": "https://climatelaunchpad.org/blog/up-high-on-the-mountains-of-cyprus-you-make-your-deal/",
+      "title": "ClimateLaunchpad — terms page",
+      "excerpt": "Application form → https://climatelaunchpad.org/application-form/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-c410a03877",
       "url": "https://climatelaunchpad.org/",
-      "title": "ClimateLaunchpad — homepage checked by scrape.py",
+      "title": "ClimateLaunchpad — homepage",
       "excerpt": "Learn Learn by doing Gain practical tools to shape your idea into a real solution. Join boot camps, coaching sessions, and a global community supporting your journey. Apply new skills directly to grow your idea. Meet the trainers → https://climatelaunchpad.org/meet-our-trainers/",
       "page": "details"
     },
     {
-      "id": "check-route-c83b0d66e2",
-      "url": "https://climatelaunchpad.org/competition/",
-      "title": "ClimateLaunchpad — details page checked by scrape.py",
+      "id": "check-route-c45065297c",
+      "url": "https://climatelaunchpad.org/terms-conditions/",
+      "title": "ClimateLaunchpad — terms page",
       "excerpt": "Application form → https://climatelaunchpad.org/application-form/",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-route-c8404627e4",
+      "url": "https://climatelaunchpad.org/blog/how-cleantech-start-ups-are-dealing-with-the-pandemic/",
+      "title": "ClimateLaunchpad — terms page",
+      "excerpt": "Apply now → https://climatelaunchpad.org/application-form/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-cff1d61ba2",
+      "url": "https://climatelaunchpad.org/blog/estonian-deals-were-sealed-in-the-sauna/",
+      "title": "ClimateLaunchpad — terms page",
+      "excerpt": "Apply now → https://climatelaunchpad.org/application-form/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-d144aa043b",
+      "url": "https://climatelaunchpad.org/blog/press-release-global-green-business-ideas-competition-open-for-applications/",
+      "title": "ClimateLaunchpad — application page",
+      "excerpt": "Apply now → https://climatelaunchpad.org/application-form/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-dae593ca38",
+      "url": "https://climatelaunchpad.org/meet-our-trainers/",
+      "title": "ClimateLaunchpad — application page",
+      "excerpt": "Apply now → https://climatelaunchpad.org/application-form/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ea54f50c7e",
+      "url": "https://climatelaunchpad.org/blog/how-will-europes-green-deal-benefit-entrepreneurs/",
+      "title": "ClimateLaunchpad — terms page",
+      "excerpt": "Application form → https://climatelaunchpad.org/application-form/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-eab1a28f61",
+      "url": "https://climatelaunchpad.org/blog/ligo-krasi-ligo-thalassa-and-state-your-deal/",
+      "title": "ClimateLaunchpad — terms page",
+      "excerpt": "Apply now → https://climatelaunchpad.org/application-form/",
+      "page": "terms"
     },
     {
       "id": "check-route-eca06c5ce9",
       "url": "https://climatelaunchpad.org/",
-      "title": "ClimateLaunchpad — homepage checked by scrape.py",
+      "title": "ClimateLaunchpad — homepage",
       "excerpt": "Application form → https://climatelaunchpad.org/application-form/",
       "page": "details"
     },
     {
-      "id": "check-route-f0e28d4cce",
-      "url": "https://climatelaunchpad.org/competition/",
-      "title": "ClimateLaunchpad — details page checked by scrape.py",
+      "id": "check-route-fe2ec064df",
+      "url": "https://climatelaunchpad.org/terms-conditions/",
+      "title": "ClimateLaunchpad — terms page",
       "excerpt": "Apply now → https://climatelaunchpad.org/application-form/",
-      "page": "details"
+      "page": "terms"
     },
     {
       "id": "check-status-12383f291f",
       "url": "https://climatelaunchpad.org/",
-      "title": "ClimateLaunchpad — homepage checked by scrape.py",
+      "title": "ClimateLaunchpad — homepage",
       "excerpt": "idea on bigger stages, gain visibility, meet global partners, and unlock new opportunities. March – May 2026 Applications Now Open To enter the competition submit your idea or innovation with environmental impact. We’ll help you fast track",
       "page": "details"
     },
     {
       "id": "check-status-12d60f956e",
       "url": "https://climatelaunchpad.org/application-form/",
-      "title": "ClimateLaunchpad — application page checked by scrape.py",
+      "title": "ClimateLaunchpad — application page",
       "excerpt": "ClimateLaunchpad – Applications are closed Facebook – Instagram – LinkedIn – YouTube About the competition Back Competition info Apply now Trainers FAQ",
       "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-cee3854164",
+      "url": "https://climatelaunchpad.org/",
+      "page": "details",
+      "excerpt": "ClimateLaunchpad Facebook – Instagram – LinkedIn – YouTube About the competition Back Competition info Apply now Trainers FAQ About Us Participating countries Back Participating countries Become a national organiser Partners Back Our partner network Partner up Blog Join the world’s largest green business ideas competition Turn your green idea into a successful start-up 540 Boot camps delivered 5K Ideas incubated 500M Euros Raised by alumni 51 Participating countries in 2026 Get ready Have an idea for a greener future? This is your place to start. Explore Test your idea safely Have a green idea but not sure where to start? ClimateLaunchpad is a free space to explore, test, and shape your concept with expert guidance. Learn Learn by doing Gain practical tools to shape your idea into a real solution. Join boot camps, coaching sessions, and a global community supporting your journey. Apply new skills directly to grow your idea. Meet the trainers Connect Join a global community ClimateLaunchpad brings people together with bold ideas and big ambitions. Meet fellow innovators, mentors, and experts who believe in climate solutions, and be part of something bigger. Climate-KIC network Pitch Take your idea to the stage As you progress, you’ll pitch your idea on bigger stages, gain visibility, meet global partners, and unlock new opportunities. March – May 2026 Applications Now Open To"
+    },
+    {
+      "id": "check-page-0e790b9419",
+      "url": "https://climatelaunchpad.org/application-form/",
+      "page": "application",
+      "excerpt": "ClimateLaunchpad – Applications are closed Facebook – Instagram – LinkedIn – YouTube About the competition Back Competition info Apply now Trainers FAQ About Us Participating countries Back Participating countries Become a national organiser Partners Back Our partner network Partner up Blog Competition Applications are closed Have a green business or idea you want to develop further? ClimateLaunchpad is the competition for you – but applications for this edition are now closed. Thank you to everyone who applied! Accepted participants get a 3-day boot camp, mentoring, and the chance to compete in National and Regional finals. Top performers win a trip to the Global Grand Final in Singapore. S tay tuned for ClimateLaunchpad 2027! Note: Applications for the 2026 edition are now closed. Thank you to everyone who applied this year. Please follow our social media channels and stay tuned for ClimateLaunchpad 2027! Check your deadline: Choose your country Angola Argentina Australia Austria Brazil Cape Verde Colombia Costa Rica Cyprus Ecuador Egypt El Salvador Estonia Fiji Finland France Germany Ghana Greece Guatemala India Indonesia Japan Kenya Madagascar Mexico Moldova Morocco Namibia Netherlands Nigeria Papua New Guinea Peru Philippines Portugal Sierra Leone Singapore South Africa South Korea Spain Switzerland Tanzania Türkiye Uganda United Kingdom United States Vanuatu Vietnam Your"
+    },
+    {
+      "id": "check-page-da342721f5",
+      "url": "https://climatelaunchpad.org/blog/press-release-global-green-business-ideas-competition-open-for-applications/",
+      "page": "application",
+      "excerpt": "ClimateLaunchpad – Press release: Global Green Business Ideas Competition open for applications Facebook – Instagram – LinkedIn – YouTube About the competition Back Competition info Apply now Trainers FAQ About Us Participating countries Back Participating countries Become a national organiser Partners Back Our partner network Partner up Blog (Success) stories Press release: Global Green Business Ideas Competition open for applications Wanted: Green business ideas to fix climate change Delft, The Netherlands, 1 March 2021 – Starting today, the seventh edition of global green business ideas competition ClimateLaunchpad opens for applications. The programme, supported by EIT Climate-KIC and TU Delft, helps aspiring entrepreneurs grow their cleantech ideas into global businesses. Think of innovations in adaptation, renewable energy, food and agriculture, water, transportation, industrial technology, or any other way to tackle climate change. The ClimateLaunchpad formula has proven time and time again to be the key to climate positive business success. The Dutch scale-up Felyx (2016 National Winner), recently announced a 24 million in investment to maintain their position as the Benelux market leader in electric shared scooters and to expand within Europe. The textile waste tracking and trading platform Reverse Resources (2015 Estonian National Winner) announced its role in the"
+    },
+    {
+      "id": "check-page-26b81e8366",
+      "url": "https://climatelaunchpad.org/blog/yes-were-back-applications-2018-now-open-in-35-countries/",
+      "page": "application",
+      "excerpt": "ClimateLaunchpad – Yes, we’re back. Applications 2018 now open in 35 countries Facebook – Instagram – LinkedIn – YouTube About the competition Back Competition info Apply now Trainers FAQ About Us Participating countries Back Participating countries Become a national organiser Partners Back Our partner network Partner up Blog (Success) stories Yes, we’re back. Applications 2018 now open in 35 countries Calling all green business ideas Let the games begin. We just kicked off the 2018 edition of our global green business ideas competition. We’re now open for applications in 35 countries. Last year’s record amount of 1,000 green ideas nicely sets the bar for this year. Do you have a green idea that deserves business success? Apply now. We’ll help you think, act and grow big. Or do you know people with a green business idea? Please forward them this newsletter. And also please share our messages on Facebook , Twitter and LinkedIn . What kinds of ideas are we looking for? We scout the globe for all kinds of ideas that help fix climate change. Whether it’s a mind shift in urban mobility, a revolution in the food chain, a breakthrough in energy production or a radical rethink of waste management. Even ideas that are still on the back of a napkin are welcome to join. Fixing climate change, one start-up at a time Don’t let him hear it, but secretly we nickname our commander in chief"
+    },
+    {
+      "id": "check-page-6d4e95920c",
+      "url": "https://climatelaunchpad.org/meet-our-trainers/",
+      "page": "application",
+      "excerpt": "ClimateLaunchpad – Trainers Facebook – Instagram – LinkedIn – YouTube About the competition Back Competition info Apply now Trainers FAQ About Us Participating countries Back Participating countries Become a national organiser Partners Back Our partner network Partner up Blog Competition Meet our trainers for 2026! Our global network of expert green tech trainers sits at the heart of our program, bringing real-world venture experience to every boot camp and shaping the success of our participants and alumni. Certified Trainers Nirmala (Mala) Sukumar Mala K is a trainer, mentor, and program director with extensive experience leading regional initiatives in entrepreneurship, leadership development, employability, and workforce transformation. She has worked with organizations including UNESCO, Microsoft, Google.org, AVPN, PERKESO, Yayasan Petronas, Micron Foundation, IKEA SE, and the U.S. Embassy to design and deliver programs focused on youth empowerment, digital inclusion, entrepreneurial mindset development, and future-ready workforce ecosystems across Asia and beyond. Over the years, Mala has trained and mentored more than 1,200 entrepreneurs and youths in digital upskilling, business and social enterprise development, career readiness, and innovationdriven growth. She is also a mentor and coach under Hellomonday, supporting professionals, founders, and career pivoters"
+    },
+    {
+      "id": "check-page-c98e97f684",
+      "url": "https://climatelaunchpad.org/thank-you-for-your-application/",
+      "page": "application",
+      "excerpt": "ClimateLaunchpad – Thank you for your application Facebook – Instagram – LinkedIn – YouTube About the competition Back Competition info Apply now Trainers FAQ About Us Participating countries Back Participating countries Become a national organiser Partners Back Our partner network Partner up Blog Thank you for your application Thank you for applying to ClimateLaunchpad 2026. The selection process in each country is managed by our local partners, known as National Leads – they will be in touch with you following the selection process. Coming up: Online video mini-course Please stay tuned! You will receive updates shortly! In the meantime, please follow us on Facebook , Instagram & LinkedIn . ClimateLaunchpad is the world’s largest green business ideas competition, established and managed by Climate KIC . 000 : 00 : 00 Global Partners Founding Partner Competition Application form About the competition Trainers FAQ About CLP Info Participating countries News (Success) stories Quick links Partner up Become a National Lead Login National leads Follow us Terms & conditions – Privacy policy – Cookie settings Cookie Settings We use cookies to deliver and improve our services, analyze site usage, and if you agree, to customize or personalize your experience and market our services to you. You can read our Privacy Policy here . Customize Accept Cookie Settings Our website uses cookies"
+    },
+    {
+      "id": "check-page-9e78032dae",
+      "url": "https://climatelaunchpad.org/wp-content/uploads/2026/02/PR-Applications-open-2021-CLP-575A7347.jpg",
+      "page": "application",
+      "excerpt": "���� C \" \" $ $ 6*&&*6>424>LDDL_Z_||��� C \" \" $ $ 6*&&*6>424>LDDL_Z_||��� � \" �� �� �� �V:B5e ��� ��N��t��%݅7A �� ���ڍ�ˢŤ`�)k �IXd�ĕ�)� �� ����v v� �(7i��C�� � �)��Ë� ���*vؐLs����2����$�L{�� �� � ��(ƙl�[3 � T��Z��\\�z�c�0��\"��Řdn�ჶJg� l�^�z��=�6z�O^�\"�iiq�AZ ��}��Ӫt���(��V)���^�v�fYl�&���4ryX��� �`�U> ����6� �� J�:Z�Z�8�3� �����.Y��Rd�� �B ����Hf�ultW�R�h �X m� �TW�U�]��B�� �Y[�� �N+ �t � �p��&#��xi!�)[\" �oղ��mwR� w|�,g��|�|u y g�� �X�J� ��� (��g�( � �KD��S� k6P? �� ��Z�z2�4n%�;X� ��2P��O� � � ( h`.���R[���o�� ��(� a�}���_H�h�Յ>�� d� ��V[g�4 ��j��T�TVפ���L� �(�[5 [��� ����3�~u�&Q4� ��;u� ��B���G� ��} �䪍��)�q��j4���F�� %��b�] �YAz��'��˕yS[2b��? . Ü �U��-l����� ��{�Ɏ�J�O=�� ��O?U�;�L��Z K�GID�k��KM� y��efd {�0���sȃ�ILK�D�� �vK=�#:�\" �* :? �1��� �w��5o�{[�bk�\\�\"K[\\lR6�z�41�j �{��-�.T�� =S�� ǧ� R�(@m ��CQBl?al z��U��H� ��O �mi����{''gvl KlJ� ��T%އ } F �� �na��]� �P~�>+���B��ZC�y��i�T;�2.}: 2i�%f&��Rx+g���k#^��u�R� ��W ������&� �:ޔ� ��8hZ �_�� �he{ C���Ω���=�X��B��2X? :�Y�|�k[呻H�X¡ZO�V��X lP� < �荬0�����Uމ�5\\�OX��+{ �� Ip+ ���Kn�4�״� : f�h= �׶r�:ڎTAh�!��\"�% �� �?j�$!2�G�9f�+J� � {4 �2�`��e�PԶ�7�Q`� < �Ȭ��v����OX�k����DM� {��� �� �;� K��fd4�삓f# �έ�I��v+4] ��T7ڙW�ڍ�fk�1 $Sk� / R}�5�V ,�h7� %S��ޟP�_ �ɾc��� #=���l!�Թ6&���g���)9 �\" ��K� �JBlG�`;�'�1 �3\"=�Uu�)v(�u�4���\\x���{��Ù! �+�IÛok�@�?G ���t����V6 �W - x,�T�b� Zӳ�J�� J�)��A�C�P�t���tX#��$$=�c�*-�� � �9 8�A�� Q6��m�W/:8"
+    },
+    {
+      "id": "check-page-c89b12605c",
+      "url": "https://climatelaunchpad.org/blog/estonian-deals-were-sealed-in-the-sauna/",
+      "page": "terms",
+      "excerpt": "ClimateLaunchpad – Estonian deals were sealed in the sauna Facebook – Instagram – LinkedIn – YouTube About the competition Back Competition info Apply now Trainers FAQ About Us Participating countries Back Participating countries Become a national organiser Partners Back Our partner network Partner up Blog (Success) stories Estonian deals were sealed in the sauna June 26-28 2015 – The ClimateLaunchpad Boot Camp in Estonia kicked off with a meet and greet dinner on June 26th, at the small sailors’ village Käsmu by the Baltic Sea. At that inspirational spot all teams had an opportunity to introduce their innovative ideas by using modeling clay. That way the 10 selected teams had a chance to give a good visualization of their business idea, potential clients and value proposition. After this playful exercise, the teams got some free time to mingle with the mentors: Ron Bloemers and Emilie van Rappard from Climate-KIC, Indrek Kelder (a cleantech investor from Smart Cap), and Kati Nikopensius (experienced coach and a COO of Ocean Visuals). The Boot Camp continued with a powerful morning the next day at an old power substation with life lessons from Arnold Schwarzenegger: Trust yourself; Break some rules; Don’t be afraid to fail; Ignore the naysayers; Work like hell and Give something back! The intensive learning day was wrapped up with a relaxing boat tip on the sea and some"
+    },
+    {
+      "id": "check-page-b93f9dd1a7",
+      "url": "https://climatelaunchpad.org/blog/how-cleantech-start-ups-are-dealing-with-the-pandemic/",
+      "page": "terms",
+      "excerpt": "ClimateLaunchpad – How cleantech start-ups are dealing with the pandemic Facebook – Instagram – LinkedIn – YouTube About the competition Back Competition info Apply now Trainers FAQ About Us Participating countries Back Participating countries Become a national organiser Partners Back Our partner network Partner up Blog (Success) stories How cleantech start-ups are dealing with the pandemic We all feel the impact of the current situation. Regional differences aside we are all affected, all of our lives are affected and all economies are affected. We got in touch with two of our alumni to find out how they and their start-ups are dealing with COVID-19. Pedro Silva Humbert from ECO2Blocks (2018 global winner) and Margaux Peltier from Enerdrape (2019 third prize winner) share their stories and insights with us. To refresh your memory, ECO2Blocks from Portugal develops environmentally friendly, 100% recycled building materials that absorb CO 2 . And Swiss based Enerdrape is working on the first geo-thermal panel that efficiently captures heat in existing indoor, underground environments and transfers it into renewable heating and cooling for buildings. What impact does COVID-19 have on your start-up? Can you still continue to work on your idea? Do you experience delays in progress? Pedro: “We had a pilot, a first paid project scheduled for May in Brazil. That has been postponed"
+    },
+    {
+      "id": "check-page-43ab97c547",
+      "url": "https://climatelaunchpad.org/blog/how-will-europes-green-deal-benefit-entrepreneurs/",
+      "page": "terms",
+      "excerpt": "ClimateLaunchpad – How will Europe’s Green Deal benefit entrepreneurs? Facebook – Instagram – LinkedIn – YouTube About the competition Back Competition info Apply now Trainers FAQ About Us Participating countries Back Participating countries Become a national organiser Partners Back Our partner network Partner up Blog (Success) stories How will Europe’s Green Deal benefit entrepreneurs? The EU’s flagship environmental policy combined with its COVID-19 green stimulus could be a boon for start-ups who are quick off the mark. By Catherine Early (This article originally featured in our event magazine the CLP Daily #4.) The European Commission needs entrepreneurs – their ideas and their inspiration. One of the commission’s most senior figures used his talk to the ClimateLaunchpad 2020 audience of start- ups to urge them to come forward with ideas. “We want to get this money into innovation and onto the ground as soon as possible,” said Diederik Samsom, Head of Cabinet for the Commission’s First Vice-President Frans Timmermans, made this clear to ClimateLaunchpad’s audience. The money Samsom was referring to will come from the 750 billion euro COVID-19 recovery fund launched in the summer, of which nearly a third of which is to be targeted at action on climate. Innovation was needed in particular for energy efficiency building retrofits, such as building-integrated solar panels, as"
+    },
+    {
+      "id": "check-page-16bad0fe37",
+      "url": "https://climatelaunchpad.org/blog/ligo-krasi-ligo-thalassa-and-state-your-deal/",
+      "page": "terms",
+      "excerpt": "ClimateLaunchpad – Ligo Krasi, ligo Thalassa and STATE YOUR DEAL! Facebook – Instagram – LinkedIn – YouTube About the competition Back Competition info Apply now Trainers FAQ About Us Participating countries Back Participating countries Become a national organiser Partners Back Our partner network Partner up Blog (Success) stories Ligo Krasi, ligo Thalassa and STATE YOUR DEAL! (a bit of wine, a bit of sea and state your DEAL!) Glyfada, June 13-14 2015 – There’s a Greek Eurovision song from the 70’s called “ligo krasi, ligo thalassa ke to agori mou” (“a bit of wine, a bit of sea and my boyfriend”). Paraphrasing the song to the title of this blog, one can get the essence of the Greek national Boot Camp that took place on the weekend 12th-14th of June in coastal Glyfada in the outskirts of Athens, Greece. After a very difficult selection of high quality applications, the 10 start-ups that were selected said no to the beach on the first sunny weekend and joined us for an intensive and fun Boot Camp! In our usual Chrysalis LEAP style, it’s all about working hard and playing hard, but a bit about the event later on, first let me introduce you to the team. The Leapsters! The boot camp was led by Paris Thomas, Chrysalis LEAP Co-founder and Climate-KIC trainer who recently got “shirt-ified” at the ClimateLaunchpad “Train the Trainers” event. The rest of the Leapsters, Eloiza, Andreas,"
+    },
+    {
+      "id": "check-page-fee9cf9b71",
+      "url": "https://climatelaunchpad.org/blog/the-european-green-deal-offers-massive-opportunities-for-green-business/",
+      "page": "terms",
+      "excerpt": "ClimateLaunchpad – The European Green Deal Offers Massive Opportunities For Green Business Facebook – Instagram – LinkedIn – YouTube About the competition Back Competition info Apply now Trainers FAQ About Us Participating countries Back Participating countries Become a national organiser Partners Back Our partner network Partner up Blog (Success) stories The European Green Deal Offers Massive Opportunities For Green Business By Stella Damstra (This article was also published on CleanTechnica ) The European Green Deal is a set of policy initiatives all targeted at transforming the 27-country bloc to a climate neutral economy by 2050. At the same time, wellbeing and prosperity need to be guaranteed through cleaner air and water, improved health, and a boost for the natural world. On its way to 2050, the EU will reduce greenhouse gas emissions 50–55% by 2030 compared to 1990 levels. The plan is ambitious and will affect nearly every aspect of the EU’s economy. Each existing law will be reviewed on its climate merits, and new legislation will be introduced on the circular economy, building renovation, biodiversity, farming, and innovation. The main policy areas are clean energy, sustainable industry, building & renovation, farm to fork, eliminating pollution, sustainable mobility, and biodiversity. Support for Innovative Green Potential One of the pillars of the European Green"
+    },
+    {
+      "id": "check-page-be3bbf96bb",
+      "url": "https://climatelaunchpad.org/blog/up-high-on-the-mountains-of-cyprus-you-make-your-deal/",
+      "page": "terms",
+      "excerpt": "ClimateLaunchpad – Up high on the mountains of Cyprus, you make your deal Facebook – Instagram – LinkedIn – YouTube About the competition Back Competition info Apply now Trainers FAQ About Us Participating countries Back Participating countries Become a national organiser Partners Back Our partner network Partner up Blog (Success) stories Up high on the mountains of Cyprus, you make your deal Finally, the weekend everyone was expecting arrived! The Cyprus and Greece Cleanlaunchpad boot camp, the final in the series, took place at the idyllic village of Kalopanagiotis on the north side of Troodos, the main mountain range of Cyprus. Beginning of September, the temperatures in Cyprus began to drop a bit, making it very comfortable while the fresh mountain air with pine scent gave everyone the motivation for a weekend full of work. My name is Stelios Y. and I am one of the Chrysalis LEAP co-founders, or LEAPsters as people call us here on the island. Along my side are our national coach duo Deano & Paris, Alex who was the guy with the idea to start Chrysalis LEAP, Stelios P. our financial guy, Eloiza our lawyer, and the latest addition in our team, our man on the ground and workshop coordinator Andreas “the Spiderman”, who had every little detail ironed out like a finely woven web. Of course, this boot camp would not have existed without Sara Schützer, who made an idea come to"
+    },
+    {
+      "id": "check-page-b4c33e21da",
+      "url": "https://climatelaunchpad.org/frequently-asked-questions/",
+      "page": "terms",
+      "excerpt": "ClimateLaunchpad – Frequently asked questions Facebook – Instagram – LinkedIn – YouTube About the competition Back Competition info Apply now Trainers FAQ About Us Participating countries Back Participating countries Become a national organiser Partners Back Our partner network Partner up Blog Competition Frequently asked questions What is ClimateLaunchpad? ClimateLaunchpad is the world’s largest green business ideas competition. Innovation and invention can lead the way to a clean future. Through ClimateLaunchpad, we create a stage for the people who have great ideas for climate innovation, and help them take the first steps of entrepreneurial thinking, business planning, and a pitch around their idea – developing those ideas into start-ups and making a global impact. ClimateLaunchpad is part of the Entrepreneurship offerings of Climate KIC . Join the green wave! About Climate KIC Established in 2010, Climate KIC is Europe’s leading climate innovation agency and community, supporting cities, regions, countries and industries to meet their climate ambitions through systems innovation and place-based transformations. Together with our partners, we generate, implement and integrate climate solutions by mobilising finance, testing business models, and opening pathways for institutional change and behavioural change. We orchestrate large-scale demonstrations that show what is"
+    },
+    {
+      "id": "check-page-f4f971df12",
+      "url": "https://climatelaunchpad.org/terms-conditions/",
+      "page": "terms",
+      "excerpt": "ClimateLaunchpad – Terms & conditions Facebook – Instagram – LinkedIn – YouTube About the competition Back Competition info Apply now Trainers FAQ About Us Participating countries Back Participating countries Become a national organiser Partners Back Our partner network Partner up Blog Terms & conditions Latest version: February 2026 1. Background and Introduction ClimateLaunchpad is an early-stage global green business ideas competition. Our mission is to unlock the world’s cleantech potential by supporting very early-stage start-ups that address climate change and help shape the world’s next economy (the “Competition”). The Competition is run primarily via climatelaunchpad.org (the “Competition Website”). The Competition is organised by Stichting Climate-KIC International Foundation (“Climate KIC”), in collaboration with National Leads and partner organisations worldwide (“Partners”). References to “we”, “us” and “our” refer to Climate KIC and its Partners. Stichting Climate-KIC International Foundation (RSIN 860987541) is registered with the Dutch Chamber of Commerce under number 77373154. Its registered office is Plantage Middenlaan 45, 1018 DC, Amsterdam, The Netherlands. By submitting an entry through the Competition Website, you accept and agree to comply with these Terms and Conditions. The name ClimateLaunchpad is a registered trademark owned by Climate KIC. 2."
     }
   ],
   "findings": {
@@ -172,6 +471,10 @@
       {
         "value": "https://climatelaunchpad.org/meet-our-trainers/",
         "evidenceId": "check-route-c410a03877"
+      },
+      {
+        "value": "https://climatelaunchpad.org/wp-content/uploads/2026/02/PR-Applications-open-2021-CLP-575A7347.jpg",
+        "evidenceId": "check-route-93fe7e0af0"
       }
     ],
     "applicationUrl": [
@@ -192,8 +495,30 @@
     ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "March",
+        "evidenceId": "check-announced-04eb875921"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-15672b52a2"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-3f78515960"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

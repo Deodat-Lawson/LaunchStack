@@ -1,110 +1,486 @@
 {
   "programId": "next-canada",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.nextcanada.com/",
+    "http://www.nextcanada.com/apply-to-next-ai-founder/",
+    "http://www.nextcanada.com/apply-to-next-ai-venture/",
+    "http://www.nextcanada.com/nextfounders_2022_apply/",
+    "https://my.nextcanada.com/apply/nai",
+    "http://www.nextcanada.com/next-36-alum-venture-sniply-acquired-in-multi-million-dollar-deal/",
+    "http://www.nextcanada.com/next-canada-celebrates-cohorts-at-venture-day-receives-1m-investment/",
+    "http://www.nextcanada.com/2021-cohort/",
+    "http://www.nextcanada.com/2024-cohort/",
+    "http://www.nextcanada.com/2026-cohort/",
+    "http://www.nextcanada.com/nai-timeline-fr/",
+    "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+    "http://www.nextcanada.com/program-timeline/",
     "https://www.nextcanada.com/2026-cohort/",
-    "https://www.nextcanada.com/programs-overview/",
-    "https://my.nextcanada.com/apply/nai"
+    "https://www.nextcanada.com/program-timeline/"
   ],
   "evidence": [
     {
+      "id": "check-deadline-2c3c38afa7",
+      "url": "https://my.nextcanada.com/apply/nai",
+      "title": "Next Canada — application page",
+      "excerpt": "Apply to NEXT AI Saved Apply to NEXT AI English Français Deadline 📆 December 9th, 2026, at 11:59 p.m. EST Thank you for applying to NEXT AI, one",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-3aab87473d",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "– way too long, we need to bring this down to 2 weeks! RecognAIse Technologies Founders: Aleks",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-69d2ec4db1",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "saving fuel. Right now, our lead time is about 2 months – way too long, we need to bring this down to 2",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-16fc50795a",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "company culture that’s just as good (or better) than an in-person one. WFHomie Founder: Pavla Bobosikova WFHomie is the",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-28235fc126",
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "title": "Next Canada — batches page",
+      "excerpt": "students as we look forward to working towards an entirely in-person class schedule again. July 11th, NEXT Canada’s Programs",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-2cc221c675",
+      "url": "https://my.nextcanada.com/apply/nai",
+      "title": "Next Canada — application page",
+      "excerpt": "for Toronto and infomtl@nextai.com for Montréal/Remote. Data privacy and ownership By completing this application",
+      "page": "application"
+    },
+    {
+      "id": "check-format-38fda2fcdf",
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "title": "Next Canada — batches page",
+      "excerpt": "NEXT Canada offices and has been able to integrate both in-person and virtual students into thoughtful discussions. NEXT",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-4a22be3135",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "that raises mental health awareness and provides virtual counseling services to university students and young",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-5bf129f6b2",
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "title": "Next Canada — batches page",
+      "excerpt": "the nation joining in via ZOOM, we are pleased to offer hybrid classes to the cohort. Reza Satchu has taught multiple",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-5d9aecef99",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "the starting point for any organization that wants to use virtual reality for learning. Wavy Founder: Shawn Hewat Wavy hosts",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-61dc0feb7b",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "while also optimizing clients’ operations using our Virtual Waiting Room. They are currently doing this by sending",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-68b3d43d93",
+      "url": "https://www.nextcanada.com/",
+      "title": "Next Canada — homepage",
+      "excerpt": "partnership with Rexall and will handle all of Rexall’s virtual care service for patients to help relieve the current",
+      "page": "details"
+    },
+    {
+      "id": "check-format-6d79a398e5",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "the employee engagement and culture-building platform for remote teams. We are building the end-to-end platform for all",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-837077b689",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "easy and exciting. Wavy’s mission is to help teams build a remote company culture that’s just as good (or better) than an",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-90ba55feab",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "hands-on learning and coding competencies in a time of remote work. A Friendlier Company Founder: Kayli Dale A",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-9ad1f24578",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "incredible guest speakers, mentors, and leaders into our (virtual) classroom. We can’t wait to see what our 2021 cohorts",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-da89ebd474",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "year in a row, our program is being delivered in a fully virtual environment. While we miss having the energy of the",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-dc7eac620a",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "to bring yoga sessions at home into the future through virtual instructors. We are doing this by creating a platform with",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-dd8d2c2a96",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "and train the workforce of tomorrow. We create hands-on virtual reality-based learning experiences that are fun, memorable",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-e17c669d32",
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "title": "Next Canada — batches page",
+      "excerpt": "offices and has been able to integrate both in-person and virtual students into thoughtful discussions. NEXT Canada is",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-e76b8b9758",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "dyslexia, public speaking, autism, and more). We provide in-person therapy at our 4 Ontario clinics and online therapy to",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-fd4aadbb89",
+      "url": "http://www.nextcanada.com/next-36-alum-venture-sniply-acquired-in-multi-million-dollar-deal/",
+      "title": "Next Canada — terms page",
+      "excerpt": "company, including 25 team members, is based in Vancouver’s Mount Pleasant area. Cheng is the",
+      "page": "terms"
+    },
+    {
       "id": "check-name-211997eb37",
       "url": "https://www.nextcanada.com/",
-      "title": "Next Canada — homepage checked by scrape.py",
+      "title": "Next Canada — homepage",
       "excerpt": "NEXT Canada - Building a more ambitious and competitive Canada 2026",
       "page": "details"
     },
     {
+      "id": "check-portfolio-080ddda808",
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "title": "Next Canada — batches page",
+      "excerpt": "alumni → http://www.nextcanada.com/tag/alumni/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-09c327fee2",
+      "url": "http://www.nextcanada.com/nai-timeline-fr/",
+      "title": "Next Canada — batches page",
+      "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-0f1c3d3ec0",
       "url": "https://www.nextcanada.com/",
-      "title": "Next Canada — homepage checked by scrape.py",
+      "title": "Next Canada — homepage",
       "excerpt": "SEE MORE OF OUR ALUMNI → https://www.nextcanada.com/alumni/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-27af0f6d3b",
-      "url": "https://www.nextcanada.com/programs-overview/",
-      "title": "Next Canada — details page checked by scrape.py",
+      "id": "check-portfolio-129ec5024c",
+      "url": "https://www.nextcanada.com/program-timeline/",
+      "title": "Next Canada — batches page",
       "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
-      "page": "details"
+      "page": "batches"
     },
     {
-      "id": "check-portfolio-29133f7bf0",
-      "url": "https://www.nextcanada.com/programs-overview/",
-      "title": "Next Canada — details page checked by scrape.py",
+      "id": "check-portfolio-133729cb1b",
+      "url": "http://www.nextcanada.com/next-canada-celebrates-cohorts-at-venture-day-receives-1m-investment/",
+      "title": "Next Canada — terms page",
+      "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-16a3277c90",
+      "url": "http://www.nextcanada.com/2024-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "DISCOVER OUR VENTURES → https://directory.nextcanada.com/directory/ventures/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-24c01b92e3",
+      "url": "http://www.nextcanada.com/next-36-alum-venture-sniply-acquired-in-multi-million-dollar-deal/",
+      "title": "Next Canada — terms page",
       "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-308985fb88",
+      "url": "http://www.nextcanada.com/2026-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-347e70f60e",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-4266a3f773",
+      "url": "http://www.nextcanada.com/next-canada-celebrates-cohorts-at-venture-day-receives-1m-investment/",
+      "title": "Next Canada — terms page",
+      "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5f507deda1",
+      "url": "http://www.nextcanada.com/2024-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-7415ff26ad",
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "title": "Next Canada — batches page",
+      "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-8065b54e2d",
+      "url": "http://www.nextcanada.com/2024-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "DISCOVER OUR ALUMNI → https://directory.nextcanada.com/directory/alumni/",
+      "page": "batches"
     },
     {
       "id": "check-portfolio-84545b2995",
       "url": "https://www.nextcanada.com/",
-      "title": "Next Canada — homepage checked by scrape.py",
+      "title": "Next Canada — homepage",
       "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-8767249ccb",
+      "url": "http://www.nextcanada.com/program-timeline/",
+      "title": "Next Canada — batches page",
+      "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-8f62d557b0",
+      "url": "http://www.nextcanada.com/nai-timeline-fr/",
+      "title": "Next Canada — batches page",
+      "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-90560b34e4",
+      "url": "http://www.nextcanada.com/nextfounders_2022_apply/",
+      "title": "Next Canada — application page",
+      "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-9bc87625b5",
+      "url": "http://www.nextcanada.com/program-timeline/",
+      "title": "Next Canada — batches page",
+      "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-a070567493",
       "url": "https://www.nextcanada.com/2026-cohort/",
-      "title": "Next Canada — batches page checked by scrape.py",
+      "title": "Next Canada — batches page",
       "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-ac40904bea",
+      "url": "http://www.nextcanada.com/2024-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
       "page": "batches"
     },
     {
       "id": "check-portfolio-b6cdf6c409",
       "url": "https://www.nextcanada.com/",
-      "title": "Next Canada — homepage checked by scrape.py",
+      "title": "Next Canada — homepage",
       "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-cd147f617a",
-      "url": "https://www.nextcanada.com/",
-      "title": "Next Canada — homepage checked by scrape.py",
-      "excerpt": "READ MORE ALUMNI STORIES → https://www.nextcanada.com/alumni",
-      "page": "details"
+      "id": "check-portfolio-b9db3ca6b2",
+      "url": "http://www.nextcanada.com/next-36-alum-venture-sniply-acquired-in-multi-million-dollar-deal/",
+      "title": "Next Canada — terms page",
+      "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
+      "page": "terms"
     },
     {
-      "id": "check-portfolio-d737f102d4",
-      "url": "https://www.nextcanada.com/2026-cohort/",
-      "title": "Next Canada — batches page checked by scrape.py",
+      "id": "check-portfolio-bef257c42d",
+      "url": "https://www.nextcanada.com/program-timeline/",
+      "title": "Next Canada — batches page",
+      "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-c5e8aa73ce",
+      "url": "http://www.nextcanada.com/2026-cohort/",
+      "title": "Next Canada — batches page",
       "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
       "page": "batches"
     },
     {
-      "id": "check-route-2e3204b045",
-      "url": "https://www.nextcanada.com/programs-overview/",
-      "title": "Next Canada — details page checked by scrape.py",
-      "excerpt": "CLICK HERE TO GET NOTIFIED WHEN APPLICATIONS OPEN → https://airtable.com/appl9JP8wsxwv4fws/pagTfVON2MbVH6Xp4/form",
+      "id": "check-portfolio-cd147f617a",
+      "url": "https://www.nextcanada.com/",
+      "title": "Next Canada — homepage",
+      "excerpt": "READ MORE ALUMNI STORIES → https://www.nextcanada.com/alumni",
       "page": "details"
     },
     {
-      "id": "check-route-addf1cd970",
-      "url": "https://www.nextcanada.com/programs-overview/",
-      "title": "Next Canada — details page checked by scrape.py",
-      "excerpt": "APPLY TO NEXT AI → https://my.nextcanada.com/apply/nai",
-      "page": "details"
+      "id": "check-portfolio-d1eaabcac1",
+      "url": "http://www.nextcanada.com/nextfounders_2022_apply/",
+      "title": "Next Canada — application page",
+      "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d6c3a5081d",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-d737f102d4",
+      "url": "https://www.nextcanada.com/2026-cohort/",
+      "title": "Next Canada — batches page",
+      "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-f3f4a88d8a",
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "title": "Next Canada — batches page",
+      "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
+      "page": "batches"
     },
     {
       "id": "check-route-cf5a2e1200",
       "url": "https://www.nextcanada.com/",
-      "title": "Next Canada — homepage checked by scrape.py",
+      "title": "Next Canada — homepage",
       "excerpt": "APPLY TO NEXT AI → https://my.nextcanada.com/apply/nai",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-b6c28f3b83",
+      "url": "https://www.nextcanada.com/",
+      "page": "details",
+      "excerpt": "NEXT Canada - Building a more ambitious and competitive Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us CREATING CANADA’S NEXT GENERATION OF HIGH-IMPACT ENTREPRENEURS 1,000+ entrepreneurs launched. 500+ ventures scaled. And counting. APPLY TO NEXT AI WHO WE ARE Canada’s strongest and most dedicated entrepreneurial network made up of 500+ top Canadian academics, entrepreneurs, investors and founders. We rally around the next generation of entrepreneurs, making it hard for them to fail. WHAT WE DO We uncover Canada’s next generation of entrepreneurs and supercharge their ambition by showing them what’s possible. We accelerate their trajectory with access to education, mentorship and funding. WHY WE DO IT To ensure a more ambitious and competitive Canada. We need"
     },
     {
-      "id": "check-status-8ebc37b58c",
-      "url": "https://www.nextcanada.com/programs-overview/",
-      "title": "Next Canada — details page checked by scrape.py",
-      "excerpt": "on two campuses: Toronto and Montréal. NEXT AI – Montréal is delivered in partnership with HEC Montréal. Applications are open from October 15th – December 9th! DISCOVER NEXT AI APPLY TO NEXT AI For growth stage founders looking to",
-      "page": "details"
+      "id": "check-page-e8ccc3de5b",
+      "url": "http://www.nextcanada.com/apply-to-next-ai-founder/",
+      "page": "application",
+      "excerpt": "Apply to Next AI - Founder – NEXT Canada"
     },
     {
-      "id": "check-status-b3830bfde9",
-      "url": "https://www.nextcanada.com/programs-overview/",
-      "title": "Next Canada — details page checked by scrape.py",
-      "excerpt": "thanks to access to tactical education, mentorship, and a network of the strongest entrepreneurs in Canada. Applications are closed for the 2027 cohort. DISCOVER NEXT 36 CLICK HERE TO GET NOTIFIED WHEN APPLICATIONS OPEN For entrepreneurs",
-      "page": "details"
+      "id": "check-page-66e2e75469",
+      "url": "http://www.nextcanada.com/apply-to-next-ai-venture/",
+      "page": "application",
+      "excerpt": "Apply to Next AI - Venture – NEXT Canada"
+    },
+    {
+      "id": "check-page-4559bb2312",
+      "url": "http://www.nextcanada.com/nextfounders_2022_apply/",
+      "page": "application",
+      "excerpt": "Next Founders Application 2022 – NEXT Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us APPLY TO NEXT FOUNDERS ABOUT US NEXT Canada accelerates the growth trajectory of aspiring and scaling entrepreneurs with education, mentorship, funding and access to Canada's strongest entrepreneurial network. Charitable registration No. 81519 8403 RR0001 KEY LINKS News Events Careers Media Kit Newsletter Sign Up CONTACT US Email: [email protected] 175 Bloor Street East Suite 1800, South Building Toronto, ON M4W 3R8 ACKNOWLEDGEMENT NEXT Canada is situated on the traditional territory of many nations including the Mississaugas of the Credit, the Anishnabeg, the Chippewa, the Haudenosaunee and the Wendat peoples."
+    },
+    {
+      "id": "check-page-2dfa688856",
+      "url": "https://my.nextcanada.com/apply/nai",
+      "page": "application",
+      "excerpt": "NEXT Canada Entrepreneur Portal Apply to NEXT AI Saved Apply to NEXT AI English Français Deadline 📆 December 9th, 2026, at 11:59 p.m. EST Thank you for applying to NEXT AI, one of NEXT Canada’s three programs and Canada’s premier accelerator for entrepreneurs building AI-enabled companies that address global challenges. NEXT AI is open only to ventures that are incorporated in Canada or are actively in the process of incorporating in Canada. NEXT AI is designed for ambitious founders who are prepared to fully engage, move quickly, act on feedback, and contribute meaningfully to a community of high-performing peers. We welcome founders from all backgrounds and believe diverse perspectives strengthen innovation and the responsible development of AI. Following our internal review, selected applicants will be invited to interviews taking place during the last week of January. For more information, visit https://www.nextcanada.com/next-ai/ or contact stephania@nextai.com for Toronto and infomtl@nextai.com for Montréal/Remote. Data privacy and ownership By completing this application form and applying to NEXT AI, you authorize NEXT Canada and HEC Montréal to collect your personal information. Your information will be used by us to contact you regarding your registration, as well as to assess your application to the program. Your information will not be shared with any third parties."
+    },
+    {
+      "id": "check-page-a32b205d8b",
+      "url": "http://www.nextcanada.com/next-36-alum-venture-sniply-acquired-in-multi-million-dollar-deal/",
+      "page": "terms",
+      "excerpt": "Next 36 Alum Venture Sniply Acquired in Multi-Million Dollar Deal – NEXT Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us Next 36 Alum Venture Sniply Acquired in Multi-Million Dollar Deal News Kyle Winters January 28, 2020 NEWS Next 36 Alum Venture Sniply Acquired in Multi-Million Dollar Deal Sniply, a venture created by Next 36 alumni Michael Cheng, Chris Bowal and Nigel Gutzmann as a marketing tool for link sharing, is being acquired in a multi-million-dollar deal by Tim Schumacher, founder of Adblock Plus, a company whose ad-blocking plugin has more than 100 million users. Cheng created Sniply in 2014, shortly after he completed the Next 36 program, a national initiative supporting youth innovation. Since then he and his partners built Sniply to 500,000"
+    },
+    {
+      "id": "check-page-0a698e353e",
+      "url": "http://www.nextcanada.com/next-canada-celebrates-cohorts-at-venture-day-receives-1m-investment/",
+      "page": "terms",
+      "excerpt": "NEXT Canada Celebrates Cohorts At Venture Day, Receives $1M Investment – NEXT Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us NEXT Canada Celebrates Cohorts At Venture Day, Receives $1M Investment News Kyle Winters August 15, 2019 NEWS NEXT Canada Celebrates Cohorts At Venture Day, Receives $1M Investment On Wednesday, more than 10 NEXT Canada ventures pitched their startup at NEXT Venture Day, to an audience of business leaders, partners, alum, and investors. Venture Day celebrated the end of three NEXT Canada programs, Next 36, which supports young founders of early-stage businesses; Founders, which focuses on founder development for existing startups with significant traction; and AI, which works with early or idea stage AI-enabled startups. Attendees were"
+    },
+    {
+      "id": "check-page-5954ab81d8",
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "page": "batches",
+      "excerpt": "NEXT Canada - Building a more ambitious and competitive Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us 2021 COHORT MEET THE 2021 COHORT Every year, NEXT Canada recruits some of the country’s highest potential entrepreneurs from coast to coast. Over the course of eight months, we give these founders all the tools they need to create game-changing, homegrown ventures with global potential. Thanks to our blend of real-world education, globally recognized faculty, and mentorship from top Canadian CEOs, our entrepreneurs go from ideation to launch and beyond within just eight months. For the second year in a row, our program is being delivered in a fully virtual environment. While we miss having the energy of the entrepreneurs in our co-working space, this new"
+    },
+    {
+      "id": "check-page-0335fc4e31",
+      "url": "http://www.nextcanada.com/2024-cohort/",
+      "page": "batches",
+      "excerpt": "NEXT Canada - Building a more ambitious and competitive Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us MEET THE 2024 COHORT NEXT Canada is on a mission to find and cultivate the best entrepreneurial talent in the country. Every year, we search far and wide for the brightest and most innovative minds with the drive and passion to launch game-changing ventures with global potential. Our three programs are designed to equip these founders with the knowledge, tools, and network they need to launch and scale their ventures through a unique blend of real-world education, top-tier mentorship, and globally recognized faculty. Discover the 2024 ventures by program The NEXT 36 program is designed for students and recent grads with big dreams and an entrepreneurial"
+    },
+    {
+      "id": "check-page-e047c151a8",
+      "url": "http://www.nextcanada.com/2026-cohort/",
+      "page": "batches",
+      "excerpt": "NEXT Canada - Building a more ambitious and competitive Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us MEET THE 2026 COHORT NEXT Canada is on a mission to find and cultivate the best entrepreneurial talent in the country. Every year, we search far and wide for the brightest and most innovative minds with the drive and passion to launch game-changing ventures with global potential. Our three programs are designed to equip these founders with the knowledge, tools, and network they need to launch and scale their ventures through a unique blend of real-world education, top-tier mentorship, and globally recognized faculty. Discover the 2026 ventures by program The NEXT 36 program is designed for students and recent grads with big dreams and an entrepreneurial"
+    },
+    {
+      "id": "check-page-3278071323",
+      "url": "http://www.nextcanada.com/nai-timeline-fr/",
+      "page": "batches",
+      "excerpt": "Next AI Program Timeline (FR) – NEXT Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us Next AI – CALENDRIER DU PROGRAMME 2020 19 octobre 2020 Ouverture des candidatures Répondez à quelques questions sur votre équipe, votre entreprise ou votre localisation préférée (Montréal ou Toronto). La candidature doit aussi comprendre une courte entrevue vidéo. 2020 Octobre - décembre 2020 Formation des équipes (optionnel) Si vous êtes à la recherche d’un cofondateur partageant les mêmes idées que vous ou souhaitez ajouter une expertise à votre équipe déjà existante, connectez-vous avec une multitude de talents mondiaux en utilisant notre plateforme exclusive de jumelage . 2020 13 décembre 2020 Date limite pour le dépôt de votre candidature 2021 Février 2021 Interviews des"
+    },
+    {
+      "id": "check-page-bb1d92630e",
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "page": "batches",
+      "excerpt": "NEXT Canada Mid-Summer Updates – NEXT Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us NEXT Canada Mid-Summer Updates Blog , Events Kyle Winters July 20, 2022 NEWS NEXT Canada Mid-Summer Updates ALYANA SATCHU July 20, 2022 The summer has been a busy and exciting one so far. Just this month, our NEXT Canada team and founders have experienced an abundance of classes, events and workshops. The members of our Next AI, Next 36, and Next Founders program participants continue to be challenged personally and professionally as they expand their skillsets, supercharge their ambition, and scale their ventures. On June 30th, the Next Canada Team convened at The Oxley in Yorkville for a relaxing and sunny afternoon of just getting to know one another better. We were"
+    },
+    {
+      "id": "check-page-8874fa3442",
+      "url": "http://www.nextcanada.com/program-timeline/",
+      "page": "batches",
+      "excerpt": "Program Timeline – NEXT Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us PROGRAM TIMELINE 2026 Spring Immersion week Next AI and Next Founders participants gain their first exposure to faculty and the NEXT network through an intense onboarding week in March (Next AI) and May (Next Founders), respectively. 2026 May Venture Reveal Select ventures from all three programs pitch and receive feedback from a network of peers, mentors and other members of the NEXT Canada community. 2026 May - August Courses and workshops Founders attend masters-level classes and workshops from our award-winning faculty, successful entrepreneurs and investors. Meet the network 2026 May - August Founder Education - Foundation Throughout the summer, founders attend multiple sessions on"
+    },
+    {
+      "id": "check-page-4b7bc1591a",
+      "url": "https://www.nextcanada.com/2026-cohort/",
+      "page": "batches",
+      "excerpt": "NEXT Canada - Building a more ambitious and competitive Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us MEET THE 2026 COHORT NEXT Canada is on a mission to find and cultivate the best entrepreneurial talent in the country. Every year, we search far and wide for the brightest and most innovative minds with the drive and passion to launch game-changing ventures with global potential. Our three programs are designed to equip these founders with the knowledge, tools, and network they need to launch and scale their ventures through a unique blend of real-world education, top-tier mentorship, and globally recognized faculty. Discover the 2026 ventures by program The NEXT 36 program is designed for students and recent grads with big dreams and an entrepreneurial"
+    },
+    {
+      "id": "check-page-58d1715cc6",
+      "url": "https://www.nextcanada.com/program-timeline/",
+      "page": "batches",
+      "excerpt": "Program Timeline – NEXT Canada 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate 2026 Cohort Programs Programs Overview NEXT 36 NEXT Founders NEXT AI Leadership Our Network Board and Staff Supporters Our Supporters Make a Donation Annual Reports Alumni Next Alumni Alumni Directory Venture Directory Spotlights Stories GRIT Magazine Video News Donate Search Paul Desmarais Sr. 14 November, 2024 The Weston Family 14 November, 2024 Tim and Frances Price 14 November, 2024 Follow Us PROGRAM TIMELINE 2026 Spring Immersion week Next AI and Next Founders participants gain their first exposure to faculty and the NEXT network through an intense onboarding week in March (Next AI) and May (Next Founders), respectively. 2026 May Venture Reveal Select ventures from all three programs pitch and receive feedback from a network of peers, mentors and other members of the NEXT Canada community. 2026 May - August Courses and workshops Founders attend masters-level classes and workshops from our award-winning faculty, successful entrepreneurs and investors. Meet the network 2026 May - August Founder Education - Foundation Throughout the summer, founders attend multiple sessions on"
     }
   ],
   "findings": {
@@ -114,10 +490,6 @@
       {
         "value": "https://my.nextcanada.com/apply/nai",
         "evidenceId": "check-route-cf5a2e1200"
-      },
-      {
-        "value": "https://airtable.com/appl9JP8wsxwv4fws/pagTfVON2MbVH6Xp4/form",
-        "evidenceId": "check-route-2e3204b045"
       }
     ],
     "applicationUrl": [
@@ -126,20 +498,50 @@
         "evidenceId": "check-route-cf5a2e1200"
       }
     ],
-    "applicationsOpen": [
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [
       {
-        "value": true,
-        "evidenceId": "check-status-8ebc37b58c"
-      },
-      {
-        "value": false,
-        "evidenceId": "check-status-b3830bfde9"
+        "value": "2026-12-09",
+        "evidenceId": "check-deadline-2c3c38afa7"
       }
     ],
-    "operatingStatus": [],
-    "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "2 months",
+        "evidenceId": "check-duration-69d2ec4db1"
+      },
+      {
+        "value": "2",
+        "evidenceId": "check-duration-3aab87473d"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-68b3d43d93"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-e76b8b9758"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-5bf129f6b2"
+      }
+    ],
+    "location": [
+      {
+        "value": "Vancouver",
+        "evidenceId": "check-location-fd4aadbb89"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.nextcanada.com/directory/alumni/",
@@ -156,6 +558,14 @@
       {
         "value": "https://www.nextcanada.com/alumni",
         "evidenceId": "check-portfolio-cd147f617a"
+      },
+      {
+        "value": "https://directory.nextcanada.com/directory/alumni/",
+        "evidenceId": "check-portfolio-8065b54e2d"
+      },
+      {
+        "value": "https://directory.nextcanada.com/directory/ventures/",
+        "evidenceId": "check-portfolio-16a3277c90"
       }
     ],
     "name": [

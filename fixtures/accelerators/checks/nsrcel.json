@@ -1,53 +1,682 @@
 {
   "programId": "nsrcel",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://nsrcel.org/",
+    "https://kotakbizlabs.accubate.app/ext/form/23736/1/apply",
+    "https://nsrcel.org/1-learn-app-redesigning-the-way-students-learn-with-nsrcels-startup-mentorship-program/",
     "https://nsrcel.org/about-us/",
-    "https://kotakbizlabs.accubate.app/ext/form/23736/1/apply"
+    "https://nsrcel.org/accelerator-women-startup-program/",
+    "https://nsrcel.org/circular-bharat-accelerator/",
+    "https://nsrcel.org/circular-innovation-incubation-program/",
+    "https://nsrcel.org/foe-women-startup-program/",
+    "https://nsrcel.org/healthcare-incubation-program/",
+    "https://nsrcel.org/incubation-women-startup-program/",
+    "https://nsrcel.org/mobility/",
+    "https://nsrcel.org/nsrcels-beyond-borders-program/",
+    "https://nsrcel.org/program/",
+    "https://nsrcel.org/programs/",
+    "https://nsrcel.org/sustainable-mobility-incubation/"
   ],
   "evidence": [
     {
+      "id": "check-deal-7c2960809f",
+      "url": "https://nsrcel.org/incubation-women-startup-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Based on assessments, selected ventures will receive a grant of INR 10 Lakhs each to support their growth. Network Access Connect with",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-e6018de576",
+      "url": "https://nsrcel.org/incubation-women-startup-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Based on assessments, selected ventures will receive a grant of INR 10 Lakhs each to support their growth. Network Connect with prospects in",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-180748757f",
+      "url": "https://nsrcel.org/programs/",
+      "title": "NSRCEL — program page",
+      "excerpt": "their ideas market-ready. Campus Founders > A 4-month program by GPS Renewables – designed for student",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-223d05a0e7",
+      "url": "https://nsrcel.org/healthcare-incubation-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "What will I learn from this program? The 5-month program has been designed to give you",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3b06b24a4b",
+      "url": "https://nsrcel.org/incubation-women-startup-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "model with revenue projections for the next 12 months. What to Expect? Need Assessment Focus on",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-68ab67a56d",
+      "url": "https://nsrcel.org/programs/",
+      "title": "NSRCEL — program page",
+      "excerpt": "> Empowering automobile startups through a 6-month immersive support and mentoring program. Climate",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-83a3579145",
+      "url": "https://nsrcel.org/program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Onboarding Knowledge sessions and mentoring (3 months) Program completion (with a certificate on",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ac8fa0b48a",
+      "url": "https://nsrcel.org/sustainable-mobility-incubation/",
+      "title": "NSRCEL — program page",
+      "excerpt": "in the program will go approximately through a 6-month engagement which might vary based on the stage",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c1a42b0254",
+      "url": "https://nsrcel.org/healthcare-incubation-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "How long is the program for? The program is for 5 months How many team members can attend the program?",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c9a5c975b7",
+      "url": "https://nsrcel.org/mobility/",
+      "title": "NSRCEL — program page",
+      "excerpt": "innovations for the automotive sector. This 6-month incubation program is designed for tech and",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-f956eb940c",
+      "url": "https://nsrcel.org/incubation-women-startup-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Phase of the Women Startup Program is a tailored 8-month program that supports founders from the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-0a98075e68",
+      "url": "https://nsrcel.org/nsrcels-beyond-borders-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups grow. Workshop Opportunities Lead interactive virtual workshops to share expertise, collaborate with startups,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-0b90c0da32",
+      "url": "https://nsrcel.org/nsrcels-beyond-borders-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks designed to provide you with a hands-on",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1dcbdb94f0",
+      "url": "https://nsrcel.org/foe-women-startup-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups grow. Workshop Opportunities Lead interactive virtual workshops to share expertise, collaborate with startups,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-27b637f1f8",
+      "url": "https://nsrcel.org/sustainable-mobility-incubation/",
+      "title": "NSRCEL — program page",
+      "excerpt": "environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks designed to provide you with a hands-on",
+      "page": "details"
+    },
+    {
+      "id": "check-format-32b1fe279b",
+      "url": "https://nsrcel.org/sustainable-mobility-incubation/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups grow. Workshop Opportunities Lead interactive virtual workshops to share expertise, collaborate with startups,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-33fa8c7034",
+      "url": "https://nsrcel.org/healthcare-incubation-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "with chronic conditions by care management solutions, remote monitoring systems, assistive technologies, and chronic",
+      "page": "details"
+    },
+    {
+      "id": "check-format-4396bb85fe",
+      "url": "https://nsrcel.org/incubation-women-startup-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks designed to provide you with a hands-on",
+      "page": "details"
+    },
+    {
+      "id": "check-format-44171a8b87",
+      "url": "https://nsrcel.org/",
+      "title": "NSRCEL — homepage",
+      "excerpt": "startups, and foster innovation in a digital environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks",
+      "page": "details"
+    },
+    {
+      "id": "check-format-4bde7186b7",
+      "url": "https://nsrcel.org/programs/",
+      "title": "NSRCEL — program page",
+      "excerpt": "environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks designed to provide you with a hands-on",
+      "page": "details"
+    },
+    {
+      "id": "check-format-500399340d",
+      "url": "https://nsrcel.org/program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups, and foster innovation in a digital environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5477845f00",
+      "url": "https://nsrcel.org/1-learn-app-redesigning-the-way-students-learn-with-nsrcels-startup-mentorship-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups, and foster innovation in a digital environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks",
+      "page": "details"
+    },
+    {
+      "id": "check-format-58ab2ec329",
+      "url": "https://nsrcel.org/sustainable-mobility-incubation/",
+      "title": "NSRCEL — program page",
+      "excerpt": "through the program. Selected startups can also access virtual workshops, one-on-one mentoring sessions, masterclasses",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5c42c424af",
+      "url": "https://nsrcel.org/circular-bharat-accelerator/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups, and foster innovation in a digital environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks",
+      "page": "details"
+    },
+    {
+      "id": "check-format-5fcad24efc",
+      "url": "https://nsrcel.org/accelerator-women-startup-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks designed to provide you with a hands-on",
+      "page": "details"
+    },
+    {
+      "id": "check-format-675f186433",
+      "url": "https://nsrcel.org/circular-innovation-incubation-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Where will the program take place? The program follows a hybrid format, with most sessions conducted online. Physical",
+      "page": "details"
+    },
+    {
+      "id": "check-format-7085ba4d72",
+      "url": "https://nsrcel.org/circular-innovation-incubation-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks designed to provide you with a hands-on",
+      "page": "details"
+    },
+    {
+      "id": "check-format-71ac9875d1",
+      "url": "https://nsrcel.org/healthcare-incubation-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups, and foster innovation in a digital environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks",
+      "page": "details"
+    },
+    {
+      "id": "check-format-892f0b6c02",
+      "url": "https://nsrcel.org/circular-innovation-incubation-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups grow. Workshop Opportunities Lead interactive virtual workshops to share expertise, collaborate with startups,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-8aee003fb7",
+      "url": "https://nsrcel.org/mobility/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups, and foster innovation in a digital environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks",
+      "page": "details"
+    },
+    {
+      "id": "check-format-8fb6cec11c",
+      "url": "https://nsrcel.org/circular-bharat-accelerator/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Where will the program take place? The program follows a hybrid format, with most sessions conducted online. Physical",
+      "page": "details"
+    },
+    {
+      "id": "check-format-906e990f57",
+      "url": "https://nsrcel.org/healthcare-incubation-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups grow. Workshop Opportunities Lead interactive virtual workshops to share expertise, collaborate with startups,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-90d5f7929e",
+      "url": "https://nsrcel.org/program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups grow. Workshop Opportunities Lead interactive virtual workshops to share expertise, collaborate with startups,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-928c59cbc0",
+      "url": "https://nsrcel.org/circular-bharat-accelerator/",
+      "title": "NSRCEL — program page",
+      "excerpt": "environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks designed to provide you with a hands-on",
+      "page": "details"
+    },
+    {
+      "id": "check-format-978ee05f68",
+      "url": "https://nsrcel.org/healthcare-incubation-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks designed to provide you with a hands-on",
+      "page": "details"
+    },
+    {
+      "id": "check-format-987d5590a4",
+      "url": "https://nsrcel.org/mobility/",
+      "title": "NSRCEL — program page",
+      "excerpt": "will the program take place? The program takes place in a hybrid format with physical events/meetups often taking place in",
+      "page": "details"
+    },
+    {
+      "id": "check-format-99a5bd84de",
+      "url": "https://nsrcel.org/foe-women-startup-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups, and foster innovation in a digital environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks",
+      "page": "details"
+    },
+    {
+      "id": "check-format-99c8fe6169",
+      "url": "https://nsrcel.org/about-us/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups, and foster innovation in a digital environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks",
+      "page": "details"
+    },
+    {
+      "id": "check-format-9b13047457",
+      "url": "https://nsrcel.org/mobility/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups grow. Workshop Opportunities Lead interactive virtual workshops to share expertise, collaborate with startups,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-a297c44efc",
+      "url": "https://nsrcel.org/programs/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups grow. Workshop Opportunities Lead interactive virtual workshops to share expertise, collaborate with startups,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-a439ac0bc2",
+      "url": "https://nsrcel.org/about-us/",
+      "title": "NSRCEL — program page",
+      "excerpt": "environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks designed to provide you with a hands-on",
+      "page": "details"
+    },
+    {
+      "id": "check-format-abc353a05d",
+      "url": "https://nsrcel.org/incubation-women-startup-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups grow. Workshop Opportunities Lead interactive virtual workshops to share expertise, collaborate with startups,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ae9dcd8edf",
+      "url": "https://nsrcel.org/",
+      "title": "NSRCEL — homepage",
+      "excerpt": "environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks designed to provide you with a hands-on",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b16fbbf8de",
+      "url": "https://nsrcel.org/sustainable-mobility-incubation/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups, and foster innovation in a digital environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b405f71572",
+      "url": "https://nsrcel.org/accelerator-women-startup-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups grow. Workshop Opportunities Lead interactive virtual workshops to share expertise, collaborate with startups,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c9d847eff3",
+      "url": "https://nsrcel.org/incubation-women-startup-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups, and foster innovation in a digital environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks",
+      "page": "details"
+    },
+    {
+      "id": "check-format-cbaa036c30",
+      "url": "https://nsrcel.org/accelerator-women-startup-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups, and foster innovation in a digital environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks",
+      "page": "details"
+    },
+    {
+      "id": "check-format-cc78f53a97",
+      "url": "https://nsrcel.org/1-learn-app-redesigning-the-way-students-learn-with-nsrcels-startup-mentorship-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks designed to provide you with a hands-on",
+      "page": "details"
+    },
+    {
+      "id": "check-format-cdac846562",
+      "url": "https://nsrcel.org/programs/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups, and foster innovation in a digital environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks",
+      "page": "details"
+    },
+    {
+      "id": "check-format-cf90938e9f",
+      "url": "https://nsrcel.org/program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks designed to provide you with a hands-on",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d4e9c197eb",
+      "url": "https://nsrcel.org/nsrcels-beyond-borders-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups, and foster innovation in a digital environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks",
+      "page": "details"
+    },
+    {
+      "id": "check-format-df4c680f85",
+      "url": "https://nsrcel.org/mobility/",
+      "title": "NSRCEL — program page",
+      "excerpt": "environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks designed to provide you with a hands-on",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e4e82bf92d",
+      "url": "https://nsrcel.org/about-us/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups grow. Workshop Opportunities Lead interactive virtual workshops to share expertise, collaborate with startups,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e96bcd5714",
+      "url": "https://nsrcel.org/foe-women-startup-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks designed to provide you with a hands-on",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ec4e47a52b",
+      "url": "https://nsrcel.org/healthcare-incubation-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Rs. 1cr Where will the program take place? The program is hybrid in format. While all the sessions will be conducted",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ec4f299902",
+      "url": "https://nsrcel.org/circular-innovation-incubation-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups, and foster innovation in a digital environment. In-Person Focus Weeks Immerse yourself in our in-person focus weeks",
+      "page": "details"
+    },
+    {
+      "id": "check-format-eccf37a6dd",
+      "url": "https://nsrcel.org/",
+      "title": "NSRCEL — homepage",
+      "excerpt": "startups grow. Workshop Opportunities Lead interactive virtual workshops to share expertise, collaborate with startups,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f1d1fcb80f",
+      "url": "https://nsrcel.org/1-learn-app-redesigning-the-way-students-learn-with-nsrcels-startup-mentorship-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups grow. Workshop Opportunities Lead interactive virtual workshops to share expertise, collaborate with startups,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ff50550b50",
+      "url": "https://nsrcel.org/circular-bharat-accelerator/",
+      "title": "NSRCEL — program page",
+      "excerpt": "startups grow. Workshop Opportunities Lead interactive virtual workshops to share expertise, collaborate with startups,",
+      "page": "details"
+    },
+    {
       "id": "check-name-ec022b1a5d",
       "url": "https://nsrcel.org/",
-      "title": "NSRCEL — homepage checked by scrape.py",
+      "title": "NSRCEL — homepage",
       "excerpt": "NSRCEL - Incubation Centre for Startups & Entrepreneurs Skip to",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-050decbf48",
+      "url": "https://nsrcel.org/foe-women-startup-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Portfolio → https://nsrcel.org/portfolio/",
       "page": "details"
     },
     {
       "id": "check-portfolio-12aaa4ad3d",
       "url": "https://nsrcel.org/about-us/",
-      "title": "NSRCEL — details page checked by scrape.py",
+      "title": "NSRCEL — program page",
       "excerpt": "Explore Our Startups → https://nsrcel.org/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1b89f1b0c8",
+      "url": "https://nsrcel.org/program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Portfolio → https://nsrcel.org/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4a42117262",
+      "url": "https://nsrcel.org/accelerator-women-startup-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Portfolio → https://nsrcel.org/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-656ac2e48f",
+      "url": "https://nsrcel.org/mobility/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Portfolio → https://nsrcel.org/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6c80115e21",
+      "url": "https://nsrcel.org/healthcare-incubation-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Portfolio → https://nsrcel.org/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-723ce3c89d",
+      "url": "https://nsrcel.org/nsrcels-beyond-borders-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Portfolio → https://nsrcel.org/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-736d1df85f",
+      "url": "https://nsrcel.org/circular-innovation-incubation-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Portfolio → https://nsrcel.org/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-88e3dc1c76",
+      "url": "https://nsrcel.org/incubation-women-startup-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Portfolio → https://nsrcel.org/portfolio/",
       "page": "details"
     },
     {
       "id": "check-portfolio-9014e77d4e",
       "url": "https://nsrcel.org/about-us/",
-      "title": "NSRCEL — details page checked by scrape.py",
+      "title": "NSRCEL — program page",
+      "excerpt": "Portfolio → https://nsrcel.org/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c6994c9335",
+      "url": "https://nsrcel.org/circular-bharat-accelerator/",
+      "title": "NSRCEL — program page",
       "excerpt": "Portfolio → https://nsrcel.org/portfolio/",
       "page": "details"
     },
     {
       "id": "check-portfolio-d900d5cca3",
       "url": "https://nsrcel.org/",
-      "title": "NSRCEL — homepage checked by scrape.py",
+      "title": "NSRCEL — homepage",
       "excerpt": "Portfolio → https://nsrcel.org/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d90e6f674d",
+      "url": "https://nsrcel.org/programs/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Portfolio → https://nsrcel.org/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e3737b33e7",
+      "url": "https://nsrcel.org/sustainable-mobility-incubation/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Portfolio → https://nsrcel.org/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e3d82c1ad0",
+      "url": "https://nsrcel.org/1-learn-app-redesigning-the-way-students-learn-with-nsrcels-startup-mentorship-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Portfolio → https://nsrcel.org/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-14ba014855",
+      "url": "https://nsrcel.org/accelerator-women-startup-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "https://kotakbizlabs.accubate.app/ext/form/23736/1/apply",
       "page": "details"
     },
     {
       "id": "check-route-39355c27e6",
       "url": "https://nsrcel.org/",
-      "title": "NSRCEL — homepage checked by scrape.py",
+      "title": "NSRCEL — homepage",
       "excerpt": "Apply Now → https://kotakbizlabs.accubate.app/ext/form/23736/1/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cb905d6026",
+      "url": "https://nsrcel.org/incubation-women-startup-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "https://kotakbizlabs.accubate.app/ext/form/23736/1/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-status-063c4ead64",
+      "url": "https://nsrcel.org/healthcare-incubation-program/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Can a single founder apply to the program? Yes. We accept applications from solo founders. When can I apply? Applications are now open. Apply here: https://nsrcel.accubate.app/ext/form/3384/1/apply What do you look for in an applicant?",
       "page": "details"
     },
     {
       "id": "check-status-26b79aa66c",
       "url": "https://nsrcel.org/",
-      "title": "NSRCEL — homepage checked by scrape.py",
+      "title": "NSRCEL — homepage",
       "excerpt": "globally, and create lasting impact. Find your fit Take the next step in your startup journey with NSRCEL Applications are now open for Impact Orbit - AgeTech Innovations Circular Bharat Accelerator Impact Orbit - Skilling and Livelihood",
       "page": "details"
+    },
+    {
+      "id": "check-status-975680a4ce",
+      "url": "https://nsrcel.org/mobility/",
+      "title": "NSRCEL — program page",
+      "excerpt": "Incubation Program for Mobility Startups Maruti Suzuki - NSRCEL Incubation Program for Mobility Startups Applications are now open for Cohort-5! Apply Now Register Your Interest Name Email Contact Number City Startup Name Stage of the",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-1644cf3063",
+      "url": "https://nsrcel.org/",
+      "page": "details",
+      "excerpt": "NSRCEL - Incubation Centre for Startups & Entrepreneurs Skip to content About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy Incubation Centre Centres of Excellence Climate Centre of Excellence Fintech Centre of Excellence For Incubators Portfolio News & Media Insights Connect Donors Partners Mentors Incubators About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable"
+    },
+    {
+      "id": "check-page-19b74b9923",
+      "url": "https://kotakbizlabs.accubate.app/ext/form/23736/1/apply",
+      "page": "application",
+      "excerpt": "Kotak BizLabs"
+    },
+    {
+      "id": "check-page-ceb2e1dd77",
+      "url": "https://nsrcel.org/1-learn-app-redesigning-the-way-students-learn-with-nsrcels-startup-mentorship-program/",
+      "page": "details",
+      "excerpt": "1 Learn App – Redesigning The Way Students Learn with NSRCEL’s Startup Mentorship Program Skip to content About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy Incubation Centre Centres of Excellence Climate Centre of Excellence Fintech Centre of Excellence For Incubators Portfolio News & Media Insights Connect Donors Partners Mentors Incubators About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program"
+    },
+    {
+      "id": "check-page-1eb635518d",
+      "url": "https://nsrcel.org/about-us/",
+      "page": "details",
+      "excerpt": "About Us | NSRCEL IIM Bangalore Incubator Centre - Startup Programs for Students, Women Entrepreneurs & Businesses Skip to content About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy Incubation Centre Centres of Excellence Climate Centre of Excellence Fintech Centre of Excellence For Incubators Portfolio News & Media Insights Connect Donors Partners Mentors Incubators About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable"
+    },
+    {
+      "id": "check-page-fbbd4aa7bc",
+      "url": "https://nsrcel.org/accelerator-women-startup-program/",
+      "page": "details",
+      "excerpt": "Women Entrepreneurship Program at IIM Bangalore | NSRCEL Skip to content About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy Incubation Centre Centres of Excellence Climate Centre of Excellence Fintech Centre of Excellence For Incubators Portfolio News & Media Insights Connect Donors Partners Mentors Incubators About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable"
+    },
+    {
+      "id": "check-page-a5e1f7fe23",
+      "url": "https://nsrcel.org/circular-bharat-accelerator/",
+      "page": "details",
+      "excerpt": "Circular Bharat Accelerator - NSRCEL Skip to content About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy Incubation Centre Centres of Excellence Climate Centre of Excellence Fintech Centre of Excellence For Incubators Portfolio News & Media Insights Connect Donors Partners Mentors Incubators About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy Incubation"
+    },
+    {
+      "id": "check-page-2c230a8fc6",
+      "url": "https://nsrcel.org/circular-innovation-incubation-program/",
+      "page": "details",
+      "excerpt": "Circular Innovation Incubation Program - Incubator for Climate Tech & Sustainable Startups | NSRCEL Skip to content About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy Incubation Centre Centres of Excellence Climate Centre of Excellence Fintech Centre of Excellence For Incubators Portfolio News & Media Insights Connect Donors Partners Mentors Incubators About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation"
+    },
+    {
+      "id": "check-page-2112fccaa9",
+      "url": "https://nsrcel.org/foe-women-startup-program/",
+      "page": "details",
+      "excerpt": "Foundations of Entrepreneurship | Women Startup Program | NSRCEL Skip to content About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy Incubation Centre Centres of Excellence Climate Centre of Excellence Fintech Centre of Excellence For Incubators Portfolio News & Media Insights Connect Donors Partners Mentors Incubators About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program"
+    },
+    {
+      "id": "check-page-c6841eaa96",
+      "url": "https://nsrcel.org/healthcare-incubation-program/",
+      "page": "details",
+      "excerpt": "Incubator for Healthcare Startups in India | NSRCEL Skip to content About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy Incubation Centre Centres of Excellence Climate Centre of Excellence Fintech Centre of Excellence For Incubators Portfolio News & Media Insights Connect Donors Partners Mentors Incubators About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy"
+    },
+    {
+      "id": "check-page-6110b56c25",
+      "url": "https://nsrcel.org/incubation-women-startup-program/",
+      "page": "details",
+      "excerpt": "Women Entrepreneurship Program at IIM Bangalore | NSRCEL Skip to content About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy Incubation Centre Centres of Excellence Climate Centre of Excellence Fintech Centre of Excellence For Incubators Portfolio News & Media Insights Connect Donors Partners Mentors Incubators About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable"
+    },
+    {
+      "id": "check-page-3efd45b06f",
+      "url": "https://nsrcel.org/mobility/",
+      "page": "details",
+      "excerpt": "Incubation Program for Mobility Startups | NSRCEL Skip to content About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy Incubation Centre Centres of Excellence Climate Centre of Excellence Fintech Centre of Excellence For Incubators Portfolio News & Media Insights Connect Donors Partners Mentors Incubators About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy"
+    },
+    {
+      "id": "check-page-54d8bd81ce",
+      "url": "https://nsrcel.org/nsrcels-beyond-borders-program/",
+      "page": "details",
+      "excerpt": "Beyond Borders Program - NSRCEL Skip to content About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy Incubation Centre Centres of Excellence Climate Centre of Excellence Fintech Centre of Excellence For Incubators Portfolio News & Media Insights Connect Donors Partners Mentors Incubators About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy Incubation Centre"
+    },
+    {
+      "id": "check-page-fd37057a9c",
+      "url": "https://nsrcel.org/program/",
+      "page": "details",
+      "excerpt": "Program - NSRCEL Skip to content About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy Incubation Centre Centres of Excellence Climate Centre of Excellence Fintech Centre of Excellence For Incubators Portfolio News & Media Insights Connect Donors Partners Mentors Incubators About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy Incubation Centre Centres of"
+    },
+    {
+      "id": "check-page-045bdce9a4",
+      "url": "https://nsrcel.org/programs/",
+      "page": "details",
+      "excerpt": "Startup & Business Incubator Programs | NSRCEL Skip to content About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy Incubation Centre Centres of Excellence Climate Centre of Excellence Fintech Centre of Excellence For Incubators Portfolio News & Media Insights Connect Donors Partners Mentors Incubators About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy"
+    },
+    {
+      "id": "check-page-692acb2186",
+      "url": "https://nsrcel.org/sustainable-mobility-incubation/",
+      "page": "details",
+      "excerpt": "Sustainable Mobility Incubation Program | NSRCEL Skip to content About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy Incubation Centre Centres of Excellence Climate Centre of Excellence Fintech Centre of Excellence For Incubators Portfolio News & Media Insights Connect Donors Partners Mentors Incubators About Us NSRCEL at a Glance People & Culture Programs For Ventures Idea and prototype Launchpad Campus Founders Healthcare Incubation Program Growth Goldman Sachs 10,000 Women Women Startup Program Impact Orbit Skilling and Livelihood Innovations AgeTech Innovations Tech Enabled Social Innovations (Closed Now) Velocity – Kotak BizLabs Circular Bharat Accelerator Climate Incubation Hub Circular Innovation Incubation Program Maruti Suzuki – NSRCEL Incubation Program for Mobility Startups Sustainable Mobility Incubation Program Beyond Borders Program Renewable Energy"
     }
   ],
   "findings": {
@@ -73,8 +702,75 @@
     ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "5 months",
+        "evidenceId": "check-duration-223d05a0e7"
+      },
+      {
+        "value": "8 months",
+        "evidenceId": "check-duration-f956eb940c"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-3b06b24a4b"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-c9a5c975b7"
+      },
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-83a3579145"
+      },
+      {
+        "value": "4 months",
+        "evidenceId": "check-duration-180748757f"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-eccf37a6dd"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-44171a8b87"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-8fb6cec11c"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "Based on assessments, selected ventures will receive a grant of INR 10 Lakhs each to support their growth. Network Access Connect with",
+        "evidenceId": "check-deal-7c2960809f"
+      },
+      {
+        "value": "Based on assessments, selected ventures will receive a grant of INR 10 Lakhs each to support their growth. Network Connect with prospects in",
+        "evidenceId": "check-deal-e6018de576"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "10",
+          "currency": "INR",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-7c2960809f"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://nsrcel.org/portfolio/",

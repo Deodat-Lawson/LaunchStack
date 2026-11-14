@@ -1,7 +1,79 @@
 {
   "programId": "orbit-startups",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://orbitventures.com/apply/",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://orbitventures.com/company/videoverse/",
+      "page": "application",
+      "anchor": "VideoVerse A universe of video applications, powered by deep learning",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
       "page": "batches",
@@ -11,17 +83,33 @@
       "origin": "official"
     },
     {
-      "url": "https://orbitventures.com/startups-portfolio/",
-      "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
+      "url": "https://orbitventures.com/faq/",
+      "page": "terms",
+      "anchor": "Application FAQS",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://orbitventures.com/apply/",
-      "page": "application",
-      "anchor": "Apply",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "page": "terms",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -35,18 +123,10 @@
       "origin": "official"
     },
     {
-      "url": "https://orbitventures.com/company/videoverse/",
-      "page": "application",
-      "anchor": "VideoVerse A universe of video applications, powered by deep learning",
+      "url": "https://orbitventures.com/startups-portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
       "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://orbitventures.com/faq/",
-      "page": "terms",
-      "anchor": "Application FAQS",
-      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

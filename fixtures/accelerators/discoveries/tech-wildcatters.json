@@ -1,6 +1,6 @@
 {
   "programId": "tech-wildcatters",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://techwildcatters.com/about-us/",
@@ -11,19 +11,203 @@
       "origin": "official"
     },
     {
-      "url": "https://techwildcatters.com/portfolio/",
-      "page": "portfolio",
-      "anchor": "Portfolio",
+      "url": "https://techwildcatters.com/about-us/info@techwildcatters.com",
+      "page": "details",
+      "anchor": "",
       "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/bc-game-live-dealer-options-enjoy-real-time-interaction-and-immersive-gameplay/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/bc-game-live-dealer-options-enjoy-real-time-interaction-and-immersive-gameplay/info@techwildcatters.com",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/casea-casino-live-casino-experience-enjoy-real-time-gaming-with-top-dealers/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/casea-casino-live-casino-experience-enjoy-real-time-gaming-with-top-dealers/info@techwildcatters.com",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/cupidono-casino-objevte-vyhody-hrani-s-zivymi-dealery-a-bonusy/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/cupidono-casino-objevte-vyhody-hrani-s-zivymi-dealery-a-bonusy/info@techwildcatters.com",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/explore-the-top-live-dealer-games-at-vegas-hero-for-uk-players-in-2026/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/explore-the-top-live-dealer-games-at-vegas-hero-for-uk-players-in-2026/info@techwildcatters.com",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/faqs/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/faqs/info@techwildcatters.com",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/getting-started-with-live-dealer-games-at-bc-game-tips-for-beginners/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/getting-started-with-live-dealer-games-at-bc-game-tips-for-beginners/info@techwildcatters.com",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     },
     {
       "url": "https://techwildcatters.com/mentorship-program/",
       "page": "details",
       "anchor": "Mentorship Program",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/mentorship-program/info@techwildcatters.com",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/portfolio/info@techwildcatters.com",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/q2-2023-portfolio-news/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/q2-2023-portfolio-news/info@techwildcatters.com",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/q3-2023-portfolio-news/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/q3-2023-portfolio-news/info@techwildcatters.com",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/tw-saudi-accelerator-2024/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/tw-saudi-accelerator-2024/info@techwildcatters.com",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/what-to-know-about-bonus-terms-at-non-ukgc-casinos-for-a-rewarding-experience/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://techwildcatters.com/what-to-know-about-bonus-terms-at-non-ukgc-casinos-for-a-rewarding-experience/info@techwildcatters.com",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     }
   ]

@@ -1,103 +1,2992 @@
 {
   "programId": "orbit-startups",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://orbitventures.com/",
-    "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+    "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
     "https://orbitventures.com/apply/",
-    "https://orbitventures.com/faq/"
+    "https://orbitventures.com/company/videoverse/",
+    "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+    "https://orbitventures.com/faq/",
+    "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+    "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+    "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+    "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+    "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+    "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+    "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+    "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+    "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/"
   ],
   "evidence": [
     {
+      "id": "check-duration-025b2ff0bf",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-0298b42ec6",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "to recognise unique visitors. _ga_* 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-03da40e4de",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "is currently not available. __Secure-YNID 6 months Description is currently not available.",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-054e766e7d",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "malicious spam attacks. viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-05a8f1ee8a",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-0b5c6f5663",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-0ba8eb9782",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 6 months A cookie set by YouTube to measure bandwidth",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-0f2f49d27e",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 6 months A cookie set by YouTube to measure bandwidth",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-107391040e",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-11af7fa5fe",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "any personal data. VISITOR_PRIVACY_METADATA 6 months YouTube sets this cookie to store the user's",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-11d9168f3a",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-1321512a77",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-14e6207175",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-154d5dca89",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "category. cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-15e97703bd",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 6 months A cookie set by YouTube to measure bandwidth",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-1602a02bed",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "etc. Cookie Duration Description _ga 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-16391c8a86",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-1a8a56de47",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "category. cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-1b2009c75a",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "to recognise unique visitors. _ga_* 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-1e3042456d",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "etc. Cookie Duration Description _ga 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-1f73920ce2",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "any personal data. VISITOR_PRIVACY_METADATA 6 months YouTube sets this cookie to store the user's",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-1f817595a5",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-1faba354dc",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "Duration Description __Secure-ROLLOUT_TOKEN 6 months Description is currently not available.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-1fe38176b4",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Duration Description __Secure-ROLLOUT_TOKEN 6 months Description is currently not available.",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-20ce8ae460",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "category. cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-22c3b45aa8",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-23b88b36c9",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-24ac50bafd",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-269f7949e2",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "to recognise unique visitors. _ga_* 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-271aaadfb5",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "is currently not available. __Secure-YNID 6 months Description is currently not available.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-2889727dcf",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-2a72db0717",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 6 months A cookie set by YouTube to measure bandwidth",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-2de28b9431",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-2e16f8b486",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-2f9ed1f942",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-302db2a041",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "Duration Description __Secure-ROLLOUT_TOKEN 6 months Description is currently not available.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-32773804e1",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-34e7a5a715",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 6 months A cookie set by YouTube to measure bandwidth",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-35253c0341",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "etc. Cookie Duration Description _ga 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-35f1df55b6",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "to recognise unique visitors. _ga_* 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-360a270416",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-37b0b5332b",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 6 months A cookie set by YouTube to measure bandwidth",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-392ee2e81c",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "to recognise unique visitors. _ga_* 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-3990761a24",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-39e780926e",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "etc. Cookie Duration Description _ga 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-3a867c189e",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-3af4ca97ac",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "etc. Cookie Duration Description _ga 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-3c0efc4667",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "category. cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-3c7958d5e2",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "etc. Cookie Duration Description _ga 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-3e81e19b36",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "category. cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-3fc2523cd9",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-419d4cc245",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Duration Description __Secure-ROLLOUT_TOKEN 6 months Description is currently not available.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-441387e456",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "Duration Description __Secure-ROLLOUT_TOKEN 6 months Description is currently not available.",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-448a3139ed",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "etc. Cookie Duration Description _ga 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-45e936c36b",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-485aa07e90",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Duration Description __Secure-ROLLOUT_TOKEN 6 months Description is currently not available.",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-491f6338bb",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-4b675e38e6",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "category. cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-4dfc046bca",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "to recognise unique visitors. _ga_* 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-4e25f255f4",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "malicious spam attacks. viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-4f6337b7b8",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-536034c678",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "is currently not available. __Secure-YNID 6 months Description is currently not available.",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-544c7f6ab2",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "is currently not available. __Secure-YNID 6 months Description is currently not available.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-554fe34937",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-565a9015b8",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 6 months A cookie set by YouTube to measure bandwidth",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-56ed04e9a7",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-5d7cde92f9",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "any personal data. VISITOR_PRIVACY_METADATA 6 months YouTube sets this cookie to store the user's",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-5e4341d171",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "is currently not available. __Secure-YNID 6 months Description is currently not available.",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-5f0e21d037",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "category. cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-5f971d0751",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "any personal data. VISITOR_PRIVACY_METADATA 6 months YouTube sets this cookie to store the user's",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-600c65ea5b",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-63e483b3fc",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-64b73e74fa",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-64ba3b694b",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 6 months A cookie set by YouTube to measure bandwidth",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-65ab9164de",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "any personal data. VISITOR_PRIVACY_METADATA 6 months YouTube sets this cookie to store the user's",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-667f5d7cb3",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-679ddab9b3",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "is currently not available. __Secure-YNID 6 months Description is currently not available.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-68121b7301",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-68bc060533",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "etc. Cookie Duration Description _ga 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-69a2fe883e",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "to recognise unique visitors. _ga_* 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-6b15893ba7",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "malicious spam attacks. viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-6ca8739101",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-6d492bc698",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "to recognise unique visitors. _ga_* 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-6e8c32dc4f",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "is currently not available. __Secure-YNID 6 months Description is currently not available.",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-706facecca",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "etc. Cookie Duration Description _ga 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-719e92865e",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-7665b64293",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "is currently not available. __Secure-YNID 6 months Description is currently not available.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-769c84a36c",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Duration Description __Secure-ROLLOUT_TOKEN 6 months Description is currently not available.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-771df44021",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "malicious spam attacks. viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-782a941a8f",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "malicious spam attacks. viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-78498e11db",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-7a842b5020",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Duration Description __Secure-ROLLOUT_TOKEN 6 months Description is currently not available.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-7bccc64195",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "any personal data. VISITOR_PRIVACY_METADATA 6 months YouTube sets this cookie to store the user's",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-7d57277e61",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "malicious spam attacks. viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-7e8b7b6a0d",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "is currently not available. __Secure-YNID 6 months Description is currently not available.",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-8057a8dcb3",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "any personal data. VISITOR_PRIVACY_METADATA 6 months YouTube sets this cookie to store the user's",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-82a5564a6d",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "any personal data. VISITOR_PRIVACY_METADATA 6 months YouTube sets this cookie to store the user's",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-83cdb1456f",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "is currently not available. __Secure-YNID 6 months Description is currently not available.",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-85cbdf3c45",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Duration Description __Secure-ROLLOUT_TOKEN 6 months Description is currently not available.",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-86757036af",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "category. cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-870f8f5447",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 6 months A cookie set by YouTube to measure bandwidth",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-87a67656ec",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "any personal data. VISITOR_PRIVACY_METADATA 6 months YouTube sets this cookie to store the user's",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-8acf1d4475",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-8bc13fbbf9",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-8cdb913f6f",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Duration Description __Secure-ROLLOUT_TOKEN 6 months Description is currently not available.",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-8df18537e3",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "any personal data. VISITOR_PRIVACY_METADATA 6 months YouTube sets this cookie to store the user's",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-90d1d7351a",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-90f893e441",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "malicious spam attacks. viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-910bf5f201",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "is currently not available. __Secure-YNID 6 months Description is currently not available.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-92aab67609",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "malicious spam attacks. viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-97ed531610",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "to recognise unique visitors. _ga_* 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-98e6e61cbf",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "etc. Cookie Duration Description _ga 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-996b339648",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-9ae7321597",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "category. cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-9b47b08bbf",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "malicious spam attacks. viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-9c5de4cea6",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9ed5d59712",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-a4f8867000",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a805e9abc9",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "any personal data. VISITOR_PRIVACY_METADATA 6 months YouTube sets this cookie to store the user's",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-ac0c9e5473",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "to recognise unique visitors. _ga_* 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ac57a1b52d",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "into short, focused modules from 3 days to 6 weeks because we know that founders have businesses to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ac71d45870",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "malicious spam attacks. viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ad78eb93e9",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-aeddcdc370",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-b008694a3d",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "etc. Cookie Duration Description _ga 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b1314e9f92",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-b14f172197",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "to recognise unique visitors. _ga_* 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-b404a3b6d7",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-b41069a7ab",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 6 months A cookie set by YouTube to measure bandwidth",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b4332c765c",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-b80df0b39b",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 6 months A cookie set by YouTube to measure bandwidth",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b943938934",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Duration Description __Secure-ROLLOUT_TOKEN 6 months Description is currently not available.",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-b978c9b7f4",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Duration Description __Secure-ROLLOUT_TOKEN 6 months Description is currently not available.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b9d8c91d72",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "to recognise unique visitors. _ga_* 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-bb75fb59cb",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "is currently not available. __Secure-YNID 6 months Description is currently not available.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-bc44c9bcf0",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Duration Description __Secure-ROLLOUT_TOKEN 6 months Description is currently not available.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-bc98e8cc15",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-bddba79041",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "malicious spam attacks. viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-beb841457e",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-c10a39f177",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 6 months A cookie set by YouTube to measure bandwidth",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-c175d91f78",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "etc. Cookie Duration Description _ga 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-c26700b0f3",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "any personal data. VISITOR_PRIVACY_METADATA 6 months YouTube sets this cookie to store the user's",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-c317300312",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-c3408e8464",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-c43c74c35c",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "etc. Cookie Duration Description _ga 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-c4a865a368",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 6 months A cookie set by YouTube to measure bandwidth",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-cb226137e9",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "category. cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-cc77bc07bf",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-cfa4541dae",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-d2353418b1",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d2b40cc194",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "is currently not available. __Secure-YNID 6 months Description is currently not available.",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-d4676304e7",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-d558e044d9",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "category. cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d66a47b53f",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Duration Description __Secure-ROLLOUT_TOKEN 6 months Description is currently not available.",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-d913d84d5f",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "to recognise unique visitors. _ga_* 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d997230545",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "category. cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-dee88ede43",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "etc. Cookie Duration Description _ga 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-dfd4a8ae35",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-e0a31b4ff9",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "etc. Cookie Duration Description _ga 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-e1b34ae5f4",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "malicious spam attacks. viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-e42c283880",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "any personal data. VISITOR_PRIVACY_METADATA 6 months YouTube sets this cookie to store the user's",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e528beee81",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "Duration Description __Secure-ROLLOUT_TOKEN 6 months Description is currently not available.",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-e53be9cd08",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "malicious spam attacks. viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-e73d1797f5",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "any personal data. VISITOR_PRIVACY_METADATA 6 months YouTube sets this cookie to store the user's",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e946dbe22b",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "malicious spam attacks. viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ebe1c150e4",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "category. cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-eec6a444fa",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "any personal data. VISITOR_PRIVACY_METADATA 6 months YouTube sets this cookie to store the user's",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ef29738e2a",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ef916b8908",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-f2b3bbdd8f",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "malicious spam attacks. viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f2e2b09f8d",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "is currently not available. __Secure-YNID 6 months Description is currently not available.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f32c7be4a0",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "category. cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-f3a2b3ba3d",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "to recognise unique visitors. _ga_* 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-f3a3a81861",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f630aad444",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 6 months A cookie set by YouTube to measure bandwidth",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f6ce820a0b",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "is currently not available. __Secure-YNID 6 months Description is currently not available.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f7db2b4582",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "to recognise unique visitors. _ga_* 1 year 1 month 4 days Google Analytics sets this cookie to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-fbd4887ea5",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 6 months A cookie set by YouTube to measure bandwidth",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-fccdfd8418",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "category. cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-fd3e8c3df5",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-fddc10874d",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-00420119ab",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-00841ce2df",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "the interface of the embedded YouTube video player. yt-remote-session-name session The yt-remote-session-name cookie is",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-0183c5f67a",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player preferences using embedded YouTube video. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-03c57f25ad",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "whether the user gets the new or old player interface. yt-remote-cast-available session The yt-remote-cast-available cookie",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-04353f371f",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-059d696a75",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "video player preferences for embedded YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is",
+      "page": "application"
+    },
+    {
+      "id": "check-format-0a606f0417",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "application"
+    },
+    {
+      "id": "check-format-0ca28b3049",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-0cb38f9df6",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "player interface. yt-remote-cast-available session The yt-remote-cast-available cookie is used to store the user's",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-11a7ca3ab7",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-127f0d958e",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "player interface. yt-remote-cast-available session The yt-remote-cast-available cookie is used to store the user's",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-14a9f61ae1",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-15241efa08",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "player interface. yt-remote-cast-available session The yt-remote-cast-available cookie is used to store the user's",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-169ec5ec7e",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period",
+      "page": "application"
+    },
+    {
+      "id": "check-format-19853876da",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-1cf01ca4d7",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player. yt-remote-session-name session The yt-remote-session-name cookie is used by YouTube to store the user's",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-22c2d13ca8",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "casting is available on their YouTube video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie",
+      "page": "application"
+    },
+    {
+      "id": "check-format-235fd0cf59",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player preferences using embedded YouTube video. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-23b1f4cf21",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period cookie is used by YouTube to store the",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-254347a8df",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie is used to store the user's video",
+      "page": "application"
+    },
+    {
+      "id": "check-format-26101b142b",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "casting is available on their YouTube video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-26a54d0dbc",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "casting is available on their YouTube video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie",
+      "page": "application"
+    },
+    {
+      "id": "check-format-2b1d21fa16",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "the interface of the embedded YouTube video player. yt-remote-session-name session The yt-remote-session-name cookie is",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-2b594a18c6",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-2d8915b381",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "casting is available on their YouTube video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-2de345a5c2",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-303520e3a4",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "player interface. yt-remote-cast-available session The yt-remote-cast-available cookie is used to store the user's",
+      "page": "application"
+    },
+    {
+      "id": "check-format-3064fee92b",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period cookie is used by YouTube to store the",
+      "page": "application"
+    },
+    {
+      "id": "check-format-3324d1e259",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is used by YouTube to store user",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-33d1e2e739",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie is used to store the user's video",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-3400d0df9f",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie is used to store the user's video",
+      "page": "application"
+    },
+    {
+      "id": "check-format-35ff7f933b",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "player interface. yt-remote-cast-available session The yt-remote-cast-available cookie is used to store the user's",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-36293077ab",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period cookie is used by YouTube to store the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-3637a772eb",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is used by YouTube to store user",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-3ab7c5d774",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player. yt-remote-session-name session The yt-remote-session-name cookie is used by YouTube to store the user's",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-3b5e7b3d65",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period cookie is used by YouTube to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-3b7b90bf9a",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "video player preferences for embedded YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is",
+      "page": "application"
+    },
+    {
+      "id": "check-format-3baa132744",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-3bc62eac5c",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player preferences for embedded YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-3be150b1d4",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "hands-on STEM learning out of reach. Jusoor Labs is a virtual science lab platform that delivers curriculum-aligned,",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-3c8330a3a4",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player preferences using embedded YouTube video. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-3fb0ddcf23",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player preferences for embedded YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-3ff3ff3e42",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-425d369b6e",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player preferences using embedded YouTube video. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-42cf9123be",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is used by YouTube to store user",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-43700fb3e2",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "personalized discovery, short videos, live commerce, virtual try-ons, secure payments, and global shipping, we deliver",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-43fdd94a68",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "the interface of the embedded YouTube video player. yt-remote-session-name session The yt-remote-session-name cookie is",
+      "page": "application"
+    },
+    {
+      "id": "check-format-477fccd6a4",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-499265cf50",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is used by YouTube to store user",
+      "page": "application"
+    },
+    {
+      "id": "check-format-4d640662e4",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period",
+      "page": "details"
+    },
+    {
+      "id": "check-format-4f3683463b",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "casting is available on their YouTube video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-511b3ebed1",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "the interface of the embedded YouTube video player. yt-remote-session-name session The yt-remote-session-name cookie is",
+      "page": "application"
+    },
+    {
+      "id": "check-format-52ec0a3682",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie is used to store the user's video",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-5521dd9e3e",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie is used to store the user's video",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-55bda283b8",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period cookie is used by YouTube to store the",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-5611cdda23",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player. yt-remote-session-name session The yt-remote-session-name cookie is used by YouTube to store the user's",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-563ad686f0",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "casting is available on their YouTube video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-563c8bf046",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "video player preferences using embedded YouTube video. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "application"
+    },
+    {
+      "id": "check-format-5d025bcc36",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "the interface of the embedded YouTube video player. yt-remote-session-name session The yt-remote-session-name cookie is",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-5d1e3fb492",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "whether the user gets the new or old player interface. yt-remote-cast-available session The yt-remote-cast-available cookie",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-5d7b87f82a",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is used by YouTube to store user",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-5df2bcf1c0",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie is used to store the user's video",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-5ea008a49d",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "whether the user gets the new or old player interface. yt-remote-cast-available session The yt-remote-cast-available cookie",
+      "page": "application"
+    },
+    {
+      "id": "check-format-5f3e91c0e4",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "whether the user gets the new or old player interface. yt-remote-cast-available session The yt-remote-cast-available cookie",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6035d442c9",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is used by YouTube to store user",
+      "page": "details"
+    },
+    {
+      "id": "check-format-615db22114",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "whether the user gets the new or old player interface. yt-remote-cast-available session The yt-remote-cast-available cookie",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-63ccbf766e",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player. yt-remote-session-name session The yt-remote-session-name cookie is used by YouTube to store the user's",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-653247b445",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie is used to store the user's video",
+      "page": "details"
+    },
+    {
+      "id": "check-format-658fd34a01",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "player interface. yt-remote-cast-available session The yt-remote-cast-available cookie is used to store the user's",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-6607e0cbbf",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player preferences using embedded YouTube video. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-67ed427b9f",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is used by YouTube to store user",
+      "page": "application"
+    },
+    {
+      "id": "check-format-69037db134",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period cookie is used by YouTube to store the",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-69b112f8f1",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "the interface of the embedded YouTube video player. yt-remote-session-name session The yt-remote-session-name cookie is",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6a20342c89",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player. yt-remote-session-name session The yt-remote-session-name cookie is used by YouTube to store the user's",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-6a24640700",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period cookie is used by YouTube to store the",
+      "page": "application"
+    },
+    {
+      "id": "check-format-6b77c2ec50",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "whether the user gets the new or old player interface. yt-remote-cast-available session The yt-remote-cast-available cookie",
+      "page": "application"
+    },
+    {
+      "id": "check-format-6cabfb4628",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period cookie is used by YouTube to store the",
+      "page": "application"
+    },
+    {
+      "id": "check-format-6cca008fd2",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "application"
+    },
+    {
+      "id": "check-format-6d9d80aa9d",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "player interface. yt-remote-cast-available session The yt-remote-cast-available cookie is used to store the user's",
+      "page": "application"
+    },
+    {
+      "id": "check-format-6da30e48da",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player preferences using embedded YouTube video. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-6ddd950449",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "video player preferences for embedded YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is",
+      "page": "details"
+    },
+    {
+      "id": "check-format-6ea1291cee",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "player interface. yt-remote-cast-available session The yt-remote-cast-available cookie is used to store the user's",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6ecb668eed",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is used by YouTube to store user",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-707bc54462",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-70b0cc3a58",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-70f60b7f66",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "the interface of the embedded YouTube video player. yt-remote-session-name session The yt-remote-session-name cookie is",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-73e107b5c2",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "the interface of the embedded YouTube video player. yt-remote-session-name session The yt-remote-session-name cookie is",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-76bb0f8417",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "casting is available on their YouTube video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-777b8d7b25",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "the interface of the embedded YouTube video player. yt-remote-session-name session The yt-remote-session-name cookie is",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-7a7ca780ae",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player. yt-remote-session-name session The yt-remote-session-name cookie is used by YouTube to store the user's",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-7ac6b5a20a",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player preferences for embedded YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-7b74ea8ced",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is used by YouTube to store user",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-7bc92f21b9",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie is used to store the user's video",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-7c4092e1bc",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "video player preferences using embedded YouTube video. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "details"
+    },
+    {
+      "id": "check-format-7e091d9d57",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "whether the user gets the new or old player interface. yt-remote-cast-available session The yt-remote-cast-available cookie",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-7e55ea7b1a",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "casting is available on their YouTube video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-806276cf0c",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period",
+      "page": "application"
+    },
+    {
+      "id": "check-format-814d4e3377",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "casting is available on their YouTube video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie",
+      "page": "details"
+    },
+    {
+      "id": "check-format-81bc25bc7b",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is used by YouTube to store user",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-82157f958c",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "player interface. yt-remote-cast-available session The yt-remote-cast-available cookie is used to store the user's",
+      "page": "application"
+    },
+    {
+      "id": "check-format-82c15186b2",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player preferences for embedded YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-84ecd1293b",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "casting is available on their YouTube video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-8cd06a2897",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "video player preferences using embedded YouTube video. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "application"
+    },
+    {
+      "id": "check-format-9458fba0b6",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "player interface. yt-remote-cast-available session The yt-remote-cast-available cookie is used to store the user's",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-955620cd17",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-96f9493310",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player. yt-remote-session-name session The yt-remote-session-name cookie is used by YouTube to store the user's",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-97b6964ef5",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period",
+      "page": "application"
+    },
+    {
+      "id": "check-format-98c47fbad6",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "whether the user gets the new or old player interface. yt-remote-cast-available session The yt-remote-cast-available cookie",
+      "page": "application"
+    },
+    {
+      "id": "check-format-98f636683d",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is used by YouTube to store user",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-9b905ad68c",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period cookie is used by YouTube to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-9db642868d",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period cookie is used by YouTube to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-9df3c87a4e",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "the interface of the embedded YouTube video player. yt-remote-session-name session The yt-remote-session-name cookie is",
+      "page": "details"
+    },
+    {
+      "id": "check-format-a0765638f5",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "application"
+    },
+    {
+      "id": "check-format-a1e8b4f1c5",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period cookie is used by YouTube to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-a39a9fcee2",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "casting is available on their YouTube video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-a493fb1b29",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie is used to store the user's video",
+      "page": "application"
+    },
+    {
+      "id": "check-format-a4a23a1232",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-a5a5f717f3",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is used by YouTube to store user",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-a5d1de70f1",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "video player. yt-remote-session-name session The yt-remote-session-name cookie is used by YouTube to store the user's",
+      "page": "application"
+    },
+    {
+      "id": "check-format-a6d4db0f2f",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie is used to store the user's video",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-a7152f3d86",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-a71e7c929d",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "casting is available on their YouTube video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie",
+      "page": "application"
+    },
+    {
+      "id": "check-format-a7ba9f997d",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "whether the user gets the new or old player interface. yt-remote-cast-available session The yt-remote-cast-available cookie",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-a857c2ebe1",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-aaf01ffd7f",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player preferences for embedded YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-ac921c81a7",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player. yt-remote-session-name session The yt-remote-session-name cookie is used by YouTube to store the user's",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-ad348e9def",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "video player preferences using embedded YouTube video. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "application"
+    },
+    {
+      "id": "check-format-af4ce0d5d9",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "the interface of the embedded YouTube video player. yt-remote-session-name session The yt-remote-session-name cookie is",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-af9ec338e2",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player preferences using embedded YouTube video. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-aff1a01df3",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie is used to store the user's video",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-b380248cda",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player preferences for embedded YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-b391c7a4ef",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie is used to store the user's video",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-b7c3980f7b",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player preferences for embedded YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-b90734ccc2",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "player interface. yt-remote-cast-available session The yt-remote-cast-available cookie is used to store the user's",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-b9ca706c41",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "whether the user gets the new or old player interface. yt-remote-cast-available session The yt-remote-cast-available cookie",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-ba3a4dc170",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-badf9db239",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "the interface of the embedded YouTube video player. yt-remote-session-name session The yt-remote-session-name cookie is",
+      "page": "application"
+    },
+    {
+      "id": "check-format-bb6407cff4",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "whether the user gets the new or old player interface. yt-remote-cast-available session The yt-remote-cast-available cookie",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-bcdcf6adc9",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player. yt-remote-session-name session The yt-remote-session-name cookie is used by YouTube to store the user's",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-be0db9be6c",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "casting is available on their YouTube video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-c078352fa3",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie is used to store the user's video",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-c0c1ab5e37",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is used by YouTube to store user",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-c1734cf0d6",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "video player. yt-remote-session-name session The yt-remote-session-name cookie is used by YouTube to store the user's",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c310cc8317",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player preferences for embedded YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-c6df0c072e",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-c776806aaf",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player preferences for embedded YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-c7b333d6b2",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "whether the user gets the new or old player interface. yt-remote-cast-available session The yt-remote-cast-available cookie",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-cb7791dbc3",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "video player preferences for embedded YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is",
+      "page": "application"
+    },
+    {
+      "id": "check-format-cc0bf75500",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "whether the user gets the new or old player interface. yt-remote-cast-available session The yt-remote-cast-available cookie",
+      "page": "details"
+    },
+    {
+      "id": "check-format-cd4b7e3ccf",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-cdcdeca6cd",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "casting is available on their YouTube video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-cdd38e316f",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player. yt-remote-session-name session The yt-remote-session-name cookie is used by YouTube to store the user's",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-d31c6d2913",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is used by YouTube to store user",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d463559661",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d4677b4453",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player. yt-remote-session-name session The yt-remote-session-name cookie is used by YouTube to store the user's",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d4d6cfc59c",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player preferences for embedded YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-d50205500e",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie is used to store the user's video",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-d557804056",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "player interface. yt-remote-cast-available session The yt-remote-cast-available cookie is used to store the user's",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d6c93d06ff",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "video player. yt-remote-session-name session The yt-remote-session-name cookie is used by YouTube to store the user's",
+      "page": "application"
+    },
+    {
+      "id": "check-format-d7590fffa2",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "whether the user gets the new or old player interface. yt-remote-cast-available session The yt-remote-cast-available cookie",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-d8584e44cd",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period cookie is used by YouTube to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-dad6b5f3e7",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-dcb4a500a7",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player preferences for embedded YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-e1613b1e63",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "user's video preferences using embedded YouTube videos. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-e39f0be3b1",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "and Sanabil ecosystem. Startups will participate in an in-person market orientation in Riyadh and receive hands-on support",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-e3eaf38627",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie is used to store the user's video",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-e44e301f57",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "casting is available on their YouTube video player. yt-remote-cast-installed session The yt-remote-cast-installed cookie",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-e7b7d4dad5",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period cookie is used by YouTube to store the",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-e8b060926f",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "player interface. yt-remote-cast-available session The yt-remote-cast-available cookie is used to store the user's",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-eadd21c0a4",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player preferences using embedded YouTube video. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-eb4a5c3f35",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "player interface. yt-remote-cast-available session The yt-remote-cast-available cookie is used to store the user's",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-ed582ee246",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "the interface of the embedded YouTube video player. yt-remote-session-name session The yt-remote-session-name cookie is",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-f115291bd3",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period cookie is used by YouTube to store the",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-f1f9554bf1",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage",
+      "excerpt": "player interface. yt-remote-cast-available session The yt-remote-cast-available cookie is used to store the user's",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f3f27e1773",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player preferences using embedded YouTube video. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-f497595f14",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "YouTube videos. yt-remote-fast-check-period session The yt-remote-fast-check-period cookie is used by YouTube to store the",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-f6331ace8c",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "the interface of the embedded YouTube video player. yt-remote-session-name session The yt-remote-session-name cookie is",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-f64c215499",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "whether the user gets the new or old player interface. yt-remote-cast-available session The yt-remote-cast-available cookie",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-f70761ee78",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "video player. yt-remote-session-name session The yt-remote-session-name cookie is used by YouTube to store the user's",
+      "page": "application"
+    },
+    {
+      "id": "check-format-fb47e5e3b3",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "video player preferences using embedded YouTube video. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-fc84674a50",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "the interface of the embedded YouTube video player. yt-remote-session-name session The yt-remote-session-name cookie is",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-fcae010a27",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "video player preferences using embedded YouTube video. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-ff3eda5026",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "YouTube videos. yt-remote-session-app session The yt-remote-session-app cookie is used by YouTube to store user",
+      "page": "application"
+    },
+    {
+      "id": "check-location-91af92ca8c",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "etc. In India alone, our startups are headquartered in Bangalore, Mumbai, Gurgaon, Ghaziabad, New",
+      "page": "terms"
+    },
+    {
       "id": "check-name-b0a435c606",
       "url": "https://orbitventures.com/",
-      "title": "Orbit Startups — homepage checked by scrape.py",
+      "title": "Orbit Startups — homepage",
       "excerpt": "Jan 05, 2023 William Bao Bean, Managing General Partner of Orbit Startups, on investing in the GCC region Blog Nov 04, 2026 Data",
       "page": "details"
     },
     {
-      "id": "check-portfolio-640b5f83ca",
-      "url": "https://orbitventures.com/apply/",
-      "title": "Orbit Startups — application page checked by scrape.py",
-      "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
-      "page": "application"
-    },
-    {
-      "id": "check-portfolio-bd9ad71a8c",
-      "url": "https://orbitventures.com/faq/",
-      "title": "Orbit Startups — terms page checked by scrape.py",
+      "id": "check-portfolio-0143eca01d",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
       "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
       "page": "terms"
     },
     {
+      "id": "check-portfolio-0267a20c3c",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-08c82185a5",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-1c2f323fda",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-34aa9f942b",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-640b5f83ca",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-6821bda619",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-acf63b9284",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b5e3218970",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-bd9ad71a8c",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c6a1a69c1c",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-c77314b0b3",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-ed7d39c4da",
       "url": "https://orbitventures.com/",
-      "title": "Orbit Startups — homepage checked by scrape.py",
+      "title": "Orbit Startups — homepage",
       "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-ef639a2676",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-fd29349ad0",
       "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
-      "title": "Orbit Startups — batches page checked by scrape.py",
+      "title": "Orbit Startups — batches page",
       "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
       "page": "batches"
     },
     {
       "id": "check-route-0d905c2b95",
       "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
-      "title": "Orbit Startups — batches page checked by scrape.py",
+      "title": "Orbit Startups — batches page",
       "excerpt": "Apply to Orbit Ventures → https://orbitventures.com/apply/",
       "page": "batches"
     },
     {
+      "id": "check-route-158410d106",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Apply → https://orbitventures.com/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1b77d5178a",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Apply to Orbit Ventures → https://orbitventures.com/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-242dc713e8",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Apply to Orbit Ventures → https://orbitventures.com/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-382da0904a",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Apply to Orbit Ventures → https://orbitventures.com/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-3c773f8e05",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Apply → https://orbitventures.com/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-41fbf3acf0",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Apply to Orbit Ventures → https://orbitventures.com/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-4a200afa8e",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Apply → https://orbitventures.com/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-4cbff93285",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "Apply → https://orbitventures.com/apply/",
+      "page": "application"
+    },
+    {
       "id": "check-route-5efa20b3d2",
       "url": "https://orbitventures.com/",
-      "title": "Orbit Startups — homepage checked by scrape.py",
+      "title": "Orbit Startups — homepage",
       "excerpt": "Apply to Orbit Ventures → https://orbitventures.com/apply/",
       "page": "details"
     },
     {
       "id": "check-route-64c894e353",
       "url": "https://orbitventures.com/",
-      "title": "Orbit Startups — homepage checked by scrape.py",
+      "title": "Orbit Startups — homepage",
       "excerpt": "Apply → https://orbitventures.com/apply/",
       "page": "details"
     },
     {
+      "id": "check-route-7300bf8a90",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "Apply to Orbit Ventures → https://orbitventures.com/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7dedc4b5c5",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Apply → https://orbitventures.com/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-9497deb7e0",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Apply → https://orbitventures.com/apply/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-9940704ffa",
       "url": "https://orbitventures.com/faq/",
-      "title": "Orbit Startups — terms page checked by scrape.py",
+      "title": "Orbit Startups — terms page",
       "excerpt": "here → https://orbitventures.com/apply/",
       "page": "terms"
     },
     {
+      "id": "check-route-a179a34a37",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Apply → https://orbitventures.com/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-a802922eec",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Apply → https://orbitventures.com/apply/",
+      "page": "batches"
+    },
+    {
       "id": "check-route-ac107e7a68",
       "url": "https://orbitventures.com/faq/",
-      "title": "Orbit Startups — terms page checked by scrape.py",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Apply to Orbit Ventures → https://orbitventures.com/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-aeacdd31c4",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Apply to Orbit Ventures → https://orbitventures.com/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b6e4abadc9",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Apply → https://orbitventures.com/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-bd903097d5",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "Apply to Orbit Ventures → https://orbitventures.com/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c4ae6940c3",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "title": "Orbit Startups — application page",
+      "excerpt": "Apply → https://orbitventures.com/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ccd8e11fc3",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Apply to Orbit Ventures → https://orbitventures.com/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-dd1b878886",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "title": "Orbit Startups — terms page",
       "excerpt": "Apply to Orbit Ventures → https://orbitventures.com/apply/",
       "page": "terms"
     },
     {
       "id": "check-route-e6174ad004",
       "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
-      "title": "Orbit Startups — batches page checked by scrape.py",
+      "title": "Orbit Startups — batches page",
       "excerpt": "Apply → https://orbitventures.com/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-e89b2db13c",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Apply to Orbit Ventures → https://orbitventures.com/apply/",
       "page": "batches"
     },
     {
       "id": "check-route-ea8f93b4dc",
       "url": "https://orbitventures.com/faq/",
-      "title": "Orbit Startups — terms page checked by scrape.py",
+      "title": "Orbit Startups — terms page",
       "excerpt": "Apply → https://orbitventures.com/apply/",
       "page": "terms"
     },
     {
       "id": "check-route-ea9e3f8a6f",
       "url": "https://orbitventures.com/",
-      "title": "Orbit Startups — homepage checked by scrape.py",
+      "title": "Orbit Startups — homepage",
       "excerpt": "VideoVerse A universe of video applications, powered by deep learning → https://orbitventures.com/company/videoverse/",
       "page": "details"
+    },
+    {
+      "id": "check-route-fca347a086",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "title": "Orbit Startups — terms page",
+      "excerpt": "Apply → https://orbitventures.com/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-fde747cac4",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "title": "Orbit Startups — batches page",
+      "excerpt": "Apply to Orbit Ventures → https://orbitventures.com/apply/",
+      "page": "batches"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-a5d9a4e743",
+      "url": "https://orbitventures.com/",
+      "page": "details",
+      "excerpt": "Home Page - Orbit Ventures Skip to content Check out Sanabil Accelerator by Orbit Batch 4 Demo day! Why Us Portfolio Partners Mentors Team Jobs News Events Apply Invest Follow Us Apply SCALING BREAKTHROUGH TECHNOLOGIES ACROSS EMERGING AND FRONTIER MARKETS LEARN MORE Photo: Pakistan’s B2B marketplace Dastgyr. YourStory Jan 05, 2023 William Bao Bean, Managing General Partner of Orbit Startups, on investing in the GCC region Blog Nov 04, 2026 Data Isn’t the Strategy. The Question Is. News Oct 22, 2026 The Emerging Markets Playbook: Why Localization Wins Over Replication News Oct 05, 2026 OmicsBank Raises $2.25M to Build Clinical Data Infrastructure for Global Healthcare and AI News Sep 24, 2026 Why Blitzscaling Breaks in Emerging Markets Sep 01, 2026 Sanabil Accelerator by Orbit Selects 13 Companies for Batch 4 ALL NEWS An emerging-market growth engine $75M invested $728M raised $125M Total Value Managed 575 Mentors 260 Companies 212 corporate partners Join our Orbit in high-growth markets Orbit Ventures invests in breakthrough companies and helps them scale across Asia, Africa, the Middle East, and Latin America—where there are the most opportunities for sustained, profitable high growth. Break away from the competition Our roots in China, India and Southeast Asia have proved that less successful companies are caught up in much longer iteration cycles and lose out on speed. In"
+    },
+    {
+      "id": "check-page-e13723e5d7",
+      "url": "https://orbitventures.com/apply-to-sanabil-accelerator-by-orbit/",
+      "page": "application",
+      "excerpt": "Apply to Sanabil Accelerator by Orbit - Orbit Ventures Skip to content Check out Sanabil Accelerator by Orbit Batch 4 Demo day! Why Us Portfolio Partners Mentors Team Jobs News Events Apply Invest Follow Us Apply Back to the Sanabil Accelerator by Orbit Program Apply to Sanabil Accelerator by Orbit Learn Why Us Mentors Team Press & Media Apply Apply to Orbit Ventures Application FAQS Partner Portfolio Innovation Case Studies Get in Touch Participate News Events Jobs Invest Newsletter Copyright ©2026 Orbit Ventures Pte. All Rights Reserved. Orbit Startups™ is a trademark of Orbit. All other trademarks are of their respective owners Cookie Policy Privacy Statement Terms of Use Communication Policy Disclaimer Follow Us We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits. By clicking “Accept”, you consent to the use of ALL the cookies. However you may visit Cookie Settings to provide a controlled consent. Cookie settings ACCEPT Manage consent Close Privacy Overview This website uses cookies to improve your experience while you navigate through the website. Out of these cookies, the cookies that are categorized as necessary are stored on your browser as they are essential for the working of basic functionalities of the website. We also use third-party cookies that help us analyze and understand how you use this"
+    },
+    {
+      "id": "check-page-3750f41911",
+      "url": "https://orbitventures.com/apply/",
+      "page": "application",
+      "excerpt": "Apply to Orbit Ventures - Orbit Ventures Skip to content Check out Sanabil Accelerator by Orbit Batch 4 Demo day! Why Us Portfolio Partners Mentors Team Jobs News Events Apply Invest Follow Us Apply Apply to Orbit Ventures Learn Why Us Mentors Team Press & Media Apply Apply to Orbit Ventures Application FAQS Partner Portfolio Innovation Case Studies Get in Touch Participate News Events Jobs Invest Newsletter Copyright ©2026 Orbit Ventures Pte. All Rights Reserved. Orbit Startups™ is a trademark of Orbit. All other trademarks are of their respective owners Cookie Policy Privacy Statement Terms of Use Communication Policy Disclaimer Follow Us We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits. By clicking “Accept”, you consent to the use of ALL the cookies. However you may visit Cookie Settings to provide a controlled consent. Cookie settings ACCEPT Manage consent Close Privacy Overview This website uses cookies to improve your experience while you navigate through the website. Out of these cookies, the cookies that are categorized as necessary are stored on your browser as they are essential for the working of basic functionalities of the website. We also use third-party cookies that help us analyze and understand how you use this website. These cookies will be stored in your browser only with your consent."
+    },
+    {
+      "id": "check-page-f5ad8f71ed",
+      "url": "https://orbitventures.com/company/videoverse/",
+      "page": "application",
+      "excerpt": "VideoVerse - Orbit Ventures Skip to content Check out Sanabil Accelerator by Orbit Batch 4 Demo day! Why Us Portfolio Partners Mentors Team Jobs News Events Apply Invest Follow Us Apply A universe of video applications, powered by deep learning GET CONNECTED vverse.ai Team Saket Dandotia COO Alok Patil CTO Vinayak Shrivastav CEO & Founder VideoVerse Company details VideoVerse is a video technology company that encapsulates an ecosystem of smart AI-based video editing suite for all enterprise and individual content creators. India United States Growth Series A(+) AI & Machine Learning Creator Economy Media Orbit Startups – Chinaccelerator 18 Company News VideoVerse acquires Reely.ai for AI-driven video creation – VentureBeat April 11, 2023 VentureBeat Smart video editing revolutionises sports watching – The Hindu September 12, 2022 The_Hindu VideoVerse Announces the Launch of Powerful Cloud-based Video Editing Tool … – Yahoo Finance August 22, 2022 Yahoo Finance Videoverse is an upcoming adventure that’s a love letter to social gaming networks August 19, 2022 Destructoid Toch.ai Raises Close to $12 Million in Series A to Transform Digital Video Content Industry October 7, 2021 Yahoo Finance See the pitch deck that helped a video-editing startup raise $12 million to take on Adobe and expand into the US October 6, 2021 markets.businessinsider.com Chinaccelerator names 6 SaaS"
+    },
+    {
+      "id": "check-page-29f6db3d81",
+      "url": "https://orbitventures.com/ai-content-editing-solutions-platform-videoverse-secures-45m-growth-investment/",
+      "page": "terms",
+      "excerpt": "AI content editing solutions platform VideoVerse secures $45m growth investment - Orbit Ventures Skip to content Check out Sanabil Accelerator by Orbit Batch 4 Demo day! Why Us Portfolio Partners Mentors Team Jobs News Events Apply Invest Follow Us Apply Back to news articles AI content editing solutions platform VideoVerse secures $45m growth investment Ching-Ping Lin March 13, 2024 VideoVerse announced that it has secured $45 million to support its mission of transforming the way content owners create, distribute, and monetize their content. VideoVerse specializes in enabling businesses to create and monetize short-form content at scale. The funding will be used to further enhance its AI-powered platform that identifies key content, generates clips, and distributes them across various channels in real-time. There is an increasing demand for short-form videos and quick highlights across all media channels. Content owners often struggle to meet these needs due to the high cost and slow process of video editing. One of VideoVerse’s products, Magnifi, is designed to address this issue by allowing businesses to reduce their video production costs by approximately 70% and production time up to 90%. The SaaS platform developed by VideoVerse uses artificial intelligence, machine learning, and computer vision to quickly create short-form content and highlights from full-length video"
+    },
+    {
+      "id": "check-page-9577a13d38",
+      "url": "https://orbitventures.com/faq/",
+      "page": "terms",
+      "excerpt": "Frequently Asked Questions - Orbit Ventures Skip to content Check out Sanabil Accelerator by Orbit Batch 4 Demo day! Why Us Portfolio Partners Mentors Team Jobs News Events Apply Invest Follow Us Apply Frequently Asked Questions What are your investment terms? We take 6% common equity through a Stock Purchase Agreement (SPA) and invest US$180,000, of which US$50K is the program cost, which we pay on the startup’s behalf to the program. The investment can be structured though different models of convertible instruments or by directly participating in an equity round. Sweet, what about perks? Enjoy over US$2 million in perks and discounts from AWS, Google, HubSpot and many more. Where do your startups come from? All over the world really. Some headquarter cities: Singapore, Bangkok, New York, Moscow, Jakarta, Taipei, Buenos Aires, Amsterdam, Hong Kong, Seoul, etc. In India alone, our startups are headquartered in Bangalore, Mumbai, Gurgaon, Ghaziabad, New Delhi, and Kolkata. How is the program structured? Our program is divided into short, focused modules from 3 days to 6 weeks because we know that founders have businesses to run. We want startups to get the resources they need when they need it, not on a schedule convenient to us. In Orbit, startups become permanent members of a community of in-house experts, mentors, founders and corporate partners who help them 1:1 on all"
+    },
+    {
+      "id": "check-page-1dd6871375",
+      "url": "https://orbitventures.com/from-dunes-to-data-streams-charting-menas-investment-trends/",
+      "page": "terms",
+      "excerpt": "From Dunes to Data Streams: Charting MENA’s Investment Trends - Orbit Ventures Skip to content Check out Sanabil Accelerator by Orbit Batch 4 Demo day! Why Us Portfolio Partners Mentors Team Jobs News Events Apply Invest Follow Us Apply Back to news articles From Dunes to Data Streams: Charting MENA’s Investment Trends Orbit Ventures Team May 9, 2025 When the spotlights hit the stage at Orbit 8 Demo Day, it wasn’t just another lineup of pitches — it was a live blueprint of how capital is reshaping the Middle East and North Africa. Three leading investors peeled back the curtain on where money is flowing, why it’s moving, and how today’s founders can ride the next wave of opportunity. The conversation kicked off with Roo Rogers of Utopia Capital, whose lens spans Africa to Southeast Asia — and now, increasingly, the Gulf. Roo recounted how Kenyan e-commerce start-up, Powered by People , propelled by a female founder’s vision to digitize artisanal manufacturing, rewrote the script on supply chains. By uniting dozens of small producer cooperatives into a single digital marketplace, this venture didn’t just unlock liquidity for women-led workshops — it rewired the routes through which global fashion flows. “What began as a five‑person operation is now scaling from Nairobi to Dhaka,” Roo reflected, underscoring how local ingenuity can leap continents in a few lines of code. Yet the"
+    },
+    {
+      "id": "check-page-313bd903bb",
+      "url": "https://orbitventures.com/orbit-startups-and-sanabil-investments-launch/",
+      "page": "terms",
+      "excerpt": "Orbit Startups and Sanabil Investments Launch Accelerator for Early-Stage Tech Innovation Across Saudi Arabia and MENA - Orbit Ventures Skip to content Check out Sanabil Accelerator by Orbit Batch 4 Demo day! Why Us Portfolio Partners Mentors Team Jobs News Events Apply Invest Follow Us Apply Back to news articles Orbit Startups and Sanabil Investments Launch Accelerator for Early-Stage Tech Innovation Across Saudi Arabia and MENA Orbit Ventures Team January 7, 2025 Sanabil Accelerator by Orbit to catalyze early-stage startups in high-growth sectors in Saudi Arabia and the MENA region Orbit Startups (Orbit) and Sanabil Investments announce the launch of a new accelerator program, Sanabil Accelerator by Orbit, to cultivate early stage startups from the Saudi Arabia and the Middle East and North Africa (MENA) region as well as global startups seeking to expand into the region. The program will focus on key sectors including fintech, healthcare, e-commerce, mobility and logistics, among others. The accelerator partnership marks a significant milestone for Orbit, with 45 portfolio companies in the MENA region since 2020, deepening its commitment to economic transformation in emerging markets through technology and entrepreneurship, and advancing Saudi Arabia’s position as a global hub for digital innovation. Sanabil Accelerator by Orbit is a continuation of Sanabil’s focus on"
+    },
+    {
+      "id": "check-page-3d3ae12e4a",
+      "url": "https://orbitventures.com/peter-thiel-backs-priceoye-in-first-pakistan-investment/",
+      "page": "terms",
+      "excerpt": "Peter Thiel backs PriceOye in first Pakistan investment - Orbit Ventures Skip to content Check out Sanabil Accelerator by Orbit Batch 4 Demo day! Why Us Portfolio Partners Mentors Team Jobs News Events Apply Invest Follow Us Apply Back to news articles Peter Thiel backs PriceOye in first Pakistan investment Orbit Ventures Team June 16, 2023 Pakistani startup PriceOye, which has taken inspiration from China’s JD.com and India’s Flipkart to build a managed marketplace of electronics products, has raised $7.9M in total from a diverse group of investors, including renowned entrepreneur Peter Thiel, co-founder of PayPal. This is Thiel’s first investment in Pakistan. The seed funding round was led by JAM Fund—a venture capital firm founded by Justin Mateen, the creator of Tinder. Prior to this round, PriceOye had successfully raised pre-seed funding from SOSV’s Orbit Startups, Fatima Gobi Ventures and Artistic Ventures. Adnan Shaffi, co-founder and CEO of PriceOye, told TechCrunch that the startup has already served 45 million unique users in Pakistan over the past two years, representing a significant 37.5% of the country’s total internet user base. Notably, 35% of its orders originate from tier-two and tier-three cities across the country, showcasing its broad reach and popularity. The duo looked at several startups in Indonesia and India and found the Asian markets were following"
+    },
+    {
+      "id": "check-page-3a2d61a8dd",
+      "url": "https://orbitventures.com/11-startups-from-batch-2-of-the-sanabil-accelerator-by-orbit-to-pitch-in-riyadh/",
+      "page": "batches",
+      "excerpt": "11 Startups from Batch 2 of the Sanabil Accelerator by Orbit to Pitch in Riyadh - Orbit Ventures Skip to content Check out Sanabil Accelerator by Orbit Batch 4 Demo day! Why Us Portfolio Partners Mentors Team Jobs News Events Apply Invest Follow Us Apply Back to news articles 11 Startups from Batch 2 of the Sanabil Accelerator by Orbit to Pitch in Riyadh Orbit Ventures Team August 28, 2025 Sanabil Accelerator by Orbit announces its second Demo Day, spotlighting 11 startups from Saudi Arabia, UAE, Qatar, Egypt, Pakistan, and Hong Kong. These startups are addressing key problems in the MENA region and building solutions in education, mobility, enterprise software, logistics, e-commerce, proptech, and fintech. They will present at the Sanabil Hub in Riyadh on September 10, 2025. The Sanabil Accelerator by Orbit is a partnership between Sanabil Investments and Orbit Startups that cultivates early-stage startups from Saudi Arabia and the broader MENA region, as well as global startups expanding into the region. The program offers each startup $100,000 in initial funding with access to follow-on investment. During the four-month intensive program, startups focus on scaling sales, refining marketing strategies, and accelerating product development while connecting with corporates, governments, and investors. Beyond Demo Day, startups gain lifetime access to Sanabil and Orbit’s"
+    },
+    {
+      "id": "check-page-2c89007431",
+      "url": "https://orbitventures.com/9-startups-to-watch-from-sanabil-accelerator-by-orbits-inaugural-batch/",
+      "page": "batches",
+      "excerpt": "9 Startups to Watch from Sanabil Accelerator by Orbit's Inaugural Batch - Orbit Ventures Skip to content Check out Sanabil Accelerator by Orbit Batch 4 Demo day! Why Us Portfolio Partners Mentors Team Jobs News Events Apply Invest Follow Us Apply Back to news articles 9 Startups to Watch from Sanabil Accelerator by Orbit’s Inaugural Batch Orbit Ventures Team February 24, 2025 The inaugural Demo Day of the Sanabil Accelerator by Orbit, backed by Sanabil Investments and Orbit Startups, spotlights its first batch of nine early-stage startups in Riyadh, Saudi Arabia. These early-stage startups span a diverse range of high-growth sectors, including logistics, AI, enterprise SaaS, healthcare, media, wellness, proptech, and e-commerce. Orbit and Sanabil recently announced the launch of this new accelerator program to cultivate early-stage startups from Saudi Arabia and the Middle East and North Africa (MENA) region, as well as global startups seeking to expand into the region. The program will focus on key sectors including fintech, healthcare, e-commerce, mobility and logistics, among others. The partnership marks a significant milestone for Orbit, with 45 portfolio companies in the MENA region since 2020, deepening its commitment to economic transformation in emerging markets and advancing Saudi Arabia’s position as a global hub for digital innovation. The program offers each"
+    },
+    {
+      "id": "check-page-9889f9b6bb",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-1-demo-day/",
+      "page": "batches",
+      "excerpt": "Sanabil Accelerator by Orbit Cohort 1 Demo Day Skip to content Check out Sanabil Accelerator by Orbit Batch 4 Demo day! Why Us Portfolio Partners Mentors Team Jobs News Events Apply Invest Follow Us Apply Back to events Sanabil Accelerator by Orbit Batch 1 Demo Day February 20, 2025 Get the first look at 9 breakthrough startups from Saudi Arabia, Egypt, Morocco, Kazakhstan and Pakistan in proptech, adtech, healthtech, e-commerce and more at the Sanabil Accelerator by Orbit Batch 1 investor-exclusive Demo Day in Riyadh. Participating Startups Boowme Boowme is a holistic relationship building platform for the Arab world. Boowme combines personal and marriage coaching with online matchmaking so Arab singles can find their life partner aligned with Arab culture and values. Book Time Pitch Deck Demo Day Pitch Kitche nara Kitchenara is MENA’s first video-based food discovery and ordering platform, where users can watch, order, and enjoy their favorite meals effortlessly. Book Time Pitch Deck Demo Day Pitch Netos Netos bridges Business, IT, and Finance with best-in-class data and analytics to quickly deliver actionable financial insights for IT networks in a single portal. Book Time Pitch Deck Demo day Pitch Neulin k Neulink is an end-to-end supply chain management solution for pharmacies, leveraging an AI decision engine to empower owners and pharmacists with data-driven insights"
+    },
+    {
+      "id": "check-page-63c478aa3d",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-2-demo-day/",
+      "page": "batches",
+      "excerpt": "Sanabil Accelerator by Orbit Cohort 1 Demo Day Skip to content Check out Sanabil Accelerator by Orbit Batch 4 Demo day! Why Us Portfolio Partners Mentors Team Jobs News Events Apply Invest Follow Us Apply Back to events Sanabil Accelerator by Orbit Batch 2 Demo Day September 10, 2025 September 10, 2025, 12:00 - 12:00 AM Get the first look at 11 breakthrough startups from Saudi Arabia, Hong Kong, Pakistan, UAE and Egypt in education, mobility, enterprise software, logistics, e-commerce, proptech, and fintech at the Sanabil Accelerator by Orbit Batch 2 investor-exclusive Demo Day in Riyadh. Participating Startups Arabius Nearly 2 billion people are learning a new language, but most fail due to tools that are costly, rigid, or ineffective. Arabius offers immersive Saudi Arabic language training through a mobile app and live sessions with trained native speakers. By combining cultural context with practical dialect mastery, Arabius makes language learning flexible, affordable, and effective—especially for professionals looking to advance their careers in the Kingdom. Book Time Demo Day Pitch Pitch Deck Bus14 In Egypt and Saudi Arabia, school transport is often unsafe, expensive, and unreliable—leaving parents anxious and schools overwhelmed. Bus14 is a tech-powered platform that provides safe, affordable, and dependable daily rides for students. With real-time tracking, vetted"
+    },
+    {
+      "id": "check-page-72112510e0",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-3-demo-day-january-28-2026/",
+      "page": "batches",
+      "excerpt": "Sanabil Accelerator by Orbit Batch 3 Demo Day - Orbit Ventures Skip to content Check out Sanabil Accelerator by Orbit Batch 4 Demo day! Why Us Portfolio Partners Mentors Team Jobs News Events Apply Invest Follow Us Apply Back to events Sanabil Accelerator by Orbit Batch 3 Demo Day January 28, 2026 7:00PM Get a first look at 11 promising startups from Pakistan, Hong Kong, Egypt, Canada, Saudi Arabia, and the UAE, spanning ad tech, esports and gaming tech, travel tech, food tech and AI, ed tech, B2C e-commerce and health and wellness, AI infrastructure, proptech, and auto tech, at the investor-exclusive Sanabil Accelerator by Orbit Batch 3 Demo Day in Riyadh. Participating Startups Calcart Brands invest billions in out-of-home advertising each year, yet most campaigns offer little visibility into audience engagement. Calcart transforms ride-hailing vehicles into digital advertising screens, enabling brands to deliver targeted, data-driven campaigns directly to passengers. Calcart gives advertisers real-time insights and stronger engagement in one of the most underutilized moments of consumer attention. Book Time Pitch Deck Demo Day Pitch Chaosground Gaming studios invest heavily in user acquisition, yet most installs fail to translate into lasting engagement or revenue. ChaosGround equips studios with a platform that delivers personalized missions, loyalty rewards, and"
+    },
+    {
+      "id": "check-page-9939115386",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "page": "batches",
+      "excerpt": "Sanabil Accelerator by Orbit Batch 4 Demo Day - Orbit Ventures Skip to content Check out Sanabil Accelerator by Orbit Batch 4 Demo day! Why Us Portfolio Partners Mentors Team Jobs News Events Apply Invest Follow Us Apply Back to events Sanabil Accelerator by Orbit Batch 4 Demo Day September 9, 2026, 7:00 - 11:00 PM Get a first look at 13 early-stage technology companies from India, Nigeria, Egypt, the United Kingdom, the United States, the UAE, and Mexico, building across fintech, AI, healthcare, commerce and creator economy, industrial technology, and sustainable food systems at the investor-exclusive Sanabil Accelerator by Orbit Batch 4 Demo Day in Riyadh. Register Here Participating Startups Espotz Helping brands build local visibility without high CAC by tapping into regional esports fan bases Book Time Demo Day Pitch Fuspay Enabling African businesses to embed interoperable financial services with an off-the shelf toolkit Book Time Demo Day Pitch Masroofi Helping parents in Egypt teach their children to manage money with full visibility and control over their spending Book Time Demo Day Pitch Influsense Creator discovery platform helping SME brands find up and coming influencers before they become outdated or unaffordable Book Time Demo Day Pitch Taiseer Sharia-compliant savings platform enabling Egyptian and Saudi consumers to preserve wealth in gold without high"
     }
   ],
   "findings": {
@@ -122,8 +3011,46 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "11 months",
+        "evidenceId": "check-duration-20ce8ae460"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-e42c283880"
+      },
+      {
+        "value": "1 month",
+        "evidenceId": "check-duration-448a3139ed"
+      },
+      {
+        "value": "6",
+        "evidenceId": "check-duration-ac57a1b52d"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-cc0bf75500"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-e39f0be3b1"
+      }
+    ],
+    "location": [
+      {
+        "value": "Bangalore",
+        "evidenceId": "check-location-91af92ca8c"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://orbitventures.com/startups-portfolio/",

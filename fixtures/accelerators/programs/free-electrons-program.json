@@ -9,14 +9,14 @@
   "websiteUrl": "https://freeelectrons.org/program/",
   "applyUrl": "https://www.f6s.com/free-electrons-2027/apply",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Insights & Updates Topics All Applications Ecosystem Partners Energy Insights Program Modules Research Startups Success Stories Utilities October 29, 2026 Utilities To drive innovation and create value, utilities today need to do more than find the next breakthrough technology. Just as important is the ability ... Read more September 29, 2026 Utilities The global energy transition is no longer a distant target; it is an active, fast-moving transformation demanding rapid technological evolution, bold ... Read more September 17, 2026 Program Modules Free Electrons 2026 Master Module: Turning Collaboration into Action Against the unmistakable backdrop of London, the Free Electrons 2026 Master ... Read more August 27, 2026 Utilities Humans started energy tech at least 400,000 years ago when we first mastered fire. Yetsomehow, for 399,990 years, our ancestors didn’t bother to ... Read more August 11, 2026 Utilities Seventeen years ago, I walked into Origin as a Personal Assistant. Not quite the power seat at the table, but arguably one of the best vantage points ... Read more August 4, 2026 Energy Insights AI demand is moving from a technology story to an electricity-system story. Recent market research estimates worldwide electricity consumption from ... Read more June 30, 2026 Utilities Ten years ago, the relationship between utilities and startups looked very different from what No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Not published on the official page.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Not published on the official page.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "free-electrons-program-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.f6s.com/free-electrons-2027/apply",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

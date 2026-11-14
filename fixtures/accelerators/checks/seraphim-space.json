@@ -1,73 +1,374 @@
 {
   "programId": "seraphim-space",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://seraphim.vc/",
-    "https://seraphim.vc/about/"
+    "https://seraphim.vc/news/ascendarc-secures-3-95m-in-seed-funding-to-revolutionise-satellite-communications-for-u-s-military-and-commercial-applications/",
+    "https://seraphim.vc/news/seraphim-space-accelerator-opens-applications-for-mission-12-with-leidos-secured-as-a-new-sponsor/",
+    "https://seraphim.vc/news/uk-launches-65-million-funding-call-for-space-technologies-and-applications/",
+    "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q1-2025-3/",
+    "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q2-2025-2/",
+    "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q2-2026-3/",
+    "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q3-2026-4/",
+    "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q3-2026/",
+    "https://seraphim.vc/generation-space/live-stream/the-seraphim-100-discover-the-investment-landscape-for-space-2016-2023/",
+    "https://seraphim.vc/generation-space/podcast/industry-for-the-intelligent-age-with-brian-manning-co-founder-ceo-xona-and-generation-space-investment-vp-lewis-jones/",
+    "https://seraphim.vc/news/2026-spacetech-predictions-investment-trends/",
+    "https://seraphim.vc/news/25-million-investment-into-isotropic-systems/",
+    "https://seraphim.vc/news/adaptive-insurance-secures-5m-investment-to-launch-ai-powered-climate-resilience-platform/",
+    "https://seraphim.vc/news/announcing-our-investment-in-space-camp-alum-xona-space-systems/"
   ],
   "evidence": [
     {
-      "id": "check-deal-e9732e7e20",
+      "id": "check-deal-8a79d415ab",
       "url": "https://seraphim.vc/",
-      "title": "Seraphim Space — homepage checked by scrape.py",
-      "excerpt": "TL;DR / Executive Summary Seraphim, a global leader in SpaceTech investment, today launched the Seraphim Academy, a selective programme that will invest $150,000 in early-stage companies through two funding stages and provide up to 12 months of tailored support to help founders raise capital, secure customers and scale",
+      "title": "Seraphim Space — homepage",
+      "excerpt": "the Seraphim Academy, a selective programme that will invest $150,000 in early-stage companies through two funding stages and provide up to",
       "page": "details"
+    },
+    {
+      "id": "check-duration-44aa2a0e79",
+      "url": "https://seraphim.vc/",
+      "title": "Seraphim Space — homepage",
+      "excerpt": "through two funding stages and provide up to 12 months of tailored support to help founders raise",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-d1eeaa4ea9",
+      "url": "https://seraphim.vc/news/seraphim-space-accelerator-opens-applications-for-mission-12-with-leidos-secured-as-a-new-sponsor/",
+      "title": "Seraphim Space — application page",
+      "excerpt": "that go through the accelerator raise within 12 months, and 93% of companies have been successfully",
+      "page": "application"
     },
     {
       "id": "check-name-38a8797642",
       "url": "https://seraphim.vc/",
-      "title": "Seraphim Space — homepage checked by scrape.py",
+      "title": "Seraphim Space — homepage",
       "excerpt": "them the backing to achieve escape velocity Across the Seraphim Space investment funds, Seraphim Academy and Seraphim Space",
       "page": "details"
     },
     {
+      "id": "check-phone-11368d521c",
+      "url": "https://seraphim.vc/news/2026-spacetech-predictions-investment-trends/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "\"telephone\": \"02036742805\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-2797a8a693",
+      "url": "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q2-2025-2/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "\"telephone\": \"02036742805\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-36cf972319",
+      "url": "https://seraphim.vc/news/uk-launches-65-million-funding-call-for-space-technologies-and-applications/",
+      "title": "Seraphim Space — application page",
+      "excerpt": "\"telephone\": \"02036742805\"",
+      "page": "application"
+    },
+    {
       "id": "check-phone-4241bbb5c7",
       "url": "https://seraphim.vc/",
-      "title": "Seraphim Space — homepage checked by scrape.py",
+      "title": "Seraphim Space — homepage",
       "excerpt": "\"telephone\": \"02036742805\"",
       "page": "details"
     },
     {
-      "id": "check-phone-783c8701fc",
-      "url": "https://seraphim.vc/about/",
-      "title": "Seraphim Space — details page checked by scrape.py",
+      "id": "check-phone-66389b8987",
+      "url": "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q1-2025-3/",
+      "title": "Seraphim Space — terms page",
       "excerpt": "\"telephone\": \"02036742805\"",
-      "page": "details"
+      "page": "terms"
     },
     {
-      "id": "check-portfolio-0a92764daa",
-      "url": "https://seraphim.vc/about/",
-      "title": "Seraphim Space — details page checked by scrape.py",
-      "excerpt": "Discover our portfolio → https://seraphim.vc/portfolio/",
-      "page": "details"
+      "id": "check-phone-6b836776cd",
+      "url": "https://seraphim.vc/news/announcing-our-investment-in-space-camp-alum-xona-space-systems/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "\"telephone\": \"02036742805\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-6f32427bc9",
+      "url": "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q2-2026-3/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "\"telephone\": \"02036742805\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-6f6dd23e8e",
+      "url": "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q3-2026/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "\"telephone\": \"02036742805\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-a44d13cbd7",
+      "url": "https://seraphim.vc/news/adaptive-insurance-secures-5m-investment-to-launch-ai-powered-climate-resilience-platform/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "\"telephone\": \"02036742805\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-ae02be6d7a",
+      "url": "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q3-2026-4/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "\"telephone\": \"02036742805\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-b17b04fdc6",
+      "url": "https://seraphim.vc/generation-space/live-stream/the-seraphim-100-discover-the-investment-landscape-for-space-2016-2023/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "\"telephone\": \"02036742805\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-cdeb6a4956",
+      "url": "https://seraphim.vc/news/ascendarc-secures-3-95m-in-seed-funding-to-revolutionise-satellite-communications-for-u-s-military-and-commercial-applications/",
+      "title": "Seraphim Space — application page",
+      "excerpt": "\"telephone\": \"02036742805\"",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-d9a907222f",
+      "url": "https://seraphim.vc/generation-space/podcast/industry-for-the-intelligent-age-with-brian-manning-co-founder-ceo-xona-and-generation-space-investment-vp-lewis-jones/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "\"telephone\": \"02036742805\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-e5a18bde4c",
+      "url": "https://seraphim.vc/news/seraphim-space-accelerator-opens-applications-for-mission-12-with-leidos-secured-as-a-new-sponsor/",
+      "title": "Seraphim Space — application page",
+      "excerpt": "\"telephone\": \"02036742805\"",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-e810af6efb",
+      "url": "https://seraphim.vc/news/25-million-investment-into-isotropic-systems/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "\"telephone\": \"02036742805\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-146237ae91",
+      "url": "https://seraphim.vc/news/seraphim-space-accelerator-opens-applications-for-mission-12-with-leidos-secured-as-a-new-sponsor/",
+      "title": "Seraphim Space — application page",
+      "excerpt": "Portfolio → https://seraphim.vc/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-22937db116",
+      "url": "https://seraphim.vc/news/ascendarc-secures-3-95m-in-seed-funding-to-revolutionise-satellite-communications-for-u-s-military-and-commercial-applications/",
+      "title": "Seraphim Space — application page",
+      "excerpt": "Portfolio → https://seraphim.vc/portfolio/",
+      "page": "application"
     },
     {
       "id": "check-portfolio-26fe08eb5b",
       "url": "https://seraphim.vc/",
-      "title": "Seraphim Space — homepage checked by scrape.py",
+      "title": "Seraphim Space — homepage",
       "excerpt": "Discover our portfolio → https://seraphim.vc/portfolio/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-33b00b3927",
+      "url": "https://seraphim.vc/news/uk-launches-65-million-funding-call-for-space-technologies-and-applications/",
+      "title": "Seraphim Space — application page",
+      "excerpt": "Portfolio → https://seraphim.vc/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3d6c8d0093",
+      "url": "https://seraphim.vc/news/25-million-investment-into-isotropic-systems/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "Portfolio → https://seraphim.vc/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-4e50671aa7",
+      "url": "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q3-2026/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "Portfolio → https://seraphim.vc/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5915280c67",
+      "url": "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q2-2025-2/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "Portfolio → https://seraphim.vc/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-781eea20da",
+      "url": "https://seraphim.vc/news/adaptive-insurance-secures-5m-investment-to-launch-ai-powered-climate-resilience-platform/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "Portfolio → https://seraphim.vc/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-98558d67ee",
+      "url": "https://seraphim.vc/news/2026-spacetech-predictions-investment-trends/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "Portfolio → https://seraphim.vc/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9fd55c433d",
+      "url": "https://seraphim.vc/generation-space/podcast/industry-for-the-intelligent-age-with-brian-manning-co-founder-ceo-xona-and-generation-space-investment-vp-lewis-jones/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "Portfolio → https://seraphim.vc/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-a38bdc57ae",
       "url": "https://seraphim.vc/",
-      "title": "Seraphim Space — homepage checked by scrape.py",
+      "title": "Seraphim Space — homepage",
       "excerpt": "Portfolio → https://seraphim.vc/portfolio/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-adb2bd0699",
-      "url": "https://seraphim.vc/about/",
-      "title": "Seraphim Space — details page checked by scrape.py",
+      "id": "check-portfolio-c243d0f88d",
+      "url": "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q2-2026-3/",
+      "title": "Seraphim Space — terms page",
       "excerpt": "Portfolio → https://seraphim.vc/portfolio/",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-dd1f955417",
+      "url": "https://seraphim.vc/news/announcing-our-investment-in-space-camp-alum-xona-space-systems/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "Portfolio → https://seraphim.vc/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-de57d7c11e",
+      "url": "https://seraphim.vc/generation-space/live-stream/the-seraphim-100-discover-the-investment-landscape-for-space-2016-2023/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "Portfolio → https://seraphim.vc/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f373ee2732",
+      "url": "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q1-2025-3/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "Portfolio → https://seraphim.vc/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-fab09e1504",
+      "url": "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q3-2026-4/",
+      "title": "Seraphim Space — terms page",
+      "excerpt": "Portfolio → https://seraphim.vc/portfolio/",
+      "page": "terms"
     },
     {
       "id": "check-route-217b2bd12e",
       "url": "https://seraphim.vc/",
-      "title": "Seraphim Space — homepage checked by scrape.py",
+      "title": "Seraphim Space — homepage",
       "excerpt": "https://seraphim.vc/",
       "page": "details"
+    },
+    {
+      "id": "check-route-4ffd2b6b40",
+      "url": "https://seraphim.vc/news/seraphim-space-accelerator-opens-applications-for-mission-12-with-leidos-secured-as-a-new-sponsor/",
+      "title": "Seraphim Space — application page",
+      "excerpt": "https://www.f6s.com/seraphim-space-mission-12uk-europe/apply → https://www.f6s.com/seraphim-space-mission-12uk-europe/apply",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-f318eeb1f9",
+      "url": "https://seraphim.vc/",
+      "page": "details",
+      "excerpt": "Investing in SpaceTech Startups | Seraphim Where are you visiting seraphim.vc from? UK/rest of World USA About About Team Focus ESG Portfolio SpaceTech Tracker SSIT (Growth Fund) Academy Funds Space Venture Fund Co-invest Insights News & Case Studies Research Insights Podcast & Videos Contact We are Generation Space. We are Seraphim. The world’s greatest problems propel everything we do. Seraphim is the global leader in SpaceTech investment. We endlessly explore the ecosystem to discover and invest in the brightest minds and smartest ideas which will provide trailblazing, high-value solutions that disrupt, transform and improve life as we know it. Accelerating humanity’s next giant leap by transforming science fiction into science fact. We are Your Mission Control For visionary space entrepreneurs providing them the backing to achieve escape velocity Across the Seraphim Space investment funds, Seraphim Academy and Seraphim Space Investment Trust, we are the first organisation to support space entrepreneurship from inception to exit. We are the industry leaders. Wherever you are in your journey we provide the capital, expertise, and global partners to realise the boldest visions. Get to know us Total Investment Raised by Portfolio $13.5b+ Portfolio IPOs 6 SpaceTech Startups supported 150+ Group AUM $1b+ Why Space Why Seraphim Our Portfolio of Pioneers Making Science fiction"
+    },
+    {
+      "id": "check-page-8b6698a31e",
+      "url": "https://seraphim.vc/news/ascendarc-secures-3-95m-in-seed-funding-to-revolutionise-satellite-communications-for-u-s-military-and-commercial-applications/",
+      "page": "application",
+      "excerpt": "AscendArc Raises $3.95M for Satellite Comms Where are you visiting seraphim.vc from? UK/rest of World USA About About Team Focus ESG Portfolio SpaceTech Tracker SSIT (Growth Fund) Academy Funds Space Venture Fund Co-invest Insights News & Case Studies Research Insights Podcast & Videos Contact AscendArc secures $3.95M in Seed Funding to Revolutionise Satellite Communications for U.S. Military and Commercial Applications Written by: Leah Martin | January 23, 2025 Portland, OR – [Date] – AscendArc, a leading innovator in satellite communications, has secured $3.95 million in pre-seed and seed funding. The funding round includes a number of prominent investors including Seraphim Space, Everywhere Ventures, Portland Seed Fund, Thermo, and Hunter Communications. This funding will accelerate AscendArc’s groundbreaking work in transforming satellite communications for both the U.S. military and commercial sectors. In addition to the funding announcement, AscendArc has been awarded a prestigious $1.8M Phase II Small Business Technology Transfer (STTR) contract, granted by the Air Force’s AFWERX program. This will enable the company to advance its “Rapid, Scalable Geosynchronous Bandwidth” technology – a game-changing approach aimed at dramatically improving high-bandwidth satellite communications. AscendArc was founded by Chris McLain with the aim to fundamentally change the economics"
+    },
+    {
+      "id": "check-page-5838664e4e",
+      "url": "https://seraphim.vc/news/seraphim-space-accelerator-opens-applications-for-mission-12-with-leidos-secured-as-a-new-sponsor/",
+      "page": "application",
+      "excerpt": "Seraphim Space Accelerator Opens Applications for Mission 12 with Leidos Secured as a New Sponsor | Seraphim Space Where are you visiting seraphim.vc from? UK/rest of World USA About About Team Focus ESG Portfolio SpaceTech Tracker SSIT (Growth Fund) Academy Funds Space Venture Fund Co-invest Insights News & Case Studies Research Insights Podcast & Videos Contact Seraphim Space Accelerator Opens Applications for Mission 12 with Leidos Secured as a New Sponsor Written by: Leah Martin | July 28, 2023 Seraphim to expand its world-leading 100 company portfolio as it opens its applications for its Mission 12 cohort London, 19 JULY 2023: Seraphim Space, known as Generation Space in the US, which runs the leading, dedicated accelerator for global startups in the SpaceTech industry, has opened its applications for its 12th cohort (Mission 12). Seraphim Space and Generation Space are thrilled to have Leidos, a FORTUNE® 500 technology, engineering and science solutions and services leader working to solve the world’s toughest challenges in the defence, intelligence, civil and health markets, on board as a new sponsor. This sponsorship brings added benefit to the pioneering companies taking part in Mission 12. The accelerator is a three-month programme that supports SpaceTech companies from inception to IPO. Through the programme, the cohort will have the opportunity to develop key"
+    },
+    {
+      "id": "check-page-16648cdd8e",
+      "url": "https://seraphim.vc/news/uk-launches-65-million-funding-call-for-space-technologies-and-applications/",
+      "page": "application",
+      "excerpt": "UK launches 65 million funding call for space technologies and applications | Seraphim Space Where are you visiting seraphim.vc from? UK/rest of World USA About About Team Focus ESG Portfolio SpaceTech Tracker SSIT (Growth Fund) Academy Funds Space Venture Fund Co-invest Insights News & Case Studies Research Insights Podcast & Videos Contact UK launches 65 million funding call for space technologies and applications Written by: Leah Martin | September 28, 2023 The UK Space Agency has announced up to £65 million of funding for ground-breaking innovations that could boost UK leadership in space technologies and applications. The National Space Innovation Programme (NSIP) will support high-risk, high-reward projects designed by British organisations with the potential to accelerate the development of new space technologies, satellite applications, and services. The programme provides an opportunity for the UK space sector to develop novel and valuable commercial innovations that could tackle challenges such as the use of satellite data to combat climate change or providing services to make in-orbit applications more sustainable. The first tranche of up to £34 million funding is now open to proposals that will drive innovation, accelerate the route to market, and catalyse investment into the UK space sector. The remaining funding will be split across further calls in 2024 and 2025"
+    },
+    {
+      "id": "check-page-f8066c6ec8",
+      "url": "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q1-2025-3/",
+      "page": "terms",
+      "excerpt": "SpaceTech Investment Tracker Q1 2025 | Seraphim Space Where are you visiting seraphim.vc from? UK/rest of World USA About About Team Focus ESG Portfolio SpaceTech Tracker SSIT (Growth Fund) Academy Funds Space Venture Fund Co-invest Insights News & Case Studies Research Insights Podcast & Videos Contact SpaceTech Investment Tracker Q1 2025 Unit 3.05, The Jellicoe, 5 Beaconsfield Street, King’s Cross, London, N1C 4EW 2026 © Seraphim Space Manager LLP is authorised and regulated by the Financial Conduct Authority. Seraphim Space Camp Accelerator Limited is an independently owned non-regulated vehicle. Designed and developed by Make Us Care . Portfolio ESG Privacy Policy Cookies Sign up to receive our latest news"
+    },
+    {
+      "id": "check-page-0d376f7ce8",
+      "url": "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q2-2025-2/",
+      "page": "terms",
+      "excerpt": "SpaceTech Investment Tracker Q2 2025 | Seraphim Space Where are you visiting seraphim.vc from? UK/rest of World USA About About Team Focus ESG Portfolio SpaceTech Tracker SSIT (Growth Fund) Academy Funds Space Venture Fund Co-invest Insights News & Case Studies Research Insights Podcast & Videos Contact SpaceTech Investment Tracker Q2 2025 Unit 3.05, The Jellicoe, 5 Beaconsfield Street, King’s Cross, London, N1C 4EW 2026 © Seraphim Space Manager LLP is authorised and regulated by the Financial Conduct Authority. Seraphim Space Camp Accelerator Limited is an independently owned non-regulated vehicle. Designed and developed by Make Us Care . Portfolio ESG Privacy Policy Cookies Sign up to receive our latest news"
+    },
+    {
+      "id": "check-page-a67c767fd6",
+      "url": "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q2-2026-3/",
+      "page": "terms",
+      "excerpt": "SpaceTech Investment Tracker Q2 2026 | Seraphim Space Where are you visiting seraphim.vc from? UK/rest of World USA About About Team Focus ESG Portfolio SpaceTech Tracker SSIT (Growth Fund) Academy Funds Space Venture Fund Co-invest Insights News & Case Studies Research Insights Podcast & Videos Contact SpaceTech Investment Tracker Q2 2026 Unit 3.05, The Jellicoe, 5 Beaconsfield Street, King’s Cross, London, N1C 4EW 2026 © Seraphim Space Manager LLP is authorised and regulated by the Financial Conduct Authority. Seraphim Space Camp Accelerator Limited is an independently owned non-regulated vehicle. Designed and developed by Make Us Care . Portfolio ESG Privacy Policy Cookies Sign up to receive our latest news"
+    },
+    {
+      "id": "check-page-2d1017b419",
+      "url": "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q3-2026-4/",
+      "page": "terms",
+      "excerpt": "SpaceTech Investment Tracker Q3 2026 | Seraphim Space Where are you visiting seraphim.vc from? UK/rest of World USA About About Team Focus ESG Portfolio SpaceTech Tracker SSIT (Growth Fund) Academy Funds Space Venture Fund Co-invest Insights News & Case Studies Research Insights Podcast & Videos Contact SpaceTech Investment Tracker Q3 2026 Unit 3.05, The Jellicoe, 5 Beaconsfield Street, King’s Cross, London, N1C 4EW 2026 © Seraphim Space Manager LLP is authorised and regulated by the Financial Conduct Authority. Seraphim Space Camp Accelerator Limited is an independently owned non-regulated vehicle. Designed and developed by Make Us Care . Portfolio ESG Privacy Policy Cookies Sign up to receive our latest news"
+    },
+    {
+      "id": "check-page-e383510edd",
+      "url": "https://seraphim.vc/generation-space/live-stream/spacetech-investment-tracker-q3-2026/",
+      "page": "terms",
+      "excerpt": "SpaceTech Investment Tracker Q3 2025 | Seraphim Space Where are you visiting seraphim.vc from? UK/rest of World USA About About Team Focus ESG Portfolio SpaceTech Tracker SSIT (Growth Fund) Academy Funds Space Venture Fund Co-invest Insights News & Case Studies Research Insights Podcast & Videos Contact SpaceTech Investment Tracker Q3 2025 Unit 3.05, The Jellicoe, 5 Beaconsfield Street, King’s Cross, London, N1C 4EW 2026 © Seraphim Space Manager LLP is authorised and regulated by the Financial Conduct Authority. Seraphim Space Camp Accelerator Limited is an independently owned non-regulated vehicle. Designed and developed by Make Us Care . Portfolio ESG Privacy Policy Cookies Sign up to receive our latest news"
+    },
+    {
+      "id": "check-page-6585395765",
+      "url": "https://seraphim.vc/generation-space/live-stream/the-seraphim-100-discover-the-investment-landscape-for-space-2016-2023/",
+      "page": "terms",
+      "excerpt": "The Seraphim 100 | Space Investment Landscape 2016–23 Where are you visiting seraphim.vc from? UK/rest of World USA About About Team Focus ESG Portfolio SpaceTech Tracker SSIT (Growth Fund) Academy Funds Space Venture Fund Co-invest Insights News & Case Studies Research Insights Podcast & Videos Contact The Seraphim 100: Discover the Investment Landscape for Space 2016-2023 Unit 3.05, The Jellicoe, 5 Beaconsfield Street, King’s Cross, London, N1C 4EW 2026 © Seraphim Space Manager LLP is authorised and regulated by the Financial Conduct Authority. Seraphim Space Camp Accelerator Limited is an independently owned non-regulated vehicle. Designed and developed by Make Us Care . Portfolio ESG Privacy Policy Cookies Sign up to receive our latest news"
+    },
+    {
+      "id": "check-page-217bcf2552",
+      "url": "https://seraphim.vc/generation-space/podcast/industry-for-the-intelligent-age-with-brian-manning-co-founder-ceo-xona-and-generation-space-investment-vp-lewis-jones/",
+      "page": "terms",
+      "excerpt": "Industry for the Intelligent Age: with Brian Manning, Co-Founder & ceo xona, and generation space investment vp, lewis jones | Seraphim Space Where are you visiting seraphim.vc from? UK/rest of World USA About About Team Focus ESG Portfolio SpaceTech Tracker SSIT (Growth Fund) Academy Funds Space Venture Fund Co-invest Insights News & Case Studies Research Insights Podcast & Videos Contact Industry for the Intelligent Age: with Brian Manning, Co-Founder & ceo xona, and generation space investment vp, lewis jones Unit 3.05, The Jellicoe, 5 Beaconsfield Street, King’s Cross, London, N1C 4EW 2026 © Seraphim Space Manager LLP is authorised and regulated by the Financial Conduct Authority. Seraphim Space Camp Accelerator Limited is an independently owned non-regulated vehicle. Designed and developed by Make Us Care . Portfolio ESG Privacy Policy Cookies Sign up to receive our latest news"
+    },
+    {
+      "id": "check-page-30a9166097",
+      "url": "https://seraphim.vc/news/2026-spacetech-predictions-investment-trends/",
+      "page": "terms",
+      "excerpt": "SpaceTech Predictions for 2026 | Seraphim Space Where are you visiting seraphim.vc from? UK/rest of World USA About About Team Focus ESG Portfolio SpaceTech Tracker SSIT (Growth Fund) Academy Funds Space Venture Fund Co-invest Insights News & Case Studies Research Insights Podcast & Videos Contact SpaceTech Predictions for 2026 Written by: Mark Boggett | January 9, 2026 Looking Back: 2025 in Review 2025 delivered a range SpaceTech stories underlining the sector’s growing significance and its momentum towards a multi-trillion-dollar industry. Many of the trends we anticipated emerged, albeit with some surprising twists. (Our 2025 predictions here). Funding was the first clear signal. Q3’s $3.5bn surge pushed trailing twelve-month investment to $10.4bn, putting 2025 just shy of the 2021 peak. And the mix told the real story: the momentum sat firmly with hardware-heavy infrastructure, Build, Launch, Downlink, and Beyond Earth. Meanwhile Software, analytics, and platforms cooled off, with no headline rounds above $100m, underscoring our predicted shift toward deep-tech companies with actual hardware, actual traction, and actual sovereign relevance. Geopolitics played out similarly. We believed the return of Trump would push space back to the centre of the US agenda and intensify the competitive dynamic with China. Sure enough, the US retained roughly 55% of global funding while"
+    },
+    {
+      "id": "check-page-51548e6bcd",
+      "url": "https://seraphim.vc/news/25-million-investment-into-isotropic-systems/",
+      "page": "terms",
+      "excerpt": "Seraphim Space's $25 million investment into Isotropic Systems Where are you visiting seraphim.vc from? UK/rest of World USA About About Team Focus ESG Portfolio SpaceTech Tracker SSIT (Growth Fund) Academy Funds Space Venture Fund Co-invest Insights News & Case Studies Research Insights Podcast & Videos Contact Seraphim Space’s $25 million investment into Isotropic Systems Written by: Christiana Okolie | September 27, 2021 Seraphim Space Investment Trust plc (LSE: SSIT), the world’s first listed fund focused on Space Tech, is pleased to announce an investment of USD $25 million into portfolio company Isotropic Systems (“Isotropic”), a leading developer of transformational broadband terminal technologies which is looking to redefine satellite communications. Isotropic’s Series B funding round, which was led by the Company’s investment manager, Seraphim Space (Manager) LLP (“Seraphim”), raised more than $35 million. Other participants in the round included leading strategic and deep-tech venture capital investors, such as AEI HorizonX, Promus Ventures, and Firmament Ventures. This is Seraphim Space’s first significant investment since its successful IPO. The increased valuation of Isotropic in this latest funding round positively impacts the net asset value of the Company, with an implied uplift of 172 per cent to the £1.41m valuation of the Company’s existing investment in"
+    },
+    {
+      "id": "check-page-68794933c6",
+      "url": "https://seraphim.vc/news/adaptive-insurance-secures-5m-investment-to-launch-ai-powered-climate-resilience-platform/",
+      "page": "terms",
+      "excerpt": "Adaptive Insurance secures $5M investment to launch AI powered climate resilience platform | Seraphim Space Where are you visiting seraphim.vc from? UK/rest of World USA About About Team Focus ESG Portfolio SpaceTech Tracker SSIT (Growth Fund) Academy Funds Space Venture Fund Co-invest Insights News & Case Studies Research Insights Podcast & Videos Contact Adaptive Insurance secures $5M investment to launch AI powered climate resilience platform Written by: Leah Martin | February 26, 2025 Funding brings platform to market with exclusive suite of parametric insurance solutions, providing swift relief to businesses impacted by weather-driven events Adaptive Insurance – a Texas-based climate resiliency company harnessing advanced AI and climate data to redefine climate based parametric insurance – has successfully closed a $5 million USD seed funding round. Led by Congruent Ventures, with additional investments from Montauk Climate, Generation Space (US arm of Seraphim Space), and private funders, the financing will accelerate the nationwide rollout of Adaptive Insurance’s innovative parametric insurance products, starting with its flagship product, GridProtect. GridProtect, the first ever short-term power outage insurance product, will use the simplicity of parametric insurance – verified trigger events, agreed-upon payments, and speedy claims processing – to provide immediate"
+    },
+    {
+      "id": "check-page-412b89c201",
+      "url": "https://seraphim.vc/news/announcing-our-investment-in-space-camp-alum-xona-space-systems/",
+      "page": "terms",
+      "excerpt": "Announcing our Investment in Xona Space Systems Where are you visiting seraphim.vc from? UK/rest of World USA About About Team Focus ESG Portfolio SpaceTech Tracker SSIT (Growth Fund) Academy Funds Space Venture Fund Co-invest Insights News & Case Studies Research Insights Podcast & Videos Contact Announcing our Investment in Space Camp alum Xona Space Systems Written by: Seraphim Capital | May 15, 2020 Xona Space Systems raises $1M pre-seed round from 1517, Seraphim Capital, Trucks Venture Capital and Stellar Solutions May 14th, 2020 :: San Mateo, CA, Xona Space Systems, a San Mateo-based startup creating a secure and precise Position, Navigation, and Timing (PNT) satellite service, announces that it has raised a $1M pre-seed round led by 1517, with participation from Seraphim Capital, Trucks Venture Capital, and Stellar Solutions. In the U.S. alone, over $300 billion of economic impact per year relies on Global Navigation Satellite Systems (GNSS), yet the only signals available to the public are unprotected, imprecise, and susceptible to disruption from easily obtainable jammers and spoofers. The reliability and performance of satellite navigation needs to drastically increase to support modern industries such as autonomous vehicles, aerial mobility, maritime automation, and many more. Xona Space Systems is developing the secure and precise PNT service that will enable"
     }
   ],
   "findings": {
@@ -78,7 +379,12 @@
         "evidenceId": "check-phone-4241bbb5c7"
       }
     ],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://www.f6s.com/seraphim-space-mission-12uk-europe/apply",
+        "evidenceId": "check-route-4ffd2b6b40"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://seraphim.vc/",
@@ -88,11 +394,36 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-44aa2a0e79"
+      }
+    ],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "TL;DR / Executive Summary Seraphim, a global leader in SpaceTech investment, today launched the Seraphim Academy, a selective programme that will invest $150,000 in early-stage companies through two funding stages and provide up to 12 months of tailored support to help founders raise capital, secure customers and scale",
-        "evidenceId": "check-deal-e9732e7e20"
+        "value": "the Seraphim Academy, a selective programme that will invest $150,000 in early-stage companies through two funding stages and provide up to",
+        "evidenceId": "check-deal-8a79d415ab"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "150000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-8a79d415ab"
       }
     ],
     "portfolioPages": [

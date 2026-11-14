@@ -1,29 +1,165 @@
 {
   "programId": "appworks",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://appworks.tw/"
+    "https://appworks.tw/",
+    "https://appworks.tw/investments/",
+    "https://appworks.tw/accelerator/",
+    "https://appworks.tw/wistron/",
+    "https://appworks.tw/wistron-accelerator-faq/",
+    "https://appworks.tw/wistron-faq"
   ],
   "evidence": [
     {
+      "id": "check-deadline-b299fa7119",
+      "url": "https://appworks.tw/accelerator/",
+      "title": "AppWorks — program page",
+      "excerpt": "AW#34 Accelerator Timeline Applications Open Nov 9th, 2026 Applications Close Dec 27, 2026 Official Kick-off Mar 9, 2027 Demo Day Jun 3, 2027",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-49aab62fef",
+      "url": "https://appworks.tw/wistron-accelerator-faq/",
+      "title": "AppWorks — terms page",
+      "excerpt": "At the same time, every enrolled startup will receive a NT$200K subsidy from Wistron, which is not in exchange for any shares.",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-130eaa1c10",
+      "url": "https://appworks.tw/investments/",
+      "title": "AppWorks — terms page",
+      "excerpt": "to our early-stage founders throughout the 6-month program. Series-A to -C Round If you’re raising",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-22b5a009b5",
+      "url": "https://appworks.tw/investments/",
+      "title": "AppWorks — terms page",
+      "excerpt": "AI agents across the platform automate tasks from virtual card issuance and procurement ordering to expense anomaly",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6afefb1ac9",
+      "url": "https://appworks.tw/investments/",
+      "title": "AppWorks — terms page",
+      "excerpt": "Gyu Yea, Matthew Quek, and Aaron Ong in 2022, GRVT is a hybrid derivatives exchange that aims to solve the high",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-0c2307a158",
+      "url": "https://appworks.tw/investments/",
+      "title": "AppWorks — terms page",
+      "excerpt": "Google Play Inflow Founded in 2022 and headquartered in Ho Chi Minh City, Inflow is a B2B fashion supply chain",
+      "page": "terms"
+    },
+    {
       "id": "check-name-1eccb79e89",
       "url": "https://appworks.tw/",
-      "title": "AppWorks — homepage checked by scrape.py",
+      "title": "AppWorks — homepage",
       "excerpt": "Home - AppWorks 之初加速器 Toggle navigation Home Accelerator Investments",
       "page": "details"
     },
     {
+      "id": "check-rolling-22b9d1d218",
+      "url": "https://appworks.tw/wistron-accelerator-faq/",
+      "title": "AppWorks — terms page",
+      "excerpt": "first round and final round application? Wistron Accelerator’s admission is on a rolling basis. Based on previous experience, teams that applied earlier had a higher chance",
+      "page": "terms"
+    },
+    {
+      "id": "check-rolling-f5755ebee6",
+      "url": "https://appworks.tw/wistron/",
+      "title": "AppWorks — program page",
+      "excerpt": "#20 Aiello (AI、IoT) Wistron Accelerator #11 Application Timeline Admission is on a rolling basis. Teams that pass the application review will receive an interview invitation.",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4b406464b0",
+      "url": "https://appworks.tw/accelerator/",
+      "title": "AppWorks — program page",
+      "excerpt": "Apply Now for AW#34 → https://8uwiwslakq0.typeform.com/aw34application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-56267bd8c2",
+      "url": "https://appworks.tw/accelerator/",
+      "title": "AppWorks — program page",
+      "excerpt": "Click here to apply → https://8uwiwslakq0.typeform.com/aw34application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-59f0f234d5",
+      "url": "https://appworks.tw/wistron-accelerator-faq/",
+      "title": "AppWorks — terms page",
+      "excerpt": "applications → https://appworks.tw/wistron/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-87be634d80",
       "url": "https://appworks.tw/",
-      "title": "AppWorks — homepage checked by scrape.py",
+      "title": "AppWorks — homepage",
       "excerpt": "https://appworks.tw/",
       "page": "details"
+    },
+    {
+      "id": "check-start-44e474fb31",
+      "url": "https://appworks.tw/wistron/",
+      "title": "AppWorks — program page",
+      "excerpt": "Bird Deadline Jul 31 2026 Final round Deadline Aug 16 2026 Program Starts in Sep 2026 Questions? Check out our FAQs 緯創集團第 11 屆垂直加速器啟動， 邀請優質",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-e5fcfb2200",
+      "url": "https://appworks.tw/",
+      "page": "details",
+      "excerpt": "Home - AppWorks 之初加速器 Toggle navigation Home Accelerator Investments Aiworks Team Join Us! Blog Wistron Accelerator By Founders, For Founders Helping tech startups disrupt the world since 2009 In the making of a great company, founders make all the big calls. And investors play the supporting roles. As prior founders ourselves, we started AppWorks to play that role. So you can count on our support. We love founders with passion, grit, and determination. We want to be the first investor to fund you and we want to help you go all the way. STATE OF THE APPWORKS NETWORK As of Q3 2026 680 ACTIVE STARTUPS 2,168 FOUNDERS 28,592 EMPLOYEES $ 8.2 B TOTAL RAISED $ 43.4 B TOTAL VALUATION $ 19.7 B ANNUAL REVENUES The Support We Provide AppWorks offers tailored support for founders across different stages of their journey. Through AppWorks Accelerator, we help early-stage startups find product-market fit and growth-stage startups expand across markets, with the resources, mentorship, and community to scale. For select startups, AppWorks Funds also provide capital to accelerate growth and long-term success. AppWorks Accelerator Started in 2010, AppWorks Accelerator helps early-stage startups find product-market fit and growth-stage startups expand across markets. Joining also connects you to our network of 680 active startups and 2,168 founders, one of the largest startup communities in"
+    },
+    {
+      "id": "check-page-4b017b7f74",
+      "url": "https://appworks.tw/investments/",
+      "page": "terms",
+      "excerpt": "Investments - AppWorks 之初加速器 Toggle navigation Home Accelerator Investments Aiworks Team Join Us! Blog Wistron Accelerator Investments We know you have a choice. We want you to choose us. As ex-founders ourselves, we know how important it is for a startup to have VCs that really help – investors who advise, open doors, guide strategies, provoke thinking and help with recruiting, but never cross the line into micromanagement. We know that money is money, and it is the right investors that make a difference. We know VCs who already have a working relationship with you make the best investors. We know that strong founders have a choice, and we want to bring much more than money to the table so that you’ll choose to work with AppWorks. Jamie Lin Chairman & Partner AppWorks Funds at a glance US$ 386 million total fund size Invest from $200K to $15M per deal Participate in Series Seed to Series-C rounds Finance 20 – 30 deals a year Will reserve funds to support your future financing Comfortable both leading and following Aim to keep dilution at 10-20% per round for you Prefer joining your Board as a Director or an Observer Will integrate you into the AppWorks Network and help you gain the full benefits Will leverage our in-house Masters Team to help you with public relations, recruiting, legal, finance, accounting, design and work space-related matters. Have so far bred 6 IPOs, 9"
+    },
+    {
+      "id": "check-page-25eea01ce0",
+      "url": "https://appworks.tw/accelerator/",
+      "page": "details",
+      "excerpt": "Accelerator - AppWorks 之初加速器 Toggle navigation Home Accelerator Investments Aiworks Team Join Us! Blog Wistron Accelerator AppWorks Accelerator Turbocharging Top Founders since 2010 Why join? What happens during the Accelerator? AppWorks Community Founder in Our Alumni Network Guidance from proven founders How Will It Help My Fundraising? Activities Ready to Apply? Why Join? Twice a year , we invite only the most driven, strategic-minded, and fastest-moving founders to join AppWorks Accelerator, an intensive three-month program. Upon joining, you’re immediately part of a community of 50 batchmates, 100+ mentors , and 2,000+ alumni — all founders and here to help you grow , whether you’re building your first prototype or already leading your market and expanding into new ones . Our accelerator offers personalized mentorship, hands-on fundraising guidance, and curated business development opportunities with leading corporates across the region. You’ll also tap into a powerful network of founders, investors, and strategic partners — all committed to helping you grow, both as a founder and as a business. At our Demo Days in Taipei, Singapore, and Kuala Lumpur , you’ll have the chance to pitch your startup to hundreds of curated investors and potential business partners, offering extended opportunities to build meaningful partnerships. Best of all, the entire program is completely"
+    },
+    {
+      "id": "check-page-9b44bc1865",
+      "url": "https://appworks.tw/wistron/",
+      "page": "details",
+      "excerpt": "Wistron Accelerator - AppWorks 之初加速器 Toggle navigation Home Accelerator Investments Aiworks Team Join Us! Blog Wistron Accelerator Wistron Accelerator Powered by AppWorks Wistron Accelerator #11 is Now Taking Applications! Calling founders working in AI, IoT, Cloud, Cyber Security, EdTech and MedTech to join us. Wistron is one of the world’s leading manufacturers in the ICT industry. In recent years, Wistron has been investing in R&D, tech innovation, and diversified product development, and has also seized on the growing trend of cloud applications. They have successfully integrated a multitude of hardware devices, software services, and cloud applications, and offer technical service platforms and solutions. During this time, they have also expanded their business to new fields like education, corporate services, and medical care. With an eye toward building a sustainable, long-term business, Wistron is actively looking into growth opportunities for the next decade, including strategic investments and technology partners, and in recent years has already invested more than NT$13 billion in over 60 companies. To foster collaboration with new startups, in 2021, Wistron has set up the investment office (CVC), and launched the Wistron Accelerator Program with AppWorks, a leading launchpad for bold and ambitious entrepreneurs targeting Greater Southeast Asia (GSEA). The Wistron"
+    },
+    {
+      "id": "check-page-7a7a51e956",
+      "url": "https://appworks.tw/wistron-accelerator-faq/",
+      "page": "terms",
+      "excerpt": "Wistron Accelerator FAQ (For Founders Applying to Wistron Accelerator #11) - AppWorks 之初加速器 Toggle navigation Home Accelerator Investments Aiworks Team Join Us! Blog Wistron Accelerator Wistron Accelerator FAQ (For Founders Applying to Wistron Accelerator #11) AppWorks December 1, 2025 in Accelerator Wistron has been working closely with AppWorks since 2014 and is one of the major limited partners of AppWorks Fund II and Fund III. It also invested in MoBagel (AW#16), ANIWARE (AW#17), Authme (AW#18), Aiello (AW#20) , and other alumni who have graduated from AppWorks Accelerator. Wistron and AppWorks have been working closely together and have a long-term strategic partnership, and launched the Wistron Accelerator in September 2021. AppWorks, itself a leading accelerator in Greater Southeast Asia, provides core logistics and operations support. We put together some frequently asked questions for startup teams who still had questions about the Wistron Accelerator program after reading the information on the landing page. If you have similar questions, we hope you can find the answers below. [Wistron Accelerator #11 is taking applications now!] 1. What outcomes does Wistron Group expect to achieve through the Accelerator program? What kind of support can Wistron Group provide? Some domain-specific perks include: a. Access to C-level Mentors from Wistron Group The most significant"
+    },
+    {
+      "id": "check-page-e66d0d63e1",
+      "url": "https://appworks.tw/wistron-faq",
+      "page": "terms",
+      "excerpt": "Wistron Accelerator FAQ 緯創加速器常見問題回覆 (為 #11 申請團隊準備) - AppWorks 之初加速器 Toggle navigation Home Accelerator Investments Aiworks Team Join Us! Blog Wistron Accelerator Wistron Accelerator FAQ 緯創加速器常見問題回覆 (為 #11 申請團隊準備) AppWorks December 1, 2025 in Accelerator 緯創資通與 AppWorks 從 2014 年開始合作，是 AppWorks Fund II、Fund III 的主要股東之一，之後也陸續投資了 MoBagel (AW#16)、 ANIWARE (AW#17)、 Authme (AW#18) 與 Aiello (AW#20) 等自 AppWorks Accelerator 畢業的新創校友，雙方有長期的策略合作關係與默契，並於 2021 年 9 月首度啓動緯創垂直加速器，由大東南亞領先的新創加速器 AppWorks 提供營運等核心業務。 計畫申請緯創加速器的新創團隊，也許對本計畫將有更近一步的疑問，因此，我們整理了以下常見問題，希望可以協助創業者從中得到解答。 【Wistron Accelerator #11 現正開放申請中： 申請專頁 】 1. 緯創集團期待藉由加速器與新創達成什麼樣的合作成果？緯創集團可以提供新創什麼幫助？ Wistron Accelerator 可以提供的相關幫助包括： 緯創集團各企業 / 事業單位高階主管提供產業面的專業建議 這個加速器的最大特色，是由緯創集團各企業與事業單位高階主管擔任 Mentors，加入的新創可直接與 Mentor 們討論合作內容與商業模式，從他們身上，獲得產業最前緣的 Insights，大幅減少新創摸索、試錯與實驗的機會成本。緯創集團參與 Wistron Accelerator 的企業與事業單位如下： Wistron 緯創資通 (包含CVC 企業投資辦公室) Wiwynn 緯穎科技 WNC 啟碁科技 WITS 緯致科技 WMT 緯創醫學 WiAdvance 緯謙科技 有與企業合作經驗的創業者都知道，通常高階主管負責策略，而團隊負責執行，因此如果能直接與最高層級溝通，那麼在策略合作聚焦，以及共同發展出新服務、新事業的機會將因此大增。 除此之外，當新創與企業合作時，常遇到的挑戰是，即便新創在本身領域具備一定的專業能力，但面對每一個不同領域的產業、每一家組織規模更大的企業，都是仍有許多需要更深入掌握的軟硬知識與技術。 因此，Wistron Accelerator 在內容設計上，一開始就由高階主管親自上陣，解決上述問題。 新創在加速器期間，將與各事業單位負責人進行深度的合作與互動，不只能更深入理解企業真正的需求與計畫、產業 Insight，也能藉此學習如何與企業客戶有效溝通、幫助解決他們的問題。 與緯創集團獨家合作 PoC 做 B2B 生意的新創都知道，因為企業組織與決策流程的關係，要成功推動企業合作，通常需要醞釀比較長的時間，動輒一季、甚至超過半年，都是常有的情形。 為了加速合作的速度，Wistron Accelerator"
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://8uwiwslakq0.typeform.com/aw34application",
+        "evidenceId": "check-route-56267bd8c2"
+      },
+      {
+        "value": "https://appworks.tw/wistron/",
+        "evidenceId": "check-route-59f0f234d5"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://appworks.tw/",
@@ -32,9 +168,68 @@
     ],
     "applicationsOpen": [],
     "operatingStatus": [],
-    "deadlines": [],
+    "deadlines": [
+      {
+        "value": "2026-12-27",
+        "evidenceId": "check-deadline-b299fa7119"
+      }
+    ],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-f5755ebee6"
+      }
+    ],
+    "announcedIntake": [],
+    "cohortStarts": [
+      {
+        "value": "Sep 2026",
+        "evidenceId": "check-start-44e474fb31"
+      }
+    ],
+    "durationWeeks": [
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-130eaa1c10"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-6afefb1ac9"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-22b5a009b5"
+      }
+    ],
+    "location": [
+      {
+        "value": "Ho Chi Minh City",
+        "evidenceId": "check-location-0c2307a158"
+      }
+    ],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "At the same time, every enrolled startup will receive a NT$200K subsidy from Wistron, which is not in exchange for any shares.",
+        "evidenceId": "check-deal-49aab62fef"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "200000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-49aab62fef"
+      }
+    ],
     "portfolioPages": [],
     "name": [
       {

@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.spacecapital.com/",
   "applyUrl": "https://www.spacecapital.com/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Space Capital | Space Tech for the Real World LP LOGIN About Portfolio Research Summit Investors TALENT If you would like to share your ideas, business, or feedback with us, please email us. All business plan submissions must include a clear description of your operations and current progress. Email: launch@spacecapital.com Linkedin Youtube Twitter/X LP LOGIN LP LOGIN see full portfolio Investing in the Invisible Backbone that Powers the Global Economy Space-BASED TECHNOLOGIES ARE THE BUILDING BLOCKS OF Satellites -- GPS, geospatial intelligence, and satellite communications -- are already the invisible backbone that powers the world's largest industries today. GPS alone has generated trillions of dollars in economic value. Geospatial intelligence and satellite communications are following the same trajectory. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Founded in 2012, Space Capital is a venture capital firm with over $1 billion AUM investing at the intersection of space technology and global markets.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Space Capital convenes the engineers, founders, and investors shaping the space economy. Secure your invitation to the Space Capital Summit—an invitation‑only gathering of top decision‑makers.",
     "sourceIds": [
       "homepage"
     ],
@@ -26,9 +26,9 @@
     {
       "id": "official-logo",
       "url": "https://www.spacecapital.com/",
-      "title": "Space Capital — official mark on the retrieved page",
-      "quote": "https://cdn.prod.website-files.com/688cc80a05b526050ab95c9d/68dd6f4084a5cf14f5f65e16_home-skybox.avif",
-      "checkedAt": "2026-11-03T00:18:31.000Z"
+      "title": "Space Capital — no rule-validated official mark",
+      "quote": "https://cdn.prod.website-files.com/688cc80a05b526050ab95c9d/6894cba9217939be75ccbda8_bgShape%20(1).avif",
+      "checkedAt": "2026-11-14T20:18:03.000Z"
     },
     {
       "id": "homepage",
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "space-capital-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.spacecapital.com/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

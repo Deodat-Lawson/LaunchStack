@@ -1,17 +1,136 @@
 {
   "programId": "lawrence-berkeley",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://ipo.lbl.gov/",
-    "https://ipo.lbl.gov/about-us/"
+    "https://ipo.lbl.gov/2018/09/27/nontoxic-synthesis-of-highly-crystalline-sp2-bonded-boron-nitride-aerogels-for-energy-filtration-and-other-applications-2013-112/",
+    "https://ipo.lbl.gov/2022/03/31/mixed-electrolyte-for-li-s-batteries-for-transportation-applications/",
+    "https://ipo.lbl.gov/2025/08/12/spectracodec-a-hilbert-curve-based-method-for-encoding-metadata-in-mass-spectra-for-machine-learning-applications-2025-107-2025-121/",
+    "https://ipo.lbl.gov/2014/07/23/aeroseal-wins-dealer-design-award/",
+    "https://ipo.lbl.gov/2014/09/29/ospip-ipo-ocfo-transition-faqs/",
+    "https://ipo.lbl.gov/2020/03/10/a-computational-temporal-logic-for-superconducting-accelerators-2020-015/",
+    "https://ipo.lbl.gov/2020/03/10/do-you-have-questions-about-intellectual-property-ask-ipo/",
+    "https://ipo.lbl.gov/2020/06/15/berkeley-lab-accepting-proposals-for-covid-19-technical-assistance-program/",
+    "https://ipo.lbl.gov/2021/06/30/a-conversation-about-innovation-with-deepti-tanjore/",
+    "https://ipo.lbl.gov/2023/04/17/an-area-efficient-superconducting-unary-convolutional-neural-network-cnn-accelerator-for-high-performance-computing-systems/",
+    "https://ipo.lbl.gov/2023/04/27/unary-single-flux-quantum-u-sfq-architecture-for-scaling-superconducting-accelerators/",
+    "https://ipo.lbl.gov/2023/07/10/berkeley-lab-and-partners-launch-phase-1-of-cradle-to-commerce-program/",
+    "https://ipo.lbl.gov/2023/07/31/a-hardware-accelerator-for-optimized-sparse-accumulation-in-high-performance-computing/",
+    "https://ipo.lbl.gov/2023/08/16/the-innovation-corps-lite-training-program-i-corps-lite-ignite-your-entrepreneurial-skills-and-bring-your-ideas-to-the-marketplace/"
   ],
   "evidence": [
     {
+      "id": "check-format-994e17b62c",
+      "url": "https://ipo.lbl.gov/2023/08/16/the-innovation-corps-lite-training-program-i-corps-lite-ignite-your-entrepreneurial-skills-and-bring-your-ideas-to-the-marketplace/",
+      "title": "Berkeley Lab IPO — program page",
+      "excerpt": "or will be assigned to a team. The next course will be virtual and held in the summer of 2023, from September to October,",
+      "page": "details"
+    },
+    {
+      "id": "check-rolling-63ee39fdb2",
+      "url": "https://ipo.lbl.gov/2020/06/15/berkeley-lab-accepting-proposals-for-covid-19-technical-assistance-program/",
+      "title": "Berkeley Lab IPO — program page",
+      "excerpt": "to the DOE’s Bay Area Site Office and OTT. All requests will be considered on a rolling basis. If the proposal is funded, principal investigators will provide a brief final",
+      "page": "details"
+    },
+    {
       "id": "check-route-902f65b470",
       "url": "https://ipo.lbl.gov/",
-      "title": "Berkeley Lab IPO — homepage checked by scrape.py",
+      "title": "Berkeley Lab IPO — homepage",
       "excerpt": "https://ipo.lbl.gov",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-7f55e7ab4f",
+      "url": "https://ipo.lbl.gov/",
+      "page": "details",
+      "excerpt": "Berkeley Lab Intellectual Property Office – Intellectual Property Office Skip to main content About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees Working with You to License Berkeley Lab Technology Industry Whether your goal is to launch a company, improve a product line, or maintain industry competitiveness, cutting-edge Berkeley Lab technologies can be part of the solution. Berkeley Lab Employees The Intellectual Property Office helps Lab researchers bring Berkeley Lab’s science solutions to the world through the following services: technology transfer and licensing, NDAs and MTAs, and entrepreneurship training. Grid Modernization Biomanufacturing Technologies & Tools Energy Storage Technologies Mineral Extraction and Recovery Technologies Microelectronics Technologies Quantum Technologies Explore licensing opportunities for our innovative,"
+    },
+    {
+      "id": "check-page-e922b5149d",
+      "url": "https://ipo.lbl.gov/2018/09/27/nontoxic-synthesis-of-highly-crystalline-sp2-bonded-boron-nitride-aerogels-for-energy-filtration-and-other-applications-2013-112/",
+      "page": "application",
+      "excerpt": "Nontoxic Synthesis of Highly Crystalline sp2-bonded Boron Nitride Aerogels for Energy, Filtration and Other Applications 2013-112 – Intellectual Property Office Skip to main content About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees Nontoxic Synthesis of Highly Crystalline sp2-bonded Boron Nitride Aerogels for Energy, Filtration and Other Applications 2013-112 APPLICATIONS OF TECHNOLOGY: A nontoxic, inexpensive process yielding boron nitride aerogels for Hydrogen storage Supporting catalyst particles Filters ADVANTAGES : Nontoxic synthesis process utilizing inexpensive raw materials supports the growing demand for new, nanostructured boron nitride materials Yields boron nitride-based material less susceptible to oxidation more stable than competitive aerogel materials with enhanced physisorption ABSTRACT: Researchers have synthesized highly crystalline"
+    },
+    {
+      "id": "check-page-7cbf4651c0",
+      "url": "https://ipo.lbl.gov/2022/03/31/mixed-electrolyte-for-li-s-batteries-for-transportation-applications/",
+      "page": "application",
+      "excerpt": "Mixed Electrolyte for Li-S Batteries for Transportation Applications 2022-018 – Intellectual Property Office Skip to main content About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees Mixed Electrolyte for Li-S Batteries for Transportation Applications 2022-018 APPLICATIONS OF TECHNOLOGY: Energy storage for transportation applications BENEFITS: Superior cycling stability and higher coulombic efficiency Stability towards polysulfide and minimization of polysulfide dissolution BACKGROUND: The Li-ion rechargeable battery is costly with a low-energy density, creating a spur of research in lithium-sulfur rechargeable batteries. The lithium sulfur reaction is more than five times the theoretical energy of transition metal oxide cathode materials and graphite coupling. However, the major obstacle is the loss of sulfur cathode material as a result of polysulfide"
+    },
+    {
+      "id": "check-page-fa5301cf4f",
+      "url": "https://ipo.lbl.gov/2025/08/12/spectracodec-a-hilbert-curve-based-method-for-encoding-metadata-in-mass-spectra-for-machine-learning-applications-2025-107-2025-121/",
+      "page": "application",
+      "excerpt": "SpectraCodec: A Hilbert curve-based method for encoding metadata in mass spectra for machine learning applications 2025-107, 2025-121 – Intellectual Property Office Skip to main content About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees Applications Embeds experimental metadata directly into mass spectrometry (MS) spectral files for unified data handling Streamlines machine learning (ML) workflows by preserving metadata with spectral data Enables reproducible, version-controlled MS analyses across collaborative environments Fully compatible with standard mzML formats and existing MS software tools Advantages/Benefits Eliminates separate metadata files, reducing complexity and risk of data loss Maintains full compatibility with existing MS analysis software and pipelines Easy ML workflow integration available for open-source Python implementation Embeds"
+    },
+    {
+      "id": "check-page-39b9b242bd",
+      "url": "https://ipo.lbl.gov/2014/07/23/aeroseal-wins-dealer-design-award/",
+      "page": "terms",
+      "excerpt": "Aeroseal Wins Dealer Design Award – Intellectual Property Office Skip to main content About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees Aeroseal Wins Dealer Design Award Article Success Story Said Tom Piscitelli, HVAC industry consultant, “Aeroseal duct sealing is a perfect example of a value-added service that can offer real growth opportunities. Adding Aeroseal as a component of a home performance solution or as a stand-alone remedy to comfort issues and high energy costs provides immediate benefits to the homeowner.” The annual award is sponsored by Air Conditioning Heating and Refrigeration News Magazine. For the complete story go here . Aeroseal is now offered in nearly all 50 states, with 300 dealers nationwide, plus Canada, Australia, France, Saudi Arabia and the UAE. Topics: Success Story Links About Us Industry News Archive For Lab Employees"
+    },
+    {
+      "id": "check-page-9e0cf1be61",
+      "url": "https://ipo.lbl.gov/2014/09/29/ospip-ipo-ocfo-transition-faqs/",
+      "page": "terms",
+      "excerpt": "OSPIP – IPO – OCFO Transition – FAQs – Intellectual Property Office Skip to main content About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees OSPIP – IPO – OCFO Transition – FAQs Effective Oct. 1, non-Federal sponsored research pre-award contract management moves from the Office of Sponsored Projects and Industry Partnerships (OSPIP) to the Innovation and Partnerships Office (IPO). Non-federal sponsors include industry (including Federal flow through awards) universities (including Federal flow through awards) , state & local governments, non-profits, foreign entities, all CRADAs, all gifts and all user agreements. Federal Strategic Partnership Program (SPP) agreements (formerly Work-for-Others, WFO) and M&O Contractor (Other DOE labs) pre-award contract management moves from OSPIP to the OCFO Budget Office. Contracts Officers (COs) are now assigned to"
+    },
+    {
+      "id": "check-page-498ba6098d",
+      "url": "https://ipo.lbl.gov/2020/03/10/a-computational-temporal-logic-for-superconducting-accelerators-2020-015/",
+      "page": "details",
+      "excerpt": "A New Design for RSFQ Superconducting Logic Computation Systems 2020-015 – Intellectual Property Office Skip to main content About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees A New Design for RSFQ Superconducting Logic Computation Systems 2020-015 APPLICATIONS OF TECHNOLOGY Next-generation data centers and high performance computing (HPC) systems Large-scale computing Large-scale science computing National security computing BACKGROUND Currently, data centers are bigger than football fields and require massive amounts of energy to operate. Yet large scale computing needs in science, industry, and for national security continue to push computing beyond its current capacity. The emergence of rapid single flux quantum (RSFQ) superconducting logic offers a new design methodology and computational model that could reap orders of magnitude higher performance"
+    },
+    {
+      "id": "check-page-42266f8952",
+      "url": "https://ipo.lbl.gov/2020/03/10/do-you-have-questions-about-intellectual-property-ask-ipo/",
+      "page": "details",
+      "excerpt": "Do you have questions about intellectual property? Ask IPO – Intellectual Property Office Skip to main content About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees Do you have questions about intellectual property? Ask IPO The Intellectual Property Office (IPO) will be at the Lab cafeteria from noon to 1:00 pm from March 17 to March 19. Staff will answer questions about records of invention, software disclosures, patents, copyrights, NDAs, MTAs, and entrepreneurship training, among others. Bring your questions! Links About Us Industry News Archive For Lab Employees Connect Our Organization Lawrence Berkeley National Laboratory Intellectual Property Office"
+    },
+    {
+      "id": "check-page-1f8c9156a8",
+      "url": "https://ipo.lbl.gov/2020/06/15/berkeley-lab-accepting-proposals-for-covid-19-technical-assistance-program/",
+      "page": "details",
+      "excerpt": "Berkeley Lab Accepting Proposals for COVID-19 Technical Assistance Program – Intellectual Property Office Skip to main content About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees Berkeley Lab Accepting Proposals for COVID-19 Technical Assistance Program Article News Run by the Office of Technology Transitions (OTT), CTAP allows national laboratories to offer short-term, limited assistance to U.S.-based entities dealing with particularly challenging technical hurdles in fighting COVID-19. The funds will support limited-duration and -scope (up to 40 hours) of technical services, analysis, testing, and consulting; they are not intended to be R&D intensive. Funds must be used by September, 2021. To be eligible for consideration for CTAP funding, proposals must: advance COVID-19 response in the U.S., and be provided to U.S. entities, not overlap with another"
+    },
+    {
+      "id": "check-page-ba06cd9f12",
+      "url": "https://ipo.lbl.gov/2021/06/30/a-conversation-about-innovation-with-deepti-tanjore/",
+      "page": "details",
+      "excerpt": "A Conversation about Innovation with Deepti Tanjore – Intellectual Property Office Skip to main content About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees A Conversation about Innovation with Deepti Tanjore Article Innovation Advanced Biofuels and Bioproducts Process Development Unit (ABPDU), about innovation. They focus on Deepti’s origin story, her work at the Lab, and her dedication to resolving scale-up challenges for synthetic biology based technologies. Watch the video (47:16). This interview is part of IPO’s Innovation Interview Series. Topics: Innovation Links About Us Industry News Archive For Lab Employees Connect Our Organization Lawrence Berkeley National Laboratory Intellectual Property Office"
+    },
+    {
+      "id": "check-page-7001e91ee6",
+      "url": "https://ipo.lbl.gov/2023/04/17/an-area-efficient-superconducting-unary-convolutional-neural-network-cnn-accelerator-for-high-performance-computing-systems/",
+      "page": "details",
+      "excerpt": "An Area-efficient Superconducting Unary Convolutional Neural Network (CNN) Accelerator for High Performance Computing Systems 2022-056 – Intellectual Property Office Skip to main content About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees An Area-efficient Superconducting Unary Convolutional Neural Network (CNN) Accelerator for High Performance Computing Systems 2022-056 APPLICATIONS OF TECHNOLOGY: Applications that require high performance computing using convolutional neural networks (CNNs), like: Data mining Medical imaging Autonomous vehicles National defense/security Scientific research Control circuits for quantum computing BENEFITS: More energy efficient than existing CNN hardware accelerators Smaller form factor than existing binary SFQ accelerators, resulting in higher-scale CNNs in the same chip area High computational throughput compared to"
+    },
+    {
+      "id": "check-page-b4683c742a",
+      "url": "https://ipo.lbl.gov/2023/04/27/unary-single-flux-quantum-u-sfq-architecture-for-scaling-superconducting-accelerators/",
+      "page": "details",
+      "excerpt": "Unary Single Flux Quantum (U-SFQ) Architecture for Scaling Superconducting Accelerators 2021-112 – Intellectual Property Office Skip to main content About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees Unary Single Flux Quantum (U-SFQ) Architecture for Scaling Superconducting Accelerators 2021-112 APPLICATIONS OF TECHNOLOGY: Applications that require high performance computing or high performance digital communications, such as: Artificial intelligence/Machine learning Image and video processing Digital signal processing Infrared sensors Space exploration equipment Quantum technology BENEFITS: Better performance and lower power/energy consumption than current complementary metal-oxide-semiconductor (CMOS) and binary superconducting circuits Better accuracy in the presence of errors and circuit noise Reliability in harsh environments BACKGROUND:"
+    },
+    {
+      "id": "check-page-052f9563d6",
+      "url": "https://ipo.lbl.gov/2023/07/10/berkeley-lab-and-partners-launch-phase-1-of-cradle-to-commerce-program/",
+      "page": "details",
+      "excerpt": "Berkeley Lab and Partners Launch Phase 1 of Cradle to Commerce Program – Intellectual Property Office Skip to main content About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees Berkeley Lab and Partners Launch Phase 1 of Cradle to Commerce Program Article Entrepreneurship The Cradle to Commerce (C2C) program , a Department of Energy Technology Commercialization Fund-supported program to accelerate the commercialization of national lab innovations, announced the selection of its first “legion” teams. The teams comprise national lab inventors and entrepreneurs who have been matched up and will receive technical and business training and mentorship, and have access to national lab user facilities and resources to support technological development. Led by Berkeley Lab in partnership with national labs Argonne National Laboratory, Idaho National Laboratory, and"
+    },
+    {
+      "id": "check-page-59c3b0e474",
+      "url": "https://ipo.lbl.gov/2023/07/31/a-hardware-accelerator-for-optimized-sparse-accumulation-in-high-performance-computing/",
+      "page": "details",
+      "excerpt": "A Hardware Accelerator for Optimized Sparse Accumulation in High Performance Computing 2022-066 – Intellectual Property Office Skip to main content About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees A Hardware Accelerator for Optimized Sparse Accumulation in High Performance Computing 2022-066 APPLICATIONS OF TECHNOLOGY: Applications that utilize sparse graph or matrix algorithms in their computational workloads, like: Scientific computing Machine learning Social network analysis Image and signal processing BENEFITS: Improved sparse accumulation (SPA) throughput Improved core utilization Reduced energy consumption Minimal hardware overhead Flexible software Interface Support for a broader class of sparse operations BACKGROUND: Performing sparse linear algebra is an important operation in many computing applications. One popular algorithm to perform"
+    },
+    {
+      "id": "check-page-d15e9d9bc0",
+      "url": "https://ipo.lbl.gov/2023/08/16/the-innovation-corps-lite-training-program-i-corps-lite-ignite-your-entrepreneurial-skills-and-bring-your-ideas-to-the-marketplace/",
+      "page": "details",
+      "excerpt": "The Innovation Corps Lite Training Program (I-Corps Lite): Ignite Your Entrepreneurial Skills and Bring Your Ideas to the Marketplace – Intellectual Property Office Skip to main content About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees About Us Team Organization Chart Startups by Technology Contact Complaint Resolution & Whistleblower Protection Act Industry Available Technologies License Process Agreements Startup Opportunities Software Marketplace Submit Reports News Success Stories Awards News Archive For Lab Employees The Innovation Corps Lite Training Program (I-Corps Lite): Ignite Your Entrepreneurial Skills and Bring Your Ideas to the Marketplace Article Entrepreneurship The Intellectual Property Office at Berkeley Lab is excited to offer the 2023 I-Corps Lite program, which aims to foster innovation and entrepreneurial skills among researchers at the Lab. The program encourages participants to apply innovative thinking to their everyday lab activities. Through a series of four training sessions run by Berkeley Lab commercialization experts, participants will learn skills related to idea and process innovation, leadership and"
     }
   ],
   "findings": {
@@ -27,8 +146,25 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-63ee39fdb2"
+      }
+    ],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-994e17b62c"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

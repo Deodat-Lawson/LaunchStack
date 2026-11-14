@@ -1,15 +1,7 @@
 {
   "programId": "boost-vc",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://www.boost.vc/portfolio",
-      "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://www.boost.vc/faq",
       "page": "terms",
@@ -20,8 +12,16 @@
     },
     {
       "url": "https://www.boost.vc/fellowship",
-      "page": "application",
+      "page": "other",
       "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.boost.vc/portfolio",
+      "page": "portfolio",
+      "anchor": "Portfolio",
       "fetched": true,
       "blocked": null,
       "origin": "official"

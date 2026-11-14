@@ -1,11 +1,67 @@
 {
   "programId": "lventure",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://zestgroup.vc/en/about-us",
       "page": "details",
       "anchor": "About us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/en/blog/exe-engineering-eni-cdp-venture-capital-investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/en/blog/proptech-newarc-closes-800k-seed-investment-round",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/en/blog/truescreen-secures-2-4-million-seed-round-investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/en/contact-us-investments",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "page": "terms",
+      "anchor": "Scouting Ticket",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/en/governance/internal-dealing",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/en/investments",
+      "page": "terms",
+      "anchor": "Investments",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -15,6 +71,62 @@
       "page": "portfolio",
       "anchor": "Portfolio",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/it/governance/internal-dealing",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/it/investments",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/storage/files/190533b9-9a95-43a1-a65c-225c63ec57ef/Internal-Dealing-Gay-20-dicembre-2024_1INFO.pdf",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/storage/files/1dcc2277-e3cf-4e31-a3e4-46fbe1389293/Internal-dealing-Gay-20062024.pdf",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/storage/files/2019/05/01072016-COMUNICAZIONE-INTERNAL-DEALING.pdf",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/storage/files/2019/05/02102015-COMUNICAZIONE-INTERNAL-DEALING.pdf",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://zestgroup.vc/storage/files/2019/05/04032013-COMUNICAZIONE-INTERNAL-DEALING.pdf",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

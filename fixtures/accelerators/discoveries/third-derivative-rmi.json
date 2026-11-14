@@ -1,19 +1,67 @@
 {
   "programId": "third-derivative-rmi",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://rmi.org/about/",
       "page": "details",
       "anchor": "About Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/about/board-of-trustees/",
+      "page": "details",
+      "anchor": "Board of Trustees",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/about/careers/",
+      "page": "details",
+      "anchor": "Careers",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/about/careers/benefits/",
+      "page": "details",
+      "anchor": "Benefits",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/about/careers/faqs/",
+      "page": "terms",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://rmi.org/about/our-impact/",
+      "url": "https://rmi.org/about/careers/how-we-work/",
       "page": "details",
-      "anchor": "Our Impact",
+      "anchor": "How We Work",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/about/careers/our-culture/",
+      "page": "details",
+      "anchor": "Our Culture",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/about/financials-annual-reports/",
+      "page": "details",
+      "anchor": "Financials & Annual Reports",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -35,50 +83,66 @@
       "origin": "official"
     },
     {
-      "url": "https://rmi.org/about/board-of-trustees/",
+      "url": "https://rmi.org/about/our-impact/",
       "page": "details",
-      "anchor": "Board of Trustees",
+      "anchor": "Our Impact",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://rmi.org/about/financials-annual-reports/",
-      "page": "details",
-      "anchor": "Financials & Annual Reports",
-      "fetched": false,
+      "url": "https://rmi.org/accelerating-clean-regional-economies-a-great-lakes-investment-strategy/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://rmi.org/about/careers/",
-      "page": "details",
-      "anchor": "Careers",
-      "fetched": false,
+      "url": "https://rmi.org/faq-why-green-hydrogen/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://rmi.org/about/careers/how-we-work/",
-      "page": "details",
-      "anchor": "How We Work",
-      "fetched": false,
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=applying-hope-in-a-time-of-crisis",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://rmi.org/about/careers/our-culture/",
-      "page": "details",
-      "anchor": "Our Culture",
-      "fetched": false,
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=applying-hope-todays-tumultuous-times",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://rmi.org/about/careers/benefits/",
-      "page": "details",
-      "anchor": "Benefits",
-      "fetched": false,
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=rmi-applications",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -86,6 +150,94 @@
       "url": "https://rmi.org/get-updates/",
       "page": "batches",
       "anchor": "Get Updates",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/homebuilderscan/faqs/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/our-solutions/driving-investment/",
+      "page": "terms",
+      "anchor": "Driving Investment",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/our-solutions/driving-investment/climate-finance/",
+      "page": "terms",
+      "anchor": "Climate Finance",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/our-solutions/driving-investment/market-creation/",
+      "page": "terms",
+      "anchor": "Market Creation",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/our-solutions/driving-investment/technology-and-innovation/",
+      "page": "terms",
+      "anchor": "Technology and Innovation",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/our-solutions/driving-investment/us-policy/",
+      "page": "terms",
+      "anchor": "US Policy",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/our-solutions/driving-investment/workforce-development/",
+      "page": "terms",
+      "anchor": "Workforce Development",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/resources/applying-hope-in-a-time-of-crisis/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/resources/applying-hope-todays-tumultuous-times/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/resources/corporate-green-power-procurement-and-application-chinas-market-progress-and-outlook/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://rmi.org/resources/from-california-to-the-caribbean-sharing-expertise-on-developing-energy-storage-for-grid-applications-in-island-nations/",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

@@ -1,7 +1,15 @@
 {
   "programId": "norrsken",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://norrsken.org/",
+      "page": "terms",
+      "anchor": "Investments",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.norrsken.org/about",
       "page": "details",

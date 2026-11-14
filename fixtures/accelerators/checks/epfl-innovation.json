@@ -1,129 +1,311 @@
 {
   "programId": "epfl-innovation",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.epfl-innovationpark.ch/",
-    "https://www.epfl-innovationpark.ch/about/mission"
+    "https://www.epfl-innovationpark.ch/about/mission",
+    "https://www.epfl-innovationpark.ch/about/who-we-are",
+    "https://www.epfl-innovationpark.ch/corporates/partnering/knova",
+    "https://www.epfl-innovationpark.ch/companies"
   ],
   "evidence": [
     {
-      "id": "check-deal-3374879ceb",
+      "id": "check-deal-cac2517f3b",
       "url": "https://www.epfl-innovationpark.ch/",
-      "title": "EPFL Innovation Park — homepage checked by scrape.py",
-      "excerpt": "Grant provides an extensive support package designed to propel the success of early-stage digital health startups. This encompassing initiative includes up to CHF 90,000 in non-dilutive funding, personalized coaching, on-demand CxO services to enhance team capabilities, and invaluable market feedback sourced from a network of",
+      "title": "EPFL Innovation Park — homepage",
+      "excerpt": "digital health startups. This encompassing initiative includes up to CHF 90,000 in non-dilutive funding, personalized coaching, on-demand CxO",
       "page": "details"
+    },
+    {
+      "id": "check-duration-2aed7348d8",
+      "url": "https://www.epfl-innovationpark.ch/",
+      "title": "EPFL Innovation Park — homepage",
+      "excerpt": "and cybersecurity  Starting October 2026  8-month program  Application deadline 30 June, 2026",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-cd33384db8",
+      "url": "https://www.epfl-innovationpark.ch/",
+      "title": "EPFL Innovation Park — homepage",
+      "excerpt": "digital health  Starting September 2026  3 to 12-month program  Application deadline July 31, 2026 The",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-dc34b368e3",
+      "url": "https://www.epfl-innovationpark.ch/",
+      "title": "EPFL Innovation Park — homepage",
+      "excerpt": "and climate challenges  Starting March 2026  8-month program  Application deadline January 31, 2026",
+      "page": "details"
+    },
+    {
+      "id": "check-email-0105925e23",
+      "url": "https://www.epfl-innovationpark.ch/about/who-we-are",
+      "title": "EPFL Innovation Park — program page",
+      "excerpt": "Park Bâtiment C CH-1015 Lausanne +41 (0)21 353 80 00 info@epfl-innovationpark.ch Terms of use Cookie Preferences Follow Us © EPFL",
+      "page": "details"
+    },
+    {
+      "id": "check-email-2053488598",
+      "url": "https://www.epfl-innovationpark.ch/companies",
+      "title": "EPFL Innovation Park — portfolio page",
+      "excerpt": "Park Bâtiment C CH-1015 Lausanne +41 (0)21 353 80 00 info@epfl-innovationpark.ch Terms of use Cookie Preferences Follow Us © EPFL",
+      "page": "portfolio"
     },
     {
       "id": "check-email-2f722b8b0f",
       "url": "https://www.epfl-innovationpark.ch/",
-      "title": "EPFL Innovation Park — homepage checked by scrape.py",
+      "title": "EPFL Innovation Park — homepage",
       "excerpt": "Park Bâtiment C CH-1015 Lausanne +41 (0)21 353 80 00 info@epfl-innovationpark.ch Terms of use Cookie Preferences Follow Us © EPFL",
       "page": "details"
     },
     {
       "id": "check-email-3f2490c0c8",
       "url": "https://www.epfl-innovationpark.ch/",
-      "title": "EPFL Innovation Park — homepage checked by scrape.py",
+      "title": "EPFL Innovation Park — homepage",
+      "excerpt": "info@epfl-innovationpark.ch",
+      "page": "details"
+    },
+    {
+      "id": "check-email-40d2c66092",
+      "url": "https://www.epfl-innovationpark.ch/about/who-we-are",
+      "title": "EPFL Innovation Park — program page",
+      "excerpt": "info@epfl-innovationpark.ch",
+      "page": "details"
+    },
+    {
+      "id": "check-email-470fb47214",
+      "url": "https://www.epfl-innovationpark.ch/corporates/partnering/knova",
+      "title": "EPFL Innovation Park — program page",
       "excerpt": "info@epfl-innovationpark.ch",
       "page": "details"
     },
     {
       "id": "check-email-54f1f96a00",
       "url": "https://www.epfl-innovationpark.ch/about/mission",
-      "title": "EPFL Innovation Park — details page checked by scrape.py",
+      "title": "EPFL Innovation Park — program page",
       "excerpt": "info@epfl-innovationpark.ch",
       "page": "details"
     },
     {
       "id": "check-email-7c91b830ec",
       "url": "https://www.epfl-innovationpark.ch/about/mission",
-      "title": "EPFL Innovation Park — details page checked by scrape.py",
+      "title": "EPFL Innovation Park — program page",
       "excerpt": "Park Bâtiment C CH-1015 Lausanne +41 (0)21 353 80 00 info@epfl-innovationpark.ch Terms of use Cookie Preferences Follow Us © EPFL",
       "page": "details"
     },
     {
+      "id": "check-email-a17d9b6126",
+      "url": "https://www.epfl-innovationpark.ch/corporates/partnering/knova",
+      "title": "EPFL Innovation Park — program page",
+      "excerpt": "Park Bâtiment C CH-1015 Lausanne +41 (0)21 353 80 00 info@epfl-innovationpark.ch Terms of use Cookie Preferences Follow Us © EPFL",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d14772fc2b",
+      "url": "https://www.epfl-innovationpark.ch/companies",
+      "title": "EPFL Innovation Park — portfolio page",
+      "excerpt": "info@epfl-innovationpark.ch",
+      "page": "portfolio"
+    },
+    {
       "id": "check-name-b1b86ffa3b",
       "url": "https://www.epfl-innovationpark.ch/",
-      "title": "EPFL Innovation Park — homepage checked by scrape.py",
+      "title": "EPFL Innovation Park — homepage",
       "excerpt": "EPFL Innovation Park - Home Startups Corporates Community Societal Impact About",
       "page": "details"
     },
     {
+      "id": "check-phone-21fcabb0ee",
+      "url": "https://www.epfl-innovationpark.ch/companies",
+      "title": "EPFL Innovation Park — portfolio page",
+      "excerpt": "+41 (0)21 353 80 00",
+      "page": "portfolio"
+    },
+    {
       "id": "check-phone-534801e505",
       "url": "https://www.epfl-innovationpark.ch/",
-      "title": "EPFL Innovation Park — homepage checked by scrape.py",
+      "title": "EPFL Innovation Park — homepage",
       "excerpt": "+41 (0)21 353 80 00",
       "page": "details"
     },
     {
       "id": "check-phone-cac80f43b9",
       "url": "https://www.epfl-innovationpark.ch/about/mission",
-      "title": "EPFL Innovation Park — details page checked by scrape.py",
+      "title": "EPFL Innovation Park — program page",
+      "excerpt": "+41 (0)21 353 80 00",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-e9076318ac",
+      "url": "https://www.epfl-innovationpark.ch/corporates/partnering/knova",
+      "title": "EPFL Innovation Park — program page",
+      "excerpt": "+41 (0)21 353 80 00",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-f910f79e90",
+      "url": "https://www.epfl-innovationpark.ch/about/who-we-are",
+      "title": "EPFL Innovation Park — program page",
       "excerpt": "+41 (0)21 353 80 00",
       "page": "details"
     },
     {
       "id": "check-portfolio-14a5ed762d",
       "url": "https://www.epfl-innovationpark.ch/",
-      "title": "EPFL Innovation Park — homepage checked by scrape.py",
+      "title": "EPFL Innovation Park — homepage",
       "excerpt": "Community → https://www.epfl-innovationpark.ch/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2584f0c856",
+      "url": "https://www.epfl-innovationpark.ch/about/who-we-are",
+      "title": "EPFL Innovation Park — program page",
+      "excerpt": "Companies → https://www.epfl-innovationpark.ch/companies",
       "page": "details"
     },
     {
       "id": "check-portfolio-3b0caac0f9",
       "url": "https://www.epfl-innovationpark.ch/about/mission",
-      "title": "EPFL Innovation Park — details page checked by scrape.py",
+      "title": "EPFL Innovation Park — program page",
       "excerpt": "Company list → https://www.epfl-innovationpark.ch/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-658f03c854",
+      "url": "https://www.epfl-innovationpark.ch/companies",
+      "title": "EPFL Innovation Park — portfolio page",
+      "excerpt": "Startups → https://www.epfl-innovationpark.ch/startups/incubating-hosting",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-66859aa792",
+      "url": "https://www.epfl-innovationpark.ch/corporates/partnering/knova",
+      "title": "EPFL Innovation Park — program page",
+      "excerpt": "Community → https://www.epfl-innovationpark.ch/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-68b40efb02",
+      "url": "https://www.epfl-innovationpark.ch/about/who-we-are",
+      "title": "EPFL Innovation Park — program page",
+      "excerpt": "Community → https://www.epfl-innovationpark.ch/companies",
       "page": "details"
     },
     {
       "id": "check-portfolio-6b6e8063b3",
       "url": "https://www.epfl-innovationpark.ch/",
-      "title": "EPFL Innovation Park — homepage checked by scrape.py",
+      "title": "EPFL Innovation Park — homepage",
       "excerpt": "Company list → https://www.epfl-innovationpark.ch/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-72b881cc54",
+      "url": "https://www.epfl-innovationpark.ch/about/who-we-are",
+      "title": "EPFL Innovation Park — program page",
+      "excerpt": "Startups → https://www.epfl-innovationpark.ch/startups/incubating-hosting",
       "page": "details"
     },
     {
       "id": "check-portfolio-7a22bf929a",
       "url": "https://www.epfl-innovationpark.ch/",
-      "title": "EPFL Innovation Park — homepage checked by scrape.py",
+      "title": "EPFL Innovation Park — homepage",
       "excerpt": "Startups → https://www.epfl-innovationpark.ch/startups/incubating-hosting",
       "page": "details"
     },
     {
       "id": "check-portfolio-7f28b64882",
       "url": "https://www.epfl-innovationpark.ch/about/mission",
-      "title": "EPFL Innovation Park — details page checked by scrape.py",
+      "title": "EPFL Innovation Park — program page",
       "excerpt": "Startups → https://www.epfl-innovationpark.ch/startups/incubating-hosting",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-80bf4fffc3",
+      "url": "https://www.epfl-innovationpark.ch/about/who-we-are",
+      "title": "EPFL Innovation Park — program page",
+      "excerpt": "Company list → https://www.epfl-innovationpark.ch/companies",
       "page": "details"
     },
     {
       "id": "check-portfolio-8c0401f7dc",
       "url": "https://www.epfl-innovationpark.ch/about/mission",
-      "title": "EPFL Innovation Park — details page checked by scrape.py",
+      "title": "EPFL Innovation Park — program page",
       "excerpt": "Community → https://www.epfl-innovationpark.ch/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b862781d01",
+      "url": "https://www.epfl-innovationpark.ch/corporates/partnering/knova",
+      "title": "EPFL Innovation Park — program page",
+      "excerpt": "Startups → https://www.epfl-innovationpark.ch/startups/incubating-hosting",
       "page": "details"
     },
     {
       "id": "check-portfolio-bd77fc1d4d",
       "url": "https://www.epfl-innovationpark.ch/about/mission",
-      "title": "EPFL Innovation Park — details page checked by scrape.py",
+      "title": "EPFL Innovation Park — program page",
       "excerpt": "Companies → https://www.epfl-innovationpark.ch/companies",
       "page": "details"
     },
     {
       "id": "check-portfolio-c3cc00a59b",
       "url": "https://www.epfl-innovationpark.ch/",
-      "title": "EPFL Innovation Park — homepage checked by scrape.py",
+      "title": "EPFL Innovation Park — homepage",
+      "excerpt": "Companies → https://www.epfl-innovationpark.ch/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f4859ea3fa",
+      "url": "https://www.epfl-innovationpark.ch/corporates/partnering/knova",
+      "title": "EPFL Innovation Park — program page",
+      "excerpt": "Company list → https://www.epfl-innovationpark.ch/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f77fb16510",
+      "url": "https://www.epfl-innovationpark.ch/corporates/partnering/knova",
+      "title": "EPFL Innovation Park — program page",
       "excerpt": "Companies → https://www.epfl-innovationpark.ch/companies",
       "page": "details"
     },
     {
       "id": "check-route-eeaa0aa7c4",
       "url": "https://www.epfl-innovationpark.ch/",
-      "title": "EPFL Innovation Park — homepage checked by scrape.py",
+      "title": "EPFL Innovation Park — homepage",
       "excerpt": "https://www.epfl-innovationpark.ch/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-e1c05326d8",
+      "url": "https://www.epfl-innovationpark.ch/",
+      "page": "details",
+      "excerpt": "EPFL Innovation Park - Home Startups Corporates Community Societal Impact About Startups Offers & Services Incubating & hosting Acceleration Coaching Partnering Funding Related content Success stories Events News Corporates Collaboration & hosting Partnering Access to startups Related content Company list Events News Community Companies Locations Working here Events News Success stories Societal Impact Our commitment Walk the talk Get inspired Related content Mission Events News About Mission Who we are Related content Events News Jobs Login Jobs Login   Menu Offers & Services Incubating & hosting Acceleration Coaching Partnering Funding Related content Companies Success stories Events News Corporates Collaboration & hosting Partnering Access to startups Related content Companies Events News Community Companies Locations Working here Events News Success stories Societal Impact Our commitment Walk the talk Get inspired Related content Mission Events News About Mission Who we are Related content Events News Vibrant, deep tech hub at the core of the EPFL Campus, one of Europe’s most cosmopolitan science and engineering universities. A springboard for your high-tech enterprise. · In the spotlight · In the spotlight · In the spotlight · In the spotlight · In the spotlight · In the spotlight · In the spotlight Services for Startups /startups/incubating-hosting Incubating & hosting"
+    },
+    {
+      "id": "check-page-ab5eb0f636",
+      "url": "https://www.epfl-innovationpark.ch/about/mission",
+      "page": "details",
+      "excerpt": "EPFL Innovation Park - Mission Startups Corporates Community Societal Impact About Startups Offers & Services Incubating & hosting Acceleration Coaching Partnering Funding Related content Success stories Events News Corporates Collaboration & hosting Partnering Access to startups Related content Company list Events News Community Companies Locations Working here Events News Success stories Societal Impact Our commitment Walk the talk Get inspired Related content Mission Events News About Mission Who we are Related content Events News Jobs Login Jobs Login   Menu Offers & Services Incubating & hosting Acceleration Coaching Partnering Funding Related content Companies Success stories Events News Corporates Collaboration & hosting Partnering Access to startups Related content Companies Events News Community Companies Locations Working here Events News Success stories Societal Impact Our commitment Walk the talk Get inspired Related content Mission Events News About Mission Who we are Related content Events News About / Mission From world-class research to impactful solutions for society Whereas EPFL draws some of the best international researchers to develop cutting-edge technology, the EPFL Innovation Park is a hive of interaction between academia and business, attracting outstanding, innovative projects and empowering them to flourish, scale up and transform society. It is"
+    },
+    {
+      "id": "check-page-ec227c07e9",
+      "url": "https://www.epfl-innovationpark.ch/about/who-we-are",
+      "page": "details",
+      "excerpt": "EPFL Innovation Park - Who we are Startups Corporates Community Societal Impact About Startups Offers & Services Incubating & hosting Acceleration Coaching Partnering Funding Related content Success stories Events News Corporates Collaboration & hosting Partnering Access to startups Related content Company list Events News Community Companies Locations Working here Events News Success stories Societal Impact Our commitment Walk the talk Get inspired Related content Mission Events News About Mission Who we are Related content Events News Jobs Login Jobs Login   Menu Offers & Services Incubating & hosting Acceleration Coaching Partnering Funding Related content Companies Success stories Events News Corporates Collaboration & hosting Partnering Access to startups Related content Companies Events News Community Companies Locations Working here Events News Success stories Societal Impact Our commitment Walk the talk Get inspired Related content Mission Events News About Mission Who we are Related content Events News About / Who we are Who we are We are a multidisciplinary team of experienced professionals who aspire to serve not only our resident companies, but also all the innovative high-tech companies and research organizations that are involved in our ecosystem and programs, to bring science to market, to speed up the development of innovative solutions, and create value and"
+    },
+    {
+      "id": "check-page-1c1f9601cf",
+      "url": "https://www.epfl-innovationpark.ch/corporates/partnering/knova",
+      "page": "details",
+      "excerpt": "EPFL Innovation Park - Partnership programs Startups Corporates Community Societal Impact About Startups Offers & Services Incubating & hosting Acceleration Coaching Partnering Funding Related content Success stories Events News Corporates Collaboration & hosting Partnering Access to startups Related content Company list Events News Community Companies Locations Working here Events News Success stories Societal Impact Our commitment Walk the talk Get inspired Related content Mission Events News About Mission Who we are Related content Events News Jobs Login Jobs Login   Menu Offers & Services Incubating & hosting Acceleration Coaching Partnering Funding Related content Companies Success stories Events News Corporates Collaboration & hosting Partnering Access to startups Related content Companies Events News Community Companies Locations Working here Events News Success stories Societal Impact Our commitment Walk the talk Get inspired Related content Mission Events News About Mission Who we are Related content Events News  Back Corporate / Partnering / KNOVA KNOVA KNOVA is an Open Innovation Platform that supports companies leveraging university research ecosystem to nurture their innovation, while also providing startups and researchers in the EPFL ecosystem with the chance to make a global impact with their technologies. · Your benefits · Your benefits · Your benefits ·"
+    },
+    {
+      "id": "check-page-e727c784b0",
+      "url": "https://www.epfl-innovationpark.ch/companies",
+      "page": "portfolio",
+      "excerpt": "EPFL Innovation Park - Companies Startups Corporates Community Societal Impact About Startups Offers & Services Incubating & hosting Acceleration Coaching Partnering Funding Related content Success stories Events News Corporates Collaboration & hosting Partnering Access to startups Related content Company list Events News Community Companies Locations Working here Events News Success stories Societal Impact Our commitment Walk the talk Get inspired Related content Mission Events News About Mission Who we are Related content Events News Jobs Login Jobs Login   Menu Offers & Services Incubating & hosting Acceleration Coaching Partnering Funding Related content Companies Success stories Events News Corporates Collaboration & hosting Partnering Access to startups Related content Companies Events News Community Companies Locations Working here Events News Success stories Societal Impact Our commitment Walk the talk Get inspired Related content Mission Events News About Mission Who we are Related content Events News Ecosystem / Company list Companies Quicklinks Access Presskit Login Contact Fondation EPFL Innovation Park Bâtiment C CH-1015 Lausanne +41 (0)21 353 80 00 info@epfl-innovationpark.ch Terms of use Cookie Preferences Follow Us © EPFL Innovation Park | Designed by :ratio Developed by Coteries"
     }
   ],
   "findings": {
@@ -149,11 +331,40 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-cd33384db8"
+      },
+      {
+        "value": "8 months",
+        "evidenceId": "check-duration-2aed7348d8"
+      }
+    ],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "Grant provides an extensive support package designed to propel the success of early-stage digital health startups. This encompassing initiative includes up to CHF 90,000 in non-dilutive funding, personalized coaching, on-demand CxO services to enhance team capabilities, and invaluable market feedback sourced from a network of",
-        "evidenceId": "check-deal-3374879ceb"
+        "value": "digital health startups. This encompassing initiative includes up to CHF 90,000 in non-dilutive funding, personalized coaching, on-demand CxO",
+        "evidenceId": "check-deal-cac2517f3b"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "90000",
+          "currency": "CHF",
+          "equity": null,
+          "label": "Grant",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-cac2517f3b"
       }
     ],
     "portfolioPages": [

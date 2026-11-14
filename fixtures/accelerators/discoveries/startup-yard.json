@@ -1,7 +1,79 @@
 {
   "programId": "startup-yard",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://startupyard.com/6-tips-to-make-your-startup-accelerator-application-standout/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel-1/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel-2/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-funnel/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-country/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain-1/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain-vs-domain/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/a-look-back-at-8-months-of-the-tatum-blockchain-accelerator-powered-by-startupyard/applications-per-domain/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/apply-to-startupyard-1-hour/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://startupyard.com/apply-to-startupyard-remote-lab/",
       "page": "application",
@@ -11,18 +83,50 @@
       "origin": "official"
     },
     {
-      "url": "https://startupyard.com/faq/",
-      "page": "terms",
-      "anchor": "our full FAQ here",
+      "url": "https://startupyard.com/apply-to-startupyard/",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://startupyard.com/the-next-wave-begins-startupyard-announces-batch-15/",
-      "page": "batches",
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/",
+      "page": "application",
       "anchor": "",
       "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/1e6a047e/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/can-we-get-200-applications-10-finalists-and-6-winning-startups-in-6-weeks/attachment/43675945/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/category/accelerator/",
+      "page": "details",
+      "anchor": "Life at an Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/faq/",
+      "page": "terms",
+      "anchor": "our full FAQ here",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -30,6 +134,22 @@
       "url": "https://startupyard.com/frequently-asked-questions-about-startupyard/",
       "page": "terms",
       "anchor": "FAQ- Frequently Asked Questions",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/the-future-of-the-accelerator-model-a-founder-centric-approach-in-an-evolving-landscape/",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/the-next-wave-begins-startupyard-announces-batch-15/",
+      "page": "batches",
+      "anchor": "",
       "fetched": false,
       "blocked": null,
       "origin": "official"

@@ -9,14 +9,14 @@
   "websiteUrl": "https://atoms.accel.com/",
   "applyUrl": "https://apply.accel-atoms.com/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Accel Atoms | Catalyst to your 0→1 journey X Philosophy Portfolio News FAQs Perks Apply Early APPLY Apply Early AI Cohort 2026: Meet the Startups Read the Blog Atoms X: Meet the startups Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog AI Cohort 2026: Meet the Founders Read the Blog Accel Atoms X + Prosus: Meet the Founders Read the Blog Accel Atoms is a pre-seed scaling program that brings together the best of Accel’s resources and global network, for Indian & Indian-origin founders building from anywhere. Atoms X Read the blog Sign up for our Newsletter Be the first to know about our latest cohorts, upcoming events, and updates from the portfolio Subscribe Hit Escape Velocity with Accel Atoms Check Your Inbox Oops! Something went wrong while submitting the form. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Pre-seed program by Accel designed to help you hit escape velocity. Apply early to our AI program and Atoms X for up to $2m in funding.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Accel Atoms is a pre-seed scaling program that brings together the best of Accel’s resources and global network, for Indian & Indian-origin founders building from anywhere.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "accel-atoms-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://apply.accel-atoms.com/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

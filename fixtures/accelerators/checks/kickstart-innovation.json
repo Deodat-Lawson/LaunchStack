@@ -1,51 +1,326 @@
 {
   "programId": "kickstart-innovation",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.kickstart-innovation.com/",
     "http://kickstart-innovation.com/apply",
-    "https://www.kickstart-innovation.com/about-impact",
-    "https://www.kickstart-innovation.com/about-faq"
+    "https://www.kickstart-innovation.com/post/application-for-the-3rd-swiss-market-entry-bootcamp-starts",
+    "https://www.kickstart-innovation.com/post/kickstart-accelerator-invites-startups-in-educational-tech-to-apply-for-new-edtech-vertical",
+    "https://www.kickstart-innovation.com/post/kickstart-intrapreneurship-program-2025-applications-open",
+    "https://www.kickstart-innovation.com/post/startups-can-apply-for-the-international-kickstart-innovation-program-2025-until-26-may",
+    "https://www.kickstart-innovation.com/post/ten-reasons-not-to-apply-to-kickstart",
+    "https://www.kickstart-innovation.com/apply",
+    "https://www.kickstart-innovation.com/about-faq",
+    "https://www.kickstart-innovation.com/community-investors",
+    "https://www.kickstart-innovation.com/post/41-international-startups-in-switzerland-to-make-deals-in-the-coming-weeks",
+    "https://www.kickstart-innovation.com/post/kickstart-2024-new-milestones-for-swiss-innovation-over-340-deals-reached",
+    "https://www.kickstart-innovation.com/post/kickstart-innovation-2025-celebrates-10-years-of-innovation-reaching-400-deals-marks-a-decade-of-i",
+    "https://www.kickstart-innovation.com/post/kickstart-program-launches-9th-iteration-to-drive-collaborative-solutions-and-investments",
+    "https://www.kickstart-innovation.com/post/kickstart-program-meets-milestone-of-over-200-innovation-deals"
   ],
   "evidence": [
     {
+      "id": "check-announced-a62880e4d6",
+      "url": "https://www.kickstart-innovation.com/post/kickstart-intrapreneurship-program-2025-applications-open",
+      "title": "Kickstart Innovation — application page",
+      "excerpt": "ensuring ideas are tested and scaled in real market conditions. 📅 Apply by August 20th and start shaping the future from within your organization. 🔗",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-61b04fb8a7",
+      "url": "https://www.kickstart-innovation.com/post/kickstart-2024-new-milestones-for-swiss-innovation-over-340-deals-reached",
+      "title": "Kickstart Innovation — terms page",
+      "excerpt": "over 30 impactful deals in Switzerland, after an 11-week program in collaboration with prominent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-68a04d0be8",
+      "url": "https://www.kickstart-innovation.com/post/kickstart-accelerator-invites-startups-in-educational-tech-to-apply-for-new-edtech-vertical",
+      "title": "Kickstart Innovation — application page",
+      "excerpt": "on the global map of entrepreneurship. For 11 weeks, 50 startups come to Switzerland where they are",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-9451359e0c",
+      "url": "https://www.kickstart-innovation.com/post/startups-can-apply-for-the-international-kickstart-innovation-program-2025-until-26-may",
+      "title": "Kickstart Innovation — application page",
+      "excerpt": "accelerate their growth by participating in the 9-week Kickstart Innovation Program, which will take",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-bb044204aa",
+      "url": "https://www.kickstart-innovation.com/post/41-international-startups-in-switzerland-to-make-deals-in-the-coming-weeks",
+      "title": "Kickstart Innovation — terms page",
+      "excerpt": "selected 41 international startups for the 11-week Kickstart Innovation program in Switzerland with",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-15dca01de6",
+      "url": "https://www.kickstart-innovation.com/post/kickstart-program-launches-9th-iteration-to-drive-collaborative-solutions-and-investments",
+      "title": "Kickstart Innovation — terms page",
+      "excerpt": "can be found here . For more information, please contact: press@kickstart-innovation.com About Kickstart Kickstart is one of Europe's largest zero",
+      "page": "terms"
+    },
+    {
       "id": "check-email-1f19971e0c",
       "url": "https://www.kickstart-innovation.com/about-faq",
-      "title": "Kickstart Innovation — terms page checked by scrape.py",
+      "title": "Kickstart Innovation — terms page",
       "excerpt": "hello@kickstart-innovation.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-26c9d0dbd0",
+      "url": "https://www.kickstart-innovation.com/post/kickstart-program-meets-milestone-of-over-200-innovation-deals",
+      "title": "Kickstart Innovation — terms page",
+      "excerpt": "Lenz Global Senior Communications Manager +41 77 529 63 26 press@kickstart-innovation.com About Kickstart Kickstart is one of Europe's largest zero",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-4193d6ccfe",
+      "url": "https://www.kickstart-innovation.com/post/startups-can-apply-for-the-international-kickstart-innovation-program-2025-until-26-may",
+      "title": "Kickstart Innovation — application page",
+      "excerpt": "press@kickstart-innovation.com",
+      "page": "application"
+    },
+    {
+      "id": "check-email-5084154e2e",
+      "url": "https://www.kickstart-innovation.com/post/kickstart-innovation-2025-celebrates-10-years-of-innovation-reaching-400-deals-marks-a-decade-of-i",
+      "title": "Kickstart Innovation — terms page",
+      "excerpt": "press@kickstart-innovation.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-5f37dd205a",
+      "url": "https://www.kickstart-innovation.com/post/41-international-startups-in-switzerland-to-make-deals-in-the-coming-weeks",
+      "title": "Kickstart Innovation — terms page",
+      "excerpt": "2024 Startup List For more information, please contact: press@kickstart-innovation.com About Kickstart Kickstart is one of Europe’s largest zero",
       "page": "terms"
     },
     {
       "id": "check-email-6156465a0f",
       "url": "https://www.kickstart-innovation.com/about-faq",
-      "title": "Kickstart Innovation — terms page checked by scrape.py",
+      "title": "Kickstart Innovation — terms page",
       "excerpt": "Still can't find what you're looking for? Get in touch. (hello@kickstart-innovation.com)",
       "page": "terms"
     },
     {
+      "id": "check-email-86f8ceabad",
+      "url": "https://www.kickstart-innovation.com/post/startups-can-apply-for-the-international-kickstart-innovation-program-2025-until-26-may",
+      "title": "Kickstart Innovation — application page",
+      "excerpt": "for scaleups For media inquiries and further information: press@kickstart-innovation.com About Kickstart Innovation Kickstart is one of Europe’s",
+      "page": "application"
+    },
+    {
       "id": "check-email-8ba3c7b503",
       "url": "https://www.kickstart-innovation.com/about-faq",
-      "title": "Kickstart Innovation — terms page checked by scrape.py",
+      "title": "Kickstart Innovation — terms page",
       "excerpt": "Still can't find what you're looking for? Get in touch. hello@kickstart-innovation.com 01 / 04 Subscribe to our newsletter About us Brand",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-8df1c415de",
+      "url": "https://www.kickstart-innovation.com/post/41-international-startups-in-switzerland-to-make-deals-in-the-coming-weeks",
+      "title": "Kickstart Innovation — terms page",
+      "excerpt": "press@kickstart-innovation.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-bb23e34737",
+      "url": "https://www.kickstart-innovation.com/post/kickstart-innovation-2025-celebrates-10-years-of-innovation-reaching-400-deals-marks-a-decade-of-i",
+      "title": "Kickstart Innovation — terms page",
+      "excerpt": "insights. For more information, please contact: press@kickstart-innovation.com Download the Press Release KS25_Kickstart",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-d03cb97ccb",
+      "url": "https://www.kickstart-innovation.com/post/kickstart-2024-new-milestones-for-swiss-innovation-over-340-deals-reached",
+      "title": "Kickstart Innovation — terms page",
+      "excerpt": "and reducing waste. For more information, please contact: press@kickstart-innovation.com Check the photos of the event :",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-e3394718ff",
+      "url": "https://www.kickstart-innovation.com/post/kickstart-program-launches-9th-iteration-to-drive-collaborative-solutions-and-investments",
+      "title": "Kickstart Innovation — terms page",
+      "excerpt": "press@kickstart-innovation.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-fff97cc4cf",
+      "url": "https://www.kickstart-innovation.com/post/kickstart-2024-new-milestones-for-swiss-innovation-over-340-deals-reached",
+      "title": "Kickstart Innovation — terms page",
+      "excerpt": "press@kickstart-innovation.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-61483b7a78",
+      "url": "https://www.kickstart-innovation.com/post/41-international-startups-in-switzerland-to-make-deals-in-the-coming-weeks",
+      "title": "Kickstart Innovation — terms page",
+      "excerpt": "comfort for occupants. B'ZEOS , based in Lausanne, has already successfully completed",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-96a2cd410e",
+      "url": "https://www.kickstart-innovation.com/about-faq",
+      "title": "Kickstart Innovation — terms page",
+      "excerpt": "universities such as ETH Zurich are based in Switzerland. We have seen a growing appetite",
       "page": "terms"
     },
     {
       "id": "check-name-69fa6f27d6",
       "url": "https://www.kickstart-innovation.com/",
-      "title": "Kickstart Innovation — homepage checked by scrape.py",
+      "title": "Kickstart Innovation — homepage",
       "excerpt": "Kickstart Innovation | innovation ecosystems with purpose | Switzerland top of",
       "page": "details"
     },
     {
+      "id": "check-portfolio-a1dad068b7",
+      "url": "https://www.kickstart-innovation.com/post/41-international-startups-in-switzerland-to-make-deals-in-the-coming-weeks",
+      "title": "Kickstart Innovation — terms page",
+      "excerpt": "alumni → https://www.kickstart-innovation.com/news-media-all/tags/alumni",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d0343071da",
+      "url": "https://www.kickstart-innovation.com/post/kickstart-innovation-2025-celebrates-10-years-of-innovation-reaching-400-deals-marks-a-decade-of-i",
+      "title": "Kickstart Innovation — terms page",
+      "excerpt": "alumni → https://www.kickstart-innovation.com/news-media-all/tags/alumni",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-3ffa1f14ee",
+      "url": "https://www.kickstart-innovation.com/post/ten-reasons-not-to-apply-to-kickstart",
+      "title": "Kickstart Innovation — application page",
+      "excerpt": "to apply → https://www.f6s.com/kickstartaccelerator2016/apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-5535d9b6a7",
       "url": "https://www.kickstart-innovation.com/",
-      "title": "Kickstart Innovation — homepage checked by scrape.py",
+      "title": "Kickstart Innovation — homepage",
       "excerpt": "Apply as a startup → http://kickstart-innovation.com/apply",
       "page": "details"
+    },
+    {
+      "id": "check-route-60543baf6d",
+      "url": "https://www.kickstart-innovation.com/post/ten-reasons-not-to-apply-to-kickstart",
+      "title": "Kickstart Innovation — application page",
+      "excerpt": "to Kickstart → https://www.f6s.com/kickstartaccelerator2016/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6e08cf23b2",
+      "url": "https://www.kickstart-innovation.com/post/kickstart-intrapreneurship-program-2025-applications-open",
+      "title": "Kickstart Innovation — application page",
+      "excerpt": "Learn more and apply here → https://intrapreneurs.kickstart-innovation.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7c78b77c7f",
+      "url": "https://www.kickstart-innovation.com/post/startups-can-apply-for-the-international-kickstart-innovation-program-2025-until-26-may",
+      "title": "Kickstart Innovation — application page",
+      "excerpt": "Application link → https://www.kickstart-innovation.com/apply",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-6544424de6",
+      "url": "https://www.kickstart-innovation.com/",
+      "page": "details",
+      "excerpt": "Kickstart Innovation | innovation ecosystems with purpose | Switzerland top of page Login to my kickstart What we offer We take an open innovation approach to help organizations succeed at becoming more sustainable and inventive by accelerating collaboration with well established startups. Fast forward innovation Scale your startup Engage with the community Discover your next investment Apply as a startup Kickstart builds innovation ecosystems with purpose 01 / 07 Case studies PostFinance created a digital coaching program on the Cognician platform PostFinance and Cognician’s PoC produced exciting results in helping learners reach predefined program learning outcomes. Agile collaboration was key in activating learners’ commitment and planning, to ensure they got maximum value from this blended learning solution. Read the case study here . News & Events all news all upcoming events 6 Oct 2026 / ​ Better Meat Than Animals: How Planted Is Rethinking Plant-Based Protein read 19 Nov 2025 / Event Retail Tech Innovation 2025 Register here all upcoming events all news Our experience Since 2015, we have facilitated 400+ commercial partnerships and supported 530+ startups in scaling. Our international alumni startups raised over CHF 3.1B , which makes us one of the most successful and largest European innovation platforms. Read more about our impact News & Events 6 Oct 2026 / ​ Better"
+    },
+    {
+      "id": "check-page-e058ea27f6",
+      "url": "http://kickstart-innovation.com/apply",
+      "page": "application",
+      "excerpt": "Kickstart Innovation: Application 2026 Kickstart Innovation: Application 2026 Thank you for your interest in Kickstart Innovation. We work closely with our partners to identify their challenges, priorities, and innovation needs, which directly shapes what solutions we scout for. This ensures a strong fit between startups and partners from the start, and increases the likelihood of a successful pilot or commercial project. We also look for startups that want to apply as interest to Switzerland and run our own selection to support them as our team in connection to our partners and ecosystem. More information about the program and you'll find here: https://www.kickstart-innovation.com/join-startup Sign in to Google to save your progress. Learn more * Indicates required question Company * Name of your company? Your answer Summary * Please summarise in one sentence what your company is doing. Your answer Website * Your answer LinkedIn It'll be an address that starts with https://www.linkedin.com/company/ Your answer Country * In which country is your company based? Your answer Stage * What is the stage of your business? Choose MVP / Prototype Pre-Revenue Paying Customers Profitable Growth / Scaling Circular Economy * Is your company Circular Economy ready? https://en.wikipedia.org/wiki/Circular_economy Choose No Yes Focus Area * For which focus area would you apply for? New Work &"
+    },
+    {
+      "id": "check-page-249a846a35",
+      "url": "https://www.kickstart-innovation.com/post/application-for-the-3rd-swiss-market-entry-bootcamp-starts",
+      "page": "application",
+      "excerpt": "Application for the 3rd Swiss Market Entry Bootcamp starts top of page Login to my kickstart News & media All / News Media releases Interviews / / / / Events Past Events Application for the 3rd Swiss Market Entry Bootcamp starts Aug 4, 2020 2 min read Updated: Jul 27, 2023 The Swiss Market Entry Bootcamp, an initiative of digitalswitzerland operated by Kickstart , offers startups a deep dive into the Swiss entrepreneurship ecosystem from October 5th and 6th at several locations. ZURICH, 5th August 2020 - The new application phase for the 3rd Swiss Market Entry Bootcamp begins today and lasts until 1 September. This initiative of digitalswitzerland offers 50 startups a deep insight into the Swiss ecosystem. The program is run by Kickstart Innovation, one of the largest innovation platforms in Europe. \"Switzerland is a global innovation leader, as the Global Innovation Index has confirmed in its ranking,\" explain Nicolas Bürer and Matthias Zwingli from digitalswitzerland. \"50 startups are given the opportunity to meet with experts from leading corporations, public institutions, innovation programs, accelerators and incubators, not only to further develop their concepts, but also to boost a possible market entry in Switzerland\". The programme is aimed at international, later-stage startups with deep technological solutions in the fields of EdTech & NewWork, Digital Health &"
+    },
+    {
+      "id": "check-page-be15b97e13",
+      "url": "https://www.kickstart-innovation.com/post/kickstart-accelerator-invites-startups-in-educational-tech-to-apply-for-new-edtech-vertical",
+      "page": "application",
+      "excerpt": "Kickstart Accelerator invites startups in Educational Tech to apply for new EdTech vertical top of page Login to my kickstart News & media All / News Media releases Interviews / / / / Events Past Events Kickstart Accelerator invites startups in Educational Tech to apply for new EdTech vertical Jun 13, 2017 4 min read Updated: Jul 27, 2023 Swiss accelerator program Kickstart Accelerator taps into the field of education technology launching a new EdTech vertical together with EPFL LAUSANNE/ ZURICH, 14 June 2017 – Kickstart Accelerator is proud to announce a sixth vertical together with the Ecole polytechnique fédérale de Lausanne (EPFL) . The multi-corporate and zero-equity accelerator launches the new EdTech vertical in Lausanne. The new acceleration program specifically for startups in education technology will be operated by venturelab a n d will have its homebase in the recently launched EdTech Collider at the EPFL Innovation Park (EIP) in Lausanne. The accelerator will welcome the 10 most promising international and Swiss startups in the field of education technology. Startups are invited to apply now Applications for the new vertical are open from today. International and Swiss startups with a promising prototype within EdTech can apply until July 10th. The selected startups will be invited to Lausanne from September to November 2017. They are provided with stipends of CHF"
+    },
+    {
+      "id": "check-page-f22cc26256",
+      "url": "https://www.kickstart-innovation.com/post/kickstart-intrapreneurship-program-2025-applications-open",
+      "page": "application",
+      "excerpt": "Kickstart Intrapreneurship Program 2025: Applications Open top of page Login to my kickstart News & media All / News Media releases Interviews / / / / Events Past Events Kickstart Intrapreneurship Program 2025: Applications Open Aug 3, 2025 1 min read Part of the Kickstart Academy , the Kickstart Intrapreneurship Program is back for 2025, offering teams from public and private organizations the chance to ideate, validate, test, and scale new products or services in a real-world environment. Over the course of 10 intensive weeks , participants gain access to: Coaching from experienced advisors A wide network of industry experts A thriving community of innovators Workshops, trainings, and fireside chats designed to fast-track progress The program equips intrapreneurial teams with the tools, skills, and network needed to transform bold ideas into impactful solutions - while strengthening entrepreneurial capabilities within their organizations. As part of the Kickstart Academy , this program goes beyond theory - offering a practical, hands-on approach to developing innovation from within and ensuring ideas are tested and scaled in real market conditions. 📅 Apply by August 20th and start shaping the future from within your organization. 🔗 Learn more and apply here Tags: startup academy intrapreneurship News 6 Oct 2026 / Category Name Better Meat Than Animals: How Planted Is"
+    },
+    {
+      "id": "check-page-0c2872c32a",
+      "url": "https://www.kickstart-innovation.com/post/startups-can-apply-for-the-international-kickstart-innovation-program-2025-until-26-may",
+      "page": "application",
+      "excerpt": "Startups can apply for the International Kickstart Innovation Program 2025 until 26 May top of page Login to my kickstart News & media All / News Media releases Interviews / / / / Events Past Events Startups can apply for the International Kickstart Innovation Program 2025 until 26 May May 15, 2025 3 min read Strong interest in AI and technological solutions AXA , Coop , Swisscom , la Mobilière , MSD , PostFinance , VNTR , Romande Energie , Sanitas , the City of Zurich , CSEM are partner companies from all our verticals Zurich, 16 May 2025 – Startups from around the world have the opportunity to accelerate their growth by participating in the 9-week Kickstart Innovation Program, which will take place in Switzerland starting in September 2025. The Kickstart Innovation Program focuses on five areas: health & well-being, finance & insurance & cyber security, food & retail, new work & learning, and smart cities. The program's partner companies include leading companies such as AXA , Coop , Swisscom , la Mobilière , MSD , PostFinance / VNTR , Romande Energie , Sanitas , the City of Zurich , CSEM and others. “In today’s fast-paced world, established companies must rapidly evolve and integrate AI and other emerging technologies into their products and processes,” says Katka Letzing, CEO and Co-Founder of Kickstart. “Over the past ten years, we’ve seen how startups, with their tech"
+    },
+    {
+      "id": "check-page-669337a4fc",
+      "url": "https://www.kickstart-innovation.com/post/ten-reasons-not-to-apply-to-kickstart",
+      "page": "application",
+      "excerpt": "Ten reasons NOT to apply to Kickstart top of page Login to my kickstart News & media All / News Media releases Interviews / / / / Events Past Events Ten reasons NOT to apply to Kickstart Feb 15, 2016 3 min read Updated: Apr 21, 2022 We’re building Kickstart , Switzerland’s most ambitious acceleration program for startups, which will happen for the first time this summer in the beautiful city of Zurich. We can promise you that it will be amazing — but it might not be the right thing for every startup. So to help you decide, we have put together our top ten reasons of why you shouldn’t apply: Your company wants to be the “next Google” or the “next Facebook”. Don’t get us wrong — we love the ambition. But Google and Facebook have already been built, and they’re successful at what they’re doing. We’d much rather have you focus on building something that doesn’t exist yet. Your startup doesn’t fit into one of our four thematic verticals . If you are building a great company in a different field, Kickstart is not for you. However, feel free to reach out to us, and we will help you find an accelerator program that might be a better fit. There are so many great ones out there! Your product will only work once you have a million users. Dream big, but start small. If the first ten users or customers of your product aren’t madly in love with it, the remaining nine hundred ninety nine"
+    },
+    {
+      "id": "check-page-78a1cb50ae",
+      "url": "https://www.kickstart-innovation.com/apply",
+      "page": "application",
+      "excerpt": "Kickstart Innovation: Application 2026 Kickstart Innovation: Application 2026 Thank you for your interest in Kickstart Innovation. We work closely with our partners to identify their challenges, priorities, and innovation needs, which directly shapes what solutions we scout for. This ensures a strong fit between startups and partners from the start, and increases the likelihood of a successful pilot or commercial project. We also look for startups that want to apply as interest to Switzerland and run our own selection to support them as our team in connection to our partners and ecosystem. More information about the program and you'll find here: https://www.kickstart-innovation.com/join-startup Sign in to Google to save your progress. Learn more * Indicates required question Company * Name of your company? Your answer Summary * Please summarise in one sentence what your company is doing. Your answer Website * Your answer LinkedIn It'll be an address that starts with https://www.linkedin.com/company/ Your answer Country * In which country is your company based? Your answer Stage * What is the stage of your business? Choose MVP / Prototype Pre-Revenue Paying Customers Profitable Growth / Scaling Circular Economy * Is your company Circular Economy ready? https://en.wikipedia.org/wiki/Circular_economy Choose No Yes Focus Area * For which focus area would you apply for? New Work &"
+    },
+    {
+      "id": "check-page-47e6959cac",
+      "url": "https://www.kickstart-innovation.com/about-faq",
+      "page": "terms",
+      "excerpt": "Frequently asked questions | Kickstart Innovation top of page Login to my kickstart Kickstart FAQs Q: Does Kickstart invest in startups? At the moment there are no investment activities on our behalf, however Kickstart organizes curtain events including the annual Investor Summit that aims to bring participating startups together with investors. Q: Why would Switzerland be an attractive location for international startups? Switzerland is one of the countries with the best environment for entrepreneurial activities. The number of companies being founded in Switzerland has been growing for several years. The stable economic framework and market, the strong education sector, the world-class infrastructure and the high quality of life are just some of the positive aspects that make Switzerland attractive for startups. Furthermore, Switzerland is one of the most important financial centers worldwide and many leading international corporations as well as leading technical universities such as ETH Zurich are based in Switzerland. We have seen a growing appetite within the corporate sector to collaborate with startups, already surmounting to +340 fruitful collaborations. Q: Is Kickstart a non-profit organization (NPO)? No, Kickstart Innovation AG is a for-profit company. Q: Why is Kickstart focusing on later-stage startups? What does “later stage” mean in this context? Later-stage"
+    },
+    {
+      "id": "check-page-732a7fb760",
+      "url": "https://www.kickstart-innovation.com/community-investors",
+      "page": "terms",
+      "excerpt": "Investors | Kickstart Innovation top of page Login to my kickstart Meet our investors Although Kickstart does not invest in our startups directly, we have built a strong network of VCs, CVCs and family offices who are ready to dive into their next venture. Discover more about our investors below. Business Angels Switzerland Visit Web Creathor Ventures Visit Web Ringier Visit Web SICTIC Visit Web Swiss Startup INVEST Visit Web Swisscom Ventures Visit Web Verve Ventures Visit Web b2venture Visit Web Experts Katka Letzing CEO & Co-Founder Oender Boyman Investor Relations Expert Get in touch Katka Letzing CEO & Co-Founder Oender Boyman Investor Relations Expert Learn more about the partnerships Investor Summit Kickstart runs an annual Investor Summit, providing a platform for our raising startups to pitch their companies, as well as hosting expert panels focusing on market trends and predictions, and inspirational keynote speakers, including Guy Kawasaki (Apple evangelist, VC and serial entrepreneur) and Thomas Dübendorfer (President and Founder of SICTIC). 01 / 05 Case studies Huma raises $130 million financing to scale its digital health platform for better care and research Read more Get in touch. learnmore@kickstart-innovation.com Subscribe to our newsletter About us Brand guidelines Privacy Policy FAQ #makeithappen Join Kickstart About us Our impact Collaboration map Press"
+    },
+    {
+      "id": "check-page-edf43c0005",
+      "url": "https://www.kickstart-innovation.com/post/41-international-startups-in-switzerland-to-make-deals-in-the-coming-weeks",
+      "page": "terms",
+      "excerpt": "41 international startups in Switzerland to make deals in the coming weeks top of page Login to my kickstart News & media All / News Media releases Interviews / / / / Events Past Events 41 international startups in Switzerland to make deals in the coming weeks Sep 3, 2024 4 min read From Switzerland: B’ZEOS, Enterprise Bot, irmos technologies, Moodtalk, Neur.on, PlaynVoice, ProSeed, Solskin, Upgrain, Wyrd.io , hypt, Enerjoy, AI Buddy, Opineo, Fetal Monitoring, Visenco, Protonica, Watchibia One of two business ideas involves sustainable solutions Future topics in the program: AI in healthcare, seaweed as food packaging, waste stream upcycling, alternative protein (fungi fermentation), medical data management, waste biomass processing, synthetic data, data storage 41 startups selected from applications from over 48 countries for the 9th Kickstart Innovation program 2024 Zurich, 3 September 2024 – Over six weeks, more than 170 experts selected 41 international startups for the 11-week Kickstart Innovation program in Switzerland with well-known companies, organizations, cities, foundations and universities. These 41 startups now have the opportunity to gain access to decision-makers and stakeholders, test and scale their business models and close promising deals. The finalists come from 9 different countries, with a strong representation of Swiss startups (over a third), to"
+    },
+    {
+      "id": "check-page-61f441ce5b",
+      "url": "https://www.kickstart-innovation.com/post/kickstart-2024-new-milestones-for-swiss-innovation-over-340-deals-reached",
+      "page": "terms",
+      "excerpt": "KICKSTART 2024: New Milestones for Swiss Innovation - over 340 Deals Reached top of page Login to my kickstart News & media All / News Media releases Interviews / / / / Events Past Events KICKSTART 2024: New Milestones for Swiss Innovation - over 340 Deals Reached Dec 4, 2024 7 min read Updated: Dec 11, 2024 Renowned Swiss companies are concluding over 30 deals with start-ups to enable new innovation in Switzerland. Examples of solutions: from automating document classification and legal and financial documents translations through AI models, to maximizing the safe operational life of crucial energy infrastructure; from extending the shelf life of selected fruit and vegetable products to methods to enable earlier and faster diagnosis of patients with rare diseases. Significant attention to fintech and insurtech as well as to circularity and sustainability continues this year. The Climate Positive Mission featured projects aimed at innovative solutions, such as converting treated wood waste into sustainable bio-based resources. Zurich, 4th December 2024 – What are the Swiss concerned about right now? In the annual SRG survey ‘How's Switzerland? ’, the main focus was on financial worries, such as rising health insurance premiums and retirement provisions, as well as a faster pace at work. Climate change and reducing domestic emissions also played a role. In recent years,"
+    },
+    {
+      "id": "check-page-414dcc65bb",
+      "url": "https://www.kickstart-innovation.com/post/kickstart-innovation-2025-celebrates-10-years-of-innovation-reaching-400-deals-marks-a-decade-of-i",
+      "page": "terms",
+      "excerpt": "Kickstart Innovation 2025 celebrates 10 years of innovation – reaching 400 deals marks a decade of impact top of page Login to my kickstart News & media All / News Media releases Interviews / / / / Events Past Events Kickstart Innovation 2025 celebrates 10 years of innovation – reaching 400 deals marks a decade of impact Nov 13, 2025 6 min read Updated: Nov 14, 2025 Kickstart Innovation celebrates 10 years of impact and looks ahead to a new decade of responsible AI and collaboration AI is integrated into 95% of the solutions, ranging from deeptech to circularity and sustainability Renowned Swiss companies are concluding over 20 deals with start-ups to enable new innovation in Switzerland. The number of solutions from Swiss startups has doubled in the last 10 years Zurich, November 13 – Kickstart Innovation, one of Europe’s leading open innovation platforms, celebrates its 10th anniversary this year, marking a decade of driving collaboration between startups, scaleups, and established organizations in Switzerland and beyond. During the 10th edition of its annual program, Kickstart announced over 20 new innovation partnerships – including pilots, proofs of concept (PoCs), and commercial projects – strengthening its position as a cornerstone of the Swiss innovation ecosystem. Since its inception in 2015, Kickstart has supported more than 500 startups a nd scaleups, reaching 400"
+    },
+    {
+      "id": "check-page-5764566af4",
+      "url": "https://www.kickstart-innovation.com/post/kickstart-program-launches-9th-iteration-to-drive-collaborative-solutions-and-investments",
+      "page": "terms",
+      "excerpt": "Kickstart Program Launches 9th Iteration to Drive Collaborative Solutions and Investments top of page Login to my kickstart News & media All / News Media releases Interviews / / / / Events Past Events Kickstart Program Launches 9th Iteration to Drive Collaborative Solutions and Investments Apr 18, 2024 3 min read Press Release Over 40 renowned companies and organizations are creating future solutions with local and international startups for Switzerland and beyond The application phase for startups begins today, with reach in over 60 countries Opportunities for deals have a focus on supporting corporates, public institutions, and startups Zurich, 17th April 2024 - Kickstart Innovation, one of Europe's leading open innovation platforms, launches its ninth program today. Every year, Kickstart has attracted some of the world’s best startups providing solutions to the biggest challenges for society. This is accomplished in partnership with major industry players, including AXA , Coop , Swisscom , La Mobilière , PostFinance , Sanitas , The City of Zurich , Canton de Vaud , and MSD . This year this list also includes IKEA Switzerland and Romande Energie . Kickstart has supported over 450 startups and facilitated over 310 deals (see our Collaboration map) in the form of pilots and commercial projects. Alumni come from over 80 countries, have raised more than CHF 2.5 billion in"
+    },
+    {
+      "id": "check-page-7811c2f6a2",
+      "url": "https://www.kickstart-innovation.com/post/kickstart-program-meets-milestone-of-over-200-innovation-deals",
+      "page": "terms",
+      "excerpt": "Kickstart program meets milestone of over 200 innovation deals top of page Login to my kickstart News & media All / News Media releases Interviews / / / / Events Past Events Kickstart program meets milestone of over 200 innovation deals Nov 10, 2021 8 min read Updated: Jul 27, 2023 Scale-ups from 11 countries including Switzerland enter into 50 pilots and commercial projects with renowned Swiss companies and institutions. Digitalization and sustainability are becoming strong drivers of innovation. 20211011_Press release Kickstart Innovation Closing (Main-ENG).docx .pdf Download PDF • 182KB ZÜRICH, 10. November 2021 - Kickstart Innovation , one of Europe's leading innovation platforms, has achieved over 200 innovation deals since its inception with the announcement of this year's 50 Proofs of Concepts (PoCs) and other partnerships between start-ups, scale-ups and established companies and organizations. \"We naturally hope that among the new partnerships there will be just as successful ones as we have seen, for example, with Planted , Coop and Migros , Axa and Veezoo or PostFinance and decentriq in the past years,\" explains Katka Letzing, co-founder and CEO of Kickstart Innovation. Since 2015, over 200 such collaborations have been launched in the application areas of Circular Economy , EdTech & New Work , FinTech & InsurTech , Food & RetailTech , HealthTech , Smart City &"
     }
   ],
   "findings": {
     "emails": [
+      {
+        "value": "press@kickstart-innovation.com",
+        "evidenceId": "check-email-4193d6ccfe"
+      },
       {
         "value": "hello@kickstart-innovation.com",
         "evidenceId": "check-email-6156465a0f"
@@ -56,6 +331,18 @@
       {
         "value": "http://kickstart-innovation.com/apply",
         "evidenceId": "check-route-5535d9b6a7"
+      },
+      {
+        "value": "https://intrapreneurs.kickstart-innovation.com/apply",
+        "evidenceId": "check-route-6e08cf23b2"
+      },
+      {
+        "value": "https://www.kickstart-innovation.com/apply",
+        "evidenceId": "check-route-7c78b77c7f"
+      },
+      {
+        "value": "https://www.f6s.com/kickstartaccelerator2016/apply",
+        "evidenceId": "check-route-3ffa1f14ee"
       }
     ],
     "applicationUrl": [
@@ -67,9 +354,44 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "August",
+        "evidenceId": "check-announced-a62880e4d6"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "11",
+        "evidenceId": "check-duration-68a04d0be8"
+      },
+      {
+        "value": "9",
+        "evidenceId": "check-duration-9451359e0c"
+      }
+    ],
+    "format": [],
+    "location": [
+      {
+        "value": "Switzerland",
+        "evidenceId": "check-location-96a2cd410e"
+      },
+      {
+        "value": "Lausanne",
+        "evidenceId": "check-location-61483b7a78"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
-    "portfolioPages": [],
+    "dealComponents": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.kickstart-innovation.com/news-media-all/tags/alumni",
+        "evidenceId": "check-portfolio-a1dad068b7"
+      }
+    ],
     "name": [
       {
         "value": "Kickstart Innovation",

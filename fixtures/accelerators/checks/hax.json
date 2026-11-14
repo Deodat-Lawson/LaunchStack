@@ -1,145 +1,1214 @@
 {
   "programId": "hax",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://hax.co/",
-    "https://hax.co/program/",
+    "https://hax.co/apply-for-the-hax-venture-fellowship/",
+    "https://hax.co/company_news/china-water-jet-cutter-market-2017-recent-study-including-growth-factors-applications/",
+    "https://hax.co/company_news/know-about-the-future-of-robotics-education-with-application-technology-growth-factors-trends/",
+    "https://hax.co/iq-motion-control-launches-new-line-of-servo-motors-with-wide-range-of-applications/",
     "https://sosv.com/apply/hax/",
-    "https://hax.co/faq/"
+    "https://sosv.com/apply",
+    "https://hax.co/company_news/10-retail-technology-investments-that-should-be-on-your-radar/",
+    "https://hax.co/company_news/20-best-prime-day-pet-deals-for-dogs-cats-and-more-nbc-news/",
+    "https://hax.co/company_news/all-the-best-pet-deals-as-of-sept-9-cameras-toys-and-more-mashable/",
+    "https://hax.co/company_news/arcis-opentrons-sign-sample-prep-product-distribution-deal/",
+    "https://hax.co/company_news/best-black-friday-robot-kit-deals-for-kids-and-adults-toms-hardware/",
+    "https://hax.co/company_news/bet-early-and-exit-often-how-iima-ventures-creates-a-healthy-investment-cycle-mint/",
+    "https://hax.co/company_news/canadian-robotics-council-creates-committee-to-boost-investment-in-domestic-robots/",
+    "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/"
   ],
   "evidence": [
     {
-      "id": "check-deal-49302c5d8f",
-      "url": "https://hax.co/faq/",
-      "title": "HAX — terms page checked by scrape.py",
-      "excerpt": "have a whole host of perks including AWS and Google credits, Solidworks discounts, Hubspot discounts and many others. The total value of these perks stands at $1M per team. Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a",
+      "id": "check-duration-0071f7255e",
+      "url": "https://hax.co/company_news/all-the-best-pet-deals-as-of-sept-9-cameras-toys-and-more-mashable/",
+      "title": "HAX — terms page",
+      "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
       "page": "terms"
     },
     {
-      "id": "check-deal-b2c1fbbcf8",
-      "url": "https://hax.co/faq/",
-      "title": "HAX — terms page checked by scrape.py",
-      "excerpt": "rounds usually up to a Series C/D, through our new SOSV V fund or our growth fund, SOSV Select . Across these rounds we can deploy an aggregate total of up to $4M per company. We rarely lead rounds and will most often just ask for a non-voting, observer seat on your board (along with information rights so we know what’s",
+      "id": "check-duration-076a1f19f6",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "title": "HAX — application page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-09e3b1a364",
+      "url": "https://hax.co/company_news/know-about-the-future-of-robotics-education-with-application-technology-growth-factors-trends/",
+      "title": "HAX — application page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-0a5bdd7712",
+      "url": "https://sosv.com/apply",
+      "title": "HAX — application page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-0cdb73a683",
+      "url": "https://hax.co/company_news/10-retail-technology-investments-that-should-be-on-your-radar/",
+      "title": "HAX — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
       "page": "terms"
+    },
+    {
+      "id": "check-duration-113d63214d",
+      "url": "https://hax.co/company_news/10-retail-technology-investments-that-should-be-on-your-radar/",
+      "title": "HAX — terms page",
+      "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-12deb0e485",
+      "url": "https://sosv.com/apply/hax/",
+      "title": "HAX — application page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-13cd323998",
+      "url": "https://hax.co/",
+      "title": "HAX — homepage",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-1563e752a5",
+      "url": "https://hax.co/company_news/best-black-friday-robot-kit-deals-for-kids-and-adults-toms-hardware/",
+      "title": "HAX — terms page",
+      "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-184f3a9ce8",
+      "url": "https://hax.co/company_news/china-water-jet-cutter-market-2017-recent-study-including-growth-factors-applications/",
+      "title": "HAX — application page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-1b9e37dd0d",
+      "url": "https://hax.co/company_news/20-best-prime-day-pet-deals-for-dogs-cats-and-more-nbc-news/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-221d5ddadc",
+      "url": "https://hax.co/company_news/arcis-opentrons-sign-sample-prep-product-distribution-deal/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-259c4c3623",
+      "url": "https://hax.co/company_news/canadian-robotics-council-creates-committee-to-boost-investment-in-domestic-robots/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-269814a0a6",
+      "url": "https://sosv.com/apply/hax/",
+      "title": "HAX — application page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-2907915414",
+      "url": "https://hax.co/company_news/10-retail-technology-investments-that-should-be-on-your-radar/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-2c3508b41a",
+      "url": "https://hax.co/company_news/arcis-opentrons-sign-sample-prep-product-distribution-deal/",
+      "title": "HAX — terms page",
+      "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-345e6595e7",
+      "url": "https://hax.co/company_news/arcis-opentrons-sign-sample-prep-product-distribution-deal/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-375152df52",
+      "url": "https://hax.co/iq-motion-control-launches-new-line-of-servo-motors-with-wide-range-of-applications/",
+      "title": "HAX — application page",
+      "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-3b6f1111ac",
+      "url": "https://sosv.com/apply",
+      "title": "HAX — application page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-3eaf4d4633",
+      "url": "https://hax.co/company_news/bet-early-and-exit-often-how-iima-ventures-creates-a-healthy-investment-cycle-mint/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-412102f2cf",
+      "url": "https://hax.co/company_news/canadian-robotics-council-creates-committee-to-boost-investment-in-domestic-robots/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-42cfe30985",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "title": "HAX — application page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-43df6eaac6",
+      "url": "https://hax.co/company_news/arcis-opentrons-sign-sample-prep-product-distribution-deal/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-4565e2867d",
+      "url": "https://hax.co/iq-motion-control-launches-new-line-of-servo-motors-with-wide-range-of-applications/",
+      "title": "HAX — application page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-4595f3a3a5",
+      "url": "https://hax.co/company_news/know-about-the-future-of-robotics-education-with-application-technology-growth-factors-trends/",
+      "title": "HAX — application page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-4c75b5674b",
+      "url": "https://sosv.com/apply/hax/",
+      "title": "HAX — application page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-52f2835440",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "title": "HAX — application page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-561adbb9fc",
+      "url": "https://sosv.com/apply/hax/",
+      "title": "HAX — application page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-5dd7f7d1d5",
+      "url": "https://hax.co/iq-motion-control-launches-new-line-of-servo-motors-with-wide-range-of-applications/",
+      "title": "HAX — application page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-5e05fd47a1",
+      "url": "https://hax.co/company_news/know-about-the-future-of-robotics-education-with-application-technology-growth-factors-trends/",
+      "title": "HAX — application page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-60ba1156dc",
+      "url": "https://hax.co/company_news/all-the-best-pet-deals-as-of-sept-9-cameras-toys-and-more-mashable/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-62ffbb8fc7",
+      "url": "https://hax.co/iq-motion-control-launches-new-line-of-servo-motors-with-wide-range-of-applications/",
+      "title": "HAX — application page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-6378bcde39",
+      "url": "https://hax.co/company_news/canadian-robotics-council-creates-committee-to-boost-investment-in-domestic-robots/",
+      "title": "HAX — terms page",
+      "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-67a67d11cc",
+      "url": "https://hax.co/company_news/20-best-prime-day-pet-deals-for-dogs-cats-and-more-nbc-news/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-6870e5eacb",
+      "url": "https://sosv.com/apply",
+      "title": "HAX — application page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-6a5ad3abfc",
+      "url": "https://hax.co/company_news/best-black-friday-robot-kit-deals-for-kids-and-adults-toms-hardware/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-6c2b8be159",
+      "url": "https://hax.co/company_news/china-water-jet-cutter-market-2017-recent-study-including-growth-factors-applications/",
+      "title": "HAX — application page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-6ea5fde493",
+      "url": "https://hax.co/company_news/know-about-the-future-of-robotics-education-with-application-technology-growth-factors-trends/",
+      "title": "HAX — application page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-7208b23934",
+      "url": "https://sosv.com/apply/hax/",
+      "title": "HAX — application page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-73f6ef4ab9",
+      "url": "https://hax.co/",
+      "title": "HAX — homepage",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-78b2ca0bc6",
+      "url": "https://hax.co/company_news/bet-early-and-exit-often-how-iima-ventures-creates-a-healthy-investment-cycle-mint/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-79b18dbb1a",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "title": "HAX — application page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-7c5a3f8904",
+      "url": "https://hax.co/",
+      "title": "HAX — homepage",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-7d6b5b5028",
+      "url": "https://hax.co/company_news/all-the-best-pet-deals-as-of-sept-9-cameras-toys-and-more-mashable/",
+      "title": "HAX — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-7e8221b84d",
+      "url": "https://hax.co/",
+      "title": "HAX — homepage",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-826960a88c",
+      "url": "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/",
+      "title": "HAX — terms page",
+      "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-82c5613ad2",
+      "url": "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-8330a9f003",
+      "url": "https://hax.co/company_news/canadian-robotics-council-creates-committee-to-boost-investment-in-domestic-robots/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-8b92bb5a70",
+      "url": "https://hax.co/company_news/china-water-jet-cutter-market-2017-recent-study-including-growth-factors-applications/",
+      "title": "HAX — application page",
+      "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-8d87d66178",
+      "url": "https://hax.co/company_news/arcis-opentrons-sign-sample-prep-product-distribution-deal/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-9074cc5558",
+      "url": "https://hax.co/company_news/canadian-robotics-council-creates-committee-to-boost-investment-in-domestic-robots/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-92abeef157",
+      "url": "https://hax.co/iq-motion-control-launches-new-line-of-servo-motors-with-wide-range-of-applications/",
+      "title": "HAX — application page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-9313beaa89",
+      "url": "https://sosv.com/apply/hax/",
+      "title": "HAX — application page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-9831825fb9",
+      "url": "https://hax.co/company_news/10-retail-technology-investments-that-should-be-on-your-radar/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-98b754ca7c",
+      "url": "https://sosv.com/apply",
+      "title": "HAX — application page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-a7030f41b1",
+      "url": "https://hax.co/company_news/best-black-friday-robot-kit-deals-for-kids-and-adults-toms-hardware/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a785f373b3",
+      "url": "https://hax.co/company_news/china-water-jet-cutter-market-2017-recent-study-including-growth-factors-applications/",
+      "title": "HAX — application page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-aa50a38f94",
+      "url": "https://hax.co/company_news/20-best-prime-day-pet-deals-for-dogs-cats-and-more-nbc-news/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ab9968f97f",
+      "url": "https://hax.co/company_news/20-best-prime-day-pet-deals-for-dogs-cats-and-more-nbc-news/",
+      "title": "HAX — terms page",
+      "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-addbab1d74",
+      "url": "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-af16dad9d1",
+      "url": "https://sosv.com/apply",
+      "title": "HAX — application page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-af45c9c903",
+      "url": "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/",
+      "title": "HAX — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b100b1aafb",
+      "url": "https://hax.co/iq-motion-control-launches-new-line-of-servo-motors-with-wide-range-of-applications/",
+      "title": "HAX — application page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-b2e2c5a791",
+      "url": "https://hax.co/company_news/bet-early-and-exit-often-how-iima-ventures-creates-a-healthy-investment-cycle-mint/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b6cb869ae9",
+      "url": "https://hax.co/company_news/all-the-best-pet-deals-as-of-sept-9-cameras-toys-and-more-mashable/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-bc0b98d1e7",
+      "url": "https://hax.co/company_news/20-best-prime-day-pet-deals-for-dogs-cats-and-more-nbc-news/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-be28b7532a",
+      "url": "https://hax.co/company_news/all-the-best-pet-deals-as-of-sept-9-cameras-toys-and-more-mashable/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-beeb02be29",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "title": "HAX — application page",
+      "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-c103af0d91",
+      "url": "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-c166108a89",
+      "url": "https://sosv.com/apply",
+      "title": "HAX — application page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-c2f75b12e3",
+      "url": "https://sosv.com/apply/hax/",
+      "title": "HAX — application page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-c3c74cd2b7",
+      "url": "https://hax.co/company_news/all-the-best-pet-deals-as-of-sept-9-cameras-toys-and-more-mashable/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-c61bcdd10a",
+      "url": "https://hax.co/company_news/arcis-opentrons-sign-sample-prep-product-distribution-deal/",
+      "title": "HAX — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-c85cf13f13",
+      "url": "https://hax.co/company_news/best-black-friday-robot-kit-deals-for-kids-and-adults-toms-hardware/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-c920a0f034",
+      "url": "https://hax.co/company_news/canadian-robotics-council-creates-committee-to-boost-investment-in-domestic-robots/",
+      "title": "HAX — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-c93152e130",
+      "url": "https://hax.co/company_news/know-about-the-future-of-robotics-education-with-application-technology-growth-factors-trends/",
+      "title": "HAX — application page",
+      "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-cb0ab737eb",
+      "url": "https://hax.co/",
+      "title": "HAX — homepage",
+      "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-cb675939a2",
+      "url": "https://hax.co/company_news/know-about-the-future-of-robotics-education-with-application-technology-growth-factors-trends/",
+      "title": "HAX — application page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d0edc8c989",
+      "url": "https://hax.co/",
+      "title": "HAX — homepage",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-d8a8a78835",
+      "url": "https://hax.co/company_news/china-water-jet-cutter-market-2017-recent-study-including-growth-factors-applications/",
+      "title": "HAX — application page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-dc3a088cb1",
+      "url": "https://hax.co/company_news/china-water-jet-cutter-market-2017-recent-study-including-growth-factors-applications/",
+      "title": "HAX — application page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-dd3bce5ecc",
+      "url": "https://hax.co/company_news/bet-early-and-exit-often-how-iima-ventures-creates-a-healthy-investment-cycle-mint/",
+      "title": "HAX — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ddce3ef5a0",
+      "url": "https://hax.co/company_news/20-best-prime-day-pet-deals-for-dogs-cats-and-more-nbc-news/",
+      "title": "HAX — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-df9fb03518",
+      "url": "https://hax.co/company_news/best-black-friday-robot-kit-deals-for-kids-and-adults-toms-hardware/",
+      "title": "HAX — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-dfc134fa2c",
+      "url": "https://hax.co/company_news/bet-early-and-exit-often-how-iima-ventures-creates-a-healthy-investment-cycle-mint/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e3f881274a",
+      "url": "https://hax.co/company_news/10-retail-technology-investments-that-should-be-on-your-radar/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e5eb8091a2",
+      "url": "https://hax.co/company_news/10-retail-technology-investments-that-should-be-on-your-radar/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e914b7637c",
+      "url": "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e9d88eda51",
+      "url": "https://sosv.com/apply",
+      "title": "HAX — application page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-f2c7d4e0a3",
+      "url": "https://hax.co/company_news/best-black-friday-robot-kit-deals-for-kids-and-adults-toms-hardware/",
+      "title": "HAX — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f5b7a9d797",
+      "url": "https://hax.co/company_news/bet-early-and-exit-often-how-iima-ventures-creates-a-healthy-investment-cycle-mint/",
+      "title": "HAX — terms page",
+      "excerpt": "Description cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-fa22675e71",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "title": "HAX — application page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-format-8e156512e5",
+      "url": "https://sosv.com/apply",
+      "title": "HAX — application page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "application"
+    },
+    {
+      "id": "check-format-ba066362ac",
+      "url": "https://sosv.com/apply/hax/",
+      "title": "HAX — application page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "application"
+    },
+    {
+      "id": "check-format-ce4de325a2",
+      "url": "https://sosv.com/apply",
+      "title": "HAX — application page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "application"
+    },
+    {
+      "id": "check-format-ea3104d6ca",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "title": "HAX — application page",
+      "excerpt": "or venture investor is required. Location This is a remote program with opportunities to join us in our Newark, San",
+      "page": "application"
+    },
+    {
+      "id": "check-format-f527b75993",
+      "url": "https://sosv.com/apply/hax/",
+      "title": "HAX — application page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "application"
     },
     {
       "id": "check-name-4b816ce733",
       "url": "https://hax.co/",
-      "title": "HAX — homepage checked by scrape.py",
+      "title": "HAX — homepage",
       "excerpt": "HAX – Hands-on Venture Capital for Hard Tech Skip to content",
       "page": "details"
     },
     {
+      "id": "check-portfolio-0038a15725",
+      "url": "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/",
+      "title": "HAX — terms page",
+      "excerpt": "Startups → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-0615978c66",
+      "url": "https://hax.co/company_news/canadian-robotics-council-creates-committee-to-boost-investment-in-domestic-robots/",
+      "title": "HAX — terms page",
+      "excerpt": "Startups → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-0946b1838e",
+      "url": "https://sosv.com/apply",
+      "title": "HAX — application page",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-163672f373",
+      "url": "https://sosv.com/apply",
+      "title": "HAX — application page",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-164ae4c75a",
+      "url": "https://hax.co/company_news/best-black-friday-robot-kit-deals-for-kids-and-adults-toms-hardware/",
+      "title": "HAX — terms page",
+      "excerpt": "Companies → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-195eb07d96",
+      "url": "https://hax.co/company_news/best-black-friday-robot-kit-deals-for-kids-and-adults-toms-hardware/",
+      "title": "HAX — terms page",
+      "excerpt": "Startups → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-1bfca60709",
       "url": "https://hax.co/",
-      "title": "HAX — homepage checked by scrape.py",
+      "title": "HAX — homepage",
       "excerpt": "Companies → https://hax.co/startups/",
       "page": "details"
     },
     {
       "id": "check-portfolio-33d23a4eb8",
       "url": "https://sosv.com/apply/hax/",
-      "title": "HAX — application page checked by scrape.py",
+      "title": "HAX — application page",
       "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-34ffd67c41",
+      "url": "https://hax.co/company_news/10-retail-technology-investments-that-should-be-on-your-radar/",
+      "title": "HAX — terms page",
+      "excerpt": "Companies → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-3610574172",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "title": "HAX — application page",
+      "excerpt": "Companies → https://hax.co/startups/",
       "page": "application"
     },
     {
       "id": "check-portfolio-3f431a666a",
       "url": "https://sosv.com/apply/hax/",
-      "title": "HAX — application page checked by scrape.py",
+      "title": "HAX — application page",
       "excerpt": "Portfolio → https://sosv.com/portfolio/",
       "page": "application"
     },
     {
-      "id": "check-portfolio-5cb2d3368e",
-      "url": "https://hax.co/program/",
-      "title": "HAX — details page checked by scrape.py",
-      "excerpt": "Companies → https://hax.co/startups/",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-7b5530df31",
-      "url": "https://hax.co/faq/",
-      "title": "HAX — terms page checked by scrape.py",
+      "id": "check-portfolio-40c96e631c",
+      "url": "https://hax.co/company_news/bet-early-and-exit-often-how-iima-ventures-creates-a-healthy-investment-cycle-mint/",
+      "title": "HAX — terms page",
       "excerpt": "Companies → https://hax.co/startups/",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-89e446d889",
-      "url": "https://hax.co/program/",
-      "title": "HAX — details page checked by scrape.py",
+      "id": "check-portfolio-44eb6211b1",
+      "url": "https://hax.co/company_news/10-retail-technology-investments-that-should-be-on-your-radar/",
+      "title": "HAX — terms page",
       "excerpt": "Startups → https://hax.co/startups/",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-50800f96f1",
+      "url": "https://hax.co/company_news/all-the-best-pet-deals-as-of-sept-9-cameras-toys-and-more-mashable/",
+      "title": "HAX — terms page",
+      "excerpt": "Startups → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5108885cce",
+      "url": "https://hax.co/company_news/20-best-prime-day-pet-deals-for-dogs-cats-and-more-nbc-news/",
+      "title": "HAX — terms page",
+      "excerpt": "Companies → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5facb7fe64",
+      "url": "https://hax.co/company_news/bet-early-and-exit-often-how-iima-ventures-creates-a-healthy-investment-cycle-mint/",
+      "title": "HAX — terms page",
+      "excerpt": "Startups → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-771d899b47",
+      "url": "https://hax.co/company_news/china-water-jet-cutter-market-2017-recent-study-including-growth-factors-applications/",
+      "title": "HAX — application page",
+      "excerpt": "Startups → https://hax.co/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-794a77aec9",
+      "url": "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/",
+      "title": "HAX — terms page",
+      "excerpt": "Companies → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-819a1f789e",
+      "url": "https://hax.co/company_news/arcis-opentrons-sign-sample-prep-product-distribution-deal/",
+      "title": "HAX — terms page",
+      "excerpt": "Companies → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-88faed098d",
+      "url": "https://hax.co/company_news/china-water-jet-cutter-market-2017-recent-study-including-growth-factors-applications/",
+      "title": "HAX — application page",
+      "excerpt": "Companies → https://hax.co/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-9e3d2d0a4e",
+      "url": "https://hax.co/company_news/all-the-best-pet-deals-as-of-sept-9-cameras-toys-and-more-mashable/",
+      "title": "HAX — terms page",
+      "excerpt": "Companies → https://hax.co/startups/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-9f50181cc9",
       "url": "https://hax.co/",
-      "title": "HAX — homepage checked by scrape.py",
+      "title": "HAX — homepage",
       "excerpt": "Startups → https://hax.co/startups/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-bd88cb1494",
-      "url": "https://hax.co/faq/",
-      "title": "HAX — terms page checked by scrape.py",
+      "id": "check-portfolio-a027244e11",
+      "url": "https://hax.co/company_news/know-about-the-future-of-robotics-education-with-application-technology-growth-factors-trends/",
+      "title": "HAX — application page",
+      "excerpt": "Companies → https://hax.co/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b7a2c7055d",
+      "url": "https://hax.co/iq-motion-control-launches-new-line-of-servo-motors-with-wide-range-of-applications/",
+      "title": "HAX — application page",
+      "excerpt": "Startups → https://hax.co/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-c0839a3e8f",
+      "url": "https://hax.co/company_news/canadian-robotics-council-creates-committee-to-boost-investment-in-domestic-robots/",
+      "title": "HAX — terms page",
+      "excerpt": "Companies → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c159bdfd4c",
+      "url": "https://hax.co/company_news/know-about-the-future-of-robotics-education-with-application-technology-growth-factors-trends/",
+      "title": "HAX — application page",
+      "excerpt": "Startups → https://hax.co/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-c78d2dbdf0",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "title": "HAX — application page",
+      "excerpt": "Startups → https://hax.co/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d69af146b2",
+      "url": "https://hax.co/iq-motion-control-launches-new-line-of-servo-motors-with-wide-range-of-applications/",
+      "title": "HAX — application page",
+      "excerpt": "Companies → https://hax.co/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-e51dd530fd",
+      "url": "https://hax.co/company_news/20-best-prime-day-pet-deals-for-dogs-cats-and-more-nbc-news/",
+      "title": "HAX — terms page",
       "excerpt": "Startups → https://hax.co/startups/",
       "page": "terms"
     },
     {
-      "id": "check-route-08b61a2d07",
-      "url": "https://hax.co/program/",
-      "title": "HAX — details page checked by scrape.py",
-      "excerpt": "APPLY → https://sosv.com/apply/hax/",
-      "page": "details"
+      "id": "check-portfolio-fd83f4022e",
+      "url": "https://hax.co/company_news/arcis-opentrons-sign-sample-prep-product-distribution-deal/",
+      "title": "HAX — terms page",
+      "excerpt": "Startups → https://hax.co/startups/",
+      "page": "terms"
     },
     {
-      "id": "check-route-40c6b529ab",
-      "url": "https://hax.co/program/",
-      "title": "HAX — details page checked by scrape.py",
-      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
-      "page": "details"
-    },
-    {
-      "id": "check-route-82e852e791",
-      "url": "https://hax.co/faq/",
-      "title": "HAX — terms page checked by scrape.py",
+      "id": "check-route-00b64245a6",
+      "url": "https://hax.co/company_news/20-best-prime-day-pet-deals-for-dogs-cats-and-more-nbc-news/",
+      "title": "HAX — terms page",
       "excerpt": "Apply → https://sosv.com/apply/hax/",
       "page": "terms"
+    },
+    {
+      "id": "check-route-07a22d1f78",
+      "url": "https://hax.co/company_news/10-retail-technology-investments-that-should-be-on-your-radar/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-0dee3cba93",
+      "url": "https://hax.co/company_news/china-water-jet-cutter-market-2017-recent-study-including-growth-factors-applications/",
+      "title": "HAX — application page",
+      "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0f8e88f745",
+      "url": "https://hax.co/iq-motion-control-launches-new-line-of-servo-motors-with-wide-range-of-applications/",
+      "title": "HAX — application page",
+      "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2333803af0",
+      "url": "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-262996b4f1",
+      "url": "https://hax.co/company_news/canadian-robotics-council-creates-committee-to-boost-investment-in-domestic-robots/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-2c6a30d457",
+      "url": "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-32993c3655",
+      "url": "https://hax.co/company_news/bet-early-and-exit-often-how-iima-ventures-creates-a-healthy-investment-cycle-mint/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-348522ea4a",
+      "url": "https://hax.co/iq-motion-control-launches-new-line-of-servo-motors-with-wide-range-of-applications/",
+      "title": "HAX — application page",
+      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3735538736",
+      "url": "https://hax.co/company_news/arcis-opentrons-sign-sample-prep-product-distribution-deal/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-39b7cae598",
+      "url": "https://hax.co/company_news/canadian-robotics-council-creates-committee-to-boost-investment-in-domestic-robots/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-453554b1c7",
+      "url": "https://hax.co/company_news/bet-early-and-exit-often-how-iima-ventures-creates-a-healthy-investment-cycle-mint/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-60fdcd93e4",
+      "url": "https://hax.co/company_news/know-about-the-future-of-robotics-education-with-application-technology-growth-factors-trends/",
+      "title": "HAX — application page",
+      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-61f0cd5e7b",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "title": "HAX — application page",
+      "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7daf5b090f",
+      "url": "https://hax.co/company_news/china-water-jet-cutter-market-2017-recent-study-including-growth-factors-applications/",
+      "title": "HAX — application page",
+      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-80d3713030",
+      "url": "https://hax.co/company_news/all-the-best-pet-deals-as-of-sept-9-cameras-toys-and-more-mashable/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-83a59eb7ff",
+      "url": "https://hax.co/company_news/know-about-the-future-of-robotics-education-with-application-technology-growth-factors-trends/",
+      "title": "HAX — application page",
+      "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9e2666f717",
+      "url": "https://hax.co/company_news/best-black-friday-robot-kit-deals-for-kids-and-adults-toms-hardware/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-af03c26c6c",
+      "url": "https://sosv.com/apply",
+      "title": "HAX — application page",
+      "excerpt": "Cutting-edge healthcare and engineering biology, with wet-lab infrastructure and deep technical, regulatory, and commercial expertise to de-risk biology and bring products toward the clinic or market. Apply to SOSV NY → https://sosv.com/apply/sosv/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c764c32995",
+      "url": "https://hax.co/company_news/20-best-prime-day-pet-deals-for-dogs-cats-and-more-nbc-news/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-c8f6459933",
+      "url": "https://hax.co/company_news/all-the-best-pet-deals-as-of-sept-9-cameras-toys-and-more-mashable/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-c936fecf3c",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "title": "HAX — application page",
+      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cb8a97fb9f",
+      "url": "https://sosv.com/apply",
+      "title": "HAX — application page",
+      "excerpt": "HAX is the world’s first and most active program focused on hard tech startups. HAX helps founders tap into the world’s premier ecosystems for real-world product development, manufacturing and fundraising. Apply to SOSV HAX → https://sosv.com/apply/hax/",
+      "page": "application"
     },
     {
       "id": "check-route-cf8cbf04df",
       "url": "https://hax.co/",
-      "title": "HAX — homepage checked by scrape.py",
+      "title": "HAX — homepage",
       "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
       "page": "details"
     },
     {
+      "id": "check-route-d1d3669e96",
+      "url": "https://hax.co/company_news/arcis-opentrons-sign-sample-prep-product-distribution-deal/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-d429837585",
       "url": "https://hax.co/",
-      "title": "HAX — homepage checked by scrape.py",
+      "title": "HAX — homepage",
       "excerpt": "Apply → https://sosv.com/apply/hax/",
       "page": "details"
     },
     {
-      "id": "check-route-e07aa29590",
-      "url": "https://hax.co/faq/",
-      "title": "HAX — terms page checked by scrape.py",
+      "id": "check-route-d64be9b0d5",
+      "url": "https://hax.co/company_news/best-black-friday-robot-kit-deals-for-kids-and-adults-toms-hardware/",
+      "title": "HAX — terms page",
       "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
       "page": "terms"
     },
     {
       "id": "check-route-f025e73fae",
       "url": "https://sosv.com/apply/hax/",
-      "title": "HAX — application page checked by scrape.py",
+      "title": "HAX — application page",
       "excerpt": "Apply → https://sosv.com/apply",
       "page": "application"
     },
     {
-      "id": "check-route-f087d99b84",
-      "url": "https://hax.co/program/",
-      "title": "HAX — details page checked by scrape.py",
-      "excerpt": "Apply → https://sosv.com/apply/hax/",
-      "page": "details"
+      "id": "check-route-ff60651f37",
+      "url": "https://hax.co/company_news/10-retail-technology-investments-that-should-be-on-your-radar/",
+      "title": "HAX — terms page",
+      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
+      "page": "terms"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-304305f6e2",
+      "url": "https://hax.co/",
+      "page": "details",
+      "excerpt": "HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply hands-on support for hard-tech founders HAX is a part of SOSV , the world’s most active pre-seed deep-tech venture capital firm. Post Announcing HAX Plasma Forge’s New Home at Princeton’s SRI Post Nov 11, 2026 NJ Means Business, So Does SOSV Forbes Nov 06, 2026 Can 3D Weaving Change The Economics Of Fashion? unspun & Arvind Test On-Demand Manufacturing TechCrunch Oct 27, 2026 SOSV at TechCrunch Disrupt: What is Physical AI, Anyway? All news for pre-seed startups solving hard problems with hard tech HAX is the world’s first and most active program built for pre-seed startups working at the intersection of science and engineering. We back founders tackling the hardest industrial-scale challenges, in fields like energy, advanced compute, transportation, health tech, and manufacturing, employing the most innovative new technologies, including everything from plasma and physical AI to advanced chemistry. CASE STUDY unspun CASE STUDY R-Zero CASE STUDY Neptune Robotics CASE STUDY Smartex More Case Studies more than capital — a global engineering organization Most investors wire money and wish you luck. We embed an elite, global engineering organization directly into your startup. Anchored in our 35,000 sq. ft Newark HQ headquarters and our upcoming"
+    },
+    {
+      "id": "check-page-bc9d6671bf",
+      "url": "https://hax.co/apply-for-the-hax-venture-fellowship/",
+      "page": "application",
+      "excerpt": "Apply for the HAX Venture Fellowship - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles Apply for the HAX Venture Fellowship HAX Team July 27, 2022 Announcing the HAX Venture Fellowship, a 1-year program for the next generation of hard tech founders and investors. ‍The HAX Venture Fellowship is a hands-on program for the next generation of Hard Tech founders and investors. The Fellowship The 1-year, part-time program gives Fellows the opportunity to work alongside HAX leadership to bring deep technology from the workshop into the real world. Fellows receive direct exposure to the world of early stage venture investing, and are given responsibilities as a technology scout, investment analyst, and early stage employee at a hard tech startup. The program is best suited for deeply technical individuals – most of whom are currently enrolled in an MBA or PhD program – who are ready to make an impact outside of the lab or workshop. Each cohort of HAX Venture Fellows will bring together individuals from diverse genders, races, orientations, abilities and circumstances. What’s Needed to Apply Please send a resume to hax-interns@sosv.com with the subject line “HAX Venture Fellowship Application”. Please include in the body of the email more information about why you are interested"
+    },
+    {
+      "id": "check-page-4bf71416cb",
+      "url": "https://hax.co/company_news/china-water-jet-cutter-market-2017-recent-study-including-growth-factors-applications/",
+      "page": "application",
+      "excerpt": "China Water Jet Cutter Market 2017 – Recent Study Including Growth Factors, Applications ... - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles China Water Jet Cutter Market 2017 – Recent Study Including Growth Factors, Applications … API Access December 12, 2017 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina"
+    },
+    {
+      "id": "check-page-f56390ef7f",
+      "url": "https://hax.co/company_news/know-about-the-future-of-robotics-education-with-application-technology-growth-factors-trends/",
+      "page": "application",
+      "excerpt": "Know about the future of Robotics Education with Application, Technology, Growth Factors, Trends ... - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles Know about the future of Robotics Education with Application, Technology, Growth Factors, Trends … API Access January 23, 2018 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia"
+    },
+    {
+      "id": "check-page-5216c8d429",
+      "url": "https://hax.co/iq-motion-control-launches-new-line-of-servo-motors-with-wide-range-of-applications/",
+      "page": "application",
+      "excerpt": "IQ Motion Control launches new line of servo motors with wide range of applications - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles IQ Motion Control launches new line of servo motors with wide range of applications HAX Team May 21, 2021 IQ Motion Control offers Vertiq offers a range of servomotor propulsion solutions. Source: IQ Motion Control IQ Motion Control , a 2018 graduate of the HAX program , announced today the launch of their newest line of servo motors, the Fortiq BLS42. The ultra compact high performance servo motors offer the performance benefits of high-end industrial servos at a greatly reduced cost, and have wide ranging applications across 3D printing, CNC machining, robotics, and conveyor systems. The new line of servos boasts impressive qualifications: Rated to 4,000 RPM, with ±2 encoder tick accuracy, meaning a 90% reduction in cogging torque ripple with IQ’s calibration software. Straight stack, straight magnet BLDC motor with an integrated motor controller and magnetic rotary encoder for position sensing. 50% less volume and are 70% of the cost when compared to traditional industrial servo motors. Four size options available for customers, each with a different torque rating dependent on stack length. The new line of motors are built to maximize"
+    },
+    {
+      "id": "check-page-a268a9bcd6",
+      "url": "https://sosv.com/apply/hax/",
+      "page": "application",
+      "excerpt": "Apply to HAX - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC * indicates required fields HAX Locations Which HAX location are you applying to? * HAX (Newark, NJ) HAX Plasma Forge (Princeton, NJ) Company Give us a quick peek at your company. Prior to applying * I confirm that my company is building a Hard Tech product. Company Name * Website Contact Email * Enter Email Confirm Email We'll use this email address to confirm that we have received your application, and to subscribe you to our newsletters if you decide to opt in. It will also be our primary point of contact if we're interested in your application, so please make sure that it is valid, up-to-date and checked regularly. Description, in 140 characters or less * Location * City State / Province / Region Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei Darussalam Bulgaria Burkina Faso"
+    },
+    {
+      "id": "check-page-0b52c2367b",
+      "url": "https://sosv.com/apply",
+      "page": "application",
+      "excerpt": "Apply to SOSV Programs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Apply to SOSV's Programs Click on the logo of the program you wish to apply to: Cutting-edge healthcare and engineering biology, with wet-lab infrastructure and deep technical, regulatory, and commercial expertise to de-risk biology and bring products toward the clinic or market. Apply to SOSV NY Full sweep of deep tech for companies that want build in proximity to Silicon Valley’s capital density and talent networks and iterate quickly with customers, partners, and follow-on investors. Apply to SOSV SF HAX is the world’s first and most active program focused on hard tech startups. HAX helps founders tap into the world’s premier ecosystems for real-world product development, manufacturing and fundraising. Apply to SOSV HAX Learn About SOSV Our Locations Our Portfolio Our Team Legal FAQ Press & Media Brand Guidelines Apply Application FAQ Apply Invest Invest in our Funds Invest in our Companies Participate SOSV Retvrn Our Events Get Email Updates SOSV Consortium Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC"
+    },
+    {
+      "id": "check-page-07cc791258",
+      "url": "https://hax.co/company_news/10-retail-technology-investments-that-should-be-on-your-radar/",
+      "page": "terms",
+      "excerpt": "10 retail technology investments that should be on your radar - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles 10 retail technology investments that should be on your radar API Access April 22, 2021 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory"
+    },
+    {
+      "id": "check-page-21b79746e9",
+      "url": "https://hax.co/company_news/20-best-prime-day-pet-deals-for-dogs-cats-and-more-nbc-news/",
+      "page": "terms",
+      "excerpt": "20+ best Prime Day pet deals for dogs, cats and more - NBC News - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles 20+ best Prime Day pet deals for dogs, cats and more – NBC News API Access October 8, 2024 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean"
+    },
+    {
+      "id": "check-page-929f0bc64f",
+      "url": "https://hax.co/company_news/all-the-best-pet-deals-as-of-sept-9-cameras-toys-and-more-mashable/",
+      "page": "terms",
+      "excerpt": "All the best pet deals as of Sept. 9: Cameras, toys, and more - Mashable - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles All the best pet deals as of Sept. 9: Cameras, toys, and more – Mashable API Access September 9, 2021 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British"
+    },
+    {
+      "id": "check-page-b1fec0197d",
+      "url": "https://hax.co/company_news/arcis-opentrons-sign-sample-prep-product-distribution-deal/",
+      "page": "terms",
+      "excerpt": "Arcis, Opentrons Sign Sample Prep Product Distribution Deal - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles Arcis, Opentrons Sign Sample Prep Product Distribution Deal API Access July 9, 2019 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei"
+    },
+    {
+      "id": "check-page-48e9bffa65",
+      "url": "https://hax.co/company_news/best-black-friday-robot-kit-deals-for-kids-and-adults-toms-hardware/",
+      "page": "terms",
+      "excerpt": "Best Black Friday Robot Kit Deals for Kids and Adults | Tom's Hardware - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles Best Black Friday Robot Kit Deals for Kids and Adults | Tom’s Hardware API Access November 26, 2021 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British"
+    },
+    {
+      "id": "check-page-138779719a",
+      "url": "https://hax.co/company_news/bet-early-and-exit-often-how-iima-ventures-creates-a-healthy-investment-cycle-mint/",
+      "page": "terms",
+      "excerpt": "Bet early and exit often: How IIMA Ventures creates a healthy investment cycle - Mint - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles Bet early and exit often: How IIMA Ventures creates a healthy investment cycle – Mint API Access April 30, 2026 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet"
+    },
+    {
+      "id": "check-page-dac30958b1",
+      "url": "https://hax.co/company_news/canadian-robotics-council-creates-committee-to-boost-investment-in-domestic-robots/",
+      "page": "terms",
+      "excerpt": "Canadian Robotics Council creates committee to boost investment in domestic robots - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles Canadian Robotics Council creates committee to boost investment in domestic robots API Access April 29, 2026 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island"
+    },
+    {
+      "id": "check-page-87b5c8a775",
+      "url": "https://hax.co/company_news/cult-food-sciences-makes-strategic-investment-in-unicorn-biotechnologies-youtube/",
+      "page": "terms",
+      "excerpt": "Cult Food Sciences makes strategic investment in Unicorn Biotechnologies - YouTube - HAX – Hands-on Venture Capital for Hard Tech Skip to content Program Plasma Forge Case Studies Companies Team News Invest Apply Apply Back to news articles Cult Food Sciences makes strategic investment in Unicorn Biotechnologies – YouTube API Access May 5, 2022 Share Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a Mentor Industry Partnerships University Collaborations Copyright All Rights Reserved 2026 SOSV Investments LLC - HAX® is a trademark of SOSV. All other trademarks are of their respective owners. Privacy Statement Terms of Use Cookie Policy Disclaimer Communication Policy Code of Conduct Get Monthly Email Updates from SOSV Join our newsletter to hear the latest hard tech trends, portfolio news and job opportunities with SOSV-backed startups. First name (Required) Last name (Required) Email (Required) Company name (Required) Job title (Required) Country (Required) Country * Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island"
     }
   ],
   "findings": {
@@ -153,6 +1222,10 @@
       {
         "value": "https://sosv.com/apply",
         "evidenceId": "check-route-f025e73fae"
+      },
+      {
+        "value": "https://sosv.com/apply/sosv/",
+        "evidenceId": "check-route-af03c26c6c"
       }
     ],
     "applicationUrl": [
@@ -164,17 +1237,29 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
-    "selectivity": [],
-    "dealText": [
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
       {
-        "value": "rounds usually up to a Series C/D, through our new SOSV V fund or our growth fund, SOSV Select . Across these rounds we can deploy an aggregate total of up to $4M per company. We rarely lead rounds and will most often just ask for a non-voting, observer seat on your board (along with information rights so we know what’s",
-        "evidenceId": "check-deal-b2c1fbbcf8"
+        "value": "11 months",
+        "evidenceId": "check-duration-cb0ab737eb"
       },
       {
-        "value": "have a whole host of perks including AWS and Google credits, Solidworks discounts, Hubspot discounts and many others. The total value of these perks stands at $1M per team. Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a",
-        "evidenceId": "check-deal-49302c5d8f"
+        "value": "5 months",
+        "evidenceId": "check-duration-7208b23934"
       }
     ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-ea3104d6ca"
+      }
+    ],
+    "location": [],
+    "selectivity": [],
+    "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://hax.co/startups/",

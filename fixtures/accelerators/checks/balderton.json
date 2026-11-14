@@ -1,59 +1,255 @@
 {
   "programId": "balderton",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.balderton.com/",
-    "https://www.balderton.com/about-balderton/"
+    "https://www.balderton.com/about-balderton/",
+    "https://www.balderton.com/founder-well-being/programme-overview/",
+    "https://careers.balderton.com/jobs?__hsfp=4048727588&__hssc=51647990.23.1634215967246&__hstc=51647990.a84059ed3fe8efa2b63fe9e02c4327e1.1634027149833.1634027149833.1634027149833.1",
+    "https://www.balderton.com/companies/",
+    "https://www.balderton.com/news/category/portfolio-news/",
+    "https://www.balderton.com/news/unit1-studio-breaks-major-barrier-to-avatar-concert-adoption-secures-new-investment/",
+    "https://careers.balderton.com/companies",
+    "https://www.balderton.com/news/category/portfolio-news/page/2/",
+    "https://www.balderton.com/news/itoflow-raises-2-5-million-to-bring-institutional-grade-portfolio-management-to-every-investment-firm/"
   ],
   "evidence": [
     {
+      "id": "check-format-38ba52b36d",
+      "url": "https://www.balderton.com/founder-well-being/programme-overview/",
+      "title": "Balderton — program page",
+      "excerpt": "and researchers for expert-led parenting classes, drop-in virtual coaching, private sessions as well as events, workshops,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-4041a7ca36",
+      "url": "https://www.balderton.com/founder-well-being/programme-overview/",
+      "title": "Balderton — program page",
+      "excerpt": "of 8-10 CEOs from within the portfolio who meet regularly, in person to discuss the business issues and overall life challenges",
+      "page": "details"
+    },
+    {
+      "id": "check-format-64b2fcc130",
+      "url": "https://www.balderton.com/news/category/portfolio-news/",
+      "title": "Balderton — portfolio page",
+      "excerpt": "11 May, 2026 Grand Games raises $70M Series B to scale hybrid casual gaming Portfolio News 06 May, 2026 Davis raises",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-7e79a24e38",
+      "url": "https://careers.balderton.com/jobs?__hsfp=4048727588&__hssc=51647990.23.1634215967246&__hstc=51647990.a84059ed3fe8efa2b63fe9e02c4327e1.1634027149833.1634027149833.1634027149833.1",
+      "title": "Balderton — portfolio page",
+      "excerpt": "Select... Industry Search industries Internships only Remote options All jobs Posted Anytime Post and Manage jobs",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-location-b0f1026776",
+      "url": "https://www.balderton.com/about-balderton/",
+      "title": "Balderton — program page",
+      "excerpt": "is a startup hub. And with investors based in Paris and Berlin, we are never more than a",
+      "page": "details"
+    },
+    {
       "id": "check-name-d02f3cfa82",
       "url": "https://www.balderton.com/",
-      "title": "Balderton — homepage checked by scrape.py",
+      "title": "Balderton — homepage",
       "excerpt": "& Performance Platform Our Values Sustainable Future Goals Balderton Launched Our team Companies All companies Founder",
       "page": "details"
     },
     {
       "id": "check-portfolio-15dfca78aa",
       "url": "https://www.balderton.com/about-balderton/",
-      "title": "Balderton — details page checked by scrape.py",
+      "title": "Balderton — program page",
       "excerpt": "Companies → https://www.balderton.com/companies/",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-1ced2b89c9",
+      "url": "https://www.balderton.com/founder-well-being/programme-overview/",
+      "title": "Balderton — program page",
+      "excerpt": "Companies → https://www.balderton.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-29624319cb",
+      "url": "https://www.balderton.com/news/category/portfolio-news/",
+      "title": "Balderton — portfolio page",
+      "excerpt": "Companies → https://www.balderton.com/companies/",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-2fa27aa962",
       "url": "https://www.balderton.com/",
-      "title": "Balderton — homepage checked by scrape.py",
+      "title": "Balderton — homepage",
       "excerpt": "Companies → https://www.balderton.com/companies/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-4f6a2804c6",
+      "url": "https://careers.balderton.com/jobs?__hsfp=4048727588&__hssc=51647990.23.1634215967246&__hstc=51647990.a84059ed3fe8efa2b63fe9e02c4327e1.1634027149833.1634027149833.1634027149833.1",
+      "title": "Balderton — portfolio page",
+      "excerpt": "companies → https://www.balderton.com/companies",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-592a418385",
       "url": "https://www.balderton.com/",
-      "title": "Balderton — homepage checked by scrape.py",
+      "title": "Balderton — homepage",
       "excerpt": "All companies → https://www.balderton.com/companies/",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-66c252f417",
+      "url": "https://www.balderton.com/news/unit1-studio-breaks-major-barrier-to-avatar-concert-adoption-secures-new-investment/",
+      "title": "Balderton — terms page",
+      "excerpt": "Companies → https://www.balderton.com/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-67e4226358",
+      "url": "https://www.balderton.com/news/category/portfolio-news/page/2/",
+      "title": "Balderton — portfolio page",
+      "excerpt": "All companies → https://www.balderton.com/companies/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-793d2a55e9",
+      "url": "https://www.balderton.com/news/category/portfolio-news/page/2/",
+      "title": "Balderton — portfolio page",
+      "excerpt": "Companies → https://www.balderton.com/companies/",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-7b057b780d",
       "url": "https://www.balderton.com/about-balderton/",
-      "title": "Balderton — details page checked by scrape.py",
+      "title": "Balderton — program page",
       "excerpt": "All companies → https://www.balderton.com/companies/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-865a01ae48",
+      "url": "https://careers.balderton.com/jobs?__hsfp=4048727588&__hssc=51647990.23.1634215967246&__hstc=51647990.a84059ed3fe8efa2b63fe9e02c4327e1.1634027149833.1634027149833.1634027149833.1",
+      "title": "Balderton — portfolio page",
+      "excerpt": "Companies → https://careers.balderton.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-9848c92c72",
+      "url": "https://www.balderton.com/news/itoflow-raises-2-5-million-to-bring-institutional-grade-portfolio-management-to-every-investment-firm/",
+      "title": "Balderton — portfolio page",
+      "excerpt": "All companies → https://www.balderton.com/companies/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-a1322e73b4",
+      "url": "https://www.balderton.com/founder-well-being/programme-overview/",
+      "title": "Balderton — program page",
+      "excerpt": "All companies → https://www.balderton.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ad88abe8fc",
+      "url": "https://www.balderton.com/news/itoflow-raises-2-5-million-to-bring-institutional-grade-portfolio-management-to-every-investment-firm/",
+      "title": "Balderton — portfolio page",
+      "excerpt": "Companies → https://www.balderton.com/companies/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-b5293a1b7e",
       "url": "https://www.balderton.com/",
-      "title": "Balderton — homepage checked by scrape.py",
+      "title": "Balderton — homepage",
       "excerpt": "Meet the portfolio → https://www.balderton.com/companies/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-c99d517008",
+      "url": "https://www.balderton.com/news/unit1-studio-breaks-major-barrier-to-avatar-concert-adoption-secures-new-investment/",
+      "title": "Balderton — terms page",
+      "excerpt": "All companies → https://www.balderton.com/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-cc0557baa9",
+      "url": "https://www.balderton.com/news/category/portfolio-news/",
+      "title": "Balderton — portfolio page",
+      "excerpt": "All companies → https://www.balderton.com/companies/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-cceef998d7",
+      "url": "https://careers.balderton.com/companies",
+      "title": "Balderton — portfolio page",
+      "excerpt": "companies → https://www.balderton.com/companies",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-ea03ba77a5",
       "url": "https://www.balderton.com/",
-      "title": "Balderton — homepage checked by scrape.py",
+      "title": "Balderton — homepage",
       "excerpt": "https://www.balderton.com",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-5092a09654",
+      "url": "https://www.balderton.com/",
+      "page": "details",
+      "excerpt": "Europe’s leading venture firm focused exclusively on backing European-founded tech companies × About Us Wellbeing & Performance Platform Our Values Sustainable Future Goals Balderton Launched Our team Companies All companies Founder spotlights Careers Resources News Celebrating European founders builtineurope.com Two decades. Hundreds of Europe’s best founders Meet the portfolio London, UK Revolut The digital banking alternative. Seed in 2015 Istanbul, Turkey Dream Games Market-leading, high-quality games for the casual puzzle game industry Seed in 2019 Exited to CVC in 2025 London, UK Wayve Full driving software system for autonomous vehicles. Series A in 2019 Cambridge, UK Darktrace World-leading cyber AI responds to threats in seconds. Secondary in 2018 IPO on London Stock Exchange in 2021 Munich, Germany The Exploration Company Space logistics company. Series B in 2024 London, UK Fuse Energy Delivering clean, cheap electricity to consumers to help solve climate change. Seed in 2022 London, UK GoCardless The easiest way for businesses to collect recurring payments. Series B in 2014 Acquired by Mollie in 2025 Munich, Germany Proxima Fusion Building a fusion power plant concept to bring limitless, safe, clean energy to the grid. Series A in 2025 Uppsala, Sweden MySQL Open-source relational database management system. Series A in 2001 Acquired by Sun Microsystems (now Oracle)"
+    },
+    {
+      "id": "check-page-1a36328e1d",
+      "url": "https://www.balderton.com/about-balderton/",
+      "page": "details",
+      "excerpt": "Why Balderton? | Balderton Capital × About Us Wellbeing & Performance Platform Our Values Sustainable Future Goals Balderton Launched Our team Companies All companies Founder spotlights Careers Resources News Meet Balderton. The go-to partner for Europe’s best founders 26 years embedded in European tech $5.7bn raised to invest from seed to IPO 300+ companies backed since 2000 “Balderton has been the kindest, most supportive, and smartest investor group I have had the honour to work with. I haven’t seen another group that has been so truly empathetic as Balderton. I felt like you guys were on my team through ups and down and I am very grateful for that.” Sujay Tyle Founder & CEO, Merama World-class venture, in your corner Groundbreaking portfolio We have partnered closely with Europe’s best entrepreneurs, as they built companies that changed the way people live and work. Experienced and equal partnership Our equal partnership includes founders of multi-billion dollar businesses, operational leaders from leading tech companies, and investment experts with years of global experience. Substantial scale and support Balderton’s early stage and growth funds allow us to invest from Seed to IPO. And we provide hands-on support for founders and their teams, based on the deep functional expertise of our portfolio services team and EIRs. Deep European expertise We have been investing in"
+    },
+    {
+      "id": "check-page-b96a1cc06a",
+      "url": "https://www.balderton.com/founder-well-being/programme-overview/",
+      "page": "details",
+      "excerpt": "Programme Overview - Balderton Capital × About Us Wellbeing & Performance Platform Our Values Sustainable Future Goals Balderton Launched Our team Companies All companies Founder spotlights Careers Resources News Founder Wellbeing & Performance Programme Overview Programme Overview Founder Survey More than half report regularly prioritising work over looking after themselves. I find that when I’m under a lot of pressure, I am terrible at longer term thinking. Setting strategy and direction requires deep thinking, research and creativity. This is vastly reduced under high pressure – your mind is not free to explore when it’s crowded. feel there is an expectation that entrepreneurs must always work long hours in order to be successful There was a very noticeable impact on how well we tracked as a company. Spent too long working on the wrong things, we were not agile enough, etc. I was distracted and unable to focus and work effectively on the right things. Balderton offers a variety of programmes to support founders as they work under intense conditions, building companies that may one day change the world. Each founder is different, so we believe in offering access to different kinds of support – from executive coaching, to health and fitness, to peer support networks and a parental support platform. 01. Health & fitness programme Our science-based physical health and"
+    },
+    {
+      "id": "check-page-7dfb0e8438",
+      "url": "https://careers.balderton.com/jobs?__hsfp=4048727588&__hssc=51647990.23.1634215967246&__hstc=51647990.a84059ed3fe8efa2b63fe9e02c4327e1.1634027149833.1634027149833.1634027149833.1",
+      "page": "portfolio",
+      "excerpt": "Jobs at Balderton Capital Companies | Balderton Capital about us our team companies resources news about us our team companies resources news Build the future from here Jobs Companies Talent Network Filter jobs by skills and more Sign in Roles Search roles Skills Search skills Location Search locations Company stage Select... Industry Search industries Internships only Remote options All jobs Posted Anytime Post and Manage jobs Powered by Consider Powered by Consider Cookies Privacy Terms The Stables 28, Britannia street, London WC1X 9JF, UK +44 (0) 20 7016 6800 +44 (0) 20 7016 6810 company about us sustainability our team contact founders founder wellbeing programme overview founder survery resources & events companies companies job founder spotlights resources ESG Talent & Culture Marketing news News events Twitter Linkedin Medium Balderton eFrontCloud Confidentiality – Our Commitment Code of conduct Legal © Balderton Capital. All rights reserved. Balderton Capital (UK) LLP is authorised and regulated by the Financial Conduct Authority."
+    },
+    {
+      "id": "check-page-8847ce190d",
+      "url": "https://www.balderton.com/companies/",
+      "page": "portfolio",
+      "excerpt": "Balderton Capital Portfolio | Balderton Capital × About Us Wellbeing & Performance Platform Our Values Sustainable Future Goals Balderton Launched Our team Companies All companies Founder spotlights Careers Resources News Europe’s most exciting startups London, UK Revolut The digital banking alternative. Seed in 2015 London, UK Wayve Full driving software system for autonomous vehicles. Series A in 2019 Munich, Germany Proxima Fusion Building a fusion power plant concept to bring limitless, safe, clean energy to the grid. Series A in 2025 London, UK Cleo An intelligent assistant for your money. Series A in 2018 Munich, Germany The Exploration Company Space logistics company. Series B in 2024 Rome, Italy Exein Embedded IoT cybersecurity. Series C in 2025 All companies Status Live Exited Location Belgium CEE Denmark Finland France Germany Ireland Israel Italy Netherlands Norway Poland Spain Sweden Switzerland Turkey UK USA Rest of the world Sort by Newest investments Oldest investments All Categories AI & machine learning Consumer Cyber security Digital health Enterprise Fintech Resilience Sustainable tech Other Reset all filters London, UK 01Health Revolutionising access to specialised healthcare services by connecting general clinicians with a network of specialists. Seed, 2023 London, UK Adludio Sensory mobile ads for agencies and brands. Seed in 2013 Istanbul, Turkey Agave"
+    },
+    {
+      "id": "check-page-17182d029b",
+      "url": "https://www.balderton.com/news/category/portfolio-news/",
+      "page": "portfolio",
+      "excerpt": "Portfolio News - Balderton Capital × About Us Wellbeing & Performance Platform Our Values Sustainable Future Goals Balderton Launched Our team Companies All companies Founder spotlights Careers Resources News News All Balderton News Portfolio News Events All Balderton News Portfolio News Events Portfolio News 11 November, 2026 Fractile raises $720m to build the hardware that pushes AI’s frontier forward Portfolio News 14 October, 2026 Duvo Raises $32 Million Series A to become the one platform enterprises run their operations on Portfolio News 22 September, 2026 Spott raises $21M Series A to build the global AI-native operating system for recruitment agencies Portfolio News 21 September, 2026 Unit1 Studio breaks major barrier to avatar concert adoption, secures new investment Portfolio News 18 September, 2026 Mantic raises $25M to scale AI forecasting Portfolio News 08 September, 2026 The Exploration Company secures $450 million in the largest-ever Series C by a European space company Portfolio News 02 September, 2026 Conveo raises $50M to help Fortune 500 brands understand what consumers want next Portfolio News 25 August, 2026 Itoflow raises $2.5 million to bring institutional-grade portfolio management to every investment firm Portfolio News 12 August, 2026 Lovable raises $400m in Series C funding to help people run their businesses Portfolio News 02 June, 2026 Salesforce"
+    },
+    {
+      "id": "check-page-ce2f3fc9b7",
+      "url": "https://www.balderton.com/news/unit1-studio-breaks-major-barrier-to-avatar-concert-adoption-secures-new-investment/",
+      "page": "terms",
+      "excerpt": "Unit1 Studio breaks major barrier to avatar concert adoption, secures new investment - Balderton Capital × About Us Wellbeing & Performance Platform Our Values Sustainable Future Goals Balderton Launched Our team Companies All companies Founder spotlights Careers Resources News Portfolio News 21 September, 2026 Unit1 Studio breaks major barrier to avatar concert adoption, secures new investment Balderton Unit1 Studio, the end-to-end avatar concert producer, today announced a major breakthrough in the commercial adoption of avatar concerts – the ability to rapidly and economically transfer avatar concert productions between venues – effectively breaking a huge barrier to market adoption of avatar concerts. In light of this breakthrough, Unit1 has secured a further $20M of new investment to fuel its work creating and operating mixed reality avatar concerts, transporting fans to legendary performances from the artists they love. While ABBA Voyage has proven audience appetite for concerts of artists who can no longer tour, the eye-watering costs of development and replication of similar productions has proved prohibitive for a majority of artists. Unit1’s unique technology removes these barriers increasing the number of artists for which avatar concerts now become a commercial reality. As proven by Unit1 successfully moving its KT Tunstall avatar showcase from its former"
+    },
+    {
+      "id": "check-page-769827ac60",
+      "url": "https://careers.balderton.com/companies",
+      "page": "portfolio",
+      "excerpt": "Jobs at Balderton Capital Companies | Balderton Capital about us our team companies resources news about us our team companies resources news Build the future from here Jobs Companies Talent Network Powered by Consider Cookies Privacy Terms The Stables 28, Britannia street, London WC1X 9JF, UK +44 (0) 20 7016 6800 +44 (0) 20 7016 6810 company about us sustainability our team contact founders founder wellbeing programme overview founder survery resources & events companies companies job founder spotlights resources ESG Talent & Culture Marketing news News events Twitter Linkedin Medium Balderton eFrontCloud Confidentiality – Our Commitment Code of conduct Legal © Balderton Capital. All rights reserved. Balderton Capital (UK) LLP is authorised and regulated by the Financial Conduct Authority."
+    },
+    {
+      "id": "check-page-0f0698491b",
+      "url": "https://www.balderton.com/news/category/portfolio-news/page/2/",
+      "page": "portfolio",
+      "excerpt": "Portfolio News - Balderton Capital - Page 2 × About Us Wellbeing & Performance Platform Our Values Sustainable Future Goals Balderton Launched Our team Companies All companies Founder spotlights Careers Resources News News All Balderton News Portfolio News Events All Balderton News Portfolio News Events Portfolio News 19 March, 2026 Reson8 raises €5m to build hyper-customised, Europe-first speech AI Portfolio News 10 March, 2026 Escape raises $18M Series A to fight AI-powered cyberattacks with AI agents Portfolio News 25 February, 2026 Wayve secures $1.5B to deploy its global autonomy platform Portfolio News 12 February, 2026 Pet love boom fuels Lassie’s $75m Series C Portfolio News 11 February, 2026 GitGuardian raises $50M Series C Portfolio News 11 February, 2026 Mozart AI scores $6M to put artists at the centre of AI-powered music making Portfolio News 28 January, 2026 Kaia Health acquired by Sword Health Portfolio News 20 January, 2026 Stream raises $90M Series D to redefine workplace finance and drive US expansion Portfolio News 18 December, 2025 Fuse Energy hits $5bn valuation in its third year Portfolio News 11 December, 2025 GoCardless to be acquired by Mollie Portfolio News 28 November, 2025 Quantum Systems triples valuation Portfolio News 24 November, 2025 Celebrating 10 years of Revolut Portfolio News 17 November, 2025 voize raises $50 million to power the AI"
+    },
+    {
+      "id": "check-page-ff62afaf98",
+      "url": "https://www.balderton.com/news/itoflow-raises-2-5-million-to-bring-institutional-grade-portfolio-management-to-every-investment-firm/",
+      "page": "portfolio",
+      "excerpt": "Itoflow raises $2.5 million to bring institutional-grade portfolio management to every investment firm - Balderton Capital × About Us Wellbeing & Performance Platform Our Values Sustainable Future Goals Balderton Launched Our team Companies All companies Founder spotlights Careers Resources News Portfolio News 25 August, 2026 Itoflow raises $2.5 million to bring institutional-grade portfolio management to every investment firm Balderton Itoflow, the AI platform helping professional investment teams scale research and portfolio management, has raised $2.5 million in pre-seed funding led by Balderton and including angel investors such as Cleo founder Barney Hussey-Yeo. Itoflow will use the funding to expand its engineering and quantitative research teams, accelerate product development and support its commercial and regulatory work. Founded in 2026, Itoflow is building AI agents that learn how each investment firm researches opportunities, manages risk and reviews portfolios. The platform does not impose a particular investment philosophy: it turns each team’s own approach into governed workflows that can operate continuously across global markets and asset classes, including equities, bonds, ETFs, commodities and digital assets. Built from the ground up, its agentic infrastructure gives Itoflow greater control over the security and reliability of agents designed to operate for"
     }
   ],
   "findings": {
@@ -69,12 +265,45 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-4041a7ca36"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-38ba52b36d"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-64b2fcc130"
+      }
+    ],
+    "location": [
+      {
+        "value": "Paris",
+        "evidenceId": "check-location-b0f1026776"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.balderton.com/companies/",
         "evidenceId": "check-portfolio-2fa27aa962"
+      },
+      {
+        "value": "https://www.balderton.com/companies",
+        "evidenceId": "check-portfolio-4f6a2804c6"
+      },
+      {
+        "value": "https://careers.balderton.com/companies",
+        "evidenceId": "check-portfolio-865a01ae48"
       }
     ],
     "name": [

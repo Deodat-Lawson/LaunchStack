@@ -1,60 +1,94 @@
 {
   "programId": "boost-vc",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.boost.vc/",
+    "https://www.boost.vc/fellowship",
     "https://www.boost.vc/faq",
-    "https://www.boost.vc/fellowship"
+    "https://www.boost.vc/portfolio"
   ],
   "evidence": [
     {
-      "id": "check-deal-0f04799055",
+      "id": "check-deal-4e2a0514f3",
+      "url": "https://www.boost.vc/",
+      "title": "Boost VC — homepage",
+      "excerpt": "Boost VC: PreSeed Investors | $500k Rounds Portfolio Fellowship Learn More We invest first – in founders",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-b8c0b5f3ee",
       "url": "https://www.boost.vc/faq",
-      "title": "Boost VC — terms page checked by scrape.py",
-      "excerpt": "like Bitcoin . Some BIG idea examples include K2Space, Prospera, Radiant Nuclear, Colossal Bio Sciences, and New Limit. How much does Boost invest? We invest $500k to lead or co-lead pre-seed rounds! We are okay being the first check and the only check. We are also okay following on to rounds, and our checks are flexible",
+      "title": "Boost VC — terms page",
+      "excerpt": "Bio Sciences, and New Limit. How much does Boost invest? We invest $500k to lead or co-lead pre-seed rounds! We are okay being the first",
       "page": "terms"
     },
     {
-      "id": "check-deal-8c09660b2b",
-      "url": "https://www.boost.vc/",
-      "title": "Boost VC — homepage checked by scrape.py",
-      "excerpt": "Boost VC: PreSeed Investors | $500k Rounds Portfolio Fellowship Learn More We invest first – in founders making aerospace a reality . Reimagining the universe We Lead Pre-Seed Rounds $500k",
-      "page": "details"
+      "id": "check-format-9aa47d1116",
+      "url": "https://www.boost.vc/portfolio",
+      "title": "Boost VC — portfolio page",
+      "excerpt": "Featured Space Bio / Health Climate Robotics Crypto AI Virtual Reality & Augmented Reality Other Ready to change the",
+      "page": "portfolio"
     },
     {
       "id": "check-name-aa08883f10",
       "url": "https://www.boost.vc/",
-      "title": "Boost VC — homepage checked by scrape.py",
+      "title": "Boost VC — homepage",
       "excerpt": "Boost VC: PreSeed Investors | $500k Rounds Portfolio Fellowship",
       "page": "details"
     },
     {
       "id": "check-portfolio-1326bf9f15",
       "url": "https://www.boost.vc/faq",
-      "title": "Boost VC — terms page checked by scrape.py",
+      "title": "Boost VC — terms page",
       "excerpt": "Portfolio → https://www.boost.vc/portfolio",
       "page": "terms"
     },
     {
       "id": "check-portfolio-4c1627636b",
       "url": "https://www.boost.vc/",
-      "title": "Boost VC — homepage checked by scrape.py",
+      "title": "Boost VC — homepage",
       "excerpt": "Portfolio → https://www.boost.vc/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-b64ae16d2b",
       "url": "https://www.boost.vc/fellowship",
-      "title": "Boost VC — application page checked by scrape.py",
+      "title": "Boost VC — application page",
       "excerpt": "Portfolio → https://www.boost.vc/portfolio",
       "page": "application"
     },
     {
       "id": "check-route-4b649fa2cf",
       "url": "https://www.boost.vc/",
-      "title": "Boost VC — homepage checked by scrape.py",
+      "title": "Boost VC — homepage",
       "excerpt": "Fellowship → https://www.boost.vc/fellowship",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-b9efe347c5",
+      "url": "https://www.boost.vc/",
+      "page": "details",
+      "excerpt": "Boost VC: PreSeed Investors | $500k Rounds Portfolio Fellowship Learn More We invest first – in founders making aerospace a reality . Reimagining the universe We Lead Pre-Seed Rounds $500k Checks #1 Deep Tech VC for Founders selected by our peers 70+ Startups invested in every year. HOW WE INVEST Speed. Conviction. Capital. $5B+ follow-on capital raised. ARTICLE Radiant Nuclear raises $300M for its semi-sized 1 megawatt reactor ARTICLE Read more ARTICLE Deepgram raises $130M at $1.3B valuation for enterprise voice AI. ARTICLE Read more ARTICLE Adam Draper, scion of the VC royal family, raises over $87 million for new Boost VC Fund 4 ARTICLE Read more ARTICLE Grid Aero raised $20 million to build autonomous cargo-hauling drones. ARTICLE Read more What We Look For . We are generalist investors who have invested in Nuclear Reactors, 10 ton Satellites, Electric Boats, Brain replacements, Bio Super powers and more. The only requirement is that your company must make 1 Billion lives better! Why are you the right team? Show us your energy for what you are doing. Why Now? Show us the social, technical, or regulatory pressure forcing change. What's the big vision? We take the bets no other investor is willing to make. Team Get to Know Us . Adam Draper Managing Director Founder of Boost VC, 4th Generation VC. Angel in Coinbase, Amplitude, Plangrid. Previously: Xpert Financial, UCLA."
+    },
+    {
+      "id": "check-page-65fb88565d",
+      "url": "https://www.boost.vc/fellowship",
+      "page": "application",
+      "excerpt": "Fellowship Program Portfolio Fellowship Learn More Sometimes all you need is $50k to get started. Boost VC Fellowship Check: we help you take the first step toward making Sci-Fi a reality. Apply for our Winter Fellowship - Due Dec 1st WE HAVE BACKED / Teenage drone builders / Bio-hackers / PhDs leaving academia / Siblings disrupting banking / Cancer sniffing dogs / Alchemical 3D printers / Brain replacements / Sperm sorting to eliminate genetic disease INVESTING IN WHAT’S NEXT © 2026 Boost VC. Backing the impossible. Cookies"
+    },
+    {
+      "id": "check-page-cfafe8d3cb",
+      "url": "https://www.boost.vc/faq",
+      "page": "terms",
+      "excerpt": "Boost VC FAQ: $400M Fund, Investment & Founder Support Portfolio Fellowship Learn More SUPPORT Frequently Asked Questions . What is Boost VC? Boost VC invests in startups. We invest at the moment when a big idea goes from “possible” to “inevitable”, through a technical breakthrough or social movement . Boost VC is a $400M AUM VC based in the heart of Silicon Valley. We have been around since 2012. We invest into emerging and frontier categories where change has been driven by a Technical achievement or social pressure . Some movements we are seeing include using technology to mimic nature’s solutions , nuclear fission opportunities due to changing tailwinds , and global financial changes sparked by peer-to-peer money like Bitcoin . Some BIG idea examples include K2Space, Prospera, Radiant Nuclear, Colossal Bio Sciences, and New Limit. How much does Boost invest? We invest $500k to lead or co-lead pre-seed rounds! We are okay being the first check and the only check. We are also okay following on to rounds, and our checks are flexible between $100k-$1M. Additionally, we write $50k Fellowship checks for founders building sci-fi tech who just need a first believer to get going! Click here to learn more and apply. While >90% of our deals are either pre-seed or Fellowship checks, we stay flexible for exceptional outliers. For example , Boost VC led Radiant Nuclear’s $300M Series D"
+    },
+    {
+      "id": "check-page-ec0cd844bf",
+      "url": "https://www.boost.vc/portfolio",
+      "page": "portfolio",
+      "excerpt": "Portfolio Portfolio Fellowship Learn More PORTFOLIO Meet the Startups Making Sci-Fi a Reality . Jump To: Space Bio/Health Climate Robotics Crypto AI VR/AR Other Featured Space Bio / Health Climate Robotics Crypto AI Virtual Reality & Augmented Reality Other Ready to change the world? Learn More © 2026 Boost VC. Backing the impossible. Cookies"
     }
   ],
   "findings": {
@@ -70,15 +104,40 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-9aa47d1116"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "Boost VC: PreSeed Investors | $500k Rounds Portfolio Fellowship Learn More We invest first – in founders making aerospace a reality . Reimagining the universe We Lead Pre-Seed Rounds $500k",
-        "evidenceId": "check-deal-8c09660b2b"
+        "value": "Boost VC: PreSeed Investors | $500k Rounds Portfolio Fellowship Learn More We invest first – in founders",
+        "evidenceId": "check-deal-4e2a0514f3"
       },
       {
-        "value": "like Bitcoin . Some BIG idea examples include K2Space, Prospera, Radiant Nuclear, Colossal Bio Sciences, and New Limit. How much does Boost invest? We invest $500k to lead or co-lead pre-seed rounds! We are okay being the first check and the only check. We are also okay following on to rounds, and our checks are flexible",
-        "evidenceId": "check-deal-0f04799055"
+        "value": "Bio Sciences, and New Limit. How much does Boost invest? We invest $500k to lead or co-lead pre-seed rounds! We are okay being the first",
+        "evidenceId": "check-deal-b8c0b5f3ee"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "500000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-4e2a0514f3"
       }
     ],
     "portfolioPages": [

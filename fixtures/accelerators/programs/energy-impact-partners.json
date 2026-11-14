@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.energyimpactpartners.com/",
   "applyUrl": "https://www.energyimpactpartners.com/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Partner Login team approach portfolio join the team news & insights home contact us partner portal ©2026 All Rights Reserved team approach portfolio join the team news & insights home contact us partner portal investing in innovative companies powering a better energy future we bring together brilliant entrepreneurs and some of the world’s most influential corporates to help transform the global economy towards a better future. Pioneering battery technology to reshape the global electric system and give it new form. Dragos is an industrial cybersecurity company founded by industrial security practitioners and focused on the industry's hardest security challenges. Its Dragos Platform, Threat Operations Center, and Intelligence team ensure asset owners and operators have access to the right tools to operate safely in the ever growing hostile digital landscape. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Energy Impact Partners LP (EIP) is a global energy investor with a proprietary model designed to drive innovation. EIP brings together entrepreneurs and some of the world’s most forward-thinking energy and industrial companies to advance innovation for a better energy future. Investing in venture, growth, private equity and credit, EIP seeks attractive risk-adjusted returns for its investors by leveraging its differentiated strategy and industrial ecosystem. With over 80 corporate partners and over $4.5 billion in assets under management, EIP invests globally with over 100 professionals based in its offices in New York, San Francisco, Washington D.C., Atlanta, Palm Beach, London, Cologne and Oslo.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "we bring together brilliant entrepreneurs and some of the world’s most influential corporates to help transform the global economy towards a better future.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "energy-impact-partners-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.energyimpactpartners.com/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

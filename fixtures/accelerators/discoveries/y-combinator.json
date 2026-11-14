@@ -1,7 +1,103 @@
 {
   "programId": "y-combinator",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "http://www.ycombinator.com/apply/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://account.ycombinator.com/?continue=https://www.ycombinator.com/apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
+    {
+      "url": "https://account.ycombinator.com/?continue=https://www.ycombinator.com/apply/reminder",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
+    {
+      "url": "https://account.ycombinator.com/?continue=https://www.ycombinator.com/deal",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
+    {
+      "url": "https://account.ycombinator.com/?continue=https://www.ycombinator.com/demoday/faq",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
+    {
+      "url": "https://account.ycombinator.com/?continue=https://www.ycombinator.com/faq",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
+    {
+      "url": "https://account.ycombinator.com/?continue=https://www.ycombinator.com/howtoapply",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
+    {
+      "url": "https://account.ycombinator.com/authenticate?continue=https%3A%2F%2Fwww.ycombinator.com%2Fapply%2Freminder",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.ycombinator.com/app/edit",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.ycombinator.com/home",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://deals.ycombinator.com",
+      "page": "terms",
+      "anchor": "YC Deals",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
+    {
+      "url": "https://news.ycombinator.com/newsfaq.html",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.ycombinator.com/about",
       "page": "details",
@@ -19,9 +115,25 @@
       "origin": "official"
     },
     {
-      "url": "https://www.ycombinator.com/faq",
-      "page": "terms",
-      "anchor": "FAQ",
+      "url": "https://www.ycombinator.com/apply/dropbox",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ycombinator.com/apply/reminder",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ycombinator.com/apply/unsubscribe-reminder",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -35,10 +147,50 @@
       "origin": "official"
     },
     {
+      "url": "https://www.ycombinator.com/deal",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ycombinator.com/demoday/faq",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ycombinator.com/faq",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ycombinator.com/growth-program",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ycombinator.com/howtoapply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.ycombinator.com/library/ks-how-to-build-the-future-paul-graham-amjad-masad",
       "page": "details",
       "anchor": "Video How To Build The Future: Paul Graham & Amjad Masad Replit co-founder and CEO Amjad Masad talks with Paul Graham about why Replit was so well positioned when coding agents arr",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

@@ -1,23 +1,94 @@
 {
   "programId": "distrito",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://www.distrito.me/"
+    "https://www.distrito.me/",
+    "https://www.distrito.me/blog/claude-code-agente-de-ia-que-programa-ao-seu-lado",
+    "https://www.distrito.me/blog/desafios-abertos-para-startups-o-programa-do-distrito",
+    "https://www.distrito.me/blog/gemini-cli-conheca-e-saiba-como-usar-ferramenta-google-programacao",
+    "https://www.distrito.me/blog/genai-lab-distrito-lanca-programa-para-solucoes-de-genai",
+    "https://www.distrito.me/blog/google-for-startups-accelerator-brasil-startups-ia",
+    "https://distrito.me/ai-education/mastering-ai-tech-teams?utm_source=blog&utm_medium=banner&utm_campaign=mastering-ai-tech",
+    "https://materiais.distrito.me/ai-lab?utm_source=blog&utm_medium=cta&utm_campaign=genai-lab&utm_term=cta-1&utm_content=google-for-startups-accelerator-brasil-startups-ia",
+    "https://materiais.distrito.me/ai-lab?utm_source=blog&utm_medium=cta&utm_campaign=genai-lab&utm_term=cta-final&utm_content=google-for-startups-accelerator-brasil-startups-ia"
   ],
   "evidence": [
     {
       "id": "check-name-edf79f0728",
       "url": "https://www.distrito.me/",
-      "title": "Distrito — homepage checked by scrape.py",
+      "title": "Distrito — homepage",
       "excerpt": "Distrito: Enterprise AI de Ponta a Ponta TRANSFORME SUA EMPRESA",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-291f50112c",
+      "url": "https://www.distrito.me/blog/desafios-abertos-para-startups-o-programa-do-distrito",
+      "title": "Distrito — program page",
+      "excerpt": "startups → https://distrito.me/blog/o-que-e-uma-startup/",
       "page": "details"
     },
     {
       "id": "check-route-56496e670c",
       "url": "https://www.distrito.me/",
-      "title": "Distrito — homepage checked by scrape.py",
+      "title": "Distrito — homepage",
       "excerpt": "https://www.distrito.me/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-f92c051933",
+      "url": "https://www.distrito.me/",
+      "page": "details",
+      "excerpt": "Distrito: Enterprise AI de Ponta a Ponta TRANSFORME SUA EMPRESA Reports Blog Eventos AI Strategy Estratégia Inteligência de Mercado Inovação Corporativa AI Champions Plataforma ÍON AI Education For Business For Tech AI Factory AI Squad AI Ecosystem GenAI Lab AI Transformation Hub Job Template Help Center Team Member conteúdo Reports Blog Eventos Newsletter QUEM SOMOS O Distrito Vagas CONTATO COMERCIAL Enterprise AI & Transformation Consultoria, capacitação e desenvolvimento de IA para empresas Das decisões estratégicas às soluções em produção, unimos o que há de mais poderoso no mundo: inteligência humana e artificial para transformar como empresas crescem, inovam e se mantêm competitivas em um mercado em constante movimento. Nossos serviços O Distrito Sua transformação com IA de ponta a ponta Empresas líderes carregam legados que moldam mercados. Na atualidade, garantir esse protagonismo exige adotar inteligência artificial com abordagem estratégica. No Distrito, essa convergência se transforma em soluções que sustentam sua competitividade e ampliam sua capacidade de transformação. Os Pilares da Transformação com Inteligência Artificial Da definição da estratégia à implementação de tecnologia proprietária, estruturamos uma jornada completa para nossos clientes. AI Strategy Alinhe negócio, tecnologia e governança em uma única estratégia. Estratégia Consultoria que entrega"
+    },
+    {
+      "id": "check-page-ed99fdd63e",
+      "url": "https://www.distrito.me/blog/claude-code-agente-de-ia-que-programa-ao-seu-lado",
+      "page": "details",
+      "excerpt": "Claude Code: o que é, como funciona e como usar o agente da Anthropic TRANSFORME SUA EMPRESA Reports Blog Eventos AI Strategy Estratégia Inteligência de Mercado Inovação Corporativa AI Champions Plataforma ÍON AI Education For Business For Tech AI Factory AI Squad AI Ecosystem GenAI Lab AI Transformation Hub Job Template Help Center Team Member conteúdo Reports Blog Eventos Newsletter QUEM SOMOS O Distrito Vagas CONTATO COMERCIAL Voltar Claude Code: o que é, como funciona e como usar o agente da Anthropic Agosto 2026 Implementação em IA Pedro Assis 18 min Sumário 1. O que é o Claude Code? 2. Como o Claude Code funciona na prática 3. Onde o Claude Code roda: terminal, IDE, desktop, web e Slack 4. Quanto custa o Claude Code e como controlar o consumo 5. Claude Code vs. Copilot, Cursor, Codex e Gemini CLI 6. Como adaptar o Claude Code ao padrão do seu time 7. O que o Claude Code faz bem e o que ainda exige supervisão 8. Como empresas estão usando o Claude Code em produção 9. Riscos, permissões e governança da adoção corporativa 10. Como preparar seu time para trabalhar com agentes de código 11. Perguntas frequentes sobre o Claude Code 12. Conclusão Em menos de dois anos, a pergunta sobre inteligência artificial no desenvolvimento de software deixou de ser se o modelo consegue escrever código e passou a ser quanto de autonomia o agente pode ter antes de precisar de supervisão"
+    },
+    {
+      "id": "check-page-97d2d6e4ee",
+      "url": "https://www.distrito.me/blog/desafios-abertos-para-startups-o-programa-do-distrito",
+      "page": "details",
+      "excerpt": "Desafios abertos para startups: o programa do Distrito TRANSFORME SUA EMPRESA Reports Blog Eventos AI Strategy Estratégia Inteligência de Mercado Inovação Corporativa AI Champions Plataforma ÍON AI Education For Business For Tech AI Factory AI Squad AI Ecosystem GenAI Lab AI Transformation Hub Job Template Help Center Team Member conteúdo Reports Blog Eventos Newsletter QUEM SOMOS O Distrito Vagas CONTATO COMERCIAL Voltar Desafios abertos para startups: o programa do Distrito Fevereiro 2023 Inovação Distrito 8 min de leitura Sumário 1. O que é o Desafio Aberto do Distrito? 2. Quais são as fases do Desafio Aberto do Distrito? 3. Qual o cronograma do Desafio Aberto do Distrito? 4. Quais os benefícios do Desafio Aberto para as startups? 5. Aposte no Desafio Aberto do Distrito e impulsione sua startup Nos últimos anos, é significativa a percepção de que o desenvolvimento de tecnologias tem alçado voos ainda maiores , trazendo para as ferramentas um nível de complexidade inédito no mercado. Essa jornada faz com que as empresas compreendam que já não se torna mais viável e vantajoso idealizar a inovação de forma isolada e independente. É pensando nisso que o Distrito, plataforma que busca a transformação de ideias e negócios, lança o seu Desafio Aberto : uma proposta de criação de um cenário para ampliação do ecossistema de inovação aberta , onde startups e empresas ganham com a"
+    },
+    {
+      "id": "check-page-f72df1a413",
+      "url": "https://www.distrito.me/blog/gemini-cli-conheca-e-saiba-como-usar-ferramenta-google-programacao",
+      "page": "details",
+      "excerpt": "Gemini CLI: Saiba como usar novo agente do Google para programação TRANSFORME SUA EMPRESA Reports Blog Eventos AI Strategy Estratégia Inteligência de Mercado Inovação Corporativa AI Champions Plataforma ÍON AI Education For Business For Tech AI Factory AI Squad AI Ecosystem GenAI Lab AI Transformation Hub Job Template Help Center Team Member conteúdo Reports Blog Eventos Newsletter QUEM SOMOS O Distrito Vagas CONTATO COMERCIAL Voltar Gemini CLI: Saiba como usar novo agente do Google para programação Junho 2025 Implementação em IA Amarílis Beltrão 6 min de leitura Sumário 1. O que é o Gemini CLI? 2. Como usar o Gemini CLI? 3. Funcionalidades essenciais do Gemini CLI 4. Importância para a comunidade desenvolvedora 5. Entendendo os agentes de IA 6. Conclusão A inteligência artificial está cada vez mais transformando o mundo da tecnologia, e o Google, sempre à frente das inovações, apresenta mais uma ferramenta que impacta o fluxo de trabalho dos programadores: o Gemini CLI . Este novo serviço atua como um agente de IA de código aberto , permitindo que as funcionalidades do Gemini, IA do Google, sejam acessadas diretamente do terminal (ambiente onde é possível inserir comandos e scripts para realizar tarefas no computador). Mas o que exatamente é o Gemini CLI? Como ele funciona e, mais importante, como pode facilitar o trabalho diário dos desenvolvedores de códigos? Mastering AI ·"
+    },
+    {
+      "id": "check-page-68c378f760",
+      "url": "https://www.distrito.me/blog/genai-lab-distrito-lanca-programa-para-solucoes-de-genai",
+      "page": "details",
+      "excerpt": "GenAI Lab: Distrito lança programa para soluções de IA generativa TRANSFORME SUA EMPRESA Reports Blog Eventos AI Strategy Estratégia Inteligência de Mercado Inovação Corporativa AI Champions Plataforma ÍON AI Education For Business For Tech AI Factory AI Squad AI Ecosystem GenAI Lab AI Transformation Hub Job Template Help Center Team Member conteúdo Reports Blog Eventos Newsletter QUEM SOMOS O Distrito Vagas CONTATO COMERCIAL Voltar GenAI Lab: Distrito lança programa para soluções de IA generativa Fevereiro 2024 Notícias Distrito 5 min de leitura Sumário 1. O que é o GenAI Lab? 2. Para quem é o GenAI Lab? 3. Sobre o evento de lançamento 4. A era da Inteligência Artificial Generativa está só começando Nesta última quarta-feira, 31, no hub do Distrito, em São Paulo, aconteceu o lançamento do GenAI Lab , programa que tem como objetivo unir as melhores startups, investidores de VC, empresas e big techs para fomentar a criação e validação de soluções baseadas em Inteligência Artificial Generativa (GenAI). No evento, que ocorreu de forma híbrida, estiveram presentes mais de 80 profissionais que estão transformando o ecossistema de inovação. Empresas como a Conta Simples, Oracle, AWS, Johnson & Johnson MedTech, KPMG, FCamara e Semantix estiveram lá! O que é o GenAI Lab? Antes de entender o que é o GenAI LAB , é importante dar um passo atrás e entender como nasceu a ideia que culminou"
+    },
+    {
+      "id": "check-page-20717b562c",
+      "url": "https://www.distrito.me/blog/google-for-startups-accelerator-brasil-startups-ia",
+      "page": "details",
+      "excerpt": "Google for Startups Accelerator Brasil: conheça as 11 startups da 13ª edição TRANSFORME SUA EMPRESA Reports Blog Eventos AI Strategy Estratégia Inteligência de Mercado Inovação Corporativa AI Champions Plataforma ÍON AI Education For Business For Tech AI Factory AI Squad AI Ecosystem GenAI Lab AI Transformation Hub Job Template Help Center Team Member conteúdo Reports Blog Eventos Newsletter QUEM SOMOS O Distrito Vagas CONTATO COMERCIAL Voltar Google for Startups Accelerator Brasil: conheça as 11 startups da 13ª edição Maio 2026 Notícias Pedro Assis 6 min Sumário 1. O que é o Google for Startups Accelerator: Brasil 2. Por que o foco em inteligência artificial em 2026? 3. MeetRox, Charla e PX Data: o GenAI Lab no acelerador do Google 4. O que é o GenAI Lab do Distrito 5. As 11 startups selecionadas para a 13ª edição 6. O Brasil no radar estratégico do Google Cloud 7. O que essa seleção representa para o setor O Google for Startups Accelerator Brasil anunciou as 11 startups de IA da sua 13ª edição , confirmando a inteligência artificial como foco principal do programa. Entre as selecionadas, três vêm do GenAI Lab do Distrito : MeetRox, Charla e PX Data, cravando um marco para o ecossistema brasileiro de IA generativa. A presença dessas três empresas não é mero acaso. O GenAI Lab reúne startups de IA com produto validado, clientes ativos e foco em resolver problemas reais de"
+    },
+    {
+      "id": "check-page-c6075fe89f",
+      "url": "https://distrito.me/ai-education/mastering-ai-tech-teams?utm_source=blog&utm_medium=banner&utm_campaign=mastering-ai-tech",
+      "page": "details",
+      "excerpt": "AI OS for Tech | Capacitação Técnica em IA | Distrito TRANSFORME SUA EMPRESA Reports Blog Eventos AI Strategy Estratégia Inteligência de Mercado Inovação Corporativa AI Champions Plataforma ÍON AI Education For Business For Tech AI Factory AI Squad AI Ecosystem GenAI Lab AI Transformation Hub Job Template Help Center Team Member conteúdo Reports Blog Eventos Newsletter QUEM SOMOS O Distrito Vagas CONTATO COMERCIAL Capacitação técnica em IA para times de tecnologia Mastering AI for Tech Capacitamos equipes de tecnologia, dados e produto para desenvolver, integrar e governar agentes de inteligência em ambiente produtivo. Capacitar minha equipe técnica Trilhas Definidas por Diagnóstico de Maturidade O AI Assessment mede a maturidade técnica dos times e indica quais trilhas contratar, isoladamente ou combinadas, conforme o perfil de cada equipe. 01 AI Assessment Medição do nível de maturidade em IA por time, com os gaps que definem o foco da capacitação. 02 Contratação modular Trilhas independentes, contratadas isoladamente ou em combinação, conforme o resultado do diagnóstico. 03 Formato online ou presencial Módulos online síncronos ou imersões presenciais no Distrito, em São Paulo, ou na unidade definida pela empresa. Capacitação para Times de Tecnologia, Dados e Produto Quatro trilhas independentes sobre desenvolvimento, arquitetura e governança de agentes, com carga horária e"
+    },
+    {
+      "id": "check-page-8f3e402a9b",
+      "url": "https://materiais.distrito.me/ai-lab?utm_source=blog&utm_medium=cta&utm_campaign=genai-lab&utm_term=cta-1&utm_content=google-for-startups-accelerator-brasil-startups-ia",
+      "page": "details",
+      "excerpt": "GenAI Lab | Programa para Startups de IA | Distrito Programa para startups de IA · Desde 2023 Iniciativas que conectam sua startup de IA a corporações, tech providers e investidores Pitch days, encontros com fundos, desafios de corporações e mentorias para startups AI-native e AI-enablers que possuem produtos B2B, com espaço dedicado em São Paulo. Programa pago, com condições apresentadas pelo nosso time após a inscrição. +80 startups de IA no programa +100 oportunidades comerciais geradas +40 soluções validadas em desafios corporativos Inscreva sua startup no GenAI Lab Preencha e nosso time entra em contato com os valores e as condições de participação. E-mail corporativo Nome Sobrenome Nome da startup Telefone Qual é o seu perfil? Selecione… Startup Investidor(a) Corporação Consultoria Outro Cargo na empresa Selecione… CIO CTO CEO C - Level Presidente/VP Diretor (a) Superintendente Gerente Head Coordenador (a) Especialista Analista Estagiário (a) Outros Cargos Como a IA faz parte do seu produto ou negócio? Selecione… Sem a IA o produto não existiria. O produto funciona sem IA, mas ela agrega valor significativo Está presente, mas de forma pontual, sem impacto central na proposta de valor Não é utilizada hoje, ainda que possa ser considerada no futuro Autorizo o Distrito a entrar em contato comigo sobre este assunto e concordo com a Política de Privacidade . Quero receber a"
+    },
+    {
+      "id": "check-page-d358a7b0c9",
+      "url": "https://materiais.distrito.me/ai-lab?utm_source=blog&utm_medium=cta&utm_campaign=genai-lab&utm_term=cta-final&utm_content=google-for-startups-accelerator-brasil-startups-ia",
+      "page": "details",
+      "excerpt": "GenAI Lab | Programa para Startups de IA | Distrito Programa para startups de IA · Desde 2023 Iniciativas que conectam sua startup de IA a corporações, tech providers e investidores Pitch days, encontros com fundos, desafios de corporações e mentorias para startups AI-native e AI-enablers que possuem produtos B2B, com espaço dedicado em São Paulo. Programa pago, com condições apresentadas pelo nosso time após a inscrição. +80 startups de IA no programa +100 oportunidades comerciais geradas +40 soluções validadas em desafios corporativos Inscreva sua startup no GenAI Lab Preencha e nosso time entra em contato com os valores e as condições de participação. E-mail corporativo Nome Sobrenome Nome da startup Telefone Qual é o seu perfil? Selecione… Startup Investidor(a) Corporação Consultoria Outro Cargo na empresa Selecione… CIO CTO CEO C - Level Presidente/VP Diretor (a) Superintendente Gerente Head Coordenador (a) Especialista Analista Estagiário (a) Outros Cargos Como a IA faz parte do seu produto ou negócio? Selecione… Sem a IA o produto não existiria. O produto funciona sem IA, mas ela agrega valor significativo Está presente, mas de forma pontual, sem impacto central na proposta de valor Não é utilizada hoje, ainda que possa ser considerada no futuro Autorizo o Distrito a entrar em contato comigo sobre este assunto e concordo com a Política de Privacidade . Quero receber a"
     }
   ],
   "findings": {
@@ -33,9 +104,21 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
-    "portfolioPages": [],
+    "dealComponents": [],
+    "portfolioPages": [
+      {
+        "value": "https://distrito.me/blog/o-que-e-uma-startup/",
+        "evidenceId": "check-portfolio-291f50112c"
+      }
+    ],
     "name": [
       {
         "value": "Distrito",

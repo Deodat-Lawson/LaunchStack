@@ -1,24 +1,73 @@
 {
   "programId": "corfo",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.corfo.gob.cl/sites/cpp/",
-    "https://www.corfo.gob.cl/sites/cpp/programasyconvocatorias/"
+    "https://www.corfo.gob.cl/sites/cpp/convocatorias_programas_innovacion/",
+    "https://www.corfo.gob.cl/sites/cpp/programa/bienes-publicos/",
+    "https://www.corfo.gob.cl/sites/cpp/programas-transforma/",
+    "https://www.corfo.gob.cl/sites/cpp/programasyconvocatorias/",
+    "https://www.corfo.gob.cl/sites/cpp/convocatoria/programa-de-absorcion-tecnologica-para-la-innovacion-2025/",
+    "https://www.corfo.gob.cl/sites/cpp/convocatoria/programa_de_absorcion_tecnologica_innova/"
   ],
   "evidence": [
     {
       "id": "check-name-0c2aa1477c",
       "url": "https://www.corfo.gob.cl/sites/cpp/",
-      "title": "CORFO — homepage checked by scrape.py",
+      "title": "CORFO — homepage",
       "excerpt": "Home - CORFO Sitio en inglés Contáctanos Ingreso usuario Inicio Sobre",
       "page": "details"
     },
     {
       "id": "check-route-deec599330",
       "url": "https://www.corfo.gob.cl/sites/cpp/",
-      "title": "CORFO — homepage checked by scrape.py",
+      "title": "CORFO — homepage",
       "excerpt": "https://www.corfo.gob.cl/sites/cpp",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-39d4ce5366",
+      "url": "https://www.corfo.gob.cl/sites/cpp/",
+      "page": "details",
+      "excerpt": "Home - CORFO Sitio en inglés Contáctanos Ingreso usuario Inicio Sobre Corfo Programas y Convocatorias Sala de Prensa Regiones Arica y Parinacota Tarapacá Antofagasta Atacama Coquimbo Valparaíso Metropolitana O´Higgins Maule Ñuble Biobío Araucanía Los Ríos Los Lagos Aysén Magallanes y Antártica Chilena CORFO Buscador Programas y convocatorias ver más Encuentra el mejor apoyo para ti ¿Quieres emprender? Si tienes una idea o proyecto que busques concretar, revisa aquí. ¿Buscas financiamiento? Conoce nuestras convocatorias, crédito, garantías y fondos. ¿Necesitas desarrollar tu proyecto de Hidrógeno Verde? Encuentra nuestra oferta para transitar hacia una economía sostenible. ¿Necesitas reconvertir tu negocio? Conoce cómo podemos apoyarte en estos desafíos. Iniciativas destacadas Transparencia Te puede interesar Chile Emprende Solicitud Patrocinio Corfo Rendiciones Financieras Trabaja con nosotros Listado de intermediarios Informes públicos Catálogo Biblioteca Repositorio Institucional Política de Calidad de Servicio Accede a nuestros sistemas SGP GIF Validador Ley I+D Cambio de Etapa Portal Consulta de Proveedores Innova Portal Consulta de Proveedores Corfo Registro de Personas Jurídicas (RPJ) Atención al cliente Política de seguridad Dirección: Moneda 921 Santiago, Chile Licencia de Creative Commons 600 586 8000 contacto@corfo.cl"
+    },
+    {
+      "id": "check-page-c3d62bd374",
+      "url": "https://www.corfo.gob.cl/sites/cpp/convocatorias_programas_innovacion/",
+      "page": "details",
+      "excerpt": "Programas de Innovación 2026 - CORFO Sitio en inglés Contáctanos Ingreso usuario Inicio Sobre Corfo Programas y Convocatorias Sala de Prensa Regiones Arica y Parinacota Tarapacá Antofagasta Atacama Coquimbo Valparaíso Metropolitana O´Higgins Maule Ñuble Biobío Araucanía Los Ríos Los Lagos Aysén Magallanes y Antártica Chilena Programas de Innovación 2026 Corfo, a través de la Gerencia de Innovación, fomenta la investigación, desarrollo e innovación (I+D+i) empresarial y potencia el ecosistema de innovación a nivel nacional y regional, para impulsar la productividad, la competitividad y la diversificación productiva en el marco de un desarrollo productivo sostenible, inclusivo y territorialmente equilibrado para Chile. Revisa y lee atentamente el perfil del beneficiario, requisitos y bases de postulación. Recuerda dirigir tus dudas a difusioninnova@corfo.cl Revisa aquí los programas abiertos en esta convocatoria: Gestión de innovación en Pymes Alcance: Todo Chile Buscamos fortalecer las capacidades de innovación de las empresas, de preferencia Pymes, mediante el fomento de una cultura de innovación al interior de éstas, que permitan promover la colaboración, la incorporación de prácticas y rutinas de innovación de manera sistemática y actividades de gestión de portafolio de proyectos de innovación de orden productivo y tecnológico. Apertura 19/05/2026 Cierre 15/07/2026 Más"
+    },
+    {
+      "id": "check-page-1e0c3bad0c",
+      "url": "https://www.corfo.gob.cl/sites/cpp/programa/bienes-publicos/",
+      "page": "details",
+      "excerpt": "Bienes públicos - CORFO Sitio en inglés Contáctanos Ingreso usuario Inicio Sobre Corfo Programas y Convocatorias Sala de Prensa Regiones Arica y Parinacota Tarapacá Antofagasta Atacama Coquimbo Valparaíso Metropolitana O´Higgins Maule Ñuble Biobío Araucanía Los Ríos Los Lagos Aysén Magallanes y Antártica Chilena Bienes públicos Disponibilidad de Postulaciones Redes y Territorios Disponible en los siguientes territorios Todo Chile ¿Qué es? Queremos apoyar soluciones que aborden y busquen resolver asimetrías de información, que aborden fallas de mercado y/o de coordinación y faciliten la toma de decisiones productivas de las empresas, con impacto en las regiones. Debes tener en cuenta que las propuestas presentadas deben tener atingencia e impacto regional y se recomienda postular con orientación de la dirección regional de Corfo correspondiente. Previo a la postulación, consulte por la disponibilidad de recursos con la respectiva dirección regional de Corfo que corresponda el proyecto. ¿Quiénes pueden postular? Persona jurídica constituida en Chile. Cerrar X Bases Legales Bases Bienes Públicos Bases Administrativas Generales Modifica BAG 2023 RE 82 2023 modifica BBPP RE 692 2023 modifica 2 BBPP modifica3 BBPP RE 364 2024 ResModificaBAG2-2024 Bases Legales El proyecto debe contar con al menos un Mandante distinto al postulante (Ministerios, Agencias de Estado, Entidades"
+    },
+    {
+      "id": "check-page-1ac2426064",
+      "url": "https://www.corfo.gob.cl/sites/cpp/programas-transforma/",
+      "page": "details",
+      "excerpt": "Programas transforma - CORFO Sitio en inglés Contáctanos Ingreso usuario Inicio Sobre Corfo Programas y Convocatorias Sala de Prensa Regiones Arica y Parinacota Tarapacá Antofagasta Atacama Coquimbo Valparaíso Metropolitana O´Higgins Maule Ñuble Biobío Araucanía Los Ríos Los Lagos Aysén Magallanes y Antártica Chilena ¿Qué son los programas transforma? Los Programas Transforma, iniciativa implementada y coordinada por Corfo, han sido concebidos como una instancia de articulación y colaboración público-privada para sofisticar y diversificar nuestra matriz productiva y dar un salto cualitativo en términos de desarrollo y crecimiento productivo sostenible. Programas Transforma SOBRE TRANSFORMA Trabajamos por un desafío país Necesitamos acelerar el paso hacia una economía basada en el conocimiento, la innovación, la sustentabilidad y la confianza , abarcando desafíos de articulación de actores del ámbito público y privado con una visión compartida de transformación productiva sostenible, en conjunto con la necesidad de reducir brechas de competitividad y tecnológicas en sectores estratégicos de la economía. Creamos estrategias colectivas Estos programas se generan a partir de un proceso de diálogo y coordinación entre el sector privado, la academia y los centros de investigación, el gobierno y la comunidad, e incorpora un fuerte componente de descentralización. Fomentamos"
+    },
+    {
+      "id": "check-page-9aa5bc0a00",
+      "url": "https://www.corfo.gob.cl/sites/cpp/programasyconvocatorias/",
+      "page": "details",
+      "excerpt": "Programas y Convocatorias - CORFO Sitio en inglés Contáctanos Ingreso usuario Inicio Sobre Corfo Programas y Convocatorias Sala de Prensa Regiones Arica y Parinacota Tarapacá Antofagasta Atacama Coquimbo Valparaíso Metropolitana O´Higgins Maule Ñuble Biobío Araucanía Los Ríos Los Lagos Aysén Magallanes y Antártica Chilena Buscador Programas y convocatorias Filtros de convocatorias Perfil / ¿Quién soy? Empresa Extranjero Institución Intermediario Organización Persona Etapa / ¿Qué busco? Estoy desarrollando I+D Estoy recién empezando Quiero aumentar mis ventas Quiero entregar servicios a emprendedores Quiero escalar Quiero fortalecer el ecosistema de emprendimiento Quiero innovar en lo que hago Tengo ganas de emprender / Hacer algo Tengo una idea de negocio ¿Qué necesito? Capacitaciones Capital de riesgo Co-financiamientos para empresas Créditos Emprender Escalamiento Garantías (Coberturas) Incentivo mujeres Innovar Otros incentivos Subsidios Territorio Nivel ventas 0,01 a 2.400 UF (Microempresa) 2.400 a 25.000 UF (Pequeña empresa) 25.000 a 100.000 UF (Mediana empresa) Mayor a 100.000 UF (Gran empresa) Menor a 100.000 UF Sin ventas Alcance / Territorio Antofagasta Arica y Parinacota Atacama Aysén Bío Bío Coquimbo Internacional La Araucanía Los Lagos Los Ríos Magallanes Maule Metropolitana Ñuble O'Higgins Regional Tarapacá Todo Chile Valparaíso Estado Abiertas Cerradas Aplicar"
+    },
+    {
+      "id": "check-page-0b6432ed1b",
+      "url": "https://www.corfo.gob.cl/sites/cpp/convocatoria/programa-de-absorcion-tecnologica-para-la-innovacion-2025/",
+      "page": "details",
+      "excerpt": "Programa de Absorción Tecnológica para la Innovación - CORFO Sitio en inglés Contáctanos Ingreso usuario Inicio Sobre Corfo Programas y Convocatorias Sala de Prensa Regiones Arica y Parinacota Tarapacá Antofagasta Atacama Coquimbo Valparaíso Metropolitana O´Higgins Maule Ñuble Biobío Araucanía Los Ríos Los Lagos Aysén Magallanes y Antártica Chilena Programa de Absorción Tecnológica para la Innovación Postulaciones Cerradas Apertura: 18/11/2025 17:00 hrs Cierre: 15/07/2026 17:00 hrs Disponible en los siguientes territorios Todo Chile ¿Qué es? Busca contribuir a mejorar las capacidades de innovación sistemática en un conjunto de empresas, de preferencia Pymes, mediante el fortalecimiento de las capacidades de absorción tecnológica, cofinanciando la incorporación de nuevo conocimiento, mejores prácticas y/o tecnologías. Te invitamos a participar en las siguiente instancias de orientación: 28/04/2026 – Charla “Formula tu proyecto” 27/11/2025 – Charla “Conoce el instrumento” 02/06/2026 – Charla “Formula tu Proyecto” Revisa casos destacados en CorfoConecta ¿Quiénes pueden postular? Podrán postular como beneficiario o gestor: ▪ Personas jurídicas constituidas en Chile. ▪ Las sociedades de profesionales referidas en el artículo 42, N°2, de la Ley sobre Impuesto a la Renta, que hayan optado por declarar sus rentas de acuerdo con las normas de la primera categoría. ▪ Personas naturales"
+    },
+    {
+      "id": "check-page-eeef752fe7",
+      "url": "https://www.corfo.gob.cl/sites/cpp/convocatoria/programa_de_absorcion_tecnologica_innova/",
+      "page": "details",
+      "excerpt": "Programa de Absorción Tecnológica para la Innovación - CORFO Sitio en inglés Contáctanos Ingreso usuario Inicio Sobre Corfo Programas y Convocatorias Sala de Prensa Regiones Arica y Parinacota Tarapacá Antofagasta Atacama Coquimbo Valparaíso Metropolitana O´Higgins Maule Ñuble Biobío Araucanía Los Ríos Los Lagos Aysén Magallanes y Antártica Chilena Programa de Absorción Tecnológica para la Innovación Postulaciones Cerradas Apertura: 05/11/2024 15:00 hrs Cierre: 15/07/2025 17:00 hrs Disponible en los siguientes territorios Todo Chile ¿Qué es? Busca contribuir a mejorar las capacidades de innovación sistemática en un conjunto de empresas, de preferencia Pymes, mediante el fortalecimiento de las capacidades de absorción tecnológica, cofinanciando la incorporación de nuevo conocimiento, mejores prácticas y/o tecnologías. Te invitamos a participar en las siguiente instancias de orientación: 14/11/2024 – Webinar de lanzamiento 19/12/2024 – Charla “Conoce el instrumento” ¿Quiénes pueden postular? Podrán postular como beneficiario o gestor: Personas jurídicas constituidas en Chile. Las sociedades de profesionales referidas en el artículo 42, N°2, de la Ley sobre Impuesto a la Renta, que hayan optado por declarar sus rentas de acuerdo con las normas de la primera categoría. Personas naturales que, al momento de postular, tengan, a lo menos, 18 años cumplidos. Cerrar X Bases Legales:"
     }
   ],
   "findings": {
@@ -34,8 +83,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

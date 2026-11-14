@@ -1,114 +1,374 @@
 {
   "programId": "samsung-next",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
-    "https://www.samsungnext.com/"
+    "https://www.samsungnext.com/",
+    "https://www.samsungnext.com/portfolio",
+    "https://www.samsungnext.com/portfolio?sector=AI",
+    "https://www.samsungnext.com/portfolio?sector=Frontier",
+    "https://www.samsungnext.com/portfolio?sector=Health",
+    "https://www.samsungnext.com/portfolio?sector=Robotics",
+    "https://www.samsungnext.com/portfolio?sector=Services"
   ],
   "evidence": [
     {
-      "id": "check-deal-e60aed7b59",
+      "id": "check-deal-2fc6fdffcf",
       "url": "https://www.samsungnext.com/",
-      "title": "Samsung NEXT — homepage checked by scrape.py",
-      "excerpt": "commit decisively, and spend the rest of our time being useful — not collecting board seats. 01 Flexible check sizes We invest across all stages, from $50K to $25MM, tailored to your team and stage of growth. 02 No IC. No theatre. Decisions made efficiently — no investment committee meetings required to slow",
+      "title": "Samsung NEXT — homepage",
+      "excerpt": "seats. 01 Flexible check sizes We invest across all stages, from $50K to $25MM, tailored to your team and stage of growth. 02 No IC. No",
       "page": "details"
     },
     {
       "id": "check-name-db410a5573",
       "url": "https://www.samsungnext.com/",
-      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "title": "Samsung NEXT — homepage",
       "excerpt": "Main - New Portfolio Team Blog Pitch us → SAMSUNG NEXT / VENTURES Companies we believe will define what's next .",
       "page": "details"
     },
     {
+      "id": "check-portfolio-019ee3d2f3",
+      "url": "https://www.samsungnext.com/portfolio?sector=AI",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Deep Tech Software → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-024cfde240",
+      "url": "https://www.samsungnext.com/portfolio?sector=Robotics",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Health & MedTech → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-04ea883b01",
+      "url": "https://www.samsungnext.com/portfolio?sector=Frontier",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Portfolio → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-08d4e4da8b",
+      "url": "https://www.samsungnext.com/portfolio?sector=Frontier",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Advanced Hardware → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-0d2dfe24a7",
+      "url": "https://www.samsungnext.com/portfolio?sector=Health",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Deep Tech Software → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-18074c7487",
+      "url": "https://www.samsungnext.com/portfolio?sector=Services",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Health & MedTech → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-18b8e2ee25",
+      "url": "https://www.samsungnext.com/portfolio?sector=Services",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "AI → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-1d5ef37b63",
+      "url": "https://www.samsungnext.com/portfolio?sector=Frontier",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Health & MedTech → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-1de5be2e13",
+      "url": "https://www.samsungnext.com/portfolio?sector=Services",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Deep Tech Software → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-29869fc452",
       "url": "https://www.samsungnext.com/",
-      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "title": "Samsung NEXT — homepage",
       "excerpt": "02 ↗ Robotics Intelligent Machines Full-stack autonomy, advanced sensing, and human-machine interfaces. 1X · Field AI · Apptronik → https://www.samsungnext.com/portfolio?sector=Robotics",
       "page": "details"
     },
     {
+      "id": "check-portfolio-2bd4440d30",
+      "url": "https://www.samsungnext.com/portfolio?sector=Health",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Robotics → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-31ba8d8df8",
+      "url": "https://www.samsungnext.com/portfolio?sector=Robotics",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Portfolio → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-37b2f42dc5",
+      "url": "https://www.samsungnext.com/portfolio?sector=AI",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Robotics → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-3dd37b2668",
       "url": "https://www.samsungnext.com/",
-      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "title": "Samsung NEXT — homepage",
       "excerpt": "04 ↗ Services Stablecoin · Blockchain · Mediatech Decentralized finance infrastructure, on-chain economies, and next-gen media platforms. Bastion · LayerZero · Volley → https://www.samsungnext.com/portfolio?sector=Services",
       "page": "details"
     },
     {
       "id": "check-portfolio-46ba389e0f",
       "url": "https://www.samsungnext.com/",
-      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "title": "Samsung NEXT — homepage",
       "excerpt": "Robotics → https://www.samsungnext.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-510c129ebf",
+      "url": "https://www.samsungnext.com/portfolio?sector=Robotics",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "AI → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-592ee4f396",
+      "url": "https://www.samsungnext.com/portfolio?sector=Health",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Portfolio → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-71e7f06d27",
       "url": "https://www.samsungnext.com/",
-      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "title": "Samsung NEXT — homepage",
       "excerpt": "01 ↗ AI Foundation models, edge deployment, and enterprise-scale implementation. Perplexity · Liquid AI · Black Forest Labs → https://www.samsungnext.com/portfolio?sector=AI",
       "page": "details"
     },
     {
       "id": "check-portfolio-779bc53bc2",
       "url": "https://www.samsungnext.com/",
-      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "title": "Samsung NEXT — homepage",
       "excerpt": "Portfolio → https://www.samsungnext.com/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-7b694f5c25",
       "url": "https://www.samsungnext.com/",
-      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "title": "Samsung NEXT — homepage",
       "excerpt": "Health & MedTech → https://www.samsungnext.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-8161b4823e",
+      "url": "https://www.samsungnext.com/portfolio?sector=AI",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "AI → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-85b8155458",
+      "url": "https://www.samsungnext.com/portfolio?sector=Frontier",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "AI → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-8ea6287944",
+      "url": "https://www.samsungnext.com/portfolio?sector=Frontier",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Deep Tech Software → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-95b7f532e3",
+      "url": "https://www.samsungnext.com/portfolio?sector=Health",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Health & MedTech → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-9eee67e1cb",
       "url": "https://www.samsungnext.com/",
-      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "title": "Samsung NEXT — homepage",
       "excerpt": "view the full portfolio → → https://www.samsungnext.com/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-9fcbc6bb43",
       "url": "https://www.samsungnext.com/",
-      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "title": "Samsung NEXT — homepage",
       "excerpt": "Deep Tech Software → https://www.samsungnext.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-9fdc8ccbcd",
+      "url": "https://www.samsungnext.com/portfolio?sector=Robotics",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Advanced Hardware → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-a8b8e1d912",
+      "url": "https://www.samsungnext.com/portfolio?sector=Services",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Advanced Hardware → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-a9d655e1d2",
+      "url": "https://www.samsungnext.com/portfolio?sector=Health",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "AI → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-accc8f79a0",
+      "url": "https://www.samsungnext.com/portfolio?sector=AI",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Advanced Hardware → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-b9969db77a",
+      "url": "https://www.samsungnext.com/portfolio?sector=Services",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Portfolio → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-bb963e0af2",
       "url": "https://www.samsungnext.com/",
-      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "title": "Samsung NEXT — homepage",
       "excerpt": "Advanced Hardware → https://www.samsungnext.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-bdad04e1fb",
+      "url": "https://www.samsungnext.com/portfolio?sector=Robotics",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Deep Tech Software → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-d10bad2db8",
+      "url": "https://www.samsungnext.com/portfolio?sector=AI",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Health & MedTech → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-d9054bd81a",
+      "url": "https://www.samsungnext.com/portfolio?sector=Robotics",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Robotics → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-dafe090ab4",
+      "url": "https://www.samsungnext.com/portfolio?sector=AI",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Portfolio → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-dbba265df0",
+      "url": "https://www.samsungnext.com/portfolio?sector=Services",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Robotics → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-dd15e71575",
       "url": "https://www.samsungnext.com/",
-      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "title": "Samsung NEXT — homepage",
       "excerpt": "AI → https://www.samsungnext.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-e44e5b4004",
+      "url": "https://www.samsungnext.com/portfolio?sector=Health",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Advanced Hardware → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-eb37e6b0ce",
       "url": "https://www.samsungnext.com/",
-      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "title": "Samsung NEXT — homepage",
       "excerpt": "05 ↗ Frontier Next-Gen Tech Novel compute, advanced materials, energy systems, and emerging deep-tech platforms. Rain · Base Power · Harmonic → https://www.samsungnext.com/portfolio?sector=Frontier",
       "page": "details"
     },
     {
       "id": "check-portfolio-f6a15e7c08",
       "url": "https://www.samsungnext.com/",
-      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "title": "Samsung NEXT — homepage",
       "excerpt": "03 ↗ Digital Health & MedTech Bio-electronic integration, precision diagnostics, and next-gen wearables. Maven Clinic · Function Health · Signos → https://www.samsungnext.com/portfolio?sector=Health",
       "page": "details"
     },
     {
+      "id": "check-portfolio-ff5dcb14c0",
+      "url": "https://www.samsungnext.com/portfolio?sector=Frontier",
+      "title": "Samsung NEXT — portfolio page",
+      "excerpt": "Robotics → https://www.samsungnext.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-d1f77acbb8",
       "url": "https://www.samsungnext.com/",
-      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "title": "Samsung NEXT — homepage",
       "excerpt": "https://www.samsungnext.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-9c304cb6a3",
+      "url": "https://www.samsungnext.com/",
+      "page": "details",
+      "excerpt": "Main - New Portfolio Team Blog Pitch us → SAMSUNG NEXT / VENTURES Companies we believe will define what's next . 200+ investments across AI, robotics, health, hardware, software, and consumer — where Samsung can be a genuinely differentiated partner. — ABOUT Samsung Next is the corporate venture arm of Samsung Electronics. We back founders building the technologies that define the next decade — where atoms matter as much as bits — and expertly chart a course through Samsung's global ecosystem on their behalf. — COMPANIES 350+ PORTFOLIO SINCE 2012 — CAPITAL $2.4B INVESTED IN FRONTIER TECH 01 / Thesis A new era of technology demands a new kind of partner . The last decade was defined by software. The next is being built at the intersection of AI, robotics, synthetic biology, and advanced hardware. Physics is relevant again — and Samsung is uniquely positioned to lead. 12+ YEARS INVESTING 6 THEMATIC DOMAINS 4 GLOBAL OFFICES 0 IC MEETINGS, EVER 02 / Focus Areas Where Samsung can be a differentiated partner. We invest across six domains where the physics, the supply chain, and the distribution of Samsung Electronics become unfair advantages for our founders. 01 ↗ AI Foundation models, edge deployment, and enterprise-scale implementation. Perplexity · Liquid AI · Black Forest Labs 02 ↗ Robotics Intelligent Machines Full-stack autonomy, advanced sensing, and human-machine interfaces."
+    },
+    {
+      "id": "check-page-aafdfdfc0d",
+      "url": "https://www.samsungnext.com/portfolio",
+      "page": "portfolio",
+      "excerpt": "Portfolio Portfolio Team Blog Pitch us → SAMSUNG NEXT / PORTFOLIO 2012 — 2026 248+ companies. One belief. We back founders building the foundational layers of tomorrow's computing — from silicon to spatial computing, from health diagnostics to climate infrastructure. 248 Active investments 6 Sectors 14 Years investing $2.1B Capital deployed ALL 248 AI 88 HEALTH 40 BLOCKCHAIN 40 CONSUMER 28 DEEP TECH 31 FINTECH 21 SHOWING 248 COMPANIES 0G Deep Tech Software 1x 8i About Absolutelabs Activeloop Affecttherapeutics Afference Agape Health Tech Agebold AgentOS AI Ai21 Aidinrobotics Akamai Alchemyapi Aleo Alice AI Aliroquantum AMI Labs AI AMMO AI AI Anodot Anykraft Anykraft Consumer Services Anzu Aporia Apptest Apptronik Arcee AI AI Archetype AI AI Archipelo Argument Computer Corp Blockchain Arrcus Artificial Assured Astromoney Ast-science Atomicform Atomicvest Atommerce Atroposhealth AudioMob Consumer Services Avironactive Axieinfinity Base Power Company Deep Tech Software Bastion Blockchain Beacon Biosignals Health Tech Bear AI Bebravehealth Beekeeper Bentoml Beoble Berachain Betterbrain Bighealth Bigwhalelabs Blackbox AI AI Black Forest Labs Consumer Services Bloom Fintech Bloomapp Bluevoyant Bondu Deep Tech Software Boredapeyachtclub Branch Bria Brightmoments Cambioml Canelamedia Canopy Care Health Tech Cast Cellular intelligence AI Centaurlabs Centml Ceramic Chai Chainsight"
+    },
+    {
+      "id": "check-page-de571d2d10",
+      "url": "https://www.samsungnext.com/portfolio?sector=AI",
+      "page": "portfolio",
+      "excerpt": "Portfolio Portfolio Team Blog Pitch us → SAMSUNG NEXT / PORTFOLIO 2012 — 2026 248+ companies. One belief. We back founders building the foundational layers of tomorrow's computing — from silicon to spatial computing, from health diagnostics to climate infrastructure. 248 Active investments 6 Sectors 14 Years investing $2.1B Capital deployed ALL 248 AI 88 HEALTH 40 BLOCKCHAIN 40 CONSUMER 28 DEEP TECH 31 FINTECH 21 SHOWING 248 COMPANIES 0G Deep Tech Software 1x 8i About Absolutelabs Activeloop Affecttherapeutics Afference Agape Health Tech Agebold AgentOS AI Ai21 Aidinrobotics Akamai Alchemyapi Aleo Alice AI Aliroquantum AMI Labs AI AMMO AI AI Anodot Anykraft Anykraft Consumer Services Anzu Aporia Apptest Apptronik Arcee AI AI Archetype AI AI Archipelo Argument Computer Corp Blockchain Arrcus Artificial Assured Astromoney Ast-science Atomicform Atomicvest Atommerce Atroposhealth AudioMob Consumer Services Avironactive Axieinfinity Base Power Company Deep Tech Software Bastion Blockchain Beacon Biosignals Health Tech Bear AI Bebravehealth Beekeeper Bentoml Beoble Berachain Betterbrain Bighealth Bigwhalelabs Blackbox AI AI Black Forest Labs Consumer Services Bloom Fintech Bloomapp Bluevoyant Bondu Deep Tech Software Boredapeyachtclub Branch Bria Brightmoments Cambioml Canelamedia Canopy Care Health Tech Cast Cellular intelligence AI Centaurlabs Centml Ceramic Chai Chainsight"
+    },
+    {
+      "id": "check-page-104e3dc521",
+      "url": "https://www.samsungnext.com/portfolio?sector=Frontier",
+      "page": "portfolio",
+      "excerpt": "Portfolio Portfolio Team Blog Pitch us → SAMSUNG NEXT / PORTFOLIO 2012 — 2026 248+ companies. One belief. We back founders building the foundational layers of tomorrow's computing — from silicon to spatial computing, from health diagnostics to climate infrastructure. 248 Active investments 6 Sectors 14 Years investing $2.1B Capital deployed ALL 248 AI 88 HEALTH 40 BLOCKCHAIN 40 CONSUMER 28 DEEP TECH 31 FINTECH 21 SHOWING 248 COMPANIES 0G Deep Tech Software 1x 8i About Absolutelabs Activeloop Affecttherapeutics Afference Agape Health Tech Agebold AgentOS AI Ai21 Aidinrobotics Akamai Alchemyapi Aleo Alice AI Aliroquantum AMI Labs AI AMMO AI AI Anodot Anykraft Anykraft Consumer Services Anzu Aporia Apptest Apptronik Arcee AI AI Archetype AI AI Archipelo Argument Computer Corp Blockchain Arrcus Artificial Assured Astromoney Ast-science Atomicform Atomicvest Atommerce Atroposhealth AudioMob Consumer Services Avironactive Axieinfinity Base Power Company Deep Tech Software Bastion Blockchain Beacon Biosignals Health Tech Bear AI Bebravehealth Beekeeper Bentoml Beoble Berachain Betterbrain Bighealth Bigwhalelabs Blackbox AI AI Black Forest Labs Consumer Services Bloom Fintech Bloomapp Bluevoyant Bondu Deep Tech Software Boredapeyachtclub Branch Bria Brightmoments Cambioml Canelamedia Canopy Care Health Tech Cast Cellular intelligence AI Centaurlabs Centml Ceramic Chai Chainsight"
+    },
+    {
+      "id": "check-page-3ac6dfb91d",
+      "url": "https://www.samsungnext.com/portfolio?sector=Health",
+      "page": "portfolio",
+      "excerpt": "Portfolio Portfolio Team Blog Pitch us → SAMSUNG NEXT / PORTFOLIO 2012 — 2026 248+ companies. One belief. We back founders building the foundational layers of tomorrow's computing — from silicon to spatial computing, from health diagnostics to climate infrastructure. 248 Active investments 6 Sectors 14 Years investing $2.1B Capital deployed ALL 248 AI 88 HEALTH 40 BLOCKCHAIN 40 CONSUMER 28 DEEP TECH 31 FINTECH 21 SHOWING 248 COMPANIES 0G Deep Tech Software 1x 8i About Absolutelabs Activeloop Affecttherapeutics Afference Agape Health Tech Agebold AgentOS AI Ai21 Aidinrobotics Akamai Alchemyapi Aleo Alice AI Aliroquantum AMI Labs AI AMMO AI AI Anodot Anykraft Anykraft Consumer Services Anzu Aporia Apptest Apptronik Arcee AI AI Archetype AI AI Archipelo Argument Computer Corp Blockchain Arrcus Artificial Assured Astromoney Ast-science Atomicform Atomicvest Atommerce Atroposhealth AudioMob Consumer Services Avironactive Axieinfinity Base Power Company Deep Tech Software Bastion Blockchain Beacon Biosignals Health Tech Bear AI Bebravehealth Beekeeper Bentoml Beoble Berachain Betterbrain Bighealth Bigwhalelabs Blackbox AI AI Black Forest Labs Consumer Services Bloom Fintech Bloomapp Bluevoyant Bondu Deep Tech Software Boredapeyachtclub Branch Bria Brightmoments Cambioml Canelamedia Canopy Care Health Tech Cast Cellular intelligence AI Centaurlabs Centml Ceramic Chai Chainsight"
+    },
+    {
+      "id": "check-page-957b14d5f0",
+      "url": "https://www.samsungnext.com/portfolio?sector=Robotics",
+      "page": "portfolio",
+      "excerpt": "Portfolio Portfolio Team Blog Pitch us → SAMSUNG NEXT / PORTFOLIO 2012 — 2026 248+ companies. One belief. We back founders building the foundational layers of tomorrow's computing — from silicon to spatial computing, from health diagnostics to climate infrastructure. 248 Active investments 6 Sectors 14 Years investing $2.1B Capital deployed ALL 248 AI 88 HEALTH 40 BLOCKCHAIN 40 CONSUMER 28 DEEP TECH 31 FINTECH 21 SHOWING 248 COMPANIES 0G Deep Tech Software 1x 8i About Absolutelabs Activeloop Affecttherapeutics Afference Agape Health Tech Agebold AgentOS AI Ai21 Aidinrobotics Akamai Alchemyapi Aleo Alice AI Aliroquantum AMI Labs AI AMMO AI AI Anodot Anykraft Anykraft Consumer Services Anzu Aporia Apptest Apptronik Arcee AI AI Archetype AI AI Archipelo Argument Computer Corp Blockchain Arrcus Artificial Assured Astromoney Ast-science Atomicform Atomicvest Atommerce Atroposhealth AudioMob Consumer Services Avironactive Axieinfinity Base Power Company Deep Tech Software Bastion Blockchain Beacon Biosignals Health Tech Bear AI Bebravehealth Beekeeper Bentoml Beoble Berachain Betterbrain Bighealth Bigwhalelabs Blackbox AI AI Black Forest Labs Consumer Services Bloom Fintech Bloomapp Bluevoyant Bondu Deep Tech Software Boredapeyachtclub Branch Bria Brightmoments Cambioml Canelamedia Canopy Care Health Tech Cast Cellular intelligence AI Centaurlabs Centml Ceramic Chai Chainsight"
+    },
+    {
+      "id": "check-page-e910cd6952",
+      "url": "https://www.samsungnext.com/portfolio?sector=Services",
+      "page": "portfolio",
+      "excerpt": "Portfolio Portfolio Team Blog Pitch us → SAMSUNG NEXT / PORTFOLIO 2012 — 2026 248+ companies. One belief. We back founders building the foundational layers of tomorrow's computing — from silicon to spatial computing, from health diagnostics to climate infrastructure. 248 Active investments 6 Sectors 14 Years investing $2.1B Capital deployed ALL 248 AI 88 HEALTH 40 BLOCKCHAIN 40 CONSUMER 28 DEEP TECH 31 FINTECH 21 SHOWING 248 COMPANIES 0G Deep Tech Software 1x 8i About Absolutelabs Activeloop Affecttherapeutics Afference Agape Health Tech Agebold AgentOS AI Ai21 Aidinrobotics Akamai Alchemyapi Aleo Alice AI Aliroquantum AMI Labs AI AMMO AI AI Anodot Anykraft Anykraft Consumer Services Anzu Aporia Apptest Apptronik Arcee AI AI Archetype AI AI Archipelo Argument Computer Corp Blockchain Arrcus Artificial Assured Astromoney Ast-science Atomicform Atomicvest Atommerce Atroposhealth AudioMob Consumer Services Avironactive Axieinfinity Base Power Company Deep Tech Software Bastion Blockchain Beacon Biosignals Health Tech Bear AI Bebravehealth Beekeeper Bentoml Beoble Berachain Betterbrain Bighealth Bigwhalelabs Blackbox AI AI Black Forest Labs Consumer Services Bloom Fintech Bloomapp Bluevoyant Bondu Deep Tech Software Boredapeyachtclub Branch Bria Brightmoments Cambioml Canelamedia Canopy Care Health Tech Cast Cellular intelligence AI Centaurlabs Centml Ceramic Chai Chainsight"
     }
   ],
   "findings": {
@@ -124,11 +384,31 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "commit decisively, and spend the rest of our time being useful — not collecting board seats. 01 Flexible check sizes We invest across all stages, from $50K to $25MM, tailored to your team and stage of growth. 02 No IC. No theatre. Decisions made efficiently — no investment committee meetings required to slow",
-        "evidenceId": "check-deal-e60aed7b59"
+        "value": "seats. 01 Flexible check sizes We invest across all stages, from $50K to $25MM, tailored to your team and stage of growth. 02 No IC. No",
+        "evidenceId": "check-deal-2fc6fdffcf"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "50000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-2fc6fdffcf"
       }
     ],
     "portfolioPages": [

@@ -1,190 +1,2051 @@
 {
   "programId": "sosv",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://sosv.com/",
-    "https://sosv.com/about/",
+    "https://sosv.com/apply",
     "https://sosv.com/apply/hax",
+    "https://sosv.com/apply/sosv",
+    "https://sosv.com/application-faqs/",
+    "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+    "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
     "https://sosv.com/legal-faqs/",
-    "https://sosv.com/subscribe"
+    "https://sosv.com/legal-faqs/?faq_id=17354",
+    "https://sosv.com/legal-faqs/?faq_id=17356",
+    "https://sosv.com/legal-faqs/?faq_id=17357",
+    "https://sosv.com/legal-faqs/?faq_id=17358",
+    "https://sosv.com/legal-faqs/?faq_id=17363",
+    "https://sosv.com/legal-faqs/?faq_id=17365",
+    "https://sosv.com/legal-faqs/?faq_id=17366"
   ],
   "evidence": [
     {
-      "id": "check-deal-0fa1e401e2",
-      "url": "https://sosv.com/legal-faqs/",
-      "title": "SOSV — terms page checked by scrape.py",
-      "excerpt": "is an Additional Cash SAFE? As part of the total SOSV Program investment, your Company may be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash SAFE to teams at SOSV’s sole discretion, and such offer is contingent on",
+      "id": "check-deal-058460f89a",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE",
       "page": "terms"
     },
     {
-      "id": "check-deal-6bba2c2659",
-      "url": "https://sosv.com/legal-faqs/",
-      "title": "SOSV — terms page checked by scrape.py",
-      "excerpt": "2026 using a post-money SAFE. The SAFE provides that immediately prior to an “Equity Financing” (as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The definition of Company Capitalisation in an SOSV post-money SAFE usually looks something like",
+      "id": "check-deal-15b8d03400",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE",
       "page": "terms"
     },
     {
-      "id": "check-deal-71b7b0f4ad",
-      "url": "https://sosv.com/legal-faqs/",
-      "title": "SOSV — terms page checked by scrape.py",
-      "excerpt": "Percentage SAFE Convert to Equity? Here’s an example of how a post-money fixed percentage SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE provides that immediately prior to an “Equity Financing” (as defined in the SAFE and",
+      "id": "check-deal-15e1ddbf73",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash",
       "page": "terms"
     },
     {
-      "id": "check-deal-88e914d798",
-      "url": "https://sosv.com/legal-faqs/",
-      "title": "SOSV — terms page checked by scrape.py",
-      "excerpt": "the Company at the time of conversion. The Discount Rate in the Cash SAFE is typically 80%. For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as the SAFE holder) would convert at $0.80 per share. The Valuation Cap The valuation cap in",
+      "id": "check-deal-161348bab5",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this",
       "page": "terms"
     },
     {
-      "id": "check-deal-f6b3ada9ec",
-      "url": "https://sosv.com/legal-faqs/",
-      "title": "SOSV — terms page checked by scrape.py",
-      "excerpt": "a fixed percentage SAFE. Additional Cash SAFE As part of the SOSV Program investment, teams may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash SAFE at its sole discretion and such offer is contingent on performance over the",
+      "id": "check-deal-19aa188250",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as",
       "page": "terms"
     },
     {
-      "id": "check-email-997fc30b25",
-      "url": "https://sosv.com/about/",
-      "title": "SOSV — details page checked by scrape.py",
-      "excerpt": "Reach SOSV comms (press@sosv.com)",
+      "id": "check-deal-1efd046394",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-2711064731",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "(as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-2cb6a34722",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-2d4cacad80",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-2e1cf2adca",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-2fcfb70555",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-31931ef5d0",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-394f5489d5",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "(as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-399651776c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "(as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-42269c9bc8",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-4f38ca45ff",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-553b0b5eaa",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-5cc5a76e68",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-5dc875f1b8",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-5efecbee05",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-64e049f189",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-6504a97ee9",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-6553808c25",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-6753d2e3af",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-6825fb8b64",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-6dba85df64",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-6ee6ce9f41",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-719de9e6b7",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-7adce74b76",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "(as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-7b17de89fd",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-7cb2cb6c62",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-85774641d1",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-8be4068827",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-8ed4e6e224",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-99ed3243e6",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-9d5e86e69c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-a2fcbee881",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-a96a079849",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-ad7a019d8f",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-c1a619409e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-c57581ea1f",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-d142ef3282",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-d6749d81d0",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-dac6f05387",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "(as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-df95cf42af",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-dfa2ae2d8f",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "(as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-e9153815b4",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "(as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-ea2fecf456",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-ec7b297693",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "(as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-ed19708bf5",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f32f41a413",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f823cbcc09",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f8f586cbba",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-fc36c44729",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-fd8862eb54",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-fed6ad2a20",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-04967b5350",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "be to raise an Equity Financing within the first 12 months of signing the Cash SAFE. The Equity Financing",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-084ea7eb7d",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-086721cad6",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-092190dd35",
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "title": "SOSV — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-0a5bdd7712",
+      "url": "https://sosv.com/apply",
+      "title": "SOSV — application page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-0afc641460",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "to the Anniversary Date, which is typically 12 months from the execution date of the Cash SAFE, SOSV",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-0b14294ad6",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-0b1ca52c67",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "with the first 25% vesting in after your first 12 months with the Company and the remainder typically",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-0f2abd549e",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-0f59bf96b2",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "prior to the Anniversary Date which is typically 12 months from the execution date of the Program SAFE,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-0f8b143ccd",
+      "url": "https://sosv.com/",
+      "title": "SOSV — homepage",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
       "page": "details"
+    },
+    {
+      "id": "check-duration-0fbbf4b07d",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-114da03c66",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-15e2251f70",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-1754e8c8a9",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "title": "SOSV — terms page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-184ffa0237",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-1859662a47",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-1f36904b12",
+      "url": "https://sosv.com/apply/sosv",
+      "title": "SOSV — application page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-1f38bddc6f",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-1fea75015a",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-21b427077b",
+      "url": "https://sosv.com/apply/hax",
+      "title": "SOSV — application page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-24d5b3af0a",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "with the first 25% vesting in after your first 12 months with the Company and the remainder typically",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-257e1b79d0",
+      "url": "https://sosv.com/apply/sosv",
+      "title": "SOSV — application page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-259dfd8e90",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-27352691e6",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-2b57a93e09",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "prior to the Anniversary Date which is typically 12 months from the execution date of the Program SAFE,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-2ebb613989",
+      "url": "https://sosv.com/apply/hax",
+      "title": "SOSV — application page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-2f5eab5a97",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "be to raise an Equity Financing within the first 12 months of signing the Cash SAFE. The Equity Financing",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-30a92e7f7e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-31e3ee5bc4",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-38dfdbb8f6",
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-3b6f1111ac",
+      "url": "https://sosv.com/apply",
+      "title": "SOSV — application page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-3b72dc066f",
+      "url": "https://sosv.com/",
+      "title": "SOSV — homepage",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3da308e979",
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "title": "SOSV — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-3e1ae07462",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-46aa2cefcf",
+      "url": "https://sosv.com/apply/sosv",
+      "title": "SOSV — application page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-47f8c61ce8",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-4858764b4e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "with the first 25% vesting in after your first 12 months with the Company and the remainder typically",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-48a88742df",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-490368b29c",
+      "url": "https://sosv.com/",
+      "title": "SOSV — homepage",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-4ee237d688",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-502d79bff6",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-5146878663",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "to the Anniversary Date, which is typically 12 months from the execution date of the Cash SAFE, SOSV",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-5278c2e7ae",
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-55edec2236",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "with the first 25% vesting in after your first 12 months with the Company and the remainder typically",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-571b5d2063",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "prior to the Anniversary Date which is typically 12 months from the execution date of the Program SAFE,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-5780664305",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "be to raise an Equity Financing within the first 12 months of signing the Cash SAFE. The Equity Financing",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-595cb5667e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-62abbf6257",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "prior to the Anniversary Date which is typically 12 months from the execution date of the Program SAFE,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-62e01235f1",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "with the first 25% vesting in after your first 12 months with the Company and the remainder typically",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-6870e5eacb",
+      "url": "https://sosv.com/apply",
+      "title": "SOSV — application page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-6d19c0fd6a",
+      "url": "https://sosv.com/application-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-6d98b3290b",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-6ea6c5a654",
+      "url": "https://sosv.com/apply/sosv",
+      "title": "SOSV — application page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-6eb6410c77",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "prior to the Anniversary Date which is typically 12 months from the execution date of the Program SAFE,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-6fe4aeb767",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-707ad5b90b",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-71c21b7e7e",
+      "url": "https://sosv.com/",
+      "title": "SOSV — homepage",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-7218559a58",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-73f5730d84",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "prior to the Anniversary Date which is typically 12 months from the execution date of the Program SAFE,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-74d53a8e5c",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-751a56ebde",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "be to raise an Equity Financing within the first 12 months of signing the Cash SAFE. The Equity Financing",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-753ffc8808",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-79e1925981",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-8285486e09",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-83dcd1c210",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "prior to the Anniversary Date which is typically 12 months from the execution date of the Program SAFE,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-8635992e2e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-86529b181e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "prior to the Anniversary Date which is typically 12 months from the execution date of the Program SAFE,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-871e65f398",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-8a3909bcd8",
+      "url": "https://sosv.com/",
+      "title": "SOSV — homepage",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-8a73571b44",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-8c922d9d3d",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-8d36db1c24",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-92264a9d3b",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-929a3ff56f",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "to the Anniversary Date, which is typically 12 months from the execution date of the Cash SAFE, SOSV",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-9757fe4f86",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-980f0e19be",
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-98b754ca7c",
+      "url": "https://sosv.com/apply",
+      "title": "SOSV — application page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-98f09d723e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a12bc5b156",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "title": "SOSV — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a1401f29a8",
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a21e25a0b8",
+      "url": "https://sosv.com/application-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a25bac4eec",
+      "url": "https://sosv.com/apply/sosv",
+      "title": "SOSV — application page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-a7329c2674",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a998086c69",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-aaa25a0c08",
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "title": "SOSV — terms page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ad05a72785",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "to the Anniversary Date, which is typically 12 months from the execution date of the Cash SAFE, SOSV",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-af16dad9d1",
+      "url": "https://sosv.com/apply",
+      "title": "SOSV — application page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-b0f6cd31bf",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "be to raise an Equity Financing within the first 12 months of signing the Cash SAFE. The Equity Financing",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b165c7aa05",
+      "url": "https://sosv.com/application-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b5951ddf4e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "be to raise an Equity Financing within the first 12 months of signing the Cash SAFE. The Equity Financing",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b9fe0df2af",
+      "url": "https://sosv.com/application-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-bdffcdd995",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "be to raise an Equity Financing within the first 12 months of signing the Cash SAFE. The Equity Financing",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-c166108a89",
+      "url": "https://sosv.com/apply",
+      "title": "SOSV — application page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-c4c6bf90cc",
+      "url": "https://sosv.com/apply/hax",
+      "title": "SOSV — application page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-c4e1c84ac3",
+      "url": "https://sosv.com/",
+      "title": "SOSV — homepage",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c8b4dae826",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ca32dec759",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "to the Anniversary Date, which is typically 12 months from the execution date of the Cash SAFE, SOSV",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ca58d4294e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d084d2c015",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d230287944",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d354c8f0e7",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d412a52404",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d4d4a7d4b9",
+      "url": "https://sosv.com/application-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d553534bf8",
+      "url": "https://sosv.com/apply/hax",
+      "title": "SOSV — application page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d5a09a61aa",
+      "url": "https://sosv.com/apply/hax",
+      "title": "SOSV — application page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d95da82592",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-db1d29add8",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-dbecab00b3",
+      "url": "https://sosv.com/",
+      "title": "SOSV — homepage",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-dc24cd3382",
+      "url": "https://sosv.com/apply/sosv",
+      "title": "SOSV — application page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-dd19af2e8a",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-de47e7b7f0",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-de4cbc04f6",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "with the first 25% vesting in after your first 12 months with the Company and the remainder typically",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-dfa84a2550",
+      "url": "https://sosv.com/apply/hax",
+      "title": "SOSV — application page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-e08e172a44",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e1318c5eb4",
+      "url": "https://sosv.com/application-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e58b8f7784",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "category . cookielawinfo-checkbox-analytics 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e64426f10f",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Other. cookielawinfo-checkbox-performance 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e66551f4f0",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "with the first 25% vesting in after your first 12 months with the Company and the remainder typically",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e7c2d3681c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "the category \"Performance\". viewed_cookie_policy 11 months The cookie is set by the GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e7dab60bdc",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "with the first 25% vesting in after your first 12 months with the Company and the remainder typically",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e9d88eda51",
+      "url": "https://sosv.com/apply",
+      "title": "SOSV — application page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-ea2de582bf",
+      "url": "https://sosv.com/application-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ed43b006cd",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Necessary\". cookielawinfo-checkbox-others 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f0c95ca6f9",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "to the Anniversary Date, which is typically 12 months from the execution date of the Cash SAFE, SOSV",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f1b760033d",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f55cddb3db",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "to the Anniversary Date, which is typically 12 months from the execution date of the Cash SAFE, SOSV",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f5f36dd1c6",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "be to raise an Equity Financing within the first 12 months of signing the Cash SAFE. The Equity Financing",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f60eb29551",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f60f8d638b",
+      "url": "https://sosv.com/apply/sosv",
+      "title": "SOSV — application page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-f652b6049b",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f865e83a79",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f8711afa9b",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "to the Anniversary Date, which is typically 12 months from the execution date of the Cash SAFE, SOSV",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-fae78ea2fa",
+      "url": "https://sosv.com/apply/hax",
+      "title": "SOSV — application page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-fb8894108f",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "title": "SOSV — terms page",
+      "excerpt": "Cookie Duration Description VISITOR_INFO1_LIVE 5 months 27 days A cookie set by YouTube to measure",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-fe2082ad2e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Functional\". cookielawinfo-checkbox-necessary 11 months This cookie is set by GDPR Cookie Consent",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ff49f2be0e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "\"Analytics\". cookielawinfo-checkbox-functional 11 months The cookie is set by GDPR cookie consent to",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-1838a6ec45",
+      "url": "https://sosv.com/application-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-27b6c1a426",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-3738999842",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-4898f59d4c",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-612037dd68",
+      "url": "https://sosv.com/apply/sosv",
+      "title": "SOSV — application page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "application"
+    },
+    {
+      "id": "check-format-641929da8b",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "title": "SOSV — terms page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-7ad51cf762",
+      "url": "https://sosv.com/",
+      "title": "SOSV — homepage",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "details"
+    },
+    {
+      "id": "check-format-80b3583d5a",
+      "url": "https://sosv.com/apply/hax",
+      "title": "SOSV — application page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "application"
+    },
+    {
+      "id": "check-format-817c998301",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "title": "SOSV — terms page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-83d6697de6",
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "title": "SOSV — terms page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-8a4f92138a",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-8e156512e5",
+      "url": "https://sosv.com/apply",
+      "title": "SOSV — application page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "application"
+    },
+    {
+      "id": "check-format-91568074a4",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-929c2b6aed",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-960dc7a596",
+      "url": "https://sosv.com/application-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "anywhere can apply. Some programs ask that you participate in-person (HAX – Newark & Shenzhen, IndieBio – New York & San",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-9db220b038",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-a3737a3905",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-a63276e82a",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-c53ab58e50",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-c8b36ab4e1",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-c8ed826fd2",
+      "url": "https://sosv.com/application-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-cd4495eb4c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-ce4de325a2",
+      "url": "https://sosv.com/apply",
+      "title": "SOSV — application page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "application"
+    },
+    {
+      "id": "check-format-cfec87e953",
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "title": "SOSV — terms page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d19c732ad4",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d49e9d7a72",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-dddf7c1164",
+      "url": "https://sosv.com/apply/hax",
+      "title": "SOSV — application page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e44ac7d79d",
+      "url": "https://sosv.com/",
+      "title": "SOSV — homepage",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ecb867ed60",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-fa9c8d9f37",
+      "url": "https://sosv.com/apply/sosv",
+      "title": "SOSV — application page",
+      "excerpt": "to track the views of embedded videos on Youtube pages. yt-remote-connected-devices never YouTube sets this cookie to store",
+      "page": "application"
+    },
+    {
+      "id": "check-format-fba28b5a2e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "preferences of the user using embedded YouTube video. yt-remote-device-id never YouTube sets this cookie to store the",
+      "page": "terms"
     },
     {
       "id": "check-name-05ce4acd96",
       "url": "https://sosv.com/",
-      "title": "SOSV — homepage checked by scrape.py",
+      "title": "SOSV — homepage",
       "excerpt": "SOSV - Deep Tech for Human and Planetary Health Skip to content",
       "page": "details"
     },
     {
-      "id": "check-portfolio-24b3eed522",
-      "url": "https://sosv.com/about/",
-      "title": "SOSV — details page checked by scrape.py",
+      "id": "check-portfolio-02fb0427bc",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
       "excerpt": "Our Portfolio → https://sosv.com/portfolio",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-0946b1838e",
+      "url": "https://sosv.com/apply",
+      "title": "SOSV — application page",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-163672f373",
+      "url": "https://sosv.com/apply",
+      "title": "SOSV — application page",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-20d25d0070",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-24fa154769",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "title": "SOSV — terms page",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-25b8c4e931",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-25c2c61660",
+      "url": "https://sosv.com/application-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-380c941cab",
       "url": "https://sosv.com/",
-      "title": "SOSV — homepage checked by scrape.py",
+      "title": "SOSV — homepage",
       "excerpt": "Our Portfolio → https://sosv.com/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-4551ccf0ca",
       "url": "https://sosv.com/apply/hax",
-      "title": "SOSV — application page checked by scrape.py",
+      "title": "SOSV — application page",
       "excerpt": "Portfolio → https://sosv.com/portfolio/",
       "page": "application"
     },
     {
       "id": "check-portfolio-4a595d8a4d",
       "url": "https://sosv.com/legal-faqs/",
-      "title": "SOSV — terms page checked by scrape.py",
+      "title": "SOSV — terms page",
       "excerpt": "Our Portfolio → https://sosv.com/portfolio",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-7d3babbe90",
-      "url": "https://sosv.com/subscribe",
-      "title": "SOSV — batches page checked by scrape.py",
+      "id": "check-portfolio-4dab38bdaf",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
       "excerpt": "Our Portfolio → https://sosv.com/portfolio",
-      "page": "batches"
+      "page": "terms"
     },
     {
-      "id": "check-portfolio-aeb9193ef1",
-      "url": "https://sosv.com/about/",
-      "title": "SOSV — details page checked by scrape.py",
+      "id": "check-portfolio-4fcf9f315c",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
       "excerpt": "Portfolio → https://sosv.com/portfolio/",
-      "page": "details"
+      "page": "terms"
     },
     {
-      "id": "check-portfolio-ce699b0d44",
-      "url": "https://sosv.com/subscribe",
-      "title": "SOSV — batches page checked by scrape.py",
+      "id": "check-portfolio-5e512e3ee7",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
       "excerpt": "Portfolio → https://sosv.com/portfolio/",
-      "page": "batches"
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5f709c8f71",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-78fe542d11",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7e9a2a1f42",
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "title": "SOSV — terms page",
+      "excerpt": "HAX 2022 → https://sosv.com/portfolio/?_company_cohorts=hax-seed-2022",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7f110f55df",
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "title": "SOSV — terms page",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8922e353a2",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-95493b4e1e",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "title": "SOSV — terms page",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9b8e85006f",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9dfb34bb9b",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a6cc42b9ce",
+      "url": "https://sosv.com/apply/sosv",
+      "title": "SOSV — application page",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b78fd09b96",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c9fa40669b",
+      "url": "https://sosv.com/apply/sosv",
+      "title": "SOSV — application page",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "application"
     },
     {
       "id": "check-portfolio-d009563ede",
       "url": "https://sosv.com/",
-      "title": "SOSV — homepage checked by scrape.py",
+      "title": "SOSV — homepage",
       "excerpt": "Portfolio → https://sosv.com/portfolio/",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-dd1108660d",
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "title": "SOSV — terms page",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-dd3817f8b2",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-e37c14aba9",
       "url": "https://sosv.com/apply/hax",
-      "title": "SOSV — application page checked by scrape.py",
+      "title": "SOSV — application page",
       "excerpt": "Our Portfolio → https://sosv.com/portfolio",
       "page": "application"
     },
     {
+      "id": "check-portfolio-ee97938f53",
+      "url": "https://sosv.com/application-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f5a8b1aee7",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-fef93a10fb",
       "url": "https://sosv.com/legal-faqs/",
-      "title": "SOSV — terms page checked by scrape.py",
+      "title": "SOSV — terms page",
       "excerpt": "Portfolio → https://sosv.com/portfolio/",
       "page": "terms"
     },
     {
-      "id": "check-route-1f53a99937",
-      "url": "https://sosv.com/",
-      "title": "SOSV — homepage checked by scrape.py",
-      "excerpt": "Apply → https://sosv.com/apply/sosv",
-      "page": "details"
+      "id": "check-rolling-03b48706ee",
+      "url": "https://sosv.com/application-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "via our Application Portal . Applications are reviewed by investment teams on a rolling basis. You are able to start and save an application at any time and return to it",
+      "page": "terms"
     },
     {
-      "id": "check-route-66204dacb6",
-      "url": "https://sosv.com/apply/hax",
-      "title": "SOSV — application page checked by scrape.py",
+      "id": "check-route-1395071797",
+      "url": "https://sosv.com/apply/sosv",
+      "title": "SOSV — application page",
       "excerpt": "Apply → https://sosv.com/apply",
       "page": "application"
     },
     {
-      "id": "check-route-6bb769aca3",
-      "url": "https://sosv.com/about/",
-      "title": "SOSV — details page checked by scrape.py",
-      "excerpt": "Apply → https://sosv.com/apply",
+      "id": "check-route-1f53a99937",
+      "url": "https://sosv.com/",
+      "title": "SOSV — homepage",
+      "excerpt": "Apply → https://sosv.com/apply/sosv",
       "page": "details"
+    },
+    {
+      "id": "check-route-30d5272706",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "title": "SOSV — terms page",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-349fa840e8",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "title": "SOSV — terms page",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-66204dacb6",
+      "url": "https://sosv.com/apply/hax",
+      "title": "SOSV — application page",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "application"
     },
     {
       "id": "check-route-7196db4c5d",
       "url": "https://sosv.com/",
-      "title": "SOSV — homepage checked by scrape.py",
+      "title": "SOSV — homepage",
       "excerpt": "Apply → https://sosv.com/apply/hax",
       "page": "details"
     },
     {
+      "id": "check-route-8361416fb6",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "title": "SOSV — terms page",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-846814ce7f",
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "title": "SOSV — terms page",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-8ff8403c30",
+      "url": "https://sosv.com/application-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "Application Portal → https://sosv.com/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-92c721e174",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "title": "SOSV — terms page",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "terms"
+    },
+    {
       "id": "check-route-9e68610e4c",
       "url": "https://sosv.com/",
-      "title": "SOSV — homepage checked by scrape.py",
+      "title": "SOSV — homepage",
       "excerpt": "Apply → https://sosv.com/apply",
       "page": "details"
     },
     {
-      "id": "check-route-b5cd0cc7c7",
-      "url": "https://sosv.com/subscribe",
-      "title": "SOSV — batches page checked by scrape.py",
+      "id": "check-route-af03c26c6c",
+      "url": "https://sosv.com/apply",
+      "title": "SOSV — application page",
+      "excerpt": "Cutting-edge healthcare and engineering biology, with wet-lab infrastructure and deep technical, regulatory, and commercial expertise to de-risk biology and bring products toward the clinic or market. Apply to SOSV NY → https://sosv.com/apply/sosv/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b4afe75712",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "title": "SOSV — terms page",
       "excerpt": "Apply → https://sosv.com/apply",
-      "page": "batches"
+      "page": "terms"
+    },
+    {
+      "id": "check-route-cb8a97fb9f",
+      "url": "https://sosv.com/apply",
+      "title": "SOSV — application page",
+      "excerpt": "HAX is the world’s first and most active program focused on hard tech startups. HAX helps founders tap into the world’s premier ecosystems for real-world product development, manufacturing and fundraising. Apply to SOSV HAX → https://sosv.com/apply/hax/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d39008ac2f",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "title": "SOSV — terms page",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-d39ccb2b09",
+      "url": "https://sosv.com/application-faqs/",
+      "title": "SOSV — terms page",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "terms"
     },
     {
       "id": "check-route-d630da9b81",
       "url": "https://sosv.com/legal-faqs/",
-      "title": "SOSV — terms page checked by scrape.py",
+      "title": "SOSV — terms page",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-f414f6daa1",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "title": "SOSV — terms page",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-f8b46e9c3e",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "title": "SOSV — terms page",
       "excerpt": "Apply → https://sosv.com/apply",
       "page": "terms"
     }
   ],
+  "pageQuotes": [
+    {
+      "id": "check-page-6adb5d747c",
+      "url": "https://sosv.com/",
+      "page": "details",
+      "excerpt": "SOSV - Deep Tech for Human and Planetary Health Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Deep Tech for Human and Planetary Health SOSV is the world’s most active deep tech venture capital firm investing at pre-seed, with deeply resourced locations for founders in New York, Newark, and San Francisco. LEARN ABOUT OUR LOCATIONS Post Watch SOSV Deep Tech Summit Replays On-Demand Post Nov 11, 2026 NJ Means Business, So Does SOSV Wall Street Journal Nov 09, 2026 How Do You Save the World’s Chocolate Supply? California Cultured & Voyage Foods Are Reinventing Chocolate Forbes Nov 06, 2026 Can 3D Weaving Change The Economics Of Fashion? unspun & Arvind Test On-Demand Manufacturing See all news We help startups go further, faster. 800+ Portfolio Companies $7.5B Raised by Portfolio 2021-2025 2,700 SOSV Co-investors 7,500 Investors in Network 44% Founders with PhDs 2021-2025 85,000 Sq ft Lab & Office Space SOSV Founders Mariano Alvarez & Brendan Collins Co-founders, Avalo.AI Avalo.ai: An Agricultural Revolution Through AI Plant Evolution Picture this: Acres of cotton all around you. 150,000 plants. Now, harvest them all, collect the seeds — all 45 million of them"
+    },
+    {
+      "id": "check-page-0b52c2367b",
+      "url": "https://sosv.com/apply",
+      "page": "application",
+      "excerpt": "Apply to SOSV Programs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Apply to SOSV's Programs Click on the logo of the program you wish to apply to: Cutting-edge healthcare and engineering biology, with wet-lab infrastructure and deep technical, regulatory, and commercial expertise to de-risk biology and bring products toward the clinic or market. Apply to SOSV NY Full sweep of deep tech for companies that want build in proximity to Silicon Valley’s capital density and talent networks and iterate quickly with customers, partners, and follow-on investors. Apply to SOSV SF HAX is the world’s first and most active program focused on hard tech startups. HAX helps founders tap into the world’s premier ecosystems for real-world product development, manufacturing and fundraising. Apply to SOSV HAX Learn About SOSV Our Locations Our Portfolio Our Team Legal FAQ Press & Media Brand Guidelines Apply Application FAQ Apply Invest Invest in our Funds Invest in our Companies Participate SOSV Retvrn Our Events Get Email Updates SOSV Consortium Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC"
+    },
+    {
+      "id": "check-page-d07b42b51c",
+      "url": "https://sosv.com/apply/hax",
+      "page": "application",
+      "excerpt": "Apply to HAX - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC * indicates required fields HAX Locations Which HAX location are you applying to? * HAX (Newark, NJ) HAX Plasma Forge (Princeton, NJ) Company Give us a quick peek at your company. Prior to applying * I confirm that my company is building a Hard Tech product. Company Name * Website Contact Email * Enter Email Confirm Email We'll use this email address to confirm that we have received your application, and to subscribe you to our newsletters if you decide to opt in. It will also be our primary point of contact if we're interested in your application, so please make sure that it is valid, up-to-date and checked regularly. Description, in 140 characters or less * Location * City State / Province / Region Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei Darussalam Bulgaria Burkina Faso"
+    },
+    {
+      "id": "check-page-92a37e0654",
+      "url": "https://sosv.com/apply/sosv",
+      "page": "application",
+      "excerpt": "Apply to SOSV - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC * indicates required fields Contact Hi! Please introduce us to a point person for your company during the application process. First Name * Last Name * Contact Email * Enter Email Confirm Email We'll use this email address to confirm that we have received your application, and to subscribe you to our newsletters if you decide to opt in. It will also be our primary point of contact if we're interested in your application, so please make sure that it is valid, up-to-date and checked regularly. Company Give us a quick peek at your company. Company Name * Website Description, in 140 characters * Location * City State / Province / Region Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei Darussalam Bulgaria Burkina Faso Burundi Cabo Verde Cambodia Cameroon Canada Cayman Islands Central"
+    },
+    {
+      "id": "check-page-c87f1eb7a9",
+      "url": "https://sosv.com/application-faqs/",
+      "page": "terms",
+      "excerpt": "Application FAQ - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Application FAQ Process How do I apply to an SOSV Startup Development Program? Please submit an application to one of our startup development programs (HAX or IndieBio) via our Application Portal . Applications are reviewed by investment teams on a rolling basis. You are able to start and save an application at any time and return to it later to submit when you are ready. Can I apply to more than one SOSV Startup Development Program? Yes, if your company is a fit for multiple programs you may apply to more than one program. How does the application process work? After our initial review, our investment teams email a select number of startups to begin a standard diligence process via a series of screening calls. Our screening calls will cover introductions, your 10-15 minute pitch (including materials). We will look to discuss your founding team, technology, addressable market, competitive landscape, and proposed technical development plan for the SOSV program. We also work with our network of experts across technology fields and industries to help us review applications. This process can"
+    },
+    {
+      "id": "check-page-c06d02f030",
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "page": "terms",
+      "excerpt": "HAX's Rightbot lands Amazon investment for freight unloading robots - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Back HAX’s Rightbot lands Amazon investment for freight unloading robots Back Lauren McCranie January 22, 2024 Rightbot’s robotic solution. Source: Rightbot Rightbot, which develops suction-based robots that unload various shapes and sizes of freight, has raised $6.25 million in a funding round led by Amazon’s Industrial Innovation Fund, with participation from SOSV and Entrepreneur First. The company produces automated mobile robots to unload floor-loaded containers of cartons and polybags. Using a suction based mechanism, the system has an ability to lift up to 55lbs. An active intelligence system adjusts the suction power according to box weight and dimensions. To address the challenge of variability in unloading, Rightbot has designed a patent pending mobile robot + robotic arm + conveyor system, where all elements works in tandem to deliver high throughput together with high reliability. “Unstructured truck and container loads are varied and unpredictable in nature. They have consistently presented a hurdle in unloading automation,”"
+    },
+    {
+      "id": "check-page-043205f5f6",
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "page": "terms",
+      "excerpt": "HAX's XFuel closes €8.2 million investment round for high-grade biomass fuels - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Back HAX’s XFuel closes €8.2 million investment round for high-grade biomass fuels Back SOSV Team July 26, 2022 XFuel aims to decarbonize the transportation industry—marine, road, and aviation. Photo by Erik Mclean on Unsplash XFuel , a company on a mission to convert biomass waste into drop-in low-carbon fuels, recently closed an €8.2 million investment round, according to Ship & Bunker’s article, “Biofuel Producer XFuel Raises €8.2 Million Investment Round” . AENU , a German VC firm, took the lead on the investment round with additional support from SOSV and Union Square Ventures , the article reports. XFuel ( HAX 2022 ) uses a modular refinery design to produce second-generation biofuel for marine, diesel, and aviation. “Using modular and scalable biorefineries, XFuel can produce high-grade fuels at a comparable or lower price point to fossil-based fuels on the market,” XFuel told Ship & Bunker in an emailed statement. “Independent assessments have shown that XFuel’s technology can currently deliver fuel with GHG savings of"
+    },
+    {
+      "id": "check-page-1c5a93fd02",
+      "url": "https://sosv.com/legal-faqs/",
+      "page": "terms",
+      "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
+    },
+    {
+      "id": "check-page-eaf7f4eaf8",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "page": "terms",
+      "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
+    },
+    {
+      "id": "check-page-d6e8c999e9",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "page": "terms",
+      "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
+    },
+    {
+      "id": "check-page-b20bc2bf64",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "page": "terms",
+      "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
+    },
+    {
+      "id": "check-page-2482a11eba",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "page": "terms",
+      "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
+    },
+    {
+      "id": "check-page-fc38a00442",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "page": "terms",
+      "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
+    },
+    {
+      "id": "check-page-5eed248980",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "page": "terms",
+      "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
+    },
+    {
+      "id": "check-page-0209bf56b9",
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "page": "terms",
+      "excerpt": "Legal FAQs - SOSV Skip to content THE SOSV DEEP TECH SUMMIT HAS CONCLUDED. WATCH REPLAYS → Locations Deep Tech 100 Portfolio News Events Matchups Team About Invest Copyright All Rights Reserved © 2026 SOSV Investments LLC. All SOSV registered trademarks are owned by SOSV Investments LLC Legal FAQs Incorporation Key Considerations When Deciding Where To Incorporate A question we get asked on a regular basis is: where should I incorporate? An interesting question with lots of possible different answers and solutions. There are a number of considerations with regards to incorporation: Fundraising Where are your Investors? Trading Where is your product being manufactured & sold? Grant availability Is there non-dilutive funding available for locating in certain areas? Residence Where do you live or where do you want to live, and are there visa restrictions? Each of these will have an impact on where you incorporate. US Investors do not generally invest into entities that are incorporated outside of the US (a Delaware C-Corp would be the standard investment entity used in the US). This is due to onerous tax filing and information requirements on US citizens for off-shore investment activity. Form Of SOSV Program Investments How are SOSV Program Investments Made? SOSV Program investments are typically made in the form of Post Money SAFEs . What Is A SAFE? A SAFE (“Simple Agreement"
+    }
+  ],
   "findings": {
-    "emails": [
-      {
-        "value": "press@sosv.com",
-        "evidenceId": "check-email-997fc30b25"
-      }
-    ],
+    "emails": [],
     "phones": [],
     "routes": [
       {
@@ -198,38 +2059,149 @@
       {
         "value": "https://sosv.com/apply",
         "evidenceId": "check-route-9e68610e4c"
+      },
+      {
+        "value": "https://sosv.com/apply/sosv/",
+        "evidenceId": "check-route-af03c26c6c"
+      },
+      {
+        "value": "https://sosv.com/apply/hax/",
+        "evidenceId": "check-route-cb8a97fb9f"
+      },
+      {
+        "value": "https://sosv.com/apply/",
+        "evidenceId": "check-route-8ff8403c30"
       }
     ],
     "applicationUrl": [
       {
-        "value": "https://sosv.com/apply",
-        "evidenceId": "check-route-9e68610e4c"
+        "value": "https://sosv.com/apply/hax",
+        "evidenceId": "check-route-7196db4c5d"
       }
     ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-03b48706ee"
+      }
+    ],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "11 months",
+        "evidenceId": "check-duration-3b72dc066f"
+      },
+      {
+        "value": "5 months",
+        "evidenceId": "check-duration-0f8b143ccd"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-b0f6cd31bf"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-7ad51cf762"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-960dc7a596"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "Percentage SAFE Convert to Equity? Here’s an example of how a post-money fixed percentage SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE provides that immediately prior to an “Equity Financing” (as defined in the SAFE and",
-        "evidenceId": "check-deal-71b7b0f4ad"
+        "value": "SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE",
+        "evidenceId": "check-deal-7cb2cb6c62"
       },
       {
-        "value": "2026 using a post-money SAFE. The SAFE provides that immediately prior to an “Equity Financing” (as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The definition of Company Capitalisation in an SOSV post-money SAFE usually looks something like",
-        "evidenceId": "check-deal-6bba2c2659"
+        "value": "(as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The",
+        "evidenceId": "check-deal-7adce74b76"
       },
       {
-        "value": "a fixed percentage SAFE. Additional Cash SAFE As part of the SOSV Program investment, teams may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash SAFE at its sole discretion and such offer is contingent on performance over the",
-        "evidenceId": "check-deal-f6b3ada9ec"
+        "value": "may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this",
+        "evidenceId": "check-deal-2fcfb70555"
       },
       {
-        "value": "the Company at the time of conversion. The Discount Rate in the Cash SAFE is typically 80%. For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as the SAFE holder) would convert at $0.80 per share. The Valuation Cap The valuation cap in",
-        "evidenceId": "check-deal-88e914d798"
+        "value": "for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash",
+        "evidenceId": "check-deal-2e1cf2adca"
       },
       {
-        "value": "is an Additional Cash SAFE? As part of the total SOSV Program investment, your Company may be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash SAFE to teams at SOSV’s sole discretion, and such offer is contingent on",
-        "evidenceId": "check-deal-0fa1e401e2"
+        "value": "For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as",
+        "evidenceId": "check-deal-5efecbee05"
+      },
+      {
+        "value": "be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this",
+        "evidenceId": "check-deal-f823cbcc09"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "250000",
+          "currency": "USD",
+          "equity": null,
+          "label": "SAFE",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-7cb2cb6c62"
+      },
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "275000",
+          "currency": "USD",
+          "equity": null,
+          "label": "SAFE",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-7adce74b76"
+      },
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "250000",
+          "currency": "USD",
+          "equity": "20%",
+          "label": "SAFE",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-2fcfb70555"
+      },
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "6000000",
+          "currency": "USD",
+          "equity": "20%",
+          "label": "SAFE",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-2e1cf2adca"
+      },
+      {
+        "value": {
+          "kind": "equity",
+          "amount": "1",
+          "currency": "USD",
+          "equity": "80%",
+          "label": "Equity",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-5efecbee05"
       }
     ],
     "portfolioPages": [
@@ -240,6 +2212,10 @@
       {
         "value": "https://sosv.com/portfolio",
         "evidenceId": "check-portfolio-380c941cab"
+      },
+      {
+        "value": "https://sosv.com/portfolio/?_company_cohorts=hax-seed-2022",
+        "evidenceId": "check-portfolio-7e9a2a1f42"
       }
     ],
     "name": [

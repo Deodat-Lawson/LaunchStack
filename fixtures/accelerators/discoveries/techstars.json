@@ -1,15 +1,7 @@
 {
   "programId": "techstars",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://www.techstars.com/portfolio",
-      "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://apply.techstars.com/",
       "page": "application",
@@ -19,9 +11,289 @@
       "origin": "official"
     },
     {
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "page": "terms",
-      "anchor": "Review $220K Investment Terms",
+      "url": "https://www.techstars.com/about",
+      "page": "details",
+      "anchor": "Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/abn-amro-techstars-future-of-finance-accelerator",
+      "page": "details",
+      "anchor": "ABN AMRO + Techstars Future of Finance Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/anywhere",
+      "page": "details",
+      "anchor": "Techstars Anywhere Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/baltimore-ai-health",
+      "page": "details",
+      "anchor": "Techstars AI Health Baltimore",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/birmingham",
+      "page": "details",
+      "anchor": "Techstars Alabama EnergyTech Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/boston",
+      "page": "details",
+      "anchor": "Techstars Boston Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/boulder",
+      "page": "details",
+      "anchor": "Techstars Boulder",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/chicago",
+      "page": "details",
+      "anchor": "Techstars Chicago",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/future-of-food",
+      "page": "details",
+      "anchor": "Techstars Future of Food Powered by Ecolab",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/london",
+      "page": "details",
+      "anchor": "Techstars London Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/northwestern-medicine-healthcare",
+      "page": "details",
+      "anchor": "Northwestern Medicine & Techstars Healthcare Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/nyc",
+      "page": "details",
+      "anchor": "Techstars New York City Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/ohio-state-university-accelerator",
+      "page": "details",
+      "anchor": "Techstars Columbus Powered by The Ohio State University",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/permanente-medicine",
+      "page": "details",
+      "anchor": "Techstars Healthcare Accelerator powered by Permanente Medicine Mid-Atlantic States",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/space",
+      "page": "details",
+      "anchor": "Techstars Space Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/tokyo",
+      "page": "details",
+      "anchor": "Techstars Tokyo Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/usc-and-techstars",
+      "page": "details",
+      "anchor": "USC and Techstars Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/verticals/finance",
+      "page": "details",
+      "anchor": "Finance",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/verticals/health",
+      "page": "details",
+      "anchor": "Health",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/verticals/infrastructure",
+      "page": "details",
+      "anchor": "Critical Infrastructure",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators/verticals/space",
+      "page": "details",
+      "anchor": "Space & Defense",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/application-preview",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/founder-advice/6-tips-to-ace-the-accelerator-application",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-make-your-techstars-application-stand-out",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-successfully-apply-to-techstars-unraveling-the-application-process",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-before-you-apply-engage",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-the-application-and-interview-process",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-paris-the-ins-and-outs-of-the-application-and-selection-process",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-successful-application-guide-key-considerations",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/insights-and-trends/applying-to-techstars-tips-from-our-managing-directors",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/insights-and-trends/founders-already-voted-the-other-side-of-the-accelerator-debate",
+      "page": "details",
+      "anchor": "Insights & Trends 12 November 2026 Founders Already Voted: The Other Side of the Accelerator Debate Read More",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/insights-and-trends/the-big-question-why-should-i-apply-to-techstars",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/program-news/applications-are-now-open-for-techstars-spring-2026-accelerator-programs",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/program-news/applications-now-open-for-third-class-of-northwestern-medicine-techstars-healthcare-accelerator",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/program-news/applications-open-the-5th-edition-of-the-abn-amro-techstars-future-of",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -35,25 +307,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.techstars.com/about",
-      "page": "details",
-      "anchor": "Learn more",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.techstars.com/newsroom/techstars-announces-the-fall-2026-founder-catalyst-global-cohort",
-      "page": "batches",
-      "anchor": "Newsroom 14 October 2026 Techstars Announces the Fall 2026 Founder Catalyst Global Cohort Read More",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.techstars.com/newsroom/introducing-the-first-techstars-x-eit-urban-mobility-founder-catalyst-cohort",
-      "page": "batches",
-      "anchor": "Newsroom 9 October 2026 Introducing the First Techstars x EIT Urban Mobility Founder Catalyst Cohort Read More",
+      "url": "https://www.techstars.com/faq",
+      "page": "terms",
+      "anchor": "FAQ",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -67,9 +323,49 @@
       "origin": "official"
     },
     {
-      "url": "https://www.techstars.com/faq",
+      "url": "https://www.techstars.com/newsroom/introducing-the-first-techstars-x-eit-urban-mobility-founder-catalyst-cohort",
+      "page": "batches",
+      "anchor": "Newsroom 9 October 2026 Introducing the First Techstars x EIT Urban Mobility Founder Catalyst Cohort Read More",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/newsroom/introducing-the-techstars-healthtech-pre-accelerator",
+      "page": "details",
+      "anchor": "Newsroom 27 October 2026 Introducing the Techstars Healthtech Pre-Accelerator Read More",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/newsroom/investment-terms",
       "page": "terms",
-      "anchor": "FAQ",
+      "anchor": "Review $220K Investment Terms",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/newsroom/techstars-announces-the-fall-2026-founder-catalyst-global-cohort",
+      "page": "batches",
+      "anchor": "Newsroom 14 October 2026 Techstars Announces the Fall 2026 Founder Catalyst Global Cohort Read More",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/newsroom/techstars-is-no-1-on-time-and-statista-s-2026-accelerator-list",
+      "page": "details",
+      "anchor": "Techstars Is No. 1 on TIME and Statista's 2026 Accelerator List Read More",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/portfolio",
+      "page": "portfolio",
+      "anchor": "Portfolio",
       "fetched": false,
       "blocked": null,
       "origin": "official"

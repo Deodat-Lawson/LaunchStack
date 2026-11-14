@@ -1,74 +1,437 @@
 {
   "programId": "galen-growth",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
     "https://www.galengrowth.com/",
-    "https://www.galengrowth.com/about-digital-health/",
-    "https://www.galengrowth.com/research-download/digital-health-exits-2026-ma-ipo-market-report/"
+    "https://www.galengrowth.com/2024-europe-digital-health-funding-propelled-to-record-highs-by-mega-deals-and-ai/",
+    "https://www.galengrowth.com/digital-health-deal-factory-september/",
+    "https://www.galengrowth.com/galen-growth-biome-healthtech-deal-factory-april-7-14/",
+    "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-april-7-14-private-event/",
+    "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-june-16-private-event/",
+    "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-june-16/",
+    "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-private-event/",
+    "https://www.galengrowth.com/galen-growth-healthtech-deal-factory/",
+    "https://www.galengrowth.com/h1-2026-digital-health-investment-trends/",
+    "https://www.galengrowth.com/healthtech-deal-factory-april-7-14/",
+    "https://www.galengrowth.com/mega-deals-in-digital-health/",
+    "https://www.galengrowth.com/mental-healths-investment-resurgence-a-market-ripe-for-innovation/",
+    "https://www.galengrowth.com/q1-2025-digital-health-funding-ai-mega-deals-europes-breakout-quarter/",
+    "https://www.galengrowth.com/q1-2025-digital-health-funding-trends-mega-deals-ai-european-growth-explored/"
   ],
   "evidence": [
     {
+      "id": "check-duration-6039d326df",
+      "url": "https://www.galengrowth.com/2024-europe-digital-health-funding-propelled-to-record-highs-by-mega-deals-and-ai/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "in Europe have not secure funding over the past 18 months. With valuations stabilising post-pandemic,",
+      "page": "terms"
+    },
+    {
       "id": "check-email-0b6b8280c8",
       "url": "https://www.galengrowth.com/",
-      "title": "Galen Growth — homepage checked by scrape.py",
+      "title": "Galen Growth — homepage",
       "excerpt": "market analysis, definitions, and annual publications. info@galengrowth.com Research Research library Digital health funding Insights",
       "page": "details"
     },
     {
-      "id": "check-email-3922d83841",
-      "url": "https://www.galengrowth.com/research-download/digital-health-exits-2026-ma-ipo-market-report/",
-      "title": "Galen Growth — terms page checked by scrape.py",
+      "id": "check-email-0db56a9a76",
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-june-16/",
+      "title": "Galen Growth — terms page",
       "excerpt": "info@galengrowth.com",
       "page": "terms"
     },
     {
-      "id": "check-email-4dbe71c3cc",
-      "url": "https://www.galengrowth.com/research-download/digital-health-exits-2026-ma-ipo-market-report/",
-      "title": "Galen Growth — terms page checked by scrape.py",
+      "id": "check-email-1a2afc0aff",
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-june-16-private-event/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "info@galengrowth.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-1f9f0d8696",
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "info@galengrowth.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-2ba01e2d13",
+      "url": "https://www.galengrowth.com/healthtech-deal-factory-april-7-14/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "info@galengrowth.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-54827100ef",
+      "url": "https://www.galengrowth.com/mental-healths-investment-resurgence-a-market-ripe-for-innovation/",
+      "title": "Galen Growth — terms page",
       "excerpt": "market analysis, definitions, and annual publications. info@galengrowth.com Research Research library Digital health funding Insights",
       "page": "terms"
     },
     {
-      "id": "check-email-55e428ec3e",
-      "url": "https://www.galengrowth.com/about-digital-health/",
-      "title": "Galen Growth — details page checked by scrape.py",
+      "id": "check-email-554e41ee71",
+      "url": "https://www.galengrowth.com/mental-healths-investment-resurgence-a-market-ripe-for-innovation/",
+      "title": "Galen Growth — terms page",
       "excerpt": "info@galengrowth.com",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-email-5bbb1fc014",
+      "url": "https://www.galengrowth.com/2024-europe-digital-health-funding-propelled-to-record-highs-by-mega-deals-and-ai/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "info@galengrowth.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-5be6f7153e",
+      "url": "https://www.galengrowth.com/digital-health-deal-factory-september/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "market analysis, definitions, and annual publications. info@galengrowth.com Research Research library Digital health funding Insights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-607921eedd",
+      "url": "https://www.galengrowth.com/q1-2025-digital-health-funding-ai-mega-deals-europes-breakout-quarter/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "info@galengrowth.com",
+      "page": "terms"
     },
     {
       "id": "check-email-665c7860b5",
       "url": "https://www.galengrowth.com/",
-      "title": "Galen Growth — homepage checked by scrape.py",
+      "title": "Galen Growth — homepage",
       "excerpt": "info@galengrowth.com",
       "page": "details"
     },
     {
-      "id": "check-email-b08c2deed2",
-      "url": "https://www.galengrowth.com/about-digital-health/",
-      "title": "Galen Growth — details page checked by scrape.py",
+      "id": "check-email-6bd7a53e10",
+      "url": "https://www.galengrowth.com/q1-2025-digital-health-funding-ai-mega-deals-europes-breakout-quarter/",
+      "title": "Galen Growth — terms page",
       "excerpt": "market analysis, definitions, and annual publications. info@galengrowth.com Research Research library Digital health funding Insights",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-email-7271f340c7",
+      "url": "https://www.galengrowth.com/q1-2025-digital-health-funding-trends-mega-deals-ai-european-growth-explored/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "info@galengrowth.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-8677e57dd4",
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-april-7-14-private-event/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "info@galengrowth.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-92141cf7a0",
+      "url": "https://www.galengrowth.com/mega-deals-in-digital-health/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "market analysis, definitions, and annual publications. info@galengrowth.com Research Research library Digital health funding Insights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-921b1de124",
+      "url": "https://www.galengrowth.com/digital-health-deal-factory-september/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "info@galengrowth.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-95402089ef",
+      "url": "https://www.galengrowth.com/q1-2025-digital-health-funding-trends-mega-deals-ai-european-growth-explored/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "market analysis, definitions, and annual publications. info@galengrowth.com Research Research library Digital health funding Insights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-a61c9f51ea",
+      "url": "https://www.galengrowth.com/galen-growth-biome-healthtech-deal-factory-april-7-14/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "market analysis, definitions, and annual publications. info@galengrowth.com Research Research library Digital health funding Insights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-b0efd9b3a7",
+      "url": "https://www.galengrowth.com/mega-deals-in-digital-health/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "info@galengrowth.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-b0fe6a103e",
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-june-16/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "market analysis, definitions, and annual publications. info@galengrowth.com Research Research library Digital health funding Insights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-b59890f2d9",
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-april-7-14-private-event/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "market analysis, definitions, and annual publications. info@galengrowth.com Research Research library Digital health funding Insights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-b86d7cc53a",
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-private-event/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "market analysis, definitions, and annual publications. info@galengrowth.com Research Research library Digital health funding Insights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-bcecd15803",
+      "url": "https://www.galengrowth.com/galen-growth-biome-healthtech-deal-factory-april-7-14/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "info@galengrowth.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-c95b6db763",
+      "url": "https://www.galengrowth.com/2024-europe-digital-health-funding-propelled-to-record-highs-by-mega-deals-and-ai/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "market analysis, definitions, and annual publications. info@galengrowth.com Research Research library Digital health funding Insights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-d1006b8a53",
+      "url": "https://www.galengrowth.com/healthtech-deal-factory-april-7-14/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "market analysis, definitions, and annual publications. info@galengrowth.com Research Research library Digital health funding Insights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-d2ca887849",
+      "url": "https://www.galengrowth.com/h1-2026-digital-health-investment-trends/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "market analysis, definitions, and annual publications. info@galengrowth.com Research Research library Digital health funding Insights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-d451847a5b",
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-june-16-private-event/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "market analysis, definitions, and annual publications. info@galengrowth.com Research Research library Digital health funding Insights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-e6e6b3f5e4",
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "market analysis, definitions, and annual publications. info@galengrowth.com Research Research library Digital health funding Insights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-f5dd928f01",
+      "url": "https://www.galengrowth.com/h1-2026-digital-health-investment-trends/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "info@galengrowth.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-ff7c8376b4",
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-private-event/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "info@galengrowth.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-1ecb3209ee",
+      "url": "https://www.galengrowth.com/digital-health-deal-factory-september/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "and automation. 3nethra has brought patients in remote corners closer to ophthalmologists across countries.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-1f86232bc1",
+      "url": "https://www.galengrowth.com/healthtech-deal-factory-april-7-14/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "an enterprise at the intersection of medical imaging and virtual reality (VR). Our proprietary applications focus on",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-39f18d0be2",
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-private-event/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "5 pm (SGT), via Zoom We provide members with physical and virtual access to qualiﬁed and strategically aligned",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-3b7eff10e1",
+      "url": "https://www.galengrowth.com/digital-health-deal-factory-september/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "Factory by Galen Growth provides members with physical and virtual access to qualiﬁed and strategically aligned",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-60600147da",
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "April 6 th , 2020. We provide members with physical and virtual access to qualiﬁed and strategically aligned",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-83d562362e",
+      "url": "https://www.galengrowth.com/mental-healths-investment-resurgence-a-market-ripe-for-innovation/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "within this cluster, pioneering mental health care through virtual visits, allowing patients to receive care from their home.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-a6aec5f4b9",
+      "url": "https://www.galengrowth.com/mental-healths-investment-resurgence-a-market-ripe-for-innovation/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "digital mental health tools into traditional care models. Virtual therapy and telepsychiatry solutions have become a focus",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-b2b7f51dce",
+      "url": "https://www.galengrowth.com/digital-health-deal-factory-september/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "HealthBeats Singapore, Singapore HealthBeats is a Remote Vitals Monitoring product with you (participants and",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-be5092d003",
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-april-7-14-private-event/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "an enterprise at the intersection of medical imaging and virtual reality (VR). Our proprietary applications focus on",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d6ee0a1fbf",
+      "url": "https://www.galengrowth.com/mental-healths-investment-resurgence-a-market-ripe-for-innovation/",
+      "title": "Galen Growth — terms page",
+      "excerpt": ": AI-powered therapy tools, digital therapeutics, and remote mental health platforms are becoming mainstream, offering",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-eb0d7a9e5f",
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "April 6th, 2020. We provide members with physical and virtual access to qualiﬁed and strategically aligned",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-ecf9deb611",
+      "url": "https://www.galengrowth.com/galen-growth-biome-healthtech-deal-factory-april-7-14/",
+      "title": "Galen Growth — terms page",
+      "excerpt": "an enterprise at the intersection of medical imaging and virtual reality (VR). Our proprietary applications focus on",
+      "page": "terms"
     },
     {
       "id": "check-name-0be5b5bd76",
       "url": "https://www.galengrowth.com/",
-      "title": "Galen Growth — homepage checked by scrape.py",
+      "title": "Galen Growth — homepage",
       "excerpt": "Galen Growth Research Archive | Digital Health Intelligence Archive ·",
       "page": "details"
     },
     {
       "id": "check-route-6cf8c2f97d",
       "url": "https://www.galengrowth.com/",
-      "title": "Galen Growth — homepage checked by scrape.py",
+      "title": "Galen Growth — homepage",
       "excerpt": "https://www.galengrowth.com/",
       "page": "details"
     },
     {
       "id": "check-status-986c88853e",
       "url": "https://www.galengrowth.com/",
-      "title": "Galen Growth — homepage checked by scrape.py",
+      "title": "Galen Growth — homepage",
       "excerpt": "Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Galen Growth ceased operations on 31 October 2026. HealthTech Alpha is no longer available. This archive keeps our published research",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-9574b3ed0d",
+      "url": "https://www.galengrowth.com/",
+      "page": "details",
+      "excerpt": "Galen Growth Research Archive | Digital Health Intelligence Archive · Galen Growth closed in October 2026 Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Menu Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Galen Growth ceased operations on 31 October 2026. HealthTech Alpha is no longer available. This archive keeps our published research freely available until 31 December 2026. Reports reflect the data at the time of publication and will not be updated. Galen Growth research archive Galen Growth research, 2025–2026 This archive preserves Galen Growth's research on digital health investment, innovation, partnerships, clinical evidence, and market development. Explore the research library Read published insights What the archive covers Capital and market maturity Funding, exits, growth signals, and geographic shifts. Innovation and adoption Products, partnerships, evidence, and healthcare implementation. Competitive movement Company strategy, portfolios, and emerging market positions. 2026 annual report The 2026 Pharma Innovation Index View the research library → Sixth annual edition Pharma Digital Health Innovation Index 2026 The sixth annual Index benchmarks 24 pharmaceutical companies across digital health strategy and the strength of their recent"
+    },
+    {
+      "id": "check-page-3cc91d2f94",
+      "url": "https://www.galengrowth.com/2024-europe-digital-health-funding-propelled-to-record-highs-by-mega-deals-and-ai/",
+      "page": "terms",
+      "excerpt": "2024 Europe Digital Health Funding Propelled to Record Highs by Mega Deals and AI | Galen Growth Archive · Galen Growth closed in October 2026 Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Menu Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Funding Blog Digital Health Funding FY 2024 2024 Europe Digital Health Funding Propelled to Record Highs by Mega Deals and AI Discover how 2024 Europe digital health funding reached record highs, driven by mega deals and advancements in AI, reshaping the healthcare innovation landscape. By Galen Growth Published 28 January 2025 Updated 6 May 2026 8 min read Digital health funding Track the global market across years, regions, categories, investors and exits. Explore the funding hub → In 2024, Europe’s digital health sector cemented its position as a global powerhouse of innovation and investment. Amid challenges such as evolving reimbursement frameworks and political instability, the region recorded the fastest year-over-year (YoY) digital heath funding growth worldwide, fueled by advances in artificial intelligence (AI) being realised in healthcare, strategic mega deals, and a strong focus on oncology and research solutions (TechBio). Here, we dive deep into the trends that defined Europe’s digital health landscape"
+    },
+    {
+      "id": "check-page-dc750b53a9",
+      "url": "https://www.galengrowth.com/digital-health-deal-factory-september/",
+      "page": "terms",
+      "excerpt": "Digital Health Deal Factory September 2020 | Galen Growth Archive · Galen Growth closed in October 2026 Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Menu Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Deal Factory Past Events Digital Health Deal Factory The Digital Health Deal Factory sessions are back. Hear innovative startups pitch their digital health solutions to investors and corporates. By Galen Growth Published 25 August 2020 Updated 21 June 2022 4 min read The Digital Health Deal Factory will be hosted on September 16th 2020, 2 pm to 5 pm (SGT), via Zoom The Digital Health Deal Factory by Galen Growth provides members with physical and virtual access to qualiﬁed and strategically aligned early-and-growth stage startups which have been selected for their ﬁt and maturity, relevant to your speciﬁc needs. An industry rendez-vous to hear startups pitch their business roadmap to investors and corporates and connect. The Deal Factory Sessions are an amazing opportunity to discover ways to innovate with young promising startups as we shift everyone’s focus towards the future of healthcare. Want to be part of our Deal Factory sessions? Contact us to enquire . Digital Health Deal Factory - Startups Pitching: Active8me Singapore, Singapore Active8me"
+    },
+    {
+      "id": "check-page-97c25f2152",
+      "url": "https://www.galengrowth.com/galen-growth-biome-healthtech-deal-factory-april-7-14/",
+      "page": "terms",
+      "excerpt": "Galen Growth's HealthTech Deal Factory – April 7 & 14 (Private Event) | Galen Growth Archive · Galen Growth closed in October 2026 Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Menu Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Past Events Galen Growth's HealthTech Deal Factory – April 7 & 14 (Private Event) Get access to Early and Growth Stage startups that are changing healthcare. Discover the next generation of HealthTech innovators. By Galen Growth Published 19 March 2021 Updated 28 September 2023 4 min read Galen Growth and Biome are inviting you to our upcoming HealthTech Deal Factory. Register for Session 1 here April 7, 4pm SGT via Zoom Register for Session 2 here April 14, 4pm SGT via Zoom Discover the Next Generation of HealthTech Startups! Galen Growth's quarterly HealthTech Deal Factory Sessions give you access to Early and Growth Stage startups that are changing healthcare. Be a part of the digital health revolution and help support the next generation of innovators. An industry rendez-vous to hear startups pitch their business roadmap to investors and corporates. The Deal Factory Sessions are an amazing opportunity to discover ways to innovate with young promising startups as we shift everyone’s focus towards the future of healthcare."
+    },
+    {
+      "id": "check-page-7383503869",
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-april-7-14-private-event/",
+      "page": "terms",
+      "excerpt": "Galen Growth HealthTech Deal Factory – April 14 (Privat… | Analysis 02 Archive · Galen Growth closed in October 2026 Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Menu Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Past Events Galen Growth HealthTech Deal Factory – April 14 (Private Event) Get access to Early and Growth Stage startups that are changing healthcare. Discover the next generation of HealthTech innovators. By Galen Growth Published 31 March 2021 Updated 14 April 2021 4 min read Discover the Next Generation of HealthTech Startups! Our quarterly Deal Factory Sessions give you access to Early and Growth Stage startups that are changing healthcare. Be a part of the digital health revolution and help support the next generation of innovators. An industry rendez-vous to hear startups pitch their business roadmap to investors and corporates. The Deal Factory Sessions are an amazing opportunity to discover ways to innovate with young promising startups as we shift everyone’s focus towards the future of healthcare. At the Deal Factory Session, you can: Find opportunities for strategic partnerships with startups to solve healthcare pain points. Discover new investment opportunities in the accelerating digital health ecosystem. *Participating startups"
+    },
+    {
+      "id": "check-page-351d317ccb",
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-june-16-private-event/",
+      "page": "terms",
+      "excerpt": "Galen Growth HealthTech Deal Factory - June 16 | Analysis 02 Archive · Galen Growth closed in October 2026 Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Menu Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Deal Factory Past Events Galen Growth HealthTech Deal Factory - June 16 Discover the Next Generation of HealthTech Startups! In collaboration with Novartis Biome and Baker McKenzie, our quarterly Deal Factory Sessions give you access to Early and Growth Stage startups that are changing healthcare. Be a part of the digital health revolution and help support the next generation of innovators. By Galen Growth Published 3 June 2021 Updated 4 December 2023 3 min read Discover the Next Generation of HealthTech Startups! In collaboration with Novartis Biome and Baker McKenzie, our quarterly Deal Factory Sessions give you access to Early and Growth Stage startups that are changing healthcare. Be a part of the digital health revolution and help support the next generation of innovators. An industry rendezvous to hear startups pitch their business roadmap to investors and corporates. The Deal Factory Sessions are an amazing opportunity to discover ways to innovate with young promising startups as we shift everyone’s focus towards the future of healthcare. June"
+    },
+    {
+      "id": "check-page-765a66b686",
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-june-16/",
+      "page": "terms",
+      "excerpt": "Galen Growth HealthTech Deal Factory - June 16 | Analysis 01 Archive · Galen Growth closed in October 2026 Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Menu Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Deal Factory Past Events Galen Growth HealthTech Deal Factory - June 16 Discover the Next Generation of HealthTech Startups! In collaboration with Novartis Biome and Baker McKenzie, our quarterly Deal Factory Sessions give you access to Early and Growth Stage startups that are changing healthcare. Be a part of the digital health revolution and help support the next generation of innovators. By Galen Growth Published 24 May 2021 Updated 4 December 2023 4 min read Discover the Next Generation of HealthTech Startups! In collaboration with Novartis Biome and Baker McKenzie, our quarterly Deal Factory Sessions give you access to Early and Growth Stage startups that are changing healthcare. Be a part of the digital health revolution and help support the next generation of innovators. An industry rendezvous to hear startups pitch their business roadmap to investors and corporates. The Deal Factory Sessions are an amazing opportunity to discover ways to innovate with young promising startups as we shift everyone’s focus towards the future of healthcare. June"
+    },
+    {
+      "id": "check-page-69aa5395b4",
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-private-event/",
+      "page": "terms",
+      "excerpt": "Galen Growth HealthTech Deal Factory (Private Event) | Galen Growth Archive · Galen Growth closed in October 2026 Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Menu Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Deal Factory Past Events Galen Growth HealthTech Deal Factory (Private Event) June 17th 2020, 2 pm to 5 pm (SGT), via Zoom We provide members with physical and virtual access to qualiﬁed and strategically aligned early-and-growth stage By Galen Growth Published 11 June 2020 Updated 13 July 2020 1 min read June 17th 2020, 2 pm to 5 pm (SGT), via Zoom We provide members with physical and virtual access to qualiﬁed and strategically aligned early-and-growth stage startups which have been selected for their ﬁt and maturity, relevant to your speciﬁc needs. An industry rendez-vous to hear startups pitch their business roadmap to investors and corporates and connect. The Deal Factory Sessions are an amazing opportunity to discover ways to innovate with young promising startups as we shift everyone’s focus towards the future of healthcare. Additionally, there will be an exciting and unique fireside chat that is open to everyone right after the Deal Factory. We highly encourage that you join us for this one-of-a-kind occasion should you have the time:"
+    },
+    {
+      "id": "check-page-c8859fd574",
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory/",
+      "page": "terms",
+      "excerpt": "Galen Growth HealthTech Deal Factory | Galen Growth Archive · Galen Growth closed in October 2026 Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Menu Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Deal Factory Past Events Galen Growth HealthTech Deal Factory Our next Deal Factory Session: April 6th, 2020. We provide members with physical and virtual access to qualiﬁed and strategically aligned early-and-growth sta By Galen Growth Published 31 March 2020 Updated 7 April 2020 1 min read Our next Deal Factory Session: April 6 th , 2020. We provide members with physical and virtual access to qualiﬁed and strategically aligned early-and-growth stage startups which have been selected for their ﬁt and maturity, relevant to your speciﬁc needs. An industry rendez-vous to hear startups pitch their business roadmap to investors and corporates and connect. The April 6 th session will have a special focus on how digital health is taking the fight to COVID-19. Bonus “ Hear from the CEO ”: Hear from Stanley Li, CEO & Founder of DXY (China) on how this veteran startup unravelled the complexity of the outbreak and stepped up to mark demonstrating the way HealthTech will change the way public health is delivered in China, and across the globe. Want to be part of our Deal"
+    },
+    {
+      "id": "check-page-c4219407d3",
+      "url": "https://www.galengrowth.com/h1-2026-digital-health-investment-trends/",
+      "page": "terms",
+      "excerpt": "5 New Rules of Digital Health Investment — Global VC Trends, H1 2026 | Galen Growth Archive · Galen Growth closed in October 2026 Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Menu Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Funding Digital Health Funding Venture Capital Global Digital Health Investment Trends in H1 2026: 5 New Rules of Healthcare Innovation Venture Capital Deal volume fell 63% in H1 2026, yet capital held at $16.6B. Galen Growth's H1 2026 Key Trends analysis reveals the 5 new rules reshaping digital health VC. By Sara Schmachtenberg Published 4 August 2026 16 min read Digital health funding Track the global market across years, regions, categories, investors and exits. Explore the funding hub → H1 2026 shows that digital health investors haven’t stepped back—they’re changing the rules. Digital health venture capital is operating under a new set of rules that increasingly influence broader healthcare investment. Over the past four years, digital health has moved beyond the extraordinary funding conditions that characterised the post-pandemic investment boom. Investors are no longer competing to back the largest number of promising companies. Instead, they are concentrating capital behind a smaller group of ventures that have"
+    },
+    {
+      "id": "check-page-83decfd83e",
+      "url": "https://www.galengrowth.com/healthtech-deal-factory-april-7-14/",
+      "page": "terms",
+      "excerpt": "Galen Growth HealthTech Deal Factory – April 14 (Privat… | Analysis 01 Archive · Galen Growth closed in October 2026 Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Menu Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Past Events Galen Growth HealthTech Deal Factory – April 14 (Private Event) Get access to Early and Growth Stage startups that are changing healthcare. Discover the next generation of HealthTech innovators. By Galen Growth Published 17 March 2021 Updated 28 September 2023 4 min read Register for Session 2 here April 14, 4pm SGT via Zoom Discover the Next Generation of HealthTech Startups! Our quarterly Deal Factory Sessions give you access to Early and Growth Stage startups that are changing healthcare. Be a part of the digital health revolution and help support the next generation of innovators. An industry rendez-vous to hear startups pitch their business roadmap to investors and corporates. The Deal Factory Sessions are an amazing opportunity to discover ways to innovate with young promising startups as we shift everyone’s focus towards the future of healthcare. At the Deal Factory Session, you can: Find opportunities for strategic partnerships with startups to solve healthcare pain points. Discover new investment opportunities in the"
+    },
+    {
+      "id": "check-page-68ef9ede4d",
+      "url": "https://www.galengrowth.com/mega-deals-in-digital-health/",
+      "page": "terms",
+      "excerpt": "Mega Deals in Digital Health: Is Digital Health's Future Bigger Than Ever? Archive · Galen Growth closed in October 2026 Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Menu Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Digital Health Funding Mega Deals Blog Mega Deals in Digital Health: Is Digital Health's Future Bigger Than Ever? Explore the surge of digital health mega deals in H1 2024, with 26 investments totaling $4.9B, driven by AI, telemedicine & personalized medicine advancements. Key sectors include therapeutics, diagnostics & health management. By Galen Growth Published 27 August 2024 Updated 26 June 2025 7 min read Digital health funding Track the global market across years, regions, categories, investors and exits. Explore the funding hub → TL;DR In H1 2024, the digital health sector saw a surge in mega deals, with 26 investments totalling $4.9 billion, a 9% increase from H1 2023. The US dominated the landscape, hosting 21 of these deals. Investments spanned various stages, reflecting strong investor confidence despite startups pushing cash reserves to their limits and longer intervals between funding rounds. Key sectors attracting significant investments included: Therapeutics Diagnostics Health management solutions Notable deals: Xaira"
+    },
+    {
+      "id": "check-page-4597da626a",
+      "url": "https://www.galengrowth.com/mental-healths-investment-resurgence-a-market-ripe-for-innovation/",
+      "page": "terms",
+      "excerpt": "Mental Health’s Investment Resurgence: A Market Ripe for Innovation | Galen Growth Archive · Galen Growth closed in October 2026 Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Menu Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Mental Health Mental Health Funding Telepsychiatry Behavioral Health Mental Health’s Investment Resurgence: A Market Ripe for Innovation The global mental health funding in digital health increased to $2.7 billion in 2024, a 38% rise in venture capital investment By Galen Growth Published 5 March 2025 Updated 25 June 2025 7 min read TL;DR Mental health investment in digital health surged to $2.7B in 2024 across 184 deals, marking a 38% year-on-year increase. Mental health now constitutes 12% of global digital health funding , reflecting strong investor confidence in the sector. AI-powered solutions saw a decline in mental health investment share, dropping from 53% to 48%. Late-stage funding reached its highest level since 2021 , indicating a shift toward scaling proven mental health solutions. M&A activity remained strong , driven by venture-to-venture acquisitions of distressed startups. Corporate partnerships expanded in H1 2024 , particularly among insurers and healthcare providers looking to integrate mental health in digital"
+    },
+    {
+      "id": "check-page-326ee6cb42",
+      "url": "https://www.galengrowth.com/q1-2025-digital-health-funding-ai-mega-deals-europes-breakout-quarter/",
+      "page": "terms",
+      "excerpt": "Q1 2025 Digital Health Funding: AI, Mega Deals & Europe’s Breakout Quarter | Galen Growth Archive · Galen Growth closed in October 2026 Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Menu Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Funding Blog Europe Q1 2025 Digital Health Funding: AI, Mega Deals & Europe’s Breakout Quarter Q1 2025 Digital Health funding reached $6.3 billion of invested capital. AI, mega deals, and Europe's rise power a resilient sector. By Galen Growth Published 7 April 2025 Updated 6 May 2026 3 min read Digital health funding Track the global market across years, regions, categories, investors and exits. Explore the funding hub → TL;DR Q1 2025 Digital Health Funding hit $6.3B, Mega deals accounted for 48% of global digital health funding, signalling sector maturity. AI-led clusters like Medical Diagnostics, Health Management Systems (HMS), and TechBio dominated digital health funding in the U.S. Europe saw an 82% year-on-year funding increase—its strongest Q1 in years. Digital health remains resilient amid trade tensions and tariff uncertainty. Click the image to save the cheatsheet. A Market Matures: Mega Deals Take Centre Stage The global Q1 2025 digital health funding sector has surged with renewed vigour, notching up a"
+    },
+    {
+      "id": "check-page-b71561b1ba",
+      "url": "https://www.galengrowth.com/q1-2025-digital-health-funding-trends-mega-deals-ai-european-growth-explored/",
+      "page": "terms",
+      "excerpt": "Q1 2025 Digital Health Funding Trends: Mega Deals, AI & European Growth Explored | Galen Growth Archive · Galen Growth closed in October 2026 Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Menu Research Library Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Funding Blog Digital Health Funding Q1 2024 Digital Health Q1 2025 Digital Health Funding Trends: Mega Deals, AI & European Growth Explored Total Q1 2025 Digital Health funding reached a robust $6.3 billion, representing a modest increase of 2% year-on-year (YoY). By Galen Growth Published 12 May 2025 Updated 6 May 2026 6 min read Digital health funding Track the global market across years, regions, categories, investors and exits. Explore the funding hub → Welcome to our FAQ summarising the key findings and trends regarding Digital Health funding and market movements in the first quarter of 2025 , based on the provided excerpts. This information is crucial for understanding the current landscape of healthcare investment. 1. What was the overall funding picture for Global Digital Health in Q1 2025? The global Digital Health sector experienced a resurgence in the first quarter of 2025, showing renewed vigour. Total funding for the quarter reached a robust $6.3 billion, representing a modest increase of 2% year-on-year"
     }
   ],
   "findings": {
@@ -94,8 +457,25 @@
       }
     ],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-6039d326df"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-3b7eff10e1"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

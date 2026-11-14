@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation",
   "applyUrl": "https://www.anderson.ucla.edu/apply",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Harold & Pauline Price Center for Entrepreneurship and Innovation | UCLA Anderson School of Management Skip to Search Skip to Main Content Skip to Footer Links UCLA Ziman Institute for Real Estate and Urban Economics Apply Open Menu Price Center for Entrepreneurship & Innovation Price Center for Entrepreneurship & Innovation Home Harold & Pauline Price Center for Entrepreneurship and Innovation UCLA Anderson and the Price Center are at the hub of an incredibly rich entrepreneurial ecosystem. As an engine of positive change in California and across the globe, we are creating the future. The Harold and Pauline Price Center for Entrepreneurship & Innovation offers a wide range of resources to support the academic and professional development of entrepreneurial leaders. Our research initiatives advance the theory and practice of entrepreneurship and innovation, while our course offerings, experiential learning activities and non-degree certificate programs prepare MBA students, undergraduates and working professionals to study, launch and manage growing ventures that will change the way we learn, work and live. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Harold & Pauline Price Center for Entrepreneurship and Innovation",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Cleantech entrepreneur Patrick O’Brien (’26) tackles water scarcity and mineral recovery",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "ucla-anderson-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.anderson.ucla.edu/apply",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

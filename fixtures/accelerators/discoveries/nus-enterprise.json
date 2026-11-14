@@ -1,7 +1,47 @@
 {
   "programId": "nus-enterprise",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://nusx.edu.sg/about",
+      "page": "details",
+      "anchor": "About Us See what NUSX stands for",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nusx.edu.sg/about/leadership",
+      "page": "details",
+      "anchor": "Our People Meet the people behind NUSX",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nusx.edu.sg/iti",
+      "page": "details",
+      "anchor": "ITI Overview Start with the problem",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nusx.edu.sg/news/first-of-its-kind-venture-capital-programme-in-asia-launches-as-nus-commits-s150-million-to-boost-growth-of-deep-tech-start-ups/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nusx.edu.sg/partnerships",
+      "page": "details",
+      "anchor": "Partnerships Overview Find the right way to partner",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://nusx.edu.sg/programmes",
       "page": "details",
@@ -11,25 +51,33 @@
       "origin": "official"
     },
     {
-      "url": "https://nusx.edu.sg/programmes/noc",
-      "page": "details",
-      "anchor": "NUS Overseas Colleges (NOC) Spend a year working at a startup abroad",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://nusx.edu.sg/summer-programme",
-      "page": "details",
-      "anchor": "Summer Programme Get your first taste of startups",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://nusx.edu.sg/programmes/grip",
       "page": "details",
       "anchor": "GRIP Turn lab IP into a company",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nusx.edu.sg/programmes/noc",
+      "page": "details",
+      "anchor": "NUS Overseas Colleges (NOC) Spend a year working at a startup abroad",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nusx.edu.sg/programmes/noc-awards",
+      "page": "details",
+      "anchor": "Awards & Scholarships",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "portfolio",
+      "anchor": "Our alumni",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -43,42 +91,26 @@
       "origin": "official"
     },
     {
-      "url": "https://nusx.edu.sg/startups",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
       "page": "details",
-      "anchor": "Startups Overview See how NUSX backs startups",
-      "fetched": false,
+      "anchor": "Curriculum Overview",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://nusx.edu.sg/partnerships",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/faculty-facilitators/",
       "page": "details",
-      "anchor": "Partnerships Overview Find the right way to partner",
-      "fetched": false,
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://nusx.edu.sg/iti",
+      "url": "https://nusx.edu.sg/programmes/noc/curriculum/internship-courses-cde-soc/",
       "page": "details",
-      "anchor": "ITI Overview Start with the problem",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://nusx.edu.sg/about",
-      "page": "details",
-      "anchor": "About Us See what NUSX stands for",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://nusx.edu.sg/about/leadership",
-      "page": "details",
-      "anchor": "Our People Meet the people behind NUSX",
-      "fetched": false,
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -86,23 +118,7 @@
       "url": "https://nusx.edu.sg/programmes/noc/locations",
       "page": "details",
       "anchor": "Locations",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://nusx.edu.sg/programmes/noc/curriculum",
-      "page": "details",
-      "anchor": "Curriculum Overview",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://nusx.edu.sg/programmes/noc-awards",
-      "page": "details",
-      "anchor": "Awards & Scholarships",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -115,9 +131,9 @@
       "origin": "official"
     },
     {
-      "url": "https://nusx.edu.sg/programmes/noc/alumni",
-      "page": "portfolio",
-      "anchor": "Our alumni",
+      "url": "https://nusx.edu.sg/startups",
+      "page": "details",
+      "anchor": "Startups Overview See how NUSX backs startups",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -126,6 +142,14 @@
       "url": "https://nusx.edu.sg/startups/b71",
       "page": "details",
       "anchor": "B71 overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nusx.edu.sg/summer-programme",
+      "page": "details",
+      "anchor": "Summer Programme Get your first taste of startups",
       "fetched": false,
       "blocked": null,
       "origin": "official"

@@ -1,53 +1,318 @@
 {
   "programId": "urban-us",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://thirdsphere.com/",
+    "https://thirdsphere.com/category/updates/",
+    "https://thirdsphere.com/updates/",
+    "https://thirdsphere.com/contact/",
     "https://thirdsphere.com/about/",
-    "https://thirdsphere.com/updates/"
+    "https://thirdsphere.com/portfolio/",
+    "https://thirdsphere.com/portfolio/affordable-clean-energy/",
+    "https://thirdsphere.com/portfolio/air-water-food/",
+    "https://thirdsphere.com/portfolio/all/",
+    "https://thirdsphere.com/portfolio/clean-water-sanitation/",
+    "https://thirdsphere.com/portfolio/climate-action/",
+    "https://thirdsphere.com/portfolio/connected-transportation-logistics/",
+    "https://thirdsphere.com/portfolio/exited/",
+    "https://thirdsphere.com/portfolio/industry-innovation-infrastructure/",
+    "https://thirdsphere.com/portfolio/pre-seed/"
   ],
   "evidence": [
     {
-      "id": "check-deal-63e2d5818e",
+      "id": "check-deal-25d6e2ac04",
       "url": "https://thirdsphere.com/about/",
-      "title": "Urban Us — details page checked by scrape.py",
-      "excerpt": "universe of products now go far beyond venture debt and usually make more sense for all stakeholders. What do we offer seedstrapping founders? We invest $250k to $1m and earmark up to $2m more for your next (and hopefully last) round. Over six months, we speed run sales to $1m ARR or $10m in pre-orders. You get",
+      "title": "Urban Us — program page",
+      "excerpt": "seedstrapping founders? We invest $250k to $1m and earmark up to $2m more for your next (and hopefully last) round. Over six months, we",
       "page": "details"
+    },
+    {
+      "id": "check-deal-c6c362b789",
+      "url": "https://thirdsphere.com/about/",
+      "title": "Urban Us — program page",
+      "excerpt": "What do we offer seedstrapping founders? We invest $250k to $1m and earmark up to $2m more for your next (and hopefully last) round.",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-e9908daf12",
+      "url": "https://thirdsphere.com/about/",
+      "title": "Urban Us — program page",
+      "excerpt": "all stakeholders. What do we offer seedstrapping founders? We invest $250k to $1m and earmark up to $2m more for your next (and hopefully last)",
+      "page": "details"
+    },
+    {
+      "id": "check-format-a60fc90801",
+      "url": "https://thirdsphere.com/updates/",
+      "title": "Urban Us — batches page",
+      "excerpt": "exits WK345: Upgrade Cities for Climate Change WK337: Remote work, real estate and cities WK330: Black lives, equitable",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-02072d2e2c",
+      "url": "https://thirdsphere.com/portfolio/clean-water-sanitation/",
+      "title": "Urban Us — portfolio page",
+      "excerpt": "Meet the portfolio → https://thirdsphere.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-041cfa2c44",
+      "url": "https://thirdsphere.com/portfolio/exited/",
+      "title": "Urban Us — portfolio page",
+      "excerpt": "Portfolio → https://thirdsphere.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-112e86a642",
+      "url": "https://thirdsphere.com/portfolio/air-water-food/",
+      "title": "Urban Us — portfolio page",
+      "excerpt": "Portfolio → https://thirdsphere.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-182d04481d",
+      "url": "https://thirdsphere.com/portfolio/connected-transportation-logistics/",
+      "title": "Urban Us — portfolio page",
+      "excerpt": "Back → https://thirdsphere.com/portfolio/",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-268d47f093",
       "url": "https://thirdsphere.com/about/",
-      "title": "Urban Us — details page checked by scrape.py",
+      "title": "Urban Us — program page",
       "excerpt": "Portfolio → https://thirdsphere.com/portfolio/",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-36ad5eefb7",
+      "url": "https://thirdsphere.com/portfolio/climate-action/",
+      "title": "Urban Us — portfolio page",
+      "excerpt": "Portfolio → https://thirdsphere.com/portfolio/",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-375525d2a5",
       "url": "https://thirdsphere.com/",
-      "title": "Urban Us — homepage checked by scrape.py",
+      "title": "Urban Us — homepage",
       "excerpt": "Portfolio → https://thirdsphere.com/portfolio/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-81921a9a23",
-      "url": "https://thirdsphere.com/updates/",
-      "title": "Urban Us — batches page checked by scrape.py",
+      "id": "check-portfolio-3e885ef8d1",
+      "url": "https://thirdsphere.com/portfolio/climate-action/",
+      "title": "Urban Us — portfolio page",
+      "excerpt": "Back → https://thirdsphere.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-568b834a15",
+      "url": "https://thirdsphere.com/portfolio/affordable-clean-energy/",
+      "title": "Urban Us — portfolio page",
+      "excerpt": "Portfolio → https://thirdsphere.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-59db18e46a",
+      "url": "https://thirdsphere.com/category/updates/",
+      "title": "Urban Us — batches page",
       "excerpt": "Portfolio → https://thirdsphere.com/portfolio/",
       "page": "batches"
     },
     {
+      "id": "check-portfolio-68ca4e701a",
+      "url": "https://thirdsphere.com/portfolio/industry-innovation-infrastructure/",
+      "title": "Urban Us — portfolio page",
+      "excerpt": "Back → https://thirdsphere.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-81921a9a23",
+      "url": "https://thirdsphere.com/updates/",
+      "title": "Urban Us — batches page",
+      "excerpt": "Portfolio → https://thirdsphere.com/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-865260b08e",
+      "url": "https://thirdsphere.com/portfolio/all/",
+      "title": "Urban Us — portfolio page",
+      "excerpt": "Back → https://thirdsphere.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-9fb5437526",
+      "url": "https://thirdsphere.com/portfolio/pre-seed/",
+      "title": "Urban Us — portfolio page",
+      "excerpt": "Back → https://thirdsphere.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-a48ab8f1e1",
+      "url": "https://thirdsphere.com/portfolio/industry-innovation-infrastructure/",
+      "title": "Urban Us — portfolio page",
+      "excerpt": "Portfolio → https://thirdsphere.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-a4c219aac2",
+      "url": "https://thirdsphere.com/portfolio/all/",
+      "title": "Urban Us — portfolio page",
+      "excerpt": "Portfolio → https://thirdsphere.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-a9a675aa5d",
+      "url": "https://thirdsphere.com/portfolio/affordable-clean-energy/",
+      "title": "Urban Us — portfolio page",
+      "excerpt": "Back → https://thirdsphere.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-c830d6c0a6",
+      "url": "https://thirdsphere.com/portfolio/pre-seed/",
+      "title": "Urban Us — portfolio page",
+      "excerpt": "Portfolio → https://thirdsphere.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-cff54dfc21",
       "url": "https://thirdsphere.com/",
-      "title": "Urban Us — homepage checked by scrape.py",
+      "title": "Urban Us — homepage",
       "excerpt": "Meet the portfolio → https://thirdsphere.com/portfolio/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-e0537e393e",
+      "url": "https://thirdsphere.com/portfolio/clean-water-sanitation/",
+      "title": "Urban Us — portfolio page",
+      "excerpt": "Portfolio → https://thirdsphere.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-edbac3e634",
+      "url": "https://thirdsphere.com/contact/",
+      "title": "Urban Us — batches page",
+      "excerpt": "Portfolio → https://thirdsphere.com/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-f5d8585a88",
+      "url": "https://thirdsphere.com/portfolio/exited/",
+      "title": "Urban Us — portfolio page",
+      "excerpt": "Back → https://thirdsphere.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-f7432c9e18",
+      "url": "https://thirdsphere.com/portfolio/connected-transportation-logistics/",
+      "title": "Urban Us — portfolio page",
+      "excerpt": "Portfolio → https://thirdsphere.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-fce8efc72d",
+      "url": "https://thirdsphere.com/portfolio/air-water-food/",
+      "title": "Urban Us — portfolio page",
+      "excerpt": "Back → https://thirdsphere.com/portfolio/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-5940da2c70",
       "url": "https://thirdsphere.com/",
-      "title": "Urban Us — homepage checked by scrape.py",
+      "title": "Urban Us — homepage",
       "excerpt": "https://thirdsphere.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-55a488a38e",
+      "url": "https://thirdsphere.com/",
+      "page": "details",
+      "excerpt": "Home - Third Sphere Skip to content Portfolio Funds Impact About Contact Updates Book Store T-Sync Portfolio Funds Impact About Contact Updates Book Store T-Sync New from Third Sphere · Out now Speedstrap A Founder’s Playbook Where VCs Aren’t the Main Characters Minimal equity, rapid revenue, as Plan A. The forgotten history of company building — and a working playbook for founders who want to keep control of what they build. Buy on Amazon Explore the book → “Venture capital can be deadly; this book shows founders what to do about it.” David Frankel · Co-founder, Founder Collective We support founders who turn theory into action. Early-stage capital for people building a better world for everyone — from infrastructure to supply chains. Meet the portfolio Impact reaching beyond the surface We fundamentally reshape broken global systems by connecting the best people reimagining our world to resources and each other. We use early stage capital to upgrade systems. That starts with finding the sectors currently not working with consideration for people, businesses, or general public responsibility - everything from infrastructure to supply chains. Because ensuring our future takes more than reducing carbon emissions. Affordable & Clean Energy Sustainable Cities & Communities Industry, Innovation & Infrastructure Clean Water & Sanitation We use early stage capital to upgrade"
+    },
+    {
+      "id": "check-page-c1a36f570a",
+      "url": "https://thirdsphere.com/category/updates/",
+      "page": "batches",
+      "excerpt": "Updates Archives - Third Sphere Skip to content Portfolio Funds Impact About Contact Updates Book Store T-Sync Portfolio Funds Impact About Contact Updates Book Store T-Sync Category: Updates WK660: Benchmarks, biochar bonds and batteries Posted on October 27, 2026 (October 29, 2026) by stonly WK660: Benchmarks, biochar bonds and batteries “There may be more capacity to adapt than we give it […] Read More… Posted in News Post , Updates WK654: Are we aligned yet? Posted on September 17, 2026 (September 17, 2026) by stonly WK654: Are we aligned yet? “The machines have proved something about the equations, but turning verified facts […] Read More… Posted in News Post , Updates WK651: We wrote a book. Want an early copy? Posted on August 21, 2026 by stonly WK651: We wrote a book. Want an early copy? “I do not think that word means what […] Read More… Posted in News Post , Updates WK633: The next startup crisis and securetech x.0 Posted on April 8, 2026 (April 8, 2026) by stonly WK633: The next startup crisis and securetech x.0 “If the story is not so simple that Eddie […] Read More… Posted in News Post , Updates WK625: Special Edition – 12 years of impact Posted on February 25, 2026 (February 25, 2026) by stonly WK625: Special Edition – 12 years of impact “Never tell me the odds.” – Han Solo, The Empire […] Read More… Posted in News Post , Updates WK621: When AI eats your moat"
+    },
+    {
+      "id": "check-page-545a1dcceb",
+      "url": "https://thirdsphere.com/updates/",
+      "page": "batches",
+      "excerpt": "- Third Sphere Skip to content Portfolio Funds Impact About Contact Updates Book Store T-Sync Portfolio Funds Impact About Contact Updates Book Store T-Sync I really enjoy your monthly newsletters and read them (and various links therein) with interest. I would actually go so far as to say that your newsletter is the most interesting of all VC letters that I read, probably largely because it is focussed around solving the largest problem in history. Jon B. I love these newsletters, I think the [Third Sphere] programme produces some of the most interesting startups in the [climate] sector. I often refer to the start-ups in report recommendations. Josh Artus Centric Lab I learn more about what’s happening in the [climate] tech scene through [Third Sphere]’ newsletter than any source out there! Jonathan Hursh UTOPIA Just a note to say how much I love these. They cut through the newsletter noise really effectively and I usually learn something. Keep ‘em coming! Marieke Spence Impact Capital Managers Just want to say I love these updates and you pull together some really important links that I don’t otherwise come across. Will keep following with interest. Lucinda Hartley Neighbourlytics Amazing community, looking forward to continuing to build connections w/ a number of folks. Once a month we produce our email updates covering new investments, insights and opportunities at the"
+    },
+    {
+      "id": "check-page-874c94a9fa",
+      "url": "https://thirdsphere.com/contact/",
+      "page": "batches",
+      "excerpt": "Contact - Third Sphere Skip to content Portfolio Funds Impact About Contact Updates Book Store T-Sync Portfolio Funds Impact About Contact Updates Book Store T-Sync Solutions are Born From Collaboration We know you’re busy, but please take a few minutes to tell us about yourself and how we might work together – this helps us to best serve you and the startup founders we are all helping to succeed. If you’re a startup responding to our call for startups, or otherwise seeking funding, you’re in the right place. We’re excited to explore working with you and promise to get you feedback shortly. Leave this field empty First name Last name Email LinkedIn or other social / bio URL Your roles I run a startup I'm an investor I work at a startup I advise startups I'm looking for my next role I'm a potential early adopter or pilot partner for your startups Startup Name Website / URL Deck Paste a link Upload a file PDF, PPT, PPTX, or Keynote — up to 25MB. Please describe what funding you've already secured including equity or debt and any grants. Please tell us about yourself How did you hear about us? Yes, please keep me posted Submit Third Sphere will only use your information for internal use and it will never be sold. You may unsubscribe from these communications at any time. For information on how to unsubscribe, as well as our privacy practices and commitment to protecting your"
+    },
+    {
+      "id": "check-page-1af5a49c14",
+      "url": "https://thirdsphere.com/about/",
+      "page": "details",
+      "excerpt": "About - Third Sphere Skip to content Portfolio Funds Impact About Contact Updates Book Store T-Sync Portfolio Funds Impact About Contact Updates Book Store T-Sync Many dimensions of change History We probably look familiar. In 2013 we began our collective journey as Urban Us to combat climate change by reimagining and upgrading our cities. As our network and portfolio expanded, so did our perspective on how to best create a world that works for everyone. That shift in our thinking led us to look outside city limits for the agents of change that will build our tomorrow. You can learn more about the history of Urban Us and how we built the URBAN-X accelerator from 2017 to 2021. More on our history here Team Stonly Baptiste Blue Yana Andrea Klimova Shaun Abrahamson Miela Mayer Shilpi Kumar Roscel Asuncion STAR QUEST PULSE NOVA MATCHA ALIGN About Third Sphere Who are we? We’re a climate-focused venture fund that’s been helping shape the landscape of early-stage climate investing for over a decade. With nearly 100 portfolio companies, we’ve built a thesis and approach that tackles climate change from unconventional angles—about two-thirds focused on mitigation, mostly via electrification, and one-third on resilience and adaptation. We like techno-economic assumptions that lead to better, faster and cheaper offerings. This means we don’t chase the latest hype cycles or stick to"
+    },
+    {
+      "id": "check-page-22ed330730",
+      "url": "https://thirdsphere.com/portfolio/",
+      "page": "portfolio",
+      "excerpt": "Portfolio - Third Sphere Skip to content Portfolio Funds Impact About Contact Updates Book Store T-Sync Portfolio Funds Impact About Contact Updates Book Store T-Sync We work for founders accelerating the transformation of global systems to better serve humanity now and into the future. → View All By Stage → Pre-seed → Seed → Series A → Series B/C → Exited Affordable & Clean Energy Sustainable Cities & Communities Industry, Innovation & Infrastructure Clean Air, Water, and Food → View All By Stage → Pre-seed → Seed → Series A → Series B/C → Exited Responsible Consumption & Production Connected Transportation & Logistics Climate Action Systems Evolution © 2026 ThirdSphere Portfolio Funds Impact Store Blog T-Sync About Careers Resources Contact Privacy Follow Along LinkedIn Twitter"
+    },
+    {
+      "id": "check-page-8e096e181b",
+      "url": "https://thirdsphere.com/portfolio/affordable-clean-energy/",
+      "page": "portfolio",
+      "excerpt": "Affordable & Clean Energy Archives - Third Sphere Skip to content Portfolio Funds Impact About Contact Updates Book Store T-Sync Portfolio Funds Impact About Contact Updates Book Store T-Sync Affordable & Clean Energy From developing new energy sources to innovative ways to store and use energy, these startups are working to make sure everyone has access to affordable, reliable, and sustainable energy. Back Arbor +More Blocpower +More Blueprint +More ChargeLab +More Domatic +More EvolOH +More Evolve Energy +More Expand Power +More Flair +More Focal +More Gradient +More Kelvin +More Mobilyze +More Plentify +More Renewell Energy +More Sapient Industries +More Singularity Energy +More Swell Energy +More Unety +More Urbio +More © 2026 ThirdSphere Portfolio Funds Impact Store Blog T-Sync About Careers Resources Contact Privacy Follow Along LinkedIn Twitter"
+    },
+    {
+      "id": "check-page-e3fa2a5f4b",
+      "url": "https://thirdsphere.com/portfolio/air-water-food/",
+      "page": "portfolio",
+      "excerpt": "Clean Air, Water, and Food Archives - Third Sphere Skip to content Portfolio Funds Impact About Contact Updates Book Store T-Sync Portfolio Funds Impact About Contact Updates Book Store T-Sync Clean Air, Water, and Food Addressing the world’s sanitation crisis with innovative solutions for wastewater treatment, solid waste management, and more. These startups are making sure that everyone has access to clean water and proper sanitation, which is essential for public health and sustainable development. Back Dutch Lion +More GreenQ +More Limeloop +More Loamist +More Mill +More Pallon +More Phuc Labs +More Rachio +More Revivn +More Swell Cycle +More Wasted* +More Wonderfil +More © 2026 ThirdSphere Portfolio Funds Impact Store Blog T-Sync About Careers Resources Contact Privacy Follow Along LinkedIn Twitter"
+    },
+    {
+      "id": "check-page-2aeeb652a8",
+      "url": "https://thirdsphere.com/portfolio/all/",
+      "page": "portfolio",
+      "excerpt": "All Archives - Third Sphere Skip to content Portfolio Funds Impact About Contact Updates Book Store T-Sync Portfolio Funds Impact About Contact Updates Book Store T-Sync All Back 3AM Innovation +More Access Grid +More Adiona +More Applied Carbon +More Arbor +More Architizer +More Architizer +More Avvir +More Blocpower +More Blokable +More Blueprint +More Borrow +More Builders Patch +More ChargeLab +More Circuit +More ClearRoad +More Climatebase +More Coord +More Cove.tool +More Cycle +More Domatic +More Dorothy +More Dutch Lion +More Earth Force +More Eva +More EvolOH +More Evolve Energy +More Expand Power +More Firedome +More Firmus +More Flair +More Focal +More FOREST3 +More Forest3 +More Furno Materials +More Gisual +More Gradient +More GreenQ +More HAAS Alert +More Kelvin +More Kiwi Ki +More Kiwibot +More Limeloop +More LiveStories +More Loamist +More Logcheck +More Loop +More Lunewave +More Mark 43 +More Merino Energy +More Metalmark +More Miles +More Mill +More Mobilyze +More Near Space Labs +More Nevoya +More Ohm +More One Concern +More OneWheel +More Oonee +More Pallon +More Partsimony +More Perl Street +More Photon Marine +More Phuc Labs +More Pi – Lit +More Plentify +More Qucit +More Rachio +More Renewell Energy +More Resonant Link +More Return To Vendor +More Revivn +More Reynko +More Roadbotics +More Sapient Industries +More SeamlessDocs +More Sention +More"
+    },
+    {
+      "id": "check-page-9d405a7299",
+      "url": "https://thirdsphere.com/portfolio/clean-water-sanitation/",
+      "page": "portfolio",
+      "excerpt": "Home - Third Sphere Skip to content Portfolio Funds Impact About Contact Updates Book Store T-Sync Portfolio Funds Impact About Contact Updates Book Store T-Sync New from Third Sphere · Out now Speedstrap A Founder’s Playbook Where VCs Aren’t the Main Characters Minimal equity, rapid revenue, as Plan A. The forgotten history of company building — and a working playbook for founders who want to keep control of what they build. Buy on Amazon Explore the book → “Venture capital can be deadly; this book shows founders what to do about it.” David Frankel · Co-founder, Founder Collective We support founders who turn theory into action. Early-stage capital for people building a better world for everyone — from infrastructure to supply chains. Meet the portfolio Impact reaching beyond the surface We fundamentally reshape broken global systems by connecting the best people reimagining our world to resources and each other. We use early stage capital to upgrade systems. That starts with finding the sectors currently not working with consideration for people, businesses, or general public responsibility - everything from infrastructure to supply chains. Because ensuring our future takes more than reducing carbon emissions. Affordable & Clean Energy Sustainable Cities & Communities Industry, Innovation & Infrastructure Clean Water & Sanitation We use early stage capital to upgrade"
+    },
+    {
+      "id": "check-page-4c8891b4c9",
+      "url": "https://thirdsphere.com/portfolio/climate-action/",
+      "page": "portfolio",
+      "excerpt": "Climate Action Archives - Third Sphere Skip to content Portfolio Funds Impact About Contact Updates Book Store T-Sync Portfolio Funds Impact About Contact Updates Book Store T-Sync Climate Action These startups are helping to create a more sustainable future by creating jobs and opportunities in the clean energy and climate space. They are empowering people and companies to take climate action and make a difference in their communities. Back Applied Carbon +More Climatebase +More Dorothy +More Furno Materials +More Merino Energy +More Mill +More One Concern +More Singularity Energy +More © 2026 ThirdSphere Portfolio Funds Impact Store Blog T-Sync About Careers Resources Contact Privacy Follow Along LinkedIn Twitter"
+    },
+    {
+      "id": "check-page-6afc7ad450",
+      "url": "https://thirdsphere.com/portfolio/connected-transportation-logistics/",
+      "page": "portfolio",
+      "excerpt": "Connected Transportation & Logistics Archives - Third Sphere Skip to content Portfolio Funds Impact About Contact Updates Book Store T-Sync Portfolio Funds Impact About Contact Updates Book Store T-Sync Connected Transportation & Logistics Future-forward modes of transportation for both passengers and goods. These startups are mitigating climate change and improving our overall quality of life by offering zero emissions, micromobility, and last-mile delivery solutions. Back Adiona +More Borrow +More Circuit +More ClearRoad +More Coord +More Cycle +More Eva +More HAAS Alert +More Kiwi Ki +More Kiwibot +More Lunewave +More Miles +More Mobilyze +More Nevoya +More Ohm +More OneWheel +More Partsimony +More Resonant Link +More UpShift +More Wright Electric +More © 2026 ThirdSphere Portfolio Funds Impact Store Blog T-Sync About Careers Resources Contact Privacy Follow Along LinkedIn Twitter"
+    },
+    {
+      "id": "check-page-06defef056",
+      "url": "https://thirdsphere.com/portfolio/exited/",
+      "page": "portfolio",
+      "excerpt": "Exited Archives - Third Sphere Skip to content Portfolio Funds Impact About Contact Updates Book Store T-Sync Portfolio Funds Impact About Contact Updates Book Store T-Sync Exited Back Architizer +More Architizer +More Avvir +More Blueprint +More Coord +More Evolve Energy +More Logcheck +More Mobilyze +More Roadbotics +More SeamlessDocs +More © 2026 ThirdSphere Portfolio Funds Impact Store Blog T-Sync About Careers Resources Contact Privacy Follow Along LinkedIn Twitter"
+    },
+    {
+      "id": "check-page-195c56c9e5",
+      "url": "https://thirdsphere.com/portfolio/industry-innovation-infrastructure/",
+      "page": "portfolio",
+      "excerpt": "Industry, Innovation & Infrastructure Archives - Third Sphere Skip to content Portfolio Funds Impact About Contact Updates Book Store T-Sync Portfolio Funds Impact About Contact Updates Book Store T-Sync Industry, Innovation & Infrastructure Startups in this area are rethinking the systems responsible for building and maintaining the world we live in. From improved methods of producing materials like reinforced concrete and finding the right people to do the work, to creating the architecture for tomorrow’s tech. Back Architizer +More Architizer +More Avvir +More ChargeLab +More Expand Power +More Forest3 +More FOREST3 +More Kiwibot +More Near Space Labs +More Oonee +More Photon Marine +More Resonant Link +More Reynko +More Skycatch +More Sonic Fire +More Swell Cycle +More Therma +More Toggle +More Versatile +More Wright Electric +More © 2026 ThirdSphere Portfolio Funds Impact Store Blog T-Sync About Careers Resources Contact Privacy Follow Along LinkedIn Twitter"
+    },
+    {
+      "id": "check-page-46a1009598",
+      "url": "https://thirdsphere.com/portfolio/pre-seed/",
+      "page": "portfolio",
+      "excerpt": "Pre-seed Archives - Third Sphere Skip to content Portfolio Funds Impact About Contact Updates Book Store T-Sync Portfolio Funds Impact About Contact Updates Book Store T-Sync Pre-seed Back Borrow +More Dorothy +More Dutch Lion +More Focal +More FOREST3 +More Forest3 +More Furno Materials +More Loamist +More Merino Energy +More Oonee +More Reynko +More Swell Cycle +More Wonderfil +More © 2026 ThirdSphere Portfolio Funds Impact Store Blog T-Sync About Careers Resources Contact Privacy Follow Along LinkedIn Twitter"
     }
   ],
   "findings": {
@@ -63,11 +328,68 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-a60fc90801"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "universe of products now go far beyond venture debt and usually make more sense for all stakeholders. What do we offer seedstrapping founders? We invest $250k to $1m and earmark up to $2m more for your next (and hopefully last) round. Over six months, we speed run sales to $1m ARR or $10m in pre-orders. You get",
-        "evidenceId": "check-deal-63e2d5818e"
+        "value": "all stakeholders. What do we offer seedstrapping founders? We invest $250k to $1m and earmark up to $2m more for your next (and hopefully last)",
+        "evidenceId": "check-deal-e9908daf12"
+      },
+      {
+        "value": "What do we offer seedstrapping founders? We invest $250k to $1m and earmark up to $2m more for your next (and hopefully last) round.",
+        "evidenceId": "check-deal-c6c362b789"
+      },
+      {
+        "value": "seedstrapping founders? We invest $250k to $1m and earmark up to $2m more for your next (and hopefully last) round. Over six months, we",
+        "evidenceId": "check-deal-25d6e2ac04"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "250000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-e9908daf12"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "1000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-c6c362b789"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "2000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-25d6e2ac04"
       }
     ],
     "portfolioPages": [

@@ -1,71 +1,467 @@
 {
   "programId": "cyclotron-road",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://cyclotronroad.lbl.gov/",
+    "https://cyclotronroad.lbl.gov/2024/09/04/applications-open-for-two-year-fellowships-at-cyclotron-road/",
     "https://cyclotronroad.lbl.gov/engage/how-to-apply/",
-    "https://cyclotronroad.lbl.gov/about-us/"
+    "https://cyclotronroad.lbl.gov/2018/05/10/cyclotron-road-introduces-fourth-cohort/",
+    "https://cyclotronroad.lbl.gov/2021/06/07/cyclotron-road-announces-cohort-2021/",
+    "https://cyclotronroad.lbl.gov/2022/06/07/cyclotron-road-announces-2022-cohort-of-fellows/",
+    "https://cyclotronroad.lbl.gov/2023/06/22/cyclotron-road-announces-2023-cohort-of-entrepreneurial-fellows/",
+    "https://cyclotronroad.lbl.gov/2024/07/10/introducing-the-10th-cohort-of-cyclotron-road-entrepreneurial-fellows/",
+    "https://cyclotronroad.lbl.gov/2026/05/29/cyclotron-road-celebrates-graduating-cohort/",
+    "https://cyclotronroad.lbl.gov/2022/07/18/leep-summit-features-cyclotron-road-doe-lab-embedded-entrepreneurship-programs/",
+    "https://cyclotronroad.lbl.gov/2022/10/07/cyclotron-road-program-update/",
+    "https://cyclotronroad.lbl.gov/about-us/",
+    "https://cyclotronroad.lbl.gov/about-us/contact/",
+    "https://cyclotronroad.lbl.gov/about-us/scientific-resources/",
+    "https://cyclotronroad.lbl.gov/about-us/team/"
   ],
   "evidence": [
     {
+      "id": "check-email-38d9b1a158",
+      "url": "https://cyclotronroad.lbl.gov/about-us/contact/",
+      "title": "Cyclotron Road — program page",
+      "excerpt": ". Media Inquiries Media inquiries may be directed to media@lbl.gov . Mailing Address Cyclotron Road Program Lawrence Berkeley",
+      "page": "details"
+    },
+    {
+      "id": "check-email-9b72c898aa",
+      "url": "https://cyclotronroad.lbl.gov/about-us/contact/",
+      "title": "Cyclotron Road — program page",
+      "excerpt": "media@lbl.gov",
+      "page": "details"
+    },
+    {
+      "id": "check-format-83b4fb2e4b",
+      "url": "https://cyclotronroad.lbl.gov/2024/09/04/applications-open-for-two-year-fellowships-at-cyclotron-road/",
+      "title": "Cyclotron Road — application page",
+      "excerpt": "in January 2024, and finalists were invited to a virtual pitch during Finalist Week in late February or early March",
+      "page": "application"
+    },
+    {
+      "id": "check-format-ea6f41ad60",
+      "url": "https://cyclotronroad.lbl.gov/2024/09/04/applications-open-for-two-year-fellowships-at-cyclotron-road/",
+      "title": "Cyclotron Road — application page",
+      "excerpt": "of fellows were invited to begin their fellowship with an in-person retreat in mid-June 2025. The DOE’s Advanced Materials and",
+      "page": "application"
+    },
+    {
       "id": "check-name-62a5fec3bd",
       "url": "https://cyclotronroad.lbl.gov/",
-      "title": "Cyclotron Road — homepage checked by scrape.py",
+      "title": "Cyclotron Road — homepage",
       "excerpt": "Cyclotron Road – Cyclotron Road Skip to main content Applications are now",
       "page": "details"
     },
     {
-      "id": "check-route-3506600a94",
-      "url": "https://cyclotronroad.lbl.gov/",
-      "title": "Cyclotron Road — homepage checked by scrape.py",
+      "id": "check-route-0c92d03664",
+      "url": "https://cyclotronroad.lbl.gov/2026/05/29/cyclotron-road-celebrates-graduating-cohort/",
+      "title": "Cyclotron Road — batches page",
+      "excerpt": "How to Apply → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-17e78fbd67",
+      "url": "https://cyclotronroad.lbl.gov/about-us/contact/",
+      "title": "Cyclotron Road — program page",
       "excerpt": "How to Apply → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
       "page": "details"
     },
     {
+      "id": "check-route-1ebcb9ae85",
+      "url": "https://cyclotronroad.lbl.gov/2018/05/10/cyclotron-road-introduces-fourth-cohort/",
+      "title": "Cyclotron Road — batches page",
+      "excerpt": "How to Apply → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-3506600a94",
+      "url": "https://cyclotronroad.lbl.gov/",
+      "title": "Cyclotron Road — homepage",
+      "excerpt": "How to Apply → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-49e3560f74",
+      "url": "https://cyclotronroad.lbl.gov/2018/05/10/cyclotron-road-introduces-fourth-cohort/",
+      "title": "Cyclotron Road — batches page",
+      "excerpt": "Apply now → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "batches"
+    },
+    {
       "id": "check-route-5f6612d799",
       "url": "https://cyclotronroad.lbl.gov/about-us/",
-      "title": "Cyclotron Road — details page checked by scrape.py",
+      "title": "Cyclotron Road — program page",
+      "excerpt": "Apply now → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-606a6fb6c0",
+      "url": "https://cyclotronroad.lbl.gov/2022/06/07/cyclotron-road-announces-2022-cohort-of-fellows/",
+      "title": "Cyclotron Road — batches page",
+      "excerpt": "How to Apply → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-63573cb02e",
+      "url": "https://cyclotronroad.lbl.gov/2022/10/07/cyclotron-road-program-update/",
+      "title": "Cyclotron Road — program page",
       "excerpt": "Apply now → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
       "page": "details"
     },
     {
       "id": "check-route-6438d310ea",
       "url": "https://cyclotronroad.lbl.gov/",
-      "title": "Cyclotron Road — homepage checked by scrape.py",
+      "title": "Cyclotron Road — homepage",
       "excerpt": "Apply now → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
       "page": "details"
     },
     {
-      "id": "check-route-9b43581f55",
-      "url": "https://cyclotronroad.lbl.gov/about-us/",
-      "title": "Cyclotron Road — details page checked by scrape.py",
+      "id": "check-route-64c03e94df",
+      "url": "https://cyclotronroad.lbl.gov/2024/09/04/applications-open-for-two-year-fellowships-at-cyclotron-road/",
+      "title": "Cyclotron Road — application page",
+      "excerpt": "Apply now → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-720e6a9a01",
+      "url": "https://cyclotronroad.lbl.gov/2023/06/22/cyclotron-road-announces-2023-cohort-of-entrepreneurial-fellows/",
+      "title": "Cyclotron Road — batches page",
+      "excerpt": "How to Apply → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-76b8d286f5",
+      "url": "https://cyclotronroad.lbl.gov/about-us/contact/",
+      "title": "Cyclotron Road — program page",
+      "excerpt": "Apply now → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-77cc7b17d6",
+      "url": "https://cyclotronroad.lbl.gov/2022/07/18/leep-summit-features-cyclotron-road-doe-lab-embedded-entrepreneurship-programs/",
+      "title": "Cyclotron Road — program page",
       "excerpt": "How to Apply → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
       "page": "details"
     },
     {
+      "id": "check-route-7c599eca55",
+      "url": "https://cyclotronroad.lbl.gov/2024/09/04/applications-open-for-two-year-fellowships-at-cyclotron-road/",
+      "title": "Cyclotron Road — application page",
+      "excerpt": "How to Apply page → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7d307b1cf0",
+      "url": "https://cyclotronroad.lbl.gov/about-us/scientific-resources/",
+      "title": "Cyclotron Road — program page",
+      "excerpt": "Apply now → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-84bb45db2d",
+      "url": "https://cyclotronroad.lbl.gov/about-us/team/",
+      "title": "Cyclotron Road — program page",
+      "excerpt": "Apply now → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-86df0f9bd1",
+      "url": "https://cyclotronroad.lbl.gov/2022/07/18/leep-summit-features-cyclotron-road-doe-lab-embedded-entrepreneurship-programs/",
+      "title": "Cyclotron Road — program page",
+      "excerpt": "Apply now → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8c68a56bb0",
+      "url": "https://cyclotronroad.lbl.gov/2022/10/07/cyclotron-road-program-update/",
+      "title": "Cyclotron Road — program page",
+      "excerpt": "How to Apply → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8efc2d570d",
+      "url": "https://cyclotronroad.lbl.gov/2024/07/10/introducing-the-10th-cohort-of-cyclotron-road-entrepreneurial-fellows/",
+      "title": "Cyclotron Road — batches page",
+      "excerpt": "Apply now → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-9b43581f55",
+      "url": "https://cyclotronroad.lbl.gov/about-us/",
+      "title": "Cyclotron Road — program page",
+      "excerpt": "How to Apply → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9efe804ae2",
+      "url": "https://cyclotronroad.lbl.gov/about-us/scientific-resources/",
+      "title": "Cyclotron Road — program page",
+      "excerpt": "How to Apply → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-aa1b77e124",
+      "url": "https://cyclotronroad.lbl.gov/2026/05/29/cyclotron-road-celebrates-graduating-cohort/",
+      "title": "Cyclotron Road — batches page",
+      "excerpt": "Apply now → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-ac0a958d5c",
+      "url": "https://cyclotronroad.lbl.gov/2024/07/10/introducing-the-10th-cohort-of-cyclotron-road-entrepreneurial-fellows/",
+      "title": "Cyclotron Road — batches page",
+      "excerpt": "How to Apply → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-ac655288e4",
+      "url": "https://cyclotronroad.lbl.gov/2021/06/07/cyclotron-road-announces-cohort-2021/",
+      "title": "Cyclotron Road — batches page",
+      "excerpt": "How to Apply → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-ae5409248a",
+      "url": "https://cyclotronroad.lbl.gov/about-us/team/",
+      "title": "Cyclotron Road — program page",
+      "excerpt": "How to Apply → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b2296ee3f2",
+      "url": "https://cyclotronroad.lbl.gov/2023/06/22/cyclotron-road-announces-2023-cohort-of-entrepreneurial-fellows/",
+      "title": "Cyclotron Road — batches page",
+      "excerpt": "Apply now → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-c515916adb",
+      "url": "https://cyclotronroad.lbl.gov/2024/09/04/applications-open-for-two-year-fellowships-at-cyclotron-road/",
+      "title": "Cyclotron Road — application page",
+      "excerpt": "How to Apply → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e772f61d14",
+      "url": "https://cyclotronroad.lbl.gov/2022/06/07/cyclotron-road-announces-2022-cohort-of-fellows/",
+      "title": "Cyclotron Road — batches page",
+      "excerpt": "Apply now → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-fc7db00ba4",
+      "url": "https://cyclotronroad.lbl.gov/2021/06/07/cyclotron-road-announces-cohort-2021/",
+      "title": "Cyclotron Road — batches page",
+      "excerpt": "Apply now → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-status-0d0410fa0d",
+      "url": "https://cyclotronroad.lbl.gov/2024/09/04/applications-open-for-two-year-fellowships-at-cyclotron-road/",
+      "title": "Cyclotron Road — application page",
+      "excerpt": "Applications for Two-Year Fellowships at Cyclotron Road – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows",
+      "page": "application"
+    },
+    {
+      "id": "check-status-24113dfd68",
+      "url": "https://cyclotronroad.lbl.gov/2023/06/22/cyclotron-road-announces-2023-cohort-of-entrepreneurial-fellows/",
+      "title": "Cyclotron Road — batches page",
+      "excerpt": "Cyclotron Road Announces 2023 Cohort of Entrepreneurial Fellows – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows",
+      "page": "batches"
+    },
+    {
+      "id": "check-status-2bed6a79c6",
+      "url": "https://cyclotronroad.lbl.gov/2026/05/29/cyclotron-road-celebrates-graduating-cohort/",
+      "title": "Cyclotron Road — batches page",
+      "excerpt": "Cyclotron Road Celebrates Graduating Cohort – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows",
+      "page": "batches"
+    },
+    {
       "id": "check-status-3aa0c4e9c5",
       "url": "https://cyclotronroad.lbl.gov/engage/how-to-apply/",
-      "title": "Cyclotron Road — application page checked by scrape.py",
+      "title": "Cyclotron Road — application page",
       "excerpt": "How to Apply – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows",
       "page": "application"
     },
     {
+      "id": "check-status-5148637bb8",
+      "url": "https://cyclotronroad.lbl.gov/2021/06/07/cyclotron-road-announces-cohort-2021/",
+      "title": "Cyclotron Road — batches page",
+      "excerpt": "Cyclotron Road Announces Cohort 2021 – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows",
+      "page": "batches"
+    },
+    {
+      "id": "check-status-602205434c",
+      "url": "https://cyclotronroad.lbl.gov/about-us/contact/",
+      "title": "Cyclotron Road — program page",
+      "excerpt": "Contact – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows",
+      "page": "details"
+    },
+    {
+      "id": "check-status-6f8d26ba9e",
+      "url": "https://cyclotronroad.lbl.gov/2022/10/07/cyclotron-road-program-update/",
+      "title": "Cyclotron Road — program page",
+      "excerpt": "Cyclotron Road Program Update – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows",
+      "page": "details"
+    },
+    {
+      "id": "check-status-71aef8bf8d",
+      "url": "https://cyclotronroad.lbl.gov/2018/05/10/cyclotron-road-introduces-fourth-cohort/",
+      "title": "Cyclotron Road — batches page",
+      "excerpt": "Cyclotron Road Introduces Fourth Cohort – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows",
+      "page": "batches"
+    },
+    {
       "id": "check-status-7a776814b0",
       "url": "https://cyclotronroad.lbl.gov/",
-      "title": "Cyclotron Road — homepage checked by scrape.py",
+      "title": "Cyclotron Road — homepage",
       "excerpt": "Cyclotron Road – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows",
       "page": "details"
     },
     {
+      "id": "check-status-7d7f00250c",
+      "url": "https://cyclotronroad.lbl.gov/about-us/team/",
+      "title": "Cyclotron Road — program page",
+      "excerpt": "Team – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows",
+      "page": "details"
+    },
+    {
+      "id": "check-status-8e72586ea4",
+      "url": "https://cyclotronroad.lbl.gov/2024/07/10/introducing-the-10th-cohort-of-cyclotron-road-entrepreneurial-fellows/",
+      "title": "Cyclotron Road — batches page",
+      "excerpt": "Introducing the 10th Cohort of Cyclotron Road Entrepreneurial Fellows – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows",
+      "page": "batches"
+    },
+    {
       "id": "check-status-bbba55c513",
       "url": "https://cyclotronroad.lbl.gov/about-us/",
-      "title": "Cyclotron Road — details page checked by scrape.py",
+      "title": "Cyclotron Road — program page",
       "excerpt": "About Us – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows",
+      "page": "details"
+    },
+    {
+      "id": "check-status-c901a73bd1",
+      "url": "https://cyclotronroad.lbl.gov/2022/06/07/cyclotron-road-announces-2022-cohort-of-fellows/",
+      "title": "Cyclotron Road — batches page",
+      "excerpt": "Cyclotron Road Announces 2022 Cohort of Fellows – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows",
+      "page": "batches"
+    },
+    {
+      "id": "check-status-d3be0b75a8",
+      "url": "https://cyclotronroad.lbl.gov/about-us/scientific-resources/",
+      "title": "Cyclotron Road — program page",
+      "excerpt": "Scientific Resources – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows",
+      "page": "details"
+    },
+    {
+      "id": "check-status-e12c352ba8",
+      "url": "https://cyclotronroad.lbl.gov/2022/07/18/leep-summit-features-cyclotron-road-doe-lab-embedded-entrepreneurship-programs/",
+      "title": "Cyclotron Road — program page",
+      "excerpt": "Features Cyclotron Road, DOE Lab-Embedded Entrepreneurship Programs – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows",
       "page": "details"
     }
   ],
+  "pageQuotes": [
+    {
+      "id": "check-page-d2a9c5cde7",
+      "url": "https://cyclotronroad.lbl.gov/",
+      "page": "details",
+      "excerpt": "Cyclotron Road – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply The solutions for the challenges of tomorrow are in the hands of today's innovators. We are now accepting applications for Cohort 2027! If you want to take your idea to impact, apply by October 30, 2026. Taking Innovation to Impact Our program empowers entrepreneurial scientists to take their innovation to impact by offering them knowledge, resources, and connections through a world-class fellowship. Fellows have launched companies across sectors like AI, energy, biomanufacturing, and critical materials that drive innovation and address societal challenges. Our program provides fellows with a living stipend, research funding, entrepreneurial training in collaboration with our non-profit partner Activate, and access to the multidisciplinary expertise and facilities at Lawrence Berkeley National Lab (Berkeley Lab). 10 Years of Cyclotron Road Helping Entrepreneurs Bring Technologies to Market Article Announcements Learn"
+    },
+    {
+      "id": "check-page-1c7e14bd5c",
+      "url": "https://cyclotronroad.lbl.gov/2024/09/04/applications-open-for-two-year-fellowships-at-cyclotron-road/",
+      "page": "application",
+      "excerpt": "Applications for Two-Year Fellowships at Cyclotron Road – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply Applications for Two-Year Fellowships at Cyclotron Road Article Announcements Applications for two-year fellowships in the Cyclotron Road program – and all other U.S. Department of Energy (DOE) Lab-Embedded Entrepreneurship Programs (LEEPs) – were open . Scientists and engineers from diverse disciplines including energy, biosciences, and robotics were encouraged to explore this unique opportunity to validate, scale, and fund their ideas from prototype to production. Entering its 10th year, the Cyclotron Road program at Lawrence Berkeley National Lab (Berkeley Lab) was the first of four LEEPs across the U.S. Since the program’s inception, startups founded by participants have secured more than $1.9 billion in follow-on funding. With the addition of the 2024 cohort that began in July , 109 people have taken part in the program, founding 84 startups, and creating more than 1,400"
+    },
+    {
+      "id": "check-page-0c825ed853",
+      "url": "https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "application",
+      "excerpt": "How to Apply – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply How to Apply Thank you for your interest in applying to the Cyclotron Road LEEP fellowship. Cyclotron Road empowers entrepreneurial scientists to take their innovation to impact by offering knowledge, resources, and connections. Cyclotron Road applications are managed in partnership with the non-profit Activate, in conjunction with their Activate Berkeley community. Applications to Cyclotron Road are reviewed by Berkeley Lab staff in coordination with our partners and sponsors. Applications for the fellowship are collected every year between September and October. Read on to learn about the application timeline and how to begin your application. Join our mailing list for webinar invitations and application updates. If you have questions, please contact our team for further information. Application process The following shows the timeline of the application process. Application Overview Checklist Subscribe to our contact"
+    },
+    {
+      "id": "check-page-a8c8b83aca",
+      "url": "https://cyclotronroad.lbl.gov/2018/05/10/cyclotron-road-introduces-fourth-cohort/",
+      "page": "batches",
+      "excerpt": "Cyclotron Road Introduces Fourth Cohort – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply Cyclotron Road Introduces Fourth Cohort Article Announcements Comprising 13 PhD-level scientists and engineers, these fellows will spend the next two years embedded at the U.S. Department of Energy’s Lawrence Berkeley National Laboratory (Berkeley Lab), advancing their technology innovations from promising concepts to first products. While their areas of expertise range from clean power generation to electronics to material science and manufacturing, all share a common desire to apply their respective technologies toward creating positive societal impacts. “We rigorously evaluated applications from over 175 scientific innovators from around the world, and this group represents the best of the best,” says Cyclotron Road founder Ilan Gur. “Bringing a new cohort into the program is always exciting, and the diversity of experience and expertise among Cohort 4 will help amplify the efforts and reach"
+    },
+    {
+      "id": "check-page-f55b81a8f4",
+      "url": "https://cyclotronroad.lbl.gov/2021/06/07/cyclotron-road-announces-cohort-2021/",
+      "page": "batches",
+      "excerpt": "Cyclotron Road Announces Cohort 2021 – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply Cyclotron Road Announces Cohort 2021 Article Announcements Selected from a record pool of 300 applicants, the 11 individuals will make up Cohort 2021 of Cyclotron Road. As part of their two-year fellowship they will work to bring to market innovative, research-driven products to improve the sustainability and scalability of modern energy systems. The projects, listed below, include development of low-cost energy storage, nontoxic agricultural pest management and next-generation plastics designed for longevity and infinite recyclability. “This year’s cohort is made up of incredibly talented, passionate people solving many of today’s most important problems,” says Cyclotron Road Division Director Rachel Slaybaugh, who also serves as associate professor of nuclear engineering at UC Berkeley. “Our fellows work across a wide range of industrial sectors with global impact. Their early-stage companies"
+    },
+    {
+      "id": "check-page-365e57b694",
+      "url": "https://cyclotronroad.lbl.gov/2022/06/07/cyclotron-road-announces-2022-cohort-of-fellows/",
+      "page": "batches",
+      "excerpt": "Cyclotron Road Announces 2022 Cohort of Fellows – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply Cyclotron Road Announces 2022 Cohort of Fellows Article Announcements Selected from a pool of more than 200 applicants, the 2022 Cohort fellows will work with Berkeley Lab scientists and facilities to translate innovative research into market-ready products that can improve the sustainability and scalability of modern energy systems. Their projects, listed below, include new energy storage technology, probabilistic computing, critical mineral refinement, environmental bioremediation and more. “I’m truly excited to welcome this new cohort to the lab. They hold such promise for broad societal impact,” said Cyclotron Road Interim Division Director Thomas Kirchstetter , who also serves as director of the Energy Analysis and Environmental Impacts Division at Berkeley Lab and adjunct professor of Civil & Environmental Engineering at UC Berkeley. “I want to peek into a crystal ball to see how"
+    },
+    {
+      "id": "check-page-58d1ca8709",
+      "url": "https://cyclotronroad.lbl.gov/2023/06/22/cyclotron-road-announces-2023-cohort-of-entrepreneurial-fellows/",
+      "page": "batches",
+      "excerpt": "Cyclotron Road Announces 2023 Cohort of Entrepreneurial Fellows – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply Cyclotron Road Announces 2023 Cohort of Entrepreneurial Fellows Article Announcements Launched in 2015, the Cyclotron Road fellowship program was the first U.S. Department of Energy (DOE) Lab-Embedded Entrepreneurship Program ( LEEP ). The program supports leading entrepreneurial scientists as they advance technology projects with the potential for global impact in an array of fields including critical materials, advanced microelectronics, energy conversion and storage, cybersecurity, and advanced manufacturing processes. With support from the DOE and in close partnership with the Lab’s nonprofit partner Activate , the program recruits, hosts, and trains entrepreneurial scientists and engineers at Berkeley Lab. The program provides a living stipend in addition to research facilities and non-dilutive funding to accelerate the development of new commercial solutions to the"
+    },
+    {
+      "id": "check-page-0e8d20bef9",
+      "url": "https://cyclotronroad.lbl.gov/2024/07/10/introducing-the-10th-cohort-of-cyclotron-road-entrepreneurial-fellows/",
+      "page": "batches",
+      "excerpt": "Introducing the 10th Cohort of Cyclotron Road Entrepreneurial Fellows – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply Introducing the 10th Cohort of Cyclotron Road Entrepreneurial Fellows Article Announcements Today the U.S. Department of Energy (DOE) announced the 2024 cohort of scientists and engineers selected to join Cyclotron Road — a DOE Lab-Embedded Entrepreneurship Program (LEEP) at Lawrence Berkeley National Laboratory (Berkeley Lab). Launched in 2015, the Cyclotron Road fellowship program was the first DOE LEEP. The program provides fellows with a living stipend, research funding, entrepreneurial training in collaboration with non-profit partner Activate , and access to the multidisciplinary researchers and resources of Berkeley Lab. This new cohort of 14 fellows adds 10 companies to the program, bringing the total number of companies advanced by Cyclotron Road fellows to 84 and the all-time number of fellows to 109: Pauliina Meskanen and Nate Weger , Calectra: provides"
+    },
+    {
+      "id": "check-page-d9049fc9d7",
+      "url": "https://cyclotronroad.lbl.gov/2026/05/29/cyclotron-road-celebrates-graduating-cohort/",
+      "page": "batches",
+      "excerpt": "Cyclotron Road Celebrates Graduating Cohort – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply Cyclotron Road Celebrates Graduating Cohort Article Announcements Cyclotron Road supports innovators as they take the leap from discovery to product development and build out their own companies. The graduating fellows have received two years of research funding, a living stipend, entrepreneurial training in collaboration with non-profit partner Activate, and access to the multidisciplinary researchers and resources of Berkeley Lab to refine their technology. The businesses these fellows are developing are contributing to advancements across critical minerals and materials, semiconductors, biomanufacturing, and more. Pauliina Meskanen and Nate Weger, Calectra: is building a novel thermal battery technology to enable a new era of cheaper and cleaner industrial heating. Its thermal battery converts low-cost electricity into high-temperature (1,600°C) heat for industrial manufacturing. The"
+    },
+    {
+      "id": "check-page-d044185cbf",
+      "url": "https://cyclotronroad.lbl.gov/2022/07/18/leep-summit-features-cyclotron-road-doe-lab-embedded-entrepreneurship-programs/",
+      "page": "details",
+      "excerpt": "LEEP Summit Features Cyclotron Road, DOE Lab-Embedded Entrepreneurship Programs – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply LEEP Summit Features Cyclotron Road, DOE Lab-Embedded Entrepreneurship Programs Article Announcements Game-changing technology that leads the United States into a clean energy future is one of the Department of Energy (DOE) goals highlighted in the first-ever LEEP Summit on Tuesday, July 12, 2022. LEEP, or Lab-Embedded Entrepreneurship Program , trains the next generation of clean tech entrepreneurs, providing full-time support for two years along with access to the many unique resources, facilities, and personnel in DOE’s national labs. The summit featured the four DOE LEEP nodes: Berkeley Lab’s Cyclotron Road , as well as the nodes at Argonne National Laboratory, the National Renewable Energy Laboratory, and Oak Ridge National Laboratory. DOE Secretary Jennifer Granholm provided opening remarks, followed by pitches from representatives of more than 25"
+    },
+    {
+      "id": "check-page-0087a1c6e6",
+      "url": "https://cyclotronroad.lbl.gov/2022/10/07/cyclotron-road-program-update/",
+      "page": "details",
+      "excerpt": "Cyclotron Road Program Update – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply Cyclotron Road Program Update Article Announcements Cyclotron Road is an important Berkeley Lab service that offers expertise and capabilities from across the Lab to science entrepreneurs, to help them accelerate the commercialization of their game-changing energy technologies. The first of the DOE’s four Lab-Embedded Entrepreneurship Programs (LEEP), it has been housed in the Energy Technologies Area (ETA) for the past seven years. Cyclotron Road will now be managed at the Strategic Partnerships Office (SPO), to become an integral part of the Deputy Lab Director for Research’s organization, and to reflect the Lab-wide nature of Cyclotron Road. The move was effective October 1, 2022. “We believe that this move will help Cyclotron Road be more widely subscribed to by all of our areas and divisions: they will have broader awareness of and ability to interact with the program, be better able to provide input"
+    },
+    {
+      "id": "check-page-2ceaf89c2f",
+      "url": "https://cyclotronroad.lbl.gov/about-us/",
+      "page": "details",
+      "excerpt": "About Us – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply About Cyclotron Road Developing Entrepreneurial Science Cyclotron Road empowers entrepreneurial scientists to advance their ideas from concept to viable first product, positioning them for broad societal impact in the long term. Nestled within Berkeley Lab, Cyclotron Road is named for the Lab’s primary address, 1 Cyclotron Road. Like Sand Hill Road in Silicon Valley, notable for its high concentration of venture capitalist firms who provide funding for new companies, Cyclotron Road aims to provide funding and support to new scientific technologies, and facilitate bringing them to market. Recruits Founders Our program offers fellowships to innovators who are determined to drive their research projects to the market’s doorstep. The program allows them to advance their projects with the potential for global impact in fields such as energy, agriculture, and manufacturing. Empowers Innovation Our program offers entrepreneurs the"
+    },
+    {
+      "id": "check-page-b08275bb92",
+      "url": "https://cyclotronroad.lbl.gov/about-us/contact/",
+      "page": "details",
+      "excerpt": "Contact – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply Contact Partnership Opportunities Cyclotron Road is always looking for new faces to get involved with the program. As a Berkeley Lab researcher or technical expert, you can become a mentor or a collaborator for our fellows or support the program as a subject matter expert during the application process. As an external organization, there may be ways to partner or support our fellows in the Cyclotron Road program. If you are interested in partnerships with fellows or the program, please use this contact form . Contact General questions about the Cyclotron Road Program may be directed to cyclotronroad_admin@lbl.gov . Media Inquiries Media inquiries may be directed to media@lbl.gov . Mailing Address Cyclotron Road Program Lawrence Berkeley National Laboratory 1 Cyclotron Road, MS: 62R0203 Berkeley, CA 94720 Visiting Berkeley Lab Information about visiting Berkeley Lab is available from your Berkeley Lab host and on the Berkeley"
+    },
+    {
+      "id": "check-page-ef130ff024",
+      "url": "https://cyclotronroad.lbl.gov/about-us/scientific-resources/",
+      "page": "details",
+      "excerpt": "Scientific Resources – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply Scientific Resources Research at Berkeley Lab Explore Berkeley Lab’s research on discovery science and solutions for abundant and reliable energy supplies. Capabilities at Berkeley Lab Gain access to capabilities in computing and data science, chemical sciences, materials synthesis and characterization, and genomic science. Additional Facilities at Berkeley Lab Explore other facilities supporting research from quantum science to energy technologies available to fellows at Berkeley Lab. Written by the experts at Activate, and in partnership with the Gordon and Betty Moore Foundation, the Science Innovator’s Handbook provides invaluable assistance to any and all scientists who are making the leap to entrepreneurship. The Handbook helps scientists understand the unique challenges they will face, and how to overcome them. Links About Us Fellows News Engage Contact Us Contact Our Organization Lawrence Berkeley National"
+    },
+    {
+      "id": "check-page-528456465c",
+      "url": "https://cyclotronroad.lbl.gov/about-us/team/",
+      "page": "details",
+      "excerpt": "Team – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply About Us Team Contact Scientific Resources Fellows Current Fellows Fellows by Year Fellows by Industry News Engage Our Program Eligibility and Selection Criteria How to Apply Our Team Todd Pray is head of Berkeley Lab’s Strategic Partnerships Office. Prior to this, he led product and business development strategy for startups developing technologies that improve human health and environmental sustainability across pharmaceutical, food science, renewable fuel, and chemical product R&D programs. Melanie Sonsteng joined Cyclotron Road in 2015 and has been a fan and champion for the innovative program ever since. She works closely with incoming and current Fellows, manages program operations and ensures that Fellows and their research teams have the support and resources they need to be successful. Thomas Kirchstetter is a Senior Scientist and the Chief Science Advisor to the Cyclotron Road program at Berkeley Lab, supporting entrepreneurs in creating solutions for society's urgent challenges. He holds a concurrent appointment as an Adjunct Professor in Civil & Environmental Engineering at UC Berkeley,"
+    }
+  ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "media@lbl.gov",
+        "evidenceId": "check-email-9b72c898aa"
+      }
+    ],
     "phones": [],
     "routes": [
       {
@@ -87,8 +483,24 @@
     ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-83b4fb2e4b"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-ea6f41ad60"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

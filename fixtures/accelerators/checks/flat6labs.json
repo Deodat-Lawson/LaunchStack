@@ -1,67 +1,451 @@
 {
   "programId": "flat6labs",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://flat6labs.com/",
-    "https://flat6labs.com/programs/",
-    "https://flat6labs.com/apply-now/"
+    "https://flat6labs.com/apply-now/",
+    "https://flat6labs.com/ar/apply-now/",
+    "https://flat6labs.com/fr/apply-now/",
+    "https://flat6labs.com/about/",
+    "https://flat6labs.com/flat6labs-and-ifc-launch-startalgeria-a-capacity-building-program-designed-to-empower-the-organizations-progressing-algerias-startup-ecosystem/",
+    "https://flat6labs.com/flat6labs-hosts-sixth-demo-day-in-riyadh/",
+    "https://flat6labs.com/program/1864-accelerator/",
+    "https://flat6labs.com/program/circular-industry-support-program-for-egyptian-smes-tadweer/",
+    "https://flat6labs.com/program/crc-tunisia-innovation-champions-program/",
+    "https://flat6labs.com/program/dice-program/",
+    "https://flat6labs.com/program/ebday/",
+    "https://flat6labs.com/program/ebdaytunisia/",
+    "https://flat6labs.com/program/egypt-proptech-challenge-2026/",
+    "https://flat6labs.com/program/eslsca-incubation-program/"
   ],
   "evidence": [
     {
+      "id": "check-deal-3995e968fc",
+      "url": "https://flat6labs.com/program/circular-industry-support-program-for-egyptian-smes-tadweer/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "sectors, providing selected businesses with: – A grant of up to €50,000. – Access to investors, partners, and industry experts. – Tailored",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-6d76bcbd5a",
+      "url": "https://flat6labs.com/program/circular-industry-support-program-for-egyptian-smes-tadweer/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "for Egyptian SMEs (Tadweer) SUPPORT & OFFERINGS A grant of up to €50,000. Access to investors, partners, and industry experts. Tailored support",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-86e7cef0e6",
+      "url": "https://flat6labs.com/program/ebday/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "from top industry experts and pioneers Total monetary prizes $5,500 ($1,800 per startup) for the top 3 startups Weekly workshops One on one",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-c6d72be68c",
+      "url": "https://flat6labs.com/program/ebday/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "from top industry experts and pioneers Total monetary prizes $5,500 ($1,800 per startup) for the top 3 startups Weekly workshops One on",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-4dabc84410",
+      "url": "https://flat6labs.com/program/eslsca-incubation-program/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "students have been selected to be part of the 8-month incubation program and are offered multiple",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-6104a2b192",
+      "url": "https://flat6labs.com/program/1864-accelerator/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "teams. Up to 10 teams were selected to begin the 14 week program. 1st Month After teams receive",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-76abc0e2e6",
+      "url": "https://flat6labs.com/program/egypt-proptech-challenge-2026/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "startups: 1- Age of Company : Must be more than 30 months old 2- Revenue : Total annual revenue should",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-76db83e368",
+      "url": "https://flat6labs.com/program/egypt-proptech-challenge-2026/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "startups: 1- Age of Company : Must be less than 30 months old 2- Funding Status: Must not have raised more",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-afd9f7c822",
+      "url": "https://flat6labs.com/program/ebday/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "English business terminologies. The program span 10 weeks for 10 startups, and will feature online",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c2ca0695a7",
+      "url": "https://flat6labs.com/program/ebday/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "according to the identified criteria to join the 5-week incubation program. Program Implementation The",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c6892f2009",
+      "url": "https://flat6labs.com/program/1864-accelerator/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "1st Month 2nd Month 3rd Month Demo Day Selection 8 weeks before the cycle, 60 to 80 of the best teams",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c80bdbae95",
+      "url": "https://flat6labs.com/program/dice-program/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "and each team works restlessly over the next 4 months developing their core business model, building a",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-dfca51cab3",
+      "url": "https://flat6labs.com/program/1864-accelerator/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "pivot or proceed. Demo Day At the end of the 14 week program, a Demo Day is held giving the companies",
+      "page": "details"
+    },
+    {
+      "id": "check-format-4beb01af52",
+      "url": "https://flat6labs.com/flat6labs-hosts-sixth-demo-day-in-riyadh/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "that enables physicians and medical complexes to launch virtual clinics with integrated payments, labs, pharmacies and",
+      "page": "details"
+    },
+    {
       "id": "check-name-1e34273384",
       "url": "https://flat6labs.com/",
-      "title": "Flat6Labs — homepage checked by scrape.py",
+      "title": "Flat6Labs — homepage",
       "excerpt": "Flat6Labs - Home Home - Flat6Labs ACCELERATING THE FUTURE",
+      "page": "details"
+    },
+    {
+      "id": "check-route-196c0e0d23",
+      "url": "https://flat6labs.com/program/eslsca-incubation-program/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "apply now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1e00ebac1e",
+      "url": "https://flat6labs.com/fr/apply-now/",
+      "title": "Flat6Labs — application page",
+      "excerpt": "English → https://flat6labs.com/apply-now/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-243ca35590",
+      "url": "https://flat6labs.com/program/dice-program/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "apply now → https://flat6labs.com/apply-now/",
       "page": "details"
     },
     {
       "id": "check-route-285743c251",
       "url": "https://flat6labs.com/",
-      "title": "Flat6Labs — homepage checked by scrape.py",
+      "title": "Flat6Labs — homepage",
       "excerpt": "apply now → https://flat6labs.com/apply-now/",
       "page": "details"
     },
     {
       "id": "check-route-3b558bf554",
       "url": "https://flat6labs.com/apply-now/",
-      "title": "Flat6Labs — application page checked by scrape.py",
+      "title": "Flat6Labs — application page",
       "excerpt": "العربية → https://flat6labs.com/ar/apply-now/",
       "page": "application"
     },
     {
+      "id": "check-route-49a1f86c05",
+      "url": "https://flat6labs.com/about/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-49f8a1f7f9",
+      "url": "https://flat6labs.com/flat6labs-and-ifc-launch-startalgeria-a-capacity-building-program-designed-to-empower-the-organizations-progressing-algerias-startup-ecosystem/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4a1f171c74",
+      "url": "https://flat6labs.com/program/circular-industry-support-program-for-egyptian-smes-tadweer/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-51d427ce62",
+      "url": "https://flat6labs.com/program/crc-tunisia-innovation-champions-program/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "apply now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-52597880fc",
+      "url": "https://flat6labs.com/program/dice-program/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-57d6106107",
+      "url": "https://flat6labs.com/program/ebdaytunisia/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "apply now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
       "id": "check-route-6085f3d16b",
       "url": "https://flat6labs.com/apply-now/",
-      "title": "Flat6Labs — application page checked by scrape.py",
+      "title": "Flat6Labs — application page",
       "excerpt": "Français → https://flat6labs.com/fr/apply-now/",
       "page": "application"
     },
     {
-      "id": "check-route-8c5c1b5a30",
-      "url": "https://flat6labs.com/programs/",
-      "title": "Flat6Labs — details page checked by scrape.py",
-      "excerpt": "Apply Now → https://forms.gle/rF21muP8dLm2qWHQ9",
+      "id": "check-route-695d99fc6c",
+      "url": "https://flat6labs.com/about/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "apply now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6b245ec324",
+      "url": "https://flat6labs.com/program/ebday/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6e4caad763",
+      "url": "https://flat6labs.com/ar/apply-now/",
+      "title": "Flat6Labs — application page",
+      "excerpt": "English → https://flat6labs.com/apply-now/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8eb2c0a828",
+      "url": "https://flat6labs.com/program/1864-accelerator/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-97791e17d5",
+      "url": "https://flat6labs.com/flat6labs-and-ifc-launch-startalgeria-a-capacity-building-program-designed-to-empower-the-organizations-progressing-algerias-startup-ecosystem/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "apply now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a3a3e63ce2",
+      "url": "https://flat6labs.com/program/egypt-proptech-challenge-2026/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a7f7e54d7a",
+      "url": "https://flat6labs.com/program/1864-accelerator/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "apply now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-afd02d5797",
+      "url": "https://flat6labs.com/program/ebdaytunisia/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b127339bdc",
+      "url": "https://flat6labs.com/program/ebday/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "apply now → https://flat6labs.com/apply-now/",
       "page": "details"
     },
     {
       "id": "check-route-b4704811c9",
       "url": "https://flat6labs.com/",
-      "title": "Flat6Labs — homepage checked by scrape.py",
+      "title": "Flat6Labs — homepage",
       "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
       "page": "details"
     },
     {
-      "id": "check-route-c8994b53db",
-      "url": "https://flat6labs.com/programs/",
-      "title": "Flat6Labs — details page checked by scrape.py",
+      "id": "check-route-b5b22b0d4c",
+      "url": "https://flat6labs.com/program/egypt-proptech-challenge-2026/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "Apply Now → https://forms.zohopublic.com/Flat6Labs/form/PROPTECHCHALLENGECITYSCAPE2025StartupApplicationFo/formperma/hM1EZeF29dxz1CubhUSqfDZBk67y9BFQfgAsaWsLHsQ",
+      "page": "details"
+    },
+    {
+      "id": "check-route-be40e247ef",
+      "url": "https://flat6labs.com/program/circular-industry-support-program-for-egyptian-smes-tadweer/",
+      "title": "Flat6Labs — program page",
       "excerpt": "apply now → https://flat6labs.com/apply-now/",
       "page": "details"
     },
     {
-      "id": "check-route-f7feee7457",
-      "url": "https://flat6labs.com/programs/",
-      "title": "Flat6Labs — details page checked by scrape.py",
+      "id": "check-route-cbe8107979",
+      "url": "https://flat6labs.com/program/egypt-proptech-challenge-2026/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "apply now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d2f33aaf87",
+      "url": "https://flat6labs.com/program/crc-tunisia-innovation-champions-program/",
+      "title": "Flat6Labs — program page",
       "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
       "page": "details"
+    },
+    {
+      "id": "check-route-d7813d2b0a",
+      "url": "https://flat6labs.com/fr/apply-now/",
+      "title": "Flat6Labs — application page",
+      "excerpt": "العربية → https://flat6labs.com/ar/apply-now/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-da6876a1f5",
+      "url": "https://flat6labs.com/flat6labs-hosts-sixth-demo-day-in-riyadh/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f034789b28",
+      "url": "https://flat6labs.com/program/eslsca-incubation-program/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f1e85b9664",
+      "url": "https://flat6labs.com/flat6labs-hosts-sixth-demo-day-in-riyadh/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "apply now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f2ac0f4aa8",
+      "url": "https://flat6labs.com/ar/apply-now/",
+      "title": "Flat6Labs — application page",
+      "excerpt": "Français → https://flat6labs.com/fr/apply-now/",
+      "page": "application"
+    },
+    {
+      "id": "check-status-af1cdc958c",
+      "url": "https://flat6labs.com/program/circular-industry-support-program-for-egyptian-smes-tadweer/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "Process OPEN APPLICATIONS FILTRATION AND INTERVIEWS Bootcamp Demo Day Post-Program Support OPEN APPLICATIONS Applications are open for interested startups and SMEs to apply through the online form. FILTRATION AND INTERVIEWS Applications",
+      "page": "details"
+    },
+    {
+      "id": "check-status-f21a40c049",
+      "url": "https://flat6labs.com/program/egypt-proptech-challenge-2026/",
+      "title": "Flat6Labs — program page",
+      "excerpt": "FILTRATION AND INTERVIEWS PREPARATION PHASE COMPETITION ANNOUNCING THE WINNERS OPEN APPLICATIONS Applications are open for interested startups to apply through the online form. FILTRATION AND INTERVIEWS Applications are",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-3f9a42f5aa",
+      "url": "https://flat6labs.com/",
+      "page": "details",
+      "excerpt": "Flat6Labs - Home Home - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English العربية Français close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now Learn More Explore Insights Apply Now Learn More Explore Insights Apply Now arrow_right Latest Flat6Labs Updates Flat6Labs Insights Flat6Labs and IFC Launch StartAlgeria, a Capacity-Building Program Designed to Empower the Organizations Progressing Algeria’s Startup Ecosystem 09 Jul 2026 In a step that reflects both parties’ commitment to supporting the innovation and entrepreneurship ecosystem: Cityscape Egypt 2026 launches the third edition of the Egypt PropTech Challenge in collaboration with Flat6Labs 10 May 2026 close Flat6Labs ACCELERATING THE FUTURE Flat6Labs is the leading entrepreneurship platform in emerging markets, empowering entrepreneurs to build, launch and grow transformative ideas through acceleration programs, ecosystem development, and tailored innovation services. About Flat6Labs Flat6Labs Locations Oman Egypt KSA Bahrain Jordan Tunisia Morocco Lebanon Iraq UAE Palestine Pakistan Oman Know More Egypt Since its"
+    },
+    {
+      "id": "check-page-30dcdea341",
+      "url": "https://flat6labs.com/apply-now/",
+      "page": "application",
+      "excerpt": "Flat6Labs - Apply Now Apply Now - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English العربية Français close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now APPLY NOW We understand the challenges you face as an entrepreneur; navigating uncertainty, building from scratch, and turning ideas into impact. That’s why our programs are designed with you in mind. Explore our open and upcoming applications, and find the support that fits the stage of your startup, its industry, and location. We’re here to be part of your journey to success! WHAT TO KNOW BEFORE APPLYING Once selected to join a Flat6Labs-affiliated program, you gain access to strategic mentorship, entrepreneurship-focused business training, personalised one-on-one sessions with subject matter experts, and a wide range of perks and services offered by our partners. Each program is carefully designed to support specific types of startups based on stage, industry focus, or geographic location. We strongly recommend reviewing the program details to ensure alignment before applying. You may apply to more than one program,"
+    },
+    {
+      "id": "check-page-70f1689062",
+      "url": "https://flat6labs.com/ar/apply-now/",
+      "page": "application",
+      "excerpt": "Flat6Labs - قدم الآن قدم الآن - Flat6Labs انطلق نحو المستقبل انطلق نحو المستقبل البرامج arrow_drop_down برامج مسرعات الأعمال برنامج ريادة أعمال تنموي برامج حاضنات الأعمال برامج التمويل الأولي أفكار العربية English Français close الصناديق صندوق TECH ACCELERATOR صندوق الأردن للتمويل الأساسي (JSF) flat6labs تمكين لتسريع الأعمال صندوق أنافا للتمويل الأساسي لبانون سيد فنَد شركة FLAT6LABS لتسريع الأعمال البرامج برامج مسرعات الأعمال برنامج ريادة أعمال تنموي برامج حاضنات الأعمال برامج التمويل الأولي معلومات عنا الابتكار المؤسسي قدم الآن فريقنا أفكار Reports البيانات الصحفية الأسئلة الشائعة الوظائف اتصل بنا قدم الآن قدم الآن Flat6Labs هو برنامج إقليمي لتسريع الشركات الناشئة يعزز ويستثمر في رواد الأعمال الأذكياء والمتحمسين بأفكارهم المتطورة. نحن نقدم التمويل الأولي ، والإرشاد الاستراتيجي ، ومساحة عمل إبداعية ، والعديد من الامتيازات ، والتدريب على الأعمال التي تركز على ريادة الأعمال. ما يجب معرفته قبل التقديم بمجرد اختيارك للمشاركة في برامج Flat6Labs للتمويل الأساسي، ستحصل على تمويل نقدي مرتبط ببرنامج التمويل الأساسي الذي ستشارك فيه، وذلك بالإضافة إلى الإرشاد الاستراتيجي، ومكاتب للعمل، والدورات التدريبية التي تركز على ريادة الأعمال، والجلسات الفردية المتخصصة علاوة على العديد من الامتيازات والخدمات المقدمة من الشركاء. هناك أمران يجب أن تضعهما في اعتبارك: -يجب أن يكون المتقدم متفرغًا بالكامل لحضور برنامج مدته 4 أشهر. -يجب أن تكون مقيمًا في نفس المدينة التي سينعقد فيها برنامج Flat6Labs الذي"
+    },
+    {
+      "id": "check-page-6e504e366b",
+      "url": "https://flat6labs.com/fr/apply-now/",
+      "page": "application",
+      "excerpt": "Flat6Labs - Postuler Aujourd’hui Postuler Aujourd'hui - Flat6Labs NOUS ACCÉLÉRONS LE FUTUR NOUS ACCÉLÉRONS LE FUTUR Programmes arrow_drop_down Programmes d'accélération LES PROGRAMMES DE DÉVELOPPEMENT DE L'ÉCOSYSTÈME Programmes D'Incubateurs programmes d'amorçage Insights Français العربية English close Funds Jordan Seed Fund (JSF) Tech Accelerator Fund Flat6Labs Tamkeen Accelerator Anava Seed Fund Lebanon Seed Fund Flat6Labs Accelerator Company Programs Programmes d'accélération LES PROGRAMMES DE DÉVELOPPEMENT DE L'ÉCOSYSTÈME Programmes D'Incubateurs programmes d'amorçage À propos L’Innovation Dans Les Entreprises Postuler Aujourd’hui Notre équipe Insights Reports De Presse FAQs Emplois Contactez-nous apply now Postuler Aujourd'hui Ici, vous pouvez consulter toutes nos applications ouvertes et à venir pour les programmes accélérateurs, les programmes d'amorçage, les programmes d'incubation ou les bootcamps. Choisissez le programme qui correspond à l'étape de votre startup ou idée de démarrage et nous sommes là pour faire partie de votre cheminement vers le succès! CE QU'IL FAUT SAVOIR AVANT DE POSTULER Une fois que vous êtes sélectionné pour rejoindre le Flat6Labs Accelerator ou le Seed Program, vous recevez un financement en espèces correspondant au Flat6Labs Accelerator ou au Seed Program auquel vous avez adhéré, un mentorat stratégique, un espace de bureau, une formation"
+    },
+    {
+      "id": "check-page-8369a0fdbd",
+      "url": "https://flat6labs.com/about/",
+      "page": "details",
+      "excerpt": "Flat6Labs - About Flat6Labs About Flat6Labs - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English العربية Français close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now Home keyboard_arrow_right About Flat6Labs MEA’s leading entrepreneurship platform in emerging markets WE ARE ACCELERATING THE FUTURE Flat6Labs is the Middle East and Africa’s leading entrepreneurial ecosystem platform with operations across 15 countries. Supporting entrepreneurs across different stages, Flat6Labs collaborates with leading partners to run renowned startup programs, strengthen entrepreneurship within emerging markets, and offer expert advisory services to startups, ESOs, corporates, and governments. Since its launch in 2011 in Cairo, Flat6Labs has supported more than 10,000 founders in the Africa, Levant, and the GCC regions through tailored programs and extensive support services, partnering with global stakeholders. Deeply committed to inclusivity and opportunity, Flat6Labs actively supports underserved entrepreneurs, with a vast track record supporting women and forcibly displaced"
+    },
+    {
+      "id": "check-page-740d918c5e",
+      "url": "https://flat6labs.com/flat6labs-and-ifc-launch-startalgeria-a-capacity-building-program-designed-to-empower-the-organizations-progressing-algerias-startup-ecosystem/",
+      "page": "details",
+      "excerpt": "Flat6Labs - Flat6Labs and IFC Launch StartAlgeria, a Capacity-Building Program Designed to Empower the Organizations Progressing Algeria’s Startup Ecosystem Flat6Labs and IFC Launch StartAlgeria, a Capacity-Building Program Designed to Empower the Organizations Progressing Algeria's Startup Ecosystem - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English العربية Français close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now news keyboard_arrow_right Flat6Labs and IFC Launch StartAlgeria, a Capacity-Building Program Designed to Empower the Organizations Progressing Algeria’s Startup Ecosystem Flat6Labs and IFC Launch StartAlgeria, a Capacity-Building Program Designed to Empower the Organizations Progressing Algeria’s Startup Ecosystem 09 Jul 2026 Flat6Labs and IFC in collaboration with the Ministry of Knowledge Economy, Startups and Micro-Enterprises are launching StartAlgeria, a capacity-building program that puts Entrepreneur Support Organizations (ESOs) at the forefront of Algeria’s ecosystem future. The program is designed to equip Algerian ESOs reinforcing pre-seed and"
+    },
+    {
+      "id": "check-page-ad02c68622",
+      "url": "https://flat6labs.com/flat6labs-hosts-sixth-demo-day-in-riyadh/",
+      "page": "details",
+      "excerpt": "Flat6Labs - Flat6Labs Hosts Sixth Demo Day of Riyadh Seed Program Flat6Labs Hosts Sixth Demo Day of Riyadh Seed Program - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English العربية close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now news keyboard_arrow_right Flat6Labs Hosts Sixth Demo Day of Riyadh Seed Program Flat6Labs Hosts Sixth Demo Day of Riyadh Seed Program 15 Jan 2026 Backed by F6 Ventures, the program accelerated 60+ startups, deployed USD 17M, and unlocked USD 38M in follow-on funding and co-investments Riyadh, Saudi Arabia – January 14, 2026 – Flat6Labs hosts today the Sixth Demo Day of its Riyadh Seed Program (RSP) in Riyadh, the most active VC in the Kingdom for the past 3 years, in partnership the Saudi Venture Capital Company (SVC), with key national ecosystem stakeholders, including Jada Fund of Funds, and Riyadh Valley Company (RVC). The event marks the conclusion of six accelerator cycles supported by the National Technology Development Program (NTDP) since the program’s launch in 2023 and represents a major milestone in fostering early-stage"
+    },
+    {
+      "id": "check-page-659acef214",
+      "url": "https://flat6labs.com/program/1864-accelerator/",
+      "page": "details",
+      "excerpt": "Flat6Labs - 1864 Accelerator 1864 Accelerator - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English العربية Français close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now 1864 Accelerator The 1864 Accelerator constitutes the first local financial technology focused ‘FinTech’ startup accelerator program of its kind in Egypt. Powered by Flat6Labs in partnership with Barclays Bank Egypt, the accelerator is a solid platform for fostering the ‘FinTech’ innovation space in Egypt through enabling entrepreneurs to transform their disruptive ideas into commercially viable solutions. The program welcomes ideas and startups across all business areas related to financial services, including but not limited to; payments, digital banking solutions, banking relationships, machine learning, lending, trading, cyber security, data analytics, payments, cryptocurrency, insurance, wealth management, asset management, and capital markets. WHAT TO KNOW BEFORE APPLYING Once you are selected to join the Program, you receive mentorship, office-space, entrepreneurship-focused business training,"
+    },
+    {
+      "id": "check-page-fee62ce3c3",
+      "url": "https://flat6labs.com/program/circular-industry-support-program-for-egyptian-smes-tadweer/",
+      "page": "details",
+      "excerpt": "Flat6Labs - Circular Industry Support Program for Egyptian SMEs (Tadweer) Circular Industry Support Program for Egyptian SMEs (Tadweer) - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now Circular Industry Support Program for Egyptian SMEs (Tadweer) Circular Industry Support Program for Egyptian SMEs (Tadweer) is designed to support startups and SMEs working in the circular economy and sustainability sectors. The program is launched by the Ministry of Local Development and Environment (MoLDE) and GIZ Egypt, through the “EU Green/NSWMP” Project, in collaboration with Flat6Labs. WHAT TO KNOW BEFORE APPLYING The program is designed to support startups and SMEs working in the circular economy and sustainability sectors, providing selected businesses with: – A grant of up to €50,000. – Access to investors, partners, and industry experts. – Tailored support to strengthen their business models, operations, and growth plans. Selection Criteria Who can participate in the Circular Industry Support Program for Egyptian SMEs"
+    },
+    {
+      "id": "check-page-3c1e87f6f8",
+      "url": "https://flat6labs.com/program/crc-tunisia-innovation-champions-program/",
+      "page": "details",
+      "excerpt": "Flat6Labs - CRC Tunisia Innovation Champions Program CRC Tunisia Innovation Champions Program - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English Français close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now CRC Tunisia Innovation Champions Program UNICEF and Flat6Labs Tunis are working hand in hand to boost innovation among youth and implement an entrepreneurship mindset that will tackle children’s daily challenges in education, health, water, sanitation & protection CRC Tunisia Innovation Champions Program Support & Offers Entrepreneurship Mindset and Problem Validation Business Modeling and Solution Validation Market Targeting Operations and Team Development CRC Tunisia Innovation Champions Program SELECTION PROCESS Applications Interviews Final Selection Program Applications Interviews Final Selection Program expand Flat6Labs is the leading entrepreneurship platform in emerging markets, empowering entrepreneurs to build, launch and grow transformative ideas through acceleration programs, ecosystem development, and tailored innovation services. Home About us Programs"
+    },
+    {
+      "id": "check-page-a0d014df31",
+      "url": "https://flat6labs.com/program/dice-program/",
+      "page": "details",
+      "excerpt": "Flat6Labs - DICE Program DICE Program - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English العربية close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now DICE Program Flat6Labs in partnership with Hatch Ideas-UK is launching an Accelerator Program funded by the British Council’s program for Developing Inclusive and Creative Economies (DICE). The program is focusing on the empowerment of entrepreneurs in order to encourage them to establish creative and social startups. The program will advocate for “Existing Enterprise At Risk” that is impacted by the current pandemic circumstances or other obstacles. WHAT TO KNOW BEFORE APPLYING Once you are selected to join DICE Program, you’ll receive world-class mentorship and coaching, information and entrepreneurial sessions, subject matter one to one sessions to the last batch of 25 startups, training by local and international experts, prize money of EGP 225,000 to the three winning startups and a multitude of perks and services. Some pointers you should keep in mind: Your team should be of 2-3 members You should have an existing"
+    },
+    {
+      "id": "check-page-81df4092ac",
+      "url": "https://flat6labs.com/program/ebday/",
+      "page": "details",
+      "excerpt": "Flat6Labs - Ebda’y Ebda'y - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English العربية close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now Ebda’y Flat6Labs in partnership with Entrepreneurship Academy powered by SANAD is launching a pre-acceleration program focusing on the empowerment of female entrepreneurship and developing their validated concepts to the growth stage. This will be achieved by equipping them with primary knowledge and tools; thus, enabling them to initiate their journey, and advance their chances of success through developing competitive products and services. The online program will be focused on assisting female entrepreneurs, at the Minimum Viable Product-MVP stage, to lay the foundations for a prosperous startup. WHAT TO KNOW BEFORE APPLYING Once you are selected to join the Program, you’ll receive training and coaching from field experts. The top three startups will receive monetary prizes with a total of $5,500 and a multitude of perks and services. Selection Criteria: A Formulated and an innovative idea Teams of 2-3 entrepreneurs ِA full-time"
+    },
+    {
+      "id": "check-page-319d06bdfe",
+      "url": "https://flat6labs.com/program/ebdaytunisia/",
+      "page": "details",
+      "excerpt": "Flat6Labs - Ebda’Y Tunisia Ebda'Y Tunisia - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English Français close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now Ebda’Y Tunisia Many females perceive entrepreneurship as a challenge and can be intimidated. Ebda’Y Tunisia is program exclusively dedicated to support women entrepreneurs in Tunisia and aims to organize workshops for those women and invite successful women guest-speakers and entrepreneurs conduct those workshops and training sessions; it aims to make all women entrepreneurs in Tunisia expand their network across the region and beyond. This program is supported by the IFC International Finance Corporation (IFC) and Startup Tunisia by Smart Capital. Funded by Anava Seed Fund WHAT TO KNOW BEFORE APPLYING We announce the opening of our new cycle(s) through the official channels of communication (website, social media, events, etc.). Interested women entrepreneurs can apply for the eight-week support program through our website by filling in a form that details the basics of your idea or company. This program is supported"
+    },
+    {
+      "id": "check-page-a955fd769d",
+      "url": "https://flat6labs.com/program/egypt-proptech-challenge-2026/",
+      "page": "details",
+      "excerpt": "Flat6Labs - Egypt PropTech Challenge 2026 Egypt PropTech Challenge 2026 - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now Egypt PropTech Challenge 2026 The Egypt PropTech Challenge is a premier competition for innovative startups in real estate sectors. It aims to put a spotlight on startups developing sustainable solutions across PropTech, ConTech, Smart Cities, and Property and Asset Management. Held during Cityscape Egypt 2026, the challenge brings together startups, industry leaders, and investors to showcase transformative tech in the sector and highlight its new solutions. Organised by Cityscape Egypt, the 3rd edition of Egypt Proptech Challenge partners with Flat6Labs to bring together startups, industry leaders, and investors to showcase transformative tech in the sector and highlight its new solutions. WHAT TO KNOW BEFORE APPLYING Egypt PropTech Challenge 2026 is open to national and global startups who create innovative solutions across the real estate sectors. Winners are chosen based on their"
+    },
+    {
+      "id": "check-page-0345312b64",
+      "url": "https://flat6labs.com/program/eslsca-incubation-program/",
+      "page": "details",
+      "excerpt": "Flat6Labs - ESLSCA Incubation Program ESLSCA Incubation Program - Flat6Labs ACCELERATING THE FUTURE ACCELERATING THE FUTURE Programs arrow_drop_down Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory Insights English العربية Français close Programs Programs for Entrepreneurs Programs for Entrepreneur Support Organizations (ESOs) Advisory About Flat6Labs Become Our Community Partner Apply Now Our Team Insights Reports Press FAQs Jobs Contact Us apply now ESLSCA Incubation Program Flat6Labs, in partnership with ESLSCA, has launched a unique innovation & entrepreneurship program dedicated to supporting ESLSCA as a leader in innovation by enabling current ESLSCA students to build viable and sustainable businesses through an incubation program. The newly envisaged partnership between ESLSCA and Flat6Labs will drive innovation within ESLSCA by supporting innovation and entrepreneurship aspirations of ESLSCA students in Egypt. This will be achieved by equipping them with primary knowledge and tools, thus, enabling them to develop competitive products and companies. The Application Process ESLSCA asked their students to submit applications in response to an internal call for applications. 100 students have been selected to be part of the 8-month incubation program and are offered multiple services and perks including, expert led training and"
     }
   ],
   "findings": {
@@ -73,16 +457,16 @@
         "evidenceId": "check-route-b4704811c9"
       },
       {
-        "value": "https://forms.gle/rF21muP8dLm2qWHQ9",
-        "evidenceId": "check-route-8c5c1b5a30"
-      },
-      {
         "value": "https://flat6labs.com/ar/apply-now/",
         "evidenceId": "check-route-3b558bf554"
       },
       {
         "value": "https://flat6labs.com/fr/apply-now/",
         "evidenceId": "check-route-6085f3d16b"
+      },
+      {
+        "value": "https://forms.zohopublic.com/Flat6Labs/form/PROPTECHCHALLENGECITYSCAPE2025StartupApplicationFo/formperma/hM1EZeF29dxz1CubhUSqfDZBk67y9BFQfgAsaWsLHsQ",
+        "evidenceId": "check-route-b5b22b0d4c"
       }
     ],
     "applicationUrl": [
@@ -91,11 +475,107 @@
         "evidenceId": "check-route-b4704811c9"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-af1cdc958c"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "8",
+        "evidenceId": "check-duration-c6892f2009"
+      },
+      {
+        "value": "14",
+        "evidenceId": "check-duration-6104a2b192"
+      },
+      {
+        "value": "4 months",
+        "evidenceId": "check-duration-c80bdbae95"
+      },
+      {
+        "value": "5",
+        "evidenceId": "check-duration-c2ca0695a7"
+      },
+      {
+        "value": "10",
+        "evidenceId": "check-duration-afd9f7c822"
+      },
+      {
+        "value": "30 months",
+        "evidenceId": "check-duration-76db83e368"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-4beb01af52"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "sectors, providing selected businesses with: – A grant of up to €50,000. – Access to investors, partners, and industry experts. – Tailored",
+        "evidenceId": "check-deal-3995e968fc"
+      },
+      {
+        "value": "for Egyptian SMEs (Tadweer) SUPPORT & OFFERINGS A grant of up to €50,000. Access to investors, partners, and industry experts. Tailored support",
+        "evidenceId": "check-deal-6d76bcbd5a"
+      },
+      {
+        "value": "from top industry experts and pioneers Total monetary prizes $5,500 ($1,800 per startup) for the top 3 startups Weekly workshops One on",
+        "evidenceId": "check-deal-c6d72be68c"
+      },
+      {
+        "value": "from top industry experts and pioneers Total monetary prizes $5,500 ($1,800 per startup) for the top 3 startups Weekly workshops One on one",
+        "evidenceId": "check-deal-86e7cef0e6"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "50000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Grant",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-3995e968fc"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "5500",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-c6d72be68c"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "1800",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-86e7cef0e6"
+      }
+    ],
     "portfolioPages": [],
     "name": [
       {

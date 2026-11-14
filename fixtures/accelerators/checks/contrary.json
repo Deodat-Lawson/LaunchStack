@@ -1,54 +1,457 @@
 {
   "programId": "contrary",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
     "https://contrary.com/",
-    "https://applications.contrary.com"
+    "https://applications.contrary.com",
+    "https://contrary.com/deals",
+    "https://contrary.com/investments",
+    "https://research.contrary.com/deep-dive/data-centers-lose-the-midterms",
+    "https://research.contrary.com/company/openai",
+    "https://research.contrary.com/report/data-centers-lose-the-midterms",
+    "https://research.contrary.com/deep-dive/anthropic-ipo-timeline-endangered",
+    "https://research.contrary.com/report/anthropic-ipo-timeline-endangered",
+    "https://contrary.com/blog/first-check-program",
+    "https://contrary.com/blog/venture-partner-apps-2026",
+    "https://research.contrary.com/about",
+    "https://contrary.com/companies",
+    "https://jobs.contrary.com/",
+    "https://jobs.contrary.com/$/jobs"
   ],
   "evidence": [
     {
+      "id": "check-announced-bd294282cd",
+      "url": "https://contrary.com/blog/venture-partner-apps-2026",
+      "title": "Contrary — application page",
+      "excerpt": "they come in, so apply now. The sooner the better. We have a final deadline of Sunday, September 13th at 11:59pm PT. We generally prefer people with more than one",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-33b9271e7c",
+      "url": "https://contrary.com/blog/first-check-program",
+      "title": "Contrary — program page",
+      "excerpt": "of school. With our First Check program, 5 teams will receive up to $100k (as an uncapped note) to build companies. It doesn’t matter who you",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-376b101cfa",
+      "url": "https://research.contrary.com/company/openai",
+      "title": "Contrary — application page",
+      "excerpt": "app in history (reaching 100 million users in 2 months), and reached 1 billion users within two years",
+      "page": "application"
+    },
+    {
+      "id": "check-email-bf75fc4e49",
+      "url": "https://applications.contrary.com",
+      "title": "Contrary — application page",
+      "excerpt": "Contact Us (info@contrary.com)",
+      "page": "application"
+    },
+    {
+      "id": "check-format-08a546f146",
+      "url": "https://research.contrary.com/company/openai",
+      "title": "Contrary — application page",
+      "excerpt": "transformations: from a non‑profit to a capped‑profit hybrid, and now toward an even more commercially driven model.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-428b725b70",
+      "url": "https://research.contrary.com/company/openai",
+      "title": "Contrary — application page",
+      "excerpt": "goal was to have one AI learn to navigate many different virtual environments (from playing Flash games to completing web",
+      "page": "application"
+    },
+    {
+      "id": "check-format-435dcd2189",
+      "url": "https://research.contrary.com/company/openai",
+      "title": "Contrary — application page",
+      "excerpt": "present a risk to its stability. Managing OpenAI’s hybrid model between its roots as a non-profit and its",
+      "page": "application"
+    },
+    {
+      "id": "check-format-7fdcdb5279",
+      "url": "https://jobs.contrary.com/",
+      "title": "Contrary — portfolio page",
+      "excerpt": "Search industries Salary Select... Internships only Remote options All jobs Posted Anytime Post and Manage jobs",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-be775d27ce",
+      "url": "https://research.contrary.com/company/openai",
+      "title": "Contrary — application page",
+      "excerpt": "as Chess or Go , OpenAI Five aimed to test AI agents in a virtual environment that would simulate the “messiness and",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e938f339d7",
+      "url": "https://contrary.com/companies",
+      "title": "Contrary — portfolio page",
+      "excerpt": "and HIPAA compliance. Sora Schools Sora Schools is a live, virtual high school designed to accelerate your student toward",
+      "page": "portfolio"
+    },
+    {
       "id": "check-name-b9380aabc7",
       "url": "https://contrary.com/",
-      "title": "Contrary — homepage checked by scrape.py",
+      "title": "Contrary — homepage",
       "excerpt": "Home | Contrary Team Companies Research A talent and research-driven",
       "page": "details"
     },
     {
+      "id": "check-portfolio-19555eb6aa",
+      "url": "https://jobs.contrary.com/",
+      "title": "Contrary — portfolio page",
+      "excerpt": "companies → https://www.contrary.com/companies",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-1ab7f952cc",
       "url": "https://contrary.com/",
-      "title": "Contrary — homepage checked by scrape.py",
+      "title": "Contrary — homepage",
       "excerpt": "Companies → https://contrary.com/companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-2ddf88d1fb",
+      "url": "https://jobs.contrary.com/$/jobs",
+      "title": "Contrary — portfolio page",
+      "excerpt": "companies → https://www.contrary.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-36acb4a2b2",
+      "url": "https://jobs.contrary.com/",
+      "title": "Contrary — portfolio page",
+      "excerpt": "Companies → https://jobs.contrary.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-4a212932e9",
+      "url": "https://contrary.com/investments",
+      "title": "Contrary — terms page",
+      "excerpt": "Companies → https://contrary.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-4b0ea709e2",
+      "url": "https://contrary.com/deals",
+      "title": "Contrary — terms page",
+      "excerpt": "Companies → https://contrary.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-67b1206a3b",
+      "url": "https://contrary.com/blog/venture-partner-apps-2026",
+      "title": "Contrary — application page",
+      "excerpt": "Companies → https://contrary.com/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-89016e6866",
+      "url": "https://research.contrary.com/report/data-centers-lose-the-midterms",
+      "title": "Contrary — terms page",
+      "excerpt": "Companies → https://research.contrary.com/company",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8e34798890",
+      "url": "https://research.contrary.com/deep-dive/anthropic-ipo-timeline-endangered",
+      "title": "Contrary — batches page",
+      "excerpt": "Companies → https://research.contrary.com/company",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-b15631573a",
+      "url": "https://contrary.com/blog/first-check-program",
+      "title": "Contrary — program page",
+      "excerpt": "Companies → https://contrary.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-cce78af832",
+      "url": "https://applications.contrary.com",
+      "title": "Contrary — application page",
+      "excerpt": "Companies → https://contrary.com/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-cd865331c2",
+      "url": "https://research.contrary.com/deep-dive/data-centers-lose-the-midterms",
+      "title": "Contrary — terms page",
+      "excerpt": "Companies → https://research.contrary.com/company",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d3ef678352",
+      "url": "https://research.contrary.com/company/openai",
+      "title": "Contrary — application page",
+      "excerpt": "Companies → https://research.contrary.com/company",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-d7c08f4af3",
       "url": "https://contrary.com/",
-      "title": "Contrary — homepage checked by scrape.py",
+      "title": "Contrary — homepage",
       "excerpt": "View Portfolio → https://contrary.com/companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-e93dcb9192",
+      "url": "https://research.contrary.com/about",
+      "title": "Contrary — program page",
+      "excerpt": "Companies → https://research.contrary.com/company",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-eb81f4f037",
+      "url": "https://research.contrary.com/report/anthropic-ipo-timeline-endangered",
+      "title": "Contrary — batches page",
+      "excerpt": "Companies → https://research.contrary.com/company",
+      "page": "batches"
+    },
+    {
+      "id": "check-rolling-a895c2a2b1",
+      "url": "https://contrary.com/blog/first-check-program",
+      "title": "Contrary — program page",
+      "excerpt": "on your company this summer. Applications open now, and will be evaluated on a rolling basis until 4/8. You can submit here . The process is simple: Apply here . We may",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0861237370",
+      "url": "https://research.contrary.com/company/openai",
+      "title": "Contrary — application page",
+      "excerpt": "Developer Tools & DevOps Series B Developer Tools & DevOps Series B Replit Replit is pushing forward the usefulness of AI agents in one key category — software creation. The Replit Agent is a code generation agent meant to automatically produce an application from an idea expressed in natural language. 10 Reports Memo → https://research.contrary.com/company/replit",
+      "page": "application"
+    },
+    {
+      "id": "check-route-21e362911e",
+      "url": "https://contrary.com/blog/venture-partner-apps-2026",
+      "title": "Contrary — application page",
+      "excerpt": "Applications → https://applications.contrary.com",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3b0e3c4f57",
+      "url": "https://research.contrary.com/report/data-centers-lose-the-midterms",
+      "title": "Contrary — terms page",
+      "excerpt": "Foundation Models Secondary Market Foundation Models Secondary Market OpenAI OpenAI has become a central driver of global AI adoption, evolving from a research lab into one of the most widely used model and application providers. 99 Reports Memo → https://research.contrary.com/company/openai",
+      "page": "terms"
+    },
+    {
       "id": "check-route-3dd9203f64",
       "url": "https://contrary.com/",
-      "title": "Contrary — homepage checked by scrape.py",
+      "title": "Contrary — homepage",
       "excerpt": "Applications → https://applications.contrary.com",
       "page": "details"
     },
     {
+      "id": "check-route-726979ab1a",
+      "url": "https://contrary.com/blog/first-check-program",
+      "title": "Contrary — program page",
+      "excerpt": "August 23, 2026 Venture Partner Applications 2026 2026 Venture Partner applications are now open! Read more → https://contrary.com/blog/venture-partner-apps-2026",
+      "page": "details"
+    },
+    {
+      "id": "check-route-810d7a72eb",
+      "url": "https://research.contrary.com/deep-dive/data-centers-lose-the-midterms",
+      "title": "Contrary — terms page",
+      "excerpt": "Foundation Models Secondary Market Foundation Models Secondary Market OpenAI OpenAI has become a central driver of global AI adoption, evolving from a research lab into one of the most widely used model and application providers. 99 Reports Memo → https://research.contrary.com/company/openai",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-8253183cd7",
+      "url": "https://contrary.com/blog/venture-partner-apps-2026",
+      "title": "Contrary — application page",
+      "excerpt": "Apply to be a Venture Partner → https://contrarycap.typeform.com/ContraryVP2026",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9782fa83ab",
+      "url": "https://jobs.contrary.com/",
+      "title": "Contrary — portfolio page",
+      "excerpt": "applications → https://applications.contrary.com/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-9b21763949",
+      "url": "https://jobs.contrary.com/$/jobs",
+      "title": "Contrary — portfolio page",
+      "excerpt": "applications → https://applications.contrary.com/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-c286f4c6e8",
+      "url": "https://contrary.com/deals",
+      "title": "Contrary — terms page",
+      "excerpt": "Applications → https://applications.contrary.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-cbd4a55024",
+      "url": "https://contrary.com/companies",
+      "title": "Contrary — portfolio page",
+      "excerpt": "Applications → https://applications.contrary.com",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-db49d1bcf0",
       "url": "https://contrary.com/",
-      "title": "Contrary — homepage checked by scrape.py",
+      "title": "Contrary — homepage",
       "excerpt": "https://contrary.com/",
       "page": "details"
+    },
+    {
+      "id": "check-route-f757c2d841",
+      "url": "https://contrary.com/investments",
+      "title": "Contrary — terms page",
+      "excerpt": "Applications → https://applications.contrary.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-f9192ec050",
+      "url": "https://contrary.com/blog/first-check-program",
+      "title": "Contrary — program page",
+      "excerpt": "Applications → https://applications.contrary.com",
+      "page": "details"
+    },
+    {
+      "id": "check-status-7565f8ff78",
+      "url": "https://contrary.com/blog/first-check-program",
+      "title": "Contrary — program page",
+      "excerpt": "of 2027 Venture Partners Read more August 23, 2026 Venture Partner Applications 2026 2026 Venture Partner applications are now open! Read more Subscribe Stay updated with Contrary. Subscribe Subscribe Company Team Companies Investors",
+      "page": "details"
+    },
+    {
+      "id": "check-status-872c3452a9",
+      "url": "https://contrary.com/blog/venture-partner-apps-2026",
+      "title": "Contrary — application page",
+      "excerpt": "Applications 2026 | Contrary Team Companies Research Venture Partner Applications 2026 2026 Venture Partner applications are now open! Rachel LeScoezec August 23, 2026 Rachel LeScoezec August 23, 2026 Weekly Newsletter Get articles like this",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-53a08430f3",
+      "url": "https://contrary.com/",
+      "page": "details",
+      "excerpt": "Home | Contrary Team Companies Research A talent and research-driven investment firm. We identify and invest in a small number of entrepreneurs and the companies they build, from seed to scale. View Portfolio Contrary Research See All METR Finds Evidence of Recursive Improvement Sachin Maini Read more Anthropic IPO Timeline Endangered Claire Schultz Read more Data Centers Lose the Midterms Sachin Maini Read more Anthropic Files S-1 Ahead of Massive IPO Sachin Maini Read more Subscribe Stay updated with Contrary. Subscribe Subscribe Company Team Companies Investors Insights Blog Research Resources Venture Partners Applications Portfolio Jobs Tech Talks Media & Legal Legal Privacy © 2026 Contrary, LLC By navigating this website you agree to our privacy policy . Deny Accept"
+    },
+    {
+      "id": "check-page-3002d3a6f8",
+      "url": "https://applications.contrary.com",
+      "page": "application",
+      "excerpt": "Team Companies Content Portfolio Jobs Research Subscribe Stay updated with Contrary. Subscribe Subscribe Company Team Companies Insights Foundations & Frontiers Blog Research Podcasts Resources Venture Partners Applications Portfolio Jobs Events Tech Talks Media & Legal Contact Us Legal & Privacy © 2024 Contrary, LLC"
+    },
+    {
+      "id": "check-page-c24f712eb7",
+      "url": "https://contrary.com/deals",
+      "page": "terms",
+      "excerpt": "Deals | Contrary Team Companies Research Enter Password You should have received a password from Contrary. Enter it below to see deals exclusive to Contrary portfolio companies. Submit Subscribe Stay updated with Contrary. Subscribe Subscribe Company Team Companies Investors Insights Blog Research Resources Venture Partners Applications Portfolio Jobs Tech Talks Media & Legal Legal Privacy © 2026 Contrary, LLC By navigating this website you agree to our privacy policy . Deny Accept"
+    },
+    {
+      "id": "check-page-b9c71d0f47",
+      "url": "https://contrary.com/investments",
+      "page": "terms",
+      "excerpt": "Investments | Contrary Team Companies Research Investments The following is a list of active investments made by Contrary. Excluded from this list are investments for which the issuer has not provided permission for Contrary to disclose publicly, fund of fund investments as well as investments in other pooled investment vehicles, and investments in which total invested capital is no more than $50,000. Past results of Contrary’s investments, pooled investment vehicles, or investment strategies are not necessarily indicative of future results. There can be no assurance that the investments will be profitable or that other investments made in the future will have similar characteristics or results. Aether Biomachines Alloy Ando Anduril Armada AtoB Base Bloom Brightland Check Corgi Cortex Health Doss DualEntry Durin Mining Endeavor Feathery Fractional FSH Technologies Hallow Kinetic Knoetic Leland Lightyear Maev Modern Intelligence Moment Nomic OneSchema Orchard Robotics Pallet Parfait Patch Pave Power Ramp Recurrency Secureframe Sora Schools Sympto Health Tava Health Uprise Valar Vesto Vise Voltra Zensors Zepto Subscribe Stay updated with Contrary. Subscribe Subscribe Company Team Companies Investors Insights Blog Research Resources Venture Partners Applications Portfolio Jobs Tech Talks Media & Legal Legal Privacy © 2026 Contrary, LLC By navigating this website you agree to our"
+    },
+    {
+      "id": "check-page-abeaa47f79",
+      "url": "https://research.contrary.com/deep-dive/data-centers-lose-the-midterms",
+      "page": "terms",
+      "excerpt": "Data Centers Lose the Midterms | Contrary Research Companies Reports Topics About Subscribe Report / Powered by Discover Companies Reports Topics About Connect Email LinkedIn Twitter Subscribe Powered by © 2026 Contrary Research · All rights reserved | Privacy Policy Report / Perspective Tech Policy & Geopolitics Cloud & Neocloud Compute Data Centers Lose the Midterms November 7, 2026 | 2 min A perspective from Contrary Research. Perspective Authors 1 Related Companies 1 Share On Tuesday, voters rejected AI data centers almost everywhere they appeared on the ballot. Of 47 local data center measures decided in votes this year, 46 went against development. Democrats who campaigned on restricting data centers won governor’s races in Texas , Georgia , Ohio and New Mexico , states that account for over 40% of planned US data center capacity. Public opposition has led AI companies to respond. The day after the midterms, OpenAI’s senior leaders were discussing whether to reset expectations for next year’s data center capacity. A day later, OpenAI released a Community Compact that pledged to pay the full cost of powering its data centers, publish water and noise data, and stop requiring NDAs from public officials. It also published a policy proposal asking lawmakers to write those pledges into law, which refers to data centers as “compute campuses.” Meta, Microsoft, Google and"
+    },
+    {
+      "id": "check-page-263c5bc998",
+      "url": "https://research.contrary.com/company/openai",
+      "page": "application",
+      "excerpt": "Report: OpenAI Business Breakdown & Founding Story | Contrary Research Companies Reports Topics About Subscribe Companies / Powered by Discover Companies Reports Topics About Connect Email LinkedIn Twitter Subscribe Powered by © 2026 Contrary Research · All rights reserved | Privacy Policy Companies / OpenAI OpenAI Foundation Models OpenAI has become a central driver of global AI adoption, evolving from a research lab into one of the most widely used model and application providers. Historically, it played a defining role in advancing the modern AI landscape, from early reinforcement learning systems and robotics experiments to pioneering large-scale transformer models that helped establish the foundation model paradigm, while the release of OpenAI’s ChatGPT in November 2022 was a watershed moment in mainstreaming AI adoption. Products like the GPT model family, GPT Image, and Sora, have achieved hundreds of millions of weekly users. Its expansion has been supported by large-scale funding and infrastructure commitments, including multi-billion-dollar investments, multiyear cloud agreements, and long-term compute buildouts with partners such as Microsoft, Oracle, NVIDIA, and AWS. Foundation Models Founded 2015 HQ San Francisco, CA Funding $78B Stage Secondary Market Employees 5,238 Updated Oct 22, 2026 Careers at OpenAI Menu Memo 165 min Deep Dives 18 Perspectives 65"
+    },
+    {
+      "id": "check-page-f1321894d2",
+      "url": "https://research.contrary.com/report/data-centers-lose-the-midterms",
+      "page": "terms",
+      "excerpt": "Data Centers Lose the Midterms | Contrary Research Companies Reports Topics About Subscribe Report / Powered by Discover Companies Reports Topics About Connect Email LinkedIn Twitter Subscribe Powered by © 2026 Contrary Research · All rights reserved | Privacy Policy Report / Perspective Tech Policy & Geopolitics Cloud & Neocloud Compute Data Centers Lose the Midterms November 7, 2026 | 2 min A perspective from Contrary Research. Perspective Authors 1 Related Companies 1 Share On Tuesday, voters rejected AI data centers almost everywhere they appeared on the ballot. Of 47 local data center measures decided in votes this year, 46 went against development. Democrats who campaigned on restricting data centers won governor’s races in Texas , Georgia , Ohio and New Mexico , states that account for over 40% of planned US data center capacity. Public opposition has led AI companies to respond. The day after the midterms, OpenAI’s senior leaders were discussing whether to reset expectations for next year’s data center capacity. A day later, OpenAI released a Community Compact that pledged to pay the full cost of powering its data centers, publish water and noise data, and stop requiring NDAs from public officials. It also published a policy proposal asking lawmakers to write those pledges into law, which refers to data centers as “compute campuses.” Meta, Microsoft, Google and"
+    },
+    {
+      "id": "check-page-6e3d1372a1",
+      "url": "https://research.contrary.com/deep-dive/anthropic-ipo-timeline-endangered",
+      "page": "batches",
+      "excerpt": "Anthropic IPO Timeline Endangered | Contrary Research Companies Reports Topics About Subscribe Report / Powered by Discover Companies Reports Topics About Connect Email LinkedIn Twitter Subscribe Powered by © 2026 Contrary Research · All rights reserved | Privacy Policy Report / Perspective Foundation Models Venture & Startup Markets Anthropic IPO Timeline Endangered November 7, 2026 | 2 min A perspective from Contrary Research. Perspective Authors 1 Related Companies 1 Share Anthropic has already delayed its IPO once, and rumors are now swirling that it may cancel the offering altogether. In September, Reuters reported the listing would slip to late October, and the WSJ later reported a November target so the company could show third-quarter results. The company’s October 26 filing set the company up to begin Nasdaq trading under the ticker ANT as soon as November 16. As that date approaches, however, concerns about the viability of the offering are mounting: The amended S-1 filed November 2 reported Q3 revenue of about $17 billion and roughly $895 billion in purchase and lease commitments. That revenue works out to about $68 billion a year, barely above the $65 billion run rate reported in July . Blackstone reportedly expects Anthropic’s debt to carry a junk rating, which would make raising debt to cover compute commitments challenging. Markets have soured on the AI trade"
+    },
+    {
+      "id": "check-page-c3c5c65deb",
+      "url": "https://research.contrary.com/report/anthropic-ipo-timeline-endangered",
+      "page": "batches",
+      "excerpt": "Anthropic IPO Timeline Endangered | Contrary Research Companies Reports Topics About Subscribe Report / Powered by Discover Companies Reports Topics About Connect Email LinkedIn Twitter Subscribe Powered by © 2026 Contrary Research · All rights reserved | Privacy Policy Report / Perspective Foundation Models Venture & Startup Markets Anthropic IPO Timeline Endangered November 7, 2026 | 2 min A perspective from Contrary Research. Perspective Authors 1 Related Companies 1 Share Anthropic has already delayed its IPO once, and rumors are now swirling that it may cancel the offering altogether. In September, Reuters reported the listing would slip to late October, and the WSJ later reported a November target so the company could show third-quarter results. The company’s October 26 filing set the company up to begin Nasdaq trading under the ticker ANT as soon as November 16. As that date approaches, however, concerns about the viability of the offering are mounting: The amended S-1 filed November 2 reported Q3 revenue of about $17 billion and roughly $895 billion in purchase and lease commitments. That revenue works out to about $68 billion a year, barely above the $65 billion run rate reported in July . Blackstone reportedly expects Anthropic’s debt to carry a junk rating, which would make raising debt to cover compute commitments challenging. Markets have soured on the AI trade"
+    },
+    {
+      "id": "check-page-713fbabd07",
+      "url": "https://contrary.com/blog/first-check-program",
+      "page": "details",
+      "excerpt": "First Check Program | Contrary Team Companies Research First Check Program Start a company with a $100k uncapped note. Will Robbins March 30, 2022 Will Robbins March 30, 2022 Weekly Newsletter Get articles like this in your inbox. Subscribe Share article Get your startup’s first check from Contrary to quit your job, skip an internship, or take time off of school. With our First Check program, 5 teams will receive up to $100k (as an uncapped note) to build companies. It doesn’t matter who you are or where you’re from. We also don’t let visa status or sector get in the way of investing in great teams. The only requirement is that you commit to working full-time on your company this summer. Applications open now, and will be evaluated on a rolling basis until 4/8. You can submit here . The process is simple: Apply here . We may invite you to a 15 minute chat with someone on the Contrary investing team. After that, we may have another ~30 minute discussion with others on the investing team. We’ll get back to you with a decision within a week. We invest in people, and like to build relationships from the very start. With support from the Contrary investing team, the broader Contrary network of backers, and, depending on city, office space to work, we’re excited to get working. Disclosure: Nothing presented within this article is intended to constitute legal, business, investment or"
+    },
+    {
+      "id": "check-page-4804773441",
+      "url": "https://contrary.com/blog/venture-partner-apps-2026",
+      "page": "application",
+      "excerpt": "Venture Partner Applications 2026 | Contrary Team Companies Research Venture Partner Applications 2026 2026 Venture Partner applications are now open! Rachel LeScoezec August 23, 2026 Rachel LeScoezec August 23, 2026 Weekly Newsletter Get articles like this in your inbox. Subscribe Share article Contrary is a talent and research-driven investment firm, backed by some of the world’s most iconic entrepreneurs. We invest in a small number of exceptional people and the companies they build, and work closely alongside them to build enduring businesses from seed to scale. With this approach, we’ve backed iconic companies like Anduril, Ramp, Hallow, Zepto, and many others. Each year, we assemble a selective team of exceptional student Venture Partners (VPs) to partner closely with us and invest in the next generation of top founders. VPs hail from universities across the US and Canada, and are a group of top founders, builders, engineers, researchers, designers and writers. As we approach the upcoming academic year, we're thrilled to begin our search for the next cohort of students to join the Contrary community. Being a Venture Partner As a Venture Partner, you'll be the go-to resource for founders and builders on campus. One day, you might grab coffee with someone brainstorming ideas for space manufacturing. The next, you'll research the latest AI trends or enterprise sales"
+    },
+    {
+      "id": "check-page-fe48a18a1a",
+      "url": "https://research.contrary.com/about",
+      "page": "details",
+      "excerpt": "About | Contrary Research Companies Reports Topics About Subscribe introducing contrary research About The mission of Contrary Research is to tell the stories of private technology companies and illuminate the dynamics that create, shape, and connect technology markets across industries. Especially in the private markets, the biggest obstacle to understanding most companies is a lack of information. Whether you're a founder, investor, operator, journalist, LP, or follower of the technology system at large, Contrary Research brings disparate insights and information together to help you better understand the world's fastest-growing technology companies. Team Kyle Harrison General Partner Sachin Maini Senior Editor Jen Yang-Wong COO Claire Schultz Research Associate Brooke Presten Operations Lead Jennifer Nordlund Operations People Contributors Abdullah Al-Rezwan Alex Banks Alexander Stratmoen Andriy Mulyar Andy Lowery Anna-Sofia Lesiv Aryan Afrouzi Bob van Luijt Brandon Duderstadt Branick Weix Chandler Luzsicza Charles Rubenfeld Convequity Dawson Sewell Eric Glyman Francis Odum Jack Raines Kat Orekhova Kyla Scanlon Matias Sanchez Sarmiento Muji Parth Parikh Peter Offringa Rak Garg Ryan Reeves Spencer Stewart Travis McPeak Will Robbins Senior Research Fellows Alex Liu Alexander Zou Alice Ao Allen Shen Andrew Kim Anisha Kothapa Colin Yuan Cory Anderson David Thai Etienne Segal"
+    },
+    {
+      "id": "check-page-87e1908adb",
+      "url": "https://contrary.com/companies",
+      "page": "portfolio",
+      "excerpt": "Portfolio | Contrary Team Companies Research Portfolio Company About Links Alloy Alloy Automation is an integration development platform for product teams to more quickly launch ERP, CRM, commerce, and other key SaaS integrations. Companies like Amazon, Gorgias, and Drip trust Alloy Automation for their integration infrastructure. Ando Ando is the modern team messaging platform. Anduril Anduril is a defense product company that builds technology for military agencies and border surveillance. Armada Armada builds and operates a resilient, secure, and scalable infrastructure, with a matching software component enabling a single control plane to easily manage and optimize data. The company’s mission is to enable connection and distribute the benefits inherent therein – anywhere in the world. AtoB AtoB is building Stripe for Transportation — modernizing the payments infrastructure for trucking and logistics, where capital movement occurs quickly and transparently. Base Base is building the future of American power by modernizing the grid as the first engineering-led, technology-driven power company. Bloom Bloom is an online financial platform that offers brokerage, securities, funding, investments, and trading services for teenagers. Brightland Brightland elevates simple, analog moments in the kitchen through consciously crafted extra virgin olive oils and fruit-forward vinegars"
+    },
+    {
+      "id": "check-page-dd387e40de",
+      "url": "https://jobs.contrary.com/",
+      "page": "portfolio",
+      "excerpt": "Jobs at Contrary Companies | Contrary team companies research companies team foundation & frontiers blog Venture Partners Portfolio Jobs Research Portfolio Jobs Find your next opportunity at one of Contrary’s portfolio companies. Jobs Companies Filter jobs by skills and more Roles Search roles Skills Search skills Location Search locations Company stage Select... Industry Search industries Salary Select... Internships only Remote options All jobs Posted Anytime Post and Manage jobs Powered by Consider Powered by Consider Privacy Terms company team companies investors insights blog research resources venture partners applications portfolio jobs tech talks media & legal legal privacy © 2026 Contrary, LLC"
+    },
+    {
+      "id": "check-page-f08e3d5b3e",
+      "url": "https://jobs.contrary.com/$/jobs",
+      "page": "portfolio",
+      "excerpt": "Jobs at Contrary Companies | Contrary team companies research companies team foundation & frontiers blog Venture Partners Portfolio Jobs Research 404 Sorry, we couldn't find that page. Powered by Consider Privacy Terms company team companies investors insights blog research resources venture partners applications portfolio jobs tech talks media & legal legal privacy © 2026 Contrary, LLC"
     }
   ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "info@contrary.com",
+        "evidenceId": "check-email-bf75fc4e49"
+      }
+    ],
     "phones": [],
     "routes": [
       {
         "value": "https://applications.contrary.com",
         "evidenceId": "check-route-3dd9203f64"
+      },
+      {
+        "value": "https://research.contrary.com/company/openai",
+        "evidenceId": "check-route-810d7a72eb"
+      },
+      {
+        "value": "https://research.contrary.com/company/replit",
+        "evidenceId": "check-route-0861237370"
+      },
+      {
+        "value": "https://contrary.com/blog/venture-partner-apps-2026",
+        "evidenceId": "check-route-726979ab1a"
+      },
+      {
+        "value": "https://contrarycap.typeform.com/ContraryVP2026",
+        "evidenceId": "check-route-8253183cd7"
+      },
+      {
+        "value": "https://applications.contrary.com/",
+        "evidenceId": "check-route-9782fa83ab"
       }
     ],
     "applicationUrl": [
@@ -57,15 +460,81 @@
         "evidenceId": "check-route-db49d1bcf0"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-7565f8ff78"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-a895c2a2b1"
+      }
+    ],
+    "announcedIntake": [
+      {
+        "value": "September",
+        "evidenceId": "check-announced-bd294282cd"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "2 months",
+        "evidenceId": "check-duration-376b101cfa"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-08a546f146"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-428b725b70"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "of school. With our First Check program, 5 teams will receive up to $100k (as an uncapped note) to build companies. It doesn’t matter who you",
+        "evidenceId": "check-deal-33b9271e7c"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-33b9271e7c"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://contrary.com/companies",
         "evidenceId": "check-portfolio-1ab7f952cc"
+      },
+      {
+        "value": "https://research.contrary.com/company",
+        "evidenceId": "check-portfolio-cd865331c2"
+      },
+      {
+        "value": "https://www.contrary.com/companies",
+        "evidenceId": "check-portfolio-19555eb6aa"
+      },
+      {
+        "value": "https://jobs.contrary.com/companies",
+        "evidenceId": "check-portfolio-36acb4a2b2"
       }
     ],
     "name": [

@@ -1,184 +1,866 @@
 {
   "programId": "third-derivative",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.third-derivative.org/",
+    "https://www.third-derivative.org/corporates-application",
+    "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+    "https://www.third-derivative.org/mentor-application",
     "https://www.third-derivative.org/startup-application",
-    "https://www.third-derivative.org/industrial-innovation-cohorts",
-    "https://www.third-derivative.org/about"
+    "https://www.third-derivative.org/startup-application?hsLang=en",
+    "https://www.third-derivative.org/blog/35-graduating-startups-driving-innovation-cohort-23-2-and-first-gigaton-captured",
+    "https://www.third-derivative.org/blog/announcing-cohort-22-1",
+    "https://www.third-derivative.org/blog/announcing-the-clean-mobile-power-cohort",
+    "https://www.third-derivative.org/blog/celebrating-cohort417",
+    "https://www.third-derivative.org/blog/d3-incoming-general-cohort-25-3-newsbrief",
+    "https://www.third-derivative.org/blog/d3-launches-first-cohort-co2-startups",
+    "https://www.third-derivative.org/blog/introducing-third-derivatives-cohort-24-1",
+    "https://www.third-derivative.org/blog/third-derivative-and-rmi-launch-industrial-innovation-cohorts-to-accelerate-decarbonization-of-steel-cement-and-chemicals",
+    "https://www.third-derivative.org/blog/third-derivative-unveils-26-startup-climate-cohort-focused-on-hard-tech-and-deployment"
   ],
   "evidence": [
     {
+      "id": "check-duration-09d5006928",
+      "url": "https://www.third-derivative.org/blog/celebrating-cohort417",
+      "title": "Third Derivative — batches page",
+      "excerpt": "with our tailored accelerator program. Honoring 18 months of decisive and inclusive growth Onboarded on",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-25b845a7fa",
+      "url": "https://www.third-derivative.org/blog/celebrating-cohort417",
+      "title": "Third Derivative — batches page",
+      "excerpt": "make the transition to D3 alumni! Over the last 18 months, these 46 inspiring climate tech startups have",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-444221f4ab",
+      "url": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+      "title": "Third Derivative — application page",
+      "excerpt": "Startups will apply to participate in an 18-month accelerator journey, including the following",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-4dfd05e066",
+      "url": "https://www.third-derivative.org/blog/announcing-the-clean-mobile-power-cohort",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Cohort will participate in Third Derivative's 18-month accelerator program, receiving bespoke,",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-81ca398b55",
+      "url": "https://www.third-derivative.org/blog/third-derivative-unveils-26-startup-climate-cohort-focused-on-hard-tech-and-deployment",
+      "title": "Third Derivative — batches page",
+      "excerpt": "new infrastructure buildout. Third Derivative’s 18-month accelerator provides tailored support to help",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-822360a561",
+      "url": "https://www.third-derivative.org/blog/35-graduating-startups-driving-innovation-cohort-23-2-and-first-gigaton-captured",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Captured (FGC) program. After a rewarding 18-month journey with Third Derivative’s accelerator,",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-a45457fdd8",
+      "url": "https://www.third-derivative.org/blog/introducing-third-derivatives-cohort-24-1",
+      "title": "Third Derivative — batches page",
+      "excerpt": "2, 2024, to join future cohorts of our virtual 18-month accelerator program and our ecosystem of",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-e11fdd70eb",
+      "url": "https://www.third-derivative.org/blog/celebrating-cohort417",
+      "title": "Third Derivative — batches page",
+      "excerpt": "our first 46 startups since their inauguration 18 months ago. Congratulations are in order for Third",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-1449b55e7e",
+      "url": "https://www.third-derivative.org/blog/d3-launches-first-cohort-co2-startups",
+      "title": "Third Derivative — batches page",
+      "excerpt": "press@third-derivative.org",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-1e15112a2e",
+      "url": "https://www.third-derivative.org/blog/d3-launches-first-cohort-co2-startups",
+      "title": "Third Derivative — batches page",
+      "excerpt": "please contact: Elaine Hsieh, Principal, Third Derivative press@third-derivative.org About Third Derivative Founded in 2020 by RMI in",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-0480cc461e",
+      "url": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+      "title": "Third Derivative — application page",
+      "excerpt": "external experts. Innovation Showcases We aim to host one in person and several virtual showcases a year. During each",
+      "page": "application"
+    },
+    {
+      "id": "check-format-0aef219010",
+      "url": "https://www.third-derivative.org/blog/introducing-third-derivatives-cohort-24-1",
+      "title": "Third Derivative — batches page",
+      "excerpt": "extended to April 2, 2024, to join future cohorts of our virtual 18-month accelerator program and our ecosystem of",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-340e8665ce",
+      "url": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+      "title": "Third Derivative — application page",
+      "excerpt": "startups and potential investors and corporate partners. Virtual Programming Developmental workshops (on topics such as",
+      "page": "application"
+    },
+    {
+      "id": "check-format-444f8504e3",
+      "url": "https://www.third-derivative.org/blog/announcing-cohort-22-1",
+      "title": "Third Derivative — batches page",
+      "excerpt": "on supercomputers with utility, market, geospatial, and remote sensing data. Next, each and every property receives a",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-60280bdcfd",
+      "url": "https://www.third-derivative.org/blog/third-derivative-unveils-26-startup-climate-cohort-focused-on-hard-tech-and-deployment",
+      "title": "Third Derivative — batches page",
+      "excerpt": "the speed to market. The flexible and highly curated remote accelerator program enables startups to focus on their",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-73527c9688",
+      "url": "https://www.third-derivative.org/blog/d3-incoming-general-cohort-25-3-newsbrief",
+      "title": "Third Derivative — batches page",
+      "excerpt": "the speed to market. The flexible and highly curated remote accelerator program enables startups to focus on their",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-c988fcc729",
+      "url": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+      "title": "Third Derivative — application page",
+      "excerpt": "Showcases We aim to host one in person and several virtual showcases a year. During each showcase, 3-6 startups will",
+      "page": "application"
+    },
+    {
+      "id": "check-format-fae5b100a4",
+      "url": "https://www.third-derivative.org/blog/announcing-cohort-22-1",
+      "title": "Third Derivative — batches page",
+      "excerpt": "sleek and smart battery swapping devices provide real-time remote monitoring of battery parameters, parallel discharge",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-fec4494a4f",
+      "url": "https://www.third-derivative.org/blog/announcing-the-clean-mobile-power-cohort",
+      "title": "Third Derivative — batches page",
+      "excerpt": "power generation, and one company has a hydrogen-battery hybrid solution. These various approaches not only provide the",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-12184bc046",
+      "url": "https://www.third-derivative.org/blog/announcing-cohort-22-1",
+      "title": "Third Derivative — batches page",
+      "excerpt": "America based startups, six are located in India, three of which are focused on",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-5295be2dd5",
+      "url": "https://www.third-derivative.org/blog/third-derivative-unveils-26-startup-climate-cohort-focused-on-hard-tech-and-deployment",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Southeast Asia, including companies based in Indonesia and Singapore. Carbon and methane (and",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-ca6aaa9bd3",
+      "url": "https://www.third-derivative.org/",
+      "title": "Third Derivative — homepage",
+      "excerpt": "environment sectors . Whether you’re based in Asia and the Middle East or expanding into",
+      "page": "details"
+    },
+    {
+      "id": "check-location-d2603ea732",
+      "url": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+      "title": "Third Derivative — application page",
+      "excerpt": "in hard-to-abate sectors. Whether based in Asia and the Middle East or looking to",
+      "page": "application"
+    },
+    {
       "id": "check-name-57091c9926",
       "url": "https://www.third-derivative.org/",
-      "title": "Third Derivative — homepage checked by scrape.py",
+      "title": "Third Derivative — homepage",
       "excerpt": "Third Derivative Skip to content Our Portfolio For Entrepreneurs",
       "page": "details"
     },
     {
-      "id": "check-portfolio-05c0d9abca",
-      "url": "https://www.third-derivative.org/industrial-innovation-cohorts",
-      "title": "Third Derivative — batches page checked by scrape.py",
+      "id": "check-portfolio-027bca2962",
+      "url": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+      "title": "Third Derivative — application page",
+      "excerpt": "EXPLORE OUR PROGRAM → https://www.third-derivative.org/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-030487908c",
+      "url": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+      "title": "Third Derivative — application page",
       "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-075e77fb8b",
+      "url": "https://www.third-derivative.org/blog/announcing-cohort-22-1",
+      "title": "Third Derivative — batches page",
+      "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-08c871fbfd",
+      "url": "https://www.third-derivative.org/blog/introducing-third-derivatives-cohort-24-1",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-0c9259203c",
+      "url": "https://www.third-derivative.org/blog/d3-incoming-general-cohort-25-3-newsbrief",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-0d8672f024",
+      "url": "https://www.third-derivative.org/mentor-application",
+      "title": "Third Derivative — application page",
+      "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-0fae41d7fd",
+      "url": "https://www.third-derivative.org/blog/celebrating-cohort417",
+      "title": "Third Derivative — batches page",
+      "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-0fc63eebbb",
+      "url": "https://www.third-derivative.org/mentor-application",
+      "title": "Third Derivative — application page",
+      "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-14fc44eadd",
+      "url": "https://www.third-derivative.org/blog/announcing-the-clean-mobile-power-cohort",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-24f257f0ff",
+      "url": "https://www.third-derivative.org/startup-application?hsLang=en",
+      "title": "Third Derivative — application page",
+      "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-27b7cfed2d",
+      "url": "https://www.third-derivative.org/blog/d3-launches-first-cohort-co2-startups",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-2f39da21ca",
+      "url": "https://www.third-derivative.org/blog/announcing-the-clean-mobile-power-cohort",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-307e6d4e39",
+      "url": "https://www.third-derivative.org/blog/celebrating-cohort417",
+      "title": "Third Derivative — batches page",
+      "excerpt": "apply here directly → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-328796c170",
+      "url": "https://www.third-derivative.org/blog/announcing-cohort-22-1",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
       "page": "batches"
     },
     {
       "id": "check-portfolio-33e79bce86",
       "url": "https://www.third-derivative.org/",
-      "title": "Third Derivative — homepage checked by scrape.py",
+      "title": "Third Derivative — homepage",
       "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
       "page": "details"
     },
     {
-      "id": "check-portfolio-3d37b60ac5",
-      "url": "https://www.third-derivative.org/industrial-innovation-cohorts",
-      "title": "Third Derivative — batches page checked by scrape.py",
-      "excerpt": "portfolio → https://www.third-derivative.org/portfolio?hsLang=en",
+      "id": "check-portfolio-3a454685e9",
+      "url": "https://www.third-derivative.org/blog/announcing-the-clean-mobile-power-cohort",
+      "title": "Third Derivative — batches page",
+      "excerpt": "more → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-3cbde69046",
+      "url": "https://www.third-derivative.org/blog/35-graduating-startups-driving-innovation-cohort-23-2-and-first-gigaton-captured",
+      "title": "Third Derivative — batches page",
+      "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-3d4e1a6e96",
+      "url": "https://www.third-derivative.org/corporates-application",
+      "title": "Third Derivative — application page",
+      "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3eb7eb90ca",
+      "url": "https://www.third-derivative.org/corporates-application",
+      "title": "Third Derivative — application page",
+      "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-428bf2f0aa",
+      "url": "https://www.third-derivative.org/blog/introducing-third-derivatives-cohort-24-1",
+      "title": "Third Derivative — batches page",
+      "excerpt": "here . → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-45c12f6f67",
+      "url": "https://www.third-derivative.org/blog/introducing-third-derivatives-cohort-24-1",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-49a9c5c4a2",
+      "url": "https://www.third-derivative.org/blog/celebrating-cohort417",
+      "title": "Third Derivative — batches page",
+      "excerpt": "portfolio page → https://www.third-derivative.org/portfolio",
       "page": "batches"
     },
     {
       "id": "check-portfolio-4dfb0ebd9c",
       "url": "https://www.third-derivative.org/",
-      "title": "Third Derivative — homepage checked by scrape.py",
+      "title": "Third Derivative — homepage",
       "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
       "page": "details"
     },
     {
-      "id": "check-portfolio-5f1674505a",
-      "url": "https://www.third-derivative.org/industrial-innovation-cohorts",
-      "title": "Third Derivative — batches page checked by scrape.py",
-      "excerpt": "18-month founder-friendly accelerator program → https://www.third-derivative.org/startups?hsLang=en",
+      "id": "check-portfolio-4f4e23278b",
+      "url": "https://www.third-derivative.org/blog/announcing-the-clean-mobile-power-cohort",
+      "title": "Third Derivative — batches page",
+      "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-59950d26a3",
+      "url": "https://www.third-derivative.org/blog/third-derivative-unveils-26-startup-climate-cohort-focused-on-hard-tech-and-deployment",
+      "title": "Third Derivative — batches page",
+      "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-6459e7c7be",
+      "url": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+      "title": "Third Derivative — application page",
+      "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-661d3b6ba7",
+      "url": "https://www.third-derivative.org/mentor-application",
+      "title": "Third Derivative — application page",
+      "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-68c10dcab5",
+      "url": "https://www.third-derivative.org/blog/introducing-third-derivatives-cohort-24-1",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Startups → https://www.third-derivative.org/blog/tag/startups",
       "page": "batches"
     },
     {
       "id": "check-portfolio-6f0070c7aa",
       "url": "https://www.third-derivative.org/startup-application",
-      "title": "Third Derivative — application page checked by scrape.py",
+      "title": "Third Derivative — application page",
       "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
       "page": "application"
     },
     {
-      "id": "check-portfolio-7a38cde247",
-      "url": "https://www.third-derivative.org/about",
-      "title": "Third Derivative — details page checked by scrape.py",
-      "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
-      "page": "details"
+      "id": "check-portfolio-6f3670532e",
+      "url": "https://www.third-derivative.org/blog/introducing-third-derivatives-cohort-24-1",
+      "title": "Third Derivative — batches page",
+      "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
+      "page": "batches"
     },
     {
-      "id": "check-portfolio-820ffec16e",
-      "url": "https://www.third-derivative.org/industrial-innovation-cohorts",
-      "title": "Third Derivative — batches page checked by scrape.py",
-      "excerpt": "EXPLORE OUR PROGRAM → https://www.third-derivative.org/startups",
+      "id": "check-portfolio-755df9ebe0",
+      "url": "https://www.third-derivative.org/blog/announcing-cohort-22-1",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
       "page": "batches"
+    },
+    {
+      "id": "check-portfolio-88c8e5abbf",
+      "url": "https://www.third-derivative.org/startup-application?hsLang=en",
+      "title": "Third Derivative — application page",
+      "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
+      "page": "application"
     },
     {
       "id": "check-portfolio-8cc4d305c4",
       "url": "https://www.third-derivative.org/",
-      "title": "Third Derivative — homepage checked by scrape.py",
+      "title": "Third Derivative — homepage",
       "excerpt": "Explore our Portfolio → https://www.third-derivative.org/portfolio?hsLang=en",
       "page": "details"
     },
     {
-      "id": "check-portfolio-8f68fc4ba9",
-      "url": "https://www.third-derivative.org/industrial-innovation-cohorts",
-      "title": "Third Derivative — batches page checked by scrape.py",
+      "id": "check-portfolio-8fd57efaec",
+      "url": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+      "title": "Third Derivative — application page",
+      "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-941381ac5d",
+      "url": "https://www.third-derivative.org/blog/d3-launches-first-cohort-co2-startups",
+      "title": "Third Derivative — batches page",
       "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
       "page": "batches"
     },
     {
-      "id": "check-portfolio-b9b2a960a3",
-      "url": "https://www.third-derivative.org/about",
-      "title": "Third Derivative — details page checked by scrape.py",
+      "id": "check-portfolio-95b28eb168",
+      "url": "https://www.third-derivative.org/blog/third-derivative-and-rmi-launch-industrial-innovation-cohorts-to-accelerate-decarbonization-of-steel-cement-and-chemicals",
+      "title": "Third Derivative — batches page",
       "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
-      "page": "details"
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-a2a80ea6b4",
+      "url": "https://www.third-derivative.org/blog/third-derivative-unveils-26-startup-climate-cohort-focused-on-hard-tech-and-deployment",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-a61f3b58d9",
+      "url": "https://www.third-derivative.org/blog/introducing-third-derivatives-cohort-24-1",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Learn more and apply → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-a93d6cc964",
+      "url": "https://www.third-derivative.org/blog/celebrating-cohort417",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-ae4876d08e",
+      "url": "https://www.third-derivative.org/blog/announcing-cohort-22-1",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Startups → https://www.third-derivative.org/blog/tag/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-af2a8f5379",
+      "url": "https://www.third-derivative.org/blog/celebrating-cohort417",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-b85908f9af",
+      "url": "https://www.third-derivative.org/blog/35-graduating-startups-driving-innovation-cohort-23-2-and-first-gigaton-captured",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-b8ca5e8eb9",
+      "url": "https://www.third-derivative.org/blog/d3-incoming-general-cohort-25-3-newsbrief",
+      "title": "Third Derivative — batches page",
+      "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-b8fc988e10",
+      "url": "https://www.third-derivative.org/blog/d3-launches-first-cohort-co2-startups",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-ba43ca571f",
+      "url": "https://www.third-derivative.org/blog/d3-incoming-general-cohort-25-3-newsbrief",
+      "title": "Third Derivative — batches page",
+      "excerpt": "https://www.third-derivative.org/portfolio → https://www.third-derivative.org/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-bc72c1aa1b",
+      "url": "https://www.third-derivative.org/blog/third-derivative-unveils-26-startup-climate-cohort-focused-on-hard-tech-and-deployment",
+      "title": "Third Derivative — batches page",
+      "excerpt": "our portfolio page here. → https://www.third-derivative.org/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-c01a856ab0",
+      "url": "https://www.third-derivative.org/blog/35-graduating-startups-driving-innovation-cohort-23-2-and-first-gigaton-captured",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
+      "page": "batches"
     },
     {
       "id": "check-portfolio-c0c6f09804",
       "url": "https://www.third-derivative.org/startup-application",
-      "title": "Third Derivative — application page checked by scrape.py",
+      "title": "Third Derivative — application page",
       "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-d0b796637d",
+      "url": "https://www.third-derivative.org/blog/third-derivative-unveils-26-startup-climate-cohort-focused-on-hard-tech-and-deployment",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-d8bdf2b9e5",
+      "url": "https://www.third-derivative.org/blog/d3-incoming-general-cohort-25-3-newsbrief",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-de4c9171d5",
+      "url": "https://www.third-derivative.org/blog/third-derivative-and-rmi-launch-industrial-innovation-cohorts-to-accelerate-decarbonization-of-steel-cement-and-chemicals",
+      "title": "Third Derivative — batches page",
+      "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
+      "page": "batches"
     },
     {
       "id": "check-portfolio-de60d69f60",
       "url": "https://www.third-derivative.org/",
-      "title": "Third Derivative — homepage checked by scrape.py",
+      "title": "Third Derivative — homepage",
       "excerpt": "https://www.third-derivative.org/startups?hsLang=en",
       "page": "details"
     },
     {
-      "id": "check-portfolio-f1cf7fb3c8",
-      "url": "https://www.third-derivative.org/",
-      "title": "Third Derivative — homepage checked by scrape.py",
-      "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-f709571ad6",
-      "url": "https://www.third-derivative.org/startup-application",
-      "title": "Third Derivative — application page checked by scrape.py",
-      "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
+      "id": "check-portfolio-e4fbf6db8b",
+      "url": "https://www.third-derivative.org/startup-application?hsLang=en",
+      "title": "Third Derivative — application page",
+      "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
       "page": "application"
     },
     {
-      "id": "check-portfolio-fd533ecca0",
-      "url": "https://www.third-derivative.org/about",
-      "title": "Third Derivative — details page checked by scrape.py",
-      "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
-      "page": "details"
+      "id": "check-portfolio-e7d4fe7294",
+      "url": "https://www.third-derivative.org/corporates-application",
+      "title": "Third Derivative — application page",
+      "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
+      "page": "application"
     },
     {
-      "id": "check-portfolio-feabadc7bb",
-      "url": "https://www.third-derivative.org/industrial-innovation-cohorts",
-      "title": "Third Derivative — batches page checked by scrape.py",
+      "id": "check-portfolio-eb3aefe6d1",
+      "url": "https://www.third-derivative.org/blog/third-derivative-and-rmi-launch-industrial-innovation-cohorts-to-accelerate-decarbonization-of-steel-cement-and-chemicals",
+      "title": "Third Derivative — batches page",
       "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
       "page": "batches"
     },
     {
-      "id": "check-route-2ec0e7ad22",
-      "url": "https://www.third-derivative.org/about",
-      "title": "Third Derivative — details page checked by scrape.py",
-      "excerpt": "How to Apply → https://www.third-derivative.org/startup-application",
+      "id": "check-portfolio-f1cf7fb3c8",
+      "url": "https://www.third-derivative.org/",
+      "title": "Third Derivative — homepage",
+      "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-f58178183b",
+      "url": "https://www.third-derivative.org/blog/celebrating-cohort417",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Startups → https://www.third-derivative.org/blog/tag/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-f709571ad6",
+      "url": "https://www.third-derivative.org/startup-application",
+      "title": "Third Derivative — application page",
+      "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f78efb6572",
+      "url": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+      "title": "Third Derivative — application page",
+      "excerpt": "Explore The Startups → https://www.third-derivative.org/portfolio?hsLang=en",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1753a2ca61",
+      "url": "https://www.third-derivative.org/blog/d3-launches-first-cohort-co2-startups",
+      "title": "Third Derivative — batches page",
+      "excerpt": "How to Apply → https://www.third-derivative.org/startup-application",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-307e6d4e39",
+      "url": "https://www.third-derivative.org/blog/celebrating-cohort417",
+      "title": "Third Derivative — batches page",
+      "excerpt": "apply here directly → https://www.third-derivative.org/startups",
+      "page": "batches"
     },
     {
       "id": "check-route-3b1dd4ecc0",
       "url": "https://www.third-derivative.org/",
-      "title": "Third Derivative — homepage checked by scrape.py",
+      "title": "Third Derivative — homepage",
       "excerpt": "APPLY TODAY → https://www.third-derivative.org/future-industries-partnership?hsLang=en",
       "page": "details"
     },
     {
-      "id": "check-route-69e5a07833",
-      "url": "https://www.third-derivative.org/industrial-innovation-cohorts",
-      "title": "Third Derivative — batches page checked by scrape.py",
+      "id": "check-route-3d333732b7",
+      "url": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+      "title": "Third Derivative — application page",
+      "excerpt": "SUBMIT YOUR APPLICATION → https://www.third-derivative.org/startup-application?hsLang=en",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4f622b4dd4",
+      "url": "https://www.third-derivative.org/corporates-application",
+      "title": "Third Derivative — application page",
+      "excerpt": "How to Apply → https://www.third-derivative.org/startup-application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6259b0889d",
+      "url": "https://www.third-derivative.org/blog/celebrating-cohort417",
+      "title": "Third Derivative — batches page",
+      "excerpt": "How to Apply → https://www.third-derivative.org/startup-application",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-640d5355c3",
+      "url": "https://www.third-derivative.org/blog/third-derivative-and-rmi-launch-industrial-innovation-cohorts-to-accelerate-decarbonization-of-steel-cement-and-chemicals",
+      "title": "Third Derivative — batches page",
+      "excerpt": "How to Apply → https://www.third-derivative.org/startup-application",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-7574a4a422",
+      "url": "https://www.third-derivative.org/blog/introducing-third-derivatives-cohort-24-1",
+      "title": "Third Derivative — batches page",
+      "excerpt": "How to Apply → https://www.third-derivative.org/startup-application",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-783d3a053c",
+      "url": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+      "title": "Third Derivative — application page",
+      "excerpt": "APPLY TODAY → https://www.third-derivative.org/startup-application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-787a4eb329",
+      "url": "https://www.third-derivative.org/blog/35-graduating-startups-driving-innovation-cohort-23-2-and-first-gigaton-captured",
+      "title": "Third Derivative — batches page",
+      "excerpt": "How to Apply → https://www.third-derivative.org/startup-application",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-8bec240d7d",
+      "url": "https://www.third-derivative.org/mentor-application",
+      "title": "Third Derivative — application page",
+      "excerpt": "How to Apply → https://www.third-derivative.org/startup-application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a61f3b58d9",
+      "url": "https://www.third-derivative.org/blog/introducing-third-derivatives-cohort-24-1",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Learn more and apply → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-b0338be37d",
+      "url": "https://www.third-derivative.org/startup-application?hsLang=en",
+      "title": "Third Derivative — application page",
+      "excerpt": "How to Apply → https://www.third-derivative.org/startup-application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b22c246261",
+      "url": "https://www.third-derivative.org/blog/d3-incoming-general-cohort-25-3-newsbrief",
+      "title": "Third Derivative — batches page",
       "excerpt": "How to Apply → https://www.third-derivative.org/startup-application",
       "page": "batches"
     },
     {
       "id": "check-route-c2e18bb6c1",
       "url": "https://www.third-derivative.org/",
-      "title": "Third Derivative — homepage checked by scrape.py",
+      "title": "Third Derivative — homepage",
       "excerpt": "How to Apply → https://www.third-derivative.org/startup-application",
       "page": "details"
     },
     {
       "id": "check-route-c3ede54352",
       "url": "https://www.third-derivative.org/",
-      "title": "Third Derivative — homepage checked by scrape.py",
+      "title": "Third Derivative — homepage",
       "excerpt": "https://www.third-derivative.org",
       "page": "details"
     },
     {
+      "id": "check-route-e325500522",
+      "url": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+      "title": "Third Derivative — application page",
+      "excerpt": "How to Apply → https://www.third-derivative.org/startup-application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e75d88669b",
+      "url": "https://www.third-derivative.org/blog/announcing-cohort-22-1",
+      "title": "Third Derivative — batches page",
+      "excerpt": "How to Apply → https://www.third-derivative.org/startup-application",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-ea79017f7f",
+      "url": "https://www.third-derivative.org/blog/third-derivative-unveils-26-startup-climate-cohort-focused-on-hard-tech-and-deployment",
+      "title": "Third Derivative — batches page",
+      "excerpt": "How to Apply → https://www.third-derivative.org/startup-application",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-f792a0792c",
+      "url": "https://www.third-derivative.org/blog/announcing-the-clean-mobile-power-cohort",
+      "title": "Third Derivative — batches page",
+      "excerpt": "How to Apply → https://www.third-derivative.org/startup-application",
+      "page": "batches"
+    },
+    {
+      "id": "check-selectivity-e351700525",
+      "url": "https://www.third-derivative.org/blog/announcing-cohort-22-1",
+      "title": "Third Derivative — batches page",
+      "excerpt": "Inside Cohort 22-1 Cohort 22-1 was selected from over 200 applicants, with an acceptance rate of ~7.5%. We’re particularly thrilled with the diversity among these 16 startups, 85%",
+      "page": "batches"
+    },
+    {
       "id": "check-status-36ad63e98b",
       "url": "https://www.third-derivative.org/",
-      "title": "Third Derivative — homepage checked by scrape.py",
+      "title": "Third Derivative — homepage",
       "excerpt": "portfolio startups are decisively tackling challenges across all emissions sectors. Explore our Portfolio NOW ACCEPTING APPLICATIONS Future Industries Partnership Opportunity for Startups The Future Industries Partnership helps climate tech",
       "page": "details"
+    },
+    {
+      "id": "check-status-75aecab35c",
+      "url": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+      "title": "Third Derivative — application page",
+      "excerpt": "Investors Mentors The Future Industries Partnership Catalysing innovation for the industrial transition NOW ACCEPTING APPLICATIONS FOR The Future Industries Partnership The Future Industries Partnership is a three-year philanthropic",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-4ab7fac4dd",
+      "url": "https://www.third-derivative.org/",
+      "page": "details",
+      "excerpt": "Third Derivative Skip to content Our Portfolio For Entrepreneurs Eligibility & Selection How to Apply Programs & Opportunities Innovation Cohorts & Partnerships Industrial Innovation Cohorts Future Industries Partnership Impact Archive Clean Mobile Power Initiative Cohort First Gigaton Captured Cooling Innovations Passive Daytime Radiative Cooling Insights & Events About Us Our Team Careers Our Partners Corporates Investors Mentors Accelerate the clean future. Together. We are building an inclusive, global ecosystem that rapidly finds, funds, and scales climate tech innovation and transforms markets. Founded by RMI and New Energy Nexus in 2020: Third Derivative is an open, collaborative climate tech ecosystem that accelerates startups and moves markets. By guiding and supporting climate tech entrepreneurs who are bringing new ideas and innovation to market, we accelerate the clean future worldwide. Through a vast global network of deep experts, corporate partners, and investors, we help startups go to market faster with their breakthrough ideas, create real impact, and transform markets. LEARN MORE ABOUT US Introducing Third Derivative's trailblazing portfolio Meet our startups actively building a sustainable, scalable climate future for all. We’re powering up the world’s most promising climate tech startups, proudly acting as their trusted guides to Third Derivative’s"
+    },
+    {
+      "id": "check-page-42365a347a",
+      "url": "https://www.third-derivative.org/corporates-application",
+      "page": "application",
+      "excerpt": "Application for Corporates Skip to content Our Portfolio For Entrepreneurs Eligibility & Selection How to Apply Programs & Opportunities Innovation Cohorts & Partnerships Industrial Innovation Cohorts Future Industries Partnership Impact Archive Clean Mobile Power Initiative Cohort First Gigaton Captured Cooling Innovations Passive Daytime Radiative Cooling Insights & Events About Us Our Team Careers Our Partners Corporates Investors Mentors Application for Corporate Partners Join the Ecosystem. Plug your organization into the best-networked climate tech accelerator. Fill out the form below to request a meeting with a D3 team member. To make sure we have the right person meeting with you, please answer the questions below: D3’s global network of corporate partners gain first access to world-changing climate startups that our Research & Insights team have put through a rigorous diligence process. We help demystify the world's most impactful climate tech opportunities, especially in harder-to-abate emissions sectors. Founded by RMI and New Energy Nexus , Third Derivative (D3) is accelerating the rate of climate innovation through our inclusive ecosystem approach, which rapidly finds, funds, and scales climate tech globally. Connect with us: About Story Team Careers Insights & Events Research & Insights Contact Contact Us Media For Entrepreneurs How to Apply Eligibility &"
+    },
+    {
+      "id": "check-page-f1dc243aae",
+      "url": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+      "page": "application",
+      "excerpt": "Future Industries Partnership Skip to content Our Portfolio For Entrepreneurs Eligibility & Selection How to Apply Programs & Opportunities Innovation Cohorts & Partnerships Industrial Innovation Cohorts Future Industries Partnership Impact Archive Clean Mobile Power Initiative Cohort First Gigaton Captured Cooling Innovations Passive Daytime Radiative Cooling Insights & Events About Us Our Team Careers Our Partners Corporates Investors Mentors The Future Industries Partnership Catalysing innovation for the industrial transition NOW ACCEPTING APPLICATIONS FOR The Future Industries Partnership The Future Industries Partnership is a three-year philanthropic programme supported by HSBC and delivered by Third Derivative and Founders Factory. Our mission is to help accelerate the deployment of innovative climate technologies needed to decarbonise heavy industries such as steel, cement, and chemicals across Asia and the Middle East. APPLY TODAY EXPLORE OUR PROGRAM BECOME A COLLABORATOR Meet Our Future Industries Partnership Startups Explore The Startups Our Vision The Future Industries Partnerships seeks to help climate tech startups address the barriers to investment and unlock the opportunities for deploying promising technologies at scale in industrial and built environment sectors across Asia and the Middle East. Climate tech startups will be provided with technical and"
+    },
+    {
+      "id": "check-page-890576c68f",
+      "url": "https://www.third-derivative.org/mentor-application",
+      "page": "application",
+      "excerpt": "Mentor Application Skip to content Our Portfolio For Entrepreneurs Eligibility & Selection How to Apply Programs & Opportunities Innovation Cohorts & Partnerships Industrial Innovation Cohorts Future Industries Partnership Impact Archive Clean Mobile Power Initiative Cohort First Gigaton Captured Cooling Innovations Passive Daytime Radiative Cooling Insights & Events About Us Our Team Careers Our Partners Corporates Investors Mentors Mentor Application Founded by RMI and New Energy Nexus , Third Derivative (D3) is accelerating the rate of climate innovation through our inclusive ecosystem approach, which rapidly finds, funds, and scales climate tech globally. Connect with us: About Story Team Careers Insights & Events Research & Insights Contact Contact Us Media For Entrepreneurs How to Apply Eligibility & Selection Partners Investors Corporates Mentors Refer a Startup SIGN UP FOR THE MONTHLY D3 NEWSLETTER Sign Up Copyright 2026. Third Derivative. All Rights Reserved. Privacy Policy"
+    },
+    {
+      "id": "check-page-5c8e35ab3f",
+      "url": "https://www.third-derivative.org/startup-application",
+      "page": "application",
+      "excerpt": "Startup Application Skip to content Our Portfolio For Entrepreneurs Eligibility & Selection How to Apply Programs & Opportunities Innovation Cohorts & Partnerships Industrial Innovation Cohorts Future Industries Partnership Impact Archive Clean Mobile Power Initiative Cohort First Gigaton Captured Cooling Innovations Passive Daytime Radiative Cooling Insights & Events About Us Our Team Careers Our Partners Corporates Investors Mentors Founded by RMI and New Energy Nexus , Third Derivative (D3) is accelerating the rate of climate innovation through our inclusive ecosystem approach, which rapidly finds, funds, and scales climate tech globally. Connect with us: About Story Team Careers Insights & Events Research & Insights Contact Contact Us Media For Entrepreneurs How to Apply Eligibility & Selection Partners Investors Corporates Mentors Refer a Startup SIGN UP FOR THE MONTHLY D3 NEWSLETTER Sign Up Copyright 2026. Third Derivative. All Rights Reserved. Privacy Policy"
+    },
+    {
+      "id": "check-page-3f02d03f02",
+      "url": "https://www.third-derivative.org/startup-application?hsLang=en",
+      "page": "application",
+      "excerpt": "Startup Application Skip to content Our Portfolio For Entrepreneurs Eligibility & Selection How to Apply Programs & Opportunities Innovation Cohorts & Partnerships Industrial Innovation Cohorts Future Industries Partnership Impact Archive Clean Mobile Power Initiative Cohort First Gigaton Captured Cooling Innovations Passive Daytime Radiative Cooling Insights & Events About Us Our Team Careers Our Partners Corporates Investors Mentors Founded by RMI and New Energy Nexus , Third Derivative (D3) is accelerating the rate of climate innovation through our inclusive ecosystem approach, which rapidly finds, funds, and scales climate tech globally. Connect with us: About Story Team Careers Insights & Events Research & Insights Contact Contact Us Media For Entrepreneurs How to Apply Eligibility & Selection Partners Investors Corporates Mentors Refer a Startup SIGN UP FOR THE MONTHLY D3 NEWSLETTER Sign Up Copyright 2026. Third Derivative. All Rights Reserved. Privacy Policy"
+    },
+    {
+      "id": "check-page-92b9316623",
+      "url": "https://www.third-derivative.org/blog/35-graduating-startups-driving-innovation-cohort-23-2-and-first-gigaton-captured",
+      "page": "batches",
+      "excerpt": "35 Graduating Startups Driving Innovation: Cohort 23-2 and First Gigaton Captured Skip to content Our Portfolio For Entrepreneurs Eligibility & Selection How to Apply Programs & Opportunities Innovation Cohorts & Partnerships Industrial Innovation Cohorts Future Industries Partnership Impact Archive Clean Mobile Power Initiative Cohort First Gigaton Captured Cooling Innovations Passive Daytime Radiative Cooling Insights & Events About Us Our Team Careers Our Partners Corporates Investors Mentors 35 Graduating Startups Driving Innovation: Cohort 23-2 and First Gigaton Captured Third Derivative February 10, 2025 Marking a major milestone for the next generation of climate leaders. Today, we celebrate a major milestone with the graduation of 35 startups from Cohort 23-2 ( our second cohort of 2023 ) and Third Derivatives' First Gigaton Captured (FGC) program. After a rewarding 18-month journey with Third Derivative’s accelerator, these innovators enter a new chapter ready to build on their momentum to drive further impact as they reach scale. Since joining in the summer of 2023, it’s been inspiring to watch this diverse group — spanning 11 countries across four continents — demonstrate determination to navigate through myriad challenges faced by early-stage companies bringing transformative technologies to market. Building a startup is difficult in any environment. The last"
+    },
+    {
+      "id": "check-page-3538f17f9f",
+      "url": "https://www.third-derivative.org/blog/announcing-cohort-22-1",
+      "page": "batches",
+      "excerpt": "Announcing Cohort 22-1 Skip to content Our Portfolio For Entrepreneurs Eligibility & Selection How to Apply Programs & Opportunities Innovation Cohorts & Partnerships Industrial Innovation Cohorts Future Industries Partnership Impact Archive Clean Mobile Power Initiative Cohort First Gigaton Captured Cooling Innovations Passive Daytime Radiative Cooling Insights & Events About Us Our Team Careers Our Partners Corporates Investors Mentors Announcing Cohort 22-1 Josh Agenbroad, Alison E. Berman March 30, 2022 We're thrilled to unveil D3's latest batch of climate tech startups—Cohort 22-1. Comprised of 16 startups working on some of the most important emissions categories, today we're welcoming Cohort 22-1 into D3's portfolio as our third official cohort. Why 22-1? Historically, our cohorts were named for the year’s peak atmospheric carbon dioxide concentration (in parts per million [ppm]), based on the Keeling Curve. We're a bunch of science nerds at D3, but we realized this was just a little too wonky—so we’re switching our cohort names to represent the year and quarter of their launch. Inside Cohort 22-1 Cohort 22-1 was selected from over 200 applicants, with an acceptance rate of ~7.5%. We’re particularly thrilled with the diversity among these 16 startups, 85% of which have diverse perspectives on the leadership team. Geographic diversity among Cohort 22-1 is also at an"
+    },
+    {
+      "id": "check-page-a3cfe81cf4",
+      "url": "https://www.third-derivative.org/blog/announcing-the-clean-mobile-power-cohort",
+      "page": "batches",
+      "excerpt": "Powering the Future of Entertainment Skip to content Our Portfolio For Entrepreneurs Eligibility & Selection How to Apply Programs & Opportunities Innovation Cohorts & Partnerships Industrial Innovation Cohorts Future Industries Partnership Impact Archive Clean Mobile Power Initiative Cohort First Gigaton Captured Cooling Innovations Passive Daytime Radiative Cooling Insights & Events About Us Our Team Careers Our Partners Corporates Investors Mentors Powering the Future of Entertainment Caroline Winslow and Jamie Holmstrom November 16, 2024 Announcing CMPI’s New Clean Mobile Power Cohort Third Derivative announces our newest cohort alongside Netflix and the Walt Disney Company in the Clean Mobile Power Initiative, aimed at accelerating the deployment of zero-emission mobile power solutions for the entertainment industry. Today, Third Derivative is thrilled to unveil our newest cohort, the Clean Mobile Power Cohort , comprised of ten companies with innovative technologies that have the potential to deliver cost-competitive, zero-emissions mobile power for the entertainment sector — providing alternatives to diesel generators. The Clean Mobile Power Cohort falls under the umbrella of the Clean Mobile Power Initiative (CMPI) , which was launched this June by Netflix and The Walt Disney Company, with the participation and support of Third Derivative and RMI. The initiative aims"
+    },
+    {
+      "id": "check-page-4ac910c473",
+      "url": "https://www.third-derivative.org/blog/celebrating-cohort417",
+      "page": "batches",
+      "excerpt": "Celebrating Cohort 417: D3's Inaugural Startups Move On Skip to content Our Portfolio For Entrepreneurs Eligibility & Selection How to Apply Programs & Opportunities Innovation Cohorts & Partnerships Industrial Innovation Cohorts Future Industries Partnership Impact Archive Clean Mobile Power Initiative Cohort First Gigaton Captured Cooling Innovations Passive Daytime Radiative Cooling Insights & Events About Us Our Team Careers Our Partners Corporates Investors Mentors Celebrating Cohort 417: D3's Inaugural Startups Move On Daisy Simmons, Elaine Hsieh July 5, 2022 Highlighting climate tech wins from our first 46 startups since their inauguration 18 months ago. Congratulations are in order for Third Derivative’s inaugural group of trailblazing entrepreneurs— Cohort 417 —who recently became our first cohort to make the transition to D3 alumni! Over the last 18 months, these 46 inspiring climate tech startups have demonstrated the system-level innovation we need to enable climate technologies to succeed at scale and move markets. In a recent celebration of the cohort’s elevation to alumni status, ecosystem leaders came together to share highlights of their journey with our tailored accelerator program. Honoring 18 months of decisive and inclusive growth Onboarded on December 1, 2020 and named for the year’s peak atmospheric carbon dioxide concentration of 417.1 parts per"
+    },
+    {
+      "id": "check-page-712bbc15ef",
+      "url": "https://www.third-derivative.org/blog/d3-incoming-general-cohort-25-3-newsbrief",
+      "page": "batches",
+      "excerpt": "Innovative companies join 280+ strong portfolio Skip to content Our Portfolio For Entrepreneurs Eligibility & Selection How to Apply Programs & Opportunities Innovation Cohorts & Partnerships Industrial Innovation Cohorts Future Industries Partnership Impact Archive Clean Mobile Power Initiative Cohort First Gigaton Captured Cooling Innovations Passive Daytime Radiative Cooling Insights & Events About Us Our Team Careers Our Partners Corporates Investors Mentors Innovative companies join 280+ strong portfolio Third Derivative August 26, 2025 Working to solve the world’s most pressing decarbonization and emission reduction challenges DENVER, CO — Third Derivative, RMI’s global climate tech accelerator, welcomed 18 new startups from six countries across four continents this week — including the accelerator’s first-ever startup from New Zealand. “From scalable bamboo building systems to modular green hydrogen, recyclable wind turbines to zero-emission cooling, these startups represent the cutting edge of global climate tech innovation” said Rushad Nanavatty, Third Derivative Managing Director. “Our class-leading portfolio continues to stay ahead of the emissions – by focusing on the industries, sectors, and geographies that are going to be the most consequential for our planet in the decades to come.” LEARN MORE ABOUT COMPANIES IN THE NEW THIRD DERIVATIVE COHORT : Aris Hydronics:"
+    },
+    {
+      "id": "check-page-11e80aa130",
+      "url": "https://www.third-derivative.org/blog/d3-launches-first-cohort-co2-startups",
+      "page": "batches",
+      "excerpt": "D3 Launches First Cohort of Innovative Carbon Dioxide Removal Startups Skip to content Our Portfolio For Entrepreneurs Eligibility & Selection How to Apply Programs & Opportunities Innovation Cohorts & Partnerships Industrial Innovation Cohorts Future Industries Partnership Impact Archive Clean Mobile Power Initiative Cohort First Gigaton Captured Cooling Innovations Passive Daytime Radiative Cooling Insights & Events About Us Our Team Careers Our Partners Corporates Investors Mentors D3 Launches First Cohort of Innovative Carbon Dioxide Removal Startups Third Derivative July 19, 2022 Third Derivative (D3) launches a cohort of five startups to accelerate the effectiveness of scaling solutions to remove CO 2 from the atmosphere. Oakland, CA – July 19, 2022 Global climate technology accelerator Third Derivative (D3) today launched a focused cohort of five promising startups working on durable carbon dioxide removal (CDR) solutions. CDR is the removal of carbon dioxide from the air or oceans, as opposed to capturing emissions directly from power plants or industrial sources, known as point-source carbon capture. “According to the Intergovernmental Panel on Climate Change, in order to achieve climate targets, we not only need to drastically reduce emissions, but also remove up to 20 billion tons of CO 2 per year from the atmosphere,” said Brant Richards, Managing Director of D3."
+    },
+    {
+      "id": "check-page-58de044985",
+      "url": "https://www.third-derivative.org/blog/introducing-third-derivatives-cohort-24-1",
+      "page": "batches",
+      "excerpt": "Introducing Third Derivative’s Cohort 24-1 Skip to content Our Portfolio For Entrepreneurs Eligibility & Selection How to Apply Programs & Opportunities Innovation Cohorts & Partnerships Industrial Innovation Cohorts Future Industries Partnership Impact Archive Clean Mobile Power Initiative Cohort First Gigaton Captured Cooling Innovations Passive Daytime Radiative Cooling Insights & Events About Us Our Team Careers Our Partners Corporates Investors Mentors Introducing Third Derivative’s Cohort 24-1 Isha Kulkarni, Jamie Hankins March 26, 2024 Our tenth cohort is the largest since Third Derivative’s i nitial launch, spanning sixteen countries and several firsts for the accelerator About Cohort 24-1 RMI’s global climate tech accelerator, Third Derivative, was built to accelerate the rate of climate innovation. Cohort 24-1, our tenth cohort to date, helps us once again support breakthrough technologies and business models critical to decarbonization across the world. The energy transition is a challenge of global proportions, and at Third Derivative we believe that our ecosystem’s strength lies in its ability to support startups in every part of the world. In that spirit, these companies span sixteen countries and come out of a competitive pool of over 250 applicants. They are led by a group of diverse, truly trailblazing innovators — nearly a quarter of these startups have at"
+    },
+    {
+      "id": "check-page-4f772fbe6b",
+      "url": "https://www.third-derivative.org/blog/third-derivative-and-rmi-launch-industrial-innovation-cohorts-to-accelerate-decarbonization-of-steel-cement-and-chemicals",
+      "page": "batches",
+      "excerpt": "Third Derivative and RMI Launch Industrial Innovation Cohorts to Accelerate Decarbonization of Steel, Cement, and Chemicals Skip to content Our Portfolio For Entrepreneurs Eligibility & Selection How to Apply Programs & Opportunities Innovation Cohorts & Partnerships Industrial Innovation Cohorts Future Industries Partnership Impact Archive Clean Mobile Power Initiative Cohort First Gigaton Captured Cooling Innovations Passive Daytime Radiative Cooling Insights & Events About Us Our Team Careers Our Partners Corporates Investors Mentors Third Derivative and RMI Launch Industrial Innovation Cohorts to Accelerate Decarbonization of Steel, Cement, and Chemicals Third Derivative August 26, 2024 A $2 million grant from The Lemelson Foundation enables the launch of an initiative to source, select, and support the most promising innovations in industrial decarbonization. RMI and Third Derivative are launching the Industrial Innovation Cohorts initiative supported by a $2 million grant from The Lemelson Foundation. Heavy industry produces the most widely used materials you see in your daily lives, from concrete and steel for buildings to chemicals and plastics for consumer products. Industry is responsible for 30% of global carbon pollution — and half of that is caused by the production of cement, concrete, iron, steel, chemicals, and plastics. Without innovation — and bringing that"
+    },
+    {
+      "id": "check-page-ecd41358a8",
+      "url": "https://www.third-derivative.org/blog/third-derivative-unveils-26-startup-climate-cohort-focused-on-hard-tech-and-deployment",
+      "page": "batches",
+      "excerpt": "Third Derivative Unveils 26-Startup Climate Cohort Focused on Hard Tech and Deployment Skip to content Our Portfolio For Entrepreneurs Eligibility & Selection How to Apply Programs & Opportunities Innovation Cohorts & Partnerships Industrial Innovation Cohorts Future Industries Partnership Impact Archive Clean Mobile Power Initiative Cohort First Gigaton Captured Cooling Innovations Passive Daytime Radiative Cooling Insights & Events About Us Our Team Careers Our Partners Corporates Investors Mentors Third Derivative Unveils 26-Startup Climate Cohort Focused on Hard Tech and Deployment Third Derivative May 20, 2026 Cohort spans 13 countries, with ~90% building hardware, materials, and infrastructure solutions for scaling decarbonization Boulder, CO — May 20, 2026 — Third Derivative, RMI’s global climate tech accelerator, today unveiled a new cohort of 26 startups focused on scaling hard-tech climate solutions. Spanning 13 countries, the cohort is primarily composed of companies building hardware, materials, and infrastructure designed to accelerate deployment in sectors such as heavy industry, energy systems, and the built environment where emissions are hardest to abate and progress has lagged. Selected from a competitive global pool, the cohort reflects a larger amount of deployment-ready climate technologies. These companies are targeting acute challenges including grid"
     }
   ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "press@third-derivative.org",
+        "evidenceId": "check-email-1449b55e7e"
+      }
+    ],
     "phones": [],
     "routes": [
       {
@@ -188,6 +870,14 @@
       {
         "value": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
         "evidenceId": "check-route-3b1dd4ecc0"
+      },
+      {
+        "value": "https://www.third-derivative.org/startup-application?hsLang=en",
+        "evidenceId": "check-route-3d333732b7"
+      },
+      {
+        "value": "https://www.third-derivative.org/startups",
+        "evidenceId": "check-route-307e6d4e39"
       }
     ],
     "applicationUrl": [
@@ -204,8 +894,54 @@
     ],
     "operatingStatus": [],
     "deadlines": [],
-    "selectivity": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-444221f4ab"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-340e8665ce"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-0480cc461e"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-fec4494a4f"
+      }
+    ],
+    "location": [
+      {
+        "value": "Asia",
+        "evidenceId": "check-location-ca6aaa9bd3"
+      },
+      {
+        "value": "India",
+        "evidenceId": "check-location-12184bc046"
+      },
+      {
+        "value": "Indonesia",
+        "evidenceId": "check-location-5295be2dd5"
+      }
+    ],
+    "selectivity": [
+      {
+        "value": {
+          "rate": null,
+          "bounded": true
+        },
+        "evidenceId": "check-selectivity-e351700525"
+      }
+    ],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.third-derivative.org/portfolio",
@@ -222,6 +958,10 @@
       {
         "value": "https://www.third-derivative.org/startups?hsLang=en",
         "evidenceId": "check-portfolio-de60d69f60"
+      },
+      {
+        "value": "https://www.third-derivative.org/blog/tag/startups",
+        "evidenceId": "check-portfolio-ae4876d08e"
       }
     ],
     "name": [

@@ -9,14 +9,14 @@
   "websiteUrl": "https://starburst.aero/",
   "applyUrl": "https://starburst.aero/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Join us as we build a greener, safer, and more connected world. Combining three complementary activities – startup accelerators, strategy consulting, & venture investments – we help aerospace and defense stakeholders innovate, navigate and invest in the dynamic ecosystem. Learn More Accelerators Define your strategy, refine your pitch, get mentorship from industry leaders and subject matter experts, raise venture capital, and bring your product to market faster. Connect with our network of startups, corporate, government, and academic partners. Learn More Strategy Consulting Tackle critical challenges and get actionable insights for technology development, go-to-market strategy, investment and acquisition ventures. Starburst is the trusted growth advisor and counselor to the world’s leading aerospace firms. Learn More Investments Partner with us to invest in proven and validated deep tech, in products that are changing electric flight, autonomous drones, urban air mobility, future travel, climate monitoring, communication, AI, energy, national security, new materials, and so much more. Learn More INDUSTRY EXPERIENCE, MARKET RESEARCH, DEEP TECH ACCELERATORS, AND INVESTMENT No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Starburst drives global aerospace and defense innovation through startup accelerators, strategy consulting and venture investments.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Combining three complementary activities – startup accelerators, strategy consulting, & venture investments – we help aerospace and defense stakeholders innovate, navigate and invest in the dynamic ecosystem.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "starburst-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://starburst.aero/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

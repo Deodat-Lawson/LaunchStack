@@ -1,11 +1,11 @@
 {
   "programId": "insight-partners",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.insightpartners.com/portfolio/",
+      "url": "https://jobs.insightpartners.com/jobs",
       "page": "portfolio",
-      "anchor": "Portfolio",
+      "anchor": "Portfolio Jobs",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -14,7 +14,7 @@
       "url": "https://www.insightpartners.com/about-us/",
       "page": "details",
       "anchor": "About Us",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -22,6 +22,126 @@
       "url": "https://www.insightpartners.com/about-us/media/",
       "page": "details",
       "anchor": "Media",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/ideas/apiphani-raises-25m-series-a-led-by-insight-partners-to-help-redefine-mission-critical-application-management-with-ai/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/ideas/apply-lean-to-scale-up/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/ideas/deci-raises-25m-series-b-to-accelerate-the-productization-of-real-world-ai-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/ideas/deepfactor-secures-15m-in-series-a-funding-to-deliver-modern-appsec-for-cloud-native-applications-powered-by-continuous-appsec-observability/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/ideas/fermyon-gives-developers-instant-self-service-for-webassembly-microservice-application-deployment-with-fermyon-cloud-closes-20-million-series-a-funding-led-by-insight-partners-in-q3/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/ideas/focus-on-ai-applications-not-just-on-workflows-andrew-ngs-keynote-at-scaleupai-24/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/ideas/frontegg-raises-25-million-to-accelerate-product-led-growth-adoption-for-saas-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/ideas/generative-ai-application-layer/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/ideas/head-of-enterprise-applications-an-often-untapped-orchestrator-for-growth-and-scale/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/ideas/moving-forward-into-an-application-driven-future/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/ideas/slim-ai-closes-31-million-series-a-to-automate-best-practices-in-software-supply-chain-security-for-cloud-native-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/ideas/sysdig-closes-68-5-million-in-series-d-funding-to-enable-enterprises-to-secure-and-monitor-containers-and-cloud-native-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/ideas/the-era-of-application-defined-it-redefining-development-and-testing-for-a-digital-transformed-world/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/ideas/tintri-raises-75-million-to-bring-application-aware-storage-to-every-data-center-and-cloud/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
       "fetched": false,
       "blocked": null,
       "origin": "official"

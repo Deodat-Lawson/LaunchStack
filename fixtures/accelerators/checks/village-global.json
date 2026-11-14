@@ -1,36 +1,266 @@
 {
   "programId": "village-global",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://www.villageglobal.com/"
+    "https://www.villageglobal.com/",
+    "https://www.villageglobal.com/insights/the-ai-models-will-swallow-the-application-layer",
+    "https://www.villageglobal.com/insights/the-application-of-intelligence-how-reid-hoffmans-ai-specialist-thinks-about-coding-agents",
+    "https://www.villageglobal.com/velocity/apply",
+    "https://www.villageglobal.com/insights/announcing-our-investment-in-verisim-life",
+    "https://www.villageglobal.com/legal/terms-of-service",
+    "https://www.villageglobal.com/insights/nick-mehta-on-whether-ai-startups-should-worry-about-the-platforms",
+    "https://www.villageglobal.com/velocity",
+    "https://www.villageglobal.com/insights/most-saas-companies-wont-survive-this---jake-saper-emergence-recall-sessions",
+    "https://www.villageglobal.com/portfolio",
+    "https://www.villageglobal.com/portfolio/blossom-health"
   ],
   "evidence": [
     {
+      "id": "check-deal-55123bc937",
+      "url": "https://www.villageglobal.com/velocity",
+      "title": "Village Global — program page",
+      "excerpt": "are accepted on a rolling basis. APPLY NOW Capital We invest up to $1M in your company to help you get to your next key milestone. When",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b4bf2bd8cc",
+      "url": "https://www.villageglobal.com/velocity",
+      "title": "Village Global — program page",
+      "excerpt": "pre-seed or seed round process will take 2-3 weeks from initial intro to investment decision. Will",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1c6210d0bb",
+      "url": "https://www.villageglobal.com/portfolio",
+      "title": "Village Global — portfolio page",
+      "excerpt": "aid from government and insurance Health Berry Street Virtual nutrition therapy, covered by insurance Health Blossom",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-6856f63173",
+      "url": "https://www.villageglobal.com/portfolio",
+      "title": "Village Global — portfolio page",
+      "excerpt": "management, covered by insurance. Health Brightside Virtual mental health platform for depression and anxiety Fintech",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-74b735e9b4",
+      "url": "https://www.villageglobal.com/portfolio/blossom-health",
+      "title": "Village Global — portfolio page",
+      "excerpt": "Venture Capital with Top Entrepreneurs Blossom Health Virtual psychiatry and medication management, covered by",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-be12f66281",
+      "url": "https://www.villageglobal.com/portfolio",
+      "title": "Village Global — portfolio page",
+      "excerpt": "therapy, covered by insurance Health Blossom Health Virtual psychiatry and medication management, covered by",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-c7a42616b8",
+      "url": "https://www.villageglobal.com/velocity",
+      "title": "Village Global — program page",
+      "excerpt": "companies. They partner with Village for in-person events, virtual masterclasses, and have even invested directly in",
+      "page": "details"
+    },
+    {
+      "id": "check-format-eb5da5195f",
+      "url": "https://www.villageglobal.com/portfolio",
+      "title": "Village Global — portfolio page",
+      "excerpt": "Video sharing mobile app Health Circadia Contactless remote monitoring for long term care facilities Enterprise",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-ef42db4bcf",
+      "url": "https://www.villageglobal.com/legal/terms-of-service",
+      "title": "Village Global — terms page",
+      "excerpt": "to the arbitrator, through a telephonic hearing, or by an in-person hearing as established by the AAA Rules. If your claim",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-6328890941",
+      "url": "https://www.villageglobal.com/velocity",
+      "title": "Village Global — program page",
+      "excerpt": "on the round dynamics. I’m not based in Silicon Valley, or even in the U.S. Will you still",
+      "page": "details"
+    },
+    {
       "id": "check-name-2814090cd0",
       "url": "https://www.villageglobal.com/",
-      "title": "Village Global — homepage checked by scrape.py",
+      "title": "Village Global — homepage",
       "excerpt": "Village Global VC | Early-Stage Venture Capital with Top Entrepreneurs",
       "page": "details"
     },
     {
+      "id": "check-portfolio-5a5a5889c2",
+      "url": "https://www.villageglobal.com/velocity",
+      "title": "Village Global — program page",
+      "excerpt": "Portfolio → https://www.villageglobal.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-73d74593a5",
+      "url": "https://www.villageglobal.com/insights/nick-mehta-on-whether-ai-startups-should-worry-about-the-platforms",
+      "title": "Village Global — program page",
+      "excerpt": "Portfolio → https://www.villageglobal.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-78ee4c2561",
+      "url": "https://www.villageglobal.com/insights/most-saas-companies-wont-survive-this---jake-saper-emergence-recall-sessions",
+      "title": "Village Global — portfolio page",
+      "excerpt": "Portfolio → https://www.villageglobal.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-791a9eb781",
       "url": "https://www.villageglobal.com/",
-      "title": "Village Global — homepage checked by scrape.py",
+      "title": "Village Global — homepage",
       "excerpt": "Portfolio → https://www.villageglobal.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-79ec394a85",
+      "url": "https://www.villageglobal.com/legal/terms-of-service",
+      "title": "Village Global — terms page",
+      "excerpt": "Portfolio → https://www.villageglobal.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9854b38ca5",
+      "url": "https://www.villageglobal.com/velocity/apply",
+      "title": "Village Global — application page",
+      "excerpt": "Portfolio → https://www.villageglobal.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a6671662ba",
+      "url": "https://www.villageglobal.com/insights/the-ai-models-will-swallow-the-application-layer",
+      "title": "Village Global — application page",
+      "excerpt": "Portfolio → https://www.villageglobal.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-bf5eefa5f4",
+      "url": "https://www.villageglobal.com/insights/the-application-of-intelligence-how-reid-hoffmans-ai-specialist-thinks-about-coding-agents",
+      "title": "Village Global — application page",
+      "excerpt": "Portfolio → https://www.villageglobal.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d84f62893c",
+      "url": "https://www.villageglobal.com/insights/announcing-our-investment-in-verisim-life",
+      "title": "Village Global — terms page",
+      "excerpt": "Portfolio → https://www.villageglobal.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f1a26410a7",
+      "url": "https://www.villageglobal.com/portfolio/blossom-health",
+      "title": "Village Global — portfolio page",
+      "excerpt": "Portfolio → https://www.villageglobal.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-rolling-04898b6820",
+      "url": "https://www.villageglobal.com/velocity",
+      "title": "Village Global — program page",
+      "excerpt": "founders. We give you the capital, peer cohort, and network to go from 0 to 1. Applications are accepted on a rolling basis. APPLY NOW Capital We invest up to $1M in your company to help you get to your",
       "page": "details"
     },
     {
       "id": "check-route-83dae7d445",
       "url": "https://www.villageglobal.com/",
-      "title": "Village Global — homepage checked by scrape.py",
+      "title": "Village Global — homepage",
       "excerpt": "https://www.villageglobal.com/",
       "page": "details"
+    },
+    {
+      "id": "check-route-d1a1ced8d2",
+      "url": "https://www.villageglobal.com/velocity",
+      "title": "Village Global — program page",
+      "excerpt": "APPLY NOW → https://www.villageglobal.com/velocity/apply",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-d32a92309a",
+      "url": "https://www.villageglobal.com/",
+      "page": "details",
+      "excerpt": "Village Global VC | Early-Stage Venture Capital with Top Entrepreneurs Network Investing Portfolio Insights Events Team Build with the best network in tech We're backed by world-class visionaries Reid Hoffman Founder, LinkedIn Bill Gates Founder, Microsoft Anne Wojcicki Founder, 23andMe Jeff Bezos Founder, Amazon Michael Dell Founder, Dell Technologies Mark Zuckerberg Founder & CEO, Meta Abby Johnson CEO, Fidelity Meet the rest of the network Join Village Global for connected capital Join Village Global for connected capital Capital is just the beginning. Join a network of 400+ founders, operator angels, and luminary LPs from the world's greatest tech companies. We're here to help you build the next one. We invest in relentlessly resourceful founders Ranjan Reddy Founder, Bureau Jake Cooper Co-founder, Grow Therapy Burkay Gur Co-founder, Fal.AI Maddie Hall Co-founder & CEO, Living Carbon Feross Aboukhadijeh Founder, Socket Felix Steinmeyer Founder, Cherry Brandon Hill Founder, Vori Soups Ranjan Co-founder, Sardine Peter Briffett Co-founder, Wagestream Alex Halliday Founder, AirOps Xinchen Wang Founder, Waypoint Bio Brad Kittredge Co-founder, Brightside Jerry Ting Co-founder & CEO, Evisort Nick Noone Co-founder, Peregrine Phaedra Ellis-Lamkins Founder, PromisePay Gavin Uberti Co-founder, Etched Trent Hedge Co-founder, Pylon Santiago Suarez Co-founder & CEO, Addi Lukas Quanstrom"
+    },
+    {
+      "id": "check-page-ee03b1b314",
+      "url": "https://www.villageglobal.com/insights/the-ai-models-will-swallow-the-application-layer",
+      "page": "application",
+      "excerpt": "The AI Models Will Swallow the Application Layer | Village Global YouTube Shorts The AI Models Will Swallow the Application Layer Build with the best network in tech. We’re a network of founders, luminary LPs, and operator angels from some of the world's greatest tech companies. We’re here to help you build the next one. GET IN TOUCH COMPANY Network Investing Portfolio Team Careers RESOURCES Insights Events Contact Us Brand & Logos SUBSCRIBE TO STAY UPDATED Thanks for signing up! Oops! Something went wrong while submitting the form. © Copyright, Village Global, 2026 Privacy Policy Disclosures Photo Attribution"
+    },
+    {
+      "id": "check-page-66d3b41ed4",
+      "url": "https://www.villageglobal.com/insights/the-application-of-intelligence-how-reid-hoffmans-ai-specialist-thinks-about-coding-agents",
+      "page": "application",
+      "excerpt": "Parth Patil on Coding Agents, Building Reid AI, and What It Takes to Operate at the Frontier | Village Global Podcast Parth Patil on Coding Agents, Building Reid AI, and What It Takes to Operate at the Frontier March 5, 2026 \"I early withdrew my 401k and just kept burning it on OpenAI API calls,\" says Parth Patil , AI specialist in Reid Hoffman's office. After getting laid off from Clubhouse in early 2023, Patil spent four months doing nothing but running experiments on GPT-4 — no salary, no plan, just a growing conviction that directing AI systems was a skill the market would eventually pay for. Hoffman hired him to build Reid AI, a functioning digital twin capable of conducting interviews on Hoffman's behalf, built entirely without a software engineering background through vibe coding. This episode of the Village Global Podcast, hosted by Sam Kirschner , VP at Village Global, covers the evolution of coding agents from first chatbots to today's multi-agent orchestration, and the specific tactics Patil uses to push these tools past their default ceiling, including how context engineering separates practitioners from casual users. Listen to the full episode on Apple Podcasts , Spotify , YouTube , or wherever you like to listen . Follow us on X , LinkedIn , Youtube , Instagram , and TikTok . Key Insights The IDE was built for humans. The AI doesn't need it. Patil lived in Cursor"
+    },
+    {
+      "id": "check-page-e30d80a5b9",
+      "url": "https://www.villageglobal.com/velocity/apply",
+      "page": "application",
+      "excerpt": "Apply to Velocity | Village Global Network Investing Portfolio Insights Events Team Village Global Velocity Application Apply below to be considered for Village Global's Velocity program for early-stage founders. Build with the best network in tech. We’re a network of founders, luminary LPs, and operator angels from some of the world's greatest tech companies. We’re here to help you build the next one. GET IN TOUCH COMPANY Network Investing Portfolio Team Careers RESOURCES Insights Events Contact Us Brand & Logos SUBSCRIBE TO STAY UPDATED Thanks for signing up! Oops! Something went wrong while submitting the form. © Copyright, Village Global, 2026 Privacy Policy Disclosures Photo Attribution"
+    },
+    {
+      "id": "check-page-175d0a37e1",
+      "url": "https://www.villageglobal.com/insights/announcing-our-investment-in-verisim-life",
+      "page": "terms",
+      "excerpt": "Announcing Our Investment in VeriSIM Life | Village Global Announcements Announcing Our Investment in VeriSIM Life June 27, 2018 When you meet a founder whose mission is to save human lives by reducing inaccurate animal testing in preclinical drug development by creating personalized clinical trials, it’s hard to say no. CEO Jo Varshney is a Veterinarian by trade, with a PhD in Comparative Oncology and Genomics & CS from University of Minnesota. Before VeriSIM Life , Jo spent time at UCSF and Genentech and upon completing Village Global’s Network Catalyst , has raised from top investors including, Stage, Amplify Partners, and TenOneTen. VeriSIM Life operates in the $35B drug discovery & development market which is projected to grow to over $70B by 2025 . Her initial work targets the $10B+ spent on pre-clinical research and the inefficiency in testing potential drugs for toxicity in animals before human trials can occur. On average, a new drug takes 10 years to enter the market and the animal testing required to validate drug safety and toxicity is uneconomical, inaccurate and inhumane. According to the FDA, only 8% of drugs that have passed animal testing eventually get to market, which means companies spend hundreds of millions of dollars on human clinical trials with flawed models that could have been mitigated with more accurate information in preclinical R&D. In an attempt"
+    },
+    {
+      "id": "check-page-4ca95df9be",
+      "url": "https://www.villageglobal.com/legal/terms-of-service",
+      "page": "terms",
+      "excerpt": "Terms of Service | Village Global Network Investing Portfolio Insights Events Team Legals Terms of Service 1. Acceptance of Terms. 1.1 Village Global Management, L.L.C. and its affiliates (“Village Global” or “we”) provides its Service (as defined below) to you through its web site located at www.villageglobal.com (the “Site”), subject to this Terms of Service agreement (“TOS”). By accepting this TOS or by accessing or using the Service or Site, you acknowledge that you have read, understood, and agree to be bound by this TOS. If you are entering into this TOS on behalf of a company, business or other legal entity, you represent that you have the authority to bind such entity and its affiliates to this TOS, in which case the terms “you” or “your” shall refer to such entity and its affiliates. If you do not have such authority, or if you do not agree with this TOS, you must not accept this TOS and may not use the Service. ‍ 1.2 Village Global may change this TOS from time to time by providing thirty (30) days prior notice either by emailing the email address associated with your account or by posting a notice on the Site. You can review the most current version of this TOS at any time at https://www.villageglobal.com/tos/. The revised terms and conditions will become effective thirty (30) days after we post or send you notice of such changes, and if you use the Service after"
+    },
+    {
+      "id": "check-page-6914c7a9f1",
+      "url": "https://www.villageglobal.com/insights/nick-mehta-on-whether-ai-startups-should-worry-about-the-platforms",
+      "page": "details",
+      "excerpt": "Nick Mehta on whether AI startups should worry about the platforms | Village Global Instagram Reels Nick Mehta on whether AI startups should worry about the platforms Build with the best network in tech. We’re a network of founders, luminary LPs, and operator angels from some of the world's greatest tech companies. We’re here to help you build the next one. GET IN TOUCH COMPANY Network Investing Portfolio Team Careers RESOURCES Insights Events Contact Us Brand & Logos SUBSCRIBE TO STAY UPDATED Thanks for signing up! Oops! Something went wrong while submitting the form. © Copyright, Village Global, 2026 Privacy Policy Disclosures Photo Attribution"
+    },
+    {
+      "id": "check-page-376fd6aa2f",
+      "url": "https://www.villageglobal.com/velocity",
+      "page": "details",
+      "excerpt": "Velocity | Village Global Network Investing Portfolio Insights Events Team velocity Velocity Velocity is our bespoke program for pre-seed founders. We give you the capital, peer cohort, and network to go from 0 to 1. Applications are accepted on a rolling basis. APPLY NOW Capital We invest up to $1M in your company to help you get to your next key milestone. When it's time for follow-on funding, we will work with you to refine your pitch and get intros to the right investors. Connectivity There's no set playbook for winning, but having the right people in your corner is key. Tap the Village Global network for intros to talent, experts, and potential customers. As your business grows, you'll get even more access to our network luminaries. Join from anywhere Founders can join from anywhere in the world. Should you want to relocate to the USA, Alma is our proud sponsor for immigration legal services, covered by the program for all Velocity founders. Compute AI founders get top-tier AI perks, from Microsoft for Startups, OpenAI, and Anthropic: Microsoft Azure credits up to $350K (valid for 4yrs). Access to a dedicated Azure GPU cluster. OpenAI credit package of $10K, VIP usage tier upgrades, and early access to technical sessions and alpha programs. Anthropic API credits of $1.5K, priority support routing and highest rate limits. Peer community Peer learning is a powerful tool for"
+    },
+    {
+      "id": "check-page-35d9a085ff",
+      "url": "https://www.villageglobal.com/insights/most-saas-companies-wont-survive-this---jake-saper-emergence-recall-sessions",
+      "page": "portfolio",
+      "excerpt": "Most SaaS Companies Won't Survive This - Jake Saper (Emergence) | Recall Sessions | Village Global YouTube (Full video) Most SaaS Companies Won't Survive This - Jake Saper (Emergence) | Recall Sessions Build with the best network in tech. We’re a network of founders, luminary LPs, and operator angels from some of the world's greatest tech companies. We’re here to help you build the next one. GET IN TOUCH COMPANY Network Investing Portfolio Team Careers RESOURCES Insights Events Contact Us Brand & Logos SUBSCRIBE TO STAY UPDATED Thanks for signing up! Oops! Something went wrong while submitting the form. © Copyright, Village Global, 2026 Privacy Policy Disclosures Photo Attribution"
+    },
+    {
+      "id": "check-page-55f9c7ae2f",
+      "url": "https://www.villageglobal.com/portfolio",
+      "page": "portfolio",
+      "excerpt": "Portfolio | Village Global Network Investing Portfolio Insights Events Team portfolio From Pre-seed to Unicorn We back audacious early-stage founders across geographies and industries. Our founders have raised $17B+ in follow-on funding — and they're just getting started. Enterprise AI/ML Applied Intuition Autonomous vehicle testing software for automakers Founders Qasar Younis Peter Ludwig Enterprise Socket Supply chain security for open source dependencies Founders Feross Aboukhadijeh Fintech Health Cherry Buy-now-pay-later financing for medical practices Founders Felix Steinmeyer Health Grow Therapy Insurance-covered mental health marketplace and therapist platform Founders Jake Cooper Alan Ni Manoj Kanagaraj Aerospace/Defense Hadrian Automation Software-native precision manufacturing for aerospace and defense Founders Chris Power Aerospace/Defense Apex Space Standardized productized satellite bus platforms Founders Ian Cinnamon Max Benassi AI/ML Peregrine Real-time data and decision platform for public safety Founders Nick Noone Ben Rudolph Health AI/ML Enveda Biosciences AI drug discovery from natural plant chemistry Founders Viswa Colluru Fintech AI/ML Sardine AI fraud prevention and compliance platform for fintechs and crypto Founders Soups Ranjan Aditya Goel Zahid Shaikh Fintech AI/ML fal Generative media platform for developers Founders Burkay Gur Gorkem Yurtseven"
+    },
+    {
+      "id": "check-page-9e6f5fc229",
+      "url": "https://www.villageglobal.com/portfolio/blossom-health",
+      "page": "portfolio",
+      "excerpt": "Blossom Health | Village Global VC | Early-Stage Venture Capital with Top Entrepreneurs Blossom Health Virtual psychiatry and medication management, covered by insurance. Health INtro OUR NETWORK VALUE 40+ Connections with founders building AI infrastructure at Grove Summit (Fall 2023) 5 Customer intros. Connected with companies now using Fal.AI’s API 3 Senior engineering hires through our network, including their Head of Ops. FEATURED IN No items found. No items found. No items found. Build with the best network in tech. We’re a network of founders, luminary LPs, and operator angels from some of the world's greatest tech companies. We’re here to help you build the next one. GET IN TOUCH COMPANY Network Investing Portfolio Team Careers RESOURCES Insights Events Contact Us Brand & Logos SUBSCRIBE TO STAY UPDATED Thanks for signing up! Oops! Something went wrong while submitting the form. © Copyright, Village Global, 2026 Privacy Policy Disclosures Photo Attribution"
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://www.villageglobal.com/velocity/apply",
+        "evidenceId": "check-route-d1a1ced8d2"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://www.villageglobal.com/",
@@ -40,8 +270,57 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-04898b6820"
+      }
+    ],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "3",
+        "evidenceId": "check-duration-b4bf2bd8cc"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-ef42db4bcf"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-c7a42616b8"
+      }
+    ],
+    "location": [
+      {
+        "value": "Silicon Valley",
+        "evidenceId": "check-location-6328890941"
+      }
+    ],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "are accepted on a rolling basis. APPLY NOW Capital We invest up to $1M in your company to help you get to your next key milestone. When",
+        "evidenceId": "check-deal-55123bc937"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "1000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-55123bc937"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://www.villageglobal.com/portfolio",

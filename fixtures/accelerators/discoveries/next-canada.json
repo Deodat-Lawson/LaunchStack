@@ -1,7 +1,103 @@
 {
   "programId": "next-canada",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "http://www.nextcanada.com/2021-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.nextcanada.com/2024-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.nextcanada.com/2026-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.nextcanada.com/apply-to-next-ai-founder/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.nextcanada.com/apply-to-next-ai-venture/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.nextcanada.com/nai-timeline-fr/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.nextcanada.com/next-36-alum-venture-sniply-acquired-in-multi-million-dollar-deal/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.nextcanada.com/next-canada-celebrates-cohorts-at-venture-day-receives-1m-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.nextcanada.com/next-canada-midsummer-updates-2/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.nextcanada.com/nextfounders_2022_apply/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://www.nextcanada.com/program-timeline/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://my.nextcanada.com/apply/nai",
+      "page": "application",
+      "anchor": "APPLY TO NEXT AI",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.nextcanada.com/2026-cohort/",
       "page": "batches",
@@ -11,17 +107,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.nextcanada.com/programs-overview/",
-      "page": "details",
-      "anchor": "Programs Overview",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nextcanada.com/next-alumni/",
+      "url": "https://www.nextcanada.com/alumni/",
       "page": "portfolio",
-      "anchor": "Next Alumni",
+      "anchor": "SEE MORE OF OUR ALUMNI",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -35,17 +123,25 @@
       "origin": "official"
     },
     {
-      "url": "https://my.nextcanada.com/apply/nai",
-      "page": "application",
-      "anchor": "APPLY TO NEXT AI",
+      "url": "https://www.nextcanada.com/next-alumni/",
+      "page": "portfolio",
+      "anchor": "Next Alumni",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nextcanada.com/program-timeline/",
+      "page": "batches",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.nextcanada.com/alumni/",
-      "page": "portfolio",
-      "anchor": "SEE MORE OF OUR ALUMNI",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "anchor": "Programs Overview",
       "fetched": false,
       "blocked": null,
       "origin": "official"

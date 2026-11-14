@@ -1,137 +1,1053 @@
 {
   "programId": "esa-space-solutions",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://business.esa.int/",
-    "https://business.esa.int/about-us",
-    "https://business.esa.int/how-to-apply"
+    "http://business.esa.int/artes-applications-workshop-2014-presentations-day-1",
+    "http://business.esa.int/artes-applications-workshop-2014-presentations-day-2",
+    "http://business.esa.int/esa-space-applications",
+    "http://business.esa.int/funding/big-data-applications-to-boost-preparedness-and-response-to-migration",
+    "http://business.esa.int/funding/call-for-ideas/call-for-ideas-artes-satcom-applications",
+    "http://business.esa.int/funding/call-for-proposals-competitive/radio-frequency-analytics-applications",
+    "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+    "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-agriculture",
+    "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-energy-and-utilities",
+    "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-health-and-safety",
+    "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-maritime-and-marine",
+    "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-smart-cities-and",
+    "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-transport-and-logistics",
+    "http://business.esa.int/funding/case-commercial-applications-enabled-space-environments"
   ],
   "evidence": [
     {
-      "id": "check-deal-c0695985de",
-      "url": "https://business.esa.int/how-to-apply",
-      "title": "ESA Space Solutions — application page checked by scrape.py",
-      "excerpt": "want to hear business ideas that are commercially viable, technically possible and involve either space tech or data. WHAT WE OFFER Zero-equity funding (from €60k to €3M+ per activity). Personalised support from a member of the ESA team. Technical & commercial guidance. Access to our network of partners. Credibility of",
+      "id": "check-duration-883aaa14b2",
+      "url": "http://business.esa.int/funding/case-commercial-applications-enabled-space-environments",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "your Full Proposal via esa-star Tendering within 8 months from an acceptable Outline Proposal. Upon",
+      "page": "application"
+    },
+    {
+      "id": "check-format-141c24c07a",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "inspection and maintenance, environmental monitoring, remote installation and energy infrastructure operations",
+      "page": "application"
+    },
+    {
+      "id": "check-format-413c91d8cd",
+      "url": "http://business.esa.int/funding/case-commercial-applications-enabled-space-environments",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "radiation, as well as an unobstructed vantage point for remote sensing or communication. All these characteristics can",
+      "page": "application"
+    },
+    {
+      "id": "check-format-652b403ba4",
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-2",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "to Access Command and control data using satellite and hybrid Technologies Sarah Bourke SKYTEK How to persuade an",
+      "page": "application"
+    },
+    {
+      "id": "check-format-cec3d71032",
+      "url": "http://business.esa.int/funding/call-for-ideas/call-for-ideas-artes-satcom-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "eLearning (e.g. training teachers over satellite, virtual whiteboard). eGovernment (e.g. counting votes by computer",
+      "page": "application"
+    },
+    {
+      "id": "check-format-d9099a28a6",
+      "url": "http://business.esa.int/funding/call-for-ideas/call-for-ideas-artes-satcom-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "rescue services). Capacity Building (e.g. telecentre for remote community development). eLearning (e.g. training teachers",
+      "page": "application"
+    },
+    {
+      "id": "check-format-fcdd61564e",
+      "url": "http://business.esa.int/funding/call-for-ideas/call-for-ideas-artes-satcom-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "and gas field monitoring). Media (e.g. news streaming from remote locations). Any other promising topic . The ideas",
+      "page": "application"
+    },
+    {
+      "id": "check-format-fe25c892ca",
+      "url": "http://business.esa.int/funding/call-for-ideas/call-for-ideas-artes-satcom-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "limited to) the following areas: eHealth (e.g. eMobility, remote medical surveillance and diagnostics). Security (e.g.",
       "page": "application"
     },
     {
       "id": "check-name-3073af3a09",
       "url": "https://business.esa.int/",
-      "title": "ESA Space Solutions — homepage checked by scrape.py",
+      "title": "ESA Space Solutions — homepage",
       "excerpt": "ESA Space Solutions Skip to main content Main navigation Home About us News",
       "page": "details"
     },
     {
-      "id": "check-portfolio-1c491de434",
-      "url": "https://business.esa.int/about-us",
-      "title": "ESA Space Solutions — details page checked by scrape.py",
+      "id": "check-portfolio-08b9390820",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-health-and-safety",
+      "title": "ESA Space Solutions — application page",
       "excerpt": "Portfolio → https://business.esa.int/projects",
-      "page": "details"
+      "page": "application"
     },
     {
-      "id": "check-portfolio-c8fff3f04e",
-      "url": "https://business.esa.int/how-to-apply",
-      "title": "ESA Space Solutions — application page checked by scrape.py",
+      "id": "check-portfolio-4584090b23",
+      "url": "http://business.esa.int/esa-space-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Portfolio → https://business.esa.int/projects",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-45a3fe4115",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-smart-cities-and",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Portfolio → https://business.esa.int/projects",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-4f266b12fa",
+      "url": "http://business.esa.int/funding/call-for-proposals-competitive/radio-frequency-analytics-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Portfolio → https://business.esa.int/projects",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-61429793a3",
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-2",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Portfolio → https://business.esa.int/projects",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-69ded46e55",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-energy-and-utilities",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Portfolio → https://business.esa.int/projects",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a05b4bdd06",
+      "url": "http://business.esa.int/funding/case-commercial-applications-enabled-space-environments",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Portfolio → https://business.esa.int/projects",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a6383ec16a",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Portfolio → https://business.esa.int/projects",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-af8b8ce061",
+      "url": "http://business.esa.int/funding/big-data-applications-to-boost-preparedness-and-response-to-migration",
+      "title": "ESA Space Solutions — application page",
       "excerpt": "Portfolio → https://business.esa.int/projects",
       "page": "application"
     },
     {
       "id": "check-portfolio-d12305d747",
       "url": "https://business.esa.int/",
-      "title": "ESA Space Solutions — homepage checked by scrape.py",
+      "title": "ESA Space Solutions — homepage",
       "excerpt": "Portfolio → https://business.esa.int/projects",
       "page": "details"
     },
     {
+      "id": "check-portfolio-d1a400c215",
+      "url": "http://business.esa.int/funding/call-for-ideas/call-for-ideas-artes-satcom-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Portfolio → https://business.esa.int/projects",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d8c837474d",
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-1",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Portfolio → https://business.esa.int/projects",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-e0fc5ec5b4",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-agriculture",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Portfolio → https://business.esa.int/projects",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-e6caacfcdf",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-maritime-and-marine",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Portfolio → https://business.esa.int/projects",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-e8cc20bb7d",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-transport-and-logistics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Portfolio → https://business.esa.int/projects",
+      "page": "application"
+    },
+    {
       "id": "check-route-04c0b04a09",
       "url": "https://business.esa.int/",
-      "title": "ESA Space Solutions — homepage checked by scrape.py",
+      "title": "ESA Space Solutions — homepage",
       "excerpt": "How to apply → https://business.esa.int/how-to-apply",
       "page": "details"
     },
     {
-      "id": "check-route-163c11103b",
-      "url": "https://business.esa.int/about-us",
-      "title": "ESA Space Solutions — details page checked by scrape.py",
-      "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
-      "page": "details"
+      "id": "check-route-097e0f24f1",
+      "url": "http://business.esa.int/funding/case-commercial-applications-enabled-space-environments",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "How to apply → https://business.esa.int/how-to-apply",
+      "page": "application"
     },
     {
-      "id": "check-route-35f9ab7d84",
-      "url": "https://business.esa.int/about-us",
-      "title": "ESA Space Solutions — details page checked by scrape.py",
+      "id": "check-route-0a4ff67499",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-maritime-and-marine",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Skip to main content → https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-maritime-and-marine#main-content",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0ca45afc9c",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-transport-and-logistics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0d125346ef",
+      "url": "http://business.esa.int/funding/case-commercial-applications-enabled-space-environments",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Skip to main content → https://business.esa.int/funding/case-commercial-applications-enabled-space-environments#main-content",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0de9e6e868",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-maritime-and-marine",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0fac767d90",
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-1",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "How to apply → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1cbdb76b57",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Transportation and Logistics: 26 April 2024 – 26 June 2024 → https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-transport-and-logistics",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1f2d86a5bd",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Maritime and Marine: 23 September - 23 November 2024 → https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-maritime-and-marine",
+      "page": "application"
+    },
+    {
+      "id": "check-route-246450fa17",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-transport-and-logistics",
+      "title": "ESA Space Solutions — application page",
       "excerpt": "Kick-starts → https://business.esa.int/how-to-apply-to-kick-starts",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-route-255d8aadec",
+      "url": "http://business.esa.int/esa-space-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Fund Commercial Applications → https://business.esa.int/funding",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2b16acce3f",
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-1",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "HOW TO APPLY → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-31a201308d",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Health and Safety: 17 July - 17 September 2024 → https://business.esa.int/funding/call-for-proposals-competitive/commercial-applications-space-enabled-robotics-health-and-safety",
+      "page": "application"
+    },
+    {
+      "id": "check-route-324225cc1c",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-energy-and-utilities",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "How to apply → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-344a171a7f",
+      "url": "http://business.esa.int/esa-space-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Skip to main content → https://business.esa.int/esa-space-applications#main-content",
+      "page": "application"
+    },
+    {
+      "id": "check-route-346ccfe31a",
+      "url": "http://business.esa.int/esa-space-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "HOW TO APPLY → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-35ec982809",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-maritime-and-marine",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Kick-starts → https://business.esa.int/how-to-apply-to-kick-starts",
+      "page": "application"
+    },
+    {
+      "id": "check-route-387e8f2746",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-energy-and-utilities",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "HOW TO APPLY → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3b6a9d0651",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "HOW TO APPLY → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3c59e9f23e",
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-1",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "https://business.esa.int/artes-applications-workshop-2014-presentations-day-1#top",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3e174b1c69",
+      "url": "http://business.esa.int/funding/call-for-proposals-competitive/radio-frequency-analytics-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "How to apply → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-40ff8ebada",
+      "url": "http://business.esa.int/esa-space-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "How to apply → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-410cccd306",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "How to apply → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-41632c0afc",
+      "url": "http://business.esa.int/funding/case-commercial-applications-enabled-space-environments",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
+      "page": "application"
+    },
+    {
+      "id": "check-route-435be9fbb0",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-transport-and-logistics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "“Commercial Applications of Space-Enabled Robotics” → https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "page": "application"
     },
     {
       "id": "check-route-473c49e134",
       "url": "https://business.esa.int/",
-      "title": "ESA Space Solutions — homepage checked by scrape.py",
+      "title": "ESA Space Solutions — homepage",
       "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
       "page": "details"
+    },
+    {
+      "id": "check-route-47da2b4f60",
+      "url": "http://business.esa.int/funding/big-data-applications-to-boost-preparedness-and-response-to-migration",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4b7f8294d0",
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-1",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
+      "page": "application"
     },
     {
       "id": "check-route-4d94da7458",
       "url": "https://business.esa.int/",
-      "title": "ESA Space Solutions — homepage checked by scrape.py",
+      "title": "ESA Space Solutions — homepage",
       "excerpt": "HOW TO APPLY → https://business.esa.int/how-to-apply",
       "page": "details"
     },
     {
-      "id": "check-route-5e5909fb78",
-      "url": "https://business.esa.int/how-to-apply",
-      "title": "ESA Space Solutions — application page checked by scrape.py",
-      "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
-      "page": "application"
-    },
-    {
-      "id": "check-route-aa4f9552ab",
-      "url": "https://business.esa.int/how-to-apply",
-      "title": "ESA Space Solutions — application page checked by scrape.py",
+      "id": "check-route-4eee1257eb",
+      "url": "http://business.esa.int/funding/case-commercial-applications-enabled-space-environments",
+      "title": "ESA Space Solutions — application page",
       "excerpt": "Kick-starts → https://business.esa.int/how-to-apply-to-kick-starts",
       "page": "application"
     },
     {
-      "id": "check-route-ac650a6b39",
-      "url": "https://business.esa.int/about-us",
-      "title": "ESA Space Solutions — details page checked by scrape.py",
-      "excerpt": "HOW TO APPLY → https://business.esa.int/how-to-apply",
-      "page": "details"
-    },
-    {
-      "id": "check-route-ae4a952033",
-      "url": "https://business.esa.int/how-to-apply",
-      "title": "ESA Space Solutions — application page checked by scrape.py",
-      "excerpt": "Proof-of-concept Studies and Pilot Project Open Calls → https://business.esa.int/how-to-apply-to-proof-concept-study-and-pilot-project-open-call-0",
+      "id": "check-route-528f7deff7",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-maritime-and-marine",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-maritime-and-marine#top",
       "page": "application"
     },
     {
-      "id": "check-route-ba21838aeb",
-      "url": "https://business.esa.int/about-us",
-      "title": "ESA Space Solutions — details page checked by scrape.py",
-      "excerpt": "How to apply → https://business.esa.int/how-to-apply",
-      "page": "details"
+      "id": "check-route-5861be3a0f",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-health-and-safety",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Skip to main content → https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-health-and-safety#main-content",
+      "page": "application"
     },
     {
-      "id": "check-route-c519c88b6e",
-      "url": "https://business.esa.int/how-to-apply",
-      "title": "ESA Space Solutions — application page checked by scrape.py",
-      "excerpt": "Kick-start Open Calls → https://business.esa.int/how-to-apply-to-kick-start-open-call",
+      "id": "check-route-59e018ab42",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-health-and-safety",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5a28069678",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-health-and-safety",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-health-and-safety#top",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5b1146da5c",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-transport-and-logistics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-transport-and-logistics#top",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5cfbecbd1c",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-health-and-safety",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "“Commercial Applications of Space-Enabled Robotics” → https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "page": "application"
+    },
+    {
+      "id": "check-route-66b1c63161",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-energy-and-utilities",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-energy-and-utilities#top",
+      "page": "application"
+    },
+    {
+      "id": "check-route-66dbc8c303",
+      "url": "http://business.esa.int/funding/call-for-ideas/call-for-ideas-artes-satcom-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "HOW TO APPLY → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-680654040f",
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-2",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Skip to main content → https://business.esa.int/artes-applications-workshop-2014-presentations-day-2#main-content",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6ab338feeb",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-transport-and-logistics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "How to apply → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6c3180a395",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-smart-cities-and",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "“Commercial Applications of Space-Enabled Robotics” → https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6f23587dc2",
+      "url": "http://business.esa.int/funding/case-commercial-applications-enabled-space-environments",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "ESA Business Applications Ambassador → https://business.esa.int/ambassador-platforms",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7035bdd648",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-energy-and-utilities",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
+      "page": "application"
+    },
+    {
+      "id": "check-route-706fc7f1ea",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Kick-starts → https://business.esa.int/how-to-apply-to-kick-starts",
+      "page": "application"
+    },
+    {
+      "id": "check-route-71316056e9",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-health-and-safety",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Kick-starts → https://business.esa.int/how-to-apply-to-kick-starts",
+      "page": "application"
+    },
+    {
+      "id": "check-route-75220ce3e2",
+      "url": "http://business.esa.int/funding/big-data-applications-to-boost-preparedness-and-response-to-migration",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "https://business.esa.int/funding/big-data-applications-to-boost-preparedness-and-response-to-migration#top",
+      "page": "application"
+    },
+    {
+      "id": "check-route-755e818175",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-health-and-safety",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "HOW TO APPLY → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7750e5d563",
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-1",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Skip to main content → https://business.esa.int/artes-applications-workshop-2014-presentations-day-1#main-content",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7bc794f4a4",
+      "url": "http://business.esa.int/funding/call-for-proposals-competitive/radio-frequency-analytics-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "https://business.esa.int/funding/call-for-proposals-competitive/radio-frequency-analytics-applications#top",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7c4add5334",
+      "url": "http://business.esa.int/funding/call-for-proposals-competitive/radio-frequency-analytics-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Skip to main content → https://business.esa.int/funding/call-for-proposals-competitive/radio-frequency-analytics-applications#main-content",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7d106a8576",
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-2",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "How to apply → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7e8e7977d2",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-agriculture",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "HOW TO APPLY → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7f7a10361b",
+      "url": "http://business.esa.int/funding/call-for-ideas/call-for-ideas-artes-satcom-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "How to apply → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-82c84753ca",
+      "url": "http://business.esa.int/funding/call-for-ideas/call-for-ideas-artes-satcom-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Skip to main content → https://business.esa.int/funding/call-for-ideas/call-for-ideas-artes-satcom-applications#main-content",
+      "page": "application"
+    },
+    {
+      "id": "check-route-861c859437",
+      "url": "http://business.esa.int/funding/case-commercial-applications-enabled-space-environments",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "https://business.esa.int/funding/case-commercial-applications-enabled-space-environments#top",
+      "page": "application"
+    },
+    {
+      "id": "check-route-86b1ae2535",
+      "url": "http://business.esa.int/funding/big-data-applications-to-boost-preparedness-and-response-to-migration",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Skip to main content → https://business.esa.int/funding/big-data-applications-to-boost-preparedness-and-response-to-migration#main-content",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8937877466",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-energy-and-utilities",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Kick-starts → https://business.esa.int/how-to-apply-to-kick-starts",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8d4aa10e13",
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-2",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Kick-starts → https://business.esa.int/how-to-apply-to-kick-starts",
+      "page": "application"
+    },
+    {
+      "id": "check-route-912d5208c7",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-agriculture",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "“Commercial Applications of Space-Enabled Robotics” → https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "page": "application"
+    },
+    {
+      "id": "check-route-91eb5d5905",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-smart-cities-and",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "How to apply → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-97460120f2",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-smart-cities-and",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Kick-starts → https://business.esa.int/how-to-apply-to-kick-starts",
+      "page": "application"
+    },
+    {
+      "id": "check-route-98216a7d27",
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-1",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "→ ARTES Applications Workshop 2014 main page → https://business.esa.int/ARTES-APPS-2014",
+      "page": "application"
+    },
+    {
+      "id": "check-route-99c7a7c44b",
+      "url": "http://business.esa.int/funding/case-commercial-applications-enabled-space-environments",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "[1] → https://business.esa.int/funding/case-commercial-applications-enabled-space-environments#_ftn1",
+      "page": "application"
+    },
+    {
+      "id": "check-route-99e11c60b9",
+      "url": "http://business.esa.int/funding/call-for-ideas/call-for-ideas-artes-satcom-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a17142e70f",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Agriculture: Opening 28 October - 15 January 2025 → https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-agriculture",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a4df1c0f79",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-maritime-and-marine",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "How to apply → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a5710cbc05",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-transport-and-logistics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "HOW TO APPLY → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a6380047a5",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-smart-cities-and",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a79b59b24c",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Energy and Utilities: 23 May - 23 July 2024 → https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-energy-and-utilities",
+      "page": "application"
+    },
+    {
+      "id": "check-route-aa9e2b9a2e",
+      "url": "http://business.esa.int/funding/call-for-proposals-competitive/radio-frequency-analytics-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
+      "page": "application"
+    },
+    {
+      "id": "check-route-add6c00fee",
+      "url": "http://business.esa.int/esa-space-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Kick-starts → https://business.esa.int/how-to-apply-to-kick-starts",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ae58331c79",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Smart Cities and Infrastructure: 7 March 2024 – 7 May 2024 → https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-smart-cities-and",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b37bf017b5",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-agriculture",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Skip to main content → https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-agriculture#main-content",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b4324095f9",
+      "url": "http://business.esa.int/funding/case-commercial-applications-enabled-space-environments",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "[1] → https://business.esa.int/funding/case-commercial-applications-enabled-space-environments#_ftnref1",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b4c02ab348",
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-2",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "HOW TO APPLY → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ba53f1198a",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-energy-and-utilities",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Skip to main content → https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-energy-and-utilities#main-content",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bbc2c9278c",
+      "url": "http://business.esa.int/funding/call-for-proposals-competitive/radio-frequency-analytics-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "HOW TO APPLY → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bbeeee930e",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-health-and-safety",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "How to apply → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c2871f5c77",
+      "url": "http://business.esa.int/funding/big-data-applications-to-boost-preparedness-and-response-to-migration",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Kick-starts → https://business.esa.int/how-to-apply-to-kick-starts",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c35b21e377",
+      "url": "http://business.esa.int/funding/call-for-ideas/call-for-ideas-artes-satcom-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "https://business.esa.int/funding/call-for-ideas/call-for-ideas-artes-satcom-applications#top",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ca55e1a11c",
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-2",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cb8af06363",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-smart-cities-and",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-smart-cities-and#top",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ccd5f68274",
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-2",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "→ ARTES Applications Workshop 2014 main page → https://business.esa.int/ARTES-APPS-2014",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ce7e349eee",
+      "url": "http://business.esa.int/funding/big-data-applications-to-boost-preparedness-and-response-to-migration",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "HOW TO APPLY → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cf84607199",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-agriculture",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "How to apply → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d0a90fb502",
+      "url": "http://business.esa.int/esa-space-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "https://business.esa.int/esa-space-applications#top",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d20b667960",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-energy-and-utilities",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Commercial Applications of Space-Enabled Robotics → https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d42a3efe5f",
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-1",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Kick-starts → https://business.esa.int/how-to-apply-to-kick-starts",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d4685c2888",
+      "url": "http://business.esa.int/funding/case-commercial-applications-enabled-space-environments",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "HOW TO APPLY → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d57b40a1a6",
+      "url": "http://business.esa.int/funding/call-for-ideas/call-for-ideas-artes-satcom-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Kick-starts → https://business.esa.int/how-to-apply-to-kick-starts",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d67d70411b",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-transport-and-logistics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Skip to main content → https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-transport-and-logistics#main-content",
       "page": "application"
     },
     {
       "id": "check-route-d6e82dd37e",
       "url": "https://business.esa.int/",
-      "title": "ESA Space Solutions — homepage checked by scrape.py",
+      "title": "ESA Space Solutions — homepage",
       "excerpt": "Kick-starts → https://business.esa.int/how-to-apply-to-kick-starts",
       "page": "details"
     },
     {
+      "id": "check-route-d820708cda",
+      "url": "http://business.esa.int/funding/case-commercial-applications-enabled-space-environments",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "[2] → https://business.esa.int/funding/case-commercial-applications-enabled-space-environments#_ftnref2",
+      "page": "application"
+    },
+    {
+      "id": "check-route-dcfb3df2d3",
+      "url": "http://business.esa.int/funding/case-commercial-applications-enabled-space-environments",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "[2] → https://business.esa.int/funding/case-commercial-applications-enabled-space-environments#_ftn2",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e03602a341",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-smart-cities-and",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Skip to main content → https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-smart-cities-and#main-content",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e082632de7",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-agriculture",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e0cfac95f9",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics#top",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e65ed497c2",
+      "url": "http://business.esa.int/esa-space-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e9ea7fb4be",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-agriculture",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Kick-starts → https://business.esa.int/how-to-apply-to-kick-starts",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f036207d0c",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-agriculture",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-agriculture#top",
+      "page": "application"
+    },
+    {
       "id": "check-route-f0cc208030",
       "url": "https://business.esa.int/",
-      "title": "ESA Space Solutions — homepage checked by scrape.py",
+      "title": "ESA Space Solutions — homepage",
       "excerpt": "how to apply → https://business.esa.int/how-to-apply",
       "page": "details"
+    },
+    {
+      "id": "check-route-f3691e3651",
+      "url": "http://business.esa.int/esa-space-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Apply to ESA Business Applications → https://business.esa.int/funding",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f59cfff875",
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-2",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "https://business.esa.int/artes-applications-workshop-2014-presentations-day-2#top",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f681b81c6f",
+      "url": "http://business.esa.int/funding/big-data-applications-to-boost-preparedness-and-response-to-migration",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "How to apply → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f7c8dbd760",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f84512d502",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-maritime-and-marine",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "HOW TO APPLY → https://business.esa.int/how-to-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f88914c74f",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Skip to main content → https://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics#main-content",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f8b2d8e9ae",
+      "url": "http://business.esa.int/funding/call-for-proposals-competitive/radio-frequency-analytics-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Kick-starts → https://business.esa.int/how-to-apply-to-kick-starts",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f97562f5c3",
+      "url": "http://business.esa.int/funding/call-for-proposals-competitive/radio-frequency-analytics-applications",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "Radio Frequency Analytics Applications - Webinar slides 30.06.2021.pdf → https://business.esa.int/sites/business/files/Radio%20Frequency%20Analytics%20Applications%20-%20Webinar%20slides%2030.06.2021.pdf",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fb92b24873",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-smart-cities-and",
+      "title": "ESA Space Solutions — application page",
+      "excerpt": "HOW TO APPLY → https://business.esa.int/how-to-apply",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-650a8027b6",
+      "url": "https://business.esa.int/",
+      "page": "details",
+      "excerpt": "ESA Space Solutions Skip to main content Main navigation Home About us News How to apply Kick-starts Proof-of-concept Studies and Pilot Projects Funding Portfolio Ambassadors Focus Areas Bioeconomy Bioeconomy Task Force Energy Energy Task Force Green Activities Maritime Maritime Sustainability Task Force Mobility-Land Rail Smart and Green Cities Task Force For Smart and Green Cities Finance and Insurance Logistics and Infrastructure National Delegations YOUR BUSINESS POWERED BY SPACE ESA Business Applications and Space Solutions (BASS) transforms European businesses through the power of commercialising space data and technology. We have invested €500 million in more than 1,200 businesses – and counting. Could you be next? Watch the video to learn more about what you can do with space-related assets! Smart, green, resilient – the many ways space is benefitting cities The Smart City Expo in Barcelona, 3-5 November, is an important event in the calendar for ESA’s Business Applications and Space Solutions (BASS) team. The… Read more Space technologies relieve the pressure for patients and care providers DecubiMat, developed and tested by German company BLACKPIN with support from ESA’s Business Applications and Space Solutions (BASS), provides a real-time… Read more Keeping the lights on – guarding the grid from space Secure and resilient electricity supplies rely on utility"
+    },
+    {
+      "id": "check-page-50995eda8d",
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-1",
+      "page": "application",
+      "excerpt": "ARTES Applications Workshop 2014 - Presentations Day 1 | ESA Space Solutions Skip to main content Main navigation Home About us News How to apply Kick-starts Proof-of-concept Studies and Pilot Projects Funding Portfolio Ambassadors Focus Areas Bioeconomy Bioeconomy Task Force Energy Energy Task Force Green Activities Maritime Maritime Sustainability Task Force Mobility-Land Rail Smart and Green Cities Task Force For Smart and Green Cities Finance and Insurance Logistics and Infrastructure National Delegations ARTES Applications Workshop 2014 - Presentations Day 1 Breadcrumb Home ARTES Applications Workshop 2014 - Presentations Day 1 REGISTRATION Welcome session (ROOM C1) Jean-Paul Schuler Director Luxinnovation ESA opening speech Magali Vaissiere Director of TIA European Investment Bank (EIB) Philippe de Fontaine Vive Vice President EIB Luxembourg Ministry of Economy Marc Serres Head of Luxembourg's delegation to ESA Trends and Horizon Scanning (SES) Karim Michel Sabbagh CEO SES ARTES Applications programme evolution and introduction to SpaceForMed (ESA & EIB) Amnon Ginati Head of TIA-A, Paola Ravacchioli (EIB) COFFEE BREAK PLENARY SESSIONS (ROOM C1) BREAKOUT SESSIONS (ROOM C2) Market Rollout examples Andreas Schönenberg Masterclass on how to write a proposal - ARTES 20 Feasibility Studies Norbert Hübner SatFinAfrica - Satellite Services for Financial Institutions in Africa"
+    },
+    {
+      "id": "check-page-6b9fc7528f",
+      "url": "http://business.esa.int/artes-applications-workshop-2014-presentations-day-2",
+      "page": "application",
+      "excerpt": "ARTES Applications Workshop 2014 - Presentations Day 2 | ESA Space Solutions Skip to main content Main navigation Home About us News How to apply Kick-starts Proof-of-concept Studies and Pilot Projects Funding Portfolio Ambassadors Focus Areas Bioeconomy Bioeconomy Task Force Energy Energy Task Force Green Activities Maritime Maritime Sustainability Task Force Mobility-Land Rail Smart and Green Cities Task Force For Smart and Green Cities Finance and Insurance Logistics and Infrastructure National Delegations ARTES Applications Workshop 2014 - Presentations Day 2 Breadcrumb Home ARTES Applications Workshop 2014 - Presentations Day 2 PLENARY SESSIONS (ROOM C1) INVESTMENT & PARTNERSHIP BREAKOUT SESSIONS (ROOM C2) SPACE FOR MEDITERRANEAN COUNTRIES BREAKOUT SESSIONS (ROOM F36) Collaborative Programmes Tony Sephton Satellite Applications CATAPULT Stuart Martin Developing Opportunities for the European EO Services Industry Stephen Coulson (EOP) ESA Technology Transfer Programme - Partnership approach Frank Salzgeber (TTP) KPI Evaluation for ARTES Applications Projects Francesco Feliciani Space for Mediterranean Countries Jean Schweitzer, EIB Media, Broadcasting and Consumer Applications Davide Tomassini 1) Investors & Funding Early-Stage Companies Rick Salmon (e-unlimited) 1) SpaceForMed, Chaired by Jean Schweitzer (SNT) netcaster - Multi-party conferencing Video 1 (Youtube) Video 2"
+    },
+    {
+      "id": "check-page-12f598a691",
+      "url": "http://business.esa.int/esa-space-applications",
+      "page": "application",
+      "excerpt": "ESA Space Applications | ESA Space Solutions Skip to main content Main navigation Home About us News How to apply Kick-starts Proof-of-concept Studies and Pilot Projects Funding Portfolio Ambassadors Focus Areas Bioeconomy Bioeconomy Task Force Energy Energy Task Force Green Activities Maritime Maritime Sustainability Task Force Mobility-Land Rail Smart and Green Cities Task Force For Smart and Green Cities Finance and Insurance Logistics and Infrastructure National Delegations ESA Space Applications Breadcrumb Home ESA Space Applications ESA has several programmes supporting businesses from all sectors to foster innovation and competitiveness of European industry. Use this tool to find the best funding opportunity for your business in ESA. Fund Commercial Applications Business Applications Funding for Commercial Applications What we offer: Zero equity funding Technical and commercial guidance Access to our network & partners Use of ESA brand for credibility Apply to ESA Business Applications Incubate a space start-up Business Incubation Centre (BIC) Incubate a space start-up ESA’s Business Incubation Centres (BICs), initiated by ESA Technology Transfer Programme Office (TTPO), work to inspire entrepreneurs to turn space-connected business ideas into commercial companies, and provide technical expertise and business-development support What can the ESA BICs do for you:"
+    },
+    {
+      "id": "check-page-c258f4f738",
+      "url": "http://business.esa.int/funding/big-data-applications-to-boost-preparedness-and-response-to-migration",
+      "page": "application",
+      "excerpt": "Big data applications to boost preparedness and response to migration Skip to main content Main navigation Home About us News How to apply Kick-starts Proof-of-concept Studies and Pilot Projects Funding Portfolio Ambassadors Focus Areas Bioeconomy Bioeconomy Task Force Energy Energy Task Force Green Activities Maritime Maritime Sustainability Task Force Mobility-Land Rail Smart and Green Cities Task Force For Smart and Green Cities Finance and Insurance Logistics and Infrastructure National Delegations Big data applications to boost preparedness and response to migration Breadcrumb Home Funding Big Data Applications To Boost Preparedness and Response To Migration ESA-STAR REFERENCE AO8644 Activity Feasibility Study Closing date 20-01-2017 Europe is being confronted with the most significant influxes of migrants and refugees in its history. One burning issue is the lack of timely information on migration trends, flows and rates. Such information gap could be bridged through an holistic approach based on the collection, analysis and integration of any relevant direct and indirect indicators of migration flows. In this context, big data processing applications have been widely recognised as a potentially very powerful tool. The utilisation of big data in support to identifying migration trends is a topic of rapidly increasing interest. Their exploitation in the human migration"
+    },
+    {
+      "id": "check-page-aacb79259e",
+      "url": "http://business.esa.int/funding/call-for-ideas/call-for-ideas-artes-satcom-applications",
+      "page": "application",
+      "excerpt": "Call for Ideas on ARTES Satcom Applications Skip to main content Main navigation Home About us News How to apply Kick-starts Proof-of-concept Studies and Pilot Projects Funding Portfolio Ambassadors Focus Areas Bioeconomy Bioeconomy Task Force Energy Energy Task Force Green Activities Maritime Maritime Sustainability Task Force Mobility-Land Rail Smart and Green Cities Task Force For Smart and Green Cities Finance and Insurance Logistics and Infrastructure National Delegations Call for Ideas on ARTES Satcom Applications Breadcrumb Home Funding Call For Ideas On ARTES Satcom Applications Activity Demonstration Project Closing date 15-07-2013 The ARTES 3-4 Satcom Applications programme of the European Space Agency (ESA)* is inviting public and commercial organisations to propose ideas, suggestions and business innovations for space-based applications and services related to satellite communications addressing European and Global market segments. The aim is to generate ideas that will improve business performance and operations, help enforce new regulatory standards, or enable improved resilience. The submissions will be reviewed by ESA to identify the most promising candidates for entering the next level of the ARTES 3-4 Satcom Applications programme, aiming at operational, self-sustaining and profitable solutions. Satellite Communications Applications The ARTES 3-4 Satcom"
+    },
+    {
+      "id": "check-page-e72b6d11a4",
+      "url": "http://business.esa.int/funding/call-for-proposals-competitive/radio-frequency-analytics-applications",
+      "page": "application",
+      "excerpt": "Radio Frequency Analytics Applications Skip to main content Main navigation Home About us News How to apply Kick-starts Proof-of-concept Studies and Pilot Projects Funding Portfolio Ambassadors Focus Areas Bioeconomy Bioeconomy Task Force Energy Energy Task Force Green Activities Maritime Maritime Sustainability Task Force Mobility-Land Rail Smart and Green Cities Task Force For Smart and Green Cities Finance and Insurance Logistics and Infrastructure National Delegations Radio Frequency Analytics Applications Breadcrumb Home Funding Radio Frequency Analytics Applications Opportunity Call for Proposals (Competitive) Activity Feasibility Study Opening date 01-07-2021 Closing date 15-11-2021 OPPORTUNITY The hustle and bustle of modern society is often intertwined – whether intentionally or unintentionally – with radio-frequency (RF) emissions. Individuals, vehicles, and equipment leave behind electromagnetic signatures that, upon capture and analysis, can reveal hidden patterns, unknown behaviours and illicit activities. RF analytics deals with the extraction of information from these emissions. The last few years have seen the start of new developments on the commercialisation of space-based RF analytics, with a number of entities commercialising or in the process to commercialise space-based RF analytics datasets. With this new opportunity, ESA aims to support the development"
+    },
+    {
+      "id": "check-page-f3b53af804",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics",
+      "page": "application",
+      "excerpt": "Commercial Applications of Space-Enabled Robotics Skip to main content Main navigation Home About us News How to apply Kick-starts Proof-of-concept Studies and Pilot Projects Funding Portfolio Ambassadors Focus Areas Bioeconomy Bioeconomy Task Force Energy Energy Task Force Green Activities Maritime Maritime Sustainability Task Force Mobility-Land Rail Smart and Green Cities Task Force For Smart and Green Cities Finance and Insurance Logistics and Infrastructure National Delegations Commercial Applications of Space-Enabled Robotics Breadcrumb Home Funding Commercial Applications of Space-Enabled Robotics Image credit: Rawpixel ESA-STAR REFERENCE 1-10494 Opportunity Call for Proposals (Non-Competitive) Activity Feasibility Study, Demonstration Project Opening date 07-03-2024 This funding call consists of 6 sub-themes, each open at a different point in time. Please see the list of currently open or upcoming funding calls and their further specific details below: Smart Cities and Infrastructure: 7 March 2024 – 7 May 2024 Transportation and Logistics: 26 April 2024 – 26 June 2024 Energy and Utilities: 23 May - 23 July 2024 Health and Safety: 17 July - 17 September 2024 Maritime and Marine: 23 September - 23 November 2024 Agriculture: Opening 28 October - 15 January 2025 Funding opportunity There have been remarkable advances in robotics technology in recent years, pushing the"
+    },
+    {
+      "id": "check-page-b968162841",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-agriculture",
+      "page": "application",
+      "excerpt": "Commercial Applications of Space-Enabled Robotics: Agriculture Skip to main content Main navigation Home About us News How to apply Kick-starts Proof-of-concept Studies and Pilot Projects Funding Portfolio Ambassadors Focus Areas Bioeconomy Bioeconomy Task Force Energy Energy Task Force Green Activities Maritime Maritime Sustainability Task Force Mobility-Land Rail Smart and Green Cities Task Force For Smart and Green Cities Finance and Insurance Logistics and Infrastructure National Delegations Commercial Applications of Space-Enabled Robotics: Agriculture Breadcrumb Home Funding Commercial Applications of Space-Enabled Robotics: Agriculture ESA-STAR REFERENCE 1-10494/11030 Opportunity Call for Proposals (Non-Competitive) Activity Feasibility Study, Demonstration Project Opening date 28-10-2024 Closing date 15-01-2025 FUNDING OPPORTUNITY This call is part of the umbrella of “Commercial Applications of Space-Enabled Robotics” thematic call for proposals. This Call for Proposals invites the submission of proposals for feasibility studies and demonstration projects for services that combine the use of satellite technologies and robotics in downstream services for Agriculture applications. ‘Robotics’ is here defined to include physical robots, autonomous drones, machines and vehicles, and precursory solutions or those that enable these (e.g. perception and navigation systems for"
+    },
+    {
+      "id": "check-page-7651387e78",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-energy-and-utilities",
+      "page": "application",
+      "excerpt": "Commercial Applications of Space-Enabled Robotics: Energy and Utilities Skip to main content Main navigation Home About us News How to apply Kick-starts Proof-of-concept Studies and Pilot Projects Funding Portfolio Ambassadors Focus Areas Bioeconomy Bioeconomy Task Force Energy Energy Task Force Green Activities Maritime Maritime Sustainability Task Force Mobility-Land Rail Smart and Green Cities Task Force For Smart and Green Cities Finance and Insurance Logistics and Infrastructure National Delegations Commercial Applications of Space-Enabled Robotics: Energy and Utilities Breadcrumb Home Funding Commercial Applications of Space-Enabled Robotics: Energy and Utilities ESA-STAR REFERENCE 1-10494 Opportunity Call for Proposals (Non-Competitive) Activity Feasibility Study, Demonstration Project Opening date 23-05-2024 Closing date 23-07-2024 WEBINAR 13 June 2024 - 11:00 - 12:00 CEST Register This call comes under the umbrella of the “ Commercial Applications of Space-Enabled Robotics ” thematic call for proposals. This call invites proposals for Feasibility Studies and Demonstration Projects for services that combine the use of satellite technologies and robotics for downstream services for energy and utilities . ‘Robotics’ is here defined to include physical robots, autonomous drones, machines and vehicles, and precursory solutions or those that enable these (e.g. perception"
+    },
+    {
+      "id": "check-page-9bec7e3799",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-health-and-safety",
+      "page": "application",
+      "excerpt": "Commercial Applications of Space-Enabled Robotics: Health and Safety Skip to main content Main navigation Home About us News How to apply Kick-starts Proof-of-concept Studies and Pilot Projects Funding Portfolio Ambassadors Focus Areas Bioeconomy Bioeconomy Task Force Energy Energy Task Force Green Activities Maritime Maritime Sustainability Task Force Mobility-Land Rail Smart and Green Cities Task Force For Smart and Green Cities Finance and Insurance Logistics and Infrastructure National Delegations Commercial Applications of Space-Enabled Robotics: Health and Safety Breadcrumb Home Funding Commercial Applications of Space-Enabled Robotics: Health and Safety ESA-STAR REFERENCE AO10494 Opportunity Call for Proposals (Non-Competitive) Activity Feasibility Study, Demonstration Project Opening date 17-07-2024 Closing date 17-09-2024 This call falls under the umbrella of the “Commercial Applications of Space-Enabled Robotics” thematic call for proposals. This Call for Proposals invites proposals for Feasibility Studies and Demonstration Projects for services that combine the use of satellite technologies and robotics for downstream services for Health and Safety. ‘Robotics’ is here defined to include physical robots, autonomous drones, machines and vehicles, and precursory solutions or those that enable these (e.g. perception and navigation systems for autonomous vehicle"
+    },
+    {
+      "id": "check-page-7f242d557c",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-maritime-and-marine",
+      "page": "application",
+      "excerpt": "Commercial Applications of Space-Enabled Robotics: Maritime and Marine Skip to main content Main navigation Home About us News How to apply Kick-starts Proof-of-concept Studies and Pilot Projects Funding Portfolio Ambassadors Focus Areas Bioeconomy Bioeconomy Task Force Energy Energy Task Force Green Activities Maritime Maritime Sustainability Task Force Mobility-Land Rail Smart and Green Cities Task Force For Smart and Green Cities Finance and Insurance Logistics and Infrastructure National Delegations Commercial Applications of Space-Enabled Robotics: Maritime and Marine Breadcrumb Home Funding Commercial Applications of Space-Enabled Robotics: Maritime and Marine ESA-STAR REFERENCE 10494/1019 Opportunity Call for Proposals (Non-Competitive) Activity Feasibility Study, Demonstration Project Opening date 23-09-2024 Closing date 25-11-2024 This call is part of the umbrella of “Commercial Applications of Space-Enabled Robotics” thematic call for proposals. This Call for Proposals invites proposals for feasibility studies and demonstration projects for services that combine the use of satellite technologies and robotics in downstream services for Maritime and Marine applications. ‘Robotics’ is here defined to include physical robots, autonomous drones, machines and vehicles, and precursory solutions or those that enable these (e.g. perception and navigation systems for"
+    },
+    {
+      "id": "check-page-7fd925a294",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-smart-cities-and",
+      "page": "application",
+      "excerpt": "Commercial Applications of Space-Enabled Robotics: Smart Cities and Infrastructure Skip to main content Main navigation Home About us News How to apply Kick-starts Proof-of-concept Studies and Pilot Projects Funding Portfolio Ambassadors Focus Areas Bioeconomy Bioeconomy Task Force Energy Energy Task Force Green Activities Maritime Maritime Sustainability Task Force Mobility-Land Rail Smart and Green Cities Task Force For Smart and Green Cities Finance and Insurance Logistics and Infrastructure National Delegations Commercial Applications of Space-Enabled Robotics: Smart Cities and Infrastructure Breadcrumb Home Funding Commercial Applications of Space-Enabled Robotics: Smart Cities and Infrastructure Image credit: Delivery Robots on Sidestreet ESA-STAR REFERENCE 1-10494 Opportunity Call for Proposals (Non-Competitive) Activity Feasibility Study, Demonstration Project Opening date 07-03-2024 Closing date 07-05-2024 This call is part of the umbrella of “Commercial Applications of Space-Enabled Robotics” thematic call for proposals. This Call for Proposals invites proposals for feasibility studies and demonstration projects for services that combine the use of satellite technologies and robotics for downstream services for Smart Cities and Infrastructure. ‘Robotics’ is here defined to include physical robots, autonomous drones, machines and vehicles, and precursory solutions or"
+    },
+    {
+      "id": "check-page-bec3639cf8",
+      "url": "http://business.esa.int/funding/call-for-proposals-non-competitive/commercial-applications-space-enabled-robotics-transport-and-logistics",
+      "page": "application",
+      "excerpt": "Commercial Applications of Space-Enabled Robotics: Transport and Logistics Skip to main content Main navigation Home About us News How to apply Kick-starts Proof-of-concept Studies and Pilot Projects Funding Portfolio Ambassadors Focus Areas Bioeconomy Bioeconomy Task Force Energy Energy Task Force Green Activities Maritime Maritime Sustainability Task Force Mobility-Land Rail Smart and Green Cities Task Force For Smart and Green Cities Finance and Insurance Logistics and Infrastructure National Delegations Commercial Applications of Space-Enabled Robotics: Transport and Logistics Breadcrumb Home Funding Commercial Applications of Space-Enabled Robotics: Transport and Logistics Electric autonomous shuttle bus. Credit: Suwin66, Shutterstock ESA-STAR REFERENCE 1-10494 Opportunity Call for Proposals (Non-Competitive) Opening date 26-04-2024 Closing date 26-06-2024 This call comes under the umbrella of the “Commercial Applications of Space-Enabled Robotics” thematic call for proposals. This call invites proposals for Feasibility Studies and Demonstration Projects for services that combine the use of satellite technologies and robotics for downstream services for transport and logistics. ‘Robotics’ is here defined to include physical robots, autonomous drones, machines and vehicles, and precursory solutions or those that enable these (e.g., perception and navigation systems for"
+    },
+    {
+      "id": "check-page-145915345c",
+      "url": "http://business.esa.int/funding/case-commercial-applications-enabled-space-environments",
+      "page": "application",
+      "excerpt": "CASE: Commercial Applications Enabled by Space Environments Skip to main content Main navigation Home About us News How to apply Kick-starts Proof-of-concept Studies and Pilot Projects Funding Portfolio Ambassadors Focus Areas Bioeconomy Bioeconomy Task Force Energy Energy Task Force Green Activities Maritime Maritime Sustainability Task Force Mobility-Land Rail Smart and Green Cities Task Force For Smart and Green Cities Finance and Insurance Logistics and Infrastructure National Delegations CASE: Commercial Applications Enabled by Space Environments Breadcrumb Home Funding CASE: Commercial Applications Enabled By Space Environments Credit: ESA/NASA ESA-STAR REFERENCE 1-11111 Activity Feasibility Study, Demonstration Project Opening date 16-12-2021 Closing date 25-11-2025 The current Call for Proposals closed for new Activity Pitch Questionnaire (APQ) submissions on 25 November 2025. Applicants who submitted an APQ by this date can still submit their Full Proposal. To submit a new proposal on the same topics, please use the Open Call for Proposals for Proof of Concept Studies (replacing Feasibility Studies) and Pilot Projects (replacing Demonstration Projects) . Your Business in Orbit Space can be the ideal environment to exploit a wide range of phenomena and physical processes that are not possible under the effects of gravity experienced on Earth, such as different fluid"
     }
   ],
   "findings": {
@@ -151,12 +1067,16 @@
         "evidenceId": "check-route-473c49e134"
       },
       {
-        "value": "https://business.esa.int/how-to-apply-to-proof-concept-study-and-pilot-project-open-call-0",
-        "evidenceId": "check-route-ae4a952033"
+        "value": "https://business.esa.int/artes-applications-workshop-2014-presentations-day-1#main-content",
+        "evidenceId": "check-route-7750e5d563"
       },
       {
-        "value": "https://business.esa.int/how-to-apply-to-kick-start-open-call",
-        "evidenceId": "check-route-c519c88b6e"
+        "value": "https://business.esa.int/ARTES-APPS-2014",
+        "evidenceId": "check-route-98216a7d27"
+      },
+      {
+        "value": "https://business.esa.int/artes-applications-workshop-2014-presentations-day-1#top",
+        "evidenceId": "check-route-3c59e9f23e"
       }
     ],
     "applicationUrl": [
@@ -168,13 +1088,29 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
-    "selectivity": [],
-    "dealText": [
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
       {
-        "value": "want to hear business ideas that are commercially viable, technically possible and involve either space tech or data. WHAT WE OFFER Zero-equity funding (from €60k to €3M+ per activity). Personalised support from a member of the ESA team. Technical & commercial guidance. Access to our network of partners. Credibility of",
-        "evidenceId": "check-deal-c0695985de"
+        "value": "8 months",
+        "evidenceId": "check-duration-883aaa14b2"
       }
     ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-652b403ba4"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-fe25c892ca"
+      }
+    ],
+    "location": [],
+    "selectivity": [],
+    "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://business.esa.int/projects",

@@ -1,66 +1,388 @@
 {
   "programId": "tech-nexus",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.technexus.com/",
-    "https://www.technexus.com/about/"
+    "https://www.technexus.com/cracking-the-enterprise-code-how-startups-can-navigate-and-win-big-deals/",
+    "https://www.technexus.com/decoding-corporate-investment-a-strategic-guide-for-early-stage-ventures/",
+    "https://www.technexus.com/fedex-thor-lead-160m-series-c-investment-in-harbinger/",
+    "https://www.technexus.com/investing-with-speed-powered-by-collaboration-announcing-our-investment-in-c360/",
+    "https://www.technexus.com/terms/",
+    "https://www.technexus.com/the-most-expensive-decision-in-cvc-isn-t-a-bad-investment-it-s-inaction/",
+    "https://www.technexus.com/the-silent-deal-killer-why-enterprise-sales-stalls-beyond-the-champion/",
+    "https://www.technexus.com/with-new-355m-investment-first-due-is-revolutionizing-public-safety-with-ai-powered-tools/",
+    "https://www.technexus.com/3-questions-ceos-want-to-know-about-cvc-but-dont-ask/",
+    "https://www.technexus.com/about/",
+    "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
+    "https://www.technexus.com/kayla-dusing-hired-by-technexus-venture-collaborative-as-venture-program-manager/",
+    "https://www.technexus.com/technexus-joins-venture-engine-program/",
+    "https://www.technexus.com/technexus-venture-collaborative-joins-istc-world-business-chicagos-venture-engine-program-as-innovation-partner/"
   ],
   "evidence": [
     {
+      "id": "check-duration-2d6d05469d",
+      "url": "https://www.technexus.com/technexus-joins-venture-engine-program/",
+      "title": "TechNexus — program page",
+      "excerpt": "to realize tangible growth Zero to Win in 24 Months TechNexus Venture Collaborative announces the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-4009d08e5b",
+      "url": "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
+      "title": "TechNexus — program page",
+      "excerpt": "the initiative, creating one of California’s largest virtual power plants (VPP) to date. “Rather than sending surplus",
+      "page": "details"
+    },
+    {
+      "id": "check-format-bde1ac1854",
+      "url": "https://www.technexus.com/",
+      "title": "TechNexus — homepage",
+      "excerpt": "context, momentum, and the serendipity that only happens in person. Visit teamworking.vc Ready to build your venture",
+      "page": "details"
+    },
+    {
+      "id": "check-location-981762bd2d",
+      "url": "https://www.technexus.com/terms/",
+      "title": "TechNexus — terms page",
+      "excerpt": "in the federal or state courts located in Cook County, Illinois, and you hereby consent to",
+      "page": "terms"
+    },
+    {
       "id": "check-name-d94d5213f2",
       "url": "https://www.technexus.com/",
-      "title": "TechNexus — homepage checked by scrape.py",
+      "title": "TechNexus — homepage",
       "excerpt": "TechNexus Venture Collaborative — Corporate Innovation Meets Startup",
       "page": "details"
     },
     {
+      "id": "check-portfolio-231cebeb82",
+      "url": "https://www.technexus.com/fedex-thor-lead-160m-series-c-investment-in-harbinger/",
+      "title": "TechNexus — terms page",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-250c4adcbc",
       "url": "https://www.technexus.com/",
-      "title": "TechNexus — homepage checked by scrape.py",
+      "title": "TechNexus — homepage",
       "excerpt": "Explore all companies → https://www.technexus.com/portfolio/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-28c05f13f7",
+      "url": "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
+      "title": "TechNexus — program page",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-45a1c0e637",
+      "url": "https://www.technexus.com/with-new-355m-investment-first-due-is-revolutionizing-public-safety-with-ai-powered-tools/",
+      "title": "TechNexus — terms page",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-487d22b103",
+      "url": "https://www.technexus.com/investing-with-speed-powered-by-collaboration-announcing-our-investment-in-c360/",
+      "title": "TechNexus — terms page",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-4baf77f13c",
+      "url": "https://www.technexus.com/the-most-expensive-decision-in-cvc-isn-t-a-bad-investment-it-s-inaction/",
+      "title": "TechNexus — terms page",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-514e2007fb",
+      "url": "https://www.technexus.com/3-questions-ceos-want-to-know-about-cvc-but-dont-ask/",
+      "title": "TechNexus — program page",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-548c1c4960",
+      "url": "https://www.technexus.com/3-questions-ceos-want-to-know-about-cvc-but-dont-ask/",
+      "title": "TechNexus — program page",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5556b74157",
+      "url": "https://www.technexus.com/terms/",
+      "title": "TechNexus — terms page",
+      "excerpt": "/ventures/ → https://www.technexus.com/ventures/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-59ba152455",
       "url": "https://www.technexus.com/",
-      "title": "TechNexus — homepage checked by scrape.py",
+      "title": "TechNexus — homepage",
       "excerpt": "Learn more → https://www.technexus.com/ventures/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-60d78d964e",
+      "url": "https://www.technexus.com/decoding-corporate-investment-a-strategic-guide-for-early-stage-ventures/",
+      "title": "TechNexus — terms page",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-69d17de9a1",
+      "url": "https://www.technexus.com/kayla-dusing-hired-by-technexus-venture-collaborative-as-venture-program-manager/",
+      "title": "TechNexus — program page",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6a63787083",
+      "url": "https://www.technexus.com/cracking-the-enterprise-code-how-startups-can-navigate-and-win-big-deals/",
+      "title": "TechNexus — terms page",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6cb765c2c0",
+      "url": "https://www.technexus.com/with-new-355m-investment-first-due-is-revolutionizing-public-safety-with-ai-powered-tools/",
+      "title": "TechNexus — terms page",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6f44f2c09a",
+      "url": "https://www.technexus.com/terms/",
+      "title": "TechNexus — terms page",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7542da1fbc",
+      "url": "https://www.technexus.com/terms/",
+      "title": "TechNexus — terms page",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-82e5bddeae",
+      "url": "https://www.technexus.com/the-silent-deal-killer-why-enterprise-sales-stalls-beyond-the-champion/",
+      "title": "TechNexus — terms page",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-87ac55d543",
+      "url": "https://www.technexus.com/fedex-thor-lead-160m-series-c-investment-in-harbinger/",
+      "title": "TechNexus — terms page",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a3639bc4f1",
+      "url": "https://www.technexus.com/technexus-venture-collaborative-joins-istc-world-business-chicagos-venture-engine-program-as-innovation-partner/",
+      "title": "TechNexus — program page",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a47d7a2778",
+      "url": "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
+      "title": "TechNexus — program page",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-af8cbf501b",
+      "url": "https://www.technexus.com/cracking-the-enterprise-code-how-startups-can-navigate-and-win-big-deals/",
+      "title": "TechNexus — terms page",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-cc75b2ee51",
+      "url": "https://www.technexus.com/technexus-venture-collaborative-joins-istc-world-business-chicagos-venture-engine-program-as-innovation-partner/",
+      "title": "TechNexus — program page",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
       "page": "details"
     },
     {
       "id": "check-portfolio-dcbeae5584",
       "url": "https://www.technexus.com/",
-      "title": "TechNexus — homepage checked by scrape.py",
+      "title": "TechNexus — homepage",
       "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-dcbf2f118a",
+      "url": "https://www.technexus.com/technexus-joins-venture-engine-program/",
+      "title": "TechNexus — program page",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-de8b120b61",
+      "url": "https://www.technexus.com/the-most-expensive-decision-in-cvc-isn-t-a-bad-investment-it-s-inaction/",
+      "title": "TechNexus — terms page",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-deaf02d9cf",
+      "url": "https://www.technexus.com/decoding-corporate-investment-a-strategic-guide-for-early-stage-ventures/",
+      "title": "TechNexus — terms page",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e12c9eb865",
+      "url": "https://www.technexus.com/kayla-dusing-hired-by-technexus-venture-collaborative-as-venture-program-manager/",
+      "title": "TechNexus — program page",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
       "page": "details"
     },
     {
       "id": "check-portfolio-e5d20cb115",
       "url": "https://www.technexus.com/",
-      "title": "TechNexus — homepage checked by scrape.py",
+      "title": "TechNexus — homepage",
       "excerpt": "For Founders → https://www.technexus.com/ventures/",
       "page": "details"
     },
     {
       "id": "check-portfolio-e68c4db52f",
       "url": "https://www.technexus.com/about/",
-      "title": "TechNexus — details page checked by scrape.py",
+      "title": "TechNexus — program page",
       "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-eb844bb291",
+      "url": "https://www.technexus.com/technexus-joins-venture-engine-program/",
+      "title": "TechNexus — program page",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-eff223bb79",
+      "url": "https://www.technexus.com/the-silent-deal-killer-why-enterprise-sales-stalls-beyond-the-champion/",
+      "title": "TechNexus — terms page",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-fbffe77560",
+      "url": "https://www.technexus.com/investing-with-speed-powered-by-collaboration-announcing-our-investment-in-c360/",
+      "title": "TechNexus — terms page",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-fea4cce8c7",
       "url": "https://www.technexus.com/about/",
-      "title": "TechNexus — details page checked by scrape.py",
+      "title": "TechNexus — program page",
       "excerpt": "For Founders → https://www.technexus.com/ventures/",
       "page": "details"
     },
     {
       "id": "check-route-275bb34e84",
       "url": "https://www.technexus.com/",
-      "title": "TechNexus — homepage checked by scrape.py",
+      "title": "TechNexus — homepage",
       "excerpt": "https://www.technexus.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-0f157aa06b",
+      "url": "https://www.technexus.com/",
+      "page": "details",
+      "excerpt": "TechNexus Venture Collaborative — Corporate Innovation Meets Startup Investment Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch Venture-Enabled Innovation™ We don't just invest in growth. We build it. Together. The first-of-its-kind venture collaborative — pioneered in 2007, with 150+ portfolio companies and $4B+ in tracked portfolio value. TechNexus partners with leading corporations and ambitious founders to invest in, build, and scale ventures that transform industries. Our insight comes from the connected entrepreneurial ecosystems . We have been mentoring, building and funding ventures since 2007, and putting our own capital and founder ethos to work alongside yours since 2017. 150+ Active Portfolio Investments More than a Dozen Corporate Partners Two Decades Curating Entrepreneurial Ecosystems $4B+ Follow-on Capital Raised by Portfolio Companies What We Do For Corporations Build and scale your venture ecosystem TechNexus invests our resources aligned with yours and coordinates co-investments where it matters Venture strategy through a startup & emerging-tech lens Venture building — co-creating new companies from scratch Turnarounds & CVC portfolio management Corporate spinouts from dormant R&D and IP Learn more For Ventures Strategic partners who actually get it Strategic capital with real corporate demand behind it Access"
+    },
+    {
+      "id": "check-page-84df58df8d",
+      "url": "https://www.technexus.com/cracking-the-enterprise-code-how-startups-can-navigate-and-win-big-deals/",
+      "page": "terms",
+      "excerpt": "Cracking the enterprise code: How startups can navigate (and win) big deals — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… Cracking the enterprise code: How startups can navigate (and win) big deals Selling to enterprises is a different game: endless procurement steps, tricky legal reviews, and the challenge of getting a dozen stakeholders aligned. This guide breaks down how startups can navigate corporate timelines, build internal champions, and close deals that transform their growth trajectory. We all know that selling to a big corporation feels like playing a completely different game than your standard B2B sale. When you are selling to a fellow startup or an SMB, decisions can happen over coffee. In the enterprise world, deals are governed by a unique corporate timeline, often involving endless procurement steps, tricky legal reviews, and the herculean task of getting a dozen different stakeholders on board. To succeed, you need more than a great product—you need a smart playbook to handle this complex, often drawn-out process. The enterprise sales process moves at a different pace and on a different calendar than you’re used to. At TechNexus, we sit right at the intersection of nimble startups and massive corporate partners. Here is what we’ve learned while helping our portfolio"
+    },
+    {
+      "id": "check-page-cab5d10aee",
+      "url": "https://www.technexus.com/decoding-corporate-investment-a-strategic-guide-for-early-stage-ventures/",
+      "page": "terms",
+      "excerpt": "Decoding Corporate Investment: A Strategic Guide for Early-Stage Ventures — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… Decoding Corporate Investment: A Strategic Guide for Early-Stage Ventures Curated reading: Decoding Corporate Investment: A Strategic Guide for Early-Stage Ventures None By Fred Hoch at TechNexus Venture Collaborative Related Reading Venture-Enabled Innovation: How Behemoths and Startups Will Change the World Why a Weakened VC Market Is a Huge Opportunity for Corporations Smart CEOs are doing this with their corporate venture units — and watching them thrive as a result CVC is not Monolithic: The Four Strategic Use Cases for Corporate Venture Capital Nothing Ventured with Fred Hoch: Making Corporate Venture Less Corporate More from TechNexus This article is curated by TechNexus Venture Collaborative as essential reading for the venture ecosystem. TechNexus invests across B2B Software through its venture ecosystem model. Written by Fred Hoch at TechNexus Venture Collaborative. TechNexus is the longest-operating venture collaborative in the United States, founded in 2007 by Terry Howerton and Fred Hoch. The firm has invested in more than 150 portfolio companies, with portfolio companies raising over $4 billion in follow-on capital. TechNexus Platform SecondWave ForgeX"
+    },
+    {
+      "id": "check-page-e100823da9",
+      "url": "https://www.technexus.com/fedex-thor-lead-160m-series-c-investment-in-harbinger/",
+      "page": "terms",
+      "excerpt": "FedEx, THOR lead $160M Series C investment in Harbinger — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… FedEx, THOR lead $160M Series C investment in Harbinger FedEx selected TechNexus portfolio company Harbinger to accelerate its fleet electrification journey, co-leading a $160M Series C alongside THOR Industries and placing an initial order for 53 electric vehicles. The deal marks a major validation of Harbinger's medium-duty EV platform from two industry giants. FedEx has ambitions to electrify its entire pickup and delivery fleet over the next 15 years, and it has selected TechNexus Venture Collaborative portfolio company Harbinger to accelerate its electrification journey. FedEx announced Thursday it co-led Harbinger’s $160 million Series C round and placed an initial order for 53 Harbinger EVs. The funding round was also led by TechNexus corporate partner THOR Industries, along with Capricorn’s Technology Impact Fund. Harbinger, which has now raised $358 million to date, has worked closely with THOR and TechNexus to develop vehicles for the RV industry. Together, THOR and Harbinger created the world's first range extended electric Class A motorhome , a revolutionary invention that has received accolades including the Fast Company 2025 World Changing Ideas Award, a TIME Best Invention"
+    },
+    {
+      "id": "check-page-5ca75bbd94",
+      "url": "https://www.technexus.com/investing-with-speed-powered-by-collaboration-announcing-our-investment-in-c360/",
+      "page": "terms",
+      "excerpt": "Investing with Speed, Powered by Collaboration: Announcing Our Investment in C360 — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… Investing with Speed, Powered by Collaboration: Announcing Our Investment in C360 Investing with Speed, Powered by Collaboration: Announcing Our Investment in C360 None By Kelly McGowan (Wyman) at TechNexus Venture Collaborative Related Reading Ocient Raises $40 Million in Series B Incubus Guitarist Michael Einziger’s Startup Mixhalo Raises $10.7 Million for Better Live Event Audio Landr raises $26 million for AI-powered music creation tools Molten, An Enterprise Software Startup, Raises $7M In Seed Funding From Ashton Kutcher, Michael Ovitz, Jack Dorsey & Other Backers Funding Sources for Black, Latinx & Womxn Founders More from TechNexus This article is published by TechNexus Venture Collaborative. TechNexus invests across B2B Software through its venture ecosystem model. TechNexus is the longest-operating venture collaborative in the United States, founded in 2007 by Terry Howerton and Fred Hoch. The firm has invested in more than 150 portfolio companies, with portfolio companies raising over $4 billion in follow-on capital. TechNexus Platform SecondWave ForgeX Pulse Investment Network Connect TeamWorking Legal & SEC Disclosures TechNexus LLC is an Exempt"
+    },
+    {
+      "id": "check-page-a94d1de95e",
+      "url": "https://www.technexus.com/terms/",
+      "page": "terms",
+      "excerpt": "TechNexus Terms & Conditions Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch Legal Terms & Conditions Effective Date: April 24, 2023 · Last Updated: April 23, 2026 · For a plain-English summary, see SEC Disclosures By accessing and using this website (\"Site\"), you agree to be bound by these Terms and Conditions (\"Terms\"). If you do not agree with any part of these Terms, you should not access the Site. TechNexus LLC and its affiliates (\"TechNexus,\" \"we,\" \"us,\" or \"our\") is an Exempt Reporting Adviser (ERA) that files Form ADV with the U.S. Securities and Exchange Commission under Section 203(l) of the Investment Advisers Act of 1940, and is not a registered investment adviser. The Site provides educational and informational content only, not investment advice. All investments carry risk of loss, and past results do not guarantee future performance. 1. About TechNexus and Website Purpose TechNexus LLC operates as an exempt reporting adviser (ERA) under Section 203(l) of the Investment Advisers Act of 1940. TechNexus is a venture collaborative that builds innovation ecosystems connecting leading corporations with ambitious early-stage companies through co-investment, operational support, and partnership infrastructure. This Site serves informational and educational purposes exclusively. The content on this Site is intended to"
+    },
+    {
+      "id": "check-page-45e387575d",
+      "url": "https://www.technexus.com/the-most-expensive-decision-in-cvc-isn-t-a-bad-investment-it-s-inaction/",
+      "page": "terms",
+      "excerpt": "The Most Expensive Decision in CVC Isn't a Bad Investment. It's Inaction. — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… The Most Expensive Decision in CVC Isn't a Bad Investment. It's Inaction. The hidden cost of passive portfolio management — and why inaction is never neutral. There is a persistent myth in corporate venturing that if you \"pause\" investing, you are not taking on more risk, and simply holding steady. That doing nothing with a portfolio that no longer has internal champions, an active investment mandate, or dedicated management bandwidth is a conservative, low-risk position. It is not. It is one of the most reliably destructive choices an organization can make with a venture portfolio — and unlike a bad investment decision, it happens in slow motion, without a single moment you can point to as the mistake. We call it the “do nothing” tax. And it compounds. What Passive Holding Actually Costs When a venture portfolio goes unmanaged, the costs are wide ranging: fair market valuations go stale, complicating any eventual exit; capital dilution accumulates as new funding rounds close without the corporate investor exercising pro-rata rights; board seats sit vacant or are staffed by people without the mandate or knowledge to add value. Additional consequences of an unmanaged"
+    },
+    {
+      "id": "check-page-e396e272f6",
+      "url": "https://www.technexus.com/the-silent-deal-killer-why-enterprise-sales-stalls-beyond-the-champion/",
+      "page": "terms",
+      "excerpt": "The Silent Deal Killer: Why Enterprise Sales Stalls Beyond the Champion — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… The Silent Deal Killer: Why Enterprise Sales Stalls Beyond the Champion How to win enterprise deals by building relationships across every department that matters. Most sales organizations still measure deal health by one signal: does the champion like us? That signal was never wrong, exactly, it was just never sufficient. A champion can want you to win and still lose you the deal. Not through ill intentions, but through math. One person doesn’t have the authority, the calendar, or the political capital to carry a purchase through legal, security, finance, and whichever executive actually owns the budget line. If your sales organization is still staffed and trained to win over one person, you are optimized for a sale that stopped existing. The View From Inside Corporates TechNexus sits closer to this problem than most. We work with startups trying to close six- and seven-figure contracts with large corporations, and we work with the corporate partners on the other side of that table deciding next steps. From our vantage point, the pattern holds regardless of industry: the companies that break into large corporate accounts are not the ones with the strongest single"
+    },
+    {
+      "id": "check-page-18eecf53fb",
+      "url": "https://www.technexus.com/with-new-355m-investment-first-due-is-revolutionizing-public-safety-with-ai-powered-tools/",
+      "page": "terms",
+      "excerpt": "With new $355M investment, First Due is revolutionizing public safety with AI-powered tools — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… With new $355M investment, First Due is revolutionizing public safety with AI-powered tools Fire and EMS agencies have been weighed down for decades by outdated processes and fragmented technology. A new $355M investment in TechNexus portfolio company First Due is powering AI-driven tools that unify the essential functions emergency crews depend on — in a profession where every second counts. Emergency response crews are in desperate need of innovation. For decades, the essential work of fire and EMS personnel have been weighed down by outdated processes and disjointed technology. What should be seamless, core operational functions have too often turned into time-consuming burdens. In a profession where every second counts, agencies continue to wrestle with fragmented systems that fail to work together. Leaders and responders are left juggling data across silos, spending valuable time on administration instead of decision-making and service. The result is a constant drag on efficiency that weakens focus where it matters most — protecting the community. To solve these pain points, TechNexus Venture Collaborative portfolio company First Due has built an"
+    },
+    {
+      "id": "check-page-cc78bb0c4d",
+      "url": "https://www.technexus.com/3-questions-ceos-want-to-know-about-cvc-but-dont-ask/",
+      "page": "details",
+      "excerpt": "3 Questions CEOs Want to Know About CVC but Don’t Ask — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… 3 Questions CEOs Want to Know About CVC but Don’t Ask 3 Questions CEOs Want to Know About CVC but Don’t Ask None By Fred Hoch at TechNexus Venture Collaborative Related Reading Fred Hoch featured in Forbes article, \"4 Unexpected Ways That Partnering With A Corporation Could Help Your Startup\"￼ Why a Weakened VC Market Is a Huge Opportunity for Corporations Smart CEOs are doing this with their corporate venture units — and watching them thrive as a result Disruption is at an all-time high. The CEOs who think outside their four walls will thrive — while the ones who don’t will disappear. Electrification: It’s not if, it’s when. More from TechNexus This article is published by TechNexus Venture Collaborative as a resource for corporate venturing leaders. TechNexus invests across Electrification through its venture ecosystem model. Written by Fred Hoch at TechNexus Venture Collaborative. TechNexus is the longest-operating venture collaborative in the United States, founded in 2007 by Terry Howerton and Fred Hoch. The firm has invested in more than 150 portfolio companies, with portfolio companies raising over $4 billion in follow-on capital. TechNexus Platform SecondWave ForgeX Pulse"
+    },
+    {
+      "id": "check-page-78457dd0d2",
+      "url": "https://www.technexus.com/about/",
+      "page": "details",
+      "excerpt": "About TechNexus — Chicago's Venture Collaborative Since 2007 Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch About TechNexus Connecting corporations and entrepreneurs to drive growth. TechNexus pioneered the venture collaborative model in 2007 — the first-of-its-kind structure pairing corporate capital with startup execution at scale, and the longest-operating venture collaborative in the United States. We help leading corporations and ambitious entrepreneurs develop mutually beneficial relationships that accelerate growth opportunities by investing capital, incubating ventures, and collaborating across our ecosystem to create new business models, revenue streams, and products. 01 Entrepreneurs We attract bold problem-solvers who challenge conventional thinking and explore possibilities through calculated risk-taking. 02 Perspective Bringing together people with different experiences, backgrounds, and ideas is crucial to driving innovation. 03 Impactful Execution We are force multipliers supporting creators committed to action-based solutions addressing genuine market needs. 04 Community We build Chicago's technology ecosystem while fostering global partnerships — because future growth depends on interconnected business ecosystems. Our Team Dynamic, driven individuals Our Track Record Built to last. Built to deliver. Corporate"
+    },
+    {
+      "id": "check-page-30f894f426",
+      "url": "https://www.technexus.com/haven-energy-launches-free-solar-and-battery-program-for-underserved-california-communities/",
+      "page": "details",
+      "excerpt": "Haven Energy launches free solar and battery program for underserved California communities — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… Haven Energy launches free solar and battery program for underserved California communities Climate tech company Haven Energy is leveraging California's $280M Self-Generation Incentive Program to provide free home solar and battery systems to low and moderate income homeowners. The initiative aims to eliminate financial barriers to clean energy for communities that need it most. Haven Energy , a climate tech company focused on expanding access to renewable energy, announced a new initiative to provide free home solar and battery systems to low and moderate income homeowners in California. The program aims to eliminate financial barriers to clean energy by leveraging California’s $280 million Self-Generation Incentive Program Residential Solar & Storage Equity (SGIP RSSE) fund. Under the new initiative, Haven, a TechNexus Venture Collaborative portfolio company, will cover all costs associated with the purchase and installation of solar panels and home battery systems. The company will own the equipment and collect state rebates, tax credits, and demand response revenues, while homeowners benefit from lower monthly electric bills and backup power during"
+    },
+    {
+      "id": "check-page-ca73dfd067",
+      "url": "https://www.technexus.com/kayla-dusing-hired-by-technexus-venture-collaborative-as-venture-program-manager/",
+      "page": "details",
+      "excerpt": "Kayla Dusing hired by TechNexus Venture Collaborative as Venture Program Manager — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… Kayla Dusing hired by TechNexus Venture Collaborative as Venture Program Manager Kayla Dusing joins TechNexus as Venture Program Manager, working at the intersection of portfolio operations and strategic partnerships. Her role spans supporting startups, collaborating with corporate partners, and streamlining the operational backbone that connects the TechNexus ecosystem. TechNexus Venture Collaborative is excited to welcome Kayla Dusing to the role of Venture Program Manager, where she’ll work alongside our Venture Operations and Collaboration teams to support TechNexus portfolio companies. Dusing’s work is at the intersection of portfolio operations and strategic partnerships. Her duties include supporting startups, collaborating with corporate partners, and strengthening connections across TechNexus’s broader venture ecosystem, which includes more than 150 portfolio companies. The hire signals TechNexus’s continued commitment to supporting startups well beyond an initial investment. Our corporate joint venture model has allowed TechNexus to connect startups to large corporations, providing meaningful partnerships, pilot programs, and new revenue streams for our"
+    },
+    {
+      "id": "check-page-2f280132d6",
+      "url": "https://www.technexus.com/technexus-joins-venture-engine-program/",
+      "page": "details",
+      "excerpt": "TechNexus Venture Collaborative Joins ISTC & World Business Chicago's Venture Engine Program as Innovation Partner — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… TechNexus Venture Collaborative Joins ISTC & World Business Chicago's Venture Engine Program as Innovation Partner TechNexus joined the Venture Engine program — powered by Illinois Science and Technology Coalition and World Business Chicago — as a sponsor and innovation partner. The program connects Illinois' most promising startups to the state's most innovative corporations. TechNexus Venture Collaborative has joined the Venture Engine program as a sponsor and innovation partner. Powered by Illinois Science and Technology Coalition (ISTC) and World Business Chicago (WBC) , Venture Engine connects Illinois' most promising startups to the state's most innovative, industry-leading corporations. As an innovation partner, TechNexus will leverage its experience, expertise, and network to help the program source startups, assist with innovation events, engage with members, and provide additional guidance for those new to navigating corporate-startup relationships. “Illinois has a vibrant startup ecosystem ready to be leveraged by forward-thinking corporations and TechNexus Venture Collaborative has been a leader in doing this work for"
+    },
+    {
+      "id": "check-page-00656da502",
+      "url": "https://www.technexus.com/technexus-venture-collaborative-joins-istc-world-business-chicagos-venture-engine-program-as-innovation-partner/",
+      "page": "details",
+      "excerpt": "Power of Collaborative Disruption | Fireside Chat w/TechNexus founders Fred Hoch & Terry Howerton — TechNexus Connect Skip to content For Corporations For Founders For Investors Portfolio About News → Get in Touch All Loading article… Power of Collaborative Disruption | Fireside Chat w/TechNexus founders Fred Hoch & Terry Howerton TechNexus founders Fred Hoch and Terry Howerton took the stage together for the first time at the 2021 Chicago Venture Summit. The fireside chat revealed the secrets of successful industry-venture partnerships and their vision for Chicago as a hub for corporate-startup matchmaking. TechNexus founders Fred Hoch and Terry Howerton sat down with Alya Woods ( Cooley LLP ) during the 2021 Chicago Venture Summit to dive into the secrets of successful industry-venture partnerships and the future of Chicago as a hub for corporate-startup matchmaking magic. For the first time live on stage together, Fred & Terry discuss Chicago tech's ecosystem evolution over the past 20+ years and how this continued momentum will incite and inspire industry innovation for the next 20...30...50+ years! TechNexus Venture Collaborative helps leading corporations and entrepreneurs partner with each other to grow revenue, create new business models, and increase market share by discovering previously unseen threats, creating valuable partnerships, or taking advantage of"
     }
   ],
   "findings": {
@@ -76,8 +398,34 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "24 months",
+        "evidenceId": "check-duration-2d6d05469d"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-bde1ac1854"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-4009d08e5b"
+      }
+    ],
+    "location": [
+      {
+        "value": "Cook County",
+        "evidenceId": "check-location-981762bd2d"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.technexus.com/ventures/",

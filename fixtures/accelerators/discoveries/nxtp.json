@@ -1,7 +1,119 @@
 {
   "programId": "nxtp",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://nxtp.vc/portfolio",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nxtp.vc/portfolio-company/123-seguro",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nxtp.vc/portfolio-company/aloi",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nxtp.vc/portfolio-company/arcus",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nxtp.vc/portfolio-company/asteras",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nxtp.vc/portfolio-company/auth0",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nxtp.vc/portfolio-company/avra",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nxtp.vc/portfolio-company/axenya",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nxtp.vc/portfolio-company/barte",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nxtp.vc/portfolio-company/betterfly",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nxtp.vc/portfolio-company/capim",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nxtp.vc/portfolio-company/cargo-sapiens",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nxtp.vc/portfolio-company/chazki",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nxtp.vc/portfolio-company/cobli",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.nxtp.vc/portfolio",
       "page": "portfolio",
@@ -11,7 +123,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.nxtp.vc/portfolio-company/pomelo",
+      "url": "https://www.nxtp.vc/portfolio-company/123-seguro",
       "page": "portfolio",
       "anchor": "",
       "fetched": false,
@@ -19,7 +131,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.nxtp.vc/portfolio-company/barte",
+      "url": "https://www.nxtp.vc/portfolio-company/aloi",
       "page": "portfolio",
       "anchor": "",
       "fetched": false,
@@ -27,7 +139,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.nxtp.vc/portfolio-company/vercel",
+      "url": "https://www.nxtp.vc/portfolio-company/arcus",
       "page": "portfolio",
       "anchor": "",
       "fetched": false,
@@ -35,39 +147,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.nxtp.vc/portfolio-company/capim",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/mural",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/securitize",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/nuvemshop",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/cobli",
+      "url": "https://www.nxtp.vc/portfolio-company/asteras",
       "page": "portfolio",
       "anchor": "",
       "fetched": false,
@@ -83,7 +163,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.nxtp.vc/portfolio-company/frete",
+      "url": "https://www.nxtp.vc/portfolio-company/axenya",
       "page": "portfolio",
       "anchor": "",
       "fetched": false,
@@ -91,7 +171,47 @@
       "origin": "official"
     },
     {
-      "url": "https://www.nxtp.vc/portfolio-company/123-seguro",
+      "url": "https://www.nxtp.vc/portfolio-company/barte",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/betterfly",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/capim",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/cargo-sapiens",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/chazki",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/cobli",
       "page": "portfolio",
       "anchor": "",
       "fetched": false,
@@ -115,6 +235,22 @@
       "origin": "official"
     },
     {
+      "url": "https://www.nxtp.vc/portfolio-company/facturama",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/flexza",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.nxtp.vc/portfolio-company/fligoo",
       "page": "portfolio",
       "anchor": "",
@@ -123,95 +259,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.nxtp.vc/portfolio-company/grandata",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/jampp",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/logan",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/properati",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/quadminds",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/retargetly",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/ripio",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/sattelogic",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/sirena",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/vu",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/workana",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/arcus",
+      "url": "https://www.nxtp.vc/portfolio-company/frete",
       "page": "portfolio",
       "anchor": "",
       "fetched": false,
@@ -227,6 +275,14 @@
       "origin": "official"
     },
     {
+      "url": "https://www.nxtp.vc/portfolio-company/grandata",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.nxtp.vc/portfolio-company/horizon",
       "page": "portfolio",
       "anchor": "",
@@ -235,7 +291,79 @@
       "origin": "official"
     },
     {
+      "url": "https://www.nxtp.vc/portfolio-company/inventa",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/jai",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/jampp",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/kangu",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/liftit",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/logan",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.nxtp.vc/portfolio-company/movedot",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/mural",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/nuvemshop",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/nuvia",
       "page": "portfolio",
       "anchor": "",
       "fetched": false,
@@ -267,7 +395,87 @@
       "origin": "official"
     },
     {
+      "url": "https://www.nxtp.vc/portfolio-company/pomelo",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/prima",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/properati",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/qive",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/quadminds",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/retargetly",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/ripio",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.nxtp.vc/portfolio-company/rsk",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/sattelogic",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/securitize",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/sirena",
       "page": "portfolio",
       "anchor": "",
       "fetched": false,
@@ -299,119 +507,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.nxtp.vc/portfolio-company/aloi",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/betterfly",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/facturama",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/flexza",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/kangu",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/liftit",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/prima",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/chazki",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/asteras",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/axenya",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/cargo-sapiens",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/inventa",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/jai",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/nuvia",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.nxtp.vc/portfolio-company/qive",
+      "url": "https://www.nxtp.vc/portfolio-company/vercel",
       "page": "portfolio",
       "anchor": "",
       "fetched": false,
@@ -427,7 +523,23 @@
       "origin": "official"
     },
     {
+      "url": "https://www.nxtp.vc/portfolio-company/vu",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.nxtp.vc/portfolio-company/waid",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nxtp.vc/portfolio-company/workana",
       "page": "portfolio",
       "anchor": "",
       "fetched": false,

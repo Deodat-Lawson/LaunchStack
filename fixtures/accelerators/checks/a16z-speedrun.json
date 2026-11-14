@@ -1,6 +1,6 @@
 {
   "programId": "a16z-speedrun",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://speedrun.a16z.com/apply",
     "https://speedrun.a16z.com/application-login",
@@ -8,109 +8,234 @@
   ],
   "evidence": [
     {
-      "id": "check-deal-3e57e2fd17",
+      "id": "check-deal-11158df209",
       "url": "https://speedrun.a16z.com/faq",
-      "title": "a16z speedrun — terms page checked by scrape.py",
-      "excerpt": "your application, so the interview builds on that. Think of it as a conversation, not a test. Capital and terms What are the terms? Our standard deal is up to $1M: $500K for 10% upfront on a SAFE, and up to an additional $500K in your next qualifying round ($2M+) within 18 months. Our current standard deal does not",
+      "title": "a16z speedrun — terms page",
+      "excerpt": "and executives About speedrun What is speedrun? We invest up to $1M in your startup, add $10M+ in credits, and help you with capital,",
       "page": "terms"
     },
     {
-      "id": "check-deal-714d6c193b",
+      "id": "check-deal-20a5edc82b",
       "url": "https://speedrun.a16z.com/faq",
-      "title": "a16z speedrun — terms page checked by scrape.py",
-      "excerpt": "If you’re building something you believe in, we’d love for you to apply. What's the difference between speedrun and alpha? The alpha fellowship invests up to $250K plus credits in students, recent grads, and dropouts who are still finding their idea, product, or team. speedrun invests up to $1M in founders who are",
+      "title": "a16z speedrun — terms page",
+      "excerpt": "and terms What are the terms? Our standard deal is up to $1M: $500K for 10% upfront on a SAFE, and up to an additional $500K in your",
       "page": "terms"
     },
     {
-      "id": "check-deal-d29a20a4b7",
+      "id": "check-deal-4e705a6d67",
       "url": "https://speedrun.a16z.com/faq",
-      "title": "a16z speedrun — terms page checked by scrape.py",
-      "excerpt": "terms Residency and the office Demo Day and fundraising Customers, talent, and visas Investors and executives About speedrun What is speedrun? We invest up to $1M in your startup, add $10M+ in credits, and help you with capital, customers, and talent as you build. The in-person part is the residency: twelve weeks of",
+      "title": "a16z speedrun — terms page",
+      "excerpt": "between speedrun and alpha? The alpha fellowship invests up to $250K plus credits in students, recent grads, and dropouts who are still",
       "page": "terms"
     },
     {
-      "id": "check-deal-d73387bb6f",
+      "id": "check-deal-4ef12947f6",
       "url": "https://speedrun.a16z.com/faq",
-      "title": "a16z speedrun — terms page checked by scrape.py",
-      "excerpt": "of progress to show. Is this only for the twelve weeks? No. The residency lasts twelve weeks, but we see this as a long-term partnership. We invest another $500K in your next round (subject to terms), and we ask for pro rata rights so we have the option to keep investing as you grow. Do you lead seed rounds? Generally,",
+      "title": "a16z speedrun — terms page",
+      "excerpt": "up to $1M: $500K for 10% upfront on a SAFE, and up to an additional $500K in your next qualifying round ($2M+) within 18 months. Our current",
       "page": "terms"
     },
     {
-      "id": "check-deal-dbeecf390e",
+      "id": "check-deal-5c6c40043d",
       "url": "https://speedrun.a16z.com/apply",
-      "title": "a16z speedrun — homepage checked by scrape.py",
-      "excerpt": "Apply to speedrun today. We invest up to $1M in your new startup. SR008 runs February 1 to April 16, 2027, in San Francisco. If you apply after November 1, we’ll consider you for the following residency.",
+      "title": "a16z speedrun — homepage",
+      "excerpt": "Apply to speedrun today. We invest up to $1M in your new startup. SR008 runs February 1 to April 16, 2027, in San",
       "page": "details"
+    },
+    {
+      "id": "check-deal-61542557d6",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page",
+      "excerpt": "speedrun What is speedrun? We invest up to $1M in your startup, add $10M+ in credits, and help you with capital, customers, and talent as you",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-ac4ffb19be",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page",
+      "excerpt": "weeks, but we see this as a long-term partnership. We invest another $500K in your next round (subject to terms), and we ask for pro rata",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-bb785c8edf",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page",
+      "excerpt": "a SAFE, and up to an additional $500K in your next qualifying round ($2M+) within 18 months. Our current standard deal does not include a",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-c076485a8c",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page",
+      "excerpt": "Capital and terms What are the terms? Our standard deal is up to $1M: $500K for 10% upfront on a SAFE, and up to an additional $500K in",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-d3fcbb9784",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page",
+      "excerpt": "still finding their idea, product, or team. speedrun invests up to $1M in founders who are already building, or further along in their",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-28feda0454",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page",
+      "excerpt": "in your next qualifying round ($2M+) within 18 months. Our current standard deal does not include a",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a7b981b25c",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page",
+      "excerpt": "and we aim to get back to you within 4 to 6 weeks. If we move forward together, we aim to close",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e0e57026a0",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page",
+      "excerpt": "aim to get back to all applications within 4 to 6 weeks, and sometimes a little longer during busy",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-eeb6895838",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page",
+      "excerpt": "whatever the decision. If it's been more than 6 weeks, please check your status page and spam folder,",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-538bb380a5",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page",
+      "excerpt": "and Tech Week, where you can meet customers and partners in person. Launch Lab helps you get your product in front of people,",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-612afbc7b6",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page",
+      "excerpt": "you with capital, customers, and talent as you build. The in-person part is the residency: twelve weeks of firesides,",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-667fe79545",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page",
+      "excerpt": "Francisco? For the residency, yes. The twelve weeks happen in person at our San Francisco office, because that's where the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6b8e6497c6",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page",
+      "excerpt": "I do the residency remotely or part-time? The residency is in person in San Francisco for the full twelve weeks, since that’s",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-749867e5c8",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page",
+      "excerpt": "During the residency, we ask for about one day a week in person at our San Francisco office for sessions, office hours,",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-a3125ac76a",
+      "url": "https://speedrun.a16z.com/apply",
+      "title": "a16z speedrun — homepage",
+      "excerpt": "You’ll also get AI Faire and Tech Week to meet buyers in person, Launch Lab to get your product in front of people, and",
+      "page": "details"
+    },
+    {
+      "id": "check-rolling-a35c90177f",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page",
+      "excerpt": "if you apply again. How does the review process work? We review applications on a rolling basis, and every one is read by a person. If we’d like to learn more, we may invite",
+      "page": "terms"
     },
     {
       "id": "check-route-0c90cb5474",
       "url": "https://speedrun.a16z.com/apply",
-      "title": "a16z speedrun — homepage checked by scrape.py",
+      "title": "a16z speedrun — homepage",
       "excerpt": "View application status → https://speedrun.a16z.com/application-login",
-      "page": "details"
-    },
-    {
-      "id": "check-route-2689d2cdab",
-      "url": "https://speedrun.a16z.com/apply",
-      "title": "a16z speedrun — homepage checked by scrape.py",
-      "excerpt": "Apply to speedrun → https://speedrun.a16z.com/apply",
       "page": "details"
     },
     {
       "id": "check-route-3b37944971",
       "url": "https://speedrun.a16z.com/faq",
-      "title": "a16z speedrun — terms page checked by scrape.py",
+      "title": "a16z speedrun — terms page",
       "excerpt": "speedrun.a16z.com/apply → https://speedrun.a16z.com/apply",
       "page": "terms"
     },
     {
       "id": "check-route-72c5b9aa18",
       "url": "https://speedrun.a16z.com/faq",
-      "title": "a16z speedrun — terms page checked by scrape.py",
+      "title": "a16z speedrun — terms page",
       "excerpt": "here → https://speedrun.a16z.com/application-login",
       "page": "terms"
     },
     {
       "id": "check-route-7bed0f8985",
       "url": "https://speedrun.a16z.com/application-login",
-      "title": "a16z speedrun — application page checked by scrape.py",
+      "title": "a16z speedrun — application page",
       "excerpt": "Apply to speedrun → https://speedrun.a16z.com/apply",
       "page": "application"
     },
     {
       "id": "check-route-8e4ee38871",
       "url": "https://speedrun.a16z.com/faq",
-      "title": "a16z speedrun — terms page checked by scrape.py",
+      "title": "a16z speedrun — terms page",
       "excerpt": "status page → https://speedrun.a16z.com/application-login",
       "page": "terms"
     },
     {
       "id": "check-route-b67dbcb43c",
       "url": "https://speedrun.a16z.com/apply",
-      "title": "a16z speedrun — homepage checked by scrape.py",
+      "title": "a16z speedrun — homepage",
       "excerpt": "Log in here. → https://speedrun.a16z.com/application-login",
       "page": "details"
     },
     {
       "id": "check-route-c7685dbf6e",
       "url": "https://speedrun.a16z.com/faq",
-      "title": "a16z speedrun — terms page checked by scrape.py",
+      "title": "a16z speedrun — terms page",
       "excerpt": "speedrun.a16z.com/application-login → https://speedrun.a16z.com/application-login",
       "page": "terms"
     },
     {
       "id": "check-route-f7b146272b",
       "url": "https://speedrun.a16z.com/faq",
-      "title": "a16z speedrun — terms page checked by scrape.py",
+      "title": "a16z speedrun — terms page",
       "excerpt": "Apply to speedrun → https://speedrun.a16z.com/apply",
       "page": "terms"
     },
     {
       "id": "check-selectivity-acbf2030bb",
       "url": "https://speedrun.a16z.com/faq",
-      "title": "a16z speedrun — terms page checked by scrape.py",
+      "title": "a16z speedrun — terms page",
       "excerpt": "do you back each residency? Recent residencies have had 70 to 80 companies. Fewer than 0.4% of applicants are accepted. Who will I work with? Your investing partner and the wider",
       "page": "terms"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-e6ce4e7edf",
+      "url": "https://speedrun.a16z.com/apply",
+      "page": "details",
+      "excerpt": "Apply to speedrun today. We invest up to $1M in your new startup. SR008 runs February 1 to April 16, 2027, in San Francisco. If you apply after November 1, we’ll consider you for the following residency. We review applications year-round, so whenever you’re ready, we’d love for you to apply. We help founders with capital, customers, and talent. When you join speedrun, you get: Capital: Up to $1M, plus $10M+ in credits from 200+ partners through the speedrun Marketplace. When you’re ready to raise your next round, Demo Day puts you in front of a room full of investors. Customers: Introductions to executives and customers through SR Insiders, our network of 150+ C-suite founding members and 1,000+ executives and operators. You’ll also get AI Faire and Tech Week to meet buyers in person, Launch Lab to get your product in front of people, and Brand Lab to shape how you show up from day one. Talent: Access to the Talent Network of 171,000+ people, which our team is always growing, plus hiring and HR support as your team scales. You’ll also be building alongside a community of 1,000+ speedrun founders who support each other with customer introductions and product feedback. Want to check the status of an existing application? Log in here. Please enter your email to begin the application. By clicking \"Get Started\", you agree to our Terms of Use and acknowledge our Privacy Policy ."
+    },
+    {
+      "id": "check-page-fd24ad2a52",
+      "url": "https://speedrun.a16z.com/application-login",
+      "page": "application",
+      "excerpt": "Speedrun - Application Login View Your Application Status Enter the email you used to apply. We'll send you a login code. By clicking \"Send Code\", you agree to our Terms of Use and acknowledge our Privacy Policy . E-MAIL Send code Applied to speedrun alpha? That application is tracked separately. Check its status at speedrun.a16z.com/alpha/status Looking for Platform Login? Founders and investors can log in to the platform to access profiles, resources, and connections. Go to platform login Founders Capital Customers Talent Residency FAQ Apply to speedrun Log in Investors Demo day & investor network Request an invitation Log in Partners Buyers, partners & advisors Follow us Substack LinkedIn X Privacy Policy Terms of Use Disclosures Speedrun Talent Network © 2026 Andreessen Horowitz"
+    },
+    {
+      "id": "check-page-b12f39fa78",
+      "url": "https://speedrun.a16z.com/faq",
+      "page": "terms",
+      "excerpt": "FAQ FAQ Browse categories to find answers to common questions about our residency, eligibility, application steps, and resources. If you need further help, don't hesitate to contact us . About speedrun Applying After you apply Capital and terms Residency and the office Demo Day and fundraising Customers, talent, and visas Investors and executives About speedrun Applying After you apply Capital and terms Residency and the office Demo Day and fundraising Customers, talent, and visas Investors and executives About speedrun What is speedrun? We invest up to $1M in your startup, add $10M+ in credits, and help you with capital, customers, and talent as you build. The in-person part is the residency: twelve weeks of firesides, practitioner sessions, office hours, and events at our San Francisco office, alongside other founders building at the same stage. How often do you run a residency? Twice a year, both in San Francisco. SR008 starts in February 2027. SR009 starts in late July 2027, with Demo Day on October 5, 2027. How many companies do you back each residency? Recent residencies have had 70 to 80 companies. Fewer than 0.4% of applicants are accepted. Who will I work with? Your investing partner and the wider speedrun team, about 40 people. Around eight are investors, and the rest are operators who help with go-to-market, talent, marketing, fundraising, and more. What sectors do"
     }
   ],
   "findings": {
@@ -128,13 +253,38 @@
     ],
     "applicationUrl": [
       {
-        "value": "https://speedrun.a16z.com/apply",
-        "evidenceId": "check-route-2689d2cdab"
+        "value": "https://speedrun.a16z.com/application-login",
+        "evidenceId": "check-route-b67dbcb43c"
       }
     ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-a35c90177f"
+      }
+    ],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6",
+        "evidenceId": "check-duration-a7b981b25c"
+      },
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-28feda0454"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-a3125ac76a"
+      }
+    ],
+    "location": [],
     "selectivity": [
       {
         "value": {
@@ -146,24 +296,102 @@
     ],
     "dealText": [
       {
-        "value": "Apply to speedrun today. We invest up to $1M in your new startup. SR008 runs February 1 to April 16, 2027, in San Francisco. If you apply after November 1, we’ll consider you for the following residency.",
-        "evidenceId": "check-deal-dbeecf390e"
+        "value": "Apply to speedrun today. We invest up to $1M in your new startup. SR008 runs February 1 to April 16, 2027, in San",
+        "evidenceId": "check-deal-5c6c40043d"
       },
       {
-        "value": "terms Residency and the office Demo Day and fundraising Customers, talent, and visas Investors and executives About speedrun What is speedrun? We invest up to $1M in your startup, add $10M+ in credits, and help you with capital, customers, and talent as you build. The in-person part is the residency: twelve weeks of",
-        "evidenceId": "check-deal-d29a20a4b7"
+        "value": "and executives About speedrun What is speedrun? We invest up to $1M in your startup, add $10M+ in credits, and help you with capital,",
+        "evidenceId": "check-deal-11158df209"
       },
       {
-        "value": "If you’re building something you believe in, we’d love for you to apply. What's the difference between speedrun and alpha? The alpha fellowship invests up to $250K plus credits in students, recent grads, and dropouts who are still finding their idea, product, or team. speedrun invests up to $1M in founders who are",
-        "evidenceId": "check-deal-714d6c193b"
+        "value": "speedrun What is speedrun? We invest up to $1M in your startup, add $10M+ in credits, and help you with capital, customers, and talent as you",
+        "evidenceId": "check-deal-61542557d6"
       },
       {
-        "value": "your application, so the interview builds on that. Think of it as a conversation, not a test. Capital and terms What are the terms? Our standard deal is up to $1M: $500K for 10% upfront on a SAFE, and up to an additional $500K in your next qualifying round ($2M+) within 18 months. Our current standard deal does not",
-        "evidenceId": "check-deal-3e57e2fd17"
+        "value": "between speedrun and alpha? The alpha fellowship invests up to $250K plus credits in students, recent grads, and dropouts who are still",
+        "evidenceId": "check-deal-4e705a6d67"
       },
       {
-        "value": "of progress to show. Is this only for the twelve weeks? No. The residency lasts twelve weeks, but we see this as a long-term partnership. We invest another $500K in your next round (subject to terms), and we ask for pro rata rights so we have the option to keep investing as you grow. Do you lead seed rounds? Generally,",
-        "evidenceId": "check-deal-d73387bb6f"
+        "value": "still finding their idea, product, or team. speedrun invests up to $1M in founders who are already building, or further along in their",
+        "evidenceId": "check-deal-d3fcbb9784"
+      },
+      {
+        "value": "Capital and terms What are the terms? Our standard deal is up to $1M: $500K for 10% upfront on a SAFE, and up to an additional $500K in",
+        "evidenceId": "check-deal-c076485a8c"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "1000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-5c6c40043d"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "10000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-61542557d6"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "250000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-4e705a6d67"
+      },
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "1000000",
+          "currency": "USD",
+          "equity": "10%",
+          "label": "SAFE",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-c076485a8c"
+      },
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "500000",
+          "currency": "USD",
+          "equity": "10%",
+          "label": "SAFE",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-20a5edc82b"
+      },
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "2000000",
+          "currency": "USD",
+          "equity": "10%",
+          "label": "SAFE",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-bb785c8edf"
       }
     ],
     "portfolioPages": [],

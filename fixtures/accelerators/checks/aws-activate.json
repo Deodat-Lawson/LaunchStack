@@ -1,201 +1,1165 @@
 {
   "programId": "aws-activate",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:59:02.000Z",
   "pagesRead": [
     "https://aws.amazon.com/startups/",
-    "https://aws.amazon.com/about-aws/our-impact/?nc2=h_dsc_aa_imp",
     "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
-    "https://aws.amazon.com/faqs/?nc1=f_dr"
+    "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
+    "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+    "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
+    "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
+    "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+    "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+    "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
+    "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+    "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+    "https://aws.amazon.com/marketplace/solutions/business-applications",
+    "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+    "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+    "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management"
   ],
   "evidence": [
     {
-      "id": "check-deal-2145e82c95",
+      "id": "check-deal-40fbfbec60",
       "url": "https://aws.amazon.com/startups/",
-      "title": "AWS Activate — homepage checked by scrape.py",
-      "excerpt": "Focus on shipping, not infrastructure. AWS Startup Advisor helps you scaffold your architecture and deploy local code to AWS, right from your IDE. Get up to $200,000 in AWS Activate Credits, with additional credits available for AI startups ready to scale. Apply now 3 3. Extend your reach Put your product in front of the",
+      "title": "AWS Activate — homepage",
+      "excerpt": "milestone. Credits to help you test and build Apply to receive up to $200,000 in AWS Activate Credits to offset costs on infrastructure, data",
       "page": "details"
     },
     {
-      "id": "check-deal-bde3cb6aef",
+      "id": "check-deal-6751b4e12e",
       "url": "https://aws.amazon.com/startups/",
-      "title": "AWS Activate — homepage checked by scrape.py",
-      "excerpt": "Insights Migrate Resources Offers Home AWS Startups Build your startup on AWS The majority of the top 100 startups globally use AI services on AWS. Get up to $200,000 in AWS Activate Credits and expert support to build what's next. Join now Play What’s new The latest from AWS for Startups. Everything for Startups at",
+      "title": "AWS Activate — homepage",
+      "excerpt": "of the top 100 startups globally use AI services on AWS. Get up to $200,000 in AWS Activate Credits and expert support to build what's next. Join",
       "page": "details"
     },
     {
-      "id": "check-deal-d60f997d6f",
+      "id": "check-deal-9715b03ec8",
       "url": "https://aws.amazon.com/startups/",
-      "title": "AWS Activate — homepage checked by scrape.py",
-      "excerpt": "guidance, business mentorship, and go-to-market resources to help you reach your next milestone. Credits to help you test and build Apply to receive up to $200,000 in AWS Activate Credits to offset costs on infrastructure, data services, and AI/ML models. Credits are redeemable on third-party models on Amazon Bedrock. AI",
+      "title": "AWS Activate — homepage",
+      "excerpt": "and deploy local code to AWS, right from your IDE. Get up to $200,000 in AWS Activate Credits, with additional credits available for AI",
       "page": "details"
+    },
+    {
+      "id": "check-duration-8f027a0726",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "title": "AWS Activate — application page",
+      "excerpt": "UAT, training, and go-live support, all in a 6-week timeline. Learn more Amazon Connect for SMB",
+      "page": "application"
+    },
+    {
+      "id": "check-format-182c00449f",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "compliance Contextual retrieval with vector databases and hybrid search To avoid struggling with poor retrieval quality or",
+      "page": "application"
+    },
+    {
+      "id": "check-format-2172b6e783",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "AI capabilities Contextual retrieval (vector databases + hybrid search) Streaming pipelines & workflow orchestration",
+      "page": "application"
+    },
+    {
+      "id": "check-format-32b3e2f824",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "setup, it provided monitoring capabilities for Amazon Virtual Private Cloud (VPC ), allowing me to track network traffic",
+      "page": "application"
+    },
+    {
+      "id": "check-format-5c020a1d64",
+      "url": "https://aws.amazon.com/startups/",
+      "title": "AWS Activate — homepage",
+      "excerpt": "Media Services Migration & Modernization Multicloud & Hybrid Networking & Content Delivery Operations Security &",
+      "page": "details"
+    },
+    {
+      "id": "check-format-bfaf8407d9",
+      "url": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
+      "title": "AWS Activate — application page",
+      "excerpt": "Media Services Migration & Modernization Multicloud & Hybrid Networking & Content Delivery Operations Security &",
+      "page": "application"
+    },
+    {
+      "id": "check-format-d05dae650b",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "LLM responses. Add zero-trust access, API input scanning, remote team access, and LLM-specific security posture. Explore",
+      "page": "application"
+    },
+    {
+      "id": "check-format-fed0429c70",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "quality or latency at scale, use semantic indexes and hybrid search to contextualize responses with current, high-value",
+      "page": "application"
+    },
+    {
+      "id": "check-location-ee94ac44a1",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "title": "AWS Activate — application page",
+      "excerpt": "Initially all customers are currently located in North America, and this meant that it was",
+      "page": "application"
     },
     {
       "id": "check-name-7f02ebee5f",
       "url": "https://aws.amazon.com/startups/",
-      "title": "AWS Activate — homepage checked by scrape.py",
+      "title": "AWS Activate — homepage",
       "excerpt": "globally use AI services on AWS. Get up to $200,000 in AWS Activate Credits and expert support to build what's next. Join now",
       "page": "details"
     },
     {
       "id": "check-portfolio-0e85577d02",
       "url": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
-      "title": "AWS Activate — application page checked by scrape.py",
+      "title": "AWS Activate — application page",
       "excerpt": "Startup → https://aws.amazon.com/startups/",
       "page": "application"
     },
     {
       "id": "check-portfolio-f9762ab845",
       "url": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
-      "title": "AWS Activate — application page checked by scrape.py",
+      "title": "AWS Activate — application page",
       "excerpt": "Home → https://aws.amazon.com/startups/",
       "page": "application"
     },
     {
-      "id": "check-route-11a45bfa2c",
-      "url": "https://aws.amazon.com/about-aws/our-impact/?nc2=h_dsc_aa_imp",
-      "title": "AWS Activate — details page checked by scrape.py",
-      "excerpt": "Education AWS Skills to Jobs Tech Alliance A global coalition that addresses the skills gap and prepares learners for in-demand tech jobs. Apply now → https://aws.amazon.com/government-education/skills-to-jobs-tech-alliance/",
-      "page": "details"
+      "id": "check-route-01b363a7b9",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business applications → https://aws.amazon.com/marketplace/solutions/business-applications/",
+      "page": "application"
     },
     {
-      "id": "check-route-2dadc84068",
-      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
-      "title": "AWS Activate — terms page checked by scrape.py",
-      "excerpt": "What is a Web Application? → https://aws.amazon.com/what-is/web-application/",
-      "page": "terms"
+      "id": "check-route-033d3a5822",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Collaboration and productivity software Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/collaboration-software?trk=5a5e1287-c028-4184-8719-3a5a862834a2&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0351b736b2",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "title": "AWS Activate — application page",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register?ref_=footer_nav_partner_application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-04153b3571",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
+      "page": "application"
+    },
+    {
+      "id": "check-route-05314bcf8a",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
+      "title": "AWS Activate — application page",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register/?ref_=footer_nav_partner_application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-06d9cb18d6",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0aad153160",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0b2c3942eb",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0f1f00cb92",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    },
+    {
+      "id": "check-route-163d117573",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
+      "page": "application"
+    },
+    {
+      "id": "check-route-195e75a18f",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1b565a35d9",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business applications → https://aws.amazon.com/marketplace/solutions/business-applications/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2487f3ba9b",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2be7eb4e8d",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register/?ref_=footer_nav_partner_application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2e5fb8a8ac",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    },
+    {
+      "id": "check-route-30a233acc5",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
+      "page": "application"
+    },
+    {
+      "id": "check-route-337b245965",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "title": "AWS Activate — application page",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register/?ref_=footer_nav_partner_application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-34ce79a86f",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications?ref_=mp_nav_solutions_bza",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3508d2b819",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    },
+    {
+      "id": "check-route-356aa1c803",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "https://aws.amazon.com/marketplace/pp/prodview-xxxbvpk2cmhcq?sr=0-2&ref_=beagle&applicationId=AWSMPContessa&trk=5ad469a6-4fed-484b-8f20-053172717fde&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3bf6830419",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/mp/business-applications-store",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3c63437694",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3d53ec6415",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3deee77524",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
+      "page": "application"
     },
     {
       "id": "check-route-3e3769002c",
       "url": "https://aws.amazon.com/startups/",
-      "title": "AWS Activate — homepage checked by scrape.py",
+      "title": "AWS Activate — homepage",
       "excerpt": "New AWS Startup Advisor Features Migrate vibe-coding apps, plan Azure-to-AWS moves, track costs, apply for credits, and discover discounts all from your IDE. Read the announcement → https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
       "page": "details"
     },
     {
+      "id": "check-route-440882e7e6",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application performance, monitoring, and observability → https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-45a30bc24c",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Cyara Automated CX Assurance Platform → https://aws.amazon.com/marketplace/pp/prodview-xxxbvpk2cmhcq?sr=0-2&ref_=beagle&applicationId=AWSMPContessa&trk=5ad469a6-4fed-484b-8f20-053172717fde&sc_channel=el",
+      "page": "application"
+    },
+    {
       "id": "check-route-468885e27d",
       "url": "https://aws.amazon.com/startups/",
-      "title": "AWS Activate — homepage checked by scrape.py",
+      "title": "AWS Activate — homepage",
       "excerpt": "Startups Fuel your startup’s growth with up to $200,000 in AWS Activate Credits Apply today → https://aws.amazon.com/startups/join?destination=/credits/apply",
       "page": "details"
     },
     {
-      "id": "check-route-4a25c2cb48",
-      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
-      "title": "AWS Activate — terms page checked by scrape.py",
-      "excerpt": "Web Server vs Application Server → https://aws.amazon.com/compare/the-difference-between-web-server-and-application-server/",
-      "page": "terms"
+      "id": "check-route-46e67f266b",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/mp/business-applications-store",
+      "page": "application"
+    },
+    {
+      "id": "check-route-48aec54551",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
+      "title": "AWS Activate — application page",
+      "excerpt": "Resources Learn more about AWS observability Browse more resources → https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability?trk=120083a1-4c66-4ec4-8a52-6a985668a88c&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-48d53208b5",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4a46042fcf",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
     },
     {
       "id": "check-route-51779a5e36",
       "url": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
-      "title": "AWS Activate — application page checked by scrape.py",
+      "title": "AWS Activate — application page",
       "excerpt": "Amazon Bedrock The end-to-end platform for building generative AI applications and agents → https://aws.amazon.com/bedrock/?nc2=h_prod_fs_br",
       "page": "application"
     },
     {
-      "id": "check-route-552eea8eef",
-      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
-      "title": "AWS Activate — terms page checked by scrape.py",
-      "excerpt": "What is Application Integration? → https://aws.amazon.com/what-is/application-integration/",
-      "page": "terms"
+      "id": "check-route-524855cf38",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
+      "page": "application"
     },
     {
-      "id": "check-route-57e83f6411",
-      "url": "https://aws.amazon.com/about-aws/our-impact/?nc2=h_dsc_aa_imp",
-      "title": "AWS Activate — details page checked by scrape.py",
-      "excerpt": "AI for Good Open Data Share any volume of data with as many people as you want. Apply now → https://aws.amazon.com/opendata/?ams%23interactive-card-vertical%23pattern-data--852709612.filter=%257B%2522filters%2522%253A%255B%255D%257D",
-      "page": "details"
+      "id": "check-route-52ffe0b6f2",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
+      "page": "application"
     },
     {
-      "id": "check-route-64ec518cf6",
-      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
-      "title": "AWS Activate — terms page checked by scrape.py",
-      "excerpt": "Free app integration services → https://aws.amazon.com/free/application-integration/",
-      "page": "terms"
+      "id": "check-route-5418a50d77",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
+      "page": "application"
+    },
+    {
+      "id": "check-route-548a24e3ab",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications?ref_=mp_nav_solutions_bza",
+      "page": "application"
+    },
+    {
+      "id": "check-route-54e5e87468",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Architecting RAG gen AI application for multi-region low latency Design RAG AI applications for global scale with low-latency, multi-region AWS architectures. Learn more → https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency/?trk=d40fbf61-eda7-4205-8c1f-8edbd2f89379&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-55cdb63781",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register/?ref_=footer_nav_partner_application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-57b2271711",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5a44c3b49b",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5a46fc679c",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application performance, monitoring, and observability → https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5af84d63be",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "title": "AWS Activate — application page",
+      "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5cd3df8583",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5dfa6273aa",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "AI chatbots Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/ai-chatbots?trk=5a5e1287-c028-4184-8719-3a5a862834a2&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-61083ed3ca",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
+      "title": "AWS Activate — application page",
+      "excerpt": "Resources Learn more about AWS observability Learn more → https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability?trk=fdd4b54a-6173-4708-a357-5eb3316569d9&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6145d11d6a",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6301725402",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
+      "page": "application"
+    },
+    {
+      "id": "check-route-678c95f9fc",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Resources Learn more about AWS observability Learn more → https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability?trk=885ea631-cb49-4d25-b209-feecde42111c&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-684e7152d7",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications?ref_=mp_nav_solutions_bza",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6cdbbe0ac7",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6dde8d929d",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6f109477fe",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "CRM Software Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/crm-software?trk=5a5e1287-c028-4184-8719-3a5a862834a2&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-72445a4d2b",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
+      "page": "application"
+    },
+    {
+      "id": "check-route-726df380ed",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application performance, monitoring, and observability → https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-72b25a295f",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business applications → https://aws.amazon.com/marketplace/solutions/business-applications/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-75a2084512",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "title": "AWS Activate — application page",
+      "excerpt": "Amazon Connect for SMB QuickStart Amazon Connect Quick Start Deployment and Support for SMB. 90 day build and support of Amazon Connect to get customers started and live on a new platform. Learn more → https://aws.amazon.com/marketplace/pp/prodview-5viggwvwulywq?sr=0-8&ref_=beagle&applicationId=AWSMPContessa&sc_channel=el&trk=5ad469a6-4fed-484b-8f20-053172717fde",
+      "page": "application"
+    },
+    {
+      "id": "check-route-76200dafb9",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
+      "title": "AWS Activate — application page",
+      "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
+      "page": "application"
     },
     {
       "id": "check-route-78962d0a15",
       "url": "https://aws.amazon.com/startups/",
-      "title": "AWS Activate — homepage checked by scrape.py",
+      "title": "AWS Activate — homepage",
       "excerpt": "Apply now → https://aws.amazon.com/startups/join?destination=/credits/apply",
       "page": "details"
     },
     {
-      "id": "check-route-81aa0e9057",
-      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
-      "title": "AWS Activate — terms page checked by scrape.py",
-      "excerpt": "What is EAI? → https://aws.amazon.com/what-is/enterprise-application-integration/",
-      "page": "terms"
+      "id": "check-route-78bbe56a9c",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
+      "page": "application"
     },
     {
-      "id": "check-route-895c9a3609",
-      "url": "https://aws.amazon.com/about-aws/our-impact/?nc2=h_dsc_aa_imp",
-      "title": "AWS Activate — details page checked by scrape.py",
-      "excerpt": "Learn more and apply → https://aws.amazon.com/about-aws/our-impact/education-equity-initiative/",
-      "page": "details"
+      "id": "check-route-79cc781901",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
+      "page": "application"
     },
     {
-      "id": "check-route-938968237e",
-      "url": "https://aws.amazon.com/about-aws/our-impact/?nc2=h_dsc_aa_imp",
-      "title": "AWS Activate — details page checked by scrape.py",
-      "excerpt": "Learn more and apply → https://aws.amazon.com/about-aws/our-impact/health-impact-initiative/",
-      "page": "details"
+      "id": "check-route-7d926ae2ac",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Enterprise Resource Software Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/enterprise-resource-management?trk=5a5e1287-c028-4184-8719-3a5a862834a2&sc_channel=el",
+      "page": "application"
     },
     {
-      "id": "check-route-afe73d07fa",
-      "url": "https://aws.amazon.com/about-aws/our-impact/?nc2=h_dsc_aa_imp",
-      "title": "AWS Activate — details page checked by scrape.py",
-      "excerpt": "Education AI/ML Scholars Get ready for a career in AI with courses featuring cutting-edge AI tools, designed for learners facing limited access to AI & ML opportunities. Apply now → https://aws.amazon.com/about-aws/our-impact/scholars/",
-      "page": "details"
+      "id": "check-route-7f71a7216e",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
+      "page": "application"
+    },
+    {
+      "id": "check-route-83d98026b3",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
+      "page": "application"
+    },
+    {
+      "id": "check-route-84f9eff99f",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
+      "page": "application"
+    },
+    {
+      "id": "check-route-85e3798c9a",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
+      "page": "application"
+    },
+    {
+      "id": "check-route-889d36518a",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
+      "title": "AWS Activate — application page",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register/?ref_=footer_nav_partner_application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8bb28fd17e",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
+      "page": "application"
+    },
+    {
+      "id": "check-route-90303e2859",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-915022b268",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
+      "page": "application"
+    },
+    {
+      "id": "check-route-91b0793e0b",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
+      "page": "application"
+    },
+    {
+      "id": "check-route-926a0efad0",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Contact Center as a Service Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/contact-center-as-a-service-ccaas?trk=5a5e1287-c028-4184-8719-3a5a862834a2&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-927a80b58e",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "title": "AWS Activate — application page",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register/?ref_=footer_nav_partner_application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-936d74c0e2",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Self-Service EKS observability Gain insights into RAG pipelines on EKS with self-service observability tools. Learn more → https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks?trk=d40fbf61-eda7-4205-8c1f-8edbd2f89379&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-967167ec76",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
+      "page": "application"
+    },
+    {
+      "id": "check-route-96c88e3259",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9a6a0f447a",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
+      "title": "AWS Activate — application page",
+      "excerpt": "Explore technical guidance → https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability?aws-marketplace-cards.sort-by=item.additionalFields.sortOrder&aws-marketplace-cards.sort-order=asc#container-3416bf3b31",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9b18ec1eaf",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9c06db9b5b",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9c0facc48d",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9dc5340745",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register/?ref_=footer_nav_partner_application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9ed81e36ed",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a4f68bf69a",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application performance, monitoring, and observability → https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a6110e54ac",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/mp/business-applications-store",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a6e1bb30d4",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Contact Center → https://aws.amazon.com/marketplace/pp/prodview-xxxbvpk2cmhcq?sr=0-2&ref_=beagle&applicationId=AWSMPContessa&trk=5ad469a6-4fed-484b-8f20-053172717fde&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a743088f40",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a7764a8de0",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a80d473dbe",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a902e80f73",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
+      "page": "application"
+    },
+    {
+      "id": "check-route-aaae83e87c",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Observability for AWS serverless Monitor RAG workloads on AWS serverless for performance and reliability. Learn more → https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications?trk=d40fbf61-eda7-4205-8c1f-8edbd2f89379&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-abde5ec5c5",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Project management software Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/project-management-software?trk=5a5e1287-c028-4184-8719-3a5a862834a2&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ad3bbce3bc",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ae72c78893",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "title": "AWS Activate — application page",
+      "excerpt": "Contact Suite for Amazon Connect Contact Suite amplifies the power of Amazon Connect, providing enhanced capabilities including an Agent Desktop, additional support for Email as a channel, and blended inbound/outbound communications. The applications are purpose-built for Connect with minimal integration effort, thus shortening the deployment and implementation time. Learn more → https://aws.amazon.com/marketplace/pp/prodview-bpoc2qcwx44nk?trk=5ad469a6-4fed-484b-8f20-053172717fde&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ae8b31b909",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Resources Learn more about AWS observability Resources → https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability?trk=3663c251-dcea-430e-a2f8-c54f898626a5&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b2a00f00fc",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b5b2af7874",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Robotic Process Automation Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/robotic-process-automation-rpa?trk=5a5e1287-c028-4184-8719-3a5a862834a2&sc_channel=el",
+      "page": "application"
     },
     {
       "id": "check-route-b5eda9b093",
       "url": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
-      "title": "AWS Activate — application page checked by scrape.py",
+      "title": "AWS Activate — application page",
       "excerpt": "Credits Stretch your runway with credits, expert guidance, and go-to-market support Apply for AWS Activate → https://aws.amazon.com/startups/credits/",
       "page": "application"
     },
     {
-      "id": "check-route-b838998591",
-      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
-      "title": "AWS Activate — terms page checked by scrape.py",
-      "excerpt": "What is Application Lifecycle Management (ALM)? → https://aws.amazon.com/what-is/application-lifecycle-management/",
-      "page": "terms"
+      "id": "check-route-b8026897f2",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Gartner Magic Quadrant → https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability?trk=885ea631-cb49-4d25-b209-feecde42111c&sc_channel=el",
+      "page": "application"
     },
     {
-      "id": "check-route-b8fab323e1",
-      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
-      "title": "AWS Activate — terms page checked by scrape.py",
-      "excerpt": "What is Application Performance Monitoring (APM)? → https://aws.amazon.com/what-is/application-performance-monitoring/",
-      "page": "terms"
+      "id": "check-route-b8f05e1b22",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
     },
     {
-      "id": "check-route-bb98af0630",
-      "url": "https://aws.amazon.com/about-aws/our-impact/?nc2=h_dsc_aa_imp",
-      "title": "AWS Activate — details page checked by scrape.py",
-      "excerpt": "AI for Good Open Data Sponsorship Program Get the cost of storage covered for publicly available high-value cloud-optimized datasets. Apply now → https://aws.amazon.com/opendata/open-data-sponsorship-program/",
-      "page": "details"
+      "id": "check-route-b9585cffb1",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "GROW with SAP on AWS → https://aws.amazon.com/marketplace/pp/prodview-k5lexy6il2mfq?sr=0-1&ref_=beagle&applicationId=AWSMPContessa",
+      "page": "application"
     },
     {
-      "id": "check-route-ce9be06711",
-      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
-      "title": "AWS Activate — terms page checked by scrape.py",
-      "excerpt": "AWS Application Discovery Service → https://aws.amazon.com/transform/",
-      "page": "terms"
+      "id": "check-route-ba3debe71e",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Search business applications product catalog → https://aws.amazon.com/marketplace/b/2649275011",
+      "page": "application"
     },
     {
-      "id": "check-route-f45514dc42",
-      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
-      "title": "AWS Activate — terms page checked by scrape.py",
-      "excerpt": "What is Application Migration? → https://aws.amazon.com/what-is/application-migration/",
-      "page": "terms"
+      "id": "check-route-bbee382c96",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
+      "page": "application"
     },
     {
-      "id": "check-route-f9956e56a9",
-      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
-      "title": "AWS Activate — terms page checked by scrape.py",
-      "excerpt": "ALB vs NLB vs GLB → https://aws.amazon.com/compare/the-difference-between-the-difference-between-application-network-and-gateway-load-balancing/",
-      "page": "terms"
+      "id": "check-route-bcf804fc8f",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application performance, monitoring, and observability → https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bd02d8c114",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c109e2273c",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
+      "title": "AWS Activate — application page",
+      "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c282a0575f",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
+      "title": "AWS Activate — application page",
+      "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c340f5c4f6",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ca0b0876e4",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "title": "AWS Activate — application page",
+      "excerpt": "Resources Learn more about AWS observability Learn more → https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability?trk=230011a2-9164-4817-98b1-c0c21b222a55&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ca8d4fc6b0",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cf44d4ab3c",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "title": "AWS Activate — application page",
+      "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d0dc460d6e",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d33a26a4b0",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "title": "AWS Activate — application page",
+      "excerpt": "Start, run, and scale Kubernetes applications → https://aws.amazon.com/pm/eks/?trk=230011a2-9164-4817-98b1-c0c21b222a55&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d6b599a691",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d918ba13ad",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Deep-dive troubleshooting with end-to-end observability Troubleshoot RAG AI applications with full-stack, end-to-end observability. Learn more → https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability?trk=d40fbf61-eda7-4205-8c1f-8edbd2f89379&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d92e90a3f5",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-db31443f97",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
+      "page": "application"
+    },
+    {
+      "id": "check-route-dbd0ec71ab",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/b/8449bda0-8265-4fca-8910-497b806742fa?ref_=mp_nav_category_8449bda0-8265-4fca-8910-497b806742fa",
+      "page": "application"
+    },
+    {
+      "id": "check-route-dc9e8107c0",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register/?ref_=footer_nav_partner_application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-dcb1f85a96",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register?ref_=footer_nav_partner_application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ddf45e211b",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e2e04dbdbe",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Resources Learn more about AWS observability Learn more → https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability?trk=6708729b-a546-4b61-a118-a40761eeb558&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e937928f2d",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register?ref_=footer_nav_partner_application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e9ca6a94be",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    },
+    {
+      "id": "check-route-eba9a2d1ff",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Servers → https://aws.amazon.com/marketplace/b/d5921967-1aed-46b5-a08e-e3d6babee4ae?ref_=mp_nav_category_d5921967-1aed-46b5-a08e-e3d6babee4ae",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ece86d93a3",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Customer Data Platform Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/customer-data-platform?trk=5a5e1287-c028-4184-8719-3a5a862834a2&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ed02386f04",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ee5f8b9be0",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ef30fe76f2",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
+      "title": "AWS Activate — application page",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register/?ref_=footer_nav_partner_application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-efa706c073",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Partner Application → https://aws.amazon.com/marketplace/management/register/?ref_=footer_nav_partner_application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f1e670a13d",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "title": "AWS Activate — application page",
+      "excerpt": "Resource management software Learn more → https://aws.amazon.com/marketplace/solutions/business-applications/what-is/resource-management-software?trk=5a5e1287-c028-4184-8719-3a5a862834a2&sc_channel=el",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f27f1131ec",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "title": "AWS Activate — application page",
+      "excerpt": "Business Applications → https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f888c92d21",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Stacks → https://aws.amazon.com/marketplace/b/ac135c44-ad53-4780-bf2b-e33925affa50?ref_=mp_nav_category_ac135c44-ad53-4780-bf2b-e33925affa50",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f9a8aafe6f",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fb208111eb",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "title": "AWS Activate — application page",
+      "excerpt": "Applications → https://aws.amazon.com/marketplace/b/e4cb435b-d605-4bb2-9f40-b47335f23bbe?ref_=mp_nav_category_e4cb435b-d605-4bb2-9f40-b47335f23bbe",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fdf1c1e642",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
+      "title": "AWS Activate — application page",
+      "excerpt": "Application Development → https://aws.amazon.com/marketplace/b/3c015f8c-b83c-4b7d-a544-29e87950c267?ref_=mp_nav_category_3c015f8c-b83c-4b7d-a544-29e87950c267",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-5df486e921",
+      "url": "https://aws.amazon.com/startups/",
+      "page": "details",
+      "excerpt": "AWS for Startups - Amazon Web Services (AWS) Skip to main content Filter: All English Contact us AWS Marketplace Support My account re:Invent Discover AWS Products Solutions Pricing Resources Search Filter: All Sign in to console Access Activate Explore topics AWS re:Invent Livestream Go beyond watching with guided labs and live Q&A Build & Deploy AI Agents 88% of agent pilots stall. Learn what the rest do differently Get started Sign up free, connect your coding agent, and start building Data for agentic AI The 7 essential data capabilities to scale agentic AI Analyst Report AWS named a Leader in the 2026 Gartner Magic Quadrant for SCPS AI for Small Businesses Solutions designed for your business. Delivered by AWS Partners News & announcements AWS blog About AWS AWS is the world's most comprehensive cloud, enabling organizations to accelerate innovation, reduce costs, and scale more efficiently Why AWS Getting Started Security Compliance Trust Center Sustainability Our Impact Global Infrastructure Careers Featured Products Analytics Application Integration Artificial Intelligence Business Applications Compute Customer Experience Databases Developer Tools End User Computing Game Tech Management Tools Media Services Migration & Modernization Multicloud & Hybrid Networking & Content Delivery Operations Security & Identity Storage Supply Chain Browse all products Transformation"
+    },
+    {
+      "id": "check-page-894544783b",
+      "url": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
+      "page": "application",
+      "excerpt": "What’s new in AWS Startup Advisor? Skip to main content Filter: All English Contact us AWS Marketplace Support My account re:Invent Discover AWS Products Solutions Pricing Resources Search Filter: All Sign in to console Access Activate Explore topics re:Invent 2026 The session catalog is live. Explore what's waiting for you Build & Deploy AI Agents 88% of agent pilots stall. Learn what the rest do differently Get started Sign up free, connect your coding agent, and start building Data for agentic AI The 7 essential data capabilities to scale agentic AI Analyst Report AWS named a Leader in the 2026 Gartner Magic Quadrant for SCPS AI for Small Businesses Solutions designed for your business. Delivered by AWS Partners News & announcements AWS blog About AWS AWS is the world's most comprehensive cloud, enabling organizations to accelerate innovation, reduce costs, and scale more efficiently Why AWS Getting Started Security Compliance Trust Center Sustainability Global Infrastructure Careers Featured Products Analytics Application Integration Artificial Intelligence Business Applications Compute Customer Experience Databases Developer Tools End User Computing Game Tech Management Tools Media Services Migration & Modernization Multicloud & Hybrid Networking & Content Delivery Operations Security & Identity Storage Supply Chain Browse all products Transformation Hubs Migrate to"
+    },
+    {
+      "id": "check-page-0d84d1774d",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability",
+      "page": "application",
+      "excerpt": "Observability and Application Performance Monitoring (APM) for AWS | AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Explore by use case Technical resources Popular tools AWS Marketplace Developer tools & tutorials Observability and Application Performance Monitoring (APM) for AWS Popular tools and technical guidance for cloud-native monitoring Explore technical guidance Try popular tools Monitor and analyze AWS workloads with precision As an indispensable foundation to Site Reliability Engineering (SRE) and with broad use cases from infrastructure to applications, alerting to root cause analysis, monitoring and observability is a critical capability to get right. We're here to provide technical guidance for your use case and to help you find the right tool for the job. Explore the following learning resources and try out industry-leading observability tools for AWS that you can use right now with your AWS account. Many are free to try, with streamlined AWS integrations, and you can easily pay-as-you-go using AWS billing once you find what you're looking for. Tools to expand your observability capabilities Improve your ability to monitor performance and issues in your AWS environment with"
+    },
+    {
+      "id": "check-page-8d7b334722",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/building-observable-amazon-eks-clusters-with-amazon-cdk-and-grafana-cloud",
+      "page": "application",
+      "excerpt": "Building Observable Amazon EKS Clusters with Amazon CDK and Grafana Cloud | AWS Marketplace AWS Marketplace Home Sign in Sign in or Create a new account Agent Mode Search Field Categories Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Explore by use case AWS Marketplace › Developer tools & tutorials › Application performance, monitoring, and observability Technical article Building observable Amazon EKS clusters with Amazon CDK and Grafana Cloud Learn how to leverage AWS CDK to automate deploying Kubernetes clusters with built-in observability Try Grafana Cloud free Start, run, and scale Kubernetes applications Auto-deploy EKS clusters with CDK and Grafana Monitoring Initial setup Let’s build our observable Amazon EKS cluster with Grafana Cloud’s built-in self-service offering Next steps Auto-deploy EKS clusters with CDK and Grafana Monitoring As more organizations rely on Kubernetes to orchestrate their containerized applications and rely on internal developer platforms to accelerate and empower development teams in provisioning and operating their own infrastructure, offering a Kubernetes solution that is fully automated and observable becomes a key concern. In this implementation walkthrough, you will learn how the AWS Cloud Development Kit (AWS CDK) can be used to build a self-service Amazon Elastic"
+    },
+    {
+      "id": "check-page-89039bbc41",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/deep-dive-troubleshooting-end-to-end-observability",
+      "page": "application",
+      "excerpt": "Accelerate Amazon ECS Performance: Deep-dive Troubleshooting with End-to-end Observability | AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Explore by use case Technical resources Popular tools AWS Marketplace › Developer tools & tutorials › Application performance, monitoring, and observability TUTORIAL Accelerate Amazon ECS performance: Deep-dive troubleshooting with end-to-end observability Three-dimensional monitoring with IBM Instana—combining distributed tracing, infrastructure visibility, and code-level profiling for Python applications on AWS Fargate Try IBM Instana Observability for free Python container performance: Find and fix bottlenecks Gap: Lack of performance mindset So what’s the right solution? Choosing IBM Instana for AWS ECS Observability Strategies you can use to improve performance Conclusion and key takeaways Python container performance: Find and fix bottlenecks Writing efficient code is a skill that developers must polish through experience, at the core of which lies a need to provide them with the right tools to understand how the code they’ve written performs in the various environments where it will ultimately run. As tech stacks, application packaging and"
+    },
+    {
+      "id": "check-page-1f6866872d",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/observability-for-aws-serverless-applications",
+      "page": "application",
+      "excerpt": "Achieving observability for AWS serverless applications | AWS Marketplace AWS Marketplace Home Sign in Sign in or Create a new account Agent Mode Search Field Categories Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Explore by use case Technical resources Popular tools AWS Marketplace Developer tools & tutorials Application performance, monitoring, and observability Achieving observability for AWS serverless applications using in-depth instrumentation How to perform end-to-end monitoring of AWS Lambda applications with Datadog Try Datadog Pro free Troubleshooting Serverless Applications Understanding the rise of serverless computing Monitoring challenges with serverless apps What telemetry must I collect? Selecting the right observability tool Key takeaways Troubleshooting Serverless Applications Gone are the days when organizations used to simply lift and shift their applications to the cloud. Now, organizations are looking at the migration strategy from a holistic angle and are rebuilding their applications using serverless design patterns to get the biggest bang for the buck. However, serverless environments present unique challenges in monitoring and troubleshooting due to their distributed nature. DevOps teams understand that without end-to-end visibility into function execution and the ability to"
+    },
+    {
+      "id": "check-page-37df6f8f4b",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimize-cloud-costs-using-application-performance-monitoring",
+      "page": "application",
+      "excerpt": "Cloud Computing Services - Amazon Web Services (AWS) Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Explore by use case AWS Marketplace › Developer tools and tutorials › Application performance, monitoring, and observability TECHNICAL ARTICLE Optimizing cloud costs with observability: A practical guide to performance monitoring How to identify cost drivers, predict performance spikes, and prevent outages using telemetry data and monitoring tools Try New Relic for free Cloud Cost Optimization Through Observability Choosing the right tool for the job Key takeaways Cloud Cost Optimization Through Observability Cloud adoption is at an all-time high; the number of organizations leveraging the cloud for innovation and agility keeps a solid growth pace that has not slowed down for the past decade. And with that adoption, we’ve also seen a variety of stages of how technology has evolved, from traditional lift and shift operations that attempt to bring legacy applications into the cloud with minimal change to their architecture, to new services being built following cloud-native principles and with observability built-in from the start. Nevertheless, many teams and organizations are struggling to realize the true"
+    },
+    {
+      "id": "check-page-eb5ce84e96",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/optimizing-kubernetes-monitoring",
+      "page": "application",
+      "excerpt": "Optimizing Kubernetes monitoring on Amazon EKS for unified observability | AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Explore by use case Technical resources Popular tools AWS Marketplace › Developer tools & tutorials › Application performance, monitoring, and observability Optimizing Kubernetes monitoring on Amazon EKS for unified observability Learn how to enhance operational efficiency and reduce MTTR by implementing comprehensive observability across your AWS container infrastructure Try Logz.io for free Complexity in modern containerized software systems Challenges in implementing unified observability Solution: Overcoming modern observability challenges with Logz.io Collecting telemetry data Create an alert for Amazon EKS monitoring Key takeaways Complexity in modern containerized software systems Modern cloud-native applications running on AWS generate massive volumes of telemetry data across logs, metrics, traces and events. As organizations scale their containerized workloads on Amazon Elastic Kubernetes Service (Amazon EKS), achieving comprehensive visibility into application performance and system health becomes increasingly challenging. The challenge is often exacerbated by"
+    },
+    {
+      "id": "check-page-a2869f45e6",
+      "url": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability/self-service-amazon-eks",
+      "page": "application",
+      "excerpt": "Self-Service Observable Amazon EKS Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Explore by use case AWS Marketplace › Developer tools & tutorials › Application performance, monitoring, and observability Technical article Self-Service Observable Amazon EKS How to deliver observable Kubernetes as part of your Internal Developer Platform Try Grafana Cloud EKS and Grafana: Automating IDPs A wide-spreading transformation Clusters and more clusters Enter platform engineering Self-service cluster observability with Grafana Cloud In a nutshell EKS and Grafana: Automating IDPs In this article we will talk about the causes, outcomes and requirements of platform engineering and internal developer platforms (IDPs). We’ll also discuss how Kubernetes (K8s) and observability are key components in the service catalog that most development teams require as well as how you can fully automate the process of spinning up Amazon Elastic Kubernetes Service (Amazon EKS) clusters with Grafana Cloud observability built-in, as part of your IDP offerings. Let's dig in! A wide-spreading transformation DevOps has transformed how most organizations build software, and as Melvin Conway wisely highlighted back in the late ’60s, the"
+    },
+    {
+      "id": "check-page-b373cd2f88",
+      "url": "https://aws.amazon.com/marketplace/build-learn/build-smarter-rag-applications",
+      "page": "application",
+      "excerpt": "Build smarter RAG applications in AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Explore by use case Technical resources Popular tools AWS Marketplace Developer tools & tutorials Build smarter RAG AI applications How to add advanced capabilities to help you get to market faster with better gen AI performance and control Build agentic systems with AWS Tools and technical guides to accelerate development Retrieval-Augmented Generation (RAG) is a powerful approach for building AI applications that deliver accurate, contextual responses using an organization's data. AWS Marketplace provides a suite of tools that integrate with AWS-native services, enhancing RAG implementations through advanced context augmentation, real-time data pipelines, and LLM observability while ensuring robust security and privacy. These specialized tools transcend basic vector embeddings by incorporating sophisticated knowledge graphs and agentic architectures. With free trials and consumption-based pricing, you can rapidly develop and scale AI applications from proof-of-concept to production, managing costs effectively through AWS billing. You'll find comprehensive technical guides that walk you through applying these"
+    },
+    {
+      "id": "check-page-2c324d0cfb",
+      "url": "https://aws.amazon.com/marketplace/build-learn/data-analytics/architecting-your-rag-gen-ai-application-for-multi-region-low-latency",
+      "page": "application",
+      "excerpt": "How to improve LLM RAG responses using search data | AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Explore by use case AWS Marketplace › Developer tools & tutorials › Data, analytics, & machine learning Technical article Architecting your RAG gen AI application for multi-region low latency How to use a multi-region vector database to scale your app globally Try DataStax Astra DB free Global Gen AI: Building for Low Latency Scaling across regions: Need for an architectural solution Gen AI essential concepts Application architecture Scaling application architecture across regions Challenges scaling your current vector database How DataStax Astra DB supports your multi-region use case Key takeaways Global Gen AI: Building for Low Latency Generative AI (gen AI) has been the talk of the town for quite some time, and many organizations have moved beyond simply doing POCs to building applications with gen AI at their core. With a new generation of tools like Amazon Bedrock , the barrier of entry to building gen AI applications has dramatically dropped. However, as these applications become exposed to the dynamic and demanding requirements of real-world use, making them work across the globe"
+    },
+    {
+      "id": "check-page-37d28e25d4",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications",
+      "page": "application",
+      "excerpt": "Business Applications | AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Business Applications Understanding Business Applications AWS Marketplace Solutions Business applications Business Application software in AWS Marketplace Enhance business agility, improve employee collaboration, and transform the customer experience (CX) with Business solutions in AWS Marketplace Explore popular solutions Explore resources Improve the customer journey with Business Application software Customer expectations are accelerating the march to the cloud leading organizations to look for business application tools that transform CX, improve business agility, and lower costs. Find the business applications software you need in AWS Marketplace to help you discover, procure, provision, and govern third-party software, allowing you to offload infrastructure management and focus on what matters most. GROW with SAP on AWS Why organizations use AWS Marketplace for Business Application solutions Improve selection, speed, and agility Quickly procure and deploy business application software that address your need to enhance business agility, lower costs, and transform the customer experience. Advance control and"
+    },
+    {
+      "id": "check-page-7709fbbeab",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/amazon-connect-aws-partner-solutions",
+      "page": "application",
+      "excerpt": "Amazon Connect AWS Partner Solutions | AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Business Applications Understanding Business Applications AWS Marketplace Solutions Business applications Amazon connect AWS partner solutions Amazon Connect & AWS Partner Solutions available in AWS Marketplace In today's hyper-competitive market, customers have more choices than ever. Each interaction is an opportunity to win loyalty or lose a customer. With overwhelmed consumers juggling countless demands and endless choices, delivering anything less than exceptional experiences is a lost opportunity. The companies that thrive tomorrow will be those that invest in remarkable customer experiences today. Thus, it’s vital for companies to prioritize their customer interactions, and take the necessary steps and investments to ensure that every customer has the best possible experience. Unlock Seamless Customer Engagement Amazon Connect, the AI-powered contact center from AWS, has revolutionized customer service, and businesses can further accelerate and customize Amazon Connect using AWS Partner solutions. Whether you need seamless Microsoft Teams integration through P3Fusion, lightning-fast deployment with"
+    },
+    {
+      "id": "check-page-0312efbcc1",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/cloud-cost-management",
+      "page": "application",
+      "excerpt": "Cloud Cost Management | AWS Marketplace AWS Marketplace Home Sign in Sign in or Create a new account Agent Mode Search Field Categories Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Business Applications Understanding Business Applications AWS Marketplace Solutions Business applications Cloud Cost Management Cloud cost management Enterprises need visibility and control to avoid surprises in their cloud spend. Adoption of cloud management solutions in AWS Marketplace enables cloud bill monitoring and optimization in one convenient location. Cloud cost optimization solutions in AWS Marketplace Displaying 1-8 (9) Displaying 1-8 (9) Anaplan Video | Datasheet Anaplan helps businesses gain cloud cost historical spend insights, driver-based forecasting, cost allocations, and high ROI optimized cost scenarios. Learn more Cloud financial management for small and medium businesses AI-powered financials, planning and analytics available in AWS Marketplace - ideal for SaaS businesses looking to upgrade from QuickBooks. Learn more Operational excellence and cost optimization CloudZero Cloud Cost Intelligence Video | Datasheet CloudZero provides the visibility to make cloud spend a strategic business metric and common language between engineering and finance. Learn more Dropbox Business Video | Datasheet Dropbox helps you"
+    },
+    {
+      "id": "check-page-bf26ff0309",
+      "url": "https://aws.amazon.com/marketplace/solutions/business-applications/contact-management",
+      "page": "application",
+      "excerpt": "Contact management software in AWS Marketplace Agent Mode English Sign in or Create a new account About Categories Delivery Methods Solutions Resources Become a Channel Partner Sell in AWS Marketplace Amazon Web Services Home Help Skip to main content AWS Marketplace Business Applications Understanding Business Applications AWS Marketplace Solutions Business applications Contact management Contact management Artificial intelligence (AI) and analytics-powered engagement solutions help contact centers create superior customer and agent experiences across all channels. Contact Management Software for Businesses Use contact management systems in AWS Marketplace to improve contact center effectiveness, reduce supply chain costs, maximize ROI on web self-service, and deliver consistently excellent customer experience. Business Application solutions in AWS Marketplace overview | (1:40 min) Play Contact Management solutions in AWS Marketplace Calabrio One Demo Calabrio ONE enables companies to uncover insights that empower human interactions with an easy, personalized and smart Workforce Engagement suite. Learn more Contact Center Cyara Automated CX Assurance Platform Video | Datasheet The Cyara Accelerator for Amazon Connect enables automation that accelerates migrations, reduces risk, and assures high-quality customer experiences. Learn more Contact Center Talkdesk Datasheet | Demo"
     }
   ],
   "findings": {
@@ -211,44 +1175,83 @@
         "evidenceId": "check-route-78962d0a15"
       },
       {
-        "value": "https://aws.amazon.com/about-aws/our-impact/health-impact-initiative/",
-        "evidenceId": "check-route-938968237e"
+        "value": "https://aws.amazon.com/bedrock/?nc2=h_prod_fs_br",
+        "evidenceId": "check-route-51779a5e36"
       },
       {
-        "value": "https://aws.amazon.com/about-aws/our-impact/education-equity-initiative/",
-        "evidenceId": "check-route-895c9a3609"
+        "value": "https://aws.amazon.com/startups/credits/",
+        "evidenceId": "check-route-b5eda9b093"
       },
       {
-        "value": "https://aws.amazon.com/about-aws/our-impact/scholars/",
-        "evidenceId": "check-route-afe73d07fa"
+        "value": "https://aws.amazon.com/marketplace/build-learn/application-performance-monitoring-observability?aws-marketplace-cards.sort-by=item.additionalFields.sortOrder&aws-marketplace-cards.sort-order=asc#container-3416bf3b31",
+        "evidenceId": "check-route-9a6a0f447a"
       },
       {
-        "value": "https://aws.amazon.com/opendata/open-data-sponsorship-program/",
-        "evidenceId": "check-route-bb98af0630"
+        "value": "https://aws.amazon.com/marketplace/solutions/business-applications",
+        "evidenceId": "check-route-9b18ec1eaf"
       }
     ],
     "applicationUrl": [
       {
-        "value": "https://aws.amazon.com/startups/join?destination=/credits/apply",
-        "evidenceId": "check-route-78962d0a15"
+        "value": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
+        "evidenceId": "check-route-3e3769002c"
       }
     ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6",
+        "evidenceId": "check-duration-8f027a0726"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-5c020a1d64"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-32b3e2f824"
+      }
+    ],
+    "location": [
+      {
+        "value": "North America",
+        "evidenceId": "check-location-ee94ac44a1"
+      }
+    ],
     "selectivity": [],
     "dealText": [
       {
-        "value": "Insights Migrate Resources Offers Home AWS Startups Build your startup on AWS The majority of the top 100 startups globally use AI services on AWS. Get up to $200,000 in AWS Activate Credits and expert support to build what's next. Join now Play What’s new The latest from AWS for Startups. Everything for Startups at",
-        "evidenceId": "check-deal-bde3cb6aef"
+        "value": "of the top 100 startups globally use AI services on AWS. Get up to $200,000 in AWS Activate Credits and expert support to build what's next. Join",
+        "evidenceId": "check-deal-6751b4e12e"
       },
       {
-        "value": "guidance, business mentorship, and go-to-market resources to help you reach your next milestone. Credits to help you test and build Apply to receive up to $200,000 in AWS Activate Credits to offset costs on infrastructure, data services, and AI/ML models. Credits are redeemable on third-party models on Amazon Bedrock. AI",
-        "evidenceId": "check-deal-d60f997d6f"
+        "value": "milestone. Credits to help you test and build Apply to receive up to $200,000 in AWS Activate Credits to offset costs on infrastructure, data",
+        "evidenceId": "check-deal-40fbfbec60"
       },
       {
-        "value": "Focus on shipping, not infrastructure. AWS Startup Advisor helps you scaffold your architecture and deploy local code to AWS, right from your IDE. Get up to $200,000 in AWS Activate Credits, with additional credits available for AI startups ready to scale. Apply now 3 3. Extend your reach Put your product in front of the",
-        "evidenceId": "check-deal-2145e82c95"
+        "value": "and deploy local code to AWS, right from your IDE. Get up to $200,000 in AWS Activate Credits, with additional credits available for AI",
+        "evidenceId": "check-deal-9715b03ec8"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "200000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-6751b4e12e"
       }
     ],
     "portfolioPages": [

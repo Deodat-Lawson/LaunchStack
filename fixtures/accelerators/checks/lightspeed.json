@@ -1,88 +1,388 @@
 {
   "programId": "lightspeed",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:59:02.000Z",
   "pagesRead": [
     "https://lsvp.com/",
-    "https://lsvp.com/about/",
-    "https://lsvp.com/stories/our-investment-in-fireworks-ai-the-inference-platform-aiming-to-power-every-genai-application/"
+    "https://lsvp.com/international-landing-pad-network-application/",
+    "https://lsvp.com/stories/announcing-overops-real-time-event-intelligence-for-modern-applications/",
+    "https://lsvp.com/stories/building-with-endor-labs-application-security-for-all/",
+    "https://lsvp.com/stories/building-with-langfuse-observability-analytics-for-llm-applications/",
+    "https://lsvp.com/stories/optimizing-llms-for-real-world-applications/",
+    "https://lsvp.com/stories/startups-v-incumbents-the-battle-for-ais-application-layer/",
+    "https://lsvp.com/stories/taking-the-big-leap-in-cloud-application-security-or-cloud-native-security/",
+    "https://lsvp.com/stories/vectorized-free-and-source-available-cloud-native-infrastructure-for-real-time-applications/",
+    "https://lsvp.com/feeds/a-lightspeed-vc-is-bullish-on-retail-investment-apps-like-robinhood-and-says-theyll-continue-to-climb-in-popularity/",
+    "https://lsvp.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+    "https://lsvp.com/feeds/https-www-etnownews-com-videos-lightspeed-ventures-on-the-startup-ecosystem-more-investment-to-trickle-into-india-rahul-taneja-video-105806559/",
+    "https://lsvp.com/feeds/lightspeed-india-is-leading-the-way-in-ai-ev-and-climate-tech-investments-heres-why/",
+    "https://lsvp.com/feeds/lightspeed-india-on-asias-tech-investment-opportunities/",
+    "https://lsvp.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/"
   ],
   "evidence": [
     {
+      "id": "check-deal-3c50ba83a3",
+      "url": "https://lsvp.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
+      "title": "Lightspeed — terms page",
+      "excerpt": "in cheque sizes while our late-stage growth funds target between $75-$200 million investments. In 2021, we invested over $300 million",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-b582b73065",
+      "url": "https://lsvp.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
+      "title": "Lightspeed — terms page",
+      "excerpt": "two global growth funds. “We have the early growth funds that target $30-$75 million in cheque sizes while our late-stage growth funds target",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-3913430fd8",
+      "url": "https://lsvp.com/stories/vectorized-free-and-source-available-cloud-native-infrastructure-for-real-time-applications/",
+      "title": "Lightspeed — application page",
+      "excerpt": "2019 to help bring his vision to reality. Now, 18 months later, what Alex and the Vectorized team has",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-56df952b44",
+      "url": "https://lsvp.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+      "title": "Lightspeed — terms page",
+      "excerpt": "invested nearly $1 billion in AI in the last 18-24 months. What we’re seeing is AI reshaping industries",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-924a802ad1",
+      "url": "https://lsvp.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+      "title": "Lightspeed — terms page",
+      "excerpt": "in artificial intelligence over the last 18-24 months, intends to keep Generative AI squarely in its",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a1f88a7436",
+      "url": "https://lsvp.com/stories/building-with-endor-labs-application-security-for-all/",
+      "title": "Lightspeed — application page",
+      "excerpt": "For All The team at Endor Labs It was just 10 months ago that we at Lightspeed announced Endor Labs’",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-f03b84f258",
+      "url": "https://lsvp.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+      "title": "Lightspeed — terms page",
+      "excerpt": "deepening. We saw this happen in the last 24-36 months with offerings such as Zomato, Mamaearth, Nykaa,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f231f0443b",
+      "url": "https://lsvp.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+      "title": "Lightspeed — terms page",
+      "excerpt": "investing in AI for a long time and the last 18 months saw clear inflection. We have globally invested",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f6d4d5a9a7",
+      "url": "https://lsvp.com/feeds/lightspeed-india-is-leading-the-way-in-ai-ev-and-climate-tech-investments-heres-why/",
+      "title": "Lightspeed — terms page",
+      "excerpt": "AI and AI-backed startups. In the last 18 months, Lightspeed, globally, has invested $1.1 billion",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-0ce7e1c3be",
+      "url": "https://lsvp.com/feeds/lightspeed-india-on-asias-tech-investment-opportunities/",
+      "title": "Lightspeed — terms page",
+      "excerpt": "insight around the world For Customers Bloomberg Anywhere Remote Login Software Updates Manage Contracts and Orders Support",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-33287added",
+      "url": "https://lsvp.com/stories/taking-the-big-leap-in-cloud-application-security-or-cloud-native-security/",
+      "title": "Lightspeed — application page",
+      "excerpt": "to the cloud easier, and make it possible to realize true hybrid-cloud strategies. ● Cloud-native, microservices-based",
+      "page": "application"
+    },
+    {
+      "id": "check-format-33d6126a34",
+      "url": "https://lsvp.com/feeds/lightspeed-india-on-asias-tech-investment-opportunities/",
+      "title": "Lightspeed — terms page",
+      "excerpt": "insight around the world For Customers Bloomberg Anywhere Remote Login Software Updates Manage Products and Account",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-7bcd611744",
+      "url": "https://lsvp.com/feeds/lightspeed-india-on-asias-tech-investment-opportunities/",
+      "title": "Lightspeed — terms page",
+      "excerpt": "Bloomberg Terminal Demo Request Bloomberg Anywhere Remote Login Bloomberg Anywhere Login Bloomberg Customer Support",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-cced979a92",
+      "url": "https://lsvp.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
+      "title": "Lightspeed — terms page",
+      "excerpt": "19.35 % Invest Now FEATURED FUNDS ★★★★ ★ UTI Aggressive Hybrid Fund Regular Plan-Growth 5Y Return 9.79 % Invest Now Enter",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-cde6877bf2",
+      "url": "https://lsvp.com/stories/taking-the-big-leap-in-cloud-application-security-or-cloud-native-security/",
+      "title": "Lightspeed — application page",
+      "excerpt": "initiatives that recognize that containers can drive hybrid cloud strategies, agile application delivery, and cost",
+      "page": "application"
+    },
+    {
+      "id": "check-location-231de06660",
+      "url": "https://lsvp.com/",
+      "title": "Lightspeed — homepage",
+      "excerpt": "is an AI safety and research company based in San... Wiz Assaf Rappaport Co-Founder &",
+      "page": "details"
+    },
+    {
+      "id": "check-location-74f516ba2b",
+      "url": "https://lsvp.com/feeds/lightspeed-india-is-leading-the-way-in-ai-ev-and-climate-tech-investments-heres-why/",
+      "title": "Lightspeed — terms page",
+      "excerpt": "for lung cancer and TB. Qure.ai is headquartered in Mumbai, with regional offices in New York,",
+      "page": "terms"
+    },
+    {
       "id": "check-name-bb1a29d050",
       "url": "https://lsvp.com/",
-      "title": "Lightspeed — homepage checked by scrape.py",
+      "title": "Lightspeed — homepage",
       "excerpt": "Lightspeed Venture Partners menu menu About Team Companies Founder",
       "page": "details"
     },
     {
+      "id": "check-portfolio-0792e0a47d",
+      "url": "https://lsvp.com/international-landing-pad-network-application/",
+      "title": "Lightspeed — application page",
+      "excerpt": "Companies → https://lsvp.com/companies-india/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-09984659d4",
+      "url": "https://lsvp.com/stories/building-with-langfuse-observability-analytics-for-llm-applications/",
+      "title": "Lightspeed — application page",
+      "excerpt": "Companies → https://lsvp.com/companies-india/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-22ecd73c58",
+      "url": "https://lsvp.com/stories/announcing-overops-real-time-event-intelligence-for-modern-applications/",
+      "title": "Lightspeed — application page",
+      "excerpt": "Companies → https://lsvp.com/companies-india/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-276a823212",
+      "url": "https://lsvp.com/stories/optimizing-llms-for-real-world-applications/",
+      "title": "Lightspeed — application page",
+      "excerpt": "Companies → https://lsvp.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-2ad84a5eab",
+      "url": "https://lsvp.com/stories/building-with-langfuse-observability-analytics-for-llm-applications/",
+      "title": "Lightspeed — application page",
+      "excerpt": "Companies → https://lsvp.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-2b38c9e756",
+      "url": "https://lsvp.com/stories/vectorized-free-and-source-available-cloud-native-infrastructure-for-real-time-applications/",
+      "title": "Lightspeed — application page",
+      "excerpt": "Companies → https://lsvp.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-37306c7f9f",
+      "url": "https://lsvp.com/stories/taking-the-big-leap-in-cloud-application-security-or-cloud-native-security/",
+      "title": "Lightspeed — application page",
+      "excerpt": "Companies → https://lsvp.com/companies-india/",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-3a1f4c1c66",
       "url": "https://lsvp.com/",
-      "title": "Lightspeed — homepage checked by scrape.py",
+      "title": "Lightspeed — homepage",
       "excerpt": "Companies → https://lsvp.com/companies/",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-45b247eebc",
+      "url": "https://lsvp.com/stories/startups-v-incumbents-the-battle-for-ais-application-layer/",
+      "title": "Lightspeed — application page",
+      "excerpt": "Companies → https://lsvp.com/companies-india/",
+      "page": "application"
     },
     {
       "id": "check-portfolio-46e7d055aa",
       "url": "https://lsvp.com/",
-      "title": "Lightspeed — homepage checked by scrape.py",
+      "title": "Lightspeed — homepage",
       "excerpt": "meet the founders → https://lsvp.com/companies",
       "page": "details"
     },
     {
-      "id": "check-portfolio-4d3c609e45",
-      "url": "https://lsvp.com/stories/our-investment-in-fireworks-ai-the-inference-platform-aiming-to-power-every-genai-application/",
-      "title": "Lightspeed — application page checked by scrape.py",
-      "excerpt": "Companies → https://lsvp.com/companies/",
+      "id": "check-portfolio-4d409ef7d3",
+      "url": "https://lsvp.com/stories/vectorized-free-and-source-available-cloud-native-infrastructure-for-real-time-applications/",
+      "title": "Lightspeed — application page",
+      "excerpt": "Companies → https://lsvp.com/companies-india/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7ef4235b3e",
+      "url": "https://lsvp.com/stories/optimizing-llms-for-real-world-applications/",
+      "title": "Lightspeed — application page",
+      "excerpt": "Companies → https://lsvp.com/companies-india/",
       "page": "application"
     },
     {
       "id": "check-portfolio-903227eca5",
       "url": "https://lsvp.com/",
-      "title": "Lightspeed — homepage checked by scrape.py",
+      "title": "Lightspeed — homepage",
       "excerpt": "Companies → https://lsvp.com/companies-india/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-90f9153f9a",
-      "url": "https://lsvp.com/stories/our-investment-in-fireworks-ai-the-inference-platform-aiming-to-power-every-genai-application/",
-      "title": "Lightspeed — application page checked by scrape.py",
+      "id": "check-portfolio-a724bf9e9d",
+      "url": "https://lsvp.com/stories/startups-v-incumbents-the-battle-for-ais-application-layer/",
+      "title": "Lightspeed — application page",
+      "excerpt": "Companies → https://lsvp.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-aefe45b6b4",
+      "url": "https://lsvp.com/stories/building-with-endor-labs-application-security-for-all/",
+      "title": "Lightspeed — application page",
+      "excerpt": "Companies → https://lsvp.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b6632d1a24",
+      "url": "https://lsvp.com/stories/taking-the-big-leap-in-cloud-application-security-or-cloud-native-security/",
+      "title": "Lightspeed — application page",
+      "excerpt": "Companies → https://lsvp.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-be1957cc72",
+      "url": "https://lsvp.com/stories/building-with-endor-labs-application-security-for-all/",
+      "title": "Lightspeed — application page",
       "excerpt": "Companies → https://lsvp.com/companies-india/",
       "page": "application"
     },
     {
-      "id": "check-portfolio-db3af3a4a0",
-      "url": "https://lsvp.com/about/",
-      "title": "Lightspeed — details page checked by scrape.py",
+      "id": "check-portfolio-ce43404e67",
+      "url": "https://lsvp.com/stories/announcing-overops-real-time-event-intelligence-for-modern-applications/",
+      "title": "Lightspeed — application page",
       "excerpt": "Companies → https://lsvp.com/companies/",
-      "page": "details"
+      "page": "application"
     },
     {
-      "id": "check-portfolio-ec4a268d9c",
-      "url": "https://lsvp.com/about/",
-      "title": "Lightspeed — details page checked by scrape.py",
-      "excerpt": "Companies → https://lsvp.com/companies-india/",
-      "page": "details"
+      "id": "check-portfolio-d3ea8a1aec",
+      "url": "https://lsvp.com/international-landing-pad-network-application/",
+      "title": "Lightspeed — application page",
+      "excerpt": "Companies → https://lsvp.com/companies/",
+      "page": "application"
     },
     {
-      "id": "check-route-c377ced2d6",
-      "url": "https://lsvp.com/about/",
-      "title": "Lightspeed — details page checked by scrape.py",
-      "excerpt": "Our Investment in Fireworks AI: the Inference Platform Aiming to Power Every GenAI Application → https://lsvp.com/stories/our-investment-in-fireworks-ai-the-inference-platform-aiming-to-power-every-genai-application/",
-      "page": "details"
+      "id": "check-route-ddf9e2aa9a",
+      "url": "https://lsvp.com/stories/building-with-endor-labs-application-security-for-all/",
+      "title": "Lightspeed — application page",
+      "excerpt": "Next story → https://lsvp.com/stories/startups-v-incumbents-the-battle-for-ais-application-layer/",
+      "page": "application"
     },
     {
       "id": "check-route-f0ff1e9385",
       "url": "https://lsvp.com/",
-      "title": "Lightspeed — homepage checked by scrape.py",
+      "title": "Lightspeed — homepage",
       "excerpt": "https://lsvp.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-e0c619d96d",
+      "url": "https://lsvp.com/",
+      "page": "details",
+      "excerpt": "Lightspeed Venture Partners menu menu About Team Companies Founder Experience Stories Launch Research Hub About Team Companies Founder Experience Stories Launch Faction Contact LP login Events Lighthouse Portfolio Jobs POSSIBILITY GROWS THE DEEPER YOU GO over a decade as AI founders' first call Too often VC only scratches the surface. Continually consuming until there’s a basic understanding of everything, and expertise in nothing. Lightspeed takes a different approach. Depth is our center of gravity. It’s how we build and maintain a mastery that enables unwavering conviction in the companies we back. Our depth of commitment means rolling up our sleeves to earn our seat at the table. Depth of relationships means authenticity, transparency and trust. And depth of belief means navigating the peaks and valleys together, regardless of how the terrain unfolds. Complete immersion is the heart of our philosophy on investing and we believe what separates us from speculators and opportunists. Creating together instead of funding from afar. Forging enduring companies with the power of one global team. Because possibility grows the deeper you go. SERVING BOLD BUILDERS OF THE FUTURE. For over twenty years Lightspeed has been the first investor and an early backer of some of the most innovative companies in the world. In service of bold founders with big ideas, we stand behind our"
     },
     {
-      "id": "check-route-ff97559e31",
-      "url": "https://lsvp.com/",
-      "title": "Lightspeed — homepage checked by scrape.py",
-      "excerpt": "Our Investment in Fireworks AI: the Inference Platform Aiming to Power Every GenAI Application → https://lsvp.com/stories/our-investment-in-fireworks-ai-the-inference-platform-aiming-to-power-every-genai-application/",
-      "page": "details"
+      "id": "check-page-eb598622de",
+      "url": "https://lsvp.com/international-landing-pad-network-application/",
+      "page": "application",
+      "excerpt": "INTERNATIONAL LANDING PAD NETWORK APPLICATION - Lightspeed Venture Partners menu menu About Team Companies Founder Experience Stories Launch Research Hub About Team Companies Founder Experience Stories Launch Faction Contact LP login Events Lighthouse Portfolio Jobs INTERNATIONAL LANDING PAD NETWORK APPLICATION Thank you for your interest in the International Landing Pad Network (ILPN), a one stop shop for growth-stage international companies outside the United States looking to expand in New York City. The information you provide through this application will be used by New York City Economic Development Corporation (NYCEDC) and the ILPN program operators to evaluate your eligibility for the program and to select growth-stage international companies to participate in the cohorts hosted by Plug and Play , SOSA , Supermomos , and The Clean Fight . Companies may apply to no more than two of the four operators. Please review this table to learn more about each operator and their unique offerings before submitting your applications. For the purposes of ILPN, a growth-stage international company is defined as one generating $5 million in year-over-year revenue or having sufficient capital to grow a team of five or more employees in New York City within approximately two years. Please check this box to confirm you meet these qualifications Full Name* Email* LinkedIn* URL Company"
+    },
+    {
+      "id": "check-page-2c35366a7f",
+      "url": "https://lsvp.com/stories/announcing-overops-real-time-event-intelligence-for-modern-applications/",
+      "page": "application",
+      "excerpt": "Announcing OverOps— Real-time Event Intelligence for Modern Applications - Lightspeed Venture Partners menu menu About Team Companies Founder Experience Stories Launch Research Hub About Team Companies Founder Experience Stories Launch Faction Contact LP login Events Lighthouse Portfolio Jobs 04/19/2016 Enterprise Share on twitter Share on facebook Share on linkedin Copy link Announcing OverOps— Real-time Event Intelligence for Modern Applications Over the past few years, there has been an incredible revolution in the way that software applications are built and run. The Cloud has simplified and accelerated time to development, Big Data has made applications smarter and more predictive, and Microservices are changing the way we think about our application architecture. Needless to say, it’s a fun time to be a software developer. But, as with every revolution, new problems emerge. And as applications have trended towards a more distributed, data-centric, and segmented architecture, keeping them up and running reliably has become more of a challenge. This is the exact problem that Tal Weiss and his co-founders at OverOps faced a few years ago after selling their startup VisualTao to Autodesk. Tal and his team were charged with mobilizing the Autodesk application, which was no easy task. The team relished the challenge of writing a distributed, cloud-based application that scaled"
+    },
+    {
+      "id": "check-page-8ed960dfd4",
+      "url": "https://lsvp.com/stories/building-with-endor-labs-application-security-for-all/",
+      "page": "application",
+      "excerpt": "Building With Endor Labs—Application Security For All - Lightspeed Venture Partners menu menu About Team Companies Founder Experience Stories Launch Research Hub About Team Companies Founder Experience Stories Launch Faction Contact LP login Events Lighthouse Portfolio Jobs 08/03/2023 Enterprise Share on twitter Share on facebook Share on linkedin Copy link Building With Endor Labs—Application Security For All The team at Endor Labs It was just 10 months ago that we at Lightspeed announced Endor Labs’ $25M Seed financing round . Since then, Endor Labs has continued to execute, added a strong customer base, won a slew of industry recognition awards, and gained a critical spot in the toolkits of leading-edge DevSecOps engineers. That’s why we’re excited to lead Endor Labs’ Series A financing. Between their seed and their Series A financing, Endor Labs is announcing a total of $70M raised, with participation from Coatue, Dell Technologies Capital, Section 32, and over 30 industry-leading CEOs, CISOs and CTOs. Endor Labs solves a critical problem that is only growing in scope – helping developers secure their applications. As we wrote back in October, “Historically, the thinking has gone that if bad guys can’t get into a network or access a company’s storage, then the data is safe. So while a ton of money is spent on securing devices, endpoints, servers, or the network, not a lot"
+    },
+    {
+      "id": "check-page-b4fd8fe4a7",
+      "url": "https://lsvp.com/stories/building-with-langfuse-observability-analytics-for-llm-applications/",
+      "page": "application",
+      "excerpt": "Building with Langfuse - Observability & Analytics for LLM Applications - Lightspeed Venture Partners menu menu About Team Companies Founder Experience Stories Launch Research Hub About Team Companies Founder Experience Stories Launch Faction Contact LP login Events Lighthouse Portfolio Jobs 11/07/2023 Enterprise Share on twitter Share on facebook Share on linkedin Copy link Building with Langfuse – Observability & Analytics for LLM Applications Today, we are excited to announce our investment into Langfuse and join Marc , Max & Clemens on the journey. We are leading the company’s $4 million seed round alongside our friends La Famiglia & Y Combinator. Langfuse co-founders from left to right: Max Deichmann, Marc Klingen, and Clemens Rawert. Our investment into Langfuse is rooted in a deep thesis and the strong conviction that the analytics stack requires a complete overhaul to fully support generative models. The crux lies in successfully integrating generative AI into production The impact potential of generative models is by now clear for most — studies suggest worker’s productivity can be boosted by as much as 40 percent and will reshape from the ground up the way we consume, personalize, and interact digitally. Consequently, the world is racing to implement generative models into every application — leading the way to a new area of cognition in software. While the impact"
+    },
+    {
+      "id": "check-page-ecdb6d5427",
+      "url": "https://lsvp.com/stories/optimizing-llms-for-real-world-applications/",
+      "page": "application",
+      "excerpt": "Optimizing LLMs For Real World Applications - Lightspeed Venture Partners menu menu About Team Companies Founder Experience Stories Launch Research Hub About Team Companies Founder Experience Stories Launch Faction Contact LP login Events Lighthouse Portfolio Jobs 11/28/2023 Enterprise Share on twitter Share on facebook Share on linkedin Copy link Optimizing LLMs For Real World Applications Meryem Arik, Gemma Garriga, and Antoine Moyroud At our recent Generative London event, Gemma Garriga , Technical Director, Office of the CTO, Google Cloud and Meryem Arik , Co-Founder of TitanML spoke with Antoine Moyroud, Partner at Lightspeed, to decode the intricacies of optimizing large language model (LLM) inference. As the buzz around deploying LLMs for real-world applications intensifies, the discussion shared valuable thoughts on quantization, fine-tuning, hardware choices, benchmarking challenges, and the ever-evolving landscape of model architectures. Here are four areas of AI technology the panel covered in their discussion: Quantization Techniques The panel dived into quantization techniques, exploring methods to slim down models without compromising accuracy. Meryem highlighted activation weight quantization ( AWQ ) as a standout, capable of achieving substantial compression without sacrificing accuracy. Alongside, the discussion touched upon TensorRT-LLM , VLLM , Titan Takeoff"
+    },
+    {
+      "id": "check-page-ec8bf4ae08",
+      "url": "https://lsvp.com/stories/startups-v-incumbents-the-battle-for-ais-application-layer/",
+      "page": "application",
+      "excerpt": "Startups v. Incumbents—The Battle for AI’s Application Layer - Lightspeed Venture Partners menu menu About Team Companies Founder Experience Stories Launch Research Hub About Team Companies Founder Experience Stories Launch Faction Contact LP login Events Lighthouse Portfolio Jobs 08/03/2023 Consumer Share on twitter Share on facebook Share on linkedin Copy link Startups v. Incumbents—The Battle for AI’s Application Layer If your AI product is going head to head with an incumbent, their distribution advantage will probably kill your startup…unless you fight back with a different game. It is Summer 2023, and each day brings a new AI product demo that goes completely viral on Twitter X or TikTok. Countless people are blown away by the product’s magic-like qualities, powered by GPT4, Stable Diffusion, or some other new language, video, or image model. And while it’s an incredibly exciting time to be building or investing in AI, it’s also a fiercely competitive one as well, especially for teams building in the application layer – the part of the technology stack that delivers real world products to end users interacting directly with software. The competition is being fueled by what’s at stake: participation in a generational platform shift in which the capabilities (and the potential value) of the tools we use are reaching new heights, all because of AI. We haven’t witnessed a"
+    },
+    {
+      "id": "check-page-d25332f079",
+      "url": "https://lsvp.com/stories/taking-the-big-leap-in-cloud-application-security-or-cloud-native-security/",
+      "page": "application",
+      "excerpt": "Taking The Big Leap in Cloud Application Security (or Cloud-Native Security). - Lightspeed Venture Partners menu menu About Team Companies Founder Experience Stories Launch Research Hub About Team Companies Founder Experience Stories Launch Faction Contact LP login Events Lighthouse Portfolio Jobs 09/19/2017 Enterprise Share on twitter Share on facebook Share on linkedin Copy link Taking The Big Leap in Cloud Application Security (or Cloud-Native Security). Our Investment in Aqua. We’re very excited to be joining forces with Aqua just as the container market is emerging. While containers and Aqua specifically have shown tremendous growth, the market is still in its infancy — we see this as an exciting opportunity. Containers are not just for web-scale companies like Facebook and Netflix anymore. Enterprise companies are adopting containers across industries and across geographies. This is happening via grass-roots, bottom-up projects driven by DevOps teams, as well as enterprise-wide, top-down design initiatives that recognize that containers can drive hybrid cloud strategies, agile application delivery, and cost savings. Aqua is at the nexus of several forces that are shaping the present and future of enterprise IT and, as a result, of how enterprises approach security: ● The DevOps movement with its drive to create more fluid, dynamic application delivery has been around"
+    },
+    {
+      "id": "check-page-c7622ee70c",
+      "url": "https://lsvp.com/stories/vectorized-free-and-source-available-cloud-native-infrastructure-for-real-time-applications/",
+      "page": "application",
+      "excerpt": "Vectorized: free and source available, cloud native infrastructure for real-time applications - Lightspeed Venture Partners menu menu About Team Companies Founder Experience Stories Launch Research Hub About Team Companies Founder Experience Stories Launch Faction Contact LP login Events Lighthouse Portfolio Jobs 01/26/2021 Enterprise Share on twitter Share on facebook Share on linkedin Copy link Vectorized: free and source available, cloud native infrastructure for real-time applications Early Vectorized Team. Alex Gallego (founder and CEO) is second from right Over the past decade, we have seen an incredible shift to the “real-time economy.” Need to go somewhere? Pick up your smartphone, get real-time pricing and availability and 5 mins later a car arrives to pick you up. Bored? Fire up Netflix and based on your preferences, there are dozens of highly relevant recommendations immediately waiting for you. Sluggish? Get on your Peloton to work out, beat your personal record and compete in real-time with riders around the world. What’s amazing is that behind each of these seemingly simple actions, there’s a complex cloud of servers, networks, and storage powering, analyzing, and executing each of your interactions. And, in today’s world, we demand real-time performance. What’s worse than staring at that spinning ball? While our world has changed dramatically over the past"
+    },
+    {
+      "id": "check-page-c431ee9a9a",
+      "url": "https://lsvp.com/feeds/a-lightspeed-vc-is-bullish-on-retail-investment-apps-like-robinhood-and-says-theyll-continue-to-climb-in-popularity/",
+      "page": "terms",
+      "excerpt": "A Lightspeed VC Says Retail Investing Will Only Become More Popular - Business Insider Subscribe Newsletters Search Business Strategy Economy Finance Retail Advertising Careers Law Media Real Estate Small Business The Better Work Project Personal Finance Tech Science AI Enterprise Transportation Startups Innovation Markets News Stocks Indices Commodities Crypto Currencies ETFs Lifestyle Entertainment Culture Travel Food Health Education Parenting Military & Defense Politics Reviews Home Kitchen Style Streaming Pets Tech Deals Gifts Tickets Video Big Business So Expensive View From Above Small Business Authorized Account Risky Business Boot Camp Still Standing How Crime Works Life Lessons Live Events Tech Insider: Growth Mode The Long Play Stream Business Insider Level Up Community Job Scout Subscribe My account Log in Newsletters Saved Articles US edition Deutschland & Österreich España Japan Polska TW 全球中文版 Get the app Tech A Lightspeed VC is bullish on retail investment apps like Robinhood and says they'll continue to climb in popularity Opinion by Mercedes Bent SOPA Images/Getty Images Robinhood app. 2021-05-23T16:50:22.000Z Save Saved Copy link Email Facebook LinkedIn Read in app This story is available exclusively to Business Insider subscribers. Become an Insider and start reading now. Have an account? Log in . Retail investing apps have been getting a bad rap lately. As"
+    },
+    {
+      "id": "check-page-fb75f842d6",
+      "url": "https://lsvp.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+      "page": "terms",
+      "excerpt": "Early-stage investing remains energetic with plenty of dry powder for investment: Lightspeed’s Rahul Taneja - CNBC TV18 Market Data English आवाज़ Stocks / Latest News Market Stocks IPOs Commodities Personal Finance Mutual Funds Business Economy India World Technology Photos More Lifestyle Culture Food & Drinks Healthcare Travel Videos Sports Entertainment Upcoming Events IPs & Events IPs & Events LIVE TV CNBC TV18 CNBC TV18 Prime CNBC Awaaz CNBC Bajar Login / Signup × Language English आवाज़ LIVE TV Language English हिन्दी Latest news Live Updates CNBC-TV18 Prime Markets Markets Data Stocks IPOs Business Personal Finance CNBC-TV18 ACCESS Impact Shorts Economy India World Upcoming Events Engage with CNBC-TV18 Photos Videos Minis Web Stories Polls Quiz Healthcare Politics Travel Education & Careers Sports Views Auto Entertainment Technology Startups Lifestyle Retail Real Estate Minis Special Coverage India Business Leader Awards Branded Content HealthX Elevate India Retirement Insights Summit The Growth Summit Ceo awards Accelerate Your Cloud Journey Accelerating to a Connected Future Financial Services Cloud Symposium Crypto Education Next Ey Entrepreneur Of The Year IRMA Wizards of finance The Thought League Discover CNBCTV18 About Contact Advertise Disclaimer Terms of Use Privacy Policy Shows Anchors Polls 11:11 Newsletter Life Advertise with us Download App Join Us On"
+    },
+    {
+      "id": "check-page-e34e87cec0",
+      "url": "https://lsvp.com/feeds/https-www-etnownews-com-videos-lightspeed-ventures-on-the-startup-ecosystem-more-investment-to-trickle-into-india-rahul-taneja-video-105806559/",
+      "page": "terms",
+      "excerpt": "Lightspeed Ventures On The Startup Ecosystem | More Investment To Trickle Into India? | Rahul Taneja | Videos | ET Now Live Videos Shows News & Current Affairs Latest News Education News Business & Finance Corporates Money Videos Shows Market & Investment Market Overview Market News Stocks Indices Crypto Currency GMP IPO Mutual Funds Economy Income Tax Lifestyle & Culture Luxe Entertainment Sports & Leisure Sports TRENDING : Ask From Experts Deer Headlights Inside Q2 Results Today Microsoft Global Outage Breaking Paytm Rbi Anthropic IPO HDFC Bank Shares Lightspeed Ventures On The Startup Ecosystem | More Investment To Trickle Into India? | Rahul Taneja Updated Dec 7, 2023 13:25 IST ET Now Exclusive: Lightspeed Ventures On The Startup Ecosystem. More Investment To Trickle Into India? Lightspeed Ventures' Investments In India. Invested IN Unicorns Like Udaan, Razorpay, Sharechat. Watch Rahul Taneja, Lightspeed on ET Now. #lightspeedventures #startup #etnowexclusive Up Next Autoplay US 10-Year Yield At 5.12%: Why Bond Markets Are Worried About More Than Inflation | James Knightley 09:54 Buy Now Sell Now | Share & Stock Market Tips | Viewer Stock Queries Answered | ET Now 32:13 Decoding Talbros Automotive Components' Global Auto Opportunity, EV Play & More | Navin Juneja 23:31 Nifty's 14% Recovery: Can The Bull Run Sustain? Expert Breakdown! | Business News | ET Now 01:10:26"
+    },
+    {
+      "id": "check-page-e94c2b25de",
+      "url": "https://lsvp.com/feeds/lightspeed-india-is-leading-the-way-in-ai-ev-and-climate-tech-investments-heres-why/",
+      "page": "terms",
+      "excerpt": "Lightspeed India is leading the way in AI, EV and climate-tech investments. Here's why Advertisement Subscribe Ask AI home leadership billionaires startups Business Economy Automobile Aviation Pharma Markets Tech Banking & Finance Space Geopolitics Life Sports Entertainment Lists India Rich List 2026 Showstoppers 2026 30 Under 30 W-Power 2026 AI Special 2025 W-Power 2025 All Lists Multimedia Videos Podcasts Photo Galleries Photo Features Newsletters More News by Numbers Thought Leadership Newsmakers Cover Stories Magazine Ask AI Lightspeed India is leading the way in AI, EV and climate-tech investments. Here ... Lightspeed has doubled down on its focus on generative AI and AI-backed startups, investing $1.1 billion across 61 AI companies globally By Salil Panchal Last Updated: Sep 26, 2024, 12:40 IST 12 min intent Reding Mode Disclaimer: Comments reflect users’ views, not forbesindia. Please keep discussions respectful and constructive. Abusive, defamatory, or illegal comments will be removed. News18 may disable any comment at its discretion. By posting, you agree to our Terms of Use and Privacy Policy . Loading comments... Join Us Prefer us on Google Team Lightspeed: (standing, from left) Dev Khare, India partner, Bejul Somaia, global partner, Rahul Taneja and Shuvi Shrivastava, India partners (sitting) Harsha Kumar and Hemant Mohapatra, India partners Image: Mexy Xavier"
+    },
+    {
+      "id": "check-page-32336c0e69",
+      "url": "https://lsvp.com/feeds/lightspeed-india-on-asias-tech-investment-opportunities/",
+      "page": "terms",
+      "excerpt": "Watch Lightspeed India on Asia's Tech Investment Opportunities - Bloomberg Skip to content Bloomberg the Company & Its Products The Company & its Products Bloomberg Terminal Demo Request Bloomberg Anywhere Remote Login Bloomberg Anywhere Login Bloomberg Customer Support Customer Support Bloomberg Connecting decision makers to a dynamic network of information, people and ideas, Bloomberg quickly and accurately delivers business and financial information, news and insight around the world For Customers Bloomberg Anywhere Remote Login Software Updates Manage Products and Account Information Support Americas +1 212 318 2000 EMEA +44 20 7330 7500 Asia Pacific +65 6212 1000 Company About Careers Inclusion at Bloomberg Tech at Bloomberg Philanthropy Sustainability Bloomberg Beta Communications Press Announcements Press Contacts Follow Facebook Instagram LinkedIn YouTube Products Bloomberg Professional Services Bloomberg Terminal Data Trading Risk Compliance Indices Industry Products Bloomberg Law Bloomberg Tax Bloomberg Government BloombergNEF Media Bloomberg Markets Bloomberg Technology Bloomberg Pursuits Bloomberg Politics Bloomberg Opinion Bloomberg Businessweek Bloomberg Live Conferences Bloomberg Radio Bloomberg Television News Bureaus Media Services Bloomberg Media Distribution Advertising Company About Careers Inclusion at Bloomberg Tech at Bloomberg Philanthropy"
+    },
+    {
+      "id": "check-page-b95b1e3b0d",
+      "url": "https://lsvp.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
+      "page": "terms",
+      "excerpt": "lightspeed venture: Lightspeed Venture Partners to increase its focus on growth deals - The Economic Times Benchmarks CLOSED Nifty 25,144.30 -155.05 Benchmarks CLOSED Sensex 81,592.45 -318.56 FEATURED FUNDS ★★★★ ★ Motilal Oswal Midcap Fund Direct-Growth 5Y Return 19.35 % Invest Now FEATURED FUNDS ★★★★ ★ UTI Aggressive Hybrid Fund Regular Plan-Growth 5Y Return 9.79 % Invest Now Enter Stock Quotes, News, Mutual Funds and more to search English Edition | ePaper | ET TV Loading... Home ETPrime Markets Market Data Masterclass News Industry SME Politics Wealth MF Tech AI World Opinion NRI Panache AI IT Tech & Internet Funding Startups Tech Bytes Newsletters Full Stack Tech Top 5 Morning Dispatch Unwrapped ET AI Awards 2027 Blogs & Opinion ET AI-Ready Business News Tech Funding Lightspeed Venture Partners to increase its focus on growth deals Lightspeed Venture Partners to increase its focus on growth deals By Apoorva Mittal & Sneha Shah Last Updated: Jul 12, 2022, 06:21:04 PM IST Follow us Share Font Size Abc Small Abc Medium Abc Large Save Print Comment Synopsis Lightspeed’s other investments in India include Darwinbox, Yellow Messenger, OK Credit, Apna, Dukaan, and Teachmint. ETtech Lightspeed partners Bejul Somaia and Aditya Sharma. Mumbai: Early-stage investor Lightspeed Venture Partners, which has backed startups including Byju’s, Oyo , Udaan and ShareChat, will focus more on"
     }
   ],
   "findings": {
@@ -90,8 +390,8 @@
     "phones": [],
     "routes": [
       {
-        "value": "https://lsvp.com/stories/our-investment-in-fireworks-ai-the-inference-platform-aiming-to-power-every-genai-application/",
-        "evidenceId": "check-route-ff97559e31"
+        "value": "https://lsvp.com/stories/startups-v-incumbents-the-battle-for-ais-application-layer/",
+        "evidenceId": "check-route-ddf9e2aa9a"
       }
     ],
     "applicationUrl": [
@@ -103,8 +403,84 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "10 months",
+        "evidenceId": "check-duration-a1f88a7436"
+      },
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-3913430fd8"
+      },
+      {
+        "value": "24 months",
+        "evidenceId": "check-duration-924a802ad1"
+      },
+      {
+        "value": "36 months",
+        "evidenceId": "check-duration-f03b84f258"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-cde6877bf2"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-7bcd611744"
+      }
+    ],
+    "location": [
+      {
+        "value": "San",
+        "evidenceId": "check-location-231de06660"
+      },
+      {
+        "value": "Mumbai",
+        "evidenceId": "check-location-74f516ba2b"
+      }
+    ],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "two global growth funds. “We have the early growth funds that target $30-$75 million in cheque sizes while our late-stage growth funds target",
+        "evidenceId": "check-deal-b582b73065"
+      },
+      {
+        "value": "in cheque sizes while our late-stage growth funds target between $75-$200 million investments. In 2021, we invested over $300 million",
+        "evidenceId": "check-deal-3c50ba83a3"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "30",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-b582b73065"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "75",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-3c50ba83a3"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://lsvp.com/companies/",

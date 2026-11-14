@@ -1,187 +1,822 @@
 {
   "programId": "y-combinator",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
     "https://www.ycombinator.com/",
-    "https://www.ycombinator.com/about",
+    "https://apply.ycombinator.com/home",
     "https://www.ycombinator.com/apply",
-    "https://www.ycombinator.com/faq"
+    "https://www.ycombinator.com/apply/dropbox",
+    "https://www.ycombinator.com/apply/reminder",
+    "https://www.ycombinator.com/apply/unsubscribe-reminder",
+    "https://www.ycombinator.com/howtoapply",
+    "http://www.ycombinator.com/apply/",
+    "https://www.ycombinator.com/deal",
+    "https://www.ycombinator.com/demoday/faq",
+    "https://www.ycombinator.com/faq",
+    "https://apply.ycombinator.com/app/edit",
+    "https://news.ycombinator.com/newsfaq.html",
+    "https://www.ycombinator.com/about",
+    "https://www.ycombinator.com/library/ks-how-to-build-the-future-paul-graham-amjad-masad"
   ],
   "evidence": [
     {
-      "id": "check-deal-770ae0a531",
-      "url": "https://www.ycombinator.com/",
-      "title": "Y Combinator — homepage checked by scrape.py",
-      "excerpt": "at over $9B. Now Twitch was acquired by Amazon for nearly $1B. In 2005, Y Combinator developed a new model of startup funding. Four times a year we invest $500k in a select group of startups. They move to San Francisco for three months, where we work intensively with them to get the company into the best possible",
+      "id": "check-announced-3534f40e96",
+      "url": "http://www.ycombinator.com/apply/",
+      "title": "Y Combinator — application page",
+      "excerpt": "your application online . People who applied before the regular deadline will hear back by December 11 . If you apply after the deadline, we'll still consider the",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-36f71ba5b6",
+      "url": "http://www.ycombinator.com/apply/",
+      "title": "Y Combinator — application page",
+      "excerpt": "we are still accepting late applications. If you applied before the deadline, you will get a decision by December 11 . If you apply after the deadline, we will still consider the",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-5f037a1743",
+      "url": "https://www.ycombinator.com/apply",
+      "title": "Y Combinator — application page",
+      "excerpt": "we are still accepting late applications. If you applied before the deadline, you will get a decision by December 11 . If you apply after the deadline, we will still consider the",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-6e9f19e5c5",
+      "url": "http://www.ycombinator.com/apply/",
+      "title": "Y Combinator — application page",
+      "excerpt": "( Spring, Summer, and Fall ) now - see more at Early Decision . The deadline to apply on-time was November 2 at 8pm PT, but we are still accepting late applications. If you",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-7561e92897",
+      "url": "https://www.ycombinator.com/apply",
+      "title": "Y Combinator — application page",
+      "excerpt": "accepting applications for the Winter 2027 Batch funding cycle. The batch will take place from January to March in San Francisco. You can also apply to future batches (",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-94f861d269",
+      "url": "https://www.ycombinator.com/apply",
+      "title": "Y Combinator — application page",
+      "excerpt": "your application online . People who applied before the regular deadline will hear back by December 11 . If you apply after the deadline, we'll still consider the",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-9d70a70806",
+      "url": "https://www.ycombinator.com/apply",
+      "title": "Y Combinator — application page",
+      "excerpt": "( Spring, Summer, and Fall ) now - see more at Early Decision . The deadline to apply on-time was November 2 at 8pm PT, but we are still accepting late applications. If you",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-e338bc7753",
+      "url": "http://www.ycombinator.com/apply/",
+      "title": "Y Combinator — application page",
+      "excerpt": "accepting applications for the Winter 2027 Batch funding cycle. The batch will take place from January to March in San Francisco. You can also apply to future batches (",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-0c85b0358d",
+      "url": "https://www.ycombinator.com/about",
+      "title": "Y Combinator — program page",
+      "excerpt": "often surprised by what they're capable of. Funding YC invests $500k per company: $125k for 7% on a post-money SAFE and another $375k on",
       "page": "details"
     },
     {
-      "id": "check-deal-b4a31773bb",
-      "url": "https://www.ycombinator.com/faq",
-      "title": "Y Combinator — terms page checked by scrape.py",
-      "excerpt": "anywhere in the world. You can apply here . How can we get funding for our startup? Apply online for our next funding cycle. How much do you invest? We invest $500,000 in each company. What can I use the YC investment for? You can use the YC investment for anything that you believe helps your business. In most cases, the",
+      "id": "check-deal-47e000f619",
+      "url": "https://www.ycombinator.com/deal",
+      "title": "Y Combinator — terms page",
+      "excerpt": "post-money valuation cap, the $375,000 MFN SAFE would convert into $375,000 / $15,000,000 = 2.5% of the company. YC also gets a right to",
       "page": "terms"
     },
     {
-      "id": "check-deal-eeb266c1cd",
+      "id": "check-deal-64b4e45ba6",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Y Combinator — terms page",
+      "excerpt": "online for our next funding cycle. How much do you invest? We invest $500,000 in each company. What can I use the YC investment for? You can use",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-74e6b65687",
+      "url": "https://www.ycombinator.com/deal",
+      "title": "Y Combinator — terms page",
+      "excerpt": "SAFEs at the same time, with an accompanying YC Agreement: We invest $125,000 on a post-money SAFE in return for 7% of your company (the \"$125k",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-7f0f32768a",
       "url": "https://www.ycombinator.com/about",
-      "title": "Y Combinator — details page checked by scrape.py",
-      "excerpt": "out the best in them. And since most people have way more potential than they realize, they're often surprised by what they're capable of. Funding YC invests $500k per company: $125k for 7% on a post-money SAFE and another $375k on an uncapped SAFE with an MFN. Groups During the batch, startups are sorted into 3 groups.",
+      "title": "Y Combinator — program page",
+      "excerpt": "by what they're capable of. Funding YC invests $500k per company: $125k for 7% on a post-money SAFE and another $375k on an uncapped SAFE",
       "page": "details"
     },
     {
-      "id": "check-email-b4cb382f8f",
+      "id": "check-deal-8923a8daef",
+      "url": "https://www.ycombinator.com/deal",
+      "title": "Y Combinator — terms page",
+      "excerpt": "percentage of the company New money is invested in the company YC's $125k SAFE will convert in the priced round into 7% of the company's",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-9758813b69",
+      "url": "https://www.ycombinator.com/deal",
+      "title": "Y Combinator — terms page",
+      "excerpt": "$125,000 of our investment converts into a fixed 7%, and the other $375,000 is invested on an uncapped MFN SAFE. If you're not familiar with",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-a0483819e9",
+      "url": "https://www.ycombinator.com/deal",
+      "title": "Y Combinator — terms page",
+      "excerpt": "$125,000 on a post-money SAFE in return for 7% of your company (the \"$125k SAFE\") We invest $375,000 on an uncapped SAFE with a Most Favored",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-a277dd5bf2",
+      "url": "https://www.ycombinator.com/deal",
+      "title": "Y Combinator — terms page",
+      "excerpt": "deal for every company that is accepted to Y Combinator. We invest $500,000, and our investment gives YC 7% of your company plus an incremental",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-adfcbaae27",
+      "url": "https://www.ycombinator.com/deal",
+      "title": "Y Combinator — terms page",
+      "excerpt": "to YC founders. The Math The way it works is this: we invest $500,000. $125,000 of our investment converts into a fixed 7%, and the other",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-c36e01c048",
+      "url": "https://www.ycombinator.com/deal",
+      "title": "Y Combinator — terms page",
+      "excerpt": "YC founders. The Math The way it works is this: we invest $500,000. $125,000 of our investment converts into a fixed 7%, and the other $375,000 is",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-c5465a18b7",
+      "url": "https://www.ycombinator.com/deal",
+      "title": "Y Combinator — terms page",
+      "excerpt": "SAFE in return for 7% of your company (the \"$125k SAFE\") We invest $375,000 on an uncapped SAFE with a Most Favored Nation (\"MFN\") provision (the",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-d5d980103d",
+      "url": "https://www.ycombinator.com/apply/dropbox",
+      "title": "Y Combinator — application page",
+      "excerpt": "away free 1GB accounts and charge for additional storage (maybe ~$5/mo or less for 10GB for individuals and team plans that start at",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-ecef92a324",
+      "url": "https://www.ycombinator.com/",
+      "title": "Y Combinator — homepage",
+      "excerpt": "a new model of startup funding. Four times a year we invest $500k in a select group of startups. They move to San Francisco for three",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-fd033e00ee",
+      "url": "https://www.ycombinator.com/about",
+      "title": "Y Combinator — program page",
+      "excerpt": "$500k per company: $125k for 7% on a post-money SAFE and another $375k on an uncapped SAFE with an MFN. Groups During the batch, startups",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-10a5806890",
+      "url": "https://www.ycombinator.com/apply/dropbox",
+      "title": "Y Combinator — application page",
+      "excerpt": "you been part-time or full-time? Please explain. 3 months part time. About ~5KLOC client and ~2KLOC server",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-13920e3120",
+      "url": "https://www.ycombinator.com/library/ks-how-to-build-the-future-paul-graham-amjad-masad",
+      "title": "Y Combinator — program page",
+      "excerpt": "The Next Big Scientific Breakthrough 333K views 6 months ago Related 53:21 The Future Of Brain-Computer",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2d13b6cdcc",
+      "url": "https://www.ycombinator.com/about",
+      "title": "Y Combinator — program page",
+      "excerpt": "is an increasingly valuable resource, those 11 weeks are still the most important thing. You can't",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-4f1ee61fb2",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Y Combinator — terms page",
+      "excerpt": "much better in person. Of course, after the 3 month program, you can go wherever you want. How do we",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-50f4d130a0",
+      "url": "https://www.ycombinator.com/library/ks-how-to-build-the-future-paul-graham-amjad-masad",
+      "title": "Y Combinator — program page",
+      "excerpt": "Paul Graham, Live from Stockholm 101K views 6 months ago 39:44 Michael Kratsios: Inside the White",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-5864456e0a",
+      "url": "https://www.ycombinator.com/library/ks-how-to-build-the-future-paul-graham-amjad-masad",
+      "title": "Y Combinator — program page",
+      "excerpt": "Future Of Brain-Computer Interfaces 265K views 8 months ago 37:29 Cursor CEO: Going Beyond Code,",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-5b6637626e",
+      "url": "http://www.ycombinator.com/apply/",
+      "title": "Y Combinator — application page",
+      "excerpt": "network of investors. YC doesn't end after 3 months. We continue to help founders for the life of",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-73a233fda7",
+      "url": "https://www.ycombinator.com/about",
+      "title": "Y Combinator — program page",
+      "excerpt": "starting a startup. Many founders describe the 11 weeks leading up to Demo Day as the most productive",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-87276a361b",
+      "url": "https://www.ycombinator.com/about",
+      "title": "Y Combinator — program page",
+      "excerpt": "the best word to describe the atmosphere. For 3 months, it's all startup, all the time. Everyone around",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-9fe43cb41a",
+      "url": "https://www.ycombinator.com/about",
+      "title": "Y Combinator — program page",
+      "excerpt": "to help them to be in dramatically better shape 3 months later. For most startups, better shape",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ab552f71d3",
+      "url": "https://www.ycombinator.com/about",
+      "title": "Y Combinator — program page",
+      "excerpt": "in their lives. Though YC continues after the 3 month cycle, and the alumni community is an",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b9332c6911",
+      "url": "https://www.ycombinator.com/apply/dropbox",
+      "title": "Y Combinator — application page",
+      "excerpt": "people's hands now. Version I can charge for: 6-8 weeks? Idea What's new about what you're making? What",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-bdffda368b",
       "url": "https://www.ycombinator.com/apply",
-      "title": "Y Combinator — application page checked by scrape.py",
+      "title": "Y Combinator — application page",
+      "excerpt": "network of investors. YC doesn't end after 3 months. We continue to help founders for the life of",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d8ebf23131",
+      "url": "https://www.ycombinator.com/library/ks-how-to-build-the-future-paul-graham-amjad-masad",
+      "title": "Y Combinator — program page",
+      "excerpt": "Inside the White House's AI Strategy 11K views 2 months ago YC's essential startup advice Y Combinator",
+      "page": "details"
+    },
+    {
+      "id": "check-email-2e8e677925",
+      "url": "http://www.ycombinator.com/apply/",
+      "title": "Y Combinator — application page",
       "excerpt": "email (apply@ycombinator.com)",
       "page": "application"
     },
     {
+      "id": "check-email-b4cb382f8f",
+      "url": "https://www.ycombinator.com/apply",
+      "title": "Y Combinator — application page",
+      "excerpt": "email (apply@ycombinator.com)",
+      "page": "application"
+    },
+    {
+      "id": "check-format-05531474a1",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Y Combinator — terms page",
+      "excerpt": "back in person . We've found that YC works much better in person. Of course, after the 3 month program, you can go wherever",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-0d77aa8353",
+      "url": "http://www.ycombinator.com/apply/",
+      "title": "Y Combinator — application page",
+      "excerpt": "at YC's campus in San Francisco. It starts with a 3-day, in-person kick-off and features regular meetups in San Francisco.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-415fa82adc",
+      "url": "https://www.ycombinator.com/apply",
+      "title": "Y Combinator — application page",
+      "excerpt": "at YC's campus in San Francisco. It starts with a 3-day, in-person kick-off and features regular meetups in San Francisco.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-440fba9ce8",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Y Combinator — terms page",
+      "excerpt": "Do I need to move to San Francisco? The batch takes place in-person in San Francisco. It kicks off with a 3-day, in-person",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-45c5956cb6",
+      "url": "http://www.ycombinator.com/apply/",
+      "title": "Y Combinator — application page",
+      "excerpt": "batch to start. About the batch The batch will take place in-person at YC's campus in San Francisco. It starts with a 3-day,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-87376efeda",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Y Combinator — terms page",
+      "excerpt": "YC remotely during Covid, but since 2022 it has been back in person . We've found that YC works much better in person. Of",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-8a57edd9aa",
+      "url": "https://www.ycombinator.com/about",
+      "title": "Y Combinator — program page",
+      "excerpt": "In the first few weeks of the batch we host a 3-day, in-person kickoff. The kickoff gives founders the opportunity to get",
+      "page": "details"
+    },
+    {
+      "id": "check-format-8b6c0c0423",
+      "url": "https://www.ycombinator.com/apply/dropbox",
+      "title": "Y Combinator — application page",
+      "excerpt": "and how did you meet? Have any of the founders not met in person? There's a joke in here somewhere. If we fund you, which",
+      "page": "application"
+    },
+    {
+      "id": "check-format-93d1213352",
+      "url": "https://www.ycombinator.com/demoday/faq",
+      "title": "Y Combinator — terms page",
+      "excerpt": "Day remotely during covid, Demo Day is now back to being in-person. Demo Day is a private, invitation-only event and always",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d8ad208566",
+      "url": "https://www.ycombinator.com/apply",
+      "title": "Y Combinator — application page",
+      "excerpt": "batch to start. About the batch The batch will take place in-person at YC's campus in San Francisco. It starts with a 3-day,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e9f53cdfd2",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Y Combinator — terms page",
+      "excerpt": "in-person in San Francisco. It kicks off with a 3-day, in-person retreat and features weekly meetups in San Francisco. We",
+      "page": "terms"
+    },
+    {
       "id": "check-name-638a344b9a",
       "url": "https://www.ycombinator.com/",
-      "title": "Y Combinator — homepage checked by scrape.py",
+      "title": "Y Combinator — homepage",
       "excerpt": "Y Combinator Open menu About What Happens at YC? Apply YC Interview",
       "page": "details"
     },
     {
       "id": "check-portfolio-053eec452c",
       "url": "https://www.ycombinator.com/apply",
-      "title": "Y Combinator — application page checked by scrape.py",
+      "title": "Y Combinator — application page",
       "excerpt": "YC companies → https://www.ycombinator.com/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-066e136f63",
+      "url": "https://www.ycombinator.com/howtoapply",
+      "title": "Y Combinator — application page",
+      "excerpt": "Startup Directory → https://www.ycombinator.com/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-1c6f6e791a",
+      "url": "https://www.ycombinator.com/apply/reminder",
+      "title": "Y Combinator — application page",
+      "excerpt": "Companies → https://www.ycombinator.com/companies",
       "page": "application"
     },
     {
       "id": "check-portfolio-29146cbf8f",
       "url": "https://www.ycombinator.com/about",
-      "title": "Y Combinator — details page checked by scrape.py",
+      "title": "Y Combinator — program page",
       "excerpt": "Startup Directory → https://www.ycombinator.com/companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-4071b69944",
+      "url": "https://www.ycombinator.com/apply/unsubscribe-reminder",
+      "title": "Y Combinator — application page",
+      "excerpt": "Companies → https://www.ycombinator.com/companies",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-495ef41591",
       "url": "https://www.ycombinator.com/about",
-      "title": "Y Combinator — details page checked by scrape.py",
+      "title": "Y Combinator — program page",
       "excerpt": "Companies → https://www.ycombinator.com/companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-62dbaff017",
+      "url": "https://www.ycombinator.com/howtoapply",
+      "title": "Y Combinator — application page",
+      "excerpt": "Companies → https://www.ycombinator.com/companies",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-6974ecfda3",
       "url": "https://www.ycombinator.com/",
-      "title": "Y Combinator — homepage checked by scrape.py",
+      "title": "Y Combinator — homepage",
       "excerpt": "All companies → https://www.ycombinator.com/companies",
       "page": "details"
     },
     {
       "id": "check-portfolio-82a21a65bc",
       "url": "https://www.ycombinator.com/apply",
-      "title": "Y Combinator — application page checked by scrape.py",
+      "title": "Y Combinator — application page",
       "excerpt": "Companies → https://www.ycombinator.com/companies",
       "page": "application"
     },
     {
       "id": "check-portfolio-835d747ce2",
       "url": "https://www.ycombinator.com/faq",
-      "title": "Y Combinator — terms page checked by scrape.py",
+      "title": "Y Combinator — terms page",
       "excerpt": "YC Startup Directory → https://www.ycombinator.com/companies",
       "page": "terms"
     },
     {
+      "id": "check-portfolio-91639e2f66",
+      "url": "https://www.ycombinator.com/library/ks-how-to-build-the-future-paul-graham-amjad-masad",
+      "title": "Y Combinator — program page",
+      "excerpt": "Startup Directory → https://www.ycombinator.com/companies",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-a214c9fa21",
       "url": "https://www.ycombinator.com/faq",
-      "title": "Y Combinator — terms page checked by scrape.py",
+      "title": "Y Combinator — terms page",
       "excerpt": "Startup Directory → https://www.ycombinator.com/companies",
       "page": "terms"
     },
     {
       "id": "check-portfolio-bbb9acbd7d",
       "url": "https://www.ycombinator.com/",
-      "title": "Y Combinator — homepage checked by scrape.py",
+      "title": "Y Combinator — homepage",
       "excerpt": "Startup Directory → https://www.ycombinator.com/companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-bea570c2d0",
+      "url": "https://www.ycombinator.com/deal",
+      "title": "Y Combinator — terms page",
+      "excerpt": "Startup Directory → https://www.ycombinator.com/companies",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-c521248f5c",
       "url": "https://www.ycombinator.com/faq",
-      "title": "Y Combinator — terms page checked by scrape.py",
+      "title": "Y Combinator — terms page",
       "excerpt": "Companies → https://www.ycombinator.com/companies",
       "page": "terms"
     },
     {
       "id": "check-portfolio-d9dfc3149e",
       "url": "https://www.ycombinator.com/",
-      "title": "Y Combinator — homepage checked by scrape.py",
+      "title": "Y Combinator — homepage",
       "excerpt": "Companies → https://www.ycombinator.com/companies",
       "page": "details"
     },
     {
-      "id": "check-portfolio-faf888f100",
-      "url": "https://www.ycombinator.com/apply",
-      "title": "Y Combinator — application page checked by scrape.py",
+      "id": "check-portfolio-dc5761d9ff",
+      "url": "https://www.ycombinator.com/library/ks-how-to-build-the-future-paul-graham-amjad-masad",
+      "title": "Y Combinator — program page",
+      "excerpt": "Companies → https://www.ycombinator.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e537841879",
+      "url": "https://www.ycombinator.com/apply/unsubscribe-reminder",
+      "title": "Y Combinator — application page",
       "excerpt": "Startup Directory → https://www.ycombinator.com/companies",
       "page": "application"
     },
     {
+      "id": "check-portfolio-ef8e572fc2",
+      "url": "https://www.ycombinator.com/demoday/faq",
+      "title": "Y Combinator — terms page",
+      "excerpt": "Companies → https://www.ycombinator.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f3b1a545fa",
+      "url": "https://www.ycombinator.com/deal",
+      "title": "Y Combinator — terms page",
+      "excerpt": "Companies → https://www.ycombinator.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f5c5080d07",
+      "url": "https://www.ycombinator.com/apply/reminder",
+      "title": "Y Combinator — application page",
+      "excerpt": "Startup Directory → https://www.ycombinator.com/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-faf888f100",
+      "url": "https://www.ycombinator.com/apply",
+      "title": "Y Combinator — application page",
+      "excerpt": "Startup Directory → https://www.ycombinator.com/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-fbdeaac577",
+      "url": "https://www.ycombinator.com/demoday/faq",
+      "title": "Y Combinator — terms page",
+      "excerpt": "Startup Directory → https://www.ycombinator.com/companies",
+      "page": "terms"
+    },
+    {
       "id": "check-route-0085c768f7",
       "url": "https://www.ycombinator.com/faq",
-      "title": "Y Combinator — terms page checked by scrape.py",
+      "title": "Y Combinator — terms page",
       "excerpt": "Apply online → https://www.ycombinator.com/apply",
       "page": "terms"
     },
     {
+      "id": "check-route-05e1704533",
+      "url": "https://www.ycombinator.com/howtoapply",
+      "title": "Y Combinator — application page",
+      "excerpt": "Apply to Y Combinator → https://www.ycombinator.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0a66686bc0",
+      "url": "https://www.ycombinator.com/deal",
+      "title": "Y Combinator — terms page",
+      "excerpt": "Apply → https://www.ycombinator.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1484e560c9",
+      "url": "https://www.ycombinator.com/apply",
+      "title": "Y Combinator — application page",
+      "excerpt": "Log in → https://account.ycombinator.com/?continue=https://www.ycombinator.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-19e6e399d7",
+      "url": "http://www.ycombinator.com/apply/",
+      "title": "Y Combinator — application page",
+      "excerpt": "Log in → https://account.ycombinator.com/?continue=https://www.ycombinator.com/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-26f24d2915",
+      "url": "https://www.ycombinator.com/apply/unsubscribe-reminder",
+      "title": "Y Combinator — application page",
+      "excerpt": "Log in or sign up → https://account.ycombinator.com/authenticate?continue=https%3A%2F%2Fwww.ycombinator.com%2Fapply%2Freminder",
+      "page": "application"
+    },
+    {
+      "id": "check-route-391384ecd0",
+      "url": "https://www.ycombinator.com/apply/reminder",
+      "title": "Y Combinator — application page",
+      "excerpt": "Apply → https://www.ycombinator.com/apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-3d6dc25ffd",
       "url": "https://www.ycombinator.com/",
-      "title": "Y Combinator — homepage checked by scrape.py",
+      "title": "Y Combinator — homepage",
       "excerpt": "Apply → https://www.ycombinator.com/apply",
       "page": "details"
     },
     {
+      "id": "check-route-45be28cc02",
+      "url": "http://www.ycombinator.com/apply/",
+      "title": "Y Combinator — application page",
+      "excerpt": "application online → https://apply.ycombinator.com/home",
+      "page": "application"
+    },
+    {
+      "id": "check-route-72147d64b4",
+      "url": "https://www.ycombinator.com/howtoapply",
+      "title": "Y Combinator — application page",
+      "excerpt": "Dropbox’s Summer 2007 application → https://www.ycombinator.com/apply/dropbox",
+      "page": "application"
+    },
+    {
+      "id": "check-route-79186fbee4",
+      "url": "https://www.ycombinator.com/howtoapply",
+      "title": "Y Combinator — application page",
+      "excerpt": "Log in → https://account.ycombinator.com/?continue=https://www.ycombinator.com/howtoapply",
+      "page": "application"
+    },
+    {
       "id": "check-route-830e7880a7",
       "url": "https://www.ycombinator.com/faq",
-      "title": "Y Combinator — terms page checked by scrape.py",
+      "title": "Y Combinator — terms page",
       "excerpt": "here → https://apply.ycombinator.com/app/edit",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-9235280ca0",
+      "url": "http://www.ycombinator.com/apply/",
+      "title": "Y Combinator — application page",
+      "excerpt": "Apply → https://apply.ycombinator.com/home",
+      "page": "application"
+    },
+    {
+      "id": "check-route-955d9a2fac",
+      "url": "https://www.ycombinator.com/demoday/faq",
+      "title": "Y Combinator — terms page",
+      "excerpt": "Apply → https://www.ycombinator.com/apply",
       "page": "terms"
     },
     {
       "id": "check-route-a4eee954f0",
       "url": "https://www.ycombinator.com/apply",
-      "title": "Y Combinator — application page checked by scrape.py",
+      "title": "Y Combinator — application page",
       "excerpt": "Sign up for reminders → https://www.ycombinator.com/apply/reminder",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a7964acdcb",
+      "url": "https://www.ycombinator.com/howtoapply",
+      "title": "Y Combinator — application page",
+      "excerpt": "Apply → https://www.ycombinator.com/apply",
       "page": "application"
     },
     {
       "id": "check-route-b10c5b4f63",
       "url": "https://www.ycombinator.com/faq",
-      "title": "Y Combinator — terms page checked by scrape.py",
+      "title": "Y Combinator — terms page",
       "excerpt": "here → https://www.ycombinator.com/apply",
       "page": "terms"
     },
     {
       "id": "check-route-bb393b959b",
       "url": "https://www.ycombinator.com/about",
-      "title": "Y Combinator — details page checked by scrape.py",
+      "title": "Y Combinator — program page",
       "excerpt": "Apply → https://www.ycombinator.com/apply",
       "page": "details"
     },
     {
+      "id": "check-route-bdb12915b4",
+      "url": "https://www.ycombinator.com/apply/reminder",
+      "title": "Y Combinator — application page",
+      "excerpt": "Log in or sign up → https://account.ycombinator.com/authenticate?continue=https%3A%2F%2Fwww.ycombinator.com%2Fapply%2Freminder",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c51cbf7cd2",
+      "url": "https://www.ycombinator.com/apply/unsubscribe-reminder",
+      "title": "Y Combinator — application page",
+      "excerpt": "Apply → https://www.ycombinator.com/apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-cc24b26e26",
       "url": "https://www.ycombinator.com/faq",
-      "title": "Y Combinator — terms page checked by scrape.py",
+      "title": "Y Combinator — terms page",
       "excerpt": "Apply → https://www.ycombinator.com/apply",
       "page": "terms"
     },
     {
+      "id": "check-route-d0f2a7463e",
+      "url": "https://www.ycombinator.com/apply/reminder",
+      "title": "Y Combinator — application page",
+      "excerpt": "Log in → https://account.ycombinator.com/?continue=https://www.ycombinator.com/apply/reminder",
+      "page": "application"
+    },
+    {
       "id": "check-route-d1907ffdf6",
       "url": "https://www.ycombinator.com/apply",
-      "title": "Y Combinator — application page checked by scrape.py",
+      "title": "Y Combinator — application page",
       "excerpt": "Apply → https://apply.ycombinator.com/home",
       "page": "application"
     },
     {
+      "id": "check-route-e40bd66230",
+      "url": "https://www.ycombinator.com/howtoapply",
+      "title": "Y Combinator — application page",
+      "excerpt": "applications → http://www.ycombinator.com/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ec4eadf890",
+      "url": "https://www.ycombinator.com/apply/unsubscribe-reminder",
+      "title": "Y Combinator — application page",
+      "excerpt": "Log in → https://account.ycombinator.com/?continue=https://www.ycombinator.com/apply/reminder",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f05d12400b",
+      "url": "https://www.ycombinator.com/library/ks-how-to-build-the-future-paul-graham-amjad-masad",
+      "title": "Y Combinator — program page",
+      "excerpt": "Apply → https://www.ycombinator.com/apply",
+      "page": "details"
+    },
+    {
       "id": "check-route-f52c68d418",
       "url": "https://www.ycombinator.com/apply",
-      "title": "Y Combinator — application page checked by scrape.py",
+      "title": "Y Combinator — application page",
       "excerpt": "application online → https://apply.ycombinator.com/home",
       "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-733c5cde51",
+      "url": "https://www.ycombinator.com/",
+      "page": "details",
+      "excerpt": "Y Combinator Open menu About What Happens at YC? Apply YC Interview Guide FAQ People YC Software YC Blog Companies Startup Directory Founder Directory Launch YC Library Partners Resources Startup School Newsletter Requests for Startups For Investors Verify Founders Hacker News Bookface SAFE Find a Co-Founder Events Startup Jobs Log in Apply YC turns builders into formidable founders [1] Airbnb Brian, Joe, and Nate did YC in W09. Airbnb went public in 2020 at an over $100B valuation. YC Now OpenAI Sam was part of YC's inaugural batch in S05 and founded OpenAI as YC Research in 2015. Sam built OpenAI into a $500B company. YC Now Stripe The Collison brothers did YC twice—first in W07 and then in S09, when they started Stripe. Stripe is now the internet’s $107B payments backbone. YC Now Coinbase Fred and Brian met on Reddit and did YC in S12. Coinbase went public in 2021 at a $86B valuation. YC Now DoorDash Andy, Stanley, Tony, and Evan did YC in S13. DoorDash went public in 2020 at a valuation of $39B. YC Now Scale AI Alexandr and Lucy did YC S16 and pivoted during the batch. In 2025, Meta acquired 49% of Scale for over $14B. YC Now Dropbox Arash and Drew started Dropbox at MIT and did YC in S07. Dropbox had the biggest tech IPO of 2018 at a $9B valuation. YC Now Reddit Alexis and Steve were in the inaugural YC batch in S05. Reddit went public in 2024 at a $6.4B valuation. YC Now"
+    },
+    {
+      "id": "check-page-6c0ceb1368",
+      "url": "https://apply.ycombinator.com/home",
+      "page": "application",
+      "excerpt": "Account | Y Combinator"
+    },
+    {
+      "id": "check-page-b411c5d834",
+      "url": "https://www.ycombinator.com/apply",
+      "page": "application",
+      "excerpt": "Apply to YC | Y Combinator Open menu About What Happens at YC? Apply YC Interview Guide FAQ People YC Software YC Blog Companies Startup Directory Founder Directory Launch YC Library Partners Resources Startup School Newsletter Requests for Startups For Investors Verify Founders Hacker News Bookface SAFE Find a Co-Founder Events Startup Jobs Log in Apply Apply to Y Combinator Y Combinator is accepting applications for the Winter 2027 Batch funding cycle. The batch will take place from January to March in San Francisco. You can also apply to future batches ( Spring, Summer, and Fall ) now - see more at Early Decision . The deadline to apply on-time was November 2 at 8pm PT, but we are still accepting late applications. If you applied before the deadline, you will get a decision by December 11 . If you apply after the deadline, we will still consider the application but can't promise exactly when we'll get back to you. Apply Not ready to apply this batch? Sign up for reminders to apply next batch. About applying to YC If you want to apply, please submit your application online . People who applied before the regular deadline will hear back by December 11 . If you apply after the deadline, we'll still consider the application but can't promise exactly when we'll get back to you. We encourage you to submit your application as soon as you're ready to apply. If your application is"
+    },
+    {
+      "id": "check-page-55399d7513",
+      "url": "https://www.ycombinator.com/apply/dropbox",
+      "page": "application",
+      "excerpt": "Dropbox's original YC application Dropbox's original YC application Company Company name: Dropbox Company url, if any: http://www.getdropbox.com/ If you have a demo, what's the url? For non-software, demo can be a video. (Please don't password protect it; just use an obscure url.) Here's a screencast that I'll also put up on news.yc: http://www.getdropbox.com/screencast/ If you do have a Windows box or two, here's the latest build: http://www.getdropbox.com/u/2/DropboxInstaller.exe What is your company going to make? Dropbox synchronizes files across your/your team's computers. It's much better than uploading or email, because it's automatic, integrated into Windows, and fits into the way you already work. There's also a web interface, and the files are securely backed up to Amazon S3. Dropbox is kind of like taking the best elements of subversion, trac and rsync and making them \"just work\" for the average individual or team. Hackers have access to these tools, but normal people don't. It's currently in private beta and I add batches of people every few days. There are lots of interesting possible features. One is syncing Google Docs/Spreadsheets (or other office web apps) to local .doc and .xls files for offline access, which would be strategically important as few web apps deal with the offline problem. Founders YC usernames of all founders, including you, dhouston,"
+    },
+    {
+      "id": "check-page-0ec6556133",
+      "url": "https://www.ycombinator.com/apply/reminder",
+      "page": "application",
+      "excerpt": "YC Application Reminders | Y Combinator Open menu About What Happens at YC? Apply YC Interview Guide FAQ People YC Software YC Blog Companies Startup Directory Founder Directory Launch YC Library Partners Resources Startup School Newsletter Requests for Startups For Investors Verify Founders Hacker News Bookface SAFE Find a Co-Founder Events Startup Jobs Log in Apply Application Deadline Reminders Not ready to apply to Winter 2027? Subscribe to receive email notifications before application deadlines. Log in or sign up Log in or sign up to turn on reminders. Footer Y Combinator Make something people want. Programs YC Program Startup School Work at a Startup Co-Founder Matching Resources Startup Directory Startup Library Investors Demo Day SAFE Hacker News Launch YC YC Deals Company YC Blog Contact Press People Careers Privacy Policy Notice at Collection Security Terms of Use Twitter Facebook Instagram LinkedIn Youtube © 2026 Y Combinator"
+    },
+    {
+      "id": "check-page-4b1e39aef1",
+      "url": "https://www.ycombinator.com/apply/unsubscribe-reminder",
+      "page": "application",
+      "excerpt": "YC Application Reminders | Y Combinator Open menu About What Happens at YC? Apply YC Interview Guide FAQ People YC Software YC Blog Companies Startup Directory Founder Directory Launch YC Library Partners Resources Startup School Newsletter Requests for Startups For Investors Verify Founders Hacker News Bookface SAFE Find a Co-Founder Events Startup Jobs Log in Apply Application Deadline Reminders Not ready to apply to Winter 2027? Subscribe to receive email notifications before application deadlines. Log in or sign up Log in or sign up to turn on reminders. Footer Y Combinator Make something people want. Programs YC Program Startup School Work at a Startup Co-Founder Matching Resources Startup Directory Startup Library Investors Demo Day SAFE Hacker News Launch YC YC Deals Company YC Blog Contact Press People Careers Privacy Policy Notice at Collection Security Terms of Use Twitter Facebook Instagram LinkedIn Youtube © 2026 Y Combinator"
+    },
+    {
+      "id": "check-page-20d51361cc",
+      "url": "https://www.ycombinator.com/howtoapply",
+      "page": "application",
+      "excerpt": "How to Apply to Y Combinator | Y Combinator Open menu About What Happens at YC? Apply YC Interview Guide FAQ People YC Software YC Blog Companies Startup Directory Founder Directory Launch YC Library Partners Resources Startup School Newsletter Requests for Startups For Investors Verify Founders Hacker News Bookface SAFE Find a Co-Founder Events Startup Jobs Log in Apply How to Apply to Y Combinator Paul Graham Introduction Four times a year Y Combinator takes applications for funding. I thought it might help applicants if I explained what we look for when we read them. Probably the biggest thing people don’t understand about the process is the importance of expressing yourself clearly. Every year we get some applications that are obviously good, some that are obviously bad, and in the middle a huge number where we just can’t tell. The idea seems kind of promising, but it’s not explained well enough for us to understand it. The founders seem like they might be good, but we don’t get a clear enough picture of them to say for sure. I suspect for every group we invite to interviews, there are one or two more that are just as good but that we pass over because they don’t manage to convey how good they are. If that’s true, another way to say it is that, of groups good enough to make it to interviews, more than half blow the application. If we get 1000 applications and have 10 days"
+    },
+    {
+      "id": "check-page-ca9a7541cf",
+      "url": "http://www.ycombinator.com/apply/",
+      "page": "application",
+      "excerpt": "Apply to YC | Y Combinator Open menu About What Happens at YC? Apply YC Interview Guide FAQ People YC Software YC Blog Companies Startup Directory Founder Directory Launch YC Library Partners Resources Startup School Newsletter Requests for Startups For Investors Verify Founders Hacker News Bookface SAFE Find a Co-Founder Events Startup Jobs Log in Apply Apply to Y Combinator Y Combinator is accepting applications for the Winter 2027 Batch funding cycle. The batch will take place from January to March in San Francisco. You can also apply to future batches ( Spring, Summer, and Fall ) now - see more at Early Decision . The deadline to apply on-time was November 2 at 8pm PT, but we are still accepting late applications. If you applied before the deadline, you will get a decision by December 11 . If you apply after the deadline, we will still consider the application but can't promise exactly when we'll get back to you. Apply Not ready to apply this batch? Sign up for reminders to apply next batch. About applying to YC If you want to apply, please submit your application online . People who applied before the regular deadline will hear back by December 11 . If you apply after the deadline, we'll still consider the application but can't promise exactly when we'll get back to you. We encourage you to submit your application as soon as you're ready to apply. If your application is"
+    },
+    {
+      "id": "check-page-fa3a99e40d",
+      "url": "https://www.ycombinator.com/deal",
+      "page": "terms",
+      "excerpt": "The Y Combinator Standard Deal | Y Combinator Open menu About What Happens at YC? Apply YC Interview Guide FAQ People YC Software YC Blog Companies Startup Directory Founder Directory Launch YC Library Partners Resources Startup School Newsletter Requests for Startups For Investors Verify Founders Hacker News Bookface SAFE Find a Co-Founder Events Startup Jobs Log in Apply The Y Combinator Deal By Kirsty Nathoo YC's Standard Deal We have a standard deal for every company that is accepted to Y Combinator. We invest $500,000, and our investment gives YC 7% of your company plus an incremental equity amount that will be fixed when you raise money from other investors. The YC investment is not contingent on hitting any milestones, and we do not wait until the batch program starts to invest. The day a company is accepted to YC, we commit to investing our standard deal and begin the process to do so immediately. In addition to the YC investment, YC companies receive access to a wide range of resources. Here is a full list of the benefits and resources available to YC founders. The Math The way it works is this: we invest $500,000. $125,000 of our investment converts into a fixed 7%, and the other $375,000 is invested on an uncapped MFN SAFE. If you're not familiar with uncapped MFN SAFEs, here's a quick example. In a typical scenario where you raise your next SAFEs at a $15M"
+    },
+    {
+      "id": "check-page-ae72fa03b3",
+      "url": "https://www.ycombinator.com/demoday/faq",
+      "page": "terms",
+      "excerpt": "Demo Day FAQ | Y Combinator Open menu About What Happens at YC? Apply YC Interview Guide FAQ People YC Software YC Blog Companies Startup Directory Founder Directory Launch YC Library Partners Resources Startup School Newsletter Requests for Startups For Investors Verify Founders Hacker News Bookface SAFE Find a Co-Founder Events Startup Jobs Log in Apply Demo Day FAQ The Basics Existing Invitations During Demo Day The Basics What is Demo Day? On Demo Day , Y Combinator's latest batch of startups present to an invite-only audience of approximately 1,000 investors and media. While we ran Demo Day remotely during covid, Demo Day is now back to being in-person. Demo Day is a private, invitation-only event and always oversubscribed. If you receive an invitation, RSVP yes to confirm your spot. There is no continuous list of investors who are always invited to Demo Day. Investors are invited based on their recent investment history in YC companies and our relationships with them. When and where is Demo Day held? Demo Day will be held in San Francisco on Wednesday, December 2nd . Can I participate online? For those who can't make it to San Francisco, we will provide access to the demo day website, which has information on the companies that presented. How do I get an invitation to Demo Day? Invitations are software generated and based on recent investment history in YC startups. If"
+    },
+    {
+      "id": "check-page-c5d6c0f471",
+      "url": "https://www.ycombinator.com/faq",
+      "page": "terms",
+      "excerpt": "Frequently Asked Questions | Y Combinator Open menu About What Happens at YC? Apply YC Interview Guide FAQ People YC Software YC Blog Companies Startup Directory Founder Directory Launch YC Library Partners Resources Startup School Newsletter Requests for Startups For Investors Verify Founders Hacker News Bookface SAFE Find a Co-Founder Events Startup Jobs Log in Apply Frequently Asked Questions Logistics Should I apply? Incorporating Other Late Applications Application Technical Support Logistics What happens at Y Combinator? This . Where does the YC program happen? Do I need to move to San Francisco? The batch takes place in-person in San Francisco. It kicks off with a 3-day, in-person retreat and features weekly meetups in San Francisco. We briefly did run YC remotely during Covid, but since 2022 it has been back in person . We've found that YC works much better in person. Of course, after the 3 month program, you can go wherever you want. How do we choose which startups to fund? We have an application process that's open to any startup, anywhere in the world. You can apply here . How can we get funding for our startup? Apply online for our next funding cycle. How much do you invest? We invest $500,000 in each company. What can I use the YC investment for? You can use the YC investment for anything that you believe helps your business. In most cases, the first use of the"
+    },
+    {
+      "id": "check-page-7fcf4596b0",
+      "url": "https://apply.ycombinator.com/app/edit",
+      "page": "application",
+      "excerpt": "Account | Y Combinator"
+    },
+    {
+      "id": "check-page-5b2f31a272",
+      "url": "https://news.ycombinator.com/newsfaq.html",
+      "page": "terms",
+      "excerpt": "Hacker News FAQ Hacker News FAQ Are there rules about submissions and comments? https://news.ycombinator.com/newsguidelines.html How are stories ranked? The basic algorithm divides points by a power of the time since a story was submitted. Comments in threads are ranked the same way. Other factors affecting rank include user flags, anti-abuse software, software which demotes overheated discussions, account or site weighting, and moderator action. How is a user's karma calculated? Roughly, the number of upvotes on their posts minus the number of downvotes. These don't match up exactly. Some votes are dropped by anti-abuse software. Do posts by users with more karma rank higher? No. Why don't I see down arrows? There are no down arrows on stories. They appear on comments after users reach a certain karma threshold, but never on direct replies. Why do I see an orange/red asterisk? It just means it's your own post. Why are my links grey instead of black like other links? It means you've visited it before. If you click on a black link it will turn grey. What kind of formatting can you use in comments? http://news.ycombinator.com/formatdoc How do I submit a question? Use the submit link in the top bar, and leave the url field blank. How do I submit a poll? http://news.ycombinator.com/newpoll How do I make a link in a text submission? You can't. This is to prevent people from"
+    },
+    {
+      "id": "check-page-28efb91500",
+      "url": "https://www.ycombinator.com/about",
+      "page": "details",
+      "excerpt": "What Happens at YC | Y Combinator Open menu About What Happens at YC? Apply YC Interview Guide FAQ People YC Software YC Blog Companies Startup Directory Founder Directory Launch YC Library Partners Resources Startup School Newsletter Requests for Startups For Investors Verify Founders Hacker News Bookface SAFE Find a Co-Founder Events Startup Jobs Log in Apply What Happens at YC The YC Program Advice Community Brand Hiring People often ask us what happens at Y Combinator. Here is an overview of what happens during the YC program and the benefits you get as a YC founder. The YC Program YC is a three month program. We now run YC four times a year, in the winter, spring, summer, and fall. Here's what happens during the three months of YC: The Goal The overall goal of YC is to help startups really take off. They arrive at YC at all different stages. Some haven't even started working yet, and others have been launched for a year or more. But whatever stage a startup is at when they arrive, our goal is to help them to be in dramatically better shape 3 months later. For most startups, better shape translates into two things: to have a better product with more users, and to have more options for raising money. Startups at all stages benefit from the intensity of YC. That's probably the best word to describe the atmosphere. For 3 months, it's all startup, all the time. Everyone around"
+    },
+    {
+      "id": "check-page-20e161ebbf",
+      "url": "https://www.ycombinator.com/library/ks-how-to-build-the-future-paul-graham-amjad-masad",
+      "page": "details",
+      "excerpt": "How To Build The Future: Paul Graham & Amjad Masad : YC Startup Library | Y Combinator Open menu About What Happens at YC? Apply YC Interview Guide FAQ People YC Software YC Blog Companies Startup Directory Founder Directory Launch YC Library Partners Resources Startup School Newsletter Requests for Startups For Investors Verify Founders Hacker News Bookface SAFE Find a Co-Founder Events Startup Jobs Log in Apply Home › How To Build The Future › How To Build The Future: Paul Graham & Amjad Masad How to Build the Future How To Build The Future: Paul Graham & Amjad Masad by Y Combinator 62K views 7 days ago Chapters 0:00 \"You guys basically invented vibe coding\" 2:43 Watching users copy-paste from ChatGPT 5:27 The origins of Replit 8:00 People underestimate their ability to predict the future 10:27 Grieving the craft 12:52 A culture of obsessing over users 15:13 Why enterprises pick Replit 17:28 The agent was just another user 20:17 It barely worked, and users loved it 23:13 $10 million projects now for $250,000 25:45 Sandboxing for humans 28:14 \"The self-driving company\" 30:34 The way AI flows into companies 33:28 What Steve Jobs knew before the iPad 35:59 Killing the sacred cow 38:25 The rest of the world is two years behind 41:15 The compute brought on AI 43:46 The person who assumes dramatic change Replit was building toward the AI coding era years before it had a name. In"
     }
   ],
   "findings": {
@@ -198,6 +833,10 @@
         "evidenceId": "check-route-3d6dc25ffd"
       },
       {
+        "value": "https://account.ycombinator.com/?continue=https://www.ycombinator.com/apply",
+        "evidenceId": "check-route-1484e560c9"
+      },
+      {
         "value": "https://apply.ycombinator.com/home",
         "evidenceId": "check-route-d1907ffdf6"
       },
@@ -210,32 +849,167 @@
         "evidenceId": "check-email-b4cb382f8f"
       },
       {
-        "value": "https://apply.ycombinator.com/app/edit",
-        "evidenceId": "check-route-830e7880a7"
+        "value": "https://account.ycombinator.com/?continue=https://www.ycombinator.com/apply/reminder",
+        "evidenceId": "check-route-d0f2a7463e"
       }
     ],
     "applicationUrl": [
       {
-        "value": "https://apply.ycombinator.com/home",
-        "evidenceId": "check-route-d1907ffdf6"
+        "value": "https://www.ycombinator.com/apply",
+        "evidenceId": "check-route-3d6dc25ffd"
       }
     ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "January",
+        "evidenceId": "check-announced-7561e92897"
+      },
+      {
+        "value": "November",
+        "evidenceId": "check-announced-9d70a70806"
+      },
+      {
+        "value": "December",
+        "evidenceId": "check-announced-5f037a1743"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-bdffda368b"
+      },
+      {
+        "value": "8",
+        "evidenceId": "check-duration-b9332c6911"
+      },
+      {
+        "value": "11",
+        "evidenceId": "check-duration-73a233fda7"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-13920e3120"
+      },
+      {
+        "value": "8 months",
+        "evidenceId": "check-duration-5864456e0a"
+      },
+      {
+        "value": "2 months",
+        "evidenceId": "check-duration-d8ebf23131"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-d8ad208566"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "at over $9B. Now Twitch was acquired by Amazon for nearly $1B. In 2005, Y Combinator developed a new model of startup funding. Four times a year we invest $500k in a select group of startups. They move to San Francisco for three months, where we work intensively with them to get the company into the best possible",
-        "evidenceId": "check-deal-770ae0a531"
+        "value": "a new model of startup funding. Four times a year we invest $500k in a select group of startups. They move to San Francisco for three",
+        "evidenceId": "check-deal-ecef92a324"
       },
       {
-        "value": "out the best in them. And since most people have way more potential than they realize, they're often surprised by what they're capable of. Funding YC invests $500k per company: $125k for 7% on a post-money SAFE and another $375k on an uncapped SAFE with an MFN. Groups During the batch, startups are sorted into 3 groups.",
-        "evidenceId": "check-deal-eeb266c1cd"
+        "value": "away free 1GB accounts and charge for additional storage (maybe ~$5/mo or less for 10GB for individuals and team plans that start at",
+        "evidenceId": "check-deal-d5d980103d"
       },
       {
-        "value": "anywhere in the world. You can apply here . How can we get funding for our startup? Apply online for our next funding cycle. How much do you invest? We invest $500,000 in each company. What can I use the YC investment for? You can use the YC investment for anything that you believe helps your business. In most cases, the",
-        "evidenceId": "check-deal-b4a31773bb"
+        "value": "deal for every company that is accepted to Y Combinator. We invest $500,000, and our investment gives YC 7% of your company plus an incremental",
+        "evidenceId": "check-deal-a277dd5bf2"
+      },
+      {
+        "value": "to YC founders. The Math The way it works is this: we invest $500,000. $125,000 of our investment converts into a fixed 7%, and the other",
+        "evidenceId": "check-deal-adfcbaae27"
+      },
+      {
+        "value": "YC founders. The Math The way it works is this: we invest $500,000. $125,000 of our investment converts into a fixed 7%, and the other $375,000 is",
+        "evidenceId": "check-deal-c36e01c048"
+      },
+      {
+        "value": "$125,000 of our investment converts into a fixed 7%, and the other $375,000 is invested on an uncapped MFN SAFE. If you're not familiar with",
+        "evidenceId": "check-deal-9758813b69"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "500000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-ecef92a324"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "5",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-d5d980103d"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "125000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-c36e01c048"
+      },
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "375000",
+          "currency": "USD",
+          "equity": "7%",
+          "label": "SAFE",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-9758813b69"
+      },
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "375000",
+          "currency": "USD",
+          "equity": "2.5%",
+          "label": "SAFE",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-47e000f619"
+      },
+      {
+        "value": {
+          "kind": "safe",
+          "amount": "125000",
+          "currency": "USD",
+          "equity": "7%",
+          "label": "SAFE",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-74e6b65687"
       }
     ],
     "portfolioPages": [

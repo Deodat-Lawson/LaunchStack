@@ -1,80 +1,507 @@
 {
   "programId": "launch-africa",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.launchafrica.vc/",
-    "https://www.launchafrica.vc/faqs"
+    "https://www.launchafrica.vc/faqs",
+    "https://www.launchafrica.vc/news/african-fintech-investment-outlook-and-insights",
+    "https://www.launchafrica.vc/news/leading-the-charge-with-12-investments-in-h1-2024",
+    "https://www.launchafrica.vc/news/new-investment-bosso",
+    "https://www.launchafrica.vc/news/new-investment-credit-circuit",
+    "https://www.launchafrica.vc/news/new-investment-kredete",
+    "https://www.launchafrica.vc/news/new-investment-lengo",
+    "https://www.launchafrica.vc/news/new-investment-meditect",
+    "https://www.launchafrica.vc/news/new-investment-paps-logistics",
+    "https://www.launchafrica.vc/news/new-investment-servisor",
+    "https://www.launchafrica.vc/news/new-investment-shiprazor",
+    "https://www.launchafrica.vc/news/new-investment-solarbox",
+    "https://www.launchafrica.vc/news/new-investment-viebeg",
+    "https://www.launchafrica.vc/news/new-investment-zuri"
   ],
   "evidence": [
     {
+      "id": "check-deal-4a868fc310",
+      "url": "https://www.launchafrica.vc/news/new-investment-meditect",
+      "title": "Launch Africa — terms page",
+      "excerpt": "Food Delivery Market Next Next Launch Africa Fund 2 Invests $4.3M in 16 Startups Launch Africa is a leading Pan-African VC fund",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-19330ea76d",
+      "url": "https://www.launchafrica.vc/faqs",
+      "title": "Launch Africa — terms page",
+      "excerpt": "be ready to scale outside its home market within 12 months of our investment. Q: How does Launch Africa add",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-93b8b58d3e",
+      "url": "https://www.launchafrica.vc/faqs",
+      "title": "Launch Africa — terms page",
+      "excerpt": "is a fit with our criteria, we'll engage within 2 weeks of your application. Launch Africa is a leading",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-aa92006831",
+      "url": "https://www.launchafrica.vc/faqs",
+      "title": "Launch Africa — terms page",
+      "excerpt": "for a $3-5 million+ Series A round within 12-24 months of our investment. Q: Does Launch Africa invest",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-c64dbcbd78",
+      "url": "https://www.launchafrica.vc/faqs",
+      "title": "Launch Africa — terms page",
+      "excerpt": "month. Our investment process typically takes 6-8 weeks from the initial call to the final investment.",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-026c9e7801",
+      "url": "https://www.launchafrica.vc/news/new-investment-solarbox",
+      "title": "Launch Africa — terms page",
+      "excerpt": "info@launchafrica.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-0ebab11579",
+      "url": "https://www.launchafrica.vc/news/new-investment-shiprazor",
+      "title": "Launch Africa — terms page",
+      "excerpt": "in Africa. Quick Links Home Portfolio Team News Contact info@launchafrica.vc Primary Office c/o Apex Fund & Corporate Services, 6th",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-19f94b75be",
+      "url": "https://www.launchafrica.vc/news/african-fintech-investment-outlook-and-insights",
+      "title": "Launch Africa — terms page",
+      "excerpt": "in Africa. Quick Links Home Portfolio Team News Contact info@launchafrica.vc Primary Office c/o Apex Fund & Corporate Services, 6th",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-2ec31f1af1",
+      "url": "https://www.launchafrica.vc/news/leading-the-charge-with-12-investments-in-h1-2024",
+      "title": "Launch Africa — terms page",
+      "excerpt": "info@launchafrica.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-467e900656",
+      "url": "https://www.launchafrica.vc/news/new-investment-servisor",
+      "title": "Launch Africa — terms page",
+      "excerpt": "in Africa. Quick Links Home Portfolio Team News Contact info@launchafrica.vc Primary Office c/o Apex Fund & Corporate Services, 6th",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-5737f6154b",
+      "url": "https://www.launchafrica.vc/news/new-investment-kredete",
+      "title": "Launch Africa — terms page",
+      "excerpt": "in Africa. Quick Links Home Portfolio Team News Contact info@launchafrica.vc Primary Office c/o Apex Fund & Corporate Services, 6th",
+      "page": "terms"
+    },
+    {
       "id": "check-email-614d31302f",
       "url": "https://www.launchafrica.vc/",
-      "title": "Launch Africa — homepage checked by scrape.py",
+      "title": "Launch Africa — homepage",
       "excerpt": "in Africa. Quick Links Home Portfolio Team News Contact info@launchafrica.vc Primary Office c/o Apex Fund & Corporate Services, 6th",
       "page": "details"
     },
     {
+      "id": "check-email-6f21f6a140",
+      "url": "https://www.launchafrica.vc/news/new-investment-meditect",
+      "title": "Launch Africa — terms page",
+      "excerpt": "in Africa. Quick Links Home Portfolio Team News Contact info@launchafrica.vc Primary Office c/o Apex Fund & Corporate Services, 6th",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-7210476939",
+      "url": "https://www.launchafrica.vc/news/new-investment-credit-circuit",
+      "title": "Launch Africa — terms page",
+      "excerpt": "info@launchafrica.vc",
+      "page": "terms"
+    },
+    {
       "id": "check-email-767498afdd",
       "url": "https://www.launchafrica.vc/",
-      "title": "Launch Africa — homepage checked by scrape.py",
+      "title": "Launch Africa — homepage",
       "excerpt": "info@launchafrica.vc",
       "page": "details"
     },
     {
+      "id": "check-email-7701635da5",
+      "url": "https://www.launchafrica.vc/news/african-fintech-investment-outlook-and-insights",
+      "title": "Launch Africa — terms page",
+      "excerpt": "info@launchafrica.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-77c3e53ab5",
+      "url": "https://www.launchafrica.vc/news/new-investment-lengo",
+      "title": "Launch Africa — terms page",
+      "excerpt": "in Africa. Quick Links Home Portfolio Team News Contact info@launchafrica.vc Primary Office c/o Apex Fund & Corporate Services, 6th",
+      "page": "terms"
+    },
+    {
       "id": "check-email-86d4b69904",
       "url": "https://www.launchafrica.vc/faqs",
-      "title": "Launch Africa — terms page checked by scrape.py",
+      "title": "Launch Africa — terms page",
       "excerpt": "info@launchafrica.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-87f7bb508d",
+      "url": "https://www.launchafrica.vc/news/new-investment-credit-circuit",
+      "title": "Launch Africa — terms page",
+      "excerpt": "in Africa. Quick Links Home Portfolio Team News Contact info@launchafrica.vc Primary Office c/o Apex Fund & Corporate Services, 6th",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-885dbe3d16",
+      "url": "https://www.launchafrica.vc/news/new-investment-zuri",
+      "title": "Launch Africa — terms page",
+      "excerpt": "info@launchafrica.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-98668b3499",
+      "url": "https://www.launchafrica.vc/news/new-investment-bosso",
+      "title": "Launch Africa — terms page",
+      "excerpt": "in Africa. Quick Links Home Portfolio Team News Contact info@launchafrica.vc Primary Office c/o Apex Fund & Corporate Services, 6th",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-9d9a65e0af",
+      "url": "https://www.launchafrica.vc/news/new-investment-paps-logistics",
+      "title": "Launch Africa — terms page",
+      "excerpt": "info@launchafrica.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-9e4b83df76",
+      "url": "https://www.launchafrica.vc/news/new-investment-bosso",
+      "title": "Launch Africa — terms page",
+      "excerpt": "info@launchafrica.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-9ecd1c3c81",
+      "url": "https://www.launchafrica.vc/news/new-investment-paps-logistics",
+      "title": "Launch Africa — terms page",
+      "excerpt": "in Africa. Quick Links Home Portfolio Team News Contact info@launchafrica.vc Primary Office c/o Apex Fund & Corporate Services, 6th",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-a3cf1a4d38",
+      "url": "https://www.launchafrica.vc/news/new-investment-zuri",
+      "title": "Launch Africa — terms page",
+      "excerpt": "in Africa. Quick Links Home Portfolio Team News Contact info@launchafrica.vc Primary Office c/o Apex Fund & Corporate Services, 6th",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-ae13c01a91",
+      "url": "https://www.launchafrica.vc/news/new-investment-viebeg",
+      "title": "Launch Africa — terms page",
+      "excerpt": "in Africa. Quick Links Home Portfolio Team News Contact info@launchafrica.vc Primary Office c/o Apex Fund & Corporate Services, 6th",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-b5d92fa9e8",
+      "url": "https://www.launchafrica.vc/news/new-investment-solarbox",
+      "title": "Launch Africa — terms page",
+      "excerpt": "in Africa. Quick Links Home Portfolio Team News Contact info@launchafrica.vc Primary Office c/o Apex Fund & Corporate Services, 6th",
       "page": "terms"
     },
     {
       "id": "check-email-d9338c4112",
       "url": "https://www.launchafrica.vc/faqs",
-      "title": "Launch Africa — terms page checked by scrape.py",
+      "title": "Launch Africa — terms page",
       "excerpt": "in Africa. Quick Links Home Portfolio Team News Contact info@launchafrica.vc Primary Office c/o Apex Fund & Corporate Services, 6th",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-ea4b3d035f",
+      "url": "https://www.launchafrica.vc/news/new-investment-meditect",
+      "title": "Launch Africa — terms page",
+      "excerpt": "info@launchafrica.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-f049265138",
+      "url": "https://www.launchafrica.vc/news/leading-the-charge-with-12-investments-in-h1-2024",
+      "title": "Launch Africa — terms page",
+      "excerpt": "in Africa. Quick Links Home Portfolio Team News Contact info@launchafrica.vc Primary Office c/o Apex Fund & Corporate Services, 6th",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-f3524811d7",
+      "url": "https://www.launchafrica.vc/news/new-investment-kredete",
+      "title": "Launch Africa — terms page",
+      "excerpt": "info@launchafrica.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-f41019163b",
+      "url": "https://www.launchafrica.vc/news/new-investment-servisor",
+      "title": "Launch Africa — terms page",
+      "excerpt": "info@launchafrica.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-f91aac9b50",
+      "url": "https://www.launchafrica.vc/news/new-investment-lengo",
+      "title": "Launch Africa — terms page",
+      "excerpt": "info@launchafrica.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-fb3c8c5706",
+      "url": "https://www.launchafrica.vc/news/new-investment-shiprazor",
+      "title": "Launch Africa — terms page",
+      "excerpt": "info@launchafrica.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-ff1761c89e",
+      "url": "https://www.launchafrica.vc/news/new-investment-viebeg",
+      "title": "Launch Africa — terms page",
+      "excerpt": "info@launchafrica.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-95f4cc20cf",
+      "url": "https://www.launchafrica.vc/news/new-investment-zuri",
+      "title": "Launch Africa — terms page",
+      "excerpt": "culturally relevant beauty products distributed through a hybrid model of physical salons (owned or managed by franchisee),",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-cdd53494f9",
+      "url": "https://www.launchafrica.vc/news/new-investment-zuri",
+      "title": "Launch Africa — terms page",
+      "excerpt": "app and physical stores. Why we invested: Zuri’s hybrid model offers an omnichannel experience to leverage the",
       "page": "terms"
     },
     {
       "id": "check-name-ae73146bb8",
       "url": "https://www.launchafrica.vc/",
-      "title": "Launch Africa — homepage checked by scrape.py",
+      "title": "Launch Africa — homepage",
       "excerpt": "Launch Africa 0 Skip to Content Home Portfolio Seed Fund I Portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-045604b503",
+      "url": "https://www.launchafrica.vc/news/new-investment-shiprazor",
+      "title": "Launch Africa — terms page",
+      "excerpt": "Portfolio → https://www.launchafrica.vc/seed-fund-i-portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-0745d7b533",
+      "url": "https://www.launchafrica.vc/news/new-investment-kredete",
+      "title": "Launch Africa — terms page",
+      "excerpt": "Portfolio → https://www.launchafrica.vc/seed-fund-i-portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-1146c906ca",
+      "url": "https://www.launchafrica.vc/news/new-investment-bosso",
+      "title": "Launch Africa — terms page",
+      "excerpt": "Portfolio → https://www.launchafrica.vc/seed-fund-i-portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-487af55397",
+      "url": "https://www.launchafrica.vc/news/new-investment-viebeg",
+      "title": "Launch Africa — terms page",
+      "excerpt": "Portfolio → https://www.launchafrica.vc/seed-fund-i-portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-48e32130a3",
+      "url": "https://www.launchafrica.vc/news/new-investment-solarbox",
+      "title": "Launch Africa — terms page",
+      "excerpt": "Portfolio → https://www.launchafrica.vc/seed-fund-i-portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-6c1570b0a1",
       "url": "https://www.launchafrica.vc/faqs",
-      "title": "Launch Africa — terms page checked by scrape.py",
+      "title": "Launch Africa — terms page",
+      "excerpt": "Portfolio → https://www.launchafrica.vc/seed-fund-i-portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7996267593",
+      "url": "https://www.launchafrica.vc/news/leading-the-charge-with-12-investments-in-h1-2024",
+      "title": "Launch Africa — terms page",
+      "excerpt": "Portfolio → https://www.launchafrica.vc/seed-fund-i-portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7c4bdf53ee",
+      "url": "https://www.launchafrica.vc/news/new-investment-zuri",
+      "title": "Launch Africa — terms page",
+      "excerpt": "Portfolio → https://www.launchafrica.vc/seed-fund-i-portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-88204d72ad",
+      "url": "https://www.launchafrica.vc/news/new-investment-lengo",
+      "title": "Launch Africa — terms page",
+      "excerpt": "Portfolio → https://www.launchafrica.vc/seed-fund-i-portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9f7dd9ebf6",
+      "url": "https://www.launchafrica.vc/news/new-investment-paps-logistics",
+      "title": "Launch Africa — terms page",
+      "excerpt": "Portfolio → https://www.launchafrica.vc/seed-fund-i-portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a181f7262b",
+      "url": "https://www.launchafrica.vc/news/new-investment-credit-circuit",
+      "title": "Launch Africa — terms page",
+      "excerpt": "Portfolio → https://www.launchafrica.vc/seed-fund-i-portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-aa3fbb8f7e",
+      "url": "https://www.launchafrica.vc/news/new-investment-servisor",
+      "title": "Launch Africa — terms page",
       "excerpt": "Portfolio → https://www.launchafrica.vc/seed-fund-i-portfolio",
       "page": "terms"
     },
     {
       "id": "check-portfolio-b022cfc0cc",
       "url": "https://www.launchafrica.vc/",
-      "title": "Launch Africa — homepage checked by scrape.py",
+      "title": "Launch Africa — homepage",
       "excerpt": "Portfolio → https://www.launchafrica.vc/seed-fund-i-portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-b2ef808f8a",
       "url": "https://www.launchafrica.vc/",
-      "title": "Launch Africa — homepage checked by scrape.py",
+      "title": "Launch Africa — homepage",
       "excerpt": "OUR PORTFOLIO → https://www.launchafrica.vc/seed-fund-i-portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-da65c6840c",
+      "url": "https://www.launchafrica.vc/news/new-investment-meditect",
+      "title": "Launch Africa — terms page",
+      "excerpt": "Portfolio → https://www.launchafrica.vc/seed-fund-i-portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e121e79bf9",
+      "url": "https://www.launchafrica.vc/news/african-fintech-investment-outlook-and-insights",
+      "title": "Launch Africa — terms page",
+      "excerpt": "Portfolio → https://www.launchafrica.vc/seed-fund-i-portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-route-4b40f36d66",
       "url": "https://www.launchafrica.vc/faqs",
-      "title": "Launch Africa — terms page checked by scrape.py",
+      "title": "Launch Africa — terms page",
       "excerpt": "application link → https://v7ssvh9rrnd.typeform.com/to/pjBZX4SM?typeform-source=www.launchafrica.vc",
       "page": "terms"
     },
     {
       "id": "check-route-559723065c",
       "url": "https://www.launchafrica.vc/",
-      "title": "Launch Africa — homepage checked by scrape.py",
+      "title": "Launch Africa — homepage",
       "excerpt": "https://www.launchafrica.vc/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-3af9a5f2ea",
+      "url": "https://www.launchafrica.vc/",
+      "page": "details",
+      "excerpt": "Launch Africa 0 Skip to Content Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Folder: Portfolio Back Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH LAUNCH AFRICA VENTURES Investing, growing and scaling the next generation of African technology startups ABOUT US Fund 1 Investments Countries About Us Launch Africa is a leading Pan-African VC fund solving the significant funding gap in the Seed and pre-Series A investment landscape in Africa. With a decade-long track record of venture building alongside some of the smartest founding teams in Africa, we back startups across multiple sectors, regions, and products that tackle the most meaningful challenges on the continent. Building the Future of African Ventures Our team is comprised of passionate and experienced professionals who bring a diverse range of expertise to the table. Drawing on our collective knowledge and deep understanding of the African market combined with our unique high touch, high scale approach, we identify and back promising startups across multiple sectors and regions. We believe in the power of entrepreneurship and innovation to transform Africa's economic landscape and create sustainable, impactful"
+    },
+    {
+      "id": "check-page-02ec4dd9b2",
+      "url": "https://www.launchafrica.vc/faqs",
+      "page": "terms",
+      "excerpt": "FAQs 1 — Launch Africa 0 Skip to Content Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Folder: Portfolio Back Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Frequently Asked Questions Q: What stage of companies does Launch Africa invest in? A: We focus on pre-seed, seed, pre-series A, and Series A investments in early-stage companies. We seek companies that will be ready for a $3-5 million+ Series A round within 12-24 months of our investment. Q: Does Launch Africa invest across Africa? A: We invest in startups whose core operations and teams are located within the African market. The company should be ready to scale outside its home market within 12 months of our investment. Q: How does Launch Africa add value beyond capital? A: Our team has extensive experience building and scaling startups in Africa. We offer hands-on support with fundraising, governance, recruiting, operations, DEI and expansion planning. Our network provides access to corporates, mentors, and key services such as marketing, HR, legal, and accounting. Q: What sectors does Launch Africa invest in? A: We are a multi-sector Fund but are particularly interested in tech-enabled sectors such as Fintech,"
+    },
+    {
+      "id": "check-page-18fdda1c4a",
+      "url": "https://www.launchafrica.vc/news/african-fintech-investment-outlook-and-insights",
+      "page": "terms",
+      "excerpt": "African Fintech Investment Outlook and Insights — Launch Africa 0 Skip to Content Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Folder: Portfolio Back Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH African Fintech Investment Outlook and Insights Feb 13 Written by Michael Mutie Panel session African Fintech Investment Outlook and Insights featuring insights and views from Adesoji Solanke, Head of Fintech Investment Banking Origination at Absa, Jasiel Martin-Odoom, Africa Investment Officer at Accion Ventures, Michael Mutie, Investment Associate at Launch Africa Ventures, Yvonne Okafor, Founder at A&A Collective and moderated by Timame Wanyoike, Partnerships & Ecosystem Manager at Katapult VC. Michael Mutie Previous Previous A new visual identity for Launch Africa Next Next Perspectives on early stage venture capital in Africa Launch Africa is a leading Pan-African VC fund solving the significant funding gap in the Seed and pre-Series A investment landscape in Africa. Quick Links Home Portfolio Team News Contact info@launchafrica.vc Primary Office c/o Apex Fund & Corporate Services, 6th Floor, Two Tribeca, Tribeca Central, Trianon 72261, Mauritius."
+    },
+    {
+      "id": "check-page-bad3bd9fa6",
+      "url": "https://www.launchafrica.vc/news/leading-the-charge-with-12-investments-in-h1-2024",
+      "page": "terms",
+      "excerpt": "Leading the Charge with 12 Investments in H1 2024 — Launch Africa 0 Skip to Content Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Folder: Portfolio Back Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Leading the Charge with 12 Investments in H1 2024 Sep 18 Written by Jeffery Akemu Africa: The Big Deal In the first half of 2024, Launch Africa Ventures reaffirmed its position as a powerhouse in African venture capital, making an impressive 12 investments in early-stage tech startups across the continent. This achievement cements the firm’s reputation as one of the most active and influential investors in Africa's startup ecosystem, focusing on sectors such as fintech, healthtech, logistics, and e-commerce. According to data compiled by The Big Deal , Launch Africa Ventures was the most active venture capital (VC) investor in Africa for the first half of 2024, marking yet another milestone in the firm's trajectory. Following the tremendous success of its first fund , which backed over 100 startups and raised $36.3 million , Launch Africa Ventures is continuing its mission with Seed Fund 2 . The fund is designed to fuel high-potential early-stage startups across Africa and is"
+    },
+    {
+      "id": "check-page-aa0569d20f",
+      "url": "https://www.launchafrica.vc/news/new-investment-bosso",
+      "page": "terms",
+      "excerpt": "New Investment : Bosso — Launch Africa 0 Skip to Content Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Folder: Portfolio Back Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH New Investment : Bosso Apr 16 Written by Jeffery Akemu What they do: Bosso is a platform that enables prospective homebuilders to access, from one place, all the key products and services required to build a home. This has allowed homebuilders to access building materials, construction companies, access to land and access to financial products (mortgages and layby payments) all in one place. In essence, we are on a mission to solve Africa's 60M housing shortage and we are leveraging technology to build products that make it easy for people in build easily and affordably. Why we invested: Bosso’s strong traction and continued growth in revenue, B2B client acquisition growth, as well as the business’s forecasted growth based on market and client pipeline, all make the opportunity an attractive one for Launch Africa ventures. When we Invested: The Investment in Bosso took place in Q4/2023 Founding Team: Ibn Kafwanka is the Co-Founder and COO of Bosso. Ibn worked at LafargeHolcim, the largest cement company"
+    },
+    {
+      "id": "check-page-c39c25f8d7",
+      "url": "https://www.launchafrica.vc/news/new-investment-credit-circuit",
+      "page": "terms",
+      "excerpt": "New Investment: Credit Circuit — Launch Africa 0 Skip to Content Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Folder: Portfolio Back Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH New Investment: Credit Circuit Mar 25 Written by Jeffery Akemu What they do: Credit Circuit offers a solution for working capital financing that is not recorded on a company’s balance sheet when cash is borrowed, and which is secured by accounts receivables. As this working capital financing solution is off-balance sheet, more businesses would have the ability to access financing in this way without adding further leverage and risk to their company. Why we invested: Credit Circuit is a business that is solving a significant problem in the working capital financing industry in South Africa. They have strong insurance and financing partners that are extremely excited about the product they have created. The business is well aligned with our thesis of investing in tech enabled, innovative businesses, as the product they have developed is the first of its kind in South Africa. It is also B2B, and the company is run by an experienced technical team. When we Invested: The Investment in Credit Circuit"
+    },
+    {
+      "id": "check-page-e4ca0ff233",
+      "url": "https://www.launchafrica.vc/news/new-investment-kredete",
+      "page": "terms",
+      "excerpt": "New Investment: Kredete — Launch Africa 0 Skip to Content Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Folder: Portfolio Back Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH New Investment: Kredete Aug 20 Written by Jeffery Akemu What they do: Kredete provides a comprehensive solution to Africa's limited access to credit by operating as a digital lending marketplace that connects borrowers and lenders, resulting in a seamless lending experience for both parties. Kredete's all-in-one lending infrastructure is designed specifically for lenders, giving them access to a curated list of borrowers who meet their lending criteria. Kredete’s platform streamlines the entire lending process from loan application, decisioning using Artificial Intelligence (A.I), disbursement, and repayment/collection. The platform’s data-driven lending decisions enable lenders to reduce risk and increase profitability. Why we invested: Kredete operates in a vast and lucrative market opportunity within Africa's digital lending landscape. With a total available market reflecting a substantial $360 billion credit gap across the African continent, kredete is well positioned to capture a meaningful share of"
+    },
+    {
+      "id": "check-page-0c3fbffbdb",
+      "url": "https://www.launchafrica.vc/news/new-investment-lengo",
+      "page": "terms",
+      "excerpt": "New Investment: Lengo — Launch Africa 0 Skip to Content Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Folder: Portfolio Back Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH New Investment: Lengo Mar 18 Written by Jeffery Akemu What they do: Lengo is building the first operating system for the informal retail industry in Africa, with a mission to help global brands to stop guessing when it comes to their African operations. They deliver a premium SaaS subscription access to the only real time database on consumer goods in the fastest growing consumer market in the world. Lengo's WhatsApp intelligent chatbot (Sadio AI) is built on WhatsApp and is customised to allow for their customers to interact with Lengo in real-time and in their local language. Presently, thanks to their WhatsApp embedded intelligent chatbot, Lengo capitalises on retailer crowdsourcing. The company is able to push insights, build on fun, winning and education conversational approaches, and even proposes groupon-like prizes, based on the number of Lengo Points earned by the retailer. Why we invested: Africa’s informal retail space consists of 1.4 billion people driving 90% of purchases in corner shops"
+    },
+    {
+      "id": "check-page-cc29b4fbdf",
+      "url": "https://www.launchafrica.vc/news/new-investment-meditect",
+      "page": "terms",
+      "excerpt": "New Investment : Meditect — Launch Africa 0 Skip to Content Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Folder: Portfolio Back Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH New Investment : Meditect Jul 1 Written by Jeffery Akemu What they do: Meditect develops digital solutions to enhance the efficiency of stakeholders in sub-Saharan Africa, notably through highly innovative pharmacy management software. At the end of 2022, Meditect launched a pharmacy management software offering user-friendly software with unique features to improve inventory management for pharmacies and other value-add services for patients. Meditect is also expanding its clients to healthcare stakeholders such as corporates, NGO, Development Finance Institutions and public authorities seeking to gather and analyze healthcare data in their countries of operations. Why we invested: Healthcare and pharmaceuticals in Africa is highly fragmented and highly fragmented and multi-layered with several points between manufacturing and dispensation, with a detrimental impact on the availability, affordability, and quality of health products for consumers. Meditect helps solve this problem in French-speaking"
+    },
+    {
+      "id": "check-page-a3e9c7ef7c",
+      "url": "https://www.launchafrica.vc/news/new-investment-paps-logistics",
+      "page": "terms",
+      "excerpt": "New Investment : Paps Logistics — Launch Africa 0 Skip to Content Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Folder: Portfolio Back Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH New Investment : Paps Logistics Jun 25 Written by Jeffery Akemu What they do: Paps Logistics is an end-to-end logistics provider optimizing supply chain operations for businesses in Africa. They have built a suite of tech-enabled solutions that offers package tracking, optimized back-office operations, and clear pricing. This improves efficiency and reduces logistics costs for customers. Why we invested: Logistics in Africa is inefficient (mainly due to lack of adequate public infrastructure) and expensive. The average cost of the last mile is an average of 55% of the total cost of the product delivered compared to the average of 28% worldwide. With its regional focus, optimized tech, and strong operational execution, Paps is positioned to outcompete fragmented incumbents and global challengers unfamiliar with the Francophone African terrain. When we Invested: The Investment in Paps Logistics was made in Q4/2023 Founding Team: Bambo Lo is the founder and CEO. He began his career as a sales"
+    },
+    {
+      "id": "check-page-e5b2f30c39",
+      "url": "https://www.launchafrica.vc/news/new-investment-servisor",
+      "page": "terms",
+      "excerpt": "New Investment : Servisor — Launch Africa 0 Skip to Content Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Folder: Portfolio Back Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH New Investment : Servisor Jul 5 Written by Jeffery Akemu What they do: Servisor revolutionizes car servicing through an online platform where consumers effortlessly: Benchmark costs and service details Access comprehensive cost breakdowns, covering parts, labor, and final expenses Compare prices, ratings, and discounts, then seamlessly book through the trusted workshop network Servisor's user-friendly interface saves time and money, empowering car owners to make informed and cost-effective service decisions. Why we invested: The current environment in the motor industry in South Africa is under pressure to transform and decrease the barriers to entry, at the same time, become more transparent and find ways to improve the standard of quality. Income (Ex VAT) from services in the motor trade industry in South Africa totalled nearly R50m (USD 2.5m) in 2018. The Frost & Sullivan South Africa Automotive Aftermarket Insights 2021 report put the total South African Repairs Market at R50bn (USD 2.5bn)."
+    },
+    {
+      "id": "check-page-472a882482",
+      "url": "https://www.launchafrica.vc/news/new-investment-shiprazor",
+      "page": "terms",
+      "excerpt": "New Investment: Shiprazor — Launch Africa 0 Skip to Content Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Folder: Portfolio Back Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH New Investment: Shiprazor Jul 25 Written by Jeffery Akemu What they do: Shiprazor is an aggregator platform focused on ecommerce logistics. At Shiprazor, they are striving to revolutionize logistics and supply chain solutions tailored for e-commerce businesses in Africa. They seamlessly connect online retailers with logistics providers, empowering them with cutting-edge platforms that streamline operations, reduce costs, provide visibility, and drive growth through better delivery experience. Shiprazor offers a comprehensive suite of solutions tailored for online and omnichannel businesses, encompassing essential components such as an Order Management System (OMS), Warehouse Management System (WMS), Last-Mile Management System (LMS), Shipping Aggregator, Fleet Management System (FMS), Returns Management System (RMS), Customer Experience/Notification System, and Address Verification System. Why we invested: The logistics management and last-mile delivery market in Africa are experiencing robust growth,"
+    },
+    {
+      "id": "check-page-0263e8b31b",
+      "url": "https://www.launchafrica.vc/news/new-investment-solarbox",
+      "page": "terms",
+      "excerpt": "New Investment : Solarbox — Launch Africa 0 Skip to Content Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Folder: Portfolio Back Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH New Investment : Solarbox Jul 18 Written by Jeffery Akemu What they do: Solarbox is an electric mobility and energy company focused on providing a sustainable transportation and energy solution for the African market. The company assembles utility electric vehicles (EVs) locally in Senegal and plans to deploy a network of solar-powered EV charging stations, enabling customers to dramatically reduce transportation fuel costs. They provide a complete solution from solar energy generation in countries with lower access to electricity through to utility electric vehicles (2-3 wheelers) and software for managing the entire system. Why we Invested: Solarbox presents a compelling opportunity to back an industry-defining company in the electric mobility sector in Africa. By providing an integrated, locally adapted solution spanning vehicles, energy and software, they can address key ecosystem challenges and accelerate adoption. They adopt a B2B strategy that facilitates easy entry into new markets without"
+    },
+    {
+      "id": "check-page-a65ada1f9f",
+      "url": "https://www.launchafrica.vc/news/new-investment-viebeg",
+      "page": "terms",
+      "excerpt": "New Investment : Viebeg — Launch Africa 0 Skip to Content Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Folder: Portfolio Back Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH New Investment : Viebeg Jul 9 Written by Jeffery Akemu What they do: Viebeg makes dental and medical supplies (pharmaceuticals & equipment) accessible and affordable through a one-stop-shop for inventory management and predictive analytics of demand and supply. The company offers: ● Affordability: linking manufacturers directly to the end-users ● De-risking: AI predicting supply shortages, epidemics, and other shocks ahead of time to prevent health crises. ● Availability: the right quantities of medical products are always available at the hospital Why we Invested: Viebeg's data-driven B2B procurement platform de-risks and optimizes the procurement of medical equipment and supplies based on demographic and public health data. Existing suppliers to the market in East and Central Africa (traditional local suppliers and brokers/ middlemen) distribute medical products in-store without offering procurement optimization. Viebeg provides supplies via a data-driven, digitized platform that makes procurement"
+    },
+    {
+      "id": "check-page-ba9fd84b76",
+      "url": "https://www.launchafrica.vc/news/new-investment-zuri",
+      "page": "terms",
+      "excerpt": "New Investment: Zuri — Launch Africa 0 Skip to Content Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Portfolio Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH Open Menu Close Menu Home Folder: Portfolio Back Seed Fund I Portfolio Seed Fund II Portfolio Team News Contact FAQs PITCH New Investment: Zuri Apr 2 Written by Jeffery Akemu What they do: Zuri is an integrated beauty platform founded in 2016 that distributes beauty products (hair extensions, products, cosmetics) and aims to empower black women entrepreneurs and customers. Zuri offers a wide range of culturally relevant beauty products distributed through a hybrid model of physical salons (owned or managed by franchisee), e-commerce, and social channels. The company has developed a proprietary software platform to deliver personalized experiences through the e-commerce app and physical stores. Why we invested: Zuri’s hybrid model offers an omnichannel experience to leverage the opportunity presented by the vastly underserved market of black and African women’s beauty. With a seasoned industry veteran at the helm, Zuri demonstrates strong potential for growth, showcasing a proven product-market fit and capital-efficient operations. This investment not only taps into the vast African beauty market but also provides"
     }
   ],
   "findings": {
@@ -100,8 +527,55 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "24 months",
+        "evidenceId": "check-duration-aa92006831"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-19330ea76d"
+      },
+      {
+        "value": "8",
+        "evidenceId": "check-duration-c64dbcbd78"
+      },
+      {
+        "value": "2",
+        "evidenceId": "check-duration-93b8b58d3e"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-95f4cc20cf"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "Food Delivery Market Next Next Launch Africa Fund 2 Invests $4.3M in 16 Startups Launch Africa is a leading Pan-African VC fund",
+        "evidenceId": "check-deal-4a868fc310"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "4300000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-4a868fc310"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://www.launchafrica.vc/seed-fund-i-portfolio",

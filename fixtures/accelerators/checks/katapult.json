@@ -1,6 +1,6 @@
 {
   "programId": "katapult",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://katapult.vc/"
   ],
@@ -8,21 +8,48 @@
     {
       "id": "check-name-2e9e01e2c7",
       "url": "https://katapult.vc/",
-      "title": "Katapult — homepage checked by scrape.py",
+      "title": "Katapult — homepage",
       "excerpt": "Katapult — Investing in a thriving world for all Ecosystem Approach",
       "page": "details"
+    },
+    {
+      "id": "check-route-3bc336a344",
+      "url": "https://katapult.vc/",
+      "title": "Katapult — homepage",
+      "excerpt": "Press → https://katapult.vc/",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-dbad238e8b",
+      "url": "https://katapult.vc/",
+      "page": "details",
+      "excerpt": "Katapult — Investing in a thriving world for all Ecosystem Approach Impact Get in touch Katapult — Oslo, est. 2015 Accelerating system change for a thriving, regenerative world. We mobilise people, technology and capital, across an ecosystem of funds, accelerators, and platforms, towards a world where all humans thrive in harmony with nature. Explore the ecosystem Our approach Scroll Our story Katapult started in Oslo in 2015 as a single venture fund, founded by Tharald Nustad on a simple conviction: that the companies solving the world's hardest problems would also build the most valuable businesses of this century. A decade on, that single fund has grown into a family of organizations, each tackling a different piece of what it takes to move impact capital from the margins to the mainstream. We invest a systems lens at the intersection of technology and planetary resilience to accelerate the transformation towards a regenerative future. Impact to date A decade building the infrastructure for impact capital. 200 + Portfolio companies backed across our funds and accelerators. 50 + Countries represented by the founders we've invested in. 10 + Years operating at the frontier of impact investing. The ecosystem One systemic ambition. Multiple pillars. Each pillar operates with dedicated teams, theory of change, stakeholders, and ecosystem of external partners. Addressing different"
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
     "routes": [],
-    "applicationUrl": [],
+    "applicationUrl": [
+      {
+        "value": "https://katapult.vc/",
+        "evidenceId": "check-route-3bc336a344"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

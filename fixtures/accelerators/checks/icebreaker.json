@@ -1,6 +1,6 @@
 {
   "programId": "icebreaker",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.icebreaker.vc/",
     "https://www.icebreaker.vc/apply",
@@ -10,37 +10,57 @@
     {
       "id": "check-name-a5d33f65ca",
       "url": "https://www.icebreaker.vc/",
-      "title": "Icebreaker — homepage checked by scrape.py",
+      "title": "Icebreaker — homepage",
       "excerpt": "Icebreaker.vc Portfolio Apply for Funding Team Contact Portfolio",
       "page": "details"
     },
     {
       "id": "check-route-19725100d2",
       "url": "https://www.icebreaker.vc/about",
-      "title": "Icebreaker — details page checked by scrape.py",
+      "title": "Icebreaker — program page",
       "excerpt": "Apply for funding → https://www.icebreaker.vc/apply",
       "page": "details"
     },
     {
       "id": "check-route-5f11623d06",
       "url": "https://www.icebreaker.vc/",
-      "title": "Icebreaker — homepage checked by scrape.py",
+      "title": "Icebreaker — homepage",
       "excerpt": "Apply for funding → https://www.icebreaker.vc/apply",
       "page": "details"
     },
     {
       "id": "check-route-6f3248193b",
       "url": "https://www.icebreaker.vc/about",
-      "title": "Icebreaker — details page checked by scrape.py",
+      "title": "Icebreaker — program page",
       "excerpt": "Apply for Funding → https://www.icebreaker.vc/apply",
       "page": "details"
     },
     {
       "id": "check-route-822b71c38a",
       "url": "https://www.icebreaker.vc/",
-      "title": "Icebreaker — homepage checked by scrape.py",
+      "title": "Icebreaker — homepage",
       "excerpt": "Apply for Funding → https://www.icebreaker.vc/apply",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-bda17fd793",
+      "url": "https://www.icebreaker.vc/",
+      "page": "details",
+      "excerpt": "Icebreaker.vc Portfolio Apply for Funding Team Contact Portfolio Apply for funding Team Contact Supporting +150 teams from Idea to Seed and beyond since 2017 We invest up to 1.5M€ first tickets in Estonia, Finland and Sweden. Playbook vol 3 The future is No UI and we'll design agent-first AI is eating the interface. The UI will become obsolete, it will be rendered on the fly or just a chat... ReOrbit €45M Series A Varma, Elo, Expansion VC, 10x Founders, and Inventure Aibidia 28M$ Series B DN Capital, FPV Ventures, Global Founders Capital Accurator x HVD Group HVD Group Gridraven 4.0M€ Seed 42 Cap Roadcloud × Goodyear Goodyear Klaus × Zendesk Creandum, Global Founders Capital, Acton, Zendesk Lumoa × Netigate Netigate Sense Of Space x HTC HTC Oterlu x Reddit Reddit eBrands $30M Series A Varma Pension Fund, Rettig Group and Veikko Laine Oy Hoxhunt $40M Series B Level Equity, Dawn Capital, Risto Siilasmaa Tesseract $25M Series A Augmentum Fintech, Sapphire Ventures, Blackfin Capital Partners Fixably $10M Series A Cusp Capital, 468 Capital Whippy x Typelane Whippy IPRally 10M Series A Endeit, Join, Spintop Workfellow x Process Maker Process Maker Flowhaven $16M Series A Sapphire Sport, Global Founders Capital Cachet 5.5M€ Series Seed Truffle Capital, UNIQA Ventures Valpas 4.0M€ Seed ActivumSG Ventures, TESI, Realty Corporation, Maki.vc Zymego 2.4M€ Seed Spintop Finnadvance 1.2M€"
+    },
+    {
+      "id": "check-page-576784a5c1",
+      "url": "https://www.icebreaker.vc/apply",
+      "page": "application",
+      "excerpt": "Apply for funding | Icebreaker.vc Portfolio Apply for Funding Team Contact Portfolio Apply for funding Team Contact Apply for funding Whether you’re exploring an idea, shaping your MVP, or celebrating your first customers, we’re excited to learn about your startup. Our team of partners are with you throughout the Idea Stage and beyond. Lasse Lehtinen Co-founder & General Partner Aleksi Partanen Co-founder & General Partner Riku Seppälä Co-founder & General Partner Jesse Tinell Partner Teddie Wardi Co-founder & Special Advisor LinkedIn Twitter Privacy Policy Code of Conduct ESG Policy Icebreaker Fund II is supported by InnovFin Equity, with the financial backing of the European Union under Horizon 2020 Financial Instruments and the European Fund for Strategic Investments (EFSI) set up under the Investment Plan for Europe. The purpose of EFSI is to help support financing and implementing productive investments in the European Union and to ensure increased access to financing."
+    },
+    {
+      "id": "check-page-7cf25afb33",
+      "url": "https://www.icebreaker.vc/about",
+      "page": "details",
+      "excerpt": "Icebreaker.vc Portfolio Apply for Funding Team Contact Portfolio Apply for funding Team Contact The Icebreaker.vc playbook vol 3 We've revamped our playbook. We’re shortly introducing our learnings and focus here and will elaborate on these topics in coming blog posts. Tl;dr; results are great; more focused strategy to maximize returns; more partner-led portfolio time; We’re doubling down on supporting idea-stage teams across Finland, Estonia and Sweden We are meeting a lot of amazing teams and we are still seeing a massive gap in idea-stage funding. During the last 9 years we have partnered up with 130+ idea-stage teams. We’ve learnt a lot and are dedicated to keep improving our support. This will continue to be our focus moving forward. We’re seeing great results Our idea-stage portfolio model from our first fund has proven highly efficient. We’ve returned about half of the first fund already, putting us in the top quartile of our vintage in Europe. Plus, we have the largest idea-stage portfolio in the Nordics and Baltics that’s progressed from idea to seed stage. Our current estimate is that Fund I will return the invested capital 5x based on current portfolio company growth rates and standard exit multiples. We’re increasing our initial ticket size because top teams need sufficient runway With our new model, we can fund idea-stage teams with up to €1.5M before they go out"
     }
   ],
   "findings": {
@@ -61,8 +81,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

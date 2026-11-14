@@ -1,7 +1,87 @@
 {
   "programId": "how-to-web",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://www.howtoweb.co/3-reasons-why-you-should-apply-for-speaking-at-how-to-web-conference/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/40-of-the-most-promising-startups-from-eastern-europe-compete-for-the-e880000-investment-prize-on-the-how-to-web-stage/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/5-questions-with-dan-mihaescu-gapminder-venture-partners-we-fill-in-a-critical-investment-gap/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/alpha-ar-is-the-winning-startup-of-spotlight-2021-competition-and-takes-home-the-e350000-investment-prize/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/apply-for-angel-investor-tickets/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/apply-for-lp-tickets/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/apply-for-media-pass",
+      "page": "application",
+      "anchor": "Apply for Media Pass",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/apply-for-speaking/",
+      "page": "application",
+      "anchor": "Apply for speaking",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/apply-for-startup-ticket/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/apply-for-startup-tickets",
+      "page": "application",
+      "anchor": "APPLY NOW",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.howtoweb.co/dealflow/",
       "page": "terms",
@@ -11,9 +91,65 @@
       "origin": "official"
     },
     {
+      "url": "https://www.howtoweb.co/e465000-the-record-investment-prize-for-the-winner-of-how-to-web-2022s-spotlight-competition/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/game-changing-investment-prize-alert-the-largest-investment-proposal-for-startups-in-eastern-europe-e780k-from-leading-investors/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/how-to-web-2023/apply-for-speaking/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/speaker/alexandra-dumitrescu",
+      "page": "details",
+      "anchor": "Alexandra Dumitrescu Program Manager – BCR Social Finance Marc Impact Network",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/speaker/alina-georgescu",
+      "page": "terms",
+      "anchor": "Alina Georgescu Investment Director Catalyst Romania",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.howtoweb.co/speaker/andrii-degeler",
       "page": "terms",
       "anchor": "Andrii Degeler Head of News Dealroom",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/speaker/camelia-dragoi",
+      "page": "terms",
+      "anchor": "Camelia Drăgoi Senior Mandate Manager European Investment Fund (EIF)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/speaker/ervin-luga",
+      "page": "terms",
+      "anchor": "Ervin Luga Head of Venture Capital Investments EBRD Venture Capital",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -27,10 +163,10 @@
       "origin": "official"
     },
     {
-      "url": "https://www.howtoweb.co/speaker/alexandra-dumitrescu",
-      "page": "details",
-      "anchor": "Alexandra Dumitrescu Program Manager – BCR Social Finance Marc Impact Network",
-      "fetched": true,
+      "url": "https://www.howtoweb.co/speaker/miruna-popa",
+      "page": "terms",
+      "anchor": "Miruna Popa Investment Manager Resource Partners",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -38,6 +174,14 @@
       "url": "https://www.howtoweb.co/speaker/oana-cosman",
       "page": "portfolio",
       "anchor": "Oana Cosman Portfolio & Growth Manager Bravva Angels",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/speaker/paul-christoph-altunay",
+      "page": "terms",
+      "anchor": "Paul-Christoph Altunay Investment Team Earlybird Venture Capital",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -51,25 +195,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.howtoweb.co/apply-for-startup-tickets",
-      "page": "application",
-      "anchor": "APPLY NOW",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.howtoweb.co/apply-for-speaking/",
-      "page": "application",
-      "anchor": "Apply for speaking",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.howtoweb.co/apply-for-media-pass",
-      "page": "application",
-      "anchor": "Apply for Media Pass",
+      "url": "https://www.howtoweb.co/terms-and-conditions/",
+      "page": "terms",
+      "anchor": "Terms & Conditions",
       "fetched": false,
       "blocked": null,
       "origin": "official"

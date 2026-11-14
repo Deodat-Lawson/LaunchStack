@@ -1,113 +1,753 @@
 {
   "programId": "elemental-impact",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
     "https://elementalimpact.com/",
+    "https://elementalimpact.com/funding-opportunities/",
+    "https://elementalimpact.com/funding-opportunities/apply/",
+    "https://elementalimpact.com/data-center-innovation-initiative/",
+    "https://share.elementalimpact.com/hubfs/Website_Files/DCII-Funding-Opportunity-Guide.pdf?utm_source=website&utm_medium=website&utm_campaign=DCII",
+    "https://elementalimpact.com/elemental-impact-website-terms-conditions/",
+    "https://elementalimpact.com/latest/events/midwest-climate-dealflow-summit/",
+    "https://elementalimpact.com/newsletter/",
+    "https://elementalimpact.com/nth-cycle-is-revolutionizing-the-u-s-s-critical-mineral-supply-chain-from-the-heart-of-ohio/",
+    "https://elementalimpact.com/fervo-energy-southern-utah-university-and-elemental-impact-launch-geothermal-apprenticeship-program/",
     "https://elementalimpact.com/mission-and-impact/",
-    "https://elementalimpact.com/funding-opportunities/apply/"
+    "https://elementalimpact.com/annual-report-2025/",
+    "https://elementalimpact.com/companies/",
+    "https://elementalimpact.com/companies/actionfigure/",
+    "https://elementalimpact.com/companies/allume-energy/"
   ],
   "evidence": [
     {
+      "id": "check-deal-1235a6fbac",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "Read the press release. What We Offer Catalytic Capital $500k to $5M of funding for deployments of technologies that can be integrated",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-4430ec0ba5",
+      "url": "https://elementalimpact.com/funding-opportunities/",
+      "title": "Elemental Impact — application page",
+      "excerpt": "more sustainable infrastructure Elemental will invest $500,000 to $5 million per project in up to 10 technology startups through 2027. The Data",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-468a0cc876",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "funding. Read the press release. What We Offer Catalytic Capital $500k to $5M of funding for deployments of technologies that can be",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-c86e3c9342",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "the Data Center Innovation Initiative (DCII), Elemental will invest $500,000 to $5 million per project in up to 10 early-stage technology startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f0af96a782",
+      "url": "https://elementalimpact.com/funding-opportunities/",
+      "title": "Elemental Impact — application page",
+      "excerpt": "for more sustainable infrastructure Elemental will invest $500,000 to $5 million per project in up to 10 technology startups through",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-f91417f272",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "Innovation Initiative (DCII), Elemental will invest $500,000 to $5 million per project in up to 10 early-stage technology startups through",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-325c4de09a",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "specific initiative, projects typically last 12-18 months and the time commitment varies based on the",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-400e52ebfd",
+      "url": "https://elementalimpact.com/nth-cycle-is-revolutionizing-the-u-s-s-critical-mineral-supply-chain-from-the-heart-of-ohio/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "helping to accelerate their timeline by 6-8 months, expand their customer pipeline from 1 to 8",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-5f84b24092",
+      "url": "https://elementalimpact.com/funding-opportunities/",
+      "title": "Elemental Impact — application page",
+      "excerpt": "helped to accelerate their timeline by 6-8 months, expand their customer pipeline, grow their",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-810502eb81",
+      "url": "https://elementalimpact.com/funding-opportunities/",
+      "title": "Elemental Impact — application page",
+      "excerpt": "and DCII companies , projects typically last 12-18 months and the time commitment varies based on the",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-9776a8e92f",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "constraints, can be deployed within 12 months using standard permitting pathways, and can",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e02b14482a",
+      "url": "https://elementalimpact.com/funding-opportunities/",
+      "title": "Elemental Impact — application page",
+      "excerpt": "project objectives. Strategy Track is roughly a 9-month active engagement. Companies can anticipate two",
+      "page": "application"
+    },
+    {
       "id": "check-email-1cb9cc0b65",
       "url": "https://elementalimpact.com/funding-opportunities/apply/",
-      "title": "Elemental Impact — application page checked by scrape.py",
+      "title": "Elemental Impact — application page",
       "excerpt": "navigating our application process, please email us at apply@elementalimpact.com and include “Funding application help” in the subject",
       "page": "application"
     },
     {
+      "id": "check-email-3537ce7b0e",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "Partner with us (partnerships@elementalimpact.com)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-42458b9ef5",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "to Project Track. If you have any questions, please email apply@elementalimpact.com and include “Funding application help” in the subject",
+      "page": "terms"
+    },
+    {
       "id": "check-email-4ddc1e6805",
       "url": "https://elementalimpact.com/funding-opportunities/apply/",
-      "title": "Elemental Impact — application page checked by scrape.py",
+      "title": "Elemental Impact — application page",
       "excerpt": "apply@elementalimpact.com (investment@elementalimpact.com)",
       "page": "application"
     },
     {
+      "id": "check-email-7d6b92dec4",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "partnerships@elementalimpact.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-822ea3a0df",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "in participating or funding the DCII can contact partnerships@elementalimpact.com to learn more. What is the time commitment for portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-8f7a98eeca",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "apply@elementalimpact.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-9e1f941903",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "navigating our application process, please email us at apply@elementalimpact.com . From Our Partners Melanie Nakagawa, CVP and Chief",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-9fcc0c3060",
+      "url": "https://elementalimpact.com/funding-opportunities/",
+      "title": "Elemental Impact — application page",
+      "excerpt": "to Project Track. If you have any questions, please email apply@elementalimpact.com . If a company applies to the DCII but is not a fit,",
+      "page": "application"
+    },
+    {
+      "id": "check-email-c419598f31",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "apply@elementalimpact.com (investment@elementalimpact.com)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-c555f67ce0",
+      "url": "https://elementalimpact.com/funding-opportunities/",
+      "title": "Elemental Impact — application page",
+      "excerpt": "apply@elementalimpact.com",
+      "page": "application"
+    },
+    {
+      "id": "check-email-f3d0306636",
+      "url": "https://elementalimpact.com/funding-opportunities/",
+      "title": "Elemental Impact — application page",
+      "excerpt": "go overlooked. You can refer companies by emailing apply@elementalimpact.com. More Elemental Apply Now → Meet Our Portfolio Companies →",
+      "page": "application"
+    },
+    {
+      "id": "check-format-09237091f9",
+      "url": "https://elementalimpact.com/companies/actionfigure/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "HQ Location International Shifted Energy Creating virtual power plants from existing infrastructure Next Company",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-0eeb86b061",
+      "url": "https://elementalimpact.com/companies/allume-energy/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "plant Charlottetown , Canada Shifted Energy Creating virtual power plants from existing infrastructure Honolulu, HI",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-227b3c6aad",
+      "url": "https://elementalimpact.com/companies/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "| LinkedIn Sectors Energy Status HQ Location US Vence Virtual livestock management Next Company San Diego, CA Website |",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-2bc1a4e31e",
+      "url": "https://elementalimpact.com/fervo-energy-southern-utah-university-and-elemental-impact-launch-geothermal-apprenticeship-program/",
+      "title": "Elemental Impact — program page",
+      "excerpt": "focused on subsurface operations will provide hands-on and virtual instruction for up to 40 individuals through 2024 CEDAR",
+      "page": "details"
+    },
+    {
+      "id": "check-format-4f84bca3a6",
+      "url": "https://elementalimpact.com/companies/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "plant Charlottetown , Canada Shifted Energy Creating virtual power plants from existing infrastructure Honolulu, HI",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-67ea030e4f",
+      "url": "https://elementalimpact.com/funding-opportunities/",
+      "title": "Elemental Impact — application page",
+      "excerpt": "on a case-by-case basis and will consider equity, debt and hybrid structures. Companies may be invited to present additional",
+      "page": "application"
+    },
+    {
+      "id": "check-format-7bf6f436be",
+      "url": "https://elementalimpact.com/companies/actionfigure/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "| LinkedIn Sectors Energy Status HQ Location US Vence Virtual livestock management Next Company San Diego, CA Website |",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-97f45b3241",
+      "url": "https://elementalimpact.com/elemental-impact-website-terms-conditions/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "the AAA Consumer Rules. The arbitration may be conducted in person, through the submission of documents, by phone, or online.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-9b1d465897",
+      "url": "https://elementalimpact.com/companies/allume-energy/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "HQ Location International Shifted Energy Creating virtual power plants from existing infrastructure Next Company",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-b21d41347d",
+      "url": "https://elementalimpact.com/companies/actionfigure/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "programming interface for energy data Oakland, CA Vence Virtual livestock management San Diego, CA Verdi Automation tools",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-b913c92d3e",
+      "url": "https://elementalimpact.com/companies/allume-energy/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "programming interface for energy data Oakland, CA Vence Virtual livestock management San Diego, CA Verdi Automation tools",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-ca4f23d8fe",
+      "url": "https://elementalimpact.com/companies/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "programming interface for energy data Oakland, CA Vence Virtual livestock management San Diego, CA Verdi Automation tools",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-d60f9cf30d",
+      "url": "https://elementalimpact.com/companies/allume-energy/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "| LinkedIn Sectors Energy Status HQ Location US Vence Virtual livestock management Next Company San Diego, CA Website |",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-f01a062705",
+      "url": "https://elementalimpact.com/companies/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "HQ Location International Shifted Energy Creating virtual power plants from existing infrastructure Next Company",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-f53e838a81",
+      "url": "https://elementalimpact.com/companies/actionfigure/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "plant Charlottetown , Canada Shifted Energy Creating virtual power plants from existing infrastructure Honolulu, HI",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-location-f2bf2601fa",
+      "url": "https://elementalimpact.com/elemental-impact-website-terms-conditions/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "in the state and federal courts located in City and County of Honolulu, Hawaiʻi, and",
+      "page": "terms"
+    },
+    {
       "id": "check-name-56204a542f",
       "url": "https://elementalimpact.com/",
-      "title": "Elemental Impact — homepage checked by scrape.py",
+      "title": "Elemental Impact — homepage",
       "excerpt": "Elemental Impact Portfolio About Latest Donate Portfolio Funding",
       "page": "details"
     },
     {
+      "id": "check-portfolio-04a600ab57",
+      "url": "https://elementalimpact.com/companies/allume-energy/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "Portfolio Companies → https://elementalimpact.com/companies/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-05bda4ed64",
       "url": "https://elementalimpact.com/funding-opportunities/apply/",
-      "title": "Elemental Impact — application page checked by scrape.py",
+      "title": "Elemental Impact — application page",
       "excerpt": "Portfolio → https://elementalimpact.com/companies/",
       "page": "application"
     },
     {
+      "id": "check-portfolio-09d8a2cb83",
+      "url": "https://elementalimpact.com/fervo-energy-southern-utah-university-and-elemental-impact-launch-geothermal-apprenticeship-program/",
+      "title": "Elemental Impact — program page",
+      "excerpt": "Portfolio Companies → https://elementalimpact.com/companies/",
+      "page": "details"
+    },
+    {
       "id": "check-portfolio-0cfad7b08c",
       "url": "https://elementalimpact.com/",
-      "title": "Elemental Impact — homepage checked by scrape.py",
+      "title": "Elemental Impact — homepage",
       "excerpt": "Portfolio → https://elementalimpact.com/companies/",
       "page": "details"
     },
     {
       "id": "check-portfolio-1ce2fb3bd2",
       "url": "https://elementalimpact.com/mission-and-impact/",
-      "title": "Elemental Impact — details page checked by scrape.py",
+      "title": "Elemental Impact — program page",
       "excerpt": "Portfolio Companies → https://elementalimpact.com/companies/",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-294e9ee587",
+      "url": "https://elementalimpact.com/companies/actionfigure/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "Portfolio → https://elementalimpact.com/companies/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-2aae550ae3",
+      "url": "https://elementalimpact.com/newsletter/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "Portfolio Companies → https://elementalimpact.com/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-35856b61b0",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "Portfolio Companies → https://elementalimpact.com/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-502f5c2d9a",
+      "url": "https://elementalimpact.com/latest/events/midwest-climate-dealflow-summit/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "Portfolio → https://elementalimpact.com/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-512a211b53",
+      "url": "https://elementalimpact.com/annual-report-2025/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "Portfolio Companies → https://elementalimpact.com/companies/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-516c5e733d",
+      "url": "https://elementalimpact.com/annual-report-2025/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "Portfolio → https://elementalimpact.com/companies/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-5526ff13b8",
+      "url": "https://elementalimpact.com/companies/allume-energy/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "Portfolio → https://elementalimpact.com/companies/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-58c54bdcc7",
+      "url": "https://elementalimpact.com/newsletter/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "Portfolio → https://elementalimpact.com/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6046faedcf",
+      "url": "https://elementalimpact.com/elemental-impact-website-terms-conditions/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "Portfolio Companies → https://elementalimpact.com/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-676b83e4f2",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "Portfolio → https://elementalimpact.com/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-792d50179f",
+      "url": "https://elementalimpact.com/latest/events/midwest-climate-dealflow-summit/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "Portfolio Companies → https://elementalimpact.com/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9051c40cd2",
+      "url": "https://elementalimpact.com/elemental-impact-website-terms-conditions/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "Portfolio → https://elementalimpact.com/companies/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-a2ab8d2da4",
       "url": "https://elementalimpact.com/funding-opportunities/apply/",
-      "title": "Elemental Impact — application page checked by scrape.py",
+      "title": "Elemental Impact — application page",
       "excerpt": "Portfolio Companies → https://elementalimpact.com/companies/",
       "page": "application"
     },
     {
-      "id": "check-portfolio-c66ba676ec",
-      "url": "https://elementalimpact.com/mission-and-impact/",
-      "title": "Elemental Impact — details page checked by scrape.py",
+      "id": "check-portfolio-aaa421e70e",
+      "url": "https://elementalimpact.com/funding-opportunities/",
+      "title": "Elemental Impact — application page",
+      "excerpt": "Portfolio → https://elementalimpact.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-aeef4c352c",
+      "url": "https://elementalimpact.com/nth-cycle-is-revolutionizing-the-u-s-s-critical-mineral-supply-chain-from-the-heart-of-ohio/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "Portfolio → https://elementalimpact.com/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c23728e447",
+      "url": "https://elementalimpact.com/fervo-energy-southern-utah-university-and-elemental-impact-launch-geothermal-apprenticeship-program/",
+      "title": "Elemental Impact — program page",
       "excerpt": "Portfolio → https://elementalimpact.com/companies/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-c66ba676ec",
+      "url": "https://elementalimpact.com/mission-and-impact/",
+      "title": "Elemental Impact — program page",
+      "excerpt": "Portfolio → https://elementalimpact.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c66d03b8a0",
+      "url": "https://elementalimpact.com/funding-opportunities/",
+      "title": "Elemental Impact — application page",
+      "excerpt": "Meet Our Portfolio Companies → → https://elementalimpact.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-c97510b941",
+      "url": "https://elementalimpact.com/companies/actionfigure/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "Portfolio Companies → https://elementalimpact.com/companies/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-cf6a3c2d4c",
       "url": "https://elementalimpact.com/",
-      "title": "Elemental Impact — homepage checked by scrape.py",
+      "title": "Elemental Impact — homepage",
       "excerpt": "Portfolio Companies → https://elementalimpact.com/companies/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-e3b2e83358",
+      "url": "https://elementalimpact.com/nth-cycle-is-revolutionizing-the-u-s-s-critical-mineral-supply-chain-from-the-heart-of-ohio/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "Portfolio Companies → https://elementalimpact.com/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f306da737e",
+      "url": "https://elementalimpact.com/funding-opportunities/",
+      "title": "Elemental Impact — application page",
+      "excerpt": "Portfolio Companies → https://elementalimpact.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-160b897416",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "the Data Center Innovation Initiative. We will accept and review applications on a rolling basis, so we encourage you to apply early. Elemental will continue to accept",
+      "page": "terms"
+    },
+    {
+      "id": "check-rolling-9efa449042",
+      "url": "https://elementalimpact.com/funding-opportunities/apply/",
+      "title": "Elemental Impact — application page",
+      "excerpt": "please fill out the intake form below. Elemental accepts applications on a rolling basis. We review every application that we receive, and will reach out to select",
+      "page": "application"
+    },
+    {
+      "id": "check-route-06995f2358",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "download our application packet → https://share.elementalimpact.com/hubfs/Website_Files/DCII-Funding-Opportunity-Guide.pdf?utm_source=website&utm_medium=website&utm_campaign=DCII",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-0f2377897f",
+      "url": "https://elementalimpact.com/funding-opportunities/",
+      "title": "Elemental Impact — application page",
+      "excerpt": "Apply Now → https://elementalimpact.com/funding-opportunities/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1c53b5fd72",
+      "url": "https://elementalimpact.com/companies/allume-energy/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "Apply Now → https://elementalimpact.com/funding-opportunities/apply/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-1de67a2b39",
+      "url": "https://elementalimpact.com/newsletter/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "Apply Now → https://elementalimpact.com/funding-opportunities/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1ebef5d3e5",
+      "url": "https://elementalimpact.com/latest/events/midwest-climate-dealflow-summit/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "Apply Now → https://elementalimpact.com/funding-opportunities/apply/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-2d0f59aa27",
       "url": "https://elementalimpact.com/",
-      "title": "Elemental Impact — homepage checked by scrape.py",
+      "title": "Elemental Impact — homepage",
+      "excerpt": "Apply Now → https://elementalimpact.com/funding-opportunities/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3ca09b0175",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "the application packet → https://share.elementalimpact.com/hubfs/Website_Files/DCII-Funding-Opportunity-Guide.pdf?utm_source=website&utm_medium=website&utm_campaign=DCII",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-4df282fe00",
+      "url": "https://elementalimpact.com/nth-cycle-is-revolutionizing-the-u-s-s-critical-mineral-supply-chain-from-the-heart-of-ohio/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "Apply Now → https://elementalimpact.com/funding-opportunities/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-5683921c69",
+      "url": "https://elementalimpact.com/fervo-energy-southern-utah-university-and-elemental-impact-launch-geothermal-apprenticeship-program/",
+      "title": "Elemental Impact — program page",
       "excerpt": "Apply Now → https://elementalimpact.com/funding-opportunities/apply/",
       "page": "details"
     },
     {
       "id": "check-route-5c7a57e9d8",
       "url": "https://elementalimpact.com/mission-and-impact/",
-      "title": "Elemental Impact — details page checked by scrape.py",
+      "title": "Elemental Impact — program page",
       "excerpt": "Apply Now → https://elementalimpact.com/funding-opportunities/apply/",
       "page": "details"
     },
     {
+      "id": "check-route-66093f536d",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "application packet → https://share.elementalimpact.com/hubfs/Website_Files/DCII-Funding-Opportunity-Guide.pdf?utm_source=website&utm_medium=website&utm_campaign=DCII",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-765d5da080",
+      "url": "https://elementalimpact.com/companies/actionfigure/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "Apply Now → https://elementalimpact.com/funding-opportunities/apply/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-7d2b58c81b",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "Apply Now → https://elementalimpact.com/funding-opportunities/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-ac0e19280a",
+      "url": "https://elementalimpact.com/elemental-impact-website-terms-conditions/",
+      "title": "Elemental Impact — terms page",
+      "excerpt": "Apply Now → https://elementalimpact.com/funding-opportunities/apply/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-bfa8c2a88a",
       "url": "https://elementalimpact.com/",
-      "title": "Elemental Impact — homepage checked by scrape.py",
+      "title": "Elemental Impact — homepage",
       "excerpt": "Apply for funding → We invest in exceptional entrepreneurs who are solving the world’s most pressing environmental challenges. → https://elementalimpact.com/funding-opportunities/",
       "page": "details"
     },
     {
+      "id": "check-route-cbca5288f0",
+      "url": "https://elementalimpact.com/funding-opportunities/",
+      "title": "Elemental Impact — application page",
+      "excerpt": "Apply Now → → https://elementalimpact.com/funding-opportunities/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cdf68d18a2",
+      "url": "https://elementalimpact.com/annual-report-2025/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "Apply Now → https://elementalimpact.com/funding-opportunities/apply/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-ff2ce2226e",
+      "url": "https://elementalimpact.com/companies/",
+      "title": "Elemental Impact — portfolio page",
+      "excerpt": "Apply Now → https://elementalimpact.com/funding-opportunities/apply/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-status-0230ca1765",
       "url": "https://elementalimpact.com/funding-opportunities/apply/",
-      "title": "Elemental Impact — application page checked by scrape.py",
+      "title": "Elemental Impact — application page",
       "excerpt": "Doerr School of Sustainability, Energy Innovation, and Breakthrough Energy Ventures Donate Apply Now We are now accepting applications for funding and support via our Project Track, Strategy Track , and the Data Center Innovation Initiative",
       "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-7309ca3e22",
+      "url": "https://elementalimpact.com/",
+      "page": "details",
+      "excerpt": "Elemental Impact Portfolio About Latest Donate Portfolio Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable infrastructure Portfolio Companies Projects Apply Now About Mission and Impact Our Approach People Jobs Build to 2030 Our strategy to scale climate innovation Annual Report 2025 A Year of Extremes Earthshot Ventures In 2021, we launched a venture fund built to deliver market-leading returns while making a significant positive climate impact Latest Latest Launching the Data Center Innovation Initiative with Amazon, Google, Meta, and Microsoft Elemental News How the Environmental Movement Can Unleash Innovation From Our CEO Catalytic Capital in Action: One Year of the D-SAFE Tools and Resources Climate Tech Map Built in partnership with Speed & Scale, McKinsey & Co., the Stanford Doerr School of Sustainability, Energy Innovation, and Breakthrough Energy Ventures Donate Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable infrastructure"
+    },
+    {
+      "id": "check-page-eb205aa030",
+      "url": "https://elementalimpact.com/funding-opportunities/",
+      "page": "application",
+      "excerpt": "Funding Opportunities - Elemental Impact Portfolio About Latest Donate Portfolio Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable infrastructure Portfolio Companies Projects Apply Now About Mission and Impact Our Approach People Jobs Build to 2030 Our strategy to scale climate innovation Annual Report 2025 A Year of Extremes Earthshot Ventures In 2021, we launched a venture fund built to deliver market-leading returns while making a significant positive climate impact Latest Latest Launching the Data Center Innovation Initiative with Amazon, Google, Meta, and Microsoft Elemental News How the Environmental Movement Can Unleash Innovation From Our CEO Catalytic Capital in Action: One Year of the D-SAFE Tools and Resources Climate Tech Map Built in partnership with Speed & Scale, McKinsey & Co., the Stanford Doerr School of Sustainability, Energy Innovation, and Breakthrough Energy Ventures Donate Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more"
+    },
+    {
+      "id": "check-page-d719a7bcc1",
+      "url": "https://elementalimpact.com/funding-opportunities/apply/",
+      "page": "application",
+      "excerpt": "Apply Now - Elemental Impact Portfolio About Latest Donate Portfolio Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable infrastructure Portfolio Companies Projects Apply Now About Mission and Impact Our Approach People Jobs Build to 2030 Our strategy to scale climate innovation Annual Report 2025 A Year of Extremes Earthshot Ventures In 2021, we launched a venture fund built to deliver market-leading returns while making a significant positive climate impact Latest Latest Launching the Data Center Innovation Initiative with Amazon, Google, Meta, and Microsoft Elemental News How the Environmental Movement Can Unleash Innovation From Our CEO Catalytic Capital in Action: One Year of the D-SAFE Tools and Resources Climate Tech Map Built in partnership with Speed & Scale, McKinsey & Co., the Stanford Doerr School of Sustainability, Energy Innovation, and Breakthrough Energy Ventures Donate Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable"
+    },
+    {
+      "id": "check-page-293ace1847",
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "page": "terms",
+      "excerpt": "Data Center Innovation Initiative - Elemental Impact Portfolio About Latest Donate Portfolio Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable infrastructure Portfolio Companies Projects Apply Now About Mission and Impact Our Approach People Jobs Build to 2030 Our strategy to scale climate innovation Annual Report 2025 A Year of Extremes Earthshot Ventures In 2021, we launched a venture fund built to deliver market-leading returns while making a significant positive climate impact Latest Latest Launching the Data Center Innovation Initiative with Amazon, Google, Meta, and Microsoft Elemental News How the Environmental Movement Can Unleash Innovation From Our CEO Catalytic Capital in Action: One Year of the D-SAFE Tools and Resources Climate Tech Map Built in partnership with Speed & Scale, McKinsey & Co., the Stanford Doerr School of Sustainability, Energy Innovation, and Breakthrough Energy Ventures Donate Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for"
+    },
+    {
+      "id": "check-page-41a719944d",
+      "url": "https://share.elementalimpact.com/hubfs/Website_Files/DCII-Funding-Opportunity-Guide.pdf?utm_source=website&utm_medium=website&utm_campaign=DCII",
+      "page": "application",
+      "excerpt": "%PDF-1.4 %���� 1 0 obj < > endobj 3 0 obj < > endobj 6 0 obj < > stream x����J�` ��Ԃ(�� 28�h��mRpi# �V!�S�� �IHS� tspu+.ހ�e( ��%���| �:t����� �� � @V�� G�zM�� < ���$*�xÐ�!��K�����c�� z� G�� � �� > �&|)�4 c�Ƃ��� � �ٛbw��0 �o�Π?�һY���M� ֩ УO� > stream x���gwSg�6�/�� �E�$˅ꪺ��m��`:$!!T�*WLuQw�� % 2@ ��i �B�) ���2 ������W�oy�6��V1�\"�:� � ��� �(� �� ��$� �RJ �QԘ�T��f 2�r�YN1 �t �[�t��j S�b�UM/ 2�r�EJ7�i�6��\"k,r�Eδ� VUc��,�֢hL�֪�vz�Yȴ��69æ��� ��n 3��Vph,J�`�0� ��a�+d�d ����+f��i&�� �Lz-Ig��[ �՞iQ4f)Kt�EG�՞%8tV%�f�� z����ZI� �Zў!(:љiU5t��%�Nt d�NT�e�Arf� :ɞ-;sU�^��%�Aq�e�^r G��0�.��4�v��0H �`ϒK�dv��4H� ŕ-;t�3�^����eg��dw: ��ߓ�� �+Wv��\\ř-� ���,�eP�r �Au��˳Tg��ʑ 9�+K�+Ӌ��,ե��Y�3Gq��Ku�3Wu T�Aqg�� ՙ��r �lё����J��\\Gy���Q�� ���I��_}�ݝg/� ��+[uf��\\� {�ji���V���3�Q�+;rdG��^z��Υ�F��V]�vw��ȕ]9�+KV���NS�ْ� ;�Tw���R]Y��� �}-�K/�9��� �=Gr��� ����ѥD{�� D5WvfK�\\Օ#�� G��fK z\"���Dg��4�� �2��Ji��� �9�#Kq�l�Av ${ ]ǩ �,�^4[p�%�Au DU/��.� ��eS �=KP�6%Kr���vdKj�� d{��� �=��,�j�왂j�8�/�d�[�l�m ���$�֬d�%�MI�H A4 �ΦdЕ��6UoU�VYo�뭊ު D��F'�l�֢�v�E�Yd���fQ� )�\"�J�Y�� �,��3I:���H�fIg��m��*i� ]�*g�E�E֚E��U�4��&��,�,b�EҕHz��3 z��e� �IԚ� ��e�2�m�f1�$j�6�I�0�� 9�,g��L��5 �F��D�4 � ��Yl�( �%��D�0�� ӊ�tl�e [2���FkZ�ES`�(�d�X3�-��&M�5�Ēi�� �Fk�QH˷d �� SZ�Yc�33�- � M�YSdJ+4� �2K� Ŧ�b�����_����QdI)(I�7� �4��� ��oJ�7f �� �+�K4E��BSJ�1�ļ�ИV`�(4k �i %�FKj�)��$5ߘV`N�7� ��� S� �Nꆒ���i�� ũ�%) �� V�/Z��(u}Iz�1���r]�uE+�"
+    },
+    {
+      "id": "check-page-7109396e9f",
+      "url": "https://elementalimpact.com/elemental-impact-website-terms-conditions/",
+      "page": "terms",
+      "excerpt": "Elemental Impact Website Terms & Conditions - Elemental Impact Portfolio About Latest Donate Portfolio Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable infrastructure Portfolio Companies Projects Apply Now About Mission and Impact Our Approach People Jobs Build to 2030 Our strategy to scale climate innovation Annual Report 2025 A Year of Extremes Earthshot Ventures In 2021, we launched a venture fund built to deliver market-leading returns while making a significant positive climate impact Latest Latest Launching the Data Center Innovation Initiative with Amazon, Google, Meta, and Microsoft Elemental News How the Environmental Movement Can Unleash Innovation From Our CEO Catalytic Capital in Action: One Year of the D-SAFE Tools and Resources Climate Tech Map Built in partnership with Speed & Scale, McKinsey & Co., the Stanford Doerr School of Sustainability, Energy Innovation, and Breakthrough Energy Ventures Donate Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation"
+    },
+    {
+      "id": "check-page-3e1742c656",
+      "url": "https://elementalimpact.com/latest/events/midwest-climate-dealflow-summit/",
+      "page": "terms",
+      "excerpt": "Midwest Climate Dealflow Summit - Elemental Impact Portfolio About Latest Donate Portfolio Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable infrastructure Portfolio Companies Projects Apply Now About Mission and Impact Our Approach People Jobs Build to 2030 Our strategy to scale climate innovation Annual Report 2025 A Year of Extremes Earthshot Ventures In 2021, we launched a venture fund built to deliver market-leading returns while making a significant positive climate impact Latest Latest Launching the Data Center Innovation Initiative with Amazon, Google, Meta, and Microsoft Elemental News How the Environmental Movement Can Unleash Innovation From Our CEO Catalytic Capital in Action: One Year of the D-SAFE Tools and Resources Climate Tech Map Built in partnership with Speed & Scale, McKinsey & Co., the Stanford Doerr School of Sustainability, Energy Innovation, and Breakthrough Energy Ventures Donate Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more"
+    },
+    {
+      "id": "check-page-c3ef256d11",
+      "url": "https://elementalimpact.com/newsletter/",
+      "page": "terms",
+      "excerpt": "Sign Up and Stay Connected - Elemental Impact Portfolio About Latest Donate Portfolio Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable infrastructure Portfolio Companies Projects Apply Now About Mission and Impact Our Approach People Jobs Build to 2030 Our strategy to scale climate innovation Annual Report 2025 A Year of Extremes Earthshot Ventures In 2021, we launched a venture fund built to deliver market-leading returns while making a significant positive climate impact Latest Latest Launching the Data Center Innovation Initiative with Amazon, Google, Meta, and Microsoft Elemental News How the Environmental Movement Can Unleash Innovation From Our CEO Catalytic Capital in Action: One Year of the D-SAFE Tools and Resources Climate Tech Map Built in partnership with Speed & Scale, McKinsey & Co., the Stanford Doerr School of Sustainability, Energy Innovation, and Breakthrough Energy Ventures Donate Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more"
+    },
+    {
+      "id": "check-page-1dc86d5fd9",
+      "url": "https://elementalimpact.com/nth-cycle-is-revolutionizing-the-u-s-s-critical-mineral-supply-chain-from-the-heart-of-ohio/",
+      "page": "terms",
+      "excerpt": "Nth Cycle is revolutionizing the U.S.’s critical mineral supply chain from the heart of Ohio - Elemental Impact Portfolio About Latest Donate Portfolio Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable infrastructure Portfolio Companies Projects Apply Now About Mission and Impact Our Approach People Jobs Build to 2030 Our strategy to scale climate innovation Annual Report 2025 A Year of Extremes Earthshot Ventures In 2021, we launched a venture fund built to deliver market-leading returns while making a significant positive climate impact Latest Latest Launching the Data Center Innovation Initiative with Amazon, Google, Meta, and Microsoft Elemental News How the Environmental Movement Can Unleash Innovation From Our CEO Catalytic Capital in Action: One Year of the D-SAFE Tools and Resources Climate Tech Map Built in partnership with Speed & Scale, McKinsey & Co., the Stanford Doerr School of Sustainability, Energy Innovation, and Breakthrough Energy Ventures Donate Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative"
+    },
+    {
+      "id": "check-page-b3de9ce9b7",
+      "url": "https://elementalimpact.com/fervo-energy-southern-utah-university-and-elemental-impact-launch-geothermal-apprenticeship-program/",
+      "page": "details",
+      "excerpt": "Fervo Energy, Southern Utah University, and Elemental Impact Launch Geothermal Apprenticeship Program - Elemental Impact Portfolio About Latest Donate Portfolio Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable infrastructure Portfolio Companies Projects Apply Now About Mission and Impact Our Approach People Jobs Build to 2030 Our strategy to scale climate innovation Annual Report 2025 A Year of Extremes Earthshot Ventures In 2021, we launched a venture fund built to deliver market-leading returns while making a significant positive climate impact Latest Latest Launching the Data Center Innovation Initiative with Amazon, Google, Meta, and Microsoft Elemental News How the Environmental Movement Can Unleash Innovation From Our CEO Catalytic Capital in Action: One Year of the D-SAFE Tools and Resources Climate Tech Map Built in partnership with Speed & Scale, McKinsey & Co., the Stanford Doerr School of Sustainability, Energy Innovation, and Breakthrough Energy Ventures Donate Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation"
+    },
+    {
+      "id": "check-page-2be54419af",
+      "url": "https://elementalimpact.com/mission-and-impact/",
+      "page": "details",
+      "excerpt": "Mission and Impact - Elemental Impact Portfolio About Latest Donate Portfolio Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable infrastructure Portfolio Companies Projects Apply Now About Mission and Impact Our Approach People Jobs Build to 2030 Our strategy to scale climate innovation Annual Report 2025 A Year of Extremes Earthshot Ventures In 2021, we launched a venture fund built to deliver market-leading returns while making a significant positive climate impact Latest Latest Launching the Data Center Innovation Initiative with Amazon, Google, Meta, and Microsoft Elemental News How the Environmental Movement Can Unleash Innovation From Our CEO Catalytic Capital in Action: One Year of the D-SAFE Tools and Resources Climate Tech Map Built in partnership with Speed & Scale, McKinsey & Co., the Stanford Doerr School of Sustainability, Energy Innovation, and Breakthrough Energy Ventures Donate Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable"
+    },
+    {
+      "id": "check-page-7d84af1e58",
+      "url": "https://elementalimpact.com/annual-report-2025/",
+      "page": "portfolio",
+      "excerpt": "Annual Report 2025 - Elemental Impact Portfolio About Latest Donate Portfolio Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable infrastructure Portfolio Companies Projects Apply Now About Mission and Impact Our Approach People Jobs Build to 2030 Our strategy to scale climate innovation Annual Report 2025 A Year of Extremes Earthshot Ventures In 2021, we launched a venture fund built to deliver market-leading returns while making a significant positive climate impact Latest Latest Launching the Data Center Innovation Initiative with Amazon, Google, Meta, and Microsoft Elemental News How the Environmental Movement Can Unleash Innovation From Our CEO Catalytic Capital in Action: One Year of the D-SAFE Tools and Resources Climate Tech Map Built in partnership with Speed & Scale, McKinsey & Co., the Stanford Doerr School of Sustainability, Energy Innovation, and Breakthrough Energy Ventures Donate Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable"
+    },
+    {
+      "id": "check-page-c960c58419",
+      "url": "https://elementalimpact.com/companies/",
+      "page": "portfolio",
+      "excerpt": "Elemental Portfolio Portfolio About Latest Donate Portfolio Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable infrastructure Portfolio Companies Projects Apply Now About Mission and Impact Our Approach People Jobs Build to 2030 Our strategy to scale climate innovation Annual Report 2025 A Year of Extremes Earthshot Ventures In 2021, we launched a venture fund built to deliver market-leading returns while making a significant positive climate impact Latest Latest Launching the Data Center Innovation Initiative with Amazon, Google, Meta, and Microsoft Elemental News How the Environmental Movement Can Unleash Innovation From Our CEO Catalytic Capital in Action: One Year of the D-SAFE Tools and Resources Climate Tech Map Built in partnership with Speed & Scale, McKinsey & Co., the Stanford Doerr School of Sustainability, Energy Innovation, and Breakthrough Energy Ventures Donate Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable infrastructure"
+    },
+    {
+      "id": "check-page-9ce6955674",
+      "url": "https://elementalimpact.com/companies/actionfigure/",
+      "page": "portfolio",
+      "excerpt": "Elemental Portfolio Portfolio About Latest Donate Portfolio Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable infrastructure Portfolio Companies Projects Apply Now About Mission and Impact Our Approach People Jobs Build to 2030 Our strategy to scale climate innovation Annual Report 2025 A Year of Extremes Earthshot Ventures In 2021, we launched a venture fund built to deliver market-leading returns while making a significant positive climate impact Latest Latest Launching the Data Center Innovation Initiative with Amazon, Google, Meta, and Microsoft Elemental News How the Environmental Movement Can Unleash Innovation From Our CEO Catalytic Capital in Action: One Year of the D-SAFE Tools and Resources Climate Tech Map Built in partnership with Speed & Scale, McKinsey & Co., the Stanford Doerr School of Sustainability, Energy Innovation, and Breakthrough Energy Ventures Donate Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable infrastructure"
+    },
+    {
+      "id": "check-page-16a2837aa1",
+      "url": "https://elementalimpact.com/companies/allume-energy/",
+      "page": "portfolio",
+      "excerpt": "Elemental Portfolio Portfolio About Latest Donate Portfolio Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable infrastructure Portfolio Companies Projects Apply Now About Mission and Impact Our Approach People Jobs Build to 2030 Our strategy to scale climate innovation Annual Report 2025 A Year of Extremes Earthshot Ventures In 2021, we launched a venture fund built to deliver market-leading returns while making a significant positive climate impact Latest Latest Launching the Data Center Innovation Initiative with Amazon, Google, Meta, and Microsoft Elemental News How the Environmental Movement Can Unleash Innovation From Our CEO Catalytic Capital in Action: One Year of the D-SAFE Tools and Resources Climate Tech Map Built in partnership with Speed & Scale, McKinsey & Co., the Stanford Doerr School of Sustainability, Energy Innovation, and Breakthrough Energy Ventures Donate Funding Opportunities Investing in entrepreneurs who are building technologies across energy, industry, food and agriculture, nature, water, and transportation Data Center Innovation Initiative Accelerating deployment of next-generation technologies for more sustainable infrastructure"
     }
   ],
   "findings": {
     "emails": [
       {
+        "value": "apply@elementalimpact.com",
+        "evidenceId": "check-email-c555f67ce0"
+      },
+      {
         "value": "investment@elementalimpact.com",
         "evidenceId": "check-email-4ddc1e6805"
       },
       {
-        "value": "apply@elementalimpact.com",
-        "evidenceId": "check-email-1cb9cc0b65"
+        "value": "partnerships@elementalimpact.com",
+        "evidenceId": "check-email-7d6b92dec4"
       }
     ],
     "phones": [],
@@ -119,6 +759,14 @@
       {
         "value": "https://elementalimpact.com/funding-opportunities/",
         "evidenceId": "check-route-bfa8c2a88a"
+      },
+      {
+        "value": "mailto:apply@elementalimpact.com",
+        "evidenceId": "check-email-c555f67ce0"
+      },
+      {
+        "value": "https://share.elementalimpact.com/hubfs/Website_Files/DCII-Funding-Opportunity-Guide.pdf?utm_source=website&utm_medium=website&utm_campaign=DCII",
+        "evidenceId": "check-route-06995f2358"
       }
     ],
     "applicationUrl": [
@@ -135,8 +783,129 @@
     ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-9efa449042"
+      }
+    ],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "8 months",
+        "evidenceId": "check-duration-5f84b24092"
+      },
+      {
+        "value": "9 months",
+        "evidenceId": "check-duration-e02b14482a"
+      },
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-810502eb81"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-9776a8e92f"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-67ea030e4f"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-97f45b3241"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-2bc1a4e31e"
+      }
+    ],
+    "location": [
+      {
+        "value": "City",
+        "evidenceId": "check-location-f2bf2601fa"
+      }
+    ],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "for more sustainable infrastructure Elemental will invest $500,000 to $5 million per project in up to 10 technology startups through",
+        "evidenceId": "check-deal-f0af96a782"
+      },
+      {
+        "value": "more sustainable infrastructure Elemental will invest $500,000 to $5 million per project in up to 10 technology startups through 2027. The Data",
+        "evidenceId": "check-deal-4430ec0ba5"
+      },
+      {
+        "value": "the Data Center Innovation Initiative (DCII), Elemental will invest $500,000 to $5 million per project in up to 10 early-stage technology startups",
+        "evidenceId": "check-deal-c86e3c9342"
+      },
+      {
+        "value": "Innovation Initiative (DCII), Elemental will invest $500,000 to $5 million per project in up to 10 early-stage technology startups through",
+        "evidenceId": "check-deal-f91417f272"
+      },
+      {
+        "value": "funding. Read the press release. What We Offer Catalytic Capital $500k to $5M of funding for deployments of technologies that can be",
+        "evidenceId": "check-deal-468a0cc876"
+      },
+      {
+        "value": "Read the press release. What We Offer Catalytic Capital $500k to $5M of funding for deployments of technologies that can be integrated",
+        "evidenceId": "check-deal-1235a6fbac"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "500000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-f0af96a782"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "5000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-4430ec0ba5"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "500000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-468a0cc876"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "5000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-1235a6fbac"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://elementalimpact.com/companies/",

@@ -1,60 +1,493 @@
 {
   "programId": "dreamit",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://dreamit.com/",
     "https://dreamit.com/faq",
-    "https://dreamit.com/pitch-us"
+    "https://dreamit.com/events/cares-act-ppp-and-startups-important-updates-for-founders",
+    "https://dreamit.com/blogs/announcing-the-17-new-startups-in-dreamit-ventures-securetech-healthtech-and-urbantech-programs",
+    "https://dreamit.com/pitch-us",
+    "https://dreamit.com/portfolio",
+    "https://dreamit.com/portfolio?35fc9c13_page=2",
+    "https://dreamit.com/portfolio?39272b1e_page=2",
+    "https://dreamit.com/portfolio?583183c2_page=2",
+    "https://dreamit.com/portfolio?5c29b4ef_page=2",
+    "https://www.dreamit.com/portfolio"
   ],
   "evidence": [
     {
-      "id": "check-deal-9fac022577",
+      "id": "check-deal-3119e5391e",
       "url": "https://dreamit.com/faq",
-      "title": "Dreamit — terms page checked by scrape.py",
-      "excerpt": "Complete our intake form here , and you will receive a message from a Dreamit team member. What is Dreamit’s offer? Dreamit gets the right to invest up to $1M and receives a small amount of equity. For companies that are earlier in their development, Dreamit may consider alternative investment structures Will you",
+      "title": "Dreamit — terms page",
+      "excerpt": "What is Dreamit’s offer? Dreamit gets the right to invest up to $1M and receives a small amount of equity. For companies that are",
       "page": "terms"
+    },
+    {
+      "id": "check-duration-a1b64e0566",
+      "url": "https://dreamit.com/blogs/announcing-the-17-new-startups-in-dreamit-ventures-securetech-healthtech-and-urbantech-programs",
+      "title": "Dreamit — program page",
+      "excerpt": "industry, and investor networks during its 14-week acceleration programs. Dreamit incorporates the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-17d5520a50",
+      "url": "https://dreamit.com/portfolio?583183c2_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "management efficiency and outcomes with evidence-based remote monitoring via automated text messages and phone calls.",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-2d8037ed01",
+      "url": "https://www.dreamit.com/portfolio",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "management efficiency and outcomes with evidence-based remote monitoring via automated text messages and phone calls.",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-30ab2bff3a",
+      "url": "https://dreamit.com/portfolio?39272b1e_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "management efficiency and outcomes with evidence-based remote monitoring via automated text messages and phone calls.",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-6f03849ed0",
+      "url": "https://dreamit.com/portfolio?5c29b4ef_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "management efficiency and outcomes with evidence-based remote monitoring via automated text messages and phone calls.",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-bb6278536b",
+      "url": "https://dreamit.com/portfolio?39272b1e_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "third party and LLM egress, across cloud native and hybrid environments. Aurva deploys quickly and replaces a",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-c1b2b69f00",
+      "url": "https://dreamit.com/portfolio?5c29b4ef_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "third party and LLM egress, across cloud native and hybrid environments. Aurva deploys quickly and replaces a",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-e21cbc19d8",
+      "url": "https://dreamit.com/portfolio",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "third party and LLM egress, across cloud native and hybrid environments. Aurva deploys quickly and replaces a",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-f5f9b5304d",
+      "url": "https://dreamit.com/portfolio?583183c2_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "third party and LLM egress, across cloud native and hybrid environments. Aurva deploys quickly and replaces a",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-fbfb407a6e",
+      "url": "https://www.dreamit.com/portfolio",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "third party and LLM egress, across cloud native and hybrid environments. Aurva deploys quickly and replaces a",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-fdf97e95fe",
+      "url": "https://dreamit.com/portfolio",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "management efficiency and outcomes with evidence-based remote monitoring via automated text messages and phone calls.",
+      "page": "portfolio"
     },
     {
       "id": "check-name-380b2139c9",
       "url": "https://dreamit.com/",
-      "title": "Dreamit — homepage checked by scrape.py",
+      "title": "Dreamit — homepage",
       "excerpt": "Dreamit Ventures | Early-Stage Cybersecurity Investor Platform",
       "page": "details"
     },
     {
+      "id": "check-portfolio-03e65a1381",
+      "url": "https://dreamit.com/portfolio?35fc9c13_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?35fc9c13_page=2&5c29b4ef_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-07ebf04877",
+      "url": "https://dreamit.com/portfolio?39272b1e_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?39272b1e_page=2&583183c2_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-088f9cff08",
+      "url": "https://dreamit.com/portfolio?35fc9c13_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Previous → https://dreamit.com/portfolio?35fc9c13_page=1",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-0a9698bc9b",
+      "url": "https://dreamit.com/portfolio?5c29b4ef_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?583183c2_page=2&5c29b4ef_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-0da3f0beb0",
+      "url": "https://dreamit.com/portfolio?35fc9c13_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?35fc9c13_page=3",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-13efc033ec",
+      "url": "https://dreamit.com/portfolio?583183c2_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?583183c2_page=2&5c29b4ef_page=2",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-1b401f5a83",
       "url": "https://dreamit.com/",
-      "title": "Dreamit — homepage checked by scrape.py",
+      "title": "Dreamit — homepage",
       "excerpt": "View Full Portfolio → https://dreamit.com/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-2766f724cc",
       "url": "https://dreamit.com/pitch-us",
-      "title": "Dreamit — details page checked by scrape.py",
+      "title": "Dreamit — program page",
       "excerpt": "Portfolio → https://dreamit.com/portfolio",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-31ca757af3",
+      "url": "https://www.dreamit.com/portfolio",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Portfolio → https://dreamit.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-32259c7333",
+      "url": "https://dreamit.com/portfolio?583183c2_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?39272b1e_page=2&583183c2_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-3571f52355",
+      "url": "https://dreamit.com/portfolio?583183c2_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Previous → https://dreamit.com/portfolio?583183c2_page=1",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-3d02fc7537",
+      "url": "https://dreamit.com/portfolio?39272b1e_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?39272b1e_page=2&5c29b4ef_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-43f943eafb",
+      "url": "https://dreamit.com/portfolio?583183c2_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Portfolio → https://dreamit.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-44190b69d9",
+      "url": "https://dreamit.com/portfolio?39272b1e_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?35fc9c13_page=2&39272b1e_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-56d3765d46",
+      "url": "https://www.dreamit.com/portfolio",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Visit BrainCheck → https://dreamit.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-5bf6a1b369",
+      "url": "https://dreamit.com/portfolio",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?35fc9c13_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-5fabdcfd30",
+      "url": "https://dreamit.com/portfolio?5c29b4ef_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Portfolio → https://dreamit.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-70a81b12fe",
+      "url": "https://dreamit.com/portfolio?39272b1e_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Portfolio → https://dreamit.com/portfolio",
+      "page": "portfolio"
     },
     {
       "id": "check-portfolio-737629ba0e",
       "url": "https://dreamit.com/",
-      "title": "Dreamit — homepage checked by scrape.py",
+      "title": "Dreamit — homepage",
       "excerpt": "Portfolio → https://dreamit.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-7d0b752f67",
+      "url": "https://dreamit.com/portfolio?583183c2_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?35fc9c13_page=2&583183c2_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-817c9c5f4c",
+      "url": "https://dreamit.com/portfolio?5c29b4ef_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?35fc9c13_page=2&5c29b4ef_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-825ff04d66",
+      "url": "https://dreamit.com/portfolio?5c29b4ef_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?5c29b4ef_page=3",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-88137e666e",
+      "url": "https://dreamit.com/events/cares-act-ppp-and-startups-important-updates-for-founders",
+      "title": "Dreamit — batches page",
+      "excerpt": "Portfolio → https://dreamit.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-89a2fee379",
+      "url": "https://www.dreamit.com/portfolio",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?35fc9c13_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-89eaaeefdb",
+      "url": "https://dreamit.com/portfolio?35fc9c13_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Portfolio → https://dreamit.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-8a22913ad6",
+      "url": "https://www.dreamit.com/portfolio",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?39272b1e_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-8f93be7ba8",
+      "url": "https://dreamit.com/portfolio?5c29b4ef_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Previous → https://dreamit.com/portfolio?5c29b4ef_page=1",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-9b1be1372f",
+      "url": "https://www.dreamit.com/portfolio",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Visit Biomeme → https://dreamit.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-9f7f959511",
+      "url": "https://dreamit.com/portfolio?583183c2_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?583183c2_page=3",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-a0896ea0d4",
+      "url": "https://dreamit.com/portfolio",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?39272b1e_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-ac4be22996",
+      "url": "https://dreamit.com/portfolio?35fc9c13_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?35fc9c13_page=2&39272b1e_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-ba4871d1be",
+      "url": "https://dreamit.com/portfolio?5c29b4ef_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?39272b1e_page=2&5c29b4ef_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-c025367839",
+      "url": "https://dreamit.com/portfolio?39272b1e_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Previous → https://dreamit.com/portfolio?39272b1e_page=1",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-c2560df18e",
+      "url": "https://dreamit.com/portfolio",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?5c29b4ef_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-c5fb80e12d",
+      "url": "https://www.dreamit.com/portfolio",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?5c29b4ef_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-d19ac2d87a",
+      "url": "https://dreamit.com/blogs/announcing-the-17-new-startups-in-dreamit-ventures-securetech-healthtech-and-urbantech-programs",
+      "title": "Dreamit — program page",
+      "excerpt": "View the Dreamit Ventures portfolio → https://www.dreamit.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d21f705ce8",
+      "url": "https://dreamit.com/blogs/announcing-the-17-new-startups-in-dreamit-ventures-securetech-healthtech-and-urbantech-programs",
+      "title": "Dreamit — program page",
+      "excerpt": "Portfolio → https://dreamit.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-db63f5b5e7",
+      "url": "https://dreamit.com/portfolio?39272b1e_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?39272b1e_page=3",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-de7bd750e4",
+      "url": "https://www.dreamit.com/portfolio",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?583183c2_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-e103388392",
+      "url": "https://dreamit.com/portfolio?35fc9c13_page=2",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?35fc9c13_page=2&583183c2_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-e4a60b45fd",
+      "url": "https://www.dreamit.com/portfolio",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Visit Biorealize → https://dreamit.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-e9302a2f64",
+      "url": "https://dreamit.com/portfolio",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Next → https://dreamit.com/portfolio?583183c2_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-fd1356d2fd",
+      "url": "https://www.dreamit.com/portfolio",
+      "title": "Dreamit — portfolio page",
+      "excerpt": "Visit Care Signal → https://dreamit.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-fd1a07fe13",
       "url": "https://dreamit.com/faq",
-      "title": "Dreamit — terms page checked by scrape.py",
+      "title": "Dreamit — terms page",
       "excerpt": "Portfolio → https://dreamit.com/portfolio",
       "page": "terms"
     },
     {
       "id": "check-route-5d0250f5d8",
       "url": "https://dreamit.com/",
-      "title": "Dreamit — homepage checked by scrape.py",
+      "title": "Dreamit — homepage",
       "excerpt": "Pitch Us → https://dreamit.com/pitch-us",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-6fc75ac01c",
+      "url": "https://dreamit.com/",
+      "page": "details",
+      "excerpt": "Dreamit Ventures | Early-Stage Cybersecurity Investor Platform Portfolio Team Pitch Us Blog Events FAQ Investing in Transformative Early-Stage Cybersecurity Startups Our deep expertise and extensive network of partners ignite revenue growth and open doors to smart capital Recent Investments ‍ View Full Portfolio Our Platform We leverage a unique, highly curated process to make meaningful customer introductions and provide access to smart capital to support company growth. Customer Sprints Curated Customer Meetings Leverage our network of 100+ enterprise partners Target revenue-generating or piloting companies Quarterly sprints to grow your customer pipeline Investor Sprints Access to Smart Capital Streamline your fundraising process Leverage our relationships with 150+ co-investors Proven process with a high probability of success About Dreamit Dreamit initially invests $500k–$1.5M in pre-Series A US companies with high growth potential. Companies should demonstrate early product-market fit via revenue, pilots, or other indicators. See our FAQ for details. We’re more than just investors—we’re active partners. We work closely with founders on crucial business aspects. Our deep domain expertise, network, and approach accelerate customer acquisition and strengthen fundraising readiness , transforming potential into tangible performance. Our Team Select Previous Investments ‍"
+    },
+    {
+      "id": "check-page-4c6507610d",
+      "url": "https://dreamit.com/faq",
+      "page": "terms",
+      "excerpt": "FAQ Platform Portfolio Team Pitch Us Blog Events FAQ Frequently Asked Questions What is Dreamit’s Investment Criteria? Dreamit invests in pre-Series A companies that have deployed a product and demonstrated early market traction in cybersecurity, anti-fraud, risk and compliance, and physical security. We like to see evidence of early product-market fit in the form of revenue, pilots, or design partnerships. What is Dreamit’s typical check size? Dreamit initially invests $500k—$1.5M in pre-Series A financing and reserves similar amounts for follow-on investments. Can you tell me more about Customer Sprints? Customer Sprints are meetings that Dreamit schedules for our portfolio companies with industry customers and go-to-market partners—primarily C-suite executives and other decision-makers. We maintain a quarterly cadence with our enterprise partners to pre-qualify every introduction and maximize the value of each engagement. ‍ These meetings aim to build relationships with prospective customers, potentially leading to design partnerships, proofs-of-concept, and commercial traction. They also help validate customer segments. Can you tell me more about Investor Sprints? We believe in the value of a strong investor syndicate. During two-week Investor Sprints, founders have curated, one-on-one meetings with top US venture capital firms. Typically, each founder meets with between"
+    },
+    {
+      "id": "check-page-b1e247e9bf",
+      "url": "https://dreamit.com/events/cares-act-ppp-and-startups-important-updates-for-founders",
+      "page": "batches",
+      "excerpt": "Dreamit Ventures Platform Portfolio Team Pitch Us Blog Events FAQ CARES Act, PPP & Startups: Important Updates For Founders April 6, 2020 Join Our Investor Network Join Our Customer Network Become a Dreamit Advisor Tell Us About Your Company Sign Up For Our Newsletters Brand Assets © Dreamit Ventures 2008– XXXX . All Rights Reserved."
+    },
+    {
+      "id": "check-page-73c9d8ccdb",
+      "url": "https://dreamit.com/blogs/announcing-the-17-new-startups-in-dreamit-ventures-securetech-healthtech-and-urbantech-programs",
+      "page": "details",
+      "excerpt": "Dreamit Ventures Platform Portfolio Team Pitch Us Blog Events FAQ Announcing the 17 New Startups in Dreamit Ventures’ SecureTech, HealthTech, and UrbanTech Programs April 2, 2019 By Charles LaCalle, Director of Sourcing at Dreamit Ventures The venture fund and growth-focused accelerator accepted the cohort from a field of nearly 2,000 pre-Series A companies NEW YORK CITY, NY — April 2, 2019 — Dreamit Ventures, an early stage venture fund and growth-focused accelerator, announced its latest batch of startups this week. Dreamit works with top healthcare, cybersecurity, and urban technology startups, providing access to extensive customer, industry, and investor networks during its 14-week acceleration programs. Dreamit incorporates the intelligence, data, and new relationships gained during acceleration into its venture investment process to build a high-potential, diversified portfolio. Since 2008, Dreamit has worked with over 320 companies. And over the last six months, the fund has seen over $600m in exits of companies that got their start at Dreamit, including LevelUp (acquired by GrubHub), Trendkite (acquired by Cision), and Adaptly (acquired by Accenture). Other well-known Dreamit startups include SeatGeek, HouseParty, Wellth, Biomeme, Tissue Analytics, Redox, Eko Devices, Raxar, Elevate, Cylera and many others. View the Dreamit Ventures portfolio Dreamit is uniquely"
+    },
+    {
+      "id": "check-page-ccfb29c74e",
+      "url": "https://dreamit.com/pitch-us",
+      "page": "details",
+      "excerpt": "Startups' Application Page Platform Portfolio Team Pitch Us Blog Events FAQ Tell Us About Your Company Company Name * Company Email * Use the same email address on both pages of the application Company Website * Use format: https://www.startup.com First Name * Last Name * Investor Deck * Upload File Max file size 10MB. Uploading... fileuploaded.jpg Upload failed. Max size for files is 10 MB. Company Stage * Select one... Idea Phase Building Proof of Concept Now Alpha/Beta Ready but Not Launched Pilots or Initial Trials Started At Revenue How Did You Hear About Dreamit Select one... Accelerator Rankings Angel List Conference or Event Dreamit Alumni Dreamit Team Member Internet Search Investor or VC Media Story Social Media Video / Youtube Select Your Vertical * Which 1 or 2 areas of Securetech best fits your company's focus? Application Security Authentication Cloud Security Cyber Recruitment & Training Data Fraud Data Privacy Data Security Email Security Endpoint Security Governance, Risk, Compliance Identity & Access Mgmt Incidence Response IoT Security Mobile Security Network Security Physical Security Security Monitoring Security Services Threat Intelligence Vulnerability Mgmt Patching Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Join Our Investor Network Join Our Customer Network Become a Dreamit Advisor Tell Us About"
+    },
+    {
+      "id": "check-page-fbe6c3ce7c",
+      "url": "https://dreamit.com/portfolio",
+      "page": "portfolio",
+      "excerpt": "Dreamit Ventures’ Portfolio Platform Portfolio Team Pitch Us Blog Events FAQ Our Investments Since 2008, we’ve invested across multiple industry verticals through four funds. Featured Securetech Healthtech Urbantech Next Healthtech Healthtech Healthtech Healthtech Healthtech Next Next All Investments Vertical Securetech Healthtech Urbantech Fund Fund I Fund II Fund III Fund IV Status Active Acquired Exited Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Visit 1DocWay Healthtech Fund II Acquired 1DocWay (acquired in 2015 by Genoa) developed a national telepsychiatry network to help improve access to psychiatric care. Visit Abode Urbantech Fund III Active Abode is the only company that can help both large REOs (e.g., banks, REITs) and DIY home sellers list, market, show, and sell their homes at a fraction of the cost of traditional brokers. Abode operates in 38 states, can rapidly list hundreds and even thousands of homes on the relevant Multiple Listing Services (MLS), and provides customers with a dashboard so they can easily track these kinds of bulk sales. Zero Trust Cloud Native Application Protection Platform (CNAPP) Visit Accuknox Securetech Fund IV Active AccuKnox is a Zero Trust Cloud Native Application Protection Platform (CNAPP). Developed in partnership with Stanford Research Institute, AccuKnox is built to scale"
+    },
+    {
+      "id": "check-page-eaeb159948",
+      "url": "https://dreamit.com/portfolio?35fc9c13_page=2",
+      "page": "portfolio",
+      "excerpt": "Dreamit Ventures’ Portfolio Platform Portfolio Team Pitch Us Blog Events FAQ Our Investments Since 2008, we’ve invested across multiple industry verticals through four funds. Featured Securetech Healthtech Urbantech Next Healthtech Healthtech Healthtech Healthtech Healthtech Next Next All Investments Vertical Securetech Healthtech Urbantech Fund Fund I Fund II Fund III Fund IV Status Active Acquired Exited Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. AI-Tabletop Simulation and Autonomous Incident Response Visit ChaosTrack Securetech Fund IV Active ChaosTrack is an AI-driven cyber response platform built to solve a core problem in incident response: cross-functional chaos. Incidents touch many business units, creating confusion and slow decisions. ChaosTrack automates tabletop exercises, response workflows, and cross-team coordination so organizations can manage incidents and compliance obligations seamlessly. The platform runs dynamic AI-driven attack simulations, guides responders with best practices, and coordinates response across functional teams. These simulations form the basis for autonomous response, allowing the platform to execute proven actions during live incidents. Visit CircleLink Healthtech Fund II Active CircleLink helps doctors earn up to $18B+ of preventative Medicare reimbursements by engaging their"
+    },
+    {
+      "id": "check-page-2f561d54d1",
+      "url": "https://dreamit.com/portfolio?39272b1e_page=2",
+      "page": "portfolio",
+      "excerpt": "Dreamit Ventures’ Portfolio Platform Portfolio Team Pitch Us Blog Events FAQ Our Investments Since 2008, we’ve invested across multiple industry verticals through four funds. Featured Securetech Healthtech Urbantech Next Healthtech Healthtech Healthtech Previous Next Next All Investments Vertical Securetech Healthtech Urbantech Fund Fund I Fund II Fund III Fund IV Status Active Acquired Exited Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Visit 1DocWay Healthtech Fund II Acquired 1DocWay (acquired in 2015 by Genoa) developed a national telepsychiatry network to help improve access to psychiatric care. Visit Abode Urbantech Fund III Active Abode is the only company that can help both large REOs (e.g., banks, REITs) and DIY home sellers list, market, show, and sell their homes at a fraction of the cost of traditional brokers. Abode operates in 38 states, can rapidly list hundreds and even thousands of homes on the relevant Multiple Listing Services (MLS), and provides customers with a dashboard so they can easily track these kinds of bulk sales. Zero Trust Cloud Native Application Protection Platform (CNAPP) Visit Accuknox Securetech Fund IV Active AccuKnox is a Zero Trust Cloud Native Application Protection Platform (CNAPP). Developed in partnership with Stanford Research Institute, AccuKnox is built to scale runtime"
+    },
+    {
+      "id": "check-page-59500db07e",
+      "url": "https://dreamit.com/portfolio?583183c2_page=2",
+      "page": "portfolio",
+      "excerpt": "Dreamit Ventures’ Portfolio Platform Portfolio Team Pitch Us Blog Events FAQ Our Investments Since 2008, we’ve invested across multiple industry verticals through four funds. Featured Securetech Healthtech Urbantech Next Healthtech Healthtech Healthtech Healthtech Healthtech Next Urbantech Previous Next All Investments Vertical Securetech Healthtech Urbantech Fund Fund I Fund II Fund III Fund IV Status Active Acquired Exited Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Visit 1DocWay Healthtech Fund II Acquired 1DocWay (acquired in 2015 by Genoa) developed a national telepsychiatry network to help improve access to psychiatric care. Visit Abode Urbantech Fund III Active Abode is the only company that can help both large REOs (e.g., banks, REITs) and DIY home sellers list, market, show, and sell their homes at a fraction of the cost of traditional brokers. Abode operates in 38 states, can rapidly list hundreds and even thousands of homes on the relevant Multiple Listing Services (MLS), and provides customers with a dashboard so they can easily track these kinds of bulk sales. Zero Trust Cloud Native Application Protection Platform (CNAPP) Visit Accuknox Securetech Fund IV Active AccuKnox is a Zero Trust Cloud Native Application Protection Platform (CNAPP). Developed in partnership with Stanford Research Institute, AccuKnox"
+    },
+    {
+      "id": "check-page-e9ef7cc023",
+      "url": "https://dreamit.com/portfolio?5c29b4ef_page=2",
+      "page": "portfolio",
+      "excerpt": "Dreamit Ventures’ Portfolio Platform Portfolio Team Pitch Us Blog Events FAQ Our Investments Since 2008, we’ve invested across multiple industry verticals through four funds. Featured Securetech Healthtech Urbantech Previous Next Healthtech Healthtech Healthtech Healthtech Healthtech Next Next All Investments Vertical Securetech Healthtech Urbantech Fund Fund I Fund II Fund III Fund IV Status Active Acquired Exited Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Visit 1DocWay Healthtech Fund II Acquired 1DocWay (acquired in 2015 by Genoa) developed a national telepsychiatry network to help improve access to psychiatric care. Visit Abode Urbantech Fund III Active Abode is the only company that can help both large REOs (e.g., banks, REITs) and DIY home sellers list, market, show, and sell their homes at a fraction of the cost of traditional brokers. Abode operates in 38 states, can rapidly list hundreds and even thousands of homes on the relevant Multiple Listing Services (MLS), and provides customers with a dashboard so they can easily track these kinds of bulk sales. Zero Trust Cloud Native Application Protection Platform (CNAPP) Visit Accuknox Securetech Fund IV Active AccuKnox is a Zero Trust Cloud Native Application Protection Platform (CNAPP). Developed in partnership with Stanford Research Institute, AccuKnox is built to"
+    },
+    {
+      "id": "check-page-f77cdba02a",
+      "url": "https://www.dreamit.com/portfolio",
+      "page": "portfolio",
+      "excerpt": "Dreamit Ventures’ Portfolio Platform Portfolio Team Pitch Us Blog Events FAQ Our Investments Since 2008, we’ve invested across multiple industry verticals through four funds. Featured Securetech Healthtech Urbantech Next Healthtech Healthtech Healthtech Healthtech Healthtech Next Next All Investments Vertical Securetech Healthtech Urbantech Fund Fund I Fund II Fund III Fund IV Status Active Acquired Exited Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Visit 1DocWay Healthtech Fund II Acquired 1DocWay (acquired in 2015 by Genoa) developed a national telepsychiatry network to help improve access to psychiatric care. Visit Abode Urbantech Fund III Active Abode is the only company that can help both large REOs (e.g., banks, REITs) and DIY home sellers list, market, show, and sell their homes at a fraction of the cost of traditional brokers. Abode operates in 38 states, can rapidly list hundreds and even thousands of homes on the relevant Multiple Listing Services (MLS), and provides customers with a dashboard so they can easily track these kinds of bulk sales. Zero Trust Cloud Native Application Protection Platform (CNAPP) Visit Accuknox Securetech Fund IV Active AccuKnox is a Zero Trust Cloud Native Application Protection Platform (CNAPP). Developed in partnership with Stanford Research Institute, AccuKnox is built to scale"
     }
   ],
   "findings": {
@@ -70,17 +503,71 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "14",
+        "evidenceId": "check-duration-a1b64e0566"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-e21cbc19d8"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-fdf97e95fe"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "Complete our intake form here , and you will receive a message from a Dreamit team member. What is Dreamit’s offer? Dreamit gets the right to invest up to $1M and receives a small amount of equity. For companies that are earlier in their development, Dreamit may consider alternative investment structures Will you",
-        "evidenceId": "check-deal-9fac022577"
+        "value": "What is Dreamit’s offer? Dreamit gets the right to invest up to $1M and receives a small amount of equity. For companies that are",
+        "evidenceId": "check-deal-3119e5391e"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "equity",
+          "amount": "1000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Equity",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-3119e5391e"
       }
     ],
     "portfolioPages": [
       {
         "value": "https://dreamit.com/portfolio",
         "evidenceId": "check-portfolio-737629ba0e"
+      },
+      {
+        "value": "https://www.dreamit.com/portfolio",
+        "evidenceId": "check-portfolio-d19ac2d87a"
+      },
+      {
+        "value": "https://dreamit.com/portfolio?5c29b4ef_page=2",
+        "evidenceId": "check-portfolio-c2560df18e"
+      },
+      {
+        "value": "https://dreamit.com/portfolio?39272b1e_page=2",
+        "evidenceId": "check-portfolio-a0896ea0d4"
+      },
+      {
+        "value": "https://dreamit.com/portfolio?583183c2_page=2",
+        "evidenceId": "check-portfolio-e9302a2f64"
+      },
+      {
+        "value": "https://dreamit.com/portfolio?35fc9c13_page=2",
+        "evidenceId": "check-portfolio-5bf6a1b369"
       }
     ],
     "name": [

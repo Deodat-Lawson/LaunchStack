@@ -1,42 +1,398 @@
 {
   "programId": "startup-health",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.startuphealth.com/",
+    "https://www.startuphealth.com/startup-health-blog/call-for-applications-startup-health-launches-12-additional-health-moonshot-communities",
+    "https://www.startuphealth.com/startup-health-blog/ai-accessibility-and-at-home-care-drive-investment-startup-health-insights-week-of-jul-23-2024",
+    "https://www.startuphealth.com/alzheimers",
+    "https://www.startuphealth.com/startup-health-blog/ai-aging-amp-access-health-startups-draw-global-investment-startup-health-insights-week-of-jul-8-2025",
+    "https://www.startuphealth.com/membership",
+    "https://www.startuphealth.com/startup-health-blog/ai-drug-discovery-amp-neurotech-lead-weeks-deals-startup-health-insights-week-of-mar-18-2025",
+    "https://www.startuphealth.com/startup-health-blog/ai-solutions-diagnostics-and-caregiver-support-see-investments-startup-health-insights-week-of-apr-9-2023",
+    "https://www.startuphealth.com/startup-health-blog/dreamed-secures-3m-amp-strategic-deals-startup-health-insights-week-of-aug-20-2024",
+    "https://www.startuphealth.com/terms",
     "https://www.startuphealth.com/contact",
-    "https://www.startuphealth.com/home"
+    "https://www.startuphealth.com/startup-health-blog/2024/01/19/10-things-you-need-to-know-about-startup-healths-alzheimers-moonshot",
+    "http://www.startuphealth.com/apply",
+    "https://www.startuphealth.com/founders",
+    "https://www.startuphealth.com/startup-health-blog/alzheimers-drug-discovery-foundations-diagnostics-accelerator-dxa-invests-10m-in-alamar-biosciences-startup-health-insights-week-of-jan-14-2025"
   ],
   "evidence": [
     {
+      "id": "check-deal-2ed6ebaec9",
+      "url": "https://www.startuphealth.com/startup-health-blog/alzheimers-drug-discovery-foundations-diagnostics-accelerator-dxa-invests-10m-in-alamar-biosciences-startup-health-insights-week-of-jan-14-2025",
+      "title": "StartUp Health — program page",
+      "excerpt": "Drug Discovery Foundation's Diagnostics Accelerator (DxA) Invests $10M in Alamar Biosciences | StartUp Health Insights: Week of Jan 14,",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b43ad4f45d",
+      "url": "https://www.startuphealth.com/terms",
+      "title": "StartUp Health — terms page",
+      "excerpt": "USE (INCLUDING WITH RESPECT TO THE SITE) IN ANY 12-MONTH PERIOD WILL NOT EXCEED $100. G. THESE",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-dbd456bb48",
+      "url": "https://www.startuphealth.com/terms",
+      "title": "StartUp Health — terms page",
+      "excerpt": "send us any and all feedback pertaining to the Site to info@startuphealth.com. By sending us any ideas, suggestions, documents or",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-00f26d14a4",
+      "url": "http://www.startuphealth.com/apply",
+      "title": "StartUp Health — application page",
+      "excerpt": "around the world. Every month Fireside chats Live virtual sessions with health leaders and bold thinkers. Recorded,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-09a5974662",
+      "url": "https://www.startuphealth.com/startup-health-blog/alzheimers-drug-discovery-foundations-diagnostics-accelerator-dxa-invests-10m-in-alamar-biosciences-startup-health-insights-week-of-jan-14-2025",
+      "title": "StartUp Health — program page",
+      "excerpt": "Health , a New Haven, CT-based provider of a solution for virtual trauma and PTSD care, raised $14.5M led by Deerfield",
+      "page": "details"
+    },
+    {
+      "id": "check-format-25b919286a",
+      "url": "https://www.startuphealth.com/founders",
+      "title": "StartUp Health — application page",
+      "excerpt": "podcasts, and archives of 80+ past event recordings. In person Industry conferences VIP access and discounts at major",
+      "page": "application"
+    },
+    {
+      "id": "check-format-27675d6c06",
+      "url": "https://www.startuphealth.com/membership",
+      "title": "StartUp Health — application page",
+      "excerpt": "podcasts, and archives of 80+ past event recordings. In person Industry conferences VIP access and discounts at major",
+      "page": "application"
+    },
+    {
+      "id": "check-format-2e52fcc222",
+      "url": "https://www.startuphealth.com/startup-health-blog/2024/01/19/10-things-you-need-to-know-about-startup-healths-alzheimers-moonshot",
+      "title": "StartUp Health — program page",
+      "excerpt": "By bringing all of these pieces together through a virtual hub, coaching workshops, and events, StartUp Health speeds",
+      "page": "details"
+    },
+    {
+      "id": "check-format-2e978323a8",
+      "url": "https://www.startuphealth.com/startup-health-blog/ai-drug-discovery-amp-neurotech-lead-weeks-deals-startup-health-insights-week-of-mar-18-2025",
+      "title": "StartUp Health — terms page",
+      "excerpt": "Capital. < source > Vori Health , a Nashville, TN-based hybrid musculoskeletal care provider, raised $53M led by NEA,",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-41b2b7791c",
+      "url": "https://www.startuphealth.com/",
+      "title": "StartUp Health — homepage",
+      "excerpt": "podcasts, and archives of 80+ past event recordings. In person Industry conferences VIP access and discounts at major",
+      "page": "details"
+    },
+    {
+      "id": "check-format-4aeff55a53",
+      "url": "https://www.startuphealth.com/startup-health-blog/ai-accessibility-and-at-home-care-drive-investment-startup-health-insights-week-of-jul-23-2024",
+      "title": "StartUp Health — terms page",
+      "excerpt": "< source > Kins , a Boston, MA-based digital-first hybrid care physical therapy practice, raised $7M from",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-7aa8efa24f",
+      "url": "https://www.startuphealth.com/",
+      "title": "StartUp Health — homepage",
+      "excerpt": "around the world. Every month Fireside chats Live virtual sessions with health leaders and bold thinkers. Recorded,",
+      "page": "details"
+    },
+    {
+      "id": "check-format-837aa18398",
+      "url": "http://www.startuphealth.com/apply",
+      "title": "StartUp Health — application page",
+      "excerpt": "podcasts, and archives of 80+ past event recordings. In person Industry conferences VIP access and discounts at major",
+      "page": "application"
+    },
+    {
+      "id": "check-format-add1f30089",
+      "url": "https://www.startuphealth.com/founders",
+      "title": "StartUp Health — application page",
+      "excerpt": "around the world. Every month Fireside chats Live virtual sessions with health leaders and bold thinkers. Recorded,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-b07be19101",
+      "url": "https://www.startuphealth.com/membership",
+      "title": "StartUp Health — application page",
+      "excerpt": "around the world. Every month Fireside chats Live virtual sessions with health leaders and bold thinkers. Recorded,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-d90cbc424f",
+      "url": "https://www.startuphealth.com/startup-health-blog/ai-solutions-diagnostics-and-caregiver-support-see-investments-startup-health-insights-week-of-apr-9-2023",
+      "title": "StartUp Health — terms page",
+      "excerpt": ", a Hackensack, NJ-based company that specializes in virtual healthcare, raised $5M led by ScOp Venture Capital, with",
+      "page": "terms"
+    },
+    {
       "id": "check-name-70beb40b9c",
       "url": "https://www.startuphealth.com/",
-      "title": "StartUp Health — homepage checked by scrape.py",
+      "title": "StartUp Health — homepage",
       "excerpt": "StartUp Health 0 Skip to Content Testimonials Events Event Calendar",
+      "page": "details"
+    },
+    {
+      "id": "check-route-18db008577",
+      "url": "https://www.startuphealth.com/startup-health-blog/2024/01/19/10-things-you-need-to-know-about-startup-healths-alzheimers-moonshot",
+      "title": "StartUp Health — program page",
+      "excerpt": "Learn more and apply for an Alzheimer’s Moonshot Fellowship → https://www.startuphealth.com/alzheimers",
+      "page": "details"
+    },
+    {
+      "id": "check-route-396cfb4a69",
+      "url": "https://www.startuphealth.com/startup-health-blog/ai-solutions-diagnostics-and-caregiver-support-see-investments-startup-health-insights-week-of-apr-9-2023",
+      "title": "StartUp Health — terms page",
+      "excerpt": "Learn more and apply for an Alzheimer’s Moonshot Fellowship → https://www.startuphealth.com/alzheimers",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-4197724f74",
+      "url": "https://www.startuphealth.com/startup-health-blog/ai-accessibility-and-at-home-care-drive-investment-startup-health-insights-week-of-jul-23-2024",
+      "title": "StartUp Health — terms page",
+      "excerpt": "Learn more and apply for an Alzheimer’s Moonshot Fellowship → https://www.startuphealth.com/alzheimers",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-443994bcd9",
+      "url": "https://www.startuphealth.com/startup-health-blog/alzheimers-drug-discovery-foundations-diagnostics-accelerator-dxa-invests-10m-in-alamar-biosciences-startup-health-insights-week-of-jan-14-2025",
+      "title": "StartUp Health — program page",
+      "excerpt": "Learn more and apply today → https://www.startuphealth.com/membership",
       "page": "details"
     },
     {
       "id": "check-route-6863158358",
       "url": "https://www.startuphealth.com/",
-      "title": "StartUp Health — homepage checked by scrape.py",
+      "title": "StartUp Health — homepage",
       "excerpt": "https://www.startuphealth.com/",
       "page": "details"
+    },
+    {
+      "id": "check-route-94d75f8075",
+      "url": "https://www.startuphealth.com/startup-health-blog/2024/01/19/10-things-you-need-to-know-about-startup-healths-alzheimers-moonshot",
+      "title": "StartUp Health — program page",
+      "excerpt": "www.startuphealth.com/apply → http://www.startuphealth.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b523e23730",
+      "url": "https://www.startuphealth.com/startup-health-blog/dreamed-secures-3m-amp-strategic-deals-startup-health-insights-week-of-aug-20-2024",
+      "title": "StartUp Health — terms page",
+      "excerpt": "Learn more and apply for an Alzheimer’s Moonshot Fellowship → https://www.startuphealth.com/alzheimers",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b9cf6df40a",
+      "url": "https://www.startuphealth.com/startup-health-blog/ai-drug-discovery-amp-neurotech-lead-weeks-deals-startup-health-insights-week-of-mar-18-2025",
+      "title": "StartUp Health — terms page",
+      "excerpt": "Learn more and apply today → https://www.startuphealth.com/membership",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-f7bd1a66e3",
+      "url": "https://www.startuphealth.com/startup-health-blog/2024/01/19/10-things-you-need-to-know-about-startup-healths-alzheimers-moonshot",
+      "title": "StartUp Health — program page",
+      "excerpt": "apply here → https://www.startuphealth.com/founders",
+      "page": "details"
+    },
+    {
+      "id": "check-route-fbcde32fbd",
+      "url": "https://www.startuphealth.com/startup-health-blog/ai-aging-amp-access-health-startups-draw-global-investment-startup-health-insights-week-of-jul-8-2025",
+      "title": "StartUp Health — terms page",
+      "excerpt": "Learn more and apply today → https://www.startuphealth.com/membership",
+      "page": "terms"
+    },
+    {
+      "id": "check-status-76b8eaf73d",
+      "url": "https://www.startuphealth.com/startup-health-blog/call-for-applications-startup-health-launches-12-additional-health-moonshot-communities",
+      "title": "StartUp Health — application page",
+      "excerpt": "StartUp Health, a global network of founders and CEOs committed to achieving health moonshots, is now accepting applications from founders at all stages — from preclinical to those scaling established companies — to join 24 Health",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-41c3930358",
+      "url": "https://www.startuphealth.com/",
+      "page": "details",
+      "excerpt": "StartUp Health 0 Skip to Content Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Folder: Events Back Event Calendar Dinner Salons Media Folder: Community Back Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Skip to what membership includes Join StartUp Heath Fuel your health moonshot. StartUp Health is a private global membership for the founders, funders, and health ecosystem leaders going after the world's biggest health challenges — with the network, intros, and access to make real change happen. Join today Starts at $499/year. No"
+    },
+    {
+      "id": "check-page-8eea32f54f",
+      "url": "https://www.startuphealth.com/startup-health-blog/call-for-applications-startup-health-launches-12-additional-health-moonshot-communities",
+      "page": "application",
+      "excerpt": "Call for Applications: StartUp Health Launches New Health Moonshot Communities — StartUp Health 0 Skip to Content Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Folder: Events Back Event Calendar Dinner Salons Media Folder: Community Back Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Call for Applications: StartUp Health Launches New Health Moonshot Communities « Back to Health Transformer Journal Oct 8 Written by Nicole Kinsey Building on the success of its T1D and Alzheimer’s Moonshot Communities, StartUp Health invites top"
+    },
+    {
+      "id": "check-page-15676cb93a",
+      "url": "https://www.startuphealth.com/startup-health-blog/ai-accessibility-and-at-home-care-drive-investment-startup-health-insights-week-of-jul-23-2024",
+      "page": "terms",
+      "excerpt": "AI, Accessibility, and At-Home Care Drive Investment | StartUp Health Insights: Week of Jul 23, 2024 — StartUp Health 0 Skip to Content Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Folder: Events Back Event Calendar Dinner Salons Media Folder: Community Back Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login AI, Accessibility, and At-Home Care Drive Investment | StartUp Health Insights: Week of Jul 23, 2024 « Back to Health Transformer Journal Jul 23 Written by Nicole Kinsey This week's health innovation funding highlights"
+    },
+    {
+      "id": "check-page-028df78394",
+      "url": "https://www.startuphealth.com/alzheimers",
+      "page": "application",
+      "excerpt": "Join the Alzheimer’s Moonshot Community — StartUp Health 0 Skip to Content Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Folder: Events Back Event Calendar Dinner Salons Media Folder: Community Back Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Join the Alzheimer’s & Brain Health Moonshot Community Collaborate with mission-aligned founders and CEOs to unlock the mysteries of the brain and accelerate breakthroughs in Alzheimer’s disease, Parkinson’s disease, and related conditions. Join Now Meet the Members of the Community"
+    },
+    {
+      "id": "check-page-701fbe954d",
+      "url": "https://www.startuphealth.com/startup-health-blog/ai-aging-amp-access-health-startups-draw-global-investment-startup-health-insights-week-of-jul-8-2025",
+      "page": "terms",
+      "excerpt": "AI, Aging & Access: Health Startups Draw Global Investment | StartUp Health Insights: Week of Jul 8, 2025 — StartUp Health 0 Skip to Content Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Folder: Events Back Event Calendar Dinner Salons Media Folder: Community Back Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login AI, Aging & Access: Health Startups Draw Global Investment | StartUp Health Insights: Week of Jul 8, 2025 « Back to Health Transformer Journal Jul 8 Written by Nicole Kinsey From reversing aging to streamlining provider data"
+    },
+    {
+      "id": "check-page-c75e0a0c28",
+      "url": "https://www.startuphealth.com/membership",
+      "page": "application",
+      "excerpt": "StartUp Health 0 Skip to Content Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Folder: Events Back Event Calendar Dinner Salons Media Folder: Community Back Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Skip to what membership includes Join StartUp Heath Fuel your health moonshot. StartUp Health is a private global membership for the founders, funders, and health ecosystem leaders going after the world's biggest health challenges — with the network, intros, and access to make real change happen. Join today Starts at $499/year. No"
+    },
+    {
+      "id": "check-page-669c1ca302",
+      "url": "https://www.startuphealth.com/startup-health-blog/ai-drug-discovery-amp-neurotech-lead-weeks-deals-startup-health-insights-week-of-mar-18-2025",
+      "page": "terms",
+      "excerpt": "AI Drug Discovery & Neurotech Lead Week's Deals | StartUp Health Insights: Week of Mar 18, 2025 — StartUp Health 0 Skip to Content Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Folder: Events Back Event Calendar Dinner Salons Media Folder: Community Back Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login AI Drug Discovery & Neurotech Lead Week's Deals | StartUp Health Insights: Week of Mar 18, 2025 « Back to Health Transformer Journal Mar 18 Written by Nicole Kinsey This week’s global health innovation funding highlights include a"
+    },
+    {
+      "id": "check-page-e0fcc740e6",
+      "url": "https://www.startuphealth.com/startup-health-blog/ai-solutions-diagnostics-and-caregiver-support-see-investments-startup-health-insights-week-of-apr-9-2023",
+      "page": "terms",
+      "excerpt": "AI Solutions, Diagnostics, and Caregiver Support See Investments | StartUp Health Insights: Week of Apr 9, 2024 — StartUp Health 0 Skip to Content Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Folder: Events Back Event Calendar Dinner Salons Media Folder: Community Back Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login AI Solutions, Diagnostics, and Caregiver Support See Investments | StartUp Health Insights: Week of Apr 9, 2024 « Back to Health Transformer Journal Apr 9 Written by Nicole Kinsey In this week's snapshot of health"
+    },
+    {
+      "id": "check-page-820734c9cc",
+      "url": "https://www.startuphealth.com/startup-health-blog/dreamed-secures-3m-amp-strategic-deals-startup-health-insights-week-of-aug-20-2024",
+      "page": "terms",
+      "excerpt": "DreaMed Secures $3M & Strategic Deals | StartUp Health Insights: Week of Aug 20, 2024 — StartUp Health 0 Skip to Content Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Folder: Events Back Event Calendar Dinner Salons Media Folder: Community Back Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login DreaMed Secures $3M & Strategic Deals | StartUp Health Insights: Week of Aug 20, 2024 « Back to Health Transformer Journal Aug 20 Written by Nicole Kinsey The AI ​​solution developed by StartUp Health company DreaMed is designed to provide"
+    },
+    {
+      "id": "check-page-b0e0aac0be",
+      "url": "https://www.startuphealth.com/terms",
+      "page": "terms",
+      "excerpt": "Terms of Use — StartUp Health 0 Skip to Content Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Folder: Events Back Event Calendar Dinner Salons Media Folder: Community Back Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Terms of Use Last updated February 13, 2024 This website, accessible through uniform resource locators www.startuphealth.com and any other sub-domains or other websites in the StartUp Health network, including but not limited to hub.startuphealth.com, healthtransformer.co (collectively, the \" Site \"), is provided by"
+    },
+    {
+      "id": "check-page-82b34a29d2",
+      "url": "https://www.startuphealth.com/contact",
+      "page": "details",
+      "excerpt": "Contact Us — StartUp Health 0 Skip to Content Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Folder: Events Back Event Calendar Dinner Salons Media Folder: Community Back Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Contact Us Follow StartUp Health on Social Media Powering Health Moonshot Communities MEMBERSHIP Join Now Frequently Asked Questions Member App Become a Sponsor MEDIA StartUp Health Insider Newsletter Health Transformer Journal StartUp Health TV StartUp Health NOW Podcast StartUp Health Magazine COMMUNITY Community"
+    },
+    {
+      "id": "check-page-705a62e9c8",
+      "url": "https://www.startuphealth.com/startup-health-blog/2024/01/19/10-things-you-need-to-know-about-startup-healths-alzheimers-moonshot",
+      "page": "details",
+      "excerpt": "10 Things You Need to Know About StartUp Health’s Alzheimer’s Moonshot — StartUp Health 0 Skip to Content Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Folder: Events Back Event Calendar Dinner Salons Media Folder: Community Back Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login 10 Things You Need to Know About StartUp Health’s Alzheimer’s Moonshot « Back to Health Transformer Journal Jan 19 Written by StartUp Health With Support from the Alzheimer’s Drug Discovery Foundation (ADDF) and Gates Ventures, we’ve launched a new global"
+    },
+    {
+      "id": "check-page-09c8e307c0",
+      "url": "http://www.startuphealth.com/apply",
+      "page": "application",
+      "excerpt": "StartUp Health 0 Skip to Content Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Folder: Events Back Event Calendar Dinner Salons Media Folder: Community Back Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Skip to what membership includes Join StartUp Heath Fuel your health moonshot. StartUp Health is a private global membership for the founders, funders, and health ecosystem leaders going after the world's biggest health challenges — with the network, intros, and access to make real change happen. Join today Starts at $499/year. No"
+    },
+    {
+      "id": "check-page-184e57d073",
+      "url": "https://www.startuphealth.com/founders",
+      "page": "application",
+      "excerpt": "StartUp Health 0 Skip to Content Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Folder: Events Back Event Calendar Dinner Salons Media Folder: Community Back Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Skip to what membership includes Join StartUp Heath Fuel your health moonshot. StartUp Health is a private global membership for the founders, funders, and health ecosystem leaders going after the world's biggest health challenges — with the network, intros, and access to make real change happen. Join today Starts at $499/year. No"
+    },
+    {
+      "id": "check-page-b785601d41",
+      "url": "https://www.startuphealth.com/startup-health-blog/alzheimers-drug-discovery-foundations-diagnostics-accelerator-dxa-invests-10m-in-alamar-biosciences-startup-health-insights-week-of-jan-14-2025",
+      "page": "details",
+      "excerpt": "Alzheimer's Drug Discovery Foundation's Diagnostics Accelerator (DxA) Invests $10M in Alamar Biosciences | StartUp Health Insights: Week of Jan 14, 2025 — StartUp Health 0 Skip to Content Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Events Event Calendar Dinner Salons Media Community Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Open Menu Close Menu Testimonials Folder: Events Back Event Calendar Dinner Salons Media Folder: Community Back Community Companies Access to Care Addiction & Opioid Crisis Alzheimer's & Brain Health Cancer Cardiometabolic & T1D Caregiving Children’s Health Food as Medicine Healthy Longevity Mental & Behavioral Health Oral Health Women's Health Join Now Member Login Alzheimer's Drug Discovery Foundation's Diagnostics Accelerator (DxA) Invests $10M in Alamar Biosciences | StartUp Health Insights: Week of Jan 14, 2025 « Back to Health"
     }
   ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "info@startuphealth.com",
+        "evidenceId": "check-email-dbd456bb48"
+      }
+    ],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://www.startuphealth.com/alzheimers",
+        "evidenceId": "check-route-4197724f74"
+      },
+      {
+        "value": "https://www.startuphealth.com/membership",
+        "evidenceId": "check-route-fbcde32fbd"
+      },
+      {
+        "value": "http://www.startuphealth.com/apply",
+        "evidenceId": "check-route-94d75f8075"
+      },
+      {
+        "value": "https://www.startuphealth.com/founders",
+        "evidenceId": "check-route-f7bd1a66e3"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://www.startuphealth.com/",
         "evidenceId": "check-route-6863158358"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-76b8eaf73d"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-b43ad4f45d"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-7aa8efa24f"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-41b2b7791c"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-4aeff55a53"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "Drug Discovery Foundation's Diagnostics Accelerator (DxA) Invests $10M in Alamar Biosciences | StartUp Health Insights: Week of Jan 14,",
+        "evidenceId": "check-deal-2ed6ebaec9"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "10000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-2ed6ebaec9"
+      }
+    ],
     "portfolioPages": [],
     "name": [
       {

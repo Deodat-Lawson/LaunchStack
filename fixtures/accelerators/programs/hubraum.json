@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.hubraum.com/",
   "applyUrl": "https://www.hubraum.com/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Telekom’s tech incubator. By bringing startups, developers, ecosystem partners and leading digital telco together, hubraum sparks innovation transfer and creates business opportunities for all sides. Recent Initiatives Tangible Tomorrow 2026 (international) Tangible Tomorrow is a program focused on accelerating innovation by bringing together universities, startups, and spin-off companies working in telecommunications and human–machine interaction. The initiative supports projects at different stages of development — from early concepts and research to prototypes and pilot implementations. Its goal is to help promising ideas move beyond the lab and into practical use, delivering value both to industry and to society more broadly. Read more Security Co-Creation Program Welcome to our Security Co-Creation Program — an initiative designed to empower startups at the forefront of (AI-driven) security solutions. Our program seeks visionary technologies to strengthen cybersecurity & network security defenses through advanced solutions in prevention, detection, and response. If you’re building the future of intelligent cybersecurity & network security, we want to help you bring your innovations to market. Join us to create a safer digital world. Read more Tangible Tomorrow 2025 No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Tangible Tomorrow is a program focused on accelerating innovation by bringing together universities, startups, and spin-off companies working in telecommunications and human–machine interaction. The initiative supports projects at different stages of development — from early concepts and research to prototypes and pilot implementations. Its goal is to help promising ideas move beyond the lab and into practical use, delivering value both to industry and to society more broadly.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Tangible Tomorrow is a program focused on accelerating innovation by bringing together universities, startups, and spin-off companies working in telecommunications and human–machine interaction. The initiative supports projects at different stages of development — from early concepts and research to prototypes and pilot implementations. Its goal is to help promising ideas move beyond the lab and into practical use, delivering value both to industry and to society more broadly.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "hubraum-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.hubraum.com/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

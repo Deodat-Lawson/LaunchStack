@@ -1,40 +1,542 @@
 {
   "programId": "porter-shed",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://portershed.com/",
-    "https://portershed.com/about/",
+    "https://portershed.com/membership/membership-application-form/",
+    "https://portershed.com/were-hiring-a-community-associate-apply-now/",
+    "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+    "https://portershed.com/is-your-business-investment-ready-ollie-walsh-pipit-global/",
+    "https://portershed.com/siorghlas-investment-summit/",
+    "https://portershed.com/terms-conditions/",
+    "https://portershed.com/two-deals-by-bob-rosenberg/",
     "https://portershed.com/ai-venture-forge-cohort/",
-    "https://portershed.com/membership/membership-application-form/"
+    "https://portershed.com/meet-the-cohort-ailtir/",
+    "https://portershed.com/meet-the-cohort-ailtire/",
+    "https://portershed.com/meet-the-cohort-aima-opex/",
+    "https://portershed.com/meet-the-cohort-colata/",
+    "https://portershed.com/meet-the-cohort-devopness/",
+    "https://portershed.com/meet-the-cohort-dwello/"
   ],
   "evidence": [
     {
+      "id": "check-duration-05dda93198",
+      "url": "https://portershed.com/meet-the-cohort-colata/",
+      "title": "Portershed — batches page",
+      "excerpt": "Forge Accelerator. The accelerator’s structured 12-week sprint, backed by industry-leading mentors from",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-2c2ef4c0b2",
+      "url": "https://portershed.com/meet-the-cohort-colata/",
+      "title": "Portershed — batches page",
+      "excerpt": "our path from MVP to commercial traction. Our 12-week focus includes testing our product/market fit by",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-31f9330fc7",
+      "url": "https://portershed.com/meet-the-cohort-colata/",
+      "title": "Portershed — batches page",
+      "excerpt": "and Leagues. What will you prioritise during the 12 weeks at AI Venture Forge? At Colata, we’ll leverage",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-760df58dd3",
+      "url": "https://portershed.com/meet-the-cohort-dwello/",
+      "title": "Portershed — batches page",
+      "excerpt": "estate. Where do you envision Dwello being in 12–18 months after the programme? In 12–18 months, we expect",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-79ee6b3d6c",
+      "url": "https://portershed.com/meet-the-cohort-aima-opex/",
+      "title": "Portershed — batches page",
+      "excerpt": "rapidly. Meet the Cohort 10 Companies | 12 Weeks Visit Companies Newsletter Signup Email Address",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-7a622dfe4a",
+      "url": "https://portershed.com/meet-the-cohort-devopness/",
+      "title": "Portershed — batches page",
+      "excerpt": "for our users. Meet the Cohort 10 Companines | 12 Weeks Visit Companies Newsletter Signup Email Address",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-7f4db03875",
+      "url": "https://portershed.com/meet-the-cohort-aima-opex/",
+      "title": "Portershed — batches page",
+      "excerpt": "operational expenses by up to 30% with an ROI< 3-6 months. How will the Venture Forge programme help you",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-83c5d562b2",
+      "url": "https://portershed.com/meet-the-cohort-ailtir/",
+      "title": "Portershed — batches page",
+      "excerpt": "boom. Meet the Cohort 10 Companies | 12 Weeks Visit Companies Newsletter Signup Email Address",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-8a7373e7b5",
+      "url": "https://portershed.com/meet-the-cohort-colata/",
+      "title": "Portershed — batches page",
+      "excerpt": "makes sense.” Meet the Cohort 10 Companies | 12 Weeks Visit Companies Newsletter Signup Email Address",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-90a53b7593",
+      "url": "https://portershed.com/meet-the-cohort-ailtir/",
+      "title": "Portershed — batches page",
+      "excerpt": "tendering inefficiencies. Looking ahead 12–18 months, what does success look like for Ailtir? Success",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-918bdc52a9",
+      "url": "https://portershed.com/meet-the-cohort-dwello/",
+      "title": "Portershed — batches page",
+      "excerpt": "being in 12–18 months after the programme? In 12–18 months, we expect Dwello to have our full product live",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-9882f08478",
+      "url": "https://portershed.com/meet-the-cohort-ailtire/",
+      "title": "Portershed — batches page",
+      "excerpt": "for Ailtire 12–18 months down the line? In 12–18 months, success means Ailtire is being used by real",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-a654f7088e",
+      "url": "https://portershed.com/ai-venture-forge-cohort/",
+      "title": "Portershed — batches page",
+      "excerpt": "News Meet the Cohort AI Venture Forge is a 12-week accelerator designed to equip AI-firststartups",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-c17962949f",
+      "url": "https://portershed.com/meet-the-cohort-ailtire/",
+      "title": "Portershed — batches page",
+      "excerpt": "secure software. Meet the Cohort 10 Companies | 12 Weeks Visit Companies Newsletter Signup Email Address",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-e9de710144",
+      "url": "https://portershed.com/meet-the-cohort-aima-opex/",
+      "title": "Portershed — batches page",
+      "excerpt": "your growth vision for AIMA OPEX over the next 18 months? Our ambition is to establish AIMA as the",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-f2f9377509",
+      "url": "https://portershed.com/meet-the-cohort-aima-opex/",
+      "title": "Portershed — batches page",
+      "excerpt": "optimisation on the factory floor. Over the next 18 months, we will build on our early traction to evolve",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-f75df0f938",
+      "url": "https://portershed.com/meet-the-cohort-dwello/",
+      "title": "Portershed — batches page",
+      "excerpt": "outcomes high. Meet the Cohort 10 Companines | 12 Weeks Visit Companies Newsletter Signup Email Address",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-f80f4db918",
+      "url": "https://portershed.com/meet-the-cohort-ailtire/",
+      "title": "Portershed — batches page",
+      "excerpt": "it. What does success look like for Ailtire 12–18 months down the line? In 12–18 months, success means",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-00842c1419",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "title": "Portershed — terms page",
+      "excerpt": "at the very top of the list. According to the National Remote Working Survey with the National University of Ireland",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-09fc3bff64",
+      "url": "https://portershed.com/siorghlas-investment-summit/",
+      "title": "Portershed — terms page",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-12818888ab",
+      "url": "https://portershed.com/meet-the-cohort-dwello/",
+      "title": "Portershed — batches page",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-14b22d881d",
+      "url": "https://portershed.com/",
+      "title": "Portershed — homepage",
+      "excerpt": "entrepreneur who wants to make every moment count, our Virtual options would suit those who want to dip back into office",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1b18136d5e",
+      "url": "https://portershed.com/",
+      "title": "Portershed — homepage",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "details"
+    },
+    {
+      "id": "check-format-1e7117c46e",
+      "url": "https://portershed.com/meet-the-cohort-colata/",
+      "title": "Portershed — batches page",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-227fd0eeff",
+      "url": "https://portershed.com/meet-the-cohort-ailtir/",
+      "title": "Portershed — batches page",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-2a235407cf",
+      "url": "https://portershed.com/meet-the-cohort-aima-opex/",
+      "title": "Portershed — batches page",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-34b283fca8",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "title": "Portershed — terms page",
+      "excerpt": "most attractive destinations that people who are currently remote working are looking to relocate to – and Galway was right",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-36127ee60d",
+      "url": "https://portershed.com/meet-the-cohort-ailtire/",
+      "title": "Portershed — batches page",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-3bd5fb8540",
+      "url": "https://portershed.com/meet-the-cohort-ailtir/",
+      "title": "Portershed — batches page",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-46fa7ce936",
+      "url": "https://portershed.com/terms-conditions/",
+      "title": "Portershed — terms page",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-4b17928d72",
+      "url": "https://portershed.com/two-deals-by-bob-rosenberg/",
+      "title": "Portershed — terms page",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-4b7ed94c8f",
+      "url": "https://portershed.com/meet-the-cohort-ailtire/",
+      "title": "Portershed — batches page",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-4d14744961",
+      "url": "https://portershed.com/meet-the-cohort-aima-opex/",
+      "title": "Portershed — batches page",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-52206030c8",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "title": "Portershed — terms page",
+      "excerpt": "has so much to offer, and it seems that the remote working/hybrid boom has really accelerated the number of people",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-52f5efe256",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "title": "Portershed — terms page",
+      "excerpt": "Hubs scheme underlines just how crucial remote and hybrid working will be to the economy. The government are backing",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-54030f2a35",
+      "url": "https://portershed.com/were-hiring-a-community-associate-apply-now/",
+      "title": "Portershed — application page",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "application"
+    },
+    {
+      "id": "check-format-57fdf5f258",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "title": "Portershed — terms page",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-60b5adc1aa",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "title": "Portershed — terms page",
+      "excerpt": "Galway the Ideal Destination for Remote Workers | PorterShed Skip to content About Our Team Our",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6a89def087",
+      "url": "https://portershed.com/meet-the-cohort-devopness/",
+      "title": "Portershed — batches page",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-6af9f785c9",
+      "url": "https://portershed.com/two-deals-by-bob-rosenberg/",
+      "title": "Portershed — terms page",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6fbc599de7",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "title": "Portershed — terms page",
+      "excerpt": "Consider Nuclear? News Galway the Ideal Destination for Remote Workers Posted June 23, 2022 A recent poll carried about",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-73d0209095",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "title": "Portershed — terms page",
+      "excerpt": "Connected Hubs scheme underlines just how crucial remote and hybrid working will be to the economy. The government",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-88ff4dad09",
+      "url": "https://portershed.com/ai-venture-forge-cohort/",
+      "title": "Portershed — batches page",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-8fbafcb4ac",
+      "url": "https://portershed.com/is-your-business-investment-ready-ollie-walsh-pipit-global/",
+      "title": "Portershed — terms page",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-985a48effb",
+      "url": "https://portershed.com/meet-the-cohort-devopness/",
+      "title": "Portershed — batches page",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-9d67af1f5c",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "title": "Portershed — terms page",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-9ef2e2a3e6",
+      "url": "https://portershed.com/is-your-business-investment-ready-ollie-walsh-pipit-global/",
+      "title": "Portershed — terms page",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-a2af413b3e",
+      "url": "https://portershed.com/siorghlas-investment-summit/",
+      "title": "Portershed — terms page",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-aa100477d4",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "title": "Portershed — terms page",
+      "excerpt": "City of Tribes has so much to offer, and it seems that the remote working/hybrid boom has really accelerated the number of",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-afb4c7738f",
+      "url": "https://portershed.com/membership/membership-application-form/",
+      "title": "Portershed — application page",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "application"
+    },
+    {
+      "id": "check-format-c49c707797",
+      "url": "https://portershed.com/were-hiring-a-community-associate-apply-now/",
+      "title": "Portershed — application page",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "application"
+    },
+    {
+      "id": "check-format-c8e2b075d1",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "title": "Portershed — terms page",
+      "excerpt": "Atlantic Way, or the need to simply make the most of the remote working trend, workers are upping sticks. And Galway made",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d78050bd6c",
+      "url": "https://portershed.com/membership/membership-application-form/",
+      "title": "Portershed — application page",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e2b9fc01d5",
+      "url": "https://portershed.com/terms-conditions/",
+      "title": "Portershed — terms page",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-e90a3f5898",
+      "url": "https://portershed.com/ai-venture-forge-cohort/",
+      "title": "Portershed — batches page",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-f2e22e3937",
+      "url": "https://portershed.com/meet-the-cohort-dwello/",
+      "title": "Portershed — batches page",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-f9cac5767c",
+      "url": "https://portershed.com/meet-the-cohort-colata/",
+      "title": "Portershed — batches page",
+      "excerpt": "Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-fab519613e",
+      "url": "https://portershed.com/",
+      "title": "Portershed — homepage",
+      "excerpt": "Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes",
+      "page": "details"
+    },
+    {
       "id": "check-name-ba9ace0f99",
       "url": "https://portershed.com/",
-      "title": "Portershed — homepage checked by scrape.py",
+      "title": "Portershed — homepage",
       "excerpt": "PorterShed | #supporteddbyAIB Skip to content About Our Team Our",
       "page": "details"
     },
     {
       "id": "check-route-90dba7dc89",
       "url": "https://portershed.com/",
-      "title": "Portershed — homepage checked by scrape.py",
+      "title": "Portershed — homepage",
       "excerpt": "https://portershed.com",
       "page": "details"
     },
     {
       "id": "check-route-99aaca1092",
       "url": "https://portershed.com/",
-      "title": "Portershed — homepage checked by scrape.py",
+      "title": "Portershed — homepage",
       "excerpt": "Apply Now → https://portershed.com/membership/membership-application-form/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-4e80710287",
+      "url": "https://portershed.com/",
+      "page": "details",
+      "excerpt": "PorterShed | #supporteddbyAIB Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions Community"
     },
     {
-      "id": "check-route-b0edb21e46",
-      "url": "https://portershed.com/about/",
-      "title": "Portershed — details page checked by scrape.py",
-      "excerpt": "Apply Now → https://portershed.com/membership/membership-application-form/",
-      "page": "details"
+      "id": "check-page-ee6d6fdbaf",
+      "url": "https://portershed.com/membership/membership-application-form/",
+      "page": "application",
+      "excerpt": "Membership Application Form | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-4181ce3856",
+      "url": "https://portershed.com/were-hiring-a-community-associate-apply-now/",
+      "page": "application",
+      "excerpt": "We're Hiring a Community Associate...Apply Now! | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market"
+    },
+    {
+      "id": "check-page-eac378009e",
+      "url": "https://portershed.com/galway-the-ideal-destination-for-remote-workers/",
+      "page": "terms",
+      "excerpt": "Galway the Ideal Destination for Remote Workers | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market"
+    },
+    {
+      "id": "check-page-03d0d9ac69",
+      "url": "https://portershed.com/is-your-business-investment-ready-ollie-walsh-pipit-global/",
+      "page": "terms",
+      "excerpt": "Is your business ‘Investment Ready?’ Ollie Walsh PipIT Global | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling"
+    },
+    {
+      "id": "check-page-069bf68751",
+      "url": "https://portershed.com/siorghlas-investment-summit/",
+      "page": "terms",
+      "excerpt": "Síorghlas Investment Summit | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-dffb89feed",
+      "url": "https://portershed.com/terms-conditions/",
+      "page": "terms",
+      "excerpt": "Terms & Conditions | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-178851009c",
+      "url": "https://portershed.com/two-deals-by-bob-rosenberg/",
+      "page": "terms",
+      "excerpt": "Two Deals by Bob Rosenberg | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-7ba77ab725",
+      "url": "https://portershed.com/ai-venture-forge-cohort/",
+      "page": "batches",
+      "excerpt": "AI Venture Forge Cohort | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-72ba62fb6a",
+      "url": "https://portershed.com/meet-the-cohort-ailtir/",
+      "page": "batches",
+      "excerpt": "Meet the Cohort: Ailtir | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-1d63c283a1",
+      "url": "https://portershed.com/meet-the-cohort-ailtire/",
+      "page": "batches",
+      "excerpt": "Meet the Cohort: Ailtire | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-906ed9fb0b",
+      "url": "https://portershed.com/meet-the-cohort-aima-opex/",
+      "page": "batches",
+      "excerpt": "Meet The Cohort: AIMA Opex | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-cf322d59a5",
+      "url": "https://portershed.com/meet-the-cohort-colata/",
+      "page": "batches",
+      "excerpt": "Meet the Cohort: Colata | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-acfaab227f",
+      "url": "https://portershed.com/meet-the-cohort-devopness/",
+      "page": "batches",
+      "excerpt": "Meet The Cohort: Devopness | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
+    },
+    {
+      "id": "check-page-40c2a7e23e",
+      "url": "https://portershed.com/meet-the-cohort-dwello/",
+      "page": "batches",
+      "excerpt": "Meet the Cohort: Dwello | PorterShed Skip to content About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News About Our Team Our Story Bowling Green Market Street Smart Regions Community PorterShed Members Our Partners Business Community Who’s Hiring Artist Of The Month Membership Dedicated Desk Corporate Hot Desk Quick Login For Members Hybrid Virtual Book A Meeting Room Our Spaces Programmes Get-pssf-ready AI Venture Forge Accelerator AI Venture Forge Cohort Programmes Overview Irish Tech Network NDRC Other Programmes Student Entrepreneurs Toolkit Events Spark All Events Energy West SH2AMROCK Hydrogen Project District Heating Galway Community Visioning Security and the Role of Indigenous Energy Should Ireland Consider Nuclear? News Contact About Our Team Our Story Bowling Green Market Street Smart Regions"
     }
   ],
   "findings": {
@@ -55,8 +557,37 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12",
+        "evidenceId": "check-duration-a654f7088e"
+      },
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-90a53b7593"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-7f4db03875"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-fab519613e"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-1b18136d5e"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

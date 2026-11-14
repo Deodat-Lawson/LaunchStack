@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.hightechxl.com/",
   "applyUrl": "https://www.hightechxl.com/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Join the Deep-Tech League FAQ Careers News & events Join the Deep-Tech League Founders Investors Partners Building deep tech ventures to solve grand societal challenges. Become a co-founder ​HighTechXL is the Netherlands’ premier deep tech venture builder, solving societal challenges by combining groundbreaking technologies and entrepreneurship. In fact, we bring together and activate technology, talent, funding and a strong ecosystem in our unique Venture Building Program. At HighTechXL, we support founders as they progress through our 1-year Deep Tech Venture Builder Program, and in addition, we connect them with essential resources, such as investors, advisors, and customers. The journey starts by scouting groundbreaking technologies at TRL3+, then, we identify the most promising ones from major tech institutes like CERN , European Space Agency (ESA) , TNO , Philips and other global innovators. Next, we promote a structured cofounder selection process to tap into a pool of vetted talented entrepreneurs. This, together with a validated market opportunity, is the entry ticket into the program. Read more about us No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "HighTechXL builds deep-tech ventures to solve global societal challenges. We combine groundbreaking IP with talent, funding, and a structured 1-year Venture Building Program.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "At HighTechXL, we support founders as they progress through our 1-year Deep Tech Venture Builder Program, and in addition, we connect them with essential resources, such as investors, advisors, and customers.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "hightechxl-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.hightechxl.com/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

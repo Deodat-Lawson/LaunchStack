@@ -1,11 +1,19 @@
 {
   "programId": "iterative",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.iterative.vc/frequently-asked-questions",
+      "url": "https://cofoundermatching.iterative.vc?utm_source=faq",
       "page": "terms",
-      "anchor": "FAQ",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://iterative.vc/deal",
+      "page": "terms",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -14,6 +22,30 @@
       "url": "https://www.iterative.vc/about",
       "page": "details",
       "anchor": "Our Story",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.iterative.vc/application-form",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.iterative.vc/application-submitted",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.iterative.vc/apply",
+      "page": "application",
+      "anchor": "Apply for Summer 2025",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -27,17 +59,81 @@
       "origin": "official"
     },
     {
-      "url": "https://www.iterative.vc/apply",
-      "page": "application",
-      "anchor": "Apply for Summer 2025",
+      "url": "https://www.iterative.vc/deal",
+      "page": "terms",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.iterative.vc/what-happens-at-iterative",
+      "url": "https://www.iterative.vc/frequently-asked-questions",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.iterative.vc/notification-bar/application-countdown",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.iterative.vc/past-successful-applications",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.iterative.vc/post/accepting-applications-for-s22",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.iterative.vc/post/answering-your-top-5-questions-on-iteratives-deal-terms",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.iterative.vc/post/deal-terms",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.iterative.vc/post/early-admission-and-pre-batch-office-hours-for-summer-2024",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.iterative.vc/post/how-to-apply-to-iterative-successfully",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.iterative.vc/post/iterative-scale-program",
       "page": "details",
-      "anchor": "About our program",
+      "anchor": "Announcements Iterative Scale Program [Closed] The most common advice when starting a company is “do things that don’t scale,” and that’s absolutely right. But at some point, if yo",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -59,9 +155,17 @@
       "origin": "official"
     },
     {
-      "url": "https://www.iterative.vc/post/iterative-scale-program",
+      "url": "https://www.iterative.vc/program-faq",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.iterative.vc/what-happens-at-iterative",
       "page": "details",
-      "anchor": "Announcements Iterative Scale Program [Closed] The most common advice when starting a company is “do things that don’t scale,” and that’s absolutely right. But at some point, if yo",
+      "anchor": "About our program",
       "fetched": false,
       "blocked": null,
       "origin": "official"

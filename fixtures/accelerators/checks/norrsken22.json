@@ -1,6 +1,6 @@
 {
   "programId": "norrsken22",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.norrsken22.com/"
   ],
@@ -8,23 +8,52 @@
     {
       "id": "check-email-18878ce893",
       "url": "https://www.norrsken22.com/",
-      "title": "Norrsken22 — homepage checked by scrape.py",
+      "title": "Norrsken22 — homepage",
       "excerpt": "in touch! Follow us Linkedin Twitter Instagram Contact info@norrsken22.com Complaints File complaint here Terms & Conditions Privacy",
       "page": "details"
     },
     {
       "id": "check-email-20094c55ca",
       "url": "https://www.norrsken22.com/",
-      "title": "Norrsken22 — homepage checked by scrape.py",
+      "title": "Norrsken22 — homepage",
       "excerpt": "info@norrsken22.com",
+      "page": "details"
+    },
+    {
+      "id": "check-format-a80a2b68ed",
+      "url": "https://www.norrsken22.com/",
+      "title": "Norrsken22 — homepage",
+      "excerpt": "Africa Raenest Raenest is a platform that helps African remote worker, freelancers and businesses manage cross-border",
+      "page": "details"
+    },
+    {
+      "id": "check-location-0de98f09f7",
+      "url": "https://www.norrsken22.com/",
+      "title": "Norrsken22 — homepage",
+      "excerpt": "supporting African entrepreneurs, based in Kenya, Nigeria and South Africa. ‍ Our",
       "page": "details"
     },
     {
       "id": "check-name-47e49d86ec",
       "url": "https://www.norrsken22.com/",
-      "title": "Norrsken22 — homepage checked by scrape.py",
+      "title": "Norrsken22 — homepage",
       "excerpt": "Norrsken22 Yummy cookies! We use them on our website to improve it.",
       "page": "details"
+    },
+    {
+      "id": "check-route-42aedf4a41",
+      "url": "https://www.norrsken22.com/",
+      "title": "Norrsken22 — homepage",
+      "excerpt": "OK → https://www.norrsken22.com/",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-7984301afb",
+      "url": "https://www.norrsken22.com/",
+      "page": "details",
+      "excerpt": "Norrsken22 Yummy cookies! We use them on our website to improve it. By entering this site you agree to us placing cookies on your device. Click here to read more about our Privacy Policy. OK Who we are What we're looking for Our Portfolio our impact Latest news Contact We are backing entrepreneurs building Africa’s next tech giants Norrsken22 is a tech growth fund, backed by an international network of tech founders, partnering with exceptional entrepreneurs in scaling disruptive businesses. We provide g rowth capital and deep strategic value to founders in Africa , while positioning them for international expansion and impact. We believe every investment is a partnership and value-creation goes far beyond just capital. FOR ENTREPRENEURS , BY ENTREPRENEURS Lexi Novitske, Ngetha Waithaka, Natalie Kolbe, Norrsken22 General Partners Norrsken22 is managed by a team of general partners deeply ingrained in the African tech ecosystem , with decades of experience supporting African entrepreneurs, based in Kenya, Nigeria and South Africa. ‍ Our founding partners are Norrsken Foundation and investors who have built and backed some of the world's most successful tech companies. ‍ The fund is backed by a unicorn board of founders who have built companies like Flutterwave , DeliveryHero , Klarna , Skype , Mojang , Izettle and King , bringing a wealth of hands-on experience to the teams we"
     }
   ],
   "findings": {
@@ -36,12 +65,34 @@
     ],
     "phones": [],
     "routes": [],
-    "applicationUrl": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.norrsken22.com/",
+        "evidenceId": "check-route-42aedf4a41"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-a80a2b68ed"
+      }
+    ],
+    "location": [
+      {
+        "value": "Kenya",
+        "evidenceId": "check-location-0de98f09f7"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

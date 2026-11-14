@@ -1,41 +1,415 @@
 {
   "programId": "cic",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://cic.com/",
-    "https://cic.com/catalyst/about/"
+    "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
+    "https://cic.com/36for75",
+    "https://cic.com/blog/2023-5-9-cics-international-soft-landing-opens-cohort-application-window/",
+    "https://cic.com/blog/cic-massachusetts-social-impact-cohort-entries/",
+    "https://cic.com/blog/providing-a-runway-for-success-cic-st-louis-welcomes-third-social-impact-cohort/",
+    "https://cic.com/de/blog/cic-nimmt-jetzt-bewerbungen-fuer-die-neue-massachusetts-social-impact-cohort-entgegen/",
+    "https://cic.com/nl/blog/cic-accepteert-nu-inschrijvingen-voor-nieuw-sociaal-impactcohort-in-massachusetts/",
+    "https://cic.com/nl/blog/cic-zoekt-impactgerichte-ondernemers-voor-36for75-cohort/",
+    "https://cic.com/nl/blog/cics-internationale-zachte-landing-opent-inschrijvingsvenster-voor-cohort/",
+    "https://cic.com/nl/blog/een-startbaan-voor-succes-cic-st-louis-verwelkomt-derde-social-impact-cohort/",
+    "https://cic.com/nl/cohort-sociale-impact-massachusetts/",
+    "https://cic.com/nl/cohort-sociale-impact-philadelphia/",
+    "https://cic.com/nl/cohort-sociale-impact-st-louis/",
+    "https://cic.com/programs/social-impact-cohort/massachusetts/"
   ],
   "evidence": [
     {
+      "id": "check-announced-5a777b1cd9",
+      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "not able to utilize the space to its fullest. We worked with the cohort to extend memberships until the end of July instead of April, as originally planned. A large part of our cohort",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-a5dc54b2b7",
+      "url": "https://cic.com/nl/blog/een-startbaan-voor-succes-cic-st-louis-verwelkomt-derde-social-impact-cohort/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "ter harte genomen bij het plannen van het derde Social Impact Cohort, dat net op 5 september van start is gegaan. Daarom hebben we de periode waarin de ruimte",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-e28aa4f133",
+      "url": "https://cic.com/blog/providing-a-runway-for-success-cic-st-louis-welcomes-third-social-impact-cohort/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "took that feedback to heart in planning for the third Social Impact Cohort, which just began on September 5. To that end, we have extended the runway time for which the space",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-0f022946b2",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "growth: a 3-month, early stage cohort, and a 6-month, growth stage cohort. Early Stage Cohort Who Our",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-50b39a73f5",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "for different stages of entrepreneur growth: a 3-month, early stage cohort, and a 6-month, growth stage",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-5b98c494ad",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "for the duration of the program, as well as for 3 months following their completion of the program. What",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-cb019f93a9",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "I prepare for a pre-seed raise in the next 6 to 12 months. GraideMind Akira Shindo , CTO | Jack Tran , CEO",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-18870f4fa8",
+      "url": "https://cic.com/blog/2023-5-9-cics-international-soft-landing-opens-cohort-application-window/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": ". For more information visit CIC.com/softlanding or join virtual information sessions in May, RSVP here . About CIC CIC is",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-32a79d5521",
+      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "happens in person, so we had to quickly pivot to offer virtual engagement opportunities. Our events and relationship",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-5952d687bb",
+      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "again program events for the cohort to meet and network in person, but we’ll also have consistent virtual opportunities that",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-68f21dd0dd",
+      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "meet and network in person, but we’ll also have consistent virtual opportunities that fit into this “new normal” landscape.",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-748e6248d1",
+      "url": "https://cic.com/blog/2023-5-9-cics-international-soft-landing-opens-cohort-application-window/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "The Gateway program, which will be conducted as a virtual experience and offer two weeks of daily virtual sessions,",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-78073b8e42",
+      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "Most of our clients speak to the importance of connection in person. With COVID, it’s been hard to physically be in the same",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-85ea4d15b5",
+      "url": "https://cic.com/36for75",
+      "title": "Cambridge Innovation Center — application page",
+      "excerpt": "and a collaborative atmosphere. Best for: Solo founders, remote workers, and individual collaborators. From $400/month",
+      "page": "application"
+    },
+    {
+      "id": "check-format-8cbda7a5a5",
+      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "it is for children and adults to interact outside of a virtual setting. I’m most looking forward to being able to share a",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-9881b23b9b",
+      "url": "https://cic.com/36for75",
+      "title": "Cambridge Innovation Center — application page",
+      "excerpt": "access to the community. Best for: Solo entrepreneurs and remote employees From $600/desk/month Lease Dedicated Desk",
+      "page": "application"
+    },
+    {
+      "id": "check-format-bb8aaadb5d",
+      "url": "https://cic.com/blog/2023-5-9-cics-international-soft-landing-opens-cohort-application-window/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "and one-to-one meetings with potential partners, will be a hybrid program that combines online programming with two weeks on",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-c4b6fc7f6f",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "to make as much programming available both virtually and in-person as possible. Most lectures and mentoring sessions will be",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-de65e209db",
+      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "being able to share a meal, moment, and idea with people in person into the new year. Our centers depend on people physically",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-eee5ab1d2a",
+      "url": "https://cic.com/blog/2023-5-9-cics-international-soft-landing-opens-cohort-application-window/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "as a virtual experience and offer two weeks of daily virtual sessions, will accept 15 startups and begin May 30. The",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-fb383ef090",
+      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "Minna: We had a short window of opportunity to have in-person programming for this year’s cohort before COVID hit, but",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-fba5c19c81",
+      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "part of our cohort model is the collaboration that happens in person, so we had to quickly pivot to offer virtual engagement",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-fd01cab256",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "virtually. However, some events can only be attended in-person, and we will make sure to give you notice when these are",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-8750d97ec1",
+      "url": "https://cic.com/blog/cic-massachusetts-social-impact-cohort-entries/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "seed – Series A) Have their business based in Massachusetts or the Greater Boston area Companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-d27fd1785a",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "and economically disadvantaged groups based in Massachusetts. This opportunity is made possible by",
+      "page": "batches"
+    },
+    {
       "id": "check-name-3e594d6752",
       "url": "https://cic.com/",
-      "title": "Cambridge Innovation Center — homepage checked by scrape.py",
+      "title": "Cambridge Innovation Center — homepage",
       "excerpt": "tested, funded, launched, and perfected. Get in Touch Cambridge Innovation Center Contact Company About Press Careers Venture Café CIC",
       "page": "details"
     },
     {
+      "id": "check-phone-312a3875d6",
+      "url": "https://cic.com/36for75",
+      "title": "Cambridge Innovation Center — application page",
+      "excerpt": "\"telephone\": \"+1 (267) 233-6888\"",
+      "page": "application"
+    },
+    {
       "id": "check-route-5a49e42d65",
       "url": "https://cic.com/",
-      "title": "Cambridge Innovation Center — homepage checked by scrape.py",
+      "title": "Cambridge Innovation Center — homepage",
       "excerpt": "https://cic.com/",
       "page": "details"
+    },
+    {
+      "id": "check-route-dec2e5a25e",
+      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "Learn more & Apply → https://cic.com/36for75",
+      "page": "batches"
+    },
+    {
+      "id": "check-status-02c84bd064",
+      "url": "https://cic.com/blog/2023-5-9-cics-international-soft-landing-opens-cohort-application-window/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "was first established in 2016, the program has supported five cohorts and a total of 68 entrepreneurs. Applications are open until May 22, 2023 . For more information visit CIC.com/softlanding or join virtual information sessions in",
+      "page": "batches"
+    },
+    {
+      "id": "check-status-f3b9c65e72",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "title": "Cambridge Innovation Center — batches page",
+      "excerpt": "or economically disadvantaged backgrounds. When Our growth-stage program runs annually from January to June. Applications are now open through October 23 at 5pm. FAQ Who is eligible for the cohort? Candidates should have businesses based in",
+      "page": "batches"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-889988bb03",
+      "url": "https://cic.com/",
+      "page": "details",
+      "excerpt": "CIC | Innovation Campuses and Catalyst Services Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Design & Construction Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with CIC staff to learn more or ask"
+    },
+    {
+      "id": "check-page-b5f90aa0e1",
+      "url": "https://cic.com/blog/2020-10-14-cic-seeks-impact-driven-entrepreneurs-for-36for75-cohort/",
+      "page": "batches",
+      "excerpt": "CIC Seeks Impact-Driven Entrepreneurs for 36for75 Cohort | CIC Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Design & Construction Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with CIC staff to learn more"
+    },
+    {
+      "id": "check-page-7746cb7a2b",
+      "url": "https://cic.com/36for75",
+      "page": "application",
+      "excerpt": "Office, Coworking & Lab Space in Philadelphia | CIC Toggle menu Office Space North America Boston Cambridge Philadelphia Providence St. Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka Now Open Insights from our Blog What Is Flexible Office Space and What Are Its Benefits? Learn More Lab Space Philadelphia St. Louis Event Space Attend an event Cambridge Philadelphia Providence St. Louis Berlin Rotterdam Warsaw Tokyo Meeting Rooms Boston Cambridge Philadelphia Providence Rotterdam St. Louis Programs Venture Café Weekly events that build community and connect innovators to a global network International Connect Programs Bridging Ecosystems through Curated Programmatic Innovation Japan Desk Programming and services bridging Japan-Boston innovation ecosystems Social Impact Cohorts Supporting underserved entrepreneurs with resources, mentors, and more View all programs CIC offers diverse programs to support startups, growing companies & organizations Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Press Keep up with the latest news from CIC’s global locations Book a Tour Login EN Change language DE JA NL PL Office Space Toggle Office Space menu North America Boston"
+    },
+    {
+      "id": "check-page-7e52c60c48",
+      "url": "https://cic.com/blog/2023-5-9-cics-international-soft-landing-opens-cohort-application-window/",
+      "page": "batches",
+      "excerpt": "CIC’s International Soft Landing Opens Cohort Application Window | CIC Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Design & Construction Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with CIC staff to"
+    },
+    {
+      "id": "check-page-3d43d790dd",
+      "url": "https://cic.com/blog/cic-massachusetts-social-impact-cohort-entries/",
+      "page": "batches",
+      "excerpt": "CIC Now Accepting Entries for New Massachusetts Social Impact Cohort | CIC Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Design & Construction Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with CIC staff to"
+    },
+    {
+      "id": "check-page-a9079d3fda",
+      "url": "https://cic.com/blog/providing-a-runway-for-success-cic-st-louis-welcomes-third-social-impact-cohort/",
+      "page": "batches",
+      "excerpt": "Providing a Runway for Success: CIC St. Louis Welcomes Third Social Impact Cohort | CIC Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Design & Construction Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with"
+    },
+    {
+      "id": "check-page-f3b6c766bf",
+      "url": "https://cic.com/de/blog/cic-nimmt-jetzt-bewerbungen-fuer-die-neue-massachusetts-social-impact-cohort-entgegen/",
+      "page": "batches",
+      "excerpt": "CIC nimmt jetzt Bewerbungen für die neue Massachusetts Social Impact Cohort entgegen | CIC Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with CIC staff to learn"
+    },
+    {
+      "id": "check-page-47cecafd0e",
+      "url": "https://cic.com/nl/blog/cic-accepteert-nu-inschrijvingen-voor-nieuw-sociaal-impactcohort-in-massachusetts/",
+      "page": "batches",
+      "excerpt": "CIC accepteert nu inschrijvingen voor nieuw sociaal impactcohort in Massachusetts | CIC Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with CIC staff to learn"
+    },
+    {
+      "id": "check-page-423705c80b",
+      "url": "https://cic.com/nl/blog/cic-zoekt-impactgerichte-ondernemers-voor-36for75-cohort/",
+      "page": "batches",
+      "excerpt": "CIC zoekt impactgerichte ondernemers voor 36for75 Cohort | CIC Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with CIC staff to learn more or ask questions Press"
+    },
+    {
+      "id": "check-page-b01c17d63f",
+      "url": "https://cic.com/nl/blog/cics-internationale-zachte-landing-opent-inschrijvingsvenster-voor-cohort/",
+      "page": "batches",
+      "excerpt": "CIC's internationale zachte landing opent inschrijvingsvenster voor cohort | CIC Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with CIC staff to learn more or"
+    },
+    {
+      "id": "check-page-e996f971b6",
+      "url": "https://cic.com/nl/blog/een-startbaan-voor-succes-cic-st-louis-verwelkomt-derde-social-impact-cohort/",
+      "page": "batches",
+      "excerpt": "Een startbaan voor succes: CIC St. Louis verwelkomt derde Social Impact Cohort | CIC Toggle menu Innovation Campuses Locations North America Boston Innovation Campus Cambridge Innovation Campus - Venture Café Philadelphia Innovation Campus + Labs Providence Innovation Campus St. Louis Innovation Campus + Labs New York (opens in a new tab) Innovation Campus + Labs, coming soon Europe Berlin Innovation Campus - Venture Café Rotterdam Innovation Campus - Venture Café Warsaw Innovation Campus - Venture Café Middle East Jeddah (opens in a new tab) Global network Muscat (opens in a new tab) Global network Asia Tokyo Innovation Campus - Venture Café Fukuoka (opens in a new tab) Innovation Campus - Venture Café Osaka (opens in a new tab) Partner site Pangyo (opens in a new tab) Innovation Campus + Labs, coming soon CIC Innovation Campus CIC Labs Venture Café CIC Global Network CIC-operated Partner Site Current Upcoming 10 campuses · 15 locations · 3 continents Tour a Location → Venture Café Worldwide → Bring CIC to You → CIC Catalyst About Advisory Partnerships Programs Company Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Contact us Get in touch with CIC staff to learn more"
+    },
+    {
+      "id": "check-page-ede4f1f0ee",
+      "url": "https://cic.com/nl/cohort-sociale-impact-massachusetts/",
+      "page": "batches",
+      "excerpt": "BIPOC en achtergestelde gemeenschappen Sociale impact | CIC Toggle menu Kantoorruimte Laboratoriumruimte Philadelphia St. Louis Vergaderruimtes Rotterdam Boston Cambridge Philadelphia Providence St. Louis Programma's Venture Café Wekelijkse evenementen die een community opbouwen en vernieuwers verbinden met een wereldwijd netwerk Internationale zachte landing Op maat gemaakte programmering waarmee startups kunnen uitbreiden naar nieuwe markten Japans bureau Programmering en diensten die de innovatie-ecosystemen tussen Japan en Boston overbruggen Cohorten voor sociale impact Ondersteuning van kansarme ondernemers met middelen, mentoren en meer Bekijk alle programma's CIC biedt diverse programma’s aan ter ondersteuning van startups, groeiende bedrijven en organisaties Evenementen Organiseer een evenement Verheven evenementen- en vergaderruimtes met diensten die u laten schitteren Bezoek een evenement Maak verbinding met het lokale innovatie-ecosysteem, netwerk en bouw een community op Bedrijf Over Ontdek de mensen en diensten die CIC tot de wereldleider op het gebied van innovatie maken Blog Krijg nieuwe inzichten en blijf op de hoogte van het laatste nieuws uit onze wereldwijde community. Carrières Sluit je aan bij ons wereldwijde team en help de toekomst van innovatie op schaal vorm te geven druk op Blijf op de hoogte van het laatste nieuws van CIC’s wereldwijde locaties Over"
+    },
+    {
+      "id": "check-page-bad7b2cca4",
+      "url": "https://cic.com/nl/cohort-sociale-impact-philadelphia/",
+      "page": "batches",
+      "excerpt": "Cohort sociale impact - Philadelphia | CIC Toggle menu Kantoorruimte Laboratoriumruimte Philadelphia St. Louis Vergaderruimtes Rotterdam Boston Cambridge Philadelphia Providence St. Louis Programma's Venture Café Wekelijkse evenementen die een community opbouwen en vernieuwers verbinden met een wereldwijd netwerk Internationale zachte landing Op maat gemaakte programmering waarmee startups kunnen uitbreiden naar nieuwe markten Japans bureau Programmering en diensten die de innovatie-ecosystemen tussen Japan en Boston overbruggen Cohorten voor sociale impact Ondersteuning van kansarme ondernemers met middelen, mentoren en meer Bekijk alle programma's CIC biedt diverse programma’s aan ter ondersteuning van startups, groeiende bedrijven en organisaties Evenementen Organiseer een evenement Verheven evenementen- en vergaderruimtes met diensten die u laten schitteren Bezoek een evenement Maak verbinding met het lokale innovatie-ecosysteem, netwerk en bouw een community op Bedrijf Over Ontdek de mensen en diensten die CIC tot de wereldleider op het gebied van innovatie maken Blog Krijg nieuwe inzichten en blijf op de hoogte van het laatste nieuws uit onze wereldwijde community. Carrières Sluit je aan bij ons wereldwijde team en help de toekomst van innovatie op schaal vorm te geven druk op Blijf op de hoogte van het laatste nieuws van CIC’s wereldwijde locaties Over Carrière Druk op"
+    },
+    {
+      "id": "check-page-028afe9acc",
+      "url": "https://cic.com/nl/cohort-sociale-impact-st-louis/",
+      "page": "batches",
+      "excerpt": "Cohort sociale impact - St. Louis | CIC Toggle menu Kantoorruimte Laboratoriumruimte Philadelphia St. Louis Vergaderruimtes Rotterdam Boston Cambridge Philadelphia Providence St. Louis Programma's Venture Café Wekelijkse evenementen die een community opbouwen en vernieuwers verbinden met een wereldwijd netwerk Internationale zachte landing Op maat gemaakte programmering waarmee startups kunnen uitbreiden naar nieuwe markten Japans bureau Programmering en diensten die de innovatie-ecosystemen tussen Japan en Boston overbruggen Cohorten voor sociale impact Ondersteuning van kansarme ondernemers met middelen, mentoren en meer Bekijk alle programma's CIC biedt diverse programma’s aan ter ondersteuning van startups, groeiende bedrijven en organisaties Evenementen Organiseer een evenement Verheven evenementen- en vergaderruimtes met diensten die u laten schitteren Bezoek een evenement Maak verbinding met het lokale innovatie-ecosysteem, netwerk en bouw een community op Bedrijf Over Ontdek de mensen en diensten die CIC tot de wereldleider op het gebied van innovatie maken Blog Krijg nieuwe inzichten en blijf op de hoogte van het laatste nieuws uit onze wereldwijde community. Carrières Sluit je aan bij ons wereldwijde team en help de toekomst van innovatie op schaal vorm te geven druk op Blijf op de hoogte van het laatste nieuws van CIC’s wereldwijde locaties Over Carrière Druk op"
+    },
+    {
+      "id": "check-page-2b041015af",
+      "url": "https://cic.com/programs/social-impact-cohort/massachusetts/",
+      "page": "batches",
+      "excerpt": "Social Impact Cohort for Underserved Founders in MA | CIC Toggle menu Office Space North America Boston Cambridge Philadelphia Providence St. Louis Europe Berlin Rotterdam Warsaw Asia Tokyo Fukuoka Now Open Insights from our Blog What Is Flexible Office Space and What Are Its Benefits? Learn More Lab Space Philadelphia St. Louis Event Space Attend an event Cambridge Philadelphia Providence St. Louis Berlin Rotterdam Warsaw Tokyo Meeting Rooms Boston Cambridge Philadelphia Providence Rotterdam St. Louis Programs Venture Café Weekly events that build community and connect innovators to a global network International Connect Programs Bridging Ecosystems through Curated Programmatic Innovation Japan Desk Programming and services bridging Japan-Boston innovation ecosystems Social Impact Cohorts Supporting underserved entrepreneurs with resources, mentors, and more View all programs CIC offers diverse programs to support startups, growing companies & organizations Company About Learn about the people and offerings that make CIC the global leader in innovation Blog Get fresh insights and catch up with the latest news from our global community Careers Join our global team and help shape the future of innovation at scale Press Keep up with the latest news from CIC’s global locations Book a Tour Login EN Change language DE JA NL PL Office Space Toggle Office Space menu North America"
     }
   ],
   "findings": {
     "emails": [],
-    "phones": [],
-    "routes": [],
+    "phones": [
+      {
+        "value": "+1 (267) 233-6888",
+        "evidenceId": "check-phone-312a3875d6"
+      }
+    ],
+    "routes": [
+      {
+        "value": "https://cic.com/36for75",
+        "evidenceId": "check-route-dec2e5a25e"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://cic.com/",
         "evidenceId": "check-route-5a49e42d65"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-02c84bd064"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "July",
+        "evidenceId": "check-announced-5a777b1cd9"
+      },
+      {
+        "value": "September",
+        "evidenceId": "check-announced-e28aa4f133"
+      },
+      {
+        "value": "september",
+        "evidenceId": "check-announced-a5dc54b2b7"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-50b39a73f5"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-0f022946b2"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-cb019f93a9"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-fba5c19c81"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-32a79d5521"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-bb8aaadb5d"
+      }
+    ],
+    "location": [
+      {
+        "value": "Massachusetts",
+        "evidenceId": "check-location-8750d97ec1"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

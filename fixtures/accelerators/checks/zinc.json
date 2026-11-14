@@ -1,56 +1,366 @@
 {
   "programId": "zinc",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.zinc.vc/",
-    "https://www.zinc.vc/programmes/pre-seed-investment/"
+    "https://www.zinc.vc/blog/looking-to-apply-to-the-zinc-venture-builder-heres-everything-you-need-to-know/",
+    "https://www.zinc.vc/blog/announcing-zincs-investment-in-kilogen-building-the-future-of-molecular-glue-drug-discovery/",
+    "https://www.zinc.vc/blog/building-next-generation-battery-recycling-announcing-zincs-investment-in-cellmine/",
+    "https://www.zinc.vc/blog/investing-in-the-future-of-green-hydrogen-announcing-zincs-pre-seed-investment-in-clyde-hydrogen-systems/",
+    "https://www.zinc.vc/blog/investing-in-the-future-of-respiratory-medicine-announcing-zincs-pre-seed-investment-in-microsol/",
+    "https://www.zinc.vc/blog/supercharging-the-search-for-your-ideal-co-founder/",
+    "https://www.zinc.vc/blog/tangent-secures-1-1m-pre-seed-investment-to-drive-social-mobility-in-tech/",
+    "https://www.zinc.vc/investment-priorities/",
+    "https://www.zinc.vc/pre-seed-investment/",
+    "https://www.zinc.vc/press/social-enterprise-builder-bags-3m-investment/",
+    "https://www.zinc.vc/programmes/pre-seed-investment/",
+    "https://www.zinc.vc/blog/announcing-the-third-cohort-of-innovation-fellowships-in-health-and-care-at-zinc/",
+    "https://www.zinc.vc/event/cohort-4-bristol-show-tell/",
+    "https://www.zinc.vc/event/what-does-research-tell-us-about-innovation-in-industries-with-significant-impacts-on-the-environment/"
   ],
   "evidence": [
     {
+      "id": "check-deal-21e7fdea39",
+      "url": "https://www.zinc.vc/blog/looking-to-apply-to-the-zinc-venture-builder-heres-everything-you-need-to-know/",
+      "title": "Zinc — application page",
+      "excerpt": "£150,000 initial investment for any company that we decide to back ~£150,000 follow on investment in the company’s seed round Is there an",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-2ef3ca3270",
+      "url": "https://www.zinc.vc/blog/investing-in-the-future-of-green-hydrogen-announcing-zincs-pre-seed-investment-in-clyde-hydrogen-systems/",
+      "title": "Zinc — terms page",
+      "excerpt": "to be leading a pre-seed round that brings together more than £1m in equity and grant funding into Clyde Hydrogen Systems . This",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-6d2af188dc",
+      "url": "https://www.zinc.vc/blog/looking-to-apply-to-the-zinc-venture-builder-heres-everything-you-need-to-know/",
+      "title": "Zinc — application page",
+      "excerpt": "you receive up to £300,000 in funding. This breaks down as: £12,00 stipend across the first 6 months per founder £150,000 initial",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-d16776c7b0",
+      "url": "https://www.zinc.vc/blog/looking-to-apply-to-the-zinc-venture-builder-heres-everything-you-need-to-know/",
+      "title": "Zinc — application page",
+      "excerpt": "breaks down as: £12,00 stipend across the first 6 months per founder £150,000 initial investment for any company that we decide to back ~£150,000",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-e957a2be33",
+      "url": "https://www.zinc.vc/blog/looking-to-apply-to-the-zinc-venture-builder-heres-everything-you-need-to-know/",
+      "title": "Zinc — application page",
+      "excerpt": "When Zinc backs a Founder to build a business, you receive up to £300,000 in funding. This breaks down as: £12,00 stipend across the first 6",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-021774ecb0",
+      "url": "https://www.zinc.vc/blog/looking-to-apply-to-the-zinc-venture-builder-heres-everything-you-need-to-know/",
+      "title": "Zinc — application page",
+      "excerpt": "Improve the Health of People and the Planet. The 12-month Venture Builder starts full-time, in-person in",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-f29ed04313",
+      "url": "https://www.zinc.vc/blog/tangent-secures-1-1m-pre-seed-investment-to-drive-social-mobility-in-tech/",
+      "title": "Zinc — terms page",
+      "excerpt": "few with established networks. During their 12 months at Zinc, Gary and Joe launched Tangent’s MVP and",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f3bc06ae3c",
+      "url": "https://www.zinc.vc/blog/looking-to-apply-to-the-zinc-venture-builder-heres-everything-you-need-to-know/",
+      "title": "Zinc — application page",
+      "excerpt": "breaks down as: £12,00 stipend across the first 6 months per founder £150,000 initial investment for any",
+      "page": "application"
+    },
+    {
+      "id": "check-format-2e05ccbfdd",
+      "url": "https://www.zinc.vc/blog/looking-to-apply-to-the-zinc-venture-builder-heres-everything-you-need-to-know/",
+      "title": "Zinc — application page",
+      "excerpt": "a full-time commitment, based in London. We do not offer remote or part-time options as it requires 100% commitment and",
+      "page": "application"
+    },
+    {
+      "id": "check-format-6568a73219",
+      "url": "https://www.zinc.vc/investment-priorities/",
+      "title": "Zinc — terms page",
+      "excerpt": "services for people with multiple chronic conditions – Remote delivery of care, including hospitals at home and virtual",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-9737cd87bc",
+      "url": "https://www.zinc.vc/investment-priorities/",
+      "title": "Zinc — terms page",
+      "excerpt": "– Remote delivery of care, including hospitals at home and virtual collaboration – Platform solutions that integrate point",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-9ad4c28792",
+      "url": "https://www.zinc.vc/blog/looking-to-apply-to-the-zinc-venture-builder-heres-everything-you-need-to-know/",
+      "title": "Zinc — application page",
+      "excerpt": "the Planet. The 12-month Venture Builder starts full-time, in-person in our London headquarters, in October-November and",
+      "page": "application"
+    },
+    {
+      "id": "check-format-cb4143a930",
+      "url": "https://www.zinc.vc/blog/announcing-zincs-investment-in-kilogen-building-the-future-of-molecular-glue-drug-discovery/",
+      "title": "Zinc — terms page",
+      "excerpt": "revenue and drug asset potential KiloGen is pursuing a hybrid platform-plus-pipeline model. In the near term, the",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-3248f9bd98",
+      "url": "https://www.zinc.vc/blog/looking-to-apply-to-the-zinc-venture-builder-heres-everything-you-need-to-know/",
+      "title": "Zinc — application page",
+      "excerpt": "Builder is a full-time commitment, based in London. We do not offer remote or part-time",
+      "page": "application"
+    },
+    {
       "id": "check-name-ec4a2609f6",
       "url": "https://www.zinc.vc/",
-      "title": "Zinc — homepage checked by scrape.py",
+      "title": "Zinc — homepage",
       "excerpt": "Home | Zinc Our Mission Investment Portfolio Innovation Partners News",
       "page": "details"
     },
     {
+      "id": "check-portfolio-24a4036fad",
+      "url": "https://www.zinc.vc/pre-seed-investment/",
+      "title": "Zinc — terms page",
+      "excerpt": "Portfolio → https://www.zinc.vc/portfolio-companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-279b524812",
+      "url": "https://www.zinc.vc/blog/investing-in-the-future-of-respiratory-medicine-announcing-zincs-pre-seed-investment-in-microsol/",
+      "title": "Zinc — terms page",
+      "excerpt": "Portfolio → https://www.zinc.vc/portfolio-companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2a9157cf66",
+      "url": "https://www.zinc.vc/blog/announcing-the-third-cohort-of-innovation-fellowships-in-health-and-care-at-zinc/",
+      "title": "Zinc — batches page",
+      "excerpt": "Portfolio → https://www.zinc.vc/portfolio-companies/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-4bb38dcfa5",
+      "url": "https://www.zinc.vc/blog/looking-to-apply-to-the-zinc-venture-builder-heres-everything-you-need-to-know/",
+      "title": "Zinc — application page",
+      "excerpt": "Portfolio → https://www.zinc.vc/portfolio-companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-8d2ae13eb1",
+      "url": "https://www.zinc.vc/blog/supercharging-the-search-for-your-ideal-co-founder/",
+      "title": "Zinc — terms page",
+      "excerpt": "Portfolio → https://www.zinc.vc/portfolio-companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-935b8e0019",
+      "url": "https://www.zinc.vc/event/cohort-4-bristol-show-tell/",
+      "title": "Zinc — batches page",
+      "excerpt": "Portfolio → https://www.zinc.vc/portfolio-companies/",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-940d0b63b0",
       "url": "https://www.zinc.vc/programmes/pre-seed-investment/",
-      "title": "Zinc — details page checked by scrape.py",
+      "title": "Zinc — terms page",
+      "excerpt": "Portfolio → https://www.zinc.vc/portfolio-companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-95aba7418d",
+      "url": "https://www.zinc.vc/event/what-does-research-tell-us-about-innovation-in-industries-with-significant-impacts-on-the-environment/",
+      "title": "Zinc — program page",
       "excerpt": "Portfolio → https://www.zinc.vc/portfolio-companies/",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-ae7d3d2976",
+      "url": "https://www.zinc.vc/blog/announcing-zincs-investment-in-kilogen-building-the-future-of-molecular-glue-drug-discovery/",
+      "title": "Zinc — terms page",
+      "excerpt": "Portfolio → https://www.zinc.vc/portfolio-companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b4fe12ca49",
+      "url": "https://www.zinc.vc/investment-priorities/",
+      "title": "Zinc — terms page",
+      "excerpt": "Portfolio → https://www.zinc.vc/portfolio-companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-dc4ae44443",
+      "url": "https://www.zinc.vc/blog/tangent-secures-1-1m-pre-seed-investment-to-drive-social-mobility-in-tech/",
+      "title": "Zinc — terms page",
+      "excerpt": "Portfolio → https://www.zinc.vc/portfolio-companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f1903934eb",
+      "url": "https://www.zinc.vc/blog/investing-in-the-future-of-green-hydrogen-announcing-zincs-pre-seed-investment-in-clyde-hydrogen-systems/",
+      "title": "Zinc — terms page",
+      "excerpt": "Portfolio → https://www.zinc.vc/portfolio-companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f44f7d58ea",
+      "url": "https://www.zinc.vc/press/social-enterprise-builder-bags-3m-investment/",
+      "title": "Zinc — terms page",
+      "excerpt": "Portfolio → https://www.zinc.vc/portfolio-companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f49ff3752f",
+      "url": "https://www.zinc.vc/blog/building-next-generation-battery-recycling-announcing-zincs-investment-in-cellmine/",
+      "title": "Zinc — terms page",
+      "excerpt": "Portfolio → https://www.zinc.vc/portfolio-companies/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-f696e40efb",
       "url": "https://www.zinc.vc/",
-      "title": "Zinc — homepage checked by scrape.py",
+      "title": "Zinc — homepage",
       "excerpt": "Portfolio → https://www.zinc.vc/portfolio-companies/",
       "page": "details"
     },
     {
-      "id": "check-route-19fe090d07",
+      "id": "check-rolling-24b992b2d4",
+      "url": "https://www.zinc.vc/pre-seed-investment/",
+      "title": "Zinc — terms page",
+      "excerpt": "the next generation of Science-for-Impact innovators Pitch decks are assessed on a rolling basis and we strongly advise you to review our priority investment areas prior to",
+      "page": "terms"
+    },
+    {
+      "id": "check-rolling-5c94179069",
       "url": "https://www.zinc.vc/programmes/pre-seed-investment/",
-      "title": "Zinc — details page checked by scrape.py",
-      "excerpt": "APPLY FOR INVESTMENT → https://airtable.com/appTvgH4eAXwSD2Vs/pagxU4iWkcj9vJrWj/form",
-      "page": "details"
+      "title": "Zinc — terms page",
+      "excerpt": "the next generation of Science-for-Impact innovators Pitch decks are assessed on a rolling basis and we strongly advise you to review our priority investment areas prior to",
+      "page": "terms"
+    },
+    {
+      "id": "check-rolling-755d60f9cf",
+      "url": "https://www.zinc.vc/blog/tangent-secures-1-1m-pre-seed-investment-to-drive-social-mobility-in-tech/",
+      "title": "Zinc — terms page",
+      "excerpt": "for our next venture building cohort are now open. Offers are made on a rolling basis, with early applications prioritised, so don’t delay: https://www.zinc.vc/",
+      "page": "terms"
+    },
+    {
+      "id": "check-rolling-8d70424212",
+      "url": "https://www.zinc.vc/blog/looking-to-apply-to-the-zinc-venture-builder-heres-everything-you-need-to-know/",
+      "title": "Zinc — application page",
+      "excerpt": "there an application deadline? Places are offered on a first come first serve, rolling basis and we receive hundreds of applications for every Venture Builder. As a",
+      "page": "application"
     },
     {
       "id": "check-route-cdcd2bfb05",
       "url": "https://www.zinc.vc/",
-      "title": "Zinc — homepage checked by scrape.py",
+      "title": "Zinc — homepage",
       "excerpt": "https://www.zinc.vc",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-8719612cc4",
+      "url": "https://www.zinc.vc/",
+      "page": "details",
+      "excerpt": "Home | Zinc Our Mission Investment Portfolio Innovation Partners News Team Our Mission Investment Portfolio Innovation Partners News Team Unlocking the Potential of Science-for-Impact Zinc exists to accelerate Science-for-Impact innovation, partnering with people and organisations to build a better future for people and the planet. Through our venture building , talent initiatives and innovation partnerships , we work across the entire Science-for-Impact ecosystem to create the conditions, capabilities, and coalitions needed for transformative change. Learn More Join the Zinc Community Become a Visiting Fellow Zinc’s network of Visiting Fellows are experts and advisors from business, academia, design, technology and the public sector. Fellows support Founders and their newly created ventures by offering expertise in the form of talks, workshops, office hours and access to research and partners. Register Your Interest Join our Executive Coaching Network Zinc works with a range of certified and trained executive coaches who support the personal development of the individuals and teams building their ventures at Zinc. Register Your Interest Join as a partner or investor Partners and investors are individuals and organisations who help Founders and their newly created businesses to gain traction with users and partners to drive growth. Register Your Interest Careers at Zinc Check"
+    },
+    {
+      "id": "check-page-2acf59605d",
+      "url": "https://www.zinc.vc/blog/looking-to-apply-to-the-zinc-venture-builder-heres-everything-you-need-to-know/",
+      "page": "application",
+      "excerpt": "Looking to apply to the Zinc Venture Builder? Here’s everything you need to know | Zinc Our Mission Investment Portfolio Innovation Partners News Team Our Mission Investment Portfolio Innovation Partners News Team 3 MINS READ Looking to apply to the Zinc Venture Builder? Here’s everything you need to know Zinc VC January 17, 2023 Venture Builder Zinc is seeking 50 extremely ambitious, talented individuals from across the globe who want to become Zinc Founders and build businesses to Improve the Health of People and the Planet. The 12-month Venture Builder starts full-time, in-person in our London headquarters, in October-November and April-May of each year. Will you rise to the challenge and join us? Zinc is an early-stage investor. We back Founders who want to build a new mission-driven business, even if they don’t yet have a team or an idea. We support the Founders to build brand new commercial businesses by providing access to co-Founders, investment, experts, in-house research & development (R&D) support and a proven process to launch a new venture. You can find a full list of our FAQs in the document below, but here are a few questions you may find useful: read the full FAQs here What will the hours be like? Can I work on something else while on the Venture Builder or could I join part-time? The Venture Builder is a full-time commitment, based in London. We do not offer"
+    },
+    {
+      "id": "check-page-8dec39e1fa",
+      "url": "https://www.zinc.vc/blog/announcing-zincs-investment-in-kilogen-building-the-future-of-molecular-glue-drug-discovery/",
+      "page": "terms",
+      "excerpt": "Announcing Zinc’s investment in KiloGen: Building the future of molecular glue drug discovery | Zinc Our Mission Investment Portfolio Innovation Partners News Team Our Mission Investment Portfolio Innovation Partners News Team 6 MINS READ Announcing Zinc’s investment in KiloGen: Building the future of molecular glue drug discovery Kate Hyslop June 15, 2026 Health Impact At Zinc, we back founders building category-creating companies that can transform outcomes in health and beyond. We’re excited to announce our investment in KiloGen , a Cambridge-based biotech developing a new platform for rational molecular glue discovery – unlocking one of the most promising and least solved frontiers in modern drug development. Led by experienced drug discovery leaders Mark McAlister PhD and Michał Biśta PhD , KiloGen is tackling a problem that has constrained medicine for decades: the vast majority of disease-driving proteins remain beyond the reach of conventional drugs. Their ambition is to make molecular glue discovery systematic , scalable , and repeatable . And in doing so, open up a new era of programmable pharmacology. Unlocking the “undruggable” majority Despite extraordinary progress in modern medicine, today’s small-molecule drugs can only target a fraction of human biology. Most medicines work by binding to a defined pocket on a protein and inhibiting its activity. But only a"
+    },
+    {
+      "id": "check-page-8e84665743",
+      "url": "https://www.zinc.vc/blog/building-next-generation-battery-recycling-announcing-zincs-investment-in-cellmine/",
+      "page": "terms",
+      "excerpt": "Building Next Generation Battery Recycling: Announcing Zinc’s Investment in CellMine | Zinc Our Mission Investment Portfolio Innovation Partners News Team Our Mission Investment Portfolio Innovation Partners News Team 4 MINS READ Building Next Generation Battery Recycling: Announcing Zinc’s Investment in CellMine Shelley Brown December 2, 2024 Climate Environment Impact Innovation Investment Zinc is excited to be leading the pre-seed investment into CellMine , an innovative battery recycling start-up spinning out of elite Edinburgh-based innovation centre Impact Solutions . CellMine, led by CEO Simon Rathbone and technical Director Adam Taylor , has developed a novel process for recycling lithium-ion batteries – commonly used in devices like smartphones, laptops, and electric vehicles – in an efficient, scalable and environmentally friendly way. CellMine’s mission is to prevent battery waste inundating landfills and to reduce industry’s reliance on mined metals. This funding round will enable the team to scale up their proven technology process for turning messy and varied waste battery feedstocks into clean chemical products ready to go back into the supply chain. An accelerating global crisis in critical minerals and complex recycling challenge The surge in demand for electric vehicles is resulting in an alarming accumulation of spent lithium-ion batteries. China alone was"
+    },
+    {
+      "id": "check-page-7a82065a83",
+      "url": "https://www.zinc.vc/blog/investing-in-the-future-of-green-hydrogen-announcing-zincs-pre-seed-investment-in-clyde-hydrogen-systems/",
+      "page": "terms",
+      "excerpt": "Investing in the Future of Green Hydrogen: Announcing Zinc’s Pre-Seed Investment in Clyde Hydrogen Systems | Zinc Our Mission Investment Portfolio Innovation Partners News Team Our Mission Investment Portfolio Innovation Partners News Team 4 MINS READ Investing in the Future of Green Hydrogen: Announcing Zinc’s Pre-Seed Investment in Clyde Hydrogen Systems Dr Luke Charbonnier-Bevan April 11, 2024 Climate Environment Impact Innovation Sustainability We are excited to be leading a pre-seed round that brings together more than £1m in equity and grant funding into Clyde Hydrogen Systems . This investment into Clyde, an innovative electrolyser startup spinning out of the University of Glasgow, will propel the team on its mission to revolutionise the hydrogen economy. So what is the hydrogen economy, and why are we so excited about this opportunity to partner with Clyde on this journey? Addressing the challenges of the evolving hydrogen economy Hydrogen is useful for all sorts of industrial applications and is vital for the climate transition, but its propensity to combust makes it difficult to produce, store and handle. There are many existing uses of hydrogen – the world produces around 95 megatonnes of hydrogen per annum , and ammonia fertiliser, produced from hydrogen, is necessary for feeding a large proportion of the world’s population. Today, most of this hydrogen is produced"
+    },
+    {
+      "id": "check-page-704b33a119",
+      "url": "https://www.zinc.vc/blog/investing-in-the-future-of-respiratory-medicine-announcing-zincs-pre-seed-investment-in-microsol/",
+      "page": "terms",
+      "excerpt": "Investing in the Future of Respiratory Medicine: Announcing Zinc’s Pre-Seed Investment in Microsol | Zinc Our Mission Investment Portfolio Innovation Partners News Team Our Mission Investment Portfolio Innovation Partners News Team 5 MINS READ Investing in the Future of Respiratory Medicine: Announcing Zinc’s Pre-Seed Investment in Microsol Natalie Pankova, PhD November 11, 2024 Health Innovation Investment Zinc is excited to be leading the pre-seed investment into Microsol , a Bristol-based startup revolutionising the development of inhaled and nasal drug products. This funding round will help propel founder Dr Dan Hardy and the team on their mission to harness Microsol’s powerful proprietary combination of advanced aerosol formulation development and computational pharmaceutics modelling, to enable more efficient and effective drug delivery for respiratory illnesses. The challenge The application of new technologies – such as artificial intelligence and machine learning, computational modelling, synthetic biology, gene editing and bioinformatics – to drug discovery, means the pace of innovation in the development of novel therapeutics is continuing to accelerate. However, the development cycles for inhaled and nasal drug products remain long and complex, facing unique R&D challenges, particularly around aerosol kinetics, distributions and stability, and especially in the"
+    },
+    {
+      "id": "check-page-1f13d3d90f",
+      "url": "https://www.zinc.vc/blog/supercharging-the-search-for-your-ideal-co-founder/",
+      "page": "terms",
+      "excerpt": "Supercharging the search for your ideal co-founder | Zinc Our Mission Investment Portfolio Innovation Partners News Team Our Mission Investment Portfolio Innovation Partners News Team 3 MINS READ Supercharging the search for your ideal co-founder Eleanor Ford September 2, 2024 Entrepreneurship Leadership It is no secret that at Zinc we think Human Capital is the most important form of capital there is. We have written before about the fact that we know that the story of our impact starts with our people . How we find talent, how we develop it and how we support it is central to the change in our mission areas that we are here to create. But it is not just in the individuals we back, it is in the magic that goes into the forming and performing of founding teams. The Harvard Business Review reports that 65% of start-ups fail due to the breakdown of founder relationships, not due to market forces. Looking in the rear-view mirror across the individuals and ventures we have backed, that seems like a conservative number. That’s why we put time into supporting our Founders on their Co-Founder search from within and beyond our cohorts. The ability to attract and really understand the potential of candidates to found at Zinc is a core part of our offer. Having seen hundreds of Founders over eight years means a certain element of “pattern spotting” of a strong, enduring co-founding team"
+    },
+    {
+      "id": "check-page-e5501d685a",
+      "url": "https://www.zinc.vc/blog/tangent-secures-1-1m-pre-seed-investment-to-drive-social-mobility-in-tech/",
+      "page": "terms",
+      "excerpt": "Tangent Secures $1.1M Pre-Seed Investment to Drive Social Mobility in Tech | Zinc Our Mission Investment Portfolio Innovation Partners News Team Our Mission Investment Portfolio Innovation Partners News Team 3 MINS READ Tangent Secures $1.1M Pre-Seed Investment to Drive Social Mobility in Tech Ella Goldner April 18, 2024 Employment Empowerment Entrepreneurship Impact Innovation Work We are excited to share Zinc’s investment in Tangent , a technology start-up on a mission to create a world where the social contexts you’re born into do not limit your career and wealth potential. Founders Gary Izunwa and Joe Adams met as part of Zinc’s fourth cohort, united by a passion to transform access to opportunities for jobseekers from lower socioeconomic backgrounds. This $1.1 million pre-seed funding round, including Google Black Founders Fund, Syndicate Room, a line-up of prominent angel investors as well as Scouts from Atomico and Ada Ventures, underscores Tangent’s commitment to addressing a huge, unaddressed diversity gap in the tech sector. Addressing the Diversity Disparity Recent data paints a stark picture: 9% of all UK tech employees come from low socioeconomic backgrounds despite making up 39% of the total UK population. This figure is significantly worse than the finance and law industries, where 29% and 23% of employees respectively come from low socioeconomic backgrounds."
+    },
+    {
+      "id": "check-page-fe3ffe0041",
+      "url": "https://www.zinc.vc/investment-priorities/",
+      "page": "terms",
+      "excerpt": "Mission | Zinc Our Mission Investment Portfolio Innovation Partners News Team Our Mission Investment Portfolio Innovation Partners News Team Improving the Health of People and The Planet Zinc backs innovators leveraging science and deep technology to solve the most valuable and pressing challenges in health and the environment, creating ventures with clear potential for significant commercial value and transformative impact. If your mission and ambition aligns with ours, we want to hear from you. Our Investment Priorities Health of People – Biotechnology, drug development and biomanufacturing – Early intervention through diagnostics and medtech innovation – Non-pharmacologic alternatives to complex disease treatment – AI enabled healthcare delivery – Life Sciences enabling tools and technology – Advancing healthspan through prevention and rehabilitation Health of Planet – Energy solutions – Industrial decarbonisation – Sustainable agriculture & food technologies – Circular economy solutions – Climate adaptation and water technologies – Carbon capture & utilisation – Biodiversity & conservation tech Improving the Health of People We invest in emerging and converging technologies that can radically improve patient outcomes, system efficiency and healthcare accessibility: Children's Health Children's Health We want to back founders with missions in these areas: – Brain"
+    },
+    {
+      "id": "check-page-6d7281759b",
+      "url": "https://www.zinc.vc/pre-seed-investment/",
+      "page": "terms",
+      "excerpt": "Pre-Seed Investment | Zinc Our Mission Investment Portfolio Innovation Partners News Team Our Mission Investment Portfolio Innovation Partners News Team Your Partner from Start to Seed Zinc has partnered with hundreds of entrepreneurs from the inception of their health and environment ventures. Science-for-Impact entrepreneurs face a unique set of challenges, requiring specialist support and aligned funding. We know what it takes to succeed in the first two years. Team: Attracting and building a winning founding team including co-founders, early hires, advisors, and investment in the personal development of founders. Product: De-risking the science and technology and building a product that is validated through key inflection points. Commercial: Validating a commercial need from customers, building a commercial proposition to win large markets, and signing early customers and commercial partnerships. Capital: Securing funding to provide runway to build the science and the business from non-dilutive and dilutive funders and commercial revenue streams. Applying for Zinc’s investment & support Are you building an exciting new venture that impacts the health of people or the planet? Zinc backs exceptional entrepreneurs starting and building Science-for-Impact ventures in the UK. We work with health and environment founders through the first two years of a new venture, providing"
+    },
+    {
+      "id": "check-page-78f778e186",
+      "url": "https://www.zinc.vc/press/social-enterprise-builder-bags-3m-investment/",
+      "page": "terms",
+      "excerpt": "Social enterprise builder bags £3M investment | Zinc Our Mission Investment Portfolio Innovation Partners News Team Our Mission Investment Portfolio Innovation Partners News Team Social enterprise builder bags £3M investment BQ Live May 2, 2018 Join the Zinc community Stay up to date with all Zinc updates and future posts as part of our fast growing community. Apply Here Related Articles Robot Wars – 50 Entrepreneurs Come Together In The UK To Address The Challenges Of Automation Zinc featured in the World at One Featured Resources Zinc heads towards new $41m tech-for-good fund to back pre-team talent solving big problems Read More Robot Wars – 50 Entrepreneurs Come Together In The UK To Address The Challenges Of Automation Read More 50 founders join Zinc’s new mission Read More Zinc, the company builder tackling societal problems, picks up £3M backing from LocalGlobe, Atomico, and LSE Read More Stay in touch! Get the latest news, updates, tools, and information from Zinc straight to your inbox with Zinc’s monthly newsletter. Join Us Contact Careers Press Privacy Policy Regulatory"
+    },
+    {
+      "id": "check-page-3654f5883c",
+      "url": "https://www.zinc.vc/programmes/pre-seed-investment/",
+      "page": "terms",
+      "excerpt": "Pre-Seed Investment | Zinc Our Mission Investment Portfolio Innovation Partners News Team Our Mission Investment Portfolio Innovation Partners News Team Your Partner from Start to Seed Zinc has partnered with hundreds of entrepreneurs from the inception of their health and environment ventures. Science-for-Impact entrepreneurs face a unique set of challenges, requiring specialist support and aligned funding. We know what it takes to succeed in the first two years. Team: Attracting and building a winning founding team including co-founders, early hires, advisors, and investment in the personal development of founders. Product: De-risking the science and technology and building a product that is validated through key inflection points. Commercial: Validating a commercial need from customers, building a commercial proposition to win large markets, and signing early customers and commercial partnerships. Capital: Securing funding to provide runway to build the science and the business from non-dilutive and dilutive funders and commercial revenue streams. Applying for Zinc’s investment & support Are you building an exciting new venture that impacts the health of people or the planet? Zinc backs exceptional entrepreneurs starting and building Science-for-Impact ventures in the UK. We work with health and environment founders through the first two years of a new venture, providing"
+    },
+    {
+      "id": "check-page-d0ddf783a5",
+      "url": "https://www.zinc.vc/blog/announcing-the-third-cohort-of-innovation-fellowships-in-health-and-care-at-zinc/",
+      "page": "batches",
+      "excerpt": "Announcing the third cohort of Innovation Fellowships in health and care at Zinc! | Zinc Our Mission Investment Portfolio Innovation Partners News Team Our Mission Investment Portfolio Innovation Partners News Team 5 MINS READ Announcing the third cohort of Innovation Fellowships in health and care at Zinc! Maria Fomina February 25, 2025 Aging Health Impact Innovation Jobs We are delighted to announce our third cohort of Innovation Fellowships in Health and Care at Zinc, which we will deliver in partnership with the NIHR and The Dunhill Medical Trust . This unique programme offers researchers and clinical academics the chance to apply their expertise in real-world commercial settings and accelerate the development of impactful health solutions while gaining new skills, networks, and career opportunities. There are many reasons why Fellows have chosen to join this programme in the past, including being excited by the chance to accelerate the development of impactful health products, acquire new skills to bring back to their academic and/or clinical contexts, or even forge entirely new career paths. “I was particularly drawn to the concept of bridging the gap between academia and industry and the unique opportunity to address real-world healthcare challenges through innovative solutions. The possibility of collaborating with leading entrepreneurs and practitioners in the field,"
+    },
+    {
+      "id": "check-page-bd42445095",
+      "url": "https://www.zinc.vc/event/cohort-4-bristol-show-tell/",
+      "page": "batches",
+      "excerpt": "Cohort 4 Bristol Show & Tell | Zinc Our Mission Investment Portfolio Innovation Partners News Team Our Mission Investment Portfolio Innovation Partners News Team « All Events This event has passed. Cohort 4 Bristol Show & Tell May 11, 2022 @ 4:00 pm - 6:00 pm BST « Zinc Venture Builder Daily Coffee Chats What does research tell us about innovation in industries with significant impacts on the environment? » Join us to hear from early stage companies from our fourth Venture Builder working on improving children and young people’s mental health. Meet the teams and get involved! Add to calendar Google Calendar iCalendar Outlook 365 Outlook Live Details Date: May 11, 2022 Time: 4:00 pm - 6:00 pm BST Website: https://www.eventbrite.com/e/cohort-4-bristol-show-tell-tickets-329802938467 Venue Future Inn Bristol Cabot Circus Bond Street Bristol , United Kingdom + Google Map « Zinc Venture Builder Daily Coffee Chats What does research tell us about innovation in industries with significant impacts on the environment? » Stay in touch! Get the latest news, updates, tools, and information from Zinc straight to your inbox with Zinc’s monthly newsletter. Join Us Contact Careers Press Privacy Policy Regulatory"
+    },
+    {
+      "id": "check-page-8238594bac",
+      "url": "https://www.zinc.vc/event/what-does-research-tell-us-about-innovation-in-industries-with-significant-impacts-on-the-environment/",
+      "page": "details",
+      "excerpt": "What does research tell us about innovation in industries with significant impacts on the environment? | Zinc Our Mission Investment Portfolio Innovation Partners News Team Our Mission Investment Portfolio Innovation Partners News Team « All Events This event has passed. What does research tell us about innovation in industries with significant impacts on the environment? June 16, 2022 @ 12:00 pm - 1:00 pm BST « Cohort 4 Bristol Show & Tell Zinc x Warrior Women Podcast Launch Party » Join us at Teesside University for this roundtable event. If you are an academic in the Northeast and interested in this event, please contact: venturebuilder@zinc.vc Add to calendar Google Calendar iCalendar Outlook 365 Outlook Live Details Date: June 16, 2022 Time: 12:00 pm - 1:00 pm BST « Cohort 4 Bristol Show & Tell Zinc x Warrior Women Podcast Launch Party » Stay in touch! Get the latest news, updates, tools, and information from Zinc straight to your inbox with Zinc’s monthly newsletter. Join Us Contact Careers Press Privacy Policy Regulatory"
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [
-      {
-        "value": "https://airtable.com/appTvgH4eAXwSD2Vs/pagxU4iWkcj9vJrWj/form",
-        "evidenceId": "check-route-19fe090d07"
-      }
-    ],
+    "routes": [],
     "applicationUrl": [
       {
         "value": "https://www.zinc.vc",
@@ -60,8 +370,117 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-8d70424212"
+      }
+    ],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-021774ecb0"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-f3bc06ae3c"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-9ad4c28792"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-2e05ccbfdd"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-cb4143a930"
+      }
+    ],
+    "location": [
+      {
+        "value": "London",
+        "evidenceId": "check-location-3248f9bd98"
+      }
+    ],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "When Zinc backs a Founder to build a business, you receive up to £300,000 in funding. This breaks down as: £12,00 stipend across the first 6",
+        "evidenceId": "check-deal-e957a2be33"
+      },
+      {
+        "value": "you receive up to £300,000 in funding. This breaks down as: £12,00 stipend across the first 6 months per founder £150,000 initial",
+        "evidenceId": "check-deal-6d2af188dc"
+      },
+      {
+        "value": "breaks down as: £12,00 stipend across the first 6 months per founder £150,000 initial investment for any company that we decide to back ~£150,000",
+        "evidenceId": "check-deal-d16776c7b0"
+      },
+      {
+        "value": "£150,000 initial investment for any company that we decide to back ~£150,000 follow on investment in the company’s seed round Is there an",
+        "evidenceId": "check-deal-21e7fdea39"
+      },
+      {
+        "value": "to be leading a pre-seed round that brings together more than £1m in equity and grant funding into Clyde Hydrogen Systems . This",
+        "evidenceId": "check-deal-2ef3ca3270"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "300000",
+          "currency": "GBP",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-e957a2be33"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "1200",
+          "currency": "GBP",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-6d2af188dc"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "150000",
+          "currency": "GBP",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-d16776c7b0"
+      },
+      {
+        "value": {
+          "kind": "equity",
+          "amount": "1000000",
+          "currency": "GBP",
+          "equity": null,
+          "label": "Equity",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-2ef3ca3270"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://www.zinc.vc/portfolio-companies/",

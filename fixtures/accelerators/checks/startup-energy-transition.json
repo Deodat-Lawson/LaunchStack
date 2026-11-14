@@ -1,29 +1,266 @@
 {
   "programId": "startup-energy-transition",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://www.startup-energy-transition.com/"
+    "https://www.startup-energy-transition.com/",
+    "https://www.startup-energy-transition.com/energy-efficiency-award-2018-apply-now/",
+    "https://www.startup-energy-transition.com/important-announcement-set-community-and-set-award-2024-application-phase-unaffected-by-cyber-attack-on-dena/",
+    "https://www.startup-energy-transition.com/new-round-of-climate-kics-accelerator-programme-started-apply-now/",
+    "https://www.startup-energy-transition.com/set-2019-application-success/",
+    "https://www.startup-energy-transition.com/set-award-2019-call-for-applications-for-top-innovators-in-the-energy-transition/",
+    "https://www.startup-energy-transition.com/set-award-2020-call-for-applications-for-top-innovators-in-the-energy-transition/",
+    "https://www.startup-energy-transition.com/set-award-2026-application-stats/",
+    "https://www.startup-energy-transition.com/set-award-21-applications-numbers/",
+    "https://www.startup-energy-transition.com/set18-application-window-closed-the-community-has-never-been-bigger/",
+    "https://www.startup-energy-transition.com/set20-success-all-applications-are-in/",
+    "https://www.startup-energy-transition.com/the-european-green-deal-industrial-strategy-the-role-of-start-ups/",
+    "https://www.startup-energy-transition.com/the-role-of-live-dealer-games-in-bwin-casinos-online-offering/",
+    "https://www.startup-energy-transition.com/press-release-set-applications-deadline-update/",
+    "https://www.startup-energy-transition.com/blitz-casino-comment-fonctionne-le-programme-de-fidelite-pour-les-parieurs-reguliers/"
   ],
   "evidence": [
     {
-      "id": "check-portfolio-f27bd78003",
-      "url": "https://www.startup-energy-transition.com/",
-      "title": "Startup Energy Transition — homepage checked by scrape.py",
+      "id": "check-duration-511d9e2c3a",
+      "url": "https://www.startup-energy-transition.com/new-round-of-climate-kics-accelerator-programme-started-apply-now/",
+      "title": "Startup Energy Transition — application page",
+      "excerpt": "climate impact. Climate-KIC offers startups an 18 month programme over 3 stages to help grow your",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-e23c3a41bc",
+      "url": "https://www.startup-energy-transition.com/new-round-of-climate-kics-accelerator-programme-started-apply-now/",
+      "title": "Startup Energy Transition — application page",
+      "excerpt": "programme will take you through three 6-month long stages, each with a special focus. The",
+      "page": "application"
+    },
+    {
+      "id": "check-location-e7ac8415b9",
+      "url": "https://www.startup-energy-transition.com/set-award-21-applications-numbers/",
+      "title": "Startup Energy Transition — application page",
+      "excerpt": "most applications from start-ups based in Germany followed by the United States and",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-19a35315d3",
+      "url": "https://www.startup-energy-transition.com/set18-application-window-closed-the-community-has-never-been-bigger/",
+      "title": "Startup Energy Transition — application page",
       "excerpt": "#Startups → https://www.startup-energy-transition.com/category/startups/",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-281b6c5acb",
+      "url": "https://www.startup-energy-transition.com/set20-success-all-applications-are-in/",
+      "title": "Startup Energy Transition — application page",
+      "excerpt": "#Startups → https://www.startup-energy-transition.com/category/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-2c5ddc1d32",
+      "url": "https://www.startup-energy-transition.com/new-round-of-climate-kics-accelerator-programme-started-apply-now/",
+      "title": "Startup Energy Transition — application page",
+      "excerpt": "#Startups → https://www.startup-energy-transition.com/category/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-4ce7b471c8",
+      "url": "https://www.startup-energy-transition.com/press-release-set-applications-deadline-update/",
+      "title": "Startup Energy Transition — batches page",
+      "excerpt": "#Startups → https://www.startup-energy-transition.com/category/startups/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-c8db884155",
+      "url": "https://www.startup-energy-transition.com/set-award-2026-application-stats/",
+      "title": "Startup Energy Transition — application page",
+      "excerpt": "#Startups → https://www.startup-energy-transition.com/category/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-e6fdcaf06b",
+      "url": "https://www.startup-energy-transition.com/energy-efficiency-award-2018-apply-now/",
+      "title": "Startup Energy Transition — application page",
+      "excerpt": "#Startups → https://www.startup-energy-transition.com/category/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-ed68bcab9d",
+      "url": "https://www.startup-energy-transition.com/the-european-green-deal-industrial-strategy-the-role-of-start-ups/",
+      "title": "Startup Energy Transition — terms page",
+      "excerpt": "#Startups → https://www.startup-energy-transition.com/category/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-fea996f8e0",
+      "url": "https://www.startup-energy-transition.com/set-2019-application-success/",
+      "title": "Startup Energy Transition — application page",
+      "excerpt": "#Startups → https://www.startup-energy-transition.com/category/startups/",
+      "page": "application"
     },
     {
       "id": "check-route-1f3fc705f6",
       "url": "https://www.startup-energy-transition.com/",
-      "title": "Startup Energy Transition — homepage checked by scrape.py",
+      "title": "Startup Energy Transition — homepage",
       "excerpt": "https://www.startup-energy-transition.com",
       "page": "details"
+    },
+    {
+      "id": "check-route-f28bd8bbe9",
+      "url": "https://www.startup-energy-transition.com/set-award-2019-call-for-applications-for-top-innovators-in-the-energy-transition/",
+      "title": "Startup Energy Transition — application page",
+      "excerpt": "apply for the SET Award 2019 → https://deutscheenergieagentur.submittable.com/submit",
+      "page": "application"
+    },
+    {
+      "id": "check-selectivity-35fc904208",
+      "url": "https://www.startup-energy-transition.com/set20-success-all-applications-are-in/",
+      "title": "Startup Energy Transition — application page",
+      "excerpt": "category with the most applications was Renewable Energies & Materials with 32% of all applicants. Category 1: Renewable Energies & Materials – 32% Category 2: Digital Energy",
+      "page": "application"
+    },
+    {
+      "id": "check-selectivity-3cfba26c9f",
+      "url": "https://www.startup-energy-transition.com/set-award-2026-application-stats/",
+      "title": "Startup Energy Transition — application page",
+      "excerpt": "impact. Founder Diversity: Progress, But Further To Go On the diversity front, 37.5% of applicants reported having at least one founder who identifies as female, non-binary, or",
+      "page": "application"
+    },
+    {
+      "id": "check-selectivity-68bbf5f666",
+      "url": "https://www.startup-energy-transition.com/set20-success-all-applications-are-in/",
+      "title": "Startup Energy Transition — application page",
+      "excerpt": "major rise in applications from African countries, with the continent making up 20% of all applications. The country from which the most applications were received was Germany,",
+      "page": "application"
+    },
+    {
+      "id": "check-selectivity-de554a4a70",
+      "url": "https://www.startup-energy-transition.com/set-2019-application-success/",
+      "title": "Startup Energy Transition — application page",
+      "excerpt": "from which the most applications were received was Germany, representing 12% of all applications. The second was the United States with 6.6%, followed by Canada with 5.7%. All",
+      "page": "application"
+    },
+    {
+      "id": "check-selectivity-f084301ced",
+      "url": "https://www.startup-energy-transition.com/set-award-2026-application-stats/",
+      "title": "Startup Energy Transition — application page",
+      "excerpt": "contributed 13.7% and North America 13.1%. Notably, Africa accounted for 11.6% of applications, demonstrating growing innovation activity on the continent. Perhaps more",
+      "page": "application"
+    },
+    {
+      "id": "check-selectivity-f553797e27",
+      "url": "https://www.startup-energy-transition.com/set20-success-all-applications-are-in/",
+      "title": "Startup Energy Transition — application page",
+      "excerpt": "from which the most applications were received was Germany, representing 11.9% of all applications. Canada followed with 6.7%, followed by India with 6%. All in all, we are",
+      "page": "application"
+    },
+    {
+      "id": "check-selectivity-f8ca367c4f",
+      "url": "https://www.startup-energy-transition.com/set-award-21-applications-numbers/",
+      "title": "Startup Energy Transition — application page",
+      "excerpt": "of issues within the energy and mobility sector. Moreover, a total of 83% of all applicants indicate that their product or service has been tested with real users.",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-2e02b1cd53",
+      "url": "https://www.startup-energy-transition.com/",
+      "page": "details",
+      "excerpt": "Start Up Energy Transition - The Global Innovation Platform SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom From innovation to impact Start Up Energy Transition (SET) is a global innovation platform supporting innovation in energy & climate tech for the global energy transition. SET is implemented with the conviction that a sustainable future is directly linked to innovative business models and political will. The SET platform is powered by the German Energy Agency (dena) . We support the global energy & climate tech ecosystem with our three pillars: The SET Award, the SET Tech Festival & the SET Spotlights (SET100 & Newsroom): SET Award The annual international competition for startups and young companies innovating for the global energy transition . In the last 10 years , the award has received more than 4.500 applications from more than 100 countries within 5 categories . Discover more SET Tech Festival Our annual one-day event bringing together innovators shaping the future of energy: the best startups in the field of energy & climate tech solutions, innovation-driven corporates , policy makers , investors , and public organisations leading the energy transition. SET Tech Festival SET Spotlights Articles , videos , posts , insights ,"
+    },
+    {
+      "id": "check-page-fe0c3bec8f",
+      "url": "https://www.startup-energy-transition.com/energy-efficiency-award-2018-apply-now/",
+      "page": "application",
+      "excerpt": "Energy Efficiency Award 2018 – Apply Now! - Start Up Energy Transition SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom June 5, 2018 • Canelle Energy Efficiency Award 2018 – Apply Now! The Deutsche Energie-Agentur ( dena ) – the German Energy Agency – is seeking outstanding projects that measurably reduce companies’ energy consumption and cut emissions that have an impact on the climate. The best of these will win the 2018 Energy Efficiency Award. Private and public companies are invited to submit their projects and concepts by June 30, 2018 . The Energy Efficiency Award is endowed with 30,000 euros of prize money and is supported by Peter Altmaier, Federal Minister of Economic Affairs and Energy. Participation within the competition is free of charge. Interested companies can submit their application online at: www.EnergyEfficiencyAward.de Energy efficiency projects and concepts are awarded in the following categories: Energy transition 2.0 – for projects that have additional positive effects on the energy system, besides increasing energy efficiency Energy efficiency: from clever to digital – for projects ranging from traditional energy efficiency measures to digital solutions Energy services and energy management – for projects"
+    },
+    {
+      "id": "check-page-5f249c03a6",
+      "url": "https://www.startup-energy-transition.com/important-announcement-set-community-and-set-award-2024-application-phase-unaffected-by-cyber-attack-on-dena/",
+      "page": "application",
+      "excerpt": "Important Announcement: SET Community and SET Award 2024 Application Phase Unaffected by Cyber Attack on dena - Start Up Energy Transition SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom November 16, 2023 February 29, 2024 • Niklas Feierabend Important Announcement: SET Community and SET Award 2024 Application Phase Unaffected by Cyber Attack on dena Berlin, November 16, 2023: In the wake of a recent cyber attack on dena’s server infrastructure, we want to reassure the SET Community that the SET Award 2024 application phase remains unaffected. Our collaboration with an external partner to process applications ensures that your data remains safe and entirely separate from dena servers. While dena is not permanently available by phone and email due to the cyberattack, the SET team is committed to maintaining the operation of the SET Tech Festival & Award 2024 via email and LinkedIn. We recognise the importance of this prestigious event and would like to reassure participants that the application phase will continue without interruption. For all enquiries related to the SET Tech Festival & Award 2024, please reach out to the SET team via email or LinkedIn for now. Additionally, for urgent matters unrelated to the award, please call the"
+    },
+    {
+      "id": "check-page-3a2ba75bab",
+      "url": "https://www.startup-energy-transition.com/new-round-of-climate-kics-accelerator-programme-started-apply-now/",
+      "page": "application",
+      "excerpt": "New round of Climate-KIC's Accelerator Programme started - Apply now! - Start Up Energy Transition SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom July 17, 2017 July 17, 2017 • Canelle New round of Climate-KIC’s Accelerator Programme started – Apply now! The Climate-KIC Accelerator is Europe’s largest cleantech accelerator, with a focus on positive climate impact. Climate-KIC offers startups an 18 month programme over 3 stages to help grow your cleantech idea into a great business. Applications close 13.08.17! The application phase for Climate-KIC’s accelerator program is open now through till 13.08.17. Climate-KIC is a strong partner of the SET project, with over 900 startups accelerated, 300m euros raised in funding, and 220 round of follow on investment! The accelerator programme will take you through three 6-month long stages, each with a special focus. The first stage of the Accelerator is intended to help early-stage startups refine and develop their specific USP and business model. Here the first prototype can be finalised and assistance is provided to obtain industry feedback. This stage critically provides access to more mature startups in later stages of the Accelerator as well as to expert coaching, 1-2-1 mentoring and"
+    },
+    {
+      "id": "check-page-c24581dff0",
+      "url": "https://www.startup-energy-transition.com/set-2019-application-success/",
+      "page": "application",
+      "excerpt": "SET 2019 Application Success! - Start Up Energy Transition SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom February 21, 2019 February 27, 2019 • Canelle SET 2019 Application Success! We are excited and proud to share that after the end of our application phase on January 31 st , we received more than 400 applications from almost 80 countries – just for the SET19! From Cambodia to Peru, or Spain to New Zealand – the countries farthest away from one-another, we received applications from all over (and under) the globe! It goes to show that climate change and global warming is in fact a global problem, and it’s great to see that start-ups from all regions are heeding the call. Just as we had hoped, start-ups and their innovators, their entrepreneurs, change-makers, current and future leaders, have all shared with us their contributions to the energy transition. As there is no one easy solution, SET19 asked for applications in five different categories representing areas requiring innovation needed for the energy transition. Innovation-packed, efficiency-driving, carbon-reducing, energy-empowering, awe-inspiring, hope-inducing, and simply awesome ideas were plentiful throughout each and every award category! Year on year SET continues to"
+    },
+    {
+      "id": "check-page-f9e050f9c8",
+      "url": "https://www.startup-energy-transition.com/set-award-2019-call-for-applications-for-top-innovators-in-the-energy-transition/",
+      "page": "application",
+      "excerpt": "SET Award 2019: Call for applications for top innovators in the energy transition - Start Up Energy Transition SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom October 10, 2018 February 21, 2019 • Canelle SET Award 2019: Call for applications for top innovators in the energy transition The SET initiative invites start-ups around the world to present their business ideas The international ‘Start Up Energy Transition’ (SET) initiative invites young and innovative companies around the world to apply for the SET Award 2019 . The third round of the award for business ideas in the energy transition and climate protection was launched during World Energy Week in Milan, Italy, by Deutsche Energie-Agentur (dena) – the German Energy Agency – in cooperation with the World Energy Council. Applications are welcome until 31 January 2019. Applications can be submitted in five different categories: 1. Low-Carbon Energy Production, 2. Intelligent Grids, Platforms and Cyber Security, 3. Energy Efficiency, Smart Devices and Storage, 4. Innovative Mobility, 5. Special Prize: Quality Access & SDG-7. In each category, the three most promising applicants will be invited to pitch their ideas at the annual summit of the SET initiative, the SET Tech Festival."
+    },
+    {
+      "id": "check-page-5c7c0cfb91",
+      "url": "https://www.startup-energy-transition.com/set-award-2020-call-for-applications-for-top-innovators-in-the-energy-transition/",
+      "page": "application",
+      "excerpt": "SET Award 2020: Call for applications for top innovators in the energy transition - Start Up Energy Transition SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom September 30, 2019 January 7, 2022 • Canelle SET Award 2020: Call for applications for top innovators in the energy transition The SET initiative invites start-ups around the world to present their business ideas Stockholm/Berlin/London, 30 September 2019 . The international ‘Start Up Energy Transition’ (SET) initiative invites young and innovative companies around the world to apply for the SET Award 2020. The fourth round of the award for business ideas in the energy transition and climate protection was launched at a kickoff event in Stockholm, Sweden. Applications are welcome until to 15 January 2020 at www.www.startup-energy-transition.com . Over the past three years, over 1300 start-ups from 88 countries have taken part. The award is an initiative of the German Energy Agency (dena) in cooperation with the World Energy Council. The event in Stockholm was organised in cooperation with the German-Swedish Chamber of Commerce and the Swedish Energy Agency (Energimyndigheten). In the current round, the award is supported by the partner country Sweden and the German Federal Ministry"
+    },
+    {
+      "id": "check-page-f5cd962629",
+      "url": "https://www.startup-energy-transition.com/set-award-2026-application-stats/",
+      "page": "application",
+      "excerpt": "SET Award 2026 Application Stats - Start Up Energy Transition SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom January 8, 2026 January 8, 2026 • Niklas Feierabend SET Award 2026 Application Stats What 475 Start-ups Reveal About the Future of Energy The Start Up Energy Transition (SET) Award is back with a bang. This year saw 475 submissions: a 34% jump that compard to last year, signals renewed momentum in cleantech innovation. With global energy transition investment hitting a record $2.1 trillion in 2024 according to BloombergNEF, the timing couldn’t be better. But beyond the headline numbers, what do these applications actually tell us about where the energy transition is heading? A Global, Maturing Ecosystem This year’s applicants span the globe. Germany led submissions with 62 applications (13%), followed by the United States with 57 (12%) and India with 36 (8%). Europe dominated overall at 47.6%, while Asia-Pacific contributed 13.7% and North America 13.1%. Notably, Africa accounted for 11.6% of applications, demonstrating growing innovation activity on the continent. Perhaps more telling is the maturity shift. Half of all applicants (50.1%) are now Late Stage (TRL 7-9), representing technologies ready for deployment at scale. This"
+    },
+    {
+      "id": "check-page-25e6c20a9e",
+      "url": "https://www.startup-energy-transition.com/set-award-21-applications-numbers/",
+      "page": "application",
+      "excerpt": "SET Award 2021 Applications: Discover the Statistics SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom March 30, 2021 April 20, 2021 • Canelle The SET Award 2021 Applications in Numbers The SET Award 2021 applications have been reviewed and the 2021 SET100 list with the top 100 energy start-ups published. Be sure to check out this year’s 15 finalists , who were announced during the Berlin Energy Transition Dialogue 2021 . Review of Applications with Early Metrics In order to produce the SET100 list, we compared, analysed, weighted and combined the scores from Early Metrics’ SET-specific start-up model and the scores provided by our high-level jury. This year’s application phase was once again competitive, with 543 start-ups applying from all around the world within just three months. Who applied to the award? Where do the start-ups come from and what are their backgrounds? We will now have a closer look at some core statistics from the applications. SET Award 2021 Applications The Categories Almost one third of the contending start-ups submitted their application for the “Clean Energy Generation” category, while the remaining four categories were distributed fairly evenly. The Countries/Regions At SET our aim is to create a vibrant global"
+    },
+    {
+      "id": "check-page-74d1f7d8f0",
+      "url": "https://www.startup-energy-transition.com/set18-application-window-closed-the-community-has-never-been-bigger/",
+      "page": "application",
+      "excerpt": "SET18 Application Window Closed & The Community Has Never Been Bigger - Start Up Energy Transition SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom February 6, 2018 January 7, 2022 • Canelle SET18 Application Window Closed & The Community Has Never Been Bigger This April, Berlin will be home to the second Start Up Energy Transition Award and SET Tech Festival. With our application round finished, our Reading Jury has jumped into action! Over 96 energy experts from around the world are combing through all the applications to decide who makes it onto our Top 100 list of energy transition-related start-ups! This year, the competition was extremely strong and our innovators rose to the challenge, with applications coming from all over the world. In total, our community grew by 22 countries and we now have a global network of 88 countries . Applications for the Award 2018 came from 68 countries in total . Where have we grown? While almost all regions are represented, we are really excited to note large growth in Africa and Asia. Africa In Africa, start-ups from 16 countries applied for the 2018 Start Up Energy Transition. Five of those nations are new to our awards, while applications from Kenya and Nigeria even doubled! These two continue to"
+    },
+    {
+      "id": "check-page-47df6cbcfb",
+      "url": "https://www.startup-energy-transition.com/set20-success-all-applications-are-in/",
+      "page": "application",
+      "excerpt": "#SET20 Success: All Applications are in! - Start Up Energy Transition SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom January 24, 2020 January 7, 2022 • Canelle #SET20 Success: All Applications are in! We are thrilled to announce that the application phase has officially closed on January 15, 2020 and this year’s numbers are in! In total we have received a record-breaking 570 applications from 90 countries. This marks yet another edition of SET that has seen substantial jumps in the numbers of both start-up applications as well as the number of countries represented. This is a testament not only to the need for a response to the imminent threat of climate change, but also to the rise of start-ups focusing on innovation in energy as a direct response. This year’s categories covered the entire clean energy spectrum, and applicants represented all corners of the globe. The SET’20 award categories are: Renewable Energies & Materials, Digital Energy Systems, Energy Efficiency Solutions, Smart Mobility, and our Special Prize: Quality Access & SDG-7. For more insights on our growing network and the eco-system that will drive the future global energy transition, take a look at the stats that we have gathered below. Applications per region: This"
+    },
+    {
+      "id": "check-page-774c38e317",
+      "url": "https://www.startup-energy-transition.com/the-european-green-deal-industrial-strategy-the-role-of-start-ups/",
+      "page": "terms",
+      "excerpt": "The European Green Deal Industrial Strategy - The Role of Start-ups - Start Up Energy Transition SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom May 6, 2020 June 26, 2020 • tahar.kechrid The European Green Deal Industrial Strategy – The Role of Start-ups How the European Union wants to enable start-ups to protect the climate and create a thriving economy – What start-ups need to know The European Commission, headed by Ursula von der Leyen, has been active in announcing new strategies and roadmaps related to the EU ‘s future. Most notably, in December 2019 the Commission presented the European Green Deal and in March 2020 it was followed up by a new European Industrial Strategy intended to outline an economic transition towards both climate neutrality and digital leadership. In this article, we provide you with a brief overview on these two strategies and highlight implications for start-ups and SMEs. The European Green Deal According to the European Commission, the European Green Deal (EGD) is a roadmap for facilitating the EU’s economy transformation to carbon neutrality by turning climate and environmental challenges into opportunities across all policy areas while also maintaining a just and inclusive transition. President von der"
+    },
+    {
+      "id": "check-page-18019f9874",
+      "url": "https://www.startup-energy-transition.com/the-role-of-live-dealer-games-in-bwin-casinos-online-offering/",
+      "page": "terms",
+      "excerpt": "The Role of Live Dealer Games in Bwin Casino's Online Offering - Start Up Energy Transition SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom November 12, 2026 • bob_1f1e19e8fa14 The Role of Live Dealer Games in Bwin Casino’s Online Offering What live dealer games bring to Bwin Casino Live dealer games have become a central part of the online casino experience, and Bwin Casino is no exception. These games stream real dealers from studios, combining the convenience of online play with the atmosphere of a land-based casino. For players who find RNG-based games impersonal, live dealer options offer a middle ground. How the live dealer format works In a live dealer game, a human croupier manages the table while a camera streams the action in real time. Players place bets through an interface that mirrors the physical table. The result is determined by the dealer’s actions, not a random number generator. Bwin Casino integrates these streams into its platform, so players can switch between live and standard games without leaving the site. Popular live dealer games at Bwin Casino The live dealer category typically includes classic table games and newer variants. Common options are live roulette, blackjack, baccarat, and poker-based games. Some"
+    },
+    {
+      "id": "check-page-6251aa31ee",
+      "url": "https://www.startup-energy-transition.com/press-release-set-applications-deadline-update/",
+      "page": "batches",
+      "excerpt": "Press Release: SET Applications Deadline Update - Start Up Energy Transition SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom January 12, 2017 December 13, 2018 • Canelle Press Release: SET Applications Deadline Update Global energy transition award for start-ups: applications accepted until January 31st dena initiative links innovative start-ups with international investors and decision-makers Berlin, 12th January 2017: Start-ups still have until 31st January 2017 to submit their entries for the international ‘Start Up Energy Transition Award’, presented by the Deutsche Energie-Agentur (dena) – the German Energy Agency. The competition is open to any ideas that promote energy transition and worldwide climate protection. The start-ups with the most innovative business models will have an opportunity to present their projects and solutions to international investors, decision-makers and climate protection specialists during the Berlin Energy Transition Dialogue in March 2017, and to network with them. Applications may be submitted at www.startup-energytransition.com . Supporters of the ‘Start Up Energy Transition’ initiative include Patricia Espinosa, General Secretary of the United Nations Framework Convention on Climate Change (UNFCCC),"
+    },
+    {
+      "id": "check-page-a33d5943b6",
+      "url": "https://www.startup-energy-transition.com/blitz-casino-comment-fonctionne-le-programme-de-fidelite-pour-les-parieurs-reguliers/",
+      "page": "details",
+      "excerpt": "Blitz Casino : comment fonctionne le programme de fidélité pour les parieurs réguliers - Start Up Energy Transition SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom SET SET Award 2027 SET Award Tech Festival Database The SET100 List 2026 Our Partners Newsroom November 12, 2026 • bob_1f1e19e8fa14 Blitz Casino : comment fonctionne le programme de fidélité pour les parieurs réguliers Un mécanisme pensé pour les parieurs récurrents Le programme de fidélité de Blitz Casino repose sur une logique simple : récompenser la régularité plutôt que le volume ponctuel. Là où beaucoup de plateformes misent tout sur un bonus de bienvenue, ce dispositif suit le joueur dans la durée. Concrètement, chaque mise placée sur les sports ou les jeux de table alimente un compteur interne, et ce compteur débloque progressivement des avantages. L’enjeu pour l’opérateur est de transformer un visiteur occasionnel en habitué, et pour le parieur, d’obtenir un retour concret sur son activité. Des paliers plutôt qu’un statut unique Le système fonctionne par niveaux successifs. Un joueur qui commence à parier régulièrement accède à un premier palier, puis progresse au fil de son activité. Chaque palier ouvre droit à des contreparties différentes : bonus crédités, tours gratuits sur les machines à sous, ou encore avantages sur les cotes pour les paris sportifs."
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://deutscheenergieagentur.submittable.com/submit",
+        "evidenceId": "check-route-f28bd8bbe9"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://www.startup-energy-transition.com",
@@ -33,12 +270,76 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
-    "selectivity": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-511d9e2c3a"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-e23c3a41bc"
+      }
+    ],
+    "format": [],
+    "location": [
+      {
+        "value": "Germany",
+        "evidenceId": "check-location-e7ac8415b9"
+      }
+    ],
+    "selectivity": [
+      {
+        "value": {
+          "rate": 0.12,
+          "bounded": false
+        },
+        "evidenceId": "check-selectivity-de554a4a70"
+      },
+      {
+        "value": {
+          "rate": 0.116,
+          "bounded": false
+        },
+        "evidenceId": "check-selectivity-f084301ced"
+      },
+      {
+        "value": {
+          "rate": 0.375,
+          "bounded": false
+        },
+        "evidenceId": "check-selectivity-3cfba26c9f"
+      },
+      {
+        "value": {
+          "rate": 0.83,
+          "bounded": false
+        },
+        "evidenceId": "check-selectivity-f8ca367c4f"
+      },
+      {
+        "value": {
+          "rate": 0.2,
+          "bounded": false
+        },
+        "evidenceId": "check-selectivity-68bbf5f666"
+      },
+      {
+        "value": {
+          "rate": 0.119,
+          "bounded": false
+        },
+        "evidenceId": "check-selectivity-f553797e27"
+      }
+    ],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.startup-energy-transition.com/category/startups/",
-        "evidenceId": "check-portfolio-f27bd78003"
+        "evidenceId": "check-portfolio-e6fdcaf06b"
       }
     ],
     "name": [],

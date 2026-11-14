@@ -1,12 +1,20 @@
 {
   "programId": "industrifonden",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://industrifonden.com/portfolio",
-      "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
+      "url": "https://industrifonden.com/faq-our-investment-process",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://industrifonden.com/news-insights/olsaro-closes-eu5m-seed-investment-to-scale-climate-resilient-cereal-genetics",
+      "page": "terms",
+      "anchor": "14 Oct 2026 OlsAro closes €5m seed investment to scale climate-resilient cereal genetics News",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -19,9 +27,9 @@
       "origin": "official"
     },
     {
-      "url": "https://industrifonden.com/faq-our-investment-process",
-      "page": "terms",
-      "anchor": "FAQ",
+      "url": "https://industrifonden.com/portfolio",
+      "page": "portfolio",
+      "anchor": "Portfolio",
       "fetched": true,
       "blocked": null,
       "origin": "official"

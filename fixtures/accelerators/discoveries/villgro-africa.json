@@ -1,35 +1,19 @@
 {
   "programId": "villgro-africa",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pages": [
     {
-      "url": "https://villgroafrica.org/innovators/innovators-business-incubation-program/",
-      "page": "details",
-      "anchor": "Incubation Program",
+      "url": "https://villgroafrica.org/5-steps-to-becoming-investment-ready/",
+      "page": "terms",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://villgroafrica.org/innovators/apply-now/",
-      "page": "application",
-      "anchor": "Apply Now",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://villgroafrica.org/investors/investment-portfolio/",
-      "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://villgroafrica.org/about/team/",
+      "url": "https://villgroafrica.org/about/careers/",
       "page": "details",
-      "anchor": "Team",
+      "anchor": "Careers",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -43,9 +27,121 @@
       "origin": "official"
     },
     {
-      "url": "https://villgroafrica.org/about/careers/",
+      "url": "https://villgroafrica.org/about/team/",
       "page": "details",
-      "anchor": "Careers",
+      "anchor": "Team",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://villgroafrica.org/about/values/",
+      "page": "details",
+      "anchor": "How We Deliver Impact",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://villgroafrica.org/african-women-innovating-in-healthcare-awiih-2024-2025-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://villgroafrica.org/applying-for-villgro-africa-incubation-program/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://villgroafrica.org/call-for-applications-asme-ishow/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://villgroafrica.org/call-for-applications-bioscience-innovation-bootcamp/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://villgroafrica.org/clinicpesa-selected-for-mit-d-labs-2019-2020-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://villgroafrica.org/flare-seals-emergency-response-deal-with-uber/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://villgroafrica.org/innovators-forum-building-resilience-through-investment-in-biomedical-and-diagnostics-innovation-and-manufacturing-in-kenya/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://villgroafrica.org/innovators/apply-now/",
+      "page": "application",
+      "anchor": "Apply Now",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://villgroafrica.org/innovators/innovators-business-incubation-program/",
+      "page": "details",
+      "anchor": "Incubation Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://villgroafrica.org/investor-deal-book/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://villgroafrica.org/investors/investment-portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://villgroafrica.org/more-health-for-africa-2025-2026-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://villgroafrica.org/reflections-on-the-prix-galien-best-incubator-accelerator-award/",
+      "page": "details",
+      "anchor": "Read More",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -59,10 +155,18 @@
       "origin": "official"
     },
     {
-      "url": "https://villgroafrica.org/about/values/",
-      "page": "details",
-      "anchor": "How We Deliver Impact",
-      "fetched": false,
+      "url": "https://villgroafrica.org/senior-investment-analyst-full-time/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://villgroafrica.org/villgro-africa-incubatees-selected-for-avpa-deal-share-room/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

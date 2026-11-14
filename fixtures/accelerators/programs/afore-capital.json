@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.afore.vc/",
   "applyUrl": "https://www.afore.vc/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Afore Capital Portfolio Founders-In-Residence FIR University Proven product and investment expertise, on your side on Day 0 — helping you build now and raise later. CHECK OUT OUR FOUNDERS-IN-RESIDENCE PROGRAM Learn more We’re a $500M fund investing $500k - $2M+ with high conviction in pre-traction, pre-everything companies! We look for what can go right. Just like you, we’re risk-takers — not risk-mitigators. All-in with you! We play to win. We don’t tell you something’s awesome just to be nice. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Proven product and investment expertise, on your side on Day 0 — helping you build now and raise later.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "We play to win. We don’t tell you something’s awesome just to be nice. We have your back and ask the tough questions. Think of us as your SWAT team.",
     "sourceIds": [
       "homepage"
     ],
@@ -26,9 +26,9 @@
     {
       "id": "official-logo",
       "url": "https://www.afore.vc/",
-      "title": "Afore Capital — official mark on the retrieved page",
-      "quote": "https://cdn.prod.website-files.com/62715edd66fdd76d96199f00/62715edd66fdd7c461199f68_Frame%20277.png",
-      "checkedAt": "2026-11-03T00:18:31.000Z"
+      "title": "Afore Capital — no rule-validated official mark",
+      "quote": "https://cdn.prod.website-files.com/62715edd66fdd76d96199f00/657076da07df81470a9fc302_image%20170%20(Traced).webp",
+      "checkedAt": "2026-11-14T20:18:03.000Z"
     },
     {
       "id": "homepage",
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "afore-capital-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.afore.vc/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

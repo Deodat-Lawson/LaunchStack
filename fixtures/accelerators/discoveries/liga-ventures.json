@@ -1,5 +1,118 @@
 {
   "programId": "liga-ventures",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
-  "pages": []
+  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "pages": [
+    {
+      "url": "https://liga.ventures/insights/artigos/aceleradora-de-startups-o-que-e-e-como-gerar-resultados-com-programa-de-aceleracao/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://liga.ventures/insights/artigos/como-criar-a-estrategia-de-inovacao-aberta-ideal-para-sua-empresa/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://liga.ventures/insights/artigos/grandes-empresas-criam-programas-para-se-relacionar-com-startups/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://liga.ventures/insights/artigos/qual-tamanho-ideal-e-como-estruturar-uma-equipe-de-inovacao-de-sucesso/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://liga.ventures/insights/artigos/relatorio-investment-and-ma-autotechs-2024/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://liga.ventures/insights/entrevistas/ana-carolina-bajarunas-ceo-da-builders-e-idealizadora-do-foodtech-movement/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://liga.ventures/insights/entrevistas/pedro-daniel-diretor-de-esportes-midia-e-entretenimento-na-ey-e-coidealizador-do-arena-hub/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://liga.ventures/insights/follow-on/relatorio-investment-and-mampa-proptechs-amp-construtechs/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://liga.ventures/insights/follow-on/relatorio-investment-e-ma-fintechs-2024/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://liga.ventures/insights/relatorios/relatorio-investment-and-ma-healthtechs/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://liga.ventures/insights/relatorios/relatorio-investment-and-mampa-logtechs/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://liga.ventures/insights/relatorios/relatorio-investment-e-m-a-agtechs-2024/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://liga.ventures/insights/relatorios/relatorio-investment-e-mampa-foodtechs/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://liga.ventures/insights/startups/relatorio-de-investment-ma-retailtechs/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
 }

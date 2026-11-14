@@ -1,28 +1,273 @@
 {
   "programId": "murud",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://www.telstra.com.au/business-enterprise/muru-d"
+    "https://www.telstra.com.au/business-enterprise/muru-d",
+    "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications",
+    "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications/cisco-webex-teams",
+    "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications/office-365-enterprise",
+    "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications/virtual-meeting-room",
+    "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications",
+    "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications/cisco-webex-teams",
+    "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications/office-365-enterprise",
+    "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications/virtual-meeting-room",
+    "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
+    "https://www.telstra.com.au/exchange/how-to-apply-for-telstra-footy-country-grants",
+    "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services",
+    "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services/messagebank",
+    "https://www.telstra.com.au/smarter-business/planning-and-strategy/how-to-apply-for-small-business-grants",
+    "https://www.telstra.com.au/careers/how-we-hire"
   ],
   "evidence": [
     {
+      "id": "check-duration-72e0ef4382",
+      "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services/messagebank",
+      "title": "Muru-D — application page",
+      "excerpt": "is available on all Business Fleet Connect 24-month and Casual plans, $55 and above Easy Share",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-f5e6b7c769",
+      "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services/messagebank",
+      "title": "Muru-D — application page",
+      "excerpt": "is available on all Business Fleet Connect 24-month and casual plans, $55 and above Easy Share",
+      "page": "application"
+    },
+    {
+      "id": "check-format-1ac9661bcc",
+      "url": "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
+      "title": "Muru-D — application page",
+      "excerpt": "Nailing the virtual graduate application process at Telstra - Telstra",
+      "page": "application"
+    },
+    {
+      "id": "check-format-2882c5cbb8",
+      "url": "https://www.telstra.com.au/careers/how-we-hire",
+      "title": "Muru-D — application page",
+      "excerpt": "the opportunity to meet with our current graduates in a virtual setting to get to know more about life at Telstra and ask",
+      "page": "application"
+    },
+    {
+      "id": "check-format-4f4b99787d",
+      "url": "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
+      "title": "Muru-D — application page",
+      "excerpt": "been moving our final stage in the interview process to a virtual setting. Typically, once candidates completed an online",
+      "page": "application"
+    },
+    {
+      "id": "check-format-646ec4a8fe",
+      "url": "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
+      "title": "Muru-D — application page",
+      "excerpt": "Sign in Telstra Better Connected Careers Nailing the virtual graduate application process at Telstra We've had to make",
+      "page": "application"
+    },
+    {
+      "id": "check-format-6911ce618b",
+      "url": "https://www.telstra.com.au/careers/how-we-hire",
+      "title": "Muru-D — application page",
+      "excerpt": "recruitment process, you’ll be asked to participate in a virtual interview. This is a three stage process: Graduate",
+      "page": "application"
+    },
+    {
+      "id": "check-format-905b142900",
+      "url": "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
+      "title": "Muru-D — application page",
+      "excerpt": "a few other tips on how you can successfully navigate our virtual application process. Before the video interview",
+      "page": "application"
+    },
+    {
+      "id": "check-format-9a1de8ef39",
+      "url": "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
+      "title": "Muru-D — application page",
+      "excerpt": "at Telstra - Telstra Publisher: Telstra Name: Nailing the virtual graduate application process at Telstra - Telstra",
+      "page": "application"
+    },
+    {
+      "id": "check-format-9bf19262a6",
+      "url": "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
+      "title": "Muru-D — application page",
+      "excerpt": "processes at Telstra recently as we move to a more virtual application and onboarding experience for our grads.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-f7b453ad5a",
+      "url": "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
+      "title": "Muru-D — application page",
+      "excerpt": "deadline. Dress appropriately, just as you would for an in-person interview. Have good lighting and keep your background as",
+      "page": "application"
+    },
+    {
+      "id": "check-location-d8d83fb924",
+      "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services",
+      "title": "Muru-D — application page",
+      "excerpt": "which you can turn off. It is usually located in Main Menu, then Tools or Settings, then Phone.",
+      "page": "application"
+    },
+    {
       "id": "check-name-b1ad1e9d8d",
       "url": "https://www.telstra.com.au/business-enterprise/muru-d",
-      "title": "Muru-D — homepage checked by scrape.py",
+      "title": "Muru-D — homepage",
       "excerpt": "muru-D - Telstra Enterprise Publisher: Telstra Name: muru-D -",
       "page": "details"
+    },
+    {
+      "id": "check-route-4347719c86",
+      "url": "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
+      "title": "Muru-D — application page",
+      "excerpt": "You can learn more about our application process here. → https://www.telstra.com.au/careers/how-we-hire",
+      "page": "application"
+    },
+    {
+      "id": "check-status-6a5392114d",
+      "url": "https://www.telstra.com.au/exchange/how-to-apply-for-telstra-footy-country-grants",
+      "title": "Muru-D — application page",
+      "excerpt": "friends at the AFL that we’d be backing footy in a big way through the Telstra Footy Country Grants program. Applications are now open. Here’s how to apply for your local AFL footy club. Luke Hopewell · 05 February 2024 · 5 minute read What",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-d7655e1d16",
+      "url": "https://www.telstra.com.au/business-enterprise/muru-d",
+      "page": "details",
+      "excerpt": "muru-D - Telstra Enterprise Publisher: Telstra Name: muru-D - Telstra Enterprise Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Sign in Contact an expert Telstra Contact an expert Show the previous links Welcome Overview Strategic pillars Current projects Events Get in touch Show next links muru-D Innovation happens here At muru-D, we turn 'what if' into 'what's next' by co-creating with our strategic partners and customers through exploration and incubation of new products, services and technologies. Overview We're tackling some of the biggest problems the world faces today, one idea at a time. muru-D is Telstra's hub for incubating ideas, products, and technologies. The name muru-D has a meaningful origin rooted in the Sydney Aboriginal Eora language. The word 'muru' means path, symbolising a journey or direction. The 'D' stands for digital, representing the focus on digital innovation. Together, muru-D signifies a pathway to digital innovation. We explore new technologies and rapidly prototype solutions, drawing on our expertise in 5G, IoT, connectivity, edge computing, and applied AI. Partnering with industry, experts, and universities, we develop real-world solutions for real-world problems. Our"
+    },
+    {
+      "id": "check-page-1011d4d3fb",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications",
+      "page": "application",
+      "excerpt": "Calling and Productivity by Telstra Enterprise Publisher: Telstra Name: Calling and Productivity by Telstra Enterprise Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Sign in Contact an expert Telstra Contact an expert Telstra Business & Enterprise Products and Solutions Unified Communications Calling and Productivity Inspire brilliant teamwork Boost productivity and customer experience by enabling your employees to work creatively and effectively wherever they are. Let's connect Explore Calling and Productivity solutions We do our best work as part of a team, but the best teams aren’t always in the same place. Sometimes you need the right tools to unite your people and deliver spectacular results. Help your teams to collaborate and operate seamlessly, with calling and productivity solutions that cater to the evolving needs of your organisation. Whether on-premises or in the cloud, we can help you define the right strategy to spark a culture of collaboration and a thriving team. Adaptive Collaboration Modern VoIP telephony services that seamelssly integrate with your collaboration platforms and are simple and quick to deploy. More about Adaptive Collaboration Telstra Liberate Get an office-like"
+    },
+    {
+      "id": "check-page-876d22c1e2",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications/cisco-webex-teams",
+      "page": "application",
+      "excerpt": "Calling and Productivity by Telstra Enterprise Publisher: Telstra Name: Calling and Productivity by Telstra Enterprise Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Sign in Contact an expert Telstra Contact an expert Telstra Business & Enterprise Products and Solutions Unified Communications Calling and Productivity Inspire brilliant teamwork Boost productivity and customer experience by enabling your employees to work creatively and effectively wherever they are. Let's connect Explore Calling and Productivity solutions We do our best work as part of a team, but the best teams aren’t always in the same place. Sometimes you need the right tools to unite your people and deliver spectacular results. Help your teams to collaborate and operate seamlessly, with calling and productivity solutions that cater to the evolving needs of your organisation. Whether on-premises or in the cloud, we can help you define the right strategy to spark a culture of collaboration and a thriving team. Adaptive Collaboration Modern VoIP telephony services that seamelssly integrate with your collaboration platforms and are simple and quick to deploy. More about Adaptive Collaboration Telstra Liberate Get an office-like"
+    },
+    {
+      "id": "check-page-d55f945ff2",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications/office-365-enterprise",
+      "page": "application",
+      "excerpt": "Calling and Productivity by Telstra Enterprise Publisher: Telstra Name: Calling and Productivity by Telstra Enterprise Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Sign in Contact an expert Telstra Contact an expert Telstra Business & Enterprise Products and Solutions Unified Communications Calling and Productivity Inspire brilliant teamwork Boost productivity and customer experience by enabling your employees to work creatively and effectively wherever they are. Let's connect Explore Calling and Productivity solutions We do our best work as part of a team, but the best teams aren’t always in the same place. Sometimes you need the right tools to unite your people and deliver spectacular results. Help your teams to collaborate and operate seamlessly, with calling and productivity solutions that cater to the evolving needs of your organisation. Whether on-premises or in the cloud, we can help you define the right strategy to spark a culture of collaboration and a thriving team. Adaptive Collaboration Modern VoIP telephony services that seamelssly integrate with your collaboration platforms and are simple and quick to deploy. More about Adaptive Collaboration Telstra Liberate Get an office-like"
+    },
+    {
+      "id": "check-page-713b0ab766",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/calling-and-productivity/business-applications/virtual-meeting-room",
+      "page": "application",
+      "excerpt": "Calling and Productivity by Telstra Enterprise Publisher: Telstra Name: Calling and Productivity by Telstra Enterprise Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Sign in Contact an expert Telstra Contact an expert Telstra Business & Enterprise Products and Solutions Unified Communications Calling and Productivity Inspire brilliant teamwork Boost productivity and customer experience by enabling your employees to work creatively and effectively wherever they are. Let's connect Explore Calling and Productivity solutions We do our best work as part of a team, but the best teams aren’t always in the same place. Sometimes you need the right tools to unite your people and deliver spectacular results. Help your teams to collaborate and operate seamlessly, with calling and productivity solutions that cater to the evolving needs of your organisation. Whether on-premises or in the cloud, we can help you define the right strategy to spark a culture of collaboration and a thriving team. Adaptive Collaboration Modern VoIP telephony services that seamelssly integrate with your collaboration platforms and are simple and quick to deploy. More about Adaptive Collaboration Telstra Liberate Get an office-like"
+    },
+    {
+      "id": "check-page-6eec177551",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications",
+      "page": "application",
+      "excerpt": "Calling and Productivity by Telstra Enterprise Publisher: Telstra Name: Calling and Productivity by Telstra Enterprise Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Sign in Contact an expert Telstra Contact an expert Telstra Business & Enterprise Products and Solutions Unified Communications Calling and Productivity Inspire brilliant teamwork Boost productivity and customer experience by enabling your employees to work creatively and effectively wherever they are. Let's connect Explore Calling and Productivity solutions We do our best work as part of a team, but the best teams aren’t always in the same place. Sometimes you need the right tools to unite your people and deliver spectacular results. Help your teams to collaborate and operate seamlessly, with calling and productivity solutions that cater to the evolving needs of your organisation. Whether on-premises or in the cloud, we can help you define the right strategy to spark a culture of collaboration and a thriving team. Adaptive Collaboration Modern VoIP telephony services that seamelssly integrate with your collaboration platforms and are simple and quick to deploy. More about Adaptive Collaboration Telstra Liberate Get an office-like"
+    },
+    {
+      "id": "check-page-37090b26b4",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications/cisco-webex-teams",
+      "page": "application",
+      "excerpt": "Calling and Productivity by Telstra Enterprise Publisher: Telstra Name: Calling and Productivity by Telstra Enterprise Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Sign in Contact an expert Telstra Contact an expert Telstra Business & Enterprise Products and Solutions Unified Communications Calling and Productivity Inspire brilliant teamwork Boost productivity and customer experience by enabling your employees to work creatively and effectively wherever they are. Let's connect Explore Calling and Productivity solutions We do our best work as part of a team, but the best teams aren’t always in the same place. Sometimes you need the right tools to unite your people and deliver spectacular results. Help your teams to collaborate and operate seamlessly, with calling and productivity solutions that cater to the evolving needs of your organisation. Whether on-premises or in the cloud, we can help you define the right strategy to spark a culture of collaboration and a thriving team. Adaptive Collaboration Modern VoIP telephony services that seamelssly integrate with your collaboration platforms and are simple and quick to deploy. More about Adaptive Collaboration Telstra Liberate Get an office-like"
+    },
+    {
+      "id": "check-page-e53037de9c",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications/office-365-enterprise",
+      "page": "application",
+      "excerpt": "Calling and Productivity by Telstra Enterprise Publisher: Telstra Name: Calling and Productivity by Telstra Enterprise Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Sign in Contact an expert Telstra Contact an expert Telstra Business & Enterprise Products and Solutions Unified Communications Calling and Productivity Inspire brilliant teamwork Boost productivity and customer experience by enabling your employees to work creatively and effectively wherever they are. Let's connect Explore Calling and Productivity solutions We do our best work as part of a team, but the best teams aren’t always in the same place. Sometimes you need the right tools to unite your people and deliver spectacular results. Help your teams to collaborate and operate seamlessly, with calling and productivity solutions that cater to the evolving needs of your organisation. Whether on-premises or in the cloud, we can help you define the right strategy to spark a culture of collaboration and a thriving team. Adaptive Collaboration Modern VoIP telephony services that seamelssly integrate with your collaboration platforms and are simple and quick to deploy. More about Adaptive Collaboration Telstra Liberate Get an office-like"
+    },
+    {
+      "id": "check-page-fd92c2ce56",
+      "url": "https://www.telstra.com.au/business-enterprise/products/unified-communications/collaboration/business-applications/virtual-meeting-room",
+      "page": "application",
+      "excerpt": "Calling and Productivity by Telstra Enterprise Publisher: Telstra Name: Calling and Productivity by Telstra Enterprise Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Sign in Contact an expert Telstra Contact an expert Telstra Business & Enterprise Products and Solutions Unified Communications Calling and Productivity Inspire brilliant teamwork Boost productivity and customer experience by enabling your employees to work creatively and effectively wherever they are. Let's connect Explore Calling and Productivity solutions We do our best work as part of a team, but the best teams aren’t always in the same place. Sometimes you need the right tools to unite your people and deliver spectacular results. Help your teams to collaborate and operate seamlessly, with calling and productivity solutions that cater to the evolving needs of your organisation. Whether on-premises or in the cloud, we can help you define the right strategy to spark a culture of collaboration and a thriving team. Adaptive Collaboration Modern VoIP telephony services that seamelssly integrate with your collaboration platforms and are simple and quick to deploy. More about Adaptive Collaboration Telstra Liberate Get an office-like"
+    },
+    {
+      "id": "check-page-63afe10321",
+      "url": "https://www.telstra.com.au/connected/careers/nailing-the-virtual-graduate-application-process-at-telstra---te",
+      "page": "application",
+      "excerpt": "Nailing the virtual graduate application process at Telstra - Telstra Publisher: Telstra Name: Nailing the virtual graduate application process at Telstra - Telstra Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Language Sign in Telstra Better Connected Careers Nailing the virtual graduate application process at Telstra We've had to make quite a few changes to our recruitment processes at Telstra recently as we move to a more virtual application and onboarding experience for our grads. Evelyn Crowe · 22 March 2021 · 4 minute read It’s not all change, though. The fundamental attributes we look for in our graduates remain the same. Candidates still need to do their research and be prepared. They still need to be their authentic selves and apply for jobs that are right for them, so we can help them develop and thrive with us. It’s important you stand out and make a good impression throughout the online application process as this can help you to get your foot in the door and kickstart what we hope will be a very successful career here at Telstra. Here’s a bit of advice on how you can do just that. What we’re looking for in our grads Here at Telstra, we recruit for a mix of technical and corporate pathways"
+    },
+    {
+      "id": "check-page-427ed86f27",
+      "url": "https://www.telstra.com.au/exchange/how-to-apply-for-telstra-footy-country-grants",
+      "page": "application",
+      "excerpt": "How to apply for Telstra Footy Country Grants Publisher: Telstra Name: How to apply for Telstra Footy Country Grants Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Language Sign in Telstra Telstra Exchange How to apply for Telstra Footy Country Grants In 2023, we announced with our friends at the AFL that we’d be backing footy in a big way through the Telstra Footy Country Grants program. Applications are now open. Here’s how to apply for your local AFL footy club. Luke Hopewell · 05 February 2024 · 5 minute read What are Telstra Footy Country Grants? If you’re a member of a local AFL footy club, you probably know how hard it is to keep your club running and growing. You need money for equipment, coaching, and programs. You need volunteers to help out with everything from umpiring to fundraising. You need to attract and retain players of all ages and backgrounds, especially young girls who are the future of our game. That’s where the Telstra Footy Country Grants come in: an opportunity for footy clubs across Australia to get some extra funding and support from us and the AFL. Clubs can apply for up to $20,000 with a total of $8 million to be distributed over the next four years. That’s a lot of money"
+    },
+    {
+      "id": "check-page-4f16df7576",
+      "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services",
+      "page": "application",
+      "excerpt": "Mobile Features and Services for you | Telstra Publisher: Telstra Name: Mobile Features and Services for you | Telstra Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Language Sign in Telstra Telstra personal Mobile phones Payment method not available This item can’t be purchased outright. However, it can be purchased on an HRO. OK Payment option selected not available This item is not available on an HRO. Please purchase it outright to continue. OK Payment option selected not available OK Not eligible for upfront plans The customer can’t purchase an upfront plan. OK Not eligible for bundle plans The customer can’t purchase a bundle plan. OK OK Your service is not eligible This service is not eligible for the action you’ve requested. OK Can’t add to cart You can’t sell this product or service via an outbound sale right now. Tell the customer they can visit telstra.com, call us or visit a store to make this purchase. Ok You can’t sell this product or service You can view this page, but you can’t sell this product or service via an outbound sale right now. Tell the customer they can visit telstra.com, call us or visit a store to make this purchase Cancel Ok Cart limit reached You can have a maximum of"
+    },
+    {
+      "id": "check-page-cc14617bda",
+      "url": "https://www.telstra.com.au/small-business/mobile-phones/mobile-applications-and-services/messagebank",
+      "page": "application",
+      "excerpt": "MessageBank® Publisher: Telstra Name: MessageBank® Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Language Sign in Telstra Payment method not available There are no payment options for this purchase. OK Payment option selected not available This item is not available on an HRO. Please purchase it outright to continue. OK Payment option selected not available OK Not eligible for upfront plans The customer can’t purchase an upfront plan. OK Not eligible for bundle plans The customer can’t purchase a bundle plan. OK OK Your service is not eligible This service is not eligible for the action you’ve requested. OK Go back View only Cart limit reached You can have a maximum of [maxLimitMessage] in one order. You already have [existingCartMessage]. You can add [addMoreMessage] now. If you'd like to add more, start a new order after you check out. Close Limited stock available Reduce the quantity to continue. Close Low income plan limit reached You can add [maxAllowedLowIncomePlan] more Low Income plans now. Close Account limit reached You can have a maximum of [maxConnectionAllowed] services on one account. Close Looks like this offer isn’t available This offer has expired or is currently unavailable. OK"
+    },
+    {
+      "id": "check-page-25c5376eb9",
+      "url": "https://www.telstra.com.au/smarter-business/planning-and-strategy/how-to-apply-for-small-business-grants",
+      "page": "application",
+      "excerpt": "How to find and apply for small business grants – Telstra Publisher: Telstra Name: How to find and apply for small business grants – Telstra Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Language Sign in Telstra Smarter Business Planning and strategy How to find and apply for small business grants Run a small business? You could be eligible for support. Learn how to find and apply for grants and funding programs, from government to start-up grants. 24 March 2022 · 6 minute read How can funding help my business? It may seem like we’re stating the obvious, but before you start a business, or launch a new idea, it’s important to know how you’ll fund your project. According to AustraliaStartups.org, lack of funding is one of the most common reasons new businesses don't make it past the development stage. The same rule could arguably be applied to new projects you’d like to undertake, even as an established small business. What you’re about to start a business or you want help to grow your brand further, it pays to find out what funding may be available to you. What amount of funding is available in Australia? As reported by AustraliaStartups.org, as an Australian small business owner, you are in luck. Why?"
+    },
+    {
+      "id": "check-page-1411896af1",
+      "url": "https://www.telstra.com.au/careers/how-we-hire",
+      "page": "application",
+      "excerpt": "How we hire - Telstra Publisher: Telstra Name: How we hire - Telstra Copyrighted By: Telstra Family Friendly: Yes Language: English Skip to main content Telstra Personal Home Page Search Telstra Telstra Search Telstra Telstra Search Telstra Telstra Personal Business Enterprise Search Telstra Language Sign in Telstra Telstra personal Careers at Telstra Payment method not available This item can’t be purchased outright. However, it can be purchased on an HRO. OK Payment option selected not available This item is not available on an HRO. Please purchase it outright to continue. OK Payment option selected not available OK Not eligible for upfront plans The customer can’t purchase an upfront plan. OK Not eligible for bundle plans The customer can’t purchase a bundle plan. OK OK Your service is not eligible This service is not eligible for the action you’ve requested. OK Can’t add to cart You can’t sell this product or service via an outbound sale right now. Tell the customer they can visit telstra.com, call us or visit a store to make this purchase. Ok You can’t sell this product or service You can view this page, but you can’t sell this product or service via an outbound sale right now. Tell the customer they can visit telstra.com, call us or visit a store to make this purchase Cancel Ok Cart limit reached You can have a maximum of [maxLimitMessage] in one order. You already have"
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [],
-    "applicationUrl": [],
-    "applicationsOpen": [],
+    "routes": [
+      {
+        "value": "https://www.telstra.com.au/careers/how-we-hire",
+        "evidenceId": "check-route-4347719c86"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.telstra.com.au/careers/how-we-hire",
+        "evidenceId": "check-route-4347719c86"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-6a5392114d"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "24 months",
+        "evidenceId": "check-duration-72e0ef4382"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-1ac9661bcc"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-f7b453ad5a"
+      }
+    ],
+    "location": [
+      {
+        "value": "Main Menu",
+        "evidenceId": "check-location-d8d83fb924"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

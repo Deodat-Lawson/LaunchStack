@@ -1,101 +1,682 @@
 {
   "programId": "alven",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://alven.co/",
-    "https://alven.co/about-us"
+    "https://alven.co/news/antvoice-premier-editeur-francais-dapplications-facebook-leve-750ke",
+    "https://alven.co/news/keymetrics-raised-2-million-become-open-source-leader-node-js-application-monitoring",
+    "https://alven.co/news/a-wave-of-new-team-members-to-support-current-and-future-investments",
+    "https://alven.co/news/alven-announces-new-hires-in-its-investment-and-operating-teams",
+    "https://alven.co/news/alven-pleased-announce-sale-100-investment-marco-vasco-figaro-group",
+    "https://alven.co/news/entreprise-ai-game-changer-dataiku-raises-101-million-series-c-round-largest-investment-enterprise-ai-date",
+    "https://alven.co/news/the-guarantors-secures-majority-investment-to-accelerate-us-growth",
+    "https://alven.co/news/tinyclues-closes-18-million-investment-round-international-growth",
+    "https://alven.co/about-us",
+    "https://alven.co/news/the-debrief-the-brand-as-a-growth-accelerator",
+    "https://alven.co/news/mindee-the-paperwork-automation-api-is-raising-14m-to-automate-companies-document-based-processes",
+    "https://alven.co/portfolio",
+    "https://alven.co/portfolio/3770132",
+    "https://alven.co/portfolio/akeneo"
   ],
   "evidence": [
     {
+      "id": "check-email-00ed4427b1",
+      "url": "https://alven.co/portfolio/3770132",
+      "title": "Alven — portfolio page",
+      "excerpt": "their vision. Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-04e05cf6d1",
+      "url": "https://alven.co/news/entreprise-ai-game-changer-dataiku-raises-101-million-series-c-round-largest-investment-enterprise-ai-date",
+      "title": "Alven — terms page",
+      "excerpt": "+33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-0725626827",
+      "url": "https://alven.co/news/the-guarantors-secures-majority-investment-to-accelerate-us-growth",
+      "title": "Alven — terms page",
+      "excerpt": "contact@alven.co contact@alven.co",
+      "page": "terms"
+    },
+    {
       "id": "check-email-07afd39df0",
       "url": "https://alven.co/",
-      "title": "Alven — homepage checked by scrape.py",
+      "title": "Alven — homepage",
       "excerpt": "+33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris",
       "page": "details"
     },
     {
+      "id": "check-email-084abf3d69",
+      "url": "https://alven.co/news/entreprise-ai-game-changer-dataiku-raises-101-million-series-c-round-largest-investment-enterprise-ai-date",
+      "title": "Alven — terms page",
+      "excerpt": "contact@alven.co contact@alven.co",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-0d97a4ada7",
+      "url": "https://alven.co/news/entreprise-ai-game-changer-dataiku-raises-101-million-series-c-round-largest-investment-enterprise-ai-date",
+      "title": "Alven — terms page",
+      "excerpt": "their vision. Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-0ecb1667d4",
+      "url": "https://alven.co/news/keymetrics-raised-2-million-become-open-source-leader-node-js-application-monitoring",
+      "title": "Alven — application page",
+      "excerpt": "+33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris",
+      "page": "application"
+    },
+    {
+      "id": "check-email-10c557ad83",
+      "url": "https://alven.co/news/alven-announces-new-hires-in-its-investment-and-operating-teams",
+      "title": "Alven — terms page",
+      "excerpt": "their vision. Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-14ee0894a4",
+      "url": "https://alven.co/news/alven-pleased-announce-sale-100-investment-marco-vasco-figaro-group",
+      "title": "Alven — terms page",
+      "excerpt": "Use of cookies Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-17f1bb54fb",
+      "url": "https://alven.co/portfolio/3770132",
+      "title": "Alven — portfolio page",
+      "excerpt": "contact@alven.co contact@alven.co",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-1d728167e0",
+      "url": "https://alven.co/news/tinyclues-closes-18-million-investment-round-international-growth",
+      "title": "Alven — terms page",
+      "excerpt": "Use of cookies Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-254ecb636c",
+      "url": "https://alven.co/news/tinyclues-closes-18-million-investment-round-international-growth",
+      "title": "Alven — terms page",
+      "excerpt": "+33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-257dfd2e3a",
+      "url": "https://alven.co/news/the-guarantors-secures-majority-investment-to-accelerate-us-growth",
+      "title": "Alven — terms page",
+      "excerpt": "+33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-25c19eb7db",
+      "url": "https://alven.co/portfolio/akeneo",
+      "title": "Alven — portfolio page",
+      "excerpt": "Use of cookies Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-30dc7c5720",
+      "url": "https://alven.co/news/alven-announces-new-hires-in-its-investment-and-operating-teams",
+      "title": "Alven — terms page",
+      "excerpt": "contact@alven.co contact@alven.co",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-3670678921",
+      "url": "https://alven.co/news/keymetrics-raised-2-million-become-open-source-leader-node-js-application-monitoring",
+      "title": "Alven — application page",
+      "excerpt": "contact@alven.co contact@alven.co",
+      "page": "application"
+    },
+    {
+      "id": "check-email-3770d91098",
+      "url": "https://alven.co/news/the-debrief-the-brand-as-a-growth-accelerator",
+      "title": "Alven — program page",
+      "excerpt": "Use of cookies Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "details"
+    },
+    {
+      "id": "check-email-39d7219639",
+      "url": "https://alven.co/news/the-guarantors-secures-majority-investment-to-accelerate-us-growth",
+      "title": "Alven — terms page",
+      "excerpt": "Use of cookies Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "terms"
+    },
+    {
       "id": "check-email-41bee8dc34",
       "url": "https://alven.co/",
-      "title": "Alven — homepage checked by scrape.py",
+      "title": "Alven — homepage",
       "excerpt": "contact@alven.co contact@alven.co",
       "page": "details"
     },
     {
+      "id": "check-email-444bc68288",
+      "url": "https://alven.co/news/antvoice-premier-editeur-francais-dapplications-facebook-leve-750ke",
+      "title": "Alven — application page",
+      "excerpt": "their vision. Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "application"
+    },
+    {
+      "id": "check-email-480bea3edf",
+      "url": "https://alven.co/news/a-wave-of-new-team-members-to-support-current-and-future-investments",
+      "title": "Alven — terms page",
+      "excerpt": "their vision. Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-4bddacf6da",
+      "url": "https://alven.co/news/mindee-the-paperwork-automation-api-is-raising-14m-to-automate-companies-document-based-processes",
+      "title": "Alven — portfolio page",
+      "excerpt": "contact@alven.co contact@alven.co",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-51d78b45f3",
+      "url": "https://alven.co/portfolio",
+      "title": "Alven — portfolio page",
+      "excerpt": "+33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-521ddce631",
+      "url": "https://alven.co/news/alven-pleased-announce-sale-100-investment-marco-vasco-figaro-group",
+      "title": "Alven — terms page",
+      "excerpt": "+33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-5ae36b3e8b",
+      "url": "https://alven.co/news/alven-announces-new-hires-in-its-investment-and-operating-teams",
+      "title": "Alven — terms page",
+      "excerpt": "+33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-5c3348d418",
+      "url": "https://alven.co/news/keymetrics-raised-2-million-become-open-source-leader-node-js-application-monitoring",
+      "title": "Alven — application page",
+      "excerpt": "Use of cookies Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "application"
+    },
+    {
       "id": "check-email-6809d0ae7c",
       "url": "https://alven.co/",
-      "title": "Alven — homepage checked by scrape.py",
+      "title": "Alven — homepage",
       "excerpt": "Use of cookies Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
       "page": "details"
     },
     {
       "id": "check-email-751ef8c18a",
       "url": "https://alven.co/",
-      "title": "Alven — homepage checked by scrape.py",
+      "title": "Alven — homepage",
       "excerpt": "their vision. Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
       "page": "details"
+    },
+    {
+      "id": "check-email-82e424f0d6",
+      "url": "https://alven.co/news/mindee-the-paperwork-automation-api-is-raising-14m-to-automate-companies-document-based-processes",
+      "title": "Alven — portfolio page",
+      "excerpt": "+33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-8bc2afff4a",
+      "url": "https://alven.co/portfolio",
+      "title": "Alven — portfolio page",
+      "excerpt": "Use of cookies Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-95011e45dd",
+      "url": "https://alven.co/portfolio/akeneo",
+      "title": "Alven — portfolio page",
+      "excerpt": "+33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-97ded3f231",
+      "url": "https://alven.co/portfolio/akeneo",
+      "title": "Alven — portfolio page",
+      "excerpt": "their vision. Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-a0f23bf299",
+      "url": "https://alven.co/news/a-wave-of-new-team-members-to-support-current-and-future-investments",
+      "title": "Alven — terms page",
+      "excerpt": "+33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-a2ea4f07e8",
+      "url": "https://alven.co/news/antvoice-premier-editeur-francais-dapplications-facebook-leve-750ke",
+      "title": "Alven — application page",
+      "excerpt": "contact@alven.co contact@alven.co",
+      "page": "application"
+    },
+    {
+      "id": "check-email-a301e439c3",
+      "url": "https://alven.co/news/mindee-the-paperwork-automation-api-is-raising-14m-to-automate-companies-document-based-processes",
+      "title": "Alven — portfolio page",
+      "excerpt": "their vision. Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-a816cdc559",
+      "url": "https://alven.co/news/entreprise-ai-game-changer-dataiku-raises-101-million-series-c-round-largest-investment-enterprise-ai-date",
+      "title": "Alven — terms page",
+      "excerpt": "Use of cookies Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-ab379b2691",
+      "url": "https://alven.co/news/the-debrief-the-brand-as-a-growth-accelerator",
+      "title": "Alven — program page",
+      "excerpt": "their vision. Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "details"
+    },
+    {
+      "id": "check-email-aca684a75c",
+      "url": "https://alven.co/news/antvoice-premier-editeur-francais-dapplications-facebook-leve-750ke",
+      "title": "Alven — application page",
+      "excerpt": "Use of cookies Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "application"
+    },
+    {
+      "id": "check-email-b0307e8786",
+      "url": "https://alven.co/news/alven-announces-new-hires-in-its-investment-and-operating-teams",
+      "title": "Alven — terms page",
+      "excerpt": "Use of cookies Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "terms"
     },
     {
       "id": "check-email-b18cd98138",
       "url": "https://alven.co/about-us",
-      "title": "Alven — details page checked by scrape.py",
+      "title": "Alven — program page",
       "excerpt": "contact@alven.co contact@alven.co",
       "page": "details"
     },
     {
+      "id": "check-email-b21a45a32d",
+      "url": "https://alven.co/portfolio",
+      "title": "Alven — portfolio page",
+      "excerpt": "contact@alven.co contact@alven.co",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-b9b59a9470",
       "url": "https://alven.co/about-us",
-      "title": "Alven — details page checked by scrape.py",
+      "title": "Alven — program page",
       "excerpt": "+33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris",
       "page": "details"
     },
     {
+      "id": "check-email-c2cfb6de33",
+      "url": "https://alven.co/portfolio/3770132",
+      "title": "Alven — portfolio page",
+      "excerpt": "+33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-c3f2b4465d",
+      "url": "https://alven.co/news/the-debrief-the-brand-as-a-growth-accelerator",
+      "title": "Alven — program page",
+      "excerpt": "+33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c6bf77262c",
+      "url": "https://alven.co/news/alven-pleased-announce-sale-100-investment-marco-vasco-figaro-group",
+      "title": "Alven — terms page",
+      "excerpt": "their vision. Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-c883bc945e",
+      "url": "https://alven.co/news/tinyclues-closes-18-million-investment-round-international-growth",
+      "title": "Alven — terms page",
+      "excerpt": "contact@alven.co contact@alven.co",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-c99020631c",
+      "url": "https://alven.co/news/antvoice-premier-editeur-francais-dapplications-facebook-leve-750ke",
+      "title": "Alven — application page",
+      "excerpt": "+33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris",
+      "page": "application"
+    },
+    {
+      "id": "check-email-d11ebcfa11",
+      "url": "https://alven.co/news/a-wave-of-new-team-members-to-support-current-and-future-investments",
+      "title": "Alven — terms page",
+      "excerpt": "contact@alven.co contact@alven.co",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-d4f5d147d5",
+      "url": "https://alven.co/news/a-wave-of-new-team-members-to-support-current-and-future-investments",
+      "title": "Alven — terms page",
+      "excerpt": "Use of cookies Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "terms"
+    },
+    {
       "id": "check-email-dc0424caa7",
       "url": "https://alven.co/about-us",
-      "title": "Alven — details page checked by scrape.py",
+      "title": "Alven — program page",
       "excerpt": "their vision. Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
       "page": "details"
     },
     {
+      "id": "check-email-dc4920f6af",
+      "url": "https://alven.co/news/tinyclues-closes-18-million-investment-round-international-growth",
+      "title": "Alven — terms page",
+      "excerpt": "their vision. Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-dd7108695d",
+      "url": "https://alven.co/news/alven-pleased-announce-sale-100-investment-marco-vasco-figaro-group",
+      "title": "Alven — terms page",
+      "excerpt": "contact@alven.co contact@alven.co",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-de6f2aac0b",
+      "url": "https://alven.co/news/the-debrief-the-brand-as-a-growth-accelerator",
+      "title": "Alven — program page",
+      "excerpt": "contact@alven.co contact@alven.co",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e014bc6d61",
+      "url": "https://alven.co/news/mindee-the-paperwork-automation-api-is-raising-14m-to-automate-companies-document-based-processes",
+      "title": "Alven — portfolio page",
+      "excerpt": "Use of cookies Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "portfolio"
+    },
+    {
       "id": "check-email-e7112414b3",
       "url": "https://alven.co/about-us",
-      "title": "Alven — details page checked by scrape.py",
+      "title": "Alven — program page",
       "excerpt": "Use of cookies Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
       "page": "details"
     },
     {
+      "id": "check-email-ea87b9e540",
+      "url": "https://alven.co/portfolio",
+      "title": "Alven — portfolio page",
+      "excerpt": "their vision. Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-f13786b564",
+      "url": "https://alven.co/news/the-guarantors-secures-majority-investment-to-accelerate-us-growth",
+      "title": "Alven — terms page",
+      "excerpt": "their vision. Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-f73fd384a4",
+      "url": "https://alven.co/portfolio/3770132",
+      "title": "Alven — portfolio page",
+      "excerpt": "Use of cookies Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-f77e4d2f6e",
+      "url": "https://alven.co/portfolio/akeneo",
+      "title": "Alven — portfolio page",
+      "excerpt": "contact@alven.co contact@alven.co",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-fb94d12307",
+      "url": "https://alven.co/news/keymetrics-raised-2-million-become-open-source-leader-node-js-application-monitoring",
+      "title": "Alven — application page",
+      "excerpt": "their vision. Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "application"
+    },
+    {
       "id": "check-name-70752dfcb9",
       "url": "https://alven.co/",
-      "title": "Alven — homepage checked by scrape.py",
+      "title": "Alven — homepage",
       "excerpt": "Alven WHO WE ARE PORTFOLIO NEWS Contact Menu Independent",
       "page": "details"
     },
     {
+      "id": "check-portfolio-1064ce7f01",
+      "url": "https://alven.co/portfolio/3770132",
+      "title": "Alven — portfolio page",
+      "excerpt": "Back to portfolio → https://alven.co/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-11b4d87d25",
+      "url": "https://alven.co/news/mindee-the-paperwork-automation-api-is-raising-14m-to-automate-companies-document-based-processes",
+      "title": "Alven — portfolio page",
+      "excerpt": "PORTFOLIO → https://alven.co/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-183344a538",
+      "url": "https://alven.co/portfolio/akeneo",
+      "title": "Alven — portfolio page",
+      "excerpt": "PORTFOLIO → https://alven.co/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-2167acef03",
       "url": "https://alven.co/",
-      "title": "Alven — homepage checked by scrape.py",
+      "title": "Alven — homepage",
       "excerpt": "View all companies → https://alven.co/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-36c1748a5a",
       "url": "https://alven.co/about-us",
-      "title": "Alven — details page checked by scrape.py",
+      "title": "Alven — program page",
       "excerpt": "PORTFOLIO → https://alven.co/portfolio",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-3a14606199",
+      "url": "https://alven.co/news/a-wave-of-new-team-members-to-support-current-and-future-investments",
+      "title": "Alven — terms page",
+      "excerpt": "PORTFOLIO → https://alven.co/portfolio",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-5be34cf673",
       "url": "https://alven.co/",
-      "title": "Alven — homepage checked by scrape.py",
+      "title": "Alven — homepage",
       "excerpt": "PORTFOLIO → https://alven.co/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-8d67d8fd7b",
+      "url": "https://alven.co/news/keymetrics-raised-2-million-become-open-source-leader-node-js-application-monitoring",
+      "title": "Alven — application page",
+      "excerpt": "PORTFOLIO → https://alven.co/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-9c648f4a2f",
+      "url": "https://alven.co/news/antvoice-premier-editeur-francais-dapplications-facebook-leve-750ke",
+      "title": "Alven — application page",
+      "excerpt": "PORTFOLIO → https://alven.co/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a28213ac1f",
+      "url": "https://alven.co/news/the-debrief-the-brand-as-a-growth-accelerator",
+      "title": "Alven — program page",
+      "excerpt": "PORTFOLIO → https://alven.co/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-aa57ca610d",
+      "url": "https://alven.co/news/entreprise-ai-game-changer-dataiku-raises-101-million-series-c-round-largest-investment-enterprise-ai-date",
+      "title": "Alven — terms page",
+      "excerpt": "PORTFOLIO → https://alven.co/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ad56652c93",
+      "url": "https://alven.co/news/alven-pleased-announce-sale-100-investment-marco-vasco-figaro-group",
+      "title": "Alven — terms page",
+      "excerpt": "PORTFOLIO → https://alven.co/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b6d1c9a255",
+      "url": "https://alven.co/portfolio/akeneo",
+      "title": "Alven — portfolio page",
+      "excerpt": "P o r t f o l i o / → https://alven.co/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-d87c8f1b3d",
+      "url": "https://alven.co/news/the-guarantors-secures-majority-investment-to-accelerate-us-growth",
+      "title": "Alven — terms page",
+      "excerpt": "PORTFOLIO → https://alven.co/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e339c982ff",
+      "url": "https://alven.co/portfolio/3770132",
+      "title": "Alven — portfolio page",
+      "excerpt": "PORTFOLIO → https://alven.co/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-e449820931",
+      "url": "https://alven.co/portfolio/akeneo",
+      "title": "Alven — portfolio page",
+      "excerpt": "Back to portfolio → https://alven.co/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-f6df2d3ee0",
+      "url": "https://alven.co/news/tinyclues-closes-18-million-investment-round-international-growth",
+      "title": "Alven — terms page",
+      "excerpt": "PORTFOLIO → https://alven.co/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f8219374e4",
+      "url": "https://alven.co/news/alven-announces-new-hires-in-its-investment-and-operating-teams",
+      "title": "Alven — terms page",
+      "excerpt": "PORTFOLIO → https://alven.co/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-fdf43bcbed",
+      "url": "https://alven.co/portfolio/3770132",
+      "title": "Alven — portfolio page",
+      "excerpt": "P o r t f o l i o / → https://alven.co/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-a9cef778d6",
       "url": "https://alven.co/",
-      "title": "Alven — homepage checked by scrape.py",
+      "title": "Alven — homepage",
       "excerpt": "https://alven.co/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-8c70b464a3",
+      "url": "https://alven.co/",
+      "page": "details",
+      "excerpt": "Alven WHO WE ARE PORTFOLIO NEWS Contact Menu Independent early-stage VC firm for 25 years We believe straightforward honesty is the best support a VC can bring. To better react, to execute faster. Who we are Portfolio View all companies We partner with the most relentless builders in Europe Portfolio We partner with the most relentless builders in Europe View all companies 1 1 1.3 1 1.2 1 1 1 1 1 1 1 1.5 1 1 1 1 1 1.3 1 1.2 1 1 1 1 1 1 1 1.5 1 1 1 1 1.3 1 1.2 1 1 1 Testimonials We embrace entrepreneurs every inch of the way Testimonials We embrace entrepreneurs every inch of the way Steve Anavi, Qonto Ning Li, Typology Romain Lapeyre, Gorgias Sacha Lazimi, Yubo Steve Anavi, Qonto Ning Li, Typology Romain Lapeyre, Gorgias Sacha Lazimi, Yubo NEWS Read more NEWS Our latest News Read more Our Rivercell raises $25M to build data platforms and AI models that predict how human cells respond to treatments 13 oct. 2026 Rivercell raises $25M to build data platforms and AI models that predict how human cells respond to treatments 13 oct. 2026 Kaiko extends its Series B to $110M to build the data infrastructure for onchain capital markets 17 sept. 2026 Kaiko extends its Series B to $110M to build the data infrastructure for onchain capital markets 17 sept. 2026 Kaiko extends its Series B to $110M to build the data infrastructure for onchain capital markets 17 sept. 2026 Archy Raises $50M"
+    },
+    {
+      "id": "check-page-1146eaa8af",
+      "url": "https://alven.co/news/antvoice-premier-editeur-francais-dapplications-facebook-leve-750ke",
+      "page": "application",
+      "excerpt": "AntVoice, premier éditeur français d’applications Facebook, lève 750k€ - Alven WHO WE ARE PORTFOLIO NEWS Contact Menu N E W S / 11 déc. 2025 P r e v i o u s N e x t AntVoice, premier éditeur français d’applications Facebook, lève 750k€ AntVoice, premier éditeur français d’applications Facebook, lève 750k€ 16 juin 2011 16 juin 2011 AntVoice, le premier éditeur français d’applications Facebook, lève 750 000 euros auprès d’investisseurs réputés pour accélérer sa croissance ! AntVoice , leader des éditeurs français d’applications Facebook avec 4,5 millions d’utilisateurs actifs mensuels*, annonce aujourd’hui un tour d’amorçage de 750 000€ auprès d’investisseurs prestigieux tels que Alven Capital, Avanquest, Nestadio Capital ou encore Michel Gotlib. Cette première levée de fonds (seed) va permettre à AntVoice de renforcer ses équipes et ses moyens pour accélérer son développement, lancer de nouvelles applications innovantes et se hisser parmi les leaders européens. « Alors que l’écosystème Facebook explose, les applications d’ AntVoice ont clairement rencontré leur public, avec 50 millions d’applications installées dans le monde et plus de 4,5 millions d’utilisateurs actifs mensuels. Nous sommes ravis d’accueillir de prestigieux investisseurs pour accompagner notre croissance et favoriser notre développement. Notre ambition est de devenir clairement l’un des leaders européens et"
+    },
+    {
+      "id": "check-page-57bfdaf4a6",
+      "url": "https://alven.co/news/keymetrics-raised-2-million-become-open-source-leader-node-js-application-monitoring",
+      "page": "application",
+      "excerpt": "Keymetrics raised $2 Million to become the open-source leader in Node.js application monitoring - Alven WHO WE ARE PORTFOLIO NEWS Contact Menu N E W S / 11 déc. 2025 P r e v i o u s N e x t Keymetrics raised $2 Million to become the open-source leader in Node.js application monitoring Keymetrics raised $2 Million to become the open-source leader in Node.js application monitoring 3 févr. 2017 3 févr. 2017 Alven is proud to announce its latest investment in Keymetrics . There is a number of reasons why we are excited to partner with the founding team in order to build an open-source leader. A rising Node.js environment offering new technical opportunities Node.js has become increasingly popular among developers over the past years and tends to overcome other server-side languages with a 60% year-over-year growth among top 10m websites compared to a 3% for Ruby, 0% for PHP and -10% for Java (source w3techs.com) Created in 2009, this open-source technology based on Javascript as well as on Google, Nginx and Mozilla technologies, allows to develop highly performant applications. For examples, Paypal switched from Java to Node.js with a 33% fewer lines of code and a 35% better response time, Groupon’s similar switch resulted in a 50% better page load time and Linkedin went from 30 Ruby servers to 3 Node.js servers. How a smart technical founder created the Node.js open-source"
+    },
+    {
+      "id": "check-page-2105625e12",
+      "url": "https://alven.co/news/a-wave-of-new-team-members-to-support-current-and-future-investments",
+      "page": "terms",
+      "excerpt": "A wave of new team members to support current and future investments - Alven WHO WE ARE PORTFOLIO NEWS Contact Menu N E W S / 11 déc. 2025 P r e v i o u s N e x t A wave of new team members to support current and future investments A wave of new team members to support current and future investments 18 oct. 2022 18 oct. 2022 Margaux Gregoir has joined the investment team as Principal. She is arriving from Luko, where she was VP of Finance, member of the Executive Committee and built support functions (finance, legal, compliance, and risk). She also drove the execution of strategic topics from fundraising to M&A, as well as international expansion. Margaux started her career at Société Générale in the General Inspection department, leading assignments across business lines and countries from retail strategy in the Czech Republic to CIB compliance in NY. Margaux graduated from HEC, Dauphine, and Sciences Po. Stella Walter takes over as Head of Talent. Prior to joining Alven Stella helped scale Luko, where she grew the team from 30 to 250, hired the C-Suite, defined Culture & HR processes, and merged teams following M&A operations. She was VP of People and a member of the executive committee. Her previous experiences include managing roles at the likes of Eutopia VC, Showroomprivé and L'Oréal. Stella's missions cover implementing and structuring hiring and HR processes, sourcing"
+    },
+    {
+      "id": "check-page-44953f1015",
+      "url": "https://alven.co/news/alven-announces-new-hires-in-its-investment-and-operating-teams",
+      "page": "terms",
+      "excerpt": "Alven announces new hires in its investment and operating teams - Alven WHO WE ARE PORTFOLIO NEWS Contact Menu N E W S / 11 déc. 2025 P r e v i o u s N e x t Alven announces new hires in its investment and operating teams Alven announces new hires in its investment and operating teams 22 sept. 2021 22 sept. 2021 Gaëlle Le Goff has been appointed Head of Marketing and Community at Alven where she leads content, community building and advocacy strategies for the fund and its portfolio companies. With over 15 years of experience in communications and advertising agencies and over 10 years in the tech industry, she has a strong track record of developing innovative engagement strategies that create a lasting sense of belonging. She was also a founder and knows what it takes to bring an idea to scale. Gaëlle can talk Product, Branding, Content and Growth Marketing techniques. Passionate by nature, she is actively involved in impactful projects and causes. She has volunteered to accelerate the vaccination campaign in France through Covidliste and has been involved for several years in improving the representation of women in the tech industry. Gaëlle graduated from ESSCA School of Management, where she studied Finance and entrepreneurship. Moreover, Alven continues the development of its investment team with the arrival of Maria Tahri as Associate. She started her career in 2019 at"
+    },
+    {
+      "id": "check-page-76c0a5b8fb",
+      "url": "https://alven.co/news/alven-pleased-announce-sale-100-investment-marco-vasco-figaro-group",
+      "page": "terms",
+      "excerpt": "Alven is pleased to announce the sale of 100% of its investment in Marco Vasco to the Figaro group - Alven WHO WE ARE PORTFOLIO NEWS Contact Menu N E W S / 11 déc. 2025 P r e v i o u s N e x t Alven is pleased to announce the sale of 100% of its investment in Marco Vasco to the Figaro group Alven is pleased to announce the sale of 100% of its investment in Marco Vasco to the Figaro group 19 sept. 2017 19 sept. 2017 Founded in 2007 by Geoffroy de Becdelièvre and Mathieu Bouchara, Marco Vasco is a French tour operator that specializes in providing personalized online travel solutions. The group has successfully obtained several rounds of funding from Alven, Iris Capital and GIMV, as well as Olivier Duha, the co-founder of Webhelp, who invested privately in the group. Marco Vasco operates in the fast-growing customized travel sector, with 150 travel consultants (all of whom are either local to or passionate about their destination) provide off-the-beaten-track experiences while emphasizing the highest service standards. Marco Vasco, which employs 240 people, will record annual revenues of over €65 million in 2017 in a high-growth environment. The Figaro group has been pursuing a successful strategy of diversifying its “non-media” activities for several years. In particular, it has a presence in the market for services such as job advertisements, real estate, and training via"
+    },
+    {
+      "id": "check-page-012a44177e",
+      "url": "https://alven.co/news/entreprise-ai-game-changer-dataiku-raises-101-million-series-c-round-largest-investment-enterprise-ai-date",
+      "page": "terms",
+      "excerpt": "Entreprise AI game-changer, Dataiku raises a $101 million series C round, the largest investment in Enterprise AI to date - Alven WHO WE ARE PORTFOLIO NEWS Contact Menu N E W S / 11 déc. 2025 P r e v i o u s N e x t Entreprise AI game-changer, Dataiku raises a $101 million series C round, the largest investment in Enterprise AI to date Entreprise AI game-changer, Dataiku raises a $101 million series C round, the largest investment in Enterprise AI to date 20 déc. 2018 20 déc. 2018 Dataiku Inc., the global game-changer in enterprise data science and machine learning platforms, announces a $101 million Series C funding round led by Iconiq Capital and supported by Alven, Battery Ventures, Dawn Capital, and FirstMark Capital. This announcement follows the company’s $28 million Series B in September 2017, the release of Dataiku 5 in September 2018 and the second consecutive year receiving the Visionary in the Gartner Magic Quadrant for Data Science and Machine-Learning Platforms award. Since its founding in 2013, Dataiku has focused on the vision of democratized data science as the key to uninhibited possibilities instead of restricted technologies reserved for the elite few. Today, Dataiku provides a platform that enables enterprises to fundamentally transform their business - global leaders use it to build AI that optimizes marketing budget, enables maintenance services,"
+    },
+    {
+      "id": "check-page-25e683d14a",
+      "url": "https://alven.co/news/the-guarantors-secures-majority-investment-to-accelerate-us-growth",
+      "page": "terms",
+      "excerpt": "TheGuarantors secures a majority investment by Warburg Pincus to accelerate US growth - Alven WHO WE ARE PORTFOLIO NEWS Contact Menu N E W S / 3 avr. 2026 P r e v i o u s N e x t TheGuarantors secures a majority investment by Warburg Pincus to accelerate US growth TheGuarantors secures a majority investment by Warburg Pincus to accelerate US growth 3 avr. 2026 3 avr. 2026 April, 2026 – TheGuarantors, a leader in residential lease guarantee solutions and AI-powered underwriting for the rental housing market in the US, has signed an agreement for a majority investment by Warburg Pincus, a pioneer of global growth investing with more than $100 billion in assets under management. The transaction is expected to close by May 2026, subject to regulatory approvals and other customary closing conditions. The company already supports nearly 4 million units across thousands of operators in the US, including 9 of the top 10 National Multifamily Housing Council property management companies. This investment will enable it to scale further, broaden access to housing for millions of renters, and continue building a market-leading platform with long-term impact across the U.S. rental ecosystem. TheGuarantors will continue to operate under its existing leadership team and is excited to partner with Warburg Pincus on its next chapter accelerating expansion, enhancing its data and AI"
+    },
+    {
+      "id": "check-page-4648b86362",
+      "url": "https://alven.co/news/tinyclues-closes-18-million-investment-round-international-growth",
+      "page": "terms",
+      "excerpt": "Tinyclues Closes $18 Million Investment Round for International Growth - Alven WHO WE ARE PORTFOLIO NEWS Contact Menu N E W S / 11 déc. 2025 P r e v i o u s N e x t Tinyclues Closes $18 Million Investment Round for International Growth Tinyclues Closes $18 Million Investment Round for International Growth 27 févr. 2018 27 févr. 2018 The Tinyclues solution uses a unique Deep AI technology that captures the latent business and customer insights contained in first-party data. It then predicts the future buyers for any product or service campaign with incredible accuracy, allowing brands to present highly relevant product offers to highly qualified audiences. Using Tinyclues to reinvent the way they create, target and orchestrate campaigns, Tinyclues customers have secured an outstanding +49% average increase in campaign revenue, in addition to a significant improvement in customer experience. Backed by EQT Ventures, Alven, Elaia Partners and ISAI, Tinyclues will further accelerate its already impressive growth in North America and Europe; in 2017, the company more than doubled its annual revenue. The investment will also support an aggressive AI-first product development timetable, further empowering brands to win new sources of revenue from intelligent marketing campaigns. Tinyclues now powers marketing campaigns for more than 80 enterprise companies including Air France,"
+    },
+    {
+      "id": "check-page-f3ed15e9d7",
+      "url": "https://alven.co/about-us",
+      "page": "details",
+      "excerpt": "About us | Alven Who we are F o u n d e d i n 2 0 0 0 b y G u i l l a u m e A u b i n a n d C h a r l e s L e t o u r n e u r , A l v e n C a p i t a l P a r t n e r s i s a n i n d e p e n d e n t e a r l y - s t a g e v e n t u r e c a p i t a l f i r m w i t h a l o n g - t e r m c o m m i t m e n t t o e n t r e p r e n e u r s . O v e r t h e p a s t 2 5 y e a r s , w e h a v e r a i s e d s e v e n f u n d s a n d b a c k e d m o r e t h a n 2 5 0 s t a r t u p s , g r o w i n g f r o m a n i n i t i a l € 8 m f u n d t o a € 3 5 0 m f u n d i n 2 0 2 2 . W e a r e a t r u s t e d p a r t n e r f o r e a r l y - s t a g e f o u n d e r s a c r o s s E u r o p e . Scroll down Our Team Our Team Charles Letourneur Managing Partner Charles Letourneur Managing Partner Guillaume Aubin Managing Partner Guillaume Aubin Managing Partner Rodolphe Menegaux Managing Partner Rodolphe Menegaux Managing Partner François Meteyer Partner François Meteyer Partner Maria Tahri Partner Maria Tahri Partner Aude Steinberg Head of Legal Aude Steinberg Head of Legal Léo-Paul Lajoinie Chief Financial Officer Léo-Paul Lajoinie Chief Financial Officer Marine Guyard Office Manager Marine Guyard Office Manager Bartosz Jakubowski Venture Partner - Portfolio Bartosz Jakubowski Venture Partner - Portfolio Margaux Gregoir Venture Partner - Portfolio Margaux Gregoir Venture Partner - Portfolio Thomas"
+    },
+    {
+      "id": "check-page-b9ff4352f5",
+      "url": "https://alven.co/news/the-debrief-the-brand-as-a-growth-accelerator",
+      "page": "details",
+      "excerpt": "The Debrief: the brand as a growth accelerator - Alven WHO WE ARE PORTFOLIO NEWS Contact Menu N E W S / 11 déc. 2025 P r e v i o u s N e x t The Debrief: the brand as a growth accelerator The Debrief: the brand as a growth accelerator 8 oct. 2020 8 oct. 2020 Oftentimes, marketers trying to develop their company’s brand are confronted with challenges from their leadership, who see the brand as a costly intangible asset, with difficult-to-quantify impact, and would rather have the time & resources spent on “direct response” marketing. Of course, with a digital marketing campaign, the impact can be measured immediately and with a great level of details. But is the brand really that unquantifiable? Our webinar addressed the multiple ways a brand can be leveraged not only to be “made profitable”, but how it can serve as a growth accelerator far beyond the sole scope of marketing & communications. https://vimeo.com/463431543 BrandZ, a Kantar brand valuation metric that measures the absolute dollar contribution of a brand to the total valuation of their parent companies, has actually measured that the average share of a brand in its parent company’s valuation is 18%. It has also measured that the companies with the strongest brands consistently outperform both the S&P 500 and the MSCI World Index, in both prosperous and crisis times. So, how can you leverage your brand to make it an"
+    },
+    {
+      "id": "check-page-9148c693b9",
+      "url": "https://alven.co/news/mindee-the-paperwork-automation-api-is-raising-14m-to-automate-companies-document-based-processes",
+      "page": "portfolio",
+      "excerpt": "Mindee, the paperwork automation API, is raising $14M to automate companies’ document-based processes - Alven WHO WE ARE PORTFOLIO NEWS Contact Menu N E W S / 11 déc. 2025 P r e v i o u s N e x t Mindee, the paperwork automation API, is raising $14M to automate companies’ document-based processes Mindee, the paperwork automation API, is raising $14M to automate companies’ document-based processes 6 oct. 2021 6 oct. 2021 Notable executives in the application development space who also participated in the round include the co-founder and former CEO of Algolia, Nicolas Dessaigne and the co-founder and CTO of Datadog, Alexis Lê-Quôc. Mindee was founded in 2018 by Jonathan Grandperrin (CEO), Victor Briançon-Marjollet (COO), Olivier Rey (CTO), Mohamed Biaz (CSO) and Olivier Rey (CTO) , all of them being former technology executives at AI startups. Mindee helps developers automate workflows in their applications by standardizing the document processing layer. Many industries could use this kind of API-based product, for now such clients are Qonto, Payfit, Spendesk and Lucca. With the new funding, the startup plans to get more customers in Europe and expand to the U.S. Their API help companies avoid manual data entry and can be used in expense management, accounts payable automation, procurement, accounting, insurance, user and employee onboarding, loan applications, underwriting, and"
+    },
+    {
+      "id": "check-page-43ab3d3304",
+      "url": "https://alven.co/portfolio",
+      "page": "portfolio",
+      "excerpt": "Alven WHO WE ARE PORTFOLIO NEWS Contact Menu Portfolio 2 5 y e a r s o f p a r t n e r s h i p s w i t h t h e m o s t r e l e n t l e s s e n t r e p r e n e u r s i n E u r o p e Active Exits 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 Active Exits 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 For founders who won’t stop short of their vision. Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris Legal Information Legal Information Use of cookies Use of cookies Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris Legal Information Legal Information Use of cookies Use of cookies"
+    },
+    {
+      "id": "check-page-25b3e9c6ed",
+      "url": "https://alven.co/portfolio/3770132",
+      "page": "portfolio",
+      "excerpt": "Alven WHO WE ARE PORTFOLIO NEWS Contact Menu P o r t f o l i o / A t t e n t i o n P r e v i o u s N e x t Attention A I - p o w e r e d c u s t o m e r c o n v e r s a t i o n s O v e r v i e w Attention is a leading AI-powered platform dedicated to helping sales and revenue teams unlock the full potential of their customer conversations. By automating the extraction of actionable insights, Attention enables businesses to make informed decisions, enhance performance, and drive growth. H i s t o r y 2021 Founded Anis Bennaceur and Matthias Wickenburg 2023 Raised Seed Funding 2024 Raised a $14M Series A round and joined the Alven family Website R e c e n t n e w s Attention Raises $30M Series B to Build the Action Layer for Revenue Teams 6 juil. 2026 Attention Raises $14 Million to augment all Sales Functions with AI-powered Automations 21 oct. 2024 1 1 1.3 1 1.2 1 1 1 1 1 1 1 1.5 1 1 1 1 1 1.3 1 1.2 1 1 1 Back to portfolio For founders who won’t stop short of their vision. Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris Legal Information Legal Information Use of cookies Use of cookies Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris Legal Information Legal Information Use of cookies Use of cookies"
+    },
+    {
+      "id": "check-page-7def2cdca1",
+      "url": "https://alven.co/portfolio/akeneo",
+      "page": "portfolio",
+      "excerpt": "Alven WHO WE ARE PORTFOLIO NEWS Contact Menu P o r t f o l i o / A k e n e o P r e v i o u s N e x t Akeneo T h e p l a t f o r m f o r p r o d u c t i n f o r m a t i o n m a n a g e m e n t O v e r v i e w Akeneo is a global leader in Product Experience Management (PXM) solutions that help merchants and brands deliver a compelling customer experience across all sales channels, including eCommerce, mobile, print, and retail points of sale. Akeneo’s open-source enterprise Product Information Management (PIM), and product data intelligence solutions, dramatically improve product data quality and accuracy while simplifying and accelerating product catalogue management. Leading global brands, including Fossil, Staples, Tarkett, and Grundfos, trust Akeneo’s solutions to scale and customise their omnichannel and cross-border commerce initiatives. Using Akeneo, brands and retailers can improve customer experience, increase sales, reduce time to market, go global, and boost team productivity. H i s t o r y 2012 Founded by Benoit Jacquemont, Frederic de Gombert, Nicolas Dupont, Yoav Kutner 2014 Joined the Alven Family 2014 Raised €1.8M in Seed funding 2017 Raised $13M in Series B funding 2019 Raised $46M in Series C funding 2022 Raised $135M in Series D funding Website R e c e n t n e w s Akeneo Announces $135 Million Series D to Redefine Product Information Management Category 15"
     }
   ],
   "findings": {
@@ -116,8 +697,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://alven.co/portfolio",

@@ -1,263 +1,1270 @@
 {
   "programId": "imec-istart",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.imec-int.com/en/istart",
+    "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
     "https://www.imec-int.com/en/applications",
-    "https://www.imec-int.com/en/about-us"
+    "https://www.imec-int.com/en/applications/agrifood-technology",
+    "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+    "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+    "https://www.imec-int.com/en/applications/automotive-technologies",
+    "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+    "https://www.imec-int.com/en/applications/data-and-telecommunication",
+    "https://www.imec-int.com/en/applications/home-automation",
+    "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+    "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+    "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+    "https://www.imec-int.com/en/applications/security-and-resilience",
+    "https://www.imec-int.com/en/applications/semiconductor-technology"
   ],
   "evidence": [
     {
+      "id": "check-format-3897ed3357",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "title": "imec.istart — application page",
+      "excerpt": "physically demanding or dangerous tasks, including in remote or unsafe environments. The journey toward full autonomy",
+      "page": "application"
+    },
+    {
+      "id": "check-format-434a88602d",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "title": "imec.istart — application page",
+      "excerpt": "- Why and What before How , David Fritz, Vice President of Hybrid-physical and Virtual Systems, Automotive and Mil-aero at",
+      "page": "application"
+    },
+    {
+      "id": "check-format-7963d1f83e",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive at imec David Fritz, Vice President of Hybrid-physical and Virtual Systems, Automotive and Mil-aero at",
+      "page": "application"
+    },
+    {
+      "id": "check-format-831a0f8142",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "development and reduce costs, imec’s SENSAI program uses a virtual validation approach. By combining physics-based modeling,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-8c3607eb86",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "title": "imec.istart — application page",
+      "excerpt": "compatible processes novel integration approaches for hybrid circuit topologies with InP-based or GaN-based devices on",
+      "page": "application"
+    },
+    {
+      "id": "check-format-c32901b885",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive Chiplet Alliance Conference is a live event, no virtual attendance will be accommodated. The conference will be",
+      "page": "application"
+    },
+    {
+      "id": "check-format-c473e925eb",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "title": "imec.istart — application page",
+      "excerpt": "at imec David Fritz, Vice President of Hybrid-physical and Virtual Systems, Automotive and Mil-aero at Siemens 13.30: ACA",
+      "page": "application"
+    },
+    {
+      "id": "check-format-cdb960c6fa",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "title": "imec.istart — application page",
+      "excerpt": "device-to-device communication, high-quality augmented and virtual reality as well as >100 Gbps backhaul applications. This",
+      "page": "application"
+    },
+    {
+      "id": "check-format-d7d91042c1",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "title": "imec.istart — application page",
+      "excerpt": "How , David Fritz, Vice President of Hybrid-physical and Virtual Systems, Automotive and Mil-aero at Siemens Modular",
+      "page": "application"
+    },
+    {
       "id": "check-name-1022dccff6",
       "url": "https://www.imec-int.com/en/istart",
-      "title": "imec.istart — homepage checked by scrape.py",
+      "title": "imec.istart — homepage",
       "excerpt": "Imec.istart | imec Expertise What we offer Applications Your career",
       "page": "details"
     },
     {
       "id": "check-route-0019944184",
       "url": "https://www.imec-int.com/en/istart",
-      "title": "imec.istart — homepage checked by scrape.py",
+      "title": "imec.istart — homepage",
       "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
       "page": "details"
     },
     {
+      "id": "check-route-008e7c2332",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "title": "imec.istart — application page",
+      "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
       "id": "check-route-00c75311c3",
       "url": "https://www.imec-int.com/en/applications",
-      "title": "imec.istart — application page checked by scrape.py",
+      "title": "imec.istart — application page",
       "excerpt": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "page": "application"
+    },
+    {
+      "id": "check-route-00ff5c55c0",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "title": "imec.istart — application page",
+      "excerpt": "Contact us → https://www.imec-int.com/en/connect-with-us?origin_url=%2Fen%2Fapplications%2Fdata-and-telecommunication&contactblock=147224#contact",
       "page": "application"
     },
     {
       "id": "check-route-04ecad4930",
       "url": "https://www.imec-int.com/en/applications",
-      "title": "imec.istart — application page checked by scrape.py",
+      "title": "imec.istart — application page",
       "excerpt": "Contact us → https://www.imec-int.com/en/connect-with-us?origin_url=%2Fen%2Fapplications&contactblock=147204#contact",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0747b91230",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "title": "imec.istart — application page",
+      "excerpt": "Contact → https://www.imec-int.com/en/connect-with-us?origin_url=%2Fen%2Fapplications%2Frobotics-technology-industry-40%2Fsafebot&contactblock=158756#contact",
       "page": "application"
     },
     {
       "id": "check-route-078553d1ba",
       "url": "https://www.imec-int.com/en/applications",
-      "title": "imec.istart — application page checked by scrape.py",
+      "title": "imec.istart — application page",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application"
+    },
+    {
+      "id": "check-route-08fa5dd5af",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0b2daa48e3",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "title": "imec.istart — application page",
+      "excerpt": "More applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0b8451b05a",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive semiconductor technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0d642c9762",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "title": "imec.istart — application page",
+      "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0ec8bea1f1",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "title": "imec.istart — application page",
       "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
       "page": "application"
     },
     {
       "id": "check-route-0fa81b4504",
       "url": "https://www.imec-int.com/en/istart",
-      "title": "imec.istart — homepage checked by scrape.py",
+      "title": "imec.istart — homepage",
       "excerpt": "Applications → https://www.imec-int.com/en/applications",
       "page": "details"
     },
     {
-      "id": "check-route-1b565e9ebe",
-      "url": "https://www.imec-int.com/en/about-us",
-      "title": "imec.istart — details page checked by scrape.py",
-      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
-      "page": "details"
+      "id": "check-route-110bac6533",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "title": "imec.istart — application page",
+      "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application"
+    },
+    {
+      "id": "check-route-11550b84a6",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application"
+    },
+    {
+      "id": "check-route-16e5e25271",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Baden-Württemberg attracts imec to lead development of chiplet-based technology for automotive applications → https://www.imec-int.com/en/press/baden-wurttemberg-attracts-imec-lead-development-chiplet-based-technology-automotive",
+      "page": "application"
+    },
+    {
+      "id": "check-route-18470f17cb",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "title": "imec.istart — application page",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-18b13c82ae",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "title": "imec.istart — application page",
+      "excerpt": "Contact us → https://www.imec-int.com/en/connect-with-us?origin_url=%2Fen%2Fapplications%2Fsemiconductor-technology&contactblock=147509#contact",
+      "page": "application"
+    },
+    {
+      "id": "check-route-19063b5141",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "title": "imec.istart — application page",
+      "excerpt": "Contact us → https://www.imec-int.com/en/connect-with-us?origin_url=%2Fen%2Fapplications%2Frobotics-technology-industry-40&contactblock=147268#contact",
+      "page": "application"
     },
     {
       "id": "check-route-1c57cead24",
       "url": "https://www.imec-int.com/en/applications",
-      "title": "imec.istart — application page checked by scrape.py",
+      "title": "imec.istart — application page",
       "excerpt": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2139384f4b",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "title": "imec.istart — application page",
+      "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2381c029fd",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-26fb21e885",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-27a179eb2e",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "title": "imec.istart — application page",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-28e7e738a7",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "title": "imec.istart — application page",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2a2b2d445d",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "title": "imec.istart — application page",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
       "page": "application"
     },
     {
       "id": "check-route-2b11489ec1",
       "url": "https://www.imec-int.com/en/applications",
-      "title": "imec.istart — application page checked by scrape.py",
+      "title": "imec.istart — application page",
       "excerpt": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2b41c4e75f",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "title": "imec.istart — application page",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
       "page": "application"
     },
     {
       "id": "check-route-2d2b93057f",
       "url": "https://www.imec-int.com/en/istart",
-      "title": "imec.istart — homepage checked by scrape.py",
+      "title": "imec.istart — homepage",
       "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
       "page": "details"
     },
     {
-      "id": "check-route-46dea7b3b7",
-      "url": "https://www.imec-int.com/en/about-us",
-      "title": "imec.istart — details page checked by scrape.py",
+      "id": "check-route-2eb49840c4",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-30ad35e918",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-357428f810",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "title": "imec.istart — application page",
+      "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-368ef1af7d",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "title": "imec.istart — application page",
+      "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-37b4b9a37c",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-38345de89a",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "title": "imec.istart — application page",
+      "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3a8fa7f783",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3b3110eb12",
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "title": "imec.istart — application page",
       "excerpt": "More applications → https://www.imec-int.com/en/applications",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-route-3cb659aec1",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "title": "imec.istart — application page",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3dca5384e4",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3def14b6ed",
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3e287f5f8f",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3f6d705c3d",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-418236813c",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "title": "imec.istart — application page",
+      "excerpt": "More applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-421ebb0839",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "title": "imec.istart — application page",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4626a28927",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4667ff6cc8",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "title": "imec.istart — application page",
+      "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-48ac1f30d1",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "title": "imec.istart — application page",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-49656bcc93",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "title": "imec.istart — application page",
+      "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application"
     },
     {
       "id": "check-route-49eb9fe912",
       "url": "https://www.imec-int.com/en/applications",
-      "title": "imec.istart — application page checked by scrape.py",
+      "title": "imec.istart — application page",
       "excerpt": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4df82bc452",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
       "page": "application"
     },
     {
       "id": "check-route-4e6ee685ed",
       "url": "https://www.imec-int.com/en/applications",
-      "title": "imec.istart — application page checked by scrape.py",
+      "title": "imec.istart — application page",
       "excerpt": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4e7c580237",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4eee6c140c",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "title": "imec.istart — application page",
+      "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4f9e4c61f9",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "title": "imec.istart — application page",
+      "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
       "page": "application"
     },
     {
       "id": "check-route-52e6e1a91f",
       "url": "https://www.imec-int.com/en/applications",
-      "title": "imec.istart — application page checked by scrape.py",
+      "title": "imec.istart — application page",
       "excerpt": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-54dd04bf5d",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "title": "imec.istart — application page",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
       "page": "application"
     },
     {
       "id": "check-route-5b7957163f",
       "url": "https://www.imec-int.com/en/applications",
-      "title": "imec.istart — application page checked by scrape.py",
+      "title": "imec.istart — application page",
       "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5e7b3f5f49",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "title": "imec.istart — application page",
+      "excerpt": "More applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5e9a191e08",
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5f2a014408",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Contact us → https://www.imec-int.com/en/connect-with-us?origin_url=%2Fen%2Fapplications%2Fautomotive-technologies&contactblock=147242#contact",
+      "page": "application"
+    },
+    {
+      "id": "check-route-61affe36b5",
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-622d9ca44b",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "title": "imec.istart — application page",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-626ab9f57c",
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-679141db2e",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "title": "imec.istart — application page",
+      "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
       "page": "application"
     },
     {
       "id": "check-route-6cb1e85808",
       "url": "https://www.imec-int.com/en/istart",
-      "title": "imec.istart — homepage checked by scrape.py",
+      "title": "imec.istart — homepage",
       "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
       "page": "details"
     },
     {
+      "id": "check-route-6cd872e2b9",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "title": "imec.istart — application page",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6d5f9ce3c4",
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6ef5148733",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "title": "imec.istart — application page",
+      "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6f9166ce2c",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "title": "imec.istart — application page",
+      "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application"
+    },
+    {
       "id": "check-route-7112008cf3",
       "url": "https://www.imec-int.com/en/istart",
-      "title": "imec.istart — homepage checked by scrape.py",
+      "title": "imec.istart — homepage",
       "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
       "page": "details"
     },
     {
       "id": "check-route-746d038d32",
       "url": "https://www.imec-int.com/en/istart",
-      "title": "imec.istart — homepage checked by scrape.py",
+      "title": "imec.istart — homepage",
       "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
       "page": "details"
     },
     {
-      "id": "check-route-78a7cb8ab6",
-      "url": "https://www.imec-int.com/en/applications",
-      "title": "imec.istart — application page checked by scrape.py",
+      "id": "check-route-74c361db98",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "title": "imec.istart — application page",
       "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
       "page": "application"
     },
     {
-      "id": "check-route-7b621dfd9f",
-      "url": "https://www.imec-int.com/en/about-us",
-      "title": "imec.istart — details page checked by scrape.py",
+      "id": "check-route-778f0135aa",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "title": "imec.istart — application page",
       "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
-      "page": "details"
+      "page": "application"
     },
     {
-      "id": "check-route-7f4b531ce5",
-      "url": "https://www.imec-int.com/en/about-us",
-      "title": "imec.istart — details page checked by scrape.py",
+      "id": "check-route-78a7cb8ab6",
+      "url": "https://www.imec-int.com/en/applications",
+      "title": "imec.istart — application page",
       "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
-      "page": "details"
+      "page": "application"
     },
     {
-      "id": "check-route-816199e2e5",
-      "url": "https://www.imec-int.com/en/about-us",
-      "title": "imec.istart — details page checked by scrape.py",
+      "id": "check-route-7c4591d20b",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "title": "imec.istart — application page",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7cf7219ec5",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "title": "imec.istart — application page",
       "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-route-7da9a22a97",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "title": "imec.istart — application page",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8377c9906f",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "More applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8392c310c3",
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application"
+    },
+    {
+      "id": "check-route-83a9fee06e",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8437a74b1c",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "title": "imec.istart — application page",
+      "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-845f3f1dde",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "title": "imec.istart — application page",
+      "excerpt": "More applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8625ffadab",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-87adf02774",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "title": "imec.istart — application page",
+      "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8939c06b7a",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "title": "imec.istart — application page",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8b160ef26c",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "title": "imec.istart — application page",
+      "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
     },
     {
       "id": "check-route-8de070f332",
       "url": "https://www.imec-int.com/en/istart",
-      "title": "imec.istart — homepage checked by scrape.py",
+      "title": "imec.istart — homepage",
       "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
       "page": "details"
     },
     {
       "id": "check-route-9127d778ed",
       "url": "https://www.imec-int.com/en/applications",
-      "title": "imec.istart — application page checked by scrape.py",
+      "title": "imec.istart — application page",
       "excerpt": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application"
+    },
+    {
+      "id": "check-route-91378b90bd",
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application"
+    },
+    {
+      "id": "check-route-97a63a325f",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "title": "imec.istart — application page",
+      "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application"
+    },
+    {
+      "id": "check-route-97b28635f7",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-99f1aed144",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a0cd29ed1e",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "title": "imec.istart — application page",
+      "excerpt": "More applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a2194c00b1",
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Contact us → https://www.imec-int.com/en/connect-with-us?origin_url=%2Fen%2F79GHz-140GHz-radar-automotive-applications&contactblock=149449#contact",
       "page": "application"
     },
     {
       "id": "check-route-a2b3dc8bf8",
       "url": "https://www.imec-int.com/en/istart",
-      "title": "imec.istart — homepage checked by scrape.py",
+      "title": "imec.istart — homepage",
       "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
       "page": "details"
     },
     {
+      "id": "check-route-a2bd2eea71",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive Chiplet Forum (ACF) → https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a36391e625",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
       "id": "check-route-a3b9426a48",
       "url": "https://www.imec-int.com/en/applications",
-      "title": "imec.istart — application page checked by scrape.py",
+      "title": "imec.istart — application page",
       "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a4c9e8d142",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "title": "imec.istart — application page",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a52d44a1c3",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "title": "imec.istart — application page",
+      "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a627e659d0",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "title": "imec.istart — application page",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a70c665e10",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "title": "imec.istart — application page",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
       "page": "application"
     },
     {
       "id": "check-route-a85fd4ef7d",
       "url": "https://www.imec-int.com/en/applications",
-      "title": "imec.istart — application page checked by scrape.py",
+      "title": "imec.istart — application page",
       "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
       "page": "application"
     },
     {
-      "id": "check-route-b262c1298e",
-      "url": "https://www.imec-int.com/en/about-us",
-      "title": "imec.istart — details page checked by scrape.py",
-      "excerpt": "Applications → https://www.imec-int.com/en/applications",
-      "page": "details"
+      "id": "check-route-a892a6d570",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "title": "imec.istart — application page",
+      "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a9a7767cab",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "title": "imec.istart — application page",
+      "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application"
+    },
+    {
+      "id": "check-route-aba3ded772",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "title": "imec.istart — application page",
+      "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application"
+    },
+    {
+      "id": "check-route-aeb5e97cf6",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-af3ae0583c",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "title": "imec.istart — application page",
+      "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b121d33120",
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "title": "imec.istart — application page",
+      "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b57e3ff872",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "title": "imec.istart — application page",
+      "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b683e7f922",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "title": "imec.istart — application page",
+      "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b8bc528150",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "title": "imec.istart — application page",
+      "excerpt": "Contact → https://www.imec-int.com/en/connect-with-us?origin_url=%2Fen%2Fapplications%2Fsecurity-and-resilience&contactblock=165986#contact",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b986c2e872",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "title": "imec.istart — application page",
+      "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application"
     },
     {
       "id": "check-route-b9c39cfbe6",
       "url": "https://www.imec-int.com/en/applications",
-      "title": "imec.istart — application page checked by scrape.py",
+      "title": "imec.istart — application page",
       "excerpt": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
       "page": "application"
     },
     {
-      "id": "check-route-c00ff94116",
-      "url": "https://www.imec-int.com/en/about-us",
-      "title": "imec.istart — details page checked by scrape.py",
-      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
-      "page": "details"
+      "id": "check-route-ba06b3df19",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "title": "imec.istart — application page",
+      "excerpt": "More applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-baf9c6cae6",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "title": "imec.istart — application page",
+      "excerpt": "Contact us → https://www.imec-int.com/en/connect-with-us?origin_url=%2Fen%2Fapplications%2Fagrifood-technology&contactblock=147299#contact",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bc50cad46a",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "title": "imec.istart — application page",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c11dd69d5d",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "title": "imec.istart — application page",
+      "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application"
     },
     {
       "id": "check-route-c38ef5afdf",
       "url": "https://www.imec-int.com/en/applications",
-      "title": "imec.istart — application page checked by scrape.py",
+      "title": "imec.istart — application page",
       "excerpt": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c4c319c69e",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "title": "imec.istart — application page",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c579312d2f",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c73303dbf2",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "title": "imec.istart — application page",
+      "excerpt": "More applications → https://www.imec-int.com/en/applications",
       "page": "application"
     },
     {
       "id": "check-route-c7f9cef385",
       "url": "https://www.imec-int.com/en/istart",
-      "title": "imec.istart — homepage checked by scrape.py",
+      "title": "imec.istart — homepage",
       "excerpt": "More applications → https://www.imec-int.com/en/applications",
       "page": "details"
     },
     {
+      "id": "check-route-c87f8c50f3",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive semiconductor technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c8d59f7ffb",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "title": "imec.istart — application page",
+      "excerpt": "Robotics → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c9d6fb0287",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "title": "imec.istart — application page",
+      "excerpt": "More applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ca5748b46e",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "title": "imec.istart — application page",
+      "excerpt": "More applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
       "id": "check-route-cca808e3cb",
       "url": "https://www.imec-int.com/en/applications",
-      "title": "imec.istart — application page checked by scrape.py",
+      "title": "imec.istart — application page",
       "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
       "page": "application"
     },
     {
-      "id": "check-route-d945765d52",
-      "url": "https://www.imec-int.com/en/about-us",
-      "title": "imec.istart — details page checked by scrape.py",
-      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
-      "page": "details"
+      "id": "check-route-ce76611c00",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "title": "imec.istart — application page",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
     },
     {
-      "id": "check-route-e79249c8a8",
-      "url": "https://www.imec-int.com/en/about-us",
-      "title": "imec.istart — details page checked by scrape.py",
+      "id": "check-route-d37f6547d2",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "title": "imec.istart — application page",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d4c27b66e0",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "title": "imec.istart — application page",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d63c6e4bea",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Contact → https://www.imec-int.com/en/connect-with-us?origin_url=%2Fen%2Fapplications%2Fcustom-electronic-component-development-space%2Fntn-semiconductor-technologies&contactblock=169736#contact",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d73a2154bd",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "title": "imec.istart — application page",
+      "excerpt": "Low-power phase-locked loop for short-range applications → https://www.imec-int.com/en/press/imec-demonstrates-low-power-phase-locked-loop-short-range-automotive-and-industrial-radar",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d847a08a80",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "title": "imec.istart — application page",
+      "excerpt": "Contact → https://www.imec-int.com/en/connect-with-us?origin_url=%2Fen%2Fapplications%2Fautomotive-semiconductor-technologies%2Fwant-join-automotive-chiplet-alliance&contactblock=157574#contact",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d90709c994",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "title": "imec.istart — application page",
+      "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d9d6f097a9",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "title": "imec.istart — application page",
       "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-route-de2d6b420b",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "title": "imec.istart — application page",
+      "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e1cc6f52e4",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "title": "imec.istart — application page",
+      "excerpt": "Low-power phase-locked loop for short-range applications → https://www.imec-int.com/en/press/imec-demonstrates-low-power-phase-locked-loop-short-range-automotive-and-industrial-radar",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e20f981004",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "title": "imec.istart — application page",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e24e4936be",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "title": "imec.istart — application page",
+      "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e5dfdf7310",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e7353dd4cb",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "title": "imec.istart — application page",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e7e7fb960e",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "More applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e810597c42",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "title": "imec.istart — application page",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e9647efae1",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "title": "imec.istart — application page",
+      "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ea69119d54",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "title": "imec.istart — application page",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ed3b02f64a",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "title": "imec.istart — application page",
+      "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application"
     },
     {
       "id": "check-route-eefe691948",
       "url": "https://www.imec-int.com/en/applications",
-      "title": "imec.istart — application page checked by scrape.py",
+      "title": "imec.istart — application page",
       "excerpt": "https://www.imec-int.com/en/applications/home-automation",
       "page": "application"
+    },
+    {
+      "id": "check-route-f31efd5b48",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "title": "imec.istart — application page",
+      "excerpt": "Contact us → https://www.imec-int.com/en/connect-with-us?origin_url=%2Fen%2Fapplications%2Fhome-automation&contactblock=147365#contact",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f36c374d8c",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "title": "imec.istart — application page",
+      "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f7ce170b9b",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "title": "imec.istart — application page",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fb7675ea25",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "title": "imec.istart — application page",
+      "excerpt": "More applications → https://www.imec-int.com/en/applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fc8467516e",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "title": "imec.istart — application page",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fe26552a66",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "title": "imec.istart — application page",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ffe28206a0",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "title": "imec.istart — application page",
+      "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-d25bba1a3c",
+      "url": "https://www.imec-int.com/en/istart",
+      "page": "details",
+      "excerpt": "Imec.istart | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / What we offer / Venturing /"
+    },
+    {
+      "id": "check-page-05432261e8",
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "page": "application",
+      "excerpt": "79GHz radar for automotive applications - imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Expertise"
+    },
+    {
+      "id": "check-page-f08034bae0",
+      "url": "https://www.imec-int.com/en/applications",
+      "page": "application",
+      "excerpt": "Applications | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications Applications Get"
+    },
+    {
+      "id": "check-page-49526fe389",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "page": "application",
+      "excerpt": "Agrifood technology: sensing, analytics, and decision support tools | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0"
+    },
+    {
+      "id": "check-page-73f5b7b557",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "page": "application",
+      "excerpt": "3rd Automotive Chiplet Alliance Conference: confirm attendance | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More"
+    },
+    {
+      "id": "check-page-db1df6ea53",
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "page": "application",
+      "excerpt": "Autonomous Edge Chiplet Forum | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications /"
+    },
+    {
+      "id": "check-page-4b5c8d5ed8",
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application",
+      "excerpt": "Automotive semiconductor technologies | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications"
+    },
+    {
+      "id": "check-page-01e9c4bb11",
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "page": "application",
+      "excerpt": "Non-terrestrial network (NTN) semiconductor technologies | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More"
+    },
+    {
+      "id": "check-page-2cce4b4ffc",
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application",
+      "excerpt": "Data and telecom | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications / Data- and"
+    },
+    {
+      "id": "check-page-efd81c7655",
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "page": "application",
+      "excerpt": "Smart buildings and intuitive spaces | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications"
+    },
+    {
+      "id": "check-page-4c27df501d",
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application",
+      "excerpt": "Advanced chip technology for healthcare | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Expertise"
+    },
+    {
+      "id": "check-page-3359cba0e2",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application",
+      "excerpt": "Robotics semiconductor technologies | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications / Applications /"
+    },
+    {
+      "id": "check-page-79220b3231",
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "page": "application",
+      "excerpt": "Redefining robotic possibilities with SAFEBOT | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications /"
+    },
+    {
+      "id": "check-page-c6f723bf5d",
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "page": "application",
+      "excerpt": "Technology for security and resilience | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More applications /"
+    },
+    {
+      "id": "check-page-c1808f8f1d",
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application",
+      "excerpt": "Semiconductor technology: exploring the next generations | imec Expertise What we offer Applications Your career About imec Contact CMOS: advanced and beyond Discover why imec is the premier R&D center for advanced logic & memory devices. Integrated photonics Take a look at technologies for optical transceivers, sensors and more. Health technologies See how imec brings the power of chip technology to the world of healthcare. Sensing and actuation Explore imec’s CMOS- and photonics-based sensing and actuation systems. Connectivity technology Look into our reliable, high-performance, low-power network technologies. More expertises Discover all our expertises. Research Be the first to reap the benefits of imec’s research by joining one of our programs or starting an exclusive bilateral collaboration. Manufacturing Go from idea to scalable and reliable semiconductor manufacturing with IC-Link. Venturing We create and co-create new ventures, and we invest in and accelerate existing ventures. Education and workforce development Imec supports formal and on-the-job training for a range of careers in semiconductors. NanoIC pilot line Aligned with the EU Chips Act, access to the pilot line will accelerate beyond-2nm innovation. Semiconductor technology Life sciences and health solutions Data and telecommunication Automotive technologies Robotics technology for Industry 4.0 More"
     }
   ],
   "findings": {
@@ -289,12 +1296,33 @@
         "evidenceId": "check-route-7112008cf3"
       }
     ],
-    "applicationUrl": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.imec-int.com/en/applications",
+        "evidenceId": "check-route-0fa81b4504"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-7963d1f83e"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-c473e925eb"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

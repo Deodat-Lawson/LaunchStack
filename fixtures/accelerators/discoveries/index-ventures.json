@@ -1,35 +1,11 @@
 {
   "programId": "index-ventures",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://www.indexventures.com/companies/",
       "page": "portfolio",
       "anchor": "Companies",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.indexventures.com/companies/revolut/",
-      "page": "portfolio",
-      "anchor": "Revolut",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.indexventures.com/companies/wizio/",
-      "page": "portfolio",
-      "anchor": "Wiz",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.indexventures.com/companies/fireworks-ai/",
-      "page": "portfolio",
-      "anchor": "Fireworks",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -43,46 +19,6 @@
       "origin": "official"
     },
     {
-      "url": "https://www.indexventures.com/companies/instinct/",
-      "page": "portfolio",
-      "anchor": "Instinct",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.indexventures.com/companies/simile/",
-      "page": "portfolio",
-      "anchor": "Simile",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.indexventures.com/companies/parallel-web-systems/",
-      "page": "portfolio",
-      "anchor": "Parallel Web Systems",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.indexventures.com/companies/flapping-airplanes/",
-      "page": "portfolio",
-      "anchor": "Flapping Airplanes",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.indexventures.com/companies/mistral/",
-      "page": "portfolio",
-      "anchor": "Mistral",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.indexventures.com/companies/chai-discovery/",
       "page": "portfolio",
       "anchor": "Chai Discovery",
@@ -91,9 +27,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.indexventures.com/companies/granola/",
+      "url": "https://www.indexventures.com/companies/decagon/",
       "page": "portfolio",
-      "anchor": "Granola",
+      "anchor": "Decagon",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -107,9 +43,217 @@
       "origin": "official"
     },
     {
-      "url": "https://www.indexventures.com/companies/decagon/",
+      "url": "https://www.indexventures.com/companies/fireworks-ai/",
       "page": "portfolio",
-      "anchor": "Decagon",
+      "anchor": "Fireworks",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/flapping-airplanes/",
+      "page": "portfolio",
+      "anchor": "Flapping Airplanes",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/granola/",
+      "page": "portfolio",
+      "anchor": "Granola",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/instinct/",
+      "page": "portfolio",
+      "anchor": "Instinct",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/mistral/",
+      "page": "portfolio",
+      "anchor": "Mistral",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/parallel-web-systems/",
+      "page": "portfolio",
+      "anchor": "Parallel Web Systems",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/revolut/",
+      "page": "portfolio",
+      "anchor": "Revolut",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/simile/",
+      "page": "portfolio",
+      "anchor": "Simile",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/wizio/",
+      "page": "portfolio",
+      "anchor": "Wiz",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/index-io-terms-and-conditions/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/a-new-era-for-electronics-design-our-investment-in-quilter/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/a-new-way-to-see-the-world-our-investment-in-kindred/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/achieving-the-sublime-in-email-security-announcing-our-20m-series-a-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/ai-that-owns-business-outcomes-our-investment-in-hone/",
+      "page": "terms",
+      "anchor": "This link opens the post, \"AI That Owns Business Outcomes: Our Investment in Hone\" AI That Owns Business Outcomes: Our Investment in Hone by Shardul Shah, Mark Xu",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/bringing-ai-to-the-fashion-industry-our-investment-in-daydream/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/building-a-new-energy-model-for-europe-our-investment-in-nomos/",
+      "page": "terms",
+      "anchor": "This link opens the post, \"Building A New Energy Model For Europe: Our Investment In Nomos\" Building A New Energy Model For Europe: Our Investment In Nomos by Bastian Hasslinger, J",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/building-the-first-intelligence-layer-for-industrial-assets-our-investment-in-scope/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/building-the-next-generation-of-real-time-ai-models-our-investment-in-cartesia/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/built-technologies-announces-series-b-financing-led-by-goldman-sachs-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/making-quantum-computing-real-our-investment-in-oratomic/",
+      "page": "terms",
+      "anchor": "This link opens the post, \"Making Quantum Computing Real: Our Investment in Oratomic\" Making Quantum Computing Real: Our Investment in Oratomic by Martin Mignot",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/our-continued-investment-in-alan/",
+      "page": "terms",
+      "anchor": "This link opens the post, \"Healthcare That Knows You: Our Continued Investment in Alan\" Healthcare That Knows You: Our Continued Investment in Alan by Jan Hammer",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/processing-ppp-loan-applications-at-scale-instabases-anant-bhardwaj-on-leading-during-covid-19/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/relationship/applyboard-inc/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/see-hear-speak-investing-in-livekit-and-the-future-of-realtime-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/simulating-society-at-scale-our-investment-in-similes-200m-series-b/",
+      "page": "terms",
+      "anchor": "Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/superlinked-raises-95m-in-seed-funding-to-enable-enterprise-scale-ai-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/perspectives/transforming-biology-from-science-to-engineering-our-investment-in-chai-discovery/",
+      "page": "terms",
+      "anchor": "This link opens the post, \"Transforming Biology From Science To Engineering: Our Investment in Chai Discovery\" Transforming Biology From Science To Engineering: Our Investment in C",
       "fetched": false,
       "blocked": null,
       "origin": "official"

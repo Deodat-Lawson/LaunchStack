@@ -1,52 +1,451 @@
 {
   "programId": "on-deck",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://joinodf.com/",
-    "https://admissions.joinodf.com/"
+    "https://admissions.joinodf.com/",
+    "https://joinodf.com/select-investors/function-investments",
+    "https://joinodf.com/select-investors/golden-palm-investments",
+    "https://joinodf.com/terms-and-conditions",
+    "https://www.joinodf.com/terms-and-conditions",
+    "https://joinodf.com/post/what-founders-need-to-know-about-equity-and-early-stage-financing",
+    "https://joinodf.com/select-investors/unitedhealthcare-accelerator",
+    "https://joinodf.com/companies",
+    "https://joinodf.com/deep-end/starting-companies",
+    "https://joinodf.com/post/antifragile-companies",
+    "https://joinodf.com/post/on-decks-top-companies-2022",
+    "https://joinodf.com/select-investors/alumni-ventures",
+    "https://joinodf.com/top-companies-2023/ampersand",
+    "https://joinodf.com/top-companies-2023/atob"
   ],
   "evidence": [
     {
-      "id": "check-deal-ecb86bcebe",
-      "url": "https://admissions.joinodf.com/",
-      "title": "On Deck — terms page checked by scrape.py",
-      "excerpt": "continue to have access to a lively online community and IRL events. Contribution: We’re a non-dilutive program with a Pay-what-you-can model; we suggest $1000 USD which covers venue, food, and year-round community infrastructure. Outcomes & Alumni Wins ODF alumni have collectively raised >$2 B and include breakout",
+      "id": "check-deal-418af5923e",
+      "url": "https://joinodf.com/select-investors/unitedhealthcare-accelerator",
+      "title": "On Deck — program page",
+      "excerpt": "Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-55f0ade6ae",
+      "url": "https://joinodf.com/select-investors/function-investments",
+      "title": "On Deck — terms page",
+      "excerpt": "Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't",
       "page": "terms"
     },
     {
-      "id": "check-deal-fa51ebe087",
-      "url": "https://joinodf.com/",
-      "title": "On Deck — homepage checked by scrape.py",
-      "excerpt": "Week in SF Befriend talented people at your stage 80-100 participants >50% technical Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't take any equity. Read FAQs -> More than 1,000 startups launched so far Loyal , Luma ,",
+      "id": "check-deal-6a942faff8",
+      "url": "https://joinodf.com/select-investors/golden-palm-investments",
+      "title": "On Deck — terms page",
+      "excerpt": "Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-8233486f67",
+      "url": "https://joinodf.com/select-investors/alumni-ventures",
+      "title": "On Deck — portfolio page",
+      "excerpt": "Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-deal-904598e828",
+      "url": "https://admissions.joinodf.com/",
+      "title": "On Deck — terms page",
+      "excerpt": "a non-dilutive program with a Pay-what-you-can model; we suggest $1000 USD which covers venue, food, and year-round community",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-9c203dae74",
+      "url": "https://joinodf.com/post/antifragile-companies",
+      "title": "On Deck — portfolio page",
+      "excerpt": "Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-deal-c130c1f090",
+      "url": "https://joinodf.com/post/what-founders-need-to-know-about-equity-and-early-stage-financing",
+      "title": "On Deck — program page",
+      "excerpt": "Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't",
       "page": "details"
+    },
+    {
+      "id": "check-deal-d3658bef8b",
+      "url": "https://joinodf.com/post/on-decks-top-companies-2022",
+      "title": "On Deck — portfolio page",
+      "excerpt": "Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-deal-d37311d147",
+      "url": "https://joinodf.com/",
+      "title": "On Deck — homepage",
+      "excerpt": "Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-285e23e3c8",
+      "url": "https://joinodf.com/terms-and-conditions",
+      "title": "On Deck — terms page",
+      "excerpt": "amount paid by you to use our Services in the 12 months preceding the incident that gave rise to the",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-dd6745215c",
+      "url": "https://www.joinodf.com/terms-and-conditions",
+      "title": "On Deck — terms page",
+      "excerpt": "amount paid by you to use our Services in the 12 months preceding the incident that gave rise to the",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-04e49c51b6",
+      "url": "https://joinodf.com/post/on-decks-top-companies-2022",
+      "title": "On Deck — portfolio page",
+      "excerpt": "Contact Us (team@joinodf.com)",
+      "page": "portfolio"
     },
     {
       "id": "check-email-2f90e89c2f",
       "url": "https://joinodf.com/",
-      "title": "On Deck — homepage checked by scrape.py",
+      "title": "On Deck — homepage",
       "excerpt": "Contact Us (team@joinodf.com)",
       "page": "details"
     },
     {
+      "id": "check-email-409647a32d",
+      "url": "https://www.joinodf.com/terms-and-conditions",
+      "title": "On Deck — terms page",
+      "excerpt": "Contact Us (team@joinodf.com)",
+      "page": "terms"
+    },
+    {
       "id": "check-email-4332162ef1",
       "url": "https://admissions.joinodf.com/",
-      "title": "On Deck — terms page checked by scrape.py",
+      "title": "On Deck — terms page",
       "excerpt": "📣 Interviews will be held in Q3 2026 📮 Email us at founders@joinodf.com if you have any questions FAQ ‣ International Founders We",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-4ca7823afb",
+      "url": "https://joinodf.com/select-investors/function-investments",
+      "title": "On Deck — terms page",
+      "excerpt": "Contact Us (team@joinodf.com)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-5f1129db23",
+      "url": "https://joinodf.com/select-investors/alumni-ventures",
+      "title": "On Deck — portfolio page",
+      "excerpt": "Contact Us (team@joinodf.com)",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-64e6522292",
+      "url": "https://joinodf.com/terms-and-conditions",
+      "title": "On Deck — terms page",
+      "excerpt": "Contact Us (team@joinodf.com)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-65ca0c007b",
+      "url": "https://joinodf.com/select-investors/golden-palm-investments",
+      "title": "On Deck — terms page",
+      "excerpt": "Contact Us (team@joinodf.com)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-9f42e96f3b",
+      "url": "https://joinodf.com/select-investors/unitedhealthcare-accelerator",
+      "title": "On Deck — program page",
+      "excerpt": "Contact Us (team@joinodf.com)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c0e19c281d",
+      "url": "https://joinodf.com/post/what-founders-need-to-know-about-equity-and-early-stage-financing",
+      "title": "On Deck — program page",
+      "excerpt": "Contact Us (team@joinodf.com)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f70fc7b114",
+      "url": "https://joinodf.com/post/antifragile-companies",
+      "title": "On Deck — portfolio page",
+      "excerpt": "Contact Us (team@joinodf.com)",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-024c7166d0",
+      "url": "https://joinodf.com/post/antifragile-companies",
+      "title": "On Deck — portfolio page",
+      "excerpt": "start the best companies. ODF is an intense one-week in-person experience focused on meeting collaborators, exploring",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-0a4ada12cf",
+      "url": "https://joinodf.com/post/on-decks-top-companies-2022",
+      "title": "On Deck — portfolio page",
+      "excerpt": "start the best companies. ODF is an intense one-week in-person experience focused on meeting collaborators, exploring",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-2a312c988d",
+      "url": "https://www.joinodf.com/terms-and-conditions",
+      "title": "On Deck — terms page",
+      "excerpt": "Participant, particularly when meeting other Participants in person. You acknowledge that ODF does not routinely screen its",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-3d440c0544",
+      "url": "https://joinodf.com/select-investors/alumni-ventures",
+      "title": "On Deck — portfolio page",
+      "excerpt": "start the best companies. ODF is an intense one-week in-person experience focused on meeting collaborators, exploring",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-3f335e2f2e",
+      "url": "https://joinodf.com/terms-and-conditions",
+      "title": "On Deck — terms page",
+      "excerpt": "Participant, particularly when meeting other Participants in person. You acknowledge that ODF does not routinely screen its",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-4a9e496b66",
+      "url": "https://www.joinodf.com/terms-and-conditions",
+      "title": "On Deck — terms page",
+      "excerpt": "interacting with any other Participants, either online or in-person. ​​2.2 ODF Talent Hub and ODF Recruit. ODF Recruit is a",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6584e4e6fe",
+      "url": "https://joinodf.com/",
+      "title": "On Deck — homepage",
+      "excerpt": "start the best companies. ODF is an intense one-week in-person experience focused on meeting collaborators, exploring",
+      "page": "details"
+    },
+    {
+      "id": "check-format-670677b9e2",
+      "url": "https://joinodf.com/post/what-founders-need-to-know-about-equity-and-early-stage-financing",
+      "title": "On Deck — program page",
+      "excerpt": "start the best companies. ODF is an intense one-week in-person experience focused on meeting collaborators, exploring",
+      "page": "details"
+    },
+    {
+      "id": "check-format-6ee929df85",
+      "url": "https://joinodf.com/select-investors/function-investments",
+      "title": "On Deck — terms page",
+      "excerpt": "start the best companies. ODF is an intense one-week in-person experience focused on meeting collaborators, exploring",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-7ab294ca1f",
+      "url": "https://joinodf.com/terms-and-conditions",
+      "title": "On Deck — terms page",
+      "excerpt": "interacting with any other Participants, either online or in-person. ​​2.2 ODF Talent Hub and ODF Recruit. ODF Recruit is a",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-8af226efb1",
+      "url": "https://joinodf.com/deep-end/starting-companies",
+      "title": "On Deck — portfolio page",
+      "excerpt": "Science Foundation Obvious Ventures Daily.co Tribe Capital Remote First Capital Seven Seven Six Sierra Ventures Elevation",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-a6eff47866",
+      "url": "https://joinodf.com/deep-end/starting-companies",
+      "title": "On Deck — portfolio page",
+      "excerpt": "If such a space does not exist in your community - join a virtual community or start one - there are founders and builders",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-c3f53e084a",
+      "url": "https://joinodf.com/select-investors/unitedhealthcare-accelerator",
+      "title": "On Deck — program page",
+      "excerpt": "start the best companies. ODF is an intense one-week in-person experience focused on meeting collaborators, exploring",
+      "page": "details"
+    },
+    {
+      "id": "check-format-d0ae2d70e4",
+      "url": "https://joinodf.com/select-investors/golden-palm-investments",
+      "title": "On Deck — terms page",
+      "excerpt": "start the best companies. ODF is an intense one-week in-person experience focused on meeting collaborators, exploring",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-1bf45b078f",
+      "url": "https://joinodf.com/post/on-decks-top-companies-2022",
+      "title": "On Deck — portfolio page",
+      "excerpt": "Top Companies → https://joinodf.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-369e1a7ddb",
+      "url": "https://joinodf.com/select-investors/golden-palm-investments",
+      "title": "On Deck — terms page",
+      "excerpt": "Top Companies → https://joinodf.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-40f6cccf8f",
+      "url": "https://joinodf.com/post/what-founders-need-to-know-about-equity-and-early-stage-financing",
+      "title": "On Deck — program page",
+      "excerpt": "Top Companies → https://joinodf.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4a14686af3",
+      "url": "https://joinodf.com/select-investors/unitedhealthcare-accelerator",
+      "title": "On Deck — program page",
+      "excerpt": "Top Companies → https://joinodf.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-55aceadbfe",
+      "url": "https://joinodf.com/terms-and-conditions",
+      "title": "On Deck — terms page",
+      "excerpt": "Top Companies → https://joinodf.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8e64c52d2a",
+      "url": "https://joinodf.com/post/antifragile-companies",
+      "title": "On Deck — portfolio page",
+      "excerpt": "Top Companies → https://joinodf.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-b5aa7b6624",
+      "url": "https://joinodf.com/select-investors/alumni-ventures",
+      "title": "On Deck — portfolio page",
+      "excerpt": "Top Companies → https://joinodf.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-d11e4d6c0c",
+      "url": "https://www.joinodf.com/terms-and-conditions",
+      "title": "On Deck — terms page",
+      "excerpt": "Top Companies → https://joinodf.com/companies",
       "page": "terms"
     },
     {
       "id": "check-portfolio-d1857ecac3",
       "url": "https://joinodf.com/",
-      "title": "On Deck — homepage checked by scrape.py",
+      "title": "On Deck — homepage",
       "excerpt": "Top Companies → https://joinodf.com/companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-fc078298a1",
+      "url": "https://joinodf.com/select-investors/function-investments",
+      "title": "On Deck — terms page",
+      "excerpt": "Top Companies → https://joinodf.com/companies",
+      "page": "terms"
+    },
+    {
       "id": "check-route-65a2041477",
       "url": "https://joinodf.com/",
-      "title": "On Deck — homepage checked by scrape.py",
+      "title": "On Deck — homepage",
       "excerpt": "https://joinodf.com/",
       "page": "details"
+    },
+    {
+      "id": "check-route-777625c89a",
+      "url": "https://joinodf.com/companies",
+      "title": "On Deck — portfolio page",
+      "excerpt": "APPLY → https://forms.joinodf.com/t/x2fuWdEqkSus?utm_source=homepage",
+      "page": "portfolio"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-f022d26510",
+      "url": "https://joinodf.com/",
+      "page": "details",
+      "excerpt": "ODF | Founder Fellowship - From idea to conviction Top Companies FAQ APPLY ODF helps more people start the best companies. ODF is an intense one-week in-person experience focused on meeting collaborators, exploring ideas, and gaining conviction. Apply to ODF ODF28 kicks off in Q1 2027. Onboarding week IRL in SF, alumni for life. Join a tight-knit community of founders and builders keen on supporting one another in doing their best work. Onboarding Week in SF Befriend talented people at your stage 80-100 participants >50% technical Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't take any equity. Read FAQs -> More than 1,000 startups launched so far Loyal , Luma , Cal.com , Lassie* , atob , Traba* , Levels* , Partiful , Finch , Shepherd* , Salsa* , Roots , Rollfi , Overflow , Roo , Tofu , Settle , Pave, Cal.ai + hundreds more *co-founders met via ODF View top ODF companies -> Over $2B raised from the best Khosla, Sequoia, a16z, Founder's Fund, General Catalyst, Benchmark, Index, Lightspeed Venture Partners, Bloomberg Beta, Sam Altman, Elad Gil + hundreds more. View top ODF companies -> ODF changes trajectories \"Meeting (my co-founder) Akshay was literally a gift from god.\" — Mike Shebat, Traba CEO (ODF6) \"ODF helped me recruit our team, find our first beta customers, and build a"
+    },
+    {
+      "id": "check-page-e02f652c9b",
+      "url": "https://admissions.joinodf.com/",
+      "page": "terms",
+      "excerpt": "What is ODF? Apply Now What is ODF? ODF helps more people start the best companies. Great fit You have a track record of shipping impressive things. You’re 100 % committed (or soon committing) to starting a company. You gain energy from helping other founders win. Not a fit You’ve already raised beyond pre-seed / found product-market fit. You’re building something that can’t reach venture scale. Your main customer base will remain outside the US. You already have a team. What You Get One-week onboarding in SF with 80-100 high-momentum builders. Lifetime access to our 3000+-member community & events. >$800 k in perks (AWS, Stripe, Mercury, Carta, etc.). Library of workshops and how-tos on fundraising, product, hiring. Time, Place & Cost Presence: You must attend the full SF sprint (five business days). Ongoing: How much time you invest in ODF for the rest of the year is up to you. You’ll continue to have access to a lively online community and IRL events. Contribution: We’re a non-dilutive program with a Pay-what-you-can model; we suggest $1000 USD which covers venue, food, and year-round community infrastructure. Outcomes & Alumni Wins ODF alumni have collectively raised >$2 B and include breakout companies like Levels, Settle, Finch, Loyal, and Grow Therapy . \"Meeting (my co-founder) Akshay was literally a gift from god.\" — Mike Shebat, Traba CEO (ODF6) Admissions Snapshot"
+    },
+    {
+      "id": "check-page-7e09d1e983",
+      "url": "https://joinodf.com/select-investors/function-investments",
+      "page": "terms",
+      "excerpt": "ODF | Founder Fellowship - From idea to conviction Top Companies FAQ APPLY ODF helps more people start the best companies. ODF is an intense one-week in-person experience focused on meeting collaborators, exploring ideas, and gaining conviction. Apply to ODF ODF28 kicks off in Q1 2027. Onboarding week IRL in SF, alumni for life. Join a tight-knit community of founders and builders keen on supporting one another in doing their best work. Onboarding Week in SF Befriend talented people at your stage 80-100 participants >50% technical Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't take any equity. Read FAQs -> More than 1,000 startups launched so far Loyal , Luma , Cal.com , Lassie* , atob , Traba* , Levels* , Partiful , Finch , Shepherd* , Salsa* , Roots , Rollfi , Overflow , Roo , Tofu , Settle , Pave, Cal.ai + hundreds more *co-founders met via ODF View top ODF companies -> Over $2B raised from the best Khosla, Sequoia, a16z, Founder's Fund, General Catalyst, Benchmark, Index, Lightspeed Venture Partners, Bloomberg Beta, Sam Altman, Elad Gil + hundreds more. View top ODF companies -> ODF changes trajectories \"Meeting (my co-founder) Akshay was literally a gift from god.\" — Mike Shebat, Traba CEO (ODF6) \"ODF helped me recruit our team, find our first beta customers, and build a"
+    },
+    {
+      "id": "check-page-a2819130b7",
+      "url": "https://joinodf.com/select-investors/golden-palm-investments",
+      "page": "terms",
+      "excerpt": "ODF | Founder Fellowship - From idea to conviction Top Companies FAQ APPLY ODF helps more people start the best companies. ODF is an intense one-week in-person experience focused on meeting collaborators, exploring ideas, and gaining conviction. Apply to ODF ODF28 kicks off in Q1 2027. Onboarding week IRL in SF, alumni for life. Join a tight-knit community of founders and builders keen on supporting one another in doing their best work. Onboarding Week in SF Befriend talented people at your stage 80-100 participants >50% technical Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't take any equity. Read FAQs -> More than 1,000 startups launched so far Loyal , Luma , Cal.com , Lassie* , atob , Traba* , Levels* , Partiful , Finch , Shepherd* , Salsa* , Roots , Rollfi , Overflow , Roo , Tofu , Settle , Pave, Cal.ai + hundreds more *co-founders met via ODF View top ODF companies -> Over $2B raised from the best Khosla, Sequoia, a16z, Founder's Fund, General Catalyst, Benchmark, Index, Lightspeed Venture Partners, Bloomberg Beta, Sam Altman, Elad Gil + hundreds more. View top ODF companies -> ODF changes trajectories \"Meeting (my co-founder) Akshay was literally a gift from god.\" — Mike Shebat, Traba CEO (ODF6) \"ODF helped me recruit our team, find our first beta customers, and build a"
+    },
+    {
+      "id": "check-page-66bc904ca8",
+      "url": "https://joinodf.com/terms-and-conditions",
+      "page": "terms",
+      "excerpt": "Terms and Conditions Discover the Top ODF Companies of 2025. See how they're shaping the future. → Find your people. Which community is right for you? ODF On Deck Founders For early-stage founders who are anywhere from pre-idea through pre-seed. Apply Now Questions before applying? Speak with an advisor Apply Terms and Conditions ‍ Last Modified: April 22, 2022 ‍ These terms and conditions (“Terms and Conditions”) set forth the agreement between you and nZero Labs, Inc. and its subsidiaries or affiliates (collectively “nZero Labs”, \"ODF\", “we” or “us”) and govern your participation in programs offered by ODF as described on its website at https://www.joinodf.com/ ( each, an \"ODF Program\") and your use of the other products and services we offer through our websites and applications that link to these Terms and Conditions (collectively , the “ODF Platform”). Our provision to you of access to and use of the ODF Platform, participation in an ODF Program, and any other services provided by ODF applications that link to these Terms and Conditions are together referred to herein as the \"Services\". By clicking \"I Accept\" or by using our Services, you agree to these Terms and Conditions, including the mandatory arbitration provision and class action waiver in Section 13. If you do not agree to these Terms and Conditions, please do not use our Services. We may supply different or"
+    },
+    {
+      "id": "check-page-a7b83bee9d",
+      "url": "https://www.joinodf.com/terms-and-conditions",
+      "page": "terms",
+      "excerpt": "Terms and Conditions Discover the Top ODF Companies of 2025. See how they're shaping the future. → Find your people. Which community is right for you? ODF On Deck Founders For early-stage founders who are anywhere from pre-idea through pre-seed. Apply Now Questions before applying? Speak with an advisor Apply Terms and Conditions ‍ Last Modified: April 22, 2022 ‍ These terms and conditions (“Terms and Conditions”) set forth the agreement between you and nZero Labs, Inc. and its subsidiaries or affiliates (collectively “nZero Labs”, \"ODF\", “we” or “us”) and govern your participation in programs offered by ODF as described on its website at https://www.joinodf.com/ ( each, an \"ODF Program\") and your use of the other products and services we offer through our websites and applications that link to these Terms and Conditions (collectively , the “ODF Platform”). Our provision to you of access to and use of the ODF Platform, participation in an ODF Program, and any other services provided by ODF applications that link to these Terms and Conditions are together referred to herein as the \"Services\". By clicking \"I Accept\" or by using our Services, you agree to these Terms and Conditions, including the mandatory arbitration provision and class action waiver in Section 13. If you do not agree to these Terms and Conditions, please do not use our Services. We may supply different or"
+    },
+    {
+      "id": "check-page-c0f2b11f14",
+      "url": "https://joinodf.com/post/what-founders-need-to-know-about-equity-and-early-stage-financing",
+      "page": "details",
+      "excerpt": "ODF | Founder Fellowship - From idea to conviction Top Companies FAQ APPLY ODF helps more people start the best companies. ODF is an intense one-week in-person experience focused on meeting collaborators, exploring ideas, and gaining conviction. Apply to ODF ODF28 kicks off in Q1 2027. Onboarding week IRL in SF, alumni for life. Join a tight-knit community of founders and builders keen on supporting one another in doing their best work. Onboarding Week in SF Befriend talented people at your stage 80-100 participants >50% technical Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't take any equity. Read FAQs -> More than 1,000 startups launched so far Loyal , Luma , Cal.com , Lassie* , atob , Traba* , Levels* , Partiful , Finch , Shepherd* , Salsa* , Roots , Rollfi , Overflow , Roo , Tofu , Settle , Pave, Cal.ai + hundreds more *co-founders met via ODF View top ODF companies -> Over $2B raised from the best Khosla, Sequoia, a16z, Founder's Fund, General Catalyst, Benchmark, Index, Lightspeed Venture Partners, Bloomberg Beta, Sam Altman, Elad Gil + hundreds more. View top ODF companies -> ODF changes trajectories \"Meeting (my co-founder) Akshay was literally a gift from god.\" — Mike Shebat, Traba CEO (ODF6) \"ODF helped me recruit our team, find our first beta customers, and build a"
+    },
+    {
+      "id": "check-page-515de36f43",
+      "url": "https://joinodf.com/select-investors/unitedhealthcare-accelerator",
+      "page": "details",
+      "excerpt": "ODF | Founder Fellowship - From idea to conviction Top Companies FAQ APPLY ODF helps more people start the best companies. ODF is an intense one-week in-person experience focused on meeting collaborators, exploring ideas, and gaining conviction. Apply to ODF ODF28 kicks off in Q1 2027. Onboarding week IRL in SF, alumni for life. Join a tight-knit community of founders and builders keen on supporting one another in doing their best work. Onboarding Week in SF Befriend talented people at your stage 80-100 participants >50% technical Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't take any equity. Read FAQs -> More than 1,000 startups launched so far Loyal , Luma , Cal.com , Lassie* , atob , Traba* , Levels* , Partiful , Finch , Shepherd* , Salsa* , Roots , Rollfi , Overflow , Roo , Tofu , Settle , Pave, Cal.ai + hundreds more *co-founders met via ODF View top ODF companies -> Over $2B raised from the best Khosla, Sequoia, a16z, Founder's Fund, General Catalyst, Benchmark, Index, Lightspeed Venture Partners, Bloomberg Beta, Sam Altman, Elad Gil + hundreds more. View top ODF companies -> ODF changes trajectories \"Meeting (my co-founder) Akshay was literally a gift from god.\" — Mike Shebat, Traba CEO (ODF6) \"ODF helped me recruit our team, find our first beta customers, and build a"
+    },
+    {
+      "id": "check-page-69c86cbb22",
+      "url": "https://joinodf.com/companies",
+      "page": "portfolio",
+      "excerpt": "ODF Companies Directory Top Companies 2025 FAQ APPLY Top Companies 2025 FAQ APPLY 2026 Top Companies Hiring 71 Industry AI 24 FinTech 21 SaaS 17 Health and Wellness 11 Health 10 Future of Work 6 See all options Region San Francisco, CA 48 New York, NY 25 Los Angeles, CA 3 Austin, TX 3 Boulder, CO 1 Bangalore, India 1 See all options Cohort ODF1 12 ODF3 10 ODF2 9 ODF7 9 ODF4 8 ODF5 7 See all options Ctrl K List Grid Made with ♥️ in San Francisco · © 2026 ODF"
+    },
+    {
+      "id": "check-page-af089752c6",
+      "url": "https://joinodf.com/deep-end/starting-companies",
+      "page": "portfolio",
+      "excerpt": "Starting Companies | The Deep End Start a company THE DEEP END PROBLEMS WORTH SOLVING The Meta-Problem of Starting Companies Technology is the best mechanism we have to solve complex, societal challenges. The most optimal way to solve them is not to tackle a specific one but rather focus on the meta problem of helping more people start more challenge-solving companies. We talk to founders and investors on the frontiers of the problem to help you understand what’s going on. Click to play Watch full episode Table of Contents Table of Contents 01. The Problem 02. Problem Worth Solving 03. Bottlenecks Access to Capital Access to Capital — Regulation — Regulation — Cultural Defaults — Cultural Defaults — Technical Barriers — Technical Barriers — Infrastructure — Infrastructure — Community — Community — Legibility of Problems — Legibility of Problems The Problem At On Deck, we believe technology is the best mechanism we have to solve complex societal problems. Climate, affordable housing, access to food, the rise of AI, education and low-cost transportation are all issues that startups are best suited to bring their technological solutions to the mass market. Startups are lean, fast-growing, and well-governed. The newness of startups means that communication costs are low and they get to avoid a lot of the bureaucracy that comes with larger more established companies or governments."
+    },
+    {
+      "id": "check-page-0d7698615a",
+      "url": "https://joinodf.com/post/antifragile-companies",
+      "page": "portfolio",
+      "excerpt": "ODF | Founder Fellowship - From idea to conviction Top Companies FAQ APPLY ODF helps more people start the best companies. ODF is an intense one-week in-person experience focused on meeting collaborators, exploring ideas, and gaining conviction. Apply to ODF ODF28 kicks off in Q1 2027. Onboarding week IRL in SF, alumni for life. Join a tight-knit community of founders and builders keen on supporting one another in doing their best work. Onboarding Week in SF Befriend talented people at your stage 80-100 participants >50% technical Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't take any equity. Read FAQs -> More than 1,000 startups launched so far Loyal , Luma , Cal.com , Lassie* , atob , Traba* , Levels* , Partiful , Finch , Shepherd* , Salsa* , Roots , Rollfi , Overflow , Roo , Tofu , Settle , Pave, Cal.ai + hundreds more *co-founders met via ODF View top ODF companies -> Over $2B raised from the best Khosla, Sequoia, a16z, Founder's Fund, General Catalyst, Benchmark, Index, Lightspeed Venture Partners, Bloomberg Beta, Sam Altman, Elad Gil + hundreds more. View top ODF companies -> ODF changes trajectories \"Meeting (my co-founder) Akshay was literally a gift from god.\" — Mike Shebat, Traba CEO (ODF6) \"ODF helped me recruit our team, find our first beta customers, and build a"
+    },
+    {
+      "id": "check-page-81fb79a201",
+      "url": "https://joinodf.com/post/on-decks-top-companies-2022",
+      "page": "portfolio",
+      "excerpt": "ODF | Founder Fellowship - From idea to conviction Top Companies FAQ APPLY ODF helps more people start the best companies. ODF is an intense one-week in-person experience focused on meeting collaborators, exploring ideas, and gaining conviction. Apply to ODF ODF28 kicks off in Q1 2027. Onboarding week IRL in SF, alumni for life. Join a tight-knit community of founders and builders keen on supporting one another in doing their best work. Onboarding Week in SF Befriend talented people at your stage 80-100 participants >50% technical Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't take any equity. Read FAQs -> More than 1,000 startups launched so far Loyal , Luma , Cal.com , Lassie* , atob , Traba* , Levels* , Partiful , Finch , Shepherd* , Salsa* , Roots , Rollfi , Overflow , Roo , Tofu , Settle , Pave, Cal.ai + hundreds more *co-founders met via ODF View top ODF companies -> Over $2B raised from the best Khosla, Sequoia, a16z, Founder's Fund, General Catalyst, Benchmark, Index, Lightspeed Venture Partners, Bloomberg Beta, Sam Altman, Elad Gil + hundreds more. View top ODF companies -> ODF changes trajectories \"Meeting (my co-founder) Akshay was literally a gift from god.\" — Mike Shebat, Traba CEO (ODF6) \"ODF helped me recruit our team, find our first beta customers, and build a"
+    },
+    {
+      "id": "check-page-f26514a694",
+      "url": "https://joinodf.com/select-investors/alumni-ventures",
+      "page": "portfolio",
+      "excerpt": "ODF | Founder Fellowship - From idea to conviction Top Companies FAQ APPLY ODF helps more people start the best companies. ODF is an intense one-week in-person experience focused on meeting collaborators, exploring ideas, and gaining conviction. Apply to ODF ODF28 kicks off in Q1 2027. Onboarding week IRL in SF, alumni for life. Join a tight-knit community of founders and builders keen on supporting one another in doing their best work. Onboarding Week in SF Befriend talented people at your stage 80-100 participants >50% technical Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't take any equity. Read FAQs -> More than 1,000 startups launched so far Loyal , Luma , Cal.com , Lassie* , atob , Traba* , Levels* , Partiful , Finch , Shepherd* , Salsa* , Roots , Rollfi , Overflow , Roo , Tofu , Settle , Pave, Cal.ai + hundreds more *co-founders met via ODF View top ODF companies -> Over $2B raised from the best Khosla, Sequoia, a16z, Founder's Fund, General Catalyst, Benchmark, Index, Lightspeed Venture Partners, Bloomberg Beta, Sam Altman, Elad Gil + hundreds more. View top ODF companies -> ODF changes trajectories \"Meeting (my co-founder) Akshay was literally a gift from god.\" — Mike Shebat, Traba CEO (ODF6) \"ODF helped me recruit our team, find our first beta customers, and build a"
+    },
+    {
+      "id": "check-page-896c1a3095",
+      "url": "https://joinodf.com/top-companies-2023/ampersand",
+      "page": "portfolio",
+      "excerpt": "ODF Matrix Partners Flex Capital 2.12 Angels base case capital Matrix Partners Flex Capital 2.12 Angels base case capital Matrix Partners Flex Capital 2.12 Angels base case capital Matrix Partners Flex Capital 2.12 Angels base case capital Matrix Partners Flex Capital 2.12 Angels base case capital ⏺"
+    },
+    {
+      "id": "check-page-d3b6411b8f",
+      "url": "https://joinodf.com/top-companies-2023/atob",
+      "page": "portfolio",
+      "excerpt": "ODF General Catalyst Bloomberg Y Combinator General Catalyst Bloomberg Y Combinator General Catalyst Bloomberg Y Combinator General Catalyst Bloomberg Y Combinator General Catalyst Bloomberg Y Combinator ⏺"
     }
   ],
   "findings": {
@@ -61,7 +460,12 @@
       }
     ],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://forms.joinodf.com/t/x2fuWdEqkSus?utm_source=homepage",
+        "evidenceId": "check-route-777625c89a"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://joinodf.com/",
@@ -71,15 +475,61 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-285e23e3c8"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-6584e4e6fe"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-a6eff47866"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "Week in SF Befriend talented people at your stage 80-100 participants >50% technical Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't take any equity. Read FAQs -> More than 1,000 startups launched so far Loyal , Luma ,",
-        "evidenceId": "check-deal-fa51ebe087"
+        "value": "Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't",
+        "evidenceId": "check-deal-d37311d147"
       },
       {
-        "value": "continue to have access to a lively online community and IRL events. Contribution: We’re a non-dilutive program with a Pay-what-you-can model; we suggest $1000 USD which covers venue, food, and year-round community infrastructure. Outcomes & Alumni Wins ODF alumni have collectively raised >$2 B and include breakout",
-        "evidenceId": "check-deal-ecb86bcebe"
+        "value": "a non-dilutive program with a Pay-what-you-can model; we suggest $1000 USD which covers venue, food, and year-round community",
+        "evidenceId": "check-deal-904598e828"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "800000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-d37311d147"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "1000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-904598e828"
       }
     ],
     "portfolioPages": [

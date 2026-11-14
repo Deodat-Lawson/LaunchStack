@@ -1,194 +1,1690 @@
 {
   "programId": "gener8tor",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.gener8tor.com/",
-    "https://www.gener8tor.com/about-us",
+    "https://www.gener8tor.com/apply",
+    "https://www.gener8tor.com/gener8tor-accelerators-application-thank-you",
+    "https://www.gener8tor.com/news/applications-now-open-for-michigan-founders-fund-pre-accelerator-program-underrepresented-founders-eligible-for-15k-in-grants",
+    "https://www.gener8tor.com/skills/learn-how-to-apply-ai",
     "https://www.gener8tor.com/faqs",
-    "https://www.gener8tor.com/apply"
+    "https://www.gener8tor.com/investment-accelerators",
+    "https://www.gener8tor.com/investment-accelerators/beam-circular",
+    "https://www.gener8tor.com/investment-accelerators/cincinnati/thank-you",
+    "https://www.gener8tor.com/investment-accelerators/curql",
+    "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+    "https://www.gener8tor.com/investment-accelerators/las-vegas",
+    "https://www.gener8tor.com/investment-accelerators/las-vegas/thank-you",
+    "https://www.gener8tor.com/investment-accelerators/luxembourg",
+    "https://www.gener8tor.com/investment-accelerators/m-spire"
   ],
   "evidence": [
     {
-      "id": "check-email-2b7bc61707",
+      "id": "check-deal-1bc0b99841",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "$50,000 for 5% of the Common Equity (Required to Participate); $50,000 Convertible Note (Optional) for $100,000 Total Initial Investment.",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-236ac4dc04",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "Startups must participate in-person. What are the terms of the $50,000 investment? Selected teams will receive a $50,000 investment for 5%",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-4fe0476405",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "title": "gener8tor — terms page",
+      "excerpt": "Programming Program Features Investment Selected teams will receive $30K in non-dilutive funding with potential for an additional $100K of",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-862f074218",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "for 5% of the Common Equity (required to participate) and a $50,000 Convertible Note (optional) for $100,000 total initial investment.",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-9082ad2c1f",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "HudsonAlpha AgTech Accelerator Powered by gener8tor invests up to $100K in ten high-growth startups per year (cohorts of five) working at",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-9d841208f5",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "to gener8tor’s global network of mentors and investors. Investment $50,000 for 5% of the Common Equity (Required to Participate); $50,000",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-b3affc4f52",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "(Required to Participate); $50,000 Convertible Note (Optional) for $100,000 Total Initial Investment. Cohort Programming Weekly cohort",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-c1332b8d6a",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "title": "gener8tor — terms page",
+      "excerpt": "$30K in non-dilutive funding with potential for an additional $100K of equity investment. More mature companies may seek higher levels",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-e50004fd9e",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "the terms of the $50,000 investment? Selected teams will receive a $50,000 investment for 5% of the Common Equity (required to participate) and",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f0bd9f22f5",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "FAQs What do we provide? Investment: Selected teams will receive a €100,000 investment in return for 7.5% equity in your company using a Simple",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f6cc1731ed",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "to participate) and a $50,000 Convertible Note (optional) for $100,000 total initial investment. More gener8tor FAQs More About gener8tor",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-fd4694eaa6",
+      "url": "https://www.gener8tor.com/news/applications-now-open-for-michigan-founders-fund-pre-accelerator-program-underrepresented-founders-eligible-for-15k-in-grants",
+      "title": "gener8tor — application page",
+      "excerpt": "founders in Southeast Michigan with concierge coaching and up to $15,000 in non-dilutive grant funding. MFFPA includes a built-in mentor and",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-058c7f1d43",
+      "url": "https://www.gener8tor.com/investment-accelerators/cincinnati/thank-you",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Investment",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-061e66558b",
+      "url": "https://www.gener8tor.com/",
+      "title": "gener8tor — homepage",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Skills",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-06f28fe61c",
       "url": "https://www.gener8tor.com/apply",
-      "title": "gener8tor — application page checked by scrape.py",
+      "title": "gener8tor — application page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Skills",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-075bab944d",
+      "url": "https://www.gener8tor.com/skills/learn-how-to-apply-ai",
+      "title": "gener8tor — application page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Investment",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-0a634d5111",
+      "url": "https://www.gener8tor.com/investment-accelerators",
+      "title": "gener8tor — terms page",
+      "excerpt": "identify, build and grow through either a 4 or 7 week free program so as to create wealth and jobs in",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-10f2ece4ec",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "identify, build and grow through either a 4 or 7 week free program so as to create wealth and jobs in",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-1a25f37733",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "B2B fintech. Each participating startup receives 12 weeks of concierge, mentorship-based programming,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-1b43f478ad",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "Apply Curql Accelerate Powered by gener8tor 12 weeks of programming and industry connections for your",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-1e92d2fc15",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Skills",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-1fbf239513",
+      "url": "https://www.gener8tor.com/news/applications-now-open-for-michigan-founders-fund-pre-accelerator-program-underrepresented-founders-eligible-for-15k-in-grants",
+      "title": "gener8tor — application page",
+      "excerpt": "identify, build and grow through either a 4 or 7 week free program so as to create wealth and jobs in",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-229f6f1626",
+      "url": "https://www.gener8tor.com/investment-accelerators/cincinnati/thank-you",
+      "title": "gener8tor — terms page",
+      "excerpt": "identify, build and grow through either a 4 or 7 week free program so as to create wealth and jobs in",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-27f7f34b62",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas/thank-you",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Skills",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-27fb45cab2",
+      "url": "https://www.gener8tor.com/investment-accelerators",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Skills",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-2ae92d7d5b",
+      "url": "https://www.gener8tor.com/",
+      "title": "gener8tor — homepage",
+      "excerpt": "to identify, build, and grow through a 4- or 7-week free program to create wealth and jobs in the",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-3095fe0d3e",
+      "url": "https://www.gener8tor.com/apply",
+      "title": "gener8tor — application page",
+      "excerpt": "companies. gener8tor's gALPHA programs are 4-week, non-investment-based pre-accelerators focused",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-30cdf16785",
+      "url": "https://www.gener8tor.com/investment-accelerators/m-spire",
+      "title": "gener8tor — terms page",
+      "excerpt": "identify, build and grow through either a 4 or 7 week free program so as to create wealth and jobs in",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-31605b0f6c",
+      "url": "https://www.gener8tor.com/faqs",
+      "title": "gener8tor — terms page",
+      "excerpt": "are 12 weeks and gBETA Accelerators are 7 weeks. Other programs run on their own schedules,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-317d77e1f1",
+      "url": "https://www.gener8tor.com/faqs",
+      "title": "gener8tor — terms page",
+      "excerpt": "programs? gener8tor's Flagship Accelerators are 12-week, investment-based programs for early-stage",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-322d081c5a",
+      "url": "https://www.gener8tor.com/investment-accelerators/cincinnati/thank-you",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Skills",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-3372f287a5",
+      "url": "https://www.gener8tor.com/skills/learn-how-to-apply-ai",
+      "title": "gener8tor — application page",
+      "excerpt": "Work through them at your own pace over the 3 week cohort. Career Essentials in Generative AI · 4",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-3813a81fe9",
+      "url": "https://www.gener8tor.com/faqs",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Skills",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-3bfb630896",
+      "url": "https://www.gener8tor.com/apply",
+      "title": "gener8tor — application page",
+      "excerpt": "Free Accelerators gener8tor's gBETA programs are 7-week, non-investment-based pre-accelerators focused",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-3c6e4c7c25",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "identify, build and grow through either a 4 or 7 week free program so as to create wealth and jobs in",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-3dab686207",
+      "url": "https://www.gener8tor.com/skills/learn-how-to-apply-ai",
+      "title": "gener8tor — application page",
+      "excerpt": "identify, build and grow through either a 4 or 7 week free program so as to create wealth and jobs in",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-426f3b6485",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "title": "gener8tor — terms page",
+      "excerpt": "for kickoff at the beginning of the program, a 1-week retreat in Week 6, and the week of the program",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-50d5195adc",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "identify, build and grow through either a 4 or 7 week free program so as to create wealth and jobs in",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-590a0e59e6",
+      "url": "https://www.gener8tor.com/investment-accelerators",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Investment",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-5c901af782",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "title": "gener8tor — terms page",
+      "excerpt": "identify, build and grow through either a 4 or 7 week free program so as to create wealth and jobs in",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-5e13b30a08",
+      "url": "https://www.gener8tor.com/investment-accelerators",
+      "title": "gener8tor — terms page",
+      "excerpt": "network is dedicated to helping you scale. Over 12 weeks, we deliver funding and curated introductions to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-66f024755c",
+      "url": "https://www.gener8tor.com/investment-accelerators/m-spire",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Investment",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-6fa7bf794d",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Investment",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-7aa1a46ec9",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Skills",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-7b3733bb87",
+      "url": "https://www.gener8tor.com/apply",
+      "title": "gener8tor — application page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Investment",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-7da63e6642",
+      "url": "https://www.gener8tor.com/gener8tor-accelerators-application-thank-you",
+      "title": "gener8tor — application page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Skills",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-80b9f245f9",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas",
+      "title": "gener8tor — terms page",
+      "excerpt": "identify, build and grow through either a 4 or 7 week free program so as to create wealth and jobs in",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-810bd7954b",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "The gener8tor Luxembourg accelerator is a 12-week program that supports leading startups across",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-87ccd9782c",
+      "url": "https://www.gener8tor.com/skills/learn-how-to-apply-ai",
+      "title": "gener8tor — application page",
+      "excerpt": "Level 2 · AI For Most Learn How to Apply AI A 3 week cohort for putting generative AI tools to work",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-8926b97e99",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Skills",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-929522e528",
+      "url": "https://www.gener8tor.com/faqs",
+      "title": "gener8tor — terms page",
+      "excerpt": "on the program. Flagship Accelerators are 12 weeks and gBETA Accelerators are 7 weeks. Other",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-96004903b6",
+      "url": "https://www.gener8tor.com/",
+      "title": "gener8tor — homepage",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Investment",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-a7d776f2dd",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Skills",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a8d66ef3a7",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas/thank-you",
+      "title": "gener8tor — terms page",
+      "excerpt": "identify, build and grow through either a 4 or 7 week free program so as to create wealth and jobs in",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ac2a3fedc2",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Investment",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b2865cd0f9",
+      "url": "https://www.gener8tor.com/news/applications-now-open-for-michigan-founders-fund-pre-accelerator-program-underrepresented-founders-eligible-for-15k-in-grants",
+      "title": "gener8tor — application page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Skills",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-b693313459",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Investment",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b9d512c29b",
+      "url": "https://www.gener8tor.com/skills/learn-how-to-apply-ai",
+      "title": "gener8tor — application page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Skills",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-bc03d7457a",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Investment",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-c62aa18381",
+      "url": "https://www.gener8tor.com/apply",
+      "title": "gener8tor — application page",
+      "excerpt": "identify, build and grow through either a 4 or 7 week free program so as to create wealth and jobs in",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-c95a861fc5",
+      "url": "https://www.gener8tor.com/gener8tor-accelerators-application-thank-you",
+      "title": "gener8tor — application page",
+      "excerpt": "identify, build and grow through either a 4 or 7 week free program so as to create wealth and jobs in",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-ca2ca1b1d5",
+      "url": "https://www.gener8tor.com/faqs",
+      "title": "gener8tor — terms page",
+      "excerpt": "identify, build and grow through either a 4 or 7 week free program so as to create wealth and jobs in",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d38d4bcb25",
+      "url": "https://www.gener8tor.com/news/applications-now-open-for-michigan-founders-fund-pre-accelerator-program-underrepresented-founders-eligible-for-15k-in-grants",
+      "title": "gener8tor — application page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Investment",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d42862856d",
+      "url": "https://www.gener8tor.com/gener8tor-accelerators-application-thank-you",
+      "title": "gener8tor — application page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Investment",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-dd4494f13b",
+      "url": "https://www.gener8tor.com/",
+      "title": "gener8tor — homepage",
+      "excerpt": "through a nationally ranked system and a 12-week investment-for-equity program. Explore programs",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e15305e37a",
+      "url": "https://www.gener8tor.com/investment-accelerators",
+      "title": "gener8tor — terms page",
+      "excerpt": "Login Account Apply The gener8tor Accelerator A 12-week investment-for-equity accelerator with a",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e20cd109ec",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Investment",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-eb0d8679dd",
+      "url": "https://www.gener8tor.com/faqs",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Investment",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ec8fa076d6",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Skills",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f31d0caddc",
+      "url": "https://www.gener8tor.com/skills/learn-how-to-apply-ai",
+      "title": "gener8tor — application page",
+      "excerpt": "members across Wisconsin, no interview required. 3 Week Cohort 9 Hours of Self-Paced Curriculum 3 Live",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-f31f78613b",
+      "url": "https://www.gener8tor.com/",
+      "title": "gener8tor — homepage",
+      "excerpt": "identify, build and grow through either a 4 or 7 week free program so as to create wealth and jobs in",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-f58f110b4e",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas/thank-you",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Investment",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-fbcb428cc4",
+      "url": "https://www.gener8tor.com/faqs",
+      "title": "gener8tor — terms page",
+      "excerpt": "gener8tor's gBETA Accelerators are no-cost, 7-week accelerators to build your company, meet",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-ff340a6558",
+      "url": "https://www.gener8tor.com/investment-accelerators/m-spire",
+      "title": "gener8tor — terms page",
+      "excerpt": "knowledge via a nationally ranked system and a 12-week investment for-equity program. Skills",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-08425b42f3",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "title": "gener8tor — terms page",
+      "excerpt": "info@gener8tor.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-247fec4bd0",
+      "url": "https://www.gener8tor.com/gener8tor-accelerators-application-thank-you",
+      "title": "gener8tor — application page",
       "excerpt": "info@gener8tor.com",
       "page": "application"
     },
     {
+      "id": "check-email-2b7bc61707",
+      "url": "https://www.gener8tor.com/apply",
+      "title": "gener8tor — application page",
+      "excerpt": "info@gener8tor.com",
+      "page": "application"
+    },
+    {
+      "id": "check-email-3b4d6fd7c9",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "info@gener8tor.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-3d65dd90da",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas/thank-you",
+      "title": "gener8tor — terms page",
+      "excerpt": "info@gener8tor.com",
+      "page": "terms"
+    },
+    {
       "id": "check-email-427dfd420c",
       "url": "https://www.gener8tor.com/faqs",
-      "title": "gener8tor — terms page checked by scrape.py",
+      "title": "gener8tor — terms page",
+      "excerpt": "info@gener8tor.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-54d2b7a4f2",
+      "url": "https://www.gener8tor.com/news/applications-now-open-for-michigan-founders-fund-pre-accelerator-program-underrepresented-founders-eligible-for-15k-in-grants",
+      "title": "gener8tor — application page",
+      "excerpt": "info@gener8tor.com",
+      "page": "application"
+    },
+    {
+      "id": "check-email-67ff6b073a",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "info@gener8tor.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-9146220673",
+      "url": "https://www.gener8tor.com/investment-accelerators",
+      "title": "gener8tor — terms page",
+      "excerpt": "info@gener8tor.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-a55416ff36",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
       "excerpt": "info@gener8tor.com",
       "page": "terms"
     },
     {
       "id": "check-email-ac860ee370",
       "url": "https://www.gener8tor.com/",
-      "title": "gener8tor — homepage checked by scrape.py",
+      "title": "gener8tor — homepage",
       "excerpt": "info@gener8tor.com",
       "page": "details"
     },
     {
-      "id": "check-email-e5e5fa8bea",
-      "url": "https://www.gener8tor.com/about-us",
-      "title": "gener8tor — details page checked by scrape.py",
+      "id": "check-email-b5cec5258d",
+      "url": "https://www.gener8tor.com/skills/learn-how-to-apply-ai",
+      "title": "gener8tor — application page",
       "excerpt": "info@gener8tor.com",
+      "page": "application"
+    },
+    {
+      "id": "check-email-bcef08fc81",
+      "url": "https://www.gener8tor.com/investment-accelerators/cincinnati/thank-you",
+      "title": "gener8tor — terms page",
+      "excerpt": "info@gener8tor.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-c4f5bd5d7c",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas",
+      "title": "gener8tor — terms page",
+      "excerpt": "info@gener8tor.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-de63d7be2c",
+      "url": "https://www.gener8tor.com/investment-accelerators/m-spire",
+      "title": "gener8tor — terms page",
+      "excerpt": "info@gener8tor.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-050f1c1fbc",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "add as part of our investment. Can teams participate in-person, virtually, hybrid? Curql Accelerate is a hybrid program.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-18846b4cdd",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "startups expand abroad through an in-country bootcamp, virtual training and on-ground immersion in the target market.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-1a50184810",
+      "url": "https://www.gener8tor.com/news/applications-now-open-for-michigan-founders-fund-pre-accelerator-program-underrepresented-founders-eligible-for-15k-in-grants",
+      "title": "gener8tor — application page",
+      "excerpt": "throughout the program. The pre-accelerator will be based in-person at Newlab @ Michigan Central in Detroit with flexibility",
+      "page": "application"
+    },
+    {
+      "id": "check-format-1ad6179079",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas",
+      "title": "gener8tor — terms page",
+      "excerpt": "technology. Can teams participate in-person, virtually, or hybrid? The program will be hybrid with some required elements of",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-1c3be4c8f8",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "session. Due to COVID-19, these mentor sessions are virtual so the teams can benefit from your expertise regardless of",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-1c66a13ac3",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "no requirement for relocation. The program will be mostly virtual, aside from some key in-person events in Luxembourg.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-2c41e6411c",
+      "url": "https://www.gener8tor.com/investment-accelerators/m-spire",
+      "title": "gener8tor — terms page",
+      "excerpt": "startups expand abroad through an in-country bootcamp, virtual training and on-ground immersion in the target market.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-2c6b1363f8",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "title": "gener8tor — terms page",
+      "excerpt": "North San Joaquin Valley. Teams will be required to a week in-person for kickoff at the beginning of the program, a 1-week",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-353c3e38f9",
+      "url": "https://www.gener8tor.com/news/applications-now-open-for-michigan-founders-fund-pre-accelerator-program-underrepresented-founders-eligible-for-15k-in-grants",
+      "title": "gener8tor — application page",
+      "excerpt": "startups expand abroad through an in-country bootcamp, virtual training and on-ground immersion in the target market.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-38f738b671",
+      "url": "https://www.gener8tor.com/skills/learn-how-to-apply-ai",
+      "title": "gener8tor — application page",
+      "excerpt": "startups expand abroad through an in-country bootcamp, virtual training and on-ground immersion in the target market.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-3f70f2a27a",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "out of Luxembourg, has a combination of in-person and virtual components. gener8tor prioritizes startups focused on",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-4206431a69",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "this program will be virtually held, there will be a few in-person meetings in Luxembourg. Ideal participants are in the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-44eb698758",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas",
+      "title": "gener8tor — terms page",
+      "excerpt": "in-person, virtually, or hybrid? The program will be hybrid with some required elements of the program to take place",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-4607716282",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "ecosystem. Can teams participate in-person, virtually, hybrid? Startups must participate in-person. What are the terms",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-46663a77be",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "in-person, virtually, hybrid? Curql Accelerate is a hybrid program. Most programming will take place virtually, but",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-4e1741c9ef",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas/thank-you",
+      "title": "gener8tor — terms page",
+      "excerpt": "startups expand abroad through an in-country bootcamp, virtual training and on-ground immersion in the target market.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-54a02d7a28",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "solution that allows students to listen and speak with a virtual language coach in real-time with the Elias Robot app, and",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-68c38f832c",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "title": "gener8tor — terms page",
+      "excerpt": "startups expand abroad through an in-country bootcamp, virtual training and on-ground immersion in the target market.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-68eca068eb",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas",
+      "title": "gener8tor — terms page",
+      "excerpt": "startups expand abroad through an in-country bootcamp, virtual training and on-ground immersion in the target market.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6fe80b0d65",
+      "url": "https://www.gener8tor.com/apply",
+      "title": "gener8tor — application page",
+      "excerpt": "startups expand abroad through an in-country bootcamp, virtual training and on-ground immersion in the target market.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-70b5261ddc",
+      "url": "https://www.gener8tor.com/faqs",
+      "title": "gener8tor — terms page",
+      "excerpt": "startups expand abroad through an in-country bootcamp, virtual training and on-ground immersion in the target market.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-7406a9dca3",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "investment. Can teams participate in-person, virtually, hybrid? Curql Accelerate is a hybrid program. Most programming",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-7902065262",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "The program, based out of Luxembourg, has a combination of in-person and virtual components. gener8tor prioritizes startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-7f59a7f833",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "with credit unions. This program offers a blended virtual and in-person format including three weeklong credit union",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-8425d40443",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "title": "gener8tor — terms page",
+      "excerpt": "the region. Can teams participate in-person, virtually, or hybrid? The program will be hybrid with some required elements of",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-8ec25c8d27",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "the strength of the local ecosystem. Can teams participate in-person, virtually, hybrid? Startups must participate in-person.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-99e26ea482",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "startups expand abroad through an in-country bootcamp, virtual training and on-ground immersion in the target market.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-99fecac8ab",
+      "url": "https://www.gener8tor.com/news/applications-now-open-for-michigan-founders-fund-pre-accelerator-program-underrepresented-founders-eligible-for-15k-in-grants",
+      "title": "gener8tor — application page",
+      "excerpt": "Newlab @ Michigan Central in Detroit with flexibility for virtual sessions. Early-stage founders and entrepreneurs",
+      "page": "application"
+    },
+    {
+      "id": "check-format-9b1a0b96d2",
+      "url": "https://www.gener8tor.com/gener8tor-accelerators-application-thank-you",
+      "title": "gener8tor — application page",
+      "excerpt": "startups expand abroad through an in-country bootcamp, virtual training and on-ground immersion in the target market.",
+      "page": "application"
+    },
+    {
+      "id": "check-format-9b96b2cabd",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas",
+      "title": "gener8tor — terms page",
+      "excerpt": "of sustainable energy technology. Can teams participate in-person, virtually, or hybrid? The program will be hybrid with",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-a4c3ee0ca0",
+      "url": "https://www.gener8tor.com/",
+      "title": "gener8tor — homepage",
+      "excerpt": "startups expand abroad through an in-country bootcamp, virtual training and on-ground immersion in the target market.",
       "page": "details"
+    },
+    {
+      "id": "check-format-b5887e7aca",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "title": "gener8tor — terms page",
+      "excerpt": "in-person, virtually, or hybrid? The program will be hybrid with some required elements of the program to take place",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-b7b653e099",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "costs. http://vestislabs.com CyberSeq CyberSeq leverages Hybrid Quantum Machine Learning to protect Cloud and IoT",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-c06a41cf07",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "credit unions. This program offers a blended virtual and in-person format including three weeklong credit union on-sites.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d399af47ce",
+      "url": "https://www.gener8tor.com/apply",
+      "title": "gener8tor — application page",
+      "excerpt": "Skills Accelerators gener8tor’s Skills Accelerator is a virtual, rapid reskilling program for people looking for jobs in",
+      "page": "application"
+    },
+    {
+      "id": "check-format-d55f29b161",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "in-person, virtually, hybrid? Startups must participate in-person. What are the terms of the $50,000 investment? Selected",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d8f854a330",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "startups expand abroad through an in-country bootcamp, virtual training and on-ground immersion in the target market.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-de9194efea",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "title": "gener8tor — terms page",
+      "excerpt": "biomanufacturing in the region. Can teams participate in-person, virtually, or hybrid? The program will be hybrid with",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-e8956141c4",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "a two-hour session. There will be opportunities to mentor in-person or virtually so the teams can benefit from your expertise",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-f2e28a989f",
+      "url": "https://www.gener8tor.com/investment-accelerators/cincinnati/thank-you",
+      "title": "gener8tor — terms page",
+      "excerpt": "startups expand abroad through an in-country bootcamp, virtual training and on-ground immersion in the target market.",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-f93a5b5ed5",
+      "url": "https://www.gener8tor.com/investment-accelerators",
+      "title": "gener8tor — terms page",
+      "excerpt": "startups expand abroad through an in-country bootcamp, virtual training and on-ground immersion in the target market.",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-0c95870f06",
+      "url": "https://www.gener8tor.com/news/applications-now-open-for-michigan-founders-fund-pre-accelerator-program-underrepresented-founders-eligible-for-15k-in-grants",
+      "title": "gener8tor — application page",
+      "excerpt": "a path for startups from any industry based in Detroit and Southeast Michigan to participate",
+      "page": "application"
+    },
+    {
+      "id": "check-location-4e44399316",
+      "url": "https://www.gener8tor.com/faqs",
+      "title": "gener8tor — terms page",
+      "excerpt": "is gener8tor located? gener8tor is headquartered in Madison, Wisconsin, but we have programming in",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-c000bbaec6",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "Hubspot and Microsoft. Do I have to be located in Luxembourg or relocate to participate? No. This",
+      "page": "terms"
     },
     {
       "id": "check-name-b636f7290d",
       "url": "https://www.gener8tor.com/",
-      "title": "gener8tor — homepage checked by scrape.py",
+      "title": "gener8tor — homepage",
       "excerpt": "gener8tor | Accelerating the Best & Brightest 0 Skip to Content",
       "page": "details"
     },
     {
-      "id": "check-portfolio-2918395d04",
-      "url": "https://www.gener8tor.com/",
-      "title": "gener8tor — homepage checked by scrape.py",
-      "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-3e337acffc",
-      "url": "https://www.gener8tor.com/apply",
-      "title": "gener8tor — application page checked by scrape.py",
-      "excerpt": "Startup → https://www.gener8tor.com/startups",
-      "page": "application"
-    },
-    {
-      "id": "check-portfolio-6a662511d1",
-      "url": "https://www.gener8tor.com/about-us",
-      "title": "gener8tor — details page checked by scrape.py",
-      "excerpt": "Startup → https://www.gener8tor.com/startups",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-6e731182d5",
-      "url": "https://www.gener8tor.com/",
-      "title": "gener8tor — homepage checked by scrape.py",
-      "excerpt": "portfolio companies. → https://www.gener8tor.com/portfolio",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-756067a039",
-      "url": "https://www.gener8tor.com/faqs",
-      "title": "gener8tor — terms page checked by scrape.py",
+      "id": "check-portfolio-057eeaacbf",
+      "url": "https://www.gener8tor.com/investment-accelerators/cincinnati/thank-you",
+      "title": "gener8tor — terms page",
       "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-7bd46f28fa",
-      "url": "https://www.gener8tor.com/about-us",
-      "title": "gener8tor — details page checked by scrape.py",
+      "id": "check-portfolio-07b5d463c6",
+      "url": "https://www.gener8tor.com/gener8tor-accelerators-application-thank-you",
+      "title": "gener8tor — application page",
+      "excerpt": "Startup → https://www.gener8tor.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-11d4a8446c",
+      "url": "https://www.gener8tor.com/investment-accelerators/cincinnati/thank-you",
+      "title": "gener8tor — terms page",
       "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-1563651156",
+      "url": "https://www.gener8tor.com/investment-accelerators/m-spire",
+      "title": "gener8tor — terms page",
+      "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-177215c5c4",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "Startup → https://www.gener8tor.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-19a1793755",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas/thank-you",
+      "title": "gener8tor — terms page",
+      "excerpt": "Startup → https://www.gener8tor.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-1e335bdb40",
+      "url": "https://www.gener8tor.com/skills/learn-how-to-apply-ai",
+      "title": "gener8tor — application page",
+      "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-25cf17ca4e",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "title": "gener8tor — terms page",
+      "excerpt": "Startup → https://www.gener8tor.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2918395d04",
+      "url": "https://www.gener8tor.com/",
+      "title": "gener8tor — homepage",
+      "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-3aa35a6211",
+      "url": "https://www.gener8tor.com/news/applications-now-open-for-michigan-founders-fund-pre-accelerator-program-underrepresented-founders-eligible-for-15k-in-grants",
+      "title": "gener8tor — application page",
+      "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3e337acffc",
+      "url": "https://www.gener8tor.com/apply",
+      "title": "gener8tor — application page",
+      "excerpt": "Startup → https://www.gener8tor.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-474a51ba88",
+      "url": "https://www.gener8tor.com/investment-accelerators",
+      "title": "gener8tor — terms page",
+      "excerpt": "portfolio companies. → https://www.gener8tor.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-4fec4b139d",
+      "url": "https://www.gener8tor.com/news/applications-now-open-for-michigan-founders-fund-pre-accelerator-program-underrepresented-founders-eligible-for-15k-in-grants",
+      "title": "gener8tor — application page",
+      "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-500fe729ee",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas",
+      "title": "gener8tor — terms page",
+      "excerpt": "Startup → https://www.gener8tor.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-64d571d59a",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas",
+      "title": "gener8tor — terms page",
+      "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6d4d31d274",
+      "url": "https://www.gener8tor.com/investment-accelerators",
+      "title": "gener8tor — terms page",
+      "excerpt": "Startup → https://www.gener8tor.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6de104b880",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas/thank-you",
+      "title": "gener8tor — terms page",
+      "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6e731182d5",
+      "url": "https://www.gener8tor.com/",
+      "title": "gener8tor — homepage",
+      "excerpt": "portfolio companies. → https://www.gener8tor.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6ecf1e4bc0",
+      "url": "https://www.gener8tor.com/news/applications-now-open-for-michigan-founders-fund-pre-accelerator-program-underrepresented-founders-eligible-for-15k-in-grants",
+      "title": "gener8tor — application page",
+      "excerpt": "startups → https://www.gener8tor.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-756067a039",
+      "url": "https://www.gener8tor.com/faqs",
+      "title": "gener8tor — terms page",
+      "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-82893f7514",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "Startup → https://www.gener8tor.com/startups",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-864c0ed78e",
       "url": "https://www.gener8tor.com/apply",
-      "title": "gener8tor — application page checked by scrape.py",
+      "title": "gener8tor — application page",
       "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
       "page": "application"
     },
     {
       "id": "check-portfolio-87eeabc32d",
       "url": "https://www.gener8tor.com/",
-      "title": "gener8tor — homepage checked by scrape.py",
+      "title": "gener8tor — homepage",
       "excerpt": "Startup → https://www.gener8tor.com/startups",
       "page": "details"
     },
     {
-      "id": "check-portfolio-9de5d39dc3",
-      "url": "https://www.gener8tor.com/faqs",
-      "title": "gener8tor — terms page checked by scrape.py",
-      "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
+      "id": "check-portfolio-95bdc7617e",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-db6877a747",
-      "url": "https://www.gener8tor.com/about-us",
-      "title": "gener8tor — details page checked by scrape.py",
+      "id": "check-portfolio-998aad3acc",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
       "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
-      "page": "details"
+      "page": "terms"
     },
     {
-      "id": "check-portfolio-eb02d0d33f",
-      "url": "https://www.gener8tor.com/about-us",
-      "title": "gener8tor — details page checked by scrape.py",
-      "excerpt": "See our Portfolio → https://www.gener8tor.com/portfolio",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-f5297e1015",
-      "url": "https://www.gener8tor.com/",
-      "title": "gener8tor — homepage checked by scrape.py",
-      "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-fa0292d649",
-      "url": "https://www.gener8tor.com/apply",
-      "title": "gener8tor — application page checked by scrape.py",
+      "id": "check-portfolio-99a94ce14a",
+      "url": "https://www.gener8tor.com/gener8tor-accelerators-application-thank-you",
+      "title": "gener8tor — application page",
       "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
       "page": "application"
     },
     {
+      "id": "check-portfolio-9de5d39dc3",
+      "url": "https://www.gener8tor.com/faqs",
+      "title": "gener8tor — terms page",
+      "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-9e4996faa2",
+      "url": "https://www.gener8tor.com/investment-accelerators/m-spire",
+      "title": "gener8tor — terms page",
+      "excerpt": "Startup → https://www.gener8tor.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a0921a8715",
+      "url": "https://www.gener8tor.com/skills/learn-how-to-apply-ai",
+      "title": "gener8tor — application page",
+      "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-ab05fa17ae",
+      "url": "https://www.gener8tor.com/gener8tor-accelerators-application-thank-you",
+      "title": "gener8tor — application page",
+      "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b1aa713833",
+      "url": "https://www.gener8tor.com/skills/learn-how-to-apply-ai",
+      "title": "gener8tor — application page",
+      "excerpt": "Startup → https://www.gener8tor.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b82a118e99",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "title": "gener8tor — terms page",
+      "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b8311f0d69",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas/thank-you",
+      "title": "gener8tor — terms page",
+      "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b9fc1a5436",
+      "url": "https://www.gener8tor.com/investment-accelerators",
+      "title": "gener8tor — terms page",
+      "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-bdb82bdbd5",
+      "url": "https://www.gener8tor.com/investment-accelerators",
+      "title": "gener8tor — terms page",
+      "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c0545a1722",
+      "url": "https://www.gener8tor.com/investment-accelerators/m-spire",
+      "title": "gener8tor — terms page",
+      "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c9afa235aa",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas",
+      "title": "gener8tor — terms page",
+      "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-cd82b06e25",
+      "url": "https://www.gener8tor.com/news/applications-now-open-for-michigan-founders-fund-pre-accelerator-program-underrepresented-founders-eligible-for-15k-in-grants",
+      "title": "gener8tor — application page",
+      "excerpt": "Startup → https://www.gener8tor.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-cdbe9bb61d",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ce2fce3a3c",
+      "url": "https://www.gener8tor.com/investment-accelerators/cincinnati/thank-you",
+      "title": "gener8tor — terms page",
+      "excerpt": "Startup → https://www.gener8tor.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e2d904dbf3",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-eb3ae0b85e",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "Startup → https://www.gener8tor.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f1aefc5db0",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f5297e1015",
+      "url": "https://www.gener8tor.com/",
+      "title": "gener8tor — homepage",
+      "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f58d8740b4",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "title": "gener8tor — terms page",
+      "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-fa0292d649",
+      "url": "https://www.gener8tor.com/apply",
+      "title": "gener8tor — application page",
+      "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-fe98e0088a",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-fef792f2c6",
       "url": "https://www.gener8tor.com/faqs",
-      "title": "gener8tor — terms page checked by scrape.py",
+      "title": "gener8tor — terms page",
       "excerpt": "Startup → https://www.gener8tor.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-rolling-01192dba97",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "Application Deadline {{ item['fields']['Application Due'] | moment }} TBD (Rolling Applications) Program Kickoff {{ item['fields']['Program Kickoff'] | moment }} TBD Program",
+      "page": "terms"
+    },
+    {
+      "id": "check-rolling-33c87d6d5e",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas",
+      "title": "gener8tor — terms page",
+      "excerpt": "Application Deadline {{ item['fields']['Application Due'] | moment }} TBD (Rolling Applications) Program Kickoff {{ item['fields']['Program Kickoff'] | moment }} TBD Program",
+      "page": "terms"
+    },
+    {
+      "id": "check-rolling-622c3b6dcb",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "Application Deadline {{ item['fields']['Application Due'] | moment }} TBD (Rolling Applications) Program Kickoff {{ item['fields']['Program Kickoff'] | moment }} TBD Program",
+      "page": "terms"
+    },
+    {
+      "id": "check-rolling-8ea7fda15b",
+      "url": "https://www.gener8tor.com/apply",
+      "title": "gener8tor — application page",
+      "excerpt": "Application Deadline {{ item['fields']['Application Due'] | moment }} TBD (Rolling Applications) Program Kickoff {{ item['fields']['Program Kickoff'] | moment }} TBD Program",
+      "page": "application"
+    },
+    {
+      "id": "check-rolling-cb83290c0e",
+      "url": "https://www.gener8tor.com/investment-accelerators",
+      "title": "gener8tor — terms page",
+      "excerpt": "Application Deadline {{ item['fields']['Application Due'] | moment }} TBD (Rolling Applications) Program Kickoff {{ item['fields']['Program Kickoff'] | moment }} TBD Program",
+      "page": "terms"
+    },
+    {
+      "id": "check-rolling-e523943922",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "title": "gener8tor — terms page",
+      "excerpt": "Application Deadline {{ item['fields']['Application Due'] | moment }} TBD (Rolling Applications) Program Kickoff {{ item['fields']['Program Kickoff'] | moment }} TBD Program",
+      "page": "terms"
+    },
+    {
+      "id": "check-rolling-eb86c65013",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "Application Deadline {{ item['fields']['Application Due'] | moment }} TBD (Rolling Applications) Program Kickoff {{ item['fields']['Program Kickoff'] | moment }} TBD Program",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-026bacb5a2",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "title": "gener8tor — terms page",
+      "excerpt": "Explore Other Programming → https://www.gener8tor.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-12e9843175",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "title": "gener8tor — terms page",
+      "excerpt": "Apply → https://www.gener8tor.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1cfcb35519",
+      "url": "https://www.gener8tor.com/gener8tor-accelerators-application-thank-you",
+      "title": "gener8tor — application page",
+      "excerpt": "Apply → https://www.gener8tor.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-32c7444640",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas",
+      "title": "gener8tor — terms page",
+      "excerpt": "Apply → https://www.gener8tor.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-3da6e10858",
+      "url": "https://www.gener8tor.com/investment-accelerators",
+      "title": "gener8tor — terms page",
+      "excerpt": "Apply → https://www.gener8tor.com/apply",
       "page": "terms"
     },
     {
       "id": "check-route-3f564118ec",
       "url": "https://www.gener8tor.com/faqs",
-      "title": "gener8tor — terms page checked by scrape.py",
+      "title": "gener8tor — terms page",
       "excerpt": "apply for programming → https://www.gener8tor.com/skills",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-4042d8431e",
+      "url": "https://www.gener8tor.com/investment-accelerators/cincinnati/thank-you",
+      "title": "gener8tor — terms page",
+      "excerpt": "Apply → https://www.gener8tor.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-42d046dab4",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "Apply for Spring 2027 Program → https://airtable.com/appSgGV5aIBGd3vQv/shrx2brvGBLQbaVen",
       "page": "terms"
     },
     {
       "id": "check-route-473c10123a",
       "url": "https://www.gener8tor.com/faqs",
-      "title": "gener8tor — terms page checked by scrape.py",
+      "title": "gener8tor — terms page",
       "excerpt": "apply for our programs → https://www.gener8tor.com/apply",
       "page": "terms"
     },
     {
+      "id": "check-route-4f1a86aa89",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas",
+      "title": "gener8tor — terms page",
+      "excerpt": "APPLY NOW → https://airtable.com/appSgGV5aIBGd3vQv/shrkUMlgJ2lMB4uq9",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-501bdf2312",
+      "url": "https://www.gener8tor.com/news/applications-now-open-for-michigan-founders-fund-pre-accelerator-program-underrepresented-founders-eligible-for-15k-in-grants",
+      "title": "gener8tor — application page",
+      "excerpt": "Apply → https://www.gener8tor.com/apply",
+      "page": "application"
+    },
+    {
       "id": "check-route-5ebb8fbd01",
       "url": "https://www.gener8tor.com/faqs",
-      "title": "gener8tor — terms page checked by scrape.py",
+      "title": "gener8tor — terms page",
       "excerpt": "Apply → https://www.gener8tor.com/apply",
       "page": "terms"
     },
     {
-      "id": "check-route-8ea6258b11",
-      "url": "https://www.gener8tor.com/about-us",
-      "title": "gener8tor — details page checked by scrape.py",
+      "id": "check-route-61c5f41efe",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "I'm ready to apply → https://airtable.com/appSgGV5aIBGd3vQv/shrx2brvGBLQbaVen",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-6411e29908",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas",
+      "title": "gener8tor — terms page",
+      "excerpt": "Explore Other Programming → https://www.gener8tor.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-6d398323f8",
+      "url": "https://www.gener8tor.com/investment-accelerators/m-spire",
+      "title": "gener8tor — terms page",
       "excerpt": "Apply → https://www.gener8tor.com/apply",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-route-76aee86c30",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "Explore Other Programming → https://www.gener8tor.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-812c80ffd7",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "Apply → https://www.gener8tor.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-84dd7e0e7d",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "Explore Other Programming → https://www.gener8tor.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-9d033c4902",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "Explore Other Programming → https://www.gener8tor.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-a20aa00ee4",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas/thank-you",
+      "title": "gener8tor — terms page",
+      "excerpt": "Apply → https://www.gener8tor.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-aa22a6720e",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "We strongly encourage diverse and underrepresented founders to apply. → https://airtable.com/shrKUBSISabDi4x6H",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-bc91b8009f",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "Apply → https://www.gener8tor.com/apply",
+      "page": "terms"
     },
     {
       "id": "check-route-c7364c587f",
       "url": "https://www.gener8tor.com/",
-      "title": "gener8tor — homepage checked by scrape.py",
+      "title": "gener8tor — homepage",
       "excerpt": "Investment Accelerators → https://www.gener8tor.com/investment-accelerators",
-      "page": "details"
-    },
-    {
-      "id": "check-route-cc508ea155",
-      "url": "https://www.gener8tor.com/about-us",
-      "title": "gener8tor — details page checked by scrape.py",
-      "excerpt": "I'm ready to apply → https://www.gener8tor.com/apply",
       "page": "details"
     },
     {
       "id": "check-route-d6fed3232e",
       "url": "https://www.gener8tor.com/",
-      "title": "gener8tor — homepage checked by scrape.py",
+      "title": "gener8tor — homepage",
       "excerpt": "Apply → https://www.gener8tor.com/apply",
       "page": "details"
+    },
+    {
+      "id": "check-route-e39f26b20e",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "Apply → https://www.gener8tor.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-e5a1571eb8",
+      "url": "https://www.gener8tor.com/skills/learn-how-to-apply-ai",
+      "title": "gener8tor — application page",
+      "excerpt": "Apply → https://www.gener8tor.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-status-08a3832e7e",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "title": "gener8tor — terms page",
+      "excerpt": "Kickoff'] | moment }} TBD Program End {{ item['fields']['Program End'] | moment }} TBD Apply Now We are not currently accepting applications for this program. Stay tuned. While there aren't any upcoming programs for this location at the moment,",
+      "page": "terms"
+    },
+    {
+      "id": "check-status-0da10b3dad",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "title": "gener8tor — terms page",
+      "excerpt": "Kickoff'] | moment }} TBD Program End {{ item['fields']['Program End'] | moment }} TBD Apply Now We are not currently accepting applications for this program. Stay tuned. While there aren't any upcoming programs for this location at the moment,",
+      "page": "terms"
+    },
+    {
+      "id": "check-status-17c5863add",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "title": "gener8tor — terms page",
+      "excerpt": "Kickoff'] | moment }} TBD Program End {{ item['fields']['Program End'] | moment }} TBD Apply Now We are not currently accepting applications for this program. Stay tuned. While there aren't any upcoming programs for this location at the moment,",
+      "page": "terms"
+    },
+    {
+      "id": "check-status-22c3df9178",
+      "url": "https://www.gener8tor.com/investment-accelerators/cincinnati/thank-you",
+      "title": "gener8tor — terms page",
+      "excerpt": "a Plane Office Hours Login Account Apply Thank you. Your application was received. We will reach out after applications are closed to set up interviews. We look forward to getting to know you. Join our programs based on geography,",
+      "page": "terms"
+    },
+    {
+      "id": "check-status-41da55664b",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "Kickoff'] | moment }} TBD Program End {{ item['fields']['Program End'] | moment }} TBD Apply Now We are not currently accepting applications for this program. Stay tuned. While there aren't any upcoming programs for this location at the moment,",
+      "page": "terms"
+    },
+    {
+      "id": "check-status-5e9dda4978",
+      "url": "https://www.gener8tor.com/gener8tor-accelerators-application-thank-you",
+      "title": "gener8tor — application page",
+      "excerpt": "a Plane Office Hours Login Account Apply Thank you. Your application was received. We will reach out after applications are closed to set up interviews. We look forward to getting to know you. Join our programs based on geography,",
+      "page": "application"
+    },
+    {
+      "id": "check-status-5fc6e0df9a",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas",
+      "title": "gener8tor — terms page",
+      "excerpt": "Kickoff'] | moment }} TBD Program End {{ item['fields']['Program End'] | moment }} TBD Apply Now We are not currently accepting applications for this program. Stay tuned. While there aren't any upcoming programs for this location at the moment,",
+      "page": "terms"
+    },
+    {
+      "id": "check-status-76d2ed37e0",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "title": "gener8tor — terms page",
+      "excerpt": "will be mostly virtual, aside from some key in-person events in Luxembourg. Program Eligibility Details Applications are open to teams based anywhere in the EU. While this program will be virtually held, there will be a few in-person",
+      "page": "terms"
+    },
+    {
+      "id": "check-status-b41bf2b5de",
+      "url": "https://www.gener8tor.com/news/applications-now-open-for-michigan-founders-fund-pre-accelerator-program-underrepresented-founders-eligible-for-15k-in-grants",
+      "title": "gener8tor — application page",
+      "excerpt": "Applications Now Open for Michigan Founders Fund Pre-Accelerator Program, Underrepresented Founders Eligible for $15K in Grants —",
+      "page": "application"
+    },
+    {
+      "id": "check-status-cd562f5d61",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas/thank-you",
+      "title": "gener8tor — terms page",
+      "excerpt": "a Plane Office Hours Login Account Apply Thank you. Your application was received. We will reach out after applications are closed to set up interviews. We look forward to getting to know you. Join our programs based on geography,",
+      "page": "terms"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-3dd0745e02",
+      "url": "https://www.gener8tor.com/",
+      "page": "details",
+      "excerpt": "gener8tor | Accelerating the Best & Brightest 0 Skip to Content Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Folder: Accelerators Back Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Folder: Industries Back Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors Folder: I am a... Back I am a Startup I am a Career Seeker I am a Creative I am a Corporation"
+    },
+    {
+      "id": "check-page-85aa7ee09e",
+      "url": "https://www.gener8tor.com/apply",
+      "page": "application",
+      "excerpt": "Apply to a gener8tor Program — gener8tor 0 Skip to Content Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Folder: Accelerators Back Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Folder: Industries Back Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors Folder: I am a... Back I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am"
+    },
+    {
+      "id": "check-page-50961e8533",
+      "url": "https://www.gener8tor.com/gener8tor-accelerators-application-thank-you",
+      "page": "application",
+      "excerpt": "gener8tor Accelerators Application - Thank you! — gener8tor 0 Skip to Content Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Folder: Accelerators Back Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Folder: Industries Back Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors Folder: I am a... Back I am a Startup I am a Career Seeker I am a Creative I am"
+    },
+    {
+      "id": "check-page-fb293d667e",
+      "url": "https://www.gener8tor.com/news/applications-now-open-for-michigan-founders-fund-pre-accelerator-program-underrepresented-founders-eligible-for-15k-in-grants",
+      "page": "application",
+      "excerpt": "Applications Now Open for Michigan Founders Fund Pre-Accelerator Program, Underrepresented Founders Eligible for $15K in Grants — gener8tor 0 Skip to Content Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Folder: Accelerators Back Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Folder: Industries Back Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors"
+    },
+    {
+      "id": "check-page-327cba51d8",
+      "url": "https://www.gener8tor.com/skills/learn-how-to-apply-ai",
+      "page": "application",
+      "excerpt": "gener8tor Skills Learn How to Apply AI — gener8tor 0 Skip to Content Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Folder: Accelerators Back Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Folder: Industries Back Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors Folder: I am a... Back I am a Startup I am a Career Seeker I am a Creative I am a"
+    },
+    {
+      "id": "check-page-965e179e59",
+      "url": "https://www.gener8tor.com/faqs",
+      "page": "terms",
+      "excerpt": "Frequently Asked Questions — gener8tor 0 Skip to Content Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Folder: Accelerators Back Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Folder: Industries Back Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors Folder: I am a... Back I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a"
+    },
+    {
+      "id": "check-page-b4f73fe8f4",
+      "url": "https://www.gener8tor.com/investment-accelerators",
+      "page": "terms",
+      "excerpt": "Investment Accelerators at gener8tor — gener8tor 0 Skip to Content Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Folder: Accelerators Back Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Folder: Industries Back Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors Folder: I am a... Back I am a Startup I am a Career Seeker I am a Creative I am a"
+    },
+    {
+      "id": "check-page-c2c161b879",
+      "url": "https://www.gener8tor.com/investment-accelerators/beam-circular",
+      "page": "terms",
+      "excerpt": "BEAM Circular Accelerator powered by gener8tor — gener8tor 0 Skip to Content Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Folder: Accelerators Back Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Folder: Industries Back Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors Folder: I am a... Back I am a Startup I am a Career Seeker I am a Creative I am"
+    },
+    {
+      "id": "check-page-e2ed66f1a4",
+      "url": "https://www.gener8tor.com/investment-accelerators/cincinnati/thank-you",
+      "page": "terms",
+      "excerpt": "Thank you for applying to a gener8tor program! — gener8tor 0 Skip to Content Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Folder: Accelerators Back Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Folder: Industries Back Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors Folder: I am a... Back I am a Startup I am a Career Seeker I am a Creative I am"
+    },
+    {
+      "id": "check-page-fdc4dbd4fb",
+      "url": "https://www.gener8tor.com/investment-accelerators/curql",
+      "page": "terms",
+      "excerpt": "Curql Accelerate Powered by gener8tor — gener8tor 0 Skip to Content Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Folder: Accelerators Back Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Folder: Industries Back Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors Folder: I am a... Back I am a Startup I am a Career Seeker I am a Creative I am a"
+    },
+    {
+      "id": "check-page-cc73236513",
+      "url": "https://www.gener8tor.com/investment-accelerators/hudsonalpha-agtech",
+      "page": "terms",
+      "excerpt": "HudsonAlpha AgTech Accelerator — gener8tor 0 Skip to Content Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Folder: Accelerators Back Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Folder: Industries Back Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors Folder: I am a... Back I am a Startup I am a Career Seeker I am a Creative I am a Corporation I"
+    },
+    {
+      "id": "check-page-d14b058c6d",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas",
+      "page": "terms",
+      "excerpt": "gener8tor Las Vegas Accelerator — gener8tor 0 Skip to Content Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Folder: Accelerators Back Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Folder: Industries Back Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors Folder: I am a... Back I am a Startup I am a Career Seeker I am a Creative I am a Corporation I"
+    },
+    {
+      "id": "check-page-2ed2c6098d",
+      "url": "https://www.gener8tor.com/investment-accelerators/las-vegas/thank-you",
+      "page": "terms",
+      "excerpt": "Thank you for applying to a gener8tor program! — gener8tor 0 Skip to Content Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Folder: Accelerators Back Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Folder: Industries Back Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors Folder: I am a... Back I am a Startup I am a Career Seeker I am a Creative I am"
+    },
+    {
+      "id": "check-page-62d619aaba",
+      "url": "https://www.gener8tor.com/investment-accelerators/luxembourg",
+      "page": "terms",
+      "excerpt": "gener8tor Luxembourg — gener8tor 0 Skip to Content Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Folder: Accelerators Back Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Folder: Industries Back Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors Folder: I am a... Back I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a"
+    },
+    {
+      "id": "check-page-26ce9d5505",
+      "url": "https://www.gener8tor.com/investment-accelerators/m-spire",
+      "page": "terms",
+      "excerpt": "M-SPIRE Sustainable Plastics Accelerator — gener8tor 0 Skip to Content Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Accelerators Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Industries Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors I am a... I am a Startup I am a Career Seeker I am a Creative I am a Corporation I am a Mentor ABOUT US More News & Stories Careers Contact Us FAQs Innovators on a Plane Office Hours Login Account Apply Open Menu Close Menu Folder: Accelerators Back Investment Accelerators Free Accelerators Skills Accelerators Creative Accelerators Sustainability Accelerators gATLAS Folder: Industries Back Sustainability Insurance & Wealth Agriculture Manufacturing Healthcare Education & Workforce Locations Investors Folder: I am a... Back I am a Startup I am a Career Seeker I am a Creative I am a"
     }
   ],
   "findings": {
@@ -207,6 +1703,18 @@
       {
         "value": "https://www.gener8tor.com/skills",
         "evidenceId": "check-route-3f564118ec"
+      },
+      {
+        "value": "https://airtable.com/appSgGV5aIBGd3vQv/shrx2brvGBLQbaVen",
+        "evidenceId": "check-route-42d046dab4"
+      },
+      {
+        "value": "https://airtable.com/appSgGV5aIBGd3vQv/shrkUMlgJ2lMB4uq9",
+        "evidenceId": "check-route-4f1a86aa89"
+      },
+      {
+        "value": "https://airtable.com/shrKUBSISabDi4x6H",
+        "evidenceId": "check-route-aa22a6720e"
       }
     ],
     "applicationUrl": [
@@ -215,11 +1723,177 @@
         "evidenceId": "check-route-c7364c587f"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": false,
+        "evidenceId": "check-status-5e9dda4978"
+      },
+      {
+        "value": true,
+        "evidenceId": "check-status-b41bf2b5de"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-8ea7fda15b"
+      }
+    ],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12",
+        "evidenceId": "check-duration-dd4494f13b"
+      },
+      {
+        "value": "7",
+        "evidenceId": "check-duration-2ae92d7d5b"
+      },
+      {
+        "value": "4",
+        "evidenceId": "check-duration-3095fe0d3e"
+      },
+      {
+        "value": "3",
+        "evidenceId": "check-duration-87ccd9782c"
+      },
+      {
+        "value": "1",
+        "evidenceId": "check-duration-426f3b6485"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-a4c3ee0ca0"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-1a50184810"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-8425d40443"
+      }
+    ],
+    "location": [
+      {
+        "value": "Detroit",
+        "evidenceId": "check-location-0c95870f06"
+      },
+      {
+        "value": "Madison",
+        "evidenceId": "check-location-4e44399316"
+      },
+      {
+        "value": "Luxembourg",
+        "evidenceId": "check-location-c000bbaec6"
+      }
+    ],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "founders in Southeast Michigan with concierge coaching and up to $15,000 in non-dilutive grant funding. MFFPA includes a built-in mentor and",
+        "evidenceId": "check-deal-fd4694eaa6"
+      },
+      {
+        "value": "Programming Program Features Investment Selected teams will receive $30K in non-dilutive funding with potential for an additional $100K of",
+        "evidenceId": "check-deal-4fe0476405"
+      },
+      {
+        "value": "$30K in non-dilutive funding with potential for an additional $100K of equity investment. More mature companies may seek higher levels",
+        "evidenceId": "check-deal-c1332b8d6a"
+      },
+      {
+        "value": "HudsonAlpha AgTech Accelerator Powered by gener8tor invests up to $100K in ten high-growth startups per year (cohorts of five) working at",
+        "evidenceId": "check-deal-9082ad2c1f"
+      },
+      {
+        "value": "to gener8tor’s global network of mentors and investors. Investment $50,000 for 5% of the Common Equity (Required to Participate); $50,000",
+        "evidenceId": "check-deal-9d841208f5"
+      },
+      {
+        "value": "$50,000 for 5% of the Common Equity (Required to Participate); $50,000 Convertible Note (Optional) for $100,000 Total Initial Investment.",
+        "evidenceId": "check-deal-1bc0b99841"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "15000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-fd4694eaa6"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "30000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-4fe0476405"
+      },
+      {
+        "value": {
+          "kind": "equity",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Equity",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-c1332b8d6a"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-9082ad2c1f"
+      },
+      {
+        "value": {
+          "kind": "equity",
+          "amount": "50000",
+          "currency": "USD",
+          "equity": "5%",
+          "label": "Equity",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-9d841208f5"
+      },
+      {
+        "value": {
+          "kind": "convertible",
+          "amount": "50000",
+          "currency": "USD",
+          "equity": "5%",
+          "label": "Convertible note",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-1bc0b99841"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://www.gener8tor.com/startups",

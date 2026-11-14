@@ -1,12 +1,20 @@
 {
   "programId": "dreamit",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://dreamit.com/portfolio",
-      "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
+      "url": "https://dreamit.com/blogs/announcing-the-17-new-startups-in-dreamit-ventures-securetech-healthtech-and-urbantech-programs",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dreamit.com/events/cares-act-ppp-and-startups-important-updates-for-founders",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -22,6 +30,54 @@
       "url": "https://dreamit.com/pitch-us",
       "page": "details",
       "anchor": "Tell Us About Your Company",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dreamit.com/portfolio",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dreamit.com/portfolio?35fc9c13_page=2",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dreamit.com/portfolio?39272b1e_page=2",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dreamit.com/portfolio?583183c2_page=2",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://dreamit.com/portfolio?5c29b4ef_page=2",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.dreamit.com/portfolio",
+      "page": "portfolio",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

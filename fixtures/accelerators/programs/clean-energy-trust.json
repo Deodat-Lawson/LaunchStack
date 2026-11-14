@@ -9,14 +9,14 @@
   "websiteUrl": "https://evergreeninno.org/",
   "applyUrl": "https://evergreeninno.org/apply",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Catalyzing climate innovation | Evergreen Climate Innovations Skip to main content Evergreen advances climate tech in the Greater Midwest We support startups bringing impactful climate technologies to market. We make seed investments and provide hands-on support to entrepreneurs. We expand access to innovation by cultivating an ecosystem of investors, corporate partners, donors, and collaborators. About this image SEM image of NanoGraf Corporation's G6 Powder, which reduces swelling and capacity loss during battery cycling. Our portfolio provides solutions for the climate emergency For over a decade, we’ve worked to help climate innovators connect to funding, demo opportunities, customers, and investors. Why We Invest Our Portfolio Discover our portfolio of startups tackling climate change No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Evergreen Climate Innovations supports entrepreneurs and startups that are bringing impactful climate technologies to market.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "We support startups bringing impactful climate technologies to market. We make seed investments and provide hands-on support to entrepreneurs. We expand access to innovation by cultivating an ecosystem of investors, corporate partners, donors, and collaborators.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "clean-energy-trust-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://evergreeninno.org/apply",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

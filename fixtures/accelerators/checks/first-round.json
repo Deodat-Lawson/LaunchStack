@@ -1,73 +1,325 @@
 {
   "programId": "first-round",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
     "https://www.firstround.com/",
-    "https://www.firstround.com/angel-track"
+    "https://firstround.com/at-investment",
+    "https://firstround.com/terms",
+    "https://www.firstround.com/angel-track",
+    "https://review.firstround.com/non-obvious-signs-of-early-startup-traction-and-how-to-spot-them/",
+    "https://www.firstround.com/terms",
+    "https://review.firstround.com/the-founder-dating-playbook-heres-the-process-i-used-to-find-my-co-founder/",
+    "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
+    "https://firstround.com/review/founder-exposed-opening-up-about-startup-failures-and-vulnerability/?ref=review.firstround.com",
+    "https://review.firstround.com/about/",
+    "https://firstround.com/companies/alma",
+    "https://firstround.com/companies/clay",
+    "https://firstround.com/companies/evolutioniq",
+    "https://firstround.com/companies/fal",
+    "https://firstround.com/companies/k2space"
   ],
   "evidence": [
     {
-      "id": "check-deal-8118a9914b",
-      "url": "https://www.firstround.com/",
-      "title": "First Round — homepage checked by scrape.py",
-      "excerpt": "First Round participate in? No round is too small for us to invest. Our average initial investment is $3.5 million, but we’ve invested in rounds as small as $100,000 and as large as $20 million. Regardless of check size, you get the same First Round experience. Do partners take board seats? Yes, we often do. It’s not",
+      "id": "check-deal-aa03fe944a",
+      "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
+      "title": "First Round — program page",
+      "excerpt": "investment is $3.5 million, but we’ve invested in rounds as small as $100,000 and as large as $20 million. Regardless of check size, you get the",
       "page": "details"
     },
     {
-      "id": "check-deal-c111a0a7c5",
+      "id": "check-deal-f99f7b7312",
       "url": "https://www.firstround.com/",
-      "title": "First Round — homepage checked by scrape.py",
-      "excerpt": "rounds do you participate in? No round is too small for us to invest. Our average initial investment is $3.5 million, but we’ve invested in rounds as small as $100,000 and as large as $20 million. Regardless of check size, you get the same First Round experience. Will you only invest if you can lead? No. We don't care about",
+      "title": "First Round — homepage",
+      "excerpt": "investment is $3.5 million, but we’ve invested in rounds as small as $100,000 and as large as $20 million. Regardless of check size, you get the",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e76753d973",
+      "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
+      "title": "First Round — program page",
+      "excerpt": "our approach here , but essentially, every 4 to 6 weeks, we go deep with a founder on a big challenge.",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-f6b24d5721",
+      "url": "https://www.firstround.com/",
+      "title": "First Round — homepage",
+      "excerpt": "our approach here , but essentially, every 4 to 6 weeks, we go deep with a founder on a big challenge.",
+      "page": "details"
+    },
+    {
+      "id": "check-format-27590b6176",
+      "url": "https://review.firstround.com/the-founder-dating-playbook-heres-the-process-i-used-to-find-my-co-founder/",
+      "title": "First Round — program page",
+      "excerpt": "“I was ghosted once,” she laughs. “With others, we had in-person convos or phone calls. There are lots of ways people can",
+      "page": "details"
+    },
+    {
+      "id": "check-format-297fc6d6d5",
+      "url": "https://www.firstround.com/angel-track",
+      "title": "First Round — terms page",
+      "excerpt": "bring Angel Track cohort members together in an immersive, in-person retreat, so you'll need to be able to attend that. It’s",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-405b21acf9",
+      "url": "https://firstround.com/companies/alma",
+      "title": "First Round — portfolio page",
+      "excerpt": "pivot from physical co-practicing spaces to a fully virtual platform: Read Alma's Path to PMF As the VP of Care",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-783463cc99",
+      "url": "https://review.firstround.com/the-founder-dating-playbook-heres-the-process-i-used-to-find-my-co-founder/",
+      "title": "First Round — program page",
+      "excerpt": "miss some context and nuance. If you discuss the answers in person, that can take at least six to 10 hours. I’d never",
       "page": "details"
     },
     {
       "id": "check-name-4f6080905e",
       "url": "https://www.firstround.com/",
-      "title": "First Round — homepage checked by scrape.py",
+      "title": "First Round — homepage",
       "excerpt": "Home | First Round Home Companies How we work Team Who we back PMF Method The",
       "page": "details"
     },
     {
+      "id": "check-portfolio-034782776c",
+      "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
+      "title": "First Round — program page",
+      "excerpt": "Imagine if the web was built with, by, and for AIs. → https://www.firstround.com/companies?category=all&q=parallel",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-109d97b6e8",
+      "url": "https://firstround.com/companies/k2space",
+      "title": "First Round — portfolio page",
+      "excerpt": "Companies → https://www.firstround.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-1537765979",
+      "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
+      "title": "First Round — program page",
+      "excerpt": "Companies → https://www.firstround.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-189540acac",
+      "url": "https://firstround.com/companies/fal",
+      "title": "First Round — portfolio page",
+      "excerpt": "Companies → https://www.firstround.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-3feb03bd8f",
+      "url": "https://firstround.com/companies/alma",
+      "title": "First Round — portfolio page",
+      "excerpt": "Companies → https://www.firstround.com/companies",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-5b07864287",
       "url": "https://www.firstround.com/",
-      "title": "First Round — homepage checked by scrape.py",
+      "title": "First Round — homepage",
       "excerpt": "Companies → https://www.firstround.com/companies",
       "page": "details"
     },
     {
       "id": "check-portfolio-63a4dab88a",
       "url": "https://www.firstround.com/",
-      "title": "First Round — homepage checked by scrape.py",
+      "title": "First Round — homepage",
       "excerpt": "Imagine if the web was built with, by, and for AIs. → https://www.firstround.com/companies?category=all&q=parallel",
       "page": "details"
     },
     {
       "id": "check-portfolio-69ade25b4d",
       "url": "https://www.firstround.com/angel-track",
-      "title": "First Round — terms page checked by scrape.py",
+      "title": "First Round — terms page",
       "excerpt": "Companies → https://www.firstround.com/companies",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-df48af1379",
-      "url": "https://www.firstround.com/",
-      "title": "First Round — homepage checked by scrape.py",
+      "id": "check-portfolio-7579b84f2d",
+      "url": "https://firstround.com/companies/fal",
+      "title": "First Round — portfolio page",
+      "excerpt": "Back to Companies → https://www.firstround.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-7f1fb4580b",
+      "url": "https://www.firstround.com/terms",
+      "title": "First Round — terms page",
+      "excerpt": "Companies → https://www.firstround.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-88443c80a8",
+      "url": "https://firstround.com/companies/clay",
+      "title": "First Round — portfolio page",
+      "excerpt": "Companies → https://www.firstround.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-8ef9f67362",
+      "url": "https://firstround.com/companies/evolutioniq",
+      "title": "First Round — portfolio page",
+      "excerpt": "Back to Companies → https://www.firstround.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-9afe7380b0",
+      "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
+      "title": "First Round — program page",
       "excerpt": "Imagine if any phone could accept credit cards anywhere. → https://www.firstround.com/companies/?category=all&q=square",
       "page": "details"
     },
     {
+      "id": "check-portfolio-9b15cef81d",
+      "url": "https://firstround.com/companies/evolutioniq",
+      "title": "First Round — portfolio page",
+      "excerpt": "Companies → https://www.firstround.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-bd08815119",
+      "url": "https://firstround.com/terms",
+      "title": "First Round — terms page",
+      "excerpt": "Companies → https://www.firstround.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c9c2bdba9f",
+      "url": "https://firstround.com/companies/alma",
+      "title": "First Round — portfolio page",
+      "excerpt": "Back to Companies → https://www.firstround.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-df48af1379",
+      "url": "https://www.firstround.com/",
+      "title": "First Round — homepage",
+      "excerpt": "Imagine if any phone could accept credit cards anywhere. → https://www.firstround.com/companies/?category=all&q=square",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f0b7624ca1",
+      "url": "https://firstround.com/companies/clay",
+      "title": "First Round — portfolio page",
+      "excerpt": "Back to Companies → https://www.firstround.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-f7b126d57f",
+      "url": "https://firstround.com/companies/k2space",
+      "title": "First Round — portfolio page",
+      "excerpt": "Back to Companies → https://www.firstround.com/companies",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-3cde586dc1",
       "url": "https://www.firstround.com/",
-      "title": "First Round — homepage checked by scrape.py",
+      "title": "First Round — homepage",
       "excerpt": "https://www.firstround.com/",
       "page": "details"
     },
     {
       "id": "check-route-cd380f3a50",
       "url": "https://www.firstround.com/angel-track",
-      "title": "First Round — terms page checked by scrape.py",
+      "title": "First Round — terms page",
       "excerpt": "Apply now → https://firstround.typeform.com/to/kzG9SaGj",
       "page": "terms"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-8139552c2c",
+      "url": "https://www.firstround.com/",
+      "page": "details",
+      "excerpt": "Home | First Round Home Companies How we work Team Who we back PMF Method The Review Beginnings Matter We go to unreasonable lengths for founders, often when all they have is an \"imagine if.\" Serval Fal Clay Notion Square Verkada K2 Space Roblox Parallel Planet Labs Beginnings start with a better question. Imagine if companies could automate their IT help desks. Serval After five years helping build Verkada, Jake Stauch set out to build his own company. He began talking to IT leaders and asking the standard customer discovery questions. What are your biggest pain points? What keeps you up at night? The answers were unremarkable. Most already had tools for the problems they knew they had. Then Jake tried a different question: If you could hire someone to sit next to you and do part of your job, what would you have them do? Suddenly, the conversations changed. IT leaders didn't want a better ticketing system, workflow builder, or IT platform. They wanted someone to handle repetitive help desk requests and manual work. Jake realized the opportunity wasn't to build another tool for IT teams. It was to build an AI teammate. That insight became Serval, now a $1B company used by Notion and Vercel. Jake Stauch and Alex McLeod, the duo behind Serval. Serval’s Path to Product-Market Fit. How lessons from Verkada shaped this AI-native IT platform, Serval. Watch the full story of how Jake"
+    },
+    {
+      "id": "check-page-43accdfcb0",
+      "url": "https://firstround.com/at-investment",
+      "page": "terms",
+      "excerpt": "Airtable Your browser version is not supported. Try our desktop apps ! Alternatively, use the latest version of Chrome , Firefox , Safari, or Edge instead. Bring your Airtable data into Claude. Try it now Airtable home or view your bases Platform Platform Platform & Products Airtable Platform Unlock the power of a next-gen app-building platform AI App Building NEW Enable teams to build custom business apps—no code needed AI Agents NEW Deploy thousands of agents inside your apps Portals Collaborate seamlessly with guest users outside your organization Scale Build apps on top of massive data sets with 100M records Platform Features Learn about automations, interfaces, and more Back Features Automations Achieve more in less time via automations Databases Use relational databases to connect data from apps, workflows, and tools Interfaces Create custom interfaces from your data Reporting Measure, analyze, and share insights Views Tailor data visualizations to your teams’ needs Governance and Security Centrally manage security, permissions and data protection Airtable AI Embed AI throughout end-to-end workflows What's New See Airtable's latest product updates Tools Integrations Integrate with tools like Slack, Google Drive, and Salesforce Back Integrations Slack Add real-time messaging to your workflows Google Drive Sync information and build workflows Salesforce Leverage CRM data"
+    },
+    {
+      "id": "check-page-21058b4d55",
+      "url": "https://firstround.com/terms",
+      "page": "terms",
+      "excerpt": "Terms of Use | First Round Home Companies How we work Team Who we back PMF Method The Review Terms and Conditions Welcome to https://www.firstround.com/ , owned and operated by FR Capital Holdings, L.P. (“First Round”) (“First Round,” “we,” or “us”). By using this website and its associated services (including any podcasts, newsletters, or other content available hereon) (collectively, the “Site”), you agree to these terms and conditions of use (the “Terms”); if you do not agree, you may not use the Site. First Round may modify the Site and/or these Terms from time to time without notice to you, except that if First Round makes material changes to these Terms, we will post the revised Terms and the revised effective date on this Site and/or provide notice by some other means. By using the Site following any modifications to the Terms, you agree to be bound by the modified Terms. Use of the Site You will comply with all applicable laws, rules and regulations in connection with your use of the Site. You will not violate or attempt to violate the security of the Site or First Round’s systems or network security, including, without limitation by (i) accessing data not intended for users of the Site or gaining unauthorized access to an account, server or any other computer system; (ii) attempting to probe, scan or test the vulnerability of a system or network or to breach security"
+    },
+    {
+      "id": "check-page-7b3c146344",
+      "url": "https://www.firstround.com/angel-track",
+      "page": "terms",
+      "excerpt": "Angel Track | First Round Home Companies How we work Team Who we back PMF Method The Review Angel invest like the best Get unparalleled access to First Round’s investing expertise and a community of exceptional angels for the best early-stage deal flow in tech. Join the waitlist SPRING 2026 Applications closed In good company Stop dabbling and join over 400 top founders, builders and creators who sharpened their investing skills with Angel Track. Cristina Cordova · COO at Linear Romain Huet · Developer Experience at OpenAI Julia Schottenstein · COO at LangChain Claire Vo · Founder of ChatPRD Stevie Case · CRO at Vanta Dan Shipper · Co-Founder & CEO at Every Dane Knecht · CTO at Cloudflare Tara Seshan · Product Staff at OpenAI Learn the craft Everything you always wanted to know about angel investing but were afraid to ask. Our Approach How we make promising angel investors even better 01 Discover the secrets behind how we’ve learned to source, evaluate, and serve our companies, using real data and stories from First Round’s 20 years in the business. 02 Learn tactical frameworks that dive into the nuts and bolts of angel investing, from positioning yourself to structuring working sessions with founders. 03 No long lectures—participate in interactive sessions, small group discussions, and case studies based on real investments. What we’ll cover Assessing teams Sizing markets"
+    },
+    {
+      "id": "check-page-5be5f75283",
+      "url": "https://review.firstround.com/non-obvious-signs-of-early-startup-traction-and-how-to-spot-them/",
+      "page": "details",
+      "excerpt": "Non-Obvious Signs of Early Startup Traction — And How to Spot Them Articles Curated Reads Paths to PMF Newsletter Podcast -Executive Function -In Depth Sign In Articles Curated Reads Paths to PMF Newsletter Podcast -Executive Function -In Depth Sign In Starting Up Non-Obvious Signs of Early Startup Traction — And How to Spot Them We gathered the most surprising anecdotes from seasoned founders about when things clicked into place. + Featuring September 12, 2024 + Featuring Outline The earliest days of company-building are typically a solitary slog, an exercise in delayed gratification. It’s just you, maybe a co-founder and a few early hires, coding and running cold outreach for hours on end. Even with a newly minted product and a handful of customers, it’s tough to zoom out from the grind and figure out whether you’re making good progress in those first few months (and even years). You might be stuck in a loop of self-doubt, asking yourself, “Is our message landing? Do people actually like — and use — what we’ve created? Is this what product-market fit is supposed to feel like?” From a quantitative lens, there are metrics to lean on as you seek to answer those questions, from ARR to CAC to sales conversions. We’re big fans of taking a more scientific approach to finding PMF here at First Round — it’s why we launched PMF Method and published detailed benchmarks B2B SaaS"
+    },
+    {
+      "id": "check-page-2e5539de08",
+      "url": "https://www.firstround.com/terms",
+      "page": "terms",
+      "excerpt": "Terms of Use | First Round Home Companies How we work Team Who we back PMF Method The Review Terms and Conditions Welcome to https://www.firstround.com/ , owned and operated by FR Capital Holdings, L.P. (“First Round”) (“First Round,” “we,” or “us”). By using this website and its associated services (including any podcasts, newsletters, or other content available hereon) (collectively, the “Site”), you agree to these terms and conditions of use (the “Terms”); if you do not agree, you may not use the Site. First Round may modify the Site and/or these Terms from time to time without notice to you, except that if First Round makes material changes to these Terms, we will post the revised Terms and the revised effective date on this Site and/or provide notice by some other means. By using the Site following any modifications to the Terms, you agree to be bound by the modified Terms. Use of the Site You will comply with all applicable laws, rules and regulations in connection with your use of the Site. You will not violate or attempt to violate the security of the Site or First Round’s systems or network security, including, without limitation by (i) accessing data not intended for users of the Site or gaining unauthorized access to an account, server or any other computer system; (ii) attempting to probe, scan or test the vulnerability of a system or network or to breach security"
+    },
+    {
+      "id": "check-page-d3b00b541d",
+      "url": "https://review.firstround.com/the-founder-dating-playbook-heres-the-process-i-used-to-find-my-co-founder/",
+      "page": "details",
+      "excerpt": "The Founder Dating Playbook – Here’s the Process I Used to Find My Co-Founder Articles Curated Reads Paths to PMF Newsletter Podcast -Executive Function -In Depth Sign In Articles Curated Reads Paths to PMF Newsletter Podcast -Executive Function -In Depth Sign In Starting Up The Founder Dating Playbook – Here’s the Process I Used to Find My Co-Founder Gloria Lin opens up about her pre-founder journey, from how to find a co-founder and early conversations, to the set of 50 questions she prototyped to team up on a startup idea. + Featuring September 30, 2019 + Featuring Outline Loading the Elevenlabs Text to Speech AudioNative Player... Gloria Lin went on a lot of dates in 2019. No, not that kind. We’re talking about co-founder dating. As the first head of product at Flipboard and the first PM hire at Stripe , Lin’s seen founding teams in action — and knew what she was looking for as she set out to build a company of her own. “I always wanted to team up with someone. My experiences as a product leader were strongest when I was partnering closely with an engineering leader,” says Lin. “When I left to start a company, there were a few spaces I was interested in, but I didn’t have a specific startup idea so I set my sights on finding a strong co-founder to work with.” But she quickly found that was easier said than done. “Most of the co-founder stories I’d heard fell in this bucket"
+    },
+    {
+      "id": "check-page-a77ad55c56",
+      "url": "https://firstround.com/?utm_source=firstround_review&utm_medium=referral&utm_campaign=learn_more&utm_content=in_post",
+      "page": "details",
+      "excerpt": "Home | First Round Home Companies How we work Team Who we back PMF Method The Review Beginnings Matter We go to unreasonable lengths for founders, often when all they have is an \"imagine if.\" Serval Fal Clay Notion Square Verkada K2 Space Roblox Parallel Planet Labs Beginnings start with a better question. Imagine if companies could automate their IT help desks. Serval After five years helping build Verkada, Jake Stauch set out to build his own company. He began talking to IT leaders and asking the standard customer discovery questions. What are your biggest pain points? What keeps you up at night? The answers were unremarkable. Most already had tools for the problems they knew they had. Then Jake tried a different question: If you could hire someone to sit next to you and do part of your job, what would you have them do? Suddenly, the conversations changed. IT leaders didn't want a better ticketing system, workflow builder, or IT platform. They wanted someone to handle repetitive help desk requests and manual work. Jake realized the opportunity wasn't to build another tool for IT teams. It was to build an AI teammate. That insight became Serval, now a $1B company used by Notion and Vercel. Jake Stauch and Alex McLeod, the duo behind Serval. Serval’s Path to Product-Market Fit. How lessons from Verkada shaped this AI-native IT platform, Serval. Watch the full story of how Jake"
+    },
+    {
+      "id": "check-page-75cfeff73e",
+      "url": "https://firstround.com/review/founder-exposed-opening-up-about-startup-failures-and-vulnerability/?ref=review.firstround.com",
+      "page": "details",
+      "excerpt": "Founder Exposed: Opening Up About Startup Failures and Vulnerability Articles Curated Reads Paths to PMF Newsletter Podcast -Executive Function -In Depth Sign In Articles Curated Reads Paths to PMF Newsletter Podcast -Executive Function -In Depth Sign In Management Founder Exposed: Opening Up About Startup Failures and Vulnerability Jeff Wald knows firsthand that behind every startup success story is a stack of seldom discussed defeats. The investor and three-time founder opens up about why leaders should embrace vulnerability, and offers tools for extracting lessons from failure and getting back in the game. + Featuring April 1, 2019 + Featuring Outline When it comes to the extremes of the startup spectrum, three-time founder, investor and New York tech ecosystem advisor Jeff Wald has seen it all. “I’ve counted Fred Wilson as an investor, raised over $60 million in funding and sold my startup WorkMarket to ADP ,” says Wald. “But before all that, earlier on in my career, I had a startup implode, leaving me bankrupt, depressed, and on the verge of moving back in with my parents. And while I’m really proud of WorkMarket’s success, it wasn’t smooth sailing. At one point, the board forced me to get a leadership coach. After four years, my co-founder left the company. And when we got acquired, people openly questioned why I didn’t hold out for a bigger outcome. So behind every exit"
+    },
+    {
+      "id": "check-page-dab84a373a",
+      "url": "https://review.firstround.com/about/",
+      "page": "details",
+      "excerpt": "About Articles Curated Reads Paths to PMF Newsletter Podcast -Executive Function -In Depth Sign In Articles Curated Reads Paths to PMF Newsletter Podcast -Executive Function -In Depth Sign In About We believe that there is powerful, untapped knowledge out there that can transform the way people build technology. There's just one problem: It's trapped in other people's heads — people who are at the top of their fields, who rarely have time to share what they've learned (even when they want to). The Review is about liberating this knowledge to inspire and accelerate action. To deliver on this mission, we'll make you three promises…. We'll get out of the way and let experts speak directly to you about what they believe is most important. (That's why we choose not to use bylines.) Every article will serve up tactics that you can use today to change your company and your career. We will never be boring. The stories you find on here are crafted to teach, to engage and to stick. We launched The Review in 2013 to cut through the noise so that you can make an impact. About Articles Curated Reads Paths to PMF Newsletter Podcast Sign in Glossary Sign In For the founder's notepad: \"If you personally want to grow as fast as your company, you have to give away your job every couple months.\" – Molly Graham “Asking ‘Why can't this be done sooner?’ methodically, reliably and habitually can"
+    },
+    {
+      "id": "check-page-206b36d212",
+      "url": "https://firstround.com/companies/alma",
+      "page": "portfolio",
+      "excerpt": "Alma | First Round Home Companies How we work Team Who we back PMF Method The Review Alma Imagine if anyone could access high-quality, affordable mental health care. Today, Alma is a membership-based network that helps tens of thousands of mental health providers across all 50 states build successful independent practices. But when founder Dr. Harry Ritter pitched First Round back in 2017, the vision looked a bit different: physical co-practicing spaces in Manhattan. Here's what founders can learn from the twists and turns in their journey: Founder Harry Ritter Initial Partnership Seed Category Healthcare Partner Hayley Barna Location New York Alma Founder Harry Ritter Initial Partnership Seed Category Healthcare Partner Hayley Barna Location New York THE FOUNDER STORY: Dr. Harry Ritter on launching as a non-technical solo founder & pivoting through a pandemic From validating his idea by interviewing therapists while he was still at Oscar, to losing 70% of revenue in one weekend, Harry dives into Alma's founding story and dramatic pivot from physical co-practicing spaces to a fully virtual platform: Read Alma's Path to PMF As the VP of Care Delivery at Oscar, Harry built out the brick-and-mortar and telemedicine programs before starting Alma. 2017 Treat customer interviews like a diagnosis During customer discovery, Harry created interview guides based on the approach from med"
+    },
+    {
+      "id": "check-page-5890c63d85",
+      "url": "https://firstround.com/companies/clay",
+      "page": "portfolio",
+      "excerpt": "Clay | First Round Home Companies How we work Team Who we back PMF Method The Review Clay Imagine if go-to-market tools were as malleable as clay. Clay is a GTM development environment that helps growth marketers and revenue teams enrich their data, automate personalized outreach, and implement any go-to-market idea. Today, it’s a $1.25B platform used by 5,000+ companies like OpenAI, Canva, and Anthropic. But back in 2017 when First Round led their seed round, they were exploring a much broader vision: making programming more accessible to everyone. After years of quietly plugging away, Clay experienced an explosion of customer and revenue growth, 10x'ing revenue in both 2022 and 2023, followed by 6x in 2024. Here's what stands out from their \"7-year overnight success\" story: Founders Kareem Amin, Nicolae Rusan, Varun Anand Initial Partnership Seed Categories Enterprise / AI Partner Brett Berson Location New York Clay Founders Kareem Amin, Nicolae Rusan, Varun Anand Initial Partnership Seed Categories Enterprise / AI Partner Brett Berson Location New York Play Founder Highlight Kareem Amin on Clay's path to product-market fit As a second-time founder (his previous company, Frame, was acquired by Sailthru in 2012), Kareem brings unique insights on how founder psychology affects company building. As he unpacks Clay’s journey, he explores the tension between flexibility and"
+    },
+    {
+      "id": "check-page-bacd57557b",
+      "url": "https://firstround.com/companies/evolutioniq",
+      "page": "portfolio",
+      "excerpt": "EvolutionIQ | First Round Home Companies How we work Team Who we back PMF Method The Review EvolutionIQ Imagine if improving disability insurance claims processing with AI helped more people return to work. Today, EvolutionIQ's AI-powered claims guidance platform is used by the majority of U.S. disability carriers to help millions of injured workers get back on their feet. In 2019, a co-founding trio saw an opportunity that others missed: in a slow-moving industry sat mountains of underutilized data. While others saw constraints in the concentrated, risk-averse world of insurance, they recognized the opportunity to create massive value with an early vertical AI application in an obscure area. Here's what stood out to us from their journey to a $730M acquisition: Founders Tomas Vykruta, Michael Saltzman, Jonathan Lewin Initial Partnership Seed Categories AI / Enterprise / Healthcare Partner Bill Trenchard Location New York EvolutionIQ Founders Tomas Vykruta, Michael Saltzman, Jonathan Lewin Initial Partnership Seed Categories AI / Enterprise / Healthcare Partner Bill Trenchard Location New York The founder's story Inside the journey to build an enduring AI business We recently sat down with the founding team to unpack how they went from an early AI idea to a $730M acquisition in five years. From navigating long sales cycles and building trust with risk-averse customers, to"
+    },
+    {
+      "id": "check-page-e781d67aaa",
+      "url": "https://firstround.com/companies/fal",
+      "page": "portfolio",
+      "excerpt": "Fal | First Round Home Companies How we work Team Who we back PMF Method The Review Fal Imagine if generative media had an infrastructure partner capable of supporting exponential growth. fal is a generative media platform for developers. By providing the fastest inference for generative models, they're tackling the challenges of slow inference speeds and high costs that often hinder the seamless integration of these powerful models into real-world applications. Founders Burkay Gur, Gorkem Yurtseven Initial Partnership Seed Categories AI / Enterprise / DevTools & Infra Partner Todd Jackson Location SF Bay Area Fal Founders Burkay Gur, Gorkem Yurtseven Initial Partnership Seed Categories AI / Enterprise / DevTools & Infra Partner Todd Jackson Location SF Bay Area Founder highlight A seriously steep slope $1M to $40M ARR in just one year. 1M+ developers. Generating billions of assets (image, video, audio) monthly and handling over 100 million inference requests daily. $49M Series B. Founders Burkay Gur and Gorkem Yurtseven unpack the details of fal's journey (so far) in Fortune. Read the story Obsess over performance When Burkay and Gorkem first showed First Round Partner Todd Jackson a demo in our office, his mind was blown — not just by how they turned him into George Clooney, but by how they were doing stable diffusion inference at 30 frames per second, so fast it basically"
+    },
+    {
+      "id": "check-page-f85c847b33",
+      "url": "https://firstround.com/companies/k2space",
+      "page": "portfolio",
+      "excerpt": "K2 Space | First Round Home Companies How we work Team Who we back PMF Method The Review K2 Space Imagine if large spacecraft made previously impossible missions possible. K2 Space is upending satellite technology by challenging a long-held industry assumption: that to make spacecraft cheaper, you need to make them smaller. Instead, they're building massive, high-powered satellites, creating a platform that's transforming how we approach national security, commercial, and scientific missions in space. We invested in their 2022 pre-seed round and they’ve continued to impress ever since, from significant technical progress and a successful demo mission, to strong customer pull and a string of contracts. Here's what early-stage founders can learn from their story: Founders Karan Kunjur, Neel Kunjur Initial Partnership Pre-Seed Categories Enterprise / Hardware Partner Bill Trenchard Location Los Angeles K2 Space Founders Karan Kunjur, Neel Kunjur Initial Partnership Pre-Seed Categories Enterprise / Hardware Partner Bill Trenchard Location Los Angeles Founder highlight Why founders (and brothers) Karan and Neel Kunjur fit the market like a flight suit The Kunjur brothers bring complementary strengths: Neel's technical expertise from SpaceX and Kitty Hawk, and Karan's commercial chops from BCG and Text IQ. As strong storytellers and communicators — critical in such a"
     }
   ],
   "findings": {
@@ -88,15 +340,45 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6",
+        "evidenceId": "check-duration-f6b24d5721"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-297fc6d6d5"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-405b21acf9"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "First Round participate in? No round is too small for us to invest. Our average initial investment is $3.5 million, but we’ve invested in rounds as small as $100,000 and as large as $20 million. Regardless of check size, you get the same First Round experience. Do partners take board seats? Yes, we often do. It’s not",
-        "evidenceId": "check-deal-8118a9914b"
-      },
+        "value": "investment is $3.5 million, but we’ve invested in rounds as small as $100,000 and as large as $20 million. Regardless of check size, you get the",
+        "evidenceId": "check-deal-f99f7b7312"
+      }
+    ],
+    "dealComponents": [
       {
-        "value": "rounds do you participate in? No round is too small for us to invest. Our average initial investment is $3.5 million, but we’ve invested in rounds as small as $100,000 and as large as $20 million. Regardless of check size, you get the same First Round experience. Will you only invest if you can lead? No. We don't care about",
-        "evidenceId": "check-deal-c111a0a7c5"
+        "value": {
+          "kind": "cash",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-f99f7b7312"
       }
     ],
     "portfolioPages": [

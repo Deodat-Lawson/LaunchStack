@@ -1,15 +1,7 @@
 {
   "programId": "on-deck",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://joinodf.com/companies",
-      "page": "portfolio",
-      "anchor": "Top Companies",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://admissions.joinodf.com/",
       "page": "terms",
@@ -19,10 +11,122 @@
       "origin": "official"
     },
     {
+      "url": "https://forms.joinodf.com/t/x2fuWdEqkSus?utm_source=homepage",
+      "page": "other",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/companies",
+      "page": "portfolio",
+      "anchor": "Top Companies",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/deep-end/starting-companies",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/post/antifragile-companies",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/post/on-decks-top-companies-2022",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/post/what-founders-need-to-know-about-equity-and-early-stage-financing",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/select-investors/alumni-ventures",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/select-investors/function-investments",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/select-investors/golden-palm-investments",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/select-investors/unitedhealthcare-accelerator",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/terms-and-conditions",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/top-companies-2023/ampersand",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://joinodf.com/top-companies-2023/atob",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://joinodf.com/top-companies-2025",
       "page": "portfolio",
       "anchor": "View top ODF companies ->",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.joinodf.com/terms-and-conditions",
+      "page": "terms",
+      "anchor": "Terms & Conditions",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

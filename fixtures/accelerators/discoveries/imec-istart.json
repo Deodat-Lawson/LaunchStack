@@ -1,7 +1,23 @@
 {
   "programId": "imec-istart",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://www.imec-int.com/en/79GHz-140GHz-radar-automotive-applications",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/about-us",
+      "page": "details",
+      "anchor": "About imec",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.imec-int.com/en/applications",
       "page": "application",
@@ -11,9 +27,97 @@
       "origin": "official"
     },
     {
-      "url": "https://www.imec-int.com/en/about-us",
-      "page": "details",
-      "anchor": "About imec",
+      "url": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/automotive-chiplet-alliance-conference",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/confirm-your-attendance-third-automotive-chiplet",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/applications/automotive-semiconductor-technologies/want-join-automotive-chiplet-alliance",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application",
+      "anchor": "Automotive technologies",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/applications/custom-electronic-component-development-space/ntn-semiconductor-technologies",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application",
+      "anchor": "Data and telecommunication",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/applications/home-automation",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application",
+      "anchor": "Life sciences and health solutions",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application",
+      "anchor": "Robotics technology for Industry 4.0",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40/safebot",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -22,38 +126,14 @@
       "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
       "page": "application",
       "anchor": "Semiconductor technology",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
-      "page": "application",
-      "anchor": "Data and telecommunication",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
-      "page": "application",
-      "anchor": "Automotive technologies",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
-      "page": "application",
-      "anchor": "Robotics technology for Industry 4.0",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
-      "page": "application",
-      "anchor": "Life sciences and health solutions",
+      "url": "https://www.imec-int.com/en/gtcsale-purchase",
+      "page": "terms",
+      "anchor": "terms and conditions of sale/purchase",
       "fetched": false,
       "blocked": null,
       "origin": "official"

@@ -1,20 +1,84 @@
 {
   "programId": "falak",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://flagship.falak.sa/",
-      "page": "details",
-      "anchor": "Flagship Program Startups Acceleration Program",
+      "url": "http://flagship.falak.sa/",
+      "page": "other",
+      "anchor": "",
       "fetched": false,
       "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://falak.sa/ar/blogs/37/Infinite-PL-and-Falak-Investment-Hub-Collaborate-to-Enhance-the-Logistics-Sector",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://falak.sa/ar/blogs/39/Falak-Investment-Hub-Joins-United-Nations-Global-Compact-and-Amplifies-Commitment-to-Sustainability-with-Flagship-ClimateTech-Accelerator",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://falak.sa/ar/landing-program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://falak.sa/en/about_us",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://falak.sa/en/alumni",
+      "page": "portfolio",
+      "anchor": "Falak Alumni",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://falak.sa/en/blogs",
+      "page": "details",
+      "anchor": "More About Falak’s Community",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://falak.sa/en/blogs/37/Infinite-PL-and-Falak-Investment-Hub-Collaborate-to-Enhance-the-Logistics-Sector",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://falak.sa/en/blogs/39/Falak-Investment-Hub-Joins-United-Nations-Global-Compact-and-Amplifies-Commitment-to-Sustainability-with-Flagship-ClimateTech-Accelerator",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
       "origin": "official"
     },
     {
       "url": "https://falak.sa/en/landing-program",
       "page": "details",
       "anchor": "Landing Program Expand into KSA",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -22,7 +86,31 @@
       "url": "https://falak.sa/en/partnership",
       "page": "details",
       "anchor": "Falak Programs Stakeholder Enabler",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://falak.sa/en/programs",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://falak.sa/en/programs/boot_camp",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://falak.sa/en/soft-landing-program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -35,19 +123,19 @@
       "origin": "official"
     },
     {
-      "url": "https://falak.sa/en/blogs",
-      "page": "details",
-      "anchor": "More About Falak’s Community",
-      "fetched": false,
+      "url": "https://falak.sa/investors/acceleration-investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://falak.sa/en/alumni",
-      "page": "portfolio",
-      "anchor": "Falak Alumni",
+      "url": "https://flagship.falak.sa/",
+      "page": "details",
+      "anchor": "Flagship Program Startups Acceleration Program",
       "fetched": false,
-      "blocked": null,
+      "blocked": "fetch_failed",
       "origin": "official"
     }
   ]

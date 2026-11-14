@@ -1,20 +1,28 @@
 {
   "programId": "eit-innoenergy",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://innoenergy.com/portfolio/",
-      "page": "portfolio",
-      "anchor": "Portfolio",
+      "url": "https://innoenergy.com/about-us/",
+      "page": "details",
+      "anchor": "Learn more about who we are",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://innoenergy.com/about-us/",
+      "url": "https://innoenergy.com/about-us/investors-centre/",
       "page": "details",
-      "anchor": "Learn more about who we are",
-      "fetched": true,
+      "anchor": "Shareholders centre",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/about-us/join-us/request-for-proposal/",
+      "page": "details",
+      "anchor": "Request for proposals",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -27,39 +35,127 @@
       "origin": "official"
     },
     {
-      "url": "https://innoenergy.com/portfolio/hardt/265770",
-      "page": "portfolio",
-      "anchor": "Learn more",
+      "url": "https://innoenergy.com/news-resources/a-new-industrial-phase-for-the-european-green-deal/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/news-resources/a-novel-private-public-fund-to-unlock-e500bn-for-europes-clean-industrial-deal/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/news-resources/accelerate-skellefteaa-2021-programme-opens-for-applications-for-clean-energy-startups-in-northern-sweden/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/news-resources/applications-for-the-second-edition-of-the-hello-cleantech-programme-for-cleantech-innovators-are-open/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-from-emissions-to-investments-madrid/",
+      "page": "terms",
+      "anchor": "BIOGENIC CCU IN EUROPE: FROM EMISSIONS TO INVESTMENTS – MADRID FEB 19 Events",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://innoenergy.com/portfolio/verkor/265685",
+      "url": "https://innoenergy.com/news-resources/biogenic-ccu-in-europe-paris-feb10/",
+      "page": "terms",
+      "anchor": "BIOGENIC CCU IN EUROPE: FROM EMISSIONS TO INVESTMENTS – Paris FEB 10 Events",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/news-resources/eit-innoenergy-beeplanet-zabala-idae-grants-for-energy-storage-and-real-application-cases/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/news-resources/eit-innoenergy-invests-in-tribonex-to-reduce-friction-losses-and-wear-in-industrial-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/news-resources/eu-innovation-fund-innoenergy-portfolio-companies/",
       "page": "portfolio",
-      "anchor": "Learn more",
+      "anchor": "Three InnoEnergy portfolio companies selected for EU Innovation Fund support News Nov 4, 2026",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/news-resources/impact-startups-le-village-by-ca-calls-for-applications-with-innoenergy-france-credit-agricole-cib-makesense-seed-i-groupe-psa/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications-in-hungary-and-turkey/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/news-resources/open-call-for-eit-innoenergy-hub-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/news-resources/the-smart-grids-of-the-future-evolving-accelerating-investment-and-delivery-madrid-nov-5/",
+      "page": "terms",
+      "anchor": "THE SMART GRIDS OF THE FUTURE: EVOLVING, ACCELERATING INVESTMENT AND DELIVERY – MADRID NOV 5 Events",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/news-resources/webinar-battery-storage-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
       "url": "https://innoenergy.com/portfolio/corpower-ocean/265713",
-      "page": "portfolio",
-      "anchor": "Learn more",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://innoenergy.com/portfolio/gravithy/265764",
-      "page": "portfolio",
-      "anchor": "Learn more",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://innoenergy.com/portfolio/skeleton/265857",
       "page": "portfolio",
       "anchor": "Learn more",
       "fetched": false,
@@ -83,26 +179,74 @@
       "origin": "official"
     },
     {
-      "url": "https://innoenergy.com/news-resources/eu-innovation-fund-innoenergy-portfolio-companies/",
+      "url": "https://innoenergy.com/portfolio/gravithy/265764",
       "page": "portfolio",
-      "anchor": "Three InnoEnergy portfolio companies selected for EU Innovation Fund support News Nov 4, 2026",
+      "anchor": "Learn more",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://innoenergy.com/about-us/investors-centre/",
-      "page": "details",
-      "anchor": "Shareholders centre",
+      "url": "https://innoenergy.com/portfolio/hardt/265770",
+      "page": "portfolio",
+      "anchor": "Learn more",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://innoenergy.com/about-us/join-us/request-for-proposal/",
-      "page": "details",
-      "anchor": "Request for proposals",
+      "url": "https://innoenergy.com/portfolio/skeleton/265857",
+      "page": "portfolio",
+      "anchor": "Learn more",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/portfolio/verkor/265685",
+      "page": "portfolio",
+      "anchor": "Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/startups/apply-form/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/terms-and-conditions/",
+      "page": "terms",
+      "anchor": "Terms and Conditions",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/uploads/2023/01/application-form-template_december_2020.docx",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/uploads/2023/01/application-scoreboard_decmber_2020.pdf",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/uploads/2023/01/webinar_battery-storage-applications_2020-03-04.pdf",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

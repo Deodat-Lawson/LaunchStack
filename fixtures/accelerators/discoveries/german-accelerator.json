@@ -1,51 +1,267 @@
 {
   "programId": "german-accelerator",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.germanaccelerator.com/our-programs",
+      "url": "https://www.germanaccelerator.com/about-us",
       "page": "details",
-      "anchor": "Programs Programs",
+      "anchor": "About Us About Us Learn more about German Accelerator and how we empower top German startups.",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.germanaccelerator.com/our-programs/kickstart",
-      "page": "details",
-      "anchor": "Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one.",
+      "url": "https://www.germanaccelerator.com/about-us/faq",
+      "page": "terms",
+      "anchor": "FAQ FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/alumni",
+      "page": "portfolio",
+      "anchor": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups.",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.germanaccelerator.com/our-programs/market-discovery",
+      "url": "https://www.germanaccelerator.com/apply-now",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/blog",
       "page": "details",
-      "anchor": "Market Discovery Market Discovery Validate the suitability of your business model in new markets.",
+      "anchor": "Blog Blog Get insights and strategy tips.",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/blog/5-reasons-for-german-startups-to-expand-to-singapore",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/blog/5-reasons-why-india-is-a-promising-market-for-german-startups",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/blog/beyond-data-how-crelora-found-its-next-growth-market-in-india",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/blog/building-circular-supply-chains-from-munich-to-south-africa",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/blog/dream-big-5-reasons-startups-should-think-about-internationalization-early",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/blog/from-aachen-to-fukuoka-how-fibrecoat-cracked-the-japanese-market",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/blog/from-founder-to-ecosystem-architect-how-one-exit-shaped-a-new-vision-for-europes-deep-tech-future-copy-9lsma",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/blog/from-munich-to-asia-how-irubis-is-transforming-bioprocessing-through-global-expansion",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/blog/germany-and-brazil-strengthen-startup-collaboration-at-hannover-messe-2026",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/blog/how-greyd-turned-a-working-product-into-a-scalable-business",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/check-your-eligibility",
+      "page": "details",
+      "anchor": "Check Eligibility Check Eligibility",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.germanaccelerator.com/our-programs/market-access",
+      "url": "https://www.germanaccelerator.com/contact-us",
       "page": "details",
-      "anchor": "Market Access Market Access Launch and expand your business in new markets across the globe.",
+      "anchor": "Contact Us Contact Us",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.germanaccelerator.com/our-programs/us/u-s-market-discovery-life-sciences",
+      "url": "https://www.germanaccelerator.com/events",
       "page": "details",
-      "anchor": "Life Sciences U.S. Life Sciences U.S.",
+      "anchor": "Events Events Join exclusive events designed to connect, inspire, and accelerate growth.",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.germanaccelerator.com/our-programs/europe/uk-market-discovery-life-sciences",
+      "url": "https://www.germanaccelerator.com/imprint",
       "page": "details",
-      "anchor": "Life Sciences UK Life Sciences UK",
+      "anchor": "Imprint",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-markets",
+      "page": "details",
+      "anchor": "Markets Markets",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-markets/asia",
+      "page": "details",
+      "anchor": "Asia Asia Unlock growth in the world’s fastest-evolving economies.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-markets/asia/china",
+      "page": "details",
+      "anchor": "China China",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-markets/asia/india",
+      "page": "details",
+      "anchor": "India India",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-markets/asia/japan",
+      "page": "details",
+      "anchor": "Japan Japan",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-markets/asia/south-korea",
+      "page": "details",
+      "anchor": "South Korea South Korea",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-markets/asia/southeast-asia",
+      "page": "details",
+      "anchor": "Southeast Asia Southeast Asia",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-markets/europe",
+      "page": "details",
+      "anchor": "Europe Europe",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-markets/south-africa",
+      "page": "details",
+      "anchor": "South Africa South Africa",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-markets/south-america",
+      "page": "details",
+      "anchor": "Latin America Latin America Tap into the rising opportunities of dynamic emerging markets.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-markets/us",
+      "page": "details",
+      "anchor": "U.S. U.S. Scale into the world’s largest and most competitive market.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-mentors",
+      "page": "details",
+      "anchor": "Mentors Mentors Tap into a global network of pioneers guiding the next generation of innovators.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-partners",
+      "page": "details",
+      "anchor": "Partners Partners Leverage the power of a global network and unlock exclusive partner benefits.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-programs",
+      "page": "details",
+      "anchor": "Programs Programs",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -59,9 +275,105 @@
       "origin": "official"
     },
     {
+      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "page": "details",
+      "anchor": "Asia Market Discovery",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
+      "page": "details",
+      "anchor": "China Market Discovery",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-access",
+      "page": "details",
+      "anchor": "India Market Access",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
+      "page": "details",
+      "anchor": "India Market Discovery",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-access",
+      "page": "details",
+      "anchor": "Japan Market Access",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
+      "page": "details",
+      "anchor": "Japan Market Discovery",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
+      "page": "details",
+      "anchor": "South Korea Market Access",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
+      "page": "details",
+      "anchor": "South Korea Market Discovery",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "page": "details",
+      "anchor": "Southeast Asia Market Access",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-discovery",
+      "page": "details",
+      "anchor": "Southeast Asia Market Discovery",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.germanaccelerator.com/our-programs/europe/france-market-discovery-future-industries",
       "page": "details",
       "anchor": "Future Industries Future Industries",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-programs/europe/uk-market-discovery-life-sciences",
+      "page": "details",
+      "anchor": "Life Sciences UK Life Sciences UK",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-programs/kickstart",
+      "page": "details",
+      "anchor": "Kickstart - Scaling & Growth Kickstart - Scaling & Growth Lay the foundation for a scalable, global business from day one.",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -75,33 +387,65 @@
       "origin": "official"
     },
     {
+      "url": "https://www.germanaccelerator.com/our-programs/market-access",
+      "page": "details",
+      "anchor": "Market Access Market Access Launch and expand your business in new markets across the globe.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-programs/market-discovery",
+      "page": "details",
+      "anchor": "Market Discovery Market Discovery Validate the suitability of your business model in new markets.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-programs/south-america/latam-market-access",
+      "page": "details",
+      "anchor": "LatAm Market Access",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-programs/south-america/south-america-market-discovery",
+      "page": "details",
+      "anchor": "LatAm Market Discovery",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-programs/us/u-s-market-discovery-ai",
+      "page": "details",
+      "anchor": "Market Discovery AI",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-programs/us/u-s-market-discovery-climate-tech",
+      "page": "details",
+      "anchor": "Market Discovery Climate Tech",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.germanaccelerator.com/our-programs/us/u-s-market-discovery-life-sciences",
+      "page": "details",
+      "anchor": "Life Sciences U.S. Life Sciences U.S.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.germanaccelerator.com/our-programs/us/u-s-market-discovery-tech",
       "page": "details",
       "anchor": "Tech Tech",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.germanaccelerator.com/alumni",
-      "page": "portfolio",
-      "anchor": "Alumni Alumni You’re in good company – follow in the footsteps of top German startups.",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.germanaccelerator.com/about-us/faq",
-      "page": "terms",
-      "anchor": "FAQ FAQ",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.germanaccelerator.com/about-us",
-      "page": "details",
-      "anchor": "About Us About Us Learn more about German Accelerator and how we empower top German startups.",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -123,113 +467,73 @@
       "origin": "official"
     },
     {
-      "url": "https://www.germanaccelerator.com/our-programs/us/u-s-market-discovery-climate-tech",
+      "url": "https://www.germanaccelerator.com/our-team",
       "page": "details",
-      "anchor": "Market Discovery Climate Tech",
+      "anchor": "Our Team Our Team Meet the people driving innovation and growth for German Accelerator.",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.germanaccelerator.com/our-programs/us/u-s-market-discovery-ai",
+      "url": "https://www.germanaccelerator.com/press",
       "page": "details",
-      "anchor": "Market Discovery AI",
+      "anchor": "Press",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.germanaccelerator.com/our-programs/south-america/south-america-market-discovery",
+      "url": "https://www.germanaccelerator.com/success-stories",
       "page": "details",
-      "anchor": "LatAm Market Discovery",
+      "anchor": "Success Stories Success Stories Discover how top startups have scaled globally with our support.",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.germanaccelerator.com/our-programs/south-america/latam-market-access",
+      "url": "https://www.germanaccelerator.com/success-stories/bidx",
       "page": "details",
-      "anchor": "LatAm Market Access",
+      "anchor": "Read story Read story",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.germanaccelerator.com/our-programs/asia/asia-market-discovery",
+      "url": "https://www.germanaccelerator.com/success-stories/iqonic-ai",
       "page": "details",
-      "anchor": "Asia Market Discovery",
+      "anchor": "Read story Read story",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-discovery",
+      "url": "https://www.germanaccelerator.com/success-stories/nautiluslog",
       "page": "details",
-      "anchor": "Southeast Asia Market Discovery",
+      "anchor": "Read story Read story",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.germanaccelerator.com/our-programs/asia/southeast-asia-market-access",
+      "url": "https://www.germanaccelerator.com/success-stories/nomitri",
       "page": "details",
-      "anchor": "Southeast Asia Market Access",
+      "anchor": "Read story Read story",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-discovery",
+      "url": "https://www.germanaccelerator.com/success-stories/rytle",
       "page": "details",
-      "anchor": "Japan Market Discovery",
+      "anchor": "Read story Read story",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.germanaccelerator.com/our-programs/asia/japan-market-access",
+      "url": "https://www.germanaccelerator.com/success-stories/tiramizoo",
       "page": "details",
-      "anchor": "Japan Market Access",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-discovery",
-      "page": "details",
-      "anchor": "South Korea Market Discovery",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-discovery",
-      "page": "details",
-      "anchor": "India Market Discovery",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.germanaccelerator.com/our-programs/asia/india-market-access",
-      "page": "details",
-      "anchor": "India Market Access",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.germanaccelerator.com/our-programs/asia/south-korea-market-access",
-      "page": "details",
-      "anchor": "South Korea Market Access",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.germanaccelerator.com/our-programs/asia/china-market-discovery",
-      "page": "details",
-      "anchor": "China Market Discovery",
+      "anchor": "Read story Read story",
       "fetched": false,
       "blocked": null,
       "origin": "official"

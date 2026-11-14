@@ -1,6 +1,6 @@
 {
   "programId": "k-startup",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.k-startup.go.kr/"
   ],
@@ -8,9 +8,17 @@
     {
       "id": "check-name-6be96df4e6",
       "url": "https://www.k-startup.go.kr/",
-      "title": "K-Startup — homepage checked by scrape.py",
+      "title": "K-Startup — homepage",
       "excerpt": "창업진흥원, K-Startup 바로가기 모두의 창업 '모두의 창업'에서 더 나은 창업을 위한 정보를 만나보세요. 바로가기 누구에게나",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-1cab0533f9",
+      "url": "https://www.k-startup.go.kr/",
+      "page": "details",
+      "excerpt": "창업진흥원, K-Startup 바로가기 모두의 창업 '모두의 창업'에서 더 나은 창업을 위한 정보를 만나보세요. 바로가기 누구에게나 있는 시작, 창업 스토리를 공유합니다. https://www.modoo.or.kr K-STARTUP 'K-Startup 창업지원포털' 에서 창업지원사업 공고 및 다양한 창업정보를 만나보세요. 바로가기 창업자를 위한 서비스를 지원합니다. https://www.k-startup.go.kr/web 스타트업 원스톱 지원센터 창업기업의 다양한 고민을 하나의 창구에서 전문가와 함께 해결해보세요. 바로가기 온라인 원스톱 상담이 곧 시작됩니다. 00 일 00 시간 00 분 00 초 법률, 경영, 회계 등 분야별 전문가 상담을 지원합니다. https://www.k-startup.go.kr/onestop"
     }
   ],
   "findings": {
@@ -21,8 +29,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

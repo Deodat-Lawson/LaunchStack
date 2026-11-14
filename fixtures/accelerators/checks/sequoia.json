@@ -1,37 +1,353 @@
 {
   "programId": "sequoia",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://sequoiacap.com/"
+    "https://sequoiacap.com/",
+    "https://sequoiacap.com/article/lightstep-and-future-of-application-management",
+    "https://sequoiacap.com/article/open-source-fellowship-applications",
+    "https://sequoiacap.com/article/partnering-with-deno-application-development-for-the-modern-web",
+    "https://sequoiacap.com/article/partnering-with-langchain-the-llm-application-framework",
+    "https://sequoiacap.com/podcast/building-frontier-ai-at-the-application-layer-harvey-s-playbook",
+    "https://sequoiacap.com/podcast/goldman-sachs-ceo-david-solomon-what-startup-founders-get-wrong-about-the-ceo-job",
+    "https://jobs.sequoiacap.com/jobs",
+    "https://sequoiacap.com/article/the-sequoia-fund-patient-capital-for-building-enduring-companies",
+    "https://sequoiacap.com/article/universal-laws-of-physics-and-companies",
+    "https://sequoiacap.com/companies/100-thieves",
+    "https://sequoiacap.com/companies/210664",
+    "https://sequoiacap.com/companies/247",
+    "https://sequoiacap.com/companies/abby-care",
+    "https://sequoiacap.com/companies/admob"
   ],
   "evidence": [
     {
+      "id": "check-duration-5b3b80d018",
+      "url": "https://sequoiacap.com/podcast/goldman-sachs-ceo-david-solomon-what-startup-founders-get-wrong-about-the-ceo-job",
+      "title": "Sequoia — program page",
+      "excerpt": "the course of a year, ultimately took us 15 months. We’re going to send all the partners off in",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-94f2cb9dcc",
+      "url": "https://sequoiacap.com/podcast/goldman-sachs-ceo-david-solomon-what-startup-founders-get-wrong-about-the-ceo-job",
+      "title": "Sequoia — program page",
+      "excerpt": "with every single one of those cohorts over 15 months. Brian Halligan: Okay. How much weight did you",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b9f306058f",
+      "url": "https://sequoiacap.com/article/open-source-fellowship-applications",
+      "title": "Sequoia — application page",
+      "excerpt": "to cover reasonable living expenses for 6 to 12 months. They will continue to own the fruits of their",
+      "page": "application"
+    },
+    {
+      "id": "check-format-4457d93f7b",
+      "url": "https://jobs.sequoiacap.com/jobs",
+      "title": "Sequoia — portfolio page",
+      "excerpt": "Select... Industry Search industries Internships only Remote options All jobs Posted Anytime Post and Manage jobs",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-e6e19e388d",
+      "url": "https://sequoiacap.com/podcast/goldman-sachs-ceo-david-solomon-what-startup-founders-get-wrong-about-the-ceo-job",
+      "title": "Sequoia — program page",
+      "excerpt": "resources and repetition, especially after shocks like remote work. Learn to kill “interesting” projects that distract",
+      "page": "details"
+    },
+    {
       "id": "check-name-1f316c61a2",
       "url": "https://sequoiacap.com/",
-      "title": "Sequoia — homepage checked by scrape.py",
+      "title": "Sequoia — homepage",
       "excerpt": "Home | Sequoia Capital our founders our companies our team stories",
       "page": "details"
     },
     {
+      "id": "check-portfolio-0adc8fbca9",
+      "url": "https://sequoiacap.com/companies/admob",
+      "title": "Sequoia — portfolio page",
+      "excerpt": "our companies → https://sequoiacap.com/our-companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-188caf0060",
+      "url": "https://sequoiacap.com/article/the-sequoia-fund-patient-capital-for-building-enduring-companies",
+      "title": "Sequoia — portfolio page",
+      "excerpt": "our companies → https://sequoiacap.com/our-companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-1a33a5a9f9",
+      "url": "https://sequoiacap.com/companies/247",
+      "title": "Sequoia — portfolio page",
+      "excerpt": "our companies → https://sequoiacap.com/our-companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-27c7e6b1ff",
+      "url": "https://sequoiacap.com/companies/210664",
+      "title": "Sequoia — portfolio page",
+      "excerpt": "Fintech → https://sequoiacap.com/our-companies?categories=fintech",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-39e7b444d4",
+      "url": "https://sequoiacap.com/article/partnering-with-langchain-the-llm-application-framework",
+      "title": "Sequoia — application page",
+      "excerpt": "our companies → https://sequoiacap.com/our-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-41c8fbddeb",
+      "url": "https://sequoiacap.com/companies/247",
+      "title": "Sequoia — portfolio page",
+      "excerpt": "GTM → https://sequoiacap.com/our-companies?categories=gtm",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-62da6de79d",
+      "url": "https://jobs.sequoiacap.com/jobs",
+      "title": "Sequoia — portfolio page",
+      "excerpt": "OUR COMPANIES → https://www.sequoiacap.com/our-companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-65b7f31d79",
+      "url": "https://sequoiacap.com/article/open-source-fellowship-applications",
+      "title": "Sequoia — application page",
+      "excerpt": "our companies → https://sequoiacap.com/our-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-6d29df5465",
+      "url": "https://sequoiacap.com/companies/abby-care",
+      "title": "Sequoia — portfolio page",
+      "excerpt": "Healthcare → https://sequoiacap.com/our-companies?categories=healthcare",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-85f0d0d4fc",
+      "url": "https://jobs.sequoiacap.com/jobs",
+      "title": "Sequoia — portfolio page",
+      "excerpt": "Our Companies → https://www.sequoiacap.com/our-companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-85f70f9d9a",
+      "url": "https://sequoiacap.com/article/universal-laws-of-physics-and-companies",
+      "title": "Sequoia — portfolio page",
+      "excerpt": "our companies → https://sequoiacap.com/our-companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-90f9111c19",
+      "url": "https://sequoiacap.com/companies/admob",
+      "title": "Sequoia — portfolio page",
+      "excerpt": "GTM → https://sequoiacap.com/our-companies?categories=gtm",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-92ebf9a530",
+      "url": "https://sequoiacap.com/article/lightstep-and-future-of-application-management",
+      "title": "Sequoia — application page",
+      "excerpt": "our companies → https://sequoiacap.com/our-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-9c4c8ccc70",
+      "url": "https://sequoiacap.com/article/partnering-with-deno-application-development-for-the-modern-web",
+      "title": "Sequoia — application page",
+      "excerpt": "our companies → https://sequoiacap.com/our-companies",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-9e9e458076",
       "url": "https://sequoiacap.com/",
-      "title": "Sequoia — homepage checked by scrape.py",
+      "title": "Sequoia — homepage",
       "excerpt": "our companies → https://sequoiacap.com/our-companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-b7dcc341dc",
+      "url": "https://sequoiacap.com/companies/100-thieves",
+      "title": "Sequoia — portfolio page",
+      "excerpt": "Consumer → https://sequoiacap.com/our-companies?categories=consumer",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-bf03a94e16",
+      "url": "https://sequoiacap.com/companies/210664",
+      "title": "Sequoia — portfolio page",
+      "excerpt": "our companies → https://sequoiacap.com/our-companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-c0d49c0292",
+      "url": "https://sequoiacap.com/podcast/goldman-sachs-ceo-david-solomon-what-startup-founders-get-wrong-about-the-ceo-job",
+      "title": "Sequoia — program page",
+      "excerpt": "our companies → https://sequoiacap.com/our-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d78573b324",
+      "url": "https://sequoiacap.com/podcast/building-frontier-ai-at-the-application-layer-harvey-s-playbook",
+      "title": "Sequoia — application page",
+      "excerpt": "our companies → https://sequoiacap.com/our-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d8168565ff",
+      "url": "https://jobs.sequoiacap.com/jobs",
+      "title": "Sequoia — portfolio page",
+      "excerpt": "Companies → https://jobs.sequoiacap.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-e8e8d388e6",
+      "url": "https://sequoiacap.com/companies/abby-care",
+      "title": "Sequoia — portfolio page",
+      "excerpt": "our companies → https://sequoiacap.com/our-companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-f52dd44068",
+      "url": "https://sequoiacap.com/companies/247",
+      "title": "Sequoia — portfolio page",
+      "excerpt": "Operations → https://sequoiacap.com/our-companies?categories=operations",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-fb2277327c",
+      "url": "https://sequoiacap.com/companies/100-thieves",
+      "title": "Sequoia — portfolio page",
+      "excerpt": "our companies → https://sequoiacap.com/our-companies",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-fb8e37c27a",
       "url": "https://sequoiacap.com/",
-      "title": "Sequoia — homepage checked by scrape.py",
+      "title": "Sequoia — homepage",
       "excerpt": "https://sequoiacap.com/our-companies?spotlight=no",
       "page": "details"
     },
     {
+      "id": "check-portfolio-fc59299325",
+      "url": "https://sequoiacap.com/companies/abby-care",
+      "title": "Sequoia — portfolio page",
+      "excerpt": "Consumer → https://sequoiacap.com/our-companies?categories=consumer",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-rolling-1d44e09599",
+      "url": "https://sequoiacap.com/article/open-source-fellowship-applications",
+      "title": "Sequoia — application page",
+      "excerpt": "project may apply for a fellowship stipend. Applications will be considered on a rolling basis. Open source software is critically important for ensuring that progress",
+      "page": "application"
+    },
+    {
       "id": "check-route-eb4b560faf",
       "url": "https://sequoiacap.com/",
-      "title": "Sequoia — homepage checked by scrape.py",
+      "title": "Sequoia — homepage",
       "excerpt": "https://sequoiacap.com/",
       "page": "details"
+    },
+    {
+      "id": "check-status-0cb81b2901",
+      "url": "https://sequoiacap.com/article/open-source-fellowship-applications",
+      "title": "Sequoia — application page",
+      "excerpt": "Sequoia Open Source Fellowship: Applications Now Open | Sequoia Capital our founders our companies our team stories Podcasts Sequoia Open Source Fellowship:",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-482c643d77",
+      "url": "https://sequoiacap.com/",
+      "page": "details",
+      "excerpt": "Home | Sequoia Capital our founders our companies our team stories Podcasts We help the daring build legendary companies. We help the daring build legendary companies. A Model For Everyone: How Ronak From Trajectory Is Building Products For Continual Learning Training Data hosted by Pat Grady and Lauren Reeder Podcast Listen No Limit: A Bot Building Tournament Tournament Read Read Access Granted: How Serval Is Transforming IT for the AI Age by Harry Spitzer Spotlight Read Crusoe CEO Chase Lochmiller: Turning Stranded Energy Into Intelligence Hosted by Brian Halligan Podcast Listen Own Your Own Intelligence Video Watch AI Ascent 2026 by Team Sequoia Perspective Read 2026: This is AGI by Pat Grady and Sonya Huang Perspective Read Partnering with Edelbyte By Bogomil Balkansky and Dean Meyer News Read The Coming ASI Era by Stephanie Zhan Video Watch The Arc Product-Market Fit Framework Perspective Read Explore our companies Find Jobs at Sequoia Companies About Our Ethos Our History Jobs Legal Business Entities Sequoia Capital Sequoia Global Equities Login LP Login Sequoia Ampersand Login MOTION ON OFF © 2026 Sequoia Capital About Our Ethos Our History Jobs Legal Business Entities Sequoia Capital Sequoia Global Equities Login LP Login Sequoia Ampersand Login MOTION ON OFF © 2026 Sequoia Capital About Our Ethos Our History Jobs Legal Business Entities Sequoia Capital Sequoia Global"
+    },
+    {
+      "id": "check-page-8e85daeaac",
+      "url": "https://sequoiacap.com/article/lightstep-and-future-of-application-management",
+      "page": "application",
+      "excerpt": "Partnering with LightStep: The Future of Application Management | Sequoia Capital our founders our companies our team stories Podcasts Partnering with LightStep: The Future of Application Management It’s now clear that every company is becoming a software company, and moving towards microservices and platforms like LightStep. It’s now clear that every company is becoming a software company, and moving towards microservices and platforms like LightStep. By Aaref Hilaly , Published November 16, 2017 Published Nov 16, 2017 By By Aaref Hilaly , Sequoia partnered with LightStep in 2017 and in 2021 the company was acquired by ServiceNow . There’s a saying, “the future is already here, it’s just not evenly distributed.” It means: “early adopters are doing today what everyone will do tomorrow.” The press often points to examples like Tesla’s autopilot , Dutch farming , automated factories , or how teenagers use social media. But the same is true for enterprise computing. In that case, the early adopters are developer-driven, cloud-native companies that have achieved scale within the past five years, such as GitHub, Lyft, and Twilio. Ask them how they build and manage applications and you get a glimpse of the future: they are all building microservices, and managing them with LightStep . To understand why, let’s start with one of the biggest trends in technology. Software has become"
+    },
+    {
+      "id": "check-page-3af5e776b9",
+      "url": "https://sequoiacap.com/article/open-source-fellowship-applications",
+      "page": "application",
+      "excerpt": "Sequoia Open Source Fellowship: Applications Now Open | Sequoia Capital our founders our companies our team stories Podcasts Sequoia Open Source Fellowship: Applications Now Open Calling all open source developers to pursue your projects with no strings attached. Calling all open source developers to pursue your projects with no strings attached. By Bogomil Balkansky , Lauren Reeder , Published February 15, 2024 Published Feb 15, 2024 By By Bogomil Balkansky , Lauren Reeder , Last year we introduced the Sequoia Open Source Fellowship with the goal of encouraging the development of open source software and supporting the community of open source developers. More than ever, open source serves as the bedrock and lifeblood of the world’s software, with companies of all sizes utilizing OSS. The entire ecosystem relies on libraries and software packages—often solely maintained by open source developers. While Sequoia has partnered with many companies that found success commercializing OSS, the non-commercial spirit of open source collaboration underpins almost every aspect of modern technology. The fellowship was designed to support this work without any expectation of an equity stake in a commercial project or company. We started the fellowship as an invite-only program. This year, we are excited to announce that we are opening applications to the public. Starting today, any"
+    },
+    {
+      "id": "check-page-6c668c9ea5",
+      "url": "https://sequoiacap.com/article/partnering-with-deno-application-development-for-the-modern-web",
+      "page": "application",
+      "excerpt": "Partnering with Deno: Application Development for the Modern Web | Sequoia Capital our founders our companies our team stories Podcasts Partnering with Deno: Application Development for the Modern Web Ryan, Bert and the Deno team are breathing new life into the server-side JavaScript ecosystem. Ryan, Bert and the Deno team are breathing new life into the server-side JavaScript ecosystem. By Lauren Reeder , Published June 21, 2022 Published Jun 21, 2022 By By Lauren Reeder , Today, we are incredibly excited to announce that we are partnering with Ryan Dahl, Bert Belder and the team at Deno . Over the last couple of years, application development has moved to the cloud. If you want an auto-scaling database, a warehouse or a message bus, you have MongoDB, Snowflake or Confluent available at the click of a button. Yet for core application logic, developers still need to worry about pods, instances, versions, ports, regions and everything between. Whether it’s deciding to run your application in US-east1 or US-east2, or choosing the right instance type out of the dozens of options—it all feels archaic and far too complex. But it doesn’t need to be that way. We deeply believe in a serverless future—one where developers can write their core logic in a simple, accessible way, and the cloud will be responsible for auto-scaling and globally distributing that code to all of the machines"
+    },
+    {
+      "id": "check-page-7e627f7ed6",
+      "url": "https://sequoiacap.com/article/partnering-with-langchain-the-llm-application-framework",
+      "page": "application",
+      "excerpt": "Partnering with LangChain: The LLM Application Framework | Sequoia Capital our founders our companies our team stories Podcasts Partnering with LangChain: The LLM Application Framework Harrison, Ankush and their team are building the AI programming framework every engineer needs. Harrison, Ankush and their team are building the AI programming framework every engineer needs. By Sonya Huang , Published February 15, 2024 Published Feb 15, 2024 By By Sonya Huang , Team LangChain We are at the dawn of a new age of applications, with large language models (LLMs) as the enabling technology. But programming an LLM remains more art than science. The instructions that generate robust, reliable performance out of these non-deterministic models remain poorly understood. We are still in a wild west of prompt hacking, eyeballing outputs and a lot of duct tape when it comes to Generative AI. We have seen this movie play out before. In Software 1.0, frameworks such as React and Next have abstracted, modularized and organized the most common building blocks of software engineering, making it fast and reliable to build and test your next mobile app or website. Generative AI, too, deserves a proper programming framework. Developers are craving a common set of best practices and composable building blocks for their LLM applications, to simplify the complex and to avoid reinventing the wheel."
+    },
+    {
+      "id": "check-page-244c58787e",
+      "url": "https://sequoiacap.com/podcast/building-frontier-ai-at-the-application-layer-harvey-s-playbook",
+      "page": "application",
+      "excerpt": "Building Frontier AI at the Application Layer | Sequoia Capital our founders our companies our team stories Podcasts Visit Sovereign AI Series Page Building Frontier AI at the Application Layer Overview Visit Sovereign AI Series Page Building Frontier AI at the Application Layer Overview Visit Sovereign AI Series Page Building Frontier AI at the Application Layer Overview Podcasts / Sovereign AI / Gabe Pereyra, Harvey Podcasts / Sovereign AI / Gabe Pereyra, Harvey Building Frontier AI at the Application Layer How does an application company compete with frontier labs that have more money, talent, compute, and data? At Sequoia Capital’s Own Your Intelligence event, Harvey co-founder and president Gabe Pereyra shares the playbook: leverage the frontier ecosystem instead of building everything yourself. He explains why open-weight models have made post-training worth it for the first time, and why every company will eventually need some version of this playbook. Transcript Chapters Sonya: Next up, we are honored to have Gabe with us. Gabe is co-founder and president of Harvey. You were a research scientist at DeepMind ages ago, and then at Meta, before you showed your college roommate what GPT-3 could do — and this duo then became Harvey. We're really excited to have you here. Everybody in the audience is an application company thinking about how to start doing their own"
+    },
+    {
+      "id": "check-page-d7022ca433",
+      "url": "https://sequoiacap.com/podcast/goldman-sachs-ceo-david-solomon-what-startup-founders-get-wrong-about-the-ceo-job",
+      "page": "details",
+      "excerpt": "Goldman Sachs CEO David Solomon: What Startup Founders Get Wrong About the CEO Job | Sequoia Capital our founders our companies our team stories Podcasts Episode 04 | Visit Long Strange Trip Series Page Goldman Sachs CEO David Solomon: What Startup Founders Get Wrong About the CEO Job Overview Episode 04 | Visit Long Strange Trip Series Page Goldman Sachs CEO David Solomon: What Startup Founders Get Wrong About the CEO Job Overview Episode 04 | Visit Long Strange Trip Series Page Goldman Sachs CEO David Solomon: What Startup Founders Get Wrong About the CEO Job Overview Podcasts / Long Strange Trip / David Solomon, Goldman Sachs Podcasts / Long Strange Trip / David Solomon, Goldman Sachs Goldman Sachs CEO David Solomon: What Startup Founders Get Wrong About the CEO Job Stream now on Youtube Spotify Apple Amazon David discusses some of the tough calls he’s had to make in the CEO seat, including the difficult decision to wind down Goldman's consumer banking ambitions. His perspective coming from a 156-year old banking giant is a little different than the common Silicon Valley wisdom. Hear why he thinks experience is vastly underrated in Silicon Valley, why \"smart enough\" matters more than being the smartest person in the room, and why serendipity and timing play bigger roles in being a great CEO than people realize. Watch Now Summary Key takeaways from David: Treat culture as an"
+    },
+    {
+      "id": "check-page-e6f629c9fb",
+      "url": "https://jobs.sequoiacap.com/jobs",
+      "page": "portfolio",
+      "excerpt": "Jobs at Sequoia Capital Companies | Sequoia Capital OUR FOUNDERS OUR COMPANIES OUR TEAM COMPANY DESIGN STORIES Our Founders Our Companies Our team Company Design stories Make a dent in the world Jobs Companies Filter jobs by skills and more Roles Search roles Skills Search skills Location Search locations Company stage Select... Industry Search industries Internships only Remote options All jobs Posted Anytime Post and Manage jobs Powered by Consider Powered by Consider Privacy Terms ABOUT Our Ethos Our History FAQ Jobs Newsletter Legal BUSINESS ENTITIES U.S./Europe India Southest Asia China Heritage SCGE LOGIN LP Login Sequoia Ampersand Login © 2021 Sequoia"
+    },
+    {
+      "id": "check-page-4b31b4a69a",
+      "url": "https://sequoiacap.com/article/the-sequoia-fund-patient-capital-for-building-enduring-companies",
+      "page": "portfolio",
+      "excerpt": "The Sequoia Capital Fund: Patient Capital for Building Enduring Companies | Sequoia Capital our founders our companies our team stories Podcasts The Sequoia Capital Fund: Patient Capital for Building Enduring Companies We are breaking with the traditional organization based on fund cycles and restructuring Sequoia Capital around a singular, permanent structure: The Sequoia Capital Fund. We are breaking with the traditional organization based on fund cycles and restructuring Sequoia Capital around a singular, permanent structure: The Sequoia Capital Fund. By Roelof Botha , Published October 26, 2021 Published Oct 26, 2021 By By Roelof Botha , The creative spirits. The underdogs. The resolute. The independent thinkers. The fighters and the true believers. This ethos describes the founders we partner with, as well as Sequoia’s relentless drive to help them succeed. Since 1972 we’ve had a front row seat as visionary business and technology leaders pushed the bounds of the possible. And it’s just the beginning. Ironically, innovations in venture capital haven’t kept pace with the companies we serve. Our industry is still beholden to a rigid 10-year fund cycle pioneered in the 1970s. As chips shrank and software flew to the cloud, venture capital kept operating on the business equivalent of floppy disks. Once upon a time the 10-year fund cycle made sense. But the assumptions it’s"
+    },
+    {
+      "id": "check-page-6b32ce5ac9",
+      "url": "https://sequoiacap.com/article/universal-laws-of-physics-and-companies",
+      "page": "portfolio",
+      "excerpt": "Universal Laws of Physics and Companies | Sequoia Capital our founders our companies our team stories Podcasts Universal Laws of Physics and Companies Leveraging physics to run a better business. Leveraging physics to run a better business. By Doug Leone Published August 18, 2015 Published Aug 18, 2015 By By Doug Leone What’s at stake The world is changing at an accelerating rate. Tomorrow’s world will be different than it is today, and the successful entrepreneurs will be the ones who best manage for change and those who don’t will be out of business. Roughly every eight to ten years a new technology upends markets and transforms industries. After the PC came the router, then the internet, then mobile and then the cloud. New changes are on the horizon. Will your company be ready? No company is safe Even the best companies are vulnerable to change. A brief glance at the Fortune 1000 illustrates how tough it is to survive. Every decade, the percentage of legacy companies in the Fortune 1000 drops sharply. Today, three-quarters of the Fortune 1000 are less than ten years old. Which means roughly 750 of the top 1000 companies in the world couldn’t keep up with the pace of change for more than a decade. Even the Dow 30, who by definition are the cream of the crop, are at risk: only four have survived since the 1960s. Change may feel risky, but the biggest risk is not changing."
+    },
+    {
+      "id": "check-page-fc162689b6",
+      "url": "https://sequoiacap.com/companies/100-thieves",
+      "page": "portfolio",
+      "excerpt": "100 Thieves | Sequoia Capital our founders our companies our team stories Podcasts 100 Thieves is a lifestyle brand for gamers. It fields esports teams, hosts live events and produces themed apparel. 100thieves.com Consumer Milestones Founded 2017 Partnered 2018 Jobs About Our Ethos Our History Jobs Legal Business Entities Sequoia Capital Sequoia Global Equities Login LP Login Sequoia Ampersand Login MOTION ON OFF © 2026 Sequoia Capital About Our Ethos Our History Jobs Legal Business Entities Sequoia Capital Sequoia Global Equities Login LP Login Sequoia Ampersand Login MOTION ON OFF © 2026 Sequoia Capital About Our Ethos Our History Jobs Legal Business Entities Sequoia Capital Sequoia Global Equities Login LP Login Sequoia Ampersand Login MOTION ON OFF © 2026 Sequoia Capital"
+    },
+    {
+      "id": "check-page-de3f10ae9e",
+      "url": "https://sequoiacap.com/companies/210664",
+      "page": "portfolio",
+      "excerpt": "Aspora | Sequoia Capital our founders our companies our team stories Podcasts Aspora is building full stack banking for diaspora populations starting with the Indian diaspora. They enable non-resident Indians to move money seamlessly across borders at the lowest costs. aspora.com Fintech Milestones Founded 2022 Partnered 2024 Team Parth Garg Partners George Robson James Flynn Luciana Lixandru Jobs Press & Media Press & Media Press & Media News Partnering with Aspora: Diaspora Banking Goes Global By Luciana Lixandru, George Robson and James Flynn Read About Our Ethos Our History Jobs Legal Business Entities Sequoia Capital Sequoia Global Equities Login LP Login Sequoia Ampersand Login MOTION ON OFF © 2026 Sequoia Capital About Our Ethos Our History Jobs Legal Business Entities Sequoia Capital Sequoia Global Equities Login LP Login Sequoia Ampersand Login MOTION ON OFF © 2026 Sequoia Capital About Our Ethos Our History Jobs Legal Business Entities Sequoia Capital Sequoia Global Equities Login LP Login Sequoia Ampersand Login MOTION ON OFF © 2026 Sequoia Capital"
+    },
+    {
+      "id": "check-page-9d48c5bceb",
+      "url": "https://sequoiacap.com/companies/247",
+      "page": "portfolio",
+      "excerpt": "[24]7.ai | Sequoia Capital our founders our companies our team stories Podcasts [24]7.ai uses AI technology to help businesses attract and retain customers with a personalized, predictive and effortless experience. [24]7.ai gives companies the ability to know and act on consumer intent in milliseconds. 247.ai GTM Operations Milestones Founded 2000 Partnered 2003 Team PV Kannan Shanmugam “Nags” Nagarajan Partner Michael Moritz Jobs About Our Ethos Our History Jobs Legal Business Entities Sequoia Capital Sequoia Global Equities Login LP Login Sequoia Ampersand Login MOTION ON OFF © 2026 Sequoia Capital About Our Ethos Our History Jobs Legal Business Entities Sequoia Capital Sequoia Global Equities Login LP Login Sequoia Ampersand Login MOTION ON OFF © 2026 Sequoia Capital About Our Ethos Our History Jobs Legal Business Entities Sequoia Capital Sequoia Global Equities Login LP Login Sequoia Ampersand Login MOTION ON OFF © 2026 Sequoia Capital"
+    },
+    {
+      "id": "check-page-e1ebd833db",
+      "url": "https://sequoiacap.com/companies/abby-care",
+      "page": "portfolio",
+      "excerpt": "Abby Care | Sequoia Capital our founders our companies our team stories Podcasts Abby Care trains family members to become paid caregivers for loved ones with disabilities or special needs. It provides training and community support to deliver better care at lower cost. abbycare.org Consumer Healthcare Milestones Founded 2021 Partnered 2021 Team Havi Nguyen Partner Alfred Lin Jobs Press & Media Press & Media Press & Media News Partnering with Abby Care By Josephine Chen and Alfred Lin Read About Our Ethos Our History Jobs Legal Business Entities Sequoia Capital Sequoia Global Equities Login LP Login Sequoia Ampersand Login MOTION ON OFF © 2026 Sequoia Capital About Our Ethos Our History Jobs Legal Business Entities Sequoia Capital Sequoia Global Equities Login LP Login Sequoia Ampersand Login MOTION ON OFF © 2026 Sequoia Capital About Our Ethos Our History Jobs Legal Business Entities Sequoia Capital Sequoia Global Equities Login LP Login Sequoia Ampersand Login MOTION ON OFF © 2026 Sequoia Capital"
+    },
+    {
+      "id": "check-page-f6b1db1db0",
+      "url": "https://sequoiacap.com/companies/admob",
+      "page": "portfolio",
+      "excerpt": "AdMob | Sequoia Capital our founders our companies our team stories Podcasts AdMob built a pay-per click marketplace for mobile apps. Now part of Google, AdMob continues to help businesses gain user insights and drive in-app purchases. admob.com GTM Milestones Founded 2006 Partnered 2006 Acquired 2010 Team Omar Hamoui Partner Jim Goetz Jobs About Our Ethos Our History Jobs Legal Business Entities Sequoia Capital Sequoia Global Equities Login LP Login Sequoia Ampersand Login MOTION ON OFF © 2026 Sequoia Capital About Our Ethos Our History Jobs Legal Business Entities Sequoia Capital Sequoia Global Equities Login LP Login Sequoia Ampersand Login MOTION ON OFF © 2026 Sequoia Capital About Our Ethos Our History Jobs Legal Business Entities Sequoia Capital Sequoia Global Equities Login LP Login Sequoia Ampersand Login MOTION ON OFF © 2026 Sequoia Capital"
     }
   ],
   "findings": {
@@ -44,11 +360,42 @@
         "evidenceId": "check-route-eb4b560faf"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-0cb81b2901"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-1d44e09599"
+      }
+    ],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-b9f306058f"
+      },
+      {
+        "value": "15 months",
+        "evidenceId": "check-duration-5b3b80d018"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-e6e19e388d"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://sequoiacap.com/our-companies",
@@ -57,6 +404,22 @@
       {
         "value": "https://sequoiacap.com/our-companies?spotlight=no",
         "evidenceId": "check-portfolio-fb8e37c27a"
+      },
+      {
+        "value": "https://www.sequoiacap.com/our-companies",
+        "evidenceId": "check-portfolio-62da6de79d"
+      },
+      {
+        "value": "https://jobs.sequoiacap.com/companies",
+        "evidenceId": "check-portfolio-d8168565ff"
+      },
+      {
+        "value": "https://sequoiacap.com/our-companies?categories=consumer",
+        "evidenceId": "check-portfolio-b7dcc341dc"
+      },
+      {
+        "value": "https://sequoiacap.com/our-companies?categories=fintech",
+        "evidenceId": "check-portfolio-27c7e6b1ff"
       }
     ],
     "name": [

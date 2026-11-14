@@ -1,36 +1,20 @@
 {
   "programId": "sosv-ny",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://sosv.com/portfolio/",
-      "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://sosv.com/about/",
       "page": "details",
       "anchor": "About",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://sosv.com/legal-faqs/",
-      "page": "terms",
-      "anchor": "Legal FAQ",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://sosv.com/will-sosv-invest-in-your-company/",
-      "page": "terms",
-      "anchor": "Application FAQ",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/application-faqs/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -38,6 +22,30 @@
       "url": "https://sosv.com/apply",
       "page": "application",
       "anchor": "Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/apply/hax/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/haxs-rightbot-lands-amazon-investment-for-freight-unloading-robots/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/haxs-xfuel-closes-e8-2-million-investment-round-for-high-grade-biomass-fuels/",
+      "page": "terms",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -51,10 +59,98 @@
       "origin": "official"
     },
     {
+      "url": "https://sosv.com/legal-faqs/",
+      "page": "terms",
+      "anchor": "Legal FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/legal-faqs/?faq_id=17354",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/legal-faqs/?faq_id=17356",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/legal-faqs/?faq_id=17357",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/legal-faqs/?faq_id=17358",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/legal-faqs/?faq_id=17363",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/legal-faqs/?faq_id=17365",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/legal-faqs/?faq_id=17366",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/legal-faqs/?faq_id=17367",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://sosv.com/subscribe",
       "page": "batches",
       "anchor": "Get Email Updates",
-      "fetched": true,
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sosv.com/will-sosv-invest-in-your-company/",
+      "page": "terms",
+      "anchor": "Application FAQ",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     }

@@ -1,37 +1,199 @@
 {
   "programId": "apx",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://apx.vc/"
+    "https://apx.vc/",
+    "https://apx.vc/jobs/investment-manager-fdm-at-apx-in-berlin",
+    "https://apx.vc/press/21-01-2021-apx-raises-significant-new-funds-from-investors-axel-springer-and-porsche-and-announces-ambitious-new-investment-strategy-english-german",
+    "https://apx.vc/press/porsche-and-axel-springer-increase-investment-into-early-stage-fund-apx-to-e55m",
+    "https://apx.vc/press/04-06-2020-apx-integrates-mental-health-support-into-its-startup-accelerator-program-english-german",
+    "https://apx.vc/press/business-insider-apx-accelerator-becomes-a-vc"
   ],
   "evidence": [
     {
+      "id": "check-deal-23dc8b610f",
+      "url": "https://apx.vc/jobs/investment-manager-fdm-at-apx-in-berlin",
+      "title": "APX — terms page",
+      "excerpt": "first investor. In addition to our financial investment of up to EUR 500,000, we provide startups with individual venture development support to",
+      "page": "terms"
+    },
+    {
       "id": "check-email-06eaae4755",
       "url": "https://apx.vc/",
-      "title": "APX — homepage checked by scrape.py",
+      "title": "APX — homepage",
       "excerpt": "Toggle Menu APX Portfolio Who we are Send us your pitch hello@apx.vc Send us your pitch Getquin Raphael and Christian develop a",
       "page": "details"
     },
     {
+      "id": "check-email-0f552aa723",
+      "url": "https://apx.vc/press/porsche-and-axel-springer-increase-investment-into-early-stage-fund-apx-to-e55m",
+      "title": "APX — terms page",
+      "excerpt": "hello@apx.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-23f28317f0",
+      "url": "https://apx.vc/jobs/investment-manager-fdm-at-apx-in-berlin",
+      "title": "APX — terms page",
+      "excerpt": "hello@apx.vc",
+      "page": "terms"
+    },
+    {
       "id": "check-email-2c40641093",
       "url": "https://apx.vc/",
-      "title": "APX — homepage checked by scrape.py",
+      "title": "APX — homepage",
       "excerpt": "hello@apx.vc",
       "page": "details"
     },
     {
+      "id": "check-email-49778d586b",
+      "url": "https://apx.vc/press/business-insider-apx-accelerator-becomes-a-vc",
+      "title": "APX — program page",
+      "excerpt": "hello@apx.vc",
+      "page": "details"
+    },
+    {
+      "id": "check-email-64b4abf972",
+      "url": "https://apx.vc/press/04-06-2020-apx-integrates-mental-health-support-into-its-startup-accelerator-program-english-german",
+      "title": "APX — program page",
+      "excerpt": "hello@apx.vc",
+      "page": "details"
+    },
+    {
+      "id": "check-email-7395f8c1c0",
+      "url": "https://apx.vc/jobs/investment-manager-fdm-at-apx-in-berlin",
+      "title": "APX — terms page",
+      "excerpt": "Toggle Menu APX Portfolio Who we are Send us your pitch hello@apx.vc Send us your pitch Investment Manager (f/d/m) at APX in",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-74f10c8291",
+      "url": "https://apx.vc/press/porsche-and-axel-springer-increase-investment-into-early-stage-fund-apx-to-e55m",
+      "title": "APX — terms page",
+      "excerpt": "Toggle Menu APX Portfolio Who we are Send us your pitch hello@apx.vc Send us your pitch APX Investors Pitching Techcrunch:",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-79e721bd2d",
+      "url": "https://apx.vc/press/business-insider-apx-accelerator-becomes-a-vc",
+      "title": "APX — program page",
+      "excerpt": "Toggle Menu APX Portfolio Who we are Send us your pitch hello@apx.vc Send us your pitch APX Investors Pitching Gründerszene:",
+      "page": "details"
+    },
+    {
+      "id": "check-email-7b5c50d4b8",
+      "url": "https://apx.vc/press/21-01-2021-apx-raises-significant-new-funds-from-investors-axel-springer-and-porsche-and-announces-ambitious-new-investment-strategy-english-german",
+      "title": "APX — terms page",
+      "excerpt": "hello@apx.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-dc7c657d81",
+      "url": "https://apx.vc/press/21-01-2021-apx-raises-significant-new-funds-from-investors-axel-springer-and-porsche-and-announces-ambitious-new-investment-strategy-english-german",
+      "title": "APX — terms page",
+      "excerpt": "Toggle Menu APX Portfolio Who we are Send us your pitch hello@apx.vc Send us your pitch APX Investors Pitching APX raises",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-ea9abe14d3",
+      "url": "https://apx.vc/press/04-06-2020-apx-integrates-mental-health-support-into-its-startup-accelerator-program-english-german",
+      "title": "APX — program page",
+      "excerpt": "Toggle Menu APX Portfolio Who we are Send us your pitch hello@apx.vc Send us your pitch APX Investors Pitching APX integrates",
+      "page": "details"
+    },
+    {
+      "id": "check-format-20364ea9ba",
+      "url": "https://apx.vc/press/04-06-2020-apx-integrates-mental-health-support-into-its-startup-accelerator-program-english-german",
+      "title": "APX — program page",
+      "excerpt": "achieve high performance in the long-run.” Related Posts Virtual Pitching Tips: 14 Learnings From Our Home Offices Standing",
+      "page": "details"
+    },
+    {
+      "id": "check-format-3ded190c95",
+      "url": "https://apx.vc/jobs/investment-manager-fdm-at-apx-in-berlin",
+      "title": "APX — terms page",
+      "excerpt": "as soon as possible. About APX Based in Berlin and working remote-first, APX invests across industries in the best founding",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-82fcb3375a",
+      "url": "https://apx.vc/press/porsche-and-axel-springer-increase-investment-into-early-stage-fund-apx-to-e55m",
+      "title": "APX — terms page",
+      "excerpt": "| 1 min read Author: Søren Lund Nielsen Related Posts Virtual Pitching Tips: 14 Learnings From Our Home Offices Standing",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-97e97d99e8",
+      "url": "https://apx.vc/press/business-insider-apx-accelerator-becomes-a-vc",
+      "title": "APX — program page",
+      "excerpt": "| 1 min read Author: Søren Lund Nielsen Related Posts Virtual Pitching Tips: 14 Learnings From Our Home Offices Standing",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b6cdddf9af",
+      "url": "https://apx.vc/press/21-01-2021-apx-raises-significant-new-funds-from-investors-axel-springer-and-porsche-and-announces-ambitious-new-investment-strategy-english-german",
+      "title": "APX — terms page",
+      "excerpt": "even closer support of each founding team. Although in-person presence is no longer a requirement for investment, APX",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-f84f81ecf7",
+      "url": "https://apx.vc/press/21-01-2021-apx-raises-significant-new-funds-from-investors-axel-springer-and-porsche-and-announces-ambitious-new-investment-strategy-english-german",
+      "title": "APX — terms page",
+      "excerpt": "please contact Søren Nielsen, soren@apx.vc . Related Posts Virtual Pitching Tips: 14 Learnings From Our Home Offices Standing",
+      "page": "terms"
+    },
+    {
       "id": "check-name-7909b5d2fb",
       "url": "https://apx.vc/",
-      "title": "APX — homepage checked by scrape.py",
+      "title": "APX — homepage",
       "excerpt": "APX - Earliest-stage startup investor. VC in Berlin. Who we",
       "page": "details"
     },
     {
       "id": "check-route-cde39ef16c",
       "url": "https://apx.vc/",
-      "title": "APX — homepage checked by scrape.py",
+      "title": "APX — homepage",
       "excerpt": "https://apx.vc",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-6cbdd2307a",
+      "url": "https://apx.vc/",
+      "page": "details",
+      "excerpt": "APX - Earliest-stage startup investor. VC in Berlin. Who we are Portfolio Toggle Menu APX Portfolio Who we are Send us your pitch hello@apx.vc Send us your pitch Getquin Raphael and Christian develop a “do-it-yourself investment software”. Emmora Evgeniya and Victoria digitize the funeral industry to give the best farewell. Offmade Lucas and Lennart create the digital investment real estate platform. Unown Tina and Linda make premium, sustainable fashion leasable online. Check out the APX portfolio WELCOME TO APX Earliest-stage investor. Long-term partner. WELCOME TO APX Earliest-stage investor. Long-term partner. The earliest-stage VC Based in Berlin and backed by Axel Springer and Porsche, we support and partner with the most ambitious pre-seed startups from Europe and beyond – often as their first investor. Who we are 0 startups 0 industries 0 countries 0 co-investors A growing family APX is an investor in exceptional earliest-stage founder teams building startups with digital business models and one of Europe’s leading earliest-stage VCs Check out our portfolio © 2026 Axel Springer Porsche GmbH & Co. KG Legal Privacy This website uses cookies We inform you that this site uses own, technical and third parties cookies to make sure our web page is user-friendly and to guarantee a high functionality of the webpage. By continuing to browse this website, you declare to accept"
+    },
+    {
+      "id": "check-page-92358243b6",
+      "url": "https://apx.vc/jobs/investment-manager-fdm-at-apx-in-berlin",
+      "page": "terms",
+      "excerpt": "Investment Manager (f/d/m) at APX in Berlin - APX | APX Early Stage Investor in Berlin Investment Manager (f/d/m) at APX in Berlin - APX Who we are Portfolio Toggle Menu APX Portfolio Who we are Send us your pitch hello@apx.vc Send us your pitch Investment Manager (f/d/m) at APX in Berlin APX Berlin APX is Europe’s leading earliest-stage VC. We are looking for an Investment Manager with 2+ years of experience in Venture Capital. Starting date: as soon as possible. About APX Based in Berlin and working remote-first, APX invests across industries in the best founding teams building digital startups – often as their first investor. In addition to our financial investment of up to EUR 500,000, we provide startups with individual venture development support to build traction and secure follow-on financing. Since 2018, we have built a portfolio of 120+ companies with founders from 20+ countries together with hundreds of co-investors. About your role Joining APX and shaping our growth story, you will further develop your investor profile as part of a group of ambitious team players from across the world. In your role, you will have the autonomy to own and execute the whole investment cycle from start (origination) to finish (deal closing and portfolio management). This expansive exposure will accelerate your holistic development as a VC investor across Europe. What you’ll be working"
+    },
+    {
+      "id": "check-page-498ef0d833",
+      "url": "https://apx.vc/press/21-01-2021-apx-raises-significant-new-funds-from-investors-axel-springer-and-porsche-and-announces-ambitious-new-investment-strategy-english-german",
+      "page": "terms",
+      "excerpt": "APX raises significant new funds from investors Axel Springer and Porsche and announces ambitious new investment strategy - APX Who we are Portfolio Toggle Menu APX Portfolio Who we are Send us your pitch hello@apx.vc Send us your pitch APX Investors Pitching APX raises significant new funds from investors Axel Springer and Porsche and announces ambitious new investment strategy January 21, 2021 - Posted by Author: APX in Category: | 1 min read Author: APX test Berlin, January 21, 2021 – Berlin-based investor APX has secured additional funding from its two investors Axel Springer and Porsche, significantly increasing its total investment amount for new and existing portfolio companies to a volume of 55 Million EUR. This allows APX to invest up to 500,000 EUR in portfolio startups even before a Series A. With a new investment strategy, APX moves away from having an accelerator program to being a very-early-stage investor with an ambition to leave an even stronger footprint in the venture capital ecosystem and support the most ambitious pre-seed startups in Europe and beyond as their long-term partner. Media and tech company Axel Springer and sports car manufacturer Porsche reiterate their commitment to the startup ecosystem by increasing the dynamic funding for APX, the early-stage investor supporting the most ambitious founding teams and their startups, to 55 Million EUR. The"
+    },
+    {
+      "id": "check-page-cad2f3b52d",
+      "url": "https://apx.vc/press/porsche-and-axel-springer-increase-investment-into-early-stage-fund-apx-to-e55m",
+      "page": "terms",
+      "excerpt": "Techcrunch: Porsche and Axel Springer increase investment into early-stage fund APX to €55M - APX Who we are Portfolio Toggle Menu APX Portfolio Who we are Send us your pitch hello@apx.vc Send us your pitch APX Investors Pitching Techcrunch: Porsche and Axel Springer increase investment into early-stage fund APX to €55M January 21, 2021 - Posted by Author: Søren Lund Nielsen in Category: | 1 min read Author: Søren Lund Nielsen Related Posts Virtual Pitching Tips: 14 Learnings From Our Home Offices Standing out from the crowd is important. For that, you need a persuasive pitch. Read More 1 min Building a Great Startup Team No matter how great your idea is or how much funding you have, you can’t do it alone. Read More 1 min Craft the Perfect Investor Deck Creating a good investor deck is hard - an excellent investor deck even harder. Read More 1 min See More Posts © 2026 Axel Springer Porsche GmbH & Co. KG Legal Privacy This website uses cookies We inform you that this site uses own, technical and third parties cookies to make sure our web page is user-friendly and to guarantee a high functionality of the webpage. By continuing to browse this website, you declare to accept the use of cookies. I Accept"
+    },
+    {
+      "id": "check-page-c4e5a54434",
+      "url": "https://apx.vc/press/04-06-2020-apx-integrates-mental-health-support-into-its-startup-accelerator-program-english-german",
+      "page": "details",
+      "excerpt": "APX integrates Mental Health Support into its Startup Accelerator Program - APX Who we are Portfolio Toggle Menu APX Portfolio Who we are Send us your pitch hello@apx.vc Send us your pitch APX Investors Pitching APX integrates Mental Health Support into its Startup Accelerator Program June 10, 2020 - Posted by Author: APX in Category: | 1 min read Author: APX test Leading pre-seed VC APX doubles down on its mental health strategy “Mental Mining” to give all new founders joining its program coaching sessions around balancing mental well-being. Each new company joining APX will have two sessions with an associated trainer addressing both general best practices and individual challenges for early-stage startup founders related to mental health. The workshops include topics such as self-awareness, group empathy and self-regulation for resilience and dealing with stress and challenges – especially in times of crisis and change. On top, APX will offer access to an internal library of relevant off-the-shelf content. Director of Venture Development at APX, Yoni Goldwasser , comments: “Through this initiative, we assist our founders with the tools and proactive measures they need to prevent burnout and stress, learn how to handle rejection and failure, and stay mindful. Our goal is to help each team create a successful venture company and for that, they need to understand that"
+    },
+    {
+      "id": "check-page-40de3678aa",
+      "url": "https://apx.vc/press/business-insider-apx-accelerator-becomes-a-vc",
+      "page": "details",
+      "excerpt": "Gründerszene: APX accelerator becomes a VC - APX Who we are Portfolio Toggle Menu APX Portfolio Who we are Send us your pitch hello@apx.vc Send us your pitch APX Investors Pitching Gründerszene: APX accelerator becomes a VC January 21, 2021 - Posted by Author: Søren Lund Nielsen in Category: | 1 min read Author: Søren Lund Nielsen Related Posts Virtual Pitching Tips: 14 Learnings From Our Home Offices Standing out from the crowd is important. For that, you need a persuasive pitch. Read More 1 min Building a Great Startup Team No matter how great your idea is or how much funding you have, you can’t do it alone. Read More 1 min Craft the Perfect Investor Deck Creating a good investor deck is hard - an excellent investor deck even harder. Read More 1 min See More Posts © 2026 Axel Springer Porsche GmbH & Co. KG Legal Privacy This website uses cookies We inform you that this site uses own, technical and third parties cookies to make sure our web page is user-friendly and to guarantee a high functionality of the webpage. By continuing to browse this website, you declare to accept the use of cookies. I Accept"
     }
   ],
   "findings": {
@@ -52,8 +214,42 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-3ded190c95"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-b6cdddf9af"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "first investor. In addition to our financial investment of up to EUR 500,000, we provide startups with individual venture development support to",
+        "evidenceId": "check-deal-23dc8b610f"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "500000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-23dc8b610f"
+      }
+    ],
     "portfolioPages": [],
     "name": [
       {

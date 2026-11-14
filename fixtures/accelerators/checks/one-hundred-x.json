@@ -1,6 +1,6 @@
 {
   "programId": "one-hundred-x",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.100x.vc/",
     "https://www.100x.vc/about"
@@ -9,16 +9,30 @@
     {
       "id": "check-name-62d38ac6b9",
       "url": "https://www.100x.vc/",
-      "title": "100X.VC — homepage checked by scrape.py",
+      "title": "100X.VC — homepage",
       "excerpt": "100X.VC | Funding Simplified. Mentoring Unlimited. Home | 100X.VC",
       "page": "details"
     },
     {
       "id": "check-route-cee8d79f5b",
       "url": "https://www.100x.vc/",
-      "title": "100X.VC — homepage checked by scrape.py",
+      "title": "100X.VC — homepage",
       "excerpt": "https://www.100x.vc/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-4b62fb2a4a",
+      "url": "https://www.100x.vc/",
+      "page": "details",
+      "excerpt": "100X.VC | Funding Simplified. Mentoring Unlimited. Home | 100X.VC About Us Team iSafe Menu Funding Simplified. Mentoring Unlimited. 01 / Moonshots Moonshots We invest in your Moonshot Ideas. 02 / India SAFE Notes India SAFE Notes Cut the complexity. Focus on growth. 03 / Network Network Helping founders reach the next round and beyond. The 100X Team Shaping businesses for hyper-growth. We are a lean team with deep operating and investing experience. Meet our Team ↗ 100X Milestones 400+ Founders 180 Companies $90 Mn+ Follow-on Funding 2,010 Jobs Created 100X.VC is the first Venture Capital firm to invest in early stage startups using founder friendly India SAFE Notes. About Us Team iSafe © 2026 100X.VC. All Rights Reserved."
+    },
+    {
+      "id": "check-page-786d83c760",
+      "url": "https://www.100x.vc/about",
+      "page": "details",
+      "excerpt": "About Us | 100X.VC About | 100X.VC About Us Team iSafe Menu About 100X.VC We fund exceptional Indian founders. 100X.VC is an early-stage venture fund investing in moonshot ideas through founder-friendly India SAFE Notes. Our Mission Funding simplified. Mentoring unlimited. We make the first institutional cheque faster and simpler, then support founders with the experience, network, and momentum they need to grow. How We Think Founder-led from day one. 01 Founders first We back ambitious founders early and stay focused on helping them build enduring companies. 02 Move with speed Clear decisions and India SAFE Notes help founders spend less time fundraising and more time building. 03 Build together Capital is only the start. Our network brings practical operating experience, mentoring, and connections. Our Approach From first conversation to hyper-growth. 01 Discover We meet founders solving important problems with a bold, scalable point of view. 02 Decide A focused evaluation process lets strong teams move quickly. 03 Invest Our India SAFE Note is designed to keep early-stage funding straightforward. 04 Mentor Founders work with operators, investors, and specialists from the 100X network. 05 Scale We help companies prepare for growth and their next institutional round. The 100X Team Built by investors. Driven by founders. Meet the operators and investors helping ambitious"
     }
   ],
   "findings": {
@@ -34,8 +48,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

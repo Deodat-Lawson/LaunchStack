@@ -1,15 +1,7 @@
 {
   "programId": "new-energy-nexus",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://www.newenergynexus.com/about/",
-      "page": "details",
-      "anchor": "About",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://apply.workable.com/newenergynexus/",
       "page": "application",
@@ -19,10 +11,34 @@
       "origin": "official"
     },
     {
-      "url": "https://www.newenergynexus.com/portfolio/",
-      "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
+      "url": "https://apply.workable.com/newenergynexus/j/0B39CDEE8D/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.workable.com/newenergynexus/j/23BA086C31/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.workable.com/newenergynexus/j/969B07F3C9/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/about/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -30,6 +46,78 @@
       "url": "https://www.newenergynexus.com/for-entrepreneurs/",
       "page": "details",
       "anchor": "Find a program",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/news/100-climate-solutions-selected-for-nex-cop28-climate-tech-startup-accelerator/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/news/2023-climate-fintech-accelerator-opens-to-startups-around-the-world/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/news/californias-pioneering-clean-energy-testing-program-lands-in-australia/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/news/calseed-cohort-7-prototype-awards-announcement/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/news/climate-tech-startups-to-be-showcased-at-cop28-in-new-program-from-cop28-and-new-energy-nexus/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/news/new-energy-nexus-response-to-white-houses-15-5-billion-ev-investment-announcement/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/news/six-women-led-agricultural-enterprises-secure-investment-to-tackle-climate-adaptation-in-the-mekong-delta/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/news/supercharge-australia-innovation-challenge-announces-australias-first-cohort-of-11-battery-startups/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newenergynexus.com/portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
       "fetched": false,
       "blocked": null,
       "origin": "official"

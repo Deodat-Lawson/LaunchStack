@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.seedstars.com/",
   "applyUrl": "https://www.seedstars.com/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: About ABOUT Our story Our impact Our values Our team Our 'Theory of Change' Press Newsroom Funds SEEDSTARS CAPITAL Seedstars International Ventures Seedstars Africa Ventures Redwood Ventures iThink VC Trust Tech Fund SECO Startup Fund Portfolio companies Programs PROGRAMS Seedstars ESO Alliance Acceleration program Growth program Investment readiness program See all OPEN CALLS FOR ENTREPRENEURS Upcoming programs Demo days Who we work with WHO WE WORK WITH Development agencies Governments Corporations Investors Entrepreneurs Mentors Ambassadors LEARN MORE Client Success Themes Events EVENTS Seedstars Calendar 10 years anniversary Seedstars World competition Local competitions Regional competitions Seedstars Summit Resources RESOURCES SMART SIGMA Seedstars Life Seedstars Insights Seedstars Index Report library Learning resources No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Our principal sectors of activity are: entrepreneurship capacity building, impact investment, community & events execution, market insights, program management, innovation advisory and talent development across all tech-enabled industries and emerging market geographies.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Support emerging market entrepreneurs across various impactful verticals with capacity building and a data-driven approach.",
     "sourceIds": [
       "homepage"
     ],
@@ -26,9 +26,9 @@
     {
       "id": "official-logo",
       "url": "https://www.seedstars.com/",
-      "title": "Seedstars — official mark on the retrieved page",
-      "quote": "https://www.seedstars.com/static/img/favicons/apple-touch-icon-57x57.656ab2997e3a.png",
-      "checkedAt": "2026-11-03T00:18:31.000Z"
+      "title": "Seedstars — no rule-validated official mark",
+      "quote": "https://seedstars-com.s3.amazonaws.com/original_images/seedstars2506logo500x500.png",
+      "checkedAt": "2026-11-14T20:18:03.000Z"
     },
     {
       "id": "homepage",
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "seedstars-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.seedstars.com/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

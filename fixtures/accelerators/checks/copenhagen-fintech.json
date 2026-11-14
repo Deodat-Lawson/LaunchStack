@@ -1,73 +1,500 @@
 {
   "programId": "copenhagen-fintech",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://copenhagenfintech.dk/",
-    "https://copenhagenfintech.dk/about"
+    "https://copenhagenfintech.dk/reports/nordic-fintech-investment-environment-2024",
+    "https://copenhagenfintech.dk/reports/nordic-fintech-investment-environment-2024?f3070f05_page=2",
+    "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation---berlin-delegation-2025",
+    "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation---singapore-fintech-festival-2025",
+    "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-fin-sum-tokyo-2023",
+    "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-finovate-europe-2023",
+    "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-norway-fintech-festival-2023",
+    "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-singapore-fintech-festival",
+    "https://copenhagenfintech.dk/cohorts/incubation-cohort",
+    "https://copenhagenfintech.dk/cohorts/incubation-program-fall-2025",
+    "https://copenhagenfintech.dk/cohorts/incubation-program-fall-2026",
+    "https://copenhagenfintech.dk/cohorts/incubation-program-spring-2025",
+    "https://copenhagenfintech.dk/cohorts/incubation-program-spring-2026",
+    "https://copenhagenfintech.dk/cohorts/india-delegation-2025"
   ],
   "evidence": [
     {
-      "id": "check-email-0b1f9ad9a7",
-      "url": "https://copenhagenfintech.dk/about",
-      "title": "Copenhagen Fintech — details page checked by scrape.py",
-      "excerpt": "Partners Strategic R&D Partners Scale-up Partners hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy",
-      "page": "details"
+      "id": "check-announced-3545d71065",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-program-fall-2025",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Practicalities and applications: Apply here Apply Here Application deadline: September 1st Mentors No items found. Alumni Partners No items found.",
+      "page": "batches"
     },
     {
-      "id": "check-email-36e6011eb4",
-      "url": "https://copenhagenfintech.dk/about",
-      "title": "Copenhagen Fintech — details page checked by scrape.py",
+      "id": "check-announced-6eb9c62d11",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-program-fall-2026",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Practicalities and applications: Apply here Apply Here Application deadline: September 1 Mentors No items found. Alumni Partners No items found.",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-f392577e30",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-program-spring-2026",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Practicalities and applications: Apply here Apply Here Application deadline: January 25th Mentors No items found. Alumni Partners No items found.",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-00a5b52b0d",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-program-fall-2026",
+      "title": "Copenhagen Fintech — batches page",
       "excerpt": "hello@copenhagenfintech.dk",
-      "page": "details"
+      "page": "batches"
+    },
+    {
+      "id": "check-email-01c08d55cb",
+      "url": "https://copenhagenfintech.dk/reports/nordic-fintech-investment-environment-2024?f3070f05_page=2",
+      "title": "Copenhagen Fintech — terms page",
+      "excerpt": "conducted in compliance with applicable GDPR regulations. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-0383603806",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-fin-sum-tokyo-2023",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Partners No items found. Participants No items found. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-0b72cf08e3",
+      "url": "https://copenhagenfintech.dk/reports/nordic-fintech-investment-environment-2024?f3070f05_page=2",
+      "title": "Copenhagen Fintech — terms page",
+      "excerpt": "hello@copenhagenfintech.dk",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-0ce7aa95b8",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-program-fall-2025",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "hello@copenhagenfintech.dk",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-1639f08234",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation---berlin-delegation-2025",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Partners No items found. Participants No items found. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-192be9d93e",
+      "url": "https://copenhagenfintech.dk/reports/nordic-fintech-investment-environment-2024",
+      "title": "Copenhagen Fintech — terms page",
+      "excerpt": "hello@copenhagenfintech.dk",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-1a42a0e18d",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-finovate-europe-2023",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Partners No items found. Participants No items found. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-1a97740e47",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation---berlin-delegation-2025",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "hello@copenhagenfintech.dk",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-1b29b189ea",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation---singapore-fintech-festival-2025",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Partners No items found. Participants No items found. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-2b777d6265",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-norway-fintech-festival-2023",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Partners No items found. Participants No items found. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-33aa6a3dd6",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-program-spring-2025",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Partners No items found. Participants No items found. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-350b50c323",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-cohort",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "hello@copenhagenfintech.dk",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-52c5614a85",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-singapore-fintech-festival",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Partners No items found. Participants No items found. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-5b86e30c00",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-fin-sum-tokyo-2023",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "hello@copenhagenfintech.dk",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-60c045c5d4",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-program-spring-2026",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Partners No items found. Participants No items found. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy",
+      "page": "batches"
     },
     {
       "id": "check-email-60f767039b",
       "url": "https://copenhagenfintech.dk/",
-      "title": "Copenhagen Fintech — homepage checked by scrape.py",
+      "title": "Copenhagen Fintech — homepage",
       "excerpt": "Partners Corporate Partners Next Current Members More hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy",
       "page": "details"
     },
     {
       "id": "check-email-7825c37398",
       "url": "https://copenhagenfintech.dk/",
-      "title": "Copenhagen Fintech — homepage checked by scrape.py",
+      "title": "Copenhagen Fintech — homepage",
       "excerpt": "hello@copenhagenfintech.dk",
       "page": "details"
     },
     {
+      "id": "check-email-80e2f26742",
+      "url": "https://copenhagenfintech.dk/cohorts/india-delegation-2025",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Partners No items found. Participants No items found. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-946313a2eb",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-cohort",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Partners No items found. Participants No items found. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-9b82aa5875",
+      "url": "https://copenhagenfintech.dk/reports/nordic-fintech-investment-environment-2024",
+      "title": "Copenhagen Fintech — terms page",
+      "excerpt": "conducted in compliance with applicable GDPR regulations. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-9b8ed86713",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-singapore-fintech-festival",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "hello@copenhagenfintech.dk",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-ada41dd8dc",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-program-spring-2025",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "hello@copenhagenfintech.dk",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-b59217ba6a",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation---singapore-fintech-festival-2025",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "hello@copenhagenfintech.dk",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-d9ed31d1d9",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-finovate-europe-2023",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "hello@copenhagenfintech.dk",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-da74f5904d",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-program-fall-2025",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Partners No items found. Participants No items found. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-e3198564b4",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-program-fall-2026",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Partners No items found. Participants No items found. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-e8735cb6b6",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-program-spring-2026",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "hello@copenhagenfintech.dk",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-ee894ffa97",
+      "url": "https://copenhagenfintech.dk/cohorts/india-delegation-2025",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "hello@copenhagenfintech.dk",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-f9bd898442",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-norway-fintech-festival-2023",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "hello@copenhagenfintech.dk",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-1a4bbadaf1",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-singapore-fintech-festival",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "the ground. Y﻿ou are a Nordic fintech based in Singapore and/or have an office in Singapore and",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-4f949692b4",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-finovate-europe-2023",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "on the ground. Y﻿ou are a fintech based in London or UK and/or have an office there and",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-87728d91ef",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-fin-sum-tokyo-2023",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "on the ground. Y﻿ou are a fintech based in Tokyo or Japan and/or have an office there",
+      "page": "batches"
+    },
+    {
+      "id": "check-location-adfbdf0874",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-norway-fintech-festival-2023",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "on the ground. Y﻿ou are a fintech based in Norway and/or have an office there and would",
+      "page": "batches"
+    },
+    {
       "id": "check-name-724880d2a4",
       "url": "https://copenhagenfintech.dk/",
-      "title": "Copenhagen Fintech — homepage checked by scrape.py",
+      "title": "Copenhagen Fintech — homepage",
       "excerpt": "Copenhagen Fintech | Nordic Fintech Innovation Hub Nordic Fintech Week Home",
       "page": "details"
     },
     {
+      "id": "check-portfolio-0b7b02ebb7",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-cohort",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Startups & Scaleups → https://copenhagenfintech.dk/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-1469965e60",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-finovate-europe-2023",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Startups & Scaleups → https://copenhagenfintech.dk/startups",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-1a2ffeb006",
       "url": "https://copenhagenfintech.dk/",
-      "title": "Copenhagen Fintech — homepage checked by scrape.py",
+      "title": "Copenhagen Fintech — homepage",
       "excerpt": "Startups & Scaleups → https://copenhagenfintech.dk/startups",
       "page": "details"
     },
     {
       "id": "check-portfolio-21c97801b9",
       "url": "https://copenhagenfintech.dk/",
-      "title": "Copenhagen Fintech — homepage checked by scrape.py",
+      "title": "Copenhagen Fintech — homepage",
       "excerpt": "Startups & Scaleups → → https://copenhagenfintech.dk/startups",
       "page": "details"
     },
     {
-      "id": "check-portfolio-b15c7bfda0",
-      "url": "https://copenhagenfintech.dk/about",
-      "title": "Copenhagen Fintech — details page checked by scrape.py",
+      "id": "check-portfolio-2954f51b27",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-program-spring-2026",
+      "title": "Copenhagen Fintech — batches page",
       "excerpt": "Startups & Scaleups → https://copenhagenfintech.dk/startups",
-      "page": "details"
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-397d8da09d",
+      "url": "https://copenhagenfintech.dk/cohorts/india-delegation-2025",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Startups & Scaleups → https://copenhagenfintech.dk/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-4230faa851",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-program-fall-2026",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Startups & Scaleups → https://copenhagenfintech.dk/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-51f5c9a78d",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation---berlin-delegation-2025",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Startups & Scaleups → https://copenhagenfintech.dk/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-86072ab335",
+      "url": "https://copenhagenfintech.dk/reports/nordic-fintech-investment-environment-2024?f3070f05_page=2",
+      "title": "Copenhagen Fintech — terms page",
+      "excerpt": "Startups & Scaleups → https://copenhagenfintech.dk/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8fec1a97d1",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-program-spring-2025",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Startups & Scaleups → https://copenhagenfintech.dk/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-90861a1d0a",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-program-fall-2025",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Startups & Scaleups → https://copenhagenfintech.dk/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-a273567999",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-singapore-fintech-festival",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Startups & Scaleups → https://copenhagenfintech.dk/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-b1322104c4",
+      "url": "https://copenhagenfintech.dk/reports/nordic-fintech-investment-environment-2024",
+      "title": "Copenhagen Fintech — terms page",
+      "excerpt": "Startups & Scaleups → https://copenhagenfintech.dk/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ce44e6825d",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation---singapore-fintech-festival-2025",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Startups & Scaleups → https://copenhagenfintech.dk/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-ebaec47217",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-norway-fintech-festival-2023",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Startups & Scaleups → https://copenhagenfintech.dk/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-ff1cfeec85",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-fin-sum-tokyo-2023",
+      "title": "Copenhagen Fintech — batches page",
+      "excerpt": "Startups & Scaleups → https://copenhagenfintech.dk/startups",
+      "page": "batches"
     },
     {
       "id": "check-route-8ebbbf9331",
       "url": "https://copenhagenfintech.dk/",
-      "title": "Copenhagen Fintech — homepage checked by scrape.py",
+      "title": "Copenhagen Fintech — homepage",
       "excerpt": "https://copenhagenfintech.dk/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-58411a1d7f",
+      "url": "https://copenhagenfintech.dk/",
+      "page": "details",
+      "excerpt": "Copenhagen Fintech | Nordic Fintech Innovation Hub Nordic Fintech Week Home Lab Events Membership More Close Home Lab About Memberships & Partnerships Startups & Scaleups Tech for Fin Incubation Scale Up Mentorship Help Desk Delegations Nordic Fintech Lab Corporates Partnership Fast Track Investors Nordic Fintech Center Intelligence Strategic Projects Collaboration Projects CPHFT 10 Years of Fintech Events Host with us Nordic Fintech Week News Press Room About Nordic Fintech Week Home Lab Events Membership More Close Home Lab About Memberships & Partnerships Startups & Scaleups Tech for Fin Incubation Scale Up Mentorship Help Desk Delegations Nordic Fintech Lab Corporates Partnership Fast Track Investors Nordic Fintech Center Intelligence Strategic Projects Collaboration Projects CPHFT 10 Years of Fintech Events Host with us Nordic Fintech Week News Press Room About Nordic Fintech Week Home Lab Events Membership More Close Home Lab About Memberships & Partnerships Startups & Scaleups Tech for Fin Incubation Scale Up Mentorship Help Desk Delegations Nordic Fintech Lab Corporates Partnership Fast Track Investors Nordic Fintech Center Intelligence Strategic Projects Collaboration Projects CPHFT 10 Years of Fintech Events Host with us Nordic Fintech Week News Press Room About Nordic Fintech Week Home Lab Events Membership More Close Home Lab About Memberships & Partnerships"
+    },
+    {
+      "id": "check-page-32f7bb2f8c",
+      "url": "https://copenhagenfintech.dk/reports/nordic-fintech-investment-environment-2024",
+      "page": "terms",
+      "excerpt": "Copenhagen Fintech Nordic Fintech Week Home Lab Events Membership More Close Home Lab About Memberships & Partnerships Startups & Scaleups Tech for Fin Incubation Scale Up Mentorship Help Desk Delegations Nordic Fintech Lab Corporates Partnership Fast Track Investors Nordic Fintech Center Intelligence Strategic Projects Collaboration Projects CPHFT 10 Years of Fintech Events Host with us Nordic Fintech Week News Press Room About Nordic Fintech Investment Environment 2024 September 21, 2024 A report on the early-stage fintech, VC investment environment in the Nordics. ‍ ‍ This report explores the early-stage venture capital (VC) fintech ecosystem in the Nordics. By examining the market dynamics, investment trends, and regulatory environment, this report aims to provide a comprehensive overview of the factors fueling the growth of fintech in the Nordic region, offering insights into its future potential and global impact. In addition, the report dives into the profiles of the founders behind the funded-fintechs, focusing on previous work experience and education, offering a comprehensive view of the people driving innovation in the fintech space. The report is written by, and based on data provided by Copenhagen Fintech, EIFO and Signal Analytics. ‍ Download Report Sign up for the report Thank you! Here the file, click the link if the automatic download is not kicking in. Thank"
+    },
+    {
+      "id": "check-page-b7927f2e91",
+      "url": "https://copenhagenfintech.dk/reports/nordic-fintech-investment-environment-2024?f3070f05_page=2",
+      "page": "terms",
+      "excerpt": "Copenhagen Fintech Nordic Fintech Week Home Lab Events Membership More Close Home Lab About Memberships & Partnerships Startups & Scaleups Tech for Fin Incubation Scale Up Mentorship Help Desk Delegations Nordic Fintech Lab Corporates Partnership Fast Track Investors Nordic Fintech Center Intelligence Strategic Projects Collaboration Projects CPHFT 10 Years of Fintech Events Host with us Nordic Fintech Week News Press Room About Nordic Fintech Investment Environment 2024 September 21, 2024 A report on the early-stage fintech, VC investment environment in the Nordics. ‍ ‍ This report explores the early-stage venture capital (VC) fintech ecosystem in the Nordics. By examining the market dynamics, investment trends, and regulatory environment, this report aims to provide a comprehensive overview of the factors fueling the growth of fintech in the Nordic region, offering insights into its future potential and global impact. In addition, the report dives into the profiles of the founders behind the funded-fintechs, focusing on previous work experience and education, offering a comprehensive view of the people driving innovation in the fintech space. The report is written by, and based on data provided by Copenhagen Fintech, EIFO and Signal Analytics. ‍ Download Report Sign up for the report Thank you! Here the file, click the link if the automatic download is not kicking in. Thank"
+    },
+    {
+      "id": "check-page-26a5964225",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation---berlin-delegation-2025",
+      "page": "batches",
+      "excerpt": "Copenhagen Fintech Nordic Fintech Week Home Lab Events Membership More Close Home Lab About Memberships & Partnerships Startups & Scaleups Tech for Fin Incubation Scale Up Mentorship Help Desk Delegations Nordic Fintech Lab Corporates Partnership Fast Track Investors Nordic Fintech Center Intelligence Strategic Projects Collaboration Projects CPHFT 10 Years of Fintech Events Host with us Nordic Fintech Week News Press Room About Copenhagen Fintech Delegation - Berlin Delegation 2025 Start date April 9, 2025 End date April 10, 2025 Delegation to Berlin from April 9-10 bringing together Nordic fintech innovators to attend FIBE and engage with key financial players. Engaging with Europe’s financial leaders at FIBE Berlin, fostering partnerships, and exploring fintech’s role in shaping the future of finance. Apply Here Mentors No items found. Alumni No items found. Partners No items found. Participants No items found. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy Policy Articles of Association Conflict of Interests Policy CVR: 35431268 LinkedIn Facebook Eventbrite ▲"
+    },
+    {
+      "id": "check-page-78baeab87a",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation---singapore-fintech-festival-2025",
+      "page": "batches",
+      "excerpt": "Copenhagen Fintech Nordic Fintech Week Home Lab Events Membership More Close Home Lab About Memberships & Partnerships Startups & Scaleups Tech for Fin Incubation Scale Up Mentorship Help Desk Delegations Nordic Fintech Lab Corporates Partnership Fast Track Investors Nordic Fintech Center Intelligence Strategic Projects Collaboration Projects CPHFT 10 Years of Fintech Events Host with us Nordic Fintech Week News Press Room About Copenhagen Fintech Delegation - Singapore Fintech Festival 2025 Start date November 11, 2025 End date November 14, 2025 For Danish fintechs looking to attend Singapore Fintech Festival and side events hosted by Copenhagen Fintech For Copenhagen Fintech Partners: banks, pension funds, insurance companies and large tech companies. Copenhagen Fintech invites our partners to join our delegation to Singapore Fintech Festival 2025 – the world’s largest and most influential fintech event… This curated programme offers strategic insights, direct exposure to the Asian fintech landscape, and access to exclusive networking opportunities with regional and global fintech frontrunners . Why Singapore? Singapore is widely recognized as a global leader in fintech and innovation – ranked as the top fintech hub in Asia and among the most advanced globally (KPMG, 2023). Its progressive regulatory environment, led by the Monetary Authority of Singapore (MAS), actively"
+    },
+    {
+      "id": "check-page-9f30d3bb26",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-fin-sum-tokyo-2023",
+      "page": "batches",
+      "excerpt": "Copenhagen Fintech Nordic Fintech Week Home Lab Events Membership More Close Home Lab About Memberships & Partnerships Startups & Scaleups Tech for Fin Incubation Scale Up Mentorship Help Desk Delegations Nordic Fintech Lab Corporates Partnership Fast Track Investors Nordic Fintech Center Intelligence Strategic Projects Collaboration Projects CPHFT 10 Years of Fintech Events Host with us Nordic Fintech Week News Press Room About Copenhagen Fintech Delegation - FIN/SUM Tokyo 2023 Start date March 27, 2023 End date March 31, 2023 For Danish fintechs looking to attend FIN/SUM Tokyo, engage with partners on the ground and/or build their network in Japan with FI's. Copenhagen Fintech is organising a fintech delegation to Tokyo, Japan from 27-31 March, 2023 to attend FIN/SUM and host side events to facilitate meetups with financial institutions and banks. The trip would be facilitated by Thomas Krogh Jensen, CEO and Nicolette Tham, Head of Community and Events with support from the Danish Trade Council. You should sign up if: You are a Danish fintech interested in to attend FIN/SUM and/or engage with partners/network on the ground. Y﻿ou are a fintech based in Tokyo or Japan and/or have an office there and would like to be invited to the side events we are hosting Preliminary information - What is covered in the trip: A﻿ pre-delegation check-in prior to the trip Side networking"
+    },
+    {
+      "id": "check-page-0c6a5653fb",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-finovate-europe-2023",
+      "page": "batches",
+      "excerpt": "Copenhagen Fintech Nordic Fintech Week Home Lab Events Membership More Close Home Lab About Memberships & Partnerships Startups & Scaleups Tech for Fin Incubation Scale Up Mentorship Help Desk Delegations Nordic Fintech Lab Corporates Partnership Fast Track Investors Nordic Fintech Center Intelligence Strategic Projects Collaboration Projects CPHFT 10 Years of Fintech Events Host with us Nordic Fintech Week News Press Room About Copenhagen Fintech Delegation - Finovate Europe 2023 Start date March 13, 2023 End date March 15, 2023 For Danish fintechs looking to attend Finovate Europe, engage with partners on the ground and/or build their network in the UK with FI's. Copenhagen Fintech is organising a fintech delegation to London, United Kingdom from 13-15 March, 2023 to attend Finovate Europe and to meet various financial institutions and banks. The trip would be facilitated by Copenhagen Fintech. You should sign up if: You are a Danish fintech interested in to attend Finovate Europe and/or engage with partners/network on the ground. Y﻿ou are a fintech based in London or UK and/or have an office there and would like to be invited to the side events we are hosting What is covered in the trip: A﻿ pre-delegation check-in prior to the trip Side networking event on 13 March (TBD, day 0 of Finovate Europe) with the delegation and extended network of financial institutions and banks"
+    },
+    {
+      "id": "check-page-61e8b7f317",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-norway-fintech-festival-2023",
+      "page": "batches",
+      "excerpt": "Copenhagen Fintech Nordic Fintech Week Home Lab Events Membership More Close Home Lab About Memberships & Partnerships Startups & Scaleups Tech for Fin Incubation Scale Up Mentorship Help Desk Delegations Nordic Fintech Lab Corporates Partnership Fast Track Investors Nordic Fintech Center Intelligence Strategic Projects Collaboration Projects CPHFT 10 Years of Fintech Events Host with us Nordic Fintech Week News Press Room About Copenhagen Fintech delegation – Norway Fintech Festival 2023 Start date End date Copenhagen Fintech is organising a fintech delegation to Bergen, Norway from April 24-26, 2023 to attend Norway Fintech Festival. Copenhagen Fintech is organising a fintech delegation to Bergen, Norway from April 24-26, 2023 to attend Norway Fintech Festival. You should sign up if: You are a Danish fintech interested in to attend Norway Fintech Festival and/or engage with partners/network on the ground. Y﻿ou are a fintech based in Norway and/or have an office there and would like to be invited to the side events we are hosting What is covered in the trip: A﻿ pre-delegation check-in prior to the trip TBD – Side networking event with the delegation and extended network Discounted conference tickets to Norway Fintech Festival If you are interested to be a part of the delegation, you are welcome to submit your interest by purchasing a ticket to this delegation. Your attendance"
+    },
+    {
+      "id": "check-page-4b042cebdd",
+      "url": "https://copenhagenfintech.dk/cohorts/copenhagen-fintech-delegation-singapore-fintech-festival",
+      "page": "batches",
+      "excerpt": "Copenhagen Fintech Nordic Fintech Week Home Lab Events Membership More Close Home Lab About Memberships & Partnerships Startups & Scaleups Tech for Fin Incubation Scale Up Mentorship Help Desk Delegations Nordic Fintech Lab Corporates Partnership Fast Track Investors Nordic Fintech Center Intelligence Strategic Projects Collaboration Projects CPHFT 10 Years of Fintech Events Host with us Nordic Fintech Week News Press Room About Copenhagen Fintech Delegation - Singapore Fintech Festival Start date November 14, 2023 End date November 18, 2023 For Danish fintechs looking to attend Singapore Fintech Festival and side events hosted by Copenhagen Fintech T﻿he details of this delegation visit are still in preliminary mode and are subject to changes - more information to follow closer to the conference date. Copenhagen Fintech is organising a fintech delegation to Singapore from 14-18 November, 2023 to attend Singapore Fintech Festival and to meet various financial institutions and banks. The trip would be facilitated by Copenhagen Fintech. You should sign up if: You are a Nordic fintech interested in to attend Singapore Fintech Festival and/or engage with partners/network on the ground. Y﻿ou are a Nordic fintech based in Singapore and/or have an office in Singapore and would like to be invited to the side events we are hosting What is covered in the trip: A﻿ pre-delegation check-in"
+    },
+    {
+      "id": "check-page-a6924f1ceb",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-cohort",
+      "page": "batches",
+      "excerpt": "Copenhagen Fintech Nordic Fintech Week Home Lab Events Membership More Close Home Lab About Memberships & Partnerships Startups & Scaleups Tech for Fin Incubation Scale Up Mentorship Help Desk Delegations Nordic Fintech Lab Corporates Partnership Fast Track Investors Nordic Fintech Center Intelligence Strategic Projects Collaboration Projects CPHFT 10 Years of Fintech Events Host with us Nordic Fintech Week News Press Room About Incubation program, spring 2024 Start date March 12, 2024 End date Through expert workshops, founders chats, one-on-one mentoring and access to our unmatched network, we will help you to get your fintech ready for market. How it works: Practicalities and applications: Applications now closed Apply Here Questions? Get in contact with Andrei Anghel, Head of Programs through aan@copenhagenfintech.dk Mentors No items found. Alumni Partners No items found. Participants No items found. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy Policy Articles of Association Conflict of Interests Policy CVR: 35431268 LinkedIn Facebook Eventbrite ▲"
+    },
+    {
+      "id": "check-page-b105c91a14",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-program-fall-2025",
+      "page": "batches",
+      "excerpt": "Copenhagen Fintech Nordic Fintech Week Home Lab Events Membership More Close Home Lab About Memberships & Partnerships Startups & Scaleups Tech for Fin Incubation Scale Up Mentorship Help Desk Delegations Nordic Fintech Lab Corporates Partnership Fast Track Investors Nordic Fintech Center Intelligence Strategic Projects Collaboration Projects CPHFT 10 Years of Fintech Events Host with us Nordic Fintech Week News Press Room About Incubation program, fall 2025 Start date October 7, 2025 End date December 4, 2025 Through expert workshops, founders chats, one-on-one mentoring and access to our unmatched network, we will help you to get your fintech ready for market. How it works: Questions? Reach out to Barbara Svigova , Program Manager at Copenhagen Fintech. Practicalities and applications: Apply here Apply Here Application deadline: September 1st Mentors No items found. Alumni Partners No items found. Participants No items found. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy Policy Articles of Association Conflict of Interests Policy CVR: 35431268 LinkedIn Facebook Eventbrite ▲"
+    },
+    {
+      "id": "check-page-d9a7f2b889",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-program-fall-2026",
+      "page": "batches",
+      "excerpt": "Copenhagen Fintech Nordic Fintech Week Home Lab Events Membership More Close Home Lab About Memberships & Partnerships Startups & Scaleups Tech for Fin Incubation Scale Up Mentorship Help Desk Delegations Nordic Fintech Lab Corporates Partnership Fast Track Investors Nordic Fintech Center Intelligence Strategic Projects Collaboration Projects CPHFT 10 Years of Fintech Events Host with us Nordic Fintech Week News Press Room About Incubation program, fall 2026 Start date September 29, 2026 End date December 3, 2026 Through expert workshops, founders chats, one-on-one mentoring and access to our unmatched network, we will help you to get your fintech ready for market. How it works: Questions? Reach out to Barbara Svigova , Program Manager at Copenhagen Fintech. Copenhagen Fintech activities are co-financed by the European Union and Virksomhedsudvikling Denmark. Practicalities and applications: Apply here Apply Here Application deadline: September 1 Mentors No items found. Alumni Partners No items found. Participants No items found. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy Policy Articles of Association Conflict of Interests Policy CVR: 35431268 LinkedIn Facebook Eventbrite ▲"
+    },
+    {
+      "id": "check-page-62f20684f2",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-program-spring-2025",
+      "page": "batches",
+      "excerpt": "Copenhagen Fintech Nordic Fintech Week Home Lab Events Membership More Close Home Lab About Memberships & Partnerships Startups & Scaleups Tech for Fin Incubation Scale Up Mentorship Help Desk Delegations Nordic Fintech Lab Corporates Partnership Fast Track Investors Nordic Fintech Center Intelligence Strategic Projects Collaboration Projects CPHFT 10 Years of Fintech Events Host with us Nordic Fintech Week News Press Room About Incubation program, spring 2025 (CLOSED FOR APPLICATIONS) Start date January 7, 2025 End date March 6, 2025 Through expert workshops, founders chats, one-on-one mentoring and access to our unmatched network, we will help you to get your fintech ready for market. How it works: ‍ Practicalities and applications: Applications now closed Apply Here Questions? Reach out to Barbara Svigova, Program Manager at Copenhagen Fintech Mentors No items found. Alumni Partners No items found. Participants No items found. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy Policy Articles of Association Conflict of Interests Policy CVR: 35431268 LinkedIn Facebook Eventbrite ▲"
+    },
+    {
+      "id": "check-page-41e3926f7e",
+      "url": "https://copenhagenfintech.dk/cohorts/incubation-program-spring-2026",
+      "page": "batches",
+      "excerpt": "Copenhagen Fintech Nordic Fintech Week Home Lab Events Membership More Close Home Lab About Memberships & Partnerships Startups & Scaleups Tech for Fin Incubation Scale Up Mentorship Help Desk Delegations Nordic Fintech Lab Corporates Partnership Fast Track Investors Nordic Fintech Center Intelligence Strategic Projects Collaboration Projects CPHFT 10 Years of Fintech Events Host with us Nordic Fintech Week News Press Room About Incubation program, spring 2026 Start date March 4, 2026 End date April 30, 2026 Through expert workshops, founders chats, one-on-one mentoring and access to our unmatched network, we will help you to get your fintech ready for market. How it works: Questions? Reach out to Barbara Svigova , Program Manager at Copenhagen Fintech. Copenhagen Fintech activities are co-financed by the European Union and Virksomhedsudvikling Denmark. Practicalities and applications: Apply here Apply Here Application deadline: January 25th Mentors No items found. Alumni Partners No items found. Participants No items found. hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy Policy Articles of Association Conflict of Interests Policy CVR: 35431268 LinkedIn Facebook Eventbrite ▲"
+    },
+    {
+      "id": "check-page-645430aa83",
+      "url": "https://copenhagenfintech.dk/cohorts/india-delegation-2025",
+      "page": "batches",
+      "excerpt": "Copenhagen Fintech Nordic Fintech Week Home Lab Events Membership More Close Home Lab About Memberships & Partnerships Startups & Scaleups Tech for Fin Incubation Scale Up Mentorship Help Desk Delegations Nordic Fintech Lab Corporates Partnership Fast Track Investors Nordic Fintech Center Intelligence Strategic Projects Collaboration Projects CPHFT 10 Years of Fintech Events Host with us Nordic Fintech Week News Press Room About Copenhagen Fintech Delegation - India 2025 Start date June 23, 2025 End date June 27, 2025 Explore India’s innovation ecosystem! Join our 5-day delegation to Bangalore, Mumbai & Gandhinagar. India is emerging as a global powerhouse in digital innovation, financial services, and scalable, inclusive solutions. Following the launch of our two reports this year— Green Fintech Denmark and Decoding India’s Fintech and Govtech Landscape —as well as our webinar on India’s fintech ecosystem, which you can access here , we are now organizing a dedicated India Delegation Trip . This initiative is designed for Danish companies and organizations looking to build meaningful partnerships, understand new market dynamics, and explore opportunities to scale globally through India’s unique value proposition. Over the course of five days, the delegation will visit Bangalore, Mumbai, and Gandhinagar , engaging with a diverse range of stakeholders, from financial services"
     }
   ],
   "findings": {
@@ -88,8 +515,41 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "September",
+        "evidenceId": "check-announced-3545d71065"
+      },
+      {
+        "value": "January",
+        "evidenceId": "check-announced-f392577e30"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [
+      {
+        "value": "Tokyo",
+        "evidenceId": "check-location-87728d91ef"
+      },
+      {
+        "value": "London",
+        "evidenceId": "check-location-4f949692b4"
+      },
+      {
+        "value": "Norway",
+        "evidenceId": "check-location-adfbdf0874"
+      },
+      {
+        "value": "Singapore",
+        "evidenceId": "check-location-1a4bbadaf1"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://copenhagenfintech.dk/startups",

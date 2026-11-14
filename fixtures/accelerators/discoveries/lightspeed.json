@@ -1,19 +1,19 @@
 {
   "programId": "lightspeed",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://lsvp.com/about/",
-      "page": "details",
-      "anchor": "About",
-      "fetched": true,
+      "url": "https://jobs.lsvp.com/jobs",
+      "page": "portfolio",
+      "anchor": "Portfolio Jobs",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://lsvp.com/companies/",
-      "page": "portfolio",
-      "anchor": "Companies",
+      "url": "https://lsvp.com/about/",
+      "page": "details",
+      "anchor": "About",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -27,17 +27,9 @@
       "origin": "official"
     },
     {
-      "url": "https://jobs.lsvp.com/jobs",
+      "url": "https://lsvp.com/companies/",
       "page": "portfolio",
-      "anchor": "Portfolio Jobs",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://lsvp.com/company/thoughtspot/",
-      "page": "portfolio",
-      "anchor": "ThoughtSpot Ajeet Singh Founder ThoughtSpot is used by a number of innovative companies...",
+      "anchor": "Companies",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -51,9 +43,169 @@
       "origin": "official"
     },
     {
-      "url": "https://lsvp.com/stories/our-investment-in-fireworks-ai-the-inference-platform-aiming-to-power-every-genai-application/",
+      "url": "https://lsvp.com/company/thoughtspot/",
+      "page": "portfolio",
+      "anchor": "ThoughtSpot Ajeet Singh Founder ThoughtSpot is used by a number of innovative companies...",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/a-lightspeed-vc-is-bullish-on-retail-investment-apps-like-robinhood-and-says-theyll-continue-to-climb-in-popularity/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/early-stage-investing-remains-energetic-with-plenty-of-dry-powder-for-investment-lightspeeds-rahul-taneja/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/https-www-etnownews-com-videos-lightspeed-ventures-on-the-startup-ecosystem-more-investment-to-trickle-into-india-rahul-taneja-video-105806559/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/lightspeed-india-is-leading-the-way-in-ai-ev-and-climate-tech-investments-heres-why/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/lightspeed-india-on-asias-tech-investment-opportunities/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/feeds/lightspeed-venture-partners-to-increase-its-focus-on-growth-deals/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/international-landing-pad-network-application/",
       "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/stories/america-runs-on-small-business-our-investment-in-pie/",
+      "page": "terms",
+      "anchor": "America Runs on Small Business: Our Investment in Pie",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/stories/announcing-our-investment-in-temporal-agents-make-mistakes-your-workflows-cant/",
+      "page": "terms",
+      "anchor": "Announcing our Investment in Temporal: Agents Make Mistakes. Your Workflows Can’t.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/stories/announcing-overops-real-time-event-intelligence-for-modern-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/stories/building-the-worlds-first-ai-native-audit-technology-our-investment-in-modus/",
+      "page": "terms",
+      "anchor": "Building the World’s First AI-Native Audit Technology: Our Investment in Modus",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/stories/building-with-endor-labs-application-security-for-all/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/stories/building-with-langfuse-observability-analytics-for-llm-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/stories/modernizing-the-electric-grid-our-investment-in-base-power/",
+      "page": "terms",
+      "anchor": "Modernizing the Electric Grid: Our Investment in Base Power",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/stories/optimizing-llms-for-real-world-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/stories/our-investment-in-fireworks-ai-the-inference-platform-aiming-to-power-every-genai-application/",
+      "page": "terms",
       "anchor": "Our Investment in Fireworks AI: the Inference Platform Aiming to Power Every GenAI Application",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/stories/startups-v-incumbents-the-battle-for-ais-application-layer/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/stories/taking-the-big-leap-in-cloud-application-security-or-cloud-native-security/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/stories/the-future-of-market-research-is-autonomous-our-investment-in-dialogue/",
+      "page": "terms",
+      "anchor": "The Future of Market Research is Autonomous: Our Investment in Dialogue",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/stories/vectorized-free-and-source-available-cloud-native-infrastructure-for-real-time-applications/",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

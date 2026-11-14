@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.startupschool.org/",
   "applyUrl": "https://www.startupschool.org/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Startup School - The Best Resource for Founders Startup School Learn how to start a company, with help from the world's top startup accelerator - Y Combinator. Startup School is a free online course on how to start a startup. Sign up Sign in Get advice based on 15 years of YC's knowledge, stay accountable for weekly progress, and find your co-founder. How Startup School works Get the essential advice for ambitious startup founders, taught by Y Combinator partners and industry leaders. Go at your own pace. It will take approximately 7 weeks if you spend 1-2 hours/week. Who is Startup School for? It's for anyone at the early stages of building a startup, turning a side project into a company, or anyone curious to learn about becoming a founder. The YC Curriculum Learn how to build a top startup - from the same people who helped Airbnb, Doordash, Stripe, Reddit, and Coinbase get started. How to Plan your MVP Michael Seibel, YC Partner & Co-Founder of Twitch Modern Startup Funding Carolynn Levy, inventor of the SAFE How to Launch your Company in the Press Kat Manalac, YC Head of Outreach How to Get Users and Grow Gustaf Alstromer, YC Partner & Former Head of Growth at Airbnb How to Lead Teams Ali Rowghani, CFO of Pixar & COO of Twitter How and When to Apply to Y Combinator Dalton Caldwell, YC Partner & Head of Admissions The Founding Story of Facebook Mark Zuckerberg, Founder and C No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Learn how to start a company with help from the world's top startup accelerator - Y Combinator.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Let other founders know your preferences for interests, skills, location, and more",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "y-combinator-startup-school-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.startupschool.org/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

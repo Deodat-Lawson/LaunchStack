@@ -1,5 +1,142 @@
 {
   "programId": "zone-startups",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
-  "pages": []
+  "checkedAt": "2026-11-14T21:21:09.000Z",
+  "pages": [
+    {
+      "url": "http://ryersonfutures.zonestartups.com/founders/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zonestartups.com/2016/11/10/zone-startups-indias-fourth-program-gateway91-international-entrepreneurs-indian-market/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zonestartups.com/2016/11/15/ryerson-futures-alumni-litmus-automation-raises-1-5mm-usd-funding/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zonestartups.com/2017/06/15/rfi-alumni-figure-1-raises-10mm-in-series-b-funding-round/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zonestartups.com/2017/12/01/startup-accelerator-ryerson-futures-expands-adding-ray-newal-as-managing-director/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zonestartups.com/2018/02/20/new-market-access-program-will-introduce-indian-and-canadian-female-founders-to-new-opportunities/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zonestartups.com/2018/02/20/new-startup-accelerator-in-vietnam-set-to-bolster-se-asian-startup-community/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zonestartups.com/2020/05/22/ryerson-university-consolidates-dmz-and-rfi-to-better-serve-and-support-startups/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zonestartups.com/?page_id=172",
+      "page": "other",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zonestartups.com/?page_id=174",
+      "page": "other",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zonestartups.com/apply-now/",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zonestartups.com/portfolio/dmz-ventures/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zonestartups.com/portfolio/empower/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zonestartups.com/portfolio/gateway-market-access/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zonestartups.com/portfolio/next-big-idea-contest/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zonestartups.com/portfolio/powered-accelerator/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zonestartups.com/startup-programs/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
 }

@@ -1,80 +1,493 @@
 {
   "programId": "lventure",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
     "https://zestgroup.vc/en",
-    "https://zestgroup.vc/en/about-us"
+    "https://zestgroup.vc/en/blog/exe-engineering-eni-cdp-venture-capital-investment",
+    "https://zestgroup.vc/en/blog/proptech-newarc-closes-800k-seed-investment-round",
+    "https://zestgroup.vc/en/blog/truescreen-secures-2-4-million-seed-round-investment",
+    "https://zestgroup.vc/en/contact-us-investments",
+    "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+    "https://zestgroup.vc/en/governance/internal-dealing",
+    "https://zestgroup.vc/en/investments",
+    "https://zestgroup.vc/it/governance/internal-dealing",
+    "https://zestgroup.vc/it/investments",
+    "https://zestgroup.vc/storage/files/190533b9-9a95-43a1-a65c-225c63ec57ef/Internal-Dealing-Gay-20-dicembre-2024_1INFO.pdf",
+    "https://zestgroup.vc/storage/files/1dcc2277-e3cf-4e31-a3e4-46fbe1389293/Internal-dealing-Gay-20062024.pdf",
+    "https://zestgroup.vc/storage/files/2019/05/01072016-COMUNICAZIONE-INTERNAL-DEALING.pdf",
+    "https://zestgroup.vc/storage/files/2019/05/02102015-COMUNICAZIONE-INTERNAL-DEALING.pdf",
+    "https://zestgroup.vc/storage/files/2019/05/04032013-COMUNICAZIONE-INTERNAL-DEALING.pdf"
   ],
   "evidence": [
     {
-      "id": "check-email-063732a89d",
-      "url": "https://zestgroup.vc/en/about-us",
-      "title": "LVenture Group — details page checked by scrape.py",
+      "id": "check-deal-29fe2db439",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Us Scouting Ticket Get €10K for Your Startup Now Zest invests €10K in ambitious founders who are validating an idea, prototype or MVP",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-aa9d4115b9",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "title": "LVenture Group — terms page",
+      "excerpt": "review Investor relations Governance Contact Us Scouting Ticket Get €10K for Your Startup Now Zest invests €10K in ambitious founders who are",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-40efd31a15",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "title": "LVenture Group — terms page",
+      "excerpt": "you receive a €10K Scouting Ticket and start an 8-week acceleration journey with Zest . Application FAQ",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-5753f28ba2",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "title": "LVenture Group — terms page",
+      "excerpt": ". How long does the program last? Approximately 8 weeks . Is the Scouting Ticket an investment? Yes. It",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-9164db5f0e",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "title": "LVenture Group — terms page",
+      "excerpt": ". 02 Acceleration Program & Hands-On Support For 8 weeks , we work side by side through hands-on sessions",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-a3c861c995",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "title": "LVenture Group — terms page",
+      "excerpt": "potential to become a high-growth business . For 8 weeks , we work side by side to validate your product,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-cfa144e270",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Zest Capital is just the starting point. For 8 weeks, we work side by side with you to build,",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-0246c15c7d",
+      "url": "https://zestgroup.vc/en/blog/proptech-newarc-closes-800k-seed-investment-round",
+      "title": "LVenture Group — terms page",
       "excerpt": "Contact Us (info@zestgroup.vc)",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-email-0885245f2d",
+      "url": "https://zestgroup.vc/en/blog/exe-engineering-eni-cdp-venture-capital-investment",
+      "title": "LVenture Group — terms page",
+      "excerpt": "info@zestgroup.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-125ae652b8",
+      "url": "https://zestgroup.vc/en/blog/truescreen-secures-2-4-million-seed-round-investment",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Contact Us (info@zestgroup.vc)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-1267652a70",
+      "url": "https://zestgroup.vc/en/governance/internal-dealing",
+      "title": "LVenture Group — terms page",
+      "excerpt": "info@zestgroup.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-2d567a10b9",
+      "url": "https://zestgroup.vc/it/governance/internal-dealing",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Contattaci (info@zestgroup.vc)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-3805ebdb40",
+      "url": "https://zestgroup.vc/en/governance/internal-dealing",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Google Privacy Policy and Terms of Service apply. Email: info@zestgroup.vc Certified Email (PEC): zestgroup.pec@legalmail.it VAT",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-3cf60fab12",
+      "url": "https://zestgroup.vc/en/blog/exe-engineering-eni-cdp-venture-capital-investment",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Google Privacy Policy and Terms of Service apply. Email: info@zestgroup.vc Certified Email (PEC): zestgroup.pec@legalmail.it VAT",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-499993da79",
+      "url": "https://zestgroup.vc/en/contact-us-investments",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Google Privacy Policy and Terms of Service apply. Email: info@zestgroup.vc Certified Email (PEC): zestgroup.pec@legalmail.it VAT",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-5037220b8e",
+      "url": "https://zestgroup.vc/en/investments",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Google Privacy Policy and Terms of Service apply. Email: info@zestgroup.vc Certified Email (PEC): zestgroup.pec@legalmail.it VAT",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-52c444d0d5",
+      "url": "https://zestgroup.vc/it/investments",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Contattaci (info@zestgroup.vc)",
+      "page": "terms"
     },
     {
       "id": "check-email-5a1ffb3f82",
       "url": "https://zestgroup.vc/en",
-      "title": "LVenture Group — homepage checked by scrape.py",
+      "title": "LVenture Group — homepage",
       "excerpt": "info@zestgroup.vc",
       "page": "details"
     },
     {
-      "id": "check-email-80c2d4fa55",
-      "url": "https://zestgroup.vc/en/about-us",
-      "title": "LVenture Group — details page checked by scrape.py",
+      "id": "check-email-5a21b19e73",
+      "url": "https://zestgroup.vc/it/investments",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Privacy Policy e Termini di servizio Google. Email: info@zestgroup.vc Pec: zestgroup.pec@legalmail.it P.IVA 01932500026 - C.F.",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-614a9289c0",
+      "url": "https://zestgroup.vc/it/governance/internal-dealing",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Privacy Policy e Termini di servizio Google. Email: info@zestgroup.vc Pec: zestgroup.pec@legalmail.it P.IVA 01932500026 - C.F.",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-6a6ca74306",
+      "url": "https://zestgroup.vc/it/investments",
+      "title": "LVenture Group — terms page",
+      "excerpt": "info@zestgroup.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-6f38fd7a60",
+      "url": "https://zestgroup.vc/en/blog/proptech-newarc-closes-800k-seed-investment-round",
+      "title": "LVenture Group — terms page",
       "excerpt": "Google Privacy Policy and Terms of Service apply. Email: info@zestgroup.vc Certified Email (PEC): zestgroup.pec@legalmail.it VAT",
-      "page": "details"
+      "page": "terms"
     },
     {
-      "id": "check-email-84c061f24c",
-      "url": "https://zestgroup.vc/en/about-us",
-      "title": "LVenture Group — details page checked by scrape.py",
+      "id": "check-email-70c8ffc7a9",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "title": "LVenture Group — terms page",
       "excerpt": "info@zestgroup.vc",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-email-723721c6e9",
+      "url": "https://zestgroup.vc/en/blog/proptech-newarc-closes-800k-seed-investment-round",
+      "title": "LVenture Group — terms page",
+      "excerpt": "info@zestgroup.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-72c9b070fb",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Contact Us (info@zestgroup.vc)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-814d712d90",
+      "url": "https://zestgroup.vc/en/investments",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Contact Us (info@zestgroup.vc)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-848025c930",
+      "url": "https://zestgroup.vc/en/investments",
+      "title": "LVenture Group — terms page",
+      "excerpt": "info@zestgroup.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-99f9c0a5b1",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Google Privacy Policy and Terms of Service apply. Email: info@zestgroup.vc Certified Email (PEC): zestgroup.pec@legalmail.it VAT",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-a5082561da",
+      "url": "https://zestgroup.vc/en/contact-us-investments",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Contact Us (info@zestgroup.vc)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-aa57108d12",
+      "url": "https://zestgroup.vc/en/blog/truescreen-secures-2-4-million-seed-round-investment",
+      "title": "LVenture Group — terms page",
+      "excerpt": "info@zestgroup.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-c94bcd790c",
+      "url": "https://zestgroup.vc/en/contact-us-investments",
+      "title": "LVenture Group — terms page",
+      "excerpt": "info@zestgroup.vc",
+      "page": "terms"
     },
     {
       "id": "check-email-cba3c5d79e",
       "url": "https://zestgroup.vc/en",
-      "title": "LVenture Group — homepage checked by scrape.py",
+      "title": "LVenture Group — homepage",
       "excerpt": "Google Privacy Policy and Terms of Service apply. Email: info@zestgroup.vc Certified Email (PEC): zestgroup.pec@legalmail.it VAT",
       "page": "details"
     },
     {
+      "id": "check-email-d6812f7e4b",
+      "url": "https://zestgroup.vc/it/governance/internal-dealing",
+      "title": "LVenture Group — terms page",
+      "excerpt": "info@zestgroup.vc",
+      "page": "terms"
+    },
+    {
       "id": "check-email-db5a8ed13d",
       "url": "https://zestgroup.vc/en",
-      "title": "LVenture Group — homepage checked by scrape.py",
+      "title": "LVenture Group — homepage",
       "excerpt": "Contact Us (info@zestgroup.vc)",
       "page": "details"
     },
     {
+      "id": "check-email-eb4dbb9eb4",
+      "url": "https://zestgroup.vc/en/blog/truescreen-secures-2-4-million-seed-round-investment",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Google Privacy Policy and Terms of Service apply. Email: info@zestgroup.vc Certified Email (PEC): zestgroup.pec@legalmail.it VAT",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-f243a24f4a",
+      "url": "https://zestgroup.vc/en/blog/exe-engineering-eni-cdp-venture-capital-investment",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Contact Us (info@zestgroup.vc)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-f77d4e898e",
+      "url": "https://zestgroup.vc/en/governance/internal-dealing",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Contact Us (info@zestgroup.vc)",
+      "page": "terms"
+    },
+    {
       "id": "check-name-642be0c8e1",
       "url": "https://zestgroup.vc/en",
-      "title": "LVenture Group — homepage checked by scrape.py",
+      "title": "LVenture Group — homepage",
       "excerpt": "It is the fruit of the merger between Digital Magics and LVenture Group, the pioneers of innovation in Italy. For over 20 years,",
       "page": "details"
     },
     {
-      "id": "check-portfolio-78554b2fad",
-      "url": "https://zestgroup.vc/en/about-us",
-      "title": "LVenture Group — details page checked by scrape.py",
+      "id": "check-phone-d19b102662",
+      "url": "https://zestgroup.vc/it/investments",
+      "title": "LVenture Group — terms page",
+      "excerpt": "+39 0645473124",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-d1e254fb22",
+      "url": "https://zestgroup.vc/it/governance/internal-dealing",
+      "title": "LVenture Group — terms page",
+      "excerpt": "+39 0645473124",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-0e5b7ce823",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "title": "LVenture Group — terms page",
       "excerpt": "Portfolio → https://zestgroup.vc/en/portfolio",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6628fa20e8",
+      "url": "https://zestgroup.vc/it/governance/internal-dealing",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Portfolio → https://zestgroup.vc/it/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6eade56c8a",
+      "url": "https://zestgroup.vc/en/contact-us-investments",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Portfolio → https://zestgroup.vc/en/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-80d99ae023",
+      "url": "https://zestgroup.vc/en/investments",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Portfolio → https://zestgroup.vc/en/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-84e64cb074",
+      "url": "https://zestgroup.vc/en/blog/truescreen-secures-2-4-million-seed-round-investment",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Portfolio → https://zestgroup.vc/en/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8f08ea5f1d",
+      "url": "https://zestgroup.vc/en/blog/proptech-newarc-closes-800k-seed-investment-round",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Portfolio → https://zestgroup.vc/en/portfolio",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-9898a6e96a",
       "url": "https://zestgroup.vc/en",
-      "title": "LVenture Group — homepage checked by scrape.py",
+      "title": "LVenture Group — homepage",
       "excerpt": "Discover our Portfolio → https://zestgroup.vc/en/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-a221a149be",
+      "url": "https://zestgroup.vc/it/investments",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Portfolio → https://zestgroup.vc/it/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a517b57ec0",
+      "url": "https://zestgroup.vc/en/blog/exe-engineering-eni-cdp-venture-capital-investment",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Portfolio → https://zestgroup.vc/en/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b2510b6620",
+      "url": "https://zestgroup.vc/en/investments",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Discover More → https://zestgroup.vc/en/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b67fc999d8",
+      "url": "https://zestgroup.vc/it/investments",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Scopri di più → https://zestgroup.vc/it/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c7fb2ebed5",
+      "url": "https://zestgroup.vc/en/governance/internal-dealing",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Portfolio → https://zestgroup.vc/en/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-f89e3e7fbb",
       "url": "https://zestgroup.vc/en",
-      "title": "LVenture Group — homepage checked by scrape.py",
+      "title": "LVenture Group — homepage",
       "excerpt": "Portfolio → https://zestgroup.vc/en/portfolio",
       "page": "details"
+    },
+    {
+      "id": "check-route-6d33157613",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "title": "LVenture Group — terms page",
+      "excerpt": "Pitch your idea → https://zestgroup.vc/en",
+      "page": "terms"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-84b89f8a2d",
+      "url": "https://zestgroup.vc/en",
+      "page": "details",
+      "excerpt": "Zest | Venture Capital and Open Innovation in Italy Investor relations Governance Contact Us it en About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review Investor relations Governance Contact Us FUTURE.FASTER. Leading Innovation We are the best at discovering top talent and transforming startups into successful businesses, delivering innovation to companies and to the market Discover More FUTURE.FASTER. We turn talent into businesses We invest in ambitious founders with the courage to disrupt the market, backed by capital, expertise, and a unique network for a 360° perspective Discover More FUTURE.FASTER. We accelerate the transformation We drive technological transformation and innovation for businesses and institutions through dedicated programs Discover More FUTURE. FASTER. Investments Discover More Innovation Discover More The Hub Discover More Zest stands for: 1 20 years of innovation 2 Leadership in early-stage venture capital 3 Investments in high-impact technologies 4 Acceleration of top startups 5 Strategic mentorship and resources for founders 6 Corporate technological transformation 7 An international network We are a team of passionate individuals united by a common goal and ambition: to drive"
+    },
+    {
+      "id": "check-page-f6dd07e260",
+      "url": "https://zestgroup.vc/en/blog/exe-engineering-eni-cdp-venture-capital-investment",
+      "page": "terms",
+      "excerpt": "EXE Engineering: €550K funding round with Eni and CDP Venture Capital Investor relations Governance Contact Us it en About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review Investor relations Governance Contact Us EXE Engineering closes €550K funding round EXE Engineering secures €550K investment from Eni and CDP Venture Capital to expand in Europe and Africa Eni invests together with CDP Venture Capital €550K and announces a collaboration with the startup EXE Engineering in the field of carbon offsetting initiatives in Africa. These new resources will allow the startup to accelerate its roadmap and support the expansion of projects into new operational contexts, including international growth in Europe and Africa. The round was led by Zero and Eni Next, Eni’s corporate venture capital company created to invest in innovative, high-tech startups. Zero is a program of the National Network of Accelerators of CDP Venture Capital – implemented in collaboration with Zest and Elis – with Eni as the main corporate partner through Joule, its school for entrepreneurship, and involving additional companies in the sector. EXE Engineering participated in the Zero acceleration program between 2024 and 2025 and developed a"
+    },
+    {
+      "id": "check-page-bdf91db348",
+      "url": "https://zestgroup.vc/en/blog/proptech-newarc-closes-800k-seed-investment-round",
+      "page": "terms",
+      "excerpt": "PropTech Newarc Closes €800K Seed Investment Round Investor relations Governance Contact Us it en About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review Investor relations Governance Contact Us NEWS PropTech Startup Newarc Closes €800K Seed Investment Round Accelerated by HabiSmart , the PropTech acceleration program of the CDP Venture Capital National Accelerator Network , managed by Zest . The startup develops AI-based digital services that streamline the processes of property buying, renovation, and enhancement. Newarc , a PropTech startup offering AI-powered digital services to facilitate property transactions, renovation, and enhancement, has closed a €800,000 seed investment round. The capital raise was subscribed by a group of business angels and the follow-on investment from the HabiSmart PropTech Accelerator of the CDP Venture Capital National Accelerator Network , with investors including the CDP Venture Capital Accelerator Fund , Zest , Nova Capital , and COIMA . Newarc: Revolutionizing Real Estate with AI Newarc simplifies and enhances real estate transactions through digital solutions and AI technologies, offering a range of services that cover the entire real estate value chain, aiming to maximize"
+    },
+    {
+      "id": "check-page-9d8366e7f3",
+      "url": "https://zestgroup.vc/en/blog/truescreen-secures-2-4-million-seed-round-investment",
+      "page": "terms",
+      "excerpt": "TrueScreen Secures €2.4 Million Seed Round Investment Investor relations Governance Contact Us it en About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review Investor relations Governance Contact Us NEWS TrueScreen Secures €2.4 Million Seed Round Investment CYSERO EuVECA , Italy's only fund dedicated to cybersecurity, robotics, and AI, promoted by AVM Gestioni SGR S.p.A. (EuVECA Società Benefit Manager), in partnership with Kilometro Rosso , the Bergamo-based scientific and technological park, has led a €2.4 million seed round investment in TrueScreen . The cybersecurity company specializes in the acquisition, certification, and management of data with legal and evidentiary value. Recognized in 2023 by PwC Luxembourg as one of the five most promising global startups in cybersecurity, TrueScreen already serves major banks, insurance companies, and multinational organizations. Its technology ensures the authenticity and immutability of digital content such as photos, videos, screenshots, emails, signatures, and data streams. By providing legally binding and tamper-proof services, TrueScreen not only prevents data manipulation but also counters the creation of deepfakes enabled by AI. Alongside Cysero VC, the round"
+    },
+    {
+      "id": "check-page-f91493e6e5",
+      "url": "https://zestgroup.vc/en/contact-us-investments",
+      "page": "terms",
+      "excerpt": "Entra in contatto con Zest Investor relations Governance Contact Us it en About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review Investor relations Governance Contact Us Contact us Name* Last name* E-mail* Company* Job title* Linkedin Website Phone Who are you?* Startup Corporate Investor Media(PR,TV...) Other Write here who you are Message Attachment Upload file File: I've read and accepted the Privacy policy This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply. Request info Subscribe to newsletter Stay updated Subscribe I've read and accepted the Privacy policy This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply. Email: info@zestgroup.vc Certified Email (PEC): zestgroup.pec@legalmail.it VAT Number: 01932500026 - Tax Code 81020000022 Business Register Number: RM – 1356785 Via Marsala 29h | 00185 | Rome | Tel +39 0645473124 Via Bernardo Quaranta 40 | 20139 | Milan Corso Giacomo Matteotti 29 bis | 10121 | Turin Subscribed and Paid-Up Share Capital: € 42.710.787,47 LinkedIn | Facebook | Instagram About us Investments Innovation The Hub - Events Portfolio People Content Hub News Contact us Choose language - en it en Privacy Policy"
+    },
+    {
+      "id": "check-page-fe8eac6495",
+      "url": "https://zestgroup.vc/en/early-stage-startup-investments-and-funding-zest",
+      "page": "terms",
+      "excerpt": "Investimenti e finanziamenti startup early stage | Zest Investor relations Governance Contact Us it en About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review Investor relations Governance Contact Us Scouting Ticket Get €10K for Your Startup Now Zest invests €10K in ambitious founders who are validating an idea, prototype or MVP with the potential to become a high-growth business . For 8 weeks , we work side by side to validate your product, market and first customers. If the results prove the potential, we can keep investing and support you on the path to scale . Apply now Where we see potential, we invest. We are Italy’s leading private investor, with 250+ startups in our portfolio. We help you validate your idea, build the right team and get investor-ready. Zest, Italy’s leading startup accelerator and early-stage investor, is the right partner to help you turn an idea into a startup . We work with founders who already have a startup ready to go to market, as well as those who are still at the stage of an idea, prototype or MVP . We look for founders who deeply understand a problem, believe they can solve it, and are ready to rapidly validate a solution . The Scouting Ticket is our first step towards"
+    },
+    {
+      "id": "check-page-b2f0fdd6c5",
+      "url": "https://zestgroup.vc/en/governance/internal-dealing",
+      "page": "terms",
+      "excerpt": "Internal dealing Investor relations Governance Contact Us it en About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review Investor relations Governance Contact Us Governance Internal dealing Consiglio di Amministrazione Fusione Parti correlate Altri Organi Sociali Assemblee Internal dealing Voto maggiorato Statuto Patti Parasociali Procedure Codice etico e modello 231 Whistleblowing Politica parità di genere Elenco delle comunicazioni di internal dealing 23/12/2025 - COMUNICAZIONE INTERNAL DEALING Download 15/12/2025 - COMUNICAZIONE INTERNAL DEALING Download 15/12/2025 - COMUNICAZIONE INTERNAL DEALING Download 02/12/2025 - COMUNICAZIONE INTERNAL DEALING Download 02/12/2025 - COMUNICAZIONE INTERNAL DEALING Download 02/12/2025 - COMUNICAZIONE INTERNAL DEALING Download 02/12/2025 - COMUNICAZIONE INTERNAL DEALING Download 02/12/2025 - COMUNICAZIONE INTERNAL DEALING Download 01/12/2025 - COMUNICAZIONE INTERNAL DEALING Download 20/12/2024 - COMUNICAZIONE INTERNAL DEALING Download 09/12/2024 - COMUNICAZIONE INTERNAL DEALING Download 27/11/2024 - COMUNICAZIONE INTERNAL DEALING Download 18/10/2024 - COMUNICAZIONE INTERNAL DEALING Download 07/10/2024 - COMUNICAZIONE INTERNAL DEALING Download 02/10/2024 - COMUNICAZIONE"
+    },
+    {
+      "id": "check-page-9ee981d4e5",
+      "url": "https://zestgroup.vc/en/investments",
+      "page": "terms",
+      "excerpt": "Zest Investments | Early-Stage Startup Investments Investor relations Governance Contact Us it en About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review About us Investments Scouting Ticket Innovation The Hub - Events Portfolio People Content Hub News Press review Investor relations Governance Contact Us Zest Investments We Invest in Talent We Invest in early-stage startups in the pre-seed and seed stage DISCOVER MORE Zest Investments Broad Vision, Focused Impact We are industry agnostic with a focus on tech verticals Discover more Zest Investments Together to Win Working closely with our founders to help them grow and succeed. We connect them into the Zest Ecosystem. Discover more Zest Investments The Italian Leader in Early-Stage investments Pioneering investments, focusing on talent Zest Investments continuously scouts for visionary entrepreneurs that are looking for a partner that can work with them and help them grow. The unique Zest ecosystem of investors, Founders and Corporates, combined with over 20 years of experience and expertise grants our portfolio with the needed support to become market leaders. Zest Investments is always on the lookout for the next trends that are shaping the market and investing at an early stage that allows us to have the pulse on what is happening in the ecosystem around us. Our"
+    },
+    {
+      "id": "check-page-4423dc08f7",
+      "url": "https://zestgroup.vc/it/governance/internal-dealing",
+      "page": "terms",
+      "excerpt": "Internal dealing Investor relations Governance Contattaci en it Chi siamo Investments Scouting Ticket Innovation The Hub - Eventi Portfolio People Content Hub News Rassegna stampa Chi siamo Investments Scouting Ticket Innovation The Hub - Eventi Portfolio People Content Hub News Rassegna stampa Investor relations Governance Contattaci Governance Internal dealing Consiglio di Amministrazione Fusione Parti correlate Altri Organi Sociali Assemblee Internal dealing Voto maggiorato Statuto Patti Parasociali Procedure Codice etico e modello 231 Whistleblowing Politica parità di genere Elenco delle comunicazioni di internal dealing 23/12/2025 - COMUNICAZIONE INTERNAL DEALING Download 15/12/2025 - COMUNICAZIONE INTERNAL DEALING Download 15/12/2025 - COMUNICAZIONE INTERNAL DEALING Download 02/12/2025 - COMUNICAZIONE INTERNAL DEALING Download 02/12/2025 - COMUNICAZIONE INTERNAL DEALING Download 02/12/2025 - COMUNICAZIONE INTERNAL DEALING Download 02/12/2025 - COMUNICAZIONE INTERNAL DEALING Download 02/12/2025 - COMUNICAZIONE INTERNAL DEALING Download 01/12/2025 - COMUNICAZIONE INTERNAL DEALING Download 20/12/2024 - COMUNICAZIONE INTERNAL DEALING Download 09/12/2024 - COMUNICAZIONE INTERNAL DEALING Download 27/11/2024 - COMUNICAZIONE INTERNAL DEALING Download 18/10/2024 - COMUNICAZIONE INTERNAL DEALING Download 07/10/2024 - COMUNICAZIONE INTERNAL DEALING Download 02/10/2024 -"
+    },
+    {
+      "id": "check-page-2b40bd736e",
+      "url": "https://zestgroup.vc/it/investments",
+      "page": "terms",
+      "excerpt": "Venture Capital per startup pre-seed e seed | Zest Investments Investor relations Governance Contattaci en it Chi siamo Investments Scouting Ticket Innovation The Hub - Eventi Portfolio People Content Hub News Rassegna stampa Chi siamo Investments Scouting Ticket Innovation The Hub - Eventi Portfolio People Content Hub News Rassegna stampa Investor relations Governance Contattaci Zest Investments Investiamo nel talento Investiamo in startup early-stage nelle fasi pre-seed e seed Scopri di più Zest Investments Innovazione Senza Confini Siamo \"industry agnostic\" con un focus su trend tecnologici Scopri di più Zest Investments Insieme per Crescere Guidiamo la crescita e il successo dei nostri founder inserendoli nell'Ecosistema Zest Scopri di più Zest Investments Il leader italiano negli investimenti early-stage venture capital Investimenti pionieristici, concentrati sul talento Zest Investments seleziona imprenditori visionari che cercano un partner con cui collaborare e crescere. L'ecosistema unico di Zest, che comprende investitori, founder e aziende, unito a oltre 20 anni di esperienza e competenza, offre al nostro portfolio il supporto necessario per diventare leader di mercato. Siamo sempre alla ricerca delle nuove tendenze che stanno plasmando il futuro con investimenti pre-seed e seed venture capital. Il nostro “ingrediente segreto” è il nostro background imprenditoriale"
+    },
+    {
+      "id": "check-page-58a29b35ce",
+      "url": "https://zestgroup.vc/storage/files/190533b9-9a95-43a1-a65c-225c63ec57ef/Internal-Dealing-Gay-20-dicembre-2024_1INFO.pdf",
+      "page": "terms",
+      "excerpt": "%PDF-1.4 %���� 3 0 obj < >stream x��Z�r�8 }�W�-r�M ��� < )�ƣ-Gvl%53� ��d�J�BRN�O� ;����� �7S�M�b �n4Ч p� >- �C\\�!���� ml�+jj6�G�R2!��`8����N����b1��b���U\"�� (�I�7� ��n �� ~ ��� ����ч֛ |N؎ ���;�((p x( � ��#�A� �P�{�G < �D������W�`]��\\�^��� �b���E � �%� �ȏ� �%��Y��+��g�;����. F�7��>xǢ(� �9\"K�?���M f+���tM���K�h�3 � � �G�.��!�ņ��~� < � �矉#��za�V�[�g>��P�f� < :��x ; i8�A�|�3ww�� ]�N �� �?�!� �� � ��: � �� A!= 7� ���>�օӟ�U��c���F/uM�l ����5�� WC�� �| �dH% ����j�u c�N��m ��\\ �(R(�.B� ��!l k_J� @�6dD`dr�M_#�� ��%m < �0��� !����k �v' %�~d( �푅 �� H _� � � $ �- �� . �� (� � �A�n�rC�� � H�g�� < �.d;� �`: ��K ��j� � �ÀJq�%'��2���0|I�^ �F� `� ;���?8r��0\\7h% ��� �@ ������ �%��V� �X !}�� ��-�E !����� X�8HC� U�S�[#\"� ) �E� [� �@39����&� [�� �� q r��� ɉ 7 ��W Z�j;�x� | |��O�1l ��?��p; N0�3Af��H, � ���KgB���(Y��M�L g3�?`�[�W~�7�A~H�t�x�� �f�}bL�v�'�o�^Qt?�mK a�U��2�>*�_�� %��頬Ö�%����Q�;ش��Ĕ��6��({ � , � �� ��a%䜍�Q�d�y�F��L�\"���3q��C < �^xb���3Jě� آ�'� Ð�Z�z�:U4,G� '�,�7 �� ��n�R ��. S'3�6� �� ��� �n +#� []���Az ���W F1Y 8Ꚇ�J�ꪟY E�-{ ����3��|a�� ��� � ��� �K �+ �K 2:��1+|a���*� ��5H�>; FP�0L3�61I� 穉V\"U�?���)�+��X�vOH� [�v��2J�V�ܔ.�I�R�~ \"� �+�� u �� {qá�)f�1��d{.QZ��8{��� � �=ͮ�.�����u�� E f�O��)y��;M� `c����3�����A�z�!UL��k ���ꏇ԰�Cn� � V' l� ��v < 4H/�D�S� � �{U�� L�]�`��$��b���p4��x^ � ��� x��_�Ο����צgЯR:�~1 $Y��d� nU�d��D;� �o%R5[Cm�_�}�{ ��ɥ|�`a�=q�� �]v����c �� O���2)��&� ����� �LZ������%��"
+    },
+    {
+      "id": "check-page-334cc823cd",
+      "url": "https://zestgroup.vc/storage/files/1dcc2277-e3cf-4e31-a3e4-46fbe1389293/Internal-dealing-Gay-20062024.pdf",
+      "page": "terms",
+      "excerpt": "%PDF-1.7 4 0 obj < < /Filter /FlateDecode /Length 20125 >> stream x���K��:�, < �Uh��)��(JZ� � �Y� D����?�� \"�p0ޏ��� Ey�AQ �� �q ˿&�B�?Z��)��܅�R�ϟ��� v1�G�t��G� �n7,���� �s� ���3 ����������r���%?�O� v���KMλ�}�� ��s���[�럯6 Ƃ���]F; ����G4��\\C��]`� ��î[ϟvy(h��G���~��rl ��.g�� i� G��e ��ni�c��+|_������힛�~��~��i�I���0-Kay+�r�~�w�{X'����,� < � ����r_ ���1-ol N�� ،7��*O�f�9��n9d < �Ǩ�D � a91 ���> � � � ΀cYL�e�9� e�ￆ�ܟ �ݔ��U0�R�!�x �o��]�0�㸛���&�����A��w, �\"�sV�n &��n�RX L��c, ��S�N�\" ʘ���E � ]���es��E�A�h/�H�uq�0��]F0��� Y�@y^���](�1 c��*2�m�c, L9���Ho���K�� �t �x�U�/� �� �]�\"Hc�� ˴@ :��u չ�o縱��,�� I�4��h�y�� �S� �-7�'� �[Z ��S�e7�|. �9��� < ��*x�E�H�Q���Fs\\yEX��DZ�k�@�� TX> ��h/zs�re�:S�42� c�Ngl]�p�T [� ��\\���V� ?��� �U��` |����;�EB O��x��Z� �;���u��hi��=�� ��6�ǯ%��� ����\\Ga�����Q ֥Z ��0'�Ż�|� � r*(`�E�ɞ|�ȋ���R%�\"e���\"u�ϵ� ��NeP�ۦ2�ç>��]ǥ{C*���N��\\]���j֛���XΝ`�]?�I���+� �YP��r5 �rWٴ� et�S�#� �? ;hH � �Kɻ�;����)��Ki9� `��g��[@yb � �ʆ�O�� �ָ��p�,'�� r���*t��� DW�z� l� b �H T�%���(�g�H�y9�[ �%ښ�֢�x T�Ju. � �� ��& � ��Wh��̨�� �\\R �?jՄW�V /|p ~� �x�K�V1���q�� ���m�@O���68T�#4L�\\�;Z �r�� Z�S�8y[ �� �� < � ! �}BXe��� ���� 9� � 7*~G�$zKtsm�c��Fu��L�� ��n� ��񅪃tv�=�m��MxO� � ��N��� ��_Ƚ�[E�p�A�L�q��T�@B���\"& l ���Ɣ�� 5+نU���C��% t|s��Y�u� z;��k�� 碐-J�P b�8�w� e�� �(�.b���m�-z�M�[�p%�:g oyQ�� �A�P�T �� ��hY ��w2V����ia-�^=�3̃�iz���� �/��= Hl�,#8A�����G�E � �πL�W'\"�8��Ax}� �\"��* t�ڊ e��\\��n_"
+    },
+    {
+      "id": "check-page-13845fbdc6",
+      "url": "https://zestgroup.vc/storage/files/2019/05/01072016-COMUNICAZIONE-INTERNAL-DEALING.pdf",
+      "page": "terms",
+      "excerpt": "%PDF-1.4 %���� 3 0 obj < >stream x��[�r�8 ��)p�S�P$ �퍖h�[4鐔g��E��D���H���g�'�G� @�!���ڙ�� |�n4� �o'��� �tI�pB-� �β ��>��H@��'�a�D�a� �L�4�~#���_'� &G � �f�i1���C2��4����4� giD QZ�d %�_a^��,Ɉ��w����r{F� � ,$Y��� ��p 'qzI�3�D.� x �$+�yD� R�aZ�� � $�.� < �f !x&Q���b���Y�|��J^�� ,}� J,* B8Ȭ�m� �� K����Q� ��@�,�� � W4 =���! � �'�O�����.(̰���\" f� %�/'̰�g�pg�� ��97˓�b %� R���! h�E{��V����ի�\\|�-�\"\\|�P�7L X�܀��}{�� ������An���Ґ�q ݆i �YM��0 ?O�l�I�G�T� ��6 �S ��A�i� -�\"���I���yx Oc�VqK�R�Iv�Y.5|~��!� rJ��x�� axF�l Ge����\\ ? 7� %p� �T F�i _�%8� �C { � �! � ���$��.� �V����I S�3�7�$��5� �w�� �� ��y{ 4�&�_� Ǡ�80 o0@ǖ\\aofcH�V��R 9~ a����y��Y�d�xZ\"7l2�������ֈRr����Z !���p��´�RL30��\\@8�B� � {�7D {�R3p �4�p < \\ � ��u�*������|~� �] �p � I��v�LU�l�d�^M�Ľ w��MV�&��4�_:����U-���g��,����n��& K �0�!�����% N��j���լxiEl��O� ! ��� ҋȏ �Ֆ�6�3��k\"�G�� � h�� ݬvߑB���\\q���*d-�H}F��A ��� ��ϫ�b}�Z �)��F�pU]sPR���1N�&�KC��o� � ߭3��v;��O 9#��� H�7��y#��α:�h ᪂��C� �ؼ�Wr.7۾� Kw[��mhz�j6�������� < �p�� i�ќ� }�&�g�fE�-��7��0Ƴ ���M6�(k�. ��x�� 6��|� � \"�7�� ш�� զ���c�-�S�t�N̓^�]� �]V�� H��� �Y�X��]��vY��X� ���]��_=�R�V@��C'h�۽ P�� P�Q�^y� ��]W�� H�Ѯ+-� �!���� h < � �v] ��F� hbo� � ]D�_� ����+� 4ѯ �z�&���P �E��#�9p �1���� � ĺ� C� =D^ �� � ��N� �i3�� �Uw���@l�o(�N ���`�+��\"x x�F�6Y�k 7-) R��nu�P������0�� 4�N)1uC��n�����G� H B�a�A�ad� �\"�^Wg, ���.B8) ���~�Y}��Ð�� �7 �t�Z�EWV�� �� �Z\\�j�@�d��(�'�ī�..��̊R~��"
+    },
+    {
+      "id": "check-page-a31c19421d",
+      "url": "https://zestgroup.vc/storage/files/2019/05/02102015-COMUNICAZIONE-INTERNAL-DEALING.pdf",
+      "page": "terms",
+      "excerpt": "%PDF-1.4 %���� 3 0 obj < >stream x�ŝ�r G���� }7r �?�K��$l� ����7\\��pC\"e��ݹ�3� ��mUw%��̓��و����'�A ���?Ef��W?�_Um6��l��UY�� < ���&���ӷE6����z�X��� �m�f���f����a� �~ �ܫ��d>}6�� < {� < _doV����j�:[���n��b�].7����r����n�:ۮ�Yє?� |���v�}����:�v��?�;B5���Gx�Z�6������v�uy��^^���m��-6����;�e�[�]�v�7�� �1���!�^?\\��p���������>�2+�.�̋�C�� (+r � ���88�# � < �\\ #6p��:/�X��W?���U>��m�� eS� `R�ռ� �xUO�lZ� Q3k'u���ͫ�;[�����w��d� ����򨚋j1=T�}�g B � l���l�7� 3 �|�N��FE��ύ�u1�.����f��V���f�tg����b���;K�֋�rׇ��O�� ��g� �� ��#>�bRdo �U��,�� oWg+�i�hk_Z�� ~\\і���f��k���a�[]�Vn����r{�Z� �S�/��ޝ�W�{w$?a�� ?ɮ6���j��� w�o���~u��)���@�D�r����ɴ���b������l6q�Ĝcj�����Ti7 ��d:5 �ܟ �^͛Ii ��//�`p.����?�H=���]wM�( k �|� �z�p�x��] �Q �u ��g ���I��L����?����}� O�'tC� >���;+��[w �G�x�_n4��1 < ��(�|�6E���V:��� �]{ϏNMw��7 \\ �~� ��|�ܟ���/wk�� �R��~ �����j ��]N�O.|�1� �y� ��o��������o>����L�O�l�Ӽ8u!T����*qM �L�l��a�%w�('�f���-��1�-..�;w�:�n��_�n ������v��Ƨ������Ew�� �����l�~��W�~һ;��b�Kl���y�h �Ӗ's6� ��́w�{?Zw�7��j�o���*[m��ե�^���r��W!we\\����Deg�km��|��X�� LS�?%������#�����z��t9]{����f��7��{w]�� �۫��=H �4�7 ��k�̰wWԅ�� ��{�p��>�F��o����m]iw|�0�β�����) �������S��7Ų���W���NB->y*��! < �*�_Q��l �6 �Ԉ�ᢎ�u]�[�R��jU� \\��� l%��7w�� n�w �߿�˜2��+u��_� |��OY�>��r�I$����f~T͕���'� u^�S�� '��E�|����?�\\([7oµ�{d��M!�\\�-�� < ��硟EGO���Y�+�n��s���Y�r=��&�f�. nF�� w��pW��O�EčЉ7���m�:�Lg��l�| �? �+�� x�߹o�8�fr� �tW�7�i�� ??�n����H��P"
+    },
+    {
+      "id": "check-page-95af7ebc78",
+      "url": "https://zestgroup.vc/storage/files/2019/05/04032013-COMUNICAZIONE-INTERNAL-DEALING.pdf",
+      "page": "terms",
+      "excerpt": "%PDF-1.5 %���� 12 0 obj < > endobj 13 0 obj < /Keywords /Author /Title /Producer /ModDate < 443a32303133303330343230303730332b303127303027>/Creator >> endobj 2 0 obj < > endobj 14 0 obj < > stream x�+ r r endstream endobj 15 0 obj < > stream x�+ r r endstream endobj 16 0 obj < > stream x��[Ɏ � � �R� R�VR�J��n ]�}� ���E� >�>ɖ C @���/�������6�� �\\�r���Edu��N��t����w�v�w� �e �lL�lx�V' �N��'���g�o�o T�RN��� < U�C����Bw��y� ��z��� ��;����q ��R�M� ���� ׻o�?��]�$�$nL���z '_&n>-n�=؟ą *Eol$y\\�� �B�茅���l����� �&�>(A^k\\`�Z� p�8N�m�ڔ�0�wc��c���l��z6ZϤqj���q�|��s ��(�݃�=Զ�G� *d� �p�B8��݃��)��x8��)e�d9 ���!�Л���zm ��[�p��q�m[.h�G?�z� )�!4 ��b� o z��$S �k�) n��0 ��ڏȎ`� p�����K��h� w ��3�@ �����$>�k �cL�Ut�P ě��O�믿���: �d_���=�hr>��� %� s~ g Ņ�G��1���5J��4D�� W�g 5� �2a U�5V ��G��6� ޫM��C� ��A\"f*�� �F Ҍ���j�� ��\\_%lUP���hж ze 2I��Jee���Jc�1l�#�6&�U�&� �>�P < $�$�;6C&�4�G� V���P ���R a�1vc���Ub��0[$ ��FVy� H�23�*�.0��k/#���nf��u t������e�� � ` �� l���Eܠ`C�6��CoC�S0=*��) ��* �� �c �N��@���I�>i;�;�0 �2Z��� � - ?ů�y���!M�%(i {.������ �ze�F A� ؤ��� � ���k�Bm�:%���I\\ c� � � �� ��f� �LtؤN�=(l4v� 1�Lw4�t1P��(��b��� < ��^Nj���w9 �~�� � � �ƅ�; PdG��u� ���q}�z9d�Ț�Y����� �� ��!� �8ݓ*� �CҪҨ�xj*�d����� FG :�?����2�� �� =Շ�' ���KS0 V�0구 �q �P�/�!F`> ,&���SjB� �� �$��3�bS+@W��yB < � < �N��ڰN ��]ɲ]�Ԃ@��S��@��eu�(4� 9�I��Z�54� ��(�� �'}}~���*�- � ܻ ��W3��Ȩ��^A� Ӭ,Z < ;4�Á�ng��D��� �{�����1�]�TP�����$��k�.1�1"
     }
   ],
   "findings": {
@@ -84,18 +497,66 @@
         "evidenceId": "check-email-db5a8ed13d"
       }
     ],
-    "phones": [],
+    "phones": [
+      {
+        "value": "+390645473124",
+        "evidenceId": "check-phone-d1e254fb22"
+      }
+    ],
     "routes": [],
-    "applicationUrl": [],
+    "applicationUrl": [
+      {
+        "value": "https://zestgroup.vc/en",
+        "evidenceId": "check-route-6d33157613"
+      }
+    ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "8",
+        "evidenceId": "check-duration-a3c861c995"
+      }
+    ],
+    "format": [],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "review Investor relations Governance Contact Us Scouting Ticket Get €10K for Your Startup Now Zest invests €10K in ambitious founders who are",
+        "evidenceId": "check-deal-aa9d4115b9"
+      },
+      {
+        "value": "Us Scouting Ticket Get €10K for Your Startup Now Zest invests €10K in ambitious founders who are validating an idea, prototype or MVP",
+        "evidenceId": "check-deal-29fe2db439"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "10000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-aa9d4115b9"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://zestgroup.vc/en/portfolio",
         "evidenceId": "check-portfolio-f89e3e7fbb"
+      },
+      {
+        "value": "https://zestgroup.vc/it/portfolio",
+        "evidenceId": "check-portfolio-6628fa20e8"
       }
     ],
     "name": [

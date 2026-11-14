@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.firstround.com/",
   "applyUrl": "https://www.firstround.com/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Home | First Round Home Companies How we work Team Who we back PMF Method The Review We go to unreasonable lengths for founders, often when all they have is an \"imagine if.\" Serval Fal Clay Notion Square Verkada K2 Space Roblox Parallel Planet Labs Imagine if companies could automate their IT help desks. After five years helping build Verkada, Jake Stauch set out to build his own company. He began talking to IT leaders and asking the standard customer discovery questions. What are your biggest pain points? What keeps you up at night? The answers were unremarkable. Most already had tools for the problems they knew they had. Then Jake tried a different question: If you could hire someone to sit next to you and do part of your job, what would you have them do? Suddenly, the conversations changed. IT leaders didn't want a better ticketing system, workflow builder, or IT platform. They wanted someone to handle repetitive help desk requests and manual work. Jake realized the opportunity wasn't to build another tool for IT teams. It was to build an AI teammate. That insight became Serval, now a $1B company used by Notion and Vercel. Jake Stauch and Alex McLeod, the duo behind Serval. How lessons from Verkada shaped this AI-native IT platform, Serval. Watch the full story of how Jake went hard early here . No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "First Round is a venture capital firm that works with founders exclusively at the earliest stages of company building, often when all they have is an “imagine if.”",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "We go to unreasonable lengths for founders, often when all they have is an \"imagine if.\"",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "first-round-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.firstround.com/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

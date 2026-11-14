@@ -1,6 +1,6 @@
 {
   "programId": "the-house-fund",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://thehouse.fund/"
   ],
@@ -8,16 +8,24 @@
     {
       "id": "check-name-f27a542bbe",
       "url": "https://thehouse.fund/",
-      "title": "The House Fund — homepage checked by scrape.py",
+      "title": "The House Fund — homepage",
       "excerpt": "The House Fund - We invest in Berkeley alumni, faculty, students The",
       "page": "details"
     },
     {
       "id": "check-route-9ab872b941",
       "url": "https://thehouse.fund/",
-      "title": "The House Fund — homepage checked by scrape.py",
+      "title": "The House Fund — homepage",
       "excerpt": "The House Fund → https://thehouse.fund/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-3316f7010a",
+      "url": "https://thehouse.fund/",
+      "page": "details",
+      "excerpt": "The House Fund - We invest in Berkeley alumni, faculty, students The House Fund Berkeley, CA Contact Watch with sound Scroll ↓ The House Fund invests at inception in Berkeley’s boldest founders. Home for the unstoppable. Backed Early, Now Valued @ $500M+ © 2026 The House Fund X LinkedIn YouTube Legal"
     }
   ],
   "findings": {
@@ -33,8 +41,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

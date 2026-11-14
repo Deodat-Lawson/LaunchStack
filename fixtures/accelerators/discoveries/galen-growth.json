@@ -1,12 +1,20 @@
 {
   "programId": "galen-growth",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://www.galengrowth.com/2024-europe-digital-health-funding-propelled-to-record-highs-by-mega-deals-and-ai/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.galengrowth.com/about-digital-health/",
       "page": "details",
       "anchor": "Definition of Digital Health",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -27,10 +35,130 @@
       "origin": "official"
     },
     {
+      "url": "https://www.galengrowth.com/digital-health-deal-factory-september/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.galengrowth.com/galen-growth-biome-healthtech-deal-factory-april-7-14/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-april-7-14-private-event/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-june-16-private-event/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-june-16/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory-private-event/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.galengrowth.com/galen-growth-healthtech-deal-factory/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.galengrowth.com/h1-2026-digital-health-investment-trends/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.galengrowth.com/healthtech-deal-factory-april-7-14/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.galengrowth.com/mega-deals-in-digital-health/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.galengrowth.com/mental-healths-investment-resurgence-a-market-ripe-for-innovation/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.galengrowth.com/q1-2025-digital-health-funding-ai-mega-deals-europes-breakout-quarter/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.galengrowth.com/q1-2025-digital-health-funding-trends-mega-deals-ai-european-growth-explored/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.galengrowth.com/research-download/digital-health-exits-2026-ma-ipo-market-report/",
       "page": "terms",
       "anchor": "Exits Are Back. Easy Exits Aren't. M&A now accounts for 95% of digital health exits as the IPO window stays shut to all but the most evidence-led ventures. Galen Growth's Digital H",
-      "fetched": true,
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.galengrowth.com/research-download/health-management-solutions-health-revolution-congress-2026/",
+      "page": "terms",
+      "anchor": "Health Management Solutions: Health Revolution Congress 2026 Presented by Galen Growth at Health Revolution Congress 2026 in Barcelona, this presentation explores how Health Manage",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.galengrowth.com/terms/",
+      "page": "terms",
+      "anchor": "Terms",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     }

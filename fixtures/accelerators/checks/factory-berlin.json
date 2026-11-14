@@ -1,6 +1,6 @@
 {
   "programId": "factory-berlin",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.factoryberlin.com/"
   ],
@@ -8,16 +8,24 @@
     {
       "id": "check-name-ddae3736dc",
       "url": "https://www.factoryberlin.com/",
-      "title": "Factory Berlin — homepage checked by scrape.py",
+      "title": "Factory Berlin — homepage",
       "excerpt": "Factory Berlin 2026 Factory Berlin · since 2011 Fifteen years. Nothing",
       "page": "details"
     },
     {
       "id": "check-route-1c321bbdf3",
       "url": "https://www.factoryberlin.com/",
-      "title": "Factory Berlin — homepage checked by scrape.py",
+      "title": "Factory Berlin — homepage",
       "excerpt": "https://www.factoryberlin.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-02af5786be",
+      "url": "https://www.factoryberlin.com/",
+      "page": "details",
+      "excerpt": "Factory Berlin 2026 Factory Berlin · since 2011 Fifteen years. Nothing but success . The world just changed — AI rewrote every rule. Standing still now means falling behind . So we change everything. Members Member login Event agency Host an event Something big is coming Imprint Privacy Berlin --:--:-- Event agency Host an event Tell us what you have in mind and the team will come back to you with dates, spaces and a quote. Name Email Phone Occasion Guests Company I consent to Factory Works GmbH storing and processing the details above in order to respond to this enquiry. I can withdraw this consent at any time with effect for the future. See our privacy policy . Send request"
     }
   ],
   "findings": {
@@ -33,8 +41,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

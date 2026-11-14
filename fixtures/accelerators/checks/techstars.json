@@ -1,184 +1,901 @@
 {
   "programId": "techstars",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.techstars.com/",
-    "https://www.techstars.com/newsroom/investment-terms",
-    "https://www.techstars.com/about",
-    "https://www.techstars.com/newsroom/techstars-announces-the-fall-2026-founder-catalyst-global-cohort"
+    "https://www.techstars.com/application-preview",
+    "https://www.techstars.com/blog/founder-advice/6-tips-to-ace-the-accelerator-application",
+    "https://www.techstars.com/blog/founder-advice/how-to-make-your-techstars-application-stand-out",
+    "https://www.techstars.com/blog/founder-advice/how-to-successfully-apply-to-techstars-unraveling-the-application-process",
+    "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-before-you-apply-engage",
+    "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-the-application-and-interview-process",
+    "https://www.techstars.com/blog/founder-advice/techstars-paris-the-ins-and-outs-of-the-application-and-selection-process",
+    "https://www.techstars.com/blog/founder-advice/techstars-successful-application-guide-key-considerations",
+    "https://www.techstars.com/blog/insights-and-trends/applying-to-techstars-tips-from-our-managing-directors",
+    "https://www.techstars.com/blog/insights-and-trends/the-big-question-why-should-i-apply-to-techstars",
+    "https://www.techstars.com/blog/program-news/applications-are-now-open-for-techstars-spring-2026-accelerator-programs",
+    "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+    "https://www.techstars.com/blog/program-news/applications-now-open-for-third-class-of-northwestern-medicine-techstars-healthcare-accelerator",
+    "https://www.techstars.com/blog/program-news/applications-open-the-5th-edition-of-the-abn-amro-techstars-future-of"
   ],
   "evidence": [
     {
-      "id": "check-deal-86f8d216af",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars — terms page checked by scrape.py",
-      "excerpt": "our partners, and access to our world-class network of investors, partners, mentors, and alumni. The $220,000 offer is made up of two components, including $200,000 through an uncapped MFN Safe and $20,000 through a Post-Money Convertible Equity Agreement (CEA). The total equity Techstars receives will be 5% of the company",
-      "page": "terms"
+      "id": "check-deal-606fbd2234",
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-paris-the-ins-and-outs-of-the-application-and-selection-process",
+      "title": "Techstars — application page",
+      "excerpt": "convertible note. Let’s fragment the offer: Techstars contribute $20,000 USD, commonly used as a stipend to support living expenses during the",
+      "page": "application"
     },
     {
-      "id": "check-deal-8f6ca8437f",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars — terms page checked by scrape.py",
-      "excerpt": "a side letter. One investment is a $20,000 fixed-percentage convertible equity agreement for 5% common stock (on a post-money basis). Another investment is a $200,000 uncapped MFN post-money Safe. The side letter sets out certain rights Techstars needs in the future. $20,000 fixed percentage convertible equity agreement",
-      "page": "terms"
+      "id": "check-deal-784c275406",
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-paris-the-ins-and-outs-of-the-application-and-selection-process",
+      "title": "Techstars — application page",
+      "excerpt": "we offer to every company an initial investment of up to $120,000 USD paired with $2M+ in perks and an invaluable global network of",
+      "page": "application"
     },
     {
-      "id": "check-deal-ac949ae7ed",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars — terms page checked by scrape.py",
-      "excerpt": "and to learn how we can partner to make the world a better place for everyone. David The Details of Techstars’ Accelerator Investment Offer Techstars invests $220,000* in companies accepted into its accelerator programs. This offer includes $200,000 through an uncapped MFN Safe, plus $20,000 through a Post-Money Convertible",
-      "page": "terms"
+      "id": "check-deal-87cd52c958",
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-paris-the-ins-and-outs-of-the-application-and-selection-process",
+      "title": "Techstars — application page",
+      "excerpt": "company an initial investment of up to $120,000 USD paired with $2M+ in perks and an invaluable global network of alumni, mentors, and",
+      "page": "application"
     },
     {
-      "id": "check-deal-b60cced620",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars — terms page checked by scrape.py",
-      "excerpt": "instruments have been converted alongside the round. The CEA and Safe are diluted by any new money in the priced round, as well as any option pool increases. $200,000 uncapped MFN Safe . The Safe will also convert when the company does a priced round of at least $1 million. It is uncapped, meaning there is no pre-determined",
-      "page": "terms"
+      "id": "check-deal-c3ae709e0a",
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-paris-the-ins-and-outs-of-the-application-and-selection-process",
+      "title": "Techstars — application page",
+      "excerpt": "during the program. Techstars offers an optional convertible note of $100,000 USD that will convert until the company raises a priced equity",
+      "page": "application"
     },
     {
-      "id": "check-deal-f70054dc0b",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars — terms page checked by scrape.py",
-      "excerpt": "a Post-Money Convertible Equity Agreement (CEA). The total equity Techstars receives will be 5% of the company in common stock plus the future value of the $200,000 uncapped MFN Safe. For example, if your next round is valued at $20M pre-money, the $200,000 MFN Safe would then convert into 1% additional ownership at that",
-      "page": "terms"
+      "id": "check-duration-2b75be495b",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+      "title": "Techstars — application page",
+      "excerpt": "Alabama Techstars Founder Catalyst Alabama is a 10-week, hybrid pre-accelerator designed to empower",
+      "page": "application"
     },
     {
-      "id": "check-deal-f97aac51fb",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars — terms page checked by scrape.py",
-      "excerpt": "founder-friendly and does not signal or pre-establish any valuation limit. *The only exception is that Techstars accelerator programs in Asia-Pacific offer a $100,000 uncapped MFN Safe. Incorporating Techstars invests in US corporations or foreign equivalents (or holding companies). For those companies that haven’t",
-      "page": "terms"
+      "id": "check-duration-3bdc250d70",
+      "url": "https://www.techstars.com/blog/program-news/applications-open-the-5th-edition-of-the-abn-amro-techstars-future-of",
+      "title": "Techstars — application page",
+      "excerpt": "USC students, alumni, faculty, and staff through 10 weeks of masterclasses, pitch coaching, and mentoring",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-58bcc5bd1f",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+      "title": "Techstars — application page",
+      "excerpt": "Program News Inside a Techstars Accelerator: 13 Weeks from Orientation to Fundraising A week-by-week",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-6b07cee6ca",
+      "url": "https://www.techstars.com/blog/program-news/applications-now-open-for-third-class-of-northwestern-medicine-techstars-healthcare-accelerator",
+      "title": "Techstars — application page",
+      "excerpt": "USC students, alumni, faculty, and staff through 10 weeks of masterclasses, pitch coaching, and mentoring",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-6b544f663b",
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-paris-the-ins-and-outs-of-the-application-and-selection-process",
+      "title": "Techstars — application page",
+      "excerpt": "deal? The chosen founders will participate in a 3-month mentorship-driven program and have access to the",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-9c0938af7d",
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-make-your-techstars-application-stand-out",
+      "title": "Techstars — application page",
+      "excerpt": "because the program is intense: \"It is 18 to 24 months' worth of work in three months.\" He ended with a",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-9eadc0ffc4",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-now-open-for-techstars-spring-2026-accelerator-programs",
+      "title": "Techstars — application page",
+      "excerpt": "USC students, alumni, faculty, and staff through 10 weeks of masterclasses, pitch coaching, and mentoring",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-bc01f3438e",
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-paris-the-ins-and-outs-of-the-application-and-selection-process",
+      "title": "Techstars — application page",
+      "excerpt": "receive an invitation to a first interview 2 to 4 weeks after the application deadline. We do our best",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-bf6cd78852",
+      "url": "https://www.techstars.com/blog/program-news/applications-now-open-for-third-class-of-northwestern-medicine-techstars-healthcare-accelerator",
+      "title": "Techstars — application page",
+      "excerpt": "Program News Inside a Techstars Accelerator: 13 Weeks from Orientation to Fundraising A week-by-week",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-c686979060",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-now-open-for-techstars-spring-2026-accelerator-programs",
+      "title": "Techstars — application page",
+      "excerpt": "Program News Inside a Techstars Accelerator: 13 Weeks from Orientation to Fundraising A week-by-week",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-c7bdc0260c",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+      "title": "Techstars — application page",
+      "excerpt": "x EIT Urban Mobility Founder Catalyst is a 10-week hybrid pre-accelerator for early-stage founders",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d3b0e2080f",
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-paris-the-ins-and-outs-of-the-application-and-selection-process",
+      "title": "Techstars — application page",
+      "excerpt": "The application typically stays open for ~12 weeks, after which we will commence the selection",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d661417d10",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+      "title": "Techstars — application page",
+      "excerpt": "USC students, alumni, faculty, and staff through 10 weeks of masterclasses, pitch coaching, and mentoring",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-f3cc72a491",
+      "url": "https://www.techstars.com/blog/program-news/applications-open-the-5th-edition-of-the-abn-amro-techstars-future-of",
+      "title": "Techstars — application page",
+      "excerpt": "Program News Inside a Techstars Accelerator: 13 Weeks from Orientation to Fundraising A week-by-week",
+      "page": "application"
+    },
+    {
+      "id": "check-email-4f14c79613",
+      "url": "https://www.techstars.com/blog/insights-and-trends/applying-to-techstars-tips-from-our-managing-directors",
+      "title": "Techstars — application page",
+      "excerpt": "startups@techstars.com",
+      "page": "application"
+    },
+    {
+      "id": "check-email-51052d759a",
+      "url": "https://www.techstars.com/blog/insights-and-trends/applying-to-techstars-tips-from-our-managing-directors",
+      "title": "Techstars — application page",
+      "excerpt": "you have any further questions, reach out to our team at startups@techstars.com . Tags Inside a Techstars Accelerator More in Insights &",
+      "page": "application"
+    },
+    {
+      "id": "check-email-bd02e4699e",
+      "url": "https://www.techstars.com/blog/insights-and-trends/the-big-question-why-should-i-apply-to-techstars",
+      "title": "Techstars — application page",
+      "excerpt": "the programs Techstars offers. Still have questions? Email startups@techstars.com. Tags Startups Techstars Atlanta in Partnership with Cox",
+      "page": "application"
+    },
+    {
+      "id": "check-example-4bb1da31d4",
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-successfully-apply-to-techstars-unraveling-the-application-process",
+      "title": "Techstars — application page",
+      "excerpt": "Techstars Application Guide: Comprehensive Key Considerations for a Successful Application → https://www.techstars.com/blog/advice/techstars-successful-application-guide-key-considerations",
+      "page": "application"
+    },
+    {
+      "id": "check-example-4c0df0cade",
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-successful-application-guide-key-considerations",
+      "title": "Techstars — application page",
+      "excerpt": "Russell originally shared his tips for a successful Techstars application with prospective founders on Medium → https://medium.com/@harris.russell1/techstars-application-guide-comprehensive-key-considerations-for-a-successful-application-22349785bfc4",
+      "page": "application"
+    },
+    {
+      "id": "check-format-0b13eee2db",
+      "url": "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-before-you-apply-engage",
+      "title": "Techstars — application page",
+      "excerpt": "calendar booking link with details to meet virtually or in person. Tags Inside a Techstars Accelerator More in Founder",
+      "page": "application"
+    },
+    {
+      "id": "check-format-276bd1515e",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+      "title": "Techstars — application page",
+      "excerpt": "in urban mobility. The programme combines in-person and virtual programming focused on customer discovery, traction,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-57c3a4f7cc",
+      "url": "https://www.techstars.com/blog/insights-and-trends/applying-to-techstars-tips-from-our-managing-directors",
+      "title": "Techstars — application page",
+      "excerpt": "and tell you more about Techstars. Can’t join them in person? Check out our FAQ and read on for insights from our",
+      "page": "application"
+    },
+    {
+      "id": "check-format-866d32f984",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+      "title": "Techstars — application page",
+      "excerpt": "x EIT Urban Mobility Founder Catalyst is a 10-week hybrid pre-accelerator for early-stage founders building scalable",
+      "page": "application"
+    },
+    {
+      "id": "check-format-9479d73bc3",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-now-open-for-techstars-spring-2026-accelerator-programs",
+      "title": "Techstars — application page",
+      "excerpt": "cities worldwide, from Los Angeles to London. Plus, one remote-first program. Programs with applications now open",
+      "page": "application"
+    },
+    {
+      "id": "check-format-b30f9506b9",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+      "title": "Techstars — application page",
+      "excerpt": "companies in urban mobility. The programme combines in-person and virtual programming focused on customer discovery,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e2d2344d2a",
+      "url": "https://www.techstars.com/blog/insights-and-trends/the-big-question-why-should-i-apply-to-techstars",
+      "title": "Techstars — application page",
+      "excerpt": "entrepreneur and managing director of Techstars Anywhere Remote Accelerator and Techstars Physical Health Fort Worth",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e52d4abf0e",
+      "url": "https://www.techstars.com/blog/program-news/applications-now-open-for-third-class-of-northwestern-medicine-techstars-healthcare-accelerator",
+      "title": "Techstars — application page",
+      "excerpt": "Participants will benefit from three months of immersive, in-person support at Northwestern Medicine’s Mansueto Innovation",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e6ceb6d1a8",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+      "title": "Techstars — application page",
+      "excerpt": "Alabama Techstars Founder Catalyst Alabama is a 10-week, hybrid pre-accelerator designed to empower early-stage founders",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e7915d3386",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+      "title": "Techstars — application page",
+      "excerpt": "Founder Catalyst Global Fall 2026 Program is a part-time, virtual pre-accelerator powered by Techstars and offered",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e7aec2be4b",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+      "title": "Techstars — application page",
+      "excerpt": "applications. Founder Catalyst is a part-time, primarily virtual pre-accelerator built for founders who want to sharpen",
+      "page": "application"
     },
     {
       "id": "check-name-87d18b4b7c",
       "url": "https://www.techstars.com/",
-      "title": "Techstars — homepage checked by scrape.py",
+      "title": "Techstars — homepage",
       "excerpt": "Techstars: the early-stage accelerator and investor Join Us",
       "page": "details"
     },
     {
-      "id": "check-portfolio-1166fe14b8",
-      "url": "https://www.techstars.com/about",
-      "title": "Techstars — details page checked by scrape.py",
+      "id": "check-portfolio-03694e9795",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-now-open-for-techstars-spring-2026-accelerator-programs",
+      "title": "Techstars — application page",
       "excerpt": "Portfolio → https://www.techstars.com/portfolio",
-      "page": "details"
+      "page": "application"
     },
     {
-      "id": "check-portfolio-57523c024a",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars — terms page checked by scrape.py",
+      "id": "check-portfolio-0c8ae4a4a9",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+      "title": "Techstars — application page",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-130fc17e18",
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-make-your-techstars-application-stand-out",
+      "title": "Techstars — application page",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-13b0fb4469",
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-make-your-techstars-application-stand-out",
+      "title": "Techstars — application page",
       "excerpt": "Alumni → https://www.techstars.com/for/alumni",
-      "page": "terms"
+      "page": "application"
     },
     {
-      "id": "check-portfolio-5a49a5b0af",
-      "url": "https://www.techstars.com/newsroom/techstars-announces-the-fall-2026-founder-catalyst-global-cohort",
-      "title": "Techstars — batches page checked by scrape.py",
+      "id": "check-portfolio-1c9de2015c",
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-successful-application-guide-key-considerations",
+      "title": "Techstars — application page",
       "excerpt": "Portfolio → https://www.techstars.com/portfolio",
-      "page": "batches"
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-200cd27a39",
+      "url": "https://www.techstars.com/application-preview",
+      "title": "Techstars — application page",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-24260c5e5e",
+      "url": "https://www.techstars.com/blog/insights-and-trends/applying-to-techstars-tips-from-our-managing-directors",
+      "title": "Techstars — application page",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-252e676aa5",
+      "url": "https://www.techstars.com/application-preview",
+      "title": "Techstars — application page",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-26cb230fef",
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-paris-the-ins-and-outs-of-the-application-and-selection-process",
+      "title": "Techstars — application page",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-2d1c7804db",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-now-open-for-techstars-spring-2026-accelerator-programs",
+      "title": "Techstars — application page",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-32af21b61a",
+      "url": "https://www.techstars.com/blog/insights-and-trends/applying-to-techstars-tips-from-our-managing-directors",
+      "title": "Techstars — application page",
+      "excerpt": "check out who we’ve accepted in the past → https://www.techstars.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3c88caeb72",
+      "url": "https://www.techstars.com/blog/insights-and-trends/the-big-question-why-should-i-apply-to-techstars",
+      "title": "Techstars — application page",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3ddee8c47a",
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-successful-application-guide-key-considerations",
+      "title": "Techstars — application page",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-4aa9ca786a",
+      "url": "https://www.techstars.com/blog/insights-and-trends/applying-to-techstars-tips-from-our-managing-directors",
+      "title": "Techstars — application page",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-4b997661f1",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+      "title": "Techstars — application page",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-4e9c37470a",
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-successful-application-guide-key-considerations",
+      "title": "Techstars — application page",
+      "excerpt": "Startups → https://www.techstars.com/blog/tags/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5030d9ab64",
+      "url": "https://www.techstars.com/blog/program-news/applications-open-the-5th-edition-of-the-abn-amro-techstars-future-of",
+      "title": "Techstars — application page",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "application"
     },
     {
       "id": "check-portfolio-5a6f9785ed",
       "url": "https://www.techstars.com/",
-      "title": "Techstars — homepage checked by scrape.py",
+      "title": "Techstars — homepage",
       "excerpt": "Alumni → https://www.techstars.com/for/alumni",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-5aefeb41e6",
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-paris-the-ins-and-outs-of-the-application-and-selection-process",
+      "title": "Techstars — application page",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5f3f41e7c5",
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-successfully-apply-to-techstars-unraveling-the-application-process",
+      "title": "Techstars — application page",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-661596a328",
+      "url": "https://www.techstars.com/blog/insights-and-trends/the-big-question-why-should-i-apply-to-techstars",
+      "title": "Techstars — application page",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "application"
     },
     {
       "id": "check-portfolio-6d81acfa6d",
       "url": "https://www.techstars.com/",
-      "title": "Techstars — homepage checked by scrape.py",
+      "title": "Techstars — homepage",
       "excerpt": "Portfolio → https://www.techstars.com/portfolio",
       "page": "details"
     },
     {
-      "id": "check-portfolio-6fb5410f83",
-      "url": "https://www.techstars.com/about",
-      "title": "Techstars — details page checked by scrape.py",
-      "excerpt": "Explore the Portfolio → https://www.techstars.com/portfolio",
-      "page": "details"
+      "id": "check-portfolio-6e793f1f95",
+      "url": "https://www.techstars.com/blog/insights-and-trends/the-big-question-why-should-i-apply-to-techstars",
+      "title": "Techstars — application page",
+      "excerpt": "Startups → https://www.techstars.com/blog/tags/startups",
+      "page": "application"
     },
     {
-      "id": "check-portfolio-81d3a48e47",
-      "url": "https://www.techstars.com/about",
-      "title": "Techstars — details page checked by scrape.py",
-      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
-      "page": "details"
+      "id": "check-portfolio-746b96b135",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+      "title": "Techstars — application page",
+      "excerpt": "Startups → https://www.techstars.com/blog/tags/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7cf01c1460",
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-successfully-apply-to-techstars-unraveling-the-application-process",
+      "title": "Techstars — application page",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "application"
     },
     {
       "id": "check-portfolio-8201ff2841",
       "url": "https://www.techstars.com/",
-      "title": "Techstars — homepage checked by scrape.py",
+      "title": "Techstars — homepage",
       "excerpt": "Learn more → https://www.techstars.com/portfolio",
       "page": "details"
     },
     {
-      "id": "check-portfolio-930a31138b",
-      "url": "https://www.techstars.com/newsroom/techstars-announces-the-fall-2026-founder-catalyst-global-cohort",
-      "title": "Techstars — batches page checked by scrape.py",
-      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
-      "page": "batches"
-    },
-    {
-      "id": "check-portfolio-9378a16d54",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars — terms page checked by scrape.py",
-      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
-      "page": "terms"
-    },
-    {
-      "id": "check-portfolio-e59508468a",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars — terms page checked by scrape.py",
+      "id": "check-portfolio-8bc0f6a3bc",
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-make-your-techstars-application-stand-out",
+      "title": "Techstars — application page",
       "excerpt": "Startups → https://www.techstars.com/blog/tags/startups",
-      "page": "terms"
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-91ab1a84aa",
+      "url": "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-before-you-apply-engage",
+      "title": "Techstars — application page",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-9d0e4e4db5",
+      "url": "https://www.techstars.com/blog/program-news/applications-now-open-for-third-class-of-northwestern-medicine-techstars-healthcare-accelerator",
+      "title": "Techstars — application page",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-9db951fb4c",
+      "url": "https://www.techstars.com/blog/program-news/applications-open-the-5th-edition-of-the-abn-amro-techstars-future-of",
+      "title": "Techstars — application page",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-9ee21c4153",
+      "url": "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-before-you-apply-engage",
+      "title": "Techstars — application page",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b2845ca511",
+      "url": "https://www.techstars.com/blog/program-news/applications-now-open-for-third-class-of-northwestern-medicine-techstars-healthcare-accelerator",
+      "title": "Techstars — application page",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-baadcdbc91",
+      "url": "https://www.techstars.com/blog/founder-advice/6-tips-to-ace-the-accelerator-application",
+      "title": "Techstars — application page",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-cb5332da3b",
+      "url": "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-the-application-and-interview-process",
+      "title": "Techstars — application page",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d3378e5362",
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-successfully-apply-to-techstars-unraveling-the-application-process",
+      "title": "Techstars — application page",
+      "excerpt": "Startups → https://www.techstars.com/blog/tags/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-db44dc484b",
+      "url": "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-the-application-and-interview-process",
+      "title": "Techstars — application page",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-ee4bc8f41b",
+      "url": "https://www.techstars.com/blog/founder-advice/6-tips-to-ace-the-accelerator-application",
+      "title": "Techstars — application page",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f291632137",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-now-open-for-techstars-spring-2026-accelerator-programs",
+      "title": "Techstars — application page",
+      "excerpt": "Startups → https://www.techstars.com/blog/tags/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-route-07a4f8275c",
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-successfully-apply-to-techstars-unraveling-the-application-process",
+      "title": "Techstars — application page",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-12bf734a7c",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-now-open-for-techstars-spring-2026-accelerator-programs",
+      "title": "Techstars — application page",
+      "excerpt": "Techstars' Spring 2026 accelerator programs → https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/registrations?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F&state=5795d43d-f6cd-4867-814a-7ffb665e686c&response_mode=fragment&response_type=code&scope=openid&nonce=9b497679-4411-47a0-8754-35263d31514e",
+      "page": "application"
+    },
+    {
+      "id": "check-route-205e5cf1e6",
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-make-your-techstars-application-stand-out",
+      "title": "Techstars — application page",
+      "excerpt": "Apply now → https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/registrations?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F&state=3b58f330-9e10-457c-8582-3b975eceb128&response_mode=fragment&response_type=code&scope=openid&nonce=671c485b-8e25-49b3-88fe-d3e343060b2a",
+      "page": "application"
+    },
+    {
+      "id": "check-route-21c13429c1",
+      "url": "https://www.techstars.com/blog/program-news/applications-now-open-for-third-class-of-northwestern-medicine-techstars-healthcare-accelerator",
+      "title": "Techstars — application page",
+      "excerpt": "applications → https://apply.techstars.com/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-23add0077e",
+      "url": "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-the-application-and-interview-process",
+      "title": "Techstars — application page",
+      "excerpt": "Before You Apply, Engage → https://www.techstars.com/the-line/advice/inside-a-techstars-accelerator-before-you-apply-engage",
+      "page": "application"
     },
     {
       "id": "check-route-2855a04baa",
       "url": "https://www.techstars.com/",
-      "title": "Techstars — homepage checked by scrape.py",
+      "title": "Techstars — homepage",
       "excerpt": "Apply Today → https://apply.techstars.com",
       "page": "details"
     },
     {
-      "id": "check-route-3b973284dd",
-      "url": "https://www.techstars.com/about",
-      "title": "Techstars — details page checked by scrape.py",
+      "id": "check-route-31e001f593",
+      "url": "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-the-application-and-interview-process",
+      "title": "Techstars — application page",
+      "excerpt": "Tips from our Managing Directors → https://www.techstars.com/the-line/pov/applying-to-techstars-tips-from-our-managing-directors",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3476e1dd10",
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-successfully-apply-to-techstars-unraveling-the-application-process",
+      "title": "Techstars — application page",
+      "excerpt": "Inside a Techstars Accelerator: The Application & Interview Process → https://www.techstars.com/blog/advice/inside-a-techstars-accelerator-the-application-and-interview-process",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4bb1da31d4",
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-successfully-apply-to-techstars-unraveling-the-application-process",
+      "title": "Techstars — application page",
+      "excerpt": "Techstars Application Guide: Comprehensive Key Considerations for a Successful Application → https://www.techstars.com/blog/advice/techstars-successful-application-guide-key-considerations",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4d95249b86",
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-paris-the-ins-and-outs-of-the-application-and-selection-process",
+      "title": "Techstars — application page",
       "excerpt": "Apply Today → https://apply.techstars.com/",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-route-4fdc0d4c62",
+      "url": "https://www.techstars.com/application-preview",
+      "title": "Techstars — application page",
+      "excerpt": "tips from our Managing Directors → https://www.techstars.com/blog/insights-and-trends/applying-to-techstars-tips-from-our-managing-directors",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5171e7dafc",
+      "url": "https://www.techstars.com/blog/program-news/applications-now-open-for-third-class-of-northwestern-medicine-techstars-healthcare-accelerator",
+      "title": "Techstars — application page",
+      "excerpt": "are now open → https://apply.techstars.com/",
+      "page": "application"
     },
     {
       "id": "check-route-5689983934",
       "url": "https://www.techstars.com/",
-      "title": "Techstars — homepage checked by scrape.py",
+      "title": "Techstars — homepage",
       "excerpt": "Apply Today → https://apply.techstars.com/",
       "page": "details"
     },
     {
-      "id": "check-route-9928ea31a2",
-      "url": "https://www.techstars.com/newsroom/investment-terms",
-      "title": "Techstars — terms page checked by scrape.py",
+      "id": "check-route-5849a45005",
+      "url": "https://www.techstars.com/blog/founder-advice/6-tips-to-ace-the-accelerator-application",
+      "title": "Techstars — application page",
       "excerpt": "Apply Today → https://apply.techstars.com/",
-      "page": "terms"
+      "page": "application"
     },
     {
-      "id": "check-route-9fefe22c6d",
-      "url": "https://www.techstars.com/about",
-      "title": "Techstars — details page checked by scrape.py",
-      "excerpt": "Apply Today → https://apply.techstars.com",
-      "page": "details"
+      "id": "check-route-59cc134549",
+      "url": "https://www.techstars.com/blog/program-news/applications-now-open-for-third-class-of-northwestern-medicine-techstars-healthcare-accelerator",
+      "title": "Techstars — application page",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "application"
     },
     {
-      "id": "check-route-c7ec111747",
-      "url": "https://www.techstars.com/newsroom/techstars-announces-the-fall-2026-founder-catalyst-global-cohort",
-      "title": "Techstars — batches page checked by scrape.py",
+      "id": "check-route-6e2c9149eb",
+      "url": "https://www.techstars.com/application-preview",
+      "title": "Techstars — application page",
+      "excerpt": "here → https://www.techstars.com/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-77af992e8f",
+      "url": "https://www.techstars.com/blog/program-news/applications-open-the-5th-edition-of-the-abn-amro-techstars-future-of",
+      "title": "Techstars — application page",
+      "excerpt": "Apply Now → https://apply.techstars.com/?accelerator=ABN%20AMRO%20+%20Techstars%20Future%20of%20Finance%20Accelerator%20",
+      "page": "application"
+    },
+    {
+      "id": "check-route-83269fb543",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+      "title": "Techstars — application page",
+      "excerpt": "time to apply → https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/registrations?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F&state=2b5b620d-27fb-419a-a6b0-80a2c1589d69&response_mode=fragment&response_type=code&scope=openid&nonce=e6e41db3-5a84-4bac-8f06-7aa0dc3e77c7&code_challenge=Akd6ENPNdntpdYaXkr42OslUe5EPjilVzcFoA8SmLsM&code_challenge_method=S256",
+      "page": "application"
+    },
+    {
+      "id": "check-route-90251e9bd1",
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-make-your-techstars-application-stand-out",
+      "title": "Techstars — application page",
       "excerpt": "Apply Today → https://apply.techstars.com/",
-      "page": "batches"
+      "page": "application"
+    },
+    {
+      "id": "check-route-ad5e815049",
+      "url": "https://www.techstars.com/blog/insights-and-trends/the-big-question-why-should-i-apply-to-techstars",
+      "title": "Techstars — application page",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-afbb8e46a4",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+      "title": "Techstars — application page",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b6b92c49bf",
+      "url": "https://www.techstars.com/blog/program-news/applications-open-the-5th-edition-of-the-abn-amro-techstars-future-of",
+      "title": "Techstars — application page",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bb0d069fca",
+      "url": "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-before-you-apply-engage",
+      "title": "Techstars — application page",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bfb747604c",
+      "url": "https://www.techstars.com/application-preview",
+      "title": "Techstars — application page",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d206f6b79d",
+      "url": "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-before-you-apply-engage",
+      "title": "Techstars — application page",
+      "excerpt": "The Application & Interview Process → https://www.techstars.com/the-line/advice/inside-a-techstars-accelerator-the-application-and-interview-process",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d58dee8514",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-now-open-for-techstars-spring-2026-accelerator-programs",
+      "title": "Techstars — application page",
+      "excerpt": "this guide will provide tips on how to best showcase your startup → https://www.techstars.com/blog/advice/how-to-successfully-apply-to-techstars-unraveling-the-application-process",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d7210b67ac",
+      "url": "https://www.techstars.com/blog/insights-and-trends/applying-to-techstars-tips-from-our-managing-directors",
+      "title": "Techstars — application page",
+      "excerpt": "here → https://www.techstars.com/application-preview",
+      "page": "application"
+    },
+    {
+      "id": "check-route-dcf6e1be4e",
+      "url": "https://www.techstars.com/application-preview",
+      "title": "Techstars — application page",
+      "excerpt": "apply → https://apply.techstars.com/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-de178432c3",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-now-open-for-techstars-spring-2026-accelerator-programs",
+      "title": "Techstars — application page",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e10d129972",
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-successfully-apply-to-techstars-unraveling-the-application-process",
+      "title": "Techstars — application page",
+      "excerpt": "apply.techstars.com → https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/auth?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F&state=43515d1a-d420-469c-bdd1-a2a71301c603&response_mode=fragment&response_type=code&scope=openid&nonce=b9f0abd2-d3e1-4a30-87c4-b8456576311a",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f02b09abdc",
+      "url": "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-the-application-and-interview-process",
+      "title": "Techstars — application page",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f6c51d287d",
+      "url": "https://www.techstars.com/blog/insights-and-trends/applying-to-techstars-tips-from-our-managing-directors",
+      "title": "Techstars — application page",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ffa6df6939",
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-successful-application-guide-key-considerations",
+      "title": "Techstars — application page",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "application"
+    },
+    {
+      "id": "check-selectivity-55db53afed",
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-make-your-techstars-application-stand-out",
+      "title": "Techstars — application page",
+      "excerpt": "improve it.\" His final pitch: \"If you follow this advice, you're going to beat 80% of applicants that were not at this workshop. So you're already ahead for sure.\" If you've",
+      "page": "application"
+    },
+    {
+      "id": "check-status-088709dcde",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+      "title": "Techstars — application page",
+      "excerpt": "Applications Are Open for 3 Techstars Founder Catalyst Programs | Techstars Join Us Portfolio Locations I Am... Resources About",
+      "page": "application"
+    },
+    {
+      "id": "check-status-1e26548e62",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-now-open-for-techstars-spring-2026-accelerator-programs",
+      "title": "Techstars — application page",
+      "excerpt": "Applications Are Now Open for Techstars' Spring 2026 Accelerator Programs | Techstars Join Us Portfolio Locations I Am... Resources",
+      "page": "application"
+    },
+    {
+      "id": "check-status-4d99aedcbf",
+      "url": "https://www.techstars.com/blog/program-news/applications-now-open-for-third-class-of-northwestern-medicine-techstars-healthcare-accelerator",
+      "title": "Techstars — application page",
+      "excerpt": "Applications Now Open for Third Class of Northwestern Medicine & Techstars Healthcare Accelerator | Techstars Join Us Portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-status-f03a1068d2",
+      "url": "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-before-you-apply-engage",
+      "title": "Techstars — application page",
+      "excerpt": "are open two times per year. We’re constantly talking with founders — before applications open, while applications are open, and throughout the interview process. We encourage you to get in touch well before applications close for",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-797b81a40c",
+      "url": "https://www.techstars.com/",
+      "page": "details",
+      "excerpt": "Techstars: the early-stage accelerator and investor Join Us Portfolio Locations I Am... Resources About Techstars Apply Today In a World of Noise, the Right Network Is Everything. We find and fund the world's most ambitious founders. Apply Today Review $220K Investment Terms 29 UNICORNS & COUNTING Techstars Network Highlights The latest news from across the global Techstars network. Techstars Is No. 1 on TIME and Statista's 2026 Accelerator List Read More 22 Techstars Portfolio Companies Named to the 2026 Inc. 5000 Read More Zipline Hits $21.5B Valuation as Walmart Takes Drone Delivery Nationwide Read More ABOUT TECHSTARS Backing Ambitious Founders Since 2006 Techstars is the accelerator and investor for founders who do more faster. Since 2006, we've backed the world's most promising early-stage startups, and today every company gets $220K in capital, three months of relentless hands-on mentorship, and a network of investors, operators, and corporate partners that keeps opening doors for years. With programs in the world's leading startup hubs and across specialized verticals, we take founders from first check to global scale. The proof: a portfolio worth more than $300 billion, built by unicorns and thousands of high-growth companies still writing their stories. Learn more 11,171 Founders Building the Future 29 Unicorns and Counting $58B Capital Raised $330B Combined Market"
+    },
+    {
+      "id": "check-page-65f1f81d0e",
+      "url": "https://www.techstars.com/application-preview",
+      "page": "application",
+      "excerpt": "Techstars Accelerator Application Guide and Requirements | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today APPLY Techstars Accelerator Application Preview Learn More About Our Application Questions When you click the apply button to one of Techstars accelerators , you’ll be prompted to create a profile. When doing so, please ensure you create your profile using an email address you use and check often so we can send you critical application updates. The Techstars mentorship-driven accelerator application consists of three main parts: Basic information about you (3-5 mins) Information about your company (20-30 minutes) Optional step to pick the top 3 accelerators you are interested in (3-5 minutes) Each application can be submitted to specific accelerator programs, or you can submit a general application, and our teams will work to connect you to the right accelerators. Submitting multiple applications does not increase your chances of acceptance, so take the time upfront to consider which of our accelerators is the best fit for you and your company. As you prepare your application, make sure to check out tips from our Managing Directors . Looking for more info on our application process? Learn more about our application process and programs currently accepting applications here . Visit our frequently asked questions . Application Questions"
+    },
+    {
+      "id": "check-page-ecfab046cc",
+      "url": "https://www.techstars.com/blog/founder-advice/6-tips-to-ace-the-accelerator-application",
+      "page": "application",
+      "excerpt": "6 Tips to Ace The Accelerator Application | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to posts Founder Advice 6 Tips to Ace The Accelerator Application September 27, 2022 Accelerators can serve as an invaluable tool to help your business scale successfully on a faster timeline. However, with so many programs out there, with a majority of them highly competitive, choosing one and completing the application can feel very daunting. Pulling from insights shared during a recent StartOut and Techstars event , here are 6 tips to help you thrive during the application process. 1. Team, Team, Team Often you will hear that team is the most important factor when accelerator applications are being reviewed. This does not mean that you already need a team of 25 behind you, but you do want to showcase the talented folks working on your idea. Applications should introduce you and your co-founders and clearly describe why you have the combined skills to make your company a success. It is not a requirement to have a co-founder, but without one, it makes things more difficult. You will need to be very explicit in explaining how this is not a weakness. You may even want to consider seeking a co-founder before applying. For example, if you are a developer you may want to bring on someone with a strong business development or marketing background."
+    },
+    {
+      "id": "check-page-10243354ea",
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-make-your-techstars-application-stand-out",
+      "page": "application",
+      "excerpt": "How to Make Your Techstars Application Stand Out | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to posts Founder Advice How to Make Your Techstars Application Stand Out May 12, 2026 We share a detailed explanation of what the Techstars application and interview process is like, including key aspects of the application and common pitfalls to avoid. This blog post is Part 3 of a 4-Part series giving you firsthand access to the accelerator journey. Part 1: Inside Week 1: A Sneak Peek into the Techstars Accelerator Experience Part 2: Why Most Pitch Decks Don't Work, and How to Make Sure Yours Does Part 4: Top 10 Learnings From Working with Techstars Founders Thousands of founders apply to Techstars every year. Two managing directors recently sat down to walk through exactly what they look for, question by question, and where most applicants go wrong. In our Inside a Techstars Accelerator session, How to Make Your Application Stand Out , Andres Barreto , Managing Director of Techstars New York City Accelerator , and Matthew Jaeh , Managing Director of Techstars Alabama EnergyTech Accelerator , opened up the rubric. Or as Andres put it: \"You're getting a hack. You're getting the answers at the back of the textbook.\" \"What Problem Are You Solving?\" (And Why 80% of Founders Blow It) The first question on the application sounds simple, but"
+    },
+    {
+      "id": "check-page-47288cc054",
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-successfully-apply-to-techstars-unraveling-the-application-process",
+      "page": "application",
+      "excerpt": "How to Successfully Apply to Techstars: Unraveling the Application Process | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to posts Founder Advice How to Successfully Apply to Techstars: Unraveling the Application Process August 2, 2024 This step-by-step guide to the Techstars application process provides a breakdown of each section of the application, providing context, tips, and what to expect. Techstars is known worldwide for its remarkable accelerator programs aimed at supporting startups as they scale their business. Navigating the application process is an integral first step in your Techstars journey, yet it can feel quite daunting. This step-by-step guide is designed to demystify the process, increasing your chances of being selected. Detailed below is a breakdown of each section of the application, providing context, tips, and what to expect. Watch the video below to get application tips directly from Sylvia Bouloutas , Investment Associate at Techstars San Francisco, and Steve Bernard , Investment Associate at Techstars Boston Accelerator. The Techstars Application Process Applying to a Techstars program is more than just a way to be evaluated, it's a unique opportunity for startup founders to get a comprehensive understanding of their business. Structured as a series of questions, the application process provides a platform"
+    },
+    {
+      "id": "check-page-3212e95480",
+      "url": "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-before-you-apply-engage",
+      "page": "application",
+      "excerpt": "Inside a Techstars Accelerator: Before You Apply, Engage | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to posts Founder Advice Inside a Techstars Accelerator: Before You Apply, Engage November 4, 2026 Before you start your accelerator application, check out these tips for how to prepare for the application and interview process. In our series Inside a Techstars Accelerator , we unpack elements of the application process and the accelerator experience, so you have all the information you need to make a decision about applying. This article explains how to prepare for the application and interview process — and how to connect with us now. You might also be interested in: How To Choose The Right Accelerator For Your Company What Are We Looking For? The Application & Interview Process What To Expect From the Three Months Accelerator FAQ Applications for Techstars are open two times per year. We’re constantly talking with founders — before applications open, while applications are open, and throughout the interview process. We encourage you to get in touch well before applications close for the program you are interested in so we can get to know you more thoroughly, and so that you can have the best possible experience with the application process. Here Are Some Ways For Us To Connect Attend an event to learn more about Techstars. Sign"
+    },
+    {
+      "id": "check-page-2088d324e3",
+      "url": "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-the-application-and-interview-process",
+      "page": "application",
+      "excerpt": "Inside a Techstars Accelerator: The Application & Interview Process | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to posts Founder Advice Inside a Techstars Accelerator: The Application & Interview Process January 12, 2026 So you're applying to a Techstars accelerator! Here are the steps you can expect in the application & interview process, plus some sample questions. In our series, Inside a Techstars Accelerator, we unpack elements of the application process and the accelerator experience, so you have all the information you need to make a decision about applying. This article explains all the steps of the application and interview process, including lots of sample questions you might be asked to answer. You might also be interested in: How to Apply How To Choose The Right Accelerator For Your Company Before You Apply, Engage What Are We Looking For? What To Expect From the Three Months Accelerator FAQ What To Expect From the Application Process Thousands of companies apply to Techstars, and our staff personally review every application that comes in. You can see the accelerators with applications open here . We recommend picking specific programs that you are interested in to ensure the right teams get eyes on your application. It takes most teams anywhere from one to four hours to complete their application for the first time."
+    },
+    {
+      "id": "check-page-5f8396262f",
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-paris-the-ins-and-outs-of-the-application-and-selection-process",
+      "page": "application",
+      "excerpt": "Techstars Paris: The ins and outs of the application and selection process | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to posts Founder Advice Techstars Paris: The ins and outs of the application and selection process January 30, 2022 Are you ready to build a better future? Paris Techstars Accelerator settled in France for the first time in 2017 . Back then, the french ecosystem was just starting to bloom, the same year that Station F opened their offices in Paris, the same year of Brexit. Techstars came to France because the french tech entrepreneurs were loading our pipelines in the global accelerators. The city had the perfect combination of brilliant talents from different universities, easing regulations for small innovative businesses, an exorbitant amount of spaces the startups called home, the right amount of capital, and a permanently embedded entrepreneurial culture. In 2017 I moved to Paris to launch Techstars Paris as the Program Manager. On my third day in the city, I went to grab a coffee around the “Sentier Valley” area when someone saw my Techstars hoodie and reached out asking : Is Techstars coming to France? How can I apply? In 2022 we doubled down on our commitment to the french ecosystem with the re-launch of Techstars Paris. From then, we invest in 24 companies per year, meaning we run two programs annually by"
+    },
+    {
+      "id": "check-page-f4a8c3fd10",
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-successful-application-guide-key-considerations",
+      "page": "application",
+      "excerpt": "Techstars Application Guide: Comprehensive Key Considerations for a Successful Application | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to posts Founder Advice Techstars Application Guide: Comprehensive Key Considerations for a Successful Application January 16, 2024 We've designed a guide to help prospective founders prepare a successful application to Techstars. By Russell Harris, Techstars Investment Associate A successful application to Techstars involves not just a solid idea, but a well-rounded understanding of the business landscape, a strategic vision, and the ability to clearly articulate how your startup stands out. This guide is designed to help you prepare a comprehensive and compelling pitch. 1. Unique Value Proposition Clearly differentiate your product or service in the market. Highlight unique features or experiences that set you apart from competitors. Identify and articulate the primary problem your product/service solves. Showcase evidence of demand or interest in your product/service from potential customers. 2. Sustainable Business Model Present a clear and sustainable revenue model. Detail how your company will achieve long-term profitability. Explain how you will balance initial customer acquisition costs with long-term value creation. Discuss the scalability of your revenue streams in different market"
+    },
+    {
+      "id": "check-page-9f0daa3e2d",
+      "url": "https://www.techstars.com/blog/insights-and-trends/applying-to-techstars-tips-from-our-managing-directors",
+      "page": "application",
+      "excerpt": "Applying to Techstars: Tips From Our Managing Directors | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to posts Insights & Trends Applying to Techstars: Tips From Our Managing Directors May 15, 2024 Techstars Managing Directors share tips and tricks to get noticed when applying for a Techstars program. Techstars’ managing directors devote their time to finding the best startups. Between office hours, roadshows, and AMAs, they are available to answer your questions and tell you more about Techstars. Can’t join them in person? Check out our FAQ and read on for insights from our managing directors on what they are looking for in applications from startups. What To Know Before Applying Our application consists of three parts: basic information, team information, and an optional step to show program preference. Each application can be submitted to specific accelerator programs, or you can submit a general application, and our teams will work to connect you to the right accelerators. Learn more about our application questions here . Do your research, learn more about each program and the team behind it, and check out who we’ve accepted in the past . Our Managing Directors Set the Record Straight You are never too far along ! Techstars can, and has, helped at all stages. It’s not just pre-product, pre-revenue companies. \"There isn’t a"
+    },
+    {
+      "id": "check-page-e7314270bf",
+      "url": "https://www.techstars.com/blog/insights-and-trends/the-big-question-why-should-i-apply-to-techstars",
+      "page": "application",
+      "excerpt": "The Big Question: Why Should I Apply to Techstars? | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to posts Insights & Trends The Big Question: Why Should I Apply to Techstars? January 29, 2024 There are three reasons to apply to a Techstars accelerator program: mentorship, business model support, and investor connections. Overwhelmed. That’s likely what founders are feeling right now if applying for a Techstars accelerator is on the radar. Anastasia Simon gets it. “We know people can be confused in looking at or figuring out which is the perfect program for their business,” said Simon, investment principal for Techstars Atlanta powered by Cox Enterprises . “It’s intimidating, but I’m here to tell you it’s worth it.” Put simply, there are three reasons to apply: mentorship, business model support, and investor connections . Be spectacular There are a few truths about starting a company. First, the power of mentorship is undisputed and secondly, the enemy of a startup is time. As a serial entrepreneur and managing director of Techstars Anywhere Remote Accelerator and Techstars Physical Health Fort Worth Accelerator , Trey Bowles understands that working in a vacuum isn’t productive. It’s why Techstars brings strong mentors with years of experience directly to the founders. “These relationships are often key to helping founders make a"
+    },
+    {
+      "id": "check-page-127629a42b",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-now-open-for-techstars-spring-2026-accelerator-programs",
+      "page": "application",
+      "excerpt": "Applications Are Now Open for Techstars' Spring 2026 Accelerator Programs | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to posts Program News Applications Are Now Open for Techstars' Spring 2026 Accelerator Programs August 25, 2025 Applications opened today for Techstars' Spring 2026 accelerator programs. Programs will kick off in March 2026. Applications opened today for Techstars' Spring 2026 accelerator programs . Programs will kick off in March 2026 in six cities worldwide, from Los Angeles to London. Plus, one remote-first program. Programs with applications now open include: Techstars Anywhere Accelerator Northwestern Medicine & Techstars Healthcare Accelerator Techstars AI Health Baltimore powered by Johns Hopkins University and CareFirst Blue Cross Blue Shield Techstars London Accelerator Techstars New York City Accelerator Techstars Workforce Development Accelerator USC and Techstars Accelerator Apply before November 19 to join the 10,600+ founders who have built their businesses with Techstars. If you’re not sure which program to apply to, check out this blog post explaining how to choose the right accelerator for you. If you're ready to apply and looking to make the most of your application, this guide will provide tips on how to best showcase your startup . About Techstars Techstars helps founders succeed. Through our"
+    },
+    {
+      "id": "check-page-e7a9e95e5a",
+      "url": "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+      "page": "application",
+      "excerpt": "Applications Are Open for 3 Techstars Founder Catalyst Programs | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to posts Program News Applications Are Open for 3 Techstars Founder Catalyst Programs July 9, 2026 Three Techstars Founder Catalyst programs are now accepting applications and will kick off in September. Early-stage founders, take note: three Techstars Founder Catalyst programs are now accepting applications. Founder Catalyst is a part-time, primarily virtual pre-accelerator built for founders who want to sharpen their fundamentals: understanding their target customers, refining their solution, and building the entrepreneurial skills that carry a startup from idea to traction. Three programs are kicking off in September and are currently accepting applications: Techstars Founder Catalyst Alabama Techstars Founder Catalyst Alabama is a 10-week, hybrid pre-accelerator designed to empower early-stage founders developing cutting-edge technology solutions for real-world problems. Through entrepreneurial masterclasses, one-on-one mentorship, and introduction to the Techstars network, participants gain the tools needed to take their ventures to the next level. Apply by August 7, 2026. Techstars Founder Catalyst Global Fall 2026 Program The Techstars Founder Catalyst Global Fall 2026 Program is a part-time, virtual pre-accelerator"
+    },
+    {
+      "id": "check-page-564e5291a9",
+      "url": "https://www.techstars.com/blog/program-news/applications-now-open-for-third-class-of-northwestern-medicine-techstars-healthcare-accelerator",
+      "page": "application",
+      "excerpt": "Applications Now Open for Third Class of Northwestern Medicine & Techstars Healthcare Accelerator | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to posts Program News Applications Now Open for Third Class of Northwestern Medicine & Techstars Healthcare Accelerator August 24, 2026 Northwestern Medicine and Techstars have opened applications for the third class of their Healthcare Accelerator, inviting six health tech startups to join a three-month program in Chicago starting March 2027. CHICAGO – Northwestern Medicine and Techstars today announced that applications are now open for the third class of the Northwestern Medicine & Techstars Healthcare Accelerator . Building on the success of prior classes, this year’s program aims to attract another cohort of six exceptional health tech startups. Participants will benefit from three months of immersive, in-person support at Northwestern Medicine’s Mansueto Innovation Institute in Chicago, gaining access to funding, mentorship, and collaboration with clinical and technical experts. The previous two classes delivered powerful innovations, including solutions like automated healthcare compliance, optimized medical coding, AI-powered pathogen analysis, and cutting-edge digital therapeutics. These startups showcased their pitch and progress at a high-impact Demo Day last summer at"
+    },
+    {
+      "id": "check-page-7218daa7c4",
+      "url": "https://www.techstars.com/blog/program-news/applications-open-the-5th-edition-of-the-abn-amro-techstars-future-of",
+      "page": "application",
+      "excerpt": "Applications Open: The 5th Edition of the ABN AMRO + Techstars Future of Finance Accelerator | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Back to posts Program News Applications Open: The 5th Edition of the ABN AMRO + Techstars Future of Finance Accelerator April 8, 2025 The ABN AMRO + Techstars Future of Finance Accelerator returns to Amsterdam this fall for its 5th edition. We’re back. The ABN AMRO + Techstars Future of Finance Accelerator returns to Amsterdam this fall for its 5th edition—running from September 8 to December 12, 2025 . And this year, we’re raising the bar. More Capital. More Time. Better Terms. Starting with the Fall 2025 class, Techstars is increasing its investment to $220,000 for every company accepted into the program. Founders also get the full experience: our proven three-month accelerator, access to world-class mentors, partner perks, and lifetime entry into the Techstars network of peer founders and investors. In exchange, Techstars receives 6-8% equity on a fully diluted basis, mostly in common stock. Why the change? Because the new deal is better for founders. By providing more capital we provide founders more time to hit their stride. This new investment structure is designed to extend the runway and boost momentum heading into the post-program raise. It’s a better deal, period. AI is Reshaping"
     }
   ],
   "findings": {
-    "emails": [],
+    "emails": [
+      {
+        "value": "startups@techstars.com",
+        "evidenceId": "check-email-4f14c79613"
+      }
+    ],
     "phones": [],
     "routes": [
       {
@@ -188,6 +905,22 @@
       {
         "value": "https://apply.techstars.com",
         "evidenceId": "check-route-2855a04baa"
+      },
+      {
+        "value": "https://www.techstars.com/blog/insights-and-trends/applying-to-techstars-tips-from-our-managing-directors",
+        "evidenceId": "check-route-4fdc0d4c62"
+      },
+      {
+        "value": "https://www.techstars.com/apply/",
+        "evidenceId": "check-route-6e2c9149eb"
+      },
+      {
+        "value": "https://login.techstars.com/auth/realms/techstars/protocol/openid-connect/registrations?client_id=apply&redirect_uri=https%3A%2F%2Fapply.techstars.com%2F&state=3b58f330-9e10-457c-8582-3b975eceb128&response_mode=fragment&response_type=code&scope=openid&nonce=671c485b-8e25-49b3-88fe-d3e343060b2a",
+        "evidenceId": "check-route-205e5cf1e6"
+      },
+      {
+        "value": "https://www.techstars.com/blog/advice/techstars-successful-application-guide-key-considerations",
+        "evidenceId": "check-route-4bb1da31d4"
       }
     ],
     "applicationUrl": [
@@ -196,34 +929,133 @@
         "evidenceId": "check-route-5689983934"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-f03a1068d2"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
-    "selectivity": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "24 months",
+        "evidenceId": "check-duration-9c0938af7d"
+      },
+      {
+        "value": "12",
+        "evidenceId": "check-duration-d3b0e2080f"
+      },
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-6b544f663b"
+      },
+      {
+        "value": "4",
+        "evidenceId": "check-duration-bc01f3438e"
+      },
+      {
+        "value": "10",
+        "evidenceId": "check-duration-9eadc0ffc4"
+      },
+      {
+        "value": "13",
+        "evidenceId": "check-duration-c686979060"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-0b13eee2db"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-e2d2344d2a"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-e6ceb6d1a8"
+      }
+    ],
+    "location": [],
+    "selectivity": [
+      {
+        "value": {
+          "rate": 0.8,
+          "bounded": false
+        },
+        "evidenceId": "check-selectivity-55db53afed"
+      }
+    ],
     "dealText": [
       {
-        "value": "our partners, and access to our world-class network of investors, partners, mentors, and alumni. The $220,000 offer is made up of two components, including $200,000 through an uncapped MFN Safe and $20,000 through a Post-Money Convertible Equity Agreement (CEA). The total equity Techstars receives will be 5% of the company",
-        "evidenceId": "check-deal-86f8d216af"
+        "value": "we offer to every company an initial investment of up to $120,000 USD paired with $2M+ in perks and an invaluable global network of",
+        "evidenceId": "check-deal-784c275406"
       },
       {
-        "value": "a Post-Money Convertible Equity Agreement (CEA). The total equity Techstars receives will be 5% of the company in common stock plus the future value of the $200,000 uncapped MFN Safe. For example, if your next round is valued at $20M pre-money, the $200,000 MFN Safe would then convert into 1% additional ownership at that",
-        "evidenceId": "check-deal-f70054dc0b"
+        "value": "company an initial investment of up to $120,000 USD paired with $2M+ in perks and an invaluable global network of alumni, mentors, and",
+        "evidenceId": "check-deal-87cd52c958"
       },
       {
-        "value": "and to learn how we can partner to make the world a better place for everyone. David The Details of Techstars’ Accelerator Investment Offer Techstars invests $220,000* in companies accepted into its accelerator programs. This offer includes $200,000 through an uncapped MFN Safe, plus $20,000 through a Post-Money Convertible",
-        "evidenceId": "check-deal-ac949ae7ed"
+        "value": "convertible note. Let’s fragment the offer: Techstars contribute $20,000 USD, commonly used as a stipend to support living expenses during the",
+        "evidenceId": "check-deal-606fbd2234"
       },
       {
-        "value": "a side letter. One investment is a $20,000 fixed-percentage convertible equity agreement for 5% common stock (on a post-money basis). Another investment is a $200,000 uncapped MFN post-money Safe. The side letter sets out certain rights Techstars needs in the future. $20,000 fixed percentage convertible equity agreement",
-        "evidenceId": "check-deal-8f6ca8437f"
+        "value": "during the program. Techstars offers an optional convertible note of $100,000 USD that will convert until the company raises a priced equity",
+        "evidenceId": "check-deal-c3ae709e0a"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "120000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-784c275406"
       },
       {
-        "value": "instruments have been converted alongside the round. The CEA and Safe are diluted by any new money in the priced round, as well as any option pool increases. $200,000 uncapped MFN Safe . The Safe will also convert when the company does a priced round of at least $1 million. It is uncapped, meaning there is no pre-determined",
-        "evidenceId": "check-deal-b60cced620"
+        "value": {
+          "kind": "cash",
+          "amount": "2000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-87cd52c958"
       },
       {
-        "value": "founder-friendly and does not signal or pre-establish any valuation limit. *The only exception is that Techstars accelerator programs in Asia-Pacific offer a $100,000 uncapped MFN Safe. Incorporating Techstars invests in US corporations or foreign equivalents (or holding companies). For those companies that haven’t",
-        "evidenceId": "check-deal-f97aac51fb"
+        "value": {
+          "kind": "convertible",
+          "amount": "20000",
+          "currency": "USD",
+          "equity": "3%",
+          "label": "Convertible note",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-606fbd2234"
+      },
+      {
+        "value": {
+          "kind": "convertible",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Convertible note",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-c3ae709e0a"
       }
     ],
     "portfolioPages": [
@@ -237,7 +1069,7 @@
       },
       {
         "value": "https://www.techstars.com/blog/tags/startups",
-        "evidenceId": "check-portfolio-e59508468a"
+        "evidenceId": "check-portfolio-8bc0f6a3bc"
       }
     ],
     "name": [
@@ -246,6 +1078,15 @@
         "evidenceId": "check-name-87d18b4b7c"
       }
     ],
-    "examplePages": []
+    "examplePages": [
+      {
+        "value": "https://www.techstars.com/blog/advice/techstars-successful-application-guide-key-considerations",
+        "evidenceId": "check-example-4bb1da31d4"
+      },
+      {
+        "value": "https://medium.com/@harris.russell1/techstars-application-guide-comprehensive-key-considerations-for-a-successful-application-22349785bfc4",
+        "evidenceId": "check-example-4c0df0cade"
+      }
+    ]
   }
 }

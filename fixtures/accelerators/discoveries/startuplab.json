@@ -1,7 +1,39 @@
 {
   "programId": "startuplab",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://www.startuplab.no/about",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuplab.no/accelerator",
+      "page": "application",
+      "anchor": "Accelerator Ready, set, grow! A 3-month sprint with top founders, investors, and experts to sharpen your edge and scale fast. Apply today",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuplab.no/apply/accelerator",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuplab.no/apply/funding",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.startuplab.no/apply/incubator",
       "page": "application",
@@ -11,17 +43,65 @@
       "origin": "official"
     },
     {
-      "url": "https://www.startuplab.no/accelerator",
+      "url": "https://www.startuplab.no/apply/student",
       "page": "application",
-      "anchor": "Accelerator Ready, set, grow! A 3-month sprint with top founders, investors, and experts to sharpen your edge and scale fast. Apply today",
-      "fetched": false,
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.startuplab.no/ventures",
+      "url": "https://www.startuplab.no/apply/submission",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuplab.no/companies",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuplab.no/companies-backup",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuplab.no/insights/accelerator-q-a",
       "page": "details",
-      "anchor": "Funding Supporting bold ideas. We invest in teams daring to change the game, both through our programs and directly. Get funding",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuplab.no/insights/five-things-founders-wish-the-knew-before-joining-an-accelerator",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuplab.no/insights/ready-to-scale-here-s-why-accelerators-make-all-the-difference",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuplab.no/legal/terms",
+      "page": "terms",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -35,10 +115,10 @@
       "origin": "official"
     },
     {
-      "url": "https://www.startuplab.no/about",
+      "url": "https://www.startuplab.no/ventures",
       "page": "details",
-      "anchor": "About",
-      "fetched": false,
+      "anchor": "Funding Supporting bold ideas. We invest in teams daring to change the game, both through our programs and directly. Get funding",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

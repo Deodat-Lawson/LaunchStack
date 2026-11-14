@@ -1,112 +1,475 @@
 {
   "programId": "google-for-startups",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://startup.google.com/",
-    "https://startup.google.com/programs/",
-    "https://startup.google.com/programs/accelerator/"
+    "https://startup.google.com/about-us/",
+    "https://startup.google.com/intl/es/programs/",
+    "https://startup.google.com/intl/es/programs/accelerator/",
+    "https://startup.google.com/intl/es/programs/accelerator/americas/",
+    "https://startup.google.com/intl/es/programs/accelerator/asia-pacific/",
+    "https://startup.google.com/intl/es/programs/accelerator/europe-middle-east-africa/",
+    "https://startup.google.com/intl/es/programs/ai-academy/",
+    "https://startup.google.com/intl/es/programs/black-founders-fund/",
+    "https://startup.google.com/intl/es/programs/cloud-academy/",
+    "https://startup.google.com/intl/es/programs/directory/",
+    "https://startup.google.com/intl/es/programs/forum/",
+    "https://startup.google.com/intl/es/programs/founders-academy/",
+    "https://startup.google.com/intl/es/programs/founders-funds/",
+    "https://startup.google.com/intl/es/programs/gemini-api-sprints/"
   ],
   "evidence": [
     {
+      "id": "check-format-c454f0801b",
+      "url": "https://startup.google.com/intl/es/programs/accelerator/",
+      "title": "Google for Startups — program page",
+      "excerpt": "por profesores bilingües, y ahora un aula totalmente virtual Creada por ti. Acelerada con Google. Los programas Google",
+      "page": "details"
+    },
+    {
       "id": "check-name-dc24b822cf",
       "url": "https://startup.google.com/",
-      "title": "Google for Startups — homepage checked by scrape.py",
+      "title": "Google for Startups — homepage",
       "excerpt": "grow: Tools, resources and support programs for startups - Google for Startups for Startups Jump to content for Startups Programs Cloud",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-05ce54c800",
+      "url": "https://startup.google.com/intl/es/programs/cloud-academy/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Alumni → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0b59dbaf18",
+      "url": "https://startup.google.com/intl/es/programs/forum/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Alumni → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0d3bbe590f",
+      "url": "https://startup.google.com/intl/es/programs/black-founders-fund/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Alumni → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-106eddc21e",
+      "url": "https://startup.google.com/about-us/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Alumni → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-27fe635660",
+      "url": "https://startup.google.com/intl/es/programs/accelerator/asia-pacific/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-28833db120",
+      "url": "https://startup.google.com/about-us/",
+      "title": "Google for Startups — program page",
+      "excerpt": "About Discover what it means to be a part of the Google for Startups alumni community → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2cf6b5c051",
+      "url": "https://startup.google.com/intl/es/programs/ai-academy/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2e787cd90b",
+      "url": "https://startup.google.com/intl/es/programs/accelerator/americas/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3962d834d1",
+      "url": "https://startup.google.com/about-us/",
+      "title": "Google for Startups — program page",
+      "excerpt": "About → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-39d91e83e4",
+      "url": "https://startup.google.com/intl/es/programs/forum/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3f1385ba8d",
+      "url": "https://startup.google.com/intl/es/programs/directory/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-405cdd5da2",
+      "url": "https://startup.google.com/intl/es/programs/accelerator/americas/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-447e61214f",
+      "url": "https://startup.google.com/intl/es/programs/ai-academy/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4b28da272a",
+      "url": "https://startup.google.com/intl/es/programs/founders-funds/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Alumni → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-546bbe563b",
+      "url": "https://startup.google.com/intl/es/programs/black-founders-fund/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-56a4648390",
+      "url": "https://startup.google.com/intl/es/programs/accelerator/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de → https://startup.google.com/alumni/",
       "page": "details"
     },
     {
       "id": "check-portfolio-57694a0d09",
       "url": "https://startup.google.com/",
-      "title": "Google for Startups — homepage checked by scrape.py",
+      "title": "Google for Startups — homepage",
       "excerpt": "About → https://startup.google.com/alumni/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-6f7b792c4c",
-      "url": "https://startup.google.com/programs/",
-      "title": "Google for Startups — details page checked by scrape.py",
-      "excerpt": "About → https://startup.google.com/alumni/",
+      "id": "check-portfolio-5f13e9cbe8",
+      "url": "https://startup.google.com/intl/es/programs/accelerator/europe-middle-east-africa/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Alumni → https://startup.google.com/alumni/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-7237d71fc6",
-      "url": "https://startup.google.com/programs/accelerator/",
-      "title": "Google for Startups — application page checked by scrape.py",
-      "excerpt": "About Discover what it means to be a part of the Google for Startups alumni community → https://startup.google.com/alumni/",
-      "page": "application"
+      "id": "check-portfolio-63cad77522",
+      "url": "https://startup.google.com/intl/es/programs/gemini-api-sprints/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Alumni → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-69aabaf522",
+      "url": "https://startup.google.com/intl/es/programs/accelerator/americas/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Alumni → https://startup.google.com/alumni/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-793def6400",
       "url": "https://startup.google.com/",
-      "title": "Google for Startups — homepage checked by scrape.py",
+      "title": "Google for Startups — homepage",
       "excerpt": "About Discover what it means to be a part of the Google for Startups alumni community → https://startup.google.com/alumni/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-99a65adcaa",
-      "url": "https://startup.google.com/programs/",
-      "title": "Google for Startups — details page checked by scrape.py",
+      "id": "check-portfolio-7a8f08abd3",
+      "url": "https://startup.google.com/intl/es/programs/gemini-api-sprints/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7b20890128",
+      "url": "https://startup.google.com/intl/es/programs/",
+      "title": "Google for Startups — program page",
       "excerpt": "Alumni → https://startup.google.com/alumni/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-c49ef684da",
-      "url": "https://startup.google.com/programs/accelerator/",
-      "title": "Google for Startups — application page checked by scrape.py",
-      "excerpt": "Alumni → https://startup.google.com/alumni/",
-      "page": "application"
+      "id": "check-portfolio-7e4accad47",
+      "url": "https://startup.google.com/intl/es/programs/accelerator/asia-pacific/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de → https://startup.google.com/alumni/",
+      "page": "details"
     },
     {
-      "id": "check-portfolio-cf660985da",
-      "url": "https://startup.google.com/programs/accelerator/",
-      "title": "Google for Startups — application page checked by scrape.py",
-      "excerpt": "About → https://startup.google.com/alumni/",
-      "page": "application"
+      "id": "check-portfolio-9c93a9ec4d",
+      "url": "https://startup.google.com/intl/es/programs/ai-academy/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Alumni → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9e13975d85",
+      "url": "https://startup.google.com/intl/es/programs/founders-funds/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9e4cc91f5f",
+      "url": "https://startup.google.com/intl/es/programs/directory/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9e4f1ca035",
+      "url": "https://startup.google.com/intl/es/programs/accelerator/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Alumni → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a1ead5b490",
+      "url": "https://startup.google.com/intl/es/programs/accelerator/europe-middle-east-africa/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ae82222957",
+      "url": "https://startup.google.com/intl/es/programs/accelerator/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b2a1e17272",
+      "url": "https://startup.google.com/intl/es/programs/accelerator/asia-pacific/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Alumni → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b2e9bd0691",
+      "url": "https://startup.google.com/intl/es/programs/founders-funds/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b6176a27db",
+      "url": "https://startup.google.com/intl/es/programs/founders-academy/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-be60746c87",
+      "url": "https://startup.google.com/intl/es/programs/directory/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Alumni → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c5a4e36f89",
+      "url": "https://startup.google.com/intl/es/programs/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d0ee7c78cf",
+      "url": "https://startup.google.com/intl/es/programs/cloud-academy/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups → https://startup.google.com/alumni/",
+      "page": "details"
     },
     {
       "id": "check-portfolio-d2c4b165b7",
       "url": "https://startup.google.com/",
-      "title": "Google for Startups — homepage checked by scrape.py",
+      "title": "Google for Startups — homepage",
       "excerpt": "Learn about our alumni → https://startup.google.com/alumni/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-df928e1ac2",
-      "url": "https://startup.google.com/programs/",
-      "title": "Google for Startups — details page checked by scrape.py",
-      "excerpt": "About Discover what it means to be a part of the Google for Startups alumni community → https://startup.google.com/alumni/",
+      "id": "check-portfolio-d3c440a1e7",
+      "url": "https://startup.google.com/intl/es/programs/founders-academy/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d43997af2a",
+      "url": "https://startup.google.com/intl/es/programs/gemini-api-sprints/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d83ad75353",
+      "url": "https://startup.google.com/intl/es/programs/founders-academy/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Alumni → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-dac0c528a7",
+      "url": "https://startup.google.com/intl/es/programs/cloud-academy/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-db6815dffc",
+      "url": "https://startup.google.com/intl/es/programs/black-founders-fund/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ddcb425ddb",
+      "url": "https://startup.google.com/intl/es/programs/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups → https://startup.google.com/alumni/",
       "page": "details"
     },
     {
       "id": "check-portfolio-e3ec0542c5",
       "url": "https://startup.google.com/",
-      "title": "Google for Startups — homepage checked by scrape.py",
+      "title": "Google for Startups — homepage",
       "excerpt": "Alumni → https://startup.google.com/alumni/",
       "page": "details"
     },
     {
-      "id": "check-route-39c2604a37",
-      "url": "https://startup.google.com/programs/",
-      "title": "Google for Startups — details page checked by scrape.py",
-      "excerpt": "Find out more → https://startup.google.com/programs/accelerator/",
+      "id": "check-portfolio-e44f634af4",
+      "url": "https://startup.google.com/intl/es/programs/accelerator/europe-middle-east-africa/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups → https://startup.google.com/alumni/",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-e876d3b3ab",
+      "url": "https://startup.google.com/intl/es/programs/forum/",
+      "title": "Google for Startups — program page",
+      "excerpt": "Acerca de → https://startup.google.com/alumni/",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-f94b978daa",
+      "url": "https://startup.google.com/",
+      "page": "details",
+      "excerpt": "Start, build, grow: Tools, resources and support programs for startups - Google for Startups for Startups Jump to content for Startups Programs Cloud credits Products Gemini Gemini kit Gemini multimedia library Alumni About Stories Directory About us Programs Cloud credits Products Gemini Gemini Go further faster with Gemini Gemini kit Gemini multimedia library Alumni Alumni Meet the startups already making a difference About Discover what it means to be a part of the Google for Startups alumni community Stories Meet founders and startups proving that innovation happens everywhere Directory Browse our alumni directory and discover startups across regions and industries About us Start. Build. Grow. Whether you’re starting out, or scaling to meet demand, connect with the right people, products, and best practices to help your startup grow. Get started The latest from Google for Startups Technical guide Startup guide to AI agents Build multi-agent systems with Google Cloud ADK Learn More Cloud program Google for Startups Cloud Program Supercharge your startup's growth with new resources Find out more Technical guide Startup guide to AI agents Build multi-agent systems with Google Cloud ADK Learn More Cloud program Google for Startups Cloud Program Supercharge your startup's growth with new resources Find out more What is Google for Startups? Google for Startups is on a mission to"
+    },
+    {
+      "id": "check-page-c7d58ba652",
+      "url": "https://startup.google.com/about-us/",
+      "page": "details",
+      "excerpt": "About Us - Google for Startups for Startups Jump to content for Startups Programs Cloud credits Products Gemini Gemini kit Gemini multimedia library Alumni About Stories Directory About us Programs Cloud credits Products Gemini Gemini Go further faster with Gemini Gemini kit Gemini multimedia library Alumni Alumni Meet the startups already making a difference About Discover what it means to be a part of the Google for Startups alumni community Stories Meet founders and startups proving that innovation happens everywhere Directory Browse our alumni directory and discover startups across regions and industries About us Proud to help startups start, build, and grow Watch the film Link to Youtube Video (visible only when JS is disabled) Play silent looping video Pause silent looping video Startups are solving the world’s important challenges with agility, innovative technology, and determination. Google is proud to help. Atlanta startup GOODR leverages tech to feed more and waste less So whether you’re starting out, building your startup, or scaling up to meet the needs of consumers, business, and society, we connect you with the right people, products, and best practices to help you thrive and grow. Because if startups succeed, our communities and economies succeed. And Google does too. Atlanta startup GOODR leverages tech to feed more and waste less Startups are solving the"
+    },
+    {
+      "id": "check-page-17484b1c9e",
+      "url": "https://startup.google.com/intl/es/programs/",
+      "page": "details",
+      "excerpt": "Program - Google para Startups para Startups Jump to content para Startups Programas Créditos de Cloud Productos Gemini Gemini kit Gemini multimedia library Alumni Acerca de Historias Directorio Sobre nosotros Programas Créditos de Cloud Productos Gemini Gemini Go further faster with Gemini Gemini kit Gemini multimedia library Alumni Alumni Descubre las startups que ya están marcando la diferencia Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups Historias Conoce a fundadores y startups que demuestran que la innovación está en todas partes Directorio Consulta nuestro directorio de antiguos alumnos y descubre startups de todas las regiones y sectores Sobre nosotros Programas para llevar tu startup al siguiente nivel Google for Startups ofrece una gran variedad de programas e iniciativas para ayudar a conectar startups, independientemente de su estado de madurez y vertical, con las personas, los productos y las mejores prácticas que necesitan para crecer y escalar. ¡Presenta tu startup! Encuentra programas específicos para ti Accelerator Gemini Startup Forum Immersion Startup School Events and opportunities Creado por ti. Acelerado con Google. Encuentra soluciones a tus retos tecnológicos con ayuda de Google Los programas Google for Startups Accelerator se centran en apoyar a un grupo selecto de startups en fase de"
+    },
+    {
+      "id": "check-page-abc6607b63",
+      "url": "https://startup.google.com/intl/es/programs/accelerator/",
+      "page": "details",
+      "excerpt": "Google for Startups Accelerator para Startups Jump to content para Startups Programas Créditos de Cloud Productos Gemini Gemini kit Gemini multimedia library Alumni Acerca de Historias Directorio Sobre nosotros Programas Créditos de Cloud Productos Gemini Gemini Go further faster with Gemini Gemini kit Gemini multimedia library Alumni Alumni Descubre las startups que ya están marcando la diferencia Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups Historias Conoce a fundadores y startups que demuestran que la innovación está en todas partes Directorio Consulta nuestro directorio de antiguos alumnos y descubre startups de todas las regiones y sectores Sobre nosotros Selan es un servicio de recogida para niños ofrecido por profesores bilingües, y ahora un aula totalmente virtual Creada por ti. Acelerada con Google. Los programas Google for Startups Accelerator se centran en apoyar a un grupo de startups en fase de crecimiento con formación personalizada de producto, tecnología y liderazgo impartida por expertos de Google. Encuentra un Accelerator Liv up se ha comprometido a llevar a sus clientes comida sana y recién hecha Acerca del programa Acerca del programa Una serie global de programas Cada programa de aceleración tiene una cohorte de 10-15 startups avanzadas, que se unen para atacar retos tecnológicos específicos"
+    },
+    {
+      "id": "check-page-dc533717c2",
+      "url": "https://startup.google.com/intl/es/programs/accelerator/americas/",
+      "page": "details",
+      "excerpt": "Américas - Google for Startups Accelerator para Startups Jump to content para Startups Programas Créditos de Cloud Productos Gemini Gemini kit Gemini multimedia library Alumni Acerca de Historias Directorio Sobre nosotros Programas Créditos de Cloud Productos Gemini Gemini Go further faster with Gemini Gemini kit Gemini multimedia library Alumni Alumni Descubre las startups que ya están marcando la diferencia Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups Historias Conoce a fundadores y startups que demuestran que la innovación está en todas partes Directorio Consulta nuestro directorio de antiguos alumnos y descubre startups de todas las regiones y sectores Sobre nosotros Accelerator Americas Américas Nuestras aceleradoras están diseñadas para ofrecer lo mejor de los programas, productos, personal y tecnología de Google a startups en etapa inicial que utilizan tecnología de IA. Américas Nuestras aceleradoras 3 Brazil Un programa de aceleración de diez semanas que conecta recursos para potenciar a startups brasileñas, desde la fase Seed hasta la Serie A, para escalar su tecnología, con enfoque en IA. Saber más Canada Un programa de aceleración de diez semanas dirigido a empresas emergentes de tecnología de alto potencial, en las rondas de financiación Seed a Serie A, en Canadá Saber más North America Un programa de"
+    },
+    {
+      "id": "check-page-489e6495b5",
+      "url": "https://startup.google.com/intl/es/programs/accelerator/asia-pacific/",
+      "page": "details",
+      "excerpt": "Asia-Pacífico - Google for Startups Accelerator para Startups Jump to content para Startups Programas Créditos de Cloud Productos Gemini Gemini kit Gemini multimedia library Alumni Acerca de Historias Directorio Sobre nosotros Programas Créditos de Cloud Productos Gemini Gemini Go further faster with Gemini Gemini kit Gemini multimedia library Alumni Alumni Descubre las startups que ya están marcando la diferencia Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups Historias Conoce a fundadores y startups que demuestran que la innovación está en todas partes Directorio Consulta nuestro directorio de antiguos alumnos y descubre startups de todas las regiones y sectores Sobre nosotros Accelerator Asia Pacific Asia-Pacífico Nuestras aceleradoras están diseñadas para ofrecer lo mejor de los programas, productos, personal y tecnología de Google a startups en etapa inicial que utilizan tecnología de IA. Asia-Pacífico Nuestras aceleradoras 3 Australia and New Zealand Un programa de aceleración híbrido de diez semanas para empresas emergentes de tecnología (startups) con sede en Australia y Nueva Zelanda, y una madurez entre Seed y Serie A (o equivalente). Saber más India Un programa de aceleración híbrido de tres meses, equity-free, para startups AI-first en etapas entre Seed y Series A con sede en la India. Saber más Japan"
+    },
+    {
+      "id": "check-page-527d1a17c4",
+      "url": "https://startup.google.com/intl/es/programs/accelerator/europe-middle-east-africa/",
+      "page": "details",
+      "excerpt": "Europe, Middle East, Africa - Google for Startups Accelerator para Startups Jump to content para Startups Programas Créditos de Cloud Productos Gemini Gemini kit Gemini multimedia library Alumni Acerca de Historias Directorio Sobre nosotros Programas Créditos de Cloud Productos Gemini Gemini Go further faster with Gemini Gemini kit Gemini multimedia library Alumni Alumni Descubre las startups que ya están marcando la diferencia Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups Historias Conoce a fundadores y startups que demuestran que la innovación está en todas partes Directorio Consulta nuestro directorio de antiguos alumnos y descubre startups de todas las regiones y sectores Sobre nosotros Accelerator Europe, Middle East, Africa Europa, Medio Oriente y África Nuestras aceleradoras están diseñadas para ofrecer lo mejor de los programas, productos, personal y tecnología de Google a startups en etapa inicial que utilizan tecnología de IA. Europa, Medio Oriente y África Nuestras aceleradoras 3 Africa Un programa de aceleración de tres meses para startups tecnológicas en etapa de crecimiento en toda África. Saber más Europe and Israel Un programa de aceleración de tres meses para startups de IA con alto potencial (desde Pre-Seed hasta Post-Serie A) que impulsan la innovación en el sector energético. Saber más Middle"
+    },
+    {
+      "id": "check-page-a439129862",
+      "url": "https://startup.google.com/intl/es/programs/ai-academy/",
+      "page": "details",
+      "excerpt": "AI Academy - Google para Startups para Startups Jump to content para Startups Programas Créditos de Cloud Productos Gemini Gemini kit Gemini multimedia library Alumni Acerca de Historias Directorio Sobre nosotros Programas Créditos de Cloud Productos Gemini Gemini Go further faster with Gemini Gemini kit Gemini multimedia library Alumni Alumni Descubre las startups que ya están marcando la diferencia Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups Historias Conoce a fundadores y startups que demuestran que la innovación está en todas partes Directorio Consulta nuestro directorio de antiguos alumnos y descubre startups de todas las regiones y sectores Sobre nosotros Programs AI Academy AI Academy AI Academy ayuda a las startups a sacar el mayor provecho a las últimas tecnologías de Inteligencia Artificial, con el objetivo de acelerar el crecimiento de su negocio y facilitar la construcción de soluciones de IA centradas en las personas. Ver programas AI Academy Sobre el programa Sobre el programa AI Academy cuenta con un plan de desarrollo sobre metodologías de ventas avanzadas y optimización de estrategias de comercialización, brindando a las startups participantes un camino estructurado para perfeccionar su trayectoria, ganar participación de mercado y lograr escalar de forma sostenible. Las empresas emergentes"
+    },
+    {
+      "id": "check-page-7c0964a430",
+      "url": "https://startup.google.com/intl/es/programs/black-founders-fund/",
+      "page": "details",
+      "excerpt": "Black Founders Fund - Google para Startups para Startups Jump to content para Startups Programas Créditos de Cloud Productos Gemini Gemini kit Gemini multimedia library Alumni Acerca de Historias Directorio Sobre nosotros Programas Créditos de Cloud Productos Gemini Gemini Go further faster with Gemini Gemini kit Gemini multimedia library Alumni Alumni Descubre las startups que ya están marcando la diferencia Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups Historias Conoce a fundadores y startups que demuestran que la innovación está en todas partes Directorio Consulta nuestro directorio de antiguos alumnos y descubre startups de todas las regiones y sectores Sobre nosotros Programs Black Founders Fund Black Founders Fund El Google for Startups Black Founders Fund proporcionó apoyo económico y práctico a fundadores negros, para ayudarles a construir y hacer crecer sus negocios. Black Founders Fund Sobre la iniciativa Sobre la iniciativa Desde que se lanzó en 2020, el Google for Startups Black Founders Fund repartió más de $40 millones para ayudar a startups fundadas por personas negras a conseguir financiación, fortalecer sus comunidades y crear cambio generacional. Además del premio económico, los beneficiarios del Black Founders Fund también recibieron apoyo continuo de mentores de Google, créditos de Google Cloud"
+    },
+    {
+      "id": "check-page-a1dd8e691b",
+      "url": "https://startup.google.com/intl/es/programs/cloud-academy/",
+      "page": "details",
+      "excerpt": "Cloud Academy - Google para Startups para Startups Jump to content para Startups Programas Créditos de Cloud Productos Gemini Gemini kit Gemini multimedia library Alumni Acerca de Historias Directorio Sobre nosotros Programas Créditos de Cloud Productos Gemini Gemini Go further faster with Gemini Gemini kit Gemini multimedia library Alumni Alumni Descubre las startups que ya están marcando la diferencia Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups Historias Conoce a fundadores y startups que demuestran que la innovación está en todas partes Directorio Consulta nuestro directorio de antiguos alumnos y descubre startups de todas las regiones y sectores Sobre nosotros Programas Cloud Academy Cloud Academy Google for Startups Cloud Academy ayuda a las startups a sacar el mayor rendimiento a la tecnología de Google Cloud y a la innovación basada en datos para acelerar y digitalizar sus negocios. Ver programas Cloud Academy Sobre el programa Sobre el programa Google for Startups Cloud Academy conecta a las startups con las tecnologías y los productos de Google Cloud que necesitan para transformar digitalmente sus negocios. A través de mentorías personalizadas con expertos de Google, estos equipos tienen la oportunidad de desarrollar su estrategia de gestión de datos a largo plazo, resolver problemas específicos de"
+    },
+    {
+      "id": "check-page-08a99ae690",
+      "url": "https://startup.google.com/intl/es/programs/directory/",
+      "page": "details",
+      "excerpt": "Directorio de programas - Google for Startups para Startups Jump to content para Startups Programas Créditos de Cloud Productos Gemini Gemini kit Gemini multimedia library Alumni Acerca de Historias Directorio Sobre nosotros Programas Créditos de Cloud Productos Gemini Gemini Go further faster with Gemini Gemini kit Gemini multimedia library Alumni Alumni Descubre las startups que ya están marcando la diferencia Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups Historias Conoce a fundadores y startups que demuestran que la innovación está en todas partes Directorio Consulta nuestro directorio de antiguos alumnos y descubre startups de todas las regiones y sectores Sobre nosotros Encuentra tu programa Google for Startups ofrece una amplia variedad de programas e iniciativas para ayudar a conectar startups en diferentes fases e industrias con las personas, los productos y las mejores prácticas que necesitan para crecer y escalar. Síguenos Programas Productos Créditos de Cloud Gemini Alumni Sobre nosotros ¿Buscas información sobre el Google for Startups Cloud Program? Más información Footer links Acerca de Google Productos de Google Privacidad Términos Cookies management controls Ayuda español English português (Brasil) 日本語 한국어"
+    },
+    {
+      "id": "check-page-e8097aaa12",
+      "url": "https://startup.google.com/intl/es/programs/forum/",
+      "page": "details",
+      "excerpt": "Gemini Startup Forum - Google para Startups para Startups Jump to content para Startups Programas Créditos de Cloud Productos Gemini Gemini kit Gemini multimedia library Alumni Acerca de Historias Directorio Sobre nosotros Programas Créditos de Cloud Productos Gemini Gemini Go further faster with Gemini Gemini kit Gemini multimedia library Alumni Alumni Descubre las startups que ya están marcando la diferencia Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups Historias Conoce a fundadores y startups que demuestran que la innovación está en todas partes Directorio Consulta nuestro directorio de antiguos alumnos y descubre startups de todas las regiones y sectores Sobre nosotros Programs Gemini Startup Forum Gemini Startup Forum Google for Startups, en colaboración con Google DeepMind y Google Cloud, lanza el Gemini Startup Forum, un encuentro exclusivo para fundadores de empresas en fase inicial, desde seed hasta serie A, en el que podrán conectar en persona con expertos de Google y descubrir las posibilidades que ofrece la IA. Ver programas Gemini Startup Forum Sobre la iniciativa Sobre la iniciativa El Gemini Startup Forum está diseñado como un encuentro presencial y exclusivo de dos días, que fomenta conexiones profundas y el intercambio de conocimientos únicos entre una comunidad global de fundadores y expertos en"
+    },
+    {
+      "id": "check-page-f9383d82db",
+      "url": "https://startup.google.com/intl/es/programs/founders-academy/",
+      "page": "details",
+      "excerpt": "Founders Academy: United States - Google para Startups para Startups Jump to content para Startups Programas Créditos de Cloud Productos Gemini Gemini kit Gemini multimedia library Alumni Acerca de Historias Directorio Sobre nosotros Programas Créditos de Cloud Productos Gemini Gemini Go further faster with Gemini Gemini kit Gemini multimedia library Alumni Alumni Descubre las startups que ya están marcando la diferencia Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups Historias Conoce a fundadores y startups que demuestran que la innovación está en todas partes Directorio Consulta nuestro directorio de antiguos alumnos y descubre startups de todas las regiones y sectores Sobre nosotros Programs Founders Academy Founders Academy Los programas Google for Startups Founders Academy preparan a fundadores y fundadoras de startups con estrategias y mentorías basadas en investigación, para mejorar sus capacidades de liderazgo y gestión de personas. Ver programas Founders Academy Sobre el programa Sobre el programa Además de trainings en liderazgo, los fundadores y fundadoras participantes accederán también a workshops y mentorías 1:1 en las que tendrán la oportunidad de desarrollar estrategias de crecimiento basadas en datos para aumentar su base de usuarios y expandirse a nuevos mercados. Cada grupo tendrá acceso a"
+    },
+    {
+      "id": "check-page-7fa4142c3f",
+      "url": "https://startup.google.com/intl/es/programs/founders-funds/",
+      "page": "details",
+      "excerpt": "Founders Funds - Google para Startups para Startups Jump to content para Startups Programas Créditos de Cloud Productos Gemini Gemini kit Gemini multimedia library Alumni Acerca de Historias Directorio Sobre nosotros Programas Créditos de Cloud Productos Gemini Gemini Go further faster with Gemini Gemini kit Gemini multimedia library Alumni Alumni Descubre las startups que ya están marcando la diferencia Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups Historias Conoce a fundadores y startups que demuestran que la innovación está en todas partes Directorio Consulta nuestro directorio de antiguos alumnos y descubre startups de todas las regiones y sectores Sobre nosotros Programs Founders Funds Founders Funds Los Google for Startups Founders Funds apoyaron de forma económica y práctica a fundadores a construir y hacer crecer sus negocios. Founders Funds Sobre los Funds Sobre los Funds Desde que se lanzaron en 2020, los Google for Startups Founders Funds repartieron más de $58 millones para apoyar a fundadores. El objetivo de nuestros Funds era ayudar a fundadores prometedores a hacer crecer sus negocios y crear cambio generacional. A través de los Funds apoyamos a más de 600 fundadores los cuales han continuado levantando más de $500 millones en rondas de financiación. Además del apoyo económico, los beneficiarios de"
+    },
+    {
+      "id": "check-page-7b121ece1b",
+      "url": "https://startup.google.com/intl/es/programs/gemini-api-sprints/",
+      "page": "details",
+      "excerpt": "Sprints de la API de Gemini: desarrolla tu proyecto con IA de la mano de expertos de Google. - Google para Startups para Startups Jump to content para Startups Programas Créditos de Cloud Productos Gemini Gemini kit Gemini multimedia library Alumni Acerca de Historias Directorio Sobre nosotros Programas Créditos de Cloud Productos Gemini Gemini Go further faster with Gemini Gemini kit Gemini multimedia library Alumni Alumni Descubre las startups que ya están marcando la diferencia Acerca de Descubre lo que significa formar parte de la comunidad de antiguos alumnos de Google para Startups Historias Conoce a fundadores y startups que demuestran que la innovación está en todas partes Directorio Consulta nuestro directorio de antiguos alumnos y descubre startups de todas las regiones y sectores Sobre nosotros Programs Gemini API Sprints Global Gemini API Sprints ¿Todo listo para integrar rápidamente la IA en tu startup? Los Gemini API Sprints son eventos prácticos e inmersivos en los que tendrás la oportunidad de ponerte al día rápidamente y aprender a integrar la IA de Google para hacer crecer tu negocio con la ayuda de expertos de Gemini. Global Gemini API Sprints Acerca de la iniciativa Acerca de la iniciativa Los Gemini API Sprints son una serie de eventos intensivos de un día, diseñados para ayudar a las startups a aprovechar el potencial de Gemini a la hora de crear"
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
     "routes": [],
-    "applicationUrl": [
-      {
-        "value": "https://startup.google.com/programs/accelerator/",
-        "evidenceId": "check-route-39c2604a37"
-      }
-    ],
+    "applicationUrl": [],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-c454f0801b"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://startup.google.com/alumni/",

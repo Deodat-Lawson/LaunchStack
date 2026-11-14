@@ -1,12 +1,28 @@
 {
   "programId": "congruent-ventures",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://www.congruentvc.com/50-by-2050-2024",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.congruentvc.com/50-by-2050-2025",
       "page": "portfolio",
       "anchor": "This Year’s 50 by 2050 List is Live! Meet the 50 companies powering tomorrow.",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.congruentvc.com/50-by-2050-2026",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -14,7 +30,87 @@
       "url": "https://www.congruentvc.com/portfolio",
       "page": "portfolio",
       "anchor": "Portfolio",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.congruentvc.com/portfolio/AMP",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.congruentvc.com/portfolio/Adapt",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.congruentvc.com/portfolio/Alloy-Enterprises",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.congruentvc.com/portfolio/Amply-Power",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.congruentvc.com/portfolio/Avalanche-Energy",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.congruentvc.com/portfolio/Bellwether-Coffee",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.congruentvc.com/portfolio/Blueprint-Power",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.congruentvc.com/portfolio/Climate-Robotics",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.congruentvc.com/portfolio/Dispatch-Goods",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.congruentvc.com/portfolio/Ebb-Carbon",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

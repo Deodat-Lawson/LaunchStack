@@ -1,19 +1,67 @@
 {
   "programId": "elemental-impact",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://elementalimpact.com/companies/",
+      "url": "https://elementalimpact.com/annual-report-2025/",
       "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
+      "anchor": "Annual Report 2025: A Year of Extremes Today, we invite you to explore our 2025 Annual Report. In it, we reflect on the stories that shaped our year, the on-the-ground strategies t",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://elementalimpact.com/mission-and-impact/",
+      "url": "https://elementalimpact.com/companies/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://elementalimpact.com/companies/actionfigure/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://elementalimpact.com/companies/allume-energy/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://elementalimpact.com/data-center-innovation-initiative/",
+      "page": "terms",
+      "anchor": "News Elemental Impact Launches the Data Center Innovation Initiative with Amazon, Google, Meta, and Microsoft Announcing a new investment initiative to accelerate deployment of nex",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://elementalimpact.com/elemental-impact-website-terms-conditions/",
+      "page": "terms",
+      "anchor": "Terms and Conditions",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://elementalimpact.com/fervo-energy-southern-utah-university-and-elemental-impact-launch-geothermal-apprenticeship-program/",
       "page": "details",
-      "anchor": "About",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://elementalimpact.com/funding-opportunities/",
+      "page": "application",
+      "anchor": "Apply for funding → We invest in exceptional entrepreneurs who are solving the world’s most pressing environmental challenges.",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -27,14 +75,6 @@
       "origin": "official"
     },
     {
-      "url": "https://elementalimpact.com/funding-opportunities/",
-      "page": "application",
-      "anchor": "Apply for funding → We invest in exceptional entrepreneurs who are solving the world’s most pressing environmental challenges.",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://elementalimpact.com/how-policy-uncertainty-is-shaping-climate-innovation/",
       "page": "portfolio",
       "anchor": "Elemental Insights How Policy Uncertainty is Shaping Climate Innovation For climate companies, policy can determine whether projects are deployed, delayed, or derailed. In 2025, th",
@@ -43,10 +83,42 @@
       "origin": "official"
     },
     {
-      "url": "https://elementalimpact.com/annual-report-2025/",
-      "page": "portfolio",
-      "anchor": "Annual Report 2025: A Year of Extremes Today, we invite you to explore our 2025 Annual Report. In it, we reflect on the stories that shaped our year, the on-the-ground strategies t",
-      "fetched": false,
+      "url": "https://elementalimpact.com/latest/events/midwest-climate-dealflow-summit/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://elementalimpact.com/mission-and-impact/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://elementalimpact.com/newsletter/",
+      "page": "terms",
+      "anchor": "Subscribe to our newsletter → Stay up to date on the latest projects, investments, and news from Elemental.",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://elementalimpact.com/nth-cycle-is-revolutionizing-the-u-s-s-critical-mineral-supply-chain-from-the-heart-of-ohio/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://share.elementalimpact.com/hubfs/Website_Files/DCII-Funding-Opportunity-Guide.pdf?utm_source=website&utm_medium=website&utm_campaign=DCII",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

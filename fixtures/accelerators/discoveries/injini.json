@@ -1,20 +1,12 @@
 {
   "programId": "injini",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://www.injini.africa/edtech-fellowship",
-      "page": "details",
-      "anchor": "About the EdTech Accelerator",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://www.injini.africa/about",
       "page": "details",
       "anchor": "About Injini",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -27,6 +19,102 @@
       "origin": "official"
     },
     {
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "page": "details",
+      "anchor": "About the EdTech Accelerator",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.injini.africa/post/accelerating-edtech-solutions-injini-announces-second-cohort-for-the-mastercard-foundation-edtech-fellowship",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.injini.africa/post/accelerating-edtech-solutions-injini-announces-third-cohort-for-the-mastercard-foundation-edtech-fellowship",
+      "page": "batches",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.injini.africa/post/applications-for-the-2024-injini-mastercard-foundation-edtech-fellowship-are-open",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.injini.africa/post/building-the-future-of-african-edtech-inside-injinis-ai-venture-builder",
+      "page": "details",
+      "anchor": "Building the Future of African EdTech: Inside Injini’s AI Ve An overview of Injini’s AI for Education Venture Builder (supported by Coefficient Giving), covering its structure, eli",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.injini.africa/post/meet-the-2026-cohort-advantage-learn",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.injini.africa/post/meet-the-2026-cohort-dalza",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.injini.africa/post/meet-the-2026-cohort-included",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.injini.africa/post/meet-the-2026-cohort-tangible-leva-foundation",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.injini.africa/post/meet-the-fellows-of-injinis-inaugural-mastercard-foundation-edtech-fellowship-program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.injini.africa/post/pitch-perfect-best-practices-for-acing-your-pitch-for-an-edtech-fellowship-program",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.injini.africa/post/prioritising-inclusion-injini-announces-fourth-cohort-for-the-mastercard-foundation-edtech-fellowship",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.injini.africa/post/s",
       "page": "details",
       "anchor": "South African EdTech Week 2026 | Insights Part 1 and 2 South African EdTech Week brought us closer to the voices and experiences of teachers, reminding us why they must remain cent",
@@ -35,10 +123,10 @@
       "origin": "official"
     },
     {
-      "url": "https://www.injini.africa/post/building-the-future-of-african-edtech-inside-injinis-ai-venture-builder",
-      "page": "details",
-      "anchor": "Building the Future of African EdTech: Inside Injini’s AI Ve An overview of Injini’s AI for Education Venture Builder (supported by Coefficient Giving), covering its structure, eli",
-      "fetched": false,
+      "url": "https://www.injini.africa/post/strengthening-investment-in-the-african-education-ecosystem",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },

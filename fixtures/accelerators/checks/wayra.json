@@ -1,24 +1,73 @@
 {
   "programId": "wayra",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://wayra.com/",
-    "https://wayra.com/about-us"
+    "https://wayra.com/investment",
+    "https://wayra.com/about-us",
+    "https://wayra.com/news/sycai-medical-to-develop-the-hospital-pilot-of-the-accion-programme-by-astrazeneca-wayra-and-kunsen"
   ],
   "evidence": [
     {
+      "id": "check-deal-092703789c",
+      "url": "https://wayra.com/investment",
+      "title": "Wayra — terms page",
+      "excerpt": "startups. More info Our portfolio With tickets ranging from €150K to €5M, we invest in qualified rounds alongside leading venture capital",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-0bef12a448",
+      "url": "https://wayra.com/investment",
+      "title": "Wayra — terms page",
+      "excerpt": "startups. More info Our portfolio With tickets ranging from €150K to €5M, we invest in qualified rounds alongside leading venture",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-0bdf923a05",
+      "url": "https://wayra.com/news/sycai-medical-to-develop-the-hospital-pilot-of-the-accion-programme-by-astrazeneca-wayra-and-kunsen",
+      "title": "Wayra — program page",
+      "excerpt": "well as respiratory conditions. It is headquartered in Cambridge (United Kingdom) and operates in more",
+      "page": "details"
+    },
+    {
       "id": "check-name-e810a277ab",
       "url": "https://wayra.com/",
-      "title": "Wayra — homepage checked by scrape.py",
+      "title": "Wayra — homepage",
       "excerpt": "Wayra | Telefónica's Corporate Venture Capital Perks Reports",
       "page": "details"
     },
     {
       "id": "check-route-b016f1b43f",
       "url": "https://wayra.com/",
-      "title": "Wayra — homepage checked by scrape.py",
+      "title": "Wayra — homepage",
       "excerpt": "EN → https://wayra.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-b45b78004d",
+      "url": "https://wayra.com/",
+      "page": "details",
+      "excerpt": "Wayra | Telefónica's Corporate Venture Capital Perks Reports About us en EN ES PT Home investment services startups News contact Perks Activation Programme About Us Link Investment is just the beginning. Growth is the goal. OUTLIERS 2026: Discover the startups that are already shaping the future Wayra is Telefónica’s Corporate Venture Capital . Our mission is to foster innovation and drive progress by investing in startups and connecting them with organisations to generate impact in Spain, Germany, the United Kingdom and Brazil. + 1 Invested startups 1 M€ Total investment + 1 M€ Business for startups + 1 Partners & Clients We are Investors We invest in startups with the potential to generate real impact within Telefónica and help them scale through commercial collaboration. Our venture-client model connects startups with Telefónica’s business units, opening access to global markets and one of the largest customer bases in the world. Discover how we can grow together. We support innovation Our experience allows us to design and deliver open innovation and corporate venture programmes for Telefónica and other corporations, either directly or through our open innovation platforms. Explore how we can build your innovation strategy together. Ready to scale, collaborate or just get to know us ? Let´s talk! Latest news 3/11/2026 Startup Sycai Medical to develop the hospital pilot of"
+    },
+    {
+      "id": "check-page-de1ecf74bf",
+      "url": "https://wayra.com/investment",
+      "page": "terms",
+      "excerpt": "Startup Investment | Wayra, Telefónica's CVC Perks Reports About us en EN ES PT Home investment services startups News contact Perks Activation Programme About Us Link Investment We identify high-potential startups, invest in them and help integrate their solutions into Telefónica’s business to generate real innovation and impact . ASSET MANAGEMENT FOR TELEFÓNICA GROUP Since 2022, we provide asset management to Telefónica Group companies’ with custom-designed investment theses: Íope Ventures and Vivo Ventures. OUR PORTFOLIO We invest in seed and growth-stage startups with the potential to generate business with Telefónica. OUR FUND INVESTMENTS We also invest as a Limited Partner in key venture markets, such as the US and Israel, which has allowed us to build a network of more than 15 strategic funds, giving us access to high-value dealflow. Asset management for Telefónica's Group Proven experience connecting Telefónica Group companies with startup innovation Over 15 years of experience investing in and working with startups. Solid portfolio performance combined with measurable business and strategic impact for Telefónica's Group companies. Longstanding collaboration with corporates across multiple sectors. A global team with deep corporate and venture capital experience. VIVO VENTURES A growth-stage fund focused on Brazilian startups with B2C solutions across healthcare,"
+    },
+    {
+      "id": "check-page-8d91650688",
+      "url": "https://wayra.com/about-us",
+      "page": "details",
+      "excerpt": "About Wayra | Telefónica's Corporate Venture Capital Perks Reports About us en EN ES PT Home investment services startups News contact Perks Activation Programme About Us Link About us Since 2011, Wayra has been connecting startups with Telefónica to drive innovation and generate real business impact. Today, Wayra operates mainly in Spain, Germany, the United Kingdom and Brazil, while also working across other markets in Europe and Latin America. We invest in startups and help them scale by collaborating directly with Telefónica’s business units through our venture-client model. Originally launched as a startup accelerator, Wayra evolved in 2018 into Telefónica’s Corporate Venture Capital, bringing together the Group’s investment and open innovation initiatives and supporting corporations and entrepreneurial ecosystems worldwide. We are the Corporate Venture Capital of Telefónica. Our mission is to foster innovation and drive progress in startups and facilitating their collaboration with organizations to generate impact in Spain, Germany, the United Kingdom and Brazil . The team Andrés Saborido CEO Santiago García Aguirre CFO Pablo Moro Funds & Venture Growth Managing Director Paloma Castellano Investment Managing Director Agustín Moro Innovation Partnerships & Services Managing Director Philipp Trauer Brazil Managing Director News Pages News Our startups Our clients About us"
+    },
+    {
+      "id": "check-page-86b68278c4",
+      "url": "https://wayra.com/news/sycai-medical-to-develop-the-hospital-pilot-of-the-accion-programme-by-astrazeneca-wayra-and-kunsen",
+      "page": "details",
+      "excerpt": "Startup Sycai Medical to develop the hospital pilot of the ACCIÓN programme driven by AstraZeneca, Wayra and Kunsen | Wayra Perks Reports About us en EN ES PT Home investment services startups News contact 03 / 11 / 26 Volver Startup Sycai Medical to develop the hospital pilot of the ACCIÓN programme driven by AstraZeneca, Wayra and Kunsen The startup, which specialises in artificial intelligence applied to medical imaging, will work with AstraZeneca and Hospital de la Santa Creu i Sant Pau in Barcelona to explore new technological tools that could help improve the detection and diagnosis of liver tumours. The first edition of ACCIÓN attracted more than 100 registered healthcare professionals and startups. AstraZeneca Spain , in collaboration with Wayra , Telefónica’s corporate venture capital, and Kunsen , an investor specialising in digital health and startup acceleration, has announced the selection of the startup Sycai Medical to carry out the hospital pilot of ACCIÓN, the accelerator for innovative healthcare initiatives that the three companies launched in November 2025. Sycai Medical , one of the eight technology-based companies that took part in ACCIÓN’s six-month acceleration programme, will now explore, together with AstraZeneca Spain and Hospital de la Santa Creu i Sant Pau in Barcelona, the potential of artificial intelligence applied to the diagnosis of liver"
     }
   ],
   "findings": {
@@ -34,8 +83,54 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [
+      {
+        "value": "Cambridge",
+        "evidenceId": "check-location-0bdf923a05"
+      }
+    ],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "startups. More info Our portfolio With tickets ranging from €150K to €5M, we invest in qualified rounds alongside leading venture",
+        "evidenceId": "check-deal-0bef12a448"
+      },
+      {
+        "value": "startups. More info Our portfolio With tickets ranging from €150K to €5M, we invest in qualified rounds alongside leading venture capital",
+        "evidenceId": "check-deal-092703789c"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "150000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-0bef12a448"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "5000000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-092703789c"
+      }
+    ],
     "portfolioPages": [],
     "name": [
       {

@@ -1,6 +1,6 @@
 {
   "programId": "vertex-ventures",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://vvus.com/faq/",
@@ -11,31 +11,119 @@
       "origin": "official"
     },
     {
-      "url": "https://vvus.com/portfolio/launchdarkly/",
-      "page": "portfolio",
+      "url": "https://vvus.com/news/announcing-our-investment-in-cleric/",
+      "page": "terms",
       "anchor": "",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://vvus.com/portfolio/human-security/",
-      "page": "portfolio",
+      "url": "https://vvus.com/news/announcing-our-investment-in-cleric/www.cleric.ai",
+      "page": "terms",
       "anchor": "",
       "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://vvus.com/news/our-investment-in-orkes-9-3m-in-funding-to-optimize-workflow-and-microservices-at-scale/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vvus.com/news/we-have-200m-reasons-to-be-excited-about-enterprise-founders/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vvus.com/portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vvus.com/portfolio/Vividly/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vvus.com/portfolio/ambi-robotics/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vvus.com/portfolio/bellhop/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vvus.com/portfolio/broker-buddha/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vvus.com/portfolio/cakewalk/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vvus.com/portfolio/clearpol/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vvus.com/portfolio/cleric/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vvus.com/portfolio/cloud-academy/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vvus.com/portfolio/cloudera/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
       "url": "https://vvus.com/portfolio/cyberhaven/",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://vvus.com/portfolio/tulip/",
       "page": "portfolio",
       "anchor": "",
       "fetched": false,
@@ -59,6 +147,22 @@
       "origin": "official"
     },
     {
+      "url": "https://vvus.com/portfolio/human-security/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vvus.com/portfolio/launchdarkly/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://vvus.com/portfolio/metaview/",
       "page": "portfolio",
       "anchor": "",
@@ -75,9 +179,9 @@
       "origin": "official"
     },
     {
-      "url": "https://vvus.com/portfolio/",
+      "url": "https://vvus.com/portfolio/tulip/",
       "page": "portfolio",
-      "anchor": "Portfolio",
+      "anchor": "",
       "fetched": false,
       "blocked": null,
       "origin": "official"

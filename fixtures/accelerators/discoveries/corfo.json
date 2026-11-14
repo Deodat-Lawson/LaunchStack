@@ -1,11 +1,27 @@
 {
   "programId": "corfo",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.corfo.gob.cl/sites/cpp/programasyconvocatorias/",
+      "url": "https://www.corfo.gob.cl/sites/cpp/convocatoria/programa-de-absorcion-tecnologica-para-la-innovacion-2025/",
       "page": "details",
-      "anchor": "Programas y Convocatorias",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.corfo.gob.cl/sites/cpp/convocatoria/programa_de_absorcion_tecnologica_innova/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.corfo.gob.cl/sites/cpp/convocatorias_programas_innovacion/",
+      "page": "details",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -14,15 +30,7 @@
       "url": "https://www.corfo.gob.cl/sites/cpp/programa/bienes-publicos/",
       "page": "details",
       "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.corfo.gob.cl/sites/cpp/convocatorias_programas_innovacion/",
-      "page": "details",
-      "anchor": "",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -30,7 +38,15 @@
       "url": "https://www.corfo.gob.cl/sites/cpp/programas-transforma/",
       "page": "details",
       "anchor": "",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.corfo.gob.cl/sites/cpp/programasyconvocatorias/",
+      "page": "details",
+      "anchor": "Programas y Convocatorias",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

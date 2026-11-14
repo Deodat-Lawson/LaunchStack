@@ -1,9 +1,9 @@
 {
   "programId": "design-terminal",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://civitta.com/hu/nemzeti-tehetseg-kozpont-start-programcsalad/",
+      "url": "https://civitta.com/about-us/",
       "page": "details",
       "anchor": "",
       "fetched": true,
@@ -14,7 +14,111 @@
       "url": "https://civitta.com/career/partner-development-program/",
       "page": "details",
       "anchor": "Public Sector Partner Development Program All Civitta locations Read more",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://civitta.com/funding/funding-for-businesses/preparing-for-a-successful-funding-application/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://civitta.com/global-funding-opportunities/interregional-innovation-investments-instrument-i3/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://civitta.com/hu/nemzeti-tehetseg-kozpont-start-programcsalad/",
+      "page": "details",
+      "anchor": "",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://civitta.com/our-work/ohtuleht-codebase-updates/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://civitta.com/our-work/optimising-car-dealership-network-in-estonia/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://civitta.com/our-work/releaf-paper-attracting-e10-5m-investment-for-innovation/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://civitta.com/our-work/usaid-nigeria-agribusiness-investment-activity-collaborative-policy-development-and-implementation/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://civitta.com/our-work/weventure-strengthening-investment-readiness-of-women-entrepreneurs/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://civitta.com/sk/morning-health-talks-bratislava-exploring-healthcare-innovation-and-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://civitta.com/sk/news-insights/the-future-of-healthcare-investments-and-innovation/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://civitta.com/topics/investment-readiness/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://civitta.com/topics/public-finance-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://civitta.com/weventure-empowering-women-entrepreneurs-to-grow-scale-and-attract-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

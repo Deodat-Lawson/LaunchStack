@@ -1,6 +1,6 @@
 {
   "programId": "gsf-accelerator",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://situsbro.com/"
   ],
@@ -8,9 +8,17 @@
     {
       "id": "check-route-f302125559",
       "url": "https://situsbro.com/",
-      "title": "GSF Accelerator — homepage checked by scrape.py",
+      "title": "GSF Accelerator — homepage",
       "excerpt": "https://situsbro.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-38606567ca",
+      "url": "https://situsbro.com/",
+      "page": "details",
+      "excerpt": "Bro138: Situs Slot Pragmatic Online Terbaru Terpercaya × Login Daftar BRO138 SLOT BRO138 SITUS BRO138 AKSES SLOT BRO138 LINK SLOT BRO138 PORTAL SLOT ONLINE Free Express Shipping with any US$ 59 purchase New Bundle Drop: Snag more, save more 🔥 Download YS App & Get 50 YS Points Home Beauty Devices & Tools Makeup Tools Makeup Sponges MilleFee MOST POPULAR View Gallery Video 1 Bro138: Situs Slot Pragmatic Online Terbaru Terpercaya 133 US$ 4.04 US$ 5.05 20% OFF 3d 19:53:07 1 set In-Stock Login Disini Save Enjoy EXTRA 15% OFF your first order ( See details ) Indonesia Free Express Shipping with any US$ 59 purchase ( 3 - 5 business days ) Returns and Exchanges Save with the 5-pack! US$ 19.19 – You save US$ 1.01! Save with the 10-pack! US$ 35.55 – You save US$ 4.85! Bestseller Rank #8 in Makeup Sponges #34 in Makeup Tools #60 in Devices & Tools INFORMASI LENGKAP BRO138 Nama Situs BRO138 Jenis Situs Situs Togel Online, Situs Slot Online, Dan Permainan Lain Nya Minimal Deposit IDR 10,000 Minimal Withdraw IDR 50,000 Transaksi Pembayaran Transfer Bank Lokal • E-wallet • QRIS Rating 9.6 / 10 Promo & Bonus Menarik Bonus Member Baru Hingga 50% Bonus Cashback Mingguan 10% SPESIAL WEEKEND SERU, HADIAH 25 SMARTPHONE SECARA CUMA-CUMA Details Product Information Made in: INDONESIA Catalog No.: 1135160439 About brand: BRO138 BRO138 merupakan keyword yang dapat digunakan untuk mencari informasi"
     }
   ],
   "findings": {
@@ -26,8 +34,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

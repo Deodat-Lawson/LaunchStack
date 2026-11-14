@@ -1,27 +1,91 @@
 {
   "programId": "third-derivative",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.third-derivative.org/portfolio",
-      "page": "portfolio",
-      "anchor": "Our Portfolio",
+      "url": "https://www.third-derivative.org/about",
+      "page": "details",
+      "anchor": "About Us",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.third-derivative.org/startup-application",
-      "page": "application",
-      "anchor": "How to Apply",
+      "url": "https://www.third-derivative.org/about?hsLang=en",
+      "page": "details",
+      "anchor": "LEARN MORE ABOUT US",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/blog/35-graduating-startups-driving-innovation-cohort-23-2-and-first-gigaton-captured",
+      "page": "batches",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.third-derivative.org/industrial-innovation-cohorts",
+      "url": "https://www.third-derivative.org/blog/announcing-cohort-22-1",
       "page": "batches",
-      "anchor": "Industrial Innovation Cohorts",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/blog/announcing-the-clean-mobile-power-cohort",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/blog/celebrating-cohort417",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/blog/d3-incoming-general-cohort-25-3-newsbrief",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/blog/d3-launches-first-cohort-co2-startups",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/blog/introducing-third-derivatives-cohort-24-1",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/blog/third-derivative-and-rmi-launch-industrial-innovation-cohorts-to-accelerate-decarbonization-of-steel-cement-and-chemicals",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/blog/third-derivative-unveils-26-startup-climate-cohort-focused-on-hard-tech-and-deployment",
+      "page": "batches",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -35,17 +99,41 @@
       "origin": "official"
     },
     {
-      "url": "https://www.third-derivative.org/about",
-      "page": "details",
-      "anchor": "About Us",
+      "url": "https://www.third-derivative.org/corporates-application",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.third-derivative.org/about?hsLang=en",
-      "page": "details",
-      "anchor": "LEARN MORE ABOUT US",
+      "url": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+      "page": "application",
+      "anchor": "APPLY TODAY",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/industrial-innovation-cohorts",
+      "page": "batches",
+      "anchor": "Industrial Innovation Cohorts",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/mentor-application",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/portfolio",
+      "page": "portfolio",
+      "anchor": "Our Portfolio",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -59,9 +147,25 @@
       "origin": "official"
     },
     {
-      "url": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+      "url": "https://www.third-derivative.org/startup-application",
       "page": "application",
-      "anchor": "APPLY TODAY",
+      "anchor": "How to Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/startup-application?hsLang=en",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/startups",
+      "page": "details",
+      "anchor": "Eligibility & Selection",
       "fetched": false,
       "blocked": null,
       "origin": "official"

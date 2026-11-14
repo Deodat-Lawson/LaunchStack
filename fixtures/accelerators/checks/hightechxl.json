@@ -1,88 +1,507 @@
 {
   "programId": "hightechxl",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:59:02.000Z",
   "pagesRead": [
     "https://www.hightechxl.com/",
+    "https://www.hightechxl.com/career/open-application/",
+    "https://www.hightechxl.com/news/epc-patent-attorneys-dos-and-donts-when-applying-for-a-patent/",
+    "https://www.hightechxl.com/news/singapore-program-applications/",
     "https://www.hightechxl.com/faq/",
-    "https://www.hightechxl.com/our-program/"
+    "https://www.hightechxl.com/investors/",
+    "https://www.hightechxl.com/news/amber-doubles-the-number-of-car-sharing-hubs-with-recent-investment-from-bom-brabant-ventures/",
+    "https://www.hightechxl.com/news/aplhabeats-receives-e1-5-million-inphocal-receives-e2-million-in-deeptechxl-first-investment-round/",
+    "https://www.hightechxl.com/news/asmls-rob-van-der-werf-an-investment-in-startups-is-an-investment-in-eindhovens-future/",
+    "https://www.hightechxl.com/news/ato-gear-maker-of-sports-wearable-arion-raises-new-investment-round-to-accelerate-commercial-rollout-of-its-cuttinng-edge-running-ai/",
+    "https://www.hightechxl.com/news/hightechxl-alumnus-sustonable-announces-equity-investment-from-gulermak-heavy-industries/",
+    "https://www.hightechxl.com/news/second-cohort-of-deep-tech-ventures-starts-venture-building-program/",
+    "https://www.hightechxl.com/news/exploring-the-latest-technologies-spring-2025/",
+    "https://www.hightechxl.com/about-us/",
+    "https://www.hightechxl.com/events/dutch-singapore-deep-tech-expansion-program-info-session/"
   ],
   "evidence": [
     {
-      "id": "check-email-18c41e8751",
-      "url": "https://www.hightechxl.com/our-program/",
-      "title": "HighTechXL — details page checked by scrape.py",
-      "excerpt": "About us Our people Portfolio News & events Get in touch info@hightechxl.com High Tech Campus 27 5656 AE Eindhoven Netherlands © 2026 -",
+      "id": "check-duration-08b8937e6b",
+      "url": "https://www.hightechxl.com/about-us/",
+      "title": "HighTechXL — program page",
+      "excerpt": "Industry Focus Deep-Tech We have your back Free 12 months Venture Building Program More information For",
       "page": "details"
+    },
+    {
+      "id": "check-duration-f2aa375bd9",
+      "url": "https://www.hightechxl.com/",
+      "title": "HighTechXL — homepage",
+      "excerpt": "Focus Deep tech We have your back Proprietary 12-month Venture Building Program More information For",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-f353096e0e",
+      "url": "https://www.hightechxl.com/investors/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "a highly curated selection process. Our proven 12-month venture building program guides startups from",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-f48a1943d6",
+      "url": "https://www.hightechxl.com/investors/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "investor-ready, they have completed a rigorous 12-month venture building process. Startups validate",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-154780e6d6",
+      "url": "https://www.hightechxl.com/news/second-cohort-of-deep-tech-ventures-starts-venture-building-program/",
+      "title": "HighTechXL — batches page",
+      "excerpt": "info@hightechxl.com",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-16f41e5aa2",
+      "url": "https://www.hightechxl.com/news/amber-doubles-the-number-of-car-sharing-hubs-with-recent-investment-from-bom-brabant-ventures/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "info@hightechxl.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-1c0fced2ab",
+      "url": "https://www.hightechxl.com/career/open-application/",
+      "title": "HighTechXL — application page",
+      "excerpt": "About us Our people Portfolio News & events Get in touch info@hightechxl.com High Tech Campus 27 5656 AE Eindhoven Netherlands © 2026 -",
+      "page": "application"
+    },
+    {
+      "id": "check-email-27bf06f27b",
+      "url": "https://www.hightechxl.com/news/ato-gear-maker-of-sports-wearable-arion-raises-new-investment-round-to-accelerate-commercial-rollout-of-its-cuttinng-edge-running-ai/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "About us Our people Portfolio News & events Get in touch info@hightechxl.com High Tech Campus 27 5656 AE Eindhoven Netherlands © 2026 -",
+      "page": "terms"
     },
     {
       "id": "check-email-2d66b8b544",
       "url": "https://www.hightechxl.com/",
-      "title": "HighTechXL — homepage checked by scrape.py",
+      "title": "HighTechXL — homepage",
       "excerpt": "info@hightechxl.com",
       "page": "details"
+    },
+    {
+      "id": "check-email-2e115f0a64",
+      "url": "https://www.hightechxl.com/career/open-application/",
+      "title": "HighTechXL — application page",
+      "excerpt": "info@hightechxl.com",
+      "page": "application"
     },
     {
       "id": "check-email-3e3f40cead",
       "url": "https://www.hightechxl.com/faq/",
-      "title": "HighTechXL — terms page checked by scrape.py",
+      "title": "HighTechXL — terms page",
       "excerpt": "info@hightechxl.com",
       "page": "terms"
+    },
+    {
+      "id": "check-email-4280b47df6",
+      "url": "https://www.hightechxl.com/events/dutch-singapore-deep-tech-expansion-program-info-session/",
+      "title": "HighTechXL — program page",
+      "excerpt": "About us Our people Portfolio News & events Get in touch info@hightechxl.com High Tech Campus 27 5656 AE Eindhoven Netherlands © 2026 -",
+      "page": "details"
+    },
+    {
+      "id": "check-email-44c9aa6379",
+      "url": "https://www.hightechxl.com/news/exploring-the-latest-technologies-spring-2025/",
+      "title": "HighTechXL — batches page",
+      "excerpt": "info@hightechxl.com",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-4c4541365a",
+      "url": "https://www.hightechxl.com/news/exploring-the-latest-technologies-spring-2025/",
+      "title": "HighTechXL — batches page",
+      "excerpt": "About us Our people Portfolio News & events Get in touch info@hightechxl.com High Tech Campus 27 5656 AE Eindhoven Netherlands © 2026 -",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-4e440c7fe5",
+      "url": "https://www.hightechxl.com/news/hightechxl-alumnus-sustonable-announces-equity-investment-from-gulermak-heavy-industries/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "About us Our people Portfolio News & events Get in touch info@hightechxl.com High Tech Campus 27 5656 AE Eindhoven Netherlands © 2026 -",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-50f95ff939",
+      "url": "https://www.hightechxl.com/about-us/",
+      "title": "HighTechXL — program page",
+      "excerpt": "info@hightechxl.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-56fd325930",
+      "url": "https://www.hightechxl.com/news/singapore-program-applications/",
+      "title": "HighTechXL — application page",
+      "excerpt": "info@hightechxl.com",
+      "page": "application"
+    },
+    {
+      "id": "check-email-58c8d07c15",
+      "url": "https://www.hightechxl.com/news/second-cohort-of-deep-tech-ventures-starts-venture-building-program/",
+      "title": "HighTechXL — batches page",
+      "excerpt": "About us Our people Portfolio News & events Get in touch info@hightechxl.com High Tech Campus 27 5656 AE Eindhoven Netherlands © 2026 -",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-5b1e9dfd92",
+      "url": "https://www.hightechxl.com/news/asmls-rob-van-der-werf-an-investment-in-startups-is-an-investment-in-eindhovens-future/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "About us Our people Portfolio News & events Get in touch info@hightechxl.com High Tech Campus 27 5656 AE Eindhoven Netherlands © 2026 -",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-616be370ac",
+      "url": "https://www.hightechxl.com/investors/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "info@hightechxl.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-65ecce5321",
+      "url": "https://www.hightechxl.com/news/singapore-program-applications/",
+      "title": "HighTechXL — application page",
+      "excerpt": "About us Our people Portfolio News & events Get in touch info@hightechxl.com High Tech Campus 27 5656 AE Eindhoven Netherlands © 2026 -",
+      "page": "application"
     },
     {
       "id": "check-email-6b72557b7b",
       "url": "https://www.hightechxl.com/",
-      "title": "HighTechXL — homepage checked by scrape.py",
+      "title": "HighTechXL — homepage",
       "excerpt": "About us Our people Portfolio News & events Get in touch info@hightechxl.com High Tech Campus 27 5656 AE Eindhoven Netherlands © 2026 -",
       "page": "details"
+    },
+    {
+      "id": "check-email-734974ce28",
+      "url": "https://www.hightechxl.com/news/epc-patent-attorneys-dos-and-donts-when-applying-for-a-patent/",
+      "title": "HighTechXL — application page",
+      "excerpt": "info@hightechxl.com",
+      "page": "application"
     },
     {
       "id": "check-email-8d1e211e81",
       "url": "https://www.hightechxl.com/faq/",
-      "title": "HighTechXL — terms page checked by scrape.py",
+      "title": "HighTechXL — terms page",
       "excerpt": "About us Our people Portfolio News & events Get in touch info@hightechxl.com High Tech Campus 27 5656 AE Eindhoven Netherlands © 2026 -",
       "page": "terms"
     },
     {
-      "id": "check-email-b1c6fd5701",
-      "url": "https://www.hightechxl.com/our-program/",
-      "title": "HighTechXL — details page checked by scrape.py",
+      "id": "check-email-922b66b7ad",
+      "url": "https://www.hightechxl.com/about-us/",
+      "title": "HighTechXL — program page",
+      "excerpt": "About us Our people Portfolio News & events Get in touch info@hightechxl.com High Tech Campus 27 5656 AE Eindhoven Netherlands © 2026 -",
+      "page": "details"
+    },
+    {
+      "id": "check-email-95b6a66851",
+      "url": "https://www.hightechxl.com/news/epc-patent-attorneys-dos-and-donts-when-applying-for-a-patent/",
+      "title": "HighTechXL — application page",
+      "excerpt": "About us Our people Portfolio News & events Get in touch info@hightechxl.com High Tech Campus 27 5656 AE Eindhoven Netherlands © 2026 -",
+      "page": "application"
+    },
+    {
+      "id": "check-email-97a75ce37d",
+      "url": "https://www.hightechxl.com/news/asmls-rob-van-der-werf-an-investment-in-startups-is-an-investment-in-eindhovens-future/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "info@hightechxl.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-9a8e8f8aa5",
+      "url": "https://www.hightechxl.com/news/amber-doubles-the-number-of-car-sharing-hubs-with-recent-investment-from-bom-brabant-ventures/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "About us Our people Portfolio News & events Get in touch info@hightechxl.com High Tech Campus 27 5656 AE Eindhoven Netherlands © 2026 -",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-a836b57b94",
+      "url": "https://www.hightechxl.com/news/aplhabeats-receives-e1-5-million-inphocal-receives-e2-million-in-deeptechxl-first-investment-round/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "info@hightechxl.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-ad90c02e63",
+      "url": "https://www.hightechxl.com/events/dutch-singapore-deep-tech-expansion-program-info-session/",
+      "title": "HighTechXL — program page",
       "excerpt": "info@hightechxl.com",
       "page": "details"
     },
     {
+      "id": "check-email-b9edce5321",
+      "url": "https://www.hightechxl.com/news/hightechxl-alumnus-sustonable-announces-equity-investment-from-gulermak-heavy-industries/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "info@hightechxl.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-c6accd7dd6",
+      "url": "https://www.hightechxl.com/news/aplhabeats-receives-e1-5-million-inphocal-receives-e2-million-in-deeptechxl-first-investment-round/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "About us Our people Portfolio News & events Get in touch info@hightechxl.com High Tech Campus 27 5656 AE Eindhoven Netherlands © 2026 -",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-df743b6b1a",
+      "url": "https://www.hightechxl.com/investors/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "About us Our people Portfolio News & events Get in touch info@hightechxl.com High Tech Campus 27 5656 AE Eindhoven Netherlands © 2026 -",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-fb55045db2",
+      "url": "https://www.hightechxl.com/news/ato-gear-maker-of-sports-wearable-arion-raises-new-investment-round-to-accelerate-commercial-rollout-of-its-cuttinng-edge-running-ai/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "info@hightechxl.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-07719c8616",
+      "url": "https://www.hightechxl.com/career/open-application/",
+      "title": "HighTechXL — application page",
+      "excerpt": "vacancy About this vacancy Venture Full-time Eindhoven/Hybrid Apply now Newsletter Do you want to keep up? Sign up for",
+      "page": "application"
+    },
+    {
+      "id": "check-format-1019e5a4ed",
+      "url": "https://www.hightechxl.com/career/open-application/",
+      "title": "HighTechXL — application page",
+      "excerpt": "team Flexible working environment (Eindhoven & remote) Opportunities to grow with us as we scale internationally",
+      "page": "application"
+    },
+    {
+      "id": "check-location-a31415c68c",
+      "url": "https://www.hightechxl.com/news/hightechxl-alumnus-sustonable-announces-equity-investment-from-gulermak-heavy-industries/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "Aad van Helden in 2014. Sustonable is headquartered in Amsterdam with 15 employees in total and has",
+      "page": "terms"
+    },
+    {
       "id": "check-name-06f43bd4fe",
       "url": "https://www.hightechxl.com/",
-      "title": "HighTechXL — homepage checked by scrape.py",
+      "title": "HighTechXL — homepage",
       "excerpt": "Deep-Tech Venture Builder in the Netherlands | HighTechXL Skip to content Skip to footer Deep-Tech Venture Builder",
       "page": "details"
     },
     {
       "id": "check-portfolio-00d46dbd81",
       "url": "https://www.hightechxl.com/",
-      "title": "HighTechXL — homepage checked by scrape.py",
+      "title": "HighTechXL — homepage",
       "excerpt": "Portfolio → https://www.hightechxl.com/portfolio/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-31af598b65",
-      "url": "https://www.hightechxl.com/faq/",
-      "title": "HighTechXL — terms page checked by scrape.py",
+      "id": "check-portfolio-0a50367e94",
+      "url": "https://www.hightechxl.com/news/exploring-the-latest-technologies-spring-2025/",
+      "title": "HighTechXL — batches page",
+      "excerpt": "Portfolio → https://www.hightechxl.com/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-0c8d540615",
+      "url": "https://www.hightechxl.com/news/ato-gear-maker-of-sports-wearable-arion-raises-new-investment-round-to-accelerate-commercial-rollout-of-its-cuttinng-edge-running-ai/",
+      "title": "HighTechXL — terms page",
       "excerpt": "Portfolio → https://www.hightechxl.com/portfolio/",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-a56ba24d3f",
-      "url": "https://www.hightechxl.com/our-program/",
-      "title": "HighTechXL — details page checked by scrape.py",
+      "id": "check-portfolio-31af598b65",
+      "url": "https://www.hightechxl.com/faq/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "Portfolio → https://www.hightechxl.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-3a1a0cd3c4",
+      "url": "https://www.hightechxl.com/career/open-application/",
+      "title": "HighTechXL — application page",
+      "excerpt": "Portfolio → https://www.hightechxl.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-4439f53796",
+      "url": "https://www.hightechxl.com/news/second-cohort-of-deep-tech-ventures-starts-venture-building-program/",
+      "title": "HighTechXL — batches page",
+      "excerpt": "Portfolio → https://www.hightechxl.com/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-4809e6b8d0",
+      "url": "https://www.hightechxl.com/news/epc-patent-attorneys-dos-and-donts-when-applying-for-a-patent/",
+      "title": "HighTechXL — application page",
+      "excerpt": "Portfolio → https://www.hightechxl.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-531792c545",
+      "url": "https://www.hightechxl.com/investors/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "View our portfolio → https://www.hightechxl.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-63036eeedc",
+      "url": "https://www.hightechxl.com/news/asmls-rob-van-der-werf-an-investment-in-startups-is-an-investment-in-eindhovens-future/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "Portfolio → https://www.hightechxl.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6dcf6ccd9f",
+      "url": "https://www.hightechxl.com/news/hightechxl-alumnus-sustonable-announces-equity-investment-from-gulermak-heavy-industries/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "Portfolio → https://www.hightechxl.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8960ca5bb2",
+      "url": "https://www.hightechxl.com/about-us/",
+      "title": "HighTechXL — program page",
       "excerpt": "Portfolio → https://www.hightechxl.com/portfolio/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-8f6c0af022",
+      "url": "https://www.hightechxl.com/news/amber-doubles-the-number-of-car-sharing-hubs-with-recent-investment-from-bom-brabant-ventures/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "Portfolio → https://www.hightechxl.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a48eb71403",
+      "url": "https://www.hightechxl.com/investors/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "Portfolio → https://www.hightechxl.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c6421f714c",
+      "url": "https://www.hightechxl.com/news/singapore-program-applications/",
+      "title": "HighTechXL — application page",
+      "excerpt": "Portfolio → https://www.hightechxl.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-ce14ab4d61",
+      "url": "https://www.hightechxl.com/events/dutch-singapore-deep-tech-expansion-program-info-session/",
+      "title": "HighTechXL — program page",
+      "excerpt": "Portfolio → https://www.hightechxl.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e58c350c55",
+      "url": "https://www.hightechxl.com/news/aplhabeats-receives-e1-5-million-inphocal-receives-e2-million-in-deeptechxl-first-investment-round/",
+      "title": "HighTechXL — terms page",
+      "excerpt": "Portfolio → https://www.hightechxl.com/portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-b9c8ae6b1e",
       "url": "https://www.hightechxl.com/",
-      "title": "HighTechXL — homepage checked by scrape.py",
+      "title": "HighTechXL — homepage",
       "excerpt": "https://www.hightechxl.com",
       "page": "details"
+    },
+    {
+      "id": "check-status-ff9aa3f5e8",
+      "url": "https://www.hightechxl.com/news/singapore-program-applications/",
+      "title": "HighTechXL — application page",
+      "excerpt": "Program celebrates first year, new cohort now open Ecosystem Eindhoven, Netherlands – September 11, 2025 Applications are now open for the second cohort of the Dutch-Singapore Deep-Tech Expansion Program, connecting deep-tech startups from",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-8cadf6bd04",
+      "url": "https://www.hightechxl.com/",
+      "page": "details",
+      "excerpt": "Deep-Tech Venture Builder in the Netherlands | HighTechXL Skip to content Skip to footer Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League FAQ Careers News & events Our program Our program Venture Opportunities Become a co-founder PreSeedXL Fund Investors Investors Portfolio Partners Partners Industry partners Technology partners About us About us Meet the team Get in touch FAQ Careers News & events Become a co-founder Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League Founders Investors Partners Building deep tech ventures to solve grand societal challenges. Become a co-founder Founding partners About us We don’t wait for the future, we build it. ​HighTechXL is the Netherlands’ premier deep tech venture builder, solving societal challenges by combining groundbreaking technologies and entrepreneurship. In fact, we bring together and activate technology, talent, funding and a strong ecosystem in our unique Venture Building Program. At HighTechXL, we support founders as they progress through our 1-year Deep Tech Venture Builder Program, and in addition, we connect them with essential resources, such as investors, advisors, and customers. The journey starts by scouting groundbreaking technologies at"
+    },
+    {
+      "id": "check-page-2c6fe62fc7",
+      "url": "https://www.hightechxl.com/career/open-application/",
+      "page": "application",
+      "excerpt": "Usono: Open Application | HighTechXL Skip to content Skip to footer Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League FAQ Careers News & events Our program Our program Venture Opportunities Become a co-founder PreSeedXL Fund Investors Investors Portfolio Partners Partners Industry partners Technology partners About us About us Meet the team Get in touch FAQ Careers News & events Become a co-founder Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League Back to overview Usono: Open Application Back to overview Usono: Open Application About Usono Usono is a MedTech company revolutionising musculoskeletal (MSK) ultrasound through dynamic imaging solutions. Our main product, ProbeFix Dynamic, is used by doctors of elite sports organizations such as Villarreal CF, AS Roma and research institutions such as MIT. Thanks to our hardware, they unlock new insights in the body in movement, for prevention, diagnosis and rehabilitation. We’re always looking for passionate people who want to make a difference in healthcare. If you don’t see a vacancy that matches your profile, but you believe you can contribute to our mission, we’d love to hear from you. What We Look For A proactive mindset, international and"
+    },
+    {
+      "id": "check-page-381483585b",
+      "url": "https://www.hightechxl.com/news/epc-patent-attorneys-dos-and-donts-when-applying-for-a-patent/",
+      "page": "application",
+      "excerpt": "EP&C Patent Attorneys: Do's and don'ts when applying for a patent | HighTechXL Skip to content Skip to footer Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League FAQ Careers News & events Our program Our program Venture Opportunities Become a co-founder PreSeedXL Fund Investors Investors Portfolio Partners Partners Industry partners Technology partners About us About us Meet the team Get in touch FAQ Careers News & events Become a co-founder Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League back to overview EP&C Patent Attorneys: Do’s and don’ts when applying for a patent Ecosystem 22 February 2023 Check existing developments before you start Are you launching a new product? Are you starting a business? Before you start with the house style and website, check whether the name has already been registered. Make agreements about intellectual property right In case of cooperation with third parties, ALWAYS make clear and written agreements about Intellectual Property Rights. You won’t be the first to see a freelancer or design agency take off with your invention! Map the competitor’s IP portfolio Map out the competitor’s IP portfolio and monitor it regularly. It provides useful information. Don’t just"
+    },
+    {
+      "id": "check-page-b703c76aab",
+      "url": "https://www.hightechxl.com/news/singapore-program-applications/",
+      "page": "application",
+      "excerpt": "Deep-tech Expansion Program celebrates first year, new cohort now open | HighTechXL Singapore Program: New Deep-Tech Cohort Applications Open Skip to content Skip to footer Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League FAQ Careers News & events Our program Our program Venture Opportunities Become a co-founder PreSeedXL Fund Investors Investors Portfolio Partners Partners Industry partners Technology partners About us About us Meet the team Get in touch FAQ Careers News & events Become a co-founder Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League back to overview Deep-tech Expansion Program celebrates first year, new cohort now open Ecosystem Eindhoven, Netherlands – September 11, 2025 Applications are now open for the second cohort of the Dutch-Singapore Deep-Tech Expansion Program, connecting deep-tech startups from Singapore and the Netherlands to scale across Europe and Southeast Asia. “The results speak for themselves. We’ve seen deep-tech startups from both countries entering new relevant markets, by opening to new powerful partnerships, and finding out what Europe has to offer,” said John Bell, CEO of HighTechXL. “It’s a great example of how innovation ecosystems can truly scale when"
+    },
+    {
+      "id": "check-page-21c70ab700",
+      "url": "https://www.hightechxl.com/faq/",
+      "page": "terms",
+      "excerpt": "Frequently Asked Questions | HighTechXL Skip to content Skip to footer Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League FAQ Careers News & events Our program Our program Venture Opportunities Become a co-founder PreSeedXL Fund Investors Investors Portfolio Partners Partners Industry partners Technology partners About us About us Meet the team Get in touch FAQ Careers News & events Become a co-founder Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League Frequently Asked Questions Here, you’ll find answers to the most common questions about our programs, startup support, and innovation ecosystem. If you need further assistance, feel free to reach out to our team! All Program Founders Investors Industry partners Technology partners Total of 46 results found Are there specific deadlines for technology submissions or selection? We start our venture building program biannually, in February and October. But we are always on the lookout for new technologies. Interested in becoming a technology partner? Please feel free to email your technology offer to techpartner@hightechxl.com . We are always open to explore the potential for collaboration. How long does it typically take to select technologies for the"
+    },
+    {
+      "id": "check-page-376713db38",
+      "url": "https://www.hightechxl.com/investors/",
+      "page": "terms",
+      "excerpt": "Deep-Tech Investors Network | HighTechXL Skip to content Skip to footer Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League FAQ Careers News & events Our program Our program Venture Opportunities Become a co-founder PreSeedXL Fund Investors Investors Portfolio Partners Partners Industry partners Technology partners About us About us Meet the team Get in touch FAQ Careers News & events Become a co-founder Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League Investors We are seeking impact investors interested in joining our regional and global investor network. Why HighTechXL? Exclusive Investment Opportunities Invest in the future of deep-tech Innovation At HighTechXL, we believe the future of deep-tech lies in bold startups that tackle the world’s toughest challenges with game-changing technology. We offer early access to high-impact ventures with real global potential. Become an investor View our portfolio Peers Our Existing investors *numbers shown are from Q1 2026 Numbers Our success in numbers 102 Ventures created 35% Survival rate 400+ Guiding Experts 25+ Different nationalities € 171M Raised in funding 3000+ New jobs created What you can expect? Benefits of investing with HighTechXL Early"
+    },
+    {
+      "id": "check-page-9854ee9918",
+      "url": "https://www.hightechxl.com/news/amber-doubles-the-number-of-car-sharing-hubs-with-recent-investment-from-bom-brabant-ventures/",
+      "page": "terms",
+      "excerpt": "Amber doubles the number of car-sharing hubs with recent investment from BOM Brabant ventures | HighTechXL Skip to content Skip to footer Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League FAQ Careers News & events Our program Our program Venture Opportunities Become a co-founder PreSeedXL Fund Investors Investors Portfolio Partners Partners Industry partners Technology partners About us About us Meet the team Get in touch FAQ Careers News & events Become a co-founder Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League back to overview Amber doubles the number of car-sharing hubs with recent investment from BOM Brabant ventures Venture building 20 February 2020 (Editor’s Note: This post was published on the Amber website January 30, 2020. Amber is an alumnus of the HighTechXL accelerator program and just announced a round of funding to double the number of car-sharing hubs from 70 to 140 with a recent round of investment.) Amber , the Eindhoven provider of business shared cars, is scaling up. The network of more than 70 hubs where customers can pick up or leave their electric car will be expanded to more than 140 hubs. In order to enable the proposed tripling of sales, BOM Brabant Ventures is"
+    },
+    {
+      "id": "check-page-ded5a614d5",
+      "url": "https://www.hightechxl.com/news/aplhabeats-receives-e1-5-million-inphocal-receives-e2-million-in-deeptechxl-first-investment-round/",
+      "page": "terms",
+      "excerpt": "Alphabeats receives €1.5 million, inPhocal receives €2 million in DeepTechXL first investment round | HighTechXL Skip to content Skip to footer Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League FAQ Careers News & events Our program Our program Venture Opportunities Become a co-founder PreSeedXL Fund Investors Investors Portfolio Partners Partners Industry partners Technology partners About us About us Meet the team Get in touch FAQ Careers News & events Become a co-founder Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League back to overview Alphabeats receives €1.5 million, inPhocal receives €2 million in DeepTechXL first investment round Venture building 28 September 2022 It’s been an exciting two weeks for deep-tech ventures as Alphabeats and inPhocal receive funding from DeepTechXL’s first investment round. Alphabeats closed a €1.5 million investment round led by DeepTechXL and supported by LUMO Labs. The investment allows Alphabeats to focus on taking their patented neurofeedback technology to the next level and developing their digital mental wellness platform. With EEG, Alphabeats uses live neurofeedback to train the brain for high-level focus and performance. Alphabeats team The Alphabeats"
+    },
+    {
+      "id": "check-page-bab76c9e29",
+      "url": "https://www.hightechxl.com/news/asmls-rob-van-der-werf-an-investment-in-startups-is-an-investment-in-eindhovens-future/",
+      "page": "terms",
+      "excerpt": "ASML’S Rob van der Werf: An investment in startups is an investment in Eindhoven's future | HighTechXL Skip to content Skip to footer Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League FAQ Careers News & events Our program Our program Venture Opportunities Become a co-founder PreSeedXL Fund Investors Investors Portfolio Partners Partners Industry partners Technology partners About us About us Meet the team Get in touch FAQ Careers News & events Become a co-founder Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League back to overview ASML’S Rob van der Werf: An investment in startups is an investment in Eindhoven’s future Ecosystem, People, Venture building 23 August 2018 (Editor’s note: This interview with Rob van der Werf, Director of Strategic Business Development for ASML, took place at ASML’s headquarters in Veldhoven, a village at the heart of Brainport Eindhoven. Rob was named our Most Valuable Partner in 2017 during XL Day in July.) ‍ASML builds the machines that make the digital age possible. Their semiconductor technology has become the industry standard to the point the Veldhoven-based company has a solid leading position in the photolithography sector. ‍ASML’s photolithography machines use"
+    },
+    {
+      "id": "check-page-451c3989b2",
+      "url": "https://www.hightechxl.com/news/ato-gear-maker-of-sports-wearable-arion-raises-new-investment-round-to-accelerate-commercial-rollout-of-its-cuttinng-edge-running-ai/",
+      "page": "terms",
+      "excerpt": "ATO-GEAR, maker of sports wearable arion, raises new investment round to accelerate commercial rollout of its cuttinng-edge running AI | HighTechXL Skip to content Skip to footer Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League FAQ Careers News & events Our program Our program Venture Opportunities Become a co-founder PreSeedXL Fund Investors Investors Portfolio Partners Partners Industry partners Technology partners About us About us Meet the team Get in touch FAQ Careers News & events Become a co-founder Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League back to overview ATO-GEAR, maker of sports wearable arion, raises new investment round to accelerate commercial rollout of its cuttinng-edge running AI Venture building 17 February 2020 Editor’s note: This post was published on techstartups.com on January 28, 2020. ATO-GEAR finished the HighTechXL high-tech hardware accelerator program in 2016. ATO-GEAR, a wearable electronics startup for B2C and B2B sports markets, announced today that it has closed an investment round with Dutch high-tech venture capital fund Innovation Industries . Earlier investors, the BOM Brabant Ventures and a consortium of business angels, have expressed their continued"
+    },
+    {
+      "id": "check-page-ff2efc2ff6",
+      "url": "https://www.hightechxl.com/news/hightechxl-alumnus-sustonable-announces-equity-investment-from-gulermak-heavy-industries/",
+      "page": "terms",
+      "excerpt": "HighTechXL alumnus Sustonable announces equity investment from Gülermak Heavy Industries | HighTechXL Skip to content Skip to footer Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League FAQ Careers News & events Our program Our program Venture Opportunities Become a co-founder PreSeedXL Fund Investors Investors Portfolio Partners Partners Industry partners Technology partners About us About us Meet the team Get in touch FAQ Careers News & events Become a co-founder Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League back to overview HighTechXL alumnus Sustonable announces equity investment from Gülermak Heavy Industries Venture building 20 February 2020 HighTechXL alumnus Sustonable announces investment round and plans to open a factory near Ankara, Turkey. (Editor’s Note: Sustonable is an alumnus of the 2017 HighTechXL accelerator program. Sustonable received investments from BOM and countertop manufacturer Dekker on-stage at XL Day. Sustonable is planning to open a factory by early summer 2020 to begin production of their 100% recyclable composite stone building materials.) Amsterdam, Valencia and Ankara – 18 February 2020 – Gülermak Heavy Industries, through its strategic investment group Shibumi"
+    },
+    {
+      "id": "check-page-28257d2879",
+      "url": "https://www.hightechxl.com/news/second-cohort-of-deep-tech-ventures-starts-venture-building-program/",
+      "page": "batches",
+      "excerpt": "Second cohort of Deep-Tech ventures starts venture-building program | HighTechXL Skip to content Skip to footer Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League FAQ Careers News & events Our program Our program Venture Opportunities Become a co-founder PreSeedXL Fund Investors Investors Portfolio Partners Partners Industry partners Technology partners About us About us Meet the team Get in touch FAQ Careers News & events Become a co-founder Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League back to overview Second cohort of Deep-Tech ventures starts venture-building program Technology, Venture building 24 September 2019 And so it begins …. HighTechXL’s second deep-tech venture-building cohort has launched with two intense days on 17 and 18 September. The clock starts now as the nine-month accelerator phase began with a structured sequence of brainstorming, 1-on-1 coaching, expert sessions and pitches. Or as Project X team member Colin Burke says, startup teams are moving through “streamlined connected fermentation … applying radical imagination, but in a streamlined process that’s channeled and focused.” “From a stressful chaos to a controlled environment,” added Johan Kortas, Burke’s Project X"
+    },
+    {
+      "id": "check-page-fcce4a3edb",
+      "url": "https://www.hightechxl.com/news/exploring-the-latest-technologies-spring-2025/",
+      "page": "batches",
+      "excerpt": "Exploring the latest technologies for the SPRING cohort 2025: APPLY NOW! | HighTechXL Skip to content Skip to footer Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League FAQ Careers News & events Our program Our program Venture Opportunities Become a co-founder PreSeedXL Fund Investors Investors Portfolio Partners Partners Industry partners Technology partners About us About us Meet the team Get in touch FAQ Careers News & events Become a co-founder Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League back to overview Exploring the latest technologies for the SPRING cohort 2025: APPLY NOW! Impact, Technology, Venture building 15 January 2025 Discover Your Co-Founder Potential! Are you ready to dive into the world of innovation and entrepreneurship? We’re on the lookout for potential co-founders (CEOs, CTOs, and CBOs)! We’re seeking experts in business management, microelectronics, material science, chemical engineering, electrochemistry, quantum security, photonics, and related fields. Explore cutting-edge technologies from major Tech Institutes HighTechXL is the Netherlands’ premier venture-building accelerator. We build teams of entrepreneurs and tech talents around the most advanced technology."
+    },
+    {
+      "id": "check-page-dd44aef556",
+      "url": "https://www.hightechxl.com/about-us/",
+      "page": "details",
+      "excerpt": "About HighTechXL | HighTechXL Skip to content Skip to footer Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League FAQ Careers News & events Our program Our program Venture Opportunities Become a co-founder PreSeedXL Fund Investors Investors Portfolio Partners Partners Industry partners Technology partners About us About us Meet the team Get in touch FAQ Careers News & events Become a co-founder Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League About us Building deep-tech ventures to solve grand societal challenges. Partners Founding partners Read more about our partners Who are we? Empowering deep-tech innovation for a better future ​​HighTechXL is the Netherlands’ premier deep-tech venture builder, solving societal challenges by combining groundbreaking technologies and entrepreneurship. We bring together and activate technology, talent, funding and a strong ecosystem in our unique Venture Building Program. We support founders as they progress through our proprietary 1-year DeepTech Venture Builder Program and connect them with essential resources, such as investors, advisors, and customers. We start from scouting groundbreaking technologies at TRL3+ and identifying the most promising technologies"
+    },
+    {
+      "id": "check-page-7ecfa9f892",
+      "url": "https://www.hightechxl.com/events/dutch-singapore-deep-tech-expansion-program-info-session/",
+      "page": "details",
+      "excerpt": "Dutch-Singapore Deep Tech Expansion Program | HighTechXL Skip to content Skip to footer Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League FAQ Careers News & events Our program Our program Venture Opportunities Become a co-founder PreSeedXL Fund Investors Investors Portfolio Partners Partners Industry partners Technology partners About us About us Meet the team Get in touch FAQ Careers News & events Become a co-founder Deep-Tech Venture Builder From Lab to Market Based in Brainport Eindhoven Co-founders Wanted Global Impact Startups Join the Deep-Tech League back to overview Dutch-Singapore Deep Tech Expansion Program Are you a Dutch deep-tech startup aiming to break into the Asian market? Join our online info session on October 15th from 12:00 pm to 1:00 pm CET to learn how the Dutch-Singapore Deep-Tech Expansion Program, In collaboration with HighTechXL and ATUM Ventures , can empower your expansion into Singapore’s thriving innovation ecosystem. This program is designed to support startups with growth potential in Asia, offering access to resources, strategic partnerships, and funding. Who: This session is for Dutch deep-tech startups and scale-ups interested in expanding to the Asian market through Singapore. What: An online info session offering insights into the Dutch-Singapore"
     }
   ],
   "findings": {
@@ -100,11 +519,42 @@
         "evidenceId": "check-route-b9c8ae6b1e"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-ff9aa3f5e8"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-f2aa375bd9"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-1019e5a4ed"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-07719c8616"
+      }
+    ],
+    "location": [
+      {
+        "value": "Amsterdam",
+        "evidenceId": "check-location-a31415c68c"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.hightechxl.com/portfolio/",

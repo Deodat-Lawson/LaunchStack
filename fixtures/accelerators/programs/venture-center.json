@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.venturecenter.co.in/",
   "applyUrl": "https://www.venturecenter.co.in/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: India's top incubator for inventive startups - Venture Center About Careers Contact Programs Support Talk Series Incubate with us Incubation & Mentoring Pre-Incubation Virtual Resident Funding Grants Seed Investment Fellowship CSR Funding Database Services Scientific services & Facilities Prototyping Facility & Support Analytical & Measurement Support Advisory Consulting Infrastructural support services Regulatory Services Programs Investor Readiness Program BFI BIOME MSME DEIA Catalyst Lab2Mkt: Spinouts from academic organizations Early Translation Accelerator MeiTY SAMRIDH Bioincubation Social Innovation BRBC Our Startups Startup directory Success Stories About us History & Milestones Life at VC Awards & Recognition Corporate Governance Our People Resources Annual Reports AiM Prime Playbook Candid Venture Center Library Technology Database Whitepapers Projects MSME IP Facilitation Center BIRAC BioNest NBM – CBA Bajaj Auto CSR — Med Tech Clean Room NIDHI-CoE BIRAC-BRBC NBM-RTTO MEITY-SAMRIDH IBPL — Solar Farm Networks NCL Technology & Entrepreneurship Club Rx Innovation Circle Careers Events Impact News Blog Support us Contact India's top incubator for inventive startups From Concept to Market Learn more Seeding tomorrow's enterprises today Translate your ideas into successful businesses. Learn more Announcements Know More 28 Oct Now Open: Specialized Testing Facilities for Cl No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "A facility to test and cycle batteries and cells for energy storage applications, including performance and durability assessment — supporting startups working on next-generation battery chemistries and energy storage systems. Read more",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "A facility to test and cycle batteries and cells for energy storage applications, including performance and durability assessment — supporting startups working on next-generation battery chemistries and energy storage systems. Read more",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "venture-center-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.venturecenter.co.in/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

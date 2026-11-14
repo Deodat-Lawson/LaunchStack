@@ -1,39 +1,500 @@
 {
   "programId": "one-eleven",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://oneeleven.com/",
+    "https://oneeleven.com/apply-here/",
     "https://oneeleven.com/about-2/",
-    "https://oneeleven.com/apply-here/"
+    "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+    "https://oneeleven.com/tag/accelerator/",
+    "https://oneeleven.com/tag/programming/",
+    "https://oneeleven.com/how-oneeleven-companies-are-creating-jobs-and-opportunities-outside-of-cities/",
+    "https://oneeleven.com/how-oneelevens-companies-and-partners-have-responded-to-covid-19/",
+    "https://oneeleven.com/maverixs-john-ruffolo-on-resilience-passion-and-investing-in-companies-that-will-benefit-canadas-future/",
+    "https://oneeleven.com/members/alumni-member-companies/",
+    "https://oneeleven.com/members/current-member-companies/",
+    "https://oneeleven.com/apply/",
+    "https://oneeleven.com/membership-guide/for-graduating-companies/",
+    "https://oneeleven.com/oneeleven-alumni-cross-the-usd-2-billion-mark-in-collective-funds-raised/",
+    "https://oneeleven.com/oneeleven-focuses-on-talent-upskilling-to-help-post-seed-companies-scale/"
   ],
   "evidence": [
     {
+      "id": "check-duration-05f3f08b28",
+      "url": "https://oneeleven.com/maverixs-john-ruffolo-on-resilience-passion-and-investing-in-companies-that-will-benefit-canadas-future/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "Matthew Lombardi: What have the last 12 months been like for John Ruffolo, specifically the",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-b631a3b601",
+      "url": "https://oneeleven.com/oneeleven-focuses-on-talent-upskilling-to-help-post-seed-companies-scale/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "made our city’s talent pool analogous to an 8-month old puppy dog: strong, fast, and smart, but",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-d96bb03fe3",
+      "url": "https://oneeleven.com/maverixs-john-ruffolo-on-resilience-passion-and-investing-in-companies-that-will-benefit-canadas-future/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "like for John Ruffolo, specifically the last 9 months – since your accident in September 2020? John",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-f3102ad339",
+      "url": "https://oneeleven.com/",
+      "title": "OneEleven — homepage",
+      "excerpt": "a proven track record to scale 5x-10x within 18-24 months. Home to ambitious founders, bold ideas, and big",
+      "page": "details"
+    },
+    {
       "id": "check-email-3c82921828",
       "url": "https://oneeleven.com/apply-here/",
-      "title": "OneEleven — application page checked by scrape.py",
+      "title": "OneEleven — application page",
       "excerpt": "info@oneeleven.com",
       "page": "application"
     },
     {
+      "id": "check-email-416cbf0881",
+      "url": "https://oneeleven.com/members/alumni-member-companies/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "info@oneeleven.com",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-email-46d2738e22",
+      "url": "https://oneeleven.com/apply/",
+      "title": "OneEleven — application page",
+      "excerpt": "info@oneeleven.com",
+      "page": "application"
+    },
+    {
+      "id": "check-format-00a4e309f3",
+      "url": "https://oneeleven.com/how-oneelevens-companies-and-partners-have-responded-to-covid-19/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "of healthcare since the company’s founding, Maple offers a virtual health service focused on matching patients to doctors via",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-0a221473b1",
+      "url": "https://oneeleven.com/how-oneeleven-companies-are-creating-jobs-and-opportunities-outside-of-cities/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "becomes more widely available, the possibility of remote work opens a lot of doors to employment for people who’ve",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-15eaad4289",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "a new skill,” Ismail says. While this necessary pivot to virtual programming has come out of a time of uncertainty and",
+      "page": "details"
+    },
+    {
+      "id": "check-format-23cb88d0fe",
+      "url": "https://oneeleven.com/how-oneelevens-companies-and-partners-have-responded-to-covid-19/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "to offer their leadership training curriculum through a virtual platform , ensuring that those enrolled can still access",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-2d7a80c80a",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "to a daily calendar of live workouts and tutorials led by remote instructors, playlists curated by the community and guest",
+      "page": "details"
+    },
+    {
+      "id": "check-format-373aa2b4d9",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "the community in mind, so the decision was made to take it virtual. The new OneEleven community Slack channel designated for",
+      "page": "details"
+    },
+    {
+      "id": "check-format-39b16f5da0",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "virtual meet-ups, online wellness resources and other remote programming to help its community navigate the work from",
+      "page": "details"
+    },
+    {
+      "id": "check-format-3a8e98a45e",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "“We started to work to bring the elements of what we offer in-person to our members, online, in the form of live streaming",
+      "page": "details"
+    },
+    {
+      "id": "check-format-44107b2248",
+      "url": "https://oneeleven.com/how-oneelevens-companies-and-partners-have-responded-to-covid-19/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "to our member companies and their founders through our remote programming channels and Expert-in-Residence remote",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-4559caa7ec",
+      "url": "https://oneeleven.com/how-oneelevens-companies-and-partners-have-responded-to-covid-19/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "is one of the most intuitive and quick ways to schedule virtual meetings, so much so that the company has seen a massive",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-48bb7b63d7",
+      "url": "https://oneeleven.com/how-oneeleven-companies-are-creating-jobs-and-opportunities-outside-of-cities/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "for patients with nurses and other hospital staff. “Our virtual physicians have kept the hospital open for over a year",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-6efb341186",
+      "url": "https://oneeleven.com/how-oneelevens-companies-and-partners-have-responded-to-covid-19/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "our remote programming channels and Expert-in-Residence remote meetings. RBC A OneEleven Partner, RBC has committed an",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-76315bb78b",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "team at OneEleven have launched a roster of webinars, virtual meet-ups, online wellness resources and other remote",
+      "page": "details"
+    },
+    {
+      "id": "check-format-768450d7fa",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "OneEleven Shifts to Virtual Programming – Oneeleven Skip to content Search for: About",
+      "page": "details"
+    },
+    {
+      "id": "check-format-80cca36b1d",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "anxious time for many. Some of the programming being taken remote are pre-existing, regular events, such as Peer Groups and",
+      "page": "details"
+    },
+    {
+      "id": "check-format-8697eaf4d1",
+      "url": "https://oneeleven.com/how-oneelevens-companies-and-partners-have-responded-to-covid-19/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "to the other systems in the background.” Zoom.ai Virtual meetings have become as ubiquitous as the term “social",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-8adee357d7",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "offices were shut down by mandate of the province, an in-person lunch was impossible with the community at large",
+      "page": "details"
+    },
+    {
+      "id": "check-format-8b5663ac02",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "went into hibernation for a few years because spontaneous, in-person meetings were happening so frequently within the OneElven",
+      "page": "details"
+    },
+    {
+      "id": "check-format-9b68e9b97c",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "two people who can then schedule a coffee break. More virtual programming aimed at social inclusion and community",
+      "page": "details"
+    },
+    {
+      "id": "check-format-aa839ec117",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "partners to lend experts and insight from afar. “From remote Investor Office Hours to webinars with partners like",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b714869974",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "protocols made necessary by COVID-19. The aim of this virtual programming is to keep the community connected, informed",
+      "page": "details"
+    },
+    {
+      "id": "check-format-bcc4494323",
+      "url": "https://oneeleven.com/how-oneeleven-companies-are-creating-jobs-and-opportunities-outside-of-cities/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "necessary diagnosis and treatment. Maple also enables the remote physicians to collaboratively care for patients with",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-cdcab441f7",
+      "url": "https://oneeleven.com/how-oneeleven-companies-are-creating-jobs-and-opportunities-outside-of-cities/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "Zaman. Maple tapped into its technology and its network of virtual physicians and piloted what became Canada’s first",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-d59679fa09",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "OneElven ecosystem, those chance encounters will now be virtual. Those who’d like to opt-in to the channel can do so, and",
+      "page": "details"
+    },
+    {
+      "id": "check-format-dc8d17891d",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "Partnership Manager at OneEleven says. The shift to virtual and remote programming has created new, unique",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e20cebdc4e",
+      "url": "https://oneeleven.com/how-oneelevens-companies-and-partners-have-responded-to-covid-19/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": ", including providing resources and technology to support remote work, providing strategies and innovations to help",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-e2bf3e6d02",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "Booking News Apply Here Member Jobs OneEleven Shifts to Virtual Programming March 31, 2020 The Programming & Events team",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f577ff7326",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "Manager at OneEleven says. The shift to virtual and remote programming has created new, unique opportunities for some",
+      "page": "details"
+    },
+    {
+      "id": "check-format-f72bbec34f",
+      "url": "https://oneeleven.com/how-oneelevens-companies-and-partners-have-responded-to-covid-19/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "of the pandemic on the Canadian economy. By shifting to remote work and pivoting to other ways to utilize their",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-fb383d8531",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "of helping the community feel supported while shifting to remote work was a focus on continuity. The OneEleven Community",
+      "page": "details"
+    },
+    {
+      "id": "check-location-36481c6630",
+      "url": "https://oneeleven.com/membership-guide/for-graduating-companies/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "Canadian, family owned company headquartered in North York. As a OneEleven member, you can access",
+      "page": "portfolio"
+    },
+    {
       "id": "check-name-5e0723b3cc",
       "url": "https://oneeleven.com/",
-      "title": "OneEleven — homepage checked by scrape.py",
+      "title": "OneEleven — homepage",
       "excerpt": "Home – Oneeleven Skip to content Search for: About Members Booking News",
       "page": "details"
     },
     {
+      "id": "check-route-04ff1e47d1",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "Apply Here → https://oneeleven.com/apply-here/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0773771598",
+      "url": "https://oneeleven.com/members/alumni-member-companies/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "APPLY → https://oneeleven.com/apply-2/",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-07c4403ba0",
       "url": "https://oneeleven.com/",
-      "title": "OneEleven — homepage checked by scrape.py",
+      "title": "OneEleven — homepage",
       "excerpt": "Apply Here → https://oneeleven.com/apply-here/",
       "page": "details"
     },
     {
       "id": "check-route-1dc8501902",
       "url": "https://oneeleven.com/about-2/",
-      "title": "OneEleven — details page checked by scrape.py",
+      "title": "OneEleven — program page",
       "excerpt": "Apply Here → https://oneeleven.com/apply-here/",
       "page": "details"
+    },
+    {
+      "id": "check-route-35cc538bb8",
+      "url": "https://oneeleven.com/oneeleven-alumni-cross-the-usd-2-billion-mark-in-collective-funds-raised/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "Apply Here → https://oneeleven.com/apply-here/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-3fa2f98ea4",
+      "url": "https://oneeleven.com/oneeleven-focuses-on-talent-upskilling-to-help-post-seed-companies-scale/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "Apply Here → https://oneeleven.com/apply-here/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-5db6b6f654",
+      "url": "https://oneeleven.com/tag/programming/",
+      "title": "OneEleven — program page",
+      "excerpt": "Apply Here → https://oneeleven.com/apply-here/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5e04d393f8",
+      "url": "https://oneeleven.com/tag/accelerator/",
+      "title": "OneEleven — program page",
+      "excerpt": "Apply Here → https://oneeleven.com/apply-here/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6cccf38307",
+      "url": "https://oneeleven.com/oneeleven-focuses-on-talent-upskilling-to-help-post-seed-companies-scale/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "apply here. → https://oneeleven.com/apply/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-6e2f78c552",
+      "url": "https://oneeleven.com/how-oneeleven-companies-are-creating-jobs-and-opportunities-outside-of-cities/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "Apply Here → https://oneeleven.com/apply-here/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-7a09b9f9ce",
+      "url": "https://oneeleven.com/how-oneelevens-companies-and-partners-have-responded-to-covid-19/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "Apply Here → https://oneeleven.com/apply-here/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-80263cc104",
+      "url": "https://oneeleven.com/members/current-member-companies/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "Apply Here → https://oneeleven.com/apply-here/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-90505b1236",
+      "url": "https://oneeleven.com/members/current-member-companies/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "BECOME A MEMBER → https://oneeleven.com/apply/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-9f3a533830",
+      "url": "https://oneeleven.com/maverixs-john-ruffolo-on-resilience-passion-and-investing-in-companies-that-will-benefit-canadas-future/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "Apply Here → https://oneeleven.com/apply-here/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-cbd0afd55d",
+      "url": "https://oneeleven.com/apply/",
+      "title": "OneEleven — application page",
+      "excerpt": "Apply Here → https://oneeleven.com/apply-here/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-eebaee381f",
+      "url": "https://oneeleven.com/membership-guide/for-graduating-companies/",
+      "title": "OneEleven — portfolio page",
+      "excerpt": "Apply Here → https://oneeleven.com/apply-here/",
+      "page": "portfolio"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-e9a2006d6d",
+      "url": "https://oneeleven.com/",
+      "page": "details",
+      "excerpt": "Home – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs Home Paris samiei 2026-11-06T14:22:18+00:00 Built to Scale . OneEleven is Canada’s leading community for venture-backed tech companies with a proven track record to scale 5x-10x within 18-24 months. Home to ambitious founders, bold ideas, and big growth, it’s where companies like Wealthsimple, Borrowell, Clio, Koho, and 1Password found the momentum to go global. A community of elite founders who learn from each other, build exceptional teams, and shape the next generation of leaders. It’s where investors and partners gain direct access to Canada’s most promising ventures in a community built on trust, collaboration, and impact. OneEleven is where Canada’s top tech companies grow and scale together. Space Community Services Capital Focus on Growth . At OneEleven, membership provides more than just workspace — it opens the door to community, resources, and programming designed to help scaling tech companies grow faster. Community Driven . Our ambitious founders and their teams motivate and support one another, leveraging the expertise of a strong peer network as they build something great. Our companies succeed because they don’t just share the same space, they share the same goals and experiences. About OneEleven . Real partnerships . Our partners support our mission to help the"
+    },
+    {
+      "id": "check-page-7eb769afb6",
+      "url": "https://oneeleven.com/apply-here/",
+      "page": "application",
+      "excerpt": "Apply Here – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs Apply Here Paris samiei 2026-10-13T18:13:07+00:00 Your inquiry The membership team replies within two business days. Loading form Loading… Leave this empty Loading your inquiry form… If the questions do not appear, refresh this page or email [email protected] with your company name and inquiry. ← Back Start over Continue → Your answers are used by OneEleven and the Ontario Centre of Innovation to route your inquiry and reply to you. Privacy policy (opens in a new tab) . Keep a copy or email the team × Open your email app with these details, or download a copy to send to [email protected] . Open email app Download a copy Unlock exclusive content. OneEleven is home to Toronto’s most promising technology companies. Stay up to date on who’s joining, who’s raising, who’s making moves and everything that matters in a city and sector that’s built to scale. Sign up for our newsletter Leave this field empty if you're human: About Toggle Navigation About News Companies Toggle Navigation Careers Apply Here Members Contact 325 Front St. W Toronto, Ontario M5V 2Y1 [email protected] With thanks to the partners who back OneEleven’s members 2023 COPYRIGHT AND TRADEMARK. ONEELEVEN IS AN INITIATIVE LED BY THE ONTARIO CENTRE OF INNOVATION. SUBSIDIARIES AND AFFILIATES. ALL INTELLECTUAL PROPERTY"
+    },
+    {
+      "id": "check-page-309caccde3",
+      "url": "https://oneeleven.com/about-2/",
+      "page": "details",
+      "excerpt": "About – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs About Paris samiei 2026-10-30T18:08:10+00:00 About us . Facilities With a 55,000 square foot facility in the heart of downtown Toronto, we provide open concept seating and private offices for growing technology companies. Easy to access by transit, car, bike or foot, our well-designed collaborative spaces & offices allow our companies to grow with us, with month-to-month leases and secure, turnkey infrastructure. Our companies are provided with state-of-the-art facilities, 60+ meeting rooms, event space available for community use, podcast studios, a parenting room, secure bike storage facilities & showers, a wellness, faith and meditation space, as well as reception & operational support. Programming & Support With programming for founders and employees at all levels, OneEleven provides an unparalleled support network for rapidly scaling tech companies. We’ve built a first-of-its-kind-in-Canada program around talent upskilling for emerging people managers. Our curriculum-based learning focuses on four areas: marketing, customer success, product, and leadership. This allows OneEleven companies to get the most out of their talent, and ensure that emerging people managers are growing and learning, as fast as their companies are scaling. OneEleven’s bespoke programming is augmented by"
+    },
+    {
+      "id": "check-page-b82d42f81b",
+      "url": "https://oneeleven.com/oneeleven-shifts-to-virtual-programming/",
+      "page": "details",
+      "excerpt": "OneEleven Shifts to Virtual Programming – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs OneEleven Shifts to Virtual Programming March 31, 2020 The Programming & Events team at OneEleven have launched a roster of webinars, virtual meet-ups, online wellness resources and other remote programming to help its community navigate the work from home mandates and social distancing protocols made necessary by COVID-19. The aim of this virtual programming is to keep the community connected, informed as well as entertained during what has become an isolating and anxious time for many. Some of the programming being taken remote are pre-existing, regular events, such as Peer Groups and the OneEleven Community Lunch, while other offerings are brand new, developed by taking into account the unique set of circumstances the community, and the city at large, is under. Part of helping the community feel supported while shifting to remote work was a focus on continuity. The OneEleven Community Lunch is an event that happens every two months in the main lunchroom at OneEleven and is a chance for the community to come together over food and mutual appreciation of community standouts. A “Golden Dongle” award (an HDMI dongle that is spray painted gold) is always handed out at the lunch, an accolade given to a member who has, in the eyes of their peers, gone"
+    },
+    {
+      "id": "check-page-7e832849d4",
+      "url": "https://oneeleven.com/tag/accelerator/",
+      "page": "details",
+      "excerpt": "accelerator Archives – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs accelerator Home » accelerator OneEleven alumni cross the USD $2-billion mark in collective funds raised Gallery OneEleven alumni cross the USD $2-billion mark in collective funds raised Uncategorized OneEleven alumni cross the USD $2-billion mark in collective funds raised Eight years after its founding, alumni of OneEleven have raised [...] OneEleven 2021-11-25T14:34:56+00:00 September 17, 2021 | Read More Unlock exclusive content. OneEleven is home to Toronto’s most promising technology companies. Stay up to date on who’s joining, who’s raising, who’s making moves and everything that matters in a city and sector that’s built to scale. Sign up for our newsletter Leave this field empty if you're human: About Toggle Navigation About News Companies Toggle Navigation Careers Apply Here Members Contact 325 Front St. W Toronto, Ontario M5V 2Y1 [email protected] With thanks to the partners who back OneEleven’s members 2023 COPYRIGHT AND TRADEMARK. ONEELEVEN IS AN INITIATIVE LED BY THE ONTARIO CENTRE OF INNOVATION. SUBSIDIARIES AND AFFILIATES. ALL INTELLECTUAL PROPERTY RIGHTS RESERVED. [email protected] Go to Top"
+    },
+    {
+      "id": "check-page-4e2aa6d21f",
+      "url": "https://oneeleven.com/tag/programming/",
+      "page": "details",
+      "excerpt": "Programming Archives – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs Programming Home » Programming Maverix’s John Ruffolo on resilience, passion, and investing in companies that will benefit Canada’s future Gallery Maverix’s John Ruffolo on resilience, passion, and investing in companies that will benefit Canada’s future Uncategorized Maverix’s John Ruffolo on resilience, passion, and investing in companies that will benefit Canada’s future Last week, the OneEleven community heard from John Ruffolo, Managing [...] OneEleven 2021-11-25T18:20:22+00:00 July 12, 2021 | Read More Unlock exclusive content. OneEleven is home to Toronto’s most promising technology companies. Stay up to date on who’s joining, who’s raising, who’s making moves and everything that matters in a city and sector that’s built to scale. Sign up for our newsletter Leave this field empty if you're human: About Toggle Navigation About News Companies Toggle Navigation Careers Apply Here Members Contact 325 Front St. W Toronto, Ontario M5V 2Y1 [email protected] With thanks to the partners who back OneEleven’s members 2023 COPYRIGHT AND TRADEMARK. ONEELEVEN IS AN INITIATIVE LED BY THE ONTARIO CENTRE OF INNOVATION. SUBSIDIARIES AND AFFILIATES. ALL INTELLECTUAL PROPERTY RIGHTS RESERVED. [email protected] Go to Top"
+    },
+    {
+      "id": "check-page-925d322556",
+      "url": "https://oneeleven.com/how-oneeleven-companies-are-creating-jobs-and-opportunities-outside-of-cities/",
+      "page": "portfolio",
+      "excerpt": "How OneEleven Companies Are Creating Jobs and Opportunities Outside of Cities – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs How OneEleven Companies Are Creating Jobs and Opportunities Outside of Cities December 9, 2019 For more than a decade, Daniel Laprade had been building his security business in Sault Ste. Marie — a city of 73,000 about an eight-hour drive north of Toronto. Back when he started, there were no smartphones, just old fashioned calls and pen and paper reports. He’d already been thinking about how to modernize when out of the blue last May, he got a call from a Toronto-based tech company called RSPNDR . They wanted to know if Laprade would sign up his security firm, KC Security Services (voted the best security company in the Sault) with the platform that was described to him as security response marketplace similar to Lyft or DoorDash: A reliable, cut-out-the-middle-man way for guards to respond promptly to calls in their area and get paid quickly. Access to more clients at absolutely no cost? For Laprade, the president of KC Security, it was a no-brainer. With the large telcos and alarm companies signed up with RSPNDR, it meant Laprade and his team would soon have access to a market that would’ve normally been served by larger, more centralized security providers. Because of RSPNDR, he was now able to stay"
+    },
+    {
+      "id": "check-page-8c8ab7a0bd",
+      "url": "https://oneeleven.com/how-oneelevens-companies-and-partners-have-responded-to-covid-19/",
+      "page": "portfolio",
+      "excerpt": "How OneEleven’s Companies and Partners Have Responded to COVID-19 – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs How OneEleven’s Companies and Partners Have Responded to COVID-19 April 9, 2020 OneEleven is home to smart people doing hard things. So it’s no surprise that our community leapt into action to help address the myriad impacts COVID-19 is having on everything from our neighbourhoods and workforce to our economy and competitive prospects. In some cases tech companies and startups were shifting their operations to respond to COVID in the first days of government mandated social distancing, advocating for their sector, or initiating novel responses. Here are some of the ways our companies and corporate partners have stepped up and are helping to address the impact of these strange times. Luminari What started as a public Google Sheet, an open and collaborative database of tech workers who had lost their jobs due to COVID-19, turned into something well beyond what co-creators Adam Bercovici ( Luminari ), Marianne Bulger (Prospect) and Adam Gellert (HiredHippo) ever anticipated. The Help List , which initially broke Google’s viewing capacity, has now been built into a robust, searchable database of over 2,500 talented Canadian tech professionals with the aim of matching people to jobs as much as strengthening the tech community"
+    },
+    {
+      "id": "check-page-af0e3075ec",
+      "url": "https://oneeleven.com/maverixs-john-ruffolo-on-resilience-passion-and-investing-in-companies-that-will-benefit-canadas-future/",
+      "page": "portfolio",
+      "excerpt": "Maverix’s John Ruffolo on resilience, passion, and investing in companies that will benefit Canada’s future – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs Maverix’s John Ruffolo on resilience, passion, and investing in companies that will benefit Canada’s future July 12, 2021 Last week, the OneEleven community heard from John Ruffolo, Managing Partner of Maverix Private Equity, about resilience and passion, and what he looks for when investing in promising businesses. https://cloud-user-recordings-ffmpeg-converted-prod.s3-ap-south-1.amazonaws.com/recordings/f6f990f0-de76-11eb-a6be-a55df49abca3/20fc0b68-8180-4023-a81f-37e314a27976/f6f990f0-de76-11eb-a6be-a55df49abca3_0001_2709f1d7.mp4 Matthew Lombardi: What have the last 12 months been like for John Ruffolo, specifically the last 9 months – since your accident in September 2020? John Ruffolo: It’s kind of a three-part thesis over the last 10 years. When I first built OMERS ventures, I was really trying to address the first part of my thesis – to help companies get from 0 revenue to $10M. As I evolved the thesis, I moved it from 10M to 100M. The third part was getting from the 100M to $1billion+ – this was the thesis behind the foundation of Mavericks. It wasn’t until around the fall time of 2020, after COVID-19 hit the world, that the capital sources started to say we’re ready to"
+    },
+    {
+      "id": "check-page-ba984cd625",
+      "url": "https://oneeleven.com/members/alumni-member-companies/",
+      "page": "portfolio",
+      "excerpt": "Alumni - OneEleven — Members 0 Skip to Content ABOUT MEMBERS CAREERS BOOKING NEWS MEMBER JOBS APPLY Open Menu Close Menu ABOUT MEMBERS CAREERS BOOKING NEWS MEMBER JOBS APPLY Open Menu Close Menu ABOUT MEMBERS CAREERS BOOKING NEWS MEMBER JOBS APPLY Alumni Companies See Current Members 325 Front St W, Toronto, ON, M5V 2Y1"
+    },
+    {
+      "id": "check-page-de48d44ec7",
+      "url": "https://oneeleven.com/members/current-member-companies/",
+      "page": "portfolio",
+      "excerpt": "Current Member Companies – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs Current Member Companies Paris samiei 2023-07-19T19:28:31+00:00 We work with ambitious founders and their teams as they build technology companies that change the world. BECOME A MEMBER Legal Tech read more AdTech Read More EdTech Read More FinTech Read More Cyber Security Read More FinTech Read More HealthTech Read More Enterprise Software Read More Analytics Platform Read More PropTech Read More Crypto Read More PropTech Read More Digital Accessibility Read More InsurTech Read More Micromobility Read More FinTech Read More Computer Software Read More Computer Software Read More FinTech Read More FinTech Read More HealthTech Read More Energy as a Service (EaaS) Read More Higher Education Read More AI Read More Mentorship Platform Read More Micromobility Read More FinTech Read More FinTech Read More FinTech Read More DevOps Read More HR Tech Read More FinTech Read More DATAWARE Read More Cleantech Read More FinTech Read More AI Read More FINTECH Read More CPG Read More Unlock exclusive content. OneEleven is home to Toronto’s most promising technology companies. Stay up to date on who’s joining, who’s raising, who’s making moves and everything that matters in a city and sector that’s built to scale. Sign up for our newsletter Leave this field empty if you're human:"
+    },
+    {
+      "id": "check-page-546233a522",
+      "url": "https://oneeleven.com/apply/",
+      "page": "application",
+      "excerpt": "Apply – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs Apply OneEleven 2026-10-05T01:43:38+00:00 Your inquiry The membership team replies within two business days. Loading form Loading… Leave this empty Loading your inquiry form… If the questions do not appear, refresh this page or email [email protected] with your company name and inquiry. ← Back Start over Continue → Your answers are used by OneEleven and the Ontario Centre of Innovation to route your inquiry and reply to you. Privacy policy (opens in a new tab) . Keep a copy or email the team × Open your email app with these details, or download a copy to send to [email protected] . Open email app Download a copy Unlock exclusive content. OneEleven is home to Toronto’s most promising technology companies. Stay up to date on who’s joining, who’s raising, who’s making moves and everything that matters in a city and sector that’s built to scale. Sign up for our newsletter Leave this field empty if you're human: About Toggle Navigation About News Companies Toggle Navigation Careers Apply Here Members Contact 325 Front St. W Toronto, Ontario M5V 2Y1 [email protected] With thanks to the partners who back OneEleven’s members 2023 COPYRIGHT AND TRADEMARK. ONEELEVEN IS AN INITIATIVE LED BY THE ONTARIO CENTRE OF INNOVATION. SUBSIDIARIES AND AFFILIATES. ALL INTELLECTUAL PROPERTY RIGHTS"
+    },
+    {
+      "id": "check-page-77c32db876",
+      "url": "https://oneeleven.com/membership-guide/for-graduating-companies/",
+      "page": "portfolio",
+      "excerpt": "For Graduating Companies – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs For Graduating Companies OneEleven 2022-11-04T18:47:26+00:00 Monex Monex Canada is a specialist in commercial foreign exchange. Based in the heart of Toronto’s financial district, we provide customized FX execution products and unparalleled guidance for managing exposure to the foreign exchange market. Monex Canada provides same-day, next-day, spot and forward contracts across a range of major, minor and exotic currencies. Our FX forward contracts also offer an effective solution for mitigating currency risk. To learn more about what Monex can do for your business, reach out to Matthew Koronkiewicz at [email protected] . Holmes + Brakel Holmes + Brakel (H+B) is a family-owned and operated, full-service contract office furniture dealership located in the GTA and serving businesses across North America. Our goal is to work with you to develop a smart solution that gets you to your ideal workspace, whatever that may be. H+B carries a number of different furniture brands, the main one being Teknion. Teknion is private, Canadian, family owned company headquartered in North York. As a OneEleven member, you can access a discount range of 35%-70%+ on Teknion office furniture . To find out more on the discounts you can access, email Courtney Sokay at [email protected] ."
+    },
+    {
+      "id": "check-page-ddb7b4426f",
+      "url": "https://oneeleven.com/oneeleven-alumni-cross-the-usd-2-billion-mark-in-collective-funds-raised/",
+      "page": "portfolio",
+      "excerpt": "OneEleven alumni cross the USD $2-billion mark in collective funds raised – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs OneEleven alumni cross the USD $2-billion mark in collective funds raised September 17, 2021 Eight years after its founding, alumni of OneEleven have raised a total of over USD $2 billion in collective funds. Our top fifteen highest-funded alumni have accounted for a significant amount of this growth. This list includes Wealthsimple, Clio, Koho, Borrowell, Jobber, Rubikcloud, Maple, Tulip, Gatik, and more. “ The support that OneEleven provided early in our journey was a key part of Gatik’s success in Canada, and we’re delighted to be part of this milestone, ” said Gautam Narang, CEO and Co-Founder of alumni company Gatik, which closed a raise of USD $85M in August, after graduating from OneEleven in December of 2020. Gatik is a Toronto-based autonomous trucking startup that previously held space at OneEleven. Since reopening in October 2020, our current member companies have raised an additional CAD $171M+ in follow-on funding — on top of this USD $2B raised by alumni — including most recently a Series B round by Blue J Legal, and a Series C round by Affinity. The investments have been from a variety of sources, including equity crowdfunding, government grants, pitch competition awards, and venture capital"
+    },
+    {
+      "id": "check-page-3436423017",
+      "url": "https://oneeleven.com/oneeleven-focuses-on-talent-upskilling-to-help-post-seed-companies-scale/",
+      "page": "portfolio",
+      "excerpt": "OneEleven focuses on talent upskilling to help post-seed companies scale – Oneeleven Skip to content Search for: About Members Booking News Apply Here Member Jobs OneEleven focuses on talent upskilling to help post-seed companies scale August 11, 2021 What is OneEleven? Since its founding in 2013, OneEleven has become the premier innovation hub for post-seed tech companies in Canada to grow and scale. We’ve had the good fortune to call companies such as Wealthsimple, Clio, Koho, Borrowell, Maple, Properly, and Tulip our members. Our organization’s cultivation of a community, housed together in one turnkey downtown Toronto facility, was the first of its kind focused on post-seed companies in Canada, building on the philosophy of late entrepreneur Tony Hsieh, who believed in unleashing the power of community collisions. But two factors — the COVID-19 pandemic, and Toronto’s maturation as a global tech hub — meant that OneEleven had to do more, and provide a new kind of value to rapidly scaling companies. When COVID-19 temporarily halted our ability to use our state-of-the-art space, we pivoted our focus to building a new, unique, and attributable value-added programming curriculum, custom built to help Canada’s fastest growing companies. Through discussions with our members, alumni, and ecosystem partners, we learned not only where we could fill an underserved need, but also"
     }
   ],
   "findings": {
@@ -48,6 +509,14 @@
       {
         "value": "https://oneeleven.com/apply-here/",
         "evidenceId": "check-route-07c4403ba0"
+      },
+      {
+        "value": "https://oneeleven.com/apply-2/",
+        "evidenceId": "check-route-0773771598"
+      },
+      {
+        "value": "https://oneeleven.com/apply/",
+        "evidenceId": "check-route-90505b1236"
       }
     ],
     "applicationUrl": [
@@ -59,8 +528,46 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "24 months",
+        "evidenceId": "check-duration-f3102ad339"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-05f3f08b28"
+      },
+      {
+        "value": "9 months",
+        "evidenceId": "check-duration-d96bb03fe3"
+      },
+      {
+        "value": "8 months",
+        "evidenceId": "check-duration-b631a3b601"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-768450d7fa"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-8adee357d7"
+      }
+    ],
+    "location": [
+      {
+        "value": "North York",
+        "evidenceId": "check-location-36481c6630"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

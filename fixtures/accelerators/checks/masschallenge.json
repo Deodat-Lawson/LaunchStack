@@ -1,157 +1,1354 @@
 {
   "programId": "masschallenge",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://masschallenge.org/",
-    "https://masschallenge.org/traction-program/"
+    "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2027",
+    "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2027",
+    "https://masschallenge.org/2026-2027-challenge-cycle/",
+    "https://masschallenge.org/smu-cox-fintech-accelerator/",
+    "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2026?hsLang=es-mx",
+    "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2026?hsLang=en-us",
+    "https://masschallenge.org/about-us/",
+    "https://masschallenge.org/challenge-program/",
+    "https://masschallenge.org/heba-2027/",
+    "https://masschallenge.org/news/yes-boston-inaugural-cohort-announcement/",
+    "https://masschallenge.org/mission",
+    "https://masschallenge.org/news/masschallenge-ranked-number-2-us-accelerator-time-statista/",
+    "https://masschallenge.org/our-accelerators/",
+    "https://masschallenge.org/programs-all"
   ],
   "evidence": [
     {
-      "id": "check-email-441069da65",
-      "url": "https://masschallenge.org/traction-program/",
-      "title": "MassChallenge — details page checked by scrape.py",
+      "id": "check-announced-135a9d3ef7",
+      "url": "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2026?hsLang=es-mx",
+      "title": "MassChallenge — application page",
+      "excerpt": "Sustainable Food Challenge 2027 - Applications Are Open MAIN INFO Deadline: November 25. Any questions: Check the different sections below and Q&A. Our",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-140b8e2eda",
+      "url": "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2027",
+      "title": "MassChallenge — application page",
+      "excerpt": "Sustainable Food Challenge 2027 - Applications Are Open MAIN INFO Deadline: November 25. Any questions: Check the different sections below and Q&A. Our",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-59d16c7852",
+      "url": "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2027",
+      "title": "MassChallenge — application page",
+      "excerpt": "Materials Challenge 2027 - Applications A re Open MAIN INFO Deadline: November 25. Any questions: Check the different sections below and Q&A. Our",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-98517f8036",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "as well as travel to scheduled in-person activities in Dallas, TX. APPLY BY NOV 19! Applications for the SMU Cox FinTech Accelerator program are",
+      "page": "application"
+    },
+    {
+      "id": "check-announced-c210440986",
+      "url": "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2026?hsLang=en-us",
+      "title": "MassChallenge — application page",
+      "excerpt": "Materials Challenge 2027 - Applications A re Open MAIN INFO Deadline: November 25. Any questions: Check the different sections below and Q&A. Our",
+      "page": "application"
+    },
+    {
+      "id": "check-deadline-1533ce3c71",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "2026 Applications Open OCT-NOV 2026 Virtual Info Sessions NOV 16, 2026 Applications Close NOV-dec 2026 Evaluation & Selection DEC 2026 Finalists",
+      "page": "application"
+    },
+    {
+      "id": "check-deadline-45a20fec5e",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "move promising solutions toward commercial application. APPLY BY NOVEMBER 16, 2026 APPLY NOW JOIN AN INFO SESSION A DIFFERENT WAY INTO THE",
+      "page": "application"
+    },
+    {
+      "id": "check-deadline-798932d0de",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "Session 1 NOV 10,2026 Virtual Info Session 2 Nov 16, 2026 Applications Close DATE TBD Virtual Pitch (Invite Only) Feb 2, 2027 Program Kickoff May 4, 2027 Program Finale *Mandatory",
+      "page": "application"
+    },
+    {
+      "id": "check-deadline-d93c979bc4",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "2026 Applications Open OCT–NOV 2026 Virtual Info Sessions NOV 19, 2026 Applications Close DEC 2026–JAN 2027 Judging FEB 2027* Program Kickoff APR",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-586b889d78",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "Station, run with the ISS National Lab and Boeing, offered up to $500K in non-dilutive funding annually and over $1M of in-kind value per",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-61b0f35ea6",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "offered up to $500K in non-dilutive funding annually and over $1M of in-kind value per project. More Info MATERNAL-CHILD HEALTH EQUITY",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-e404f38bfa",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "offered up to $500K in non-dilutive funding annually and over $1M of in-kind value per project. MORE INFO MATERNAL-CHILD HEALTH EQUITY",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-1a15953d1c",
+      "url": "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2026?hsLang=es-mx",
+      "title": "MassChallenge — application page",
+      "excerpt": "=> Our Sustainable Food Track, part of the 4-month early-stage Acceleration Program, is ideal for",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-2f0d9596a0",
+      "url": "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2026?hsLang=en-us",
+      "title": "MassChallenge — application page",
+      "excerpt": "=> Our Sustainable Food Track, part of the 4-month early-stage Acceleration Program, is ideal for",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-4558ada8ad",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "financial resources to live in the US for the 4-month duration of the program, as well as proof you",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-628fec513a",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "forward. The SMU Cox FinTech Accelerator brings 16 weeks of specialized mentorship, commercial",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-7f7a2b51a6",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "if I'm selected? Selected startups join a 16-week, five-module curriculum covering market",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-bf67d54502",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "READINESS FINTECH FOCUSED STRATEGIC RIGOR A 16-week, five-module program covering market validation,",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-c410e32fc3",
+      "url": "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2027",
+      "title": "MassChallenge — application page",
+      "excerpt": "=> Our Sustainable Food Track, part of the 4-month early-stage Acceleration Program, is ideal for",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-fd5f6619a3",
+      "url": "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2027",
+      "title": "MassChallenge — application page",
+      "excerpt": "=> Our Sustainable Food Track, part of the 4-month early-stage Acceleration Program, is ideal for",
+      "page": "application"
+    },
+    {
+      "id": "check-email-0627761221",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "finalists in December. Need more info? Send an email to programs@masschallenge.org. BCBSMA Commitment To Health Equity BCBSMA was the first",
+      "page": "application"
+    },
+    {
+      "id": "check-email-096d562761",
+      "url": "https://masschallenge.org/about-us/",
+      "title": "MassChallenge — program page",
+      "excerpt": "Centre for Sustainability 4-6 University Way London E162RD contact@masschallenge.org Careers Ways to Support Join the Network © MassChallenge",
+      "page": "details"
+    },
+    {
+      "id": "check-email-11ea193bf0",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "programs@masschallenge.org Partnership questions: partnerships@masschallenge.org General: contact@masschallenge.org Address: 10 Fan Pier",
+      "page": "application"
+    },
+    {
+      "id": "check-email-1f9ed7fbaa",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "contact@masschallenge.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-27fb427630",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "I find answers? If you still have questions, reach out to programs@masschallenge.org . contact@masschallenge.org Careers Ways to Support Join",
+      "page": "details"
+    },
+    {
+      "id": "check-email-3377323009",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "programs@masschallenge.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-3b3c456abb",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "have questions, reach out to programs@masschallenge.org . contact@masschallenge.org Careers Ways to Support Join the Network © MassChallenge",
+      "page": "details"
+    },
+    {
+      "id": "check-email-43a04f0a98",
+      "url": "https://masschallenge.org/news/masschallenge-ranked-number-2-us-accelerator-time-statista/",
+      "title": "MassChallenge — program page",
       "excerpt": "contact@masschallenge.org",
       "page": "details"
     },
     {
-      "id": "check-email-6a7c00bab0",
-      "url": "https://masschallenge.org/traction-program/",
-      "title": "MassChallenge — details page checked by scrape.py",
+      "id": "check-email-4cda850ba2",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "and then apply. Need more info? Send an email to programs@masschallenge.org. FAQs FAQs Why SMU Cox School of Business? SMU Cox School",
+      "page": "application"
+    },
+    {
+      "id": "check-email-4e659c91c2",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "10 Fan Pier Blvd, 3rd floor, Boston, MA, 02210 USA contact@masschallenge.org Careers Ways to Support Join the Network © MassChallenge",
+      "page": "application"
+    },
+    {
+      "id": "check-email-60641cd1c5",
+      "url": "https://masschallenge.org/mission",
+      "title": "MassChallenge — program page",
+      "excerpt": "contact@masschallenge.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-63340e47f1",
+      "url": "https://masschallenge.org/our-accelerators/",
+      "title": "MassChallenge — program page",
       "excerpt": "to get involved. Linkedin Instagram X-twitter contact@masschallenge.org Careers Ways to Support Join the Network © MassChallenge",
       "page": "details"
     },
     {
+      "id": "check-email-6cf11d3381",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "mid-program day in April. Need more info? Send an email to programs@masschallenge.org. FEATURED MASSCHALLENGE PARTNERS THANK YOU TO OUR",
+      "page": "application"
+    },
+    {
       "id": "check-email-71a257afef",
       "url": "https://masschallenge.org/",
-      "title": "MassChallenge — homepage checked by scrape.py",
+      "title": "MassChallenge — homepage",
       "excerpt": "contact@masschallenge.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-722d5248de",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "questions: partnerships@masschallenge.org General: contact@masschallenge.org Address: 10 Fan Pier Blvd, 3rd floor, Boston, MA, 02210",
+      "page": "application"
+    },
+    {
+      "id": "check-email-7408fd3158",
+      "url": "https://masschallenge.org/news/masschallenge-ranked-number-2-us-accelerator-time-statista/",
+      "title": "MassChallenge — program page",
+      "excerpt": "Best Incubators & Accelerators 2026 ranking here. contact@masschallenge.org Careers Ways to Support Join the Network © MassChallenge",
+      "page": "details"
+    },
+    {
+      "id": "check-email-85748611bd",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "into the next era of impact. CREATE A STARTUP PROFILE contact@masschallenge.org Careers Ways to Support Join the Network © MassChallenge",
+      "page": "application"
+    },
+    {
+      "id": "check-email-875d0047b4",
+      "url": "https://masschallenge.org/news/yes-boston-inaugural-cohort-announcement/",
+      "title": "MassChallenge — batches page",
+      "excerpt": "contact@masschallenge.org",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-91df26be24",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "programs@masschallenge.org.",
+      "page": "application"
+    },
+    {
+      "id": "check-email-a0700fe00f",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "and then apply. Need more info? Send an email to programs@masschallenge.org. FAQs FAQs Who is eligible to apply? We’re looking for",
+      "page": "application"
+    },
+    {
+      "id": "check-email-aa4aedc0c3",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "contact@masschallenge.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-ac11b188e7",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "contact@masschallenge.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-ac71210ab3",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "programs@masschallenge.org.",
+      "page": "application"
+    },
+    {
+      "id": "check-email-aede532b67",
+      "url": "https://masschallenge.org/news/yes-boston-inaugural-cohort-announcement/",
+      "title": "MassChallenge — batches page",
+      "excerpt": "startups and program partners, in the full press release . contact@masschallenge.org Careers Ways to Support Join the Network © MassChallenge",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-b1de5f5d9c",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "programs@masschallenge.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-b3ca36e780",
+      "url": "https://masschallenge.org/news/masschallenge-ranked-number-2-us-accelerator-time-statista/",
+      "title": "MassChallenge — program page",
+      "excerpt": "in joining our expert and investor network, contact community@masschallenge.org. See TIME and Statista’s full America’s Best Incubators &",
+      "page": "details"
+    },
+    {
+      "id": "check-email-be2f4be27a",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "partnerships@masschallenge.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-cb4043c4be",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "challenge convention. Bring yours to the table. apply now contact@masschallenge.org Careers Ways to Support Join the Network © MassChallenge",
+      "page": "application"
+    },
+    {
+      "id": "check-email-cbd3d62ad3",
+      "url": "https://masschallenge.org/about-us/",
+      "title": "MassChallenge — program page",
+      "excerpt": "contact@masschallenge.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-cd79342c2c",
+      "url": "https://masschallenge.org/our-accelerators/",
+      "title": "MassChallenge — program page",
+      "excerpt": "contact@masschallenge.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d0b2f7c61b",
+      "url": "https://masschallenge.org/challenge-program/",
+      "title": "MassChallenge — program page",
+      "excerpt": "to get involved. Linkedin Instagram X-twitter contact@masschallenge.org Careers Ways to Support Join the Network © MassChallenge",
+      "page": "details"
+    },
+    {
+      "id": "check-email-da10f94ced",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "contact@masschallenge.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-e3e3737fb6",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "to create meaningful change. Contact Program questions: programs@masschallenge.org Partnership questions: partnerships@masschallenge.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-e81ae8b87f",
+      "url": "https://masschallenge.org/mission",
+      "title": "MassChallenge — program page",
+      "excerpt": "Centre for Sustainability 4-6 University Way London E162RD contact@masschallenge.org Careers Ways to Support Join the Network © MassChallenge",
       "page": "details"
     },
     {
       "id": "check-email-e8f27306d8",
       "url": "https://masschallenge.org/",
-      "title": "MassChallenge — homepage checked by scrape.py",
+      "title": "MassChallenge — homepage",
       "excerpt": "to get involved. Linkedin Instagram X-twitter contact@masschallenge.org Careers Ways to Support Join the Network © MassChallenge",
       "page": "details"
     },
     {
-      "id": "check-name-21ec86ad28",
-      "url": "https://masschallenge.org/",
-      "title": "MassChallenge — homepage checked by scrape.py",
-      "excerpt": "Home - MassChallenge MassChallenge Network Close Network Open Network OUR",
+      "id": "check-email-f194339a03",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "programs@masschallenge.org.",
+      "page": "application"
+    },
+    {
+      "id": "check-email-fafeda3a22",
+      "url": "https://masschallenge.org/challenge-program/",
+      "title": "MassChallenge — program page",
+      "excerpt": "contact@masschallenge.org",
       "page": "details"
     },
     {
-      "id": "check-portfolio-be75f45106",
-      "url": "https://masschallenge.org/traction-program/",
-      "title": "MassChallenge — details page checked by scrape.py",
+      "id": "check-format-020c36cce1",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "and traveling for this program? Our 2022 program is fully virtual, and we offer a residency program that provides founders",
+      "page": "details"
+    },
+    {
+      "id": "check-format-0665255a38",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "– KEY DATES OCT 19, 2026 Applications Open OCT-NOV 2026 Virtual Info Sessions NOV 16, 2026 Applications Close NOV-dec 2026",
+      "page": "application"
+    },
+    {
+      "id": "check-format-09b839ca37",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "and startup guidance. Accelerator Support Ongoing virtual meetings for expert advice, goal accountability, and",
+      "page": "application"
+    },
+    {
+      "id": "check-format-0e5a8892ce",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "company through a fintech-specific lens. BUILD & VALIDATE VIRTUAL Pressure-test your market, regulatory approach, business",
+      "page": "application"
+    },
+    {
+      "id": "check-format-1409dc633c",
+      "url": "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2026?hsLang=en-us",
+      "title": "MassChallenge — application page",
+      "excerpt": "Algae, seaweed and novel bio-based feedstocks Bio-hybrid polymers and biodegradable polymer alternatives Low-Carbon",
+      "page": "application"
+    },
+    {
+      "id": "check-format-1a35fab2cb",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "and growing financial ecosystem. Through the four-month hybrid program, a highly selective cohort of founders will",
+      "page": "application"
+    },
+    {
+      "id": "check-format-24e0d301a9",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "mentor and expert access. The curriculum centers on three in-person intensives: a kickoff, a midpoint session, and a closing",
+      "page": "application"
+    },
+    {
+      "id": "check-format-285ebbf7cc",
+      "url": "https://masschallenge.org/",
+      "title": "MassChallenge — homepage",
+      "excerpt": "and investors to accelerate commercial growth. The hybrid program combines specialized mentorship, corporate",
+      "page": "details"
+    },
+    {
+      "id": "check-format-296f2f4def",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "JOURNEY The SMU Cox FinTech Accelerator combines focused virtual programming with three in-person moments in Dallas, TX,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-29aeb9e9b7",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "IS YOUR STARTUP A GOOD FIT FOR THE PROGRAM? Join a live virtual info session for applicant Q&A. Use the links below to",
+      "page": "application"
+    },
+    {
+      "id": "check-format-2ba9945235",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "KEY DATES OCT 6, 2026 Applications Open OCT–NOV 2026 Virtual Info Sessions NOV 19, 2026 Applications Close DEC 2026–JAN",
+      "page": "application"
+    },
+    {
+      "id": "check-format-3736cacd6b",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "and/or senior executive is required. Is the program in-person? It is a four-month hybrid program combining in-person",
+      "page": "application"
+    },
+    {
+      "id": "check-format-3ae7dc9efc",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "or whether your company is at the right stage? Join a virtual information session to learn more about the program,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-422e714937",
+      "url": "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2026?hsLang=en-us",
+      "title": "MassChallenge — application page",
+      "excerpt": "partnerships, and investments for several of the startups; In-person - In addition to the above, each partner will select one",
+      "page": "application"
+    },
+    {
+      "id": "check-format-5788688f31",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "Info Session 2 Nov 16, 2026 Applications Close DATE TBD Virtual Pitch (Invite Only) Feb 2, 2027 Program Kickoff May 4,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-5e9d818d65",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "is required. Is the program in-person? It is a four-month hybrid program combining in-person engagement in Dallas with",
+      "page": "application"
+    },
+    {
+      "id": "check-format-61801d556e",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "in curriculum delivery as well as travel to scheduled in-person activities in Dallas, TX. APPLY BY NOV 19! Applications",
+      "page": "application"
+    },
+    {
+      "id": "check-format-6d294f11e6",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "APR 2027* Program Midpoint JUN 2027* Program Finale *In-person attendance is required. INFO SESSIONS: IS YOUR STARTUP A",
+      "page": "application"
+    },
+    {
+      "id": "check-format-70c3b0835f",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "opportunities for one or two named founders or leaders. In Person Orientation Meet the cohort, BCBSMA, and MassChallenge",
+      "page": "application"
+    },
+    {
+      "id": "check-format-710415285d",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "from around the world. However, there are four required in-person sessions that at least one member from your team must",
+      "page": "application"
+    },
+    {
+      "id": "check-format-7e2db6f9f7",
+      "url": "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2027",
+      "title": "MassChallenge — application page",
+      "excerpt": "partnerships, and investments for several of the startups; In-person - In addition to the above, each partner will select one",
+      "page": "application"
+    },
+    {
+      "id": "check-format-8574b92d11",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "Open Nov 6, 2026 Virtual Info Session 1 NOV 10,2026 Virtual Info Session 2 Nov 16, 2026 Applications Close DATE TBD",
+      "page": "application"
+    },
+    {
+      "id": "check-format-8858e7ac80",
+      "url": "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2026?hsLang=es-mx",
+      "title": "MassChallenge — application page",
+      "excerpt": "partnerships, and investments for several of the startups; In-person - In addition to the above, each partner will select one",
+      "page": "application"
+    },
+    {
+      "id": "check-format-88a854a55a",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "to investors, grant-makers, and BCBSMA leaders in both virtual and in-person events. Closing Workshop Expert panels,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-8b973d71c8",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "program combining in-person engagement in Dallas with virtual mentor and expert access. The curriculum centers on three",
+      "page": "application"
+    },
+    {
+      "id": "check-format-942f3dcaa1",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "program review, and post-program planning, including an in-person pitch event (travel covered). Alumni Access Continued",
+      "page": "application"
+    },
+    {
+      "id": "check-format-9bb33327f2",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "combines focused virtual programming with three in-person moments in Dallas, TX, giving founders time to learn,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-a2c072893d",
+      "url": "https://masschallenge.org/news/yes-boston-inaugural-cohort-announcement/",
+      "title": "MassChallenge — batches page",
+      "excerpt": "providers, trusted health information and supportive virtual communities. ThriveLink uses AI-powered navigation tools",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-a5d125b86c",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "partners, application process, and what to expect. VIRTUAL INFO SESSION November 13, 2026 @ 9:30 am ET register",
+      "page": "application"
+    },
+    {
+      "id": "check-format-a934751974",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "the opportunities that matter most. ENGAGE & ADVANCE VIRTUAL Turn insight into action through enterprise engagement,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-ac8f7a530d",
+      "url": "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2027",
+      "title": "MassChallenge — application page",
+      "excerpt": "Algae, seaweed and novel bio-based feedstocks Bio-hybrid polymers and biodegradable polymer alternatives Low-Carbon",
+      "page": "application"
+    },
+    {
+      "id": "check-format-afc4203dd8",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "Key Dates Oct 27, 2026 Applications Open Nov 6, 2026 Virtual Info Session 1 NOV 10,2026 Virtual Info Session 2 Nov 16,",
+      "page": "application"
+    },
+    {
+      "id": "check-format-b6d578bf66",
+      "url": "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2027",
+      "title": "MassChallenge — application page",
+      "excerpt": "partnerships, and investments for several of the startups; In-person - In addition to the above, each partner will select one",
+      "page": "application"
+    },
+    {
+      "id": "check-format-ce1eb2ef44",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "also attend Matchmaking (January 6 to 8). There’s also a virtual mid-program day in April. Need more info? Send an email to",
+      "page": "application"
+    },
+    {
+      "id": "check-format-dc5f41dc3f",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "first is an online application review, and the second is a virtual pitch in front of a panel of judges. Acceptance is",
+      "page": "details"
+    },
+    {
+      "id": "check-format-de64e75663",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "to participate in Round Two judging, which is a 20-minute virtual pitch session. What engagement is expected? Expectations",
+      "page": "details"
+    },
+    {
+      "id": "check-format-e243f4c516",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "in-person? It is a four-month hybrid program combining in-person engagement in Dallas with virtual mentor and expert",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e321db10a0",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "2027. Do I need to be based in Boston? Are there any in-person requirements for this program? No, we accept applications",
+      "page": "application"
+    },
+    {
+      "id": "check-format-f38388164b",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "startups pitch to a panel of judges or challenge partners in-person or via Skype (in some circumstances). Just applying to the",
+      "page": "details"
+    },
+    {
+      "id": "check-format-fef6f4425c",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "receive extended feedback from expert judges on their in-person pitches. Eligibility For our early-stage accelerator",
+      "page": "details"
+    },
+    {
+      "id": "check-location-15af254c80",
+      "url": "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2026?hsLang=en-us",
+      "title": "MassChallenge — application page",
+      "excerpt": "note that our partner corporations are headquartered in Europe, so physical collaboration would be",
+      "page": "application"
+    },
+    {
+      "id": "check-location-25bfc8f684",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "in mid-June 2027. Do I need to be based in Boston? Are there any in-person requirements",
+      "page": "application"
+    },
+    {
+      "id": "check-location-2cffd17ca4",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "and BCBSMA. Both organizations are based in Boston, MA, and are known for driving",
+      "page": "application"
+    },
+    {
+      "id": "check-location-30209b46f7",
+      "url": "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2027",
+      "title": "MassChallenge — application page",
+      "excerpt": "note that our partner corporations are headquartered in Europe, so physical collaboration would be",
+      "page": "application"
+    },
+    {
+      "id": "check-location-80ddbe033d",
+      "url": "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2027",
+      "title": "MassChallenge — application page",
+      "excerpt": "note that our partner corporations are headquartered in Europe, so physical collaboration would be",
+      "page": "application"
+    },
+    {
+      "id": "check-location-d299c1379e",
+      "url": "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2026?hsLang=es-mx",
+      "title": "MassChallenge — application page",
+      "excerpt": "note that our partner corporations are headquartered in Europe, so physical collaboration would be",
+      "page": "application"
+    },
+    {
+      "id": "check-name-3df1230942",
+      "url": "https://masschallenge.org/",
+      "title": "MassChallenge — homepage",
+      "excerpt": "MassChallenge | Startup Accelerator and Global Network MassChallenge",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1964108723",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "Featured Startups → https://masschallenge.org/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-33a63e1f9e",
+      "url": "https://masschallenge.org/challenge-program/",
+      "title": "MassChallenge — program page",
       "excerpt": "Featured Startups → https://masschallenge.org/startups",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-49502652bc",
+      "url": "https://masschallenge.org/news/masschallenge-ranked-number-2-us-accelerator-time-statista/",
+      "title": "MassChallenge — program page",
+      "excerpt": "Featured Startups → https://masschallenge.org/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-53e63ccb68",
+      "url": "https://masschallenge.org/about-us/",
+      "title": "MassChallenge — program page",
+      "excerpt": "Featured Startups → https://masschallenge.org/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7d035f515d",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "Featured Startups → https://masschallenge.org/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7e2cf8c8db",
+      "url": "https://masschallenge.org/our-accelerators/",
+      "title": "MassChallenge — program page",
+      "excerpt": "Featured Startups → https://masschallenge.org/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-96c8d60df4",
+      "url": "https://masschallenge.org/mission",
+      "title": "MassChallenge — program page",
+      "excerpt": "Featured Startups → https://masschallenge.org/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c503d10528",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "Featured Startups → https://masschallenge.org/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-cbb1d57844",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "Featured Startups → https://masschallenge.org/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d16930ed12",
+      "url": "https://masschallenge.org/news/yes-boston-inaugural-cohort-announcement/",
+      "title": "MassChallenge — batches page",
+      "excerpt": "Featured Startups → https://masschallenge.org/startups",
+      "page": "batches"
     },
     {
       "id": "check-portfolio-fa0a65b208",
       "url": "https://masschallenge.org/",
-      "title": "MassChallenge — homepage checked by scrape.py",
+      "title": "MassChallenge — homepage",
       "excerpt": "Featured Startups → https://masschallenge.org/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-route-06b6ca9f93",
+      "url": "https://masschallenge.org/challenge-program/",
+      "title": "MassChallenge — program page",
+      "excerpt": "LEARN HOW TO APPLY → → https://masschallenge.org/2026-2027-challenge-cycle/",
       "page": "details"
     },
     {
       "id": "check-route-09c9b1a66a",
       "url": "https://masschallenge.org/",
-      "title": "MassChallenge — homepage checked by scrape.py",
+      "title": "MassChallenge — homepage",
       "excerpt": "APPLY TO AN ACCELERATOR → https://masschallenge.org/our-accelerators/",
       "page": "details"
     },
     {
       "id": "check-route-0d3fe40b0c",
       "url": "https://masschallenge.org/",
-      "title": "MassChallenge — homepage checked by scrape.py",
+      "title": "MassChallenge — homepage",
       "excerpt": "NOW ACCEPTING APPLICATIONS → https://masschallenge.org/smu-cox-fintech-accelerator/",
       "page": "details"
     },
     {
       "id": "check-route-0e95a137a9",
       "url": "https://masschallenge.org/",
-      "title": "MassChallenge — homepage checked by scrape.py",
+      "title": "MassChallenge — homepage",
       "excerpt": "NOW ACCEPTING APPLICATIONS → https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2027",
       "page": "details"
     },
     {
-      "id": "check-route-2181c1595c",
-      "url": "https://masschallenge.org/traction-program/",
-      "title": "MassChallenge — details page checked by scrape.py",
-      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav",
+      "id": "check-route-173a29dcb3",
+      "url": "https://masschallenge.org/challenge-program/",
+      "title": "MassChallenge — program page",
+      "excerpt": "NOW ACCEPTING APPLICATIONS → https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2027",
       "page": "details"
     },
     {
-      "id": "check-route-2f54a02743",
-      "url": "https://masschallenge.org/traction-program/",
-      "title": "MassChallenge — details page checked by scrape.py",
-      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/login/?next=/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav&_gl=1*100wh1d*_ga*MTM2NDEwNjc0NS4xNzU3NjQzMzg4*_ga_THNYBZVCTM*czE3NTc2NDMzODckbzEkZzEkdDE3NTc2NDM5MjUkajU2JGwwJGgw",
+      "id": "check-route-1f48628437",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "MORE INFO → https://apply.masschallenge.org/maternal-health",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1f6e0387aa",
+      "url": "https://masschallenge.org/news/yes-boston-inaugural-cohort-announcement/",
+      "title": "MassChallenge — batches page",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-2ac9b9526c",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2b55796506",
+      "url": "https://masschallenge.org/mission",
+      "title": "MassChallenge — program page",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav",
       "page": "details"
     },
     {
       "id": "check-route-38fb88c65e",
       "url": "https://masschallenge.org/",
-      "title": "MassChallenge — homepage checked by scrape.py",
+      "title": "MassChallenge — homepage",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3de398c57b",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "apply now → https://accelerate.masschallenge.org/dashboard/universal-navigation/getting-started/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3ed21a60c5",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "APPLY NOW → https://accelerate.masschallenge.org/programs/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-43a434c788",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4a529f35e8",
+      "url": "https://masschallenge.org/news/masschallenge-ranked-number-2-us-accelerator-time-statista/",
+      "title": "MassChallenge — program page",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/login/?next=/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav&_gl=1*100wh1d*_ga*MTM2NDEwNjc0NS4xNzU3NjQzMzg4*_ga_THNYBZVCTM*czE3NTc2NDMzODckbzEkZzEkdDE3NTc2NDM5MjUkajU2JGwwJGgw",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4e41c1535d",
+      "url": "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2027",
+      "title": "MassChallenge — application page",
+      "excerpt": "Sustainable Food Challenge. → https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2026?hsLang=es-mx",
+      "page": "application"
+    },
+    {
+      "id": "check-route-51e1b26cbe",
+      "url": "https://masschallenge.org/news/yes-boston-inaugural-cohort-announcement/",
+      "title": "MassChallenge — batches page",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/login/?next=/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav&_gl=1*100wh1d*_ga*MTM2NDEwNjc0NS4xNzU3NjQzMzg4*_ga_THNYBZVCTM*czE3NTc2NDMzODckbzEkZzEkdDE3NTc2NDM5MjUkajU2JGwwJGgw",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-55b83255a6",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "More Info → https://apply.masschallenge.org/autodesk-challenge?utm_campaign=Autodesk&utm_source=hootsuite&utm_medium=social&utm_content=partnership%20announcement",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5e24e68614",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/login/?next=/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav&_gl=1*100wh1d*_ga*MTM2NDEwNjc0NS4xNzU3NjQzMzg4*_ga_THNYBZVCTM*czE3NTc2NDMzODckbzEkZzEkdDE3NTc2NDM5MjUkajU2JGwwJGgw",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6d3d4f75f3",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "MORE INFO → https://apply.masschallenge.org/autodesk-challenge?utm_campaign=Autodesk&utm_source=hootsuite&utm_medium=social&utm_content=partnership%20announcement",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6e0b513422",
+      "url": "https://masschallenge.org/challenge-program/",
+      "title": "MassChallenge — program page",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6e6b0f17ca",
+      "url": "https://masschallenge.org/our-accelerators/",
+      "title": "MassChallenge — program page",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav",
+      "page": "details"
+    },
+    {
+      "id": "check-route-746b9ae5a1",
+      "url": "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2026?hsLang=es-mx",
+      "title": "MassChallenge — application page",
+      "excerpt": "Sustainable Materials Challenge. → https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2026?hsLang=en-us",
+      "page": "application"
+    },
+    {
+      "id": "check-route-755c93fb9f",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "APPLY now → https://accelerate.masschallenge.org/dashboard/universal-navigation/getting-started/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-76a9318d3d",
+      "url": "https://masschallenge.org/our-accelerators/",
+      "title": "MassChallenge — program page",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/login/?next=/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav&_gl=1*100wh1d*_ga*MTM2NDEwNjc0NS4xNzU3NjQzMzg4*_ga_THNYBZVCTM*czE3NTc2NDMzODckbzEkZzEkdDE3NTc2NDM5MjUkajU2JGwwJGgw",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7a0e4fb451",
+      "url": "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2026?hsLang=en-us",
+      "title": "MassChallenge — application page",
+      "excerpt": "Sustainable Food Challenge. → https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2026?hsLang=es-mx",
+      "page": "application"
+    },
+    {
+      "id": "check-route-81a64e01e2",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "P&G Home Cleanovation Challenge → https://apply.masschallenge.org/home-cleanovation-challenge-2023",
+      "page": "details"
+    },
+    {
+      "id": "check-route-87671be6f6",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/login/?next=/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav&_gl=1*100wh1d*_ga*MTM2NDEwNjc0NS4xNzU3NjQzMzg4*_ga_THNYBZVCTM*czE3NTc2NDMzODckbzEkZzEkdDE3NTc2NDM5MjUkajU2JGwwJGgw",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8b0ab44584",
+      "url": "https://masschallenge.org/news/masschallenge-ranked-number-2-us-accelerator-time-statista/",
+      "title": "MassChallenge — program page",
       "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav",
       "page": "details"
     },
     {
       "id": "check-route-8e1c1afaeb",
       "url": "https://masschallenge.org/",
-      "title": "MassChallenge — homepage checked by scrape.py",
+      "title": "MassChallenge — homepage",
       "excerpt": "LEARN HOW TO APPLY → → https://masschallenge.org/2026-2027-challenge-cycle/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-96a06209f7",
+      "url": "https://masschallenge.org/about-us/",
+      "title": "MassChallenge — program page",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/login/?next=/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav&_gl=1*100wh1d*_ga*MTM2NDEwNjc0NS4xNzU3NjQzMzg4*_ga_THNYBZVCTM*czE3NTc2NDMzODckbzEkZzEkdDE3NTc2NDM5MjUkajU2JGwwJGgw",
       "page": "details"
     },
     {
       "id": "check-route-9837c9678e",
       "url": "https://masschallenge.org/",
-      "title": "MassChallenge — homepage checked by scrape.py",
+      "title": "MassChallenge — homepage",
       "excerpt": "apply to an accelerator → https://masschallenge.org/our-accelerators/#home-apply",
       "page": "details"
     },
     {
-      "id": "check-route-9b5415bec2",
-      "url": "https://masschallenge.org/traction-program/",
-      "title": "MassChallenge — details page checked by scrape.py",
-      "excerpt": "NOW ACCEPTING APPLICATIONS → https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "id": "check-route-a1caaeea15",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "Sustainable Food Solutions Challenge → https://apply.masschallenge.org/en-us/mcch-sustainable-food-solutions-challenge-2023",
+      "page": "details"
+    },
+    {
+      "id": "check-route-aa3988ba9a",
+      "url": "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2027",
+      "title": "MassChallenge — application page",
+      "excerpt": "Sustainable Materials Challenge. → https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2026?hsLang=en-us",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ad6157e57c",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "Apply now → https://accelerate.masschallenge.org/program-wizard/?wizard=startup&program=254",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b5da2957dc",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "Maternal-Child Health Equity Challenge → https://apply.masschallenge.org/maternal-health",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ba24771042",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "More Info → https://apply.masschallenge.org/home-cleanovation-challenge-2023",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c2e094aa4e",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "APPLY NOW → https://accelerate.masschallenge.org/dashboard/universal-navigation/getting-started/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ca862ab375",
+      "url": "https://masschallenge.org/challenge-program/",
+      "title": "MassChallenge — program page",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/login/?next=/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav&_gl=1*100wh1d*_ga*MTM2NDEwNjc0NS4xNzU3NjQzMzg4*_ga_THNYBZVCTM*czE3NTc2NDMzODckbzEkZzEkdDE3NTc2NDM5MjUkajU2JGwwJGgw",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cce2e4ad06",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "Human Potential Sprint → https://apply.masschallenge.org/humanpotential23",
       "page": "details"
     },
     {
       "id": "check-route-ce02730436",
       "url": "https://masschallenge.org/",
-      "title": "MassChallenge — homepage checked by scrape.py",
+      "title": "MassChallenge — homepage",
       "excerpt": "OUR ACCELERATORS → https://masschallenge.org/our-accelerators/",
       "page": "details"
     },
     {
+      "id": "check-route-d163d1d729",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/login/?next=/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav&_gl=1*100wh1d*_ga*MTM2NDEwNjc0NS4xNzU3NjQzMzg4*_ga_THNYBZVCTM*czE3NTc2NDMzODckbzEkZzEkdDE3NTc2NDM5MjUkajU2JGwwJGgw",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d834fec525",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "MORE INFO → https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2026",
+      "page": "details"
+    },
+    {
+      "id": "check-route-da351c4186",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "MITRE Social Innovation Mentorship Program for Underrepresented Founders → https://apply.masschallenge.org/mitre-mentorship",
+      "page": "details"
+    },
+    {
+      "id": "check-route-daeba5deaf",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav",
+      "page": "application"
+    },
+    {
       "id": "check-route-dcd13066ce",
       "url": "https://masschallenge.org/",
-      "title": "MassChallenge — homepage checked by scrape.py",
+      "title": "MassChallenge — homepage",
       "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/login/?next=/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav&_gl=1*100wh1d*_ga*MTM2NDEwNjc0NS4xNzU3NjQzMzg4*_ga_THNYBZVCTM*czE3NTc2NDMzODckbzEkZzEkdDE3NTc2NDM5MjUkajU2JGwwJGgw",
+      "page": "details"
+    },
+    {
+      "id": "check-route-dd15e8b2df",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "MORE INFO → https://apply.masschallenge.org/mitre-mentorship",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e35e53dfb0",
+      "url": "https://masschallenge.org/",
+      "title": "MassChallenge — homepage",
+      "excerpt": "NOW ACCEPTING APPLICATIONS → https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2027",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e7659fc5a8",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "More Info → https://apply.masschallenge.org/maternal-health",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e96a07a3ca",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "Apply Now → https://accelerate.masschallenge.org/programs/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-eb19056432",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "title": "MassChallenge — application page",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ebd48acb16",
+      "url": "https://masschallenge.org/mission",
+      "title": "MassChallenge — program page",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/login/?next=/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav&_gl=1*100wh1d*_ga*MTM2NDEwNjc0NS4xNzU3NjQzMzg4*_ga_THNYBZVCTM*czE3NTc2NDMzODckbzEkZzEkdDE3NTc2NDM5MjUkajU2JGwwJGgw",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ec1e4c2791",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "APPLY NOW → https://accelerate.masschallenge.org/program-wizard/?wizard=startup&program=254",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ef37dcd7fb",
+      "url": "https://masschallenge.org/heba-2027/",
+      "title": "MassChallenge — application page",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/login/?next=/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav&_gl=1*100wh1d*_ga*MTM2NDEwNjc0NS4xNzU3NjQzMzg4*_ga_THNYBZVCTM*czE3NTc2NDMzODckbzEkZzEkdDE3NTc2NDM5MjUkajU2JGwwJGgw",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f5016b8e62",
+      "url": "https://masschallenge.org/programs-all",
+      "title": "MassChallenge — program page",
+      "excerpt": "MORE INFO → https://apply.masschallenge.org/home-cleanovation-challenge-2023",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f99debad06",
+      "url": "https://masschallenge.org/challenge-program/",
+      "title": "MassChallenge — program page",
+      "excerpt": "NOW ACCEPTING APPLICATIONS → https://masschallenge.org/heba-2027/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-fcb5254906",
+      "url": "https://masschallenge.org/about-us/",
+      "title": "MassChallenge — program page",
+      "excerpt": "Apply → https://accelerate.masschallenge.org/accounts/register?utm_source=mainnav&utm_medium=button&utm_campaign=mainnav&utm_id=mainnav&utm_term=mainnav",
       "page": "details"
     },
     {
       "id": "check-route-fe3bb7214f",
       "url": "https://masschallenge.org/",
-      "title": "MassChallenge — homepage checked by scrape.py",
+      "title": "MassChallenge — homepage",
       "excerpt": "NOW ACCEPTING APPLICATIONS → https://masschallenge.org/2026-2027-challenge-cycle/",
       "page": "details"
     },
     {
+      "id": "check-status-0b61d7ef1f",
+      "url": "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2027",
+      "title": "MassChallenge — application page",
+      "excerpt": "Our match-making contest finds you the right partner to scale up. Sustainable Food Challenge 2027 - Applications Are Open MAIN INFO Deadline: November 25. Any questions: Check the different sections below and Q&A. Our contact:",
+      "page": "application"
+    },
+    {
       "id": "check-status-2f8e741857",
       "url": "https://masschallenge.org/",
-      "title": "MassChallenge — homepage checked by scrape.py",
+      "title": "MassChallenge — homepage",
       "excerpt": "and loyalty LEARN HOW TO APPLY → Eligibility, timeline, information sessions and application details NOW ACCEPTING APPLICATIONS FINTECH SMU Cox FinTech Accelerator Connecting fintech startups from around the world with industry experts,",
       "page": "details"
     },
     {
-      "id": "check-status-3ba076a3b1",
-      "url": "https://masschallenge.org/traction-program/",
-      "title": "MassChallenge — details page checked by scrape.py",
-      "excerpt": "combines specialized mentorship, corporate engagement, and three immersive experiences in Dallas, Texas. NOW ACCEPTING APPLICATIONS SECURITY & RESILIENCY SECURITY & RESILIENCY TRACTION PROGRAM The next generation of security and resilience",
+      "id": "check-status-6db1b715f3",
+      "url": "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2026?hsLang=es-mx",
+      "title": "MassChallenge — application page",
+      "excerpt": "Our match-making contest finds you the right partner to scale up. Sustainable Food Challenge 2027 - Applications Are Open MAIN INFO Deadline: November 25. Any questions: Check the different sections below and Q&A. Our contact:",
+      "page": "application"
+    },
+    {
+      "id": "check-status-c28aa5b999",
+      "url": "https://masschallenge.org/challenge-program/",
+      "title": "MassChallenge — program page",
+      "excerpt": "that turn waste into value. The goal: lower emissions, better performance, and innovations ready to scale. NOW ACCEPTING APPLICATIONS SUSTAINABLE FOOD SYSTEMS MC Switzerland Sustainable Foods Challenge Sustainable Food Challenge connects",
       "page": "details"
+    },
+    {
+      "id": "check-status-d012b1a8ce",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "title": "MassChallenge — application page",
+      "excerpt": "— a culminating event connecting the cohort with investors, corporate leaders, and the broader ecosystem. APPLICATIONS ARE NOW OPEN Applications for the SMU Cox FinTech Accelerator program are open October 6 through November 19, 2026.",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-3e192da946",
+      "url": "https://masschallenge.org/",
+      "page": "details",
+      "excerpt": "MassChallenge | Startup Accelerator and Global Network MassChallenge Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems Accelerators Close Accelerators Open Accelerators OUR ACCELERATORS Traction Challenge Breakthrough Bio OUR ACCELERATORS Traction Challenge Breakthrough Bio Corporate Partners About Close About Open About ABOUT US Regions Team Careers Ways to Support ABOUT US Regions Team Careers Ways to Support Insights Close Insights Open Insights Case Studies Innovation Blog News Events Case Studies Innovation Blog News Events Give Login Apply Give Login Apply Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial"
+    },
+    {
+      "id": "check-page-5e82d2b5e2",
+      "url": "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2027",
+      "page": "application",
+      "excerpt": "MCCH Sustainable Food Challenge 2027 SUSTAINABLE FOOD CHALLENGE 2027 Get your idea exposed to global food corporations and gain the chance of a pilot or investment. Our match-making contest finds you the right partner to scale up. Sustainable Food Challenge 2027 - Applications Are Open MAIN INFO Deadline: November 25. Any questions: Check the different sections below and Q&A. Our contact: switzerland@masschallenge.org ♻️ Your solution is more oriented towards Materials Science? Check the Sustainable Materials Challenge. HOW THE CHALLENGE WORKS Online - Relevant applicants will be presented to partner corporations ; Online - Selected startups will be invited to meet with R&D, open innovation, sustainability executives, and business unit heads for further discussion and to evaluate the potential for collaboration; Online - We expect that this will result in proof of concepts, partnerships, and investments for several of the startups; In-person - In addition to the above, each partner will select one start-up to pitch their joint collaboration idea at the MassChallenge Sustainable Food Challenge Day in June 2027 , where all of our corporate partners will attend. This will be a physical event in Switzerland; It is anticipated that partners and startups will then work together to scale the startups' ideas through the partners’ businesses. ABOUT THE CHALLENGE Feeding the planet ’s"
+    },
+    {
+      "id": "check-page-c0fb277156",
+      "url": "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2027",
+      "page": "application",
+      "excerpt": "MCCH Sustainable Materials Challenge 2027 SUSTAINABLE MATERIALS CHALLENGE 20 27 Get your idea exposed to global corporations and gain the chance of a pilot or investment. Our match-making contest finds you the right partner to scale up. Sustainable Materials Challenge 2027 - Applications A re Open MAIN INFO Deadline: November 25. Any questions: Check the different sections below and Q&A. Our contact: switzerland@masschallenge.org ♻️ Your solution is more oriented towards AgriFood? Check the Sustainable Food Challenge. HOW THE CHALLENGE WORKS Online - Relevant applicants will be presented to partner corporations ; Online - Selected startups will be invited to meet with R&D, open innovation, sustainability executives, and business unit heads for further discussion and to evaluate the potential for collaboration; Online - We expect that this will result in proof of concepts, partnerships, and investments for several of the startups; In-person - In addition to the above, each partner will select one start-up to pitch their joint collaboration idea at the Sustainable Materials Challenge Day in June 2027 , where all of our corporate partners will attend. This will be a physical event in Switzerland; It is anticipated that partners and startups will then work together to scale the startups' ideas through the partners’ businesses. ABOUT THE CHALLENGE Making, using, and disposing of"
+    },
+    {
+      "id": "check-page-5875d38921",
+      "url": "https://masschallenge.org/2026-2027-challenge-cycle/",
+      "page": "application",
+      "excerpt": "2026–2027 Challenge Programs | MassChallenge MassChallenge Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems Accelerators Close Accelerators Open Accelerators OUR ACCELERATORS Traction Challenge Breakthrough Bio OUR ACCELERATORS Traction Challenge Breakthrough Bio Corporate Partners About Close About Open About ABOUT US Regions Team Careers Ways to Support ABOUT US Regions Team Careers Ways to Support Insights Close Insights Open Insights Case Studies Innovation Blog News Events Case Studies Innovation Blog News Events Give Login Apply Give Login Apply Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems"
+    },
+    {
+      "id": "check-page-d2b2f31fb9",
+      "url": "https://masschallenge.org/smu-cox-fintech-accelerator/",
+      "page": "application",
+      "excerpt": "SMU Cox FinTech Accelerator | MassChallenge MassChallenge Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems Accelerators Close Accelerators Open Accelerators OUR ACCELERATORS Traction Challenge Breakthrough Bio OUR ACCELERATORS Traction Challenge Breakthrough Bio Corporate Partners About Close About Open About ABOUT US Regions Team Careers Ways to Support ABOUT US Regions Team Careers Ways to Support Insights Close Insights Open Insights Case Studies Innovation Blog News Events Case Studies Innovation Blog News Events Give Login Apply Give Login Apply Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems"
+    },
+    {
+      "id": "check-page-62d93f1865",
+      "url": "https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2026?hsLang=es-mx",
+      "page": "application",
+      "excerpt": "MCCH Sustainable Food Challenge 2027 SUSTAINABLE FOOD CHALLENGE 2027 Get your idea exposed to global food corporations and gain the chance of a pilot or investment. Our match-making contest finds you the right partner to scale up. Sustainable Food Challenge 2027 - Applications Are Open MAIN INFO Deadline: November 25. Any questions: Check the different sections below and Q&A. Our contact: switzerland@masschallenge.org ♻️ Your solution is more oriented towards Materials Science? Check the Sustainable Materials Challenge. HOW THE CHALLENGE WORKS Online - Relevant applicants will be presented to partner corporations ; Online - Selected startups will be invited to meet with R&D, open innovation, sustainability executives, and business unit heads for further discussion and to evaluate the potential for collaboration; Online - We expect that this will result in proof of concepts, partnerships, and investments for several of the startups; In-person - In addition to the above, each partner will select one start-up to pitch their joint collaboration idea at the MassChallenge Sustainable Food Challenge Day in June 2027 , where all of our corporate partners will attend. This will be a physical event in Switzerland; It is anticipated that partners and startups will then work together to scale the startups' ideas through the partners’ businesses. ABOUT THE CHALLENGE Feeding the planet ’s"
+    },
+    {
+      "id": "check-page-ad070e5864",
+      "url": "https://apply.masschallenge.org/mcch-sustainable-materials-challenge-2026?hsLang=en-us",
+      "page": "application",
+      "excerpt": "MCCH Sustainable Materials Challenge 2027 SUSTAINABLE MATERIALS CHALLENGE 20 27 Get your idea exposed to global corporations and gain the chance of a pilot or investment. Our match-making contest finds you the right partner to scale up. Sustainable Materials Challenge 2027 - Applications A re Open MAIN INFO Deadline: November 25. Any questions: Check the different sections below and Q&A. Our contact: switzerland@masschallenge.org ♻️ Your solution is more oriented towards AgriFood? Check the Sustainable Food Challenge. HOW THE CHALLENGE WORKS Online - Relevant applicants will be presented to partner corporations ; Online - Selected startups will be invited to meet with R&D, open innovation, sustainability executives, and business unit heads for further discussion and to evaluate the potential for collaboration; Online - We expect that this will result in proof of concepts, partnerships, and investments for several of the startups; In-person - In addition to the above, each partner will select one start-up to pitch their joint collaboration idea at the Sustainable Materials Challenge Day in June 2027 , where all of our corporate partners will attend. This will be a physical event in Switzerland; It is anticipated that partners and startups will then work together to scale the startups' ideas through the partners’ businesses. ABOUT THE CHALLENGE Making, using, and disposing of"
+    },
+    {
+      "id": "check-page-d173584046",
+      "url": "https://masschallenge.org/about-us/",
+      "page": "details",
+      "excerpt": "About Us - MassChallenge MassChallenge Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems Accelerators Close Accelerators Open Accelerators OUR ACCELERATORS Traction Challenge Breakthrough Bio OUR ACCELERATORS Traction Challenge Breakthrough Bio Corporate Partners About Close About Open About ABOUT US Regions Team Careers Ways to Support ABOUT US Regions Team Careers Ways to Support Insights Close Insights Open Insights Case Studies Innovation Blog News Events Case Studies Innovation Blog News Events Give Login Apply Give Login Apply Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems Accelerators Close"
+    },
+    {
+      "id": "check-page-e0db5170f6",
+      "url": "https://masschallenge.org/challenge-program/",
+      "page": "details",
+      "excerpt": "Corporate Startup Challenges & Accelerators | MassChallenge MassChallenge Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems Accelerators Close Accelerators Open Accelerators OUR ACCELERATORS Traction Challenge Breakthrough Bio OUR ACCELERATORS Traction Challenge Breakthrough Bio Corporate Partners About Close About Open About ABOUT US Regions Team Careers Ways to Support ABOUT US Regions Team Careers Ways to Support Insights Close Insights Open Insights Case Studies Innovation Blog News Events Case Studies Innovation Blog News Events Give Login Apply Give Login Apply Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial"
+    },
+    {
+      "id": "check-page-0b4094c939",
+      "url": "https://masschallenge.org/heba-2027/",
+      "page": "application",
+      "excerpt": "BCBSMA Health Equity Business Accelerator | MassChallenge MassChallenge Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems Accelerators Close Accelerators Open Accelerators OUR ACCELERATORS Traction Challenge Breakthrough Bio OUR ACCELERATORS Traction Challenge Breakthrough Bio Corporate Partners About Close About Open About ABOUT US Regions Team Careers Ways to Support ABOUT US Regions Team Careers Ways to Support Insights Close Insights Open Insights Case Studies Innovation Blog News Events Case Studies Innovation Blog News Events Give Login Apply Give Login Apply Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial"
+    },
+    {
+      "id": "check-page-b348a251d7",
+      "url": "https://masschallenge.org/news/yes-boston-inaugural-cohort-announcement/",
+      "page": "batches",
+      "excerpt": "Yes/Boston Announces Inaugural Food and Health Cohort MassChallenge Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems Accelerators Close Accelerators Open Accelerators OUR ACCELERATORS Traction Challenge Breakthrough Bio OUR ACCELERATORS Traction Challenge Breakthrough Bio Corporate Partners About Close About Open About ABOUT US Regions Team Careers Ways to Support ABOUT US Regions Team Careers Ways to Support Insights Close Insights Open Insights Case Studies Innovation Blog News Events Case Studies Innovation Blog News Events Give Login Apply Give Login Apply Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial"
+    },
+    {
+      "id": "check-page-c8418dedd8",
+      "url": "https://masschallenge.org/mission",
+      "page": "details",
+      "excerpt": "About Us - MassChallenge MassChallenge Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems Accelerators Close Accelerators Open Accelerators OUR ACCELERATORS Traction Challenge Breakthrough Bio OUR ACCELERATORS Traction Challenge Breakthrough Bio Corporate Partners About Close About Open About ABOUT US Regions Team Careers Ways to Support ABOUT US Regions Team Careers Ways to Support Insights Close Insights Open Insights Case Studies Innovation Blog News Events Case Studies Innovation Blog News Events Give Login Apply Give Login Apply Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems Accelerators Close"
+    },
+    {
+      "id": "check-page-85256a8313",
+      "url": "https://masschallenge.org/news/masschallenge-ranked-number-2-us-accelerator-time-statista/",
+      "page": "details",
+      "excerpt": "MassChallenge Ranked #2 U.S. Accelerator by TIME and Statista MassChallenge Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems Accelerators Close Accelerators Open Accelerators OUR ACCELERATORS Traction Challenge Breakthrough Bio OUR ACCELERATORS Traction Challenge Breakthrough Bio Corporate Partners About Close About Open About ABOUT US Regions Team Careers Ways to Support ABOUT US Regions Team Careers Ways to Support Insights Close Insights Open Insights Case Studies Innovation Blog News Events Case Studies Innovation Blog News Events Give Login Apply Give Login Apply Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global"
+    },
+    {
+      "id": "check-page-2d1e375861",
+      "url": "https://masschallenge.org/our-accelerators/",
+      "page": "details",
+      "excerpt": "Startup Accelerator Programs | MassChallenge MassChallenge Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems Accelerators Close Accelerators Open Accelerators OUR ACCELERATORS Traction Challenge Breakthrough Bio OUR ACCELERATORS Traction Challenge Breakthrough Bio Corporate Partners About Close About Open About ABOUT US Regions Team Careers Ways to Support ABOUT US Regions Team Careers Ways to Support Insights Close Insights Open Insights Case Studies Innovation Blog News Events Case Studies Innovation Blog News Events Give Login Apply Give Login Apply Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems"
+    },
+    {
+      "id": "check-page-95fc0de79a",
+      "url": "https://masschallenge.org/programs-all",
+      "page": "details",
+      "excerpt": "All Programs - MassChallenge MassChallenge Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems Accelerators Close Accelerators Open Accelerators OUR ACCELERATORS Traction Challenge Breakthrough Bio OUR ACCELERATORS Traction Challenge Breakthrough Bio Corporate Partners About Close About Open About ABOUT US Regions Team Careers Ways to Support ABOUT US Regions Team Careers Ways to Support Insights Close Insights Open Insights Case Studies Innovation Blog News Events Case Studies Innovation Blog News Events Give Login Apply Give Login Apply Network Close Network Open Network OUR NETWORK Founders Experts Collaborators OUR NETWORK Founders Experts Collaborators Challenge Areas Close Challenge Areas Open Challenge Areas OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems OUR CHALLENGE AREAS Healthcare and Life Sciences Security and Resiliency Sustainable Food Systems Climate Global Financial Systems Accelerators Close"
     }
   ],
   "findings": {
@@ -159,6 +1356,18 @@
       {
         "value": "contact@masschallenge.org",
         "evidenceId": "check-email-71a257afef"
+      },
+      {
+        "value": "programs@masschallenge.org",
+        "evidenceId": "check-email-f194339a03"
+      },
+      {
+        "value": "partnerships@masschallenge.org",
+        "evidenceId": "check-email-be2f4be27a"
+      },
+      {
+        "value": "community@masschallenge.org",
+        "evidenceId": "check-email-b3ca36e780"
       }
     ],
     "phones": [],
@@ -201,9 +1410,107 @@
       }
     ],
     "operatingStatus": [],
-    "deadlines": [],
+    "deadlines": [
+      {
+        "value": "2026-11-16",
+        "evidenceId": "check-deadline-45a20fec5e"
+      },
+      {
+        "value": "2026-11-19",
+        "evidenceId": "check-deadline-d93c979bc4"
+      },
+      {
+        "value": "2027-02-02",
+        "evidenceId": "check-deadline-798932d0de"
+      }
+    ],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "November",
+        "evidenceId": "check-announced-140b8e2eda"
+      },
+      {
+        "value": "NOV",
+        "evidenceId": "check-announced-98517f8036"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "4 months",
+        "evidenceId": "check-duration-fd5f6619a3"
+      },
+      {
+        "value": "16",
+        "evidenceId": "check-duration-628fec513a"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-285ebbf7cc"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-b6d578bf66"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-0665255a38"
+      }
+    ],
+    "location": [
+      {
+        "value": "Europe",
+        "evidenceId": "check-location-80ddbe033d"
+      },
+      {
+        "value": "Boston",
+        "evidenceId": "check-location-25bfc8f684"
+      }
+    ],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "Station, run with the ISS National Lab and Boeing, offered up to $500K in non-dilutive funding annually and over $1M of in-kind value per",
+        "evidenceId": "check-deal-586b889d78"
+      },
+      {
+        "value": "offered up to $500K in non-dilutive funding annually and over $1M of in-kind value per project. MORE INFO MATERNAL-CHILD HEALTH EQUITY",
+        "evidenceId": "check-deal-e404f38bfa"
+      },
+      {
+        "value": "offered up to $500K in non-dilutive funding annually and over $1M of in-kind value per project. More Info MATERNAL-CHILD HEALTH EQUITY",
+        "evidenceId": "check-deal-61b0f35ea6"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "500000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-586b889d78"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "1000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-e404f38bfa"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://masschallenge.org/startups",
@@ -213,7 +1520,7 @@
     "name": [
       {
         "value": "MassChallenge",
-        "evidenceId": "check-name-21ec86ad28"
+        "evidenceId": "check-name-3df1230942"
       }
     ],
     "examplePages": []

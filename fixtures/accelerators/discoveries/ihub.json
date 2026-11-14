@@ -1,11 +1,115 @@
 {
   "programId": "ihub",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "http://wib.ihub.co.ke/apply/",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
     {
       "url": "https://ihub.co.ke/about-us/",
       "page": "details",
       "anchor": "About Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ihub.co.ke/around-investment-2024-in-review-outlook-on-2025-and-beyond/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ihub.co.ke/blog-news-and-updates/",
+      "page": "batches",
+      "anchor": "Blog, News and Updates",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ihub.co.ke/blogs/34339/ihub-women-in-business-programme-call-for-applications-open",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://ihub.co.ke/https-ihub-co-ke-announcement-cohort-2-ihub-kenya-2024-mastercard-foundation-edtech-fellowship/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ihub.co.ke/https-ihub-co-ke-apply-for-campbuni-4th-edition-a-young-adults-design-camp/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ihub.co.ke/https-ihub-co-ke-cchub-ihub-unveils-the-15-startups-in-women-in-business-cohort-2/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ihub.co.ke/https-ihub-co-ke-ihub-women-in-business-programme-call-for-applications-open/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ihub.co.ke/https-ihub-co-ke-meet-the-ihubs-women-in-business-cohort-1/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ihub.co.ke/https-ihub-co-ke-pivot-east-call-for-application-for-startups-opened/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ihub.co.ke/https-ihub-co-ke-safaricom-m-pesa-africa-and-sumitomo-corporation-launch-spark-accelerator-program-call-for-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ihub.co.ke/https-ihub-co-ke-women-in-business-cohort-2/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ihub.co.ke/investment-q1-2025-review-q2-outlook/",
+      "page": "terms",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -19,9 +123,25 @@
       "origin": "official"
     },
     {
-      "url": "https://ihub.co.ke/blog-news-and-updates/",
-      "page": "batches",
-      "anchor": "Blog, News and Updates",
+      "url": "https://ihub.co.ke/report/around-investment-h12025-in-review-outlook-on-h2-2025/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ihub.co.ke/report/investment-q1-2025-review-q2-outlook/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ihub.co.ke/wp-content/uploads/2025/06/Investment-Q1-2025-Review-Q2-Outlook-.pdf",
+      "page": "terms",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

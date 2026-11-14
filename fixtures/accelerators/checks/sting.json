@@ -1,223 +1,955 @@
 {
   "programId": "sting",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.sting.co/",
-    "https://www.sting.co/sting-core",
+    "https://propelcapital.sting.co",
+    "https://www.sting.co/apply",
+    "https://www.sting.co/newsroom/press/applications-are-now-open-for-the-cassini-business-accelerator-a-program-supporting-founders-in-the-european-space-tech-ecosystem",
     "https://www.sting.co/science-to-business",
     "https://www.sting.co/faq",
-    "https://www.sting.co/newsroom/news/meet-the-21-startups-joining-sting-this-autumn"
+    "https://www.sting.co/faqs/are-there-other-benefits-to-having-propel-capital-as-a-financier-in-addition-to-the-investment-itself",
+    "https://www.sting.co/faqs/can-i-apply-as-a-solo-founder",
+    "https://www.sting.co/faqs/can-i-apply-if-ive-already-raised-funding",
+    "https://www.sting.co/faqs/can-i-work-or-intern-at-sting",
+    "https://www.sting.co/faqs/do-i-get-access-to-an-office-or-workspace",
+    "https://www.sting.co/faqs/do-i-need-to-be-based-in-stockholm",
+    "https://www.sting.co/faqs/do-i-pay-for-stings-services",
+    "https://www.sting.co/faqs/do-we-need-to-have-our-tech-inhouse",
+    "https://www.sting.co/faqs/do-you-provide-access-to-experts-in-legal-ip-recruitment-etc"
   ],
   "evidence": [
     {
+      "id": "check-announced-d9db54fb5e",
+      "url": "https://www.sting.co/apply",
+      "title": "STING — application page",
+      "excerpt": "22, 2026. Change header image: Tell us what you're building. Applications close November 22. We read every one. Scroll through the whole form before you",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-0ae19aadd8",
+      "url": "https://propelcapital.sting.co",
+      "title": "STING — application page",
+      "excerpt": "and selected angels screen your company within 2 weeks. We focus on the founders, the problem, the",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-22c18c3d4c",
+      "url": "https://www.sting.co/faqs/are-there-other-benefits-to-having-propel-capital-as-a-financier-in-addition-to-the-investment-itself",
+      "title": "STING — terms page",
+      "excerpt": "agreement, the process typically takes 4–6 weeks. Read more chevron_right How is Turbine Capital",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-24670ca62d",
+      "url": "https://www.sting.co/science-to-business",
+      "title": "STING — application page",
+      "excerpt": "extensive business development support for up to 18 months. New Financing Offers : Up to 100,000 SEK for",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-3c2753e1f3",
+      "url": "https://propelcapital.sting.co",
+      "title": "STING — application page",
+      "excerpt": "and you have the cash in your account within 2 weeks. We plug you into the full Sting ecosystem of",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-6d65e1ecc1",
+      "url": "https://www.sting.co/faq",
+      "title": "STING — terms page",
+      "excerpt": "agreement, the process typically takes 4–6 weeks. Read more chevron_right Funding & Propel",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-77b669f9b2",
+      "url": "https://propelcapital.sting.co",
+      "title": "STING — application page",
+      "excerpt": "table and any investments or grants so far; 12-18 months roadmap and how you will use the Propel",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-7a9f8857c0",
+      "url": "https://propelcapital.sting.co",
+      "title": "STING — application page",
+      "excerpt": "we invest From first email to first cheque in 4–6 weeks. We respect your time. Our process is",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-98d76619e6",
+      "url": "https://www.sting.co/newsroom/press/applications-are-now-open-for-the-cassini-business-accelerator-a-program-supporting-founders-in-the-european-space-tech-ecosystem",
+      "title": "STING — application page",
+      "excerpt": "the CASSINI Business Accelerator (CBA) a 6-months program to support startups within the space",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-b955f73275",
+      "url": "https://www.sting.co/faqs/do-i-pay-for-stings-services",
+      "title": "STING — terms page",
+      "excerpt": "runs for up to 18 months, structured in three 6-month periods, with 2% equity per period. These",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-cc856ba35d",
+      "url": "https://propelcapital.sting.co",
+      "title": "STING — application page",
+      "excerpt": "to signed investment agreement, typically 4–6 weeks. We give you a clear yes or no — never a slow",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-d7a0cedafb",
+      "url": "https://www.sting.co/science-to-business",
+      "title": "STING — application page",
+      "excerpt": "research into a successful startup. Get up to 18 months of expert business support, funding for patents",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-e865f712fd",
+      "url": "https://www.sting.co/faqs/do-i-pay-for-stings-services",
+      "title": "STING — terms page",
+      "excerpt": "‍ Here’s how it works: Sting Core runs for up to 18 months, structured in three 6-month periods, with 2%",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-68f8f4d410",
+      "url": "https://www.sting.co/apply",
+      "title": "STING — application page",
+      "excerpt": "go out ahead of kick-off on February 15. Questions: hello@sting.co, or talk to one of our coaches. Trusted by 500+ thriving",
+      "page": "application"
+    },
+    {
       "id": "check-email-e744de8397",
       "url": "https://www.sting.co/faq",
-      "title": "STING — terms page checked by scrape.py",
+      "title": "STING — terms page",
       "excerpt": "in touch with Sting? Visit sting.co/contact or email us at hello@sting.co. You can also connect with individual team members via",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-fe8ab86abf",
+      "url": "https://www.sting.co/faqs/can-i-work-or-intern-at-sting",
+      "title": "STING — terms page",
+      "excerpt": "in touch with Sting? Visit sting.co/contact or email us at hello@sting.co. You can also connect with individual team members via",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-05f1c55bed",
+      "url": "https://www.sting.co/faqs/do-i-get-access-to-an-office-or-workspace",
+      "title": "STING — terms page",
+      "excerpt": "happenings in the Stockholm startup ecosystem. Join our in-person and online events. About About Sting is a community of",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-0f335754c7",
+      "url": "https://www.sting.co/faqs/are-there-other-benefits-to-having-propel-capital-as-a-financier-in-addition-to-the-investment-itself",
+      "title": "STING — terms page",
+      "excerpt": "happenings in the Stockholm startup ecosystem. Join our in-person and online events. About About Sting is a community of",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-106ce4b116",
+      "url": "https://www.sting.co/faqs/can-i-apply-as-a-solo-founder",
+      "title": "STING — terms page",
+      "excerpt": "happenings in the Stockholm startup ecosystem. Join our in-person and online events. About About Sting is a community of",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-20e1c56261",
+      "url": "https://www.sting.co/faqs/do-we-need-to-have-our-tech-inhouse",
+      "title": "STING — terms page",
+      "excerpt": "happenings in the Stockholm startup ecosystem. Join our in-person and online events. About About Sting is a community of",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-39c70f1f69",
+      "url": "https://www.sting.co/faq",
+      "title": "STING — terms page",
+      "excerpt": "happenings in the Stockholm startup ecosystem. Join our in-person and online events. About About Sting is a community of",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-653ec8e9c5",
+      "url": "https://www.sting.co/apply",
+      "title": "STING — application page",
+      "excerpt": "happenings in the Stockholm startup ecosystem. Join our in-person and online events. About About Sting is a community of",
+      "page": "application"
+    },
+    {
+      "id": "check-format-6de8cd55ce",
+      "url": "https://www.sting.co/science-to-business",
+      "title": "STING — application page",
+      "excerpt": "happenings in the Stockholm startup ecosystem. Join our in-person and online events. About About Sting is a community of",
+      "page": "application"
+    },
+    {
+      "id": "check-format-82631ad4d3",
+      "url": "https://www.sting.co/newsroom/press/applications-are-now-open-for-the-cassini-business-accelerator-a-program-supporting-founders-in-the-european-space-tech-ecosystem",
+      "title": "STING — application page",
+      "excerpt": "happenings in the Stockholm startup ecosystem. Join our in-person and online events. About About Sting is a community of",
+      "page": "application"
+    },
+    {
+      "id": "check-format-856854c2c1",
+      "url": "https://www.sting.co/faqs/do-you-provide-access-to-experts-in-legal-ip-recruitment-etc",
+      "title": "STING — terms page",
+      "excerpt": "happenings in the Stockholm startup ecosystem. Join our in-person and online events. About About Sting is a community of",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-96bcb23ba7",
+      "url": "https://www.sting.co/faqs/do-i-pay-for-stings-services",
+      "title": "STING — terms page",
+      "excerpt": "happenings in the Stockholm startup ecosystem. Join our in-person and online events. About About Sting is a community of",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-a59e0b7faa",
+      "url": "https://www.sting.co/faqs/do-i-need-to-be-based-in-stockholm",
+      "title": "STING — terms page",
+      "excerpt": "happenings in the Stockholm startup ecosystem. Join our in-person and online events. About About Sting is a community of",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-b85784d51d",
+      "url": "https://www.sting.co/faqs/can-i-work-or-intern-at-sting",
+      "title": "STING — terms page",
+      "excerpt": "happenings in the Stockholm startup ecosystem. Join our in-person and online events. About About Sting is a community of",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-ba2cfd7fc5",
+      "url": "https://www.sting.co/faqs/can-i-apply-if-ive-already-raised-funding",
+      "title": "STING — terms page",
+      "excerpt": "happenings in the Stockholm startup ecosystem. Join our in-person and online events. About About Sting is a community of",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-dbf1375e36",
+      "url": "https://www.sting.co/faq",
+      "title": "STING — terms page",
+      "excerpt": "Network Where can I find upcoming events? Sting hosts both in-person and online events for founders, investors and the wider",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-e566cbc6c0",
+      "url": "https://www.sting.co/",
+      "title": "STING — homepage",
+      "excerpt": "happenings in the Stockholm startup ecosystem. Join our in-person and online events. About About Sting is a community of",
+      "page": "details"
+    },
+    {
+      "id": "check-format-ecff5548d3",
+      "url": "https://www.sting.co/faqs/can-i-work-or-intern-at-sting",
+      "title": "STING — terms page",
+      "excerpt": "Where can I find upcoming events? Sting hosts both in-person and online events for founders, investors and the wider",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-06c0586e35",
+      "url": "https://www.sting.co/faq",
+      "title": "STING — terms page",
+      "excerpt": "leading startup accelerator/incubator, based in Stockholm. We help early-stage tech (Climate,",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-0dbbf215bc",
+      "url": "https://www.sting.co/faqs/can-i-apply-if-ive-already-raised-funding",
+      "title": "STING — terms page",
+      "excerpt": "from this category Do I need to be based in Stockholm? We welcome startups from across",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-757aee0a7c",
+      "url": "https://www.sting.co/faqs/can-i-apply-as-a-solo-founder",
+      "title": "STING — terms page",
+      "excerpt": "more chevron_right Do I need to be based in Stockholm? We welcome startups from across",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-c7b35e29c0",
+      "url": "https://www.sting.co/faqs/do-i-need-to-be-based-in-stockholm",
+      "title": "STING — terms page",
+      "excerpt": "Sting FAQ | Do I need to be based in Stockholm? Programs Sting Programs Sting Core",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-d332ca1345",
+      "url": "https://propelcapital.sting.co",
+      "title": "STING — application page",
+      "excerpt": "team and ecosystem. You need to be headquartered in Sweden to be able to receive a Propel",
+      "page": "application"
+    },
+    {
+      "id": "check-location-e76cb35cf0",
+      "url": "https://www.sting.co/faqs/do-i-pay-for-stings-services",
+      "title": "STING — terms page",
+      "excerpt": "leading startup accelerator/incubator, based in Stockholm. We help early-stage tech (Climate,",
       "page": "terms"
     },
     {
       "id": "check-name-d6a9a5ee18",
       "url": "https://www.sting.co/",
-      "title": "STING — homepage checked by scrape.py",
+      "title": "STING — homepage",
       "excerpt": "Sting | Sweden’s Leading Startup Accelerator No items found.",
       "page": "details"
     },
     {
-      "id": "check-portfolio-0892d31e4c",
-      "url": "https://www.sting.co/newsroom/news/meet-the-21-startups-joining-sting-this-autumn",
-      "title": "STING — batches page checked by scrape.py",
-      "excerpt": "All Companies → https://www.sting.co/companies",
-      "page": "batches"
+      "id": "check-portfolio-16078821df",
+      "url": "https://propelcapital.sting.co",
+      "title": "STING — application page",
+      "excerpt": "Explore the full Sting portfolio → → https://www.sting.co/companies",
+      "page": "application"
     },
     {
       "id": "check-portfolio-20753624f3",
       "url": "https://www.sting.co/",
-      "title": "STING — homepage checked by scrape.py",
+      "title": "STING — homepage",
       "excerpt": "Companies → https://www.sting.co/companies",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-26d9317823",
+      "url": "https://www.sting.co/faqs/can-i-apply-if-ive-already-raised-funding",
+      "title": "STING — terms page",
+      "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-2fdf6da342",
       "url": "https://www.sting.co/science-to-business",
-      "title": "STING — application page checked by scrape.py",
+      "title": "STING — application page",
       "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
       "page": "application"
+    },
+    {
+      "id": "check-portfolio-3dd604599b",
+      "url": "https://www.sting.co/faqs/can-i-work-or-intern-at-sting",
+      "title": "STING — terms page",
+      "excerpt": "Companies → https://www.sting.co/companies",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-443a4c60a4",
       "url": "https://www.sting.co/",
-      "title": "STING — homepage checked by scrape.py",
+      "title": "STING — homepage",
       "excerpt": "All Companies → https://www.sting.co/companies",
       "page": "details"
     },
     {
-      "id": "check-portfolio-4ffd8df0fe",
-      "url": "https://www.sting.co/sting-core",
-      "title": "STING — details page checked by scrape.py",
-      "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-5e7141bcc5",
-      "url": "https://www.sting.co/",
-      "title": "STING — homepage checked by scrape.py",
-      "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-62c335aa13",
-      "url": "https://www.sting.co/science-to-business",
-      "title": "STING — application page checked by scrape.py",
-      "excerpt": "All Companies → https://www.sting.co/companies",
-      "page": "application"
-    },
-    {
-      "id": "check-portfolio-76c0dd8d96",
-      "url": "https://www.sting.co/science-to-business",
-      "title": "STING — application page checked by scrape.py",
-      "excerpt": "Companies → https://www.sting.co/companies",
-      "page": "application"
-    },
-    {
-      "id": "check-portfolio-980c8a9958",
-      "url": "https://www.sting.co/faq",
-      "title": "STING — terms page checked by scrape.py",
+      "id": "check-portfolio-45f416e581",
+      "url": "https://www.sting.co/faqs/do-i-pay-for-stings-services",
+      "title": "STING — terms page",
       "excerpt": "All Companies → https://www.sting.co/companies",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-a6ca14c131",
-      "url": "https://www.sting.co/sting-core",
-      "title": "STING — details page checked by scrape.py",
+      "id": "check-portfolio-4b579bb7a0",
+      "url": "https://www.sting.co/apply",
+      "title": "STING — application page",
       "excerpt": "Explore portfolio chevron_right → https://www.sting.co/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-4cd90be672",
+      "url": "https://www.sting.co/faqs/can-i-work-or-intern-at-sting",
+      "title": "STING — terms page",
+      "excerpt": "All Companies → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5a2ceaeea0",
+      "url": "https://www.sting.co/faqs/can-i-apply-as-a-solo-founder",
+      "title": "STING — terms page",
+      "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5c265e64fd",
+      "url": "https://www.sting.co/newsroom/press/applications-are-now-open-for-the-cassini-business-accelerator-a-program-supporting-founders-in-the-european-space-tech-ecosystem",
+      "title": "STING — application page",
+      "excerpt": "Companies → https://www.sting.co/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5e7141bcc5",
+      "url": "https://www.sting.co/",
+      "title": "STING — homepage",
+      "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-5f7e420f07",
+      "url": "https://www.sting.co/faqs/do-i-get-access-to-an-office-or-workspace",
+      "title": "STING — terms page",
+      "excerpt": "All Companies → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-60b5a8532f",
+      "url": "https://www.sting.co/newsroom/press/applications-are-now-open-for-the-cassini-business-accelerator-a-program-supporting-founders-in-the-european-space-tech-ecosystem",
+      "title": "STING — application page",
+      "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-62c335aa13",
+      "url": "https://www.sting.co/science-to-business",
+      "title": "STING — application page",
+      "excerpt": "All Companies → https://www.sting.co/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-64021e1a32",
+      "url": "https://www.sting.co/apply",
+      "title": "STING — application page",
+      "excerpt": "All Companies → https://www.sting.co/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-651cc72baf",
+      "url": "https://www.sting.co/faqs/can-i-apply-as-a-solo-founder",
+      "title": "STING — terms page",
+      "excerpt": "Companies → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-67a25099b6",
+      "url": "https://www.sting.co/faqs/do-you-provide-access-to-experts-in-legal-ip-recruitment-etc",
+      "title": "STING — terms page",
+      "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-76c0dd8d96",
+      "url": "https://www.sting.co/science-to-business",
+      "title": "STING — application page",
+      "excerpt": "Companies → https://www.sting.co/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-76f87252dd",
+      "url": "https://www.sting.co/faqs/do-i-need-to-be-based-in-stockholm",
+      "title": "STING — terms page",
+      "excerpt": "Companies → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7a92b4d1c8",
+      "url": "https://www.sting.co/newsroom/press/applications-are-now-open-for-the-cassini-business-accelerator-a-program-supporting-founders-in-the-european-space-tech-ecosystem",
+      "title": "STING — application page",
+      "excerpt": "All Companies → https://www.sting.co/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-8295d19101",
+      "url": "https://www.sting.co/faqs/do-i-get-access-to-an-office-or-workspace",
+      "title": "STING — terms page",
+      "excerpt": "Companies → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8a8f713c8a",
+      "url": "https://www.sting.co/faqs/can-i-apply-as-a-solo-founder",
+      "title": "STING — terms page",
+      "excerpt": "All Companies → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8bd70528e2",
+      "url": "https://www.sting.co/faqs/do-i-need-to-be-based-in-stockholm",
+      "title": "STING — terms page",
+      "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8d54d83a4e",
+      "url": "https://www.sting.co/apply",
+      "title": "STING — application page",
+      "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-8d6d01c962",
+      "url": "https://www.sting.co/apply",
+      "title": "STING — application page",
+      "excerpt": "Companies → https://www.sting.co/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-8ec839f9d8",
+      "url": "https://www.sting.co/faqs/are-there-other-benefits-to-having-propel-capital-as-a-financier-in-addition-to-the-investment-itself",
+      "title": "STING — terms page",
+      "excerpt": "All Companies → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-91df5c27cb",
+      "url": "https://www.sting.co/faqs/can-i-apply-if-ive-already-raised-funding",
+      "title": "STING — terms page",
+      "excerpt": "All Companies → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-97e90b0a95",
+      "url": "https://www.sting.co/faqs/can-i-apply-if-ive-already-raised-funding",
+      "title": "STING — terms page",
+      "excerpt": "Companies → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-980c8a9958",
+      "url": "https://www.sting.co/faq",
+      "title": "STING — terms page",
+      "excerpt": "All Companies → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a10d8e529e",
+      "url": "https://www.sting.co/faqs/can-i-work-or-intern-at-sting",
+      "title": "STING — terms page",
+      "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a57250e758",
+      "url": "https://www.sting.co/faqs/do-you-provide-access-to-experts-in-legal-ip-recruitment-etc",
+      "title": "STING — terms page",
+      "excerpt": "All Companies → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a6816e3218",
+      "url": "https://www.sting.co/faqs/do-we-need-to-have-our-tech-inhouse",
+      "title": "STING — terms page",
+      "excerpt": "Companies → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ae310d4d63",
+      "url": "https://www.sting.co/faqs/do-i-need-to-be-based-in-stockholm",
+      "title": "STING — terms page",
+      "excerpt": "All Companies → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b2e3f5e850",
+      "url": "https://www.sting.co/faqs/are-there-other-benefits-to-having-propel-capital-as-a-financier-in-addition-to-the-investment-itself",
+      "title": "STING — terms page",
+      "excerpt": "Companies → https://www.sting.co/companies",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-b8afbdce35",
       "url": "https://www.sting.co/",
-      "title": "STING — homepage checked by scrape.py",
+      "title": "STING — homepage",
       "excerpt": "Explore portfolio chevron_right → https://www.sting.co/companies",
       "page": "details"
     },
     {
-      "id": "check-portfolio-c3dff8341c",
-      "url": "https://www.sting.co/newsroom/news/meet-the-21-startups-joining-sting-this-autumn",
-      "title": "STING — batches page checked by scrape.py",
+      "id": "check-portfolio-d1167cd29a",
+      "url": "https://www.sting.co/faqs/do-we-need-to-have-our-tech-inhouse",
+      "title": "STING — terms page",
       "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
-      "page": "batches"
+      "page": "terms"
     },
     {
-      "id": "check-portfolio-c5b565b5d8",
-      "url": "https://www.sting.co/sting-core",
-      "title": "STING — details page checked by scrape.py",
+      "id": "check-portfolio-daf5b107f9",
+      "url": "https://www.sting.co/faqs/do-i-pay-for-stings-services",
+      "title": "STING — terms page",
       "excerpt": "Companies → https://www.sting.co/companies",
-      "page": "details"
-    },
-    {
-      "id": "check-portfolio-d4be143029",
-      "url": "https://www.sting.co/sting-core",
-      "title": "STING — details page checked by scrape.py",
-      "excerpt": "All Companies → https://www.sting.co/companies",
-      "page": "details"
+      "page": "terms"
     },
     {
       "id": "check-portfolio-df1eb19ff1",
       "url": "https://www.sting.co/faq",
-      "title": "STING — terms page checked by scrape.py",
+      "title": "STING — terms page",
       "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-df575de6d5",
+      "url": "https://www.sting.co/faqs/do-you-provide-access-to-experts-in-legal-ip-recruitment-etc",
+      "title": "STING — terms page",
+      "excerpt": "Companies → https://www.sting.co/companies",
       "page": "terms"
     },
     {
       "id": "check-portfolio-e79762b089",
       "url": "https://www.sting.co/science-to-business",
-      "title": "STING — application page checked by scrape.py",
+      "title": "STING — application page",
       "excerpt": "View all DeepTech companies chevron_right → https://www.sting.co/companies",
       "page": "application"
     },
     {
+      "id": "check-portfolio-f1d18de65e",
+      "url": "https://www.sting.co/faqs/are-there-other-benefits-to-having-propel-capital-as-a-financier-in-addition-to-the-investment-itself",
+      "title": "STING — terms page",
+      "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f40a24d9ba",
+      "url": "https://www.sting.co/faqs/do-i-get-access-to-an-office-or-workspace",
+      "title": "STING — terms page",
+      "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-f74e29c74a",
       "url": "https://www.sting.co/faq",
-      "title": "STING — terms page checked by scrape.py",
+      "title": "STING — terms page",
       "excerpt": "Companies → https://www.sting.co/companies",
       "page": "terms"
     },
     {
-      "id": "check-portfolio-fdb9b97cdf",
-      "url": "https://www.sting.co/newsroom/news/meet-the-21-startups-joining-sting-this-autumn",
-      "title": "STING — batches page checked by scrape.py",
-      "excerpt": "Companies → https://www.sting.co/companies",
-      "page": "batches"
+      "id": "check-portfolio-f9e4207b76",
+      "url": "https://www.sting.co/faqs/do-we-need-to-have-our-tech-inhouse",
+      "title": "STING — terms page",
+      "excerpt": "All Companies → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ffea62d79a",
+      "url": "https://www.sting.co/faqs/do-i-pay-for-stings-services",
+      "title": "STING — terms page",
+      "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-11387319ac",
+      "url": "https://www.sting.co/faqs/can-i-work-or-intern-at-sting",
+      "title": "STING — terms page",
+      "excerpt": "Apply to Propel Lorem ipsum → https://propelcapital.sting.co",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-125cf81851",
+      "url": "https://www.sting.co/faqs/do-i-need-to-be-based-in-stockholm",
+      "title": "STING — terms page",
+      "excerpt": "Apply to Propel Lorem ipsum → https://propelcapital.sting.co",
+      "page": "terms"
     },
     {
       "id": "check-route-2fba29ecc8",
       "url": "https://www.sting.co/",
-      "title": "STING — homepage checked by scrape.py",
+      "title": "STING — homepage",
       "excerpt": "Apply to Sting → https://www.sting.co/programs",
+      "page": "details"
+    },
+    {
+      "id": "check-route-326d243b8e",
+      "url": "https://www.sting.co/faqs/do-you-provide-access-to-experts-in-legal-ip-recruitment-etc",
+      "title": "STING — terms page",
+      "excerpt": "Science to Business Through our \"Science to Business\" initiative, we provide exclusive support to turn groundbreaking concepts into startups. Get funding for patent applications and key hires, connect with co-founders, and qualify for up to 500,000 SEK from Propel Capital. → https://www.sting.co/science-to-business",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-3985a128af",
+      "url": "https://www.sting.co/faqs/can-i-apply-as-a-solo-founder",
+      "title": "STING — terms page",
+      "excerpt": "Apply to Propel Lorem ipsum → https://propelcapital.sting.co",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-3fed1f6480",
+      "url": "https://www.sting.co/faq",
+      "title": "STING — terms page",
+      "excerpt": "Apply to Propel Lorem ipsum → https://propelcapital.sting.co",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-45055b153a",
+      "url": "https://www.sting.co/",
+      "title": "STING — homepage",
+      "excerpt": "Apply to Sting → https://app.sting.co/auth/signup",
+      "page": "details"
+    },
+    {
+      "id": "check-route-47c2e01344",
+      "url": "https://www.sting.co/",
+      "title": "STING — homepage",
+      "excerpt": "Apply to Propel Lorem ipsum → https://propelcapital.sting.co",
       "page": "details"
     },
     {
       "id": "check-route-4ed78cc3fd",
       "url": "https://www.sting.co/",
-      "title": "STING — homepage checked by scrape.py",
+      "title": "STING — homepage",
       "excerpt": "https://www.sting.co/",
       "page": "details"
     },
     {
-      "id": "check-route-50a718cf7c",
-      "url": "https://www.sting.co/newsroom/news/meet-the-21-startups-joining-sting-this-autumn",
-      "title": "STING — batches page checked by scrape.py",
+      "id": "check-route-5f567b8cda",
+      "url": "https://www.sting.co/faqs/can-i-apply-if-ive-already-raised-funding",
+      "title": "STING — terms page",
+      "excerpt": "Apply to Propel Lorem ipsum → https://propelcapital.sting.co",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-6d3c61b07d",
+      "url": "https://www.sting.co/faqs/do-i-need-to-be-based-in-stockholm",
+      "title": "STING — terms page",
       "excerpt": "Science to Business Through our \"Science to Business\" initiative, we provide exclusive support to turn groundbreaking concepts into startups. Get funding for patent applications and key hires, connect with co-founders, and qualify for up to 500,000 SEK from Propel Capital. → https://www.sting.co/science-to-business",
-      "page": "batches"
+      "page": "terms"
+    },
+    {
+      "id": "check-route-70af26d8d9",
+      "url": "https://www.sting.co/newsroom/press/applications-are-now-open-for-the-cassini-business-accelerator-a-program-supporting-founders-in-the-european-space-tech-ecosystem",
+      "title": "STING — application page",
+      "excerpt": "Apply to Propel Lorem ipsum → https://propelcapital.sting.co",
+      "page": "application"
+    },
+    {
+      "id": "check-route-780d5a10a8",
+      "url": "https://www.sting.co/faqs/do-i-get-access-to-an-office-or-workspace",
+      "title": "STING — terms page",
+      "excerpt": "Science to Business Through our \"Science to Business\" initiative, we provide exclusive support to turn groundbreaking concepts into startups. Get funding for patent applications and key hires, connect with co-founders, and qualify for up to 500,000 SEK from Propel Capital. → https://www.sting.co/science-to-business",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-83748fc6fe",
+      "url": "https://www.sting.co/faqs/are-there-other-benefits-to-having-propel-capital-as-a-financier-in-addition-to-the-investment-itself",
+      "title": "STING — terms page",
+      "excerpt": "Science to Business Through our \"Science to Business\" initiative, we provide exclusive support to turn groundbreaking concepts into startups. Get funding for patent applications and key hires, connect with co-founders, and qualify for up to 500,000 SEK from Propel Capital. → https://www.sting.co/science-to-business",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-98f88cf410",
+      "url": "https://www.sting.co/faqs/can-i-apply-as-a-solo-founder",
+      "title": "STING — terms page",
+      "excerpt": "Science to Business Through our \"Science to Business\" initiative, we provide exclusive support to turn groundbreaking concepts into startups. Get funding for patent applications and key hires, connect with co-founders, and qualify for up to 500,000 SEK from Propel Capital. → https://www.sting.co/science-to-business",
+      "page": "terms"
     },
     {
       "id": "check-route-9cfbbed1e9",
       "url": "https://www.sting.co/",
-      "title": "STING — homepage checked by scrape.py",
+      "title": "STING — homepage",
       "excerpt": "Science to Business Through our \"Science to Business\" initiative, we provide exclusive support to turn groundbreaking concepts into startups. Get funding for patent applications and key hires, connect with co-founders, and qualify for up to 500,000 SEK from Propel Capital. → https://www.sting.co/science-to-business",
       "page": "details"
+    },
+    {
+      "id": "check-route-a2544c8828",
+      "url": "https://www.sting.co/apply",
+      "title": "STING — application page",
+      "excerpt": "Apply to Propel Lorem ipsum → https://propelcapital.sting.co",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a2749a8f1e",
+      "url": "https://www.sting.co/faqs/can-i-apply-if-ive-already-raised-funding",
+      "title": "STING — terms page",
+      "excerpt": "Science to Business Through our \"Science to Business\" initiative, we provide exclusive support to turn groundbreaking concepts into startups. Get funding for patent applications and key hires, connect with co-founders, and qualify for up to 500,000 SEK from Propel Capital. → https://www.sting.co/science-to-business",
+      "page": "terms"
     },
     {
       "id": "check-route-a61d34b226",
       "url": "https://www.sting.co/science-to-business",
-      "title": "STING — application page checked by scrape.py",
+      "title": "STING — application page",
       "excerpt": "Apply to the Sting Core Program → https://www.sting.co/sting-core",
       "page": "application"
     },
     {
+      "id": "check-route-ab739c91be",
+      "url": "https://www.sting.co/apply",
+      "title": "STING — application page",
+      "excerpt": "Science to Business Through our \"Science to Business\" initiative, we provide exclusive support to turn groundbreaking concepts into startups. Get funding for patent applications and key hires, connect with co-founders, and qualify for up to 500,000 SEK from Propel Capital. → https://www.sting.co/science-to-business",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b3a9527814",
+      "url": "https://www.sting.co/newsroom/press/applications-are-now-open-for-the-cassini-business-accelerator-a-program-supporting-founders-in-the-european-space-tech-ecosystem",
+      "title": "STING — application page",
+      "excerpt": "Science to Business Through our \"Science to Business\" initiative, we provide exclusive support to turn groundbreaking concepts into startups. Get funding for patent applications and key hires, connect with co-founders, and qualify for up to 500,000 SEK from Propel Capital. → https://www.sting.co/science-to-business",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b5af50316d",
+      "url": "https://www.sting.co/faqs/do-i-pay-for-stings-services",
+      "title": "STING — terms page",
+      "excerpt": "Apply to Propel Lorem ipsum → https://propelcapital.sting.co",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b992253fde",
+      "url": "https://www.sting.co/faqs/do-i-get-access-to-an-office-or-workspace",
+      "title": "STING — terms page",
+      "excerpt": "Apply to Propel Lorem ipsum → https://propelcapital.sting.co",
+      "page": "terms"
+    },
+    {
       "id": "check-route-b9f8280059",
       "url": "https://www.sting.co/",
-      "title": "STING — homepage checked by scrape.py",
+      "title": "STING — homepage",
       "excerpt": "Apply now! → https://www.sting.co/sting-core",
       "page": "details"
     },
     {
+      "id": "check-route-c5b1ba1e16",
+      "url": "https://www.sting.co/faqs/are-there-other-benefits-to-having-propel-capital-as-a-financier-in-addition-to-the-investment-itself",
+      "title": "STING — terms page",
+      "excerpt": "Apply to Propel Lorem ipsum → https://propelcapital.sting.co",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-d95819b22a",
+      "url": "https://www.sting.co/faqs/do-you-provide-access-to-experts-in-legal-ip-recruitment-etc",
+      "title": "STING — terms page",
+      "excerpt": "Apply to Propel Lorem ipsum → https://propelcapital.sting.co",
+      "page": "terms"
+    },
+    {
       "id": "check-route-e9724a348e",
       "url": "https://www.sting.co/faq",
-      "title": "STING — terms page checked by scrape.py",
+      "title": "STING — terms page",
       "excerpt": "Science to Business Through our \"Science to Business\" initiative, we provide exclusive support to turn groundbreaking concepts into startups. Get funding for patent applications and key hires, connect with co-founders, and qualify for up to 500,000 SEK from Propel Capital. → https://www.sting.co/science-to-business",
       "page": "terms"
     },
     {
-      "id": "check-route-fcba70480b",
-      "url": "https://www.sting.co/sting-core",
-      "title": "STING — details page checked by scrape.py",
+      "id": "check-route-f03809874d",
+      "url": "https://www.sting.co/faqs/do-we-need-to-have-our-tech-inhouse",
+      "title": "STING — terms page",
       "excerpt": "Science to Business Through our \"Science to Business\" initiative, we provide exclusive support to turn groundbreaking concepts into startups. Get funding for patent applications and key hires, connect with co-founders, and qualify for up to 500,000 SEK from Propel Capital. → https://www.sting.co/science-to-business",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-route-f6028bc70f",
+      "url": "https://www.sting.co/faqs/do-we-need-to-have-our-tech-inhouse",
+      "title": "STING — terms page",
+      "excerpt": "Apply to Propel Lorem ipsum → https://propelcapital.sting.co",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-f6d35cc5d0",
+      "url": "https://www.sting.co/science-to-business",
+      "title": "STING — application page",
+      "excerpt": "Apply to Propel Lorem ipsum → https://propelcapital.sting.co",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f74ad2b1da",
+      "url": "https://www.sting.co/faqs/can-i-work-or-intern-at-sting",
+      "title": "STING — terms page",
+      "excerpt": "Science to Business Through our \"Science to Business\" initiative, we provide exclusive support to turn groundbreaking concepts into startups. Get funding for patent applications and key hires, connect with co-founders, and qualify for up to 500,000 SEK from Propel Capital. → https://www.sting.co/science-to-business",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-fe66572aed",
+      "url": "https://www.sting.co/faqs/do-i-pay-for-stings-services",
+      "title": "STING — terms page",
+      "excerpt": "Science to Business Through our \"Science to Business\" initiative, we provide exclusive support to turn groundbreaking concepts into startups. Get funding for patent applications and key hires, connect with co-founders, and qualify for up to 500,000 SEK from Propel Capital. → https://www.sting.co/science-to-business",
+      "page": "terms"
+    },
+    {
+      "id": "check-status-066ad91bf8",
+      "url": "https://www.sting.co/newsroom/press/applications-are-now-open-for-the-cassini-business-accelerator-a-program-supporting-founders-in-the-european-space-tech-ecosystem",
+      "title": "STING — application page",
+      "excerpt": "Press Releases | Applications are now open for the CASSINI Business Accelerator, a program supporting founders in the European space tech ecosystem No",
+      "page": "application"
     },
     {
       "id": "check-status-9f0f8a5ad0",
       "url": "https://www.sting.co/faq",
-      "title": "STING — terms page checked by scrape.py",
+      "title": "STING — terms page",
       "excerpt": "the terms of your next qualified financing round. Read more chevron_right How do I apply to Stings programs? Applications are open several times a year. Simply visit sting.co and select the program you’re interested in. Each application",
       "page": "terms"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-b00d043edf",
+      "url": "https://www.sting.co/",
+      "page": "details",
+      "excerpt": "Sting | Sweden’s Leading Startup Accelerator No items found. Programs Sting Programs Sting Core Real results. Lifelong impact. Sting Core is our flagship six-month program for ambitious tech founders ready to fast-track their startups' growth with purpose and precision. Climate Race The Sting Climate Race 2025 is your chance to fast-track your climate tech startup in a world that urgently needs solutions. Pre-Sting Pre-Sting Not quite ready to join Sting yet? Our Pre-Sting opportunities are for early-stage startups who are ready to begin turning their idea into reality. Explore Pre-Sting Opportunities chevron_right Sting Startup Academy An online, self-paced course designed to take your idea to the next level. Open Coaching Welcome to book a 20-minute session with one of Sting's startup coaches. Test Drive Test your idea throughout an intensive workshop series designed for teams that are just getting started. Focus Areas Focus Areas We love all startups. However, we are particularly strong within the areas of Health, Climate, Society and DeepTech. Explore Focus Areas chevron_right Climate Sting brings together Sweden’s most experienced coaches, successful entrepreneurs and dedicated investors within the climate and energy sec Health Sting brings together Sweden’s most experienced HealthTech coaches, entrepreneurs and investors, so the world can benefit from your solution"
+    },
+    {
+      "id": "check-page-fb80219cd7",
+      "url": "https://propelcapital.sting.co",
+      "page": "application",
+      "excerpt": "Propel Capital — Sweden's Most Active Angel Club Powered by Portfolio Process Angels FAQ Send pitch deck Sweden's most active angel club — by Sting since 2014 We back bold tech founders at the very start. Propel Capital invests in pre-seed Swedish tech startups with breakthrough ideas — pairing first-cheque capital with 120+ hands-on angels and the full force of the Sting ecosystem. Send us your pitch deck How we invest 230+ Startups backed 120+ Active angels 57% FOLLOW ON Propel Capital VII 600,000 SEK Ticket size Committed capital SEK 27M Stage Pre-seed Geography Sweden Sectors Climate, Health, AI, Deeptech Number of Propel Angels 39 Year launched 2025 Portfolio 230+ startups. One mission: build what matters. From climate, health and deeptech to fintech, AI and space — a glimpse of the founders we've been first to back. Sellpy Reorbit Airmee All Ears Waybler Brainzell Qasa Sudio Karma Biorestore Care to Translate Zivi Beleco Wehype Fairlo Float Klimato imagi Mendi Relox Robotics Pliance Defentry Din Psykolog Lylli Hypertype Parsd Akira Science Kura Celluxtreme Simulair PryvX Occurrence Brave Onion ReBake Seaqure Labs Arkus AI Explore the full Sting portfolio → How we invest From first email to first cheque in 4–6 weeks. We respect your time. Our process is structured, transparent and moves fast — because great founders don't wait around. 01 Send your deck Upload your pitch"
+    },
+    {
+      "id": "check-page-85cdf1ce29",
+      "url": "https://www.sting.co/apply",
+      "page": "application",
+      "excerpt": "Apply to Sting Core | Sting No items found. Programs Sting Programs Sting Core Real results. Lifelong impact. Sting Core is our flagship six-month program for ambitious tech founders ready to fast-track their startups' growth with purpose and precision. Climate Race The Sting Climate Race 2025 is your chance to fast-track your climate tech startup in a world that urgently needs solutions. Pre-Sting Pre-Sting Not quite ready to join Sting yet? Our Pre-Sting opportunities are for early-stage startups who are ready to begin turning their idea into reality. Explore Pre-Sting Opportunities chevron_right Sting Startup Academy An online, self-paced course designed to take your idea to the next level. Open Coaching Welcome to book a 20-minute session with one of Sting's startup coaches. Test Drive Test your idea throughout an intensive workshop series designed for teams that are just getting started. Focus Areas Focus Areas We love all startups. However, we are particularly strong within the areas of Health, Climate, Society and DeepTech. Explore Focus Areas chevron_right Climate Sting brings together Sweden’s most experienced coaches, successful entrepreneurs and dedicated investors within the climate and energy sec Health Sting brings together Sweden’s most experienced HealthTech coaches, entrepreneurs and investors, so the world can benefit from your solution Society Sting"
+    },
+    {
+      "id": "check-page-36cb69c46b",
+      "url": "https://www.sting.co/newsroom/press/applications-are-now-open-for-the-cassini-business-accelerator-a-program-supporting-founders-in-the-european-space-tech-ecosystem",
+      "page": "application",
+      "excerpt": "Press Releases | Applications are now open for the CASSINI Business Accelerator, a program supporting founders in the European space tech ecosystem No items found. Programs Sting Programs Sting Core Real results. Lifelong impact. Sting Core is our flagship six-month program for ambitious tech founders ready to fast-track their startups' growth with purpose and precision. Climate Race The Sting Climate Race 2025 is your chance to fast-track your climate tech startup in a world that urgently needs solutions. Pre-Sting Pre-Sting Not quite ready to join Sting yet? Our Pre-Sting opportunities are for early-stage startups who are ready to begin turning their idea into reality. Explore Pre-Sting Opportunities chevron_right Sting Startup Academy An online, self-paced course designed to take your idea to the next level. Open Coaching Welcome to book a 20-minute session with one of Sting's startup coaches. Test Drive Test your idea throughout an intensive workshop series designed for teams that are just getting started. Focus Areas Focus Areas We love all startups. However, we are particularly strong within the areas of Health, Climate, Society and DeepTech. Explore Focus Areas chevron_right Climate Sting brings together Sweden’s most experienced coaches, successful entrepreneurs and dedicated investors within the climate and energy sec Health Sting brings together Sweden’s most"
+    },
+    {
+      "id": "check-page-7273fe504c",
+      "url": "https://www.sting.co/science-to-business",
+      "page": "application",
+      "excerpt": "Science to business No items found. Programs Sting Programs Sting Core Real results. Lifelong impact. Sting Core is our flagship six-month program for ambitious tech founders ready to fast-track their startups' growth with purpose and precision. Climate Race The Sting Climate Race 2025 is your chance to fast-track your climate tech startup in a world that urgently needs solutions. Pre-Sting Pre-Sting Not quite ready to join Sting yet? Our Pre-Sting opportunities are for early-stage startups who are ready to begin turning their idea into reality. Explore Pre-Sting Opportunities chevron_right Sting Startup Academy An online, self-paced course designed to take your idea to the next level. Open Coaching Welcome to book a 20-minute session with one of Sting's startup coaches. Test Drive Test your idea throughout an intensive workshop series designed for teams that are just getting started. Focus Areas Focus Areas We love all startups. However, we are particularly strong within the areas of Health, Climate, Society and DeepTech. Explore Focus Areas chevron_right Climate Sting brings together Sweden’s most experienced coaches, successful entrepreneurs and dedicated investors within the climate and energy sec Health Sting brings together Sweden’s most experienced HealthTech coaches, entrepreneurs and investors, so the world can benefit from your solution Society Sting accelerates"
+    },
+    {
+      "id": "check-page-8897c2dcba",
+      "url": "https://www.sting.co/faq",
+      "page": "terms",
+      "excerpt": "Sting FAQ | All you need to know about our startup programs No items found. Programs Sting Programs Sting Core Real results. Lifelong impact. Sting Core is our flagship six-month program for ambitious tech founders ready to fast-track their startups' growth with purpose and precision. Climate Race The Sting Climate Race 2025 is your chance to fast-track your climate tech startup in a world that urgently needs solutions. Pre-Sting Pre-Sting Not quite ready to join Sting yet? Our Pre-Sting opportunities are for early-stage startups who are ready to begin turning their idea into reality. Explore Pre-Sting Opportunities chevron_right Sting Startup Academy An online, self-paced course designed to take your idea to the next level. Open Coaching Welcome to book a 20-minute session with one of Sting's startup coaches. Test Drive Test your idea throughout an intensive workshop series designed for teams that are just getting started. Focus Areas Focus Areas We love all startups. However, we are particularly strong within the areas of Health, Climate, Society and DeepTech. Explore Focus Areas chevron_right Climate Sting brings together Sweden’s most experienced coaches, successful entrepreneurs and dedicated investors within the climate and energy sec Health Sting brings together Sweden’s most experienced HealthTech coaches, entrepreneurs and investors, so the world can benefit from your"
+    },
+    {
+      "id": "check-page-f4989acab1",
+      "url": "https://www.sting.co/faqs/are-there-other-benefits-to-having-propel-capital-as-a-financier-in-addition-to-the-investment-itself",
+      "page": "terms",
+      "excerpt": "Sting FAQ | Are there other benefits to having Propel Capital as a financier, in addition to the investment itself? Programs Sting Programs Sting Core Real results. Lifelong impact. Sting Core is our flagship six-month program for ambitious tech founders ready to fast-track their startups' growth with purpose and precision. Climate Race The Sting Climate Race 2025 is your chance to fast-track your climate tech startup in a world that urgently needs solutions. Pre-Sting Pre-Sting Not quite ready to join Sting yet? Our Pre-Sting opportunities are for early-stage startups who are ready to begin turning their idea into reality. Explore Pre-Sting Opportunities chevron_right Sting Startup Academy An online, self-paced course designed to take your idea to the next level. Open Coaching Welcome to book a 20-minute session with one of Sting's startup coaches. Test Drive Test your idea throughout an intensive workshop series designed for teams that are just getting started. Focus Areas Focus Areas We love all startups. However, we are particularly strong within the areas of Health, Climate, Society and DeepTech. Explore Focus Areas chevron_right Climate Sting brings together Sweden’s most experienced coaches, successful entrepreneurs and dedicated investors within the climate and energy sec Health Sting brings together Sweden’s most experienced HealthTech coaches, entrepreneurs and"
+    },
+    {
+      "id": "check-page-bdafbd946d",
+      "url": "https://www.sting.co/faqs/can-i-apply-as-a-solo-founder",
+      "page": "terms",
+      "excerpt": "Sting FAQ | Can I apply as a solo founder? Programs Sting Programs Sting Core Real results. Lifelong impact. Sting Core is our flagship six-month program for ambitious tech founders ready to fast-track their startups' growth with purpose and precision. Climate Race The Sting Climate Race 2025 is your chance to fast-track your climate tech startup in a world that urgently needs solutions. Pre-Sting Pre-Sting Not quite ready to join Sting yet? Our Pre-Sting opportunities are for early-stage startups who are ready to begin turning their idea into reality. Explore Pre-Sting Opportunities chevron_right Sting Startup Academy An online, self-paced course designed to take your idea to the next level. Open Coaching Welcome to book a 20-minute session with one of Sting's startup coaches. Test Drive Test your idea throughout an intensive workshop series designed for teams that are just getting started. Focus Areas Focus Areas We love all startups. However, we are particularly strong within the areas of Health, Climate, Society and DeepTech. Explore Focus Areas chevron_right Climate Sting brings together Sweden’s most experienced coaches, successful entrepreneurs and dedicated investors within the climate and energy sec Health Sting brings together Sweden’s most experienced HealthTech coaches, entrepreneurs and investors, so the world can benefit from your solution Society Sting"
+    },
+    {
+      "id": "check-page-a8463bc2c9",
+      "url": "https://www.sting.co/faqs/can-i-apply-if-ive-already-raised-funding",
+      "page": "terms",
+      "excerpt": "Sting FAQ | Can I apply if I’ve already raised funding? Programs Sting Programs Sting Core Real results. Lifelong impact. Sting Core is our flagship six-month program for ambitious tech founders ready to fast-track their startups' growth with purpose and precision. Climate Race The Sting Climate Race 2025 is your chance to fast-track your climate tech startup in a world that urgently needs solutions. Pre-Sting Pre-Sting Not quite ready to join Sting yet? Our Pre-Sting opportunities are for early-stage startups who are ready to begin turning their idea into reality. Explore Pre-Sting Opportunities chevron_right Sting Startup Academy An online, self-paced course designed to take your idea to the next level. Open Coaching Welcome to book a 20-minute session with one of Sting's startup coaches. Test Drive Test your idea throughout an intensive workshop series designed for teams that are just getting started. Focus Areas Focus Areas We love all startups. However, we are particularly strong within the areas of Health, Climate, Society and DeepTech. Explore Focus Areas chevron_right Climate Sting brings together Sweden’s most experienced coaches, successful entrepreneurs and dedicated investors within the climate and energy sec Health Sting brings together Sweden’s most experienced HealthTech coaches, entrepreneurs and investors, so the world can benefit from your solution Society"
+    },
+    {
+      "id": "check-page-3695468af4",
+      "url": "https://www.sting.co/faqs/can-i-work-or-intern-at-sting",
+      "page": "terms",
+      "excerpt": "Sting FAQ | Can I work or intern at Sting? Programs Sting Programs Sting Core Real results. Lifelong impact. Sting Core is our flagship six-month program for ambitious tech founders ready to fast-track their startups' growth with purpose and precision. Climate Race The Sting Climate Race 2025 is your chance to fast-track your climate tech startup in a world that urgently needs solutions. Pre-Sting Pre-Sting Not quite ready to join Sting yet? Our Pre-Sting opportunities are for early-stage startups who are ready to begin turning their idea into reality. Explore Pre-Sting Opportunities chevron_right Sting Startup Academy An online, self-paced course designed to take your idea to the next level. Open Coaching Welcome to book a 20-minute session with one of Sting's startup coaches. Test Drive Test your idea throughout an intensive workshop series designed for teams that are just getting started. Focus Areas Focus Areas We love all startups. However, we are particularly strong within the areas of Health, Climate, Society and DeepTech. Explore Focus Areas chevron_right Climate Sting brings together Sweden’s most experienced coaches, successful entrepreneurs and dedicated investors within the climate and energy sec Health Sting brings together Sweden’s most experienced HealthTech coaches, entrepreneurs and investors, so the world can benefit from your solution Society Sting"
+    },
+    {
+      "id": "check-page-433abce65a",
+      "url": "https://www.sting.co/faqs/do-i-get-access-to-an-office-or-workspace",
+      "page": "terms",
+      "excerpt": "Sting FAQ | Do I get access to an office or workspace? Programs Sting Programs Sting Core Real results. Lifelong impact. Sting Core is our flagship six-month program for ambitious tech founders ready to fast-track their startups' growth with purpose and precision. Climate Race The Sting Climate Race 2025 is your chance to fast-track your climate tech startup in a world that urgently needs solutions. Pre-Sting Pre-Sting Not quite ready to join Sting yet? Our Pre-Sting opportunities are for early-stage startups who are ready to begin turning their idea into reality. Explore Pre-Sting Opportunities chevron_right Sting Startup Academy An online, self-paced course designed to take your idea to the next level. Open Coaching Welcome to book a 20-minute session with one of Sting's startup coaches. Test Drive Test your idea throughout an intensive workshop series designed for teams that are just getting started. Focus Areas Focus Areas We love all startups. However, we are particularly strong within the areas of Health, Climate, Society and DeepTech. Explore Focus Areas chevron_right Climate Sting brings together Sweden’s most experienced coaches, successful entrepreneurs and dedicated investors within the climate and energy sec Health Sting brings together Sweden’s most experienced HealthTech coaches, entrepreneurs and investors, so the world can benefit from your solution Society"
+    },
+    {
+      "id": "check-page-731a97dc77",
+      "url": "https://www.sting.co/faqs/do-i-need-to-be-based-in-stockholm",
+      "page": "terms",
+      "excerpt": "Sting FAQ | Do I need to be based in Stockholm? Programs Sting Programs Sting Core Real results. Lifelong impact. Sting Core is our flagship six-month program for ambitious tech founders ready to fast-track their startups' growth with purpose and precision. Climate Race The Sting Climate Race 2025 is your chance to fast-track your climate tech startup in a world that urgently needs solutions. Pre-Sting Pre-Sting Not quite ready to join Sting yet? Our Pre-Sting opportunities are for early-stage startups who are ready to begin turning their idea into reality. Explore Pre-Sting Opportunities chevron_right Sting Startup Academy An online, self-paced course designed to take your idea to the next level. Open Coaching Welcome to book a 20-minute session with one of Sting's startup coaches. Test Drive Test your idea throughout an intensive workshop series designed for teams that are just getting started. Focus Areas Focus Areas We love all startups. However, we are particularly strong within the areas of Health, Climate, Society and DeepTech. Explore Focus Areas chevron_right Climate Sting brings together Sweden’s most experienced coaches, successful entrepreneurs and dedicated investors within the climate and energy sec Health Sting brings together Sweden’s most experienced HealthTech coaches, entrepreneurs and investors, so the world can benefit from your solution Society Sting"
+    },
+    {
+      "id": "check-page-e398aabb0f",
+      "url": "https://www.sting.co/faqs/do-i-pay-for-stings-services",
+      "page": "terms",
+      "excerpt": "Sting FAQ | Do I pay for Sting’s services? Programs Sting Programs Sting Core Real results. Lifelong impact. Sting Core is our flagship six-month program for ambitious tech founders ready to fast-track their startups' growth with purpose and precision. Climate Race The Sting Climate Race 2025 is your chance to fast-track your climate tech startup in a world that urgently needs solutions. Pre-Sting Pre-Sting Not quite ready to join Sting yet? Our Pre-Sting opportunities are for early-stage startups who are ready to begin turning their idea into reality. Explore Pre-Sting Opportunities chevron_right Sting Startup Academy An online, self-paced course designed to take your idea to the next level. Open Coaching Welcome to book a 20-minute session with one of Sting's startup coaches. Test Drive Test your idea throughout an intensive workshop series designed for teams that are just getting started. Focus Areas Focus Areas We love all startups. However, we are particularly strong within the areas of Health, Climate, Society and DeepTech. Explore Focus Areas chevron_right Climate Sting brings together Sweden’s most experienced coaches, successful entrepreneurs and dedicated investors within the climate and energy sec Health Sting brings together Sweden’s most experienced HealthTech coaches, entrepreneurs and investors, so the world can benefit from your solution Society Sting"
+    },
+    {
+      "id": "check-page-ed1149c90d",
+      "url": "https://www.sting.co/faqs/do-we-need-to-have-our-tech-inhouse",
+      "page": "terms",
+      "excerpt": "Sting FAQ | Do we need to have our tech inhouse? Programs Sting Programs Sting Core Real results. Lifelong impact. Sting Core is our flagship six-month program for ambitious tech founders ready to fast-track their startups' growth with purpose and precision. Climate Race The Sting Climate Race 2025 is your chance to fast-track your climate tech startup in a world that urgently needs solutions. Pre-Sting Pre-Sting Not quite ready to join Sting yet? Our Pre-Sting opportunities are for early-stage startups who are ready to begin turning their idea into reality. Explore Pre-Sting Opportunities chevron_right Sting Startup Academy An online, self-paced course designed to take your idea to the next level. Open Coaching Welcome to book a 20-minute session with one of Sting's startup coaches. Test Drive Test your idea throughout an intensive workshop series designed for teams that are just getting started. Focus Areas Focus Areas We love all startups. However, we are particularly strong within the areas of Health, Climate, Society and DeepTech. Explore Focus Areas chevron_right Climate Sting brings together Sweden’s most experienced coaches, successful entrepreneurs and dedicated investors within the climate and energy sec Health Sting brings together Sweden’s most experienced HealthTech coaches, entrepreneurs and investors, so the world can benefit from your solution Society Sting"
+    },
+    {
+      "id": "check-page-0cbe3837aa",
+      "url": "https://www.sting.co/faqs/do-you-provide-access-to-experts-in-legal-ip-recruitment-etc",
+      "page": "terms",
+      "excerpt": "Sting FAQ | Do you provide access to experts in legal, IP, recruitment, etc.? Programs Sting Programs Sting Core Real results. Lifelong impact. Sting Core is our flagship six-month program for ambitious tech founders ready to fast-track their startups' growth with purpose and precision. Climate Race The Sting Climate Race 2025 is your chance to fast-track your climate tech startup in a world that urgently needs solutions. Pre-Sting Pre-Sting Not quite ready to join Sting yet? Our Pre-Sting opportunities are for early-stage startups who are ready to begin turning their idea into reality. Explore Pre-Sting Opportunities chevron_right Sting Startup Academy An online, self-paced course designed to take your idea to the next level. Open Coaching Welcome to book a 20-minute session with one of Sting's startup coaches. Test Drive Test your idea throughout an intensive workshop series designed for teams that are just getting started. Focus Areas Focus Areas We love all startups. However, we are particularly strong within the areas of Health, Climate, Society and DeepTech. Explore Focus Areas chevron_right Climate Sting brings together Sweden’s most experienced coaches, successful entrepreneurs and dedicated investors within the climate and energy sec Health Sting brings together Sweden’s most experienced HealthTech coaches, entrepreneurs and investors, so the world can benefit from"
     }
   ],
   "findings": {
     "emails": [
       {
         "value": "hello@sting.co",
-        "evidenceId": "check-email-e744de8397"
+        "evidenceId": "check-email-68f8f4d410"
       }
     ],
     "phones": [],
@@ -227,12 +959,20 @@
         "evidenceId": "check-route-9cfbbed1e9"
       },
       {
+        "value": "https://propelcapital.sting.co",
+        "evidenceId": "check-route-47c2e01344"
+      },
+      {
         "value": "https://www.sting.co/programs",
         "evidenceId": "check-route-2fba29ecc8"
       },
       {
         "value": "https://www.sting.co/sting-core",
         "evidenceId": "check-route-b9f8280059"
+      },
+      {
+        "value": "https://app.sting.co/auth/signup",
+        "evidenceId": "check-route-45055b153a"
       }
     ],
     "applicationUrl": [
@@ -244,13 +984,56 @@
     "applicationsOpen": [
       {
         "value": true,
-        "evidenceId": "check-status-9f0f8a5ad0"
+        "evidenceId": "check-status-066ad91bf8"
       }
     ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "November",
+        "evidenceId": "check-announced-d9db54fb5e"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6",
+        "evidenceId": "check-duration-7a9f8857c0"
+      },
+      {
+        "value": "2",
+        "evidenceId": "check-duration-0ae19aadd8"
+      },
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-77b669f9b2"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-98d76619e6"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-e566cbc6c0"
+      }
+    ],
+    "location": [
+      {
+        "value": "Sweden",
+        "evidenceId": "check-location-d332ca1345"
+      },
+      {
+        "value": "Stockholm",
+        "evidenceId": "check-location-06c0586e35"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.sting.co/companies",

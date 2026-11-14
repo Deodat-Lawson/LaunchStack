@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.breakthroughenergy.org/",
   "applyUrl": "https://www.breakthroughenergy.org/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Home Home Home Toggle menu Home Home Toggle menu Home Home Toggle menu Home Home Toggle menu Scroll for more Empowering innovators to build the future of energy Empowering innovators to build the future of energy Empowering innovators to build the future of energy Breakthrough Energy is a global platform to accelerate clean energy innovation and build the industries of the future. Energy is prosperity The opportunity AHEAD Affordable Reliable Clean Energy Affordable Reliable Clean Energy The world’s demand for electricity will double by 2050. Innovation is how we can meet humanity's needs without sacrificing prosperity or planet. 51k TWh in 2050 27k TWh in 2024 29 Manufacturing Companies 26 Electricity Companies 20 Agriculture Companies 17 Transportation Companies 11 Building Companies Full Portfolio 29 Manufacturing Companies 26 Electricity Companies 20 Agriculture Companies 17 Transportation Companies 11 Building Companies Full Portfolio DISCOVER DEVELOP DEPLOY Investing in Opportunity We survey the landscape for white space where we can drive technology discovery and leverage our unique talents to build great companies from the ground up. We partner with the world's leading innovators to turn breakthrough technologies into great businesses. Superior performance is our north star—clean technologies have to be affordable and reliable to reach global scale. Breaking Through is No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Empowering innovators to build the future of energy",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Not published on the official page.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "breakthrough-energy-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.breakthroughenergy.org/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

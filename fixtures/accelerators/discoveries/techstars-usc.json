@@ -1,15 +1,7 @@
 {
   "programId": "techstars-usc",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://www.techstars.com/portfolio",
-      "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://apply.techstars.com/",
       "page": "application",
@@ -19,17 +11,41 @@
       "origin": "official"
     },
     {
-      "url": "https://www.techstars.com/portfolio?program=USC%20and%20Techstars%20Accelerator",
-      "page": "portfolio",
-      "anchor": "Past Companies",
+      "url": "https://www.techstars.com/about",
+      "page": "details",
+      "anchor": "About Us",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.techstars.com/newsroom/investment-terms?__hstc=179629243.862d6eced7c3a4ae0864a9cf4155f374.1782152171367.1784579020418.1784582807777.62&__hssc=179629243.14.1784582807777&__hsfp=143c38c4ead2932c5805bba8a2d90e8f",
-      "page": "terms",
-      "anchor": "$220,000 equity investment",
+      "url": "https://www.techstars.com/accelerator-hub",
+      "page": "details",
+      "anchor": "Inside an Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerator-hub?__hstc=179629243.862d6eced7c3a4ae0864a9cf4155f374.1782152171367.1784579020418.1784582807777.62&__hssc=179629243.14.1784582807777&__hsfp=143c38c4ead2932c5805bba8a2d90e8f",
+      "page": "details",
+      "anchor": "Inside an Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/accelerators",
+      "page": "details",
+      "anchor": "Techstars Accelerators",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/application-preview",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -38,7 +54,103 @@
       "url": "https://www.techstars.com/application-preview?__hstc=179629243.862d6eced7c3a4ae0864a9cf4155f374.1782152171367.1784579020418.1784582807777.62&__hssc=179629243.14.1784582807777&__hsfp=143c38c4ead2932c5805bba8a2d90e8f",
       "page": "application",
       "anchor": "https://www.techstars.com/application-preview",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/founder-advice/6-tips-to-ace-the-accelerator-application",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-make-your-techstars-application-stand-out",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/founder-advice/how-to-successfully-apply-to-techstars-unraveling-the-application-process",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-before-you-apply-engage",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/founder-advice/inside-a-techstars-accelerator-the-application-and-interview-process",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-paris-the-ins-and-outs-of-the-application-and-selection-process",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/founder-advice/techstars-successful-application-guide-key-considerations",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/insights-and-trends/applying-to-techstars-tips-from-our-managing-directors",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/insights-and-trends/the-big-question-why-should-i-apply-to-techstars",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/program-news/applications-are-now-open-for-techstars-spring-2026-accelerator-programs",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/program-news/applications-are-open-for-3-techstars-founder-catalyst-programs",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/blog/program-news/applications-now-open-for-third-class-of-northwestern-medicine-techstars-healthcare-accelerator",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -46,22 +158,14 @@
       "url": "https://www.techstars.com/blog/program-news/join-us-in-welcoming-the-2026-usc-and-techstars-university-catalyst-class",
       "page": "details",
       "anchor": "Program News 31 August 2026 Join Us in Welcoming the 2026 USC and Techstars University Catalyst Class Read More",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.techstars.com/newsroom/meet-the-startups-joining-techstars-spring-2026-accelerator-programs",
-      "page": "details",
-      "anchor": "Newsroom 9 March 2026 Meet the Startups Joining Techstars' Spring 2026 Accelerator Programs Read More",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.techstars.com/about",
-      "page": "details",
-      "anchor": "About Us",
+      "url": "https://www.techstars.com/faq",
+      "page": "terms",
+      "anchor": "FAQ",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -75,9 +179,33 @@
       "origin": "official"
     },
     {
-      "url": "https://www.techstars.com/faq",
+      "url": "https://www.techstars.com/newsroom/investment-terms?__hstc=179629243.862d6eced7c3a4ae0864a9cf4155f374.1782152171367.1784579020418.1784582807777.62&__hssc=179629243.14.1784582807777&__hsfp=143c38c4ead2932c5805bba8a2d90e8f",
       "page": "terms",
-      "anchor": "FAQ",
+      "anchor": "$220,000 equity investment",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/newsroom/meet-the-startups-joining-techstars-spring-2026-accelerator-programs",
+      "page": "details",
+      "anchor": "Newsroom 9 March 2026 Meet the Startups Joining Techstars' Spring 2026 Accelerator Programs Read More",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/portfolio",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/portfolio?program=USC%20and%20Techstars%20Accelerator",
+      "page": "portfolio",
+      "anchor": "Past Companies",
       "fetched": false,
       "blocked": null,
       "origin": "official"

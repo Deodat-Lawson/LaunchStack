@@ -1,37 +1,318 @@
 {
   "programId": "nexus-venture-partners",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://www.nexusvp.com/"
+    "https://www.nexusvp.com/",
+    "https://www.nexusvp.com/in/terms-of-service",
+    "https://www.nexusvp.com/terms-of-service",
+    "https://www.nexusvp.com/companies",
+    "https://www.nexusvp.com/companies/abcoffee",
+    "https://www.nexusvp.com/companies/aemon-ai",
+    "https://www.nexusvp.com/companies/agilitas-sports",
+    "https://www.nexusvp.com/companies/allo-health",
+    "https://www.nexusvp.com/companies/animall",
+    "https://www.nexusvp.com/companies/apollo-io",
+    "https://www.nexusvp.com/companies/arkin-net",
+    "https://www.nexusvp.com/companies/aryaka",
+    "https://www.nexusvp.com/companies/asknicely",
+    "https://www.nexusvp.com/companies/assetplus",
+    "https://www.nexusvp.com/companies/aurva-io"
   ],
   "evidence": [
     {
       "id": "check-name-55eddc4bbc",
       "url": "https://www.nexusvp.com/",
-      "title": "Nexus Venture Partners — homepage checked by scrape.py",
+      "title": "Nexus Venture Partners — homepage",
       "excerpt": "Nexus Venture Partners | Investing before the world agrees companies team",
       "page": "details"
     },
     {
+      "id": "check-portfolio-0ec49c4f14",
+      "url": "https://www.nexusvp.com/companies/abcoffee",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-162f542da7",
+      "url": "https://www.nexusvp.com/in/terms-of-service",
+      "title": "Nexus Venture Partners — terms page",
+      "excerpt": "companies → https://www.nexusvp.com/in/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-186f131521",
+      "url": "https://www.nexusvp.com/companies/agilitas-sports",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-2f29b2542d",
+      "url": "https://www.nexusvp.com/companies/apollo-io",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "Back to Companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-423e07f4f4",
+      "url": "https://www.nexusvp.com/companies/abcoffee",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "Back to Companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-51bb299153",
+      "url": "https://www.nexusvp.com/companies/aryaka",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "Back to Companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-52484ac662",
+      "url": "https://www.nexusvp.com/companies/assetplus",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-5659b73f7c",
+      "url": "https://www.nexusvp.com/companies/allo-health",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "Back to Companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-6072ebebce",
+      "url": "https://www.nexusvp.com/companies/animall",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-61aa96b68e",
+      "url": "https://www.nexusvp.com/companies/allo-health",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-66b1ccf4f0",
+      "url": "https://www.nexusvp.com/companies/aryaka",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-6a77c357ac",
+      "url": "https://www.nexusvp.com/companies/agilitas-sports",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "Back to Companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-6bc5134374",
+      "url": "https://www.nexusvp.com/companies/asknicely",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-7397552251",
+      "url": "https://www.nexusvp.com/companies/apollo-io",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-7417da5951",
+      "url": "https://www.nexusvp.com/companies/arkin-net",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "Back to Companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-80e4d1d662",
+      "url": "https://www.nexusvp.com/companies",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "https://www.nexusvp.com/companies?3115ed5c_page=2",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-8b3af96779",
+      "url": "https://www.nexusvp.com/companies/animall",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "Back to Companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-a2f3e163be",
+      "url": "https://www.nexusvp.com/companies/assetplus",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "Back to Companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-a3d17df1e8",
+      "url": "https://www.nexusvp.com/companies/asknicely",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "Back to Companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-a57c346aff",
       "url": "https://www.nexusvp.com/",
-      "title": "Nexus Venture Partners — homepage checked by scrape.py",
+      "title": "Nexus Venture Partners — homepage",
       "excerpt": "See all companies → https://www.nexusvp.com/companies",
       "page": "details"
     },
     {
       "id": "check-portfolio-a594838358",
       "url": "https://www.nexusvp.com/",
-      "title": "Nexus Venture Partners — homepage checked by scrape.py",
+      "title": "Nexus Venture Partners — homepage",
       "excerpt": "companies → https://www.nexusvp.com/companies",
       "page": "details"
     },
     {
+      "id": "check-portfolio-ad60de854d",
+      "url": "https://www.nexusvp.com/companies/aemon-ai",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "Back to Companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-b179551e57",
+      "url": "https://www.nexusvp.com/companies/aurva-io",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-b2ad4b90b7",
+      "url": "https://www.nexusvp.com/companies/aemon-ai",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-b60e5309b2",
+      "url": "https://www.nexusvp.com/companies/aurva-io",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "Back to Companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-ce15459864",
+      "url": "https://www.nexusvp.com/terms-of-service",
+      "title": "Nexus Venture Partners — terms page",
+      "excerpt": "companies → https://www.nexusvp.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f82c79429c",
+      "url": "https://www.nexusvp.com/companies/arkin-net",
+      "title": "Nexus Venture Partners — portfolio page",
+      "excerpt": "companies → https://www.nexusvp.com/companies",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-1de6c85b9f",
       "url": "https://www.nexusvp.com/",
-      "title": "Nexus Venture Partners — homepage checked by scrape.py",
+      "title": "Nexus Venture Partners — homepage",
       "excerpt": "https://www.nexusvp.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-17da09cf51",
+      "url": "https://www.nexusvp.com/",
+      "page": "details",
+      "excerpt": "Nexus Venture Partners | Investing before the world agrees companies team Investing before the world agrees. Partnering early with Software, AI, and Frontier Tech founders for the long haul. Partnering early with Software, AI, and Frontier Tech founders for the long haul. Staying until the work is done. Scroll Iambic Goes Public: Six Years From First Check to IPO read more Category leaders rarely look obvious at the start. Early conviction. Long-term commitment. Tim Zheng The AI Sales Platform Apurva Shrivastava Tyson Chen AI workforce for service businesses Dan Pinto The device intelligence platform for high-scale applications Caleb Peffer The easiest way to extract AI ready data from the web Max Brodeur-Urbas Automate Any Workflow with AI Tom Miller Accelerating molecular discovery through physics-based machine learning Abhinav Asthana Collaboration platform and the only complete development environment for all things API Darrick Hortion The Next Wave of AI Compute See all companies Backed early. Built over time. We back founders before categories are clear, investing $1M-$25M from Pre-Seed through Series B. We back founders before categories are clear, investing $1M-$25M from Pre-Seed through Series B. $3.2B $3.2B capital managed across 8 funds 12 unicorns backed at the earliest stages 8 IPOs and counting Global team. Deep conviction. our team Silicon Valley 3000 Sand Hill"
+    },
+    {
+      "id": "check-page-893979374a",
+      "url": "https://www.nexusvp.com/in/terms-of-service",
+      "page": "terms",
+      "excerpt": "Terms of Service | | Nexus Venture Partners companies team Terms of Service TERMS OF USE Effective Date: August 3, 2026 BY ACCESSING OR USING THIS WEBSITE (the “Site”) and any content, posts, blog posts, portfolio company announcements, videos and podcasts, information, tools, or materials made available on or through the Site or on our social media handles, operated by Nexus Venture Partners (collectively, the “Materials”), you acknowledge that you have read, understood, and agree to be bound by these Terms of Use (these “Terms”), as they may be amended from time to time. If you do not agree to these Terms, you may not access or use the Site. Accessing the Site Access to the Site is permitted on a temporary basis, and we reserve the right, at any time and without notice, to withdraw, suspend, modify, or discontinue the Site or any Materials, in whole or in part. We will not be liable to you or any third party if, for any reason, the Site or any Materials are unavailable at any time or for any period. By accessing or using the Site, you represent and warrant that you are at least 18 years of age, have the legal capacity to provide valid consent, and are legally competent and authorised to enter into binding agreements under applicable law. The Site is not intended for use by children or any person under 18 years of age, and we do not knowingly permit such persons to access or"
+    },
+    {
+      "id": "check-page-28f5ceec99",
+      "url": "https://www.nexusvp.com/terms-of-service",
+      "page": "terms",
+      "excerpt": "Terms of Service | | Nexus Venture Partners companies team Terms of Service TERMS OF USE Effective Date: August 3, 2026 BY ACCESSING OR USING THIS WEBSITE (the “Site”) and any content, posts, blog posts, portfolio company announcements, videos and podcasts, information, tools, or materials made available on or through the Site or on our social media handles, operated by Nexus Venture Partners (collectively, the “Materials”), you acknowledge that you have read, understood, and agree to be bound by these Terms of Use (these “Terms”), as they may be amended from time to time. If you do not agree to these Terms, you may not access or use the Site. Accessing the Site Access to the Site is permitted on a temporary basis, and we reserve the right, at any time and without notice, to withdraw, suspend, modify, or discontinue the Site or any Materials, in whole or in part. We will not be liable to you or any third party if, for any reason, the Site or any Materials are unavailable at any time or for any period. By accessing or using the Site, you represent and warrant that you are at least 18 years of age, have the legal capacity to provide valid consent, and are legally competent and authorised to enter into binding agreements under applicable law. The Site is not intended for use by children or any person under 18 years of age, and we do not knowingly permit such persons to access or"
+    },
+    {
+      "id": "check-page-dbe4cdb484",
+      "url": "https://www.nexusvp.com/companies",
+      "page": "portfolio",
+      "excerpt": "Portfolio Companies | Nexus Venture Partners companies team Companies We stay close to the work & the founders building it. 150+ companies across AI and frontier tech. Every one of them backed before their category was obvious. Sort trigger Number Sort trigger A-Z Featured All Filters Sector AI Consumer Enterprise Fintech Frontier Tech Open Source Location U.S. India Status M&A IPO Active Stage Invested Pre-Seed Seed Series A Series B Clear All Filters Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Technology enabled specialty grab and go coffee abCoffee India Active Seed Consumer abCoffee The AI R&D Engineer Aemon.ai U.S. Active Seed Enterprise AI Aemon.ai Sportswear brand Agilitas Sports India Active Seed Consumer Agilitas Sports Digital clinic for men's sexual health Allo Health India Active Seed Consumer Allo Health Dairy farmer super-app. Animall India Active Series A Consumer Animall The AI Sales Platform 1 Apollo.io U.S. Featured Active Seed Enterprise AI Apollo.io Consumer-class simplicity to software-defined datacenters. Acquired by VMware Arkin Net U.S. M&A No items found. Enterprise M&A Arkin Net Cloud-based WAN (wide area network) as-a-Service Aryaka U.S. Active No items found. Enterprise Aryaka Customer Experience (CX) platform for service businesses AskNicely U.S. Active Series A Enterprise AskNicely India’s"
+    },
+    {
+      "id": "check-page-a1449f1906",
+      "url": "https://www.nexusvp.com/companies/abcoffee",
+      "page": "portfolio",
+      "excerpt": "abCoffee | Portfolio | Nexus Venture Partners companies team Back to Companies abCoffee. Technology enabled specialty grab and go coffee. https://abcoffee.in Sector Consumer Stage Invested Seed Location India Status Active Partners Suvir Sujan Abhijeet Anand Founder No items found. Silicon Valley 3000 Sand Hill Road Building 1, Suite 260 Menlo Park, CA 94025 San Francisco 101 Natoma St., 2F San Francisco, CA 94105 Bengaluru 137, 1 st Cross Rd, KHB Colony, 5 th Block, Koramangala, Bengaluru - 560095, India Mumbai G-2, Sarjan Plaza 100, Dr. Annie Besant Road, Worli, Mumbai - 400018, India © 2025 Nexus Venture Partners. All rights reserved. Privacy Policy Terms of Service"
+    },
+    {
+      "id": "check-page-b8c84ddbbb",
+      "url": "https://www.nexusvp.com/companies/aemon-ai",
+      "page": "portfolio",
+      "excerpt": "Aemon.ai | Portfolio | Nexus Venture Partners companies team Back to Companies Aemon.ai. The AI R&D Engineer. https://aemon.ai/ Sector Enterprise AI Stage Invested Seed Location U.S. Status Active Partners Abhishek Sharma Richard Zhou CEO & Co-Founder Ray Xu Co-Founder No items found. Silicon Valley 3000 Sand Hill Road Building 1, Suite 260 Menlo Park, CA 94025 San Francisco 101 Natoma St., 2F San Francisco, CA 94105 Bengaluru 137, 1 st Cross Rd, KHB Colony, 5 th Block, Koramangala, Bengaluru - 560095, India Mumbai G-2, Sarjan Plaza 100, Dr. Annie Besant Road, Worli, Mumbai - 400018, India © 2025 Nexus Venture Partners. All rights reserved. Privacy Policy Terms of Service"
+    },
+    {
+      "id": "check-page-67f46a484d",
+      "url": "https://www.nexusvp.com/companies/agilitas-sports",
+      "page": "portfolio",
+      "excerpt": "Agilitas Sports | Portfolio | Nexus Venture Partners companies team Back to Companies Agilitas Sports. Sportswear brand. https://agilitas.in/ Sector Consumer Stage Invested Seed Location India Status Active Partners Suvir Sujan Abhishek Ganguly CEO & Co-Founder Amit Prabhu CFO & Co-Founder Atul Bajaj COO & Co-Founder No items found. Silicon Valley 3000 Sand Hill Road Building 1, Suite 260 Menlo Park, CA 94025 San Francisco 101 Natoma St., 2F San Francisco, CA 94105 Bengaluru 137, 1 st Cross Rd, KHB Colony, 5 th Block, Koramangala, Bengaluru - 560095, India Mumbai G-2, Sarjan Plaza 100, Dr. Annie Besant Road, Worli, Mumbai - 400018, India © 2025 Nexus Venture Partners. All rights reserved. Privacy Policy Terms of Service"
+    },
+    {
+      "id": "check-page-d4a991beb1",
+      "url": "https://www.nexusvp.com/companies/allo-health",
+      "page": "portfolio",
+      "excerpt": "Allo Health | Portfolio | Nexus Venture Partners companies team Back to Companies Allo Health. Digital clinic for men's sexual health. https://allohealth.care/ Sector Consumer Stage Invested Seed Location India Status Active Partners Pratik Poddar Pranay Jivrajka Founder No items found. Silicon Valley 3000 Sand Hill Road Building 1, Suite 260 Menlo Park, CA 94025 San Francisco 101 Natoma St., 2F San Francisco, CA 94105 Bengaluru 137, 1 st Cross Rd, KHB Colony, 5 th Block, Koramangala, Bengaluru - 560095, India Mumbai G-2, Sarjan Plaza 100, Dr. Annie Besant Road, Worli, Mumbai - 400018, India © 2025 Nexus Venture Partners. All rights reserved. Privacy Policy Terms of Service"
+    },
+    {
+      "id": "check-page-289fe9c672",
+      "url": "https://www.nexusvp.com/companies/animall",
+      "page": "portfolio",
+      "excerpt": "Animall | Portfolio | Nexus Venture Partners companies team Back to Companies Animall. Dairy farmer super-app.. https://animall.in/ Sector Consumer Stage Invested Series A Location India Status Active Partners Pratik Poddar Anurag Bisoi Co-Founder Kirti Co-Founder Libin V Babu Co-Founder Neetu Y Co-Founder No items found. Silicon Valley 3000 Sand Hill Road Building 1, Suite 260 Menlo Park, CA 94025 San Francisco 101 Natoma St., 2F San Francisco, CA 94105 Bengaluru 137, 1 st Cross Rd, KHB Colony, 5 th Block, Koramangala, Bengaluru - 560095, India Mumbai G-2, Sarjan Plaza 100, Dr. Annie Besant Road, Worli, Mumbai - 400018, India © 2025 Nexus Venture Partners. All rights reserved. Privacy Policy Terms of Service"
+    },
+    {
+      "id": "check-page-a02fc683c1",
+      "url": "https://www.nexusvp.com/companies/apollo-io",
+      "page": "portfolio",
+      "excerpt": "Apollo.io | Portfolio | Nexus Venture Partners companies team Back to Companies Apollo.io. The AI Sales Platform. https://www.apollo.io/ Sector Enterprise AI Stage Invested Seed Location U.S. Status Active Partners Abhishek Sharma Jishnu Bhattacharjee Matt Curl CEO Tim Zheng Chairman & Co-Founder Ray Li CTO & Co-Founder No items found. Silicon Valley 3000 Sand Hill Road Building 1, Suite 260 Menlo Park, CA 94025 San Francisco 101 Natoma St., 2F San Francisco, CA 94105 Bengaluru 137, 1 st Cross Rd, KHB Colony, 5 th Block, Koramangala, Bengaluru - 560095, India Mumbai G-2, Sarjan Plaza 100, Dr. Annie Besant Road, Worli, Mumbai - 400018, India © 2025 Nexus Venture Partners. All rights reserved. Privacy Policy Terms of Service"
+    },
+    {
+      "id": "check-page-671b9b41aa",
+      "url": "https://www.nexusvp.com/companies/arkin-net",
+      "page": "portfolio",
+      "excerpt": "Arkin Net | Portfolio | Nexus Venture Partners companies team Back to Companies Arkin Net. Consumer-class simplicity to software-defined datacenters. Acquired by VMware. https://www.vmware.com/in.html Sector Enterprise Location U.S. Status M&A Partners Jishnu Bhattacharjee Shiv Agarwal CEO & Co-Founder Rohit Toshniwal Co-Founder Mukul Gupta Co-Founder No items found. Silicon Valley 3000 Sand Hill Road Building 1, Suite 260 Menlo Park, CA 94025 San Francisco 101 Natoma St., 2F San Francisco, CA 94105 Bengaluru 137, 1 st Cross Rd, KHB Colony, 5 th Block, Koramangala, Bengaluru - 560095, India Mumbai G-2, Sarjan Plaza 100, Dr. Annie Besant Road, Worli, Mumbai - 400018, India © 2025 Nexus Venture Partners. All rights reserved. Privacy Policy Terms of Service"
+    },
+    {
+      "id": "check-page-3b5d04ecdd",
+      "url": "https://www.nexusvp.com/companies/aryaka",
+      "page": "portfolio",
+      "excerpt": "Aryaka | Portfolio | Nexus Venture Partners companies team Back to Companies Aryaka. Cloud-based WAN (wide area network) as-a-Service. https://www.aryaka.com/ Sector Enterprise Location U.S. Status Active Partners Jishnu Bhattacharjee Matt Carter CEO & Co-Founder No items found. Silicon Valley 3000 Sand Hill Road Building 1, Suite 260 Menlo Park, CA 94025 San Francisco 101 Natoma St., 2F San Francisco, CA 94105 Bengaluru 137, 1 st Cross Rd, KHB Colony, 5 th Block, Koramangala, Bengaluru - 560095, India Mumbai G-2, Sarjan Plaza 100, Dr. Annie Besant Road, Worli, Mumbai - 400018, India © 2025 Nexus Venture Partners. All rights reserved. Privacy Policy Terms of Service"
+    },
+    {
+      "id": "check-page-3b0c60fe29",
+      "url": "https://www.nexusvp.com/companies/asknicely",
+      "page": "portfolio",
+      "excerpt": "AskNicely | Portfolio | Nexus Venture Partners companies team Back to Companies AskNicely. Customer Experience (CX) platform for service businesses. https://www.asknicely.com/ Sector Enterprise Stage Invested Series A Location U.S. Status Active Partners Abhishek Sharma Jishnu Bhattacharjee Aaron Ward Co-Founder John Ballinger Co-Founder No items found. Silicon Valley 3000 Sand Hill Road Building 1, Suite 260 Menlo Park, CA 94025 San Francisco 101 Natoma St., 2F San Francisco, CA 94105 Bengaluru 137, 1 st Cross Rd, KHB Colony, 5 th Block, Koramangala, Bengaluru - 560095, India Mumbai G-2, Sarjan Plaza 100, Dr. Annie Besant Road, Worli, Mumbai - 400018, India © 2025 Nexus Venture Partners. All rights reserved. Privacy Policy Terms of Service"
+    },
+    {
+      "id": "check-page-ff8afc9fa8",
+      "url": "https://www.nexusvp.com/companies/assetplus",
+      "page": "portfolio",
+      "excerpt": "AssetPlus | Portfolio | Nexus Venture Partners companies team Back to Companies AssetPlus. India’s leading digital wealth platform for Mutual Fund Distributors. https://www.partners.assetplus.in/ Sector Fintech Stage Invested Series B Location India Status Active Partners Anand Datta Anup Gupta Zenil Sanghvi Vishranth Suresh CEO & Co-Founder Awanish Raj CTO & Co-Founder No items found. Silicon Valley 3000 Sand Hill Road Building 1, Suite 260 Menlo Park, CA 94025 San Francisco 101 Natoma St., 2F San Francisco, CA 94105 Bengaluru 137, 1 st Cross Rd, KHB Colony, 5 th Block, Koramangala, Bengaluru - 560095, India Mumbai G-2, Sarjan Plaza 100, Dr. Annie Besant Road, Worli, Mumbai - 400018, India © 2025 Nexus Venture Partners. All rights reserved. Privacy Policy Terms of Service"
+    },
+    {
+      "id": "check-page-40b60ff4b6",
+      "url": "https://www.nexusvp.com/companies/aurva-io",
+      "page": "portfolio",
+      "excerpt": "Aurva.io | Portfolio | Nexus Venture Partners companies team Back to Companies Aurva.io. Enabling Secure and Compliant Data Access. https://www.aurva.io/ Sector Enterprise Stage Invested Seed Location India Status Active Partners Jishnu Bhattacharjee Utkarsh Malhotra Apurv Garg CEO & Co-Founder Krishna Bagadia Co-Founder No items found. Silicon Valley 3000 Sand Hill Road Building 1, Suite 260 Menlo Park, CA 94025 San Francisco 101 Natoma St., 2F San Francisco, CA 94105 Bengaluru 137, 1 st Cross Rd, KHB Colony, 5 th Block, Koramangala, Bengaluru - 560095, India Mumbai G-2, Sarjan Plaza 100, Dr. Annie Besant Road, Worli, Mumbai - 400018, India © 2025 Nexus Venture Partners. All rights reserved. Privacy Policy Terms of Service"
     }
   ],
   "findings": {
@@ -47,12 +328,27 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.nexusvp.com/companies",
         "evidenceId": "check-portfolio-a594838358"
+      },
+      {
+        "value": "https://www.nexusvp.com/in/companies",
+        "evidenceId": "check-portfolio-162f542da7"
+      },
+      {
+        "value": "https://www.nexusvp.com/companies?3115ed5c_page=2",
+        "evidenceId": "check-portfolio-80e4d1d662"
       }
     ],
     "name": [

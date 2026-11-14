@@ -1,19 +1,139 @@
 {
   "programId": "lawrence-berkeley",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://ipo.lbl.gov/about-us/",
-      "page": "details",
-      "anchor": "About Us",
+      "url": "https://ipo.lbl.gov/2014/07/23/aeroseal-wins-dealer-design-award/",
+      "page": "terms",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://ipo.lbl.gov/about-us/team/",
+      "url": "https://ipo.lbl.gov/2014/09/29/ospip-ipo-ocfo-transition-faqs/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ipo.lbl.gov/2018/09/27/nontoxic-synthesis-of-highly-crystalline-sp2-bonded-boron-nitride-aerogels-for-energy-filtration-and-other-applications-2013-112/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ipo.lbl.gov/2020/03/10/a-computational-temporal-logic-for-superconducting-accelerators-2020-015/",
       "page": "details",
-      "anchor": "Team",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ipo.lbl.gov/2020/03/10/do-you-have-questions-about-intellectual-property-ask-ipo/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ipo.lbl.gov/2020/06/15/berkeley-lab-accepting-proposals-for-covid-19-technical-assistance-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ipo.lbl.gov/2021/06/30/a-conversation-about-innovation-with-deepti-tanjore/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ipo.lbl.gov/2022/03/31/mixed-electrolyte-for-li-s-batteries-for-transportation-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ipo.lbl.gov/2023/04/17/an-area-efficient-superconducting-unary-convolutional-neural-network-cnn-accelerator-for-high-performance-computing-systems/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ipo.lbl.gov/2023/04/27/unary-single-flux-quantum-u-sfq-architecture-for-scaling-superconducting-accelerators/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ipo.lbl.gov/2023/07/10/berkeley-lab-and-partners-launch-phase-1-of-cradle-to-commerce-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ipo.lbl.gov/2023/07/31/a-hardware-accelerator-for-optimized-sparse-accumulation-in-high-performance-computing/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ipo.lbl.gov/2023/08/16/the-innovation-corps-lite-training-program-i-corps-lite-ignite-your-entrepreneurial-skills-and-bring-your-ideas-to-the-marketplace/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ipo.lbl.gov/2025/08/12/spectracodec-a-hilbert-curve-based-method-for-encoding-metadata-in-mass-spectra-for-machine-learning-applications-2025-107-2025-121/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ipo.lbl.gov/about-us/",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ipo.lbl.gov/about-us/complaint-resolutionfeedback/",
+      "page": "details",
+      "anchor": "Complaint Resolution & Whistleblower Protection Act",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ipo.lbl.gov/about-us/contact-us/",
+      "page": "details",
+      "anchor": "Contact",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -35,17 +155,9 @@
       "origin": "official"
     },
     {
-      "url": "https://ipo.lbl.gov/about-us/contact-us/",
+      "url": "https://ipo.lbl.gov/about-us/team/",
       "page": "details",
-      "anchor": "Contact",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://ipo.lbl.gov/about-us/complaint-resolutionfeedback/",
-      "page": "details",
-      "anchor": "Complaint Resolution & Whistleblower Protection Act",
+      "anchor": "Team",
       "fetched": false,
       "blocked": null,
       "origin": "official"

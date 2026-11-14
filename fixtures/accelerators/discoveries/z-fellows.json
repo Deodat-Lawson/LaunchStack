@@ -1,5 +1,30 @@
 {
   "programId": "z-fellows",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
-  "pages": []
+  "checkedAt": "2026-11-14T19:43:41.000Z",
+  "pages": [
+    {
+      "url": "https://www.zfellows.com/writings-copy/choosing-your-lifes-work-changing-the-world-and-dealing-with-setbacks",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zfellows.com/writings-copy/insights-from-marcus-aurelius-elon-musk-s-algorithm-for-managing-companies-and-naval-s-best-tweets-on-startups",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.zfellows.com/writings/choosing-your-lifes-work-changing-the-world-and-dealing-with-setbacks",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
 }

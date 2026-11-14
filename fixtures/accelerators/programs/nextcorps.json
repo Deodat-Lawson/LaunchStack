@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 2,
+  "id": "nextcorps",
+  "name": "NextCorps",
+  "logo": {
+    "path": "/accelerators/logos/nextcorps.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://nextcorps.org/",
+  "applyUrl": "https://nextcorps.org/",
+  "description": {
+    "text": "Startup Week has something for every entrepreneur. Sign up for free sessions Be Next to Accelerate Your Battery Business Applications are open for the inaugural cohort of the NENY Battery […]",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "Tap into Rochester’s Largest Resource for Startup Programming to Move Forward Faster",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://nextcorps.org/",
+      "title": "NextCorps — official mark on the retrieved page",
+      "quote": "https://nextcorps.org/wp-content/uploads/2021/07/NextCorps-Logo-Horizontal-Cropped.png",
+      "checkedAt": "2026-11-14T20:04:58.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://nextcorps.org/",
+      "title": "NextCorps — visible page text",
+      "quote": "Home - NextCorps Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator Manufacturers > Growth Services Manufacturing Partner Network Community Engagement > Clean Jobs Collaborative Resources Facility Partners Reports State of Innovation Impact Reports Newsletter Blog Inside the Incubator Partner Spotlight Podcast Video learning Events Our Startups Incubation Services Luminate Venture For ClimateTech Scale For ClimateTech Contact Us Subscribe Apply Search Startup Week has something for every entrepreneur. Sign up for free sessions Be Next to Tap into Rochester’s Largest Resource for Startup Programming to Move Forward Faster Get Startup Help We’re here to help entrepreneurs who are ready to start or expand their businesses. Explore our programs to see which is right",
+      "checkedAt": "2026-11-14T20:04:58.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ]
+    }
+  ]
+}

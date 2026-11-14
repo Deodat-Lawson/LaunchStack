@@ -1,15 +1,7 @@
 {
   "programId": "founders-factory",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://foundersfactory.com/portfolio/",
-      "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://foundersfactory.com/about-us/",
       "page": "details",
@@ -21,8 +13,56 @@
     {
       "url": "https://foundersfactory.com/accelerator/",
       "page": "details",
-      "anchor": "Explore programs",
-      "fetched": false,
+      "anchor": "Accelerator",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://foundersfactory.com/accelerator/beauty/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://foundersfactory.com/accelerator/media/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://foundersfactory.com/articles/founders-factory-nature-tech-cohort-press-release/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://foundersfactory.com/articles/founders-factory-neurological-care-cohort-press-release/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://foundersfactory.com/articles/investing-in-qi4m-s-orchextra-the-agentic-ecosystem-to-manage-investment-cycles-with-precision/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://foundersfactory.com/articles/northwestern-healthcare-cohort-press-release/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -35,10 +75,42 @@
       "origin": "official"
     },
     {
+      "url": "https://foundersfactory.com/fastweb/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
+      "page": "application",
+      "anchor": "Open Health Northwestern Medicine Healthcare Accelerator Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://foundersfactory.com/pico/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://foundersfactory.com/portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://foundersfactory.com/rio-tinto-mining-tech-accelerator/",
       "page": "application",
       "anchor": "Open Industrials Rio Tinto Mining Tech Accelerator Apply",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -46,15 +118,7 @@
       "url": "https://foundersfactory.com/western-australia-government-nature-tech-accelerator/",
       "page": "application",
       "anchor": "Open Nature WA Government Nature Tech Accelerator Apply",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://foundersfactory.com/mswa-ms-neurological-care-accelerator/",
-      "page": "application",
-      "anchor": "Open Health MSWA MS & Neurological Care Accelerator Apply",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

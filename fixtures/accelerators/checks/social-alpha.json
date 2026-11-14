@@ -1,45 +1,353 @@
 {
   "programId": "social-alpha",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.socialalpha.org/",
-    "https://www.socialalpha.org/programs-accelerators/"
+    "https://www.socialalpha.org/press-releasae/through-the-use-of-technology-kitablet-application-is-taking-homegrown-childrens-literature-to-a-wider-audience/",
+    "https://www.socialalpha.org/announcement/social-alpha-announces-investment-in-healthtech-start-up-medprime-technologies-along-with-mumbai-angels-sine-iit-bombay-riso-capital-lavni-ventures-and-keiretsu-forum-in-seed-round/",
+    "https://www.socialalpha.org/announcement/social-alpha-backed-phool-co-has-received-investment-hindi-actor-alia-bhatt-invests-in-social-alpha-backed-d2c-start-up-phool-co-that-makes-natural-incense-and-bio-leather/",
+    "https://www.socialalpha.org/faq_terms-temp/",
+    "https://www.socialalpha.org/investment-model/",
+    "https://www.socialalpha.org/optimising-investment-instruments-for-early-stage-climate-tech-founders/",
+    "https://www.socialalpha.org/category/investment-stories/",
+    "https://www.socialalpha.org/timeline/",
+    "https://www.socialalpha.org/about-us-draft/",
+    "https://www.socialalpha.org/about-us/",
+    "https://www.socialalpha.org/announcement/india-innovation-growth-programme-iigp-2-0-2018-to-bring-funding-of-usd-2-million-in-social-and-industrial-innovations/",
+    "https://www.socialalpha.org/announcement/tata-trusts-and-social-alpha-launch-fellowship-program-to-empower-entrepreneurs-with-deep-science-and-technology-focus/",
+    "https://www.socialalpha.org/announcement/tata-trusts-foundation-for-innovation-and-social-entrepreneurship-joins-lockheed-martin-and-department-of-science-and-technologys-india-innovation-growth-programme-2-0-to-foster-sus/",
+    "https://www.socialalpha.org/announcement/unhie-birac-and-social-alpha-announce-india-accelerator-platform-for-healthcare-innovations/"
   ],
   "evidence": [
     {
+      "id": "check-announced-d1fd56165e",
+      "url": "https://www.socialalpha.org/faq_terms-temp/",
+      "title": "Social Alpha — terms page",
+      "excerpt": "the focus areas of the Quest will be selected as the first cohort of the IAIN. These applications may be across the Early-stage or Matured-stage category. What is the",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-9a64218e7f",
+      "url": "https://www.socialalpha.org/announcement/tata-trusts-and-social-alpha-launch-fellowship-program-to-empower-entrepreneurs-with-deep-science-and-technology-focus/",
+      "title": "Social Alpha — program page",
+      "excerpt": "safety blanket to all the finalists by way of a monthly stipend of INR 60,000. This is not compensation for their foregone salary or career",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-0dcbb13112",
+      "url": "https://www.socialalpha.org/faq_terms-temp/",
+      "title": "Social Alpha — terms page",
+      "excerpt": "incubation support will be for a period of 12-24 months (extendable further based on need and",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-0e1de1feed",
+      "url": "https://www.socialalpha.org/announcement/tata-trusts-and-social-alpha-launch-fellowship-program-to-empower-entrepreneurs-with-deep-science-and-technology-focus/",
+      "title": "Social Alpha — program page",
+      "excerpt": "means to cover their essential expenses over the 12 month period. We believe the provision of stipend will",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-49c43dae78",
+      "url": "https://www.socialalpha.org/announcement/tata-trusts-and-social-alpha-launch-fellowship-program-to-empower-entrepreneurs-with-deep-science-and-technology-focus/",
+      "title": "Social Alpha — program page",
+      "excerpt": "(E4i) Program, here today. The E4i program is a 12-month immersive fellowship that equips passionate",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-8119078633",
+      "url": "https://www.socialalpha.org/announcement/tata-trusts-and-social-alpha-launch-fellowship-program-to-empower-entrepreneurs-with-deep-science-and-technology-focus/",
+      "title": "Social Alpha — program page",
+      "excerpt": "health, agriculture, energy and environment 12 Month immersive program with access to incubation",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-b5f0be00e7",
+      "url": "https://www.socialalpha.org/optimising-investment-instruments-for-early-stage-climate-tech-founders/",
+      "title": "Social Alpha — terms page",
+      "excerpt": "but can demonstrate tangible growth within 12-15 months of having received the investment. Investors, on",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-c51491fe03",
+      "url": "https://www.socialalpha.org/faq_terms-temp/",
+      "title": "Social Alpha — terms page",
+      "excerpt": "• Post December 2020: Incubation for next 12-24 months; Funding opportunity Can I submit my application",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-d584625515",
+      "url": "https://www.socialalpha.org/timeline/",
+      "title": "Social Alpha — batches page",
+      "excerpt": "Post January 2020 Incubation for next 12-24 months; Funding opportunity For any assistance needed",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-dc5b9f3e10",
+      "url": "https://www.socialalpha.org/faq_terms-temp/",
+      "title": "Social Alpha — terms page",
+      "excerpt": "of the program? The program is a typically a 12-24 month long engagement. However, it will vary from case",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-2f05a0640b",
+      "url": "https://www.socialalpha.org/faq_terms-temp/",
+      "title": "Social Alpha — terms page",
+      "excerpt": "there may be a requirement to attend certain sessions in person. The winners will be required attend the orientation",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-6bde5e2535",
+      "url": "https://www.socialalpha.org/announcement/social-alpha-announces-investment-in-healthtech-start-up-medprime-technologies-along-with-mumbai-angels-sine-iit-bombay-riso-capital-lavni-ventures-and-keiretsu-forum-in-seed-round/",
+      "title": "Social Alpha — terms page",
+      "excerpt": "of microscopy, thereby facilitating telepathology, remote consulting, and automation of diagnostic tests using",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-84df6328a2",
+      "url": "https://www.socialalpha.org/timeline/",
+      "title": "Social Alpha — batches page",
+      "excerpt": "30th September 2019 Deadline for applications October 2019 Virtual interviews for top 60 applications Mid November 2019 Jury",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-b6e95af19c",
+      "url": "https://www.socialalpha.org/optimising-investment-instruments-for-early-stage-climate-tech-founders/",
+      "title": "Social Alpha — terms page",
+      "excerpt": "of first priced investment round) and those with a hybrid of the valuation cap and discount rate (ensuring that the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-f16252ce00",
+      "url": "https://www.socialalpha.org/faq_terms-temp/",
+      "title": "Social Alpha — terms page",
+      "excerpt": "• September 2019: Initial evaluation • October 2019: Virtual interviews for top 60 applications • Mid November 2019:",
+      "page": "terms"
+    },
+    {
       "id": "check-name-da4857d98f",
       "url": "https://www.socialalpha.org/",
-      "title": "Social Alpha — homepage checked by scrape.py",
+      "title": "Social Alpha — homepage",
       "excerpt": "Social Alpha Toggle Navigation Approach INNOVATION ECOSYSTEM INCUBATION",
       "page": "details"
     },
     {
-      "id": "check-portfolio-48fdc9f21f",
-      "url": "https://www.socialalpha.org/",
-      "title": "Social Alpha — homepage checked by scrape.py",
+      "id": "check-portfolio-026c4cc362",
+      "url": "https://www.socialalpha.org/about-us/",
+      "title": "Social Alpha — program page",
       "excerpt": "Portfolio → https://www.socialalpha.org/our-portfolio/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-92ee9646fd",
-      "url": "https://www.socialalpha.org/programs-accelerators/",
-      "title": "Social Alpha — details page checked by scrape.py",
+      "id": "check-portfolio-06190366a6",
+      "url": "https://www.socialalpha.org/about-us-draft/",
+      "title": "Social Alpha — program page",
       "excerpt": "Portfolio → https://www.socialalpha.org/our-portfolio/",
       "page": "details"
+    },
+    {
+      "id": "check-portfolio-07ed2dc5b0",
+      "url": "https://www.socialalpha.org/announcement/india-innovation-growth-programme-iigp-2-0-2018-to-bring-funding-of-usd-2-million-in-social-and-industrial-innovations/",
+      "title": "Social Alpha — program page",
+      "excerpt": "Portfolio → https://www.socialalpha.org/our-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-143cba3358",
+      "url": "https://www.socialalpha.org/investment-model/",
+      "title": "Social Alpha — terms page",
+      "excerpt": "Portfolio → https://www.socialalpha.org/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-1f039fe80c",
+      "url": "https://www.socialalpha.org/faq_terms-temp/",
+      "title": "Social Alpha — terms page",
+      "excerpt": "Portfolio → https://www.socialalpha.org/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2e1756cf15",
+      "url": "https://www.socialalpha.org/category/investment-stories/",
+      "title": "Social Alpha — terms page",
+      "excerpt": "Portfolio → https://www.socialalpha.org/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-48fdc9f21f",
+      "url": "https://www.socialalpha.org/",
+      "title": "Social Alpha — homepage",
+      "excerpt": "Portfolio → https://www.socialalpha.org/our-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4c13fc64cf",
+      "url": "https://www.socialalpha.org/timeline/",
+      "title": "Social Alpha — batches page",
+      "excerpt": "Portfolio → https://www.socialalpha.org/our-portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-51e535899c",
+      "url": "https://www.socialalpha.org/press-releasae/through-the-use-of-technology-kitablet-application-is-taking-homegrown-childrens-literature-to-a-wider-audience/",
+      "title": "Social Alpha — application page",
+      "excerpt": "Portfolio → https://www.socialalpha.org/our-portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7866db12cd",
+      "url": "https://www.socialalpha.org/announcement/unhie-birac-and-social-alpha-announce-india-accelerator-platform-for-healthcare-innovations/",
+      "title": "Social Alpha — program page",
+      "excerpt": "Portfolio → https://www.socialalpha.org/our-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8d1e9516b4",
+      "url": "https://www.socialalpha.org/announcement/tata-trusts-and-social-alpha-launch-fellowship-program-to-empower-entrepreneurs-with-deep-science-and-technology-focus/",
+      "title": "Social Alpha — program page",
+      "excerpt": "Portfolio → https://www.socialalpha.org/our-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a331b8a136",
+      "url": "https://www.socialalpha.org/announcement/social-alpha-announces-investment-in-healthtech-start-up-medprime-technologies-along-with-mumbai-angels-sine-iit-bombay-riso-capital-lavni-ventures-and-keiretsu-forum-in-seed-round/",
+      "title": "Social Alpha — terms page",
+      "excerpt": "Portfolio → https://www.socialalpha.org/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-bb23830cc0",
+      "url": "https://www.socialalpha.org/optimising-investment-instruments-for-early-stage-climate-tech-founders/",
+      "title": "Social Alpha — terms page",
+      "excerpt": "Portfolio → https://www.socialalpha.org/our-portfolio/",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-df82ecfad9",
       "url": "https://www.socialalpha.org/",
-      "title": "Social Alpha — homepage checked by scrape.py",
+      "title": "Social Alpha — homepage",
       "excerpt": "SEE ALL PORTFOLIO COMPANIES → https://www.socialalpha.org/our-portfolio/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-e56920a9d6",
+      "url": "https://www.socialalpha.org/announcement/tata-trusts-foundation-for-innovation-and-social-entrepreneurship-joins-lockheed-martin-and-department-of-science-and-technologys-india-innovation-growth-programme-2-0-to-foster-sus/",
+      "title": "Social Alpha — program page",
+      "excerpt": "Portfolio → https://www.socialalpha.org/our-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e7f21a03db",
+      "url": "https://www.socialalpha.org/announcement/social-alpha-backed-phool-co-has-received-investment-hindi-actor-alia-bhatt-invests-in-social-alpha-backed-d2c-start-up-phool-co-that-makes-natural-incense-and-bio-leather/",
+      "title": "Social Alpha — terms page",
+      "excerpt": "Portfolio → https://www.socialalpha.org/our-portfolio/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-50925ae53d",
       "url": "https://www.socialalpha.org/",
-      "title": "Social Alpha — homepage checked by scrape.py",
+      "title": "Social Alpha — homepage",
       "excerpt": "https://www.socialalpha.org/",
       "page": "details"
+    },
+    {
+      "id": "check-status-2a9c4b982b",
+      "url": "https://www.socialalpha.org/announcement/tata-trusts-and-social-alpha-launch-fellowship-program-to-empower-entrepreneurs-with-deep-science-and-technology-focus/",
+      "title": "Social Alpha — program page",
+      "excerpt": "a lot of hands on support from successful innovators and entrepreneurs”, said Kumar. The E4i program is now accepting applications; Deadline for application is January 6th, 2019. To apply log onto www.socialalphachallenge.org . CATEGORIES",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-7a59bd8afc",
+      "url": "https://www.socialalpha.org/",
+      "page": "details",
+      "excerpt": "Social Alpha Toggle Navigation Approach INNOVATION ECOSYSTEM INCUBATION LABS INVESTMENT MODEL Portfolio Labs Social Alpha Labs Clean Energy AIC CEIBIC SPIN Mach33 Programs Techtonic Accelerators Sustain Plus DST Seed Support Program Namma Bengaluru Challenge ‘26 Other Programs Entrepreneur in Residence About Newsroom ANNOUNCEMENTS Newsletters OPINION ARTICLES PRESS BLOGS PODCASTS RESOURCES Careers WORK AT SOCIAL ALPHA WORK AT A PORTFOLIO COMPANY Get Involved Our complex social, economic and environmental challenges urgently demand a radically new approach. Our complex social, economic and environmental challenges urgently demand a radically new approach. sai April 13, 2026 September 21, 2026 Social Alpha backs science- and technology-led innovations that address critical social, economic, and environmental challenges, supporting mission-driven entrepreneurs from lab to market. Through our full-stack architecture, we help de-risk, deploy, and scale deep-tech innovations across energy, resources, materials, food systems, and health. Impact at scale. 3.5 million+ People reached across 400+ districts in 28 states and union territories 20+ MedTech innovations deployed across public and private health systems 3,75,000+ Households served by distributed renewable energy solutions 2,00,000+ Smallholder farmers with improved incomes 1,50,000+ MT Waste diverted from landfills 1GT/yr CO 2"
+    },
+    {
+      "id": "check-page-425f21daee",
+      "url": "https://www.socialalpha.org/press-releasae/through-the-use-of-technology-kitablet-application-is-taking-homegrown-childrens-literature-to-a-wider-audience/",
+      "page": "application",
+      "excerpt": "Through the use of technology, Kitablet application is taking homegrown children's literature to a wider audience - SocialAlpha Toggle Navigation Approach INNOVATION ECOSYSTEM INCUBATION LABS INVESTMENT MODEL Portfolio Labs Social Alpha Labs Clean Energy AIC CEIBIC SPIN Mach33 Programs Techtonic Accelerators Sustain Plus DST Seed Support Program Namma Bengaluru Challenge ‘26 Other Programs Entrepreneur in Residence About Newsroom ANNOUNCEMENTS Newsletters OPINION ARTICLES PRESS BLOGS PODCASTS RESOURCES Careers WORK AT SOCIAL ALPHA WORK AT A PORTFOLIO COMPANY Get Involved Through the use of technology, Kitablet application is taking homegrown children’s literature to a wider audience December 25, 2018 By Social Alpha Through the use of technology, Kitablet application is taking homegrown children’s literature to a wider audience Social Alpha December 25, 2018 June 20, 2019 CATEGORIES All 18 Investment Stories 36 Insights and Reflections 13 Entrepreneur Speak 3 Notes 1 ARCHIVES April 2026 August 2025 June 2025 April 2025 March 2025 February 2025 January 2025 December 2024 November 2024 October 2024 September 2024 July 2024 June 2024 May 2024 April 2024 January 2024 March 2022 January 2022 December 2021 November 2021 September 2021 August 2021 July 2021 June 2021 May 2021 March 2021 February 2021 January 2021 October 2020 September 2020 June 2020 January 2020 December 2019"
+    },
+    {
+      "id": "check-page-162681b1dc",
+      "url": "https://www.socialalpha.org/announcement/social-alpha-announces-investment-in-healthtech-start-up-medprime-technologies-along-with-mumbai-angels-sine-iit-bombay-riso-capital-lavni-ventures-and-keiretsu-forum-in-seed-round/",
+      "page": "terms",
+      "excerpt": "Social Alpha announces investment in healthtech start-up MedPrime Technologies along with Mumbai Angels, SINE IIT Bombay, RiSo Capital, Lavni Ventures and Keiretsu Forum in seed round - SocialAlpha Toggle Navigation Approach INNOVATION ECOSYSTEM INCUBATION LABS INVESTMENT MODEL Portfolio Labs Social Alpha Labs Clean Energy AIC CEIBIC SPIN Mach33 Programs Techtonic Accelerators Sustain Plus DST Seed Support Program Namma Bengaluru Challenge ‘26 Other Programs Entrepreneur in Residence About Newsroom ANNOUNCEMENTS Newsletters OPINION ARTICLES PRESS BLOGS PODCASTS RESOURCES Careers WORK AT SOCIAL ALPHA WORK AT A PORTFOLIO COMPANY Get Involved Social Alpha announces investment in healthtech start-up MedPrime Technologies along with Mumbai Angels, SINE IIT Bombay, RiSo Capital, Lavni Ventures and Keiretsu Forum in seed round August 3, 2021 By Social Alpha Social Alpha announces investment in healthtech start-up MedPrime Technologies along with Mumbai Angels, SINE IIT Bombay, RiSo Capital, Lavni Ventures and Keiretsu Forum in seed round Social Alpha August 3, 2021 August 3, 2021 The freshly infused capital will be used towards scaling up MedPrime’s Cilika product line and make it more profitable along with developing the AI component for MICALYS Bengaluru, August 3 rd , 2021: Social Alpha announces investment in healthtech startup Medprime Technologies that focusses on providing"
+    },
+    {
+      "id": "check-page-a0897543b8",
+      "url": "https://www.socialalpha.org/announcement/social-alpha-backed-phool-co-has-received-investment-hindi-actor-alia-bhatt-invests-in-social-alpha-backed-d2c-start-up-phool-co-that-makes-natural-incense-and-bio-leather/",
+      "page": "terms",
+      "excerpt": "Social Alpha backed Phool.co a D2C start-up has received investment from Alia Bhatt. Phool.co have pioneered flower cycling technologies to upcycle cellulose waste and specializes in manufacturing charcoal-free incense and other wellness products. - SocialAlpha Toggle Navigation Approach INNOVATION ECOSYSTEM INCUBATION LABS INVESTMENT MODEL Portfolio Labs Social Alpha Labs Clean Energy AIC CEIBIC SPIN Mach33 Programs Techtonic Accelerators Sustain Plus DST Seed Support Program Namma Bengaluru Challenge ‘26 Other Programs Entrepreneur in Residence About Newsroom ANNOUNCEMENTS Newsletters OPINION ARTICLES PRESS BLOGS PODCASTS RESOURCES Careers WORK AT SOCIAL ALPHA WORK AT A PORTFOLIO COMPANY Get Involved Social Alpha backed Phool.co a D2C start-up has received investment from Alia Bhatt. Phool.co have pioneered flower cycling technologies to upcycle cellulose waste and specializes in manufacturing charcoal-free incense and other wellness products. October 11, 2021 By chandu Social Alpha backed Phool.co a D2C start-up has received investment from Alia Bhatt. Phool.co have pioneered flower cycling technologies to upcycle cellulose waste and specializes in manufacturing charcoal-free incense and other wellness products. chandu October 11, 2021 October 11, 2021 Alia Bhatt has invested in Social-Alpha -backed startup Phool.co, which has pioneered the flowercycling technologies to"
+    },
+    {
+      "id": "check-page-b747dc5012",
+      "url": "https://www.socialalpha.org/faq_terms-temp/",
+      "page": "terms",
+      "excerpt": "faq_terms temp - SocialAlpha Toggle Navigation Approach INNOVATION ECOSYSTEM INCUBATION LABS INVESTMENT MODEL Portfolio Labs Social Alpha Labs Clean Energy AIC CEIBIC SPIN Mach33 Programs Techtonic Accelerators Sustain Plus DST Seed Support Program Namma Bengaluru Challenge ‘26 Other Programs Entrepreneur in Residence About Newsroom ANNOUNCEMENTS Newsletters OPINION ARTICLES PRESS BLOGS PODCASTS RESOURCES Careers WORK AT SOCIAL ALPHA WORK AT A PORTFOLIO COMPANY Get Involved faq_terms temp Social Alpha November 18, 2020 November 18, 2020 Frequently Asked Questions To know more about the Quest, we request you to go through the FAQs section: ELIGIBILITY Who can apply for the program? Social Alpha Quest Agritech Innovations is a search for innovators and entrepreneurs with transformative technologies that address a curated set of challenges faced by the smallholder farmers in Uttar Pradesh. Individuals, group of individuals, social enterprises and start-ups registered in India (whether for-profit or not-for-profit) are eligible to apply for the program. In which category am I eligible to apply? Applicants are requested to select the most appropriate category based on the development stage/technology readiness level of the product. TRL 3 to 6 need to apply to the Early Stage Category and TRL 7 onwards need to apply to the Matured Stage category. Please select the category carefully"
+    },
+    {
+      "id": "check-page-c2abd15b14",
+      "url": "https://www.socialalpha.org/investment-model/",
+      "page": "terms",
+      "excerpt": "Investment Model - SocialAlpha Toggle Navigation Approach INNOVATION ECOSYSTEM INCUBATION LABS INVESTMENT MODEL Portfolio Labs Social Alpha Labs Clean Energy AIC CEIBIC SPIN Mach33 Programs Techtonic Accelerators Sustain Plus DST Seed Support Program Namma Bengaluru Challenge ‘26 Other Programs Entrepreneur in Residence About Newsroom ANNOUNCEMENTS Newsletters OPINION ARTICLES PRESS BLOGS PODCASTS RESOURCES Careers WORK AT SOCIAL ALPHA WORK AT A PORTFOLIO COMPANY Get Involved Investment Model Social Alpha April 13, 2019 April 22, 2026 Investment Model Creation of a new category of 'patient' capital to invest in early stage start-ups which is willing to stretch the boundaries of Risk-Reward-Patience frontiers. We have arrived at meaningful metrics to determine the measure of success of social enterprises, and followed up with a relevant alternative to mainstream venture investing models. SUSTAINABLE GROWTH AND IMPACT DRIVEN OUR INVESTMENT THESIS Our Approach is to prioritise the Inclusive in Inclusive Innovation, Impact in Impact Investing and Social in Social Entrepreneurship. Markets have assumed low returns in certain categories due to lack of reliable data points but an innovation that solves problems at scale may deliver market returns but one needs patient capital and risk appetite to validate. Why is there no surge in social investments? Missing Entrepreneurs Why is the"
+    },
+    {
+      "id": "check-page-3d891227bf",
+      "url": "https://www.socialalpha.org/optimising-investment-instruments-for-early-stage-climate-tech-founders/",
+      "page": "terms",
+      "excerpt": "Optimising Investment Instruments for Early-Stage Climate-tech Founders - SocialAlpha Toggle Navigation Approach INNOVATION ECOSYSTEM INCUBATION LABS INVESTMENT MODEL Portfolio Labs Social Alpha Labs Clean Energy AIC CEIBIC SPIN Mach33 Programs Techtonic Accelerators Sustain Plus DST Seed Support Program Namma Bengaluru Challenge ‘26 Other Programs Entrepreneur in Residence About Newsroom ANNOUNCEMENTS Newsletters OPINION ARTICLES PRESS BLOGS PODCASTS RESOURCES Careers WORK AT SOCIAL ALPHA WORK AT A PORTFOLIO COMPANY Get Involved Optimising Investment Instruments for Early-Stage Climate-tech Founders March 2, 2022 By Social Alpha All Optimising Investment Instruments for Early-Stage Climate-tech Founders Social Alpha March 2, 2022 March 2, 2022 Co-authored by Kaustubh Rastogi and Rohan Parikh Climate-tech investments in India have taken off, yet funding remains relatively scarce. For early-stage founders building products and solutions in capital-deprived, unproven markets, it is important to raise money smartly. Understanding the implications of using certain investment instruments over others can help them maximise their growth while keeping their dilution to a minimum. India’s climate-tech moment has arrived. Despite receiving a paltry portion of the total global climate-tech fundraises from 2020-21, India has ranked among the top ten global locations for VC-funded"
+    },
+    {
+      "id": "check-page-44e193a4cd",
+      "url": "https://www.socialalpha.org/category/investment-stories/",
+      "page": "terms",
+      "excerpt": "Investment Stories Archives - SocialAlpha Toggle Navigation Approach INNOVATION ECOSYSTEM INCUBATION LABS INVESTMENT MODEL Portfolio Labs Social Alpha Labs Clean Energy AIC CEIBIC SPIN Mach33 Programs Techtonic Accelerators Sustain Plus DST Seed Support Program Namma Bengaluru Challenge ‘26 Other Programs Entrepreneur in Residence About Newsroom ANNOUNCEMENTS Newsletters OPINION ARTICLES PRESS BLOGS PODCASTS RESOURCES Careers WORK AT SOCIAL ALPHA WORK AT A PORTFOLIO COMPANY Get Involved Investment Stories Home Investment Stories Building a Greener Future: Angirus’ Game Changing Bricks From C&D Waste by Social Alpha | April 3, 2025 April 3, 2025 | Investment Stories In the relentless march towards urbanisation, India faces a monumental challenge: the accelerating demand for... continue reading Bridging the Gaps in Mental Healthcare: Wundrsight’s VR Therapy for Lasting Recovery by Social Alpha | January 30, 2025 January 30, 2025 | Investment Stories Picture this: a mental healthcare professional is trying to treat eight patients back-to-back in a... continue reading Point-of-care Screening Solutions: The Future of Cervical Cancer Prevention by Social Alpha | November 20, 2024 November 20, 2024 | Investment Stories Cervical cancer is a leading global public health challenge, being the second most common cancer... continue reading Reimagining Building Insulation: Samakhya’s"
+    },
+    {
+      "id": "check-page-3ac746b3a1",
+      "url": "https://www.socialalpha.org/timeline/",
+      "page": "batches",
+      "excerpt": "TIMELINE - SocialAlpha Toggle Navigation Approach INNOVATION ECOSYSTEM INCUBATION LABS INVESTMENT MODEL Portfolio Labs Social Alpha Labs Clean Energy AIC CEIBIC SPIN Mach33 Programs Techtonic Accelerators Sustain Plus DST Seed Support Program Namma Bengaluru Challenge ‘26 Other Programs Entrepreneur in Residence About Newsroom ANNOUNCEMENTS Newsletters OPINION ARTICLES PRESS BLOGS PODCASTS RESOURCES Careers WORK AT SOCIAL ALPHA WORK AT A PORTFOLIO COMPANY Get Involved TIMELINE Social Alpha November 17, 2020 November 17, 2020 Timeline 1st July 2019 Launch of Social Alpha Quest for Agritech Innovations 30th September 2019 Deadline for applications October 2019 Virtual interviews for top 60 applications Mid November 2019 Jury round for top 25; Grand finale; Announcement of winners December 2019 onwards Orientation launchpad and start of pre-incubation Post January 2020 Incubation for next 12-24 months; Funding opportunity For any assistance needed in filling the application form, please reach out to us at quest@www.socialalpha.org Approach | Portfolio | Programs | About | Media | Careers | Get Involved | Newsletters Terms & Conditions Privacy Policy © 2024 Foundation for Innovation and Social Entrepreneurship"
+    },
+    {
+      "id": "check-page-2d38d4039c",
+      "url": "https://www.socialalpha.org/about-us-draft/",
+      "page": "details",
+      "excerpt": "About Us draft - SocialAlpha Toggle Navigation Approach INNOVATION ECOSYSTEM INCUBATION LABS INVESTMENT MODEL Portfolio Labs Social Alpha Labs Clean Energy AIC CEIBIC SPIN Mach33 Programs Techtonic Accelerators Sustain Plus DST Seed Support Program Namma Bengaluru Challenge ‘26 Other Programs Entrepreneur in Residence About Newsroom ANNOUNCEMENTS Newsletters OPINION ARTICLES PRESS BLOGS PODCASTS RESOURCES Careers WORK AT SOCIAL ALPHA WORK AT A PORTFOLIO COMPANY Get Involved About Us draft chandu March 27, 2023 May 19, 2023 Our Story We imagine an India where entrepreneurs and innovators have access to the resources they need to create deep and irreversible impact. Our Philosophy At Social Alpha, we believe that science and technology innovations and entrepreneurship has the potential to bring about a positive change in the life of masses. We search for entrepreneurs and innovators who are on a ‘mission to create social, economic and environmental impact’ and support them through their ‘lab to market’ journey, as they create compelling solutions to fight poverty and address India’s intractable developmental challenges. In pursuit of game changing, disruptive innovations The current science and technology based entrepreneurship ecosystem needs innovative alternatives to mainstream venture investing models – a new category of risk underwriting which is not averse to extremely"
+    },
+    {
+      "id": "check-page-4681b8e79b",
+      "url": "https://www.socialalpha.org/about-us/",
+      "page": "details",
+      "excerpt": "About Us - SocialAlpha Toggle Navigation Approach INNOVATION ECOSYSTEM INCUBATION LABS INVESTMENT MODEL Portfolio Labs Social Alpha Labs Clean Energy AIC CEIBIC SPIN Mach33 Programs Techtonic Accelerators Sustain Plus DST Seed Support Program Namma Bengaluru Challenge ‘26 Other Programs Entrepreneur in Residence About Newsroom ANNOUNCEMENTS Newsletters OPINION ARTICLES PRESS BLOGS PODCASTS RESOURCES Careers WORK AT SOCIAL ALPHA WORK AT A PORTFOLIO COMPANY Get Involved About Us Social Alpha April 27, 2019 September 23, 2026 Our Story We imagine an India where entrepreneurs and innovators have access to the resources they need to create deep and irreversible impact. Our Philosophy At Social Alpha, we believe that science and technology innovations and entrepreneurship has the potential to bring about a positive change in the life of masses. We search for entrepreneurs and innovators who are on a ‘mission to create social, economic and environmental impact’ and support them through their ‘lab to market’ journey, as they create compelling solutions to fight poverty and address India’s intractable developmental challenges. In pursuit of game changing, disruptive innovations The current science and technology based entrepreneurship ecosystem needs innovative alternatives to mainstream venture investing models – a new category of risk underwriting which is not averse to extremely"
+    },
+    {
+      "id": "check-page-b328e58261",
+      "url": "https://www.socialalpha.org/announcement/india-innovation-growth-programme-iigp-2-0-2018-to-bring-funding-of-usd-2-million-in-social-and-industrial-innovations/",
+      "page": "details",
+      "excerpt": "India innovation growth programme (iigp 2.0) – 2018 to bring funding of usd 2 million in social and industrial innovations - SocialAlpha Toggle Navigation Approach INNOVATION ECOSYSTEM INCUBATION LABS INVESTMENT MODEL Portfolio Labs Social Alpha Labs Clean Energy AIC CEIBIC SPIN Mach33 Programs Techtonic Accelerators Sustain Plus DST Seed Support Program Namma Bengaluru Challenge ‘26 Other Programs Entrepreneur in Residence About Newsroom ANNOUNCEMENTS Newsletters OPINION ARTICLES PRESS BLOGS PODCASTS RESOURCES Careers WORK AT SOCIAL ALPHA WORK AT A PORTFOLIO COMPANY Get Involved India innovation growth programme (iigp 2.0) – 2018 to bring funding of usd 2 million in social and industrial innovations March 21, 2018 By Social Alpha India innovation growth programme (iigp 2.0) – 2018 to bring funding of usd 2 million in social and industrial innovations Social Alpha March 21, 2018 June 20, 2019 5 Innovations of 2017 spanning across healthcare, water, aerospace and nanotechnology have gone into India and overseas market New Delhi: The 2018 edition of the India Innovation Growth Programme 2.0 aimed at developing entrepreneurship in India will be launched today at the Rashtrapati Bhavan in the presence of Shri Ram Nath Kovind, President of India. Established by the Department of Science and Technology, Government of India, Lockheed Martin Corporation & Tata Trusts, the India"
+    },
+    {
+      "id": "check-page-89c1e9f599",
+      "url": "https://www.socialalpha.org/announcement/tata-trusts-and-social-alpha-launch-fellowship-program-to-empower-entrepreneurs-with-deep-science-and-technology-focus/",
+      "page": "details",
+      "excerpt": "Tata Trusts and Social Alpha launch fellowship program to empower entrepreneurs with deep science and technology focus - SocialAlpha Toggle Navigation Approach INNOVATION ECOSYSTEM INCUBATION LABS INVESTMENT MODEL Portfolio Labs Social Alpha Labs Clean Energy AIC CEIBIC SPIN Mach33 Programs Techtonic Accelerators Sustain Plus DST Seed Support Program Namma Bengaluru Challenge ‘26 Other Programs Entrepreneur in Residence About Newsroom ANNOUNCEMENTS Newsletters OPINION ARTICLES PRESS BLOGS PODCASTS RESOURCES Careers WORK AT SOCIAL ALPHA WORK AT A PORTFOLIO COMPANY Get Involved Tata Trusts and Social Alpha launch fellowship program to empower entrepreneurs with deep science and technology focus November 14, 2018 By Social Alpha Tata Trusts and Social Alpha launch fellowship program to empower entrepreneurs with deep science and technology focus Social Alpha November 14, 2018 June 20, 2019 Social Alpha Entrepreneurs for Impact (E4i) Program will select up to 8 entrepreneurs To solve problems in water, sanitation, health, agriculture, energy and environment 12 Month immersive program with access to incubation labs, mentoring and seed capital Delhi, November 14, 2018: The Tata Trusts and Social Alpha announced the launch of their flagship fellowship program, the Social Alpha Entrepreneurs for Impact (E4i) Program, here today. The E4i program is a 12-month immersive fellowship that"
+    },
+    {
+      "id": "check-page-82e243b082",
+      "url": "https://www.socialalpha.org/announcement/tata-trusts-foundation-for-innovation-and-social-entrepreneurship-joins-lockheed-martin-and-department-of-science-and-technologys-india-innovation-growth-programme-2-0-to-foster-sus/",
+      "page": "details",
+      "excerpt": "Tata Trusts’ Foundation for Innovation and Social Entrepreneurship joins Lockheed Martin, and Department of Science and Technology’s India Innovation Growth Programme 2.0 to foster sustainable social and industrial innovations - SocialAlpha Toggle Navigation Approach INNOVATION ECOSYSTEM INCUBATION LABS INVESTMENT MODEL Portfolio Labs Social Alpha Labs Clean Energy AIC CEIBIC SPIN Mach33 Programs Techtonic Accelerators Sustain Plus DST Seed Support Program Namma Bengaluru Challenge ‘26 Other Programs Entrepreneur in Residence About Newsroom ANNOUNCEMENTS Newsletters OPINION ARTICLES PRESS BLOGS PODCASTS RESOURCES Careers WORK AT SOCIAL ALPHA WORK AT A PORTFOLIO COMPANY Get Involved Tata Trusts’ Foundation for Innovation and Social Entrepreneurship joins Lockheed Martin, and Department of Science and Technology’s India Innovation Growth Programme 2.0 to foster sustainable social and industrial innovations October 6, 2016 By Social Alpha Tata Trusts’ Foundation for Innovation and Social Entrepreneurship joins Lockheed Martin, and Department of Science and Technology’s India Innovation Growth Programme 2.0 to foster sustainable social and industrial innovations Social Alpha October 6, 2016 June 20, 2019 Entries for innovative ideas to be accepted through an ‘Open Innovation Call’ and targeted university challenges, covering both social and industrial innovations New and improved"
+    },
+    {
+      "id": "check-page-842af0490c",
+      "url": "https://www.socialalpha.org/announcement/unhie-birac-and-social-alpha-announce-india-accelerator-platform-for-healthcare-innovations/",
+      "page": "details",
+      "excerpt": "UNHIE, BIRAC and Social Alpha announce India Accelerator Platform for Healthcare Innovations - SocialAlpha Toggle Navigation Approach INNOVATION ECOSYSTEM INCUBATION LABS INVESTMENT MODEL Portfolio Labs Social Alpha Labs Clean Energy AIC CEIBIC SPIN Mach33 Programs Techtonic Accelerators Sustain Plus DST Seed Support Program Namma Bengaluru Challenge ‘26 Other Programs Entrepreneur in Residence About Newsroom ANNOUNCEMENTS Newsletters OPINION ARTICLES PRESS BLOGS PODCASTS RESOURCES Careers WORK AT SOCIAL ALPHA WORK AT A PORTFOLIO COMPANY Get Involved UNHIE, BIRAC and Social Alpha announce India Accelerator Platform for Healthcare Innovations November 29, 2019 By Social Alpha UNHIE, BIRAC and Social Alpha announce India Accelerator Platform for Healthcare Innovations Social Alpha November 29, 2019 November 29, 2019 UNHIE, BIRAC and Social Alpha announce India Accelerator Platform for Healthcare Innovations Initiative to fast track adoption, ease access and market entry to enable universal healthcare Platform will lead to successful adoption of at least 100 Indian innovations in 5 years; leading to creation of new market opportunities worth $500 million for India’s MedTech start-ups Create a Market Shaping accelerator and multilateral mechanism to identify and promote contextual, “Made-in-India” health innovations. Delhi, November 21, 2019: A unique programme for health"
     }
   ],
   "findings": {
@@ -52,11 +360,72 @@
         "evidenceId": "check-route-50925ae53d"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-2a9c4b982b"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "may",
+        "evidenceId": "check-announced-d1fd56165e"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "24 months",
+        "evidenceId": "check-duration-dc5b9f3e10"
+      },
+      {
+        "value": "15 months",
+        "evidenceId": "check-duration-b5f0be00e7"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-8119078633"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-6bde5e2535"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-2f05a0640b"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-b6e95af19c"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "safety blanket to all the finalists by way of a monthly stipend of INR 60,000. This is not compensation for their foregone salary or career",
+        "evidenceId": "check-deal-9a64218e7f"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "60000",
+          "currency": "INR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-9a64218e7f"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://www.socialalpha.org/our-portfolio/",

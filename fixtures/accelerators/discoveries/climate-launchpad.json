@@ -1,31 +1,7 @@
 {
   "programId": "climate-launchpad",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://climatelaunchpad.org/competition/",
-      "page": "details",
-      "anchor": "About the competition",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://climatelaunchpad.org/application-form/",
-      "page": "application",
-      "anchor": "Apply now",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://climatelaunchpad.org/frequently-asked-questions/",
-      "page": "terms",
-      "anchor": "FAQ",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://climatelaunchpad.org/about-climatelaunchpad/",
       "page": "details",
@@ -35,10 +11,10 @@
       "origin": "official"
     },
     {
-      "url": "https://climatelaunchpad.org/meet-our-trainers/",
+      "url": "https://climatelaunchpad.org/application-form/",
       "page": "application",
-      "anchor": "Learn Learn by doing Gain practical tools to shape your idea into a real solution. Join boot camps, coaching sessions, and a global community supporting your journey. Apply new ski",
-      "fetched": false,
+      "anchor": "Apply now",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -55,6 +31,118 @@
       "page": "portfolio",
       "anchor": "Celebrating the recent funding achievements of ClimateLaunchpad Participants Alumni Insights Success Stories 4 min read",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/blog/estonian-deals-were-sealed-in-the-sauna/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/blog/how-cleantech-start-ups-are-dealing-with-the-pandemic/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/blog/how-will-europes-green-deal-benefit-entrepreneurs/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/blog/ligo-krasi-ligo-thalassa-and-state-your-deal/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/blog/press-release-global-green-business-ideas-competition-open-for-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/blog/the-european-green-deal-offers-massive-opportunities-for-green-business/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/blog/up-high-on-the-mountains-of-cyprus-you-make-your-deal/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/blog/yes-were-back-applications-2018-now-open-in-35-countries/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/competition/",
+      "page": "details",
+      "anchor": "About the competition",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/frequently-asked-questions/",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/meet-our-trainers/",
+      "page": "application",
+      "anchor": "Learn Learn by doing Gain practical tools to shape your idea into a real solution. Join boot camps, coaching sessions, and a global community supporting your journey. Apply new ski",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/terms-conditions/",
+      "page": "terms",
+      "anchor": "Terms & conditions",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/thank-you-for-your-application/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/wp-content/uploads/2026/02/PR-Applications-open-2021-CLP-575A7347.jpg",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

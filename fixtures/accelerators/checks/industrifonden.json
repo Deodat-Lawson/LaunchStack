@@ -1,88 +1,178 @@
 {
   "programId": "industrifonden",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://industrifonden.com/",
+    "https://industrifonden.com/faq-our-investment-process",
+    "https://industrifonden.com/news-insights/olsaro-closes-eu5m-seed-investment-to-scale-climate-resilient-cereal-genetics",
     "https://industrifonden.com/our-story",
-    "https://industrifonden.com/faq-our-investment-process"
+    "https://industrifonden.com/portfolio"
   ],
   "evidence": [
     {
-      "id": "check-deal-173fc53d1d",
+      "id": "check-deal-fcfff09880",
       "url": "https://industrifonden.com/our-story",
-      "title": "Industrifonden — details page checked by scrape.py",
-      "excerpt": "reshaped their industries – and we exit when the company is ready, not when a fund term ends. We invest in early-stage companies. Our first ticket is often €1–5million, with capacity to invest considerably more over a company's lifecycle. We invest across four areas – life science, deep tech, software, and growth –",
+      "title": "Industrifonden — program page",
+      "excerpt": "ends. We invest in early-stage companies. Our first ticket is often €1–5million, with capacity to invest considerably more over a company's",
       "page": "details"
+    },
+    {
+      "id": "check-duration-73b112e556",
+      "url": "https://industrifonden.com/faq-our-investment-process",
+      "title": "Industrifonden — terms page",
+      "excerpt": "from the initial meeting to funding takes 3-6 months. Previous progress updates facilitate the",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-0a457f23e2",
+      "url": "https://industrifonden.com/portfolio",
+      "title": "Industrifonden — portfolio page",
+      "excerpt": "Sweden Get directions Phone: +46 8 587 919 00 E-mail: info@industrifonden.com ⓒ 2026 Industrifonden",
+      "page": "portfolio"
     },
     {
       "id": "check-email-0ce88091da",
       "url": "https://industrifonden.com/",
-      "title": "Industrifonden — homepage checked by scrape.py",
+      "title": "Industrifonden — homepage",
       "excerpt": "Sweden Get directions Phone: +46 8 587 919 00 E-mail: info@industrifonden.com ⓒ 2026 Industrifonden Iframe is blocked. Accept cookies to",
       "page": "details"
     },
     {
+      "id": "check-email-182078bf98",
+      "url": "https://industrifonden.com/news-insights/olsaro-closes-eu5m-seed-investment-to-scale-climate-resilient-cereal-genetics",
+      "title": "Industrifonden — terms page",
+      "excerpt": "Sweden Get directions Phone: +46 8 587 919 00 E-mail: info@industrifonden.com ⓒ 2026 Industrifonden",
+      "page": "terms"
+    },
+    {
       "id": "check-email-64c40a9b77",
       "url": "https://industrifonden.com/our-story",
-      "title": "Industrifonden — details page checked by scrape.py",
+      "title": "Industrifonden — program page",
       "excerpt": "Sweden Get directions Phone: +46 8 587 919 00 E-mail: info@industrifonden.com ⓒ 2026 Industrifonden",
       "page": "details"
     },
     {
       "id": "check-email-a277021f96",
       "url": "https://industrifonden.com/faq-our-investment-process",
-      "title": "Industrifonden — terms page checked by scrape.py",
+      "title": "Industrifonden — terms page",
       "excerpt": "Sweden Get directions Phone: +46 8 587 919 00 E-mail: info@industrifonden.com ⓒ 2026 Industrifonden",
       "page": "terms"
     },
     {
+      "id": "check-format-29585556e9",
+      "url": "https://industrifonden.com/",
+      "title": "Industrifonden — homepage",
+      "excerpt": "MedTech, and innovative healthcare solutions. Join us in person or online! 22 Feb 2024 Tech Arena 2024 We're gearing up",
+      "page": "details"
+    },
+    {
+      "id": "check-format-b2cda17fce",
+      "url": "https://industrifonden.com/portfolio",
+      "title": "Industrifonden — portfolio page",
+      "excerpt": "is a game developer and publisher, building world-class virtual reality games. Founded by game development veterans, the",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-fa7d2f7cf7",
+      "url": "https://industrifonden.com/portfolio",
+      "title": "Industrifonden — portfolio page",
+      "excerpt": "distributing sensitive data for use in the multi-cloud and hybrid-cloud environment, while at the same time reducing",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-location-5060d90946",
+      "url": "https://industrifonden.com/portfolio",
+      "title": "Industrifonden — portfolio page",
+      "excerpt": "insight platform Founded in 2022 and headquartered in Lund, Sweden, TrackPaw Scientific is on a",
+      "page": "portfolio"
+    },
+    {
       "id": "check-name-79ffda7be7",
       "url": "https://industrifonden.com/",
-      "title": "Industrifonden — homepage checked by scrape.py",
+      "title": "Industrifonden — homepage",
       "excerpt": "Industrifonden – Sweden’s Venture Capital Fund Home Team Portfolio About",
       "page": "details"
     },
     {
       "id": "check-portfolio-404975177e",
       "url": "https://industrifonden.com/faq-our-investment-process",
-      "title": "Industrifonden — terms page checked by scrape.py",
+      "title": "Industrifonden — terms page",
       "excerpt": "Portfolio → https://industrifonden.com/portfolio",
       "page": "terms"
     },
     {
       "id": "check-portfolio-6c1a167592",
       "url": "https://industrifonden.com/",
-      "title": "Industrifonden — homepage checked by scrape.py",
+      "title": "Industrifonden — homepage",
       "excerpt": "Portfolio → https://industrifonden.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-7f43ba6b1a",
+      "url": "https://industrifonden.com/news-insights/olsaro-closes-eu5m-seed-investment-to-scale-climate-resilient-cereal-genetics",
+      "title": "Industrifonden — terms page",
+      "excerpt": "Portfolio → https://industrifonden.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-80c2294d1d",
       "url": "https://industrifonden.com/our-story",
-      "title": "Industrifonden — details page checked by scrape.py",
+      "title": "Industrifonden — program page",
       "excerpt": "Portfolio → https://industrifonden.com/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-c327fce23c",
       "url": "https://industrifonden.com/",
-      "title": "Industrifonden — homepage checked by scrape.py",
+      "title": "Industrifonden — homepage",
       "excerpt": "OUR COMPANIES → https://industrifonden.com/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-fd60ec85ed",
       "url": "https://industrifonden.com/",
-      "title": "Industrifonden — homepage checked by scrape.py",
+      "title": "Industrifonden — homepage",
       "excerpt": "SEE ALL PORTFOLIO COMPANIES → https://industrifonden.com/portfolio",
       "page": "details"
     },
     {
       "id": "check-route-7e24a00d39",
       "url": "https://industrifonden.com/",
-      "title": "Industrifonden — homepage checked by scrape.py",
+      "title": "Industrifonden — homepage",
       "excerpt": "https://industrifonden.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-7798f2b145",
+      "url": "https://industrifonden.com/",
+      "page": "details",
+      "excerpt": "Industrifonden – Sweden’s Venture Capital Fund Home Team Portfolio About us News & Insights Meet Us Talent Contact WE'RE SWEDEN'S Venture Capital Fund We back unique, scalable innovations with the patient capital and staying power to see them through — from first check to global scale. read more TICKET SIZE - PORTFOLIO COMPANIES ASSETS UNDER MANAGEMENT IPOS NORDIC INNOVATIONS Bringing breakthroughs to the world Industrifonden is an evergreen venture capital fund backing innovative companies with the potential to fundamentally reshape industries and create long-term value for society. We invest with patience and conviction, supporting companies through complexity and critical inflection points, enabling them to scale globally. As an evergreen, fund terms do not dictate our timeline – we're in it for the long run. Our focus is Sweden, but our reach extends across the New Nordics where we participate in strong syndicates alongside local co-investors, backing exceptional companies wherever they're building in the region. OUR STRATEGIES LIFE SCIENCE We are obsessed with the future of human health. We invest in therapeutics and health technologies, backing exceptional founders who turn breakthrough science into treatments and tools that reach patients. Software We back founders who have gone deep into an industry and come back with something that changes it — vertical AI and"
+    },
+    {
+      "id": "check-page-674b863785",
+      "url": "https://industrifonden.com/faq-our-investment-process",
+      "page": "terms",
+      "excerpt": "FAQ | Industrifonden Home Team Portfolio About us News & Insights Meet Us Talent Contact FAQ Our Investment 01 When is the right time to approach Industrifonden about investing? We are interested to invest when your startup has demonstrated initial evidence and is ready to accelerate, usually in Seed or A-round funding. Ideally, contact us at least six months before you plan to close the funding. It is common that we received previous updates from the company and have been able to follow progress for a certain time before the funding process started. 02 What criteria do you use for investments? We focus on unique and scalable innovations. We seek passionate founders and teams with the capability to turn visionary ideas into reality, and concepts that have the potential to revolutionize or create new industries. We believe that mixed teams with complementing capabilities are best positioned to succeed. 03 How should I approach Industrifonden for an investment? Please send your pitch deck to a relevant member of our investment team. Given the high volume of inquiries we receive, only select proposals that fit our focus areas will lead to an initial call or meeting. 04 What is your investment process and how long does it take? Submitted pitch decks areevaluated. Due to the high number of inquiries, we only schedule meetings with those that best align with our investment criteria."
+    },
+    {
+      "id": "check-page-c03327b9db",
+      "url": "https://industrifonden.com/news-insights/olsaro-closes-eu5m-seed-investment-to-scale-climate-resilient-cereal-genetics",
+      "page": "terms",
+      "excerpt": "Industrifonden Home Team Portfolio About us News & Insights Meet Us Talent Contact News OlsAro closes €5m seed investment to scale climate-resilient cereal genetics Published 14.10.26 OlsAro, the Swedish AgTech company developing climate-resilient cereal genetics, has raised €5 million in seed funding to develop its SeedAX platform and bring its first salinity-resilient wheat product to market. The round was led by Industrifonden, with Nordic Foodtech VC joining as co-lead. Existing investors Future Food Fund, PINC (Paulig’s venture arm), AgFunder and GU Ventures also participated. The financing follows OlsAro’s €2.5 million pre-seed round in April 2024, bringing the total raised by the Swedish company to date to approximately €7.5 million. Salinity already affects around a tenth of the world’s cropland. Heat and drought are also putting pressure on cereal production, increasing the need for varieties that can maintain yields under these conditions. OlsAro develops cereal traits and varieties, with an initial focus on wheat. Its SeedAX platform combines proprietary genetics and data, AI-driven trait discovery and genetic technologies to identify and validate climate-resilience traits, then integrate them into elite germplasm for commercial seed programmes. OlsAro’s salinity-resilient wheat has shown an up to 41% yield increase over a moderately salt-tolerant variety under"
+    },
+    {
+      "id": "check-page-e3d1740dd3",
+      "url": "https://industrifonden.com/our-story",
+      "page": "details",
+      "excerpt": "Our story – Industrifonden Home Team Portfolio About us News & Insights Meet Us Talent Contact ABOUT US We’re in it for the long run, experience has taught us that developing fundamental innovations takes time. EN SV Ticket SIZE - PORTFOLIO COMPANIES FUNDS UNDER MANAGEMENT IPOS Industrifonden was founded by the Swedish government in 1979 as an independent foundation to provide Swedish industry with an innovation growth engine. For more than four decades, we've backed high-tech ventures from first check to global scale – accumulating pattern recognition and knowledge across cycles Our focus is Sweden, but our reach extends across the New Nordics where we participate in strong syndicates alongside local co-investors, backing exceptional companies wherever they're building in the region. Today, we are an independent venture capital fund continuing our legacy by partnering with innovators and entrepreneurs to bring Nordic breakthrough innovations to the world. From QlikTech, Arcam and Oatly to CellaVision, Inriver, and Calliditas, we've backed companies that reshaped their industries – and we exit when the company is ready, not when a fund term ends. We invest in early-stage companies. Our first ticket is often €1–5million, with capacity to invest considerably more over a company's lifecycle. We invest across four areas – life science, deep tech, software, and growth – each led by"
+    },
+    {
+      "id": "check-page-750bafaebf",
+      "url": "https://industrifonden.com/portfolio",
+      "page": "portfolio",
+      "excerpt": "Portfolio – Industrifonden Home Team Portfolio About us News & Insights Meet Us Talent Contact PORTFOLIO The innovations we've partnered with Status Active Selected exits Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Strategies Software Life science Deep tech & planetary health Growth Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Accedo Transforming the video experience Accedo helps the world’s leading content providers, television operators, broadcasters, and brands deliver multi-screen video services. They provide a combination of the products and services needed to support our customers at every stage of the video business journey, from strategy and conception through to delivery and post-launch optimization. STATUS Selected exits WEBSITE accedo.tv AdamantQ Next-gen quantum sensors Adamant Quanta strives to innovate and deliver immediately useful cost- and energy-efficient quantum tech using defects in diamond crystals. Leveraging their extensive experience and know-how, their mission is to serve the timing, sensing, and detection markets with innovative functionalised diamond crystals that utilize their quantum mechanical properties to deliver superior functionality and performance. AREA Deep tech & planetary health STATUS Active WEBSITE adamantq.com OUR CONTACT"
     }
   ],
   "findings": {
@@ -103,11 +193,54 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-73b112e556"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-29585556e9"
+      },
+      {
+        "value": "remote",
+        "evidenceId": "check-format-b2cda17fce"
+      },
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-fa7d2f7cf7"
+      }
+    ],
+    "location": [
+      {
+        "value": "Lund",
+        "evidenceId": "check-location-5060d90946"
+      }
+    ],
     "selectivity": [],
     "dealText": [
       {
-        "value": "reshaped their industries – and we exit when the company is ready, not when a fund term ends. We invest in early-stage companies. Our first ticket is often €1–5million, with capacity to invest considerably more over a company's lifecycle. We invest across four areas – life science, deep tech, software, and growth –",
-        "evidenceId": "check-deal-173fc53d1d"
+        "value": "ends. We invest in early-stage companies. Our first ticket is often €1–5million, with capacity to invest considerably more over a company's",
+        "evidenceId": "check-deal-fcfff09880"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "1",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-fcfff09880"
       }
     ],
     "portfolioPages": [

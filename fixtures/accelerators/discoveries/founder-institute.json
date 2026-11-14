@@ -1,27 +1,75 @@
 {
   "programId": "founder-institute",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:59:02.000Z",
   "pages": [
     {
-      "url": "https://fi.co/banners/1453/click",
-      "page": "application",
-      "anchor": "NEW - Silicon Valley AI Program. 50 founders. Pitch VCs in San Francisco. APPLY NOW",
+      "url": "https://FI.co/join/faq",
+      "page": "terms",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/about",
+      "page": "details",
+      "anchor": "Our Impact",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://fi.co/philadelphia",
-      "page": "application",
-      "anchor": "Apply in Philadelphia",
-      "fetched": false,
+      "url": "https://fi.co/agreements",
+      "page": "details",
+      "anchor": "Program Agreements",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://fi.co/program",
+      "url": "https://fi.co/aifounder",
       "page": "details",
-      "anchor": "Schedule",
+      "anchor": "See the program",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/auth/google_oauth2?source_2=",
+      "page": "other",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/auth/google_oauth2?source_2=home",
+      "page": "other",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/auth/linkedin?source_2=",
+      "page": "other",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/auth/linkedin?source_2=home",
+      "page": "other",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/banners/1453/click",
+      "page": "application",
+      "anchor": "NEW - Silicon Valley AI Program. 50 founders. Pitch VCs in San Francisco. APPLY NOW",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -35,10 +83,58 @@
       "origin": "official"
     },
     {
-      "url": "https://fi.co/about",
+      "url": "https://fi.co/join",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/join/about",
       "page": "details",
-      "anchor": "Our Impact",
-      "fetched": false,
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/join/aifounder?src=agentic-apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/join/aifounder?src=agentic-curriculum",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/join/aifounder?src=agentic-float",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/join/aifounder?src=agentic-hero",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/join/home",
+      "page": "application",
+      "anchor": "Apply Now",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -51,34 +147,26 @@
       "origin": "official"
     },
     {
-      "url": "https://fi.co/join",
+      "url": "https://fi.co/philadelphia",
       "page": "application",
-      "anchor": "Apply",
-      "fetched": false,
+      "anchor": "Apply in Philadelphia",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://fi.co/join/home",
-      "page": "application",
-      "anchor": "Apply now",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://fi.co/aifounder",
+      "url": "https://fi.co/program",
       "page": "details",
-      "anchor": "See the program",
+      "anchor": "Schedule",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://fi.co/scale",
-      "page": "portfolio",
-      "anchor": "Alumni Benefits",
-      "fetched": false,
+      "url": "https://fi.co/register/15882/v5",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -91,9 +179,9 @@
       "origin": "official"
     },
     {
-      "url": "https://fi.co/agreements",
-      "page": "details",
-      "anchor": "Program Agreements",
+      "url": "https://fi.co/scale",
+      "page": "portfolio",
+      "anchor": "Alumni Benefits",
       "fetched": false,
       "blocked": null,
       "origin": "official"

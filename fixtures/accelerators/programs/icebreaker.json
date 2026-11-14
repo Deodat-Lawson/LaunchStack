@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.icebreaker.vc/",
   "applyUrl": "https://www.icebreaker.vc/apply",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Icebreaker.vc Portfolio Apply for Funding Team Contact Portfolio Apply for funding Team Contact Supporting +150 teams from Idea to Seed and beyond since 2017 We invest up to 1.5M€ first tickets in Estonia, Finland and Sweden. Playbook vol 3 The future is No UI and we'll design agent-first AI is eating the interface. The UI will become obsolete, it will be rendered on the fly or just a chat... ReOrbit €45M Series A Varma, Elo, Expansion VC, 10x Founders, and Inventure Aibidia 28M$ Series B DN Capital, FPV Ventures, Global Founders Capital No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Supporting +100 teams from Idea to Seed and beyond since 2017. We invest up to 1.5M€ first tickets in Estonia, Finland and Sweden.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Not published on the official page.",
     "sourceIds": [
       "homepage"
     ],
@@ -26,9 +26,9 @@
     {
       "id": "official-logo",
       "url": "https://www.icebreaker.vc/",
-      "title": "Icebreaker — official mark on the retrieved page",
-      "quote": "https://cdn.prod.website-files.com/678a23c8a43f7d664993e3a0/678a23c8a43f7d664993e3af_61700ce03a6ee56d8f3dfcfe_Untitleds.ico",
-      "checkedAt": "2026-11-03T00:18:31.000Z"
+      "title": "Icebreaker — no rule-validated official mark",
+      "quote": "https://cdn.prod.website-files.com/678a23c8a43f7d664993e3a0/678a23c8a43f7d664993e3b0_61700c53b9cfb9998d33f962_Untitled.png",
+      "checkedAt": "2026-11-14T20:18:03.000Z"
     },
     {
       "id": "homepage",
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "icebreaker-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.icebreaker.vc/apply",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

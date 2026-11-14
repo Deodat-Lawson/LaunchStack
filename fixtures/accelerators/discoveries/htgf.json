@@ -1,12 +1,76 @@
 {
   "programId": "htgf",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.htgf.de/en/portfolio/",
+      "url": "https://startupjobs.htgf.de/jobs",
       "page": "portfolio",
-      "anchor": "Portfolio",
+      "anchor": "Portfolio Jobs",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/5-millionen-euro-seed-investment-fuer-natif-ai/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/berliner-bitcoin-startup-bitwala-bekommt-e800k-als-seed-investment-um-den-globalen-geldtransfer-zu-revolutionieren/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/computer-aided-engineering-im-ki-zeitalter-neural-concept-sa-erhaelt-siebenstelliges-investment-von-constantia-new-business-und-htgf/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/comydo-smarter-haustueroeffner-fuer-paketboten-sichert-sich-hohes-sechsstelliges-seed-investment/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/crossvertise-gmbh-high-tech-grunderfonds-und-investment-konsortium-bambooventures-finanzieren-die-erste-medienubergreifende-buchungsplattform-fur-werbetrager/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/deal-united-gewinnt-das-vertrauen-des-high-tech-grunderfonds/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/deal-united-schliest-finanzierungsrunde-ab-und-treibt-internationalisierung-voran/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/1-5-million-euro-investment-for-start-up-replex/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -14,7 +78,7 @@
       "url": "https://www.htgf.de/en/about-us/",
       "page": "details",
       "anchor": "About us",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -27,6 +91,22 @@
       "origin": "official"
     },
     {
+      "url": "https://www.htgf.de/en/development-and-first-clinical-application-of-an-innovative-muscle-stimulator-for-the-treatment-of-the-heart-insufficiency-financially-secured/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/innovative-measurement-for-geothermal-probes-and-industrial-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.htgf.de/en/investors/",
       "page": "portfolio",
       "anchor": "from third parties into our portfolio",
@@ -35,39 +115,39 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/egym/",
+      "url": "https://www.htgf.de/en/medtech-radar-live-2019-application-submission-for-start-ups-is-now-open/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/microstim-successfully-raised-funds-for-the-first-clinical-application-of-their-heart-assist-system/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/new-safety-solution-for-industrial-applications-keeper-beeper-collision-sweeper/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/",
       "page": "portfolio",
-      "anchor": "Unternehmen ansehen",
+      "anchor": "Portfolio",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/simscale/",
-      "page": "portfolio",
-      "anchor": "Unternehmen ansehen",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/vmray/",
-      "page": "portfolio",
-      "anchor": "Unternehmen ansehen",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/instagrid/",
-      "page": "portfolio",
-      "anchor": "Unternehmen ansehen",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/tubulis/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/aegiq/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -83,7 +163,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/eeden/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/attenio/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -91,7 +171,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/doinstruct/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/belyntic-2/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -99,23 +179,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/proxima-fusion/",
-      "page": "portfolio",
-      "anchor": "Unternehmen ansehen",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.htgf.de/portfolio",
-      "page": "portfolio",
-      "anchor": "discover now",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/meinprospekt-2/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/cloudsquid/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -131,55 +195,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/qurie/",
-      "page": "portfolio",
-      "anchor": "Unternehmen ansehen",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/pressmatrix-2/",
-      "page": "portfolio",
-      "anchor": "Unternehmen ansehen",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/sierra-sensors-2/",
-      "page": "portfolio",
-      "anchor": "Unternehmen ansehen",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/visumotion-2/",
-      "page": "portfolio",
-      "anchor": "Unternehmen ansehen",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/capical-2/",
-      "page": "portfolio",
-      "anchor": "Unternehmen ansehen",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/ci-hub/",
-      "page": "portfolio",
-      "anchor": "Unternehmen ansehen",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/magazino-2/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/crossvertise-2/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -195,7 +211,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/ctrls/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/doinstruct/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -203,7 +219,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/srtd-biotech/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/eeden/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -211,7 +227,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/wetransform-2/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/egym/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -219,7 +235,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/nanda-technologies-2/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/enercast/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -227,7 +243,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/marble-imaging/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/everreal/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -235,7 +251,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/variolytics/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/hbox-therapies/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -243,7 +259,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/urotec-2/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/ice-gateway-2/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -251,7 +267,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/audavis/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/innerspace/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -259,7 +275,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/dotega/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/instagrid/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -267,7 +283,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/dxi/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/ionkraft/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -275,7 +291,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/cutanos/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/isptech/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -283,7 +299,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/nanostruct/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/kontext/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -291,7 +307,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/extoll/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/ksk-diagnostics/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -299,7 +315,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/gilupi-2/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/m2p-lab/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -307,7 +323,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/co-reactive/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/mevaldi/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -315,7 +331,95 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/biovox/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/myr-2/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/neotiv/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/nfon-2/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/noxon/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/o11-biomedical/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/paddy/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/pagent-ai/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/phytonics/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/pixel-flo/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/proxima-fusion/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/rebelle-2/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/reflex-aerospace/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -331,7 +435,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/alentis-2/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/simscale/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -339,7 +443,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/dcubed/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/smartbax/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -347,7 +451,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/syte/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/sovity/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -355,7 +459,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/bab-la/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/synendos-therapeuthics/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -363,7 +467,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/trans-duodenal-concepts/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/tq-therapeutics/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -371,7 +475,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/biograil/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/tubulis/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -379,7 +483,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/zeeg/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/tweezr/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -387,7 +491,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/urge-io-2/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/verovaccines/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -395,7 +499,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/ailos-robotics/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/vertama/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -403,7 +507,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/jupus/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/viamon-2/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -411,7 +515,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/qnami/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/visumotion-2/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -419,7 +523,7 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/praxiseins/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/vmray/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
       "fetched": false,
@@ -427,9 +531,25 @@
       "origin": "official"
     },
     {
-      "url": "https://www.htgf.de/en/portfolio/htgffamily/rabot-energy/",
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/vrey/",
       "page": "portfolio",
       "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/kiwigrid-entwickelt-bsi-konforme-smart-grid-application-plattform-mit-security-loesung-von-gemalto/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/portfolio",
+      "page": "portfolio",
+      "anchor": "discover now",
       "fetched": false,
       "blocked": null,
       "origin": "official"

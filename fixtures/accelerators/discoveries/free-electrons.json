@@ -1,20 +1,12 @@
 {
   "programId": "free-electrons",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pages": [
-    {
-      "url": "https://freeelectrons.org/2026-program/",
-      "page": "details",
-      "anchor": "PROGRAM",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://freeelectrons.org/2027-program/",
       "page": "details",
-      "anchor": "2027 Program",
-      "fetched": false,
+      "anchor": "PROGRAM",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -27,14 +19,6 @@
       "origin": "official"
     },
     {
-      "url": "https://freeelectrons.org/our-alumni/",
-      "page": "portfolio",
-      "anchor": "ALUMNI",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://freeelectrons.org/news/",
       "page": "details",
       "anchor": "ABOUT US",
@@ -43,11 +27,91 @@
       "origin": "official"
     },
     {
-      "url": "https://www.f6s.com/free-electrons-2027/apply",
+      "url": "https://freeelectrons.org/news/10-reasons-why-startups-should-apply-to-free-electrons/",
       "page": "application",
-      "anchor": "Apply now",
-      "fetched": false,
-      "blocked": "robots",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/news/9-reasons-for-your-startup-to-apply/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/news/applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/news/charting-the-future-free-electrons-2026-category-guide/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/news/free-electrons-2019-opens-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/news/free-electrons-2020-applications-open/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/news/free-electrons-a-fast-lane-for-business-to-business/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/news/free-electrons-impact-grows-with-more-pilots-deals-between-utilities-startups/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/news/free-electrons-reinforces-global-positioning/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/news/in-free-electrons-like-in-life-its-not-where-you-start-its-where-you-finish/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/news/introducing-the-categories-for-free-electrons-2025/",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
       "origin": "official"
     },
     {
@@ -56,6 +120,46 @@
       "anchor": "September 17, 2026 Program Modules Recap of the Free Electrons 10th Edition Master Module in London Free Electrons 2026 Master Module: Turning Collaboration into Action Against the",
       "fetched": false,
       "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/our-alumni/",
+      "page": "portfolio",
+      "anchor": "ALUMNI",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/terms-conditions/",
+      "page": "terms",
+      "anchor": "Terms & Conditions",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.f6s.com/free-electrons-2026/apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.f6s.com/free-electrons-2027/apply",
+      "page": "application",
+      "anchor": "Apply now",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.f6s.com/freeelectrons2020/apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
       "origin": "official"
     }
   ]

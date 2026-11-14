@@ -1,72 +1,780 @@
 {
   "programId": "falak",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
-    "https://falak.sa/en"
+    "https://falak.sa/en",
+    "https://falak.sa/en/blogs/37/Infinite-PL-and-Falak-Investment-Hub-Collaborate-to-Enhance-the-Logistics-Sector",
+    "https://falak.sa/en/blogs/39/Falak-Investment-Hub-Joins-United-Nations-Global-Compact-and-Amplifies-Commitment-to-Sustainability-with-Flagship-ClimateTech-Accelerator",
+    "https://falak.sa/ar/blogs/37/Infinite-PL-and-Falak-Investment-Hub-Collaborate-to-Enhance-the-Logistics-Sector",
+    "https://falak.sa/ar/blogs/39/Falak-Investment-Hub-Joins-United-Nations-Global-Compact-and-Amplifies-Commitment-to-Sustainability-with-Flagship-ClimateTech-Accelerator",
+    "https://falak.sa/en/blogs",
+    "https://falak.sa/investors/acceleration-investment",
+    "https://falak.sa/en/landing-program",
+    "https://falak.sa/en/partnership",
+    "https://falak.sa/ar/landing-program",
+    "https://falak.sa/en/about_us",
+    "https://falak.sa/en/programs",
+    "https://falak.sa/en/programs/boot_camp",
+    "https://falak.sa/en/soft-landing-program",
+    "https://falak.sa/en/alumni"
   ],
   "evidence": [
     {
+      "id": "check-duration-0c0a7cd6d3",
+      "url": "https://falak.sa/ar/landing-program",
+      "title": "Falak — program page",
+      "excerpt": "of Commerce certification are issued within 3-5 weeks, the company will be fully established within",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2303823f35",
+      "url": "https://falak.sa/investors/acceleration-investment",
+      "title": "Falak — terms page",
+      "excerpt": "take up to 10 growth startups on an accelerated 16-week journey (rigorous selection process with less",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-346d296b76",
+      "url": "https://falak.sa/en/programs",
+      "title": "Falak — program page",
+      "excerpt": "- Pre-Series A Period : 1 month onboarding + 3 months program Investment : 5 million SAR in up to 10",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-65226b4370",
+      "url": "https://falak.sa/investors/acceleration-investment",
+      "title": "Falak — terms page",
+      "excerpt": "to accelerate their journey by achieving in 4 months what they would otherwise do in 12 to 18 months",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-89f52b1701",
+      "url": "https://falak.sa/en/soft-landing-program",
+      "title": "Falak — program page",
+      "excerpt": "the company will be fully established within 2-3 months. How much does the Saudi setup cost? For more",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-8b976dc29c",
+      "url": "https://falak.sa/en/programs",
+      "title": "Falak — program page",
+      "excerpt": ": Seed - Post Seed - Pre-Series A Period : 1 month onboarding + 3 months program Investment : 5",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c712012e0a",
+      "url": "https://falak.sa/investors/acceleration-investment",
+      "title": "Falak — terms page",
+      "excerpt": "4 months what they would otherwise do in 12 to 18 months through hands-on support, direct funding,",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-cc99ab7a10",
+      "url": "https://falak.sa/en/soft-landing-program",
+      "title": "Falak — program page",
+      "excerpt": "of Commerce certification are issued within 3-5 weeks, the company will be fully established within",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ce543f3457",
+      "url": "https://falak.sa/en/landing-program",
+      "title": "Falak — program page",
+      "excerpt": "the company will be fully established within 2-3 months. How much does the Saudi setup cost? For more",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-dd4aa8d04a",
+      "url": "https://falak.sa/en/programs",
+      "title": "Falak — program page",
+      "excerpt": "Bootcamps Stages : Any Stage Period : 5 days - 3 months Investment : No Investment Learn More Pitch to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e2390ff938",
+      "url": "https://falak.sa/en/landing-program",
+      "title": "Falak — program page",
+      "excerpt": "of Commerce certification are issued within 3-5 weeks, the company will be fully established within",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e7b4dc9144",
+      "url": "https://falak.sa/en/programs",
+      "title": "Falak — program page",
+      "excerpt": "SR in up to 10 different startups within a 3 month duration to enable, develop, and grow startups",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-ebaaed87db",
+      "url": "https://falak.sa/en/programs",
+      "title": "Falak — program page",
+      "excerpt": "for investments You are ready to commit for 4 months You need hands-on mentorship with world-class",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-f91fca93f4",
+      "url": "https://falak.sa/ar/landing-program",
+      "title": "Falak — program page",
+      "excerpt": "the company will be fully established within 2-3 months. How much does the Saudi setup cost? For more",
+      "page": "details"
+    },
+    {
+      "id": "check-format-11b0042206",
+      "url": "https://falak.sa/en/programs/boot_camp",
+      "title": "Falak — program page",
+      "excerpt": "Live Virtual Bootcamp Hungry for MORE? Join our Live Virtual Bootcamp Book Your Seat Ready to make an impact? Get more",
+      "page": "details"
+    },
+    {
+      "id": "check-format-3b890e8842",
+      "url": "https://falak.sa/en/programs/boot_camp",
+      "title": "Falak — program page",
+      "excerpt": "partners to enable you with all pillars of success. Live Virtual Bootcamp Hungry for MORE? Join our Live Virtual Bootcamp",
+      "page": "details"
+    },
+    {
       "id": "check-name-e9d49b8cf8",
       "url": "https://falak.sa/en",
-      "title": "Falak — homepage checked by scrape.py",
+      "title": "Falak — homepage",
       "excerpt": "Falak عربي Startups Flagship Program Startups Acceleration",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-05ef3d2b32",
+      "url": "https://falak.sa/ar/landing-program",
+      "title": "Falak — program page",
+      "excerpt": "9200 05610",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-1bed16fea7",
+      "url": "https://falak.sa/en/blogs/37/Infinite-PL-and-Falak-Investment-Hub-Collaborate-to-Enhance-the-Logistics-Sector",
+      "title": "Falak — terms page",
+      "excerpt": "9200 05610",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-43433d6816",
+      "url": "https://falak.sa/en/about_us",
+      "title": "Falak — program page",
+      "excerpt": "9200 05610",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-51158a18a3",
+      "url": "https://falak.sa/en/blogs",
+      "title": "Falak — program page",
+      "excerpt": "9200 05610",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-74cc242f1f",
+      "url": "https://falak.sa/en/programs",
+      "title": "Falak — program page",
+      "excerpt": "9200 05610",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-8da93f56f5",
+      "url": "https://falak.sa/en/blogs/39/Falak-Investment-Hub-Joins-United-Nations-Global-Compact-and-Amplifies-Commitment-to-Sustainability-with-Flagship-ClimateTech-Accelerator",
+      "title": "Falak — terms page",
+      "excerpt": "9200 05610",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-99307e5a23",
+      "url": "https://falak.sa/investors/acceleration-investment",
+      "title": "Falak — terms page",
+      "excerpt": "9200 05610",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-a2a939ff8b",
+      "url": "https://falak.sa/en/landing-program",
+      "title": "Falak — program page",
+      "excerpt": "9200 05610",
       "page": "details"
     },
     {
       "id": "check-phone-a601368aa8",
       "url": "https://falak.sa/en",
-      "title": "Falak — homepage checked by scrape.py",
+      "title": "Falak — homepage",
       "excerpt": "9200 05610",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-da1cabb43e",
+      "url": "https://falak.sa/ar/blogs/37/Infinite-PL-and-Falak-Investment-Hub-Collaborate-to-Enhance-the-Logistics-Sector",
+      "title": "Falak — terms page",
+      "excerpt": "9200 05610",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-e36b24510b",
+      "url": "https://falak.sa/en/alumni",
+      "title": "Falak — portfolio page",
+      "excerpt": "9200 05610",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-phone-ea06c7b6bf",
+      "url": "https://falak.sa/en/partnership",
+      "title": "Falak — program page",
+      "excerpt": "9200 05610",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-ea606403a4",
+      "url": "https://falak.sa/en/soft-landing-program",
+      "title": "Falak — program page",
+      "excerpt": "9200 05610",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-f083dd3e7e",
+      "url": "https://falak.sa/en/programs/boot_camp",
+      "title": "Falak — program page",
+      "excerpt": "9200 05610",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-fddd089d09",
+      "url": "https://falak.sa/ar/blogs/39/Falak-Investment-Hub-Joins-United-Nations-Global-Compact-and-Amplifies-Commitment-to-Sustainability-with-Flagship-ClimateTech-Accelerator",
+      "title": "Falak — terms page",
+      "excerpt": "9200 05610",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-03ceb83321",
+      "url": "https://falak.sa/en/soft-landing-program",
+      "title": "Falak — program page",
+      "excerpt": "Portfolio → https://falak.sa/en/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0529adbc43",
+      "url": "https://falak.sa/ar/blogs/39/Falak-Investment-Hub-Joins-United-Nations-Global-Compact-and-Amplifies-Commitment-to-Sustainability-with-Flagship-ClimateTech-Accelerator",
+      "title": "Falak — terms page",
+      "excerpt": "أعضاء مجتمعنا → https://falak.sa/ar/alumni",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-0fd648e5f4",
+      "url": "https://falak.sa/en/blogs",
+      "title": "Falak — program page",
+      "excerpt": "Portfolio → https://falak.sa/en/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0fefd1909f",
+      "url": "https://falak.sa/en/alumni",
+      "title": "Falak — portfolio page",
+      "excerpt": "Mentors → https://falak.sa/en/alumni?type=mentors",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-10ac0fd78b",
+      "url": "https://falak.sa/en/alumni",
+      "title": "Falak — portfolio page",
+      "excerpt": "عربي → https://falak.sa/ar/alumni",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-121bda810f",
+      "url": "https://falak.sa/en/blogs/39/Falak-Investment-Hub-Joins-United-Nations-Global-Compact-and-Amplifies-Commitment-to-Sustainability-with-Flagship-ClimateTech-Accelerator",
+      "title": "Falak — terms page",
+      "excerpt": "Browse our startups → https://falak.sa/en/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-14840d6259",
+      "url": "https://falak.sa/en/blogs/37/Infinite-PL-and-Falak-Investment-Hub-Collaborate-to-Enhance-the-Logistics-Sector",
+      "title": "Falak — terms page",
+      "excerpt": "Browse our startups → https://falak.sa/en/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-1cae1465ab",
+      "url": "https://falak.sa/en/about_us",
+      "title": "Falak — program page",
+      "excerpt": "Check out our Portfolio → https://falak.sa/en/startups",
       "page": "details"
     },
     {
       "id": "check-portfolio-1cdb7adb01",
       "url": "https://falak.sa/en",
-      "title": "Falak — homepage checked by scrape.py",
+      "title": "Falak — homepage",
       "excerpt": "Check out our Portfolio → https://falak.sa/en/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1d58d207a2",
+      "url": "https://falak.sa/ar/landing-program",
+      "title": "Falak — program page",
+      "excerpt": "استثماراتنا → https://falak.sa/ar/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1e777ded6f",
+      "url": "https://falak.sa/en/alumni",
+      "title": "Falak — portfolio page",
+      "excerpt": "Browse our startups → https://falak.sa/en/startups",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-1f07a0cedf",
+      "url": "https://falak.sa/en/programs/boot_camp",
+      "title": "Falak — program page",
+      "excerpt": "Portfolio → https://falak.sa/en/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-229c599496",
+      "url": "https://falak.sa/ar/blogs/37/Infinite-PL-and-Falak-Investment-Hub-Collaborate-to-Enhance-the-Logistics-Sector",
+      "title": "Falak — terms page",
+      "excerpt": "تصفح شركاتنا الناشئة → https://falak.sa/ar/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2c57f16bbd",
+      "url": "https://falak.sa/en/about_us",
+      "title": "Falak — program page",
+      "excerpt": "Startups → https://falak.sa/en",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-329dba0601",
+      "url": "https://falak.sa/en/landing-program",
+      "title": "Falak — program page",
+      "excerpt": "Falak Alumni → https://falak.sa/en/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3e11d29753",
+      "url": "https://falak.sa/ar/landing-program",
+      "title": "Falak — program page",
+      "excerpt": "تصفح شركاتنا الناشئة → https://falak.sa/ar/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4edd7a23e4",
+      "url": "https://falak.sa/en/programs/boot_camp",
+      "title": "Falak — program page",
+      "excerpt": "Startups → https://falak.sa/en/programs",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5896942494",
+      "url": "https://falak.sa/en/landing-program",
+      "title": "Falak — program page",
+      "excerpt": "Portfolio → https://falak.sa/en/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-599433fb74",
+      "url": "https://falak.sa/en/soft-landing-program",
+      "title": "Falak — program page",
+      "excerpt": "Startups → https://falak.sa/en/programs",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-59d71e99ae",
+      "url": "https://falak.sa/en/programs",
+      "title": "Falak — program page",
+      "excerpt": "Portfolio → https://falak.sa/en/startups",
       "page": "details"
     },
     {
       "id": "check-portfolio-5bf9f43807",
       "url": "https://falak.sa/en",
-      "title": "Falak — homepage checked by scrape.py",
+      "title": "Falak — homepage",
       "excerpt": "Portfolio → https://falak.sa/en/startups",
       "page": "details"
     },
     {
+      "id": "check-portfolio-63097e89d5",
+      "url": "https://falak.sa/investors/acceleration-investment",
+      "title": "Falak — terms page",
+      "excerpt": "Startups → https://falak.sa/en/programs",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-66fcbf5e28",
+      "url": "https://falak.sa/en/alumni",
+      "title": "Falak — portfolio page",
+      "excerpt": "All → https://falak.sa/en/alumni?type=all",
+      "page": "portfolio"
+    },
+    {
       "id": "check-portfolio-6b57dfd46d",
       "url": "https://falak.sa/en",
-      "title": "Falak — homepage checked by scrape.py",
+      "title": "Falak — homepage",
       "excerpt": "Browse our startups → https://falak.sa/en/startups",
       "page": "details"
     },
     {
+      "id": "check-portfolio-73c9740db2",
+      "url": "https://falak.sa/en/about_us",
+      "title": "Falak — program page",
+      "excerpt": "Falak Alumni → https://falak.sa/en/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-86cf12392b",
+      "url": "https://falak.sa/en/about_us",
+      "title": "Falak — program page",
+      "excerpt": "Portfolio → https://falak.sa/en/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8821fa71fe",
+      "url": "https://falak.sa/en/blogs/37/Infinite-PL-and-Falak-Investment-Hub-Collaborate-to-Enhance-the-Logistics-Sector",
+      "title": "Falak — terms page",
+      "excerpt": "Falak Alumni → https://falak.sa/en/alumni",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-89b7e28a85",
+      "url": "https://falak.sa/en/blogs/39/Falak-Investment-Hub-Joins-United-Nations-Global-Compact-and-Amplifies-Commitment-to-Sustainability-with-Flagship-ClimateTech-Accelerator",
+      "title": "Falak — terms page",
+      "excerpt": "Falak Alumni → https://falak.sa/en/alumni",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-927ead3ae8",
+      "url": "https://falak.sa/en/blogs/37/Infinite-PL-and-Falak-Investment-Hub-Collaborate-to-Enhance-the-Logistics-Sector",
+      "title": "Falak — terms page",
+      "excerpt": "Portfolio → https://falak.sa/en/startups",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-a240b6a4ad",
       "url": "https://falak.sa/en",
-      "title": "Falak — homepage checked by scrape.py",
+      "title": "Falak — homepage",
       "excerpt": "Falak Alumni → https://falak.sa/en/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a383e1259e",
+      "url": "https://falak.sa/en/about_us",
+      "title": "Falak — program page",
+      "excerpt": "Browse our startups → https://falak.sa/en/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a5082b2565",
+      "url": "https://falak.sa/investors/acceleration-investment",
+      "title": "Falak — terms page",
+      "excerpt": "Portfolio → https://falak.sa/en/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b4c8e27b10",
+      "url": "https://falak.sa/ar/blogs/39/Falak-Investment-Hub-Joins-United-Nations-Global-Compact-and-Amplifies-Commitment-to-Sustainability-with-Flagship-ClimateTech-Accelerator",
+      "title": "Falak — terms page",
+      "excerpt": "استثماراتنا → https://falak.sa/ar/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b71fcfef97",
+      "url": "https://falak.sa/ar/landing-program",
+      "title": "Falak — program page",
+      "excerpt": "أعضاء مجتمعنا → https://falak.sa/ar/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b9f07614d2",
+      "url": "https://falak.sa/en/blogs/39/Falak-Investment-Hub-Joins-United-Nations-Global-Compact-and-Amplifies-Commitment-to-Sustainability-with-Flagship-ClimateTech-Accelerator",
+      "title": "Falak — terms page",
+      "excerpt": "Portfolio → https://falak.sa/en/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ba719d3e1b",
+      "url": "https://falak.sa/en/partnership",
+      "title": "Falak — program page",
+      "excerpt": "Falak Alumni → https://falak.sa/en/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bb982182fe",
+      "url": "https://falak.sa/en/about_us",
+      "title": "Falak — program page",
+      "excerpt": "Startups → https://falak.sa/en#tab802",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bf80f210b5",
+      "url": "https://falak.sa/en/partnership",
+      "title": "Falak — program page",
+      "excerpt": "Browse our startups → https://falak.sa/en/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c026ad1855",
+      "url": "https://falak.sa/en/alumni",
+      "title": "Falak — portfolio page",
+      "excerpt": "Team Members → https://falak.sa/en/alumni?type=team_members",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-c96fe197c3",
+      "url": "https://falak.sa/en/alumni",
+      "title": "Falak — portfolio page",
+      "excerpt": "Community Members → https://falak.sa/en/alumni?type=community_members",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-cc3244678d",
+      "url": "https://falak.sa/ar/blogs/39/Falak-Investment-Hub-Joins-United-Nations-Global-Compact-and-Amplifies-Commitment-to-Sustainability-with-Flagship-ClimateTech-Accelerator",
+      "title": "Falak — terms page",
+      "excerpt": "تصفح شركاتنا الناشئة → https://falak.sa/ar/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d4474bd211",
+      "url": "https://falak.sa/en/alumni",
+      "title": "Falak — portfolio page",
+      "excerpt": "Portfolio → https://falak.sa/en/startups",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-d636c603b0",
+      "url": "https://falak.sa/en/blogs",
+      "title": "Falak — program page",
+      "excerpt": "Startups → https://falak.sa/en/programs",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e023d7a9d5",
+      "url": "https://falak.sa/ar/blogs/37/Infinite-PL-and-Falak-Investment-Hub-Collaborate-to-Enhance-the-Logistics-Sector",
+      "title": "Falak — terms page",
+      "excerpt": "أعضاء مجتمعنا → https://falak.sa/ar/alumni",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ef9df7c11b",
+      "url": "https://falak.sa/ar/blogs/37/Infinite-PL-and-Falak-Investment-Hub-Collaborate-to-Enhance-the-Logistics-Sector",
+      "title": "Falak — terms page",
+      "excerpt": "استثماراتنا → https://falak.sa/ar/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-fc4fd4b0f4",
+      "url": "https://falak.sa/en/landing-program",
+      "title": "Falak — program page",
+      "excerpt": "Browse our startups → https://falak.sa/en/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-fe28d5fbb9",
+      "url": "https://falak.sa/en/partnership",
+      "title": "Falak — program page",
+      "excerpt": "Portfolio → https://falak.sa/en/startups",
       "page": "details"
     },
     {
       "id": "check-route-01df2a2e49",
       "url": "https://falak.sa/en",
-      "title": "Falak — homepage checked by scrape.py",
+      "title": "Falak — homepage",
       "excerpt": "Apply for ClimateTech → https://flagship.falak.sa",
       "page": "details"
     },
     {
+      "id": "check-route-27157ad04a",
+      "url": "https://falak.sa/en/partnership",
+      "title": "Falak — program page",
+      "excerpt": "Apply for Flagship → https://flagship.falak.sa/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-389ded4836",
+      "url": "https://falak.sa/en/blogs/39/Falak-Investment-Hub-Joins-United-Nations-Global-Compact-and-Amplifies-Commitment-to-Sustainability-with-Flagship-ClimateTech-Accelerator",
+      "title": "Falak — terms page",
+      "excerpt": "Apply for ClimateTech → https://flagship.falak.sa",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-41dcc9ab00",
+      "url": "https://falak.sa/en/blogs/37/Infinite-PL-and-Falak-Investment-Hub-Collaborate-to-Enhance-the-Logistics-Sector",
+      "title": "Falak — terms page",
+      "excerpt": "Apply for ClimateTech → https://flagship.falak.sa",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-4e420d3266",
+      "url": "https://falak.sa/en/blogs/37/Infinite-PL-and-Falak-Investment-Hub-Collaborate-to-Enhance-the-Logistics-Sector",
+      "title": "Falak — terms page",
+      "excerpt": "Apply for Flagship → https://flagship.falak.sa/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-5c875e4127",
       "url": "https://falak.sa/en",
-      "title": "Falak — homepage checked by scrape.py",
+      "title": "Falak — homepage",
       "excerpt": "https://falak.sa/en",
       "page": "details"
     },
     {
-      "id": "check-route-c25ee40aab",
-      "url": "https://falak.sa/en",
-      "title": "Falak — homepage checked by scrape.py",
+      "id": "check-route-9d4c52eeb1",
+      "url": "https://falak.sa/en/landing-program",
+      "title": "Falak — program page",
+      "excerpt": "Apply for ClimateTech → https://flagship.falak.sa",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a7206da6c2",
+      "url": "https://falak.sa/en/about_us",
+      "title": "Falak — program page",
       "excerpt": "Apply for Flagship → https://flagship.falak.sa/",
       "page": "details"
+    },
+    {
+      "id": "check-route-ad3ff2871b",
+      "url": "https://falak.sa/en/partnership",
+      "title": "Falak — program page",
+      "excerpt": "Apply for ClimateTech → https://flagship.falak.sa",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b67866ff32",
+      "url": "https://falak.sa/en/blogs/39/Falak-Investment-Hub-Joins-United-Nations-Global-Compact-and-Amplifies-Commitment-to-Sustainability-with-Flagship-ClimateTech-Accelerator",
+      "title": "Falak — terms page",
+      "excerpt": "Apply for Flagship → https://flagship.falak.sa/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-c25ee40aab",
+      "url": "https://falak.sa/en",
+      "title": "Falak — homepage",
+      "excerpt": "Apply for Flagship → https://flagship.falak.sa/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c88381fc18",
+      "url": "https://falak.sa/en/about_us",
+      "title": "Falak — program page",
+      "excerpt": "Apply for ClimateTech → https://flagship.falak.sa",
+      "page": "details"
+    },
+    {
+      "id": "check-route-caf1ce6e2e",
+      "url": "https://falak.sa/en/alumni",
+      "title": "Falak — portfolio page",
+      "excerpt": "Apply for ClimateTech → https://flagship.falak.sa",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-cf2f1e4220",
+      "url": "https://falak.sa/en/landing-program",
+      "title": "Falak — program page",
+      "excerpt": "Apply for Flagship → https://flagship.falak.sa/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-dd7acfa8fe",
+      "url": "https://falak.sa/en/alumni",
+      "title": "Falak — portfolio page",
+      "excerpt": "Apply for Flagship → https://flagship.falak.sa/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-selectivity-e8fb833d0d",
+      "url": "https://falak.sa/investors/acceleration-investment",
+      "title": "Falak — terms page",
+      "excerpt": "startups on an accelerated 16-week journey (rigorous selection process with less than 2% acceptance rate). Education Manual Training In-Kind Funding Direct Funding Market Access",
+      "page": "terms"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-b886d21aaf",
+      "url": "https://falak.sa/en",
+      "page": "details",
+      "excerpt": "Falak عربي Startups Flagship Program Startups Acceleration Program Falak Angels Pitch to Angel Network Landing Program Expand into KSA Business Hub Office Spaces Pitch to Falak Angels Apply Now Investors Falak Angels Join Falak Angels Network Join Falak Angels on AngelSpace Go to AngelSpace Partners Falak Programs Stakeholder Enabler Strategic Partners Become a Partner with Falak Portfolio Community Falak Academy Learn, connect and get connected Falak spaces The Coworking Spaces, Meeting Rooms & Educational Hall Events Takkyat Falak Podcast Apply for Flagship عربي Startups Flagship Program Startups Acceleration Program Falak Angels Pitch to Angel Network Landing Program Expand into KSA Business Hub Office Spaces Pitch to Falak Angels Apply Now Investors Falak Angels Join Falak Angels Network Join Falak Angels on AngelSpace Go to AngelSpace Partners Falak Programs Stakeholder Enabler Strategic Partners Become a Partner with Falak Portfolio Community Falak Academy Learn, connect and get connected Falak spaces The Coworking Spaces, Meeting Rooms & Educational Hall Events Takkyat Falak Podcast Apply for ClimateTech We Enable Startups Nourishing entrepreneurs on all aspects of growth and business using the right methodologies, solid human capital, and scalable business models Investors By building tech-investment knowledge with tailored investor education and offering access to"
+    },
+    {
+      "id": "check-page-baaed5de41",
+      "url": "https://falak.sa/en/blogs/37/Infinite-PL-and-Falak-Investment-Hub-Collaborate-to-Enhance-the-Logistics-Sector",
+      "page": "terms",
+      "excerpt": "Infinite PL and Falak Investment Hub Collaborate to Enhance the Logistics Sector عربي Startups Flagship Program Startups Acceleration Program Falak Angels Pitch to Angel Network Landing Program Expand into KSA Business Hub Office Spaces Pitch to Falak Angels Apply Now Investors Falak Angels Join Falak Angels Network Join Falak Angels on AngelSpace Go to AngelSpace Partners Falak Programs Stakeholder Enabler Strategic Partners Become a Partner with Falak Portfolio Community Falak Academy Learn, connect and get connected Falak spaces The Coworking Spaces, Meeting Rooms & Educational Hall Events Takkyat Falak Podcast Apply for Flagship عربي Startups Flagship Program Startups Acceleration Program Falak Angels Pitch to Angel Network Landing Program Expand into KSA Business Hub Office Spaces Pitch to Falak Angels Apply Now Investors Falak Angels Join Falak Angels Network Join Falak Angels on AngelSpace Go to AngelSpace Partners Falak Programs Stakeholder Enabler Strategic Partners Become a Partner with Falak Portfolio Community Falak Academy Learn, connect and get connected Falak spaces The Coworking Spaces, Meeting Rooms & Educational Hall Events Takkyat Falak Podcast Apply for ClimateTech Infinite PL and Falak Investment Hub Collaborate to Enhance the Logistics Sector Falak Academy Infinite PL and Falak Investment Hub Collaborate to Enhance the Logistics Sector Posted at 16 May 24"
+    },
+    {
+      "id": "check-page-ab81d99e21",
+      "url": "https://falak.sa/en/blogs/39/Falak-Investment-Hub-Joins-United-Nations-Global-Compact-and-Amplifies-Commitment-to-Sustainability-with-Flagship-ClimateTech-Accelerator",
+      "page": "terms",
+      "excerpt": "Falak Investment Hub Joins United Nations Global Compact and Amplifies Commitment to Sustainability with Flagship ClimateTech Accelerator عربي Startups Flagship Program Startups Acceleration Program Falak Angels Pitch to Angel Network Landing Program Expand into KSA Business Hub Office Spaces Pitch to Falak Angels Apply Now Investors Falak Angels Join Falak Angels Network Join Falak Angels on AngelSpace Go to AngelSpace Partners Falak Programs Stakeholder Enabler Strategic Partners Become a Partner with Falak Portfolio Community Falak Academy Learn, connect and get connected Falak spaces The Coworking Spaces, Meeting Rooms & Educational Hall Events Takkyat Falak Podcast Apply for Flagship عربي Startups Flagship Program Startups Acceleration Program Falak Angels Pitch to Angel Network Landing Program Expand into KSA Business Hub Office Spaces Pitch to Falak Angels Apply Now Investors Falak Angels Join Falak Angels Network Join Falak Angels on AngelSpace Go to AngelSpace Partners Falak Programs Stakeholder Enabler Strategic Partners Become a Partner with Falak Portfolio Community Falak Academy Learn, connect and get connected Falak spaces The Coworking Spaces, Meeting Rooms & Educational Hall Events Takkyat Falak Podcast Apply for ClimateTech Falak Investment Hub Joins United Nations Global Compact and Amplifies Commitment to Sustainability with Flagship ClimateTech Accelerator"
+    },
+    {
+      "id": "check-page-8957ec9426",
+      "url": "https://falak.sa/ar/blogs/37/Infinite-PL-and-Falak-Investment-Hub-Collaborate-to-Enhance-the-Logistics-Sector",
+      "page": "terms",
+      "excerpt": "تعاون إنفينيت بي إل وفلك للأعمال والاستثمار لتعزيز قطاع اللوجستيات English الشركات الناشئة مسرعة فلك للاعمال برنامج تسريع الشركات الناشئة شبكة فلك للمستثمرين الملائكيين اعرض على أعضاء الشبكة برنامج توطين الشركات الناشئة الأجنبية ابدأ معنا توسع شركتك في المملكة مركز فلك للأعمال والاستثمار المساحات المشتركة سجل بلقاءات العرض على المستثمرين قدم الان المستثمرين شبكة فلك للمستثمرين الملائكيين انضم لشبكة فلك للمستثمرين الملائكيين انضم إلى شبكة فلك للمستثمرين الملائكيين على AngelSpace. توجه إلى منصة AngelSpace الشراكات برامج فلك لتمكين أصحاب المصلحة الشراكات الاستراتيجية كن شريكاً لنا استثماراتنا مجتمعنا أكاديمية فلك تعلم وعلّم وتعارف مساحات فلك المساحات المشتركة وغرف الاجتماعات وقاعة التعليم الفعاليات بودكاست تكية فلك تقدم بطلب لـ Flagship English الشركات الناشئة مسرعة فلك للاعمال برنامج تسريع الشركات الناشئة شبكة فلك للمستثمرين الملائكيين اعرض على أعضاء الشبكة برنامج توطين الشركات الناشئة الأجنبية ابدأ معنا توسع شركتك في المملكة مركز فلك للأعمال والاستثمار المساحات المشتركة سجل بلقاءات العرض على المستثمرين قدم الان المستثمرين شبكة فلك للمستثمرين الملائكيين انضم لشبكة فلك للمستثمرين الملائكيين انضم إلى شبكة فلك للمستثمرين الملائكيين على AngelSpace. توجه إلى منصة AngelSpace الشراكات برامج فلك لتمكين أصحاب المصلحة الشراكات الاستراتيجية كن شريكاً لنا استثماراتنا مجتمعنا أكاديمية فلك تعلم وعلّم وتعارف مساحات فلك المساحات المشتركة وغرف الاجتماعات وقاعة التعليم الفعاليات بودكاست تكية فلك"
+    },
+    {
+      "id": "check-page-64c1536fc5",
+      "url": "https://falak.sa/ar/blogs/39/Falak-Investment-Hub-Joins-United-Nations-Global-Compact-and-Amplifies-Commitment-to-Sustainability-with-Flagship-ClimateTech-Accelerator",
+      "page": "terms",
+      "excerpt": "فلك للأعمال والاستثمار تنضم إلى الميثاق العالمي للأمم المتحدة وتعزز التزامها بالاستدامة مع مسرعة فلاقشِب: تقنيات المناخ English الشركات الناشئة مسرعة فلك للاعمال برنامج تسريع الشركات الناشئة شبكة فلك للمستثمرين الملائكيين اعرض على أعضاء الشبكة برنامج توطين الشركات الناشئة الأجنبية ابدأ معنا توسع شركتك في المملكة مركز فلك للأعمال والاستثمار المساحات المشتركة سجل بلقاءات العرض على المستثمرين قدم الان المستثمرين شبكة فلك للمستثمرين الملائكيين انضم لشبكة فلك للمستثمرين الملائكيين انضم إلى شبكة فلك للمستثمرين الملائكيين على AngelSpace. توجه إلى منصة AngelSpace الشراكات برامج فلك لتمكين أصحاب المصلحة الشراكات الاستراتيجية كن شريكاً لنا استثماراتنا مجتمعنا أكاديمية فلك تعلم وعلّم وتعارف مساحات فلك المساحات المشتركة وغرف الاجتماعات وقاعة التعليم الفعاليات بودكاست تكية فلك تقدم بطلب لـ Flagship English الشركات الناشئة مسرعة فلك للاعمال برنامج تسريع الشركات الناشئة شبكة فلك للمستثمرين الملائكيين اعرض على أعضاء الشبكة برنامج توطين الشركات الناشئة الأجنبية ابدأ معنا توسع شركتك في المملكة مركز فلك للأعمال والاستثمار المساحات المشتركة سجل بلقاءات العرض على المستثمرين قدم الان المستثمرين شبكة فلك للمستثمرين الملائكيين انضم لشبكة فلك للمستثمرين الملائكيين انضم إلى شبكة فلك للمستثمرين الملائكيين على AngelSpace. توجه إلى منصة AngelSpace الشراكات برامج فلك لتمكين أصحاب المصلحة الشراكات الاستراتيجية كن شريكاً لنا استثماراتنا مجتمعنا أكاديمية فلك تعلم وعلّم وتعارف مساحات فلك المساحات المشتركة وغرف"
+    },
+    {
+      "id": "check-page-80af5e486a",
+      "url": "https://falak.sa/en/blogs",
+      "page": "details",
+      "excerpt": "Blogs About Us Portfolio Startups Startups Flagship Acceleration Program Startups Bootcamps Pitch to The Angel Network Investors Investors Angel Network Acceleration Investment Business Solutions Business Solutions Working Spaces Meeting Rooms Education Hall Expand Into Saudi Falak Academy Falak Academy Articles References Newsletters Events العربية Falak Academy The unicorn community is for those who believe they can help thrive a nation, rise to their limitless potential, and challenge the status quo. In this page we will be sharing videos, blogs, articles, podcast episodes and so much more from MENA’s brightest minds. Articles 24-06-2020 The New Commodity: Youth Saudi Arabia Is Living In That Rise Of Over 70 Percent Of The Population At The Peak Of Their Productivity; And We Are An Even Bigger Commodity Than Oil 24-06-2020 A Mediocre Idea With Great Execution > A Great Idea Without Execution Mediocre Ideas With Great Execution Have The Potential To Become Disruptive Ideas With Experienced Execution, And Genius Ideas With No Execution Don’t Even Deserve The Time To Talk About Them 28-06-2020 Could History Repeats Itself? One of the fundamental reasons the dotcom bubble happened was due to the fact that human being are creatures of influence; when people saw people moving to buy stocks of highly overvalued tech companies on the stock market, they jumped to follow in fear of"
+    },
+    {
+      "id": "check-page-dbed04fc90",
+      "url": "https://falak.sa/investors/acceleration-investment",
+      "page": "terms",
+      "excerpt": "Acceleration Investment About Us Portfolio Startups Startups Flagship Acceleration Program Startups Bootcamps Pitch to The Angel Network Investors Investors Angel Network Acceleration Investment Business Solutions Business Solutions Working Spaces Meeting Rooms Education Hall Expand Into Saudi Falak Academy Falak Academy Articles References Newsletters Events العربية Acceleration Investment Falak is licensed from Monshaat for acceleration programs and services. Falak successfully executed the first investment-backed acceleration program in KSA helping startups to accelerate their journey by achieving in 4 months what they would otherwise do in 12 to 18 months through hands-on support, direct funding, practical workshops, on-ground training, access to network, mentorship, operational support and discounted services through Falak’s Partners. Overview of The Program Falak is one of the first angel-backed accredited Saudi accelerator programs in the history of Saudi Arabia, we aim to compete on a global standard with a localized competitive edge to take up to 10 growth startups on an accelerated 16-week journey (rigorous selection process with less than 2% acceptance rate). Education Manual Training In-Kind Funding Direct Funding Market Access Mentorship Success Speakers Support Services Objective Investing in early-stage startups in diversified industries according to market"
+    },
+    {
+      "id": "check-page-443eea7ad7",
+      "url": "https://falak.sa/en/landing-program",
+      "page": "details",
+      "excerpt": "Landing Program عربي Startups Flagship Program Startups Acceleration Program Falak Angels Pitch to Angel Network Landing Program Expand into KSA Business Hub Office Spaces Pitch to Falak Angels Apply Now Investors Falak Angels Join Falak Angels Network Join Falak Angels on AngelSpace Go to AngelSpace Partners Falak Programs Stakeholder Enabler Strategic Partners Become a Partner with Falak Portfolio Community Falak Academy Learn, connect and get connected Falak spaces The Coworking Spaces, Meeting Rooms & Educational Hall Events Takkyat Falak Podcast Apply for Flagship عربي Startups Flagship Program Startups Acceleration Program Falak Angels Pitch to Angel Network Landing Program Expand into KSA Business Hub Office Spaces Pitch to Falak Angels Apply Now Investors Falak Angels Join Falak Angels Network Join Falak Angels on AngelSpace Go to AngelSpace Partners Falak Programs Stakeholder Enabler Strategic Partners Become a Partner with Falak Portfolio Community Falak Academy Learn, connect and get connected Falak spaces The Coworking Spaces, Meeting Rooms & Educational Hall Events Takkyat Falak Podcast Apply for ClimateTech Establish your business in Saudi Arabia In partnership with As part of Saudi Vision 2030 that guarantees to openly welcome foreign investments, Falak established the Soft Landing Program to support and incubate innovation, creativity and diversity within the"
+    },
+    {
+      "id": "check-page-8f56bfbc51",
+      "url": "https://falak.sa/en/partnership",
+      "page": "details",
+      "excerpt": "Partners عربي Startups Flagship Program Startups Acceleration Program Falak Angels Pitch to Angel Network Landing Program Expand into KSA Business Hub Office Spaces Pitch to Falak Angels Apply Now Investors Falak Angels Join Falak Angels Network Join Falak Angels on AngelSpace Go to AngelSpace Partners Falak Programs Stakeholder Enabler Strategic Partners Become a Partner with Falak Portfolio Community Falak Academy Learn, connect and get connected Falak spaces The Coworking Spaces, Meeting Rooms & Educational Hall Events Takkyat Falak Podcast Apply for Flagship عربي Startups Flagship Program Startups Acceleration Program Falak Angels Pitch to Angel Network Landing Program Expand into KSA Business Hub Office Spaces Pitch to Falak Angels Apply Now Investors Falak Angels Join Falak Angels Network Join Falak Angels on AngelSpace Go to AngelSpace Partners Falak Programs Stakeholder Enabler Strategic Partners Become a Partner with Falak Portfolio Community Falak Academy Learn, connect and get connected Falak spaces The Coworking Spaces, Meeting Rooms & Educational Hall Events Takkyat Falak Podcast Apply for ClimateTech Falak Programs Designing & managing impact-driven programs in entrepreneurship, innovation, and technology investment. Our Programs in Numbers + 2.6 M SAR Grants Deployed to Startups + 150 K SAR Perks & Discounts Offered to Beneficiaries + 60 Falak’s Program"
+    },
+    {
+      "id": "check-page-ae36a8e926",
+      "url": "https://falak.sa/ar/landing-program",
+      "page": "details",
+      "excerpt": "برنامج توطين الشركات الناشئة الأجنبية English الشركات الناشئة مسرعة فلك للاعمال برنامج تسريع الشركات الناشئة شبكة فلك للمستثمرين الملائكيين اعرض على أعضاء الشبكة برنامج توطين الشركات الناشئة الأجنبية ابدأ معنا توسع شركتك في المملكة مركز فلك للأعمال والاستثمار المساحات المشتركة سجل بلقاءات العرض على المستثمرين قدم الان المستثمرين شبكة فلك للمستثمرين الملائكيين انضم لشبكة فلك للمستثمرين الملائكيين انضم إلى شبكة فلك للمستثمرين الملائكيين على AngelSpace. توجه إلى منصة AngelSpace الشراكات برامج فلك لتمكين أصحاب المصلحة الشراكات الاستراتيجية كن شريكاً لنا استثماراتنا مجتمعنا أكاديمية فلك تعلم وعلّم وتعارف مساحات فلك المساحات المشتركة وغرف الاجتماعات وقاعة التعليم الفعاليات بودكاست تكية فلك تقدم بطلب لـ Flagship English الشركات الناشئة مسرعة فلك للاعمال برنامج تسريع الشركات الناشئة شبكة فلك للمستثمرين الملائكيين اعرض على أعضاء الشبكة برنامج توطين الشركات الناشئة الأجنبية ابدأ معنا توسع شركتك في المملكة مركز فلك للأعمال والاستثمار المساحات المشتركة سجل بلقاءات العرض على المستثمرين قدم الان المستثمرين شبكة فلك للمستثمرين الملائكيين انضم لشبكة فلك للمستثمرين الملائكيين انضم إلى شبكة فلك للمستثمرين الملائكيين على AngelSpace. توجه إلى منصة AngelSpace الشراكات برامج فلك لتمكين أصحاب المصلحة الشراكات الاستراتيجية كن شريكاً لنا استثماراتنا مجتمعنا أكاديمية فلك تعلم وعلّم وتعارف مساحات فلك المساحات المشتركة وغرف الاجتماعات وقاعة التعليم الفعاليات بودكاست تكية فلك قدم على برنامج ClimateTech"
+    },
+    {
+      "id": "check-page-63d4f7c365",
+      "url": "https://falak.sa/en/about_us",
+      "page": "details",
+      "excerpt": "Falak عربي Startups Flagship Program Startups Acceleration Program Falak Angels Pitch to Angel Network Landing Program Expand into KSA Business Hub Office Spaces Pitch to Falak Angels Apply Now Investors Falak Angels Join Falak Angels Network Join Falak Angels on AngelSpace Go to AngelSpace Partners Falak Programs Stakeholder Enabler Strategic Partners Become a Partner with Falak Portfolio Community Falak Academy Learn, connect and get connected Falak spaces The Coworking Spaces, Meeting Rooms & Educational Hall Events Takkyat Falak Podcast Apply for Flagship عربي Startups Flagship Program Startups Acceleration Program Falak Angels Pitch to Angel Network Landing Program Expand into KSA Business Hub Office Spaces Pitch to Falak Angels Apply Now Investors Falak Angels Join Falak Angels Network Join Falak Angels on AngelSpace Go to AngelSpace Partners Falak Programs Stakeholder Enabler Strategic Partners Become a Partner with Falak Portfolio Community Falak Academy Learn, connect and get connected Falak spaces The Coworking Spaces, Meeting Rooms & Educational Hall Events Takkyat Falak Podcast Apply for ClimateTech We Enable Startups Nourishing entrepreneurs on all aspects of growth and business using the right methodologies, solid human capital, and scalable business models Investors By building tech-investment knowledge with tailored investor education and offering access to"
+    },
+    {
+      "id": "check-page-a31f458013",
+      "url": "https://falak.sa/en/programs",
+      "page": "details",
+      "excerpt": "Startups Programs About Us Portfolio Startups Startups Flagship Acceleration Program Startups Bootcamps Pitch to The Angel Network Investors Investors Angel Network Acceleration Investment Business Solutions Business Solutions Working Spaces Meeting Rooms Education Hall Expand Into Saudi Falak Academy Falak Academy Articles References Newsletters Events العربية Startups Programs Falak believes in the power of entrepreneurship in all sectors and stages, accordingly, Falak offer diverse startup programs from boot camps, to workshops, to investment-backed acceleration programs - each dedicated program has a different minimum criteria with the common purpose of nourishing entrepreneurs on all aspects of growth and business using the right methodologies, solid human capital, and scalable business models. Our Program Flagship Acceleration Program Stages : Seed - Post Seed - Pre-Series A Period : 1 month onboarding + 3 months program Investment : 5 million SAR in up to 10 startups Learn More Startups Bootcamps Stages : Any Stage Period : 5 days - 3 months Investment : No Investment Learn More Pitch to The Angel Network Stages : Pre Seed - Seed - Post Seed Period : One day event / Monthly Investment : Depends on investors Learn More How to find the right program? Flagship Acceleration Program Overview Saudi Arabia's first angel-backed acceleration program is here to make history in"
+    },
+    {
+      "id": "check-page-6d36b08440",
+      "url": "https://falak.sa/en/programs/boot_camp",
+      "page": "details",
+      "excerpt": "Startups Programs About Us Portfolio Startups Startups Flagship Acceleration Program Startups Bootcamps Pitch to The Angel Network Investors Investors Angel Network Acceleration Investment Business Solutions Business Solutions Working Spaces Meeting Rooms Education Hall Expand Into Saudi Falak Academy Falak Academy Articles References Newsletters Events العربية Hungry for MORE? MENA’s leading experts will take you through a mind-blowing journey to advance in your career and see immediate results. Book Your Seat Who Is It For: Entrepreneurs - Who want to learn the best strategies to grow their businesses with the help of top industry experts Professionals -Who want to network with aspiring entrepreneurs and early-stage startups in MENA Freelancers - Who want to obtain practical skills to advance in their careers Students - Who are done with the theoretical programs and want to learn by doing What You'll Get: Accelerate your career Get ahead in your career by gaining all the practical skills needed to develop and grow businesses. Mentorship sessions with top industry experts Get one-on-one mentorship sessions with world-class mentors. Access to Falak’s Network You will have access to Falak’s vast network of strategic partners to enable you with all pillars of success. Live Virtual Bootcamp Hungry for MORE? Join our Live Virtual Bootcamp Book Your Seat Ready to make an impact?"
+    },
+    {
+      "id": "check-page-06ebf47b10",
+      "url": "https://falak.sa/en/soft-landing-program",
+      "page": "details",
+      "excerpt": "Acceleration Program About Us Portfolio Startups Startups Flagship Acceleration Program Startups Bootcamps Pitch to The Angel Network Investors Investors Angel Network Acceleration Investment Business Solutions Business Solutions Working Spaces Meeting Rooms Education Hall Expand Into Saudi Falak Academy Falak Academy Articles References Newsletters Events العربية Establish your business in Saudi Arabia As part of Saudi Vision 2030 that guarantees to openly welcome foreign investments, Falak established the Soft Landing Program to support and incubate innovation, creativity and diversity within the Saudi economy. In partnership with Expand into Saudi As part of Saudi Vision 2030 that guarantees to openly welcome foreign investments, Falak established the Soft Landing Program to support and incubate innovation, creativity and diversity within the Saudi economy. Why Falak Investment Hub? Soft Landing Setup Our business setup services make it easy for you to submit virtually all documents online or remotely, ensuring a fast and efficient process 100% Foreign Ownership Expand your business into Saudi Arabia as a 100% foreign company without having to employ a local partner. Office Setup Falak's coworking spaces serve as your soft landing office and registered address for the initial three months as part of our setup package Explore Falak Office Membership Strong Community After"
+    },
+    {
+      "id": "check-page-8576afe1d9",
+      "url": "https://falak.sa/en/alumni",
+      "page": "portfolio",
+      "excerpt": "Alumni عربي Startups Flagship Program Startups Acceleration Program Falak Angels Pitch to Angel Network Landing Program Expand into KSA Business Hub Office Spaces Pitch to Falak Angels Apply Now Investors Falak Angels Join Falak Angels Network Join Falak Angels on AngelSpace Go to AngelSpace Partners Falak Programs Stakeholder Enabler Strategic Partners Become a Partner with Falak Portfolio Community Falak Academy Learn, connect and get connected Falak spaces The Coworking Spaces, Meeting Rooms & Educational Hall Events Takkyat Falak Podcast Apply for Flagship عربي Startups Flagship Program Startups Acceleration Program Falak Angels Pitch to Angel Network Landing Program Expand into KSA Business Hub Office Spaces Pitch to Falak Angels Apply Now Investors Falak Angels Join Falak Angels Network Join Falak Angels on AngelSpace Go to AngelSpace Partners Falak Programs Stakeholder Enabler Strategic Partners Become a Partner with Falak Portfolio Community Falak Academy Learn, connect and get connected Falak spaces The Coworking Spaces, Meeting Rooms & Educational Hall Events Takkyat Falak Podcast Apply for ClimateTech A community of outliers, go-givers and dreamers. + 350 Workshops conducted + 3500 Community members and beneficiaries Learn about our members, the success stories and hear from them about their experience Subscribe to our Newsletter Taeb Khalil CEO of Pura Salman"
     }
   ],
   "findings": {
@@ -96,8 +804,53 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
-    "selectivity": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "4 months",
+        "evidenceId": "check-duration-65226b4370"
+      },
+      {
+        "value": "18 months",
+        "evidenceId": "check-duration-c712012e0a"
+      },
+      {
+        "value": "16",
+        "evidenceId": "check-duration-2303823f35"
+      },
+      {
+        "value": "5",
+        "evidenceId": "check-duration-e2390ff938"
+      },
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-ce543f3457"
+      },
+      {
+        "value": "1 month",
+        "evidenceId": "check-duration-8b976dc29c"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-3b890e8842"
+      }
+    ],
+    "location": [],
+    "selectivity": [
+      {
+        "value": {
+          "rate": null,
+          "bounded": true
+        },
+        "evidenceId": "check-selectivity-e8fb833d0d"
+      }
+    ],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://falak.sa/en/startups",
@@ -106,6 +859,22 @@
       {
         "value": "https://falak.sa/en/alumni",
         "evidenceId": "check-portfolio-a240b6a4ad"
+      },
+      {
+        "value": "https://falak.sa/ar/startups",
+        "evidenceId": "check-portfolio-ef9df7c11b"
+      },
+      {
+        "value": "https://falak.sa/ar/alumni",
+        "evidenceId": "check-portfolio-e023d7a9d5"
+      },
+      {
+        "value": "https://falak.sa/en/programs",
+        "evidenceId": "check-portfolio-d636c603b0"
+      },
+      {
+        "value": "https://falak.sa/en",
+        "evidenceId": "check-portfolio-2c57f16bbd"
       }
     ],
     "name": [

@@ -1,43 +1,214 @@
 {
   "programId": "zone-startups",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T21:21:09.000Z",
   "pagesRead": [
-    "https://www.zonestartups.com/"
+    "https://www.zonestartups.com/",
+    "https://www.zonestartups.com/2020/05/22/ryerson-university-consolidates-dmz-and-rfi-to-better-serve-and-support-startups/",
+    "https://www.zonestartups.com/2016/11/10/zone-startups-indias-fourth-program-gateway91-international-entrepreneurs-indian-market/",
+    "https://www.zonestartups.com/2017/12/01/startup-accelerator-ryerson-futures-expands-adding-ray-newal-as-managing-director/",
+    "https://www.zonestartups.com/2018/02/20/new-market-access-program-will-introduce-indian-and-canadian-female-founders-to-new-opportunities/",
+    "https://www.zonestartups.com/2018/02/20/new-startup-accelerator-in-vietnam-set-to-bolster-se-asian-startup-community/",
+    "https://www.zonestartups.com/startup-programs/",
+    "https://www.zonestartups.com/2016/11/15/ryerson-futures-alumni-litmus-automation-raises-1-5mm-usd-funding/",
+    "http://ryersonfutures.zonestartups.com/founders/",
+    "https://www.zonestartups.com/2017/06/15/rfi-alumni-figure-1-raises-10mm-in-series-b-funding-round/",
+    "https://www.zonestartups.com/portfolio/dmz-ventures/",
+    "https://www.zonestartups.com/portfolio/empower/",
+    "https://www.zonestartups.com/portfolio/gateway-market-access/",
+    "https://www.zonestartups.com/portfolio/next-big-idea-contest/",
+    "https://www.zonestartups.com/portfolio/powered-accelerator/"
   ],
   "evidence": [
     {
+      "id": "check-location-3065ba9eb1",
+      "url": "http://ryersonfutures.zonestartups.com/founders/",
+      "title": "Zone Startups — program page",
+      "excerpt": "India. Our flagship Indian program, based in Mumbai, is a… Visit Site Empower An",
+      "page": "details"
+    },
+    {
+      "id": "check-location-39d9f8d294",
+      "url": "https://www.zonestartups.com/portfolio/empower/",
+      "title": "Zone Startups — portfolio page",
+      "excerpt": "is an accelerator for female founders based in Mumbai looking to scale and grow their",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-location-3feac54bc7",
+      "url": "https://www.zonestartups.com/",
+      "title": "Zone Startups — homepage",
+      "excerpt": "India. Our flagship Indian program, based in Mumbai, is a… Visit Site Empower An",
+      "page": "details"
+    },
+    {
       "id": "check-name-959fe14442",
       "url": "https://www.zonestartups.com/",
-      "title": "Zone Startups — homepage checked by scrape.py",
+      "title": "Zone Startups — homepage",
       "excerpt": "Zone Startups Skip to content Menu Home Blog A global network of",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-20533fb85d",
+      "url": "https://www.zonestartups.com/startup-programs/",
+      "title": "Zone Startups — program page",
+      "excerpt": "Portfolio → https://www.zonestartups.com/?page_id=439",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7d1eb2c105",
+      "url": "https://www.zonestartups.com/startup-programs/",
+      "title": "Zone Startups — program page",
+      "excerpt": "Apply Now → https://www.zonestartups.com/?page_id=172",
       "page": "details"
     },
     {
       "id": "check-route-a8fbcd889d",
       "url": "https://www.zonestartups.com/",
-      "title": "Zone Startups — homepage checked by scrape.py",
+      "title": "Zone Startups — homepage",
       "excerpt": "https://www.zonestartups.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f049d3b414",
+      "url": "https://www.zonestartups.com/startup-programs/",
+      "title": "Zone Startups — program page",
+      "excerpt": "APPLY NOW → https://www.zonestartups.com/apply-now/",
       "page": "details"
     },
     {
       "id": "check-selectivity-434fcd6059",
       "url": "https://www.zonestartups.com/",
-      "title": "Zone Startups — homepage checked by scrape.py",
+      "title": "Zone Startups — homepage",
       "excerpt": "world-class companies. The Zone Startups Method Screen companies, accepting approximately 1% of applicants. Help companies grow and scale. Focus on market validation and customer",
       "page": "details"
     },
     {
       "id": "check-selectivity-73435ae942",
       "url": "https://www.zonestartups.com/",
-      "title": "Zone Startups — homepage checked by scrape.py",
+      "title": "Zone Startups — homepage",
       "excerpt": "into world-class companies. The Zone Startups Method Screen companies, accepting approximately 1% of applicants. Help companies grow and scale. Focus on market validation and customer",
       "page": "details"
+    },
+    {
+      "id": "check-selectivity-781887677e",
+      "url": "http://ryersonfutures.zonestartups.com/founders/",
+      "title": "Zone Startups — program page",
+      "excerpt": "into world-class companies. The Zone Startups Method Screen companies, accepting approximately 1% of applicants. Help companies grow and scale. Focus on market validation and customer",
+      "page": "details"
+    },
+    {
+      "id": "check-selectivity-af3a45c165",
+      "url": "http://ryersonfutures.zonestartups.com/founders/",
+      "title": "Zone Startups — program page",
+      "excerpt": "world-class companies. The Zone Startups Method Screen companies, accepting approximately 1% of applicants. Help companies grow and scale. Focus on market validation and customer",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-7e774b6260",
+      "url": "https://www.zonestartups.com/",
+      "page": "details",
+      "excerpt": "Zone Startups Skip to content Menu Home Blog A global network of accelerator programs transforming innovative ideas and products into world-class companies. The Zone Startups Method Screen companies, accepting approximately 1% of applicants. Help companies grow and scale. Focus on market validation and customer acquisition. Provide seed capital to the highest potential companies. Grow companies through a Series A raise. We were at the point where we were figuring out exactly what we needed to do to scale the business quickly. During our stay, we grew the team from 2 to 13, raised $1-million and grew our client base to 75 clients. – Marie Chevrier | Founder/CEO, Sampler Zone Startups has given so much to us in a short span of time, in terms of space to work which brought discipline in the work style, connection among industry leaders, investors, and government officials. This discipline gave a boost to our revenues and confidence as well. – Sidhartha Mohanty | Co-founder, Bindas Jobs Zone Startups acts as the rudder to steer our team down the wild white water ride that is a startup. Dangers lurk at any moment during the first two years and the professional and engaged Zone Startups Calgary team is there to help us avoid the pitfalls and move quickly toward success. – Steve Fisher | CEO, Veerum Operating from a startup hub has given us the best exposure possible. After coming to"
+    },
+    {
+      "id": "check-page-c4b66244b5",
+      "url": "https://www.zonestartups.com/2020/05/22/ryerson-university-consolidates-dmz-and-rfi-to-better-serve-and-support-startups/",
+      "page": "batches",
+      "excerpt": "Ryerson University consolidates DMZ and RFI to better serve and support startups – Zone Startups Skip to content Menu Home Blog Ryerson University consolidates DMZ and RFI to better serve and support startups Today, Ryerson University announced a number of exciting new programming and operational opportunities to better serve startups and entrepreneurs. The executive director of the DMZ , Abdullah Snobar, will begin providing oversight of Ryerson Futures Inc. (RFI) as its new CEO. As part of this consolidation, RFI will be rebranded DMZ Ventures (DMZV). “Today’s announcement is great news for students and start-ups interested in innovation and entrepreneurship,” said President and Vice-Chancellor Mohamed Lachemi, also a member of the Board of Directors of DMZV. “With these changes, Ryerson reinforces its leadership role and becomes one of the only universities in Canada that can offer companies the full spectrum of support at every stage from ideation to actively participating in the economy. This move will help entrepreneurs build businesses that change lives and create more made-in-Canada careers.” Under this new structure, the DMZ will continue to operate as the premier program in Canada for supporting start-ups and the innovation economy, while DMZV will help to enhance and streamline services and supports for high-potential, highly scalable startups. “We know the pressure"
+    },
+    {
+      "id": "check-page-b64e40cfc2",
+      "url": "https://www.zonestartups.com/2016/11/10/zone-startups-indias-fourth-program-gateway91-international-entrepreneurs-indian-market/",
+      "page": "details",
+      "excerpt": "Zone Startups India’s Fourth Program Gateway91 Helps International Entrepreneurs Begin in the Indian Market – Zone Startups Skip to content Menu Home Blog Zone Startups India’s Fourth Program Gateway91 Helps International Entrepreneurs Begin in the Indian Market Zone Startups now has yet another program to expand the startup community in India. The Honourable Navdeep Bains, Minister of Innovation, Science, and Economic Development arrived to help announce a new soft landing program for international companies wanting to bring their products and services to the Indian market. The program, affectionately called Gateway91, is run by Zone Startups India, and is their fourth new program after empoWer, Barclays Rise Accelerator, and Thought Factory with Axis Bank. “All around the world, confident, ambitious countries are investing in their own future,” said Bains. “Formidable energies have led to Zone Startups India’s partnership among Ryerson, Simon Fraser University, and the Bombay Stock Exchange, and the Government of Canada is proud to support this program. This work in the emerging field of financial technology has the potential to turn ideas into marketable solutions.” The governments of Ontario and Canada will be funding five Canadian Fintech startups to grow and explore the Indian market through the program. “We’re proud to be a partner with the federal government and Zone"
+    },
+    {
+      "id": "check-page-cf90f4d6ba",
+      "url": "https://www.zonestartups.com/2017/12/01/startup-accelerator-ryerson-futures-expands-adding-ray-newal-as-managing-director/",
+      "page": "details",
+      "excerpt": "Startup Accelerator Ryerson Futures Expands Adding Ray Newal as Managing Director – Zone Startups Skip to content Menu Home Blog Startup Accelerator Ryerson Futures Expands Adding Ray Newal as Managing Director Ryerson Futures (RFI), the startup accelerator program based at Ryerson University, is welcoming Ray Newal, an experienced entrepreneur, business leader, and mentor, as its new managing director. “I’m honoured to be joining a team that so deeply embodies my view that the right advice and mentorship can have an exponential impact on the trajectory of early-stage startups,” he says. Newal brings more than a decade of growth and operations experience obtained at technology leaders DoubleClick, Microsoft, and Yahoo!. In 2009, he co-founded a Sequoia Capital-backed streaming video startup Jigsee where, as CEO, he led teams in India and Canada. With Newal joining the RFI team, current managing director Alan Lysne will become COO & managing partner to focus on expanding Ryerson Futures’ and Zone Startups’ programs across Canada and internationally. These include Zone Startups India , Zone Startups Calgary , Zone Startups Sports + Media , as well as new initiatives. “Ray comes with a depth of expertise as an entrepreneur who has been a founder and knows what it takes to help entrepreneurs build and scale their company,” says RFI president Matt Saunders. “We look forward to"
+    },
+    {
+      "id": "check-page-8da9f6ae42",
+      "url": "https://www.zonestartups.com/2018/02/20/new-market-access-program-will-introduce-indian-and-canadian-female-founders-to-new-opportunities/",
+      "page": "details",
+      "excerpt": "New market access program will introduce Indian and Canadian female founders to new opportunities – Zone Startups Skip to content Menu Home Blog New market access program will introduce Indian and Canadian female founders to new opportunities A new program will allow female startup founders to have the opportunity to engage with the Zone Startups global accelerator program and be selected to participate in an international market access program later this year. The initiative is a result of a partnership between Ryerson Futures , the Canadian government’s Innovation, Science, and Economic Development Canada, as well as India’s Department of Science and Technology. “Canadian founders are some of the most well-rounded and ambitious in the world,” says Matt Saunders, President of Ryerson Futures and Zone Startups. “We’re excited to be able to expand our programming and support for these startups as they grow and thrive in a new market.” The announcement was made by Canadian Minister of Innovation, Science, and Economic Development Navdeep Bains, members of the Indian Department of Science and Technology, along with representatives of Ryerson Futures and Zone Startups India . The collaboration further fosters the relationship between Canada and India to create an active, global startup community. “Innovation is about finding solutions, and great ideas can come from anywhere and"
+    },
+    {
+      "id": "check-page-bf8e66a3df",
+      "url": "https://www.zonestartups.com/2018/02/20/new-startup-accelerator-in-vietnam-set-to-bolster-se-asian-startup-community/",
+      "page": "details",
+      "excerpt": "New startup accelerator in Vietnam set to bolster SE Asian startup community – Zone Startups Skip to content Menu Home Blog New startup accelerator in Vietnam set to bolster SE Asian startup community Zone Startups Vietnam, a new startup accelerator program, will open its doors in Ho Chi Minh City this spring. The initiative is an extension of Ryerson Futures (RFI) and their Zone Startups family of programs, including three in Canada and four in India. RFI is partnering with VinaCapital, as well as independent investors Tin Nguyen and Cong Phan. The accelerator program will follow the proven formula of the current Zone Startups programs: a focus on market validation and customer acquisition. Companies accepted into the program will have access to mentors in key areas, as well as extensive networking and fundraising strategies and opportunities. “I’m very excited to join Zone Startups Vietnam as a partner and investor,” says Phan. “I believe the startup ecosystem in Vietnam will greatly benefit from an international accelerator program focused on assisting startups with market validation and customer acquisition. Zone Startups has been developing and iterating on their programs since their launch in 2013. They have continued to expand their programs in Canada and India with partners including GE, Bombay Stock Exchange, Axis Bank, Lodha Group, Rogers Communications, Baker"
+    },
+    {
+      "id": "check-page-6ca4906409",
+      "url": "https://www.zonestartups.com/startup-programs/",
+      "page": "details",
+      "excerpt": "Startup Programs – Zone Startups Skip to content Menu Home Blog Supporting the growth of high-potential startups Zone Startups is an accelerator program supported by successful entrepreneurs and finance leaders. We constantly evaluate early stage technology companies, bringing them into our program. What kind of startups are compelling to us? We’re looking for powerful teams and ideas, and companies ready for the vigour of product validation and customer acquisition. What we deliver to startups: Production validation and customer development For startups looking to establish traction and drive growth, we provide the structure and guidance to have their products resonate with target audiences. A global network of corporate partners Startups can establish relations to pursue partnerships, business development, and investment opportunities. Insight from mentors and advisors Access entrepreneurs and industry experts who have first-hand experience in building and growth businesses. Seed Capital For high-potential startups, Zone Startups can make seed investments and support activities to raise additional capital. Startups in the Program No Posts Found. View All Featured Companies We were at the point where we were figuring out exactly what we needed to do to scale the business quickly. During our stay, we grew the team from 2 to 13, raised $1-million and grew our client base to 75"
+    },
+    {
+      "id": "check-page-05ea06b3d6",
+      "url": "https://www.zonestartups.com/2016/11/15/ryerson-futures-alumni-litmus-automation-raises-1-5mm-usd-funding/",
+      "page": "portfolio",
+      "excerpt": "Ryerson Futures Alumni Litmus Automation Raises 1.5MM USD Funding – Zone Startups Skip to content Menu Home Blog Ryerson Futures Alumni Litmus Automation Raises 1.5MM USD Funding The Internet of Things (IoT) space now has another key player, as Litmus Automation has attracted $1.5 million USD in funding from several private angel investors in both Canada and the US to expand their business. Litmus Automation allows for rapid IoT deployment including connectivity, management, and integration for large enterprises, mid-size businesses, and startups through a cloud-based or on-premise middleware platform called Loop. Companies can integrate gathered data in real time into any third-party software application or enterprise system. “Through early client adoption, we have learned the pain points of large clients in the connected car and industrial spaces, even at a time when we were still developing our platform,” said Vatsal Shah, CEO/Co-founder of Litmus Automation. “We now have a production-ready platform suited for businesses looking to take projects from proof-of-concepts to full production quickly, securely and with complete ease.” Litmus started in late 2013 with three founders: CEO Vatsal Shah, COO John Younes, and CFO Sacha Sawaya. “We were on a mission to solve the chaos of proprietary vendors and interoperability in industrial automation and the IoT space,” says Younes."
+    },
+    {
+      "id": "check-page-b86969c67a",
+      "url": "http://ryersonfutures.zonestartups.com/founders/",
+      "page": "details",
+      "excerpt": "Zone Startups Skip to content Menu Home Blog A global network of accelerator programs transforming innovative ideas and products into world-class companies. The Zone Startups Method Screen companies, accepting approximately 1% of applicants. Help companies grow and scale. Focus on market validation and customer acquisition. Provide seed capital to the highest potential companies. Grow companies through a Series A raise. We were at the point where we were figuring out exactly what we needed to do to scale the business quickly. During our stay, we grew the team from 2 to 13, raised $1-million and grew our client base to 75 clients. – Marie Chevrier | Founder/CEO, Sampler Zone Startups has given so much to us in a short span of time, in terms of space to work which brought discipline in the work style, connection among industry leaders, investors, and government officials. This discipline gave a boost to our revenues and confidence as well. – Sidhartha Mohanty | Co-founder, Bindas Jobs Zone Startups acts as the rudder to steer our team down the wild white water ride that is a startup. Dangers lurk at any moment during the first two years and the professional and engaged Zone Startups Calgary team is there to help us avoid the pitfalls and move quickly toward success. – Steve Fisher | CEO, Veerum Operating from a startup hub has given us the best exposure possible. After coming to"
+    },
+    {
+      "id": "check-page-024193aa5e",
+      "url": "https://www.zonestartups.com/2017/06/15/rfi-alumni-figure-1-raises-10mm-in-series-b-funding-round/",
+      "page": "portfolio",
+      "excerpt": "RFI Alumni Figure 1 Raises $10MM in Series B Funding Round – Zone Startups Skip to content Menu Home Blog RFI Alumni Figure 1 Raises $10MM in Series B Funding Round Have you ever wondered if your doctor collaborates with other doctors to make sure they have that diagnosis just right? Figure 1, a knowledge-sharing platform for healthcare professionals, makes that practice a lot easier—and it’s paying off. The company just closed a $10MM USD series B funding round led by Kensington Capital Partners from a number of investors, including Samsung NEXT Ventures, John Hancock/Manulife, Hedgewood, and existing investors Union Square Ventures, Rho Canada Ventures, and Version One Ventures. “Every morning, we wake up with the goal of democratizing medical knowledge in order to help save lives,” said Gregory Levey, Figure 1’s CEO. “We are thrilled to be partnering with investors who understand why we come to work. Using these resources, the coming years will see Figure 1 integrate new technologies in order to completely transform itself—bolstering the already astounding capabilities of the network. We are just getting started.” Since their time as one of Ryerson Futures ’ first companies four years ago, Figure 1 has become an integral platform for healthcare professionals around the world who are looking to connect and collaborate with others around patient cases. More than two-thirds of"
+    },
+    {
+      "id": "check-page-a8f3d36e17",
+      "url": "https://www.zonestartups.com/portfolio/dmz-ventures/",
+      "page": "portfolio",
+      "excerpt": "DMZ Ventures – Zone Startups Skip to content Menu Home Blog DMZ Ventures Based in Toronto, DMZ Ventures is Canada’s leading accelerator for high-potential startups with the capability to rapidly iterate and globally scale. CONTACT US © 2020 Zone Startups"
+    },
+    {
+      "id": "check-page-568b8b95b1",
+      "url": "https://www.zonestartups.com/portfolio/empower/",
+      "page": "portfolio",
+      "excerpt": "Empower – Zone Startups Skip to content Menu Home Blog Empower An initiative with Zone Startups India, empoWer is an accelerator for female founders based in Mumbai looking to scale and grow their startups. CONTACT US © 2020 Zone Startups"
+    },
+    {
+      "id": "check-page-2b7db59b3b",
+      "url": "https://www.zonestartups.com/portfolio/gateway-market-access/",
+      "page": "portfolio",
+      "excerpt": "Gateway Market Access – Zone Startups Skip to content Menu Home Blog Gateway Market Access With support from the Canadian and Indian governments, Gateway is a market access program to allow thriving startup founders entry into a new region, sending Canadian founders to India and vice versa. CONTACT US © 2020 Zone Startups"
+    },
+    {
+      "id": "check-page-ee424e4de0",
+      "url": "https://www.zonestartups.com/portfolio/next-big-idea-contest/",
+      "page": "portfolio",
+      "excerpt": "Next Big Idea Contest – Zone Startups Skip to content Menu Home Blog Next Big Idea Contest An initiative by Zone Startups India, the Next Big Idea Contest is an annual competition selecting a handful of companies to participate in a Canada market access program, to have the chance to grow their established Indian companies in the North American market. CONTACT US © 2020 Zone Startups"
+    },
+    {
+      "id": "check-page-e8850e4e86",
+      "url": "https://www.zonestartups.com/portfolio/powered-accelerator/",
+      "page": "portfolio",
+      "excerpt": "Powered Accelerator – Zone Startups Skip to content Menu Home Blog Powered Accelerator An initiative by the Shell Foundation, Powered is an entrepreneurship program unlike any other, focused on two sustainable development goals: energy and diversity. CONTACT US © 2020 Zone Startups"
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://www.zonestartups.com/apply-now/",
+        "evidenceId": "check-route-f049d3b414"
+      },
+      {
+        "value": "https://www.zonestartups.com/?page_id=172",
+        "evidenceId": "check-route-7d1eb2c105"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://www.zonestartups.com",
@@ -47,6 +218,17 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [
+      {
+        "value": "Mumbai",
+        "evidenceId": "check-location-3feac54bc7"
+      }
+    ],
     "selectivity": [
       {
         "value": {
@@ -57,7 +239,13 @@
       }
     ],
     "dealText": [],
-    "portfolioPages": [],
+    "dealComponents": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.zonestartups.com/?page_id=439",
+        "evidenceId": "check-portfolio-20533fb85d"
+      }
+    ],
     "name": [
       {
         "value": "Zone Startups",

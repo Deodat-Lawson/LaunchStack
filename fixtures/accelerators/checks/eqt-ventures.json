@@ -1,39 +1,297 @@
 {
   "programId": "eqt-ventures",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://eqtgroup.com/private-capital/eqt-ventures",
-    "https://eqtgroup.com/about/people/alexander-fred-ojala",
-    "https://eqtgroup.com/about/people/gustav-von-sydow"
+    "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-breakthrough-research-grant-in-rare-diseases-2025-09-02",
+    "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-breakthrough-science-grants-to-reduce-dependence-on-critical-minerals-for-the-green-transition-2026-01-27",
+    "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-science-grants-to-overcome-the-blood-brain-barrier-and-transform-cns-drug-delivery-2026-03-10",
+    "https://eqtgroup.com/news/xxl-intends-to-apply-for-listing",
+    "https://eqtgroup.com/about/people/gustav-von-sydow",
+    "https://eqtgroup.com/about/scaleup-europe/investment-guidelines",
+    "https://eqtgroup.com/eqt-foundation/breakthrough-science-program-faq",
+    "https://eqtgroup.com/news/150-million-investment-to-build-grade-a-office-space-in-the-rapidly-emerging-bpo-office-destination-of-clark-philippines",
+    "https://eqtgroup.com/news/Real-Deals-Article",
+    "https://eqtgroup.com/news/Responsible-investment",
+    "https://eqtgroup.com/news/amg-announces-investment-in-baring-private-equity-asia",
+    "https://eqtgroup.com/news/baring-asia-completes-deal-to-acquire-majority-stake-in-vistra-group",
+    "https://eqtgroup.com/news/baring-asia-completes-deal-to-acquire-orangefield",
+    "https://eqtgroup.com/news/baring-private-equity-asia-and-alibaba-enter-partnership-with-the-crownx-leads-usd400mm-investment"
   ],
   "evidence": [
     {
+      "id": "check-deal-5a2c278394",
+      "url": "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-breakthrough-science-grants-to-reduce-dependence-on-critical-minerals-for-the-green-transition-2026-01-27",
+      "title": "EQT Ventures — application page",
+      "excerpt": "The program will award catalytic, non-dilutive grants of €25,000 to €100,000 to researchers developing high-risk, high-impact deeptech solutions",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-872b297a5b",
+      "url": "https://eqtgroup.com/news/baring-private-equity-asia-and-alibaba-enter-partnership-with-the-crownx-leads-usd400mm-investment",
+      "title": "EQT Ventures — terms page",
+      "excerpt": "valuation of USD6.9 billion for 100% of its equity, an equivalent of USD93.5 (c. VND 2,150,000) per share. Masan will own 80.2% of the Company",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-a8bb535775",
+      "url": "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-science-grants-to-overcome-the-blood-brain-barrier-and-transform-cns-drug-delivery-2026-03-10",
+      "title": "EQT Ventures — application page",
+      "excerpt": "The program will award catalytic, non-dilutive grants of €25,000 to €100,000 to researchers developing high-risk, high-impact deeptech solutions",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-cf0d7ab999",
+      "url": "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-breakthrough-science-grants-to-reduce-dependence-on-critical-minerals-for-the-green-transition-2026-01-27",
+      "title": "EQT Ventures — application page",
+      "excerpt": "transition. The program will award catalytic, non-dilutive grants of €25,000 to €100,000 to researchers developing high-risk, high-impact deeptech",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-fb84499d17",
+      "url": "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-science-grants-to-overcome-the-blood-brain-barrier-and-transform-cns-drug-delivery-2026-03-10",
+      "title": "EQT Ventures — application page",
+      "excerpt": "system. The program will award catalytic, non-dilutive grants of €25,000 to €100,000 to researchers developing high-risk, high-impact deeptech",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-30795df5d4",
+      "url": "https://eqtgroup.com/news/Responsible-investment",
+      "title": "EQT Ventures — terms page",
+      "excerpt": "who invest in private equity funds. Following a 16 month consultation process involving more than 40",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-b5252fe399",
+      "url": "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-breakthrough-research-grant-in-rare-diseases-2025-09-02",
+      "title": "EQT Ventures — application page",
+      "excerpt": "reduce cost or complexity of deployment in low-resource or remote settings Human-relevant disease models: induced",
+      "page": "application"
+    },
+    {
+      "id": "check-format-d28e4b572d",
+      "url": "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-breakthrough-science-grants-to-reduce-dependence-on-critical-minerals-for-the-green-transition-2026-01-27",
+      "title": "EQT Ventures — application page",
+      "excerpt": "Circular substitutes through recycling, reuse, and “virtual” substitution: technologies that displace virgin critical",
+      "page": "application"
+    },
+    {
+      "id": "check-location-60b78383ae",
+      "url": "https://eqtgroup.com/news/amg-announces-investment-in-baring-private-equity-asia",
+      "title": "EQT Ventures — terms page",
+      "excerpt": "“Baring Asia is AMG’s first Affiliate based in Asia, and with its exceptional two-decade",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-8fc87ad0ae",
+      "url": "https://eqtgroup.com/private-capital/eqt-ventures",
+      "title": "EQT Ventures — homepage",
+      "excerpt": "Luxembourg, with investment advisors located in Europe and the US. Focused on European",
+      "page": "details"
+    },
+    {
       "id": "check-name-3f8275f336",
       "url": "https://eqtgroup.com/private-capital/eqt-ventures",
-      "title": "EQT Ventures — homepage checked by scrape.py",
+      "title": "EQT Ventures — homepage",
       "excerpt": "we are What we do Shareholders Insights LP Login LP Login EQT Ventures Backing Generation-Defining Founders We are an early-stage",
       "page": "details"
     },
     {
+      "id": "check-phone-2265bfb336",
+      "url": "https://eqtgroup.com/news/amg-announces-investment-in-baring-private-equity-asia",
+      "title": "EQT Ventures — terms page",
+      "excerpt": "+46850655300",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-41eeaa13b6",
+      "url": "https://eqtgroup.com/news/Real-Deals-Article",
+      "title": "EQT Ventures — terms page",
+      "excerpt": "+46850655300",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-5319ab2e4a",
+      "url": "https://eqtgroup.com/about/scaleup-europe/investment-guidelines",
+      "title": "EQT Ventures — terms page",
+      "excerpt": "+46850655300",
+      "page": "terms"
+    },
+    {
       "id": "check-phone-6b4260b0ed",
       "url": "https://eqtgroup.com/about/people/gustav-von-sydow",
-      "title": "EQT Ventures — terms page checked by scrape.py",
+      "title": "EQT Ventures — terms page",
       "excerpt": "+46850655300",
       "page": "terms"
     },
     {
       "id": "check-phone-82cda575a2",
       "url": "https://eqtgroup.com/private-capital/eqt-ventures",
-      "title": "EQT Ventures — homepage checked by scrape.py",
+      "title": "EQT Ventures — homepage",
       "excerpt": "+46850655300",
       "page": "details"
     },
     {
-      "id": "check-phone-b2b903d861",
-      "url": "https://eqtgroup.com/about/people/alexander-fred-ojala",
-      "title": "EQT Ventures — details page checked by scrape.py",
+      "id": "check-phone-853fbf63e4",
+      "url": "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-breakthrough-science-grants-to-reduce-dependence-on-critical-minerals-for-the-green-transition-2026-01-27",
+      "title": "EQT Ventures — application page",
       "excerpt": "+46850655300",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-phone-8e26ca4e8c",
+      "url": "https://eqtgroup.com/news/Responsible-investment",
+      "title": "EQT Ventures — terms page",
+      "excerpt": "+46850655300",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-8e63eb89fe",
+      "url": "https://eqtgroup.com/news/baring-private-equity-asia-and-alibaba-enter-partnership-with-the-crownx-leads-usd400mm-investment",
+      "title": "EQT Ventures — terms page",
+      "excerpt": "+46850655300",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-9868e091d6",
+      "url": "https://eqtgroup.com/news/baring-asia-completes-deal-to-acquire-orangefield",
+      "title": "EQT Ventures — terms page",
+      "excerpt": "+46850655300",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-b351e7d188",
+      "url": "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-science-grants-to-overcome-the-blood-brain-barrier-and-transform-cns-drug-delivery-2026-03-10",
+      "title": "EQT Ventures — application page",
+      "excerpt": "+46850655300",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-bb25b52f46",
+      "url": "https://eqtgroup.com/news/xxl-intends-to-apply-for-listing",
+      "title": "EQT Ventures — application page",
+      "excerpt": "+46850655300",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-bbe75e20fd",
+      "url": "https://eqtgroup.com/news/150-million-investment-to-build-grade-a-office-space-in-the-rapidly-emerging-bpo-office-destination-of-clark-philippines",
+      "title": "EQT Ventures — terms page",
+      "excerpt": "+46850655300",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-c174ff3152",
+      "url": "https://eqtgroup.com/eqt-foundation/breakthrough-science-program-faq",
+      "title": "EQT Ventures — terms page",
+      "excerpt": "+46850655300",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-f7623e3e48",
+      "url": "https://eqtgroup.com/news/baring-asia-completes-deal-to-acquire-majority-stake-in-vistra-group",
+      "title": "EQT Ventures — terms page",
+      "excerpt": "+46850655300",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-f77e5029e5",
+      "url": "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-breakthrough-research-grant-in-rare-diseases-2025-09-02",
+      "title": "EQT Ventures — application page",
+      "excerpt": "+46850655300",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-2af90bc5c7",
+      "url": "https://eqtgroup.com/private-capital/eqt-ventures",
+      "page": "details",
+      "excerpt": "Striving to Be the Most Impactful Partner | EQT Skip to main content Who we are What we do Shareholders Insights LP Login LP Login EQT Ventures Backing Generation-Defining Founders We are an early-stage venture fund, partnering with founders from Seed and supporting companies on their journey to scale. We've backed AI native companies such as Parloa, Sana, Cleo, 1X, Wolt, Flow Engineering and Small Giant Games. We've backed category-defining companies across other sectors, including The Exploration Company, Heart Aerospace, Handshake and Natural Cycles. Stories Meet the companies Meet the team Our funds As early-stage lead investors, operational advisors, and high-conviction capital providers, our goal is to be the most impactful partner for the founders we team up with. We’re here to help you scale fast, break through barriers with the support of the global EQT platform, and turn bold ideas into reality while building long-term resilience in your business. Most of our team is made up of ex-founders and operators, so we’ve been in your shoes. We know what it takes to build a company – the good, the bad, and everything in between. We've been through the trenches, and we get it. We use the disproportionate scale of EQT's platform, and give you access to customers and advisors at a scale and level that is unmatched. EQT Ventures is domiciled in Luxembourg, with investment"
+    },
+    {
+      "id": "check-page-64aa46ce13",
+      "url": "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-breakthrough-research-grant-in-rare-diseases-2025-09-02",
+      "page": "application",
+      "excerpt": "EQT Foundation Opens Rare Disease Research Grant | EQT Skip to main content Who we are What we do Shareholders Insights LP Login LP Login News EQT Foundation opens applications for breakthrough research grant in rare diseases Copy Link September 2, 2025, 12:26 Share The link was copied! EQT Foundation opens applications for deeptech solutions grant, tackling transforming how we diagnose, treat, and manage rare conditions The program will award between EUR 25,000 to EUR 100,000 EQT Foundation is launching a new call for proposals under its Breakthrough Science program. The program awards catalytic grants of €25,000 to €100,000 to researchers tackling urgent challenges in the field of rare diseases. Designed to accelerate bold scientific ideas with high potential for real-world patient impact, the program supports translational research that might be overlooked by traditional funders. The call is open to scientists affiliated with accredited nonprofit institutions globally. More than 300 million people worldwide live with a rare disease, nearly half of them children¹. For most, the path to diagnosis is long and uncertain, and treatment options are limited or nonexistent. At the same time, the rare disease field has given rise to some of the most significant advances in medicine, from gene therapy to RNA-based modulation. This grant call aims to support the next generation of"
+    },
+    {
+      "id": "check-page-50104fcc54",
+      "url": "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-breakthrough-science-grants-to-reduce-dependence-on-critical-minerals-for-the-green-transition-2026-01-27",
+      "page": "application",
+      "excerpt": "EQT Foundation opens applications for breakthrough | EQT Skip to main content Who we are What we do Shareholders Insights LP Login LP Login News EQT Foundation opens applications for breakthrough science grants to reduce dependence on critical minerals for the green transition Copy Link January 27, 2026, 09:00 Share The link was copied! EQT Foundation opens applications for deeptech solutions grants, tackling critical mineral dependence in climate technologies The program will award between EUR 25,000 and EUR 100,000 EQT Foundation is launching a new open call for proposals under its Science Grants program, focused on critical mineral substitutes for the green transition. The program will award catalytic, non-dilutive grants of €25,000 to €100,000 to researchers developing high-risk, high-impact deeptech solutions that reduce or eliminate the use of critical and strategic raw materials in key climate technologies. Designed to accelerate bold scientific ideas with strong translational potential, the call is open to scientists affiliated with accredited nonprofit institutions worldwide. The global transition to net zero depends on technologies such as batteries, electric motors, power electronics, photovoltaics, and electrolyzers. Many of these rely on a narrow set of critical minerals whose supply is concentrated, volatile, and often associated with significant environmental"
+    },
+    {
+      "id": "check-page-31b267878f",
+      "url": "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-science-grants-to-overcome-the-blood-brain-barrier-and-transform-cns-drug-delivery-2026-03-10",
+      "page": "application",
+      "excerpt": "EQT Foundation opens applications for science grants | EQT Skip to main content Who we are What we do Shareholders Insights LP Login LP Login News EQT Foundation opens applications for science grants to overcome the blood-brain barrier and transform CNS drug delivery Copy Link March 10, 2026, 09:30 Share The link was copied! EQT Foundation opens applications for deeptech solutions grants, tackling one of medicine’s most formidable biological barriers The program will award between EUR 25,000 and EUR 100,000 The call focuses on breakthrough technologies to cross or modulate the blood-brain barrier for therapeutic delivery to the brain EQT Foundation is launching a new open call for proposals under its Science Grants program, focused on breakthrough innovations to cross or modulate the blood-brain barrier (BBB) for therapeutic delivery to the central nervous system. The program will award catalytic, non-dilutive grants of €25,000 to €100,000 to researchers developing high-risk, high-impact deeptech solutions with the potential to unlock a new era of Central Nervous System (CNS) medicine. Designed to accelerate bold scientific ideas with strong translational potential, the call is open to scientists affiliated with accredited nonprofit institutions worldwide. The blood-brain barrier protects the central nervous system, but it also blocks more than 98% of small molecule drugs and"
+    },
+    {
+      "id": "check-page-1d3d8c67f2",
+      "url": "https://eqtgroup.com/news/xxl-intends-to-apply-for-listing",
+      "page": "application",
+      "excerpt": "XXL Intends to Apply for Listing | EQT Skip to main content Who we are What we do Shareholders Insights LP Login LP Login News XXL Intends to Apply for Listing Copy Link September 10, 2014, 08:30 Share The link was copied! On September 9, 2014, XXL ASA announced its intention to launch an Initial Public Offering of its ordinary shares and to apply for a listing on the Oslo Stock Exchange. DISCLAIMER – IMPORTANT THE FOLLOWING PAGES INCLUDE INFORMATION PERTAINING TO THE INITIAL PUBLIC OFFERING OF SHARES OF XXL ASA. ELECTRONIC VERSIONS OF THE MATERIALS YOU ARE SEEKING TO ACCESS ARE BEING MADE AVAILABLE ON THIS WEBPAGE IN GOOD FAITH AND FOR INFORMATION PURPOSES ONLY AND ONLY TO PERSONS IN CERTAIN JURISDICTIONS AS DESCRIBED BELOW. THESE MATERIALS ARE NOT DIRECTED AT OR ACCESSIBLE BY PERSONS LOCATED IN THE UNITED STATES, AUSTRALIA, CANADA AND JAPAN AND IF YOU ARE IN ONE OF THOSE JURISDICTIONS, YOU SHOULD NOT ACCESS ANY OF THESE MATERIALS. Please read this notice carefully - it applies to all persons who view this webpage. Please note that the disclaimer set out below may be altered or updated. You should read it in full each time you visit the site. Overseas Persons Viewing the materials you seek to access may not be lawful in certain jurisdictions. In other jurisdictions, only certain categories of persons may be allowed to view these materials. All persons resident outside Norway"
+    },
+    {
+      "id": "check-page-9df8a8628b",
+      "url": "https://eqtgroup.com/about/people/gustav-von-sydow",
+      "page": "terms",
+      "excerpt": "Gustav von Sydow | EQT Skip to main content Who we are What we do Shareholders Insights LP Login LP Login Our People / Gustav von Sydow Deal Partner Gustav von Sydow Gustav von Sydow is a Partner at EQT Ventures, where he works closely with portfolio companies to drive value creation and realization across the funds as co-chair of the Portfolio Performance Review and the Exit & Liquidity Review. He joined EQT as an Entrepreneur in Residence, supporting the development of a new AI-driven approach to startup discovery and due diligence that has informed a significant share of Ventures' recent early-stage investments. Before EQT, Gustav co-founded and served as CEO of Burt Corporation, a startup studio focused on data-first products with offices in Stockholm, Gothenburg, and New York, whose products launched at conferences including TechCrunch50 and DEMO and are used daily by the world's leading internet companies, media groups, and consumer brands. Building companies across both continents made him a natural bridge connecting European founders and investors to the New York technology ecosystem. Earlier in his career he worked as an award-winning advertising creative and developer, and launched his first startup while in high school. Based in New York, Gustav is part of accelerating EQT's expansion in the United States. What excites him most is backing founders building the"
+    },
+    {
+      "id": "check-page-737bc23cc9",
+      "url": "https://eqtgroup.com/about/scaleup-europe/investment-guidelines",
+      "page": "terms",
+      "excerpt": "Scaleup Europe Fund – Investment Guidelines Skip to main content Who we are What we do Shareholders Insights LP Login LP Login Scaleup Europe Fund – Investment Guidelines Investment approach A commercial fund: The Scaleup Europe Fund invests on a commercial basis to generate financial returns, while supporting the growth of European technology companies. Investment decisions are made independently on commercial merits, within the investment mandate, by EQT as the fund’s portfolio manager. Neither the European Commission, nor any other investor, make or direct individual investment decisions. An advisory committee of investor representatives oversees compliance with the mandate. This is standard governance for a professionally managed fund. What we invest in: We make equity and equity-related investments in European technology companies from their first significant raise to pre-IPO. We aim to lead or co-lead financing rounds. Our investment in a company is typically €30m to €300m, with an ability to make follow-on investments as the company grows and raises additional capital. We focus on three broadly defined themes, which describe where we concentrate rather than fixed criteria and allow for change in technology and markets: DeepTech. Including quantum technologies, semiconductors, advanced computing, AI infrastructure, robotics and autonomous systems, clean and secure energy"
+    },
+    {
+      "id": "check-page-e1edab1617",
+      "url": "https://eqtgroup.com/eqt-foundation/breakthrough-science-program-faq",
+      "page": "terms",
+      "excerpt": "Breakthrough Science Program FAQ | EQT Foundation Skip to main content Who we are What we do Shareholders Insights LP Login LP Login Breakthrough Science Program FAQ Do You Want to Know More? Get in touch with us and take the first step to successive growth. Contact us Get the Latest Updates Subscribe to EQT Foundation's press releases and updates. Sign up now Contact us Offices +46850655300 Press Newsroom [email protected] Careers Careers at EQT Follow us LinkedIn X YouTube Instagram Legal Terms and Conditions of Use Cookie Notice Privacy Notice EQT Policies & Statements Complaints Handling Procedure Sustainable Finance Disclosure Fraud and Phishing Awareness Local sites Japan - 日本 Go to the top ©EQT AB 2026 . All rights reserved."
+    },
+    {
+      "id": "check-page-fe5aecba14",
+      "url": "https://eqtgroup.com/news/150-million-investment-to-build-grade-a-office-space-in-the-rapidly-emerging-bpo-office-destination-of-clark-philippines",
+      "page": "terms",
+      "excerpt": "$150 million investment to build Grade A office space | EQT Skip to main content Who we are What we do Shareholders Insights LP Login LP Login News $150 million investment to build Grade A office space in the rapidly emerging BPO office destination of Clark, Philippines Copy Link November 9, 2015, 06:30 Share The link was copied! The Philippines is one of the fastest growing office markets in Asia and the second largest BPO outsourcing destination globally. $150 million represents one of the largest investments in recent times by foreign investors into the country’s real estate sector. Clark Freeport Zone, 80 km from Metro Manila, is well positioned to thrive as an emerging BPO hub for the country as existing occupiers look for cost effective expansion outside Manila and new occupiers enter the market. ADM Capital (“ADM”) and BPE Asia Real Estate (“BPE Asia”), an affiliate of Baring Private Equity Asia (“Baring Asia”), announced today the closing of an initial US$150 million investment to finance the construction of Grade A office space as well complementary infrastructure within the 177 hectare Global Gateway Logistics City (GGLC) in the Clark Freeport Zone north of Metro Manila. BPE Asia and ADM Capital are leading a consortium of investors to provide the cornerstone capital for the construction of five Grade A office buildings with a total gross floor area of approximately"
+    },
+    {
+      "id": "check-page-7e5cb5c687",
+      "url": "https://eqtgroup.com/news/Real-Deals-Article",
+      "page": "terms",
+      "excerpt": "Real Deals Article | EQT Skip to main content Who we are What we do Shareholders Insights LP Login LP Login News Real Deals Article Copy Link September 5, 2013, 14:50 Share The link was copied! In its August issue the leading private equity magazine Real Deals named Conni Jonsson one of the 20 people who have had the greatest impact on the private equity industry this century. The magazine labels him an outspoken transparency champion and writes: “Since becoming managing partner in 1994, Jonsson has embodied EQT´s reputation as a sensible and successful investor. Since spinning out from Investor AB, the firm has curried good will with its industrial approach and consistent returns. EQT´s growth ….into a regional powerhouse culminated in 2011 with a highly impressive EUR 4.75bn fundraising……” “…..In 2011 he called on private equity to “grow up” and embrace transparency, and made good on his word shortly thereafter by bringing EQT onshore. He reiterated his stance earlier this year, simplifying the organisation of the company and stating: “It’s not only fair to pay tax, we should pay tax”.” Real Deals finished the article: “With this combination of straight talking and success, private equity couldn’t hope for a much better representative than Conni Jonsson.” EQT Partners EQT Latest News From EQT Exclusive News and Insights Every Week Add your email address below to sign up for"
+    },
+    {
+      "id": "check-page-96f09fca39",
+      "url": "https://eqtgroup.com/news/Responsible-investment",
+      "page": "terms",
+      "excerpt": "Responsible Investment | EQT Skip to main content Who we are What we do Shareholders Insights LP Login LP Login News Responsible Investment Copy Link May 19, 2013, 00:00 Share The link was copied! ESG factors have steadily increased in importance for investors and businesses alike and today, there is a growing global understanding that integrating ESG into the business model can drive both innovation and profitability, adding value to all stakeholders. In a 2011 progress report from the United Nations-supported Principles for Responsible Investment (UN PRI), it was estimated that the total value of internally active managed assets under management for which ESG criteria were integrated via PRI signatories into the underlying investment strategies exceeded USD 10.7 trillion. Though it represented less than 10% of the total global market at the time, it clearly demonstrated a change which is rapidly gaining momentum. RI and ESG issues have been high on EQT’s agenda for several years and, apart from developing its own RI policy and practices, EQT has also been a keen participant in the private equity industry’s efforts to promote and implement sound RI and ESG practices. On a global scale, the United Nations-supported Principles for Responsible Investment (UN PRI) is an important platform which EQT became a signatory of in 2010. The principles generally state that ESG issues will"
+    },
+    {
+      "id": "check-page-adcd885834",
+      "url": "https://eqtgroup.com/news/amg-announces-investment-in-baring-private-equity-asia",
+      "page": "terms",
+      "excerpt": "AMG Announces Investment in Baring Private Equity Asia | EQT Skip to main content Who we are What we do Shareholders Insights LP Login LP Login News AMG Announces Investment in Baring Private Equity Asia Copy Link January 5, 2016, 06:30 Share The link was copied! Affiliated Managers Group, Inc. (NYSE: AMG), a global asset management company, has acquired an equity interest in Baring Private Equity Asia (“Baring Asia”). Baring Asia’s senior partners will continue to hold a majority of the equity of the business and, consistent with AMG’s partnership approach, direct its day-to-day operations. Based in Hong Kong, Baring Asia is the largest dedicated Asian private equity firm, and advises funds with total assets under management of over US$8 billion. Founded by Jean Eric Salata in 1997, Baring Asia’s investment philosophy is deeply rooted in the principles of capital preservation and diversified portfolio construction. Through its pan-Asian investment platform spanning offices in Hong Kong, Shanghai, Beijing, Mumbai, Singapore, Jakarta, and Tokyo, Baring Asia’s 66 investment professionals specialize in growth-oriented investments, sponsoring management buyouts and providing capital to companies for expansion, recapitalization or acquisitions. With an 18-year track record of alpha generation across multiple business cycles, Baring Asia’s proprietary deal origination is facilitated"
+    },
+    {
+      "id": "check-page-45ab23897d",
+      "url": "https://eqtgroup.com/news/baring-asia-completes-deal-to-acquire-majority-stake-in-vistra-group",
+      "page": "terms",
+      "excerpt": "Baring Asia Completes Deal to Acquire Majority Stake | EQT Skip to main content Who we are What we do Shareholders Insights LP Login LP Login News Baring Asia Completes Deal to Acquire Majority Stake in Vistra Group Copy Link October 27, 2015, 06:30 Share The link was copied! Baring Private Equity Asia (“Baring Asia”), one of Asia’s largest and most established independent private equity firms, has today completed the deal announced in May to acquire a majority stake in Vistra Group (following regulatory approvals). This change of investor from the previous majority stakeholder, IK Investment Partners (“IK”), does not affect the ongoing operations of Vistra Group, whose management team will continue to hold a significant shareholding in the company. Advising funds that manage more than USD9 billion in committed capital, Baring Asia runs a pan‐Asian investment program, sponsoring management buyouts and providing growth capital to companies for expansion or acquisitions, making it a perfect partner to support and enhance Vistra Group’s continued growth. Commenting on the completion, Martin Crawford, CEO of Vistra Group, said, “Our partnership with Baring Asia brings a new and exciting chapter for the Vistra Group. With their support, we can continue the success and growth of the firm to the satisfaction of our clients, our employees and our shareholders. We very much look"
+    },
+    {
+      "id": "check-page-f704bfcc0e",
+      "url": "https://eqtgroup.com/news/baring-asia-completes-deal-to-acquire-orangefield",
+      "page": "terms",
+      "excerpt": "Baring Asia Completes Deal to Acquire Orangefield | EQT Skip to main content Who we are What we do Shareholders Insights LP Login LP Login News Baring Asia Completes Deal to Acquire Orangefield Copy Link November 16, 2015, 06:30 Share The link was copied! Baring Private Equity Asia (“Baring Asia”), one of Asia’s largest and most established independent private equity firms, following regulatory approvals has completed the deal to acquire Orangefield. Advising funds that manage more than USD9 billion in committed capital, Baring Asia runs a pan‐Asian investment program, sponsoring management buyouts and providing growth capital to companies for expansion or acquisitions, making it a perfect partner to support and enhance Orangefield’s continued growth. Commenting on the completion, Joep Bruins, CEO of Orangefield, said: “We are glad this deal is finalized, now we can focus on moving forward. We have been working hard in the past year to strengthen our service offering further, and with Baring Asia behind us Orangefield’s services can be brought to a new level.” Jean Eric Salata, Founder and CEO of Baring Asia, added: “I couldn’t be happier about Orangefield officially joining our group. They are an organization of highly qualified professionals that always go the extra mile, and that is exactly the kind of team and energy that makes us excited about supporting their growth"
+    },
+    {
+      "id": "check-page-392ca29f61",
+      "url": "https://eqtgroup.com/news/baring-private-equity-asia-and-alibaba-enter-partnership-with-the-crownx-leads-usd400mm-investment",
+      "page": "terms",
+      "excerpt": "BARING PRIVATE EQUITY ASIA AND ALIBABA ENTER | EQT Skip to main content Who we are What we do Shareholders Insights LP Login LP Login News BARING PRIVATE EQUITY ASIA AND ALIBABA ENTER PARTNERSHIP WITH THE CROWNX: LEADS USD400MM INVESTMENT Copy Link May 18, 2021, 05:30 Share The link was copied! Ho Chi Minh City, 18 th May 2021 – Masan Group Corporation ( HOSE: MSN, “Masan”) and a consortium led by Alibaba Group (“Alibaba”) and Baring Private Equity Asia (“BPEA”) today announced the signing of definitive agreements for the acquisition of a 5.5% stake in The CrownX (“TCX” or the “Company”) for a total cash consideration of USD400 million (the “Transaction”). The CrownX is Masan’s integrated consumer retail arm that consolidates its interests in Masan Consumer Holdings (“MCH”) and VinCommerce (“VCM”). The Transaction implies a pre-money valuation of USD6.9 billion for 100% of its equity, an equivalent of USD93.5 (c. VND 2,150,000) per share. Masan will own 80.2% of the Company post the consortium’s investment. The formation of The CrownX last year brought together two industry leaders to form a consumer and retail powerhouse. As part of Alibaba’s investment, The CrownX will now partner with Lazada to build the Company’s digital presence and capabilities and accelerate the offline to online (“O2O”) market in Vietnam. With this partnership, the Transaction marks a shared vision"
     }
   ],
   "findings": {
@@ -49,8 +307,88 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "16 months",
+        "evidenceId": "check-duration-30795df5d4"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-b5252fe399"
+      }
+    ],
+    "location": [
+      {
+        "value": "Europe",
+        "evidenceId": "check-location-8fc87ad0ae"
+      },
+      {
+        "value": "Asia",
+        "evidenceId": "check-location-60b78383ae"
+      }
+    ],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "transition. The program will award catalytic, non-dilutive grants of €25,000 to €100,000 to researchers developing high-risk, high-impact deeptech",
+        "evidenceId": "check-deal-cf0d7ab999"
+      },
+      {
+        "value": "The program will award catalytic, non-dilutive grants of €25,000 to €100,000 to researchers developing high-risk, high-impact deeptech solutions",
+        "evidenceId": "check-deal-5a2c278394"
+      },
+      {
+        "value": "system. The program will award catalytic, non-dilutive grants of €25,000 to €100,000 to researchers developing high-risk, high-impact deeptech",
+        "evidenceId": "check-deal-fb84499d17"
+      },
+      {
+        "value": "valuation of USD6.9 billion for 100% of its equity, an equivalent of USD93.5 (c. VND 2,150,000) per share. Masan will own 80.2% of the Company",
+        "evidenceId": "check-deal-872b297a5b"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "25000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-cf0d7ab999"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "100000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-5a2c278394"
+      },
+      {
+        "value": {
+          "kind": "equity",
+          "amount": null,
+          "currency": null,
+          "equity": "100%",
+          "label": "Equity",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-872b297a5b"
+      }
+    ],
     "portfolioPages": [],
     "name": [
       {

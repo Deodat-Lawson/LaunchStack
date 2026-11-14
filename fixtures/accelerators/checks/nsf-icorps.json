@@ -1,82 +1,402 @@
 {
   "programId": "nsf-icorps",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.nsf.gov/funding/initiatives/i-corps",
-    "https://www.nsf.gov/about",
+    "https://www.nsf.gov/funding/initiatives/i-corps/webinars-resources",
+    "https://www.nsf.gov/pubs/2018/nsf18057/nsf18057.jsp",
+    "https://www.nsf.gov/funding/initiatives/i-corps/cohorts",
+    "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-announces-special-opportunity-i-corpstm-quantumx",
+    "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-names-three-new-i-corps-hubs-expanding-national",
+    "https://www.nsf.gov/group/265/updates",
     "https://www.nsf.gov/updates-on-priorities",
-    "https://www.nsf.gov/funding/initiatives/i-corps/webinars-resources"
+    "https://www.nsf.gov/funding/initiatives/i-corps/updates",
+    "https://www.nsf.gov/funding/initiatives/i-corps/updates/10-years-i-corps",
+    "https://www.nsf.gov/funding/initiatives/i-corps/updates/new-nsf-effort-expands-i-corpstm-teams-training-program",
+    "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-expands-national-innovation-network-5-new-i-corps-hubs",
+    "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-funding-opportunity-expands-i-corps-hubs-program",
+    "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-i-corps-biennial-report-2023",
+    "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-i-corps-launches-new-website"
   ],
   "evidence": [
     {
+      "id": "check-announced-408b9f908e",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/cohorts",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "(11:45 a.m.-6 p.m. on Mar. 25; 10 a.m.-3 p.m. on Mar. 26) Winter Cohort #3 Orientation: Feb. 22 (1-5 p.m.) Kickoff: Mar. 1-5 (10 a.m.-3:30 p.m. on Mar. 1; 10",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-47a634cbb3",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/cohorts",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "29 (11:45 a.m. – 6 p.m. on Oct 28; 10 a.m. – 3 p.m. on Oct 29) Fall Cohort #2 Orientation: Sept. 28 (1 – 5 p.m.) Kickoff: Oct. 5 - 9 (10 a.m. – 3:30 p.m. on Oct 5;",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-594bc86b5b",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/cohorts",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "16; 10 a.m. – 3 p.m. on Dec. 17) Summer 2026 Cohorts - CLOSED Summer Cohort #1 Orientation: May 21 (1-5 p.m.) Kickoff: June 1-5 (10 a.m.-4 p.m. on June 1 and 3;",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-95394ad593",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/cohorts",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "(11:45 a.m. – 6 p.m. on Nov. 19; 10 a.m. – 3 p.m. on Nov. 20) Fall Cohort #3 Orientation: Oct. 8 (1 – 5 p.m.) Kickoff: Oct. 26 - 30 (10 a.m. – 3:30 p.m. on Oct.",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-9723abf0f1",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/cohorts",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "All times are given in Eastern Time. Winter 2027 Cohorts Winter Cohort #1 Orientation: Jan. 14 (1-5 p.m.) Kickoff: Jan. 25-29 (10 a.m.-3:30 p.m. on Jan. 25; 10",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-b9b75d39b6",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/cohorts",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "13-14 (11:45 a.m.-6 pm on Aug. 13; 10 a.m.-3 p.m. on Aug. 14) Summer Cohort #3 Orientation: July 6 (1-5 p.m.) Kickoff: July 13-17 (10 a.m.-4 p.m. on July 13 and 15;",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-d26aa00703",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/cohorts",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "Apr. 14; 10 a.m.-3 p.m. on Apr. 15) Fall 2026 Cohorts - CLOSED Fall Cohort #1 Orientation: Sept. 3 (1 – 5 p.m.) Kickoff: Sept. 14 – 18 (10 a.m. – 3:30 p.m. on Sept.",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-ed69cc22b5",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/cohorts",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "(11:45 a.m.-6 p.m. on Mar. 11; 10 a.m.-3 p.m. on Mar. 12) Winter Cohort #2 Orientation: Feb. 1 (1-5 p.m.) Kickoff: Feb. 8-12 (10 a.m.-3:30 p.m. on Feb. 8; 10",
+      "page": "batches"
+    },
+    {
+      "id": "check-announced-f3086bd889",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/cohorts",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "(11:45 a.m.-6 p.m. on July 22; 10 a.m.-3 p.m. on July 23) Summer Cohort #2 Orientation: June 15 (1-5 p.m.) Kickoff: June 22-26 (10 a.m.-4 p.m. on June 22 and 24;",
+      "page": "batches"
+    },
+    {
+      "id": "check-deal-74727232a5",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-names-three-new-i-corps-hubs-expanding-national",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "society and the economy. Each NSF I-Corps Hub may receive up to $3 million per year for five years and comprises a regional alliance of at",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-0d68213867",
+      "url": "https://www.nsf.gov/pubs/2018/nsf18057/nsf18057.jsp",
+      "title": "NSF I-Corps — terms page",
+      "excerpt": "the interview process starts approximately 6 months prior to a cohort's start date and continues",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-0fc1b15c5a",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-announces-special-opportunity-i-corpstm-quantumx",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "grant to support participation in the program. 5-week program from kickoff to closing. Open to all",
+      "page": "batches"
+    },
+    {
+      "id": "check-duration-ff42e8e760",
+      "url": "https://www.nsf.gov/pubs/2018/nsf18057/nsf18057.jsp",
+      "title": "NSF I-Corps — terms page",
+      "excerpt": "for the I-Corps cohort (typically around 4 weeks prior to the start of the cohort) you will",
+      "page": "terms"
+    },
+    {
       "id": "check-email-5b2e944f04",
       "url": "https://www.nsf.gov/updates-on-priorities",
-      "title": "NSF I-Corps — batches page checked by scrape.py",
+      "title": "NSF I-Corps — batches page",
       "excerpt": "Submit your questions Media inquiries: Please email media@nsf.gov or call (703) 292-7090. Statement of NSF priorities April",
       "page": "batches"
     },
     {
       "id": "check-email-5ecfce093b",
       "url": "https://www.nsf.gov/updates-on-priorities",
-      "title": "NSF I-Corps — batches page checked by scrape.py",
+      "title": "NSF I-Corps — batches page",
       "excerpt": "media@nsf.gov",
       "page": "batches"
     },
     {
+      "id": "check-format-70cdb639ea",
+      "url": "https://www.nsf.gov/pubs/2018/nsf18057/nsf18057.jsp",
+      "title": "NSF I-Corps — terms page",
+      "excerpt": "immersion Kickoff, a weekly online curriculum, and an in-person Lessons Learned report-out. The Kickoff and Lessons",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-9e30a5cbf2",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/cohorts",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "may be conducted by phone, video conferencing or in person. To conduct in-person interviews, you will need to follow",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-aa694b375a",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/cohorts",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "by phone, video conferencing or in person. To conduct in-person interviews, you will need to follow your university's",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-b9ff359469",
+      "url": "https://www.nsf.gov/pubs/2018/nsf18057/nsf18057.jsp",
+      "title": "NSF I-Corps — terms page",
+      "excerpt": "of an approximately seven-week program that involves an in-person entrepreneurial curriculum immersion Kickoff, a weekly",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-e3dd4e2efe",
+      "url": "https://www.nsf.gov/pubs/2018/nsf18057/nsf18057.jsp",
+      "title": "NSF I-Corps — terms page",
+      "excerpt": "appointments with 15 potential customers - these must be in-person interviews at times that do not conflict with the",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-e6024f9d95",
+      "url": "https://www.nsf.gov/pubs/2018/nsf18057/nsf18057.jsp",
+      "title": "NSF I-Corps — terms page",
+      "excerpt": "more than 100 potential customers and potential partners in person. A good mentor can help the team find the right people to",
+      "page": "terms"
+    },
+    {
       "id": "check-name-9535a94328",
       "url": "https://www.nsf.gov/funding/initiatives/i-corps",
-      "title": "NSF I-Corps — homepage checked by scrape.py",
+      "title": "NSF I-Corps — homepage",
       "excerpt": "NSF I-Corps™ | NSF - U.S. National Science Foundation Skip to main",
       "page": "details"
     },
     {
       "id": "check-phone-334ab7f8c0",
       "url": "https://www.nsf.gov/funding/initiatives/i-corps/webinars-resources",
-      "title": "NSF I-Corps — terms page checked by scrape.py",
+      "title": "NSF I-Corps — terms page",
       "excerpt": "(703) 292-5111",
       "page": "terms"
     },
     {
-      "id": "check-phone-4eb81199f9",
-      "url": "https://www.nsf.gov/funding/initiatives/i-corps",
-      "title": "NSF I-Corps — homepage checked by scrape.py",
-      "excerpt": "(703) 292-5111",
-      "page": "details"
-    },
-    {
-      "id": "check-phone-a520f574e5",
-      "url": "https://www.nsf.gov/updates-on-priorities",
-      "title": "NSF I-Corps — batches page checked by scrape.py",
+      "id": "check-phone-3613161533",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates/10-years-i-corps",
+      "title": "NSF I-Corps — batches page",
       "excerpt": "(703) 292-5111",
       "page": "batches"
     },
     {
-      "id": "check-phone-ef6b24542d",
-      "url": "https://www.nsf.gov/about",
-      "title": "NSF I-Corps — details page checked by scrape.py",
+      "id": "check-phone-4eb81199f9",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps",
+      "title": "NSF I-Corps — homepage",
       "excerpt": "(703) 292-5111",
       "page": "details"
     },
     {
+      "id": "check-phone-5ce728f719",
+      "url": "https://www.nsf.gov/group/265/updates",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "(703) 292-5111",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-66bd3d6d3d",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates/new-nsf-effort-expands-i-corpstm-teams-training-program",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "(703) 292-5111",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-6a38bd45e0",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-names-three-new-i-corps-hubs-expanding-national",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "(703) 292-5111",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-79a9366758",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-funding-opportunity-expands-i-corps-hubs-program",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "(703) 292-5111",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-8bc909f119",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-expands-national-innovation-network-5-new-i-corps-hubs",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "(703) 292-5111",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-8c9261db0b",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/cohorts",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "(703) 292-5111",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-9a53240484",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "(703) 292-5111",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-a520f574e5",
+      "url": "https://www.nsf.gov/updates-on-priorities",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "(703) 292-5111",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-b854c98210",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-i-corps-biennial-report-2023",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "(703) 292-5111",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-cfd2eaa486",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-i-corps-launches-new-website",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "(703) 292-5111",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-e31bffdb0a",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-announces-special-opportunity-i-corpstm-quantumx",
+      "title": "NSF I-Corps — batches page",
+      "excerpt": "(703) 292-5111",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-e88ad2209b",
+      "url": "https://www.nsf.gov/pubs/2018/nsf18057/nsf18057.jsp",
+      "title": "NSF I-Corps — terms page",
+      "excerpt": "(703) 292-5111",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-b4e19c82c3",
       "url": "https://www.nsf.gov/funding/initiatives/i-corps",
-      "title": "NSF I-Corps — homepage checked by scrape.py",
+      "title": "NSF I-Corps — homepage",
       "excerpt": "Cohorts → https://www.nsf.gov/funding/initiatives/i-corps/cohorts",
       "page": "details"
     },
     {
       "id": "check-portfolio-e6e4aebe43",
       "url": "https://www.nsf.gov/funding/initiatives/i-corps/webinars-resources",
-      "title": "NSF I-Corps — terms page checked by scrape.py",
+      "title": "NSF I-Corps — terms page",
       "excerpt": "Cohorts → https://www.nsf.gov/funding/initiatives/i-corps/cohorts",
       "page": "terms"
     },
     {
-      "id": "check-route-42021c989d",
-      "url": "https://www.nsf.gov/funding/initiatives/i-corps/webinars-resources",
-      "title": "NSF I-Corps — terms page checked by scrape.py",
-      "excerpt": "NSF I-Corps™ → https://www.nsf.gov/funding/initiatives/i-corps",
+      "id": "check-rolling-0378ef0214",
+      "url": "https://www.nsf.gov/pubs/2018/nsf18057/nsf18057.jsp",
+      "title": "NSF I-Corps — terms page",
+      "excerpt": "is the proposal deadline? There are no set deadlines. Teams are interviewed on a rolling basis. Typically, the interview process starts approximately 6 months prior to a",
       "page": "terms"
+    },
+    {
+      "id": "check-route-1a52ece9a1",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps",
+      "title": "NSF I-Corps — homepage",
+      "excerpt": "Top → https://www.nsf.gov/funding/initiatives/i-corps",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-e8eb8410ea",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps",
+      "page": "details",
+      "excerpt": "NSF I-Corps™ | NSF - U.S. National Science Foundation Skip to main content An official website of the United States government Here's how you know Here's how you know Official websites use .gov A .gov website belongs to an official government organization in the United States. Secure .gov websites use HTTPS. A lock ( ) or https:// means you've safely connected to the .gov website. Share sensitive information only on official, secure websites. Search Menu Search search Find Funding Funding Search Award Search NSF-wide Initiatives Research Experiences for Undergraduates Where to Start For Everyone For Early-Career Researchers For Postdoctoral Fellows For Graduate Students For Undergraduates For Industry For Entrepreneurs How to Apply Preparing Your Proposal Submitting Your Proposal Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov Grants.gov How We Make Funding Decisions Manage Your Award Getting Started Request a Change to Your Award Report Your Outcomes Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov NSF Public Access Repository Who to Contact With Questions Focus Areas Major Initiatives Super Intelligence Biotechnology Quantum STEM Workforce Focus Areas Explore All Focus Areas Arctic and Antarctic Astronomy and Space Biology Chemistry Computing Earth and Environment Education and Training Engineering"
+    },
+    {
+      "id": "check-page-9564ec2c65",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/webinars-resources",
+      "page": "terms",
+      "excerpt": "Webinars, FAQs, and Other Resources - NSF I-Corps™ | NSF - U.S. National Science Foundation Skip to main content An official website of the United States government Here's how you know Here's how you know Official websites use .gov A .gov website belongs to an official government organization in the United States. Secure .gov websites use HTTPS. A lock ( ) or https:// means you've safely connected to the .gov website. Share sensitive information only on official, secure websites. Search Menu Search search Find Funding Funding Search Award Search NSF-wide Initiatives Research Experiences for Undergraduates Where to Start For Everyone For Early-Career Researchers For Postdoctoral Fellows For Graduate Students For Undergraduates For Industry For Entrepreneurs How to Apply Preparing Your Proposal Submitting Your Proposal Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov Grants.gov How We Make Funding Decisions Manage Your Award Getting Started Request a Change to Your Award Report Your Outcomes Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov NSF Public Access Repository Who to Contact With Questions Focus Areas Major Initiatives Super Intelligence Biotechnology Quantum STEM Workforce Focus Areas Explore All Focus Areas Arctic and Antarctic Astronomy and Space Biology Chemistry Computing Earth and"
+    },
+    {
+      "id": "check-page-16b22d52c1",
+      "url": "https://www.nsf.gov/pubs/2018/nsf18057/nsf18057.jsp",
+      "page": "terms",
+      "excerpt": "FAQ: I-Corps(TM) Team Solicitation | NSF - U.S. National Science Foundation Skip to main content An official website of the United States government Here's how you know Here's how you know Official websites use .gov A .gov website belongs to an official government organization in the United States. Secure .gov websites use HTTPS. A lock ( ) or https:// means you've safely connected to the .gov website. Share sensitive information only on official, secure websites. Search Menu Search search Find Funding Funding Search Award Search NSF-wide Initiatives Research Experiences for Undergraduates Where to Start For Everyone For Early-Career Researchers For Postdoctoral Fellows For Graduate Students For Undergraduates For Industry For Entrepreneurs How to Apply Preparing Your Proposal Submitting Your Proposal Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov Grants.gov How We Make Funding Decisions Manage Your Award Getting Started Request a Change to Your Award Report Your Outcomes Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov NSF Public Access Repository Who to Contact With Questions Focus Areas Major Initiatives Super Intelligence Biotechnology Quantum STEM Workforce Focus Areas Explore All Focus Areas Arctic and Antarctic Astronomy and Space Biology Chemistry Computing Earth and Environment Education and"
+    },
+    {
+      "id": "check-page-52681b5e43",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/cohorts",
+      "page": "batches",
+      "excerpt": "Cohorts - NSF I-Corps™ | NSF - U.S. National Science Foundation Skip to main content An official website of the United States government Here's how you know Here's how you know Official websites use .gov A .gov website belongs to an official government organization in the United States. Secure .gov websites use HTTPS. A lock ( ) or https:// means you've safely connected to the .gov website. Share sensitive information only on official, secure websites. Search Menu Search search Find Funding Funding Search Award Search NSF-wide Initiatives Research Experiences for Undergraduates Where to Start For Everyone For Early-Career Researchers For Postdoctoral Fellows For Graduate Students For Undergraduates For Industry For Entrepreneurs How to Apply Preparing Your Proposal Submitting Your Proposal Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov Grants.gov How We Make Funding Decisions Manage Your Award Getting Started Request a Change to Your Award Report Your Outcomes Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov NSF Public Access Repository Who to Contact With Questions Focus Areas Major Initiatives Super Intelligence Biotechnology Quantum STEM Workforce Focus Areas Explore All Focus Areas Arctic and Antarctic Astronomy and Space Biology Chemistry Computing Earth and Environment Education and Training"
+    },
+    {
+      "id": "check-page-ce04ada491",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-announces-special-opportunity-i-corpstm-quantumx",
+      "page": "batches",
+      "excerpt": "NSF announces special opportunity - I-Corps™ for Quantum+X - to accelerate adoption and commercialization of quantum-related discoveries and innovations | NSF - U.S. National Science Foundation Skip to main content An official website of the United States government Here's how you know Here's how you know Official websites use .gov A .gov website belongs to an official government organization in the United States. Secure .gov websites use HTTPS. A lock ( ) or https:// means you've safely connected to the .gov website. Share sensitive information only on official, secure websites. Search Menu Search search Find Funding Funding Search Award Search NSF-wide Initiatives Research Experiences for Undergraduates Where to Start For Everyone For Early-Career Researchers For Postdoctoral Fellows For Graduate Students For Undergraduates For Industry For Entrepreneurs How to Apply Preparing Your Proposal Submitting Your Proposal Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov Grants.gov How We Make Funding Decisions Manage Your Award Getting Started Request a Change to Your Award Report Your Outcomes Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov NSF Public Access Repository Who to Contact With Questions Focus Areas Major Initiatives Super Intelligence Biotechnology Quantum STEM Workforce Focus Areas Explore"
+    },
+    {
+      "id": "check-page-7e9b11b336",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-names-three-new-i-corps-hubs-expanding-national",
+      "page": "batches",
+      "excerpt": "NSF names three new I-Corps Hubs expanding the National Innovation Network across the U.S. | NSF - U.S. National Science Foundation Skip to main content An official website of the United States government Here's how you know Here's how you know Official websites use .gov A .gov website belongs to an official government organization in the United States. Secure .gov websites use HTTPS. A lock ( ) or https:// means you've safely connected to the .gov website. Share sensitive information only on official, secure websites. Search Menu Search search Find Funding Funding Search Award Search NSF-wide Initiatives Research Experiences for Undergraduates Where to Start For Everyone For Early-Career Researchers For Postdoctoral Fellows For Graduate Students For Undergraduates For Industry For Entrepreneurs How to Apply Preparing Your Proposal Submitting Your Proposal Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov Grants.gov How We Make Funding Decisions Manage Your Award Getting Started Request a Change to Your Award Report Your Outcomes Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov NSF Public Access Repository Who to Contact With Questions Focus Areas Major Initiatives Super Intelligence Biotechnology Quantum STEM Workforce Focus Areas Explore All Focus Areas Arctic and Antarctic Astronomy and Space Biology"
+    },
+    {
+      "id": "check-page-590e4af96a",
+      "url": "https://www.nsf.gov/group/265/updates",
+      "page": "batches",
+      "excerpt": "Updates - NSF I-Corps™ | NSF - U.S. National Science Foundation Skip to main content An official website of the United States government Here's how you know Here's how you know Official websites use .gov A .gov website belongs to an official government organization in the United States. Secure .gov websites use HTTPS. A lock ( ) or https:// means you've safely connected to the .gov website. Share sensitive information only on official, secure websites. Search Menu Search search Find Funding Funding Search Award Search NSF-wide Initiatives Research Experiences for Undergraduates Where to Start For Everyone For Early-Career Researchers For Postdoctoral Fellows For Graduate Students For Undergraduates For Industry For Entrepreneurs How to Apply Preparing Your Proposal Submitting Your Proposal Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov Grants.gov How We Make Funding Decisions Manage Your Award Getting Started Request a Change to Your Award Report Your Outcomes Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov NSF Public Access Repository Who to Contact With Questions Focus Areas Major Initiatives Super Intelligence Biotechnology Quantum STEM Workforce Focus Areas Explore All Focus Areas Arctic and Antarctic Astronomy and Space Biology Chemistry Computing Earth and Environment Education and Training"
+    },
+    {
+      "id": "check-page-807e367487",
+      "url": "https://www.nsf.gov/updates-on-priorities",
+      "page": "batches",
+      "excerpt": "Updates on NSF Priorities | NSF - U.S. National Science Foundation Skip to main content An official website of the United States government Here's how you know Here's how you know Official websites use .gov A .gov website belongs to an official government organization in the United States. Secure .gov websites use HTTPS. A lock ( ) or https:// means you've safely connected to the .gov website. Share sensitive information only on official, secure websites. Search Menu Search search Find Funding Funding Search Award Search NSF-wide Initiatives Research Experiences for Undergraduates Where to Start For Everyone For Early-Career Researchers For Postdoctoral Fellows For Graduate Students For Undergraduates For Industry For Entrepreneurs How to Apply Preparing Your Proposal Submitting Your Proposal Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov Grants.gov How We Make Funding Decisions Manage Your Award Getting Started Request a Change to Your Award Report Your Outcomes Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov NSF Public Access Repository Who to Contact With Questions Focus Areas Major Initiatives Super Intelligence Biotechnology Quantum STEM Workforce Focus Areas Explore All Focus Areas Arctic and Antarctic Astronomy and Space Biology Chemistry Computing Earth and Environment Education and Training"
+    },
+    {
+      "id": "check-page-f4e5c806c4",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates",
+      "page": "batches",
+      "excerpt": "Updates - NSF I-Corps™ | NSF - U.S. National Science Foundation Skip to main content An official website of the United States government Here's how you know Here's how you know Official websites use .gov A .gov website belongs to an official government organization in the United States. Secure .gov websites use HTTPS. A lock ( ) or https:// means you've safely connected to the .gov website. Share sensitive information only on official, secure websites. Search Menu Search search Find Funding Funding Search Award Search NSF-wide Initiatives Research Experiences for Undergraduates Where to Start For Everyone For Early-Career Researchers For Postdoctoral Fellows For Graduate Students For Undergraduates For Industry For Entrepreneurs How to Apply Preparing Your Proposal Submitting Your Proposal Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov Grants.gov How We Make Funding Decisions Manage Your Award Getting Started Request a Change to Your Award Report Your Outcomes Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov NSF Public Access Repository Who to Contact With Questions Focus Areas Major Initiatives Super Intelligence Biotechnology Quantum STEM Workforce Focus Areas Explore All Focus Areas Arctic and Antarctic Astronomy and Space Biology Chemistry Computing Earth and Environment Education and Training"
+    },
+    {
+      "id": "check-page-e505b54d76",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates/10-years-i-corps",
+      "page": "batches",
+      "excerpt": "10 years of I-Corps | NSF - U.S. National Science Foundation Skip to main content An official website of the United States government Here's how you know Here's how you know Official websites use .gov A .gov website belongs to an official government organization in the United States. Secure .gov websites use HTTPS. A lock ( ) or https:// means you've safely connected to the .gov website. Share sensitive information only on official, secure websites. Search Menu Search search Find Funding Funding Search Award Search NSF-wide Initiatives Research Experiences for Undergraduates Where to Start For Everyone For Early-Career Researchers For Postdoctoral Fellows For Graduate Students For Undergraduates For Industry For Entrepreneurs How to Apply Preparing Your Proposal Submitting Your Proposal Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov Grants.gov How We Make Funding Decisions Manage Your Award Getting Started Request a Change to Your Award Report Your Outcomes Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov NSF Public Access Repository Who to Contact With Questions Focus Areas Major Initiatives Super Intelligence Biotechnology Quantum STEM Workforce Focus Areas Explore All Focus Areas Arctic and Antarctic Astronomy and Space Biology Chemistry Computing Earth and Environment Education and Training"
+    },
+    {
+      "id": "check-page-24978e598a",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates/new-nsf-effort-expands-i-corpstm-teams-training-program",
+      "page": "batches",
+      "excerpt": "New NSF effort expands I-Corps™ Teams training program | NSF - U.S. National Science Foundation Skip to main content An official website of the United States government Here's how you know Here's how you know Official websites use .gov A .gov website belongs to an official government organization in the United States. Secure .gov websites use HTTPS. A lock ( ) or https:// means you've safely connected to the .gov website. Share sensitive information only on official, secure websites. Search Menu Search search Find Funding Funding Search Award Search NSF-wide Initiatives Research Experiences for Undergraduates Where to Start For Everyone For Early-Career Researchers For Postdoctoral Fellows For Graduate Students For Undergraduates For Industry For Entrepreneurs How to Apply Preparing Your Proposal Submitting Your Proposal Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov Grants.gov How We Make Funding Decisions Manage Your Award Getting Started Request a Change to Your Award Report Your Outcomes Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov NSF Public Access Repository Who to Contact With Questions Focus Areas Major Initiatives Super Intelligence Biotechnology Quantum STEM Workforce Focus Areas Explore All Focus Areas Arctic and Antarctic Astronomy and Space Biology Chemistry Computing Earth and"
+    },
+    {
+      "id": "check-page-ed2f8d0871",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-expands-national-innovation-network-5-new-i-corps-hubs",
+      "page": "batches",
+      "excerpt": "NSF expands the National Innovation Network with 5 new I-Corps Hubs | NSF - U.S. National Science Foundation Skip to main content An official website of the United States government Here's how you know Here's how you know Official websites use .gov A .gov website belongs to an official government organization in the United States. Secure .gov websites use HTTPS. A lock ( ) or https:// means you've safely connected to the .gov website. Share sensitive information only on official, secure websites. Search Menu Search search Find Funding Funding Search Award Search NSF-wide Initiatives Research Experiences for Undergraduates Where to Start For Everyone For Early-Career Researchers For Postdoctoral Fellows For Graduate Students For Undergraduates For Industry For Entrepreneurs How to Apply Preparing Your Proposal Submitting Your Proposal Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov Grants.gov How We Make Funding Decisions Manage Your Award Getting Started Request a Change to Your Award Report Your Outcomes Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov NSF Public Access Repository Who to Contact With Questions Focus Areas Major Initiatives Super Intelligence Biotechnology Quantum STEM Workforce Focus Areas Explore All Focus Areas Arctic and Antarctic Astronomy and Space Biology Chemistry Computing"
+    },
+    {
+      "id": "check-page-c4d047fa1f",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-funding-opportunity-expands-i-corps-hubs-program",
+      "page": "batches",
+      "excerpt": "NSF funding opportunity expands I-Corps Hubs program | NSF - U.S. National Science Foundation Skip to main content An official website of the United States government Here's how you know Here's how you know Official websites use .gov A .gov website belongs to an official government organization in the United States. Secure .gov websites use HTTPS. A lock ( ) or https:// means you've safely connected to the .gov website. Share sensitive information only on official, secure websites. Search Menu Search search Find Funding Funding Search Award Search NSF-wide Initiatives Research Experiences for Undergraduates Where to Start For Everyone For Early-Career Researchers For Postdoctoral Fellows For Graduate Students For Undergraduates For Industry For Entrepreneurs How to Apply Preparing Your Proposal Submitting Your Proposal Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov Grants.gov How We Make Funding Decisions Manage Your Award Getting Started Request a Change to Your Award Report Your Outcomes Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov NSF Public Access Repository Who to Contact With Questions Focus Areas Major Initiatives Super Intelligence Biotechnology Quantum STEM Workforce Focus Areas Explore All Focus Areas Arctic and Antarctic Astronomy and Space Biology Chemistry Computing Earth and"
+    },
+    {
+      "id": "check-page-ed965d7fee",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-i-corps-biennial-report-2023",
+      "page": "batches",
+      "excerpt": "NSF I-Corps trains an entrepreneurial workforce, enables economic impact nationwide | NSF - U.S. National Science Foundation Skip to main content An official website of the United States government Here's how you know Here's how you know Official websites use .gov A .gov website belongs to an official government organization in the United States. Secure .gov websites use HTTPS. A lock ( ) or https:// means you've safely connected to the .gov website. Share sensitive information only on official, secure websites. Search Menu Search search Find Funding Funding Search Award Search NSF-wide Initiatives Research Experiences for Undergraduates Where to Start For Everyone For Early-Career Researchers For Postdoctoral Fellows For Graduate Students For Undergraduates For Industry For Entrepreneurs How to Apply Preparing Your Proposal Submitting Your Proposal Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov Grants.gov How We Make Funding Decisions Manage Your Award Getting Started Request a Change to Your Award Report Your Outcomes Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov NSF Public Access Repository Who to Contact With Questions Focus Areas Major Initiatives Super Intelligence Biotechnology Quantum STEM Workforce Focus Areas Explore All Focus Areas Arctic and Antarctic Astronomy and Space Biology"
+    },
+    {
+      "id": "check-page-4a39af5d21",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/updates/nsf-i-corps-launches-new-website",
+      "page": "batches",
+      "excerpt": "NSF I-Corps launches new website | NSF - U.S. National Science Foundation Skip to main content An official website of the United States government Here's how you know Here's how you know Official websites use .gov A .gov website belongs to an official government organization in the United States. Secure .gov websites use HTTPS. A lock ( ) or https:// means you've safely connected to the .gov website. Share sensitive information only on official, secure websites. Search Menu Search search Find Funding Funding Search Award Search NSF-wide Initiatives Research Experiences for Undergraduates Where to Start For Everyone For Early-Career Researchers For Postdoctoral Fellows For Graduate Students For Undergraduates For Industry For Entrepreneurs How to Apply Preparing Your Proposal Submitting Your Proposal Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov Grants.gov How We Make Funding Decisions Manage Your Award Getting Started Request a Change to Your Award Report Your Outcomes Proposal & Award Policies & Procedures Guide (PAPPG) Additional Resources Research.gov NSF Public Access Repository Who to Contact With Questions Focus Areas Major Initiatives Super Intelligence Biotechnology Quantum STEM Workforce Focus Areas Explore All Focus Areas Arctic and Antarctic Astronomy and Space Biology Chemistry Computing Earth and Environment Education and"
     }
   ],
   "findings": {
@@ -96,14 +416,87 @@
     "applicationUrl": [
       {
         "value": "https://www.nsf.gov/funding/initiatives/i-corps",
-        "evidenceId": "check-route-42021c989d"
+        "evidenceId": "check-route-1a52ece9a1"
       }
     ],
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-0378ef0214"
+      }
+    ],
+    "announcedIntake": [
+      {
+        "value": "Jan",
+        "evidenceId": "check-announced-9723abf0f1"
+      },
+      {
+        "value": "Feb",
+        "evidenceId": "check-announced-ed69cc22b5"
+      },
+      {
+        "value": "Sept",
+        "evidenceId": "check-announced-d26aa00703"
+      },
+      {
+        "value": "Oct",
+        "evidenceId": "check-announced-95394ad593"
+      },
+      {
+        "value": "May",
+        "evidenceId": "check-announced-594bc86b5b"
+      },
+      {
+        "value": "June",
+        "evidenceId": "check-announced-f3086bd889"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-0d68213867"
+      },
+      {
+        "value": "4",
+        "evidenceId": "check-duration-ff42e8e760"
+      },
+      {
+        "value": "5",
+        "evidenceId": "check-duration-0fc1b15c5a"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-e6024f9d95"
+      }
+    ],
+    "location": [],
     "selectivity": [],
-    "dealText": [],
+    "dealText": [
+      {
+        "value": "society and the economy. Each NSF I-Corps Hub may receive up to $3 million per year for five years and comprises a regional alliance of at",
+        "evidenceId": "check-deal-74727232a5"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "3000000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-74727232a5"
+      }
+    ],
     "portfolioPages": [
       {
         "value": "https://www.nsf.gov/funding/initiatives/i-corps/cohorts",

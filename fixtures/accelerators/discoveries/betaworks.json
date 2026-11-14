@@ -1,11 +1,43 @@
 {
   "programId": "betaworks",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://render.betaworks.com/announcing-ai-camp-native-applications-e1358061c601",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
+    {
+      "url": "https://render.betaworks.com/apply-to-betaworks-fall-ai-camp-interfaces-b99a3f4ac81e",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
+    {
+      "url": "https://render.betaworks.com/meet-the-nine-native-ai-startups-launching-at-betaworks-camp-demo-day-866b149de87e",
+      "page": "other",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
     {
       "url": "https://www.betaworks.com/camp",
       "page": "details",
       "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.betaworks.com/camp/ai-camp-agent-systems",
+      "page": "other",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -22,7 +54,7 @@
       "url": "https://www.betaworks.com/camp/application",
       "page": "application",
       "anchor": "Apply",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -30,7 +62,7 @@
       "url": "https://www.betaworks.com/companies",
       "page": "portfolio",
       "anchor": "Companies",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -38,6 +70,22 @@
       "url": "https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
       "page": "batches",
       "anchor": "Deadline Extended! Apply to AI Camp",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.betaworks.com/writing/camp-the-new-agentic-economy",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.betaworks.com/writing/spring-2026-camp-agent-systems",
+      "page": "other",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"

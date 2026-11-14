@@ -1,244 +1,477 @@
 {
   "programId": "bessemer",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.bvp.com/",
-    "https://www.bvp.com/about",
-    "https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age"
+    "https://www.bvp.com/atlas/best-of-breed-applications",
+    "https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
+    "https://www.bvp.com/news/recall-ai-unlocking-conversation-and-meeting-data-to-power-ai-applications-and-agents",
+    "https://www.bvp.com/news/render-ushers-in-a-modern-age-of-application-development-in-the-cloud",
+    "https://www.bvp.com/atlas/acv-from-used-car-dealerships-in-buffalo-to-a-nationwide-marketplace",
+    "https://www.bvp.com/atlas/an-inside-look-at-our-investment-process-for-twilio",
+    "https://www.bvp.com/atlas/driving-seven-figure-enterprise-deals-how-recall-ais-amanda-zhu-went-from-founder-led-sales-to-building-out-gtm",
+    "https://www.bvp.com/news/bessemer-series-a-investment-alloy",
+    "https://www.bvp.com/news/bessemer-series-a-investment-cypress-io",
+    "https://www.bvp.com/news/bessemer-series-a-investment-electric",
+    "https://www.bvp.com/news/bessemer-series-a-investment-pana",
+    "https://www.bvp.com/news/bessemer-series-a-investment-pinpoint",
+    "https://www.bvp.com/news/bessemer-series-c-investment-bigid",
+    "https://www.bvp.com/news/bessemer-series-c-investment-launchdarkly"
   ],
   "evidence": [
     {
+      "id": "check-duration-d1f60fae09",
+      "url": "https://www.bvp.com/atlas/an-inside-look-at-our-investment-process-for-twilio",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "using Twilio. It’s been up now foro more than 6 months at 1-800-CLEANUP with positive results.” Law 4:",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-0bfea7cd14",
+      "url": "https://www.bvp.com/atlas/driving-seven-figure-enterprise-deals-how-recall-ais-amanda-zhu-went-from-founder-led-sales-to-building-out-gtm",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "puts it, “The room shapes what people feel safe saying.” In-person visits have been an incredibly effective way for Amanda to",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-d6466248e3",
+      "url": "https://www.bvp.com/atlas/driving-seven-figure-enterprise-deals-how-recall-ais-amanda-zhu-went-from-founder-led-sales-to-building-out-gtm",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "checkpoints. Invest in back-channeling, warm intros, and in-person visits as much as the formal sales process. Every",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-e264d981dd",
+      "url": "https://www.bvp.com/news/recall-ai-unlocking-conversation-and-meeting-data-to-power-ai-applications-and-agents",
+      "title": "Bessemer Venture Partners — application page",
+      "excerpt": "more. Recall.ai handles it all — from unlimited concurrent Virtual Machine infrastructure to real-time transcripts, audio and",
+      "page": "application"
+    },
+    {
+      "id": "check-format-e5291ad265",
+      "url": "https://www.bvp.com/atlas/driving-seven-figure-enterprise-deals-how-recall-ais-amanda-zhu-went-from-founder-led-sales-to-building-out-gtm",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "and metadata from Zoom, Microsoft Teams, Google Meet, in-person meetings, phone calls, and more. Recall.ai offers a",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-ed5491fb04",
+      "url": "https://www.bvp.com/atlas/acv-from-used-car-dealerships-in-buffalo-to-a-nationwide-marketplace",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "by a couple of legacy players. Most sales happen through in-person auctions, where dealers place bids, often without knowing",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-febe497abd",
+      "url": "https://www.bvp.com/atlas/driving-seven-figure-enterprise-deals-how-recall-ais-amanda-zhu-went-from-founder-led-sales-to-building-out-gtm",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "solution—something that never surfaced on Zoom. Meeting in person created the space for candor, which let Amanda respond by",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-3109a0ee6a",
+      "url": "https://www.bvp.com/news/bessemer-series-c-investment-bigid",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "Partner Alex Ferrara is a partner based in Bessemer's London office where he leads Bessemer's",
+      "page": "terms"
+    },
+    {
       "id": "check-name-f8482c41b8",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "Bessemer Venture Partners Portfolio Team Atlas Beyond the capital Portfolio Team",
       "page": "details"
     },
     {
-      "id": "check-phone-2d83ebf690",
-      "url": "https://www.bvp.com/about",
-      "title": "Bessemer Venture Partners — details page checked by scrape.py",
-      "excerpt": "+1 (914) 833-9100",
-      "page": "details"
-    },
-    {
-      "id": "check-phone-41658b478e",
-      "url": "https://www.bvp.com/about",
-      "title": "Bessemer Venture Partners — details page checked by scrape.py",
-      "excerpt": "+1 (650) 853-7000",
-      "page": "details"
-    },
-    {
-      "id": "check-phone-5b5836efb8",
-      "url": "https://www.bvp.com/about",
-      "title": "Bessemer Venture Partners — details page checked by scrape.py",
-      "excerpt": "+972 (3) 373-9880",
-      "page": "details"
-    },
-    {
-      "id": "check-phone-5b671fabd9",
-      "url": "https://www.bvp.com/about",
-      "title": "Bessemer Venture Partners — details page checked by scrape.py",
-      "excerpt": "+1 (415) 800-8982",
-      "page": "details"
-    },
-    {
-      "id": "check-phone-7a784e0203",
-      "url": "https://www.bvp.com/about",
-      "title": "Bessemer Venture Partners — details page checked by scrape.py",
-      "excerpt": "+1 (617) 588-1700",
-      "page": "details"
-    },
-    {
-      "id": "check-phone-b83ffc5bd0",
-      "url": "https://www.bvp.com/about",
-      "title": "Bessemer Venture Partners — details page checked by scrape.py",
-      "excerpt": "+91 (80) 6146-9000",
-      "page": "details"
-    },
-    {
-      "id": "check-phone-f8d22294de",
-      "url": "https://www.bvp.com/about",
-      "title": "Bessemer Venture Partners — details page checked by scrape.py",
-      "excerpt": "+1 (212) 653-1900",
-      "page": "details"
+      "id": "check-portfolio-056184ce60",
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-alloy",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.bvp.com/portfolio",
+      "page": "terms"
     },
     {
       "id": "check-portfolio-07ee0a4214",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "Enterprise → https://www.bvp.com/portfolio?sectors=enterprise",
       "page": "details"
     },
     {
       "id": "check-portfolio-1c6dec2015",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "Data & Cloud → https://www.bvp.com/portfolio?sectors=data-and-cloud",
       "page": "details"
     },
     {
       "id": "check-portfolio-20321befd3",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "Cybersecurity → https://www.bvp.com/portfolio?sectors=cybersecurity",
       "page": "details"
     },
     {
+      "id": "check-portfolio-234ebf0adc",
+      "url": "https://www.bvp.com/atlas/driving-seven-figure-enterprise-deals-how-recall-ais-amanda-zhu-went-from-founder-led-sales-to-building-out-gtm",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.bvp.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-2752f571ac",
       "url": "https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
-      "title": "Bessemer Venture Partners — application page checked by scrape.py",
+      "title": "Bessemer Venture Partners — application page",
       "excerpt": "Portfolio → https://www.bvp.com/portfolio",
       "page": "application"
     },
     {
       "id": "check-portfolio-27c3158853",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "Explore our portfolio → https://www.bvp.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-434ab95675",
+      "url": "https://www.bvp.com/news/bessemer-series-c-investment-launchdarkly",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.bvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-444255afb7",
+      "url": "https://www.bvp.com/atlas/an-inside-look-at-our-investment-process-for-twilio",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.bvp.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-45b83f7476",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "Consumer → https://www.bvp.com/portfolio?sectors=consumer",
       "page": "details"
     },
     {
       "id": "check-portfolio-56834e9da3",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "AI → https://www.bvp.com/portfolio?sectors=ai",
       "page": "details"
     },
     {
+      "id": "check-portfolio-568cf05ea9",
+      "url": "https://www.bvp.com/atlas/acv-from-used-car-dealerships-in-buffalo-to-a-nationwide-marketplace",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.bvp.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-58178f5d61",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "Developer → https://www.bvp.com/portfolio?sectors=developer",
       "page": "details"
     },
     {
+      "id": "check-portfolio-621608e131",
+      "url": "https://www.bvp.com/news/recall-ai-unlocking-conversation-and-meeting-data-to-power-ai-applications-and-agents",
+      "title": "Bessemer Venture Partners — application page",
+      "excerpt": "Portfolio → https://www.bvp.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7d4c42fb06",
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-cypress-io",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.bvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-8b9fc35b9a",
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-electric",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.bvp.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-8d88bcb77c",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "Crypto → https://www.bvp.com/portfolio?sectors=crypto",
       "page": "details"
     },
     {
       "id": "check-portfolio-9298c1ca3a",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "Healthcare → https://www.bvp.com/portfolio?sectors=healthcare",
       "page": "details"
     },
     {
       "id": "check-portfolio-aaa5df5df5",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "Infrastructure → https://www.bvp.com/portfolio?sectors=infrastructure",
       "page": "details"
     },
     {
+      "id": "check-portfolio-abe9a07791",
+      "url": "https://www.bvp.com/news/bessemer-series-c-investment-bigid",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.bvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-afc182bdd6",
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-pana",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.bvp.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b5256400ab",
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-pinpoint",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "Portfolio → https://www.bvp.com/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-b8bb2d7a76",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "Vertical → https://www.bvp.com/portfolio?sectors=vertical",
       "page": "details"
     },
     {
       "id": "check-portfolio-ba46e7537e",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "Marketplaces → https://www.bvp.com/portfolio?sectors=marketplaces",
       "page": "details"
     },
     {
       "id": "check-portfolio-c3bb5366bc",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "Biotech → https://www.bvp.com/portfolio?sectors=biotech",
       "page": "details"
     },
     {
-      "id": "check-portfolio-cff3366578",
-      "url": "https://www.bvp.com/about",
-      "title": "Bessemer Venture Partners — details page checked by scrape.py",
+      "id": "check-portfolio-cf1c5bfe38",
+      "url": "https://www.bvp.com/atlas/best-of-breed-applications",
+      "title": "Bessemer Venture Partners — application page",
       "excerpt": "Portfolio → https://www.bvp.com/portfolio",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d76ba75a50",
+      "url": "https://www.bvp.com/news/render-ushers-in-a-modern-age-of-application-development-in-the-cloud",
+      "title": "Bessemer Venture Partners — application page",
+      "excerpt": "Portfolio → https://www.bvp.com/portfolio",
+      "page": "application"
     },
     {
       "id": "check-portfolio-d9fbb6ad55",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "Fintech → https://www.bvp.com/portfolio?sectors=fintech",
       "page": "details"
     },
     {
       "id": "check-portfolio-e45d81c754",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "Portfolio → https://www.bvp.com/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-ed9200c7c7",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "Physical AI & Robotics → https://www.bvp.com/portfolio?sectors=physical-ai-and-robotics",
       "page": "details"
     },
     {
       "id": "check-portfolio-ef1f3eaeba",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "Deep Tech & Defense → https://www.bvp.com/portfolio?sectors=deep-tech-and-defense",
       "page": "details"
     },
     {
+      "id": "check-route-1aa272b980",
+      "url": "https://www.bvp.com/news/bessemer-series-c-investment-launchdarkly",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "News Dreeze: pioneering 'Application Revival' for the agentic age Bessemer Venture Partners co-leads Dreeze’s $33M Seed to build cloud-native application recovery for businesses. → https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-6d5c50b2ea",
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-pana",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "News Dreeze: pioneering 'Application Revival' for the agentic age Bessemer Venture Partners co-leads Dreeze’s $33M Seed to build cloud-native application recovery for businesses. → https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
+      "page": "terms"
+    },
+    {
       "id": "check-route-74742ca7dd",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "https://www.bvp.com/",
       "page": "details"
     },
     {
       "id": "check-route-7bc85d711b",
       "url": "https://www.bvp.com/",
-      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "title": "Bessemer Venture Partners — homepage",
       "excerpt": "News Dreeze: pioneering 'Application Revival' for the agentic age November 10, 2026 Bessemer Venture Partners co-leads Dreeze’s $33M Seed to build cloud-native application recovery for businesses. → https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
       "page": "details"
+    },
+    {
+      "id": "check-route-8778fe9615",
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-alloy",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "News Dreeze: pioneering 'Application Revival' for the agentic age Bessemer Venture Partners co-leads Dreeze’s $33M Seed to build cloud-native application recovery for businesses. → https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-90dfb8801b",
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-cypress-io",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "News Dreeze: pioneering 'Application Revival' for the agentic age Bessemer Venture Partners co-leads Dreeze’s $33M Seed to build cloud-native application recovery for businesses. → https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-955cf7ea82",
+      "url": "https://www.bvp.com/news/bessemer-series-c-investment-bigid",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "News Dreeze: pioneering 'Application Revival' for the agentic age Bessemer Venture Partners co-leads Dreeze’s $33M Seed to build cloud-native application recovery for businesses. → https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b0f832623b",
+      "url": "https://www.bvp.com/news/render-ushers-in-a-modern-age-of-application-development-in-the-cloud",
+      "title": "Bessemer Venture Partners — application page",
+      "excerpt": "News Dreeze: pioneering 'Application Revival' for the agentic age Bessemer Venture Partners co-leads Dreeze’s $33M Seed to build cloud-native application recovery for businesses. → https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cd43e438e8",
+      "url": "https://www.bvp.com/news/recall-ai-unlocking-conversation-and-meeting-data-to-power-ai-applications-and-agents",
+      "title": "Bessemer Venture Partners — application page",
+      "excerpt": "News Dreeze: pioneering 'Application Revival' for the agentic age Bessemer Venture Partners co-leads Dreeze’s $33M Seed to build cloud-native application recovery for businesses. → https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cfeb9712cc",
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-electric",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "News Dreeze: pioneering 'Application Revival' for the agentic age Bessemer Venture Partners co-leads Dreeze’s $33M Seed to build cloud-native application recovery for businesses. → https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-fa5e565d8c",
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-pinpoint",
+      "title": "Bessemer Venture Partners — terms page",
+      "excerpt": "News Dreeze: pioneering 'Application Revival' for the agentic age Bessemer Venture Partners co-leads Dreeze’s $33M Seed to build cloud-native application recovery for businesses. → https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
+      "page": "terms"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-ea2fcd99a6",
+      "url": "https://www.bvp.com/",
+      "page": "details",
+      "excerpt": "Bessemer Venture Partners Portfolio Team Atlas Beyond the capital Portfolio Team Atlas Beyond the capital About News Portfolio careers Search / Forged in steel. Building what’s next. We exist to back audacious founders through dedicated early and growth practices. Founder-focused for the long term. With two dedicated practices, seed/early and growth, we’re ready to meet you exactly where you are. Explore our portfolio Where we invest Every sector we back starts with a Roadmap: our thesis on where the market is heading and what it will take to win. AI is reshaping every one of them. Vertical Crypto Fintech Deep Tech & Defense Enterprise Consumer Biotech Developer Vertical Crypto Fintech Deep Tech & Defense Enterprise Consumer Biotech Developer Vertical Crypto Fintech Deep Tech & Defense Enterprise Consumer Biotech Developer AI Infrastructure Marketplaces Physical AI & Robotics Healthcare Data & Cloud Cybersecurity AI Infrastructure Marketplaces Physical AI & Robotics Healthcare Data & Cloud Cybersecurity AI Infrastructure Marketplaces Physical AI & Robotics Healthcare Data & Cloud Cybersecurity Read the roadmaps Insights that matter to founders. Subscribe to Atlas Article The AI 100: benchmarks for the third supercycle November 12, 2026 The inaugural list of the top 100 private AI companies is worth $3.6T, with ARR growth averaging 480%. A decade of Cloud 100 painted greatness;"
+    },
+    {
+      "id": "check-page-4059e18329",
+      "url": "https://www.bvp.com/atlas/best-of-breed-applications",
+      "page": "application",
+      "excerpt": "Best of breed applications finally have their day | Bessemer Venture Partners Portfolio Team Atlas Beyond the capital Portfolio Team Atlas Beyond the capital About News Portfolio careers Search / Article Best of breed applications finally have their day Byron Deeter Published on Mar 18, 2013 One of the oldest debates in corporate IT is whether to adopt a single vendor application suite or deploy best-of-breed packages. CIOs and business users have argued over the years about which approach delivers the ideal balance of user features, time to value, cost management and business benefits. It seems like there’s never been a black-and-white answer — until now. There is a strong and compelling case for best of breed applications. Cloud computing has made it financially and operationally viable for a company to pick the world’s best application for every need, every user, and every business case. Companies no longer have to sacrifice functionality for the sake of integration. You can have your cake and eat it too. After more than a decade of software industry consolidation and the dominance of “all-in-one” software suites, it is becoming increasingly difficult to justify a suite purchase. Business users were previously forced to accept inferior products in the interest of “seamless integration and simplicity”…that never materialized. Instead, all too often the attempts to install"
+    },
+    {
+      "id": "check-page-5a0cacbee4",
+      "url": "https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
+      "page": "application",
+      "excerpt": "Dreeze: pioneering 'Application Revival' for the agentic age | Bessemer Venture Partners Portfolio Team Atlas Beyond the capital Portfolio Team Atlas Beyond the capital About News Portfolio careers Search / News Dreeze: pioneering 'Application Revival' for the agentic age Bessemer Venture Partners co-leads Dreeze’s $33M Seed to build cloud-native application recovery for businesses. Table of Contents Dreeze’s solution for full application recovery “Once in a shift” opportunity Adam Fisher & Roei Haviv Published on Nov 10, 2026 If cloud backup is insurance, recovery is the payout. Yet in the agentic age, the uncertainty surrounding true recovery is only growing. AI agents can now write code and change infrastructure around the clock, making both backup and recovery harder to trust. Recovering data doesn’t automatically mean recovering the application—you can bring back the data while leaving behind the infrastructure, configurations, identities, and connections that make it run. A cloud-native application is a web of services, accounts, and permissions that changes every day. Traditional recovery was built for a world where restoring the data meant restoring the business. In the cloud, data can come back while the application stays down, because much of what it depends on was never part of the backup. With cloud intrusions up 37% in 2025 , that gap is being tested more"
+    },
+    {
+      "id": "check-page-95f2cda8b7",
+      "url": "https://www.bvp.com/news/recall-ai-unlocking-conversation-and-meeting-data-to-power-ai-applications-and-agents",
+      "page": "application",
+      "excerpt": "Recall.ai: unlocking conversation and meeting data to power AI applications and agents | Bessemer Venture Partners Portfolio Team Atlas Beyond the capital Portfolio Team Atlas Beyond the capital About News Portfolio careers Search / News Recall.ai: unlocking conversation and meeting data to power AI applications and agents Bessemer Venture Partners leads Recall.ai’s $38M Series B to help teams capture and leverage conversational data at scale. Table of Contents Agents and applications need context One API, every platform Why we’re backing the team behind Recall.ai Talia Goldberg, Libbie Frost & Bhavik Nagda Published on Sep 4, 2025 Conversations are arguably the world’s largest data set. Yet, the data and context that fuel today's AI revolution are often relegated to what's already documented or structured. Conversation data, on the other hand, just floats in the ether. But every strategy meeting, sales call, customer complaint, brainstorming session, doctor consult, and coffee chat holds something invaluable: context. Agents and applications need context Conversation and meeting data offer vital context to supercharge AI agents and apps. Enter Recall.ai — the infrastructure that makes it effortless to capture and leverage this data at scale and in real time. The ability to gain insights from conversation data is enabling the emergence of new markets and products. This"
+    },
+    {
+      "id": "check-page-9c8ea605f5",
+      "url": "https://www.bvp.com/news/render-ushers-in-a-modern-age-of-application-development-in-the-cloud",
+      "page": "application",
+      "excerpt": "Render ushers in a modern age of application development in the cloud | Bessemer Venture Partners Portfolio Team Atlas Beyond the capital Portfolio Team Atlas Beyond the capital About News Portfolio careers Search / News Render ushers in a modern age of application development in the cloud Bessemer Venture Partners leads Render’s $50 million Series B to empower developers to build anything, anywhere, with no DevOps tedium. Table of Contents Render to the rescue! Render’s rise to market Elliott Robinson, Janelle Teng Wade & Grace Ma Published on Jun 20, 2023 Over the last decade, the modern data stack and developer platform ecosystem have undergone a major transformation. There have been broad industry shifts such as the unbundling of monolithic workloads into microservices. Cutting-edge, specialized tools have emerged in countless categories such as authentication, database, compute, and storage, among others. Developers now also have flexible architecture options such as containers, Kubernetes, static sites, and a host of modern networking protocols. While the landscape has evolved, accessibility of these tools for cloud application developers haven’t kept pace with the rate of infrastructure and tooling innovation. Developers are excited about building applications with these new capabilities, but the process to get projects online is still tedious, expensive, and"
+    },
+    {
+      "id": "check-page-6160bb7d56",
+      "url": "https://www.bvp.com/atlas/acv-from-used-car-dealerships-in-buffalo-to-a-nationwide-marketplace",
+      "page": "terms",
+      "excerpt": "ACV: From used-car dealerships in Buffalo to a nationwide marketplace | Bessemer Venture Partners Portfolio Team Atlas Beyond the capital Portfolio Team Atlas Beyond the capital About News Portfolio careers Search / Article ACV: From used-car dealerships in Buffalo to a nationwide marketplace How ACV Auctions grew from manual processes to an industry-leading digital platform Table of Contents Testing the waters Building trust between buyers and sellers A low-tech solution to a complex problem Getting the right unit economics Scaling to a nationwide business Bob Goodman Published on Mar 24, 2021 The opportunity almost slipped through our fingers. It was mid 2016, and a friend had asked whether I’d do him a favor by sending someone from Bessemer to a demo day in New York City for Buffalo-based startups. I’d all but forgotten about it. But at the last minute, on his insistence, I asked one of our associates to attend. “You'll get a free glass of wine and maybe a little something to eat,” I told him. “You don't have to spend more than an hour.” He ended up spending much longer. After CEO George Chamoun pitched his fledgling dealer-to-dealer marketplace for used cars sales, ACV Auctions , our associate cornered him and peppered him with questions, monopolizing his attention so no one else was able to get to George at the event. He returned to the office brimming with excitement."
+    },
+    {
+      "id": "check-page-262e4a7af4",
+      "url": "https://www.bvp.com/atlas/an-inside-look-at-our-investment-process-for-twilio",
+      "page": "terms",
+      "excerpt": "An inside look at our investment process for Twilio | Bessemer Venture Partners Portfolio Team Atlas Beyond the capital Portfolio Team Atlas Beyond the capital About News Portfolio careers Search / Article An inside look at our investment process for Twilio Table of Contents Law 1: Delivers a service that can be metered Law 2: Grows with the business Law 3: Replaces something that companies already pay for Law 4: Offers an amazing user experience for the developer Law 5: Receives tons of explicit developer love Law 6: Exhibits strong network effects Law 7: Eliminates the need for non-core skill sets that no one enjoys Law 8: Democratizes development Ethan Kurzweil Published on Apr 11, 2017 Mark Twain once said that history doesn’t repeat itself, but it does rhyme. If Twilio provides any indication of what’s to come, we believe now more than ever in the future of the business-to-developer (B2D) space. As we reflect on 2016, Twilio’s IPO is a brightspot. When we originally published “Eight laws for developer platforms,” we delved into our early memos recommending an investment in Twilio; then, and now, the company continues to exemplify these laws in practice. With permission from Twilio, we’re open sourcing an inside look at our original investment memos, which Byron Deeter, David Cowan, and I co-authored. We diligence each company before investing and compile our findings into"
+    },
+    {
+      "id": "check-page-acf10b392f",
+      "url": "https://www.bvp.com/atlas/driving-seven-figure-enterprise-deals-how-recall-ais-amanda-zhu-went-from-founder-led-sales-to-building-out-gtm",
+      "page": "terms",
+      "excerpt": "Driving seven-figure deals: How Recall.ai’s Amanda Zhu went from founder-led sales to building out GTM | Bessemer Venture Partners Portfolio Team Atlas Beyond the capital Portfolio Team Atlas Beyond the capital About News Portfolio careers Search / Playbook Driving seven-figure deals: How Recall.ai’s Amanda Zhu went from founder-led sales to building out GTM A COO’s guide to enterprise sales—including blueprints for building processes, tips for overcoming stall-outs, how to hire your first VP of Sales, and beyond. Table of Contents Top takeaways from this enterprise sales guide Discovery calls that lay the groundwork for seven-figure deals 1. There is no enterprise sales script—only a scaffold 2. Successful discovery and demo calls have four main ingredients Creating deal momentum where it counts 3. Flying out is about uncovering the real blocker, not pitching harder 4. A carefully-engineered prospect dinner can deliver 160x ROI 5. Enterprise objections are most often missed signals Scaling the sales organization by hiring dedicated leadership 6. Ask hard-hitting questions to secure the right VP of Sales 7. Maximum exposure is the best way to onboard a new VP of Sales Scaling beyond the first GTM motion 8. Changes to your GTM motion aren’t without risk—but a calculated risk was how Amanda scaled MRR 5X 9. Upheaval is often a necessary part of hypergrowth GTM resources Atlas"
+    },
+    {
+      "id": "check-page-2281f3ac6a",
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-alloy",
+      "page": "terms",
+      "excerpt": "Alloy is the identity API powering the rebundling of financial services | Bessemer Venture Partners Portfolio Team Atlas Beyond the capital Portfolio Team Atlas Beyond the capital About News Portfolio careers Search / News Alloy is the identity API powering the rebundling of financial services Find out why Bessemer is leading this company's $12 million Series A financing. Table of Contents What inspired Alloy Here’s how Alloy works Charles Birnbaum Published on Sep 17, 2019 Over the last decade, there’s been an explosion of consumer fintech startups offering digital-first and easy-to-use solutions to lure the next wave of consumers and businesses away from traditional financial institutions. The “unbundling of financial services” has inspired better customer experience, pricing, and more transparent solutions, but it has also led to some significant challenges for the industry as a whole. While banking, wealth management, insurance, and other financial services have improved substantially during this past decade of unbundling, it doesn’t seem that customers have lost their desire for a more holistic digital banking experience. People want all the new functionality, progress, and mobile-first experiences that have resulted from the unbundling of the traditional bank platforms, but also have their financial services all in one place. Emerging leaders of this most recent wave of"
+    },
+    {
+      "id": "check-page-045eec5546",
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-cypress-io",
+      "page": "terms",
+      "excerpt": "Our investment in Cypress.io | Bessemer Venture Partners Portfolio Team Atlas Beyond the capital Portfolio Team Atlas Beyond the capital About News Portfolio careers Search / News Our investment in Cypress.io Spend more time coding, less time testing Table of Contents Just take a look at following tweets about Cypress, and you will see what we mean: Bob Goodman & Mike Droesch Published on Jun 28, 2018 We are excited to announce our recent investment in Cypress.io. Cypress has built a next-gen front-end test automation product for modern web applications. Cypress’ open source test runner is quickly gaining adoption among developers as a replacement for the widely used Selenium toolkit. We are proud to be partnering with CEO Drew Lanham, Founder and CTO Brian Mann, and the rest of the Cypress team as they continue on their mission to empower developers to spend more time building great apps and less time worrying about testing. At Bessemer, we have long been fans of developer-centric businesses, and we have published many of our thoughts on the space, including our eight laws of developer platforms. Cypress is a rare business that checks all eight boxes, and excels across many dimensions. This all starts with a product that delivers a delightful and intuitive user experience, runs tests dramatically faster than incumbent products, and is more reliable than any other test"
+    },
+    {
+      "id": "check-page-e760f07cdd",
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-electric",
+      "page": "terms",
+      "excerpt": "Our investment in Electric | Bessemer Venture Partners Portfolio Team Atlas Beyond the capital Portfolio Team Atlas Beyond the capital About News Portfolio careers Search / News Our investment in Electric Why we are so excited about the future of IT support Table of Contents Let’s dig a little deeper into each: Bob Goodman & Mike Droesch Published on Mar 30, 2018 Bessemer is excited to announce our recent investment in Electric, the New York City based startup that provides intelligent IT support solutions to small and mid-sized businesses. We first met Electric's founder and CEO, Ryan Denehy, on a snowy Friday afternoon in the West Village as he inhaled a piece of pizza in between meetings – he clearly hadn't had a chance to eat lunch. It was immediately obvious that Ryan is a scrappy entrepreneur on a mission. As a serial founder, Ryan has learned a ton from his past two companies and is eager to capitalize on past lessons learned with Electric. Ryan and his team have spent an enormous amount of time studying the SMB IT market, and impressed us with the business model they developed to fix the broken customer experience that’s so common with traditional IT support services. From a venture perspective, Electric isn't exactly a typical investment. They are selling to SMBs, which is notoriously difficult, and IT support has traditionally been a services-heavy business. But"
+    },
+    {
+      "id": "check-page-7844161eaf",
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-pana",
+      "page": "terms",
+      "excerpt": "Meet Pana: The company transforming the $1.3 trillion corporate travel industry | Bessemer Venture Partners Portfolio Team Atlas Beyond the capital Portfolio Team Atlas Beyond the capital About News Portfolio careers Search / News Meet Pana: The company transforming the $1.3 trillion corporate travel industry Find out why Bessemer is betting on this Denver-based startup and leading its $10 million Series A financing Table of Contents A massive market opportunity ripe for disruption Serving the highest value piece of travel–guest and group travel Bessemer's $10 million Series A investment in Pana Kristina Shen Published on Apr 23, 2019 Do you ever wake up at 5 a.m. to rush to the airport only to find out that your flight for an important client meeting is cancelled? It’s painful to say the least. Most people who travel for work can probably relate to this notoriously bad travel day. On a personal level, it’s frustrating, stressful, and inconvenient; on a business level, travel plans going awry can impact business opportunities (especially when you miss important client meetings), put a huge dent on productivity levels and the company’s budget, and creates unnecessary extra work for the back office. \"Corporate travel is a force-multiplier for growth,\" says Devon Tivona. That’s why when I first met Devon Tivona, co-founder and CEO of Pana, the leading corporate travel"
+    },
+    {
+      "id": "check-page-c05ac95c51",
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-pinpoint",
+      "page": "terms",
+      "excerpt": "Why Bessemer is leading Pinpoint's $13.6 million Series A | Bessemer Venture Partners Portfolio Team Atlas Beyond the capital Portfolio Team Atlas Beyond the capital About News Portfolio careers Search / News Why Bessemer is leading Pinpoint's $13.6 million Series A Find out how Pinpoint is building a new category for engineering analytics Table of Contents Bessemer’s Series A investment in Pinpoint Unpacking software engineering analytics Published on Feb 14, 2019 In the age of data-driven decision-making, Peter Drucker’s axiom has never been truer: “What gets measured gets managed.” This is a motto most teams and businesses live and die by, but some take it a step further. What gets measured gets managed, and what gets managed gets optimized—particularly for high-performing teams across software companies. The proliferation of analytics tools empowers people to find objective answers to their most burning questions. For example, marketers use Twilio Sendgrid’s Marketing Campaigns offering to understand and optimize email campaign performance in order to drive conversion and ROI. Product leaders rely on user behavioral analytics tools, such as Amplitude, to see patterns in usage, conversion, and other key product metrics. And HR teams conduct surveys with Glint to capture internal metrics and pulse scores that provide insight into employee engagement and retention. Across"
+    },
+    {
+      "id": "check-page-07b33ca80f",
+      "url": "https://www.bvp.com/news/bessemer-series-c-investment-bigid",
+      "page": "terms",
+      "excerpt": "BigID is the backbone of the $100 billion+ data privacy industry | Bessemer Venture Partners Portfolio Team Atlas Beyond the capital Portfolio Team Atlas Beyond the capital About News Portfolio careers Search / News BigID is the backbone of the $100 billion+ data privacy industry Bessemer leads BigID’s $50 million Series C financing to help enterprises comply with global privacy regulations. Table of Contents Bessemer leads BigID’s $50 million Series C financing The team The solution Alex Ferrara & Jules Schwerin Published on Sep 5, 2019 Thirty years ago, only a few organizations had consumer data at scale. They were heavily regulated and often monopolies and oligopolies, such as the government, healthcare, financial institutions (Visa), and telecom companies (AT&T). Today consumer data is widespread and used as a source of competitive advantage in nearly every industry, such as retail (Amazon/Walmart), media (Spotify/Netflix/Youtube), automotive (Tesla), and transportation (Uber/Lyft). While companies have been quietly gathering massive sets of data on consumers for many years, only recently did legislation and data breaches push data privacy into the fore of the public dialogue. We believe mass data collection is unlikely to stop or even decelerate anytime soon. Gathering consumer data is becoming increasingly core to many, if not most enterprises, not just the likes of"
+    },
+    {
+      "id": "check-page-d045fd3404",
+      "url": "https://www.bvp.com/news/bessemer-series-c-investment-launchdarkly",
+      "page": "terms",
+      "excerpt": "Bessemer leads LaunchDarkly's $44 million Series C | Bessemer Venture Partners Portfolio Team Atlas Beyond the capital Portfolio Team Atlas Beyond the capital About News Portfolio careers Search / News Bessemer leads LaunchDarkly's $44 million Series C LaunchDarkly continues to expand its footprint as the leader in feature management in a product-centric world. Table of Contents Allocating engineering resources wisely Bessemer’s Series C investment in LaunchDarkly Ethan Kurzweil Published on Mar 13, 2019 The challenge (and beauty) of software development is that no product is ever truly finished. Tech giants like Amazon hold onto mantras like, “Every day is day one,” a reminder that each decision, down to a line of code, is a new beginning when building a relationship with the customer. As a result, modern dev teams have always been maniacally focused on improvement. This is largely due to the ever-evolving demands and expectations consumers and enterprises have of digital products, along with the tools and systems people depend on for work. In today’s market, all companies–led by their product development teams– have to move quickly when developing and implementing new product features, while also avoiding botched and buggy launches. To navigate these unique challenges, developers historically have rolled out changes gradually, often using feature flags, a modern development"
     }
   ],
   "findings": {
     "emails": [],
-    "phones": [
-      {
-        "value": "+16508537000",
-        "evidenceId": "check-phone-41658b478e"
-      },
-      {
-        "value": "+14158008982",
-        "evidenceId": "check-phone-5b671fabd9"
-      },
-      {
-        "value": "+16175881700",
-        "evidenceId": "check-phone-7a784e0203"
-      },
-      {
-        "value": "+12126531900",
-        "evidenceId": "check-phone-f8d22294de"
-      },
-      {
-        "value": "+19148339100",
-        "evidenceId": "check-phone-2d83ebf690"
-      },
-      {
-        "value": "+918061469000",
-        "evidenceId": "check-phone-b83ffc5bd0"
-      }
-    ],
+    "phones": [],
     "routes": [
       {
         "value": "https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
@@ -254,8 +487,34 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-d1f60fae09"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-e264d981dd"
+      },
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-ed5491fb04"
+      }
+    ],
+    "location": [
+      {
+        "value": "Bessemer's London",
+        "evidenceId": "check-location-3109a0ee6a"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.bvp.com/portfolio",

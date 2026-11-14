@@ -1,250 +1,927 @@
 {
   "programId": "fledge",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:59:02.000Z",
   "pagesRead": [
     "https://www.fledge.co/",
-    "https://www.fledge.co/about/",
+    "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+    "https://www.fledge.co/2012/applications-are-in/",
+    "https://www.fledge.co/2014/spring2014-applications/",
+    "https://www.fledge.co/500x90-fledge-tag-line-apply-today-fledge6/",
+    "https://www.fledge.co/800x550-applications-via-gust/",
+    "https://www.fledge.co/about/annotated-application/",
+    "https://www.fledge.co/apply-2/",
+    "https://www.fledge.co/apply-via-gust/",
     "https://www.fledge.co/apply/",
-    "https://www.fledge.co/about/faq/"
+    "https://www.fledge.co/banner_apply/",
+    "https://www.fledge.co/banner_apply_14s/",
+    "https://www.fledge.co/banner_apply_1day/",
+    "https://www.fledge.co/banner_apply_2days/",
+    "https://www.fledge.co/banner_apply_3days/"
   ],
   "evidence": [
     {
-      "id": "check-deal-5d8e8a2acb",
-      "url": "https://www.fledge.co/about/",
-      "title": "Fledge — details page checked by scrape.py",
-      "excerpt": "experts in a variety of topics, sourced from our global network of hundreds of mentors , who share their experiences, advice, and connections. MONEY We invest $15,000 – $20,000 (varies by city) into each company invited to participate, using a unique revenue-based structure that aligns our interests with the founders and",
+      "id": "check-announced-0e42425bd2",
+      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "title": "Fledge — application page",
+      "excerpt": "Min read A Dozens of applications arrived by the June 30th midnight deadline, including one 22 seconds into July 1st. Thank you to all who applied! The collection of teams and ideas",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-470cbe1232",
+      "url": "https://www.fledge.co/",
+      "title": "Fledge — homepage",
+      "excerpt": "improving the lives of everyone on the planet. We invest $15,000 (Peru) , €15,000 (Europe) , or $20,000 (U.S.) into each company we",
       "page": "details"
     },
     {
-      "id": "check-deal-87009b2304",
+      "id": "check-deal-5911916845",
       "url": "https://www.fledge.co/",
-      "title": "Fledge — homepage checked by scrape.py",
-      "excerpt": "goal is to help foster a wave of companies that make a measurable impact in the world, collectively improving the lives of everyone on the planet. We invest $15,000 (Peru) , €15,000 (Europe) , or $20,000 (U.S.) into each company we invite to participate, using revenue-based equity , which aligns our interests with the",
+      "title": "Fledge — homepage",
+      "excerpt": "on the planet. We invest $15,000 (Peru) , €15,000 (Europe) , or $20,000 (U.S.) into each company we invite to participate, using",
       "page": "details"
+    },
+    {
+      "id": "check-deal-f74a001cd6",
+      "url": "https://www.fledge.co/",
+      "title": "Fledge — homepage",
+      "excerpt": "the lives of everyone on the planet. We invest $15,000 (Peru) , €15,000 (Europe) , or $20,000 (U.S.) into each company we invite to",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-2c5abe62ea",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "title": "Fledge — application page",
+      "excerpt": "ratio of Investment to-date and Revenues (last 12 months) provides us a key indicator about the progress",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-df614f134c",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "title": "Fledge — application page",
+      "excerpt": "please convert to US$. 4. Revenues (last 12 months)? Angel investors and venture capitalists today",
+      "page": "application"
+    },
+    {
+      "id": "check-format-01f503a522",
+      "url": "https://www.fledge.co/500x90-fledge-tag-line-apply-today-fledge6/",
+      "title": "Fledge — application page",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
+      "page": "application"
+    },
+    {
+      "id": "check-format-10a6b37215",
+      "url": "https://www.fledge.co/banner_apply_1day/",
+      "title": "Fledge — application page",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
+      "page": "application"
+    },
+    {
+      "id": "check-format-3aa01c0781",
+      "url": "https://www.fledge.co/banner_apply_3days/",
+      "title": "Fledge — application page",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
+      "page": "application"
+    },
+    {
+      "id": "check-format-56b1ae6a49",
+      "url": "https://www.fledge.co/banner_apply/",
+      "title": "Fledge — application page",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
+      "page": "application"
+    },
+    {
+      "id": "check-format-5eb392a294",
+      "url": "https://www.fledge.co/banner_apply_14s/",
+      "title": "Fledge — application page",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
+      "page": "application"
+    },
+    {
+      "id": "check-format-620f39707c",
+      "url": "https://www.fledge.co/banner_apply_2days/",
+      "title": "Fledge — application page",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
+      "page": "application"
+    },
+    {
+      "id": "check-format-74507a2590",
+      "url": "https://www.fledge.co/apply-via-gust/",
+      "title": "Fledge — application page",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
+      "page": "application"
+    },
+    {
+      "id": "check-format-a6f5bfc755",
+      "url": "https://www.fledge.co/",
+      "title": "Fledge — homepage",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... Startups with",
+      "page": "details"
+    },
+    {
+      "id": "check-format-bd44033985",
+      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "title": "Fledge — application page",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... January 12, 2023",
+      "page": "application"
+    },
+    {
+      "id": "check-format-c673921e9f",
+      "url": "https://www.fledge.co/800x550-applications-via-gust/",
+      "title": "Fledge — application page",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
+      "page": "application"
+    },
+    {
+      "id": "check-format-d109b6bbfc",
+      "url": "https://www.fledge.co/2012/applications-are-in/",
+      "title": "Fledge — application page",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... January 12, 2023",
+      "page": "application"
+    },
+    {
+      "id": "check-format-d34002581e",
+      "url": "https://www.fledge.co/apply-2/",
+      "title": "Fledge — application page",
+      "excerpt": "of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023",
+      "page": "application"
     },
     {
       "id": "check-name-75403b0c18",
       "url": "https://www.fledge.co/",
-      "title": "Fledge — homepage checked by scrape.py",
+      "title": "Fledge — homepage",
       "excerpt": "Fledge – Impact accelerators About Startups Trainers Locations",
       "page": "details"
     },
     {
       "id": "check-portfolio-06e5200025",
       "url": "https://www.fledge.co/",
-      "title": "Fledge — homepage checked by scrape.py",
+      "title": "Fledge — homepage",
       "excerpt": "Read → https://www.fledge.co/about/startups/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-0bc8bf9141",
-      "url": "https://www.fledge.co/about/",
-      "title": "Fledge — details page checked by scrape.py",
-      "excerpt": "Startups → https://www.fledge.co/about/startups/",
-      "page": "details"
+      "id": "check-portfolio-0959d710aa",
+      "url": "https://www.fledge.co/banner_apply_3days/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
     },
     {
       "id": "check-portfolio-1ae907d886",
       "url": "https://www.fledge.co/apply/",
-      "title": "Fledge — application page checked by scrape.py",
+      "title": "Fledge — application page",
       "excerpt": "Overview for startups → https://www.fledge.co/startups/",
       "page": "application"
     },
     {
-      "id": "check-portfolio-2efc86ad83",
-      "url": "https://www.fledge.co/about/faq/",
-      "title": "Fledge — terms page checked by scrape.py",
+      "id": "check-portfolio-293a7c6393",
+      "url": "https://www.fledge.co/banner_apply_1day/",
+      "title": "Fledge — application page",
       "excerpt": "Startups → https://www.fledge.co/apply/",
-      "page": "terms"
+      "page": "application"
     },
     {
       "id": "check-portfolio-327fec0705",
       "url": "https://www.fledge.co/",
-      "title": "Fledge — homepage checked by scrape.py",
+      "title": "Fledge — homepage",
       "excerpt": "Startups → https://www.fledge.co/about/startups/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-346fded69a",
-      "url": "https://www.fledge.co/about/",
-      "title": "Fledge — details page checked by scrape.py",
-      "excerpt": "https://www.fledge.co/about/startups/",
-      "page": "details"
+      "id": "check-portfolio-3c64713306",
+      "url": "https://www.fledge.co/2012/applications-are-in/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
     },
     {
-      "id": "check-portfolio-48202f3c71",
-      "url": "https://www.fledge.co/about/",
-      "title": "Fledge — details page checked by scrape.py",
+      "id": "check-portfolio-45395f056d",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "title": "Fledge — application page",
       "excerpt": "Startups → https://www.fledge.co/apply/",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-49bc830d9f",
+      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-724f53f4e0",
+      "url": "https://www.fledge.co/banner_apply_14s/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-ad0942d790",
+      "url": "https://www.fledge.co/800x550-applications-via-gust/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
     },
     {
       "id": "check-portfolio-b11d71cf3e",
       "url": "https://www.fledge.co/",
-      "title": "Fledge — homepage checked by scrape.py",
+      "title": "Fledge — homepage",
       "excerpt": "Startups → https://www.fledge.co/apply/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-b607afcde5",
+      "url": "https://www.fledge.co/apply-via-gust/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
       "id": "check-portfolio-c256f7efe8",
       "url": "https://www.fledge.co/",
-      "title": "Fledge — homepage checked by scrape.py",
+      "title": "Fledge — homepage",
       "excerpt": "Startup Accelerator → https://www.fledge.co/about/startups/",
       "page": "details"
     },
     {
+      "id": "check-portfolio-d956d9110c",
+      "url": "https://www.fledge.co/2014/spring2014-applications/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f1dcae4074",
+      "url": "https://www.fledge.co/banner_apply/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f70c470f63",
+      "url": "https://www.fledge.co/banner_apply_2days/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f86f563a5f",
+      "url": "https://www.fledge.co/apply-2/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-fdd3c38492",
+      "url": "https://www.fledge.co/500x90-fledge-tag-line-apply-today-fledge6/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
       "id": "check-route-042342f720",
       "url": "https://www.fledge.co/apply/",
-      "title": "Fledge — application page checked by scrape.py",
+      "title": "Fledge — application page",
       "excerpt": "Share on Telegram (Opens in new window) Telegram → https://www.fledge.co/apply/?share=telegram",
       "page": "application"
     },
     {
-      "id": "check-route-04d54662de",
-      "url": "https://www.fledge.co/about/faq/",
-      "title": "Fledge — terms page checked by scrape.py",
+      "id": "check-route-052509485f",
+      "url": "https://www.fledge.co/800x550-applications-via-gust/",
+      "title": "Fledge — application page",
       "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
-      "page": "terms"
+      "page": "application"
+    },
+    {
+      "id": "check-route-0959d710aa",
+      "url": "https://www.fledge.co/banner_apply_3days/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
     },
     {
       "id": "check-route-0a81713f84",
       "url": "https://www.fledge.co/apply/",
-      "title": "Fledge — application page checked by scrape.py",
+      "title": "Fledge — application page",
       "excerpt": "Share on LinkedIn (Opens in new window) LinkedIn → https://www.fledge.co/apply/?share=linkedin",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1245133527",
+      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on WhatsApp (Opens in new window) WhatsApp → https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=jetpack-whatsapp",
+      "page": "application"
+    },
+    {
+      "id": "check-route-15ce43002a",
+      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Tumblr (Opens in new window) Tumblr → https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=tumblr",
       "page": "application"
     },
     {
       "id": "check-route-1bd40b38bb",
       "url": "https://www.fledge.co/apply/",
-      "title": "Fledge — application page checked by scrape.py",
+      "title": "Fledge — application page",
       "excerpt": "An annotated application → https://www.fledge.co/about/annotated-application/",
       "page": "application"
     },
     {
-      "id": "check-route-2daed8407c",
-      "url": "https://www.fledge.co/about/faq/",
-      "title": "Fledge — terms page checked by scrape.py",
-      "excerpt": "Apply → https://www.fledge.co/apply/",
-      "page": "terms"
+      "id": "check-route-1d105d7f48",
+      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on LinkedIn (Opens in new window) LinkedIn → https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=linkedin",
+      "page": "application"
     },
     {
-      "id": "check-route-2efc86ad83",
-      "url": "https://www.fledge.co/about/faq/",
-      "title": "Fledge — terms page checked by scrape.py",
+      "id": "check-route-1e396dde19",
+      "url": "https://www.fledge.co/2012/applications-are-in/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on X (Opens in new window) X → https://www.fledge.co/2012/applications-are-in/?share=twitter",
+      "page": "application"
+    },
+    {
+      "id": "check-route-24c8ffe3e2",
+      "url": "https://www.fledge.co/2014/spring2014-applications/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on LinkedIn (Opens in new window) LinkedIn → https://www.fledge.co/2014/spring2014-applications/?share=linkedin",
+      "page": "application"
+    },
+    {
+      "id": "check-route-293a7c6393",
+      "url": "https://www.fledge.co/banner_apply_1day/",
+      "title": "Fledge — application page",
       "excerpt": "Startups → https://www.fledge.co/apply/",
-      "page": "terms"
+      "page": "application"
     },
     {
-      "id": "check-route-30da17b5df",
-      "url": "https://www.fledge.co/about/faq/",
-      "title": "Fledge — terms page checked by scrape.py",
-      "excerpt": "apply → https://www.fledge.co/apply/",
-      "page": "terms"
+      "id": "check-route-3addf8e778",
+      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Reddit (Opens in new window) Reddit → https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=reddit",
+      "page": "application"
     },
     {
-      "id": "check-route-43f42c7f00",
-      "url": "https://www.fledge.co/about/",
-      "title": "Fledge — details page checked by scrape.py",
+      "id": "check-route-3c64713306",
+      "url": "https://www.fledge.co/2012/applications-are-in/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3fd79cbf9a",
+      "url": "https://www.fledge.co/500x90-fledge-tag-line-apply-today-fledge6/",
+      "title": "Fledge — application page",
       "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
-      "page": "details"
+      "page": "application"
     },
     {
-      "id": "check-route-48202f3c71",
-      "url": "https://www.fledge.co/about/",
-      "title": "Fledge — details page checked by scrape.py",
+      "id": "check-route-45395f056d",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "title": "Fledge — application page",
       "excerpt": "Startups → https://www.fledge.co/apply/",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-route-45594af2ac",
+      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Pinterest (Opens in new window) Pinterest → https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=pinterest",
+      "page": "application"
+    },
+    {
+      "id": "check-route-49197b243d",
+      "url": "https://www.fledge.co/2012/applications-are-in/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Pinterest (Opens in new window) Pinterest → https://www.fledge.co/2012/applications-are-in/?share=pinterest",
+      "page": "application"
+    },
+    {
+      "id": "check-route-49bc830d9f",
+      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4b046befc5",
+      "url": "https://www.fledge.co/banner_apply_2days/",
+      "title": "Fledge — application page",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4b7495b21f",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on X (Opens in new window) X → https://www.fledge.co/about/annotated-application/?share=twitter",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4d436f41cf",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Facebook (Opens in new window) Facebook → https://www.fledge.co/about/annotated-application/?share=facebook",
+      "page": "application"
     },
     {
       "id": "check-route-4e47a7b391",
       "url": "https://www.fledge.co/apply/",
-      "title": "Fledge — application page checked by scrape.py",
+      "title": "Fledge — application page",
       "excerpt": "Share on Pinterest (Opens in new window) Pinterest → https://www.fledge.co/apply/?share=pinterest",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4e6788a792",
+      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on X (Opens in new window) X → https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=twitter",
+      "page": "application"
+    },
+    {
+      "id": "check-route-512b9b1161",
+      "url": "https://www.fledge.co/2012/applications-are-in/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Tumblr (Opens in new window) Tumblr → https://www.fledge.co/2012/applications-are-in/?share=tumblr",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5651a0f25b",
+      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Telegram (Opens in new window) Telegram → https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=telegram",
+      "page": "application"
+    },
+    {
+      "id": "check-route-56c403a5c0",
+      "url": "https://www.fledge.co/2014/spring2014-applications/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Pinterest (Opens in new window) Pinterest → https://www.fledge.co/2014/spring2014-applications/?share=pinterest",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5963703c4b",
+      "url": "https://www.fledge.co/500x90-fledge-tag-line-apply-today-fledge6/",
+      "title": "Fledge — application page",
+      "excerpt": "https://www.fledge.co/wp-content/uploads/2014/12/500x90-Fledge-Tag-line-Apply-Today-Fledge6.png",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5a33a245ed",
+      "url": "https://www.fledge.co/banner_apply_2days/",
+      "title": "Fledge — application page",
+      "excerpt": "https://www.fledge.co/wp-content/uploads/2012/06/banner_apply_2days.png",
       "page": "application"
     },
     {
       "id": "check-route-60b47b0894",
       "url": "https://www.fledge.co/",
-      "title": "Fledge — homepage checked by scrape.py",
+      "title": "Fledge — homepage",
       "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
       "page": "details"
     },
     {
+      "id": "check-route-6818a13744",
+      "url": "https://www.fledge.co/banner_apply_1day/",
+      "title": "Fledge — application page",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6d8db15a45",
+      "url": "https://www.fledge.co/2012/applications-are-in/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Facebook (Opens in new window) Facebook → https://www.fledge.co/2012/applications-are-in/?share=facebook",
+      "page": "application"
+    },
+    {
+      "id": "check-route-724f53f4e0",
+      "url": "https://www.fledge.co/banner_apply_14s/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-805706c0d2",
+      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "title": "Fledge — application page",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8090b4efe9",
+      "url": "https://www.fledge.co/apply-2/",
+      "title": "Fledge — application page",
+      "excerpt": "https://www.fledge.co/wp-content/uploads/2012/04/Apply.png",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8199b03604",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Tumblr (Opens in new window) Tumblr → https://www.fledge.co/about/annotated-application/?share=tumblr",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8a279f0523",
+      "url": "https://www.fledge.co/banner_apply/",
+      "title": "Fledge — application page",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8c0aab7c39",
+      "url": "https://www.fledge.co/2012/applications-are-in/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on WhatsApp (Opens in new window) WhatsApp → https://www.fledge.co/2012/applications-are-in/?share=jetpack-whatsapp",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8d5e1472f0",
+      "url": "https://www.fledge.co/2014/spring2014-applications/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Tumblr (Opens in new window) Tumblr → https://www.fledge.co/2014/spring2014-applications/?share=tumblr",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8e7ced7081",
+      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Facebook (Opens in new window) Facebook → https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=facebook",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8f0970e8b1",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Pinterest (Opens in new window) Pinterest → https://www.fledge.co/about/annotated-application/?share=pinterest",
+      "page": "application"
+    },
+    {
       "id": "check-route-9419444a7e",
       "url": "https://www.fledge.co/apply/",
-      "title": "Fledge — application page checked by scrape.py",
+      "title": "Fledge — application page",
       "excerpt": "Share on X (Opens in new window) X → https://www.fledge.co/apply/?share=twitter",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9dd06f28b3",
+      "url": "https://www.fledge.co/2012/applications-are-in/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Reddit (Opens in new window) Reddit → https://www.fledge.co/2012/applications-are-in/?share=reddit",
       "page": "application"
     },
     {
       "id": "check-route-9f3a17fc98",
       "url": "https://www.fledge.co/apply/",
-      "title": "Fledge — application page checked by scrape.py",
+      "title": "Fledge — application page",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a86ab5b4b6",
+      "url": "https://www.fledge.co/banner_apply_14s/",
+      "title": "Fledge — application page",
       "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
       "page": "application"
     },
     {
       "id": "check-route-a9ad212a51",
       "url": "https://www.fledge.co/apply/",
-      "title": "Fledge — application page checked by scrape.py",
+      "title": "Fledge — application page",
       "excerpt": "Share on WhatsApp (Opens in new window) WhatsApp → https://www.fledge.co/apply/?share=jetpack-whatsapp",
+      "page": "application"
+    },
+    {
+      "id": "check-route-aa2979d43c",
+      "url": "https://www.fledge.co/banner_apply/",
+      "title": "Fledge — application page",
+      "excerpt": "https://www.fledge.co/wp-content/uploads/2012/04/banner_apply.png",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ad0942d790",
+      "url": "https://www.fledge.co/800x550-applications-via-gust/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ad43ca09c1",
+      "url": "https://www.fledge.co/800x550-applications-via-gust/",
+      "title": "Fledge — application page",
+      "excerpt": "https://www.fledge.co/wp-content/uploads/2012/04/800x550-Applications-via-Gust.png",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ad54f9be88",
+      "url": "https://www.fledge.co/banner_apply_1day/",
+      "title": "Fledge — application page",
+      "excerpt": "https://www.fledge.co/wp-content/uploads/2012/06/banner_apply_1day.png",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ae27ec9a49",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Reddit (Opens in new window) Reddit → https://www.fledge.co/about/annotated-application/?share=reddit",
       "page": "application"
     },
     {
       "id": "check-route-b11d71cf3e",
       "url": "https://www.fledge.co/",
-      "title": "Fledge — homepage checked by scrape.py",
+      "title": "Fledge — homepage",
       "excerpt": "Startups → https://www.fledge.co/apply/",
       "page": "details"
     },
     {
+      "id": "check-route-b607afcde5",
+      "url": "https://www.fledge.co/apply-via-gust/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
       "id": "check-route-b6c9823916",
       "url": "https://www.fledge.co/apply/",
-      "title": "Fledge — application page checked by scrape.py",
+      "title": "Fledge — application page",
       "excerpt": "Share on Reddit (Opens in new window) Reddit → https://www.fledge.co/apply/?share=reddit",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b6eeaf0289",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Telegram (Opens in new window) Telegram → https://www.fledge.co/about/annotated-application/?share=telegram",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b8bb62eedd",
+      "url": "https://www.fledge.co/2014/spring2014-applications/",
+      "title": "Fledge — application page",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bb5eb44d4a",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on WhatsApp (Opens in new window) WhatsApp → https://www.fledge.co/about/annotated-application/?share=jetpack-whatsapp",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bdbf84bb8a",
+      "url": "https://www.fledge.co/2014/spring2014-applications/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Facebook (Opens in new window) Facebook → https://www.fledge.co/2014/spring2014-applications/?share=facebook",
       "page": "application"
     },
     {
       "id": "check-route-bf20d8ad04",
       "url": "https://www.fledge.co/apply/",
-      "title": "Fledge — application page checked by scrape.py",
+      "title": "Fledge — application page",
       "excerpt": "Share on Tumblr (Opens in new window) Tumblr → https://www.fledge.co/apply/?share=tumblr",
       "page": "application"
     },
     {
-      "id": "check-route-cf29ee6cac",
-      "url": "https://www.fledge.co/about/faq/",
-      "title": "Fledge — terms page checked by scrape.py",
-      "excerpt": "apply today → https://www.fledge.co/apply/",
-      "page": "terms"
+      "id": "check-route-bfded519ef",
+      "url": "https://www.fledge.co/2014/spring2014-applications/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on WhatsApp (Opens in new window) WhatsApp → https://www.fledge.co/2014/spring2014-applications/?share=jetpack-whatsapp",
+      "page": "application"
     },
     {
-      "id": "check-route-dc4a01a274",
-      "url": "https://www.fledge.co/about/faq/",
-      "title": "Fledge — terms page checked by scrape.py",
-      "excerpt": "fill out an application → https://www.fledge.co/apply",
-      "page": "terms"
+      "id": "check-route-c5c621dc77",
+      "url": "https://www.fledge.co/banner_apply_3days/",
+      "title": "Fledge — application page",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c9eb210574",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on LinkedIn (Opens in new window) LinkedIn → https://www.fledge.co/about/annotated-application/?share=linkedin",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cde10a0524",
+      "url": "https://www.fledge.co/apply-via-gust/",
+      "title": "Fledge — application page",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d542a1db34",
+      "url": "https://www.fledge.co/banner_apply_14s/",
+      "title": "Fledge — application page",
+      "excerpt": "https://www.fledge.co/wp-content/uploads/2013/11/banner_apply_14S.png",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d7bc5d1b09",
+      "url": "https://www.fledge.co/2012/applications-are-in/",
+      "title": "Fledge — application page",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d956d9110c",
+      "url": "https://www.fledge.co/2014/spring2014-applications/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-dc716608c7",
+      "url": "https://www.fledge.co/banner_apply_3days/",
+      "title": "Fledge — application page",
+      "excerpt": "https://www.fledge.co/wp-content/uploads/2012/06/banner_apply_3days.png",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e1a0969bb1",
+      "url": "https://www.fledge.co/2014/spring2014-applications/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Telegram (Opens in new window) Telegram → https://www.fledge.co/2014/spring2014-applications/?share=telegram",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e25cf361b3",
+      "url": "https://www.fledge.co/apply-via-gust/",
+      "title": "Fledge — application page",
+      "excerpt": "https://www.fledge.co/wp-content/uploads/2012/04/Apply-via-Gust.png",
+      "page": "application"
+    },
+    {
+      "id": "check-route-edb95b5a7b",
+      "url": "https://www.fledge.co/2012/applications-are-in/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on LinkedIn (Opens in new window) LinkedIn → https://www.fledge.co/2012/applications-are-in/?share=linkedin",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f1dcae4074",
+      "url": "https://www.fledge.co/banner_apply/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f2e82efa34",
+      "url": "https://www.fledge.co/2014/spring2014-applications/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Reddit (Opens in new window) Reddit → https://www.fledge.co/2014/spring2014-applications/?share=reddit",
+      "page": "application"
     },
     {
       "id": "check-route-f599703e91",
       "url": "https://www.fledge.co/apply/",
-      "title": "Fledge — application page checked by scrape.py",
+      "title": "Fledge — application page",
       "excerpt": "Share on Facebook (Opens in new window) Facebook → https://www.fledge.co/apply/?share=facebook",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f5f3ded972",
+      "url": "https://www.fledge.co/2014/spring2014-applications/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on X (Opens in new window) X → https://www.fledge.co/2014/spring2014-applications/?share=twitter",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f70c470f63",
+      "url": "https://www.fledge.co/banner_apply_2days/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f86f563a5f",
+      "url": "https://www.fledge.co/apply-2/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f9905509d4",
+      "url": "https://www.fledge.co/apply-2/",
+      "title": "Fledge — application page",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fdd3c38492",
+      "url": "https://www.fledge.co/500x90-fledge-tag-line-apply-today-fledge6/",
+      "title": "Fledge — application page",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fe95b1de89",
+      "url": "https://www.fledge.co/2012/applications-are-in/",
+      "title": "Fledge — application page",
+      "excerpt": "Share on Telegram (Opens in new window) Telegram → https://www.fledge.co/2012/applications-are-in/?share=telegram",
       "page": "application"
     },
     {
       "id": "check-status-21b87ae53c",
       "url": "https://www.fledge.co/apply/",
-      "title": "Fledge — application page checked by scrape.py",
+      "title": "Fledge — application page",
       "excerpt": "– Fledge About Startups Trainers Locations Demo Day Blog Contact Us Apply A Open Applications The following applications are open now: Fledge Africa (2026) Co-ops (Boston) Fledge partner programs include: Fledge Peru Fledge Barcelona The",
       "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-78928f0cca",
+      "url": "https://www.fledge.co/",
+      "page": "details",
+      "excerpt": "Fledge – Impact accelerators About Startups Trainers Locations Demo Day Blog Contact Us Angel Accelerator Read About the Fledge Accelerators Read Startup Accelerator Read Locations Read Africa Eats Read Fledglings Read Demo Day Read Fledge Impact Accelerators Fledge is a global network of impact accelerators and investment funds , helping entrepreneurs create impactful companies and co-ops at scale through intense, short programs filled with education , guidance , and a massive amount of mentorship . The program runs in many different cities, not all under the Fledge brand. Each city’s program is a bit different from the others’, but all are focused on mission-driven for-profit companies. Th educational curriculum is based on The Next Step books and online classes, taught to fill in any gaps in the key skills entrepreneurs need to know to succeed: strategy, financials, marketing, sales, funding, etc. All our cities share a global network of hundreds of mentors , who share their experiences, advice, and connections in 1-on-1 meetings with participants. Every day, week after week, we push the participants forward, iterating business strategy, financial models, marketing and sales plans, funding options, and investor and sales pitches, plus we put a special focus on storytelling. The result is intense and creates lasting value for years after the companies return home. We have"
     },
     {
-      "id": "check-status-82f1ffa0ac",
-      "url": "https://www.fledge.co/about/faq/",
-      "title": "Fledge — terms page checked by scrape.py",
-      "excerpt": "us form and tell us a bit about your idea. We’ll tell you whether you should apply. Or, better yet, if applications are open, take the time to fill out an application , and if it’s a good fit, we’ll get back to you with follow-up",
-      "page": "terms"
+      "id": "check-page-3f695e8ac4",
+      "url": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/",
+      "page": "application",
+      "excerpt": "Applications are in.. Invitations are out.. – Fledge About Startups Trainers Locations Demo Day Blog Contact Us Applications are in.. Invitations are out.. In Conscious , Fledglings , Seattle July 3, 2012 1 Min read A Dozens of applications arrived by the June 30th midnight deadline, including one 22 seconds into July 1st. Thank you to all who applied! The collection of teams and ideas is inspiring. The potential impact across these companies, once launched, could reach across billions of people, spanning the less fortunate billion living on $1 or $2 per day to small business owners and other neighbors in all of our local communities. Picking just seven of these applications to go forward was not easy, but for this first cohort, our resources are limited. Seven teams have received invitations, and are busy reviewing the final details of the program. If you’ve not received an invitation, hold tight, as life is complex and some teams may change their plans. The kick-off date and list of teams will be announced shortly. Share this: Share on X (Opens in new window) X Share on Facebook (Opens in new window) Facebook Share on LinkedIn (Opens in new window) LinkedIn Share on WhatsApp (Opens in new window) WhatsApp Share on Telegram (Opens in new window) Telegram Share on Pinterest (Opens in new window) Pinterest Share on Tumblr (Opens in new window) Tumblr Share on Reddit (Opens in"
+    },
+    {
+      "id": "check-page-5caaac38db",
+      "url": "https://www.fledge.co/2012/applications-are-in/",
+      "page": "application",
+      "excerpt": "Applications are in… – Fledge About Startups Trainers Locations Demo Day Blog Contact Us Applications are in… In Conscious , Fledglings December 17, 2012 1 Min read A A big THANK YOU to all the applicants for the Winter 2013 program. It is amazing the breadth of “conscious” ideas that exist around the world. That breadth was augmented by applications from over a dozen countries worldwide, plus a similar number of US states and Canadian provinces. In fact, what is quite nice to see in this latest round of applications are the number of applicants from outside of Seattle. While we think Seattle could very well be the center of excellence for conscious companies, there is talent worldwide, and Fledge expects to work with companies from far and wide. Now comes the hard part… picking just seven of these teams to invite as the next fledglings. Over the coming month, we’ll be interviewing the top teams, digging into their ideas, and determining which mix we can help the most, and which can potentially best help each other. Meanwhile… we continue working with our Summer 2012 fledglings, helping them take flight with their new companies. Share this: Share on X (Opens in new window) X Share on Facebook (Opens in new window) Facebook Share on LinkedIn (Opens in new window) LinkedIn Share on WhatsApp (Opens in new window) WhatsApp Share on Telegram (Opens in new window) Telegram Share on"
+    },
+    {
+      "id": "check-page-6688152d29",
+      "url": "https://www.fledge.co/2014/spring2014-applications/",
+      "page": "application",
+      "excerpt": "114 applications from 88 cities – Fledge About Startups Trainers Locations Demo Day Blog Contact Us 114 applications from 88 cities In Fledglings , Seattle January 3, 2014 1 Min read 1 “Wow!” sums it up nicely. 114 applicants want to be fledglings. That is a new record for Fledge, up from 99 for the Autumn session, almost double the 65 from last year’s Spring session. What is even more exciting is that these applications are now coming from around the world. 88 cities in 32 countries. For the first time, most of the applications are from outside the USA. We are busy interviewing these teams, with a goal of picking seven invitees before the end of January. That is always been a difficult process, and getting harder each time as not only do we receive more applications, but the quality goes up each and every session as well. This means that less than 7% of the applicants will be invited as fledglings. For the rest, we’re about to launch some online educational materials which should provide some advice and guidance. More details on that, and the list of fledglings soon. Share this: Share on X (Opens in new window) X Share on Facebook (Opens in new window) Facebook Share on LinkedIn (Opens in new window) LinkedIn Share on WhatsApp (Opens in new window) WhatsApp Share on Telegram (Opens in new window) Telegram Share on Pinterest (Opens in new window) Pinterest Share on Tumblr"
+    },
+    {
+      "id": "check-page-7b9a02f96b",
+      "url": "https://www.fledge.co/500x90-fledge-tag-line-apply-today-fledge6/",
+      "page": "application",
+      "excerpt": "500×90 Fledge + Tag line + Apply Today Fledge6 – Fledge About Startups Trainers Locations Demo Day Blog Contact Us 500×90 Fledge + Tag line + Apply Today Fledge6 December 3, 2014 1 Min read Add comment 5 Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. − two = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially"
+    },
+    {
+      "id": "check-page-43b5eb1fd9",
+      "url": "https://www.fledge.co/800x550-applications-via-gust/",
+      "page": "application",
+      "excerpt": "800×550 Applications via Gust – Fledge About Startups Trainers Locations Demo Day Blog Contact Us 800×550 Applications via Gust October 25, 2012 1 Min read Add comment 8 Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. + two = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms"
+    },
+    {
+      "id": "check-page-70d29bfe2a",
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "page": "application",
+      "excerpt": "Annotated Application – Fledge About Startups Trainers Locations Demo Day Blog Contact Us Annotated Application A What does a great application look like? Unfortunately we can’t just share a selection of great and poor applications for everyone to review, as that would not be fair to those applicants. Instead, below is an annotated version of the Fledge application, explaining why each question is asked, and providing some guidance and samples of how to best answer the question: Basic Information Fledge uses F6s.com to host our application. This website hosts applications for thousands of other accelerators too. To save you time, F6S asks every applicant a set of basic questions about your business. Video The application asks for a videos. The application says this is optional, but here in the 21st Century is it expected, even if just a quick video shot on a mobile phone. The videos these days are often quite polished, produced from some online tool, or from the Adobe Creative suite of tools, or it is a video from a television interview, or a video from a business plan competition or even another Demo Day from another incubator or accelerator. If you don’t have such a video and can’t create one, then explaining the product in a minute or two using a webcam or phone is fine. Back we Fledge first started, nearly all the videos were that simple. The video should be no more than"
+    },
+    {
+      "id": "check-page-e9f607c2d5",
+      "url": "https://www.fledge.co/apply-2/",
+      "page": "application",
+      "excerpt": "Apply – Fledge About Startups Trainers Locations Demo Day Blog Contact Us Apply November 12, 2012 1 Min read Add comment A Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. two + two = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability and"
+    },
+    {
+      "id": "check-page-b332c33c7d",
+      "url": "https://www.fledge.co/apply-via-gust/",
+      "page": "application",
+      "excerpt": "Apply via Gust – Fledge About Startups Trainers Locations Demo Day Blog Contact Us Apply via Gust October 25, 2012 1 Min read Add comment A Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. + 5 = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability"
+    },
+    {
+      "id": "check-page-59c12ea0fb",
+      "url": "https://www.fledge.co/apply/",
+      "page": "application",
+      "excerpt": "Apply – Fledge About Startups Trainers Locations Demo Day Blog Contact Us Apply A Open Applications The following applications are open now: Fledge Africa (2026) Co-ops (Boston) Fledge partner programs include: Fledge Peru Fledge Barcelona The Nature-Accelerator The Impact StartUp Visa Program Start.coop The Land Accelerator More information Overview for startups Overview for co-ops Frequently asked questions (FAQ) More recommendations from fledglings An annotated application Locations View the Demo Day talks Share this: Share on X (Opens in new window) X Share on Facebook (Opens in new window) Facebook Share on LinkedIn (Opens in new window) LinkedIn Share on WhatsApp (Opens in new window) WhatsApp Share on Telegram (Opens in new window) Telegram Share on Pinterest (Opens in new window) Pinterest Share on Tumblr (Opens in new window) Tumblr Share on Reddit (Opens in new window) Reddit Print (Opens in new window) Print About About Startup accelerators Co-op Accelerator FAQ Annotated Application Recommendations Fledglings Fledglings Demo Day Locations Locations More Mentor Investor News Blog Subscribe Contact Us About Startups Trainers Locations Demo Day Blog Contact Us Search Recent Posts Africa (2026) Startups with Profits? EGA Farms The Land Accelerator and TerraFund Progress Recycling Glass at Bricolage Dynamics Subscribe * indicates required Email Address * First Name Last"
+    },
+    {
+      "id": "check-page-9310fb9053",
+      "url": "https://www.fledge.co/banner_apply/",
+      "page": "application",
+      "excerpt": "banner_apply – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply April 25, 2012 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. − three = 1 Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth, sustainability"
+    },
+    {
+      "id": "check-page-fd6ac548ba",
+      "url": "https://www.fledge.co/banner_apply_14s/",
+      "page": "application",
+      "excerpt": "banner_apply_14S – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_14S November 27, 2013 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. × 8 = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth,"
+    },
+    {
+      "id": "check-page-b4982d25f8",
+      "url": "https://www.fledge.co/banner_apply_1day/",
+      "page": "application",
+      "excerpt": "banner_apply_1day – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_1day June 26, 2012 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. − three = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth,"
+    },
+    {
+      "id": "check-page-d2cf1e09db",
+      "url": "https://www.fledge.co/banner_apply_2days/",
+      "page": "application",
+      "excerpt": "banner_apply_2days – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_2days June 26, 2012 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. − = 2 Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth,"
+    },
+    {
+      "id": "check-page-eff5b92a5c",
+      "url": "https://www.fledge.co/banner_apply_3days/",
+      "page": "application",
+      "excerpt": "banner_apply_3days – Fledge About Startups Trainers Locations Demo Day Blog Contact Us banner_apply_3days June 26, 2012 1 Min read Add comment b Add comment Cancel reply Comment Name * Email * Website Time limit is exhausted. Please reload CAPTCHA. + eight = Read more October 5, 2025 Africa (2026) In Conscious October 5, 2025 05 October The next Fledge accelerator is in Africa, specifically focused on for-profit companies that lower hunger and poverty by creating incomes for smallholder farmers and by greatly lowering post-harvest losses. This program is run in partnership with Africa Eats, an investment company with a portfolio of bizi with that same mission. Fledge Africa started in-person in Nairobi, Kenya in February 2026... July 25, 2023 Startups with Profits? In Investment July 25, 2023 25 July Venture capital and angel investing are realms filled with unspoken assumptions. One such assumption is that companies should burn through substantial capital before even considering profitability. This notion is misguided! Countless startups, often overlooked by these investors, are compelled to be profitable to survive. If these investors took a moment to recognize these startups, they would... June 16, 2023 EGA Farms In LatAm June 16, 2023 16 June From the creators of Fledge Peru comes EGA Farms… For the socially responsible produce consumer, EGA Farms promotes growth,"
     }
   ],
   "findings": {
@@ -260,20 +937,20 @@
         "evidenceId": "check-route-60b47b0894"
       },
       {
-        "value": "https://www.fledge.co/apply/?share=twitter",
-        "evidenceId": "check-route-9419444a7e"
+        "value": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=twitter",
+        "evidenceId": "check-route-4e6788a792"
       },
       {
-        "value": "https://www.fledge.co/apply/?share=facebook",
-        "evidenceId": "check-route-f599703e91"
+        "value": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=facebook",
+        "evidenceId": "check-route-8e7ced7081"
       },
       {
-        "value": "https://www.fledge.co/apply/?share=linkedin",
-        "evidenceId": "check-route-0a81713f84"
+        "value": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=linkedin",
+        "evidenceId": "check-route-1d105d7f48"
       },
       {
-        "value": "https://www.fledge.co/apply/?share=jetpack-whatsapp",
-        "evidenceId": "check-route-a9ad212a51"
+        "value": "https://www.fledge.co/2012/applications-are-in-invitations-are-out/?share=jetpack-whatsapp",
+        "evidenceId": "check-route-1245133527"
       }
     ],
     "applicationUrl": [
@@ -290,15 +967,78 @@
     ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "July",
+        "evidenceId": "check-announced-0e42425bd2"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-df614f134c"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-a6f5bfc755"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [
       {
-        "value": "goal is to help foster a wave of companies that make a measurable impact in the world, collectively improving the lives of everyone on the planet. We invest $15,000 (Peru) , €15,000 (Europe) , or $20,000 (U.S.) into each company we invite to participate, using revenue-based equity , which aligns our interests with the",
-        "evidenceId": "check-deal-87009b2304"
+        "value": "improving the lives of everyone on the planet. We invest $15,000 (Peru) , €15,000 (Europe) , or $20,000 (U.S.) into each company we",
+        "evidenceId": "check-deal-470cbe1232"
       },
       {
-        "value": "experts in a variety of topics, sourced from our global network of hundreds of mentors , who share their experiences, advice, and connections. MONEY We invest $15,000 – $20,000 (varies by city) into each company invited to participate, using a unique revenue-based structure that aligns our interests with the founders and",
-        "evidenceId": "check-deal-5d8e8a2acb"
+        "value": "the lives of everyone on the planet. We invest $15,000 (Peru) , €15,000 (Europe) , or $20,000 (U.S.) into each company we invite to",
+        "evidenceId": "check-deal-f74a001cd6"
+      },
+      {
+        "value": "on the planet. We invest $15,000 (Peru) , €15,000 (Europe) , or $20,000 (U.S.) into each company we invite to participate, using",
+        "evidenceId": "check-deal-5911916845"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "15000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-470cbe1232"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "15000",
+          "currency": "EUR",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-f74a001cd6"
+      },
+      {
+        "value": {
+          "kind": "cash",
+          "amount": "20000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Cash",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-5911916845"
       }
     ],
     "portfolioPages": [

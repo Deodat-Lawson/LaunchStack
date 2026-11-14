@@ -1,236 +1,941 @@
 {
   "programId": "arch-grants",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
     "https://archgrants.org/",
-    "https://archgrants.org/about-us/",
+    "http://archgrants.org/programs/application-reminder-form/",
     "https://archgrants.org/programs/application-reminder-form/",
-    "https://archgrants.org/programs/faqs/"
+    "http://archgrants.org/programs/faqs/",
+    "http://archgrants.org/get-involved/become-a-competition-judge/",
+    "http://archgrants.org/wepower-announces-first-investment-in-st-louis-startup-bold-xchange/",
+    "https://archgrants.org/programs/faqs/",
+    "http://archgrants.org/mission-driven-tech-startup-selected-to-join-latest-cohort-of-fintechs-in-mastercard-start-path-program/",
+    "http://archgrants.org/about-us/",
+    "http://archgrants.org/about-us/our-impact/",
+    "http://archgrants.org/about-us/our-supporters/",
+    "http://archgrants.org/about-us/sustained-impact/",
+    "http://archgrants.org/about-us/team/",
+    "http://archgrants.org/get-involved/expert-in-residence-program/",
+    "http://archgrants.org/hq-expansion-and-lending-program/"
   ],
   "evidence": [
     {
-      "id": "check-deal-4938898ea4",
-      "url": "https://archgrants.org/programs/faqs/",
-      "title": "Arch Grants — terms page checked by scrape.py",
-      "excerpt": "business within St. Louis’ expanding entrepreneurial hub surrounded by a community of mentors, collaborators, and resources. Arch Grants Companies receive $75,000 and access to an ecosystem of resources and support to help grow and scale their businesses. How is Arch Grants different from angel investors and venture",
+      "id": "check-deal-1d727d8e10",
+      "url": "http://archgrants.org/wepower-announces-first-investment-in-st-louis-startup-bold-xchange/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "CEO of COUNSELMEDS) We are pleased to announce that we’ve awarded $100,000 in a non-dilutive […] Read More Contact 2315 Locust St. Suite 2B St.",
       "page": "terms"
     },
     {
-      "id": "check-deal-6b2b8c24c3",
-      "url": "https://archgrants.org/about-us/",
-      "title": "Arch Grants — details page checked by scrape.py",
-      "excerpt": "the world – by attracting and retaining extraordinary entrepreneurs. Through our unique and groundbreaking annual Startup Competition model, we provide up to $100,000 in equity-free grants and access to an ecosystem of resources, helping early-stage startups grow and scale. Our program is a beacon for entrepreneurs globally,",
+      "id": "check-deal-5e92c28f84",
+      "url": "http://archgrants.org/mission-driven-tech-startup-selected-to-join-latest-cohort-of-fintechs-in-mastercard-start-path-program/",
+      "title": "Arch Grants — batches page",
+      "excerpt": "CEO of COUNSELMEDS) We are pleased to announce that we’ve awarded $100,000 in a non-dilutive […] Read More Contact 2315 Locust St. Suite 2B St.",
+      "page": "batches"
+    },
+    {
+      "id": "check-deal-665d247a62",
+      "url": "https://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "mentors, collaborators, and resources. Arch Grants Companies receive $75,000 and access to an ecosystem of resources and support to help grow and",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-7e4b62bb16",
+      "url": "http://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "mentors, collaborators, and resources. Arch Grants Companies receive $75,000 and access to an ecosystem of resources and support to help grow and",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-a6f5f208c2",
+      "url": "http://archgrants.org/about-us/",
+      "title": "Arch Grants — program page",
+      "excerpt": "groundbreaking annual Startup Competition model, we provide up to $100,000 in equity-free grants and access to an ecosystem of resources,",
       "page": "details"
+    },
+    {
+      "id": "check-deal-a82161cc3f",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "CEO of COUNSELMEDS) We are pleased to announce that we’ve awarded $100,000 in a non-dilutive […] Read More Contact 2315 Locust St. Suite 2B St.",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-b21f81e6f5",
+      "url": "http://archgrants.org/about-us/sustained-impact/",
+      "title": "Arch Grants — program page",
+      "excerpt": "to help our Founders raise growth capital by awarding additional $100,000 non-dilutive grants to Arch Grants portfolio companies based in St.",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-28da566aab",
+      "url": "http://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "close within 9 months? If the round closes after 9 months from the awarded date, the Founder will need to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-3a60efc869",
+      "url": "http://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "What happens if the round does not close within 9 months? If the round closes after 9 months from the",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-67df7c0ec8",
+      "url": "http://archgrants.org/get-involved/expert-in-residence-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "Arch Grants EIRs are brought on for an initial 6-month trial period after which their participation in",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-8249d721c1",
+      "url": "https://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "close within 9 months? If the round closes after 9 months from the awarded date, the Founder will need to",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-8d24320881",
+      "url": "https://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "What happens if the round does not close within 9 months? If the round closes after 9 months from the",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-97a05d25bb",
+      "url": "https://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "program year. The Arch Grants program requires a 12-month commitment by the Founders and Company to reside",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-b3cb013bff",
+      "url": "http://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "program year. The Arch Grants program requires a 12-month commitment by the Founders and Company to reside",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-06680aa619",
+      "url": "http://archgrants.org/wepower-announces-first-investment-in-st-louis-startup-bold-xchange/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "info@archgrants.org",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-1397aabe8f",
+      "url": "http://archgrants.org/get-involved/expert-in-residence-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "details"
+    },
+    {
+      "id": "check-email-1685315bcd",
+      "url": "http://archgrants.org/get-involved/become-a-competition-judge/",
+      "title": "Arch Grants — application page",
+      "excerpt": "info@archgrants.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-1807813e63",
+      "url": "http://archgrants.org/wepower-announces-first-investment-in-st-louis-startup-bold-xchange/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "terms"
     },
     {
       "id": "check-email-1ac8f5e5ac",
       "url": "https://archgrants.org/programs/application-reminder-form/",
-      "title": "Arch Grants — application page checked by scrape.py",
+      "title": "Arch Grants — application page",
       "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
       "page": "application"
     },
     {
       "id": "check-email-2e9c764762",
       "url": "https://archgrants.org/programs/faqs/",
-      "title": "Arch Grants — terms page checked by scrape.py",
+      "title": "Arch Grants — terms page",
       "excerpt": "to judge or donating . For general questions, please email info@archgrants.org . Competition and Format Questions about the Startup",
       "page": "terms"
     },
     {
+      "id": "check-email-31663e6637",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "details"
+    },
+    {
       "id": "check-email-33ab70cfc7",
       "url": "https://archgrants.org/programs/faqs/",
-      "title": "Arch Grants — terms page checked by scrape.py",
+      "title": "Arch Grants — terms page",
       "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
       "page": "terms"
+    },
+    {
+      "id": "check-email-36c6a33674",
+      "url": "http://archgrants.org/about-us/our-supporters/",
+      "title": "Arch Grants — program page",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "details"
+    },
+    {
+      "id": "check-email-39325dff93",
+      "url": "http://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "to judge or donating . For general questions, please email info@archgrants.org . Competition and Format Questions about the Startup",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-39a1b300f5",
+      "url": "http://archgrants.org/about-us/",
+      "title": "Arch Grants — program page",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "details"
+    },
+    {
+      "id": "check-email-41a9175516",
+      "url": "http://archgrants.org/about-us/our-impact/",
+      "title": "Arch Grants — program page",
+      "excerpt": "info@archgrants.org",
+      "page": "details"
     },
     {
       "id": "check-email-43467d09f9",
       "url": "https://archgrants.org/",
-      "title": "Arch Grants — homepage checked by scrape.py",
+      "title": "Arch Grants — homepage",
       "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
       "page": "details"
     },
     {
-      "id": "check-email-8a0123c481",
-      "url": "https://archgrants.org/programs/faqs/",
-      "title": "Arch Grants — terms page checked by scrape.py",
-      "excerpt": "info@archgrants.org",
-      "page": "terms"
-    },
-    {
-      "id": "check-email-8daf8f70c7",
-      "url": "https://archgrants.org/about-us/",
-      "title": "Arch Grants — details page checked by scrape.py",
-      "excerpt": "info@archgrants.org",
-      "page": "details"
-    },
-    {
-      "id": "check-email-9ba620d50c",
-      "url": "https://archgrants.org/about-us/",
-      "title": "Arch Grants — details page checked by scrape.py",
-      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
-      "page": "details"
-    },
-    {
-      "id": "check-email-c9c038e7da",
-      "url": "https://archgrants.org/",
-      "title": "Arch Grants — homepage checked by scrape.py",
-      "excerpt": "info@archgrants.org",
-      "page": "details"
-    },
-    {
-      "id": "check-email-fd2eae8763",
-      "url": "https://archgrants.org/programs/application-reminder-form/",
-      "title": "Arch Grants — application page checked by scrape.py",
+      "id": "check-email-45fd92ba42",
+      "url": "http://archgrants.org/programs/application-reminder-form/",
+      "title": "Arch Grants — application page",
       "excerpt": "info@archgrants.org",
       "page": "application"
     },
     {
+      "id": "check-email-56e33fedc0",
+      "url": "http://archgrants.org/about-us/sustained-impact/",
+      "title": "Arch Grants — program page",
+      "excerpt": "info@archgrants.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-87e6264334",
+      "url": "http://archgrants.org/mission-driven-tech-startup-selected-to-join-latest-cohort-of-fintechs-in-mastercard-start-path-program/",
+      "title": "Arch Grants — batches page",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-8a0123c481",
+      "url": "https://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "info@archgrants.org",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-932a198628",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "info@archgrants.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-95c5d77e59",
+      "url": "http://archgrants.org/about-us/our-impact/",
+      "title": "Arch Grants — program page",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "details"
+    },
+    {
+      "id": "check-email-9c53f76be8",
+      "url": "http://archgrants.org/about-us/",
+      "title": "Arch Grants — program page",
+      "excerpt": "info@archgrants.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b4233e6b74",
+      "url": "http://archgrants.org/get-involved/expert-in-residence-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "info@archgrants.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-bc3c53d1ae",
+      "url": "http://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "info@archgrants.org",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-c9c038e7da",
+      "url": "https://archgrants.org/",
+      "title": "Arch Grants — homepage",
+      "excerpt": "info@archgrants.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-cada9cc624",
+      "url": "http://archgrants.org/programs/application-reminder-form/",
+      "title": "Arch Grants — application page",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "application"
+    },
+    {
+      "id": "check-email-cf0b62755f",
+      "url": "http://archgrants.org/about-us/sustained-impact/",
+      "title": "Arch Grants — program page",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f200a63f10",
+      "url": "http://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-f35e28a383",
+      "url": "http://archgrants.org/mission-driven-tech-startup-selected-to-join-latest-cohort-of-fintechs-in-mastercard-start-path-program/",
+      "title": "Arch Grants — batches page",
+      "excerpt": "info@archgrants.org",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-f6d97f67af",
+      "url": "http://archgrants.org/about-us/team/",
+      "title": "Arch Grants — program page",
+      "excerpt": "info@archgrants.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-fb0258d71c",
+      "url": "http://archgrants.org/about-us/our-supporters/",
+      "title": "Arch Grants — program page",
+      "excerpt": "info@archgrants.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-fb5b7f8480",
+      "url": "http://archgrants.org/about-us/team/",
+      "title": "Arch Grants — program page",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "details"
+    },
+    {
+      "id": "check-email-fb84d3b19a",
+      "url": "http://archgrants.org/get-involved/become-a-competition-judge/",
+      "title": "Arch Grants — application page",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "application"
+    },
+    {
+      "id": "check-email-fd2eae8763",
+      "url": "https://archgrants.org/programs/application-reminder-form/",
+      "title": "Arch Grants — application page",
+      "excerpt": "info@archgrants.org",
+      "page": "application"
+    },
+    {
+      "id": "check-format-2381bd2cc1",
+      "url": "http://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "additional information and materials, participate in a virtual interview, and pass due diligence. Finalist Round: The",
+      "page": "terms"
+    },
+    {
+      "id": "check-format-b4ea3037c3",
+      "url": "https://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "additional information and materials, participate in a virtual interview, and pass due diligence. Finalist Round: The",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-048b8b9cb1",
+      "url": "https://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "an Arch Grant, you will need to be located in St. Louis, full time, eight weeks after",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-3e48629aaf",
+      "url": "http://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "an Arch Grant, you will need to be located in St. Louis, full time, eight weeks after",
+      "page": "terms"
+    },
+    {
+      "id": "check-location-ad2705894d",
+      "url": "http://archgrants.org/about-us/sustained-impact/",
+      "title": "Arch Grants — program page",
+      "excerpt": "to Arch Grants portfolio companies based in St. Louis. Learn More Accelerate Economic",
+      "page": "details"
+    },
+    {
       "id": "check-name-ba5a68878e",
       "url": "https://archgrants.org/",
-      "title": "Arch Grants — homepage checked by scrape.py",
+      "title": "Arch Grants — homepage",
       "excerpt": "Home | Arch Grants Skip to content Search for: Search About Team Our Impact",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-0251d862f3",
+      "url": "http://archgrants.org/about-us/team/",
+      "title": "Arch Grants — program page",
+      "excerpt": "314-272-4857",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-028fc98b38",
+      "url": "http://archgrants.org/get-involved/expert-in-residence-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "314-272-4857",
       "page": "details"
     },
     {
       "id": "check-phone-44cd17ceb4",
       "url": "https://archgrants.org/programs/application-reminder-form/",
-      "title": "Arch Grants — application page checked by scrape.py",
+      "title": "Arch Grants — application page",
       "excerpt": "314-272-4857",
       "page": "application"
     },
     {
-      "id": "check-phone-c09f1f5dea",
-      "url": "https://archgrants.org/about-us/",
-      "title": "Arch Grants — details page checked by scrape.py",
+      "id": "check-phone-648ada673a",
+      "url": "http://archgrants.org/about-us/our-supporters/",
+      "title": "Arch Grants — program page",
+      "excerpt": "314-272-4857",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-801b180c24",
+      "url": "http://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "314-272-4857",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-ac493a7350",
+      "url": "http://archgrants.org/wepower-announces-first-investment-in-st-louis-startup-bold-xchange/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "314-272-4857",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-b233a4d6fd",
+      "url": "http://archgrants.org/mission-driven-tech-startup-selected-to-join-latest-cohort-of-fintechs-in-mastercard-start-path-program/",
+      "title": "Arch Grants — batches page",
+      "excerpt": "314-272-4857",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-bcc36ffc2b",
+      "url": "http://archgrants.org/about-us/our-impact/",
+      "title": "Arch Grants — program page",
+      "excerpt": "314-272-4857",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-c2a226b4d7",
+      "url": "http://archgrants.org/about-us/sustained-impact/",
+      "title": "Arch Grants — program page",
+      "excerpt": "314-272-4857",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-c524c24861",
+      "url": "http://archgrants.org/get-involved/become-a-competition-judge/",
+      "title": "Arch Grants — application page",
+      "excerpt": "314-272-4857",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-c560603397",
+      "url": "http://archgrants.org/about-us/",
+      "title": "Arch Grants — program page",
       "excerpt": "314-272-4857",
       "page": "details"
     },
     {
       "id": "check-phone-d2e3545ee3",
       "url": "https://archgrants.org/programs/faqs/",
-      "title": "Arch Grants — terms page checked by scrape.py",
+      "title": "Arch Grants — terms page",
       "excerpt": "314-272-4857",
       "page": "terms"
     },
     {
+      "id": "check-phone-f13594aff6",
+      "url": "http://archgrants.org/programs/application-reminder-form/",
+      "title": "Arch Grants — application page",
+      "excerpt": "314-272-4857",
+      "page": "application"
+    },
+    {
       "id": "check-phone-f8b08a2a26",
       "url": "https://archgrants.org/",
-      "title": "Arch Grants — homepage checked by scrape.py",
+      "title": "Arch Grants — homepage",
+      "excerpt": "314-272-4857",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-fe7ac33a88",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "title": "Arch Grants — program page",
       "excerpt": "314-272-4857",
       "page": "details"
     },
     {
       "id": "check-portfolio-006446d225",
       "url": "https://archgrants.org/programs/faqs/",
-      "title": "Arch Grants — terms page checked by scrape.py",
+      "title": "Arch Grants — terms page",
       "excerpt": "The Companies → https://archgrants.org/companies/",
       "page": "terms"
     },
     {
       "id": "check-portfolio-007154d7a6",
       "url": "https://archgrants.org/programs/application-reminder-form/",
-      "title": "Arch Grants — application page checked by scrape.py",
+      "title": "Arch Grants — application page",
       "excerpt": "The Companies → https://archgrants.org/companies/",
       "page": "application"
     },
     {
-      "id": "check-portfolio-1e3139beee",
-      "url": "https://archgrants.org/about-us/",
-      "title": "Arch Grants — details page checked by scrape.py",
-      "excerpt": "The Companies → https://archgrants.org/companies/",
+      "id": "check-portfolio-0fc2a717b6",
+      "url": "http://archgrants.org/about-us/our-supporters/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Companies → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1780aed32e",
+      "url": "http://archgrants.org/about-us/our-impact/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Startups → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-216284ed6a",
+      "url": "http://archgrants.org/programs/application-reminder-form/",
+      "title": "Arch Grants — application page",
+      "excerpt": "The Startups → http://archgrants.org/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-2746e80dea",
+      "url": "http://archgrants.org/wepower-announces-first-investment-in-st-louis-startup-bold-xchange/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "The Companies → http://archgrants.org/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2b418f4ec7",
+      "url": "http://archgrants.org/get-involved/become-a-competition-judge/",
+      "title": "Arch Grants — application page",
+      "excerpt": "The Companies → http://archgrants.org/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-35ad39bbea",
+      "url": "http://archgrants.org/get-involved/expert-in-residence-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Startups → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-41edf1607c",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Companies → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4c9d834262",
+      "url": "http://archgrants.org/about-us/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Companies → http://archgrants.org/companies/",
       "page": "details"
     },
     {
       "id": "check-portfolio-4ea2edd0a1",
       "url": "https://archgrants.org/",
-      "title": "Arch Grants — homepage checked by scrape.py",
+      "title": "Arch Grants — homepage",
       "excerpt": "The Startups → https://archgrants.org/companies/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-55fab73160",
-      "url": "https://archgrants.org/about-us/",
-      "title": "Arch Grants — details page checked by scrape.py",
-      "excerpt": "The Startups → https://archgrants.org/companies/",
+      "id": "check-portfolio-645f1ab5d1",
+      "url": "http://archgrants.org/about-us/our-supporters/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Startups → http://archgrants.org/companies/",
       "page": "details"
     },
     {
       "id": "check-portfolio-67e4ee1978",
       "url": "https://archgrants.org/programs/faqs/",
-      "title": "Arch Grants — terms page checked by scrape.py",
+      "title": "Arch Grants — terms page",
       "excerpt": "The Startups → https://archgrants.org/companies/",
       "page": "terms"
     },
     {
+      "id": "check-portfolio-69d2631b5f",
+      "url": "http://archgrants.org/programs/application-reminder-form/",
+      "title": "Arch Grants — application page",
+      "excerpt": "The Companies → http://archgrants.org/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-6c11e9ab55",
+      "url": "http://archgrants.org/about-us/our-impact/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Companies → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6e442ccda0",
+      "url": "http://archgrants.org/about-us/team/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Companies → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7cf54b6a32",
+      "url": "http://archgrants.org/get-involved/become-a-competition-judge/",
+      "title": "Arch Grants — application page",
+      "excerpt": "The Startups → http://archgrants.org/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7de000cfb8",
+      "url": "http://archgrants.org/about-us/team/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Startups → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7fbc07f916",
+      "url": "http://archgrants.org/mission-driven-tech-startup-selected-to-join-latest-cohort-of-fintechs-in-mastercard-start-path-program/",
+      "title": "Arch Grants — batches page",
+      "excerpt": "The Companies → http://archgrants.org/companies/",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-81566dc920",
       "url": "https://archgrants.org/programs/application-reminder-form/",
-      "title": "Arch Grants — application page checked by scrape.py",
+      "title": "Arch Grants — application page",
       "excerpt": "The Startups → https://archgrants.org/companies/",
       "page": "application"
     },
     {
       "id": "check-portfolio-8af0699f99",
       "url": "https://archgrants.org/",
-      "title": "Arch Grants — homepage checked by scrape.py",
+      "title": "Arch Grants — homepage",
       "excerpt": "Explore All Startups → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-90da454675",
+      "url": "http://archgrants.org/about-us/sustained-impact/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Companies → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9dc1fa85e1",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Startups → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a9c5a03d25",
+      "url": "http://archgrants.org/about-us/sustained-impact/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Startups → http://archgrants.org/companies/",
       "page": "details"
     },
     {
       "id": "check-portfolio-aed2247869",
       "url": "https://archgrants.org/",
-      "title": "Arch Grants — homepage checked by scrape.py",
+      "title": "Arch Grants — homepage",
       "excerpt": "The Companies → https://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ba837ff5c8",
+      "url": "http://archgrants.org/get-involved/expert-in-residence-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Companies → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bbae359579",
+      "url": "http://archgrants.org/about-us/",
+      "title": "Arch Grants — program page",
+      "excerpt": "The Startups → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ccc5a36ea3",
+      "url": "http://archgrants.org/wepower-announces-first-investment-in-st-louis-startup-bold-xchange/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "The Startups → http://archgrants.org/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d77098a8f5",
+      "url": "http://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "The Startups → http://archgrants.org/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-de1dadb84e",
+      "url": "http://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "The Companies → http://archgrants.org/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-f7be4a0de5",
+      "url": "http://archgrants.org/mission-driven-tech-startup-selected-to-join-latest-cohort-of-fintechs-in-mastercard-start-path-program/",
+      "title": "Arch Grants — batches page",
+      "excerpt": "The Startups → http://archgrants.org/companies/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-0d6277ecde",
+      "url": "http://archgrants.org/get-involved/become-a-competition-judge/",
+      "title": "Arch Grants — application page",
+      "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-11057febfc",
+      "url": "http://archgrants.org/about-us/sustained-impact/",
+      "title": "Arch Grants — program page",
+      "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
       "page": "details"
     },
     {
       "id": "check-route-1e1d8fa0cc",
       "url": "https://archgrants.org/programs/faqs/",
-      "title": "Arch Grants — terms page checked by scrape.py",
+      "title": "Arch Grants — terms page",
       "excerpt": "applying to judge → http://archgrants.org/get-involved/become-a-competition-judge/",
       "page": "terms"
     },
     {
-      "id": "check-route-1fcd2104ec",
-      "url": "https://archgrants.org/about-us/",
-      "title": "Arch Grants — details page checked by scrape.py",
-      "excerpt": "Application Reminder Form → https://archgrants.org/programs/application-reminder-form/",
+      "id": "check-route-39bb08574e",
+      "url": "http://archgrants.org/mission-driven-tech-startup-selected-to-join-latest-cohort-of-fintechs-in-mastercard-start-path-program/",
+      "title": "Arch Grants — batches page",
+      "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-41e0ca2566",
+      "url": "http://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "Apply to the Competition → http://archgrants.org/programs/startup-competition/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-6fcd6ade6b",
+      "url": "http://archgrants.org/about-us/our-impact/",
+      "title": "Arch Grants — program page",
+      "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
       "page": "details"
+    },
+    {
+      "id": "check-route-775d0264a3",
+      "url": "http://archgrants.org/about-us/our-supporters/",
+      "title": "Arch Grants — program page",
+      "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7eed1f8fb4",
+      "url": "http://archgrants.org/about-us/team/",
+      "title": "Arch Grants — program page",
+      "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8292eaa98a",
+      "url": "http://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "applying to judge → http://archgrants.org/get-involved/become-a-competition-judge/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-8493537b9a",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8595c30873",
+      "url": "http://archgrants.org/get-involved/expert-in-residence-program/",
+      "title": "Arch Grants — program page",
+      "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9dd3ef2a79",
+      "url": "http://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "application reminder form → https://archgrants.org/programs/application-reminder-form/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-a4963a888a",
+      "url": "http://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-abdeeee125",
+      "url": "http://archgrants.org/wepower-announces-first-investment-in-st-louis-startup-bold-xchange/",
+      "title": "Arch Grants — terms page",
+      "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
+      "page": "terms"
     },
     {
       "id": "check-route-b926cce6f7",
       "url": "https://archgrants.org/programs/faqs/",
-      "title": "Arch Grants — terms page checked by scrape.py",
+      "title": "Arch Grants — terms page",
       "excerpt": "Apply to the Competition → http://archgrants.org/programs/startup-competition/",
       "page": "terms"
     },
     {
       "id": "check-route-bd68017528",
       "url": "https://archgrants.org/programs/faqs/",
-      "title": "Arch Grants — terms page checked by scrape.py",
+      "title": "Arch Grants — terms page",
       "excerpt": "Application Reminder Form → https://archgrants.org/programs/application-reminder-form/",
       "page": "terms"
     },
     {
       "id": "check-route-dbf865ac57",
       "url": "https://archgrants.org/",
-      "title": "Arch Grants — homepage checked by scrape.py",
+      "title": "Arch Grants — homepage",
       "excerpt": "Application Reminder Form → https://archgrants.org/programs/application-reminder-form/",
       "page": "details"
     },
     {
       "id": "check-route-eb427ecf48",
       "url": "https://archgrants.org/programs/faqs/",
-      "title": "Arch Grants — terms page checked by scrape.py",
+      "title": "Arch Grants — terms page",
       "excerpt": "application reminder form → https://archgrants.org/programs/application-reminder-form/",
       "page": "terms"
     },
     {
       "id": "check-route-f5a3460b46",
       "url": "https://archgrants.org/",
-      "title": "Arch Grants — homepage checked by scrape.py",
+      "title": "Arch Grants — homepage",
       "excerpt": "https://archgrants.org/",
       "page": "details"
+    },
+    {
+      "id": "check-route-fb0d7773b4",
+      "url": "http://archgrants.org/about-us/",
+      "title": "Arch Grants — program page",
+      "excerpt": "Application Reminder Form → http://archgrants.org/programs/application-reminder-form/",
+      "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-a8f202ec21",
+      "url": "https://archgrants.org/",
+      "page": "details",
+      "excerpt": "Home | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Champion the Bold. The future of St. Louis starts here. Join us at neXus, an event showcasing how the innovation community is reshaping St. Louis. neXus isn’t just another event — it’s where investors, founders, civic leaders, and bold thinkers collide to shape what’s next for our city, our startups, and our region’s economy. Expect"
+    },
+    {
+      "id": "check-page-82d0234169",
+      "url": "http://archgrants.org/programs/application-reminder-form/",
+      "page": "application",
+      "excerpt": "Application Reminder Form | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Application Reminder Form Fill out the form below to receive reminders and updates regarding our Startup Competition application cycle. Facebook This field is for validation purposes and should be left unchanged. Name (Required) First Last Email (Required) Company Name (Required) (If Company Name is not"
+    },
+    {
+      "id": "check-page-168ea72ef1",
+      "url": "https://archgrants.org/programs/application-reminder-form/",
+      "page": "application",
+      "excerpt": "Application Reminder Form | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Application Reminder Form Fill out the form below to receive reminders and updates regarding our Startup Competition application cycle. Name This field is for validation purposes and should be left unchanged. Name (Required) First Last Email (Required) Company Name (Required) (If Company Name is not applicable,"
+    },
+    {
+      "id": "check-page-1c3d825471",
+      "url": "http://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "FAQs | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Frequently Asked Questions General Questions Questions about the Startup Competition About The Competition Why should I enter the Arch Grants Startup Competition? Arch Grants is a source of equity-free funding for early-stage startups, and also an opportunity to grow your business within St. Louis’ expanding entrepreneurial hub"
+    },
+    {
+      "id": "check-page-69de40ca14",
+      "url": "http://archgrants.org/get-involved/become-a-competition-judge/",
+      "page": "application",
+      "excerpt": "Become a Competition Judge | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Calling All Competition Judges Arch Grants is looking for industry experts to judge and aid in the evaluation process of our annual Startup Competition applicants. Our competition attracts applicants from around the world, representing nearly every industry and sector. To evaluate the diverse array of startups"
+    },
+    {
+      "id": "check-page-1b1165fd11",
+      "url": "http://archgrants.org/wepower-announces-first-investment-in-st-louis-startup-bold-xchange/",
+      "page": "terms",
+      "excerpt": "WEPOWER Announces First Investment in St. Louis Startup, Bold Xchange | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media WEPOWER Announces First Investment in St. Louis Startup, Bold Xchange Sep 22, 2022 Founders Associated Companies Bold Xchange Recent News View All News Nov 3, 2026 Arch Grants Arch Grants Awards $1.35M to 2026 Cohort – Announces 20 New Startups joining"
+    },
+    {
+      "id": "check-page-cd52dca562",
+      "url": "https://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "excerpt": "FAQs | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Frequently Asked Questions General Questions Questions about the Startup Competition About The Competition Why should I enter the Arch Grants Startup Competition? Arch Grants is a source of equity-free funding for early-stage startups, and also an opportunity to grow your business within St. Louis’ expanding entrepreneurial hub"
+    },
+    {
+      "id": "check-page-989e540447",
+      "url": "http://archgrants.org/mission-driven-tech-startup-selected-to-join-latest-cohort-of-fintechs-in-mastercard-start-path-program/",
+      "page": "batches",
+      "excerpt": "Mission-driven tech startup selected to join latest cohort of fintechs in Mastercard Start Path program | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Mission-driven tech startup selected to join latest cohort of fintechs in Mastercard Start Path program Aug 23, 2022 Founders Associated Companies oneKIN Recent News View All News Nov 3, 2026 Arch Grants Arch Grants Awards"
+    },
+    {
+      "id": "check-page-71f345c39b",
+      "url": "http://archgrants.org/about-us/",
+      "page": "details",
+      "excerpt": "About | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus About Arch Grants We Champion The Bold. Arch Grants disrupted the status quo of economic development in 2012 with a mission to transform the economy – in St. Louis and throughout the world – by attracting and retaining extraordinary entrepreneurs. Through our unique and groundbreaking annual Startup Competition model, we provide up"
+    },
+    {
+      "id": "check-page-decec89cab",
+      "url": "http://archgrants.org/about-us/our-impact/",
+      "page": "details",
+      "excerpt": "Our Impact | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Accelerating Economic Development Arch Grants’ portfolio companies have gone on to create over 4,300 jobs in Missouri, generate over $1.4 billion in revenue and attract more than $928 million in follow-on capital (and counting!). $ 1.4 B+ revenue generated $ 955 M+ capital raised $ 276 M+ STL wages paid 4300 + jobs created in"
+    },
+    {
+      "id": "check-page-28c20cfcbe",
+      "url": "http://archgrants.org/about-us/our-supporters/",
+      "page": "details",
+      "excerpt": "Our Supporters | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Annual Supporters Arch Grants is only able to achieve our mission through our community’s tremendous generosity. Arch Grants’ annual donors, sponsors, and supporters believe in the immense power of bold entrepreneurs to positively impact the economy, the culture, and the fabric of St. Louis. They support believers and"
+    },
+    {
+      "id": "check-page-7f46d16c89",
+      "url": "http://archgrants.org/about-us/sustained-impact/",
+      "page": "details",
+      "excerpt": "Sustained Impact | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Sustained Impact Campaign The Arch Grants Sustained Impact Campaign supports a community-funded endowment that ensures that our unique and effective model can both grow in scale year-over-year and that we can continue to fund extraordinary entrepreneurs and their innovative companies in perpetuity. This effort is the"
+    },
+    {
+      "id": "check-page-853f9acc1c",
+      "url": "http://archgrants.org/about-us/team/",
+      "page": "details",
+      "excerpt": "Team | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Meet the Team Who We Are. Arch Grants staff and volunteer leadership are believers and builders themselves and are relentless in their efforts to champion bold entrepreneurs and build a robust future for the St. Louis region, and for the world. Gabe Angieri Executive Director Connect on LinkedIn Betsy Barton Director of Strategic"
+    },
+    {
+      "id": "check-page-184fd139db",
+      "url": "http://archgrants.org/get-involved/expert-in-residence-program/",
+      "page": "details",
+      "excerpt": "Expert-in-Residence Program | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus Expert-in-Residence Program Summary of Program The Arch Grants Expert-in-Residence (EIR) program provides mentorship and coaching assistance to current and past Arch Grants Founders by connecting them with seasoned entrepreneurs, technologists, and executives. The Expert-in-Residence (EIR) position is a"
+    },
+    {
+      "id": "check-page-795e8eb440",
+      "url": "http://archgrants.org/hq-expansion-and-lending-program/",
+      "page": "details",
+      "excerpt": "Arch Grants Marks Milestone with Headquarters Expansion and New Lending Program to Accelerate Startup Growth in St. Louis | Arch Grants Skip to content Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Careers Contact Us News & Media Careers Contact Us Search for: Search About Team Our Impact Our Supporters Sustained Impact Programs Startup Competition Application Reminder Form FAQs Fellows Program Growth Grants Investor Masterclass Series Innovation Summit Founder Lending Program Why St. Louis STL Ecosystem Resource Ecosystem The Startups The Companies Founder Directory Success Stories Get Involved neXus Become a Competition Judge Become an Angel Vendor Expert-in-Residence Program Other Ways to Get Involved Donate 2026 neXus News & Media Arch Grants Marks Milestone with Headquarters Expansion and New Lending Program to Accelerate Startup Growth in St. Louis Oct 15, 2025 Arch Grants FOR IMMEDIATE RELEASE October 15, 2025 ST. LOUIS, Mo –"
     }
   ],
   "findings": {
@@ -252,12 +957,16 @@
         "evidenceId": "check-route-dbf865ac57"
       },
       {
+        "value": "http://archgrants.org/programs/application-reminder-form/",
+        "evidenceId": "check-route-a4963a888a"
+      },
+      {
         "value": "http://archgrants.org/get-involved/become-a-competition-judge/",
-        "evidenceId": "check-route-1e1d8fa0cc"
+        "evidenceId": "check-route-8292eaa98a"
       },
       {
         "value": "http://archgrants.org/programs/startup-competition/",
-        "evidenceId": "check-route-b926cce6f7"
+        "evidenceId": "check-route-41e0ca2566"
       }
     ],
     "applicationUrl": [
@@ -269,15 +978,90 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-b3cb013bff"
+      },
+      {
+        "value": "9 months",
+        "evidenceId": "check-duration-3a60efc869"
+      },
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-67df7c0ec8"
+      }
+    ],
+    "format": [
+      {
+        "value": "remote",
+        "evidenceId": "check-format-2381bd2cc1"
+      }
+    ],
+    "location": [
+      {
+        "value": "St",
+        "evidenceId": "check-location-3e48629aaf"
+      }
+    ],
     "selectivity": [],
     "dealText": [
       {
-        "value": "the world – by attracting and retaining extraordinary entrepreneurs. Through our unique and groundbreaking annual Startup Competition model, we provide up to $100,000 in equity-free grants and access to an ecosystem of resources, helping early-stage startups grow and scale. Our program is a beacon for entrepreneurs globally,",
-        "evidenceId": "check-deal-6b2b8c24c3"
+        "value": "mentors, collaborators, and resources. Arch Grants Companies receive $75,000 and access to an ecosystem of resources and support to help grow and",
+        "evidenceId": "check-deal-7e4b62bb16"
       },
       {
-        "value": "business within St. Louis’ expanding entrepreneurial hub surrounded by a community of mentors, collaborators, and resources. Arch Grants Companies receive $75,000 and access to an ecosystem of resources and support to help grow and scale their businesses. How is Arch Grants different from angel investors and venture",
-        "evidenceId": "check-deal-4938898ea4"
+        "value": "CEO of COUNSELMEDS) We are pleased to announce that we’ve awarded $100,000 in a non-dilutive […] Read More Contact 2315 Locust St. Suite 2B St.",
+        "evidenceId": "check-deal-1d727d8e10"
+      },
+      {
+        "value": "groundbreaking annual Startup Competition model, we provide up to $100,000 in equity-free grants and access to an ecosystem of resources,",
+        "evidenceId": "check-deal-a6f5f208c2"
+      },
+      {
+        "value": "to help our Founders raise growth capital by awarding additional $100,000 non-dilutive grants to Arch Grants portfolio companies based in St.",
+        "evidenceId": "check-deal-b21f81e6f5"
+      }
+    ],
+    "dealComponents": [
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "75000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-7e4b62bb16"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": false,
+          "condition": null
+        },
+        "evidenceId": "check-deal-1d727d8e10"
+      },
+      {
+        "value": {
+          "kind": "grant",
+          "amount": "100000",
+          "currency": "USD",
+          "equity": null,
+          "label": "Grant",
+          "contingent": true,
+          "condition": "up to"
+        },
+        "evidenceId": "check-deal-a6f5f208c2"
       }
     ],
     "portfolioPages": [

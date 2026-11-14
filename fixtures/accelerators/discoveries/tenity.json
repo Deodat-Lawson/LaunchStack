@@ -1,59 +1,27 @@
 {
   "programId": "tenity",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.tenity.com/about/",
+      "url": "http://www.tenity.com/programs",
       "page": "details",
-      "anchor": "About Tenity",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.tenity.com/portfolio/",
-      "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
+      "url": "https://www.tenity.com/6-startups-secure-investment-in-singapores-fall-2025-fin-tech-accelerator-program/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.tenity.com/programs/",
+      "url": "https://www.tenity.com/about/",
       "page": "details",
-      "anchor": "Programs",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.tenity.com/cases/visa-innovation-program-europe/",
-      "page": "details",
-      "anchor": "Visa Innovation Program Europe Read more",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.tenity.com/about/zurich/",
-      "page": "details",
-      "anchor": "Zurich",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.tenity.com/about/london/",
-      "page": "details",
-      "anchor": "London",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.tenity.com/about/singapore/",
-      "page": "details",
-      "anchor": "Singapore",
+      "anchor": "About Tenity",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -67,6 +35,22 @@
       "origin": "official"
     },
     {
+      "url": "https://www.tenity.com/about/istanbul/",
+      "page": "details",
+      "anchor": "Istanbul",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/about/london/",
+      "page": "details",
+      "anchor": "London",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.tenity.com/about/madrid/",
       "page": "details",
       "anchor": "Madrid",
@@ -75,10 +59,138 @@
       "origin": "official"
     },
     {
-      "url": "https://www.tenity.com/about/istanbul/",
+      "url": "https://www.tenity.com/about/singapore/",
       "page": "details",
-      "anchor": "Istanbul",
+      "anchor": "Singapore",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/about/zurich/",
+      "page": "details",
+      "anchor": "Zurich",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/articles/8-fintechs-1-payment-journey-how-the-first-visa-innovation-program-europe-nordics-baltics-cohort-showcased-the-future-of-payments/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/cases/visa-innovation-program-europe/",
+      "page": "details",
+      "anchor": "Visa Innovation Program Europe Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/digital-health-center-bulach-and-tenity-announce-the-fourth-startup-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/digital-health-centre-bulach-and-tenity-announce-the-third-startup-cohort/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/press-tenity-announces-9-game-changing-projects-as-part-of-xrpl-accelerator-cohort-6-bridging-web3-innovation-with-real-world-impact/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/program/novartis-turkiye-health-innovation-program/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/programs/",
+      "page": "details",
+      "anchor": "Programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/services/co-investment-opportunities/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/services/dealflow-sourcing/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/stories/applications-open-for-health-innovation-program-with-novartis-turkiye/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/stories/from-applications-to-the-stage-looking-back-at-the-idda-incubation-program/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/tenity-advances-decentralized-finance-defi-innovation-with-broader-investment-in-the-xrp-ledger-xrpl/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/tenity-announces-investments-in-7-promising-startups-from-batch-9-of-the-singapore-fin-tech-accelerator-program/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tenity.com/tenity-backs-kapnative-to-enhance-confidence-in-private-market-investments-for-financial-institutions/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

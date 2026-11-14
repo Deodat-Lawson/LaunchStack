@@ -1,73 +1,465 @@
 {
   "programId": "utrechtinc",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://utrechtinc.nl/",
-    "https://utrechtinc.nl/programs/"
+    "https://utrechtinc.nl/artikel/uniiq-100th-investment-bactheravax/",
+    "https://utrechtinc.nl/mentor-expertise/finance-investment/",
+    "https://utrechtinc.nl/artikel/spring-2026-science-validation-program-cohort/",
+    "https://utrechtinc.nl/artikel/spring-2026-tech-validation-program-cohort/",
+    "https://utrechtinc.nl/artikel/welcome-new-cohort-science-validation-program-%f0%9f%8d%82-fall-2025/",
+    "https://utrechtinc.nl/artikel/welcome-new-cohort-student-validation-program-%f0%9f%8d%82-fall-2025-2/",
+    "https://utrechtinc.nl/artikel/welcome-new-cohort-tech-validation-program-%f0%9f%8d%82-fall-2025/",
+    "https://utrechtinc.nl/about/",
+    "https://utrechtinc.nl/about/contact/",
+    "https://utrechtinc.nl/artikel/5-things-they-dont-tell-you-about-product-market-fit/",
+    "https://utrechtinc.nl/artikel/managing-director/",
+    "https://utrechtinc.nl/artikel/nestpod-goes-international/",
+    "https://utrechtinc.nl/artikel/pitch-battle-20-nov/",
+    "https://utrechtinc.nl/artikel/science-based-validation-program-spring2025/"
   ],
   "evidence": [
     {
-      "id": "check-email-070725fd32",
-      "url": "https://utrechtinc.nl/programs/",
-      "title": "UtrechtInc — details page checked by scrape.py",
-      "excerpt": "Inclusivity, and Sustainability Privacy Policy Contact us: info@utrechtinc.nl +31 (0)30 253 6169 Go to facebook Go to instagram Go to",
+      "id": "check-email-093a081b61",
+      "url": "https://utrechtinc.nl/artikel/uniiq-100th-investment-bactheravax/",
+      "title": "UtrechtInc — terms page",
+      "excerpt": "info@utrechtinc.nl",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-0a9409e19f",
+      "url": "https://utrechtinc.nl/artikel/managing-director/",
+      "title": "UtrechtInc — program page",
+      "excerpt": "info@utrechtinc.nl",
       "page": "details"
     },
     {
-      "id": "check-email-0962380df8",
-      "url": "https://utrechtinc.nl/programs/",
-      "title": "UtrechtInc — details page checked by scrape.py",
+      "id": "check-email-136b5a8d76",
+      "url": "https://utrechtinc.nl/about/contact/",
+      "title": "UtrechtInc — program page",
       "excerpt": "info@utrechtinc.nl",
+      "page": "details"
+    },
+    {
+      "id": "check-email-139f6d5852",
+      "url": "https://utrechtinc.nl/artikel/welcome-new-cohort-student-validation-program-%f0%9f%8d%82-fall-2025-2/",
+      "title": "UtrechtInc — batches page",
+      "excerpt": "info@utrechtinc.nl",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-25a4107d2e",
+      "url": "https://utrechtinc.nl/about/",
+      "title": "UtrechtInc — program page",
+      "excerpt": "info@utrechtinc.nl",
+      "page": "details"
+    },
+    {
+      "id": "check-email-27c4644c35",
+      "url": "https://utrechtinc.nl/artikel/welcome-new-cohort-student-validation-program-%f0%9f%8d%82-fall-2025-2/",
+      "title": "UtrechtInc — batches page",
+      "excerpt": "Inclusivity, and Sustainability Privacy Policy Contact us: info@utrechtinc.nl +31 (0)30 253 6169 Go to facebook Go to instagram Go to",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-36e850709d",
+      "url": "https://utrechtinc.nl/artikel/spring-2026-tech-validation-program-cohort/",
+      "title": "UtrechtInc — batches page",
+      "excerpt": "info@utrechtinc.nl",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-51fd10c28d",
+      "url": "https://utrechtinc.nl/artikel/welcome-new-cohort-tech-validation-program-%f0%9f%8d%82-fall-2025/",
+      "title": "UtrechtInc — batches page",
+      "excerpt": "Inclusivity, and Sustainability Privacy Policy Contact us: info@utrechtinc.nl +31 (0)30 253 6169 Go to facebook Go to instagram Go to",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-528ab1505f",
+      "url": "https://utrechtinc.nl/artikel/nestpod-goes-international/",
+      "title": "UtrechtInc — program page",
+      "excerpt": "info@utrechtinc.nl",
+      "page": "details"
+    },
+    {
+      "id": "check-email-572a5f6d81",
+      "url": "https://utrechtinc.nl/about/contact/",
+      "title": "UtrechtInc — program page",
+      "excerpt": "every last Thursday of the month. Contact us Email: info@utrechtinc.nl Phone: +31 (0)30 253 6169 Opening hours Monday – Friday:",
       "page": "details"
     },
     {
       "id": "check-email-59f82ac194",
       "url": "https://utrechtinc.nl/",
-      "title": "UtrechtInc — homepage checked by scrape.py",
+      "title": "UtrechtInc — homepage",
       "excerpt": "Inclusivity, and Sustainability Privacy Policy Contact us: info@utrechtinc.nl +31 (0)30 253 6169 Go to facebook Go to instagram Go to",
       "page": "details"
     },
     {
-      "id": "check-email-e33c74b756",
-      "url": "https://utrechtinc.nl/",
-      "title": "UtrechtInc — homepage checked by scrape.py",
+      "id": "check-email-64009d9f93",
+      "url": "https://utrechtinc.nl/artikel/5-things-they-dont-tell-you-about-product-market-fit/",
+      "title": "UtrechtInc — program page",
       "excerpt": "info@utrechtinc.nl",
       "page": "details"
     },
     {
+      "id": "check-email-67fb15f293",
+      "url": "https://utrechtinc.nl/artikel/science-based-validation-program-spring2025/",
+      "title": "UtrechtInc — program page",
+      "excerpt": "Inclusivity, and Sustainability Privacy Policy Contact us: info@utrechtinc.nl +31 (0)30 253 6169 Go to facebook Go to instagram Go to",
+      "page": "details"
+    },
+    {
+      "id": "check-email-7180a43138",
+      "url": "https://utrechtinc.nl/mentor-expertise/finance-investment/",
+      "title": "UtrechtInc — terms page",
+      "excerpt": "Inclusivity, and Sustainability Privacy Policy Contact us: info@utrechtinc.nl +31 (0)30 253 6169 Go to facebook Go to instagram Go to",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-753b306655",
+      "url": "https://utrechtinc.nl/about/contact/",
+      "title": "UtrechtInc — program page",
+      "excerpt": "Inclusivity, and Sustainability Privacy Policy Contact us: info@utrechtinc.nl +31 (0)30 253 6169 Go to facebook Go to instagram Go to",
+      "page": "details"
+    },
+    {
+      "id": "check-email-789c925465",
+      "url": "https://utrechtinc.nl/artikel/managing-director/",
+      "title": "UtrechtInc — program page",
+      "excerpt": "Inclusivity, and Sustainability Privacy Policy Contact us: info@utrechtinc.nl +31 (0)30 253 6169 Go to facebook Go to instagram Go to",
+      "page": "details"
+    },
+    {
+      "id": "check-email-798b587047",
+      "url": "https://utrechtinc.nl/artikel/welcome-new-cohort-science-validation-program-%f0%9f%8d%82-fall-2025/",
+      "title": "UtrechtInc — batches page",
+      "excerpt": "Inclusivity, and Sustainability Privacy Policy Contact us: info@utrechtinc.nl +31 (0)30 253 6169 Go to facebook Go to instagram Go to",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-7ea761e869",
+      "url": "https://utrechtinc.nl/artikel/5-things-they-dont-tell-you-about-product-market-fit/",
+      "title": "UtrechtInc — program page",
+      "excerpt": "Inclusivity, and Sustainability Privacy Policy Contact us: info@utrechtinc.nl +31 (0)30 253 6169 Go to facebook Go to instagram Go to",
+      "page": "details"
+    },
+    {
+      "id": "check-email-803b0b704c",
+      "url": "https://utrechtinc.nl/artikel/nestpod-goes-international/",
+      "title": "UtrechtInc — program page",
+      "excerpt": "Inclusivity, and Sustainability Privacy Policy Contact us: info@utrechtinc.nl +31 (0)30 253 6169 Go to facebook Go to instagram Go to",
+      "page": "details"
+    },
+    {
+      "id": "check-email-930c14f30c",
+      "url": "https://utrechtinc.nl/mentor-expertise/finance-investment/",
+      "title": "UtrechtInc — terms page",
+      "excerpt": "info@utrechtinc.nl",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-a92890248e",
+      "url": "https://utrechtinc.nl/artikel/science-based-validation-program-spring2025/",
+      "title": "UtrechtInc — program page",
+      "excerpt": "info@utrechtinc.nl",
+      "page": "details"
+    },
+    {
+      "id": "check-email-aaa6e3b960",
+      "url": "https://utrechtinc.nl/artikel/spring-2026-tech-validation-program-cohort/",
+      "title": "UtrechtInc — batches page",
+      "excerpt": "Inclusivity, and Sustainability Privacy Policy Contact us: info@utrechtinc.nl +31 (0)30 253 6169 Go to facebook Go to instagram Go to",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-b4610b91ec",
+      "url": "https://utrechtinc.nl/about/",
+      "title": "UtrechtInc — program page",
+      "excerpt": "Inclusivity, and Sustainability Privacy Policy Contact us: info@utrechtinc.nl +31 (0)30 253 6169 Go to facebook Go to instagram Go to",
+      "page": "details"
+    },
+    {
+      "id": "check-email-be886bb7a0",
+      "url": "https://utrechtinc.nl/artikel/spring-2026-science-validation-program-cohort/",
+      "title": "UtrechtInc — batches page",
+      "excerpt": "Inclusivity, and Sustainability Privacy Policy Contact us: info@utrechtinc.nl +31 (0)30 253 6169 Go to facebook Go to instagram Go to",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-ca4b49a403",
+      "url": "https://utrechtinc.nl/artikel/spring-2026-science-validation-program-cohort/",
+      "title": "UtrechtInc — batches page",
+      "excerpt": "info@utrechtinc.nl",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-ccd020884e",
+      "url": "https://utrechtinc.nl/artikel/pitch-battle-20-nov/",
+      "title": "UtrechtInc — program page",
+      "excerpt": "info@utrechtinc.nl",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d8806376bc",
+      "url": "https://utrechtinc.nl/artikel/welcome-new-cohort-tech-validation-program-%f0%9f%8d%82-fall-2025/",
+      "title": "UtrechtInc — batches page",
+      "excerpt": "info@utrechtinc.nl",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-e33c74b756",
+      "url": "https://utrechtinc.nl/",
+      "title": "UtrechtInc — homepage",
+      "excerpt": "info@utrechtinc.nl",
+      "page": "details"
+    },
+    {
+      "id": "check-email-ea7581bbe2",
+      "url": "https://utrechtinc.nl/artikel/pitch-battle-20-nov/",
+      "title": "UtrechtInc — program page",
+      "excerpt": "Inclusivity, and Sustainability Privacy Policy Contact us: info@utrechtinc.nl +31 (0)30 253 6169 Go to facebook Go to instagram Go to",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f42245ce3f",
+      "url": "https://utrechtinc.nl/artikel/uniiq-100th-investment-bactheravax/",
+      "title": "UtrechtInc — terms page",
+      "excerpt": "Inclusivity, and Sustainability Privacy Policy Contact us: info@utrechtinc.nl +31 (0)30 253 6169 Go to facebook Go to instagram Go to",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-fad02446c8",
+      "url": "https://utrechtinc.nl/artikel/welcome-new-cohort-science-validation-program-%f0%9f%8d%82-fall-2025/",
+      "title": "UtrechtInc — batches page",
+      "excerpt": "info@utrechtinc.nl",
+      "page": "batches"
+    },
+    {
+      "id": "check-format-30aed6e15b",
+      "url": "https://utrechtinc.nl/artikel/welcome-new-cohort-science-validation-program-%f0%9f%8d%82-fall-2025/",
+      "title": "UtrechtInc — batches page",
+      "excerpt": "on-demand, high-resolution data platform powered by a hybrid of physical modelling and AI that delivers ultra-accurate",
+      "page": "batches"
+    },
+    {
       "id": "check-name-85d5b45f5b",
       "url": "https://utrechtinc.nl/",
-      "title": "UtrechtInc — homepage checked by scrape.py",
+      "title": "UtrechtInc — homepage",
       "excerpt": "Home - UtrechtInc Startup Incubator To main content To navigation UtrechtInc",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-02fffc42e3",
+      "url": "https://utrechtinc.nl/artikel/pitch-battle-20-nov/",
+      "title": "UtrechtInc — program page",
+      "excerpt": "Startups & Graduates → https://utrechtinc.nl/community/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-151c93f185",
+      "url": "https://utrechtinc.nl/artikel/welcome-new-cohort-student-validation-program-%f0%9f%8d%82-fall-2025-2/",
+      "title": "UtrechtInc — batches page",
+      "excerpt": "Startups & Graduates → https://utrechtinc.nl/community/startups/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-18b59fd4f8",
+      "url": "https://utrechtinc.nl/mentor-expertise/finance-investment/",
+      "title": "UtrechtInc — terms page",
+      "excerpt": "Startups & Graduates → https://utrechtinc.nl/community/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2da0d1b091",
+      "url": "https://utrechtinc.nl/artikel/uniiq-100th-investment-bactheravax/",
+      "title": "UtrechtInc — terms page",
+      "excerpt": "Startups & Graduates → https://utrechtinc.nl/community/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-61e2db3f1e",
+      "url": "https://utrechtinc.nl/artikel/spring-2026-tech-validation-program-cohort/",
+      "title": "UtrechtInc — batches page",
+      "excerpt": "Startups & Graduates → https://utrechtinc.nl/community/startups/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-6862a647fb",
+      "url": "https://utrechtinc.nl/about/",
+      "title": "UtrechtInc — program page",
+      "excerpt": "Startups & Graduates → https://utrechtinc.nl/community/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-703c4c4fc0",
+      "url": "https://utrechtinc.nl/artikel/spring-2026-science-validation-program-cohort/",
+      "title": "UtrechtInc — batches page",
+      "excerpt": "Startups & Graduates → https://utrechtinc.nl/community/startups/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-81b0ab011b",
+      "url": "https://utrechtinc.nl/about/contact/",
+      "title": "UtrechtInc — program page",
+      "excerpt": "Startups & Graduates → https://utrechtinc.nl/community/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8584547c58",
+      "url": "https://utrechtinc.nl/artikel/managing-director/",
+      "title": "UtrechtInc — program page",
+      "excerpt": "Startups & Graduates → https://utrechtinc.nl/community/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-85f7897b02",
+      "url": "https://utrechtinc.nl/artikel/nestpod-goes-international/",
+      "title": "UtrechtInc — program page",
+      "excerpt": "Startups & Graduates → https://utrechtinc.nl/community/startups/",
       "page": "details"
     },
     {
       "id": "check-portfolio-a973199509",
       "url": "https://utrechtinc.nl/",
-      "title": "UtrechtInc — homepage checked by scrape.py",
+      "title": "UtrechtInc — homepage",
       "excerpt": "See more startups → https://utrechtinc.nl/community/startups/",
       "page": "details"
     },
     {
-      "id": "check-portfolio-c18e84c115",
-      "url": "https://utrechtinc.nl/programs/",
-      "title": "UtrechtInc — details page checked by scrape.py",
+      "id": "check-portfolio-bb88fc454b",
+      "url": "https://utrechtinc.nl/artikel/welcome-new-cohort-tech-validation-program-%f0%9f%8d%82-fall-2025/",
+      "title": "UtrechtInc — batches page",
+      "excerpt": "Startups & Graduates → https://utrechtinc.nl/community/startups/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-db2d421dda",
+      "url": "https://utrechtinc.nl/artikel/welcome-new-cohort-science-validation-program-%f0%9f%8d%82-fall-2025/",
+      "title": "UtrechtInc — batches page",
+      "excerpt": "Startups & Graduates → https://utrechtinc.nl/community/startups/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-ecf1dcb950",
+      "url": "https://utrechtinc.nl/artikel/5-things-they-dont-tell-you-about-product-market-fit/",
+      "title": "UtrechtInc — program page",
+      "excerpt": "Startups & Graduates → https://utrechtinc.nl/community/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f9ffb352bd",
+      "url": "https://utrechtinc.nl/artikel/science-based-validation-program-spring2025/",
+      "title": "UtrechtInc — program page",
       "excerpt": "Startups & Graduates → https://utrechtinc.nl/community/startups/",
       "page": "details"
     },
     {
       "id": "check-portfolio-fe608142b4",
       "url": "https://utrechtinc.nl/",
-      "title": "UtrechtInc — homepage checked by scrape.py",
+      "title": "UtrechtInc — homepage",
       "excerpt": "Startups & Graduates → https://utrechtinc.nl/community/startups/",
       "page": "details"
     },
     {
       "id": "check-route-8d4bb1b71a",
       "url": "https://utrechtinc.nl/",
-      "title": "UtrechtInc — homepage checked by scrape.py",
+      "title": "UtrechtInc — homepage",
       "excerpt": "UtrechtInc Startup Incubator → https://utrechtinc.nl",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-8ce82e5d7a",
+      "url": "https://utrechtinc.nl/",
+      "page": "details",
+      "excerpt": "Home - UtrechtInc Startup Incubator To main content To navigation UtrechtInc Startup Incubator Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Search button Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US TOP 15 EUROPEAN STARTUP INCUBATOR Don’t build alone. Build with 400+ founders who’ve done it. We connect researchers and founders with the mentors, funding, and community to take it from idea to real company, whatever stage you’re starting from. Meet us Our programs Start where you are. Building something new can be hard. Having the right people around you makes all the difference. UtrechtInc connects you with 100+ experienced mentors, a community of fellow builders, and the investors and partners who’ve been waiting for someone like you. Whatever stage you’re at – idea, prototype, or first revenue – and whatever background you have – researcher, doctor, student, or entrepreneur – there’s"
+    },
+    {
+      "id": "check-page-fa4dfdc1d5",
+      "url": "https://utrechtinc.nl/artikel/uniiq-100th-investment-bactheravax/",
+      "page": "terms",
+      "excerpt": "Big wins • Bactherax - UtrechtInc Startup Incubator To main content To navigation UtrechtInc Startup Incubator Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Search button Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Bactheravax - UNIIQ's 100th investment Bactheravax, advancing innovative colon cancer treatment becomes UNIIQ’s 100th investment UNIIQ marked a major milestone: its 100th investment. The fund announced a new stake in Bactheravax , a UtrechtInc associated startup developing an innovative vaccine concept aimed at improving the treatment of colon cancer. Colon cancer continues to have a significant societal impact, with high mortality rates despite advances in care. Bactheravax is working on a novel, research-driven approach that could strengthen treatment options and improve patient outcomes. We congratulate Bactheravax and we look forward to seeing how they progress and"
+    },
+    {
+      "id": "check-page-cd959d0a06",
+      "url": "https://utrechtinc.nl/mentor-expertise/finance-investment/",
+      "page": "terms",
+      "excerpt": "Finance & Investment Archives - UtrechtInc Startup Incubator To main content To navigation UtrechtInc Startup Incubator Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Search button Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Finance & Investment Navigation Home Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Events Students Team Programs Ready to Start Science Validation Life Science Validation Tech Validation Student Validation The Foundership NEWSLETTER SIGNUP Facebook This field is for validation purposes and should be left unchanged. First name (Required) Email SUBSCRIBE Diversity, Inclusivity, and Sustainability Privacy Policy Contact us: info@utrechtinc.nl +31 (0)30 253 6169 Go to facebook Go to instagram Go to linkedin Scroll to top"
+    },
+    {
+      "id": "check-page-4bf8e1d38a",
+      "url": "https://utrechtinc.nl/artikel/spring-2026-science-validation-program-cohort/",
+      "page": "batches",
+      "excerpt": "Meet the Spring 2026 Science Validation Program Startups - UtrechtInc Startup Incubator To main content To navigation UtrechtInc Startup Incubator Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Search button Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Meet the Spring 2026 Science Validation Program Startups Get ready to meet the Spring 2026 cohort of our Science Validation Program 🍂 🔸 ReduCO2 Team: Lotta Ternieten , Stefan Pitsch and Andreas Hettmann Carbon conversion technology transforming CO₂ into durable raw materials. Designed to reduce atmospheric emissions while creating sustainable industrial resources. 🔸 ReFOLD Team: Dr. Maarten Geurts , Dr. Else Driehuis , Prof. Ruben van Boxtel and Prof. Jeffrey Beekman 🔸 Subspacial Team: Sagar Khavnekar and Jeremy Leitz Spatial biology platform generating foundational subcellular data for advanced biological intelligence. Enables deeper"
+    },
+    {
+      "id": "check-page-636f273ff1",
+      "url": "https://utrechtinc.nl/artikel/spring-2026-tech-validation-program-cohort/",
+      "page": "batches",
+      "excerpt": "Meet the Spring 2026 Tech Validation Program Startups - UtrechtInc Startup Incubator To main content To navigation UtrechtInc Startup Incubator Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Search button Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Meet the Spring 2026 Tech Validation Program Startups Get ready to meet the Spring 2026 cohort of our Tech Validation Program 🍂 🔸 Abakino Team: Sohail Afiat An intuitive whiteboard-based graphing tool that lets users solve equations and visualize functions through handwriting and gestures. Built to simplify STEM education by making advanced math interaction feel natural and accessible. 🔸 Neurobian Team: Andrea Gasperini Cognitive safety infrastructure that monitors real-time signals to detect risk and provide timely, adaptive AI assistance. Designed to make AI systems safer and more responsive in dynamic environments. 🔸 Tagetto Team: Pieter"
+    },
+    {
+      "id": "check-page-a8c4c57ecd",
+      "url": "https://utrechtinc.nl/artikel/welcome-new-cohort-science-validation-program-%f0%9f%8d%82-fall-2025/",
+      "page": "batches",
+      "excerpt": "Welcome new cohort Science Validation Program 🍂 Fall 2025 - UtrechtInc Startup Incubator To main content To navigation UtrechtInc Startup Incubator Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Search button Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Welcome new cohort Science Validation Program 🍂 Fall 2025 Get ready to meet the Fall 2025 cohort of our Science Validation Program 🍂 We have startups in water resources, carbon capture & conversion, integrative patient care, nanomedicine & drug analysis, precision oncology, and early diagnostics for heart disease. 🔸 Hydrominds Team: Walter Immerzeel, Sonu Khanal, Arthur Lutz, Philip Kraaijenbrink Hydrominds’ ambition is to transform mountain water resources and disaster management with the HydroMind Engine—an on-demand, high-resolution data platform powered by a hybrid of physical modelling and AI that delivers ultra-accurate"
+    },
+    {
+      "id": "check-page-77ed44826f",
+      "url": "https://utrechtinc.nl/artikel/welcome-new-cohort-student-validation-program-%f0%9f%8d%82-fall-2025-2/",
+      "page": "batches",
+      "excerpt": "Welcome new cohort Student Validation Program 🍂 Fall 2025 - UtrechtInc Startup Incubator To main content To navigation UtrechtInc Startup Incubator Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Search button Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Welcome new cohort Student Validation Program 🍂 Fall 2025 Get ready to meet the Fall 2025 cohort of our Student Validation Program 🍂 🔸 Auditree Team: Ruben de Koning Auditree transform complex legal updates into immediate policy actions for continuous audit readiness. 🔸 The Erlenmeyer Collective Team: Tim Sturre, Anna Charitonos, Alessia Aresi, Marta Pinto and Arianna Mori They provide an online platform for young, ambitious scientific communicators to gain experience with writing, visualizing, or otherwise creating accessible popular-scientific content. 🔸 AEGIR Team: Nicholas van den Berge and Warner Bartlema AEGIR store excess green"
+    },
+    {
+      "id": "check-page-311c6e8861",
+      "url": "https://utrechtinc.nl/artikel/welcome-new-cohort-tech-validation-program-%f0%9f%8d%82-fall-2025/",
+      "page": "batches",
+      "excerpt": "Welcome new cohort Tech Validation Program 🍂 Fall 2025 - UtrechtInc Startup Incubator To main content To navigation UtrechtInc Startup Incubator Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Search button Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Welcome new cohort Tech Validation Program 🍂 Fall 2025 We are excited to welcome the Fall 2025 cohort of our Tech Validation Program 🍂 This cohort features a powerful mix of DeepTech and Digital Solutions spanning Healthcare & Diagnostics, Climate & Energy Sustainability, AI-Powered Platforms, Social Connection. 🔸 Benchtop Team: Lahari Ganti Bridging the gap between children’s imagination and digital storytelling by using AI to transform drawings into complete animated stories with sound and narration for families and schools. 🔸 Upvoice Team: Rik Arkema Identifying issues through pulse surveys, then brings employees together anonymously"
+    },
+    {
+      "id": "check-page-e3c8d4c902",
+      "url": "https://utrechtinc.nl/about/",
+      "page": "details",
+      "excerpt": "Team - UtrechtInc Startup Incubator To main content To navigation UtrechtInc Startup Incubator Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Search button Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US About UtrechtInc Utrecht's startup incubator since 2009 The startup incubator at the heart of Utrecht Science Park – supporting researchers, entrepreneurs and student from first idea to scaling company. About us At UtrechtInc, we empower entrepreneurship as a catalyst for innovative solutions and significant societal impact. As a top 10 global university-linked startup incubator and top 15 European incubator, we cater to the needs of science and student entrepreneurs across all stages. We provide an assortment of programs and resources designed to aid entrepreneurs in transforming their ideas into viable businesses. Get in touch Our mission Our commitment at UtrechtInc is to create and"
+    },
+    {
+      "id": "check-page-da87b88bff",
+      "url": "https://utrechtinc.nl/about/contact/",
+      "page": "details",
+      "excerpt": "Contact - UtrechtInc Startup Incubator To main content To navigation UtrechtInc Startup Incubator Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Search button Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Get in touch with UtrechtInc We’re at Utrecht Science Park, Monday to Friday. Reach us by email, phone, or come visit – the front office is always open during business hours. We also offer a tour of our incubator every last Thursday of the month. Contact us Email: info@utrechtinc.nl Phone: +31 (0)30 253 6169 Opening hours Monday – Friday: 08:30–17:30 Saturday – Sunday: Closed Our address UtrechtInc is located at Princetonlaan 6, Vening Meinesz Building C (VMC), 3584 CB Utrecht, Netherlands, on Utrecht Science Park. Postal address UtrechtInc, VMC, Winthontlaan 30C, 3526 KV Utrecht Visit us UtrechtInc is located at Princetonlaan 6, Vening Meinesz Building C (VMC), 3584 CB Utrecht,"
+    },
+    {
+      "id": "check-page-71dd2c2cf8",
+      "url": "https://utrechtinc.nl/artikel/5-things-they-dont-tell-you-about-product-market-fit/",
+      "page": "details",
+      "excerpt": "5 things they don't tell you about product-market fit - UtrechtInc Startup Incubator To main content To navigation UtrechtInc Startup Incubator Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Search button Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US 5 things they don’t tell you about product-market fit Product-market fit is one of the many jargons that you might have heard being thrown around in any startup environment. Conceptually, it is quite simple. In the words of the man who coined the term, Marc Andreesen said, “Product-market fit means being in a good market with a product that can satisfy that market.” It is one of the founding blocks that you build your startup on. However, as intuitive as the concept may sound, it is the one thing that we have seen founders have the most difficult time understanding. A google search will take you down a nauseating rabbit-hole of all the"
+    },
+    {
+      "id": "check-page-51eb789989",
+      "url": "https://utrechtinc.nl/artikel/managing-director/",
+      "page": "details",
+      "excerpt": "We’re hiring: Managing Director of UtrechtInc - UtrechtInc Startup Incubator To main content To navigation UtrechtInc Startup Incubator Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Search button Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US We’re hiring: Managing Director of UtrechtInc We’re hiring: Managing Director of UtrechtInc UtrechtInc is looking for an entrepreneurial and connecting Managing Director. Are you an inspiring leader who spots opportunities and has the drive to act on them? Do you get your energy from bringing together science, government and business? And would you like to be the face of one of Europe’s leading startup hubs, helping new generations of founders succeed? Then we’d love to hear from you. The role As Managing Director, you lead UtrechtInc and its small, dedicated team of around five people, supported by some 60 mentors and coaches. You strengthen our"
+    },
+    {
+      "id": "check-page-15bb3da5f0",
+      "url": "https://utrechtinc.nl/artikel/nestpod-goes-international/",
+      "page": "details",
+      "excerpt": "Nestpod goes international - UtrechtInc Startup Incubator To main content To navigation UtrechtInc Startup Incubator Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Search button Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Nestpod goes international 🟠 Good news: Nestpod goes international Nestpod , alumni of our Tech Validation Program last year, now has a pod at Ramstein Air Base in Germany, its first placement outside the Netherlands. Founders Naomi Griekspoor and Birgitta de Gruijter build ready-to-use cabins where mothers can pump or breastfeed in quiet and privacy. After a first test at the Negenmaandenbeurs in February and a second at sports club Kampong in Utrecht, Nestpods are now also in use at Bol’s office and in the factory hall of Sanorice. Requests are coming in from France, Austria and Switzerland, and the team aims to deliver at least ten pods this year. For employers,"
+    },
+    {
+      "id": "check-page-299dba8ab6",
+      "url": "https://utrechtinc.nl/artikel/pitch-battle-20-nov/",
+      "page": "details",
+      "excerpt": "Incubator Pitch Battle: Cast your vote! - UtrechtInc Startup Incubator To main content To navigation UtrechtInc Startup Incubator Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Search button Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Incubator Pitch Battle Cast your vote! Three UtrechtInc startups are competing in the Incubator Pitch Battle, and public voting is now open. Startups from incubators across the Netherlands have recorded their pitches. The online vote counts for 50% of the final result. The other 50% comes from the audience at the live final on 20 November at PLNT Leiden, where pitches are judged on impact, level of innovation and pitch. Meet our three: ☄️ ObsessLess founded by Mourice Schuurmans and Adrian Pavel An app with guided tools for people with OCD, both for hard moments and for daily practice. It works alongside therapy or when therapy isn’t available. ☄️ I See U"
+    },
+    {
+      "id": "check-page-a7b09ac4a5",
+      "url": "https://utrechtinc.nl/artikel/science-based-validation-program-spring2025/",
+      "page": "details",
+      "excerpt": "Welcome startups to our Spring Science-based Validation Program - UtrechtInc Startup Incubator To main content To navigation UtrechtInc Startup Incubator Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Search button Home Programs Ready to start Science Validation Life Science Validation Tech Validation Student Validation The Foundership Community News Startups & Graduates Offices & Coworking Mentors Talent & Jobs Investors & Funding Partners Going international Events Students About us Team Contact MEET US Welcome startups to our Spring Science-based Validation Program Welcome startups to our Spring Science-based Validation Program. We have five fantastic startups have been selected for our spring science validation program, started on March 24. Fiskemed – Founded by Jan Bogerd Develops drugs to create sterility in farmed fish, offering a sustainable solution to genetic introgression and precocious male puberty. TeamMeUp – Founded by Ioanna Lykourentzou & Pedro Santoro Zambon Develops an online platform for automated matchmaking, enhancing connections in the games industry. Xcellerate – Founded by Benjamin Smits & Vincent de Boer"
     }
   ],
   "findings": {
@@ -88,8 +480,20 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-30aed6e15b"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://utrechtinc.nl/community/startups/",

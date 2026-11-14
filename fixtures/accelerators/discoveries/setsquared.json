@@ -1,12 +1,196 @@
 {
   "programId": "setsquared",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://www.setsquared.co.uk/?page_id=158",
+      "page": "details",
+      "anchor": "About SETsquared Find out more about our Partnership and the team behind our programmes",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.setsquared.co.uk/about-setsquared/",
       "page": "details",
       "anchor": "About SETsquared",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/about-us/",
+      "page": "details",
+      "anchor": "Find out more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/ai-applications/",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/applications-to-iot-boost-programme-are-open/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/are-you-an-entrepreneur/",
+      "page": "details",
+      "anchor": "Are you an Entrepreneur? Find out what programmes we can offer you",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/blu-wireless-raises-16-6-million-in-growth-funding-round-for-5g-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/campaign-application-submitted-confirmation-example-confirmation/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/deal-readiness-toolkit/",
+      "page": "terms",
+      "anchor": "Deal Readiness Toolkit",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/digital-entrepreneurs-programme-application-received/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/eir-application-received/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/enterprising-women-4-open-for-applications/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/entrepreneurs-workout-2026-application-confirmed/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/euroincnet-company-application-confirmation/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/from-student-start-up-to-1-4m-investment-catalyst-alumnus-mytender-enters-its-next-chapter/",
+      "page": "terms",
+      "anchor": "/News From student start-up to £1.4m... What happens when a promising idea meets the right support, ambition and momentum? For mytender.io, the journey from a University...",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/future-of-mobility-application-form/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/gradinvest20-application-received/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/icure-2020-application-received/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/icure-application-form-2020/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/icure-application-form/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/innovation-hub/",
+      "page": "portfolio",
+      "anchor": "Innovation Hub Join our fast-growing online community of UK companies and sector experts, funders and investors at the forefront of digital, scientific,...",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/investment-futures-25/",
+      "page": "terms",
+      "anchor": "Investment Futures ’25",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/investment-futures-content-series-insights-from-innovation-roundtables/",
+      "page": "terms",
+      "anchor": "View the series",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/past-programmes/",
+      "page": "details",
+      "anchor": "Past Programmes",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -19,57 +203,33 @@
       "origin": "official"
     },
     {
-      "url": "https://www.setsquared.co.uk/programme/investment-futures-delegate-registration/",
+      "url": "https://www.setsquared.co.uk/programme/creative-tech/",
       "page": "details",
-      "anchor": "Investment Futures 2026",
+      "anchor": "Creative Tech",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.setsquared.co.uk/deal-readiness-toolkit/",
+      "url": "https://www.setsquared.co.uk/programme/cyber-invest/",
+      "page": "details",
+      "anchor": "Cyber Invest",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/programme/cyber-investment-report-2025/",
       "page": "terms",
-      "anchor": "Deal Readiness Toolkit",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.setsquared.co.uk/support-programmes/",
-      "page": "details",
-      "anchor": "Support Programmes",
+      "anchor": "Cyber Investment Report",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.setsquared.co.uk/programme/student-enterprise/",
+      "url": "https://www.setsquared.co.uk/programme/fwd-project/",
       "page": "details",
-      "anchor": "Student Enterprise",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.setsquared.co.uk/programme/icure-programme/",
-      "page": "details",
-      "anchor": "ICURe",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.setsquared.co.uk/programme/gw-shift-training/",
-      "page": "details",
-      "anchor": "Hydrogen Training",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.setsquared.co.uk/programme/gw-shift-research-impact-training/",
-      "page": "details",
-      "anchor": "Research Impact Training: Hydrogen",
+      "anchor": "The FWD Project",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -91,49 +251,17 @@
       "origin": "official"
     },
     {
-      "url": "https://www.setsquared.co.uk/programme/opportunities-in-hydrogen-mobility/",
+      "url": "https://www.setsquared.co.uk/programme/gw-shift-research-impact-training/",
       "page": "details",
-      "anchor": "Opportunities in Hydrogen Mobility",
+      "anchor": "Research Impact Training: Hydrogen",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.setsquared.co.uk/past-programmes/",
+      "url": "https://www.setsquared.co.uk/programme/gw-shift-training/",
       "page": "details",
-      "anchor": "Past Programmes",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.setsquared.co.uk/programme/cyber-invest/",
-      "page": "details",
-      "anchor": "Cyber Invest",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.setsquared.co.uk/programme/cyber-investment-report-2025/",
-      "page": "details",
-      "anchor": "Cyber Investment Report",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.setsquared.co.uk/programme/investor-partnerships-future-economy-prog/",
-      "page": "details",
-      "anchor": "Investor Partnerships Future Economy Programme",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.setsquared.co.uk/programme/spinoutwest/",
-      "page": "details",
-      "anchor": "SpinOutWest",
+      "anchor": "Hydrogen Training",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -147,25 +275,33 @@
       "origin": "official"
     },
     {
-      "url": "https://www.setsquared.co.uk/programme/telecoms/",
+      "url": "https://www.setsquared.co.uk/programme/icure-programme/",
       "page": "details",
-      "anchor": "Transforming Telecoms",
+      "anchor": "ICURe",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.setsquared.co.uk/programme/fwd-project/",
-      "page": "details",
-      "anchor": "The FWD Project",
+      "url": "https://www.setsquared.co.uk/programme/investment-futures-delegate-registration/",
+      "page": "terms",
+      "anchor": "Investment Futures 2026",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.setsquared.co.uk/programme/creative-tech/",
+      "url": "https://www.setsquared.co.uk/programme/investor-partnerships-future-economy-prog/",
       "page": "details",
-      "anchor": "Creative Tech",
+      "anchor": "Investor Partnerships Future Economy Programme",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/programme/opportunities-in-hydrogen-mobility/",
+      "page": "details",
+      "anchor": "Opportunities in Hydrogen Mobility",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -179,33 +315,41 @@
       "origin": "official"
     },
     {
-      "url": "https://www.setsquared.co.uk/are-you-an-entrepreneur/",
+      "url": "https://www.setsquared.co.uk/programme/spinoutwest/",
       "page": "details",
-      "anchor": "Are you an Entrepreneur? Find out what programmes we can offer you",
+      "anchor": "SpinOutWest",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.setsquared.co.uk/innovation-hub/",
-      "page": "portfolio",
-      "anchor": "Innovation Hub Join our fast-growing online community of UK companies and sector experts, funders and investors at the forefront of digital, scientific,...",
+      "url": "https://www.setsquared.co.uk/programme/student-enterprise/",
+      "page": "details",
+      "anchor": "Student Enterprise",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.setsquared.co.uk/?page_id=158",
+      "url": "https://www.setsquared.co.uk/programme/telecoms/",
       "page": "details",
-      "anchor": "About SETsquared Find out more about our Partnership and the team behind our programmes",
+      "anchor": "Transforming Telecoms",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.setsquared.co.uk/about-us/",
+      "url": "https://www.setsquared.co.uk/support-programmes/",
       "page": "details",
-      "anchor": "Find out more",
+      "anchor": "Support Programmes",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.setsquared.co.uk/website-terms-and-conditions-of-use/",
+      "page": "terms",
+      "anchor": "Terms and Conditions",
       "fetched": false,
       "blocked": null,
       "origin": "official"

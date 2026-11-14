@@ -1,45 +1,332 @@
 {
   "programId": "kalaari",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://kalaari.com/",
-    "https://kalaari.com/about-us"
+    "https://kalaari.com/insights-from-the-fronlines/the-eo-report-value-chain-opportunity-and-where-india-is-headed",
+    "https://kalaari.com/about-us",
+    "https://kalaari.com/insights-from-the-fronlines/overview-of-female-healthcare-opportunities-in-india-2",
+    "https://kalaari.com/insights-from-the-fronlines/the-hindsight-building-the-india-space-stack",
+    "https://www.kalaari.com/insights-from-the-fronlines/ashok-jhunjhunwala-the-architect-of-indias-deep-tech-ecosystem-changemakers-ep-1",
+    "https://www.kalaari.com/insights-from-the-fronlines/building-the-ai-layer-for-legal-teams",
+    "https://kalaari.com/insights-from-the-fronlines/building-the-ai-layer-for-legal-teams",
+    "https://kalaari.com/insights-from-the-fronlines/the-fintech-opportunity-hidden-in-sme-banking-ft-mabel-chacko-open-financial-technologies",
+    "https://kalaari.com/insights-from-the-fronlines/the-builders-the-believers",
+    "https://kalaari.com/portfolio",
+    "https://kalaari.com/portfolio-copy",
+    "https://kalaari.com/portfolio-details",
+    "https://kalaari.com/portfolio-program-company/amazon-web-services-aws",
+    "https://kalaari.com/portfolio-program-company/amplitude"
   ],
   "evidence": [
     {
+      "id": "check-duration-09fe14b851",
+      "url": "https://kalaari.com/portfolio",
+      "title": "Kalaari Capital — portfolio page",
+      "excerpt": "our latest reports and what’s new in the past 3 months. DEEPTECH DISPATCH A bi-quarterly newsletter",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-1cad2e2a33",
+      "url": "https://www.kalaari.com/insights-from-the-fronlines/ashok-jhunjhunwala-the-architect-of-indias-deep-tech-ecosystem-changemakers-ep-1",
+      "title": "Kalaari Capital — program page",
+      "excerpt": "our latest reports and what’s new in the past 3 months. DEEPTECH DISPATCH A bi-quarterly newsletter",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-20eae7cdd5",
+      "url": "https://kalaari.com/portfolio-copy",
+      "title": "Kalaari Capital — portfolio page",
+      "excerpt": "our latest reports and what’s new in the past 3 months. DEEPTECH DISPATCH A bi-quarterly newsletter",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-40531ae17d",
+      "url": "https://kalaari.com/insights-from-the-fronlines/the-hindsight-building-the-india-space-stack",
+      "title": "Kalaari Capital — program page",
+      "excerpt": "our latest reports and what’s new in the past 3 months. DEEPTECH DISPATCH A bi-quarterly newsletter",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-59edaaf325",
+      "url": "https://www.kalaari.com/insights-from-the-fronlines/building-the-ai-layer-for-legal-teams",
+      "title": "Kalaari Capital — program page",
+      "excerpt": "our latest reports and what’s new in the past 3 months. DEEPTECH DISPATCH A bi-quarterly newsletter",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-7387988f35",
+      "url": "https://kalaari.com/insights-from-the-fronlines/building-the-ai-layer-for-legal-teams",
+      "title": "Kalaari Capital — program page",
+      "excerpt": "our latest reports and what’s new in the past 3 months. DEEPTECH DISPATCH A bi-quarterly newsletter",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-75527e7d3c",
+      "url": "https://kalaari.com/",
+      "title": "Kalaari Capital — homepage",
+      "excerpt": "our latest reports and what’s new in the past 3 months. DEEPTECH DISPATCH A bi-quarterly newsletter",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-893563a604",
+      "url": "https://kalaari.com/insights-from-the-fronlines/overview-of-female-healthcare-opportunities-in-india-2",
+      "title": "Kalaari Capital — program page",
+      "excerpt": "our latest reports and what’s new in the past 3 months. DEEPTECH DISPATCH A bi-quarterly newsletter",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-915c57dfb7",
+      "url": "https://kalaari.com/insights-from-the-fronlines/the-builders-the-believers",
+      "title": "Kalaari Capital — portfolio page",
+      "excerpt": "our latest reports and what’s new in the past 3 months. DEEPTECH DISPATCH A bi-quarterly newsletter",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-b19d97d41f",
+      "url": "https://kalaari.com/about-us",
+      "title": "Kalaari Capital — program page",
+      "excerpt": "our latest reports and what’s new in the past 3 months. DEEPTECH DISPATCH A bi-quarterly newsletter",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-d68c965882",
+      "url": "https://kalaari.com/insights-from-the-fronlines/the-eo-report-value-chain-opportunity-and-where-india-is-headed",
+      "title": "Kalaari Capital — terms page",
+      "excerpt": "our latest reports and what’s new in the past 3 months. DEEPTECH DISPATCH A bi-quarterly newsletter",
+      "page": "terms"
+    },
+    {
+      "id": "check-duration-e3d129832d",
+      "url": "https://kalaari.com/insights-from-the-fronlines/the-fintech-opportunity-hidden-in-sme-banking-ft-mabel-chacko-open-financial-technologies",
+      "title": "Kalaari Capital — program page",
+      "excerpt": "our latest reports and what’s new in the past 3 months. DEEPTECH DISPATCH A bi-quarterly newsletter",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-e9f1ede192",
+      "url": "https://kalaari.com/portfolio-program-company/amazon-web-services-aws",
+      "title": "Kalaari Capital — portfolio page",
+      "excerpt": "time: • Applications typically take around 2 weeks. If you haven't heard back after that, please",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-ee516da2c7",
+      "url": "https://kalaari.com/portfolio-program-company/amplitude",
+      "title": "Kalaari Capital — portfolio page",
+      "excerpt": "company at Series C stage or below Offerings 3 months of Amplitude's Growth Plan for free on a",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-0989d21821",
+      "url": "https://kalaari.com/portfolio-copy",
+      "title": "Kalaari Capital — portfolio page",
+      "excerpt": "A, 2022 Pre-Series A, 2022 ConsumerTech Tring Building hybrid casual games for global audience Stage Pre-Seed, 2025",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-format-4943e77dc0",
+      "url": "https://kalaari.com/portfolio",
+      "title": "Kalaari Capital — portfolio page",
+      "excerpt": "A, 2022 Pre-Series A, 2022 ConsumerTech Tring Building hybrid casual games for global audience Stage Pre-Seed, 2025",
+      "page": "portfolio"
+    },
+    {
       "id": "check-name-4116d41d8d",
       "url": "https://kalaari.com/",
-      "title": "Kalaari Capital — homepage checked by scrape.py",
+      "title": "Kalaari Capital — homepage",
       "excerpt": "Championing India's Alpha | Kalaari Capital Skip to main content About About Kalaari Team Portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0be757e26f",
+      "url": "https://kalaari.com/portfolio-details",
+      "title": "Kalaari Capital — portfolio page",
+      "excerpt": "Portfolio → https://kalaari.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-0c0bed836d",
+      "url": "https://kalaari.com/insights-from-the-fronlines/building-the-ai-layer-for-legal-teams",
+      "title": "Kalaari Capital — program page",
+      "excerpt": "Portfolio → https://kalaari.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-14bd0cb7b3",
+      "url": "https://kalaari.com/insights-from-the-fronlines/the-hindsight-building-the-india-space-stack",
+      "title": "Kalaari Capital — program page",
+      "excerpt": "Portfolio → https://kalaari.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3d9f83d7c3",
+      "url": "https://www.kalaari.com/insights-from-the-fronlines/building-the-ai-layer-for-legal-teams",
+      "title": "Kalaari Capital — program page",
+      "excerpt": "Portfolio → https://kalaari.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3f0364fa1b",
+      "url": "https://kalaari.com/insights-from-the-fronlines/the-eo-report-value-chain-opportunity-and-where-india-is-headed",
+      "title": "Kalaari Capital — terms page",
+      "excerpt": "Portfolio → https://kalaari.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-4c8e6eca13",
+      "url": "https://www.kalaari.com/insights-from-the-fronlines/ashok-jhunjhunwala-the-architect-of-indias-deep-tech-ecosystem-changemakers-ep-1",
+      "title": "Kalaari Capital — program page",
+      "excerpt": "Portfolio → https://kalaari.com/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-63dcfcdb2d",
       "url": "https://kalaari.com/",
-      "title": "Kalaari Capital — homepage checked by scrape.py",
+      "title": "Kalaari Capital — homepage",
+      "excerpt": "Portfolio → https://kalaari.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8a489d06fe",
+      "url": "https://kalaari.com/insights-from-the-fronlines/overview-of-female-healthcare-opportunities-in-india-2",
+      "title": "Kalaari Capital — program page",
+      "excerpt": "Portfolio → https://kalaari.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a408f259a8",
+      "url": "https://kalaari.com/insights-from-the-fronlines/the-builders-the-believers",
+      "title": "Kalaari Capital — portfolio page",
+      "excerpt": "Portfolio → https://kalaari.com/portfolio",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-portfolio-c77e45e2f5",
+      "url": "https://kalaari.com/insights-from-the-fronlines/the-fintech-opportunity-hidden-in-sme-banking-ft-mabel-chacko-open-financial-technologies",
+      "title": "Kalaari Capital — program page",
       "excerpt": "Portfolio → https://kalaari.com/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-c94fd99436",
       "url": "https://kalaari.com/about-us",
-      "title": "Kalaari Capital — details page checked by scrape.py",
+      "title": "Kalaari Capital — program page",
       "excerpt": "Portfolio → https://kalaari.com/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-da078937e7",
       "url": "https://kalaari.com/",
-      "title": "Kalaari Capital — homepage checked by scrape.py",
+      "title": "Kalaari Capital — homepage",
       "excerpt": "View Portfolio → https://kalaari.com/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-f4b35c4591",
+      "url": "https://kalaari.com/portfolio-copy",
+      "title": "Kalaari Capital — portfolio page",
+      "excerpt": "Portfolio → https://kalaari.com/portfolio",
+      "page": "portfolio"
+    },
+    {
       "id": "check-route-7ef36f29af",
       "url": "https://kalaari.com/",
-      "title": "Kalaari Capital — homepage checked by scrape.py",
+      "title": "Kalaari Capital — homepage",
       "excerpt": "https://kalaari.com/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-a882e4d201",
+      "url": "https://kalaari.com/",
+      "page": "details",
+      "excerpt": "Championing India's Alpha | Kalaari Capital Skip to main content About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What’s Your Pitch About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What's Your Piitch Championing India’s Alpha We back audacious founders on their journey to build iconic companies. Our Vision Portfolio Mosaic Portfolio Mosaic An IIT Madras-incubated startup pioneering industrialized prefab micro-construction to deliver scalable, rapid infrastructure across India. View Blog Articulus Surgical is building affordable, modular surgical robotics for India — where 70% of surgeries are still open procedures and robotic systems have reached fewer than 300 of 70,000 hospitals. Read Blog Kalaari Capital led a $3M seed round in NudgeBee, an AI-agentic platform that unifies SRE, FinOps, and Cloud Ops into a single enterprise context layer to automate complex cloud operations. Read Blog byteXL’s differentiated approach is its deep integration with engineering institutions. Read Blog Eloelo is demonstrating the potential of mobile-first entertainment products built for India's next billion users. Read Blog The gap between when clean electricity is produced and when it is needed is one of the largest unresolved problems in India's renewable energy story. Read Newsletter We explore why compute is moving into"
+    },
+    {
+      "id": "check-page-1f93085d74",
+      "url": "https://kalaari.com/insights-from-the-fronlines/the-eo-report-value-chain-opportunity-and-where-india-is-headed",
+      "page": "terms",
+      "excerpt": "The EO Report: Value Chain, Opportunity and Where India is Headed Skip to main content About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What’s Your Pitch About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What's Your Piitch > Alpha Archives > PERSPECTIVE > The EO Report: Value Chain, Opportunity and Where India is Headed > ... > Perspective > REPORT The EO Report: Value Chain, Opportunity and Where India is Headed REPORT PERSPECTIVE 2 min July 22, 2026 We’re excited to share that our portfolio company, Digantara, has raised a $50 million Series B round. We congratulate Anirudh, Tanveer and Rahul and the entire Digantara team on this incredible milestone. Since our seed investment in 2021, the team has demonstrated deep commitment to their core mission – making space more accessible and building a comprehensive space situational awareness & surveillance platform. About 90% of India's Obvious Geological Potential is unexplored. Only 22% of Indian farmers have crop insurance. And India still depends on foreign satellites for a substantial share of its defense intelligence. All three of these problems have the same solution: Earth Observation. We spent months going deep on the EO sector and put together everything we found in one report. The market sits at $6B today but the industries EO is being embedded into,"
+    },
+    {
+      "id": "check-page-be11ae5d1b",
+      "url": "https://kalaari.com/about-us",
+      "page": "details",
+      "excerpt": "About | Kalaari Capital Skip to main content About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What’s Your Pitch About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What's Your Piitch > About Two decades of backing founders who dare Our Philosophy We've built our portfolio by recognizing potential in unexpected places and supporting founders through the longest part of their journey. When we invest, we're committing to a long journey: pivots that test resolve, plateaus that demand persistence, and breakthroughs that make it worthwhile. We've learned that backing great founders also means helping improve the startup landscape around them. We publish research, mentor through our programs, and contribute to discussions about what founders need to succeed. These efforts benefit our portfolio companies and the broader community of builders. Building for India takes time, and we choose to walk the whole journey with the founders daring to reimagine it. Our Values #Life@Kalaari Dynamic We thrive on diverse ideas, perspectives, and experiences Performance Oriented We create opportunities and challenges that empower people to exceed their own expectations Team Kalaari living the spirit of Diwali festivities Passion for Technology We stay at the forefront of technology and work with bold builders shaping the future Teamwork"
+    },
+    {
+      "id": "check-page-ea34fd0f1f",
+      "url": "https://kalaari.com/insights-from-the-fronlines/overview-of-female-healthcare-opportunities-in-india-2",
+      "page": "details",
+      "excerpt": "Overview of Female Healthcare - Opportunities in India Skip to main content About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What’s Your Pitch About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What's Your Piitch > Alpha Archives > PERSPECTIVE > Overview of Female Healthcare - Opportunities in India > ... > Perspective > REPORT Overview of Female Healthcare - Opportunities in India REPORT PERSPECTIVE 2 min April 28, 2026 We’re excited to share that our portfolio company, Digantara, has raised a $50 million Series B round. We congratulate Anirudh, Tanveer and Rahul and the entire Digantara team on this incredible milestone. Since our seed investment in 2021, the team has demonstrated deep commitment to their core mission – making space more accessible and building a comprehensive space situational awareness & surveillance platform. Female healthcare in India represents a significantly underserved $10 billion market opportunity, with alarming statistics showing 1 in 5 women suffering from PCOS and rapid growth in breast and cervical cancer cases. Despite women making up 48% of India’s population, they face persistent barriers to quality healthcare access. Our comprehensive report examines how technology-driven innovations are transforming this landscape, highlighting opportunities across digital clinics, AI-powered"
+    },
+    {
+      "id": "check-page-61e2c86366",
+      "url": "https://kalaari.com/insights-from-the-fronlines/the-hindsight-building-the-india-space-stack",
+      "page": "details",
+      "excerpt": "The Hindsight: Building the India Space Stack Skip to main content About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What’s Your Pitch About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What's Your Piitch > Alpha Archives > CONVERSATIONS > The Hindsight: Building the India Space Stack > ... > Perspective > PODCAST The Hindsight: Building the India Space Stack PODCAST CONVERSATIONS 2 min September 7, 2026 We’re excited to share that our portfolio company, Digantara, has raised a $50 million Series B round. We congratulate Anirudh, Tanveer and Rahul and the entire Digantara team on this incredible milestone. Since our seed investment in 2021, the team has demonstrated deep commitment to their core mission – making space more accessible and building a comprehensive space situational awareness & surveillance platform. Back when Sanjay Nekkanti, the founder of Dhruva Space was still in college, he kept hearing the same thing: Satellites were a government-only game in India. To him, this meant India risked remaining a bystander when the rest of the world industrialized space with the private sector playing a substantial role. Over a billion people and not a single private space company to show for it? He set out to build the whole stack: satellites, launch infrastructure, and ground infrastructure. So customers get a"
+    },
+    {
+      "id": "check-page-b4aa35849d",
+      "url": "https://www.kalaari.com/insights-from-the-fronlines/ashok-jhunjhunwala-the-architect-of-indias-deep-tech-ecosystem-changemakers-ep-1",
+      "page": "details",
+      "excerpt": "Ashok Jhunjhunwala: Architect of India's deep tech ecosystem | Changemakers Ep 1 Skip to main content About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What’s Your Pitch About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What's Your Piitch > Alpha Archives > CONVERSATIONS > Ashok Jhunjhunwala: Architect of India's deep tech ecosystem | Changemakers Ep 1 > ... > Perspective > PODCAST Ashok Jhunjhunwala: Architect of India's deep tech ecosystem | Changemakers Ep 1 PODCAST CONVERSATIONS 2 min June 18, 2026 We’re excited to share that our portfolio company, Digantara, has raised a $50 million Series B round. We congratulate Anirudh, Tanveer and Rahul and the entire Digantara team on this incredible milestone. Since our seed investment in 2021, the team has demonstrated deep commitment to their core mission – making space more accessible and building a comprehensive space situational awareness & surveillance platform. More PODCASTS The Hindsight: Closing India's AI Compute Gap After the success of Netmagic, when the AI wave arrived, @Sharad Sanghi saw an opportunity India couldn't afford to miss. He believed that while the country has made significant strides in data centres and software, critical gaps remained in compute infrastructure and semiconductors. PODCAST CONVERSATIONS The Hindsight: Building the India Space"
+    },
+    {
+      "id": "check-page-bdfa88a67a",
+      "url": "https://www.kalaari.com/insights-from-the-fronlines/building-the-ai-layer-for-legal-teams",
+      "page": "details",
+      "excerpt": "The Hindsight: How SpotDraft Built the AI Layer for Legal Teams Skip to main content About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What’s Your Pitch About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What's Your Piitch > Alpha Archives > CONVERSATIONS > The Hindsight: How SpotDraft Built the AI Layer for Legal Teams > ... > Perspective > PODCAST The Hindsight: How SpotDraft Built the AI Layer for Legal Teams PODCAST CONVERSATIONS 2 min August 7, 2026 We’re excited to share that our portfolio company, Digantara, has raised a $50 million Series B round. We congratulate Anirudh, Tanveer and Rahul and the entire Digantara team on this incredible milestone. Since our seed investment in 2021, the team has demonstrated deep commitment to their core mission – making space more accessible and building a comprehensive space situational awareness & surveillance platform. \"India will teach you how to build. It'll harden you.\" When Shashank Bijapur built SpotDraft, the AI layer for legal teams and contract management, he realized early that selling in India first brought important learnings: it is easier as there is a stronger local network and word-of-mouth helps bring new customers. But his team also realized their product was finally solid once the bugs reported dried up. That is when they decided to start looking at the"
+    },
+    {
+      "id": "check-page-34149af956",
+      "url": "https://kalaari.com/insights-from-the-fronlines/building-the-ai-layer-for-legal-teams",
+      "page": "details",
+      "excerpt": "The Hindsight: How SpotDraft Built the AI Layer for Legal Teams Skip to main content About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What’s Your Pitch About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What's Your Piitch > Alpha Archives > CONVERSATIONS > The Hindsight: How SpotDraft Built the AI Layer for Legal Teams > ... > Perspective > PODCAST The Hindsight: How SpotDraft Built the AI Layer for Legal Teams PODCAST CONVERSATIONS 2 min August 7, 2026 We’re excited to share that our portfolio company, Digantara, has raised a $50 million Series B round. We congratulate Anirudh, Tanveer and Rahul and the entire Digantara team on this incredible milestone. Since our seed investment in 2021, the team has demonstrated deep commitment to their core mission – making space more accessible and building a comprehensive space situational awareness & surveillance platform. \"India will teach you how to build. It'll harden you.\" When Shashank Bijapur built SpotDraft, the AI layer for legal teams and contract management, he realized early that selling in India first brought important learnings: it is easier as there is a stronger local network and word-of-mouth helps bring new customers. But his team also realized their product was finally solid once the bugs reported dried up. That is when they decided to start looking at the"
+    },
+    {
+      "id": "check-page-d1c96317eb",
+      "url": "https://kalaari.com/insights-from-the-fronlines/the-fintech-opportunity-hidden-in-sme-banking-ft-mabel-chacko-open-financial-technologies",
+      "page": "details",
+      "excerpt": "The Hindsight: The Fintech Opportunity Hidden in SME Banking Skip to main content About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What’s Your Pitch About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What's Your Piitch > Alpha Archives > CONVERSATIONS > The Hindsight: The Fintech Opportunity Hidden in SME Banking > ... > Perspective > PODCAST The Hindsight: The Fintech Opportunity Hidden in SME Banking PODCAST CONVERSATIONS 2 min June 18, 2026 We’re excited to share that our portfolio company, Digantara, has raised a $50 million Series B round. We congratulate Anirudh, Tanveer and Rahul and the entire Digantara team on this incredible milestone. Since our seed investment in 2021, the team has demonstrated deep commitment to their core mission – making space more accessible and building a comprehensive space situational awareness & surveillance platform. In this episode of The Hindsight, Vani Kola sits down with Mabel Chacko to unpack the early journey behind Open, Asia's first neobank built specifically for SMEs and startups -- the first customers, ISO compliance, building with your life partner as co-founder, and the decisions that shaped the company long before success felt inevitable. The conversation highlights how SME banking remains a fragmented, underpenetrated market where fintech companies can win by"
+    },
+    {
+      "id": "check-page-ae51de85a3",
+      "url": "https://kalaari.com/insights-from-the-fronlines/the-builders-the-believers",
+      "page": "portfolio",
+      "excerpt": "The Builders, The Believers Skip to main content About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What’s Your Pitch About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What's Your Piitch > Alpha Archives > EDITIONS > The Builders, The Believers > ... > Perspective > NEWSLETTER The Builders, The Believers NEWSLETTER EDITIONS 2 min October 1, 2026 “Without ambition, one starts nothing.” Ralph Waldo Emerson Ambition is where possibility begins. Turning that into progress takes more. It takes exceptional talent, the conviction to solve hard problems, and capital willing to back them for the long term. What completes this combination is an ecosystem prepared to stay the course. Apart from bold founders, this ecosystem needs thinkers, researchers, investors, and operators who can recognize breakthrough ideas early and work closely with entrepreneurs to turn them into enduring enterprises. This is why we created the Kalaari Fellowship program— to bring exceptional talent into the venture ecosystem and give the next generation an opportunity to learn, contribute and work alongside those building India’s technology future. Applications for the fifth batch of the Fellowship are currently open. Our programs are a commitment to what has always been one of India’s greatest strengths: its people, enabled by its digital"
+    },
+    {
+      "id": "check-page-acc35a3866",
+      "url": "https://kalaari.com/portfolio",
+      "page": "portfolio",
+      "excerpt": "Backing Market-Defining Startups | Kalaari Portfolio Skip to main content About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What’s Your Pitch About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What's Your Piitch > Portfolio Meet the #KalaariFamily Portfolio Sector ( All ) B2B ConsumerTech DeepTech AI/SaaS Sort New First Old First An Artificial Intelligence-based conversational banking platform Stage Series A, 2016 Series A, 2016 AI/SaaS ActiveAI AI-driven Tenant Experience Platform, bringing digital transformation to commercial real estate Stage Seed, 2024 Seed, 2024 Seed, 2024 AI/SaaS Aeria Full-Stack AI-Driven Quality Assessment and Analytics Platform Stage Series A, 2019 Series A, 2019 B2B Agnext A B2B Agri-Input E-commerce Marketplace Stage Series A, 2021 Series A, 2021 Series A, 2021 ConsumerTech Agrim India-native, vertically integrated robotic surgery platform Stage Seed, 2026 Seed, 2026 Seed, 2026 DeepTech Articulus India's leading e-waste & lithium-ion battery recycling company Stage Series A, 2008 Series A, 2008 DeepTech Attero Mobility Platform for Gig Workers Stage Pre-Series A, 2022 Pre-Series A, 2022 Pre-Series A, 2022 Baaz Bikes Internet-first Jewellery Brand Stage Series B, 2014 Series B, 2014 Series B, 2014 ConsumerTech Bluestone Building casual puzzle games for global audiences Stage Series A,"
+    },
+    {
+      "id": "check-page-85a391b6df",
+      "url": "https://kalaari.com/portfolio-copy",
+      "page": "portfolio",
+      "excerpt": "Portfolio Skip to main content About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What’s Your Pitch About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What's Your Piitch > Portfolio Meet the #KalaariFamily Portfolio Sector ( All ) B2B ConsumerTech DeepTech AI/SaaS Sort New First Old First An Artificial Intelligence-based conversational banking platform Stage Series A, 2016 Series A, 2016 AI/SaaS ActiveAI AI-driven Tenant Experience Platform, bringing digital transformation to commercial real estate Stage Seed, 2024 Seed, 2024 Seed, 2024 AI/SaaS Aeria Full-Stack AI-Driven Quality Assessment and Analytics Platform Stage Series A, 2019 Series A, 2019 B2B Agnext A B2B Agri-Input E-commerce Marketplace Stage Series A, 2021 Series A, 2021 Series A, 2021 ConsumerTech Agrim India-native, vertically integrated robotic surgery platform Stage Seed, 2026 Seed, 2026 Seed, 2026 DeepTech Articulus India's leading e-waste & lithium-ion battery recycling company Stage Series A, 2008 Series A, 2008 DeepTech Attero Mobility Platform for Gig Workers Stage Pre-Series A, 2022 Pre-Series A, 2022 Pre-Series A, 2022 Baaz Bikes Internet-first Jewellery Brand Stage Series B, 2014 Series B, 2014 Series B, 2014 ConsumerTech Bluestone Building casual puzzle games for global audiences Stage Series A, 2022 Series A, 2022 Series A, 2022"
+    },
+    {
+      "id": "check-page-8f8b5e8a78",
+      "url": "https://kalaari.com/portfolio-details",
+      "page": "portfolio",
+      "excerpt": "portfolio details Skip to main content About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What’s Your Pitch About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What's Your Piitch Consumer Edtech Website Investing Stage & Year Series A, 2024 Founding Year 2018 Status Active Consumer Edtech Transforming engineering education to make students industry-ready ByteXL offers engineering colleges a proprietary learning platform, in-house teacher network and deep operational network to deliver high-quality education. Leadership Karun Tadepalli Founder & CEO Linkedin Sricharan Tadepalli Co-Founder & CSO Linkedin Why did Kalaari invest in byteXL? The global technology landscape is advancing at a breakneck pace, with cutting-edge innovations in AI, machine learning, and cloud computing. However, the IT curriculum in Indian colleges seems locked in a time warp, trailing almost a decade behind. There are over 1,500 engineering colleges and 1.5K universities in India that enroll close to 1.1 million Computer Science Engineering (CSE) students each year with the total education expenditure of nearly $1.4 billion. However, the big IT curriculum directly impacts the employability prospects of students. This creates an interesting opportunity... Read More Investment Lead Sampath P View Profile What the founder says What the founder"
+    },
+    {
+      "id": "check-page-3be5b168c4",
+      "url": "https://kalaari.com/portfolio-program-company/amazon-web-services-aws",
+      "page": "portfolio",
+      "excerpt": "Kalaari's WebSite KStack My Dashboard Logout > Partner Hub > KStack > ... > Partner Hub > My Dashboard amazon-web-services-aws Amazon Web Services (AWS) amazon-web-services-aws About AWS provides cloud computing solutions including compute, storage, databases, and ML services. Eligibility : Pre-Seed through Series A funded startups. Offerings Up to $100,000 in AWS credits for 1 year (Seed stage) Additional $100,000 credits available upon Series A raise 1:1 Architectural Reviews with AWS Solution Architects Specialist Office Hours: Data Analytics, ML, Serverless, IoT, Blockchain, Containers & more Thank you for applying for AWS Activate credits through Kalaari! Here's everything you need to know to complete your application and make the most of this benefit. ━━ HOW TO APPLY ━━ 1. Visit the application link: https://aws.amazon.com/activate/portfolioplus-signup/ 2. When prompted, enter the Org ID: 15UPT 3. Sign up using your company email address 4. Make sure to provide your AWS Account ID — credits will be added directly to this account ━━ GOOD TO KNOW ━━• Processing time: • Applications typically take around 2 weeks. If you haven't heard back after that, please follow up directly with vatsalsr@amazon.com. • Previous credits: If you've received AWS credits before, you'll be topped up to the highest eligible package. For example, if you received $10,000 in the past, you'll"
+    },
+    {
+      "id": "check-page-6ea54bec06",
+      "url": "https://kalaari.com/portfolio-program-company/amplitude",
+      "page": "portfolio",
+      "excerpt": "Kalaari's WebSite KStack My Dashboard Logout > Partner Hub > KStack > ... > Partner Hub > My Dashboard amplitude Amplitude amplitude About Amplitude helps product teams understand user behaviour through deep analytics. Eligibility : Net new paying customer of Amplitude (have not previously been on a paid plan) A Kalaari Capital portfolio company A private company at Series C stage or below Offerings 3 months of Amplitude's Growth Plan for free on a year-long contract Core analytics and collaboration features Connect marketing and product insights with campaign reporting Advanced analyses: Journeys, Conversion Drivers, and A/B Test Analysis Dedicated customer success partnership https://amplitude.com/startups Thank you for your interest in Amplitude through Kalaari! ━━ HOW TO APPLY ━━ 1. Reach out directly to Pratham Shetty ( pratham.shetty@amplitude.com) at Amplitude 2. Mention that you are a Kalaari Capital portfolio company when prompted Warm regards, KStack Team portfolio_programs@kalaari.com ‍ Apply Thank you for your Interest. We’ve sent the next steps to your email. Please check your inbox to continue with the application. Return to Partner Hub If you're an audacious founder building the future, we want to hear from you. What's Your Pitch ABOUT US Team Life@Kalaari Contact Us Investor Relations RESOURCES Perspective Conversations Editions Community Media Kit PROGRAMS"
     }
   ],
   "findings": {
@@ -55,8 +342,29 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "3 months",
+        "evidenceId": "check-duration-75527e7d3c"
+      },
+      {
+        "value": "2",
+        "evidenceId": "check-duration-e9f1ede192"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-4943e77dc0"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://kalaari.com/portfolio",

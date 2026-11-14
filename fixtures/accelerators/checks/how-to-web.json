@@ -1,82 +1,346 @@
 {
   "programId": "how-to-web",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
     "https://www.howtoweb.co/",
+    "https://www.howtoweb.co/3-reasons-why-you-should-apply-for-speaking-at-how-to-web-conference/",
+    "https://www.howtoweb.co/apply-for-angel-investor-tickets/",
+    "https://www.howtoweb.co/apply-for-lp-tickets/",
+    "https://www.howtoweb.co/apply-for-media-pass",
+    "https://www.howtoweb.co/apply-for-speaking/",
+    "https://www.howtoweb.co/apply-for-startup-tickets",
+    "https://www.howtoweb.co/how-to-web-2023/apply-for-speaking/",
+    "https://www.howtoweb.co/40-of-the-most-promising-startups-from-eastern-europe-compete-for-the-e880000-investment-prize-on-the-how-to-web-stage/",
+    "https://www.howtoweb.co/apply-for-startup-ticket/",
+    "https://www.howtoweb.co/5-questions-with-dan-mihaescu-gapminder-venture-partners-we-fill-in-a-critical-investment-gap/",
+    "https://www.howtoweb.co/alpha-ar-is-the-winning-startup-of-spotlight-2021-competition-and-takes-home-the-e350000-investment-prize/",
     "https://www.howtoweb.co/dealflow/",
-    "https://www.howtoweb.co/speaker/alexandra-dumitrescu",
-    "https://www.howtoweb.co/apply-for-startup-tickets"
+    "https://www.howtoweb.co/e465000-the-record-investment-prize-for-the-winner-of-how-to-web-2022s-spotlight-competition/",
+    "https://www.howtoweb.co/game-changing-investment-prize-alert-the-largest-investment-proposal-for-startups-in-eastern-europe-e780k-from-leading-investors/"
   ],
   "evidence": [
     {
+      "id": "check-announced-adcbec3068",
+      "url": "https://www.howtoweb.co/game-changing-investment-prize-alert-the-largest-investment-proposal-for-startups-in-eastern-europe-e780k-from-leading-investors/",
+      "title": "How to Web — terms page",
+      "excerpt": "eye on the future are encouraged to act swiftly, as the application deadline is set for August 31. The application criteria include having an early-stage startup,",
+      "page": "terms"
+    },
+    {
       "id": "check-name-76e8eacb6e",
       "url": "https://www.howtoweb.co/",
-      "title": "How to Web — homepage checked by scrape.py",
+      "title": "How to Web — homepage",
       "excerpt": "How to Web Conference | October 5-7, 2027 - How to Web Conference Hey",
       "page": "details"
     },
     {
-      "id": "check-route-075beb5cbd",
-      "url": "https://www.howtoweb.co/speaker/alexandra-dumitrescu",
-      "title": "How to Web — details page checked by scrape.py",
+      "id": "check-route-1dd15e90bc",
+      "url": "https://www.howtoweb.co/40-of-the-most-promising-startups-from-eastern-europe-compete-for-the-e880000-investment-prize-on-the-how-to-web-stage/",
+      "title": "How to Web — terms page",
       "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
-      "page": "details"
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1e89149902",
+      "url": "https://www.howtoweb.co/apply-for-angel-investor-tickets/",
+      "title": "How to Web — application page",
+      "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-22f7f21405",
+      "url": "https://www.howtoweb.co/5-questions-with-dan-mihaescu-gapminder-venture-partners-we-fill-in-a-critical-investment-gap/",
+      "title": "How to Web — terms page",
+      "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-23c9a5c94b",
+      "url": "https://www.howtoweb.co/3-reasons-why-you-should-apply-for-speaking-at-how-to-web-conference/",
+      "title": "How to Web — application page",
+      "excerpt": "https://www.howtoweb.co/how-to-web-2023/apply-for-speaking/ → https://www.howtoweb.co/how-to-web-2023/apply-for-speaking/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-264da2cd15",
+      "url": "https://www.howtoweb.co/game-changing-investment-prize-alert-the-largest-investment-proposal-for-startups-in-eastern-europe-e780k-from-leading-investors/",
+      "title": "How to Web — terms page",
+      "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-2dabeaadfb",
+      "url": "https://www.howtoweb.co/40-of-the-most-promising-startups-from-eastern-europe-compete-for-the-e880000-investment-prize-on-the-how-to-web-stage/",
+      "title": "How to Web — terms page",
+      "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
+      "page": "terms"
     },
     {
       "id": "check-route-3c2093f5c2",
       "url": "https://www.howtoweb.co/dealflow/",
-      "title": "How to Web — terms page checked by scrape.py",
+      "title": "How to Web — terms page",
       "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
       "page": "terms"
     },
     {
       "id": "check-route-4ded3489c3",
       "url": "https://www.howtoweb.co/apply-for-startup-tickets",
-      "title": "How to Web — application page checked by scrape.py",
+      "title": "How to Web — application page",
       "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
       "page": "application"
     },
     {
       "id": "check-route-51c9e0731c",
       "url": "https://www.howtoweb.co/",
-      "title": "How to Web — homepage checked by scrape.py",
+      "title": "How to Web — homepage",
       "excerpt": "APPLY NOW → https://www.howtoweb.co/apply-for-startup-tickets",
       "page": "details"
     },
     {
+      "id": "check-route-647d088728",
+      "url": "https://www.howtoweb.co/e465000-the-record-investment-prize-for-the-winner-of-how-to-web-2022s-spotlight-competition/",
+      "title": "How to Web — terms page",
+      "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-6cbde9ba84",
+      "url": "https://www.howtoweb.co/apply-for-lp-tickets/",
+      "title": "How to Web — application page",
+      "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "application"
+    },
+    {
       "id": "check-route-6d0ec23674",
       "url": "https://www.howtoweb.co/",
-      "title": "How to Web — homepage checked by scrape.py",
+      "title": "How to Web — homepage",
       "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
       "page": "details"
     },
     {
-      "id": "check-route-b89c281f63",
-      "url": "https://www.howtoweb.co/speaker/alexandra-dumitrescu",
-      "title": "How to Web — details page checked by scrape.py",
+      "id": "check-route-83a192fb2f",
+      "url": "https://www.howtoweb.co/how-to-web-2023/apply-for-speaking/",
+      "title": "How to Web — application page",
+      "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8626252058",
+      "url": "https://www.howtoweb.co/apply-for-startup-ticket/",
+      "title": "How to Web — application page",
+      "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "application"
+    },
+    {
+      "id": "check-route-864a03785b",
+      "url": "https://www.howtoweb.co/game-changing-investment-prize-alert-the-largest-investment-proposal-for-startups-in-eastern-europe-e780k-from-leading-investors/",
+      "title": "How to Web — terms page",
+      "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-90d239f30c",
+      "url": "https://www.howtoweb.co/apply-for-media-pass",
+      "title": "How to Web — application page",
       "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
-      "page": "details"
+      "page": "application"
+    },
+    {
+      "id": "check-route-9428bc9db9",
+      "url": "https://www.howtoweb.co/3-reasons-why-you-should-apply-for-speaking-at-how-to-web-conference/",
+      "title": "How to Web — application page",
+      "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9d8e72df5e",
+      "url": "https://www.howtoweb.co/3-reasons-why-you-should-apply-for-speaking-at-how-to-web-conference/",
+      "title": "How to Web — application page",
+      "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a90d97d0dd",
+      "url": "https://www.howtoweb.co/5-questions-with-dan-mihaescu-gapminder-venture-partners-we-fill-in-a-critical-investment-gap/",
+      "title": "How to Web — terms page",
+      "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-ab37fe8656",
+      "url": "https://www.howtoweb.co/apply-for-lp-tickets/",
+      "title": "How to Web — application page",
+      "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b58e9da1eb",
+      "url": "https://www.howtoweb.co/how-to-web-2023/apply-for-speaking/",
+      "title": "How to Web — application page",
+      "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c7264df110",
+      "url": "https://www.howtoweb.co/40-of-the-most-promising-startups-from-eastern-europe-compete-for-the-e880000-investment-prize-on-the-how-to-web-stage/",
+      "title": "How to Web — terms page",
+      "excerpt": "the dedicated page → https://www.howtoweb.co/apply-for-startup-ticket/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-d03cc7f355",
+      "url": "https://www.howtoweb.co/alpha-ar-is-the-winning-startup-of-spotlight-2021-competition-and-takes-home-the-e350000-investment-prize/",
+      "title": "How to Web — terms page",
+      "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-d64be43938",
+      "url": "https://www.howtoweb.co/apply-for-angel-investor-tickets/",
+      "title": "How to Web — application page",
+      "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "application"
+    },
+    {
+      "id": "check-route-dd2b214f39",
+      "url": "https://www.howtoweb.co/apply-for-startup-ticket/",
+      "title": "How to Web — application page",
+      "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
+      "page": "application"
     },
     {
       "id": "check-route-ec2ce1504c",
       "url": "https://www.howtoweb.co/dealflow/",
-      "title": "How to Web — terms page checked by scrape.py",
+      "title": "How to Web — terms page",
       "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
       "page": "terms"
     },
     {
       "id": "check-route-ef796eb8b5",
       "url": "https://www.howtoweb.co/apply-for-startup-tickets",
-      "title": "How to Web — application page checked by scrape.py",
+      "title": "How to Web — application page",
       "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
       "page": "application"
     },
     {
+      "id": "check-route-f2ba903fae",
+      "url": "https://www.howtoweb.co/apply-for-speaking/",
+      "title": "How to Web — application page",
+      "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f9d4ff1d7c",
+      "url": "https://www.howtoweb.co/e465000-the-record-investment-prize-for-the-winner-of-how-to-web-2022s-spotlight-competition/",
+      "title": "How to Web — terms page",
+      "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-fb390f3ad8",
+      "url": "https://www.howtoweb.co/alpha-ar-is-the-winning-startup-of-spotlight-2021-competition-and-takes-home-the-e350000-investment-prize/",
+      "title": "How to Web — terms page",
+      "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
+      "page": "terms"
+    },
+    {
       "id": "check-route-ffe4916c17",
       "url": "https://www.howtoweb.co/",
-      "title": "How to Web — homepage checked by scrape.py",
+      "title": "How to Web — homepage",
       "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-cf419393c1",
+      "url": "https://www.howtoweb.co/",
+      "page": "details",
+      "excerpt": "How to Web Conference | October 5-7, 2027 - How to Web Conference Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Bucharest · Oct 5–7, 2027 Where builders & visionaries gather Eastern Europe's leading startup & technology conference. Three days in Bucharest for tech professionals and leaders, founders, investors, and anyone who wants a sharper read on the year ahead. Buy 2027 Tickets Partner with us 3,000+ Attendees 9,000+ Meetings 500+ Founders 250+ Investors 100+ Speakers 50+ Side events 2026 In Review What will you build when you can build anything? To every speaker, founder, investor and attendee who brought their clarity and drive to Bucharest for the 2026 edition – thank you for making How to Web Conference unforgettable. As we begin building the 2027 experience, we let it be guided"
+    },
+    {
+      "id": "check-page-fd01b28dc3",
+      "url": "https://www.howtoweb.co/3-reasons-why-you-should-apply-for-speaking-at-how-to-web-conference/",
+      "page": "application",
+      "excerpt": "3 Reasons Why You Should Apply For Speaking - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets events 2 June, 2022 3 Reasons Why You Should Apply for Speaking at How to Web Conference At How to Web, we’re committed to connecting innovative minds with the possibilities of tomorrow and we are using our main platform — the conference, in doing so. From getting inspired by world leaders in the industry to connecting with potential collaborators, business partners, or investors, this is the playground for any eager professional that wants to build a better future. One extra medium we’re enabling our audience with is going on stage . That’s right — if your expertise is your business card and you believe that other innovators can benefit from your actionable takeaways, we’re paving the"
+    },
+    {
+      "id": "check-page-b4fc55f0c2",
+      "url": "https://www.howtoweb.co/apply-for-angel-investor-tickets/",
+      "page": "application",
+      "excerpt": "Angel Investor Tickets - How to Web Conference - How to Web Hey Builders, we're back! Partner with us Buy Tickets Partner with us Buy Tickets APPLY FOR ANGEL INVESTOR TICKETS Sign-up to our newsletter to receive the latest updates and a custom discount code as part of our community Job Category Tech Professional Startup Founder Startup Program Representative Corporate Investor LP Angel Investor BizDev Executive Media Representative Other Job Category Tech Professional Startup Founder Startup Program Representative Corporate Investor LP Angel Investor BizDev Executive Media Representative Other SIGN UP Thank you for subscribing, let's keep building! Location Face Convention Center, Piata Presei Libere, 3-5 Stay tuned Follow us on: facebook twitter linkedin youtube-square Or drop us an e-mail at: [email protected] Contact us Partnership Become a volunteer Apply for speaking Around Town Where to stay Comms Newsletter Apply for Media Pass Terms & Conditions Data Protection Policy Code of Conduct © howtoweb 2026. All rights reserved"
+    },
+    {
+      "id": "check-page-f81c75113f",
+      "url": "https://www.howtoweb.co/apply-for-lp-tickets/",
+      "page": "application",
+      "excerpt": "Limited Partner Tickets | How to Web Conference - How to Web Hey Builders, we're back! Partner with us Buy Tickets Partner with us Buy Tickets APPLY FOR LP TICKETS Sign-up to our newsletter to receive the latest updates and a custom discount code as part of our community Job Category Tech Professional Startup Founder Startup Program Representative Corporate Investor LP Angel Investor BizDev Executive Media Representative Other Job Category Tech Professional Startup Founder Startup Program Representative Corporate Investor LP Angel Investor BizDev Executive Media Representative Other SIGN UP Thank you for subscribing, let's keep building! Location Face Convention Center, Piata Presei Libere, 3-5 Stay tuned Follow us on: facebook twitter linkedin youtube-square Or drop us an e-mail at: [email protected] Contact us Partnership Become a volunteer Apply for speaking Around Town Where to stay Comms Newsletter Apply for Media Pass Terms & Conditions Data Protection Policy Code of Conduct © howtoweb 2026. All rights reserved"
+    },
+    {
+      "id": "check-page-76b6d9896a",
+      "url": "https://www.howtoweb.co/apply-for-media-pass",
+      "page": "application",
+      "excerpt": "Apply for Media Accreditation - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Media Apply for a media pass Press, media professionals and content creators – apply below for media access to How to Web Conference. October 5-7, 2027 · Bucharest, Romania. Sign-up to our newsletter to receive the latest updates and a custom discount code as part of our community Job Category Tech Professional Startup Founder Startup Program Representative Corporate Investor LP Angel Investor BizDev Executive Media Representative Other Job Category Tech Professional Startup Founder Startup Program Representative Corporate Investor LP Angel Investor BizDev Executive Media Representative Other SIGN UP Thank you for subscribing, let's keep building! Location Face Convention Center, Piata Presei"
+    },
+    {
+      "id": "check-page-ed3e450ba2",
+      "url": "https://www.howtoweb.co/apply-for-speaking/",
+      "page": "application",
+      "excerpt": "Apply for Speaking at How to Web Conference - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Apply for Speaking Speaker applications for How to Web Conference 2026 are closed. Subscribe to our newsletter to find out when we open the applications for 2027: https://www.howtoweb.co/newsletter/ Sign-up to our newsletter to receive the latest updates and a custom discount code as part of our community Job Category Tech Professional Startup Founder Startup Program Representative Corporate Investor LP Angel Investor BizDev Executive Media Representative Other Job Category Tech Professional Startup Founder Startup Program Representative Corporate Investor LP Angel Investor BizDev Executive Media Representative Other SIGN UP Thank you for subscribing, let's keep building! Location Face"
+    },
+    {
+      "id": "check-page-d48b73bc61",
+      "url": "https://www.howtoweb.co/apply-for-startup-tickets",
+      "page": "application",
+      "excerpt": "Apply for Startup Tickets - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Startups Apply for Startup Tickets. Access the full How to Web Conference 2027 — plus founder-specific programs, investor introductions, and the Demo Area. Apply below to get your startup ticket. The process How it works. Step 01 Apply Fill in the form below. Select Dealflow, Spotlight, or both. Step 02 Review Our team reviews your application within 24 hours. Step 03 Decision You'll receive an email with your result and next steps. Step 04 Get your ticket Use the link in your email to confirm your spot. Step 05 Conference How to Web Conference — October 5–7, 2027 · Bucharest. Tracks Two paths in. Dealflow For early-stage startups ready to connect with investors and the conference ecosystem. Approved"
+    },
+    {
+      "id": "check-page-1e15572463",
+      "url": "https://www.howtoweb.co/how-to-web-2023/apply-for-speaking/",
+      "page": "application",
+      "excerpt": "Apply for Speaking at How to Web Conference - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Apply for Speaking Speaker applications for How to Web Conference 2026 are closed. Subscribe to our newsletter to find out when we open the applications for 2027: https://www.howtoweb.co/newsletter/ Sign-up to our newsletter to receive the latest updates and a custom discount code as part of our community Job Category Tech Professional Startup Founder Startup Program Representative Corporate Investor LP Angel Investor BizDev Executive Media Representative Other Job Category Tech Professional Startup Founder Startup Program Representative Corporate Investor LP Angel Investor BizDev Executive Media Representative Other SIGN UP Thank you for subscribing, let's keep building! Location Face"
+    },
+    {
+      "id": "check-page-486388a27b",
+      "url": "https://www.howtoweb.co/40-of-the-most-promising-startups-from-eastern-europe-compete-for-the-e880000-investment-prize-on-the-how-to-web-stage/",
+      "page": "terms",
+      "excerpt": "40+ Startups at Spotlight | How to Web Conference 2023 - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets press releases 20 September, 2023 40+ of the most promising startups from Eastern Europe compete for the €880,000 investment prize on the How to Web Conference’ stage 40+ technology startups from across Eastern Europe have been selected to participate in this year’s edition of Spotlight, the program and competition dedicated to early-stage startups, part of the How to Web Conference. [Bucharest, 23.08.2023] On October 4th and 5th, Spotlight will bring together in front of the 2,500 participants of How to Web conference, 40 promising tech startups. The founders of these companies will have access to the expertise of global industry specialists, gain visibility by presenting"
+    },
+    {
+      "id": "check-page-789e6d0173",
+      "url": "https://www.howtoweb.co/apply-for-startup-ticket/",
+      "page": "application",
+      "excerpt": "Apply for Startup Tickets - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Startups Apply for Startup Tickets. Access the full How to Web Conference 2027 — plus founder-specific programs, investor introductions, and the Demo Area. Apply below to get your startup ticket. The process How it works. Step 01 Apply Fill in the form below. Select Dealflow, Spotlight, or both. Step 02 Review Our team reviews your application within 24 hours. Step 03 Decision You'll receive an email with your result and next steps. Step 04 Get your ticket Use the link in your email to confirm your spot. Step 05 Conference How to Web Conference — October 5–7, 2027 · Bucharest. Tracks Two paths in. Dealflow For early-stage startups ready to connect with investors and the conference ecosystem. Approved"
+    },
+    {
+      "id": "check-page-42b6ef6fd2",
+      "url": "https://www.howtoweb.co/5-questions-with-dan-mihaescu-gapminder-venture-partners-we-fill-in-a-critical-investment-gap/",
+      "page": "terms",
+      "excerpt": "5 Questions With Dan Mihaescu (GapMinder Venture Partners): “We fill in a critical investment gap” - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets interviews 1 April, 2018 5 Questions With Dan Mihaescu (GapMinder Venture Partners): “We fill in a critical investment gap” In early January 2018, GapMinder Venture Partners announced it was open for business, targeting to invest EUR 26m in early stage technology companies in Central Eastern Europe, with an emphasis on Romania’s developing tech scene. The fund is led by Dan Mihaescu as Founding Partner, a well-known investor in a number of high tech start-ups with a deep knowledge of the regional start-up scene. Dan has a solid investment track record, being an angel investor in companies such as Axosuits , TypingDNA or"
+    },
+    {
+      "id": "check-page-71835b86a4",
+      "url": "https://www.howtoweb.co/alpha-ar-is-the-winning-startup-of-spotlight-2021-competition-and-takes-home-the-e350000-investment-prize/",
+      "page": "terms",
+      "excerpt": "Alpha AR, an AI-based deep tech startup from Estonia, is the winning startup of Spotlight 2021 competition and takes home the €350,000 investment prize - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets events 24 November, 2021 Alpha AR, an AI-based deep tech startup from Estonia, is the winning startup of Spotlight 2021 competition and takes home the €350,000 investment prize Alpha AR from Estonia , an AI-based deep tech solution that makes 3D easy and scalable for AR/VR, NFTs, games and marketing, is the winner of the €350,000 investment prize from How to Web’s 2021 Spotlight competition. „We want to thank the How to Web team for all the support during the two months of the program. We didn’t expect to be the winners, but we are glad to see that investors trust our solution”,"
+    },
+    {
+      "id": "check-page-a0b4eb53c5",
+      "url": "https://www.howtoweb.co/dealflow/",
+      "page": "terms",
+      "excerpt": "Dealflow | How to Web Conference 2026 - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Dealflow A few months of meetings in just a day — welcome to Dealflow, How to Web's platform for connecting Eastern European startups with global and regional investors. BUY TICKETS Seize the Best Dealflow For Investors If you want to connect with some of the most promising Eastern European startups joining How to Web, grab an investor ticket and access Dealflow. This will grant you access in advance to the full list of attending startups that want to meet investors, with their contact details and decks. Access our networking app to set meetings in the Networking Area, schedule private meetings in the VIP Areas, or watch their pitches, and start doing deals! For Founders If you are a founder"
+    },
+    {
+      "id": "check-page-2f67a917d1",
+      "url": "https://www.howtoweb.co/e465000-the-record-investment-prize-for-the-winner-of-how-to-web-2022s-spotlight-competition/",
+      "page": "terms",
+      "excerpt": "€465,000 — the record investment prize of Spotlight - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets events 23 August, 2022 €465,000 — the record investment prize for the winner of How to Web 2022’s Spotlight competition Spotlight, the leading startup competition in Eastern Europe, announces the investment prize up for grabs this year, reaching a record 465,000 euros. The award is syndicated by a group of the most active investors from the region: Tech Angels, Seedblink, Hellen’s Rock, GapMinder VC, Fortech Investments, Growceanu, V7 Capital, RocaX, Startup Wise Guys, and Transylvania Angels Network. In addition to the big investment prize, participants can benefit from unique opportunities for collaboration, business, and scaling. On top of these, the conference’s main"
+    },
+    {
+      "id": "check-page-7d99ae2fa0",
+      "url": "https://www.howtoweb.co/game-changing-investment-prize-alert-the-largest-investment-proposal-for-startups-in-eastern-europe-e780k-from-leading-investors/",
+      "page": "terms",
+      "excerpt": "Record Investment Prize Spotlight 2023 - How to Web Hey Builders, we're back! Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets Who’s coming Tech Professionals Tech & product teams Founders BizDevs Investors Startup Delegations Media Agenda Agenda Speakers Content Side Events Investors Summit Programs Spotlight Dealflow Future Builders Demo Area Demo Nights Partners Blog Articles Reports Venture Report 2025 Partner with us Buy Tickets press releases For Startups 23 August, 2023 Game-Changing Investment Prize Alert: The Largest Investment Proposal for Startups in Eastern Europe — €780K from Leading Investors Pioneering Entrepreneurs: Secure the Region’s Largest Investment Prize at Spotlight, part of How to Web Conference 2023! Press Release | Bucharest, 23.08.2023 – In a groundbreaking move that is set to redefine the startup ecosystem in Eastern Europe, How to Web Conference 2023 is unveiling an investment prize of unprecedented scale — €780.000. This investment prize, which stands as the largest in Eastern Europe and ranks second across the European startup landscape, marks a significant milestone in the region’s"
     }
   ],
   "findings": {
@@ -94,6 +358,14 @@
       {
         "value": "https://www.howtoweb.co/apply-for-media-pass",
         "evidenceId": "check-route-ffe4916c17"
+      },
+      {
+        "value": "https://www.howtoweb.co/how-to-web-2023/apply-for-speaking/",
+        "evidenceId": "check-route-23c9a5c94b"
+      },
+      {
+        "value": "https://www.howtoweb.co/apply-for-startup-ticket/",
+        "evidenceId": "check-route-c7264df110"
       }
     ],
     "applicationUrl": [
@@ -105,8 +377,20 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [
+      {
+        "value": "August",
+        "evidenceId": "check-announced-adcbec3068"
+      }
+    ],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

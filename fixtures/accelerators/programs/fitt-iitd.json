@@ -9,14 +9,14 @@
   "websiteUrl": "https://fitt-iitd.in/web/home",
   "applyUrl": "https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Stakeholders Search LATEST NEWS & ANNOUNCEMENTS -*- NIQ for Eating Outlets (Cafeteria, Quick Meals Kiosk & Ice-Cream Parlour ) at R&I Park IIT Dellhi FITT is an industry Academia interface organization, established by IIT Delhi to facilitate Research Translation, Technology Development, IPR Management, Technology Transfer & Commercialisation, R&D Collaboration, Start-up Incubation and Mentoring. FITT has adopted several programs to enrich the entrepreneurial eco-system and technology commercialization efforts at the Institute. FITT manages the incubator program at IIT Delhi. Projects addressing technologies at the core and aims at the development of proprietary knowledge in a process, product, software, designs, specific/generic algorithm etc. FITT manages the Intellectual Property and also facilitates the commercialization of IP assets and Know-how of IIT Delhi through technology transfer and licensing. FITT, IIT Delhi's Research and Innovation Park is planned to be a managed facility with focus on innovation and product development where IIT Delhi, industry, entrepreneurs and government agencies interact and enable creation of advanced technological solutions. Previous Next No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "FITT is an industry Academia interface organization, established by IIT Delhi to facilitate Research Translation, Technology Development, IPR Management, Technology Transfer & Commercialisation, R&D Collaboration, Start-up Incubation and Mentoring.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "FITT is an industry Academia interface organization, established by IIT Delhi to facilitate Research Translation, Technology Development, IPR Management, Technology Transfer & Commercialisation, R&D Collaboration, Start-up Incubation and Mentoring.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "fitt-iitd-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

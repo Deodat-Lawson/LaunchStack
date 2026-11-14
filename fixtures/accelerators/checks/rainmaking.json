@@ -1,53 +1,304 @@
 {
   "programId": "rainmaking",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.rainmaking.io/",
+    "https://apply.workable.com/rainmaking-innovation/",
+    "https://apply.workable.com/rainmaking-innovation/j/7E5E786491/",
+    "https://apply.workable.com/rainmaking-innovation/j/F0AEEB2CD6/",
+    "https://www.rainmaking.io/work/barclays-investment-programme",
     "https://www.rainmaking.io/about",
-    "https://apply.workable.com/rainmaking-innovation/"
+    "https://www.rainmaking.io/expansion-programs",
+    "https://www.rainmaking.io/live-programs",
+    "https://www.rainmaking.io/portfolio"
   ],
   "evidence": [
     {
+      "id": "check-duration-62aeb96fb7",
+      "url": "https://www.rainmaking.io/live-programs",
+      "title": "Rainmaking — program page",
+      "excerpt": "land their first international client within 3-6 months. Schedule a discovery call with our team Book a",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-709bc3f839",
+      "url": "https://apply.workable.com/rainmaking-innovation/j/F0AEEB2CD6/",
+      "title": "Rainmaking — application page",
+      "excerpt": "an outstanding academic background and at least 6 months worth of work/internship experience with a",
+      "page": "application"
+    },
+    {
+      "id": "check-duration-72ae7a38a1",
+      "url": "https://www.rainmaking.io/live-programs",
+      "title": "Rainmaking — program page",
+      "excerpt": "construction at scale. The innovation cluster, 12 months into its existence, has already unlocked £350m",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-7dd25d6e2f",
+      "url": "https://www.rainmaking.io/live-programs",
+      "title": "Rainmaking — program page",
+      "excerpt": "land their first international client within 3-6 months. Helping Jordanian companies expand beyond their",
+      "page": "details"
+    },
+    {
+      "id": "check-format-0ce1edab76",
+      "url": "https://apply.workable.com/rainmaking-innovation/j/F0AEEB2CD6/",
+      "title": "Rainmaking — application page",
+      "excerpt": "pool in London - Rainmaking Join our talent pool in London Hybrid London, England, United Kingdom Overview Application Share",
+      "page": "application"
+    },
+    {
+      "id": "check-format-1c049e886f",
+      "url": "https://apply.workable.com/rainmaking-innovation/",
+      "title": "Rainmaking — application page",
+      "excerpt": "England, United Kingdom EU Join our talent pool in London Hybrid London, England, United Kingdom View website Help",
+      "page": "application"
+    },
+    {
+      "id": "check-format-2561e7e1a2",
+      "url": "https://apply.workable.com/rainmaking-innovation/",
+      "title": "Rainmaking — application page",
+      "excerpt": "Lead / Associate Director - Energy Tech Opportunity Hybrid London, England, United Kingdom EU Join our talent pool in",
+      "page": "application"
+    },
+    {
+      "id": "check-format-4275313be0",
+      "url": "https://apply.workable.com/rainmaking-innovation/j/7E5E786491/",
+      "title": "Rainmaking — application page",
+      "excerpt": "Lead / Associate Director - Energy Tech Opportunity Hybrid EU London, England, United Kingdom Overview Application",
+      "page": "application"
+    },
+    {
+      "id": "check-format-ff0ce86605",
+      "url": "https://apply.workable.com/rainmaking-innovation/j/F0AEEB2CD6/",
+      "title": "Rainmaking — application page",
+      "excerpt": "eventful ride Our team is based in London. We work in a hybrid set-up with at least 2 days a week in the office (Central",
+      "page": "application"
+    },
+    {
+      "id": "check-location-111a375534",
+      "url": "https://apply.workable.com/rainmaking-innovation/j/F0AEEB2CD6/",
+      "title": "Rainmaking — application page",
+      "excerpt": "is quite the eventful ride Our team is based in London. We work in a hybrid set-up with at",
+      "page": "application"
+    },
+    {
       "id": "check-name-4d9225a720",
       "url": "https://www.rainmaking.io/",
-      "title": "Rainmaking — homepage checked by scrape.py",
+      "title": "Rainmaking — homepage",
       "excerpt": "Rainmaking Capabilities Work Company Contact us Capabilities Work",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-52756f5eda",
+      "url": "https://www.rainmaking.io/live-programs",
+      "title": "Rainmaking — program page",
+      "excerpt": "Venture Portfolio → https://www.rainmaking.io/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-69c3793c92",
       "url": "https://www.rainmaking.io/",
-      "title": "Rainmaking — homepage checked by scrape.py",
+      "title": "Rainmaking — homepage",
+      "excerpt": "Venture Portfolio → https://www.rainmaking.io/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9beeaa2958",
+      "url": "https://www.rainmaking.io/expansion-programs",
+      "title": "Rainmaking — program page",
       "excerpt": "Venture Portfolio → https://www.rainmaking.io/portfolio",
       "page": "details"
     },
     {
       "id": "check-portfolio-9f6fc2483f",
       "url": "https://www.rainmaking.io/about",
-      "title": "Rainmaking — details page checked by scrape.py",
+      "title": "Rainmaking — program page",
       "excerpt": "Venture Portfolio → https://www.rainmaking.io/portfolio",
       "page": "details"
     },
     {
+      "id": "check-portfolio-b590a324a8",
+      "url": "https://www.rainmaking.io/work/barclays-investment-programme",
+      "title": "Rainmaking — terms page",
+      "excerpt": "Venture Portfolio → https://www.rainmaking.io/portfolio",
+      "page": "terms"
+    },
+    {
       "id": "check-portfolio-e18c945530",
       "url": "https://www.rainmaking.io/",
-      "title": "Rainmaking — homepage checked by scrape.py",
+      "title": "Rainmaking — homepage",
       "excerpt": "View Portfolio → https://www.rainmaking.io/portfolio",
       "page": "details"
     },
     {
-      "id": "check-route-715d47fd7d",
-      "url": "https://www.rainmaking.io/about",
-      "title": "Rainmaking — details page checked by scrape.py",
+      "id": "check-route-06457b52c5",
+      "url": "https://apply.workable.com/rainmaking-innovation/j/7E5E786491/",
+      "title": "Rainmaking — application page",
+      "excerpt": "View all jobs → https://apply.workable.com/rainmaking-innovation/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-18283de2b6",
+      "url": "https://apply.workable.com/rainmaking-innovation/",
+      "title": "Rainmaking — application page",
+      "excerpt": "https://apply.workable.com/rainmaking-innovation/j/F0AEEB2CD6/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2145d33cd2",
+      "url": "https://www.rainmaking.io/expansion-programs",
+      "title": "Rainmaking — program page",
       "excerpt": "Careers → https://apply.workable.com/rainmaking-innovation/",
       "page": "details"
     },
     {
-      "id": "check-route-dad180ee49",
-      "url": "https://www.rainmaking.io/",
-      "title": "Rainmaking — homepage checked by scrape.py",
+      "id": "check-route-5aa63ca2e1",
+      "url": "https://www.rainmaking.io/portfolio",
+      "title": "Rainmaking — portfolio page",
+      "excerpt": "Careers → https://apply.workable.com/rainmaking-innovation/",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-route-715d47fd7d",
+      "url": "https://www.rainmaking.io/about",
+      "title": "Rainmaking — program page",
       "excerpt": "Careers → https://apply.workable.com/rainmaking-innovation/",
       "page": "details"
+    },
+    {
+      "id": "check-route-7e4845dc89",
+      "url": "https://apply.workable.com/rainmaking-innovation/",
+      "title": "Rainmaking — application page",
+      "excerpt": "https://apply.workable.com/rainmaking-innovation/j/7E5E786491/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7f9a32c789",
+      "url": "https://apply.workable.com/rainmaking-innovation/j/7E5E786491/",
+      "title": "Rainmaking — application page",
+      "excerpt": "Application → https://apply.workable.com/rainmaking-innovation/j/7E5E786491/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9639792837",
+      "url": "https://www.rainmaking.io/live-programs",
+      "title": "Rainmaking — program page",
+      "excerpt": "Careers → https://apply.workable.com/rainmaking-innovation/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9a8ca7aa09",
+      "url": "https://apply.workable.com/rainmaking-innovation/j/7E5E786491/",
+      "title": "Rainmaking — application page",
+      "excerpt": "https://apply.workable.com/rainmaking-innovation/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bda1e46bb9",
+      "url": "https://apply.workable.com/rainmaking-innovation/j/F0AEEB2CD6/",
+      "title": "Rainmaking — application page",
+      "excerpt": "Apply for this job → https://apply.workable.com/rainmaking-innovation/j/F0AEEB2CD6/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c456407015",
+      "url": "https://www.rainmaking.io/work/barclays-investment-programme",
+      "title": "Rainmaking — terms page",
+      "excerpt": "Careers → https://apply.workable.com/rainmaking-innovation/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-d281a15c8f",
+      "url": "https://apply.workable.com/rainmaking-innovation/j/7E5E786491/",
+      "title": "Rainmaking — application page",
+      "excerpt": "Apply for this job → https://apply.workable.com/rainmaking-innovation/j/7E5E786491/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d67a090ff7",
+      "url": "https://apply.workable.com/rainmaking-innovation/j/F0AEEB2CD6/",
+      "title": "Rainmaking — application page",
+      "excerpt": "Application → https://apply.workable.com/rainmaking-innovation/j/F0AEEB2CD6/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-dad180ee49",
+      "url": "https://www.rainmaking.io/",
+      "title": "Rainmaking — homepage",
+      "excerpt": "Careers → https://apply.workable.com/rainmaking-innovation/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e24d987bbe",
+      "url": "https://apply.workable.com/rainmaking-innovation/j/F0AEEB2CD6/",
+      "title": "Rainmaking — application page",
+      "excerpt": "View all jobs → https://apply.workable.com/rainmaking-innovation/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e51c95306b",
+      "url": "https://apply.workable.com/rainmaking-innovation/j/F0AEEB2CD6/",
+      "title": "Rainmaking — application page",
+      "excerpt": "https://apply.workable.com/rainmaking-innovation/",
+      "page": "application"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-5b42502ab1",
+      "url": "https://www.rainmaking.io/",
+      "page": "details",
+      "excerpt": "Rainmaking Capabilities Work Company Contact us Capabilities Work Company Contact us Build your next Build your next Build your next growth engine Build your next growth engine growth engine growth engine We turn entrepreneurship into scaled growth We turn entrepreneurship into scaled growth We turn entrepreneurship into scaled growth Get in touch Get in touch For nearly two decades, Rainmaking has helped ambitious companies, governments, and regions turn entrepreneurship into scaled growth. For nearly two decades, Rainmaking has helped ambitious companies, governments, and regions turn entrepreneurship into scaled growth. $10b+ Equity value created $10b+ Equity value created 1800+ Ventures 1800+ Ventures 85+ Fortune 500 partners 85+ Fortune 500 partners 5 Global offices 5 Global offices Four ways we create growth A systematic process to identify where to focus for new growth, what specific plays unlock it, and how to win across build/partner/buy. Opportunity Mapping A systematic process to identify where to focus for new growth, what specific plays unlock it, and how to win across build/partner/buy. Opportunity Mapping A lean startup, entrepreneurial approach that de-risks the building and launching of new products, services and ventures. New Ventures A lean startup, entrepreneurial approach that de-risks the building and launching of new products, services and ventures. New"
+    },
+    {
+      "id": "check-page-34c8ce9a26",
+      "url": "https://apply.workable.com/rainmaking-innovation/",
+      "page": "application",
+      "excerpt": "Rainmaking - Current Openings Open Opportunities Job Openings 2 jobs Venture Lead / Associate Director - Energy Tech Opportunity Hybrid London, England, United Kingdom EU Join our talent pool in London Hybrid London, England, United Kingdom View website Help Accessibility Cookie settings Powered by Workable This website uses cookies to improve user’s experience, personalise ads and analyse traffic. You can accept all cookies, decline all optional cookies, or manage your cookie settings. To learn more, view our cookies policy . Cookies settings Accept all Decline all"
+    },
+    {
+      "id": "check-page-a8f0c5eeb6",
+      "url": "https://apply.workable.com/rainmaking-innovation/j/7E5E786491/",
+      "page": "application",
+      "excerpt": "Venture Lead / Associate Director - Energy Tech Opportunity - Rainmaking Venture Lead / Associate Director - Energy Tech Opportunity Hybrid EU London, England, United Kingdom Overview Application Share this job Description At Rainmaking, our mission is to help large corporates tap into the massive potential of the startup world. We believe the greatest value can be unlocked by combining the scale strengths and deep domain knowledge of corporates with the entrepreneurial execution of startups. We help corporations embed an entrepreneurial culture. We train teams with practical entrepreneurial skills. We help companies to meaningfully engage with startups. And, we partner to collaboratively build digital products, and launch new ventures, startup-style. We do this through 3 offerings: Venture Strategy: Defining investment and innovation thesis aligned with business priorities and opportunity areas for corporates to build/buy/partner within. Venture Partnering / Co-venturing: Supporting large corporates in forming value-add partnerships with (or acquiring) successful startups, leveraging our in-house accelerator brand, StartupBootcamp. Venture Building: Where existing offers don’t exist, helping corporates create new products by launching new ventures from scratch on their behalf. Rainmaking has partnered with over 100 Fortune 500 companies, delivering positive change through"
+    },
+    {
+      "id": "check-page-6d2f42de0c",
+      "url": "https://apply.workable.com/rainmaking-innovation/j/F0AEEB2CD6/",
+      "page": "application",
+      "excerpt": "Join our talent pool in London - Rainmaking Join our talent pool in London Hybrid London, England, United Kingdom Overview Application Share this job Description At Rainmaking, our mission is to help large corporates tap into the massive potential of the start-up world. We believe the greatest value can be unlocked by combining the scale strengths and deep domain knowledge of corporates with the entrepreneurial execution of startups. We help corporations embed an entrepreneurial culture. We train teams with practical entrepreneurial skills. We help companies to meaningfully engage with startups. And, we partner to collaboratively build digital products, and launch new ventures, startup-style. We do this through 3 offerings: Venture Strategy: Defining investment and innovation thesis aligned with business priorities and opportunity areas for corporates to build/buy/partner within. Venture Partnering / Co-venturing: Supporting large corporates in forming value-add partnerships with (or acquiring) successful startups, leveraging our in-house accelerator brand, StartupBootcamp. Venture Building: Where existing offers don’t exist, helping corporates create new products by launching new ventures from scratch on their behalf. Rainmaking has partnered with over 100 Fortune 500 companies, delivering positive change through entrepreneurship and bringing startups and corporates together"
+    },
+    {
+      "id": "check-page-956081be22",
+      "url": "https://www.rainmaking.io/work/barclays-investment-programme",
+      "page": "terms",
+      "excerpt": "Barclays investment programme - Rainmaking Capabilities Work Company Contact us Capabilities Work Company Contact us Barclays investment programme A startup and investment programme Led a suite of startup programmes for Barclays Rise, the startup hub of Barclays UK, building a pipeline of new partnerships and investments across the future of banking, finance and money. Venture Investing More Case studies Venture Investing Hitachi Accelerating the impact of the CVO office Venture Investing Hitachi Accelerating the impact of the CVO office Venture Investing IKEA x Taskrabbit Capturing growth from digital innovation Venture Investing IKEA x Taskrabbit Capturing growth from digital innovation Schedule a discovery call with our team Book a call Book a call Capabilities New Ventures Strategic Partnership Venture Investing Innovation Ecosystems Growth Systems Resources About Us Contact Careers News & Insights Case Studies Venture Portfolio Our Family Startup Bootcamp Founder Factor Finnovista Rainmaking AI Slideworks Offices London New York Copenhagen Singapore Riyadh Dubai Mexico CIty Privacy Cookie Settings © Rainmaking Innovation Limited © Rainmaking Innovation Limited"
+    },
+    {
+      "id": "check-page-e9b60ada0b",
+      "url": "https://www.rainmaking.io/about",
+      "page": "details",
+      "excerpt": "About - Rainmaking RMI Capabilities Work Company Contact us Capabilities Work Company Contact us W e t u r n e n t r e p r e n e u r s h i p i n t o s c a l e d g r o w t h W e t u r n e n t r e p r e n e u r s h i p i n t o s c a l e d g r o w t h W e t u r n e n t r e p r e n e u r s h i p i n t o s c a l e d g r o w t h We turn entrepreneurship into scaled growth About us Rainmaking is a small global company and a bit hard to label. Part consultancy, part company builder, part venture capital firm. Since 2007, we've partnered with 85+ Fortune 500 companies, alongside governments, regions, and founders, to turn entrepreneurship into scaled growth. Together we've built and scaled more than 1,800 technology ventures, attracted over $10B in funding, created 10,000+ jobs, and delivered hundreds of exits. We help pioneering organizations find, build, and scale new sources of revenue, combining company building, partnerships, and investment into one operating model. We bring the people, playbooks, and governance to make it work, powered by AI, data, and modern tools. From studios in London, Copenhagen, Berlin, Singapore, and New York, our strategists, engineers, operators, and founders build alongside our partners. Not from the sidelines. In the room where the work gets done. Our Leadership Phil Roche CEO, Europe Phil Roche CEO, Europe Phil Roche CEO, Europe Phil Roche CEO, Europe"
+    },
+    {
+      "id": "check-page-0e0d07c372",
+      "url": "https://www.rainmaking.io/expansion-programs",
+      "page": "details",
+      "excerpt": "Expansion Programs- Rainmaking RMI Capabilities Work Company Contact us Capabilities Work Company Contact us Expansion programs H e l p s t a r t u p s l a n d , s e l l , a n d s c a l e i n n e w m a r k e t s H e l p s t a r t u p s l a n d , s e l l , a n d s c a l e i n n e w m a r k e t s Expansion Programs Expansion Programs We design and run commercially driven expansion programs that help startups and scaleups enter new international markets — with real customers, real partners, and real revenue from day one. Built for regions and development agencies that want to attract high-growth companies and drive inward investment. We design and run commercially driven expansion programs that help startups and scaleups enter new international markets — with real customers, real partners, and real revenue from day one. Built for regions and development agencies that want to attract high-growth companies and drive inward investment. Outcomes Market-ready startups Curated companies matched to genuine local demand, vetted for commercial fit and operational maturity, not just exploring Market-ready startups Curated companies matched to genuine local demand, vetted for commercial fit and operational maturity, not just exploring Market-ready startups Curated companies matched to genuine local demand, vetted for commercial fit and operational maturity, not just exploring Commercial"
+    },
+    {
+      "id": "check-page-f07a9f01b1",
+      "url": "https://www.rainmaking.io/live-programs",
+      "page": "details",
+      "excerpt": "Live Programs - Rainmaking RMI Capabilities Work Company Contact us Capabilities Work Company Contact us Live Programs E c o s y s t e m s w e ’ r e b u i l d i n g t o d a y . . . E c o s y s t e m s w e ’ r e b u i l d i n g t o d a y . . . Mexico City - Fintech - Ecommerce Miami - Fintech - Ecommerce New York - Fintech - Ecommerce Hartford - Fintech - Ecommerce Columbia - Fintech - Ecommerce Madrid - Fintech - Ecommerce Barcelona - Fintech - Ecommerce Dublin - Fintech - Ecommerce London - Fintech - Ecommerce Amsterdam - Fintech - Ecommerce Rome/Milan - Fintech - Ecommerce Berlin - Fintech - Ecommerce Copenhagen - Fintech - Ecommerce Norway - Fintech - Ecommerce Cape Town - Fintech - Ecommerce Cairo - Fintech - Ecommerce Istanbul - Fintech - Ecommerce Haifa - Fintech - Ecommerce Jordan - Fintech - Ecommerce KSA - Fintech - Ecommerce Doha - Fintech - Ecommerce Dubai - Fintech - Ecommerce Mumbai - Fintech - Ecommerce Chengdu - Fintech - Ecommerce Seoul - Fintech - Ecommerce Singapore - Fintech - Ecommerce Osaka - Fintech - Ecommerce Melbourne - Fintech - Ecommerce Featured programs Unlocking the housing market through sustainable construction Rainmaking, in partnershp with Thames Freeport, a London Economic Zone, have led the development of a world leading construction innovation cluster, bringing together developers, planners, investors, innovators and energy companies to"
+    },
+    {
+      "id": "check-page-ff118a1789",
+      "url": "https://www.rainmaking.io/portfolio",
+      "page": "portfolio",
+      "excerpt": "Portfolio - Rainmaking RMI Capabilities Work Company Contact us Capabilities Work Company Contact us O u r P o r t f o l i o Since 2007 we’ve helped fund, build and scale over 1800 technology companies All Mobility Food AI Fintech Consumer Climate Health SaaS Other Showing 50 companies Robot.com 2016 Sendcloud 2014 b.well 2018 Kuda Bank 2018 BondIT 2015 Babyscripts 2016 MoneyFellows 2015 Skytree 2014 Aerobotics 2017 Delio 2015 Laka 2017 BITA 2019 Wellth 2018 Tulyp 2022 Manus Machina 2014 LoyaltyLion 2012 MobieTrain 2018 Plytix 2015 Flow 2015 Miqrotec 2022 coModule 2014 Visitt 2017 Bellabeat 2013 Whering 2020 High Mobility 2013 Plastiks.io 2019 HubPay 2019 Sonect 2020 Obsess 2020 CareAngel 2016 Rightindem 2016 Evja 2016 Cevinio 2014 Joyride 2017 Vexi 2019 We Are Eves 2019 ThingTrax 2017 Prestanamico 2019 Finerio 2017 Sitemark 2016 ChatLingual 2013 Payment24 2016 Bdeo 2017 Segmentify 2015 FlyFarm 2022 Dashmote 2015 Tradler 2018 Tengiva 2021 Mela 2018 Cybertonica 2015 See more All Mobility Food AI Fintech Consumer Climate Health SaaS Other Showing 50 companies Robot.com 2016 Sendcloud 2014 b.well 2018 Kuda Bank 2018 BondIT 2015 Babyscripts 2016 MoneyFellows 2015 Skytree 2014 Aerobotics 2017 Delio 2015 Laka 2017 BITA 2019 Wellth 2018 Tulyp 2022 Manus Machina 2014 LoyaltyLion 2012 MobieTrain 2018 Plytix 2015 Flow 2015 Miqrotec 2022 coModule 2014 Visitt 2017 Bellabeat 2013 Whering"
     }
   ],
   "findings": {
@@ -57,6 +308,22 @@
       {
         "value": "https://apply.workable.com/rainmaking-innovation/",
         "evidenceId": "check-route-dad180ee49"
+      },
+      {
+        "value": "https://apply.workable.com/rainmaking-innovation/j/7E5E786491/",
+        "evidenceId": "check-route-7e4845dc89"
+      },
+      {
+        "value": "https://apply.workable.com/rainmaking-innovation/j/F0AEEB2CD6/",
+        "evidenceId": "check-route-18283de2b6"
+      },
+      {
+        "value": "https://apply.workable.com/rainmaking-innovation/j/7E5E786491/apply/",
+        "evidenceId": "check-route-7f9a32c789"
+      },
+      {
+        "value": "https://apply.workable.com/rainmaking-innovation/j/F0AEEB2CD6/apply/",
+        "evidenceId": "check-route-d67a090ff7"
       }
     ],
     "applicationUrl": [
@@ -68,8 +335,34 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "6 months",
+        "evidenceId": "check-duration-709bc3f839"
+      },
+      {
+        "value": "12 months",
+        "evidenceId": "check-duration-72ae7a38a1"
+      }
+    ],
+    "format": [
+      {
+        "value": "hybrid",
+        "evidenceId": "check-format-2561e7e1a2"
+      }
+    ],
+    "location": [
+      {
+        "value": "London",
+        "evidenceId": "check-location-111a375534"
+      }
+    ],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [
       {
         "value": "https://www.rainmaking.io/portfolio",

@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.sting.co/",
   "applyUrl": "https://www.sting.co/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Sting | Sweden’s Leading Startup Accelerator No items found. Programs Sting Programs Sting Core Real results. Lifelong impact. Sting Core is our flagship six-month program for ambitious tech founders ready to fast-track their startups' growth with purpose and precision. Climate Race The Sting Climate Race 2025 is your chance to fast-track your climate tech startup in a world that urgently needs solutions. Pre-Sting Pre-Sting Not quite ready to join Sting yet? Our Pre-Sting opportunities are for early-stage startups who are ready to begin turning their idea into reality. Explore Pre-Sting Opportunities chevron_right Sting Startup Academy An online, self-paced course designed to take your idea to the next level. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Sting is Sweden’s leading startup accelerator, backing bold founders with funding, coaching, and a world-class network to help them grow smarter and achieve success faster.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "Get the experience, connections and capital that are hard to build alone. + 500 companies since 2002. #1 DeepTech Startup Hub in the Nordics according to Financial Times",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "sting-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.sting.co/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

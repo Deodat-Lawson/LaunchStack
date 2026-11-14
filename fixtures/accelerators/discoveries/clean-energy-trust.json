@@ -1,28 +1,12 @@
 {
   "programId": "clean-energy-trust",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://evergreeninno.org/apply",
-      "page": "application",
-      "anchor": "Apply for Investment",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://evergreeninno.org/portfolio",
-      "page": "portfolio",
-      "anchor": "Portfolio",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://evergreeninno.org/about-us",
       "page": "details",
       "anchor": "About Us",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -38,6 +22,134 @@
       "url": "https://evergreeninno.org/about-us/supporters",
       "page": "details",
       "anchor": "Supporters",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/apply",
+      "page": "terms",
+      "anchor": "Apply for Investment",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/events/fall-2026-investment-cycle-info-session",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/events/november-18-spring-investment-cycle-information-session",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/events/spring-investment-cycle-information-session-2025",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/explore/article/2017-cet-challenge-application-launch",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/explore/article/2020-new-investment-spotlight-renewance",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/explore/article/an-environmentally-and-socially-conscious-food-supply-our-investment-in-agricycle",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/explore/article/august-cleantech-roundup-new-investments-corporate-renewables",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/explore/article/clean-energy-trust-announces-970000-in-seed-investments-benefiting-midwest-cleantech-startups-at-co_invest-cleantech-event",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/explore/article/clean-energy-trust-selects-finalists-2017-cet-challenge-investments",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/explore/article/clean-energy-trusts-investment-in-varunas-vision",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/explore/article/february-2025-cleantech-roundup-trade-war-evolving-generation-mix-climate-tech-investment-data",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/explore/article/investment-committee-formation-brings-additional-rigor-clean-energy-trusts-investment-model",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/explore/article/may-cleantech-roundup-covid-evs-enormous-storage-investments-scooter-consolidation-insanely-cheap-solar",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/portfolio",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/start-up-opportunities/award/501vc",
+      "page": "terms",
+      "anchor": "501vc® Investment Fund",
       "fetched": false,
       "blocked": null,
       "origin": "official"

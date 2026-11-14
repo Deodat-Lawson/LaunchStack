@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 2,
+  "id": "inspyre-innovation-hub",
+  "name": "INSPYRE Innovation Hub",
+  "logo": {
+    "path": "/accelerators/logos/inspyre-innovation-hub.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://inspyrehub.com/",
+  "applyUrl": "https://inspyrehub.com/",
+  "description": {
+    "text": "CenterState CEO’s INSPYRE Innovation Hub is where founders dream, build, and scale. It’s the largest entrepreneurship hub in New York State.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "INSPYRE is a bold leap forward for Syracuse’s startup scene. INSPYRE is where entrepreneurs come to dream, build and scale. See it for yourself.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://inspyrehub.com/",
+      "title": "INSPYRE Innovation Hub — official mark on the retrieved page",
+      "quote": "https://inspyrehub.com/wp-content/uploads/2025/03/INSPYRE-logo-Secondary-Horizontal.png",
+      "checkedAt": "2026-11-14T20:04:58.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://inspyrehub.com/",
+      "title": "INSPYRE Innovation Hub — visible page text",
+      "quote": "INSPYRE Innovation Hub: The Largest Entrepreneurship Hub in NY Contact CenterState CEO CLIENT PORTAL Follow Follow Follow Follow About Meet the Team Our Sponsors Fractional C-Suite Amenities WHY CNY Be Our Client Apply Programs Innovation Hot Spot Get Involved Day Passes Be a Sponsor Become a Mentor Events Meeting Spaces News Team Store Welcome to the new INSPYRE Innovation Hub by CenterState CEO Learn more Be Our Client Book an Appointment Learn more Get Involved INSPYRE Offerings Learn more Meeting Spaces at INSPYRE Learn more Get Your Day Pass to INSPYRE! INSPYRE is a bold leap forward for Syracuse’s startup scene. INSPYRE is where entrepreneurs come to dream, build and scale. See it for yourself. GET YOUR DAY PASS INSPYRE News: Read more stories here. GENIUS NY Celebrates 10 Years of Innovation at Third Annual Founders Retreat Founders from across GENIUS NY's 10 cohorts... read more 10 Local Entrepreneurs Graduate from Up Start Accelerator The CenterState CEO program helps early-stage... read more Client Spotlight: NextHealth AI What started as a frustrating personal... read more INSPYRE Innovation Hub’s First Year Fuels Growth, Connections and Entrepreneurial Success In just one year, CenterState CEO’s INSPYRE... read more Client Spotlight: SINBUN What started as a passion concept shared with... read more CenterState CEO’s First Whiz Kidz Summer Program Inspires the Next",
+      "checkedAt": "2026-11-14T20:04:58.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ]
+    }
+  ]
+}

@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.indexventures.com/",
   "applyUrl": "https://www.indexventures.com/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Resources Search Submit Search Find a team member, company, Perspectives piece or Index Press resource Back Perspectives Companies Index Press Team Startup Jobs Sorry, your browser doesn't support playback for this video Asher, Aidan and Ben Pathologically curious. Tireless debaters. Cheerful contrarians. Read more Asher, Aidan and Ben Flapping Airplanes Sorry, your browser doesn't support playback for this video Scott Morton Launch pad veteran. Chaser of open waters. Hardware's software renegade. Read more Scott Morton Revel Sorry, your browser doesn't support playback for this video Joon Sung Park Multidisciplinary artist. Agent architect. Simulator of worlds. Read more Joon Sung Park Simile Sorry, your browser doesn't support playback for this video Lin Qiao AI torchbearer. Inference innovator. Open-source evangelist. Read more Lin Qiao Fireworks Sorry, your browser doesn't support playback for this video Jean-Charles Samuelian-Werve Grandchild of refugees. Methodic optimist. Global health maverick. Read more Jean-Charles Samuelian-Werve Alan No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "Partnering with exceptional entrepreneurs from SF to NY, London to Tel Aviv, from Seed to IPO.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "When it comes to the founders we work with , we look for the unexpected. The groundbreakers and game-changers with a fire inside that can’t be dimmed or duplicated. Because at Index, we’re invested in the people behind great ideas.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "index-ventures-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.indexventures.com/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

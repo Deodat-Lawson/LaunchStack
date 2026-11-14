@@ -9,14 +9,14 @@
   "websiteUrl": "https://www.samsungnext.com/",
   "applyUrl": "https://www.samsungnext.com/",
   "description": {
-    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Main - New Portfolio Team Blog Pitch us → SAMSUNG NEXT / VENTURES 200+ investments across AI, robotics, health, hardware, software, and consumer — where Samsung can be a genuinely differentiated partner. — ABOUT Samsung Next is the corporate venture arm of Samsung Electronics. We back founders building the technologies that define the next decade — where atoms matter as much as bits — and expertly chart a course through Samsung's global ecosystem on their behalf. — COMPANIES 350+ PORTFOLIO SINCE 2012 — CAPITAL $2.4B INVESTED IN FRONTIER TECH 01 / Thesis The last decade was defined by software. The next is being built at the intersection of AI, robotics, synthetic biology, and advanced hardware. Physics is relevant again — and Samsung is uniquely positioned to lead. 12+ YEARS INVESTING 6 THEMATIC DOMAINS 4 GLOBAL OFFICES 0 IC MEETINGS, EVER 02 / Focus Areas We invest across six domains where the physics, the supply chain, and the distribution of Samsung Electronics become unfair advantages for our founders. 01 ↗ AI Foundation models, edge deployment, and enterprise-scale implementation. Perplexity · Liquid AI · Black Forest Labs 02 ↗ Robotics Intelligent Machines Full-stack autonomy, advanced sensing, and human-machine interfaces. 1X · Field AI · Apptronik 03 ↗ Digital Health & MedTech Bio-electronic integration, precision diagnostics, and next-gen wearables. Maven Clinic · Func No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "text": "The last decade was defined by software. The next is being built at the intersection of AI, robotics, synthetic biology, and advanced hardware. Physics is relevant again — and Samsung is uniquely positioned to lead.",
     "sourceIds": [
       "homepage"
     ],
     "interpretation": true
   },
   "targetApplicants": {
-    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "text": "We invest across six domains where the physics, the supply chain, and the distribution of Samsung Electronics become unfair advantages for our founders.",
     "sourceIds": [
       "homepage"
     ],
@@ -47,19 +47,7 @@
       "rolling": false,
       "sourceIds": [
         "homepage"
-      ],
-      "form": {
-        "id": "samsung-next-unconfirmed",
-        "status": "unavailable",
-        "sourceUrl": "https://www.samsungnext.com/",
-        "checkedAt": "2026-11-03T00:18:31.000Z",
-        "supported": false,
-        "limitations": [
-          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
-          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
-        ],
-        "fields": []
-      }
+      ]
     }
   ]
 }

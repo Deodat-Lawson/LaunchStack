@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 2,
+  "id": "sku-fka-incubation-station",
+  "name": "SKU (FKA Incubation Station)",
+  "logo": {
+    "path": "/accelerators/logos/sku-fka-incubation-station.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.sku.is",
+  "applyUrl": "https://www.sku.is",
+  "description": {
+    "text": "SKU is THE leading consumer products accelerator. We educate and equip companies with market-validated products for growth into world class brands.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "SKU’s 12-week program includes a best-in-class curriculum and hand-picked teams of rock-star mentors to help brands successfully scale.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.sku.is",
+      "title": "SKU (FKA Incubation Station) — official mark on the retrieved page",
+      "quote": "http://files.sku.is/wp-content/uploads/2018/03/sku110.png",
+      "checkedAt": "2026-11-14T20:04:58.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.sku.is",
+      "title": "SKU (FKA Incubation Station) — visible page text",
+      "quote": "Home - SKU X Facebook Instagram About SKU Team Get in Touch Media Programs Apply to SKU Spring 2027 FAQ Testimonials Brands A-Z Testimonials Mentors About Mentor Interest Form Testimonials Get in Touch Events Fall Showcase: November 17, 2026 Resources Preferred Providers Partners Benefits Get in Touch SKU Report Blog Gift Guide Creating Lasting Change in CPG SKU: The Nation's Leading Consumer Products Accelerator Now Accepting Applications for Our Spring 2027 Program APPLY TODAY The SKU Ecosystem SKU surrounds stellar startups with a powerful ecosystem that provides the tools and skills necessary to scale. Founders SKU’s 12-week program includes a best-in-class curriculum and hand-picked teams of rock-star mentors to help brands successfully scale. > Apply Now Mentors Join SKU’s community of more than 700 industry experts, investors, successful entrepreneurs, all dedicated to helping passionate founders build their brands. > Become a SKU Mentor Partners Connect with SKU’s powerful community of CPG founders and industry leaders and stay on top of the latest trends in CPG. > Sponsor SKU What We Do SKU provides an ecosystem that creates lasting change in CPG by providing all the resources founders need to accelerate the growth of their brands. SKU’s world-class program is driven by a community of the nation’s top CPG leaders, successful founders and industry experts. Our",
+      "checkedAt": "2026-11-14T20:04:58.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ]
+    }
+  ]
+}

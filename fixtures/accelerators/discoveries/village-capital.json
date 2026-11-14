@@ -1,7 +1,39 @@
 {
   "programId": "village-capital",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://newsandviews.vilcap.com/press-releases/africa-ecosystem-catalysts-facility-announces-initial-investments-in-ghana-based-startups-rivia-clinics-and-vdl-fulfillment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://newsandviews.vilcap.com/press-releases/kenyan-based-startup-aquarech-receives-usd-350k-investment-from-village-capitals-reducing-inequalities-investment-facility",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vilcap.com/about-us",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vilcap.com/about-us/our-team",
+      "page": "details",
+      "anchor": "Meet our team",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://vilcap.com/about-us/story",
       "page": "details",
@@ -11,10 +43,10 @@
       "origin": "official"
     },
     {
-      "url": "https://vilcap.com/programs",
-      "page": "details",
-      "anchor": "Learn more about our startup programs.",
-      "fetched": false,
+      "url": "https://vilcap.com/entrepreneurs/peer-selected-investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -22,7 +54,7 @@
       "url": "https://vilcap.com/eso-programs",
       "page": "details",
       "anchor": "Learn more about our ESO programs.",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -30,7 +62,7 @@
       "url": "https://vilcap.com/impactinvesting",
       "page": "details",
       "anchor": "Learn more about our impact investing work.",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -43,18 +75,66 @@
       "origin": "official"
     },
     {
-      "url": "https://vilcap.com/about-us/our-team",
+      "url": "https://vilcap.com/programs",
       "page": "details",
-      "anchor": "Meet our team",
-      "fetched": false,
+      "anchor": "Learn more about our startup programs.",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://vilcap.com/about-us",
+      "url": "https://vilcap.com/programs//programs/the-future-of-aging-2026",
       "page": "details",
-      "anchor": "About Us",
+      "anchor": "",
       "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://vilcap.com/programs//programs/vilcap-innovative-capital-facility-nwa",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vilcap.com/programs/adapt-innovation-for-social-resilience-united-states-2024",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vilcap.com/programs/ibm-hyper-protect-accelerator-cohort-4",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://vilcap.com/terms-of-service",
+      "page": "terms",
+      "anchor": "Terms of Service",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

@@ -1,12 +1,28 @@
 {
   "programId": "mars-discovery",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.marsdd.com/startups/capital-program/",
+      "url": "https://app.marsdd.com/companies",
+      "page": "portfolio",
+      "anchor": "Directory",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://app.marsdd.com/signup?type=venture",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://hubs.marsdd.com/hubs/",
       "page": "details",
-      "anchor": "MaRS Capital Program",
-      "fetched": true,
+      "anchor": "About Innovation Hubs",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -19,10 +35,90 @@
       "origin": "official"
     },
     {
-      "url": "https://www.marsdd.com/startups/",
+      "url": "https://www.marsdd.com/accelerators/",
       "page": "details",
-      "anchor": "targeted programming",
+      "anchor": "Accelerators",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.marsdd.com/application-accepted/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.marsdd.com/apply/",
+      "page": "application",
+      "anchor": "",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.marsdd.com/avindataindex-terms/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.marsdd.com/career/impact-investment-intern/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.marsdd.com/ineligible-application/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.marsdd.com/magazine/tapping-the-source-how-relics-of-the-industrial-age-could-help-power-the-future/",
+      "page": "details",
+      "anchor": "Tapping the source: How relics of the industrial age could help power the future Aslan Renewables’ modular turbine systems tap into dormant infrastructure as a new source of hydrop",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.marsdd.com/mars-admare-tx-accelerator-application/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.marsdd.com/mars-capital-program-investor-application/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.marsdd.com/mars-capital-program-venture-application/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.marsdd.com/mobility-unlimited-hub-application/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -43,10 +139,58 @@
       "origin": "official"
     },
     {
-      "url": "https://www.marsdd.com/magazine/tapping-the-source-how-relics-of-the-industrial-age-could-help-power-the-future/",
+      "url": "https://www.marsdd.com/startups/",
       "page": "details",
-      "anchor": "Tapping the source: How relics of the industrial age could help power the future Aslan Renewables’ modular turbine systems tap into dormant infrastructure as a new source of hydrop",
+      "anchor": "targeted programming",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.marsdd.com/startups/capital-program/",
+      "page": "details",
+      "anchor": "MaRS Capital Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.marsdd.com/terms-conditions/",
+      "page": "terms",
+      "anchor": "Terms & Conditions",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.marsdd.com/venture-services-terms-and-conditions/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.marsdd.com/video/how-hydrostor-secured-multi-million-dollar-investments/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.marsdd.com/video/investor-rapid-fire-applying-indigenous-principles-to-investing-in-healthtech-althea-wishloff/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.marsdd.com/video/the-hardest-thing-for-an-entrepreneur-is-dealing-with-false-hope/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

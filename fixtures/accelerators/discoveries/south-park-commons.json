@@ -1,6 +1,6 @@
 {
   "programId": "south-park-commons",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://www.southparkcommons.com/apply",
@@ -11,17 +11,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.southparkcommons.com/companies",
-      "page": "portfolio",
-      "anchor": "Companies",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.southparkcommons.com/faq",
-      "page": "terms",
-      "anchor": "FAQ",
+      "url": "https://www.southparkcommons.com/apply?pathway=funding",
+      "page": "application",
+      "anchor": "Funding $1M to $10M · Exploration & Conviction Funding from $1M to $10M for founders who want to build a venture-scale company. Not all our members are ready for funding; for those",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -30,15 +22,15 @@
       "url": "https://www.southparkcommons.com/apply?pathway=residency",
       "page": "application",
       "anchor": "Residency 6 months · No cost or equity · Ideation & Exploration A talent-dense community of technical founders, researchers, and domain-experts testing each other's ideas, finding ",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.southparkcommons.com/apply?pathway=funding",
-      "page": "application",
-      "anchor": "Funding $1M to $10M · Exploration & Conviction Funding from $1M to $10M for founders who want to build a venture-scale company. Not all our members are ready for funding; for those",
-      "fetched": false,
+      "url": "https://www.southparkcommons.com/companies",
+      "page": "portfolio",
+      "anchor": "Companies",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -46,55 +38,7 @@
       "url": "https://www.southparkcommons.com/companies/baseten",
       "page": "portfolio",
       "anchor": "Baseten",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.southparkcommons.com/companies/goodfire",
-      "page": "portfolio",
-      "anchor": "Goodfire",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.southparkcommons.com/companies/profound",
-      "page": "portfolio",
-      "anchor": "Profound",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.southparkcommons.com/companies/gamma",
-      "page": "portfolio",
-      "anchor": "Gamma",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.southparkcommons.com/companies/luma",
-      "page": "portfolio",
-      "anchor": "Luma Labs",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.southparkcommons.com/companies/render",
-      "page": "portfolio",
-      "anchor": "Render",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.southparkcommons.com/companies/density-ai",
-      "page": "portfolio",
-      "anchor": "Density AI",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -102,38 +46,62 @@
       "url": "https://www.southparkcommons.com/companies/cognition-ai",
       "page": "portfolio",
       "anchor": "Cognition",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.southparkcommons.com/companies/socket",
+      "url": "https://www.southparkcommons.com/companies/comun",
       "page": "portfolio",
-      "anchor": "Socket",
-      "fetched": false,
+      "anchor": "More About Comun",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.southparkcommons.com/companies/muon-space",
+      "url": "https://www.southparkcommons.com/companies/deep-cogito",
       "page": "portfolio",
-      "anchor": "Muon Space",
-      "fetched": false,
+      "anchor": "Deep Cogito",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.southparkcommons.com/companies/replit",
+      "url": "https://www.southparkcommons.com/companies/density-ai",
       "page": "portfolio",
-      "anchor": "Replit",
-      "fetched": false,
+      "anchor": "Density AI",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.southparkcommons.com/companies/pilot",
+      "url": "https://www.southparkcommons.com/companies/doppel",
       "page": "portfolio",
-      "anchor": "Pilot",
+      "anchor": "Doppel",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.southparkcommons.com/companies/gamma",
+      "page": "portfolio",
+      "anchor": "Gamma",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.southparkcommons.com/companies/goodfire",
+      "page": "portfolio",
+      "anchor": "Goodfire",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.southparkcommons.com/companies/luma",
+      "page": "portfolio",
+      "anchor": "Luma Labs",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -147,33 +115,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.southparkcommons.com/companies/doppel",
+      "url": "https://www.southparkcommons.com/companies/muon-space",
       "page": "portfolio",
-      "anchor": "Doppel",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.southparkcommons.com/companies/deep-cogito",
-      "page": "portfolio",
-      "anchor": "Deep Cogito",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.southparkcommons.com/companies/planetscale",
-      "page": "portfolio",
-      "anchor": "PlanetScale",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.southparkcommons.com/companies/nuance-labs",
-      "page": "portfolio",
-      "anchor": "Nuance Labs",
+      "anchor": "Muon Space",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -187,9 +131,57 @@
       "origin": "official"
     },
     {
-      "url": "https://www.southparkcommons.com/companies/comun",
+      "url": "https://www.southparkcommons.com/companies/nuance-labs",
       "page": "portfolio",
-      "anchor": "More About Comun",
+      "anchor": "Nuance Labs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.southparkcommons.com/companies/pilot",
+      "page": "portfolio",
+      "anchor": "Pilot",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.southparkcommons.com/companies/planetscale",
+      "page": "portfolio",
+      "anchor": "PlanetScale",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.southparkcommons.com/companies/profound",
+      "page": "portfolio",
+      "anchor": "Profound",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.southparkcommons.com/companies/render",
+      "page": "portfolio",
+      "anchor": "Render",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.southparkcommons.com/companies/replit",
+      "page": "portfolio",
+      "anchor": "Replit",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.southparkcommons.com/companies/socket",
+      "page": "portfolio",
+      "anchor": "Socket",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -199,6 +191,22 @@
       "page": "portfolio",
       "anchor": "More About Unit21",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.southparkcommons.com/faq",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.southparkcommons.com/terms-of-service",
+      "page": "terms",
+      "anchor": "Terms of Service",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

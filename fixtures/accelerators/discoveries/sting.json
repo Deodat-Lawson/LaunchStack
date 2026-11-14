@@ -1,19 +1,171 @@
 {
   "programId": "sting",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://www.sting.co/sting-core",
-      "page": "details",
-      "anchor": "Sting Programs",
+      "url": "https://app.sting.co/auth/signup",
+      "page": "application",
+      "anchor": "Apply to Sting",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://propelcapital.sting.co",
+      "page": "application",
+      "anchor": "Apply to Propel Lorem ipsum",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.sting.co/science-to-business",
+      "url": "https://www.sting.co/about",
+      "page": "details",
+      "anchor": "About Sting is a community of entrepreneurs united in action, on a mission to share our experience with people whose ideas have potential to solve humanity’s biggest challenges. Re",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/about/contact",
+      "page": "details",
+      "anchor": "Contact We’re here to help! If you have any questions, concerns, or need assistance, please don’t hesitate to let us know.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/about/partners",
+      "page": "details",
+      "anchor": "Partners Creating a better world requires teamwork, partnerships, and collaboration. Our ch",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/about/people",
+      "page": "details",
+      "anchor": "People We are a community of entrepreneurs united in action, on a mission to share our experience with peo",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/about/sting-projects",
+      "page": "details",
+      "anchor": "Sting Projects Lorem ipsum",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/about/sting-projects/circle-of-life-science",
+      "page": "details",
+      "anchor": "Circle of Life Science Eager to lead the future of pediatric healthcare through tech innovation?",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/annual-reports/2023",
+      "page": "details",
+      "anchor": "Sting Annual Report 2023 For a comprehensive overview of our overall impact, I invite you to explore our detailed report.I hope you will find value in reviewing our 2022 status rep",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/apply",
       "page": "application",
-      "anchor": "Science to Business Through our \"Science to Business\" initiative, we provide exclusive support to turn groundbreaking concepts into startups. Get funding for patent applications an",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/companies",
+      "page": "portfolio",
+      "anchor": "Companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/faq",
+      "page": "terms",
+      "anchor": "FAQs Explore the FAQs for insights on various topics related to our organization.",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/faqs/are-there-other-benefits-to-having-propel-capital-as-a-financier-in-addition-to-the-investment-itself",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/faqs/can-i-apply-as-a-solo-founder",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/faqs/can-i-apply-if-ive-already-raised-funding",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/faqs/can-i-work-or-intern-at-sting",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/faqs/do-i-get-access-to-an-office-or-workspace",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/faqs/do-i-need-to-be-based-in-stockholm",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/faqs/do-i-pay-for-stings-services",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/faqs/do-we-need-to-have-our-tech-inhouse",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/faqs/do-you-provide-access-to-experts-in-legal-ip-recruitment-etc",
+      "page": "terms",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
@@ -35,81 +187,33 @@
       "origin": "official"
     },
     {
-      "url": "https://www.sting.co/annual-reports/2023",
-      "page": "details",
-      "anchor": "Sting Annual Report 2023 For a comprehensive overview of our overall impact, I invite you to explore our detailed report.I hope you will find value in reviewing our 2022 status rep",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.sting.co/companies",
+      "url": "https://www.sting.co/newsroom/news/aktiebok-io-free-share-register",
       "page": "portfolio",
-      "anchor": "Companies",
+      "anchor": "November 2, 2026 Sting opens aktiebok.io, a free share register for Swedish companies Our startups kept asking for an easier way to keep their share register, so we built one. Now ",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.sting.co/about/sting-projects/circle-of-life-science",
-      "page": "details",
-      "anchor": "Circle of Life Science Eager to lead the future of pediatric healthcare through tech innovation?",
+      "url": "https://www.sting.co/newsroom/news/meet-the-21-startups-joining-sting-this-autumn",
+      "page": "batches",
+      "anchor": "October 6, 2026 Meet the 21 startups joining Sting this autumn From technology built for the Moon to critical infrastructure beneath the ocean and new ways to understand our cells,",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.sting.co/about",
-      "page": "details",
-      "anchor": "About Sting is a community of entrepreneurs united in action, on a mission to share our experience with people whose ideas have potential to solve humanity’s biggest challenges. Re",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.sting.co/about/people",
-      "page": "details",
-      "anchor": "People We are a community of entrepreneurs united in action, on a mission to share our experience with peo",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.sting.co/about/partners",
-      "page": "details",
-      "anchor": "Partners Creating a better world requires teamwork, partnerships, and collaboration. Our ch",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.sting.co/about/contact",
-      "page": "details",
-      "anchor": "Contact We’re here to help! If you have any questions, concerns, or need assistance, please don’t hesitate to let us know.",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.sting.co/faq",
-      "page": "terms",
-      "anchor": "FAQs Explore the FAQs for insights on various topics related to our organization.",
+      "url": "https://www.sting.co/newsroom/press/applications-are-now-open-for-the-cassini-business-accelerator-a-program-supporting-founders-in-the-european-space-tech-ecosystem",
+      "page": "application",
+      "anchor": "",
       "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.sting.co/programs",
-      "page": "details",
-      "anchor": "Our Programs",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.sting.co/about/sting-projects",
-      "page": "details",
-      "anchor": "Sting Projects Lorem ipsum",
+      "url": "https://www.sting.co/newsroom/press/seaqure-labs-secures-over-sek-5-million-to-scale-sustainable-mycoprotein-based-fish-feed",
+      "page": "terms",
+      "anchor": "August 21, 2025 Seaqure labs secures over SEK 5 million to scale sustainable mycoprotein-based fish feed Seaqure labs, a Gothenburg-based bio- and foodtech company, has closed a pr",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -123,18 +227,26 @@
       "origin": "official"
     },
     {
-      "url": "https://www.sting.co/newsroom/news/aktiebok-io-free-share-register",
-      "page": "portfolio",
-      "anchor": "November 2, 2026 Sting opens aktiebok.io, a free share register for Swedish companies Our startups kept asking for an easier way to keep their share register, so we built one. Now ",
+      "url": "https://www.sting.co/programs",
+      "page": "details",
+      "anchor": "Our Programs",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.sting.co/newsroom/news/meet-the-21-startups-joining-sting-this-autumn",
-      "page": "batches",
-      "anchor": "October 6, 2026 Meet the 21 startups joining Sting this autumn From technology built for the Moon to critical infrastructure beneath the ocean and new ways to understand our cells,",
+      "url": "https://www.sting.co/science-to-business",
+      "page": "application",
+      "anchor": "Science to Business Through our \"Science to Business\" initiative, we provide exclusive support to turn groundbreaking concepts into startups. Get funding for patent applications an",
       "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sting.co/sting-core",
+      "page": "details",
+      "anchor": "Sting Programs",
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     }

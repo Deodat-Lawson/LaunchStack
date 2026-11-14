@@ -1,7 +1,151 @@
 {
   "programId": "bessemer",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "https://jobs.bvp.com/jobs",
+      "page": "portfolio",
+      "anchor": "Portfolio careers",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/about",
+      "page": "details",
+      "anchor": "About",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/atlas/acv-from-used-car-dealerships-in-buffalo-to-a-nationwide-marketplace",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/atlas/an-inside-look-at-our-investment-process-for-twilio",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/atlas/best-of-breed-applications",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/atlas/driving-seven-figure-enterprise-deals-how-recall-ais-amanda-zhu-went-from-founder-led-sales-to-building-out-gtm",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/atlas/the-ai-100-benchmarks-for-the-third-supercycle",
+      "page": "portfolio",
+      "anchor": "Article The AI 100: benchmarks for the third supercycle November 12, 2026 The inaugural list of the top 100 private AI companies is worth $3.6T, with ARR growth averaging 480%. A d",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/beyond-the-capital",
+      "page": "portfolio",
+      "anchor": "Community & events Peer forums, matchmaking, workshops, and events built around the problems you face. 450+ active companies. 2,000+ community members.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-alloy",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-cypress-io",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-electric",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-pana",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/news/bessemer-series-a-investment-pinpoint",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/news/bessemer-series-c-investment-bigid",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/news/bessemer-series-c-investment-launchdarkly",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
+      "page": "application",
+      "anchor": "News Dreeze: pioneering 'Application Revival' for the agentic age November 10, 2026 Bessemer Venture Partners co-leads Dreeze’s $33M Seed to build cloud-native application recovery",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/news/recall-ai-unlocking-conversation-and-meeting-data-to-power-ai-applications-and-agents",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/news/render-ushers-in-a-modern-age-of-application-development-in-the-cloud",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.bvp.com/portfolio",
       "page": "portfolio",
@@ -11,17 +155,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.bvp.com/about",
-      "page": "details",
-      "anchor": "About",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.bvp.com/portfolio/canva",
+      "url": "https://www.bvp.com/portfolio/abridge",
       "page": "portfolio",
-      "anchor": "",
+      "anchor": "company-abridge-currentcolor",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -35,31 +171,23 @@
       "origin": "official"
     },
     {
-      "url": "https://www.bvp.com/portfolio/waymo",
-      "page": "portfolio",
-      "anchor": "company-waymo-color",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.bvp.com/portfolio/ramp",
-      "page": "portfolio",
-      "anchor": "company-ramp-currentcolor",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.bvp.com/portfolio/legora",
-      "page": "portfolio",
-      "anchor": "company-legora-currentcolor",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.bvp.com/portfolio/axonius",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio/canva",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio/eliseai",
       "page": "portfolio",
       "anchor": "",
       "fetched": false,
@@ -75,22 +203,6 @@
       "origin": "official"
     },
     {
-      "url": "https://www.bvp.com/portfolio/abridge",
-      "page": "portfolio",
-      "anchor": "company-abridge-currentcolor",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.bvp.com/portfolio/eliseai",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
       "url": "https://www.bvp.com/portfolio/kymera-therapeutics",
       "page": "portfolio",
       "anchor": "company-kymera-currentcolor",
@@ -99,49 +211,33 @@
       "origin": "official"
     },
     {
-      "url": "https://www.bvp.com/portfolio?sectors=vertical",
+      "url": "https://www.bvp.com/portfolio/legora",
       "page": "portfolio",
-      "anchor": "Vertical",
+      "anchor": "company-legora-currentcolor",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.bvp.com/portfolio?sectors=crypto",
+      "url": "https://www.bvp.com/portfolio/ramp",
       "page": "portfolio",
-      "anchor": "Crypto",
+      "anchor": "company-ramp-currentcolor",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.bvp.com/portfolio?sectors=fintech",
+      "url": "https://www.bvp.com/portfolio/waymo",
       "page": "portfolio",
-      "anchor": "Fintech",
+      "anchor": "company-waymo-color",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://www.bvp.com/portfolio?sectors=deep-tech-and-defense",
+      "url": "https://www.bvp.com/portfolio?sectors=ai",
       "page": "portfolio",
-      "anchor": "Deep Tech & Defense",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.bvp.com/portfolio?sectors=enterprise",
-      "page": "portfolio",
-      "anchor": "Enterprise",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.bvp.com/portfolio?sectors=consumer",
-      "page": "portfolio",
-      "anchor": "Consumer",
+      "anchor": "AI",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -155,6 +251,46 @@
       "origin": "official"
     },
     {
+      "url": "https://www.bvp.com/portfolio?sectors=consumer",
+      "page": "portfolio",
+      "anchor": "Consumer",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=crypto",
+      "page": "portfolio",
+      "anchor": "Crypto",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=cybersecurity",
+      "page": "portfolio",
+      "anchor": "Cybersecurity",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=data-and-cloud",
+      "page": "portfolio",
+      "anchor": "Data & Cloud",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=deep-tech-and-defense",
+      "page": "portfolio",
+      "anchor": "Deep Tech & Defense",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://www.bvp.com/portfolio?sectors=developer",
       "page": "portfolio",
       "anchor": "Developer",
@@ -163,9 +299,25 @@
       "origin": "official"
     },
     {
-      "url": "https://www.bvp.com/portfolio?sectors=ai",
+      "url": "https://www.bvp.com/portfolio?sectors=enterprise",
       "page": "portfolio",
-      "anchor": "AI",
+      "anchor": "Enterprise",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=fintech",
+      "page": "portfolio",
+      "anchor": "Fintech",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=healthcare",
+      "page": "portfolio",
+      "anchor": "Healthcare",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -195,41 +347,9 @@
       "origin": "official"
     },
     {
-      "url": "https://www.bvp.com/portfolio?sectors=healthcare",
+      "url": "https://www.bvp.com/portfolio?sectors=vertical",
       "page": "portfolio",
-      "anchor": "Healthcare",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.bvp.com/portfolio?sectors=data-and-cloud",
-      "page": "portfolio",
-      "anchor": "Data & Cloud",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.bvp.com/portfolio?sectors=cybersecurity",
-      "page": "portfolio",
-      "anchor": "Cybersecurity",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
-      "page": "application",
-      "anchor": "News Dreeze: pioneering 'Application Revival' for the agentic age November 10, 2026 Bessemer Venture Partners co-leads Dreeze’s $33M Seed to build cloud-native application recovery",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.bvp.com/beyond-the-capital",
-      "page": "portfolio",
-      "anchor": "Community & events Peer forums, matchmaking, workshops, and events built around the problems you face. 450+ active companies. 2,000+ community members.",
+      "anchor": "Vertical",
       "fetched": false,
       "blocked": null,
       "origin": "official"

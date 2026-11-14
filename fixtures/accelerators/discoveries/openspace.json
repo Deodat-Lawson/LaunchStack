@@ -1,12 +1,20 @@
 {
   "programId": "openspace",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
       "url": "https://www.openspacecapital.com/companies",
       "page": "portfolio",
       "anchor": "Companies",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.openspacecapital.com/insights/accelerating-venture-climate-investment-in-southeast-asia",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -14,23 +22,7 @@
       "url": "https://www.openspacecapital.com/insights/openspace-portfolio-companies-on-forbes-asia-100-to-watch-list",
       "page": "portfolio",
       "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.openspacecapital.com/insights/portfolio-company-feature-janji-jiwa",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.openspacecapital.com/insights/portfolio-company-feature-love-bonito",
-      "page": "portfolio",
-      "anchor": "",
-      "fetched": false,
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -38,7 +30,23 @@
       "url": "https://www.openspacecapital.com/insights/portfolio-company-feature-cheak",
       "page": "portfolio",
       "anchor": "",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.openspacecapital.com/insights/portfolio-company-feature-janji-jiwa",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.openspacecapital.com/insights/portfolio-company-feature-love-bonito",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -46,7 +54,63 @@
       "url": "https://www.openspacecapital.com/insights/portfolio-company-feature-sarisuki",
       "page": "portfolio",
       "anchor": "",
-      "fetched": false,
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.openspacecapital.com/portfolio/amp",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.openspacecapital.com/portfolio/ampd",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.openspacecapital.com/portfolio/beleaf",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.openspacecapital.com/portfolio/briohr",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.openspacecapital.com/portfolio/broom",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.openspacecapital.com/portfolio/chope",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.openspacecapital.com/portfolio/copilotiq",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     }

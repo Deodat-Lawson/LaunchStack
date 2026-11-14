@@ -1,25 +1,129 @@
 {
   "programId": "setsquared",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pagesRead": [
     "https://www.setsquared.co.uk/",
-    "https://www.setsquared.co.uk/about-setsquared/",
-    "https://www.setsquared.co.uk/deal-readiness-toolkit/"
+    "https://www.setsquared.co.uk/ai-applications/",
+    "https://www.setsquared.co.uk/applications-to-iot-boost-programme-are-open/",
+    "https://www.setsquared.co.uk/blu-wireless-raises-16-6-million-in-growth-funding-round-for-5g-applications/",
+    "https://www.setsquared.co.uk/campaign-application-submitted-confirmation-example-confirmation/",
+    "https://www.setsquared.co.uk/digital-entrepreneurs-programme-application-received/",
+    "https://www.setsquared.co.uk/eir-application-received/",
+    "https://www.setsquared.co.uk/enterprising-women-4-open-for-applications/",
+    "https://www.setsquared.co.uk/entrepreneurs-workout-2026-application-confirmed/",
+    "https://www.setsquared.co.uk/euroincnet-company-application-confirmation/",
+    "https://www.setsquared.co.uk/future-of-mobility-application-form/",
+    "https://www.setsquared.co.uk/gradinvest20-application-received/",
+    "https://www.setsquared.co.uk/icure-2020-application-received/",
+    "https://www.setsquared.co.uk/icure-application-form-2020/",
+    "https://www.setsquared.co.uk/icure-application-form/"
   ],
   "evidence": [
     {
       "id": "check-name-5400002866",
       "url": "https://www.setsquared.co.uk/",
-      "title": "SETsquared — homepage checked by scrape.py",
+      "title": "SETsquared — homepage",
       "excerpt": "SETsquared Partnership | the University Enterprise Collaboration",
       "page": "details"
     },
     {
       "id": "check-route-498b062c66",
       "url": "https://www.setsquared.co.uk/",
-      "title": "SETsquared — homepage checked by scrape.py",
+      "title": "SETsquared — homepage",
       "excerpt": "Home → https://www.setsquared.co.uk/",
       "page": "details"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-7fc9220536",
+      "url": "https://www.setsquared.co.uk/",
+      "page": "details",
+      "excerpt": "SETsquared Partnership | the University Enterprise Collaboration About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy"
+    },
+    {
+      "id": "check-page-39012e9a77",
+      "url": "https://www.setsquared.co.uk/ai-applications/",
+      "page": "application",
+      "excerpt": "AI solutions - vote yes - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy Locations & Contact Close"
+    },
+    {
+      "id": "check-page-49ca2809e5",
+      "url": "https://www.setsquared.co.uk/applications-to-iot-boost-programme-are-open/",
+      "page": "application",
+      "excerpt": "Applications to IoT Boost programme are open! - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy"
+    },
+    {
+      "id": "check-page-91507ebc36",
+      "url": "https://www.setsquared.co.uk/blu-wireless-raises-16-6-million-in-growth-funding-round-for-5g-applications/",
+      "page": "application",
+      "excerpt": "Blu Wireless raises $16.6 million in growth funding round for 5G applications - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative"
+    },
+    {
+      "id": "check-page-9fbd0f78a7",
+      "url": "https://www.setsquared.co.uk/campaign-application-submitted-confirmation-example-confirmation/",
+      "page": "application",
+      "excerpt": "Campaign Application Submitted Confirmation: Example Confirmation - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech"
+    },
+    {
+      "id": "check-page-d38c4d2d44",
+      "url": "https://www.setsquared.co.uk/digital-entrepreneurs-programme-application-received/",
+      "page": "application",
+      "excerpt": "Digital Entrepreneurs Programme - Application Received - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy"
+    },
+    {
+      "id": "check-page-5cc8dd973d",
+      "url": "https://www.setsquared.co.uk/eir-application-received/",
+      "page": "application",
+      "excerpt": "Entrepreneur in Residence Application Received - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy"
+    },
+    {
+      "id": "check-page-2887ced2c4",
+      "url": "https://www.setsquared.co.uk/enterprising-women-4-open-for-applications/",
+      "page": "application",
+      "excerpt": "Enterprising Women opens for fourth year - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy"
+    },
+    {
+      "id": "check-page-45b6879243",
+      "url": "https://www.setsquared.co.uk/entrepreneurs-workout-2026-application-confirmed/",
+      "page": "application",
+      "excerpt": "Entrepreneurs Workout 2026 - application confirmed - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy"
+    },
+    {
+      "id": "check-page-f4706ad43f",
+      "url": "https://www.setsquared.co.uk/euroincnet-company-application-confirmation/",
+      "page": "application",
+      "excerpt": "EuroIncNet Investment Showcase 2024 - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy Locations &"
+    },
+    {
+      "id": "check-page-85039c8440",
+      "url": "https://www.setsquared.co.uk/future-of-mobility-application-form/",
+      "page": "application",
+      "excerpt": "Future of Mobility Technology Disruptors Application Form - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up"
+    },
+    {
+      "id": "check-page-bbb4545ea5",
+      "url": "https://www.setsquared.co.uk/gradinvest20-application-received/",
+      "page": "application",
+      "excerpt": "GRADINVEST@20 - Application Received - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy Locations &"
+    },
+    {
+      "id": "check-page-f9314160a7",
+      "url": "https://www.setsquared.co.uk/icure-2020-application-received/",
+      "page": "application",
+      "excerpt": "ICURe Programme 2020 - Application Received - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy"
+    },
+    {
+      "id": "check-page-16c8d50cb1",
+      "url": "https://www.setsquared.co.uk/icure-application-form-2020/",
+      "page": "application",
+      "excerpt": "ICURe application form - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy Locations & Contact Close"
+    },
+    {
+      "id": "check-page-1f834c1f7c",
+      "url": "https://www.setsquared.co.uk/icure-application-form/",
+      "page": "application",
+      "excerpt": "ICURe application form - SETsquared About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up News & Insights Events Locations & Contact Home About SETsquared Are you an Entrepreneur? Are you a Student? Are you a Researcher? Incubation & Acceleration Centres Investment Futures 2026 Investors & Corporates Innovation Hub Deal Readiness Toolkit Partnership Opportunities Support Programmes Student Enterprise ICURe Hydrogen Training Research Impact Training: Hydrogen Hydrogen Ecosystem Builder Hydrogen Webinar Series Opportunities in Hydrogen Mobility Past Programmes Cyber Invest Cyber Investment Report Investor Partnerships Future Economy Programme SpinOutWest Hydrogen & Sustainable Transport Economy Accelerator Transforming Telecoms The FWD Project Creative Tech Scale-Up Privacy Policy Locations & Contact Close"
     }
   ],
   "findings": {
@@ -35,8 +139,15 @@
     "applicationsOpen": [],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [],
+    "format": [],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [
       {

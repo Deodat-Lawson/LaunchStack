@@ -1,71 +1,7 @@
 {
   "programId": "eit-rawmaterials",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
-    {
-      "url": "https://eitrawmaterials.eu/knowledge-innovation",
-      "page": "details",
-      "anchor": "About Knowledge & Innovation",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/finance-fundraising",
-      "page": "details",
-      "anchor": "About Finance & Fundraising",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/finance-fundraising/all-startups",
-      "page": "portfolio",
-      "anchor": "Startup Portfolio",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/education-skills",
-      "page": "details",
-      "anchor": "About Education and Skills",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/education-skills/european-raw-materials-academy",
-      "page": "details",
-      "anchor": "About the Academy",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/education-skills/european-advanced-materials-academy",
-      "page": "details",
-      "anchor": "About the Academy",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://masters.eitrawmaterials.eu/",
-      "page": "details",
-      "anchor": "Master Programmes",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eitrawmaterials.eu/academy/custom-programmes",
-      "page": "details",
-      "anchor": "Customized Services",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
     {
       "url": "https://alumni.eitrawmaterials.eu/",
       "page": "portfolio",
@@ -75,9 +11,9 @@
       "origin": "official"
     },
     {
-      "url": "https://eitrawmaterials.eu/about-us/publications",
+      "url": "https://eitrawmaterials.eu/about-finance-fundraising",
       "page": "details",
-      "anchor": "Publications",
+      "anchor": "",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -86,6 +22,14 @@
       "url": "https://eitrawmaterials.eu/about-us",
       "page": "details",
       "anchor": "About Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/about-us/contact-us",
+      "page": "details",
+      "anchor": "Contact Us",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -139,18 +83,122 @@
       "origin": "official"
     },
     {
-      "url": "https://eitrawmaterials.eu/about-us/contact-us",
+      "url": "https://eitrawmaterials.eu/about-us/publications",
       "page": "details",
-      "anchor": "Contact Us",
+      "anchor": "Publications",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://eitrawmaterials.eu/about-finance-fundraising",
+      "url": "https://eitrawmaterials.eu/academy/custom-programmes",
       "page": "details",
-      "anchor": "",
+      "anchor": "Customized Services",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/articles/call-for-applications-members-of-executive-board",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/education-skills",
+      "page": "details",
+      "anchor": "About Education and Skills",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/education-skills/european-advanced-materials-academy",
+      "page": "details",
+      "anchor": "About the Academy",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/education-skills/european-raw-materials-academy",
+      "page": "details",
+      "anchor": "About the Academy",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/erma-booster-call",
+      "page": "other",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/erma/investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/erma/investment/proposal",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/finance-fundraising",
+      "page": "details",
+      "anchor": "About Finance & Fundraising",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/finance-fundraising/all-startups",
+      "page": "portfolio",
+      "anchor": "Startup Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/knowledge-innovation",
+      "page": "details",
+      "anchor": "About Knowledge & Innovation",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/over-500-organisations-apply-eit-hei-initiatives-third-call-proposals",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/newsroom/success-stories/return-critical-minerals-investment-should-be-resilience-not-profit",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -158,6 +206,70 @@
       "url": "https://eitrawmaterials.eu/our-portfolio",
       "page": "portfolio",
       "anchor": "View our startup portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/press-releases/2025-greenland-resources-investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-accelerates-green-transition-strategic-investment-silicon-recycling",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-doubles-investment-novana-low-carbon-circular-vanadium-recovery",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-launches-new-investment-call-technology-start-ups-scale-ups-and",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/press-releases/eit-rawmaterials-makes-eu05m-seed-investment-propel-novana-vanadium-recovery-project",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/press-releases/european-competitiveness-requires-strategic-investment-commitment-raw-materials",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eitrawmaterials.eu/press-releases/nordic-bio-graphite-investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://masters.eitrawmaterials.eu/",
+      "page": "details",
+      "anchor": "Master Programmes",
       "fetched": false,
       "blocked": null,
       "origin": "official"

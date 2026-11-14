@@ -1,12 +1,20 @@
 {
   "programId": "seedstars",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
+    {
+      "url": "http://seedstars.com/about/",
+      "page": "details",
+      "anchor": "Our story",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://www.seedstars.com/about/",
       "page": "details",
       "anchor": "ABOUT",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -15,6 +23,326 @@
       "page": "details",
       "anchor": "Our 'Theory of Change'",
       "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/",
+      "page": "details",
+      "anchor": "OPEN CALLS FOR ENTREPRENEURS",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/agrovine-engineering/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/aquafarms-africa/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/crop2cash/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/gnugrid-africa-limited/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/green-innovation-ventures-enterprises-limited/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/insurepay/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/jirogasy/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/kiri-ev-ltd/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/seedstars-shell-foundation-investment-readiness-program/kitovu-technology-company/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/investors/",
+      "page": "terms",
+      "anchor": "IMPACT INVESTMENT Partner with us to fund impactful and innovative solutions across the world.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/insights/how-grow-startup-using-referral-program/",
+      "page": "details",
+      "anchor": "GLOBAL • How To Grow A Startup Using A Referral Program Referral programs are one of the most cost-effective ways for a startup to grow. Imagine turning every new customer into ano",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/learning-resources/fundraising-strategy-early-stage-startup-z/",
+      "page": "terms",
+      "anchor": "GLOBAL • INVESTMENT Fundraising Strategy for an Early-Stage Startup From A to Z The article is based on the training we provide for startups during the Growth Programs . Feb. 24, 2",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/become-successful-angel-investor-i-believe-trick-not-be-independent-joseph-de-leon/",
+      "page": "terms",
+      "anchor": "GLOBAL • INVESTMENT \"To Become a Successful Angel Investor, I Believe the Trick Is Not to Be Independent\", - Joseph de Leon How investors are born and where to find them? What to a",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/bridging-financial-inclusion-gap-includes-education-financial-literacy/",
+      "page": "details",
+      "anchor": "AFRICA • FINANCIAL SERVICES Why Bridging The Financial Inclusion Gap Includes Education On Financial Literacy QuickCheck not only bridges the financial inclusion gap but also educa",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/capital-commodity-knowing-what-do-it-not/",
+      "page": "terms",
+      "anchor": "GLOBAL • INVESTMENT Capital is a commodity. Knowing what to do with it is not. Some capital will flow faster than others and investment terms must be considered, but assuming all t",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/emerging-venture-capital-fund-managers-emerging-markets-unveiling-key-insights-our-own-data/",
+      "page": "terms",
+      "anchor": "GLOBAL • INVESTMENT Emerging Venture Capital Fund Managers in Emerging Markets: Unveiling Key Insights From our own data After reviewing decks and speaking with amazing fund manage",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/female-founders-emerging-markets-fundraising-challenges-opportunities/",
+      "page": "terms",
+      "anchor": "GLOBAL • INVESTMENT Female Founders in Emerging Markets: Fundraising Challenges & Opportunities In honor of International Women’s Month, Seedstars organized a panel discussion wher",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/future-bright-african-tech-startup-funding-grows/",
+      "page": "terms",
+      "anchor": "AFRICA • FINANCIAL SERVICES Future bright as african tech startup funding grows Africa has long lagged behind the rest of the world when it comes to investment, even in the contine",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/future-finance-financial-inclusion-not-end-line/",
+      "page": "terms",
+      "anchor": "GLOBAL • INVESTMENT Future of Finance: Financial inclusion is not the end of the line The last two decades saw billions of dollars invested in financial inclusion which has led to ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/goal-cure-slightly-sick-investment-fund-sector-bas-godska/",
+      "page": "portfolio",
+      "anchor": "CENTRAL AND EASTERN EUROPE • INVESTMENT \"The Goal Is to 'Cure' a Slightly Sick Investment Fund Sector,\" Bas Godska What does it take to be an investor? How venture capitalists choo",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/how-kenza-traveled-world-find-her-calling-and-started-african-vc-fund-kenza-lahlou/",
+      "page": "terms",
+      "anchor": "MIDDLE EAST AND NORTH AFRICA • INVESTMENT How Kenza Traveled the World to Find Her Calling and Started an African VC Fund | Kenza Lahlou Kenza was born in Morocco, but has quite a ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/how-t-support-impact-investment-in-cee/",
+      "page": "terms",
+      "anchor": "CENTRAL AND EASTERN EUROPE • INVESTMENT How to support impact investment in CEE and what chess to do with it | Olena Boytsun Olena leads Luminate's funding activities in Central an",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/investing-beyond-capital-seedstars-international-ventures/",
+      "page": "portfolio",
+      "anchor": "GLOBAL • INVESTMENT Investing beyond capital with Seedstars International Ventures On top of capital Seedstars portfolio companies get access our Value Creation Platform where they",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/learning-achievements-seedstars-international-ventures/",
+      "page": "terms",
+      "anchor": "GLOBAL • INVESTMENT Learning & Achievements Seedstars International Ventures Fund 2: One year since launch One year since the launch of Seedstars International Ventures II, let's c",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/mena-exit-valuations-hit-3b-usd/",
+      "page": "terms",
+      "anchor": "MIDDLE EAST AND NORTH AFRICA • INVESTMENT MENA exit valuations hit 3B USD MAGNiTT’s latest research reveals 60 startup exits across the MENA region over the last 5 years aggregatin",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/newest-additions-seedstars-portfolio/",
+      "page": "portfolio",
+      "anchor": "GLOBAL • INVESTMENT Newest Additions to the Seedstars Portfolio Our team has once again selected 8 of the most promising ventures to join the Seedstars Portfolio and to participate",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/raising-pre-seed-and-seed-capital-sub-saharan-africa/",
+      "page": "terms",
+      "anchor": "AFRICA • INVESTMENT Raising pre-seed and seed capital in Sub-Saharan Africa Raising pre-seed and seed capital in Sub-Saharan Africa. Today, most VC funding (approx. 83%) goes to th",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/seedstars-international-ventures-adds-six-new-companies-portfolio/",
+      "page": "portfolio",
+      "anchor": "GLOBAL • INVESTMENT Seedstars International Ventures Adds Six New Companies To Portfolio Seedstars International Ventures now has 80 companies in it’s portfolio. Mar. 02, 2022",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/sustainability-over-hacks-how-embracing-growth-partners-can-spark-startups-journey/",
+      "page": "terms",
+      "anchor": "GLOBAL • INVESTMENT Sustainability over Hacks: How Embracing Growth Partners Can Spark a Startup's Journey Regardless of the industry, business model, geography, or team, all start",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/what-does-startup-growth-mean-and-how-do-you-achieve-it-8-game-changing-tips-seedstars-growth-mentors/",
+      "page": "terms",
+      "anchor": "GLOBAL • INVESTMENT What does startup growth mean and how do you achieve it? 8 game-changing tips from Seedstars growth mentors When lighting a fire in a windy setting, one should ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/whats-your-why-salum-awadh/",
+      "page": "terms",
+      "anchor": "AFRICA • INVESTMENT What’s Your Why: Salum Awadh What kind of startups, Salum, CEO of SSC Capital from Tanzania, is looking as an investor and entrepreneur? Mar. 30, 2020",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/winning-marathons-and-advising-billionaire-impact-investors-tenke-zoltani/",
+      "page": "terms",
+      "anchor": "CENTRAL AND EASTERN EUROPE • INVESTMENT Winning Marathons and Advising Billionaire Impact Investors | Tenke Zoltani From a Hungarian refugee family who emigrated to the United Stat",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/newsroom/",
+      "page": "batches",
+      "anchor": "NEWSROOM The source of news about Seedstars and our activities around the world. Access, here, our brand and press kits, read all of our press releases, and get the latest updates.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/newsroom/2020-migration-challenge-call-applications-now-open/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/newsroom/africa-investment-forum-2024-market-days-seedstars-africa-ventures-i-announces-42m-first-close/",
+      "page": "terms",
+      "anchor": "GLOBAL • Africa Investment Forum 2024 Market Days: Seedstars Africa Ventures I announces $42m first close Seedstars Africa Ventures I, a venture capital fund making early-stage inv",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/newsroom/call-applications-financial-inclusion-lab-2022-powered-development-bank-latin-america-caf/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/newsroom/open-applications-cafs-financial-inclusion-lab-2023/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/newsroom/seedstars-brings-its-startup-competition-online-2020-applications-are-open/",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
@@ -44,16 +372,8 @@
     },
     {
       "url": "https://www.seedstars.com/programs/investment-readiness/",
-      "page": "details",
+      "page": "terms",
       "anchor": "Investment readiness program",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.seedstars.com/community/entrepreneurs/programs/",
-      "page": "details",
-      "anchor": "OPEN CALLS FOR ENTREPRENEURS",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -62,70 +382,6 @@
       "url": "https://www.seedstars.com/services/",
       "page": "portfolio",
       "anchor": "VIEW ALL SERVICES We tackle some of the toughest challenges in society by supporting and investing in entrepreneurs who are building impactful companies.",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.seedstars.com/content-hub/newsroom/",
-      "page": "batches",
-      "anchor": "NEWSROOM The source of news about Seedstars and our activities around the world. Access, here, our brand and press kits, read all of our press releases, and get the latest updates.",
-      "fetched": true,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.seedstars.com/content-hub/life/seedstars-international-ventures-adds-six-new-companies-portfolio/",
-      "page": "portfolio",
-      "anchor": "GLOBAL • INVESTMENT Seedstars International Ventures Adds Six New Companies To Portfolio Seedstars International Ventures now has 80 companies in it’s portfolio. Mar. 02, 2022",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.seedstars.com/content-hub/life/investing-beyond-capital-seedstars-international-ventures/",
-      "page": "portfolio",
-      "anchor": "GLOBAL • INVESTMENT Investing beyond capital with Seedstars International Ventures On top of capital Seedstars portfolio companies get access our Value Creation Platform where they",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.seedstars.com/content-hub/life/newest-additions-seedstars-portfolio/",
-      "page": "portfolio",
-      "anchor": "GLOBAL • INVESTMENT Newest Additions to the Seedstars Portfolio Our team has once again selected 8 of the most promising ventures to join the Seedstars Portfolio and to participate",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.seedstars.com/content-hub/learning-resources/fundraising-strategy-early-stage-startup-z/",
-      "page": "details",
-      "anchor": "GLOBAL • INVESTMENT Fundraising Strategy for an Early-Stage Startup From A to Z The article is based on the training we provide for startups during the Growth Programs . Feb. 24, 2",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.seedstars.com/content-hub/life/goal-cure-slightly-sick-investment-fund-sector-bas-godska/",
-      "page": "portfolio",
-      "anchor": "CENTRAL AND EASTERN EUROPE • INVESTMENT \"The Goal Is to 'Cure' a Slightly Sick Investment Fund Sector,\" Bas Godska What does it take to be an investor? How venture capitalists choo",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.seedstars.com/content-hub/insights/how-grow-startup-using-referral-program/",
-      "page": "details",
-      "anchor": "GLOBAL • How To Grow A Startup Using A Referral Program Referral programs are one of the most cost-effective ways for a startup to grow. Imagine turning every new customer into ano",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.seedstars.com/content-hub/life/bridging-financial-inclusion-gap-includes-education-financial-literacy/",
-      "page": "details",
-      "anchor": "AFRICA • FINANCIAL SERVICES Why Bridging The Financial Inclusion Gap Includes Education On Financial Literacy QuickCheck not only bridges the financial inclusion gap but also educa",
       "fetched": false,
       "blocked": null,
       "origin": "official"

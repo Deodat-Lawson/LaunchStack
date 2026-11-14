@@ -1,34 +1,263 @@
 {
   "programId": "eit-digital",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-14T20:18:03.000Z",
   "pagesRead": [
     "https://28digital.eu/",
-    "https://28digital.eu/our-community/about-us/"
+    "https://28digital.eu/co-creation-accelerator-2026-2027/",
+    "https://28digital.eu/co-creation-accelerator-2026-2027/faq/",
+    "https://28digital.eu/digital-innovation-entrepreneurship/",
+    "https://28digital.eu/our-community/about-us/",
+    "https://28digital.eu/venture-incubation-program/",
+    "https://28digital.eu/fileadmin/2026/cca/28DIGITAL_Co-Creation_Accelerator_2026-2027_Cut-Off_1.pdf",
+    "https://28digital.eu/fileadmin/2026/venture-incubation-program/VIP_2026_open_call_for_startups-update.pdf",
+    "https://workspaces.28digital.eu/site/private/go/article.aspx?id=614",
+    "https://28digital.eu/alumni-startup-competition/",
+    "https://28digital.eu/equity-portfolio/",
+    "https://28digital.eu/newsroom/news/2026/28digital-beyond-graduation-opening-the-door-to-erasmus-for-young-entrepreneurs/",
+    "https://28digital.eu/access-to-finance/",
+    "https://28digital.eu/speedmaster/"
   ],
   "evidence": [
     {
+      "id": "check-duration-0bc76c5084",
+      "url": "https://28digital.eu/co-creation-accelerator-2026-2027/",
+      "title": "EIT Digital — program page",
+      "excerpt": "partners. €250,000 Maximum funding available. 4 months Program execution period. TRL 4–5 and above",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-5f261e5da7",
+      "url": "https://28digital.eu/venture-incubation-program/",
+      "title": "EIT Digital — program page",
+      "excerpt": "Package Introductory bootcamp followed by a 12-week incubation program including mentoring, MVP",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-96f0f19b70",
+      "url": "https://28digital.eu/co-creation-accelerator-2026-2027/",
+      "title": "EIT Digital — program page",
+      "excerpt": "validate your deep tech venture with industry A 4-month program to develop early-stage solutions (TRL",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-bf91f47a18",
+      "url": "https://28digital.eu/venture-incubation-program/",
+      "title": "EIT Digital — program page",
+      "excerpt": "introductory bootcamp, followed by a structured 12-week incubation program for selected teams.",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-c3668c86ac",
+      "url": "https://28digital.eu/speedmaster/",
+      "title": "EIT Digital — portfolio page",
+      "excerpt": "requires a commitment of two hours per week for 10 weeks. Regular attendance is crucial to maximize the",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-duration-f59de59562",
+      "url": "https://28digital.eu/venture-incubation-program/",
+      "title": "EIT Digital — program page",
+      "excerpt": "Package Prize and expert support during the 12-week incubation phase. Establish your deep tech",
+      "page": "details"
+    },
+    {
+      "id": "check-duration-fa492d6603",
+      "url": "https://28digital.eu/venture-incubation-program/",
+      "title": "EIT Digital — program page",
+      "excerpt": "with a Bootcamp , followed by a structured 12-week incubation program for selected teams. The",
+      "page": "details"
+    },
+    {
+      "id": "check-format-c654e6f27a",
+      "url": "https://28digital.eu/venture-incubation-program/",
+      "title": "EIT Digital — program page",
+      "excerpt": "venture-building environments. Is the program online or in person? The program is delivered fully online, making it",
+      "page": "details"
+    },
+    {
+      "id": "check-rolling-5e69d15111",
+      "url": "https://workspaces.28digital.eu/site/private/go/article.aspx?id=614",
+      "title": "EIT Digital — program page",
+      "excerpt": "Track and Open Challenge Track. We are accepting Industry Track challenges on a rolling basis. These Industry challenges will be published here. Please stay tuned for",
+      "page": "details"
+    },
+    {
+      "id": "check-rolling-89bb64c2a2",
+      "url": "https://28digital.eu/alumni-startup-competition/",
+      "title": "EIT Digital — portfolio page",
+      "excerpt": "your application early. Our selection committee reviews applications on a rolling basis and may contact you with follow-up questions. What do you get? All eligible",
+      "page": "portfolio"
+    },
+    {
+      "id": "check-rolling-c3859c4ff8",
+      "url": "https://28digital.eu/co-creation-accelerator-2026-2027/",
+      "title": "EIT Digital — program page",
+      "excerpt": "industry needs and use cases. We are accepting Industry Track challenges on a rolling basis. These Industry challenges will be published here. Please stay tuned for",
+      "page": "details"
+    },
+    {
       "id": "check-route-87540c154b",
       "url": "https://28digital.eu/",
-      "title": "EIT Digital — homepage checked by scrape.py",
+      "title": "EIT Digital — homepage",
       "excerpt": "28Digital → https://28digital.eu/",
       "page": "details"
+    },
+    {
+      "id": "check-route-fa55bab961",
+      "url": "https://28digital.eu/co-creation-accelerator-2026-2027/faq/",
+      "title": "EIT Digital — terms page",
+      "excerpt": "Apply now → https://workspaces.28digital.eu/site/private/go/article.aspx?id=614",
+      "page": "terms"
+    },
+    {
+      "id": "check-status-05dddbd18a",
+      "url": "https://28digital.eu/alumni-startup-competition/",
+      "title": "EIT Digital — portfolio page",
+      "excerpt": "by Growth Services 0 Companies participated in Speed Master Applications closed Thanks for your interest. Applications are closed. Contact us. For more information and questions, contact Beatrice Olivari ( Alumni Startup Competition Team",
+      "page": "portfolio"
+    }
+  ],
+  "pageQuotes": [
+    {
+      "id": "check-page-2aca1b572b",
+      "url": "https://28digital.eu/",
+      "page": "details",
+      "excerpt": "Home // 28DIGITAL 28Digital We build what's next Talent . Tech . Trust . Talent – Tech Skills and Masters Studies Tech – Startup and Scaleup Programmes Tech – Research to Market Trust – Become a Partner Latest news See all news 5 November 2026 28DIGITAL and Sardinia: a new partnership to connect the island to Europe’s innovation ecosystem At the end of September, 28DIGITAL was delighted to be hosted by Regione Sardegna in… 4 November 2026 28DIGITAL Beyond Graduation: Opening the Door to Erasmus for Young Entrepreneurs Europe's small and medium-sized enterprises (SMEs) make up over 99% of all companies on… 21 October 2026 Europe's digital skills gap won't be closed by attraction alone Almost 300 participants gathered in Dublin last week for the Digital Talent EU Days, where… 14 October 2026 Scaling From Lab to Market: 28DIGITAL Welcomes First TTO Club International Associate Member Technology now moves faster than any one region can scale it alone. That was the message… 14 October 2026 The Blue Frontier: Why Europe’s Next Deep Tech Revolution is Offshore Every AI demo you saw this year was running on someone else's money. The pilots in your… 7 October 2026 Europe's deep-tech talent meets in Tallinn: 245 students, 40 nationalities, 48 hours of real-world challenges As Europe debates how to build and keep the technical talent behind its digital… Events See all events 17 November"
+    },
+    {
+      "id": "check-page-b19a1e8734",
+      "url": "https://28digital.eu/co-creation-accelerator-2026-2027/",
+      "page": "details",
+      "excerpt": "Co-Creation Accelerator 2026-2027 // 28DIGITAL 28Digital Co-Creation Accelerator 2026-2027 Home Co-Creation Accelerator 2026-2027 Build and validate your deep tech venture with industry A 4-month program to develop early-stage solutions (TRL 4-5 and above) in collaboration with industry partners. €250,000 Maximum funding available. 4 months Program execution period. TRL 4–5 and above Technology readiness level. Co-creation with industry Built with industry partners. Equity-Based Program Funding, mentorship, and support in exchange for equity. About the program The Co-Creation Accelerator is a program by 28DIGITAL, designed to bring together startups and industry partners to co-develop solutions addressing real-world challenges. The focus is on: Validating core technology (TRL 4–5 and above) Strengthening problem–solution fit Reducing technical and market uncertainty Building a clear path toward scalability This is not a traditional accelerator. It is a challenge-driven, execution-focused program . Challenges The program is built around real industry challenges . Two ways to apply: Open Challenge Track Apply with your own corporate partner and jointly define the challenge you want to address. Industry Challenge Track Apply to predefined challenges developed with corporate partners. These reflect concrete industry needs and use cases. We are accepting Industry Track challenges"
+    },
+    {
+      "id": "check-page-13cfcdd3da",
+      "url": "https://28digital.eu/co-creation-accelerator-2026-2027/faq/",
+      "page": "terms",
+      "excerpt": "FAQ // 28DIGITAL 28Digital FAQ Co-Creation Accelerator 2026-2027 Home Co-Creation Accelerator 2026-2027 FAQ Application and eligibility I am not an 28DIGITAL Partner, can I participate in an Open Innovation Factory 2026-2027 proposal? Organisations that are not formal Partners can apply to become 28DIGITAL Partners. In order to be included in a proposal for cut-off 1, organisations should have at least registered via the 28DIGITAL website. If the activity is selected, organisations must complete the partnership to be eligible to participate in the activity. Is there a list of partners who are already working with 28DIGITAL? The list of partners is available on the 28DIGITAL website, in the “Become a Partner” section. What are the requirements to join the program? To join the program: All applicants must be operating in the EU, or Horizon Europe associated countries (see https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/list-3rd-country-participation_horizon-euratom_en.pdf ) The venture to be boosted must be incorporated max. 5 years before submission date. Solutions must demonstrate TRL 4-5 and above. Financials What is KAVA and what are KAVA costs? KAVA means KIC Added Value Activity, in other words an Activity. KAVA costs are the costs necessary to the implementation of an Activity Proposal and are mentioned in the proposal. Equity"
+    },
+    {
+      "id": "check-page-4ca27d929d",
+      "url": "https://28digital.eu/digital-innovation-entrepreneurship/",
+      "page": "details",
+      "excerpt": "Digital Innovation & Entrepreneurship // 28DIGITAL 28Digital Digital Innovation & Entrepreneurship Discover opportunities to build and launch with us the next generation of digital ventures, products and services. Home Digital Innovation & Entrepreneurship Check out the current opportunities in 28DIGITAL's ecosystem! Programmes, initiatives, services and EU-funded projects are waiting for you. Find out more Mentor Me Program Unlock the potential of your startup with the exclusive initiative designed to empower early-stage entrepreneurs through expert mentorship. Find out more Speedmaster An Intense Course Package for Entrepreneurs Find out more Venture Incubation Program From Idea to First Customers Find out more Open Innovation Factory From Product-Market Fit to Scalable Revenue Find out more Access to Finance Prepare, Connect and Raise Your Series A/B Funding Round Find out more Equity Portfolio View growth companies in which we hold shares resulting from the Open Innovation Factory & Venture Program. Find out more Champions The European Scaleup Competition Find out more Initiated by the European Institute of Innovation and Technology (EIT) ©2010-2026 28Digital · Legal Notice · Intranet · Contact Us · For Press · Reporting Channel Scroll up Initiated by the EIT Our Community Purpose Become a Partner About us Why 28D? Mission & Vision Strategy 2026-2030 History Supervisory"
+    },
+    {
+      "id": "check-page-27f4026814",
+      "url": "https://28digital.eu/our-community/about-us/",
+      "page": "details",
+      "excerpt": "About us // 28DIGITAL 28Digital About us Home Our Community About us By mobilising a global multi-stakeholder platform, rooted in European values and open to the world, we turn knowledge into innovation, scale startups into global ventures, and build the next generation of digital talent to shape a fair, competitive, and human-centric digital future. We operate in domains where digital technology and innovation drive societal progress, addressing major global challenges and delivering tangible benefits for people, businesses, and the planet. Our focus is on areas that reflect Europe’s leadership potential, advancing tech sovereignty, enhancing competitiveness, and supporting a more sustainable and resilient future. Technologies such as AI, cybersecurity, advanced computing, and robotics are not confined to a single sector; they are powerful enablers of societal transformation, defence and dual-use innovation, and sustainability. Their impact depends on how we develop, apply, and scale them across strategic domain. 28DIGITAL was founded upon the initiative of the European Institute of Innovation and Technology (EIT), a body of the European Union. 28DIGITAL received €1.1B funding and strategic guidance from the EIT over 15 years as an EIT Knowledge and Innovation Community (KIC). Following the successful signature of a Memorandum of Cooperation, the EIT and 28DIGITAL collaborate"
+    },
+    {
+      "id": "check-page-d0b09dbddc",
+      "url": "https://28digital.eu/venture-incubation-program/",
+      "page": "details",
+      "excerpt": "Venture Incubation Program // 28DIGITAL 28Digital Venture Incubation Program Do you want to start your entrepreneurial journey? Do you have a business idea and want to turn your innovative digital technology into an MVP and start your venture? Home Venture Incubation Program What is the 28DIGITAL Venture Incubation Program? The 28DIGITAL Venture Incubation Program is a two-stage initiative supporting the creation and growth of digital and deep-tech ventures (including projects and spin-offs originating from the universities, research organisation, and academic laboratories seeking to realise the commercial potential of their innovation) across Europe. The program helps teams to: validate a business idea and shape an MVP strengthen entrepreneurial and venture-building skills incorporate a company in the EU prepare for market entry, investment, and growth Program structure Stage 1: Growth Package Introductory bootcamp followed by a 12-week incubation program including mentoring, MVP development, and validation, concluding in Demo Day. Selected teams receive a €5,000 Growth Package Prize. Stage 2: Final Prize Selected ventures may apply for the final stage and compete for up to €25,000 based on performance. Important: Selected ventures will commit to providing 28DIGITAL with 5% equity through a SAFE (Simple Agreement for Future Equity). Who can apply? The 28DIGITAL Venture"
+    },
+    {
+      "id": "check-page-d55ae50688",
+      "url": "https://28digital.eu/fileadmin/2026/cca/28DIGITAL_Co-Creation_Accelerator_2026-2027_Cut-Off_1.pdf",
+      "page": "details",
+      "excerpt": "%PDF-1.3 %��������� 3 0 obj < < /Filter /FlateDecode /Length 16593 >> stream x ��ɮ%�q&��y�CR\"���T�öٽP�D� .�� %P�JJ�������8w�;T�!� A��v# < |0�� 7����翝��2��6������ < �?��n�,�8��~�tð��?��p��� < ��e�� i�K�o˩���>���翜�t����0�˾u�p��z� ���q�, 5K m�lf#u��y���7��.>����|�H��F m�ɶG�Q�լ� ^�Ln�-�m��V�k�A�����b�� i2Mz7n��4>t�y4�q�U�=��;�ҙ�Ժ�,��]�jX' �73g�7;��7�qh:�vֵ� [�kص�q0�~��} �i � ��Q�ӽ}���g�� ��b�{� ��-��7M�vʧ-�y ��4ڽ� :�[ �� zgL>�g�G�� No���b}:���W�u &`���Lʔ�@,�cX��i � �� �=��&c�ү6�)_�������* ȇ��õ �pt ��\\��#^Ӧi�� Vٗ�� �����flݝ��{�) &� ��� ��B� ��0�D�AO�}���g|彵��+Y7v �ɞ~�xo,�9hj��1� yo^ �M�ڻ�4� �do� �-i� !k�� H�� }�^��& �� m�|*�u0�Pv;(�-bd�?' �J! >5�N\\ �y>� hK �k�� ?�˔��l���s�o�u� ���'J� \"���d�HAb�m F�\")V;7����� �E!M�% �2�q�v�N����x�2�6��2� �/:��yϜ� (Ċ�Ѿg h�F�)� ޡج���л ��L�n͛� m� �І�bOx��L�L�- �(�8�B�)�|.O�l��${k��CZ4 M��|o\"U�LG��n���j�@# � �H ���g�� -ξ��)_;�� �a2M̥�7 !GqR՘l��D� ��6��L�(�Y � �6��^(�ܣ�8�DY�٪�~t} ,4�ϔ�� ��� J �m�3�E �����{1@ E�Y�Sk��꣘� �4ǚ��$���lX�0 � ��� �0b�9l0Q! �mmPy�t\\�?��{Va�>SV! ��,�' �*��2g|h�F�M �B� ɣ} `�a`��� ��{�M i��tj���`�62 flK� �^Ly>g�F:=�m � �Ki��CoP!��z&�O ^���_5N� �����H������Ѣcx���g� �!��>=ͱ f ���8f�-:I����\"�y� y�Y ��� {&O1�,�)O�]l�H�h�F�-�=�� ��Cf� X�� �-D�G�nT@(�u� �� ��h F ���Y:b Ť ����4^^�Kh\"4l�3�G < ���9�*�{8rk��b�e�{MO�9�� ��y C( ��fp�yLx(;��ޣ���p>Û� ���ٴ�b][ ��B|�� �~6Ҋ� �� �q� �P䠯��uD��ڸg��2�D� ��l eUP~�Ib֌ � ��]z�6�A�PV�jEfv�V�6P���"
+    },
+    {
+      "id": "check-page-a50289de43",
+      "url": "https://28digital.eu/fileadmin/2026/venture-incubation-program/VIP_2026_open_call_for_startups-update.pdf",
+      "page": "details",
+      "excerpt": "%PDF-1.3 %��������� 3 0 obj < < /Filter /FlateDecode /Length 1772 >> stream x �Y�n�F ��+Z� �x�VW�}�rpN10@ � ��A XIl'��W�p�� I0�&9d���^�?�w⓸�� �� ��/ ���|Abs�E �ؼ�Պ�7���Wӿ�q��)��ߴ����6?�����UʮJi����ns�?��&��.� ���o�UQ�\"�ۨ�S��꺶{� ����� w �h��� 8+�,d �! c Y ʋ� ����R��c + � UKQ�jc 4w +� ��5kJE� T����Tɠ��JR'�Us��Qm < ^w����k� ���I���u-�3�/�-�t�b�� �>P zF � ���W �� �����r�;'Z� �� �m�ii�_ s �O > >��� �~ ��@�\\�4�\"��p����� � =��M�3A���S�,4̩$ �sIR�$� �$��Z[O ӭq�%)�������* #�+��ɒ�� ��Iu��j Z�1� P� ±$ ���A�p4���K�ǃ�W� ��u��ʪ��StlA�N*�CP G��;��A:��L��9�� < � !�T@3Ay�Z�8�ʃ C�D Ӫ\\�1�p��T�N �5T �W ��1�DR�PM��Pu�q�[+S � � ��[yp�R�;� g��xa���� �i�Q��B��&�U\"���0A � ��Y�S�GOC i� _�،�d �b�d�@��d�t)B\"Jzj%R` x�w-�(���n� Ƞ�Q�G֐� � ݵ � ���ԑ;�� D���=� ov�����Y�y � �k�R .3#,�9�)!�Q� RC�+� /���K < (I wEZ�?\\�T � � ��X~�� ?ev����S 7oz�� �צk yV/� /��ַŦ� LC}� |��a�C���m�~����i�� �J {#cR�j�t�*ǫ� �ֆ < ��{� �I \\ᑆ ��IV �� �F���s�%&+m�A�&�vfT�f�� \" /� ,H �r2��4���wGot� �� ����*x�����+$ �� < � $ ᦎS� �T�U�@ �T#�C� 7�5� �\"pI *������9 �د` sU�S�6 �`&̄y�� Ɋ�XE��s�� ��� � �^��� �s ����o�F�\"K�H4��b� g�A� \\ ���y����c ~{߭� 2�a� �^c� T� ��۴{ �@ � �-8ţ &��P�1��]G ߲EU+� Y�l�y�D ����� KDhVJ̹ �� �Xf� 3 �H6�%Q+��B�� > endobj 4 0 obj < < /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] /ColorSpace < < /Cs1 5 0 R >> /Font < < /TT2 7 0 R /TT4 9 0 R /TT6 12 0 R /TT8 14 0 R /TT10 16 0 R /TT12 18 0 R /TT14 20 0 R /TT16 22 0 R /TT18 26"
+    },
+    {
+      "id": "check-page-53f03c9f0e",
+      "url": "https://workspaces.28digital.eu/site/private/go/article.aspx?id=614",
+      "page": "details",
+      "excerpt": "Co-Creation Accelerator 2026-2027 – Proposals Submission - 28Digital / CO-CREATION ACCELERATOR 2026-2027 – PROPOSALS SUBMISSION Co-Creation Accelerator 2026-2027 - Proposals Submission Co-Creation Accelerator 2026-2027 Call for Proposals Document Co-Creation Accelerator 2026-2027 Proposal Submission System Open Challenge Track Challenge Definition Template 28DIGITAL Launches a call for proposals for the Co-Creation Accelerator 2026-2027. We are looking for world-Class digital solutions developed by ventures ranging from early-stage to more mature teams who are looking to validate their digital products and achieve early traction at corporates and/or SMEs as pilot customers or partners. Two complementary tracks are possible: Industry Challenge Track and Open Challenge Track. We are accepting Industry Track challenges on a rolling basis. These Industry challenges will be published here. Please stay tuned for updates. Please refer to Co-Creation Aceelerator Call 2026-2027 for Proposals Document for further details. Current Partners as well as new organizations willing to join 28DIGITAL are welcome to submit a proposal. This page contains information and relevant documents for Partners planning to submit a proposal for the 2026 edition of Co-Creation Accelerator . Timeline Call opening date: 01 July 2026 . Submission deadline : 08 September 2026 at 17:00 CEST (hard deadline, no"
+    },
+    {
+      "id": "check-page-a0168fce96",
+      "url": "https://28digital.eu/alumni-startup-competition/",
+      "page": "portfolio",
+      "excerpt": "Alumni Startup Competition // 28DIGITAL 28Digital Alumni Startup Competition The competition for the 28DIGITAL Alumni-founded startups Home Alumni Startup Competition Your startup deserves a bigger room. Alumni Startup Competition is the first startup competition built by 28DIGITAL, for the 28DIGITAL Alumni community. Pitch your startup to a room of investors, European stakeholders and fellow Alumni. Get visibility, feedback, and a shot at exclusive prizes. Open to all 28DIGITAL Alumni founders. Any stage, any sector, anywhere. Four steps. One winner. Apply - before 7 September Apply before 7 September 2026. One form. Ten Minutes. Apply Here's everything you need to know before you start. Who can apply? The competition is open to applicants who meet both of the following criteria: You are currently enrolled in, or have completed, the EIT Digital Master School or Doctoral School (DSL or iDSL). You are a founder of an incorporated startup, or plan to incorporate within the next few months. In the latter case, if you win, the prize money will be awarded to the company upon incorporation with the appropriate documentation requested. Deadline Applications close on 7 September 2026, 23:59 CEST . We recommend submitting your application early. Our selection committee reviews applications on a rolling basis and may contact you with follow-up questions. What do you get? All eligible"
+    },
+    {
+      "id": "check-page-acf35468b8",
+      "url": "https://28digital.eu/equity-portfolio/",
+      "page": "portfolio",
+      "excerpt": "Equity Portfolio // 28DIGITAL 28Digital Equity Portfolio Home Equity Portfolio 28DIGITAL's Open Innovation Factory and Venture Program support has resulted in equity holdings in startups and scaleups based in over 20 European countries. Many have gone on to raise substantial investment. EIT continues to add value to these portfolio companies, contributing to the European digital ecosystem and to the sustainability of 28DIGITAL. Focus Area: Show all Digital Cities Digital Finance Digital Industry Digital Tech Digital Wellbeing Country: Show all Bulgaria Croatia Cyprus Czech Republic Estonia Finland France Germany Greece Hungary Ireland Italy Latvia Lithuania Luxembourg Malta Montenegro Netherlands North Macedonia Norway Poland Portugal Romania Serbia Slovenia Spain Sweden Turkey United Kingdom Mobility, City Analytics, Safety Serving the cities with digital technologies addressing urban mobility, citizen inclusiveness and engagement, and city safety. Logistics, Production, Retail The digital transformation of the industry, from production to logistics to retail. Networking, Data/AI, Cybersecurity & Privacy Inventing the digital future with core technologies providing secure, robust, responsive and intelligent communications and computation. Healthy Youth, Occupational Health, Independent Living Safeguarding health for the youth, the working professional and the elderly by"
+    },
+    {
+      "id": "check-page-461cc1c7c7",
+      "url": "https://28digital.eu/newsroom/news/2026/28digital-beyond-graduation-opening-the-door-to-erasmus-for-young-entrepreneurs/",
+      "page": "portfolio",
+      "excerpt": "28DIGITAL Beyond Graduation: Opening the Door to Erasmus for Young Entrepreneurs // 28DIGITAL EIT Digital 28DIGITAL Beyond Graduation: Opening the Door to Erasmus for Young Entrepreneurs Date 4 November 2026 Share Evangelos Marios Kemos [email protected] Europe's small and medium-sized enterprises (SMEs) make up over 99% of all companies on the continent and employ more than 136 million people. Behind that scale sits a simple truth: entrepreneurs learn fastest from other entrepreneurs. That is the idea behind Erasmus for Young Entrepreneurs (EYE), the EU-funded exchange programme that pairs new or aspiring entrepreneurs with experienced business owners across participating countries — and it's an opportunity we want more of our alumni and partners to know about. 28DIGITAL has long championed hands-on, peer-to-peer paths into entrepreneurship, and EYE fits squarely into that mission fit both for our student alumni and startup founders. Salvatore Moccia “ The 28DIGITAL journey doesn't stop at graduation. We are training the digital innovators and entrepreneurs Europe needs, and Erasmus for Young Entrepreneurs is yet another collaboration in that direction — a way for our alumni to keep building, well beyond the classroom, with the support of an experienced entrepreneur abroad. ” – Salvatore Moccia, Chief Education & Skills Officer, 28DIGITAL Since it launched, the programme has"
+    },
+    {
+      "id": "check-page-045d246878",
+      "url": "https://28digital.eu/access-to-finance/",
+      "page": "portfolio",
+      "excerpt": "Access to Finance // 28DIGITAL 28Digital ACCESS TO FINANCE Prepare Connect & Raise Home Access to Finance Fundraising is hard don't do it alone Join the Growth Services programme offered by 28DIGITAL to receive unparalleled fundraising support. Our team of venture capital experts help European deep tech companies gain access to the financing they need to scale their businesses. THIS IS HOW WE WORK PREPARE : Raising a Series A is a lot of work. From pitch decks to projections, from deal structure to the data room, it’s time to get organized. Double check, triple check, tighten and polish. With our help, you’ll build the confidence and competence to ace your investor meetings. CONNECT : Nothing beats a good network. Expand your fundraising search well beyond your home country. Our fundraising experts have personal relationships with investor all across Europe. What’s more, we know what they want. Get introduced to investors whose interests match your tech, geography and ticket size. Startups with an international investor expand faster and have a better chance to do later a large Series B round. RAISE : You only get one chance to make a first impression. Make it count. With our training and introductions, you’ll be poised to deliver the right message to the right audience at the right time. Let the investors see your purpose, your potential and your growth plan. Find a strategic"
+    },
+    {
+      "id": "check-page-6f66bb1074",
+      "url": "https://28digital.eu/speedmaster/",
+      "page": "portfolio",
+      "excerpt": "Speed Master // 28DIGITAL 28Digital Speed Master Executive Course Enrolment for the 9th edition is open, enroll now ! Sign up to be considered for the next cohort starting on November 2026 . About Curriculum Enroll Now Instructors Startups we're training FAQ/UPDATES CHAT WITH US Build a startup that is commercial, fundable and ready for the next stage. Speed Master is a practical startup execution programme for early-stage, innovation-driven founders in Europe. Designed for pre-seed and seed-stage teams working on Deep Tech, Strategic Tech, Social Tech and Impact Tech, the programme helps founders translate innovation into a clear business model, a stronger go-to-market approach and a more fundable growth story. This is not generic executive education. It is a focused, founder-oriented programme built around the non-negotiables of early-stage startup development. Apply for the next Speed Master cohort! Individual Pass €790 Start-up Pass €1900 Enroll Now Learn more Schedule November 2026 - January 2027 Format Live online sessions Practical founder-focused content Core startup topics Specialised workshops Designed for busy early-stage founders Language English Cost Individual: €790 Start-up Pass: €1900 (up to 5 team members) 28DIGITAL Partners receive a 50% reduction in the entry fee Pacing 1 session per week (2 - 3 hours) Modules: Core Track Mandatory for all participants:"
     }
   ],
   "findings": {
     "emails": [],
     "phones": [],
-    "routes": [],
+    "routes": [
+      {
+        "value": "https://workspaces.28digital.eu/site/private/go/article.aspx?id=614",
+        "evidenceId": "check-route-fa55bab961"
+      }
+    ],
     "applicationUrl": [
       {
         "value": "https://28digital.eu/",
         "evidenceId": "check-route-87540c154b"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": false,
+        "evidenceId": "check-status-05dddbd18a"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
+    "rolling": [
+      {
+        "value": true,
+        "evidenceId": "check-rolling-c3859c4ff8"
+      }
+    ],
+    "announcedIntake": [],
+    "cohortStarts": [],
+    "durationWeeks": [
+      {
+        "value": "4 months",
+        "evidenceId": "check-duration-96f0f19b70"
+      },
+      {
+        "value": "12",
+        "evidenceId": "check-duration-5f261e5da7"
+      },
+      {
+        "value": "10",
+        "evidenceId": "check-duration-c3668c86ac"
+      }
+    ],
+    "format": [
+      {
+        "value": "in-person",
+        "evidenceId": "check-format-c654e6f27a"
+      }
+    ],
+    "location": [],
     "selectivity": [],
     "dealText": [],
+    "dealComponents": [],
     "portfolioPages": [],
     "name": [],
     "examplePages": []

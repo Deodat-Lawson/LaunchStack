@@ -1,41 +1,49 @@
 {
   "programId": "eqt-ventures",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-14T19:43:41.000Z",
   "pages": [
     {
-      "url": "https://eqtgroup.com/about/current-portfolio?fund=eqt_ventures_i%2ceqt_ventures_ii%2ceqt_ventures_iii",
-      "page": "portfolio",
-      "anchor": "See all",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eqtgroup.com/about/current-portfolio/parloa",
-      "page": "portfolio",
-      "anchor": "See company page",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eqtgroup.com/about/current-portfolio?fund=eqt_ventures_i%2Ceqt_ventures_ii%2Ceqt_ventures_iii",
-      "page": "portfolio",
-      "anchor": "Browse all companies",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://eqtgroup.com/about/current-portfolio/the-exploration-company",
-      "page": "portfolio",
-      "anchor": "See company page",
+      "url": "https://eqtgroup.com/about/careers",
+      "page": "details",
+      "anchor": "Careers at EQT",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
       "url": "https://eqtgroup.com/about/current-portfolio/cleo",
+      "page": "portfolio",
+      "anchor": "See company page",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/current-portfolio/funds/eqt-ventures",
+      "page": "portfolio",
+      "anchor": "EQT Ventures I Launch 2016 Size 566M EUR Status Fully invested",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/current-portfolio/funds/eqt-ventures-ii",
+      "page": "portfolio",
+      "anchor": "EQT Ventures II Launch 2019 Size 660M EUR Status Fully invested",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/current-portfolio/funds/eqt-ventures-iii",
+      "page": "portfolio",
+      "anchor": "EQT Ventures III Launch 2022 Size 1.1B EUR Status Fully Invested",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/current-portfolio/parloa",
       "page": "portfolio",
       "anchor": "See company page",
       "fetched": false,
@@ -59,10 +67,42 @@
       "origin": "official"
     },
     {
+      "url": "https://eqtgroup.com/about/current-portfolio/the-exploration-company",
+      "page": "portfolio",
+      "anchor": "See company page",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/current-portfolio?fund=eqt_ventures_i%2Ceqt_ventures_ii%2Ceqt_ventures_iii",
+      "page": "portfolio",
+      "anchor": "Browse all companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/current-portfolio?fund=eqt_ventures_i%2ceqt_ventures_ii%2ceqt_ventures_iii",
+      "page": "portfolio",
+      "anchor": "See all",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/offices",
+      "page": "details",
+      "anchor": "Offices",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://eqtgroup.com/about/people/alexander-fred-ojala",
       "page": "details",
       "anchor": "Alexander Fred-Ojala Head of AI Early Stage Tech Learn more",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },
@@ -115,6 +155,14 @@
       "origin": "official"
     },
     {
+      "url": "https://eqtgroup.com/about/people/gustav-skarman",
+      "page": "details",
+      "anchor": "Gustav Skarman Analyst Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://eqtgroup.com/about/people/gustav-von-sydow",
       "page": "terms",
       "anchor": "Gustav von Sydow Deal Partner Learn more",
@@ -150,6 +198,14 @@
       "url": "https://eqtgroup.com/about/people/maximilian-samne",
       "page": "details",
       "anchor": "Maximilian Samne AI Engineering Associate Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/nitya-hinduja",
+      "page": "details",
+      "anchor": "Nitya Hinduja Associate Learn more",
       "fetched": false,
       "blocked": null,
       "origin": "official"
@@ -211,57 +267,113 @@
       "origin": "official"
     },
     {
-      "url": "https://eqtgroup.com/about/people/nitya-hinduja",
-      "page": "details",
-      "anchor": "Nitya Hinduja Associate Learn more",
-      "fetched": false,
+      "url": "https://eqtgroup.com/about/scaleup-europe/investment-guidelines",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://eqtgroup.com/about/people/gustav-skarman",
-      "page": "details",
-      "anchor": "Gustav Skarman Analyst Learn more",
-      "fetched": false,
+      "url": "https://eqtgroup.com/eqt-foundation/breakthrough-science-program-faq",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://eqtgroup.com/about/current-portfolio/funds/eqt-ventures-iii",
-      "page": "portfolio",
-      "anchor": "EQT Ventures III Launch 2022 Size 1.1B EUR Status Fully Invested",
-      "fetched": false,
+      "url": "https://eqtgroup.com/news/150-million-investment-to-build-grade-a-office-space-in-the-rapidly-emerging-bpo-office-destination-of-clark-philippines",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://eqtgroup.com/about/current-portfolio/funds/eqt-ventures-ii",
-      "page": "portfolio",
-      "anchor": "EQT Ventures II Launch 2019 Size 660M EUR Status Fully invested",
-      "fetched": false,
+      "url": "https://eqtgroup.com/news/Real-Deals-Article",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://eqtgroup.com/about/current-portfolio/funds/eqt-ventures",
-      "page": "portfolio",
-      "anchor": "EQT Ventures I Launch 2016 Size 566M EUR Status Fully invested",
-      "fetched": false,
+      "url": "https://eqtgroup.com/news/Responsible-investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://eqtgroup.com/about/offices",
-      "page": "details",
-      "anchor": "Offices",
-      "fetched": false,
+      "url": "https://eqtgroup.com/news/amg-announces-investment-in-baring-private-equity-asia",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://eqtgroup.com/about/careers",
-      "page": "details",
-      "anchor": "Careers at EQT",
+      "url": "https://eqtgroup.com/news/baring-asia-completes-deal-to-acquire-majority-stake-in-vistra-group",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/news/baring-asia-completes-deal-to-acquire-orangefield",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/news/baring-private-equity-asia-and-alibaba-enter-partnership-with-the-crownx-leads-usd400mm-investment",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-breakthrough-research-grant-in-rare-diseases-2025-09-02",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-breakthrough-science-grants-to-reduce-dependence-on-critical-minerals-for-the-green-transition-2026-01-27",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/news/eqt-foundation-opens-applications-for-science-grants-to-overcome-the-blood-brain-barrier-and-transform-cns-drug-delivery-2026-03-10",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/news/xxl-intends-to-apply-for-listing",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/terms-and-conditions",
+      "page": "terms",
+      "anchor": "Terms and Conditions of Use",
       "fetched": false,
       "blocked": null,
       "origin": "official"

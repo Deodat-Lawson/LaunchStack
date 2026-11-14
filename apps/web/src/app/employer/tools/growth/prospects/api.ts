@@ -142,6 +142,8 @@ export interface CompanyRow {
     iconUrl?: string | null;
     fit: number | null;
     fitThreshold: number;
+    /** Why the fit check ruled it out (its score is then 0); null when it was not. */
+    ruledOut?: string | null;
     stage: SalesStage;
     staleDays: number | null;
     people: number;
@@ -326,8 +328,13 @@ export interface OutreachResult {
 }
 
 export interface NewSegmentInput {
+    /**
+     * "partners" (default): buyers of what you sell. "companies": companies
+     * matching a description, held in `offering`.
+     */
+    intent?: "partners" | "companies";
     name: string;
-    /** What you sell, in your words. */
+    /** What you sell, in your words; for "companies", the description of the companies wanted. */
     offering: string;
     /** Who buys it: the kinds of companies to look for ("restaurants", "coffee roasters"). */
     industries: string[];

@@ -565,6 +565,7 @@ export function toCompanyRow(item: PartnerListItem, ctx: RowContext): CompanyRow
         iconUrl: org.iconUrl ?? null,
         fit: rel.fitScore,
         fitThreshold: FIT_THRESHOLD,
+        ruledOut: rel.fitBreakdown?.excludedBecause ?? null,
         stage: rel.stage,
         staleDays: staleDays(item, ctx.now),
         people,

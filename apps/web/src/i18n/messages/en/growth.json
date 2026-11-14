@@ -309,8 +309,14 @@
       "simulateSelected": "Simulate {count, plural, one {# company} other {# companies}}",
       "simulateHint": "Open Scenarios built from this segment's prospects, or the ones you picked.",
       "simulateSubject": "How would the businesses in this segment respond to what we offer?",
-      "layout": { "cards": "Cards", "table": "Table", "aria": "How to show companies" },
-      "foundInLastRun": "found in the last run"
+      "layout": {
+        "cards": "Cards",
+        "table": "Table",
+        "aria": "How to show companies"
+      },
+      "foundInLastRun": "found in the last run",
+      "ruledOut": "Ruled out",
+      "ruledOutWhy": "Ruled out: {reason}"
     },
     "company": {
       "updateDealFailed": "Could not update the deal",
@@ -384,7 +390,16 @@
       "offeringFromProfile": "Drafted from your company profile. Edit it to fit this group of customers.",
       "submit": "Find companies",
       "failed": "Could not start the search",
-      "defaultName": "{buyers} · {where}"
+      "defaultName": "{buyers} · {where}",
+      "intent": {
+        "aria": "What to look for",
+        "partners": "Find buyers",
+        "companies": "Find companies like this"
+      },
+      "describe": "Describe the companies",
+      "describePlaceholder": "Tech companies worth $3B or more, consumer or enterprise",
+      "describeHint": "Industry, size, stage, anything else that matters. Every company found is checked against this.",
+      "whereHintCompanies": "A city, a state or a country. Separate several with “;”. Nearby cities in the same area count."
     }
   },
   "brand": {

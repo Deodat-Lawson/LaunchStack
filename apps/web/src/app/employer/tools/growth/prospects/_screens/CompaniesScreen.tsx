@@ -45,10 +45,10 @@ import { simulateHref } from "../_lib/simulate";
 import { useResource } from "~/lib/tools/useResource";
 import { BulkBar } from "../_components/BulkBar";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
-import { FitMeter } from "~/components/tools/FitMeter";
 import { PageHeader } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { CompanyCard, CompanyPicture } from "../_components/CompanyCard";
+import { FitCell, useWhyLine } from "../_components/FitCell";
 import { FoundViaChips } from "../_components/SourceChip";
 import { StagePill } from "../_components/StagePill";
 
@@ -564,6 +564,7 @@ function CompanyTableRow({
     const t = useTranslations("growth.prospects");
     const { relativeTime } = useGrowthFormat();
     const word = useCopyText();
+    const whyLine = useWhyLine();
     return (
         <TableRow
             data-row-index={index}
@@ -617,7 +618,9 @@ function CompanyTableRow({
                 </div>
             </TableCell>
             <TableCell className="text-ink-2 max-w-[380px] min-w-[260px] whitespace-normal">
-                <span className="line-clamp-2 leading-snug">{word(c.whyCopy, c.why)}</span>
+                <span className="line-clamp-2 leading-snug">
+                    {whyLine(c, word(c.whyCopy, c.why))}
+                </span>
                 {c.excluded && c.excludedReason && (
                     <span className="text-ink-3 mt-0.5 block text-xs">
                         {word(c.excludedReasonCopy, c.excludedReason)}
@@ -625,7 +628,7 @@ function CompanyTableRow({
                 )}
             </TableCell>
             <TableCell>
-                <FitMeter value={c.fit} threshold={c.fitThreshold} />
+                <FitCell c={c} />
             </TableCell>
             <TableCell>
                 <StagePill stage={c.stage} staleDays={c.staleDays} />

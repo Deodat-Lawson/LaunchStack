@@ -228,6 +228,7 @@ export async function createSegment(
         constraints: null,
         knownPartnerDomains: [],
         customerDomains: [],
+        intent: input.intent ?? "partners",
     };
     const program = await createProgram({
         companyId: ctx.companyId,

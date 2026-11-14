@@ -5,12 +5,12 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { ToolLink } from "~/components/tool-app/ToolLink";
-import { FitMeter } from "~/components/tools/FitMeter";
 import { Checkbox } from "~/components/ui/checkbox";
 import { useCopyText } from "~/lib/tools/copyText";
 import { cn } from "~/lib/utils";
 
 import type { CompanyRow } from "../api";
+import { FitCell, useWhyLine } from "./FitCell";
 import { FoundViaChips } from "./SourceChip";
 import { StagePill } from "./StagePill";
 
@@ -89,6 +89,7 @@ export function CompanyCard({
 }) {
     const t = useTranslations("growth.prospects");
     const word = useCopyText();
+    const whyLine = useWhyLine();
     return (
         <article
             data-row-index={index}
@@ -138,10 +139,10 @@ export function CompanyCard({
                     </p>
                 </div>
                 <p className="text-ink-2 line-clamp-3 text-[13px] leading-snug">
-                    {word(c.whyCopy, c.why)}
+                    {whyLine(c, word(c.whyCopy, c.why))}
                 </p>
                 <div className="mt-auto flex flex-wrap items-center gap-x-3 gap-y-2 pt-1">
-                    <FitMeter value={c.fit} threshold={c.fitThreshold} />
+                    <FitCell c={c} />
                     <StagePill stage={c.stage} staleDays={c.staleDays} />
                     <span className="text-ink-3 ml-auto inline-flex items-center gap-1 text-xs tabular-nums">
                         <Users className="size-3.5" aria-hidden />

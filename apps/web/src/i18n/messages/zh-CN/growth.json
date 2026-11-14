@@ -309,8 +309,14 @@
       "simulateSelected": "模拟 {count} 家公司",
       "simulateHint": "打开情景模拟，基于这个细分市场的潜在客户，或你选定的公司。",
       "simulateSubject": "这个细分市场中的企业会如何回应我们的产品？",
-      "layout": { "cards": "卡片", "table": "表格", "aria": "公司的显示方式" },
-      "foundInLastRun": "在上次运行中发现"
+      "layout": {
+        "cards": "卡片",
+        "table": "表格",
+        "aria": "公司的显示方式"
+      },
+      "foundInLastRun": "在上次运行中发现",
+      "ruledOut": "已排除",
+      "ruledOutWhy": "已排除：{reason}"
     },
     "company": {
       "updateDealFailed": "无法更新商机",
@@ -384,7 +390,16 @@
       "offeringFromProfile": "根据你的公司资料起草。可按这群客户修改。",
       "submit": "查找公司",
       "failed": "无法开始查找",
-      "defaultName": "{buyers} · {where}"
+      "defaultName": "{buyers} · {where}",
+      "intent": {
+        "aria": "要查找什么",
+        "partners": "查找买家",
+        "companies": "查找类似的公司"
+      },
+      "describe": "描述你要找的公司",
+      "describePlaceholder": "市值 30 亿美元以上的科技公司，消费类或企业类均可",
+      "describeHint": "行业、规模、阶段，以及其他重要条件。找到的每家公司都会按此核对。",
+      "whereHintCompanies": "城市、州或国家。多个地点用“;”分隔。同一地区的周边城市也算在内。"
     }
   },
   "brand": {

@@ -9,6 +9,7 @@
         "build": "pnpm --filter @launchstack/web build",
         "build:landing": "pnpm --filter @launchstack/landing build",
         "db:migrate": "pnpm --filter @launchstack/web db:migrate",
+        "deploy:check": "node apps/web/scripts/deploy-check.mjs",
         "check": "eslint . && pnpm -r typecheck",
         "lint": "eslint .",
         "lint:fix": "eslint --fix .",

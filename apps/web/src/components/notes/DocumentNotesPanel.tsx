@@ -30,6 +30,8 @@ interface Props {
     versionId: number | null;
     /** Called after any CRUD success so the caller can refresh surrounding UI. */
     onChanged?: () => void;
+    /** A new draft supersedes any passage the viewer previously navigated to. */
+    onDraftStart?: () => void;
     /**
      * When set, the panel switches into "new note" draft mode with this anchor
      * pre-populated — used by the PDF viewer when the user highlights text and
@@ -93,6 +95,7 @@ export function DocumentNotesPanel({
     documentId,
     versionId,
     onChanged,
+    onDraftStart,
     prefilledAnchor,
     prefilledText,
     onNoteClick,
@@ -109,6 +112,8 @@ export function DocumentNotesPanel({
     /** The note a delete has been asked for, pending the confirm dialog. */
     const [pendingDelete, setPendingDelete] = useState<DocumentNote | null>(null);
     const activeCardRef = useRef<HTMLDivElement | null>(null);
+    const onDraftStartRef = useRef(onDraftStart);
+    onDraftStartRef.current = onDraftStart;
 
     const ordered = useMemo(() => orderNotesForReading(notes), [notes]);
 
@@ -155,6 +160,7 @@ export function DocumentNotesPanel({
     // captured from the PDF viewer.
     useEffect(() => {
         if (!prefilledAnchor) return;
+        onDraftStartRef.current?.();
         setDraft({
             id: "new",
             title: "",
@@ -170,6 +176,7 @@ export function DocumentNotesPanel({
 
     useEffect(() => {
         if (!prefilledText) return;
+        onDraftStartRef.current?.();
         setDraft({
             ...EMPTY_DRAFT,
             id: "new",
@@ -184,6 +191,7 @@ export function DocumentNotesPanel({
     }, [prefilledText]);
 
     const startNewDraft = () => {
+        onDraftStart?.();
         setDraft({ ...EMPTY_DRAFT, id: "new" });
         setError(null);
     };

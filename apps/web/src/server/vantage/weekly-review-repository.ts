@@ -271,7 +271,8 @@ export function createWeeklyReviewRepository(
         authorizeDispatch(
             actor: WeeklyReviewActor,
             id: string,
-            kind: "generation" | "judge" = "generation"
+            kind: "generation" | "judge" = "generation",
+            expectedActiveId?: string | null
         ) {
             return transact(async query => {
                 const row = await rowFor(query, actor, id, true);
@@ -280,6 +281,17 @@ export function createWeeklyReviewRepository(
                 await authority(query, actor, dependenciesOf(row), "dispatch");
                 if (row[kind + "_dispatched"] || (kind === "judge" && !row.generation_dispatched))
                     throw new WeeklyReviewConflict("dispatch_already_reserved_or_invalid_order");
+                // Compare the week-owned pointer, without reading the old report's
+                // frozen sources. A revoked old report must remain replaceable.
+                // Final activation still performs CAS for races after this check.
+                if (kind === "generation" && expectedActiveId !== undefined) {
+                    const active = await query(
+                        "SELECT run_id FROM pdr_ai_v2_vantage_weekly_review_active WHERE company_id=$1::bigint AND owner_id=$2 AND week_start=$3::date",
+                        [actor.companyId, actor.userId, row.week_start]
+                    );
+                    if ((active[0]?.run_id ?? null) !== expectedActiveId)
+                        throw new WeeklyReviewConflict("active_review_changed");
+                }
                 await query(
                     "UPDATE pdr_ai_v2_vantage_weekly_review_runs SET " +
                         kind +

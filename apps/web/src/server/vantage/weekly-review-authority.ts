@@ -383,7 +383,8 @@ export function createWeeklyReviewAuthority(
                             requiredUnits: frozen.dependency.requiredUnits,
                         },
                         frozen.dependency.authorityRevision,
-                        frozen
+                        frozen,
+                        phase === "read" || phase === "decision"
                     );
                     current.push(result.dependency);
                     continue;

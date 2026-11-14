@@ -154,7 +154,12 @@ export async function generateWeeklyReview(
                         ...test,
                         ...budgetPorts,
                         authorizeDispatch: kind =>
-                            repository.authorizeDispatch(current, reserved.id, kind),
+                            repository.authorizeDispatch(
+                                current,
+                                reserved.id,
+                                kind,
+                                args.expectedActiveId
+                            ),
                     });
                 const generationRoute =
                     process.env.VANTAGE_WEEKLY_REVIEW_GENERATION_ROUTE ?? "default";
@@ -183,7 +188,12 @@ export async function generateWeeklyReview(
                     judge,
                     ...budgetPorts,
                     authorizeDispatch: kind =>
-                        repository.authorizeDispatch(current, reserved.id, kind),
+                        repository.authorizeDispatch(
+                            current,
+                            reserved.id,
+                            kind,
+                            args.expectedActiveId
+                        ),
                 });
             }
         );

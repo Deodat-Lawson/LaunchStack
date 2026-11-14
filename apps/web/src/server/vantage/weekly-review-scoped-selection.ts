@@ -91,7 +91,8 @@ export function createScopedSourceReader(
         cutoff: string,
         scope: WeeklyReviewSourceScope,
         authorityRevision: string,
-        frozen?: NonNullable<FrozenDependency["scope"]>
+        frozen?: NonNullable<FrozenDependency["scope"]>,
+        historical = false
     ) => {
         const request: ScopedEvidenceRequest = frozen?.request ?? {
             actorId: actor.userId,
@@ -181,8 +182,16 @@ export function createScopedSourceReader(
             version: scope.version,
             authorized: true,
             purpose,
-            audience: companyReadable ? "company" : "actor",
-            companyReadable,
+            // Current ACL and purpose were checked above. Historical citation identity
+            // retains its captured audience while exact parent and unit checks still run.
+            audience:
+                historical && frozen
+                    ? frozen.dependency.audience
+                    : companyReadable
+                      ? "company"
+                      : "actor",
+            companyReadable:
+                historical && frozen ? frozen.dependency.companyReadable : companyReadable,
             aclRevision: frozen?.dependency.aclRevision ?? aclRevision,
             authorityRevision,
             finiteScope: { qualification: scope.qualification, requiredUnits: scope.requiredUnits },

@@ -358,6 +358,13 @@
       "when": 1794607064974,
       "tag": "20261113215744_vantage_scoped_source_policy",
       "breakpoints": true
+    },
+    {
+      "idx": 51,
+      "version": "7",
+      "when": 1794614400000,
+      "tag": "20261114000000_vantage_identity_authority_updates",
+      "breakpoints": true
     }
   ]
 }

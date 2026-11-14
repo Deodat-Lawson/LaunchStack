@@ -92,6 +92,10 @@ describe("scoped evidence through real PostgreSQL authority and acceptance", () 
             const privateNote = await addDocument(String(company!.id), "Private star", [
                 "Private planning evidence.",
             ]);
+            // Retain a mixed admission containing an ordinary exact-version dependency.
+            const wholeNote = await addDocument(String(company!.id), "Whole star", [
+                "Ordinary exact-version planning evidence.",
+            ]);
             const foreign = await addDocument(String(otherCompany!.id), "Foreign document", [
                 "Foreign tenant evidence.",
             ]);
@@ -189,10 +193,13 @@ describe("scoped evidence through real PostgreSQL authority and acceptance", () 
                 )
             ).rejects.toThrow("required_context_audience");
             await database.transaction(async query => {
-                await authority.validatePreferenceSources(query, actor, [privateNote.id]);
+                await authority.validatePreferenceSources(query, actor, [
+                    privateNote.id,
+                    wholeNote.id,
+                ]);
                 await query(
                     "INSERT INTO pdr_ai_v2_vantage_weekly_review_preferences(company_id,actor_id,star_document_ids) VALUES($1::bigint,$2,$3::jsonb)",
-                    [actor.companyId, actor.userId, JSON.stringify([privateNote.id])]
+                    [actor.companyId, actor.userId, JSON.stringify([privateNote.id, wholeNote.id])]
                 );
             });
             await expect(
@@ -235,10 +242,8 @@ describe("scoped evidence through real PostgreSQL authority and acceptance", () 
                     source => source.documentId === privateNote.id
                 )?.audience
             ).toBe("actor");
-            // Keep the admission scenario mixed, covering ordinary exact-version dependencies too.
-            await sql`UPDATE pdr_ai_v2_vantage_weekly_review_preferences SET star_source_scopes='{}'::jsonb,version=version+1 WHERE company_id=${actor.companyId} AND actor_id=${actor.userId}`;
             const context = await collect();
-            expect(context.scopedEvidence).toHaveLength(1);
+            expect(context.scopedEvidence).toHaveLength(2);
             expect(context.scopedEvidence![0]!.coverage).toMatchObject({
                 state: "relevant_spans_reviewed",
                 originalCompleteness: "unknown",
@@ -334,19 +339,21 @@ describe("scoped evidence through real PostgreSQL authority and acceptance", () 
                     };
                 },
             };
-            const result = await runWeeklyReviewV21(candidate.input, {
-                generation: { modelId: "synthetic-generation" } as never,
-                judge: { modelId: "synthetic-judge" } as never,
-                invoke: (async () => ({
-                    result: report,
-                    usage: { inputTokens: 10, outputTokens: 10, totalTokens: 20 },
-                })) as never,
-                validationJudge,
-                authorizeDispatch: kind =>
-                    repository.authorizeDispatch(candidate.current, candidate.reserved.id, kind),
-                budgetProfile: "scoped-v2",
-                selectionDiagnostics: candidate.frozen.selectionDiagnostics,
-            });
+            const runCandidate = (selected: Awaited<ReturnType<typeof prepare>>) =>
+                runWeeklyReviewV21(selected.input, {
+                    generation: { modelId: "synthetic-generation" } as never,
+                    judge: { modelId: "synthetic-judge" } as never,
+                    invoke: (async () => ({
+                        result: report,
+                        usage: { inputTokens: 10, outputTokens: 10, totalTokens: 20 },
+                    })) as never,
+                    validationJudge,
+                    authorizeDispatch: kind =>
+                        repository.authorizeDispatch(selected.current, selected.reserved.id, kind),
+                    budgetProfile: "scoped-v2",
+                    selectionDiagnostics: selected.frozen.selectionDiagnostics,
+                });
+            const result = await runCandidate(candidate);
             expect(result.evidence.schemaVersion).toBe("vantage-admission/v3");
             const [reservedRow] =
                 await sql`SELECT dependencies FROM pdr_ai_v2_vantage_weekly_review_runs WHERE id=${candidate.reserved.id}`;
@@ -391,6 +398,57 @@ describe("scoped evidence through real PostgreSQL authority and acceptance", () 
                 result.report
             );
 
+            // Current access remains granted while each accepted Star's captured audience changes.
+            await sql`UPDATE pdr_ai_v2_document_settings SET restricted=false WHERE document_id=${privateNote.id}`;
+            const assertHistorical = async (id: string) => {
+                const historical = await flagOffRepository.get(actor, id);
+                await repository.decide(actor, id, {
+                    key: randomUUID(),
+                    expectedVersion: historical.version,
+                    topicId: historical.report.topics[0]!.id,
+                    decision: "Discuss the evidence",
+                });
+                const restored = await repository.restore(actor, id, {
+                    key: randomUUID(),
+                    expectedActiveId: await repository.active(actor, week),
+                });
+                expect(restored.runId).toBe(id);
+            };
+            await assertHistorical(candidate.reserved.id);
+            const companyCandidate = await prepare();
+            const companyResult = await runCandidate(companyCandidate);
+            await repository.accept(companyCandidate.current, companyCandidate.reserved.id, {
+                ...companyResult,
+                expectedActiveId: candidate.reserved.id,
+            });
+            await sql`UPDATE pdr_ai_v2_document_settings SET restricted=true WHERE document_id=${privateNote.id}`;
+            await assertHistorical(companyCandidate.reserved.id);
+            // Restore the original active report for the remaining race assertions.
+            await assertHistorical(candidate.reserved.id);
+            const beforeRevocation = await flagOffRepository.get(
+                actor,
+                companyCandidate.reserved.id
+            );
+            deniedDocumentIds = [Number(privateNote.id)];
+            await expect(
+                flagOffRepository.get(actor, companyCandidate.reserved.id)
+            ).rejects.toThrow("source_access_denied");
+            await expect(
+                repository.decide(actor, companyCandidate.reserved.id, {
+                    key: randomUUID(),
+                    expectedVersion: beforeRevocation.version,
+                    topicId: beforeRevocation.report.topics[0]!.id,
+                    decision: "Discuss evidence",
+                })
+            ).rejects.toThrow("source_access_denied");
+            await expect(
+                repository.restore(actor, companyCandidate.reserved.id, {
+                    key: randomUUID(),
+                    expectedActiveId: candidate.reserved.id,
+                })
+            ).rejects.toThrow("source_access_denied");
+            deniedDocumentIds = [];
+
             // A newer version does not rewrite exact accepted history.
             const [future] =
                 await sql`INSERT INTO pdr_ai_v2_document_versions(document_id,version_number,url,mime_type,created_at) VALUES (${architecture.id},2,'synthetic','text/plain','2026-12-01') RETURNING id`;
@@ -409,6 +467,12 @@ describe("scoped evidence through real PostgreSQL authority and acceptance", () 
             await expect(flagOffRepository.get(actor, candidate.reserved.id)).rejects.toThrow(
                 "required_context_audience"
             );
+            await expect(
+                repository.restore(actor, candidate.reserved.id, {
+                    key: randomUUID(),
+                    expectedActiveId: candidate.reserved.id,
+                })
+            ).rejects.toThrow("required_context_audience");
             await sql`DELETE FROM pdr_ai_v2_document_settings WHERE document_id=${architecture.id}`;
 
             const racing = await prepare();

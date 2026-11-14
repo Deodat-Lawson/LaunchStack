@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -110,53 +110,89 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
     const [documents, setDocuments] = useState<{ id: string; title: string }[]>([]),
         [stars, setStars] = useState<string[]>([]),
         [preferenceVersion, setPreferenceVersion] = useState(0);
-    const [decisions, setDecisions] = useState<Record<string, string>>({});
+    const [decisions, setDecisions] = useState<Record<string, { text: string }>>({});
+    const [activeId, setActiveId] = useState<string | null>(null);
+    const [loadedWeek, setLoadedWeek] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [contextReady, setContextReady] = useState(false);
+    const request = useRef(0);
+    const operation = useRef(0);
+    const invalidate = useCallback(() => {
+        request.current++;
+        operation.current++;
+    }, []);
     const load = useCallback(
-        async (id?: string) => {
-            const data = await call<RunList>("?weekStart=" + encodeURIComponent(week));
-            setEnabled(data.enabled);
-            setRuns(data.runs);
-            const chosen =
-                id ??
-                data.activeId ??
-                data.runs.find(
-                    (run: { status: string; week_start: string }) =>
-                        run.status === "accepted" && String(run.week_start).slice(0, 10) === week
-                )?.id;
-            setReview(chosen ? await call<Saved>("/" + chosen) : null);
-            if (data.enabled) {
-                const context = await call<Context>("/context");
-                setDocuments(context.documents ?? []);
-                setStars((context.preferences?.star_document_ids ?? []).map(String));
-                setPreferenceVersion(context.preferences?.version ?? 0);
-                setAdmin(context.canConfigure);
-                setPolicyVersion(context.policy?.version ?? 0);
-                setArchitecture(String(context.policy?.architecture_document_id ?? ""));
-                setRequired((context.policy?.required_document_ids ?? []).join(","));
+        async (id?: string, refreshContext = true) => {
+            const identity = ++request.current;
+            const current = () => identity === request.current;
+            setLoading(true);
+            setLoadedWeek(null);
+            if (refreshContext) setContextReady(false);
+            setError("");
+            setReview(null);
+            try {
+                const data = await call<RunList>("?weekStart=" + encodeURIComponent(week));
+                if (!current()) return;
+                setEnabled(data.enabled);
+                const weekRuns = data.runs.filter(
+                    run => String(run.week_start).slice(0, 10) === week
+                );
+                setRuns(weekRuns);
+                setActiveId(data.activeId);
+                setLoadedWeek(week);
+                const chosen =
+                    id ?? data.activeId ?? weekRuns.find(run => run.status === "accepted")?.id;
+                // Report access and configuration access are independent. A revoked historical
+                // dependency must still allow replacement using the actual active pointer.
+                const results = await Promise.allSettled([
+                    (async () => {
+                        const saved = chosen ? await call<Saved>("/" + chosen) : null;
+                        if (current()) setReview(saved);
+                    })(),
+                    (async () => {
+                        if (!data.enabled || !refreshContext) return;
+                        const context = await call<Context>("/context");
+                        if (!current()) return;
+                        setDocuments(context.documents ?? []);
+                        setStars((context.preferences?.star_document_ids ?? []).map(String));
+                        setPreferenceVersion(context.preferences?.version ?? 0);
+                        setAdmin(context.canConfigure);
+                        setPolicyVersion(context.policy?.version ?? 0);
+                        setArchitecture(String(context.policy?.architecture_document_id ?? ""));
+                        setRequired((context.policy?.required_document_ids ?? []).join(","));
+                        setContextReady(true);
+                    })(),
+                ]);
+                if (!current()) return;
+                const failure = results.find(result => result.status === "rejected");
+                if (failure?.status === "rejected") throw failure.reason;
+            } catch (reason) {
+                if (current()) setError(reason instanceof Error ? reason.message : "requestFailed");
+            } finally {
+                if (current()) setLoading(false);
             }
         },
         [week]
     );
     useEffect(() => {
-        let active = true;
-        load().catch((reason: unknown) => {
-            if (active) setError(reason instanceof Error ? reason.message : "requestFailed");
-        });
-        return () => {
-            active = false;
-        };
-    }, [load]);
-    async function act(work: () => Promise<void>) {
+        void load();
+        return invalidate;
+    }, [load, invalidate]);
+    async function act(work: (current: () => boolean) => Promise<void>) {
+        const identity = ++operation.current;
+        const requestIdentity = request.current;
+        const current = () => identity === operation.current && requestIdentity === request.current;
         setBusy(true);
         setError("");
         try {
-            await work();
+            await work(current);
         } catch (e) {
-            setError(e instanceof Error ? e.message : "requestFailed");
+            if (current()) setError(e instanceof Error ? e.message : "requestFailed");
         } finally {
-            setBusy(false);
+            if (identity === operation.current) setBusy(false);
         }
     }
+    const ready = !loading && loadedWeek === week;
     if (enabled === false) return <AgendaScreen week={initialWeek ?? null} />;
     return (
         <div className="mx-auto max-w-[1100px] space-y-5 p-6">
@@ -174,19 +210,25 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                         id="weekly-review-week"
                         type="date"
                         value={week}
-                        onChange={e => setWeek(e.target.value)}
+                        onChange={e => {
+                            invalidate();
+                            setBusy(false);
+                            setLoading(true);
+                            setReview(null);
+                            setWeek(e.target.value);
+                        }}
                     />
                 </div>
                 <Button
-                    disabled={busy || enabled !== true}
+                    disabled={busy || !ready || enabled !== true}
                     onClick={() =>
-                        act(async () => {
+                        act(async current => {
                             const saved = await call<Saved>(
                                 "",
-                                { weekStart: week, expectedActiveId: review?.id ?? null },
+                                { weekStart: week, expectedActiveId: activeId },
                                 crypto.randomUUID()
                             );
-                            await load(saved.id);
+                            if (current()) await load(saved.id, false);
                         })
                     }
                 >
@@ -195,8 +237,9 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                 <div>
                     <Label htmlFor="weekly-review-history">{t("history")}</Label>
                     <Select
+                        disabled={busy || !ready}
                         value={review?.id ?? undefined}
-                        onValueChange={value => act(() => load(value))}
+                        onValueChange={value => act(() => load(value, false))}
                     >
                         <SelectTrigger id="weekly-review-history">
                             <SelectValue placeholder={t("selectReport")} />
@@ -214,7 +257,7 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                     </Select>
                 </div>
             </div>
-            {admin && (
+            {ready && contextReady && admin && (
                 <details className="border-line rounded border p-4">
                     <summary>{t("requiredContext")}</summary>
                     <p className="text-ink-2 my-2 text-sm">{t("contextHelp")}</p>
@@ -257,7 +300,7 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                         className="mt-3"
                         disabled={busy || !architecture}
                         onClick={() =>
-                            act(async () => {
+                            act(async current => {
                                 await call("/context", {
                                     expectedVersion: policyVersion,
                                     architectureDocumentId: architecture,
@@ -266,7 +309,7 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                                         .map(s => s.trim())
                                         .filter(Boolean),
                                 });
-                                await load(review?.id);
+                                if (current()) await load(review?.id);
                             })
                         }
                     >
@@ -274,7 +317,7 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                     </Button>
                 </details>
             )}
-            {enabled && (
+            {enabled && ready && contextReady && (
                 <details className="border-line rounded border p-4">
                     <summary>{t("personalStars")}</summary>
                     <p className="text-ink-2 my-2 text-sm">{t("starHelp")}</p>
@@ -299,14 +342,14 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                         className="mt-3"
                         disabled={busy || stars.length > 8}
                         onClick={() =>
-                            act(async () => {
+                            act(async current => {
                                 await call(
                                     "/context",
                                     { expectedVersion: preferenceVersion, starDocumentIds: stars },
                                     undefined,
                                     "PATCH"
                                 );
-                                await load(review?.id);
+                                if (current()) await load(review?.id);
                             })
                         }
                     >
@@ -372,109 +415,123 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                             </div>
                         ))}
                     </div>
-                    {review.report.topics.map(topic => (
-                        <section
-                            key={topic.id}
-                            className="border-line space-y-3 rounded border p-4"
-                        >
-                            <h3 className="font-semibold">{topic.title}</h3>
-                            {topic.facts.map((fact, i) => (
-                                <p key={i}>
-                                    {fact.text}
-                                    <span className="text-ink-2 block text-xs">
-                                        {fact.refs.join(", ")}
-                                    </span>
-                                </p>
-                            ))}
-                            {topic.conflicts.map((conflict, i) => (
-                                <p key={i}>
-                                    {t("conflict")}: {conflict.text}
-                                    <span className="text-ink-2 block text-xs">
-                                        {conflict.refs.join(", ")}
-                                    </span>
-                                </p>
-                            ))}
-                            <p>
-                                <strong>{t("why")}: </strong>
-                                {topic.whyItMatters}
-                            </p>
-                            <p>
-                                <strong>{t("whyNow")}: </strong>
-                                {topic.whyNow}
-                            </p>
-                            <p>{topic.decisionQuestion}</p>
-                            <p>{topic.rationale}</p>
-                            {topic.recommendation && (
-                                <div>
-                                    <p>
-                                        {topic.recommendation.call} (
-                                        {topic.recommendation.confidence})
-                                    </p>
-                                    <p>{topic.recommendation.because}</p>
-                                    <p>{topic.recommendation.wouldChangeIf}</p>
-                                    <p className="text-ink-2 text-xs">
-                                        {topic.recommendation.refs.join(", ")}
-                                    </p>
-                                </div>
-                            )}
-                            <p>{topic.proposedNextStep}</p>
-                            {topic.proposedOwner && (
-                                <p>
-                                    {t("owner")}: {topic.proposedOwner}
-                                </p>
-                            )}
-                            {topic.proposedDue && (
-                                <p>
-                                    {t("due")}: {topic.proposedDue}
-                                </p>
-                            )}
-                            {topic.helpRequested && (
-                                <p>
-                                    {t("help")}: {topic.helpRequested}
-                                </p>
-                            )}
-                            {topic.unknowns.map((value, i) => (
-                                <p key={i}>
-                                    {t("unknown")}: {value}
-                                </p>
-                            ))}
-                            {review.decisions
-                                .filter(d => d.topicId === topic.id)
-                                .map(d => (
-                                    <p key={d.version} className="text-ink-2 text-sm">
-                                        {t("recordedDecision")}: {d.decision}
+                    {review.report.topics.map(topic => {
+                        const draftKey = JSON.stringify([review.id, topic.id]);
+                        const draft = decisions[draftKey];
+                        return (
+                            <section
+                                key={topic.id}
+                                className="border-line space-y-3 rounded border p-4"
+                            >
+                                <h3 className="font-semibold">{topic.title}</h3>
+                                {topic.facts.map((fact, i) => (
+                                    <p key={i}>
+                                        {fact.text}
+                                        <span className="text-ink-2 block text-xs">
+                                            {fact.refs.join(", ")}
+                                        </span>
                                     </p>
                                 ))}
-                            <Label htmlFor={"decision-" + topic.id}>{t("decision")}</Label>
-                            <Textarea
-                                id={"decision-" + topic.id}
-                                value={decisions[topic.id] ?? ""}
-                                onChange={e =>
-                                    setDecisions({ ...decisions, [topic.id]: e.target.value })
-                                }
-                            />
-                            <Button
-                                disabled={busy || !decisions[topic.id]?.trim()}
-                                onClick={() =>
-                                    act(async () => {
-                                        await call(
-                                            "/" + review.id + "/decisions",
-                                            {
-                                                expectedVersion: review.version,
-                                                topicId: topic.id,
-                                                decision: decisions[topic.id],
-                                            },
-                                            crypto.randomUUID()
-                                        );
-                                        setDecisions({ ...decisions, [topic.id]: "" });
-                                        await load(review.id);
-                                    })
-                                }
-                            >
-                                {t("saveDecision")}
-                            </Button>
-                        </section>
-                    ))}
+                                {topic.conflicts.map((conflict, i) => (
+                                    <p key={i}>
+                                        {t("conflict")}: {conflict.text}
+                                        <span className="text-ink-2 block text-xs">
+                                            {conflict.refs.join(", ")}
+                                        </span>
+                                    </p>
+                                ))}
+                                <p>
+                                    <strong>{t("why")}: </strong>
+                                    {topic.whyItMatters}
+                                </p>
+                                <p>
+                                    <strong>{t("whyNow")}: </strong>
+                                    {topic.whyNow}
+                                </p>
+                                <p>{topic.decisionQuestion}</p>
+                                <p>{topic.rationale}</p>
+                                {topic.recommendation && (
+                                    <div>
+                                        <p>
+                                            {topic.recommendation.call} (
+                                            {topic.recommendation.confidence})
+                                        </p>
+                                        <p>{topic.recommendation.because}</p>
+                                        <p>{topic.recommendation.wouldChangeIf}</p>
+                                        <p className="text-ink-2 text-xs">
+                                            {topic.recommendation.refs.join(", ")}
+                                        </p>
+                                    </div>
+                                )}
+                                <p>{topic.proposedNextStep}</p>
+                                {topic.proposedOwner && (
+                                    <p>
+                                        {t("owner")}: {topic.proposedOwner}
+                                    </p>
+                                )}
+                                {topic.proposedDue && (
+                                    <p>
+                                        {t("due")}: {topic.proposedDue}
+                                    </p>
+                                )}
+                                {topic.helpRequested && (
+                                    <p>
+                                        {t("help")}: {topic.helpRequested}
+                                    </p>
+                                )}
+                                {topic.unknowns.map((value, i) => (
+                                    <p key={i}>
+                                        {t("unknown")}: {value}
+                                    </p>
+                                ))}
+                                {review.decisions
+                                    .filter(d => d.topicId === topic.id)
+                                    .map(d => (
+                                        <p key={d.version} className="text-ink-2 text-sm">
+                                            {t("recordedDecision")}: {d.decision}
+                                        </p>
+                                    ))}
+                                <Label htmlFor={"decision-" + topic.id}>{t("decision")}</Label>
+                                <Textarea
+                                    id={"decision-" + topic.id}
+                                    value={draft?.text ?? ""}
+                                    onChange={e => {
+                                        const text = e.target.value;
+                                        setDecisions(previous => ({
+                                            ...previous,
+                                            [draftKey]: { text },
+                                        }));
+                                    }}
+                                />
+                                <Button
+                                    disabled={busy || !ready || !draft?.text.trim()}
+                                    onClick={() =>
+                                        act(async current => {
+                                            await call(
+                                                "/" + review.id + "/decisions",
+                                                {
+                                                    expectedVersion: review.version,
+                                                    topicId: topic.id,
+                                                    decision: draft?.text,
+                                                },
+                                                crypto.randomUUID()
+                                            );
+                                            if (!current()) return;
+                                            setDecisions(previous => {
+                                                if (previous[draftKey] !== draft) return previous;
+                                                const next = { ...previous };
+                                                delete next[draftKey];
+                                                return next;
+                                            });
+                                            await load(review.id, false);
+                                        })
+                                    }
+                                >
+                                    {t("saveDecision")}
+                                </Button>
+                            </section>
+                        );
+                    })}
                 </article>
             )}
         </div>

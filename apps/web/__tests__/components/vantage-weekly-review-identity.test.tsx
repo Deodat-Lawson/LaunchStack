@@ -78,6 +78,8 @@ function list(activeId: string, week = weekA) {
 function defaultFetch(url: string, options?: RequestInit): unknown {
     if (url.includes("?weekStart="))
         return response(list(url.endsWith(weekB) ? "B" : "A", url.endsWith(weekB) ? weekB : weekA));
+    if (url.endsWith("/context/role"))
+        return response({ role: null, version: 0, canEdit: true, enabled: true });
     if (url.endsWith("/context")) return response({ documents: [], canConfigure: false });
     if (options?.method === "POST") return response(report("generated"));
     return response(report(url.split("/").at(-1)!));
@@ -105,13 +107,15 @@ beforeEach(() => {
 it("namespaces drafts by report and restores them when returning to history", async () => {
     renderWithLocale(<WeeklyReviewEntry week={weekA} />, "en");
     await screen.findByText("Report A");
-    fireEvent.change(screen.getAllByRole("textbox")[0]!, { target: { value: "A only" } });
+    fireEvent.change(screen.getAllByLabelText("Human decision")[0]!, {
+        target: { value: "A only" },
+    });
     history("history");
     await screen.findByRole("heading", { name: "Report history" });
-    expect(screen.getAllByRole("textbox")[0]).toHaveValue("");
+    expect(screen.getAllByLabelText("Human decision")[0]).toHaveValue("");
     history("A");
     await screen.findByText("Report A");
-    expect(screen.getAllByRole("textbox")[0]).toHaveValue("A only");
+    expect(screen.getAllByLabelText("Human decision")[0]).toHaveValue("A only");
 });
 
 it("preserves both newer same-topic edits and other-topic edits while a save waits", async () => {
@@ -121,16 +125,22 @@ it("preserves both newer same-topic edits and other-topic edits while a save wai
     );
     renderWithLocale(<WeeklyReviewEntry week={weekA} />, "en");
     await screen.findByText("Report A");
-    fireEvent.change(screen.getAllByRole("textbox")[0]!, { target: { value: "submitted" } });
+    fireEvent.change(screen.getAllByLabelText("Human decision")[0]!, {
+        target: { value: "submitted" },
+    });
     fireEvent.click(saveButton());
-    fireEvent.change(screen.getAllByRole("textbox")[0]!, { target: { value: "newer" } });
-    fireEvent.change(screen.getAllByRole("textbox")[1]!, { target: { value: "other topic" } });
+    fireEvent.change(screen.getAllByLabelText("Human decision")[0]!, {
+        target: { value: "newer" },
+    });
+    fireEvent.change(screen.getAllByLabelText("Human decision")[1]!, {
+        target: { value: "other topic" },
+    });
     await act(async () => {
         saving.resolve(response({}));
     });
     await waitFor(() => expect(saveButton()).toBeEnabled());
-    expect(screen.getAllByRole("textbox")[0]).toHaveValue("newer");
-    expect(screen.getAllByRole("textbox")[1]).toHaveValue("other topic");
+    expect(screen.getAllByLabelText("Human decision")[0]).toHaveValue("newer");
+    expect(screen.getAllByLabelText("Human decision")[1]).toHaveValue("other topic");
 });
 
 it("uses the true active pointer while displaying history and filters the chosen week", async () => {
@@ -221,7 +231,9 @@ it("does not reload an old report after a save completes in a new week", async (
     );
     renderWithLocale(<WeeklyReviewEntry week={weekA} />, "en");
     await screen.findByText("Report A");
-    fireEvent.change(screen.getAllByRole("textbox")[0]!, { target: { value: "submitted" } });
+    fireEvent.change(screen.getAllByLabelText("Human decision")[0]!, {
+        target: { value: "submitted" },
+    });
     fireEvent.click(saveButton());
     changeWeek(weekB);
     await screen.findByText("Report B");
@@ -236,11 +248,13 @@ it("does not reload an old report after a save completes in a new week", async (
 it("clears only the submitted unchanged draft after a successful save", async () => {
     renderWithLocale(<WeeklyReviewEntry week={weekA} />, "en");
     await screen.findByText("Report A");
-    fireEvent.change(screen.getAllByRole("textbox")[0]!, { target: { value: "submitted" } });
-    fireEvent.change(screen.getAllByRole("textbox")[1]!, { target: { value: "keep" } });
+    fireEvent.change(screen.getAllByLabelText("Human decision")[0]!, {
+        target: { value: "submitted" },
+    });
+    fireEvent.change(screen.getAllByLabelText("Human decision")[1]!, { target: { value: "keep" } });
     fireEvent.click(saveButton());
-    await waitFor(() => expect(screen.getAllByRole("textbox")[0]).toHaveValue(""));
-    expect(screen.getAllByRole("textbox")[1]).toHaveValue("keep");
+    await waitFor(() => expect(screen.getAllByLabelText("Human decision")[0]).toHaveValue(""));
+    expect(screen.getAllByLabelText("Human decision")[1]).toHaveValue("keep");
     expect(mockFetch).toHaveBeenCalledWith(
         "/api/vantage/reviews/A/decisions",
         expect.objectContaining({
@@ -256,15 +270,21 @@ it("keeps a new edit even when it returns to the submitted text", async () => {
     );
     renderWithLocale(<WeeklyReviewEntry week={weekA} />, "en");
     await screen.findByText("Report A");
-    fireEvent.change(screen.getAllByRole("textbox")[0]!, { target: { value: "submitted" } });
+    fireEvent.change(screen.getAllByLabelText("Human decision")[0]!, {
+        target: { value: "submitted" },
+    });
     fireEvent.click(saveButton());
-    fireEvent.change(screen.getAllByRole("textbox")[0]!, { target: { value: "changed" } });
-    fireEvent.change(screen.getAllByRole("textbox")[0]!, { target: { value: "submitted" } });
+    fireEvent.change(screen.getAllByLabelText("Human decision")[0]!, {
+        target: { value: "changed" },
+    });
+    fireEvent.change(screen.getAllByLabelText("Human decision")[0]!, {
+        target: { value: "submitted" },
+    });
     await act(async () => {
         saving.resolve(response({}));
     });
     await waitFor(() => expect(saveButton()).toBeEnabled());
-    expect(screen.getAllByRole("textbox")[0]).toHaveValue("submitted");
+    expect(screen.getAllByLabelText("Human decision")[0]).toHaveValue("submitted");
 });
 
 it("keeps generation disabled when the new week list fails", async () => {

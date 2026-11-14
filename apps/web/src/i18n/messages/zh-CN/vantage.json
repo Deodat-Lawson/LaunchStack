@@ -677,6 +677,15 @@
     }
   },
   "weeklyReview": {
+    "businessRole": "我的业务职责",
+    "businessRoleHelp": "确认你的业务角色、职责和优先事项，以个性化每周回顾的重点。工作区权限由单独的设置管理。",
+    "primaryBusinessRole": "主要业务角色",
+    "businessResponsibilities": "职责",
+    "businessPriorities": "优先事项",
+    "businessRoleLimits": "每行一项，每个列表最多 8 项，每项最多 160 个字符。",
+    "confirmBusinessRole": "我确认这些是我当前的业务职责和优先事项。",
+    "saveBusinessRole": "确认并保存",
+    "clearBusinessRole": "清除业务角色",
     "title": "????",
     "description": "??????????????????????????????????",
     "week": "???",

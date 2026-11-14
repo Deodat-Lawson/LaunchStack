@@ -187,6 +187,14 @@ export async function PATCH(request: Request) {
             .strict()
             .parse(await request.json());
         const version = await weeklyReviewDatabase.transaction(async query => {
+            await query(
+                "INSERT INTO pdr_ai_v2_vantage_weekly_review_epochs(company_id) VALUES($1::bigint) ON CONFLICT DO NOTHING",
+                [auth.actor.companyId]
+            );
+            await query(
+                "SELECT version FROM pdr_ai_v2_vantage_weekly_review_epochs WHERE company_id=$1::bigint FOR UPDATE",
+                [auth.actor.companyId]
+            );
             const existing = (
                 await query(
                     "SELECT version,star_source_scopes FROM pdr_ai_v2_vantage_weekly_review_preferences WHERE company_id=$1::bigint AND actor_id=$2 FOR UPDATE",

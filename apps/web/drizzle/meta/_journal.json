@@ -365,6 +365,13 @@
       "when": 1794614400000,
       "tag": "20261114000000_vantage_identity_authority_updates",
       "breakpoints": true
+    },
+    {
+      "idx": 52,
+      "version": "7",
+      "when": 1794657600000,
+      "tag": "20261114120000_vantage_business_role_context",
+      "breakpoints": true
     }
   ]
 }

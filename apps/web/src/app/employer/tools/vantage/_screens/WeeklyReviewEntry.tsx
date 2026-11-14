@@ -14,6 +14,8 @@ import {
     SelectValue,
 } from "~/components/ui/select";
 import { AgendaScreen } from "./AgendaScreen";
+import { WeeklyReviewBusinessRole } from "./WeeklyReviewBusinessRole";
+import type { BusinessRoleContext } from "~/server/vantage/weekly-review-business-role";
 import {
     EvidenceInspector,
     EvidenceRefs,
@@ -142,6 +144,10 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
     const [loading, setLoading] = useState(true);
     const [contextReady, setContextReady] = useState(false);
     const [configuration, setConfiguration] = useState<Context | null>(null);
+    const [businessRole, setBusinessRole] = useState<BusinessRoleContext | null>(null);
+    const [businessRoleVersion, setBusinessRoleVersion] = useState(0);
+    const [canEditBusinessRole, setCanEditBusinessRole] = useState(false);
+    const [businessRoleEnabled, setBusinessRoleEnabled] = useState(false);
     const [selectedRef, setSelectedRef] = useState<string | null>(null);
     const request = useRef(0);
     const operation = useRef(0);
@@ -180,8 +186,20 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                     })(),
                     (async () => {
                         if (!data.enabled || !refreshContext) return;
-                        const context = await call<Context>("/context");
+                        const [context, roleContext] = await Promise.all([
+                            call<Context>("/context"),
+                            call<{
+                                role: BusinessRoleContext | null;
+                                version: number;
+                                canEdit: boolean;
+                                enabled: boolean;
+                            }>("/context/role"),
+                        ]);
                         if (!current()) return;
+                        setBusinessRole(roleContext.role);
+                        setBusinessRoleVersion(roleContext.version);
+                        setCanEditBusinessRole(roleContext.canEdit === true);
+                        setBusinessRoleEnabled(roleContext.enabled === true);
                         setConfiguration(context);
                         setDocuments(context.documents ?? []);
                         setStars((context.preferences?.star_document_ids ?? []).map(String));
@@ -347,6 +365,26 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                     </Select>
                 </div>
             </div>
+            {enabled && businessRoleEnabled && ready && contextReady && (
+                <WeeklyReviewBusinessRole
+                    key={businessRoleVersion}
+                    role={businessRole}
+                    disabled={busy || !canEditBusinessRole}
+                    onSave={role =>
+                        act(async current => {
+                            await call(
+                                "/context/role",
+                                role
+                                    ? { expectedVersion: businessRoleVersion, ...role }
+                                    : { expectedVersion: businessRoleVersion, role: null },
+                                undefined,
+                                "PATCH"
+                            );
+                            if (current()) await load(review?.id);
+                        })
+                    }
+                />
+            )}
             {ready && contextReady && admin && (
                 <details className="border-line rounded border p-4">
                     <summary>{t("requiredContext")}</summary>

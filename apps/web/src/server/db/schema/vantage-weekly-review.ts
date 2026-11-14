@@ -137,6 +137,7 @@ export const vantageWeeklyReviewPreferences = pgTable(
         starSourceScopes: jsonb("star_source_scopes")
             .notNull()
             .default(sql`'{}'::jsonb`),
+        businessRoleContext: jsonb("business_role_context"),
         version: integer("version").notNull().default(1),
     },
     t => ({

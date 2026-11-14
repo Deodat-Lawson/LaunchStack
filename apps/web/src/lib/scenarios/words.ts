@@ -34,45 +34,41 @@ export const STANCE_LABEL: Record<Stance, string> = {
     [2]: "Strongly supportive",
 };
 
-/** Series keys for the chart (CSS custom property names can't start with a minus). */
-export const STANCE_KEY: Record<Stance, string> = {
-    [-2]: "critical2",
-    [-1]: "critical1",
-    [0]: "neutral",
-    [1]: "supportive1",
-    [2]: "supportive2",
-};
-
 /**
  * A diverging scale built from the status tokens: danger for critical, info
  * for supportive, the ink ladder for neutral. Red against blue stays apart for
- * the common colour-vision deficiencies (red against green would not); the
- * milder steps and the neutral middle are mixed toward the panel (in oklab,
- * so the hue does not swing on the way), so the
- * scale is lightest in the middle and reads by lightness as well as hue.
- * Every use also carries the word.
+ * the common colour-vision deficiencies (red against green would not). The
+ * milder steps sit at 70% and the neutral middle at 40% over the panel, so the
+ * scale is lightest in the middle and reads by lightness as well as hue. At
+ * 60% and 50%, supportive and neutral were too close for protanopic readers
+ * (ΔE 5.7 by the data-viz palette check); as rendered now the closest
+ * neighbours measure 9.1 in light and 11.4 in dark. Every use also carries
+ * the word.
  */
-export const STANCE_COLOR: Record<Stance, string> = {
-    [-2]: "var(--danger)",
-    [-1]: "color-mix(in oklab, var(--danger) 60%, var(--panel))",
-    [0]: "color-mix(in oklab, var(--ink-4) 50%, var(--panel))",
-    [1]: "color-mix(in oklab, var(--info) 60%, var(--panel))",
-    [2]: "var(--info)",
-};
-
-/** The same scale as background classes, for dots and bars. */
 export const STANCE_BG: Record<Stance, string> = {
     [-2]: "bg-danger",
-    [-1]: "bg-danger/60",
-    [0]: "bg-ink-4/50",
-    [1]: "bg-info/60",
+    [-1]: "bg-danger/70",
+    [0]: "bg-ink-4/40",
+    [1]: "bg-info/70",
     [2]: "bg-info",
 };
 
-export const FACTION_BG: Record<"supportive" | "neutral" | "critical", string> = {
-    supportive: "bg-info",
-    neutral: "bg-ink-4",
-    critical: "bg-danger",
+/** The same scale for SVG marks. */
+export const STANCE_FILL: Record<Stance, string> = {
+    [-2]: "fill-danger",
+    [-1]: "fill-danger/70",
+    [0]: "fill-ink-4/40",
+    [1]: "fill-info/70",
+    [2]: "fill-info",
+};
+
+/** The same scale as a ring round a portrait. */
+export const STANCE_RING: Record<Stance, string> = {
+    [-2]: "ring-danger",
+    [-1]: "ring-danger/70",
+    [0]: "ring-ink-4/40",
+    [1]: "ring-info/70",
+    [2]: "ring-info",
 };
 
 /** A mean stance (−2…+2) in English words. New code: `moodLabel(t, mean)`. */

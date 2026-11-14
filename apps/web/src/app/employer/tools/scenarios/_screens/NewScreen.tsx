@@ -37,6 +37,7 @@ import { useErrorText } from "~/lib/tools/errorText";
 
 import { ScenariosApiError, newIdempotencyKey, scenariosApi } from "../api";
 import { FilePickerDialog } from "../_components/FilePickerDialog";
+import { MiniRoom } from "../_components/MiniRoom";
 import { SituationComposer, type PickedFile } from "../_components/SituationComposer";
 import { useScenarios } from "../_lib/context";
 import { SIZE_PRESETS, UPLOAD_ACCEPT, presetFor } from "../_lib/files";
@@ -319,7 +320,7 @@ export function NewScreen() {
 
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-6">
-            <PageHeader size="md" title={t("title")} accent={t("accent")} />
+            <PageHeader size="md" title={t("title")} />
             <input
                 ref={fileInput}
                 type="file"
@@ -333,7 +334,7 @@ export function NewScreen() {
                     e.target.value = "";
                 }}
             />
-            <div className="@max-lg:grid-cols-1 grid grid-cols-[minmax(0,1fr)_320px] items-start gap-8">
+            <div className="@max-lg:grid-cols-1 grid grid-cols-[minmax(0,1fr)_340px] items-start gap-10">
                 <div className="flex min-w-0 flex-col gap-8">
                     <section className="flex flex-col gap-4" aria-label={t("situationLabel")}>
                         <SituationComposer
@@ -369,60 +370,64 @@ export function NewScreen() {
                     </section>
 
                     <section className="flex flex-col gap-3">
-                        <SectionHeading
-                            title={t("builtFromTitle")}
-                            aside={t("builtFromAside")}
-                            className="mb-0"
-                        />
-                        <div className="@max-md:grid-cols-1 grid grid-cols-2 gap-2">
-                            {switches.map(s => (
-                                <SourceCard key={s.id} source={s} />
-                            ))}
+                        <div>
+                            <h2 className="text-ink text-[16px] font-semibold tracking-[-0.01em]">
+                                {t("builtFromTitle")}
+                            </h2>
+                            <p className="text-ink-3 mt-0.5 text-[13px]">{t("builtFromAside")}</p>
                         </div>
-                        <Collapsible
-                            open={notesOpen || hasNotes}
-                            onOpenChange={setNotesOpen}
-                            className="border-line bg-panel rounded-lg border"
-                        >
-                            <CollapsibleTrigger
-                                disabled={hasNotes}
-                                className="hover:bg-panel-2 focus-visible:ring-brand/50 flex w-full items-center gap-3 rounded-lg p-3 text-left outline-none focus-visible:ring-2 disabled:cursor-default disabled:hover:bg-transparent"
-                            >
-                                <SourceIcon icon={ClipboardPaste} on={hasNotes} />
-                                <span className="min-w-0 flex-1">
-                                    <span className="text-ink block text-[13px] font-medium">
-                                        {t("notesLabel")}
-                                    </span>
-                                    <span className="text-ink-3 block text-xs">
-                                        {t("notesHint")}
-                                    </span>
-                                </span>
-                                {!hasNotes && (
-                                    <ChevronDown
-                                        aria-hidden
-                                        className={cn(
-                                            "text-ink-3 size-4 shrink-0 transition-transform",
-                                            notesOpen && "rotate-180"
+                        <ul className="border-line divide-line-2 bg-panel divide-y overflow-hidden rounded-xl border">
+                            {switches.map(s => (
+                                <li key={s.id}>
+                                    <SourceRow source={s} />
+                                </li>
+                            ))}
+                            <li>
+                                <Collapsible
+                                    open={notesOpen || hasNotes}
+                                    onOpenChange={setNotesOpen}
+                                >
+                                    <CollapsibleTrigger
+                                        disabled={hasNotes}
+                                        className="hover:bg-panel-2 focus-visible:ring-brand/50 flex w-full items-center gap-3 px-4 py-3 text-left outline-none focus-visible:ring-2 focus-visible:ring-inset disabled:cursor-default disabled:hover:bg-transparent"
+                                    >
+                                        <SourceIcon icon={ClipboardPaste} on={hasNotes} />
+                                        <span className="min-w-0 flex-1">
+                                            <span className="text-ink block text-[13.5px] font-medium">
+                                                {t("notesLabel")}
+                                            </span>
+                                            <span className="text-ink-3 block text-xs leading-snug">
+                                                {t("notesHint")}
+                                            </span>
+                                        </span>
+                                        {!hasNotes && (
+                                            <ChevronDown
+                                                aria-hidden
+                                                className={cn(
+                                                    "text-ink-3 size-4 shrink-0 transition-transform",
+                                                    notesOpen && "rotate-180"
+                                                )}
+                                            />
                                         )}
-                                    />
-                                )}
-                            </CollapsibleTrigger>
-                            <CollapsibleContent className="px-3 pb-3">
-                                <Textarea
-                                    id="scenario-notes"
-                                    aria-label={t("notesAria")}
-                                    value={notes}
-                                    onChange={e => setNotes(e.target.value)}
-                                    rows={5}
-                                    placeholder={t("notesPlaceholder")}
-                                    className="bg-surface md:text-[13px]"
-                                    aria-invalid={notes.length > L.notesMax || undefined}
-                                />
-                                <div className="mt-1 flex justify-end">
-                                    <Counter value={notes.length} max={L.notesMax} />
-                                </div>
-                            </CollapsibleContent>
-                        </Collapsible>
+                                    </CollapsibleTrigger>
+                                    <CollapsibleContent className="px-4 pb-3.5">
+                                        <Textarea
+                                            id="scenario-notes"
+                                            aria-label={t("notesAria")}
+                                            value={notes}
+                                            onChange={e => setNotes(e.target.value)}
+                                            rows={5}
+                                            placeholder={t("notesPlaceholder")}
+                                            className="bg-surface md:text-[13px]"
+                                            aria-invalid={notes.length > L.notesMax || undefined}
+                                        />
+                                        <div className="mt-1 flex justify-end">
+                                            <Counter value={notes.length} max={L.notesMax} />
+                                        </div>
+                                    </CollapsibleContent>
+                                </Collapsible>
+                            </li>
+                        </ul>
                     </section>
 
                     <section className="flex flex-col gap-4">
@@ -479,13 +484,15 @@ export function NewScreen() {
                 </div>
 
                 <aside className="@max-lg:static sticky top-0 flex flex-col gap-3">
-                    <div className="border-line bg-panel overflow-hidden rounded-xl border">
-                        <div className="px-4 pb-3 pt-4">
-                            <span className="text-ink-3 text-xs">{t("summary.title")}</span>
+                    <div className="border-line bg-panel overflow-hidden rounded-2xl border">
+                        <div className="px-5 pb-2 pt-4">
+                            <h2 className="text-ink text-[15px] font-semibold">
+                                {t("room.title")}
+                            </h2>
                             <p
                                 className={cn(
-                                    "mt-1 line-clamp-4 text-[13px] leading-relaxed",
-                                    subject.trim() ? "text-ink" : "text-ink-3"
+                                    "mt-1 line-clamp-3 text-[13px] leading-relaxed",
+                                    subject.trim() ? "text-ink-2" : "text-ink-3"
                                 )}
                             >
                                 {subject.trim()
@@ -493,7 +500,17 @@ export function NewScreen() {
                                     : t("summary.empty")}
                             </p>
                         </div>
-                        <dl className="border-line-2 grid gap-2 border-t px-4 py-3 text-xs">
+                        <div className="px-6 pb-1 pt-2">
+                            <MiniRoom
+                                seats={agents}
+                                tone="brand"
+                                label={t("room.seats", { count: agents })}
+                            />
+                        </div>
+                        <p className="text-ink-3 px-5 pb-3 text-center text-xs leading-relaxed">
+                            {t("room.caption", { count: agents, rounds })}
+                        </p>
+                        <dl className="border-line-2 grid gap-2 border-t px-5 py-3 text-xs">
                             <SummaryRow
                                 term={t("files")}
                                 value={
@@ -507,7 +524,7 @@ export function NewScreen() {
                                                   : null,
                                           ]
                                               .filter(Boolean)
-                                              .join(" · ")
+                                              .join(", ")
                                 }
                                 muted={picked.length === 0 && !uploader.busy}
                             />
@@ -520,7 +537,6 @@ export function NewScreen() {
                                 }
                                 muted={builtFrom.length === 0}
                             />
-                            <SummaryRow term={t("size")} value={size} />
                         </dl>
                         <EstimateBox
                             estimate={current ?? estimate.data}
@@ -621,8 +637,10 @@ function SourceIcon({ icon: Icon, on }: { icon: LucideIcon; on: boolean }) {
         <span
             aria-hidden
             className={cn(
-                "inline-flex size-8 shrink-0 items-center justify-center rounded-md transition-colors",
-                on ? "bg-brand text-brand-fg" : "bg-panel-2 text-ink-2"
+                "inline-flex size-8 shrink-0 items-center justify-center rounded-full border transition-colors",
+                on
+                    ? "bg-brand-soft text-brand-ink border-transparent"
+                    : "bg-panel-2 text-ink-3 border-line border-dashed"
             )}
         >
             <Icon className="size-4" />
@@ -630,33 +648,23 @@ function SourceIcon({ icon: Icon, on }: { icon: LucideIcon; on: boolean }) {
     );
 }
 
-/** One source the people can be built from, as a card the whole of which flips its switch. */
-function SourceCard({ source: s }: { source: SourceSwitch }) {
+/** One source the people can be built from, as a row the whole of which flips its switch. */
+function SourceRow({ source: s }: { source: SourceSwitch }) {
     const id = `scenario-${s.id}`;
     return (
         <label
             htmlFor={id}
             className={cn(
-                "flex items-start gap-3 rounded-lg border p-3 transition-colors",
-                s.disabled
-                    ? "border-line bg-panel cursor-not-allowed opacity-60"
-                    : s.checked
-                      ? "border-brand/50 bg-brand-soft/50 cursor-pointer"
-                      : "border-line bg-panel hover:bg-panel-2 cursor-pointer"
+                "flex items-center gap-3 px-4 py-3 transition-colors",
+                s.disabled ? "cursor-not-allowed opacity-60" : "hover:bg-panel-2 cursor-pointer"
             )}
         >
             <SourceIcon icon={s.icon} on={s.checked} />
             <span className="min-w-0 flex-1">
-                <span className="text-ink block text-[13px] font-medium">{s.label}</span>
+                <span className="text-ink block text-[13.5px] font-medium">{s.label}</span>
                 <span className="text-ink-3 mt-0.5 block text-xs leading-snug">{s.hint}</span>
             </span>
-            <Switch
-                id={id}
-                checked={s.checked}
-                disabled={s.disabled}
-                onCheckedChange={s.set}
-                className="mt-0.5"
-            />
+            <Switch id={id} checked={s.checked} disabled={s.disabled} onCheckedChange={s.set} />
         </label>
     );
 }

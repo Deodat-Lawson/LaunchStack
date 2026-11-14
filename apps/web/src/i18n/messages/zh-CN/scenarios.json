@@ -25,7 +25,7 @@
       "simulating": "第 {round, number} 轮，共 {rounds, number} 轮",
       "reporting": "正在撰写报告"
     },
-    "size": "{agents, plural, other {# 个人物}} · {rounds, plural, other {# 轮}}",
+    "size": "{agents, plural, other {# 个人物}}，{rounds, plural, other {# 轮}}",
     "sourceKind": {
       "document": "文件",
       "search": "从你的文件中找到",
@@ -34,7 +34,7 @@
       "companyProfile": "公司资料",
       "notes": "粘贴的材料"
     },
-    "caveat": "这是基于你的记录构建的模拟人物所演绎的情景，可供思考参考，并非预测。",
+    "caveat": "基于你的记录构建的模拟人物。可供思考参考，并非预测。",
     "stanceByRound": "各轮立场：{stances}",
     "stanceMove": "{from} → {to}",
     "list": {
@@ -46,7 +46,9 @@
       "softened": "态度缓和：{stance}",
       "cooled": "态度降温：{stance}",
       "turned": "转为{stance}"
-    }
+    },
+    "people": "{count, plural, other {# 个人物}}",
+    "rounds": "{count, plural, other {# 轮}}"
   },
   "tool": {
     "title": "情景模拟",
@@ -58,7 +60,7 @@
   "interviews": {
     "blockedStopped": "这个情景在第一轮结束前就已停止，没有可以提问的人。",
     "blockedWaiting": "第一轮结束后，人物才能回答。",
-    "answeredBy": "{name} · {when}",
+    "answeredBy": "{name}，{when}",
     "askError": "无法提出这个问题",
     "questionLabel": "你的问题",
     "placeholderAnalyst": "为什么批评者在第 4 轮之后态度缓和了？",
@@ -71,16 +73,16 @@
   "askTab": {
     "ask": "提问对象",
     "analyst": "分析师",
-    "analystAsked": "分析师 · 已提问",
+    "analystAsked": "分析师（已提问）",
     "someone": "某人",
     "people": "人物",
-    "person": "{name} — {role}",
-    "personAsked": "{name} — {role} · 已提问"
+    "person": "{name}，{role}",
+    "personAsked": "{name}，{role}（已提问）"
   },
   "feed": {
     "emptyLive": "还没有人发帖。人物构建完成后会出现开场帖子。",
     "empty": "没有任何帖子。",
-    "counts": "{posts, plural, other {# 条帖子}} · {comments, plural, other {# 条评论}}",
+    "counts": "{posts, plural, other {# 条帖子}}，{comments, plural, other {# 条评论}}",
     "showRound": "显示轮次",
     "allRounds": "所有轮次",
     "opening": "开场",
@@ -103,7 +105,7 @@
     "fewerReplies": "收起回复",
     "rounds": "轮次",
     "mostVocal": "最活跃的人",
-    "roundMeta": "{posts, number} 条帖子 · {comments, number} 条回复",
+    "roundMeta": "{posts, number} 条帖子，{comments, number} 条回复",
     "quotedAria": "前往 {name} 被引用的帖子",
     "openProfile": "打开 {name} 的主页"
   },
@@ -114,14 +116,20 @@
     "building": "{count, plural, other {正在根据来源构建 # 个人物…}}",
     "waitingForSources": "来源收集完成后才会构建人物。",
     "nobody": "这个情景没有构建任何人物。",
-    "summary": "{count, plural, other {# 个人物}} · {grounded, number} 个基于你的记录构建 · {invented, number} 个为补足空缺而虚构",
+    "summary": "{count, plural, other {# 个人物}}：{grounded, number} 个基于你的记录构建，{invented, number} 个为补足空缺而虚构",
     "filterLabel": "显示",
     "followers": "{count, number} 位关注者",
     "from": "来源：{label}",
     "fromMore": "来源：{label} 等 {more, number} 项",
     "hiddenFile": "你无权打开的文件",
     "keptQuiet": "从未发帖。心里在想：",
-    "readAlong": "只浏览，没有发帖。"
+    "readAlong": "只浏览，没有发帖。",
+    "viewLabel": "视图",
+    "viewCards": "卡片",
+    "viewGrid": "按轮次",
+    "gridLabel": "每个人在每一轮后的立场",
+    "gridPerson": "人物",
+    "gridChange": "变化"
   },
   "personSheet": {
     "caresAbout": "关注",
@@ -198,27 +206,20 @@
     "shares": "分享",
     "dislikes": "点踩",
     "mood": "情绪",
-    "moodValue": "{from} → {to}",
-    "opinionTitle": "舆论如何变化",
-    "opinionAside": "第 {round, number} 轮后均值 {mean} · {mood}",
-    "chartPending": "第一轮结束后开始显示图表。",
-    "noRound": "没有完成任何一轮。",
+    "moodValue": "从 {from} 到 {to}",
     "roundByRound": "逐轮情况",
-    "factionsTitle": "人们最终的立场",
-    "factionShare": "占全部人物的 {share}",
     "faction": {
       "supportive": "支持",
       "neutral": "中立",
       "critical": "反对"
     },
-    "drivers": "推动因素",
     "turningPoints": "转折点",
     "turningRound": "第 {round, number} 轮",
     "watchFor": "现实中需要留意的",
     "numbersPerRound": "各轮数据",
-    "usageLive": "目前已用：约 {calls, number} 次模型调用 · {credits, number} 额度（预估 {estimate, number}）。",
-    "usage": "已用：约 {calls, number} 次模型调用 · {credits, number} 额度（预估 {estimate, number}）。",
-    "roundMood": "{mean} · {mood}",
+    "usageLive": "目前已用约 {calls, number} 次模型调用、{credits, number} 额度（预估 {estimate, number}）。",
+    "usage": "已用约 {calls, number} 次模型调用、{credits, number} 额度（预估 {estimate, number}）。",
+    "roundMood": "{mean}，{mood}",
     "table": {
       "round": "轮次",
       "active": "活跃",
@@ -227,7 +228,12 @@
       "likes": "点赞",
       "shares": "分享",
       "mood": "情绪"
-    }
+    },
+    "whatHappened": "发生了什么",
+    "whoMoved": "立场变化最大的人",
+    "moverLine": "从{from}到{to}，变化 {count, number} 次",
+    "whatMoved": "是什么让他们改变",
+    "quoteBy": "{who}，第 {round, number} 轮"
   },
   "sources": {
     "used": {
@@ -279,21 +285,16 @@
       "redacted": "你无权访问的文件"
     }
   },
-  "chart": {
-    "start": "开始",
-    "roundTick": "R{round}",
-    "describe": "{critical, number} 人反对，{neutral, number} 人中立，{supportive, number} 人支持",
-    "summary": "各轮舆论。开始时：{start}。第 {round, number} 轮后：{end}。",
-    "summaryEmpty": "各轮舆论。"
-  },
   "list": {
     "newScenario": "新建情景",
-    "title": "如果这样做，",
-    "accent": "会发生什么",
+    "title": "情景",
     "emptyTitle": "还没有情景",
     "emptyBody": "一个小型的模拟社交网络：基于你的文件、潜在客户、帖子评论和公司资料构建的人物，逐轮对你描述的情景作出反应。可供思考参考，并非预测。",
     "shared": "已共享",
-    "byWhen": "{name} · {when}"
+    "cardMeta": "{count, plural, other {# 个人物}}，{when}",
+    "cardMetaBy": "{count, plural, other {# 个人物}}，{name}，{when}",
+    "roomAria": "{supportive, number} 人支持，{neutral, number} 人中立，{critical, number} 人反对",
+    "roomPending": "{count, plural, other {# 个座位}}，尚无结果"
   },
   "new": {
     "estimateError": "无法估算费用",
@@ -318,12 +319,11 @@
       "profileNone": "这个工作区还没有公司资料。",
       "profileHint": "你卖什么、卖给谁、价格多少。"
     },
-    "title": "新建",
-    "accent": "情景",
+    "title": "新建情景",
     "uploadLabel": "上传与该情景相关的文件",
     "situationLabel": "情景",
     "subjectLabel": "如果……会怎样",
-    "subjectPlaceholder": "可能发生的事——新品发布、调价、新政策——如有帮助，也写下背后的计划、你会采取的行动，以及目前的进展…",
+    "subjectPlaceholder": "可能发生的事（新品发布、调价、新政策），如有帮助，也写下背后的计划、你会采取的行动，以及目前的进展…",
     "subjectHint": "附上与它相关的材料：商业计划书、行动计划、案例记录或定价页面。",
     "subjectHintUpload": "附上与它相关的材料：商业计划书、行动计划、案例记录或定价页面。把文件拖到框中即可上传。",
     "starters": {
@@ -343,8 +343,8 @@
     },
     "titleLabel": "标题（可选）",
     "titlePlaceholder": "留空则根据情景生成",
-    "builtFromTitle": "人物的其他构建依据",
-    "builtFromAside": "只使用你能查看的材料",
+    "builtFromTitle": "谁来坐这些座位",
+    "builtFromAside": "人物优先基于这些你能查看的材料构建，剩余的座位由虚构人物补足。",
     "files": "文件",
     "notesLabel": "粘贴材料",
     "notesHint": "一篇新闻报道、一份政策草案、一则公告、竞争对手的定价页面…",
@@ -363,7 +363,6 @@
     "rounds": "轮数",
     "roundsHint": "每一轮，人物会阅读自己的动态，并发帖、回复、分享或改变想法。",
     "summary": {
-      "title": "你的情景",
       "question": "如果{situation}，会怎样？",
       "empty": "如果……会怎样？描述情景即可开始。",
       "noFiles": "未附加",
@@ -389,7 +388,12 @@
     "estimateCalls": "约 {calls, number} 次模型调用",
     "unmetered": "这个工作区不计量用量。",
     "balance": "余额：{balance, number} 额度",
-    "notEnough": "额度不足以支持这个规模：大约需要 {credits, number}，而工作区只有 {balance, number}。请减少人物或轮数。"
+    "notEnough": "额度不足以支持这个规模：大约需要 {credits, number}，而工作区只有 {balance, number}。请减少人物或轮数。",
+    "room": {
+      "title": "你的房间",
+      "seats": "{count, plural, other {# 个座位}}",
+      "caption": "{count, plural, other {# 个座位}}，{rounds, plural, other {# 轮}}。每一轮，每个人都会阅读动态，然后可能发帖、回复、转发或改变想法。"
+    }
   },
   "files": {
     "companyTitle": "你的公司资料将这个文件视为由公司撰写或与公司相关的文件。",
@@ -410,7 +414,7 @@
     "unreadable": "无法读取",
     "remove": "移除 {name}",
     "dismiss": "关闭 {name}",
-    "uploading": "正在上传 · {size}",
+    "uploading": "正在上传，{size}",
     "uploadFailed": "上传失败",
     "size": {
       "bytes": "{size} B",
@@ -461,12 +465,9 @@
     "draftTested": "测试的草稿：",
     "whatHappensIf": "如果：",
     "showSituation": "展开全文",
-    "createdBy": "{name}，{when}",
-    "you": "你",
     "shared": "已共享",
     "shareLabel": "与工作区共享",
     "cancelRun": "取消运行",
-    "roundsDone": "已完成 {round, number}/{rounds, number} 轮",
     "confirmCancelTitle": "取消这个情景？",
     "confirmDeleteTitle": "删除这个情景？",
     "confirmCancelBody": "它会在当前轮次结束后停止。已完成的轮次仍可查看，但不会生成报告。",
@@ -482,7 +483,15 @@
     "adding": "正在添加…",
     "addEvent": "添加事件",
     "injectionPending": "将出现在下一轮",
-    "injectionRound": "第 {round, number} 轮"
+    "injectionRound": "第 {round, number} 轮",
+    "tabsLabel": "此情景的视图",
+    "shareButton": "共享",
+    "sharedButton": "已共享",
+    "moreActions": "更多操作",
+    "finishedWhen": "{when}完成",
+    "startedWhen": "{when}开始",
+    "finishedBy": "由 {name} 发起，{when}完成",
+    "startedBy": "由 {name} 于{when}发起"
   },
   "server": {
     "errors": {
@@ -553,5 +562,32 @@
       "modelTimedOut": "模型未能及时作答，运行已停止。",
       "modelFailed": "模型持续返回错误，运行已停止。"
     }
+  },
+  "room": {
+    "title": "每个人坐在哪里",
+    "atStart": "开始时",
+    "afterRound": "第 {round, number} 轮后",
+    "ofTotal": "/ {total, number}",
+    "supportive": "支持",
+    "summaryAria": "{round, plural, =0 {开始时} other {第 # 轮后}}：{supportive, number} 人支持，{neutral, number} 人中立，{critical, number} 人反对。",
+    "seatAria": "{name}，第 {round, number} 轮后：{stance}",
+    "seatAtStart": "{name}，开始时：{stance}",
+    "replay": "回放",
+    "pause": "暂停",
+    "replayAria": "回放各轮",
+    "pauseAria": "暂停回放",
+    "scrubLabel": "查看某一轮后的座位",
+    "start": "开始",
+    "round": "第 {round, number} 轮",
+    "notYet": "第 {round, number} 轮尚未进行",
+    "captionStart": "开始时。",
+    "captionRound": "第 {round, number} 轮。",
+    "captionEvent": "新增事件：{text}",
+    "captionStartCounts": "{total, number} 人中有 {neutral, number} 人起初持中立态度。",
+    "captionCounts": "{supportive, number} 人支持，{neutral, number} 人中立，{critical, number} 人反对。",
+    "captionMoved": "立场有变化的人：{names}。",
+    "captionNobody": "没有人改变立场。",
+    "turningPoint": "转折点",
+    "eventAdded": "新增事件"
   }
 }

@@ -186,7 +186,7 @@ export function SourcesTab({
                                                 )}
                                             </div>
                                             {source.excerpt && (
-                                                <blockquote className="border-line text-ink-2 mt-1.5 border-l-2 pl-3 text-[13px] leading-relaxed">
+                                                <blockquote className="bg-panel-2 text-ink-2 mt-2 rounded-lg px-3 py-2 text-[13px] leading-relaxed">
                                                     {source.excerpt}
                                                 </blockquote>
                                             )}

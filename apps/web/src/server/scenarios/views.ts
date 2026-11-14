@@ -23,18 +23,19 @@ import { author, findAgent, followeesOf, followersOf, type World } from "@launch
 
 import type { Locale } from "~/i18n/locales";
 import { translatorFor, wordEnglish } from "~/i18n/translate";
-import type {
-    PostTestResult,
-    ScenarioDetail,
-    ScenarioFieldBasis,
-    ScenarioStage,
-    ScenarioV2Detail,
-    ScenarioInjection,
-    ScenarioPerson,
-    ScenarioPost,
-    ScenarioSource,
-    ScenarioSummary,
-    Stance,
+import {
+    outcomeOf,
+    type PostTestResult,
+    type ScenarioDetail,
+    type ScenarioFieldBasis,
+    type ScenarioStage,
+    type ScenarioV2Detail,
+    type ScenarioInjection,
+    type ScenarioPerson,
+    type ScenarioPost,
+    type ScenarioSource,
+    type ScenarioSummary,
+    type Stance,
 } from "~/lib/scenarios/types";
 
 export const LEFT_WORKSPACE = "Someone who has left";
@@ -91,6 +92,7 @@ type SummaryInput = Pick<
     | "createdAt"
     | "finishedAt"
     | "headline"
+    | "campSizes"
 > & { contractVersion?: number };
 
 /**
@@ -126,6 +128,13 @@ export function toSummary(
         shared: run.sharedAt !== null,
         headline: run.headline,
         contractVersion: run.contractVersion === 2 ? 2 : 1,
+        outcome: run.campSizes
+            ? {
+                  critical: run.campSizes.critical ?? 0,
+                  neutral: run.campSizes.neutral ?? 0,
+                  supportive: run.campSizes.supportive ?? 0,
+              }
+            : null,
     };
 }
 
@@ -135,7 +144,13 @@ export function recordSummary(
     names: Map<string, string>,
     v2?: V2Progress
 ): ScenarioSummary {
-    return toSummary({ ...run, headline: run.report?.headline ?? null }, viewerUserId, names, v2);
+    const outcome = outcomeOf(run.report?.factions);
+    return toSummary(
+        { ...run, headline: run.report?.headline ?? null, campSizes: outcome },
+        viewerUserId,
+        names,
+        v2
+    );
 }
 
 /** Whether a reader may see this evidence item's label and text. */

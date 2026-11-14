@@ -18,61 +18,83 @@ export async function GET() {
     const auth = await reviewActor();
     if (!auth.ok) return auth.response;
     try {
-        const documents = await weeklyReviewServices().authority.listReadableDocuments(auth.actor);
-        const readableIds = documents.map(document => String(document.id));
-        const canConfigure = auth.ctx.can("settings.manage");
-        const readableDocumentIds = (value: unknown) =>
-            Array.isArray(value) ? value.map(String).filter(id => readableIds.includes(id)) : [];
         return NextResponse.json(
-            await weeklyReviewDatabase.transaction(async query => {
-                const policy = canConfigure
-                    ? (
-                          await query(
-                              "SELECT architecture_document_id,required_document_ids,required_source_scopes,version FROM pdr_ai_v2_vantage_weekly_review_policy WHERE company_id=$1::bigint",
-                              [auth.actor.companyId]
-                          )
-                      )[0]
-                    : undefined;
-                const preferences = (
-                    await query(
-                        "SELECT star_document_ids,star_source_scopes,version FROM pdr_ai_v2_vantage_weekly_review_preferences WHERE company_id=$1::bigint AND actor_id=$2",
-                        [auth.actor.companyId, auth.actor.userId]
-                    )
-                )[0];
-                return {
-                    documents,
-                    enabled: weeklyReviewEnabled(),
-                    scopedEvidenceEnabled: scopedEvidenceV2Enabled(),
-                    canConfigure,
-                    policy: policy
-                        ? {
-                              architecture_document_id: readableIds.includes(
-                                  String(policy.architecture_document_id)
+            await weeklyReviewServices().authority.withReadableDocuments(
+                auth.actor,
+                async (query, documents, actor) => {
+                    const readableIds = documents.map(document => document.id);
+                    const canConfigure = actor.canConfigure === true;
+                    const documentIds = (value: unknown) =>
+                        Array.isArray(value) ? value.map(String) : [];
+                    const readableDocumentIds = (value: unknown) =>
+                        documentIds(value).filter(id => readableIds.includes(id));
+                    const hasHiddenSources = (ids: string[], scopes: unknown) => {
+                        const scopeIds =
+                            scopes && typeof scopes === "object" ? Object.keys(scopes) : [];
+                        return [...ids, ...scopeIds].some(id => !readableIds.includes(id));
+                    };
+                    const policy = canConfigure
+                        ? (
+                              await query(
+                                  "SELECT architecture_document_id,required_document_ids,required_source_scopes,version FROM pdr_ai_v2_vantage_weekly_review_policy WHERE company_id=$1::bigint",
+                                  [auth.actor.companyId]
                               )
-                                  ? String(policy.architecture_document_id)
-                                  : null,
-                              required_document_ids: readableDocumentIds(
-                                  policy.required_document_ids
-                              ),
-                              required_source_scopes: retainedSourceScopes(
-                                  policy.required_source_scopes,
-                                  readableIds
-                              ),
-                              version: policy.version,
-                          }
-                        : null,
-                    preferences: preferences
-                        ? {
-                              star_document_ids: readableDocumentIds(preferences.star_document_ids),
-                              star_source_scopes: retainedSourceScopes(
-                                  preferences.star_source_scopes,
-                                  readableIds
-                              ),
-                              version: preferences.version,
-                          }
-                        : null,
-                };
-            })
+                          )[0]
+                        : undefined;
+                    const preferences = (
+                        await query(
+                            "SELECT star_document_ids,star_source_scopes,version FROM pdr_ai_v2_vantage_weekly_review_preferences WHERE company_id=$1::bigint AND actor_id=$2",
+                            [auth.actor.companyId, auth.actor.userId]
+                        )
+                    )[0];
+                    return {
+                        documents,
+                        enabled: weeklyReviewEnabled(),
+                        scopedEvidenceEnabled: scopedEvidenceV2Enabled(),
+                        canConfigure,
+                        policy: policy
+                            ? {
+                                  architecture_document_id: readableIds.includes(
+                                      String(policy.architecture_document_id)
+                                  )
+                                      ? String(policy.architecture_document_id)
+                                      : null,
+                                  required_document_ids: readableDocumentIds(
+                                      policy.required_document_ids
+                                  ),
+                                  required_source_scopes: retainedSourceScopes(
+                                      policy.required_source_scopes,
+                                      readableIds
+                                  ),
+                                  version: policy.version,
+                                  hasHiddenSources: hasHiddenSources(
+                                      [
+                                          String(policy.architecture_document_id),
+                                          ...documentIds(policy.required_document_ids),
+                                      ],
+                                      policy.required_source_scopes
+                                  ),
+                              }
+                            : null,
+                        preferences: preferences
+                            ? {
+                                  star_document_ids: readableDocumentIds(
+                                      preferences.star_document_ids
+                                  ),
+                                  star_source_scopes: retainedSourceScopes(
+                                      preferences.star_source_scopes,
+                                      readableIds
+                                  ),
+                                  version: preferences.version,
+                                  hasHiddenSources: hasHiddenSources(
+                                      documentIds(preferences.star_document_ids),
+                                      preferences.star_source_scopes
+                                  ),
+                              }
+                            : null,
+                    };
+                }
+            )
         );
     } catch (error) {
         return reviewError(error);

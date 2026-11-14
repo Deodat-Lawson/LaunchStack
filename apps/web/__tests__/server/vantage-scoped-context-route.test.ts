@@ -13,6 +13,10 @@ jest.mock("~/app/api/vantage/reviews/_http", () => ({
 import { GET, POST, PATCH } from "~/app/api/vantage/reviews/context/route";
 import { reviewActor } from "~/app/api/vantage/reviews/_http";
 import {
+    createWeeklyReviewAuthority,
+    type WeeklyReviewAuthorityActor,
+} from "~/server/vantage/weekly-review-authority";
+import {
     scopedEvidenceV2Enabled,
     weeklyReviewEnabled,
     weeklyReviewDatabase,
@@ -149,20 +153,41 @@ describe("context metadata authorization (offline)", () => {
     };
     function setupRead(canConfigure: boolean, readableIds: string[], legacy = false) {
         setup();
+        let currentActor: WeeklyReviewAuthorityActor = {
+            companyId: "1",
+            userId: "actor",
+            role: "member",
+            canRead: true,
+            canMutate: true,
+            canConfigure,
+            documentScope: {
+                kind: "only",
+                allowedCategories: [],
+                deniedDocumentIds: [],
+                allowedDocumentIds: readableIds.map(Number),
+            },
+        };
+        let onLock = async () => {};
         jest.mocked(reviewActor).mockResolvedValue({
             ok: true,
             actor: { companyId: "1", userId: "actor" },
             ctx: { can: () => canConfigure },
         } as never);
         jest.mocked(weeklyReviewServices).mockReturnValue({
-            authority: {
-                listReadableDocuments: jest.fn(async () =>
-                    readableIds.map(id => ({ id, title: "Readable document " + id }))
-                ),
-            },
+            authority: createWeeklyReviewAuthority(weeklyReviewDatabase, async () => currentActor),
         } as unknown as ReturnType<typeof weeklyReviewServices>);
         jest.mocked(weeklyReviewDatabase.transaction).mockImplementation(async work =>
             work(async sql => {
+                if (sql.includes("FOR SHARE")) {
+                    await onLock();
+                    return [{ version: 1 }];
+                }
+                if (sql.includes("SELECT id,title,category"))
+                    return ["1", "2", "3"].map(id => ({
+                        id,
+                        title: "Readable document " + id,
+                        category: "",
+                    }));
                 if (sql.includes("weekly_review_policy"))
                     return [
                         {
@@ -187,6 +212,15 @@ describe("context metadata authorization (offline)", () => {
                 return [];
             })
         );
+        return {
+            setActor: (actor: WeeklyReviewAuthorityActor) => {
+                currentActor = actor;
+            },
+            actor: currentActor,
+            atLock: (callback: () => Promise<void>) => {
+                onLock = callback;
+            },
+        };
     }
     beforeEach(() => jest.clearAllMocks());
     it.each([true, false])(
@@ -203,7 +237,12 @@ describe("context metadata authorization (offline)", () => {
                 scopedEvidenceEnabled: enabled,
                 canConfigure: false,
                 policy: null,
-                preferences: { star_document_ids: [], star_source_scopes: {}, version: 3 },
+                preferences: {
+                    star_document_ids: [],
+                    star_source_scopes: {},
+                    version: 3,
+                    hasHiddenSources: true,
+                },
             });
         }
     );
@@ -225,11 +264,13 @@ describe("context metadata authorization (offline)", () => {
                 required_document_ids: ["3"],
                 required_source_scopes: { "1": scope },
                 version: 2,
+                hasHiddenSources: true,
             });
             expect(body.preferences).toEqual({
                 star_document_ids: ["1"],
                 star_source_scopes: { "1": scope },
                 version: 3,
+                hasHiddenSources: true,
             });
             expect(JSON.stringify(body)).not.toContain("Private qualification");
             expect(JSON.stringify(body)).not.toContain(hiddenScope.expectedParentHash);
@@ -244,20 +285,67 @@ describe("context metadata authorization (offline)", () => {
             required_document_ids: ["3"],
             required_source_scopes: {},
             version: 2,
+            hasHiddenSources: true,
         });
         expect(body.preferences).toEqual({
             star_document_ids: [],
             star_source_scopes: {},
             version: 3,
+            hasHiddenSources: true,
         });
     });
     it("keeps absent configuration rows null", async () => {
         setupRead(true, ["1"]);
         jest.mocked(weeklyReviewDatabase.transaction).mockImplementation(async work =>
-            work(async () => [])
+            work(async sql => (sql.includes("FOR SHARE") ? [{ version: 1 }] : []))
         );
         const body = await (await GET()).json();
         expect(body.policy).toBeNull();
         expect(body.preferences).toBeNull();
+    });
+    it("reports fully readable configuration without hidden entries", async () => {
+        setupRead(true, ["1", "2", "3"]);
+        const body = await (await GET()).json();
+        expect(body.policy.hasHiddenSources).toBe(false);
+        expect(body.preferences.hasHiddenSources).toBe(false);
+    });
+    it("uses fresh configurator capability after the authority barrier", async () => {
+        const f = setupRead(true, ["1", "2", "3"]);
+        f.atLock(async () => {
+            f.setActor({ ...f.actor, canConfigure: false });
+        });
+        const body = await (await GET()).json();
+        expect(body.canConfigure).toBe(false);
+        expect(body.policy).toBeNull();
+    });
+    it("rejects a reader revoked while waiting at the authority barrier", async () => {
+        const f = setupRead(true, ["1", "2", "3"]);
+        f.atLock(async () => {
+            f.setActor({ ...f.actor, canRead: false });
+        });
+        const response = await GET();
+        expect(response.status).toBe(403);
+        expect(await response.json()).toEqual({ error: "review_access_denied" });
+    });
+    it("uses fresh source ACL after the authority barrier and reads metadata in that transaction", async () => {
+        const f = setupRead(true, ["1", "2", "3"]);
+        f.atLock(async () => {
+            f.setActor({
+                ...f.actor,
+                documentScope: {
+                    kind: "only",
+                    allowedCategories: [],
+                    deniedDocumentIds: [],
+                    allowedDocumentIds: [],
+                },
+            });
+        });
+        const body = await (await GET()).json();
+        expect(body.documents).toEqual([]);
+        expect(body.policy.required_source_scopes).toEqual({});
+        expect(body.preferences.star_source_scopes).toEqual({});
+        expect(body.policy.architecture_document_id).toBeNull();
+        expect(body.policy.hasHiddenSources).toBe(true);
+        expect(weeklyReviewDatabase.transaction).toHaveBeenCalledTimes(1);
     });
 });

@@ -14,7 +14,7 @@ import {
 import {
     EVALUATION_VERSION,
     SCOPED_EVALUATION_VERSION,
-    EvaluationInputSchema,
+    type EvaluationInputSchema,
     type EvaluationInput,
     type ValidationJudge,
 } from "./validation/contracts";

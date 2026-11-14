@@ -144,7 +144,37 @@ export function createWeeklyReviewAuthority(
         };
         return { ...source, ref: "doc:" + source.id + "@" + source.version };
     }
+    async function withReadableDocuments<T>(
+        expected: WeeklyReviewActor,
+        read: (
+            query: WeeklyReviewQuery,
+            documents: { id: string; title: string; category: string }[],
+            actor: WeeklyReviewAuthorityActor
+        ) => Promise<T>
+    ): Promise<T> {
+        return database.transaction(async query => {
+            const { actor } = await fresh(query, expected);
+            const rows = await query(
+                "SELECT id,title,category FROM pdr_ai_v2_document WHERE company_id=$1::bigint ORDER BY id DESC LIMIT 500",
+                [actor.companyId]
+            );
+            const documents = rows
+                .filter(row =>
+                    scopeAllowsDocument(actor.documentScope, {
+                        id: Number(row.id),
+                        category: String(row.category),
+                    })
+                )
+                .map(row => ({
+                    id: String(row.id),
+                    title: String(row.title),
+                    category: String(row.category),
+                }));
+            return read(query, documents, actor);
+        });
+    }
     return {
+        withReadableDocuments,
         async validateCompanySources(
             query: WeeklyReviewQuery,
             expected: WeeklyReviewActor,
@@ -213,25 +243,7 @@ export function createWeeklyReviewAuthority(
             return sources;
         },
         async listReadableDocuments(expected: WeeklyReviewActor) {
-            return database.transaction(async query => {
-                const { actor } = await fresh(query, expected);
-                const rows = await query(
-                    "SELECT id,title,category FROM pdr_ai_v2_document WHERE company_id=$1::bigint ORDER BY id DESC LIMIT 500",
-                    [actor.companyId]
-                );
-                return rows
-                    .filter(row =>
-                        scopeAllowsDocument(actor.documentScope, {
-                            id: Number(row.id),
-                            category: String(row.category),
-                        })
-                    )
-                    .map(row => ({
-                        id: String(row.id),
-                        title: String(row.title),
-                        category: String(row.category),
-                    }));
-            });
+            return withReadableDocuments(expected, async (_query, documents) => documents);
         },
         async collectWeeklyReviewContext(
             expected: WeeklyReviewActor,

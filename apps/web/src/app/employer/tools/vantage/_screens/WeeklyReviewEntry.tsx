@@ -14,6 +14,13 @@ import {
     SelectValue,
 } from "~/components/ui/select";
 import { AgendaScreen } from "./AgendaScreen";
+import {
+    EvidenceInspector,
+    EvidenceRefs,
+    SourceScopeEditor,
+    type SourceChoice,
+    type SourceScope,
+} from "./WeeklyReviewEvidence";
 import type { WeeklyReviewV21 } from "@launchstack/pipelines/vantage/weekly-review-v21";
 
 type ScopedSourceCoverage = {
@@ -45,12 +52,20 @@ type RunList = { enabled: boolean; activeId: string | null; runs: RunSummary[] }
 type Context = {
     documents?: { id: string; title: string }[];
     canConfigure: boolean;
+    scopedEvidenceEnabled?: boolean;
     policy?: {
         version: number;
         architecture_document_id: string | number;
         required_document_ids: (string | number)[];
+        required_source_scopes?: Record<string, SourceScope>;
+        hasHiddenSources?: boolean;
     } | null;
-    preferences?: { version: number; star_document_ids: (string | number)[] } | null;
+    preferences?: {
+        version: number;
+        star_document_ids: (string | number)[];
+        star_source_scopes?: Record<string, SourceScope>;
+        hasHiddenSources?: boolean;
+    } | null;
 };
 async function call<T = unknown>(
     path: string,
@@ -93,6 +108,17 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                 return t("candidate_not_admitted");
             case "stale_review":
                 return t("stale_review");
+            case "partially_visible_configuration":
+                return t("hiddenConfiguration");
+            case "source_context_too_long":
+            case "source_context_unavailable":
+            case "retrieval_source_too_large":
+                return t("scopeClearUnavailable");
+            case "stale_context_policy":
+            case "stale_context_preferences":
+                return t("staleScopeConfiguration");
+            case "scoped_evidence_disabled":
+                return t("scopeEditingDisabled");
             default:
                 return t("requestFailed");
         }
@@ -115,6 +141,8 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
     const [loadedWeek, setLoadedWeek] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [contextReady, setContextReady] = useState(false);
+    const [configuration, setConfiguration] = useState<Context | null>(null);
+    const [selectedRef, setSelectedRef] = useState<string | null>(null);
     const request = useRef(0);
     const operation = useRef(0);
     const invalidate = useCallback(() => {
@@ -130,6 +158,7 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
             if (refreshContext) setContextReady(false);
             setError("");
             setReview(null);
+            setSelectedRef(null);
             try {
                 const data = await call<RunList>("?weekStart=" + encodeURIComponent(week));
                 if (!current()) return;
@@ -153,6 +182,7 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                         if (!data.enabled || !refreshContext) return;
                         const context = await call<Context>("/context");
                         if (!current()) return;
+                        setConfiguration(context);
                         setDocuments(context.documents ?? []);
                         setStars((context.preferences?.star_document_ids ?? []).map(String));
                         setPreferenceVersion(context.preferences?.version ?? 0);
@@ -193,6 +223,66 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
         }
     }
     const ready = !loading && loadedWeek === week;
+    const sourceChoices: SourceChoice[] = [];
+    const policy = configuration?.policy;
+    const preferences = configuration?.preferences;
+    if (admin && policy) {
+        for (const id of [
+            String(policy.architecture_document_id ?? ""),
+            ...policy.required_document_ids.map(String),
+        ].filter(Boolean)) {
+            sourceChoices.push({
+                id,
+                title: documents.find(document => document.id === id)?.title ?? id,
+                purpose:
+                    id === String(policy.architecture_document_id)
+                        ? "company-architecture"
+                        : "workspace-required",
+                configurationVersion: policy.version,
+                hasHiddenSources: policy.hasHiddenSources,
+            });
+        }
+    }
+    for (const id of preferences?.star_document_ids.map(String) ?? []) {
+        sourceChoices.push({
+            id,
+            title: documents.find(document => document.id === id)?.title ?? id,
+            purpose: "personal-star",
+            configurationVersion: preferences!.version,
+            hasHiddenSources: preferences!.hasHiddenSources,
+        });
+    }
+    async function saveScope(source: SourceChoice, scope: SourceScope | null, version: number) {
+        await act(async current => {
+            if (source.hasHiddenSources) throw Error("partially_visible_configuration");
+            const personal = source.purpose === "personal-star";
+            const scopes = {
+                ...(personal ? preferences?.star_source_scopes : policy?.required_source_scopes),
+            };
+            if (scope) scopes[source.id] = scope;
+            else delete scopes[source.id];
+            if (personal) {
+                await call(
+                    "/context",
+                    {
+                        expectedVersion: version,
+                        starDocumentIds: preferences?.star_document_ids.map(String) ?? [],
+                        starSourceScopes: scopes,
+                    },
+                    undefined,
+                    "PATCH"
+                );
+            } else {
+                await call("/context", {
+                    expectedVersion: version,
+                    architectureDocumentId: String(policy?.architecture_document_id ?? ""),
+                    requiredDocumentIds: policy?.required_document_ids.map(String) ?? [],
+                    requiredSourceScopes: scopes,
+                });
+            }
+            if (current()) await load(review?.id);
+        });
+    }
     if (enabled === false) return <AgendaScreen week={initialWeek ?? null} />;
     return (
         <div className="mx-auto max-w-[1100px] space-y-5 p-6">
@@ -261,6 +351,7 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                 <details className="border-line rounded border p-4">
                     <summary>{t("requiredContext")}</summary>
                     <p className="text-ink-2 my-2 text-sm">{t("contextHelp")}</p>
+                    {policy?.hasHiddenSources && <p role="alert">{t("hiddenConfiguration")}</p>}
                     <Label htmlFor="weekly-review-architecture">{t("architecture")}</Label>
                     <Select value={architecture || undefined} onValueChange={setArchitecture}>
                         <SelectTrigger id="weekly-review-architecture">
@@ -298,7 +389,7 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                     </div>
                     <Button
                         className="mt-3"
-                        disabled={busy || !architecture}
+                        disabled={busy || !architecture || policy?.hasHiddenSources}
                         onClick={() =>
                             act(async current => {
                                 await call("/context", {
@@ -321,6 +412,9 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                 <details className="border-line rounded border p-4">
                     <summary>{t("personalStars")}</summary>
                     <p className="text-ink-2 my-2 text-sm">{t("starHelp")}</p>
+                    {preferences?.hasHiddenSources && (
+                        <p role="alert">{t("hiddenConfiguration")}</p>
+                    )}
                     <div className="max-h-48 space-y-2 overflow-auto">
                         {documents.map(doc => (
                             <Label key={doc.id} className="flex items-center gap-2">
@@ -340,7 +434,7 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                     </div>
                     <Button
                         className="mt-3"
-                        disabled={busy || stars.length > 8}
+                        disabled={busy || stars.length > 8 || preferences?.hasHiddenSources}
                         onClick={() =>
                             act(async current => {
                                 await call(
@@ -357,8 +451,27 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                     </Button>
                 </details>
             )}
+            {ready && contextReady && sourceChoices.length > 0 && (
+                <SourceScopeEditor
+                    key={`${week}:${policyVersion}:${preferenceVersion}`}
+                    sources={sourceChoices}
+                    read={call}
+                    disabled={busy}
+                    scopedEnabled={configuration?.scopedEvidenceEnabled === true}
+                    onSave={saveScope}
+                />
+            )}
             {review && (
                 <article className="space-y-5">
+                    {selectedRef && (
+                        <EvidenceInspector
+                            key={selectedRef}
+                            reportId={review.id}
+                            reference={selectedRef}
+                            read={call}
+                            onClose={() => setSelectedRef(null)}
+                        />
+                    )}
                     {review.evidence?.qualityEvidence === "injected-deterministic" && (
                         <p className="text-ink-2 text-sm">{t("synthetic")}</p>
                     )}
@@ -408,9 +521,20 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                                 <strong>
                                     {figure.label}: {figure.value}
                                 </strong>
-                                <p className="text-ink-2 text-xs">{figure.refs.join(", ")}</p>
+                                <EvidenceRefs refs={figure.refs} onInspect={setSelectedRef} />
                                 {figure.derivation && (
-                                    <p className="text-xs">{JSON.stringify(figure.derivation)}</p>
+                                    <div className="space-y-1 text-xs">
+                                        <p>{figure.derivation.op}</p>
+                                        {figure.derivation.inputs.map((input, index) => (
+                                            <div key={index}>
+                                                <span>{input.value}</span>
+                                                <EvidenceRefs
+                                                    refs={[input.ref]}
+                                                    onInspect={setSelectedRef}
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
                                 )}
                             </div>
                         ))}
@@ -427,17 +551,16 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                                 {topic.facts.map((fact, i) => (
                                     <p key={i}>
                                         {fact.text}
-                                        <span className="text-ink-2 block text-xs">
-                                            {fact.refs.join(", ")}
-                                        </span>
+                                        <EvidenceRefs refs={fact.refs} onInspect={setSelectedRef} />
                                     </p>
                                 ))}
                                 {topic.conflicts.map((conflict, i) => (
                                     <p key={i}>
                                         {t("conflict")}: {conflict.text}
-                                        <span className="text-ink-2 block text-xs">
-                                            {conflict.refs.join(", ")}
-                                        </span>
+                                        <EvidenceRefs
+                                            refs={conflict.refs}
+                                            onInspect={setSelectedRef}
+                                        />
                                     </p>
                                 ))}
                                 <p>
@@ -458,9 +581,10 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                                         </p>
                                         <p>{topic.recommendation.because}</p>
                                         <p>{topic.recommendation.wouldChangeIf}</p>
-                                        <p className="text-ink-2 text-xs">
-                                            {topic.recommendation.refs.join(", ")}
-                                        </p>
+                                        <EvidenceRefs
+                                            refs={topic.recommendation.refs}
+                                            onInspect={setSelectedRef}
+                                        />
                                     </div>
                                 )}
                                 <p>{topic.proposedNextStep}</p>

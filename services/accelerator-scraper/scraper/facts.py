@@ -184,10 +184,16 @@ SCALE = {
 }
 
 
+# Site plumbing, never a Program page, whatever its query string mentions.
+PLUMBING = re.compile(r"/(?:wp-login\.php|wp-admin|xmlrpc\.php|logout|feed|cart)(?:[/?#]|$)", re.I)
+
+
 def classify(url: str, anchor: str) -> str:
     """Which kind of official page a link points to, from its URL and anchor text."""
     hay = f"{url} {anchor}".lower()
-    if any(skip in hay for skip in ("terms of use", "terms-of-use", "privacy", "cookie")):
+    if PLUMBING.search(url) or any(
+        skip in hay for skip in ("terms of use", "terms-of-use", "privacy", "cookie")
+    ):
         return "other"
     for page, words in PAGE_RULES:
         if any(word in hay for word in words):

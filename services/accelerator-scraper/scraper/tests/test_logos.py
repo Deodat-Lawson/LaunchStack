@@ -1,7 +1,11 @@
+import tempfile
 import unittest
+from pathlib import Path
 
 from scraper.logos import names_someone_else, program_tokens, ranked
+from scraper.outcome import Outcome
 from scraper.parse import Page
+from scraper.quotes import commit
 
 ACME = Page.read(
     "https://acme.example/programs/",
@@ -98,6 +102,20 @@ class LogoChoice(unittest.TestCase):
         self.assertFalse(
             names_someone_else("https://skydeck.berkeley.edu/wp-content/uploads/2024/01/logo.png", skydeck)
         )
+
+
+class LogoFiles(unittest.TestCase):
+    def test_a_new_mark_never_deletes_the_shared_placeholder(self) -> None:
+        with tempfile.TemporaryDirectory() as folder:
+            logos = Path(folder)
+            placeholder = logos / "none.png"
+            placeholder.write_bytes(b"none")
+            outcome = Outcome("acme", {}, logos / "acme.json")
+            outcome.logo = (logos / "acme.png", b"mark")
+            outcome.old_logo = placeholder
+            commit([outcome])
+            self.assertTrue(placeholder.exists())
+            self.assertEqual((logos / "acme.png").read_bytes(), b"mark")
 
 
 if __name__ == "__main__":

@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import json
 from datetime import datetime
+from pathlib import Path
 
 from . import LOGO_REVIEW, OBSERVATIONS, PROGRAMS, iso
-from .logos import refresh_logo
+from .logos import NONE_PATH, refresh_logo
 from .net import Fetcher, unreachable
 from .outcome import Outcome
 from .parse import Page
@@ -138,8 +139,11 @@ def commit(outcomes: list[Outcome]) -> None:
             target.parent.mkdir(parents=True, exist_ok=True)
             if not target.exists() or target.read_bytes() != png:
                 target.write_bytes(png)
-            if outcome.old_logo and outcome.old_logo.exists() and outcome.old_logo != target:
-                outcome.old_logo.unlink()
+            old = outcome.old_logo
+            # none.png is shared by every Program without a mark; replacing one Program's
+            # placeholder must never delete it for the others.
+            if old and old.exists() and old != target and old.name != Path(NONE_PATH).name:
+                old.unlink()
         if not (outcome.changed or outcome.stamped):
             continue
         if outcome.path.exists():

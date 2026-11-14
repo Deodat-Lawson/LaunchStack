@@ -1,7 +1,7 @@
 import unittest
 from datetime import date, datetime, timezone
 
-from scraper.facts import Findings
+from scraper.facts import Findings, classify
 from scraper.parse import Page
 from scraper.records import skeleton
 from scraper.tags import alias_pattern
@@ -92,6 +92,15 @@ class TagAliases(unittest.TestCase):
 
     def test_korean_aliases_match_with_attached_particles(self) -> None:
         self.assertTrue(alias_pattern("액셀러레이터", False).search("스타트업 액셀러레이터입니다"))
+
+
+class PageKinds(unittest.TestCase):
+    def test_site_plumbing_is_never_read_as_a_program_page(self) -> None:
+        login = "https://zone.example/wp-login.php?redirect_to=https%3A%2F%2Fzone.example%2Fportfolio%2F"
+        self.assertEqual(classify(login, ""), "other")
+        self.assertEqual(classify("https://zone.example/feed/", ""), "other")
+        self.assertEqual(classify("https://apply.zone.example/signup", ""), "application")
+        self.assertEqual(classify("https://zone.example/feedback-program-apply", ""), "application")
 
 
 if __name__ == "__main__":

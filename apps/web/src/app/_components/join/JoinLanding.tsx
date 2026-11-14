@@ -374,14 +374,11 @@ export function JoinLanding({
     // The invited address, when it is another account already signed in on
     // this browser: switching to it is one click, and nobody signs out.
     const invitedEmail = load.phase === "ready" ? load.details.email : null;
-    const invitedAccount =
-        (invitedEmail &&
-            accounts.find(
-                a =>
-                    a.userId !== activeUserId &&
-                    a.email.toLowerCase() === invitedEmail.toLowerCase()
-            )) ||
-        null;
+    const invitedAccount = invitedEmail
+        ? (accounts.find(
+              a => a.userId !== activeUserId && a.email.toLowerCase() === invitedEmail.toLowerCase()
+          ) ?? null)
+        : null;
 
     /**
      * Another account, without ending this one or any other signed in here:

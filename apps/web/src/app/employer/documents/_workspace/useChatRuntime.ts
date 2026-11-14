@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { isModelPick, pickOfModel, requestOfPick } from "~/lib/ai/model-picks";
 import { DEFAULT_PASSAGE_QUESTION, toPassagePayload } from "~/lib/chat-passages";
 import { chatStatusKeyword, chatStreamErrorKey } from "~/lib/chat-stream";
-import { conversationContext, priorQuestions } from "~/lib/chat-turns";
+import { conversationContext, priorQuestions, type ChatCreatedSource } from "~/lib/chat-turns";
 import { mentionedSourceRefs, renderMentionsFor } from "~/lib/source-mentions";
 import { deriveSessionTitle, MAX_SESSION_APPEND } from "~/lib/workspace-history";
 import { useAIChat } from "../hooks/useAIChat";
@@ -967,13 +967,28 @@ function applyResponse(
         .map(({ title, url }) => ({ title: title.slice(0, 500), url }));
     answer.webSources = webSources.length > 0 ? webSources : undefined;
     const created = (response.createdSources ?? [])
-        .filter(({ documentId }) => Number.isInteger(documentId) && documentId > 0)
-        .slice(0, 5)
-        .map(({ documentId, title, folder }) => ({
-            documentId,
-            title: title.slice(0, 300),
-            folder: folder.slice(0, 300),
-        }));
+        .filter(item =>
+            item.kind === "diagram"
+                ? Number.isInteger(item.mindmapId) && item.mindmapId > 0
+                : Number.isInteger(item.documentId) && item.documentId > 0
+        )
+        .slice(0, 8)
+        .map(
+            (item): ChatCreatedSource =>
+                item.kind === "diagram"
+                    ? {
+                          kind: "diagram",
+                          mindmapId: item.mindmapId,
+                          title: item.title.slice(0, 300),
+                          folder: item.folder.slice(0, 300),
+                          ...(item.edited ? { edited: true } : {}),
+                      }
+                    : {
+                          documentId: item.documentId,
+                          title: item.title.slice(0, 300),
+                          folder: item.folder.slice(0, 300),
+                      }
+        );
     answer.createdSources = created.length > 0 ? created : undefined;
     answer.citations = (response.references ?? []).flatMap(reference => {
         const source = sources.find(s => s.documentId === Number(reference.documentId));

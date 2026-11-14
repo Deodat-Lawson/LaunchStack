@@ -49,6 +49,8 @@ import { categoryName, shapeName, swatchName, type MindmapT } from "./EditorCont
 export interface CanvasMenuExtras {
     /** Take a topic's text to the chat — present only inside the workspace. */
     onAskAboutNode?: (text: string) => void;
+    /** Have the workspace's model suggest subtopics for a topic. */
+    onExpandWithAi?: (nodeId: string) => void;
 }
 
 /**
@@ -114,6 +116,7 @@ function focusTier(
               pick("ask"),
               addChild,
               addSibling,
+              pick("expand-ai"),
               pick("colour"),
               pick("collapse"),
               pick("duplicate"),
@@ -250,6 +253,15 @@ function buildEverything(
                 label: t("contextMenu.ask"),
                 icon: "ask",
                 onSelect: () => extras.onAskAboutNode?.(text),
+            });
+        }
+        if (extras.onExpandWithAi && isTopicShape(singleNode.shape) && singleNode.text.trim()) {
+            items.push({
+                type: "item",
+                id: "expand-ai",
+                label: t("contextMenu.expandWithAi"),
+                icon: "brain",
+                onSelect: () => extras.onExpandWithAi?.(singleNode.id),
             });
         }
         items.push({

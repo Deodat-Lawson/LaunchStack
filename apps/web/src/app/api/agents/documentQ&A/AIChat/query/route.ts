@@ -66,6 +66,8 @@ import {
     documentToolsPrompt,
     noDocumentToolsPrompt,
 } from "~/server/chat-document-tools";
+import { createDiagramTools, diagramToolsPrompt } from "~/server/chat-diagram-tools";
+import { creatorThemeMode } from "~/server/mindmap/agent";
 import { createWebTools, webSearchAvailable, webToolsPrompt } from "~/server/chat-web-tools";
 import {
     FULL_READ_TOKEN_BUDGET,
@@ -1578,9 +1580,24 @@ export async function POST(request: Request) {
                 writeAllowed && mayUpload
                     ? createDocumentTools(ctx.data, { requestUrl: request.url, locale })
                     : null;
+            // Diagrams too: asked to map something out, the model draws it in
+            // the Mindmap editor, and it can change one that exists. Reading
+            // follows the agent's access to sources; drawing and editing
+            // follow writing, plus upload access to make one and edit access
+            // to change one (each draft's own access is checked on top).
+            const diagramTools =
+                takesTools && sourcesAllowed
+                    ? createDiagramTools(ctx.data, {
+                          locale,
+                          mode: creatorThemeMode(request.headers.get("cookie")),
+                          canCreate: writeAllowed && mayUpload,
+                          canEdit: writeAllowed && ctx.data.can("documents.edit"),
+                      })
+                    : null;
             const tools = [
                 ...(sourceTools?.tools ?? []),
                 ...(documentTools?.tools ?? []),
+                ...(diagramTools?.tools ?? []),
                 ...(webTools?.tools ?? []),
             ];
             // Nothing attached and no way to look through the sources: say so,
@@ -1661,6 +1678,9 @@ export async function POST(request: Request) {
                 systemPrompt += `\n\n${documentToolsPrompt()}`;
             } else if (writeAllowed && !mayUpload) {
                 systemPrompt += `\n\n${noDocumentToolsPrompt()}`;
+            }
+            if (diagramTools?.tools.length) {
+                systemPrompt += `\n\n${diagramToolsPrompt(diagramTools)}`;
             }
             if (webTools)
                 systemPrompt += `\n\n${webToolsPrompt(new Date(), { search: webTools.search })}`;
@@ -1757,9 +1777,17 @@ export async function POST(request: Request) {
                     },
                 }));
                 const webToolNames = new Set((webTools?.tools ?? []).map(tool => tool.name));
-                const documentToolNames = new Set(
-                    (documentTools?.tools ?? []).map(tool => tool.name)
-                );
+                const documentToolNames = new Set([
+                    ...(documentTools?.tools ?? []).map(tool => tool.name),
+                    ...(diagramTools?.writes
+                        ? diagramTools.tools
+                              .filter(
+                                  tool =>
+                                      tool.name === "create_diagram" || tool.name === "edit_diagram"
+                              )
+                              .map(tool => tool.name)
+                        : []),
+                ]);
                 let round = 1;
                 let thinking: string | null = null;
                 let toolCall: { id: string; label: string } | null = null;
@@ -1830,8 +1858,13 @@ export async function POST(request: Request) {
                         step(toolCall.id, "active", status);
                     },
                     // Looking (a search, a read) and then writing takes a
-                    // round more than looking alone.
-                    ...(documentTools ? { maxToolRounds: 4 } : {}),
+                    // round more than looking alone; changing a diagram is
+                    // find, read, edit, and perhaps a second edit.
+                    ...(diagramTools?.writes
+                        ? { maxToolRounds: 6 }
+                        : documentTools
+                          ? { maxToolRounds: 4 }
+                          : {}),
                 });
                 if (emit) {
                     endToolCall();
@@ -1982,9 +2015,11 @@ export async function POST(request: Request) {
                               }
                             : undefined,
                     // The documents the answer wrote, for the chat to list and open.
-                    createdSources: documentTools?.created.length
-                        ? documentTools.created
-                        : undefined,
+                    createdSources:
+                        (documentTools?.created.length ?? 0) + (diagramTools?.touched.length ?? 0) >
+                        0
+                            ? [...(documentTools?.created ?? []), ...(diagramTools?.touched ?? [])]
+                            : undefined,
                     disclaimer: supervision.disclaimer,
                     guardrails: !supervision.approved
                         ? {

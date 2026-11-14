@@ -208,7 +208,24 @@
       "createFailed": "Couldn't create that mindmap",
       "intro": "Draw it here, then make it citable when it is ready.",
       "untitled": "Untitled mindmap",
-      "openingEditor": "Opening the editor…"
+      "openingEditor": "Opening the editor…",
+      "generate": {
+        "label": "Describe it and AI draws it",
+        "placeholder": "e.g. How a customer refund works, from the request to the payout",
+        "kindLabel": "Diagram type",
+        "kinds": {
+          "auto": "Any type",
+          "mindmap": "Mind map",
+          "flowchart": "Flowchart",
+          "org_chart": "Org chart",
+          "tree": "Tree"
+        },
+        "generate": "Generate",
+        "drawing": "Drawing…",
+        "hint": "Or start from a template below.",
+        "drawingHint": "Drawing your diagram. This takes a few seconds.",
+        "failed": "Couldn't draw that. Try again."
+      }
     },
     "file": {
       "titleLabel": "Title",
@@ -728,7 +745,14 @@
       "private": "Only you",
       "shared": "Shared",
       "workspace": "Everyone in the workspace"
-    }
+    },
+    "ariaMade": "Made in your workspace",
+    "diagramsCount": "{count, plural, one {Drew # diagram} other {Drew # diagrams}}",
+    "changedCount": "{count, plural, one {Changed # diagram} other {Changed # diagrams}}",
+    "mixedCount": "{count, plural, one {Made or changed # item} other {Made or changed # items}}",
+    "diagramMade": "Diagram · {place}",
+    "diagramChanged": "Changed · {place}",
+    "openDiagram": "Open {title}"
   },
   "failure": {
     "categories": {

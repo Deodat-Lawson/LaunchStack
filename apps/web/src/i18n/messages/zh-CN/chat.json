@@ -712,7 +712,12 @@
       "writingDocument": "正在撰写文档",
       "readingSources": "正在阅读 {count} 个来源",
       "readingSourcesProgress": "正在阅读 {count} 个来源…已完成 {done} 个",
-      "readingYourSources": "正在阅读你的来源"
+      "readingYourSources": "正在阅读你的来源",
+      "findingDiagrams": "正在查找你的图表",
+      "readingDiagram": "正在读取图表",
+      "drawingDiagramTitled": "正在绘制“{title}”",
+      "drawingDiagram": "正在绘制图表",
+      "editingDiagram": "正在修改图表"
     },
     "aiChat": {
       "chatNotFound": "未找到该对话",

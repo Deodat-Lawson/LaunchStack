@@ -298,6 +298,13 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
         },
     ],
     [
+        "apps/web/src/server/mindmap/generate.ts",
+        {
+            scopedBy: [`${API}/mindmaps/generate/route.ts`, `${API}/mindmaps/expand/route.ts`],
+            note: "Generate with AI and Expand with AI: POST body after auth, counted as the mindmap feature",
+        },
+    ],
+    [
         "apps/web/src/server/extraction/documents.ts",
         {
             scopedBy: ["apps/web/src/server/extraction/executor.ts", `${JOBS}/extractionRun.ts`],

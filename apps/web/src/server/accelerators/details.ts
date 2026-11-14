@@ -88,7 +88,7 @@ export function programDetails(dossier: ProgramIntelligence): ProgramDetails {
                 cash,
                 cash.map(item =>
                     item.amount && item.currency
-                        ? `${item.currency} ${item.amount}${item.condition ? ` · ${item.condition}` : ""}`
+                        ? `${item.condition ? `${item.condition} ` : ""}${item.currency} ${item.amount}`
                         : item.label
                 )
             ),

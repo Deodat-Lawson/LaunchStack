@@ -16,19 +16,8 @@ import {
     type ProgramDetails,
 } from "../_lib/details";
 import { daysBetween } from "../_lib/vision-filters";
+import { LinkList, linkItem, pageLabel, type LinkListItem } from "./LinkList";
 import { ProgramLogo } from "./ProgramFacts";
-
-/** "500.co/fellowship": which page it is, readable at a glance. */
-function pageLabel(url: string): string {
-    try {
-        const { hostname, pathname } = new URL(url);
-        const path = pathname.replace(/\/+$/, "");
-        const label = hostname.replace(/^www\./, "") + path;
-        return label.length > 48 ? `${label.slice(0, 47)}…` : label;
-    } catch {
-        return url;
-    }
-}
 
 /** One entry per page; several excerpts from the same page are one source. */
 function uniqueSources(sources: readonly DetailSource[]): DetailSource[] {
@@ -64,38 +53,16 @@ function SourceList({ sources }: { sources: readonly DetailSource[] }) {
             <h3 className="text-ink text-sm font-semibold">
                 {t("sourcesCount", { count: unique.length })}
             </h3>
-            <ul className="border-line divide-line divide-y rounded-xl border">
-                {visible.map(source => (
-                    <li key={source.url}>
-                        <a
-                            href={source.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:bg-panel-2 group flex items-center gap-3 px-3 py-2.5 transition-colors first:rounded-t-xl last:rounded-b-xl"
-                        >
-                            <span className="min-w-0 flex-1">
-                                <span className="text-ink group-hover:text-brand-ink block truncate text-sm">
-                                    {sourceTitle(source)}
-                                </span>
-                                <span className="text-ink-3 block truncate text-xs">
-                                    {pageLabel(source.url)}
-                                </span>
-                            </span>
-                            <span className="text-ink-3 shrink-0 text-xs">
-                                {t("checked", {
-                                    date: format.dateTime(new Date(source.checkedAt), {
-                                        dateStyle: "medium",
-                                    }),
-                                })}
-                            </span>
-                            <ExternalLink
-                                aria-hidden="true"
-                                className="text-ink-3 group-hover:text-ink size-3.5 shrink-0"
-                            />
-                        </a>
-                    </li>
-                ))}
-            </ul>
+            <LinkList
+                items={visible.map(source => ({
+                    href: source.url,
+                    title: sourceTitle(source),
+                    detail: pageLabel(source.url),
+                    meta: t("checked", {
+                        date: format.dateTime(new Date(source.checkedAt), { dateStyle: "medium" }),
+                    }),
+                }))}
+            />
             {unique.length > SOURCES_SHOWN && (
                 <Button variant="ghost" size="sm" onClick={() => setExpanded(open => !open)}>
                     {expanded
@@ -149,33 +116,39 @@ function readableNarrative(text: string): string {
     return body.charAt(0).toUpperCase() + body.slice(1);
 }
 
-/** "USD 150000 · per company" reads as "$150,000 · per company" in the reader's locale. */
+/** "up to USD 150000" reads as "Up to $150,000" in the reader's language and locale. */
 function useFormatCash(): (value: string) => string {
+    const t = useTranslations("accelerators.details");
     const format = useFormatter();
     return value => {
-        const match = /^([A-Z]{3}) (\d+)(.*)$/.exec(value);
+        const match = /^(up to )?([A-Z]{3}) (\d+)$/i.exec(value);
         if (!match) return value;
-        const [, currency, amount, rest] = match;
-        return (
-            format.number(Number(amount), {
-                style: "currency",
-                currency: currency!,
-                maximumFractionDigits: 0,
-            }) + rest
-        );
+        const [, upTo, currency, amount] = match;
+        const money = format.number(Number(amount), {
+            style: "currency",
+            currency: currency!.toUpperCase(),
+            maximumFractionDigits: 0,
+        });
+        return upTo ? t("upTo", { amount: money }) : money;
     };
 }
 
-function Fact({ label, children }: { label: string; children: ReactNode }) {
+function Fact({ label, wide, children }: { label: string; wide?: boolean; children: ReactNode }) {
     return (
-        <div className="min-w-0 space-y-0.5">
+        <div className={wide ? "col-span-full min-w-0 space-y-1.5" : "min-w-0 space-y-0.5"}>
             <dt className="text-ink-3 text-xs">{label}</dt>
             <dd className="text-ink text-sm leading-relaxed">{children}</dd>
         </div>
     );
 }
 
-type FactItem = { label: string; state: "known" | "unpublished" | "unchecked"; node: ReactNode };
+type FactItem = {
+    label: string;
+    state: "known" | "unpublished" | "unchecked";
+    node: ReactNode;
+    /** Spans the whole list, for content such as a list of links. */
+    wide?: boolean;
+};
 
 function fact<T>(
     label: string,
@@ -189,6 +162,22 @@ function fact<T>(
         state: known ? "known" : slot && slot.state !== "not_checked" ? "unpublished" : "unchecked",
         node: <Slot slot={slot} render={render} />,
     };
+}
+
+/**
+ * Every published way to apply as one list of titled links: the application portal
+ * first, then the other application pages and addresses the scraper found.
+ */
+function howToApply(label: string, details: ProgramDetails | undefined): FactItem {
+    const portal = publishedValue(details?.contact.applicationUrl);
+    const routes = publishedValue(details?.contact.routes) ?? [];
+    const links = new Map<string, LinkListItem>();
+    for (const value of portal ? [portal, ...routes] : routes) {
+        const item = linkItem(value);
+        if (item && !links.has(item.href)) links.set(item.href, item);
+    }
+    if (links.size === 0) return fact(label, details?.contact.routes);
+    return { label, state: "known", wide: true, node: <LinkList items={[...links.values()]} /> };
 }
 
 /**
@@ -208,7 +197,7 @@ function FactList({ items }: { items: FactItem[] }) {
             {known.length > 0 && (
                 <dl className="grid gap-x-6 gap-y-3 [@container(min-width:560px)]:grid-cols-2">
                     {known.map(item => (
-                        <Fact key={item.label} label={item.label}>
+                        <Fact key={item.label} label={item.label} wide={item.wide}>
                             {item.node}
                         </Fact>
                     ))}
@@ -371,6 +360,7 @@ export function DealTab({ details }: { details: ProgramDetails | undefined }) {
     const t = useTranslations("accelerators.details");
     const formatCash = useFormatCash();
     const summary = publishedValue(details?.deal.summary);
+    const wording = publishedValue(details?.deal.formatted);
     return (
         <div className="space-y-4">
             {summary && <p className="text-ink text-base font-semibold">{summary}</p>}
@@ -387,11 +377,16 @@ export function DealTab({ details }: { details: ProgramDetails | undefined }) {
                     fact(t("benefits"), details?.deal.benefits),
                 ]}
             />
-            {publishedValue(details?.deal.formatted) && (
-                <MarkdownMessage
-                    content={publishedValue(details?.deal.formatted) ?? ""}
-                    className="text-ink-2 space-y-2 text-sm [&_h2]:mt-4 [&_h2]:font-semibold [&_h3]:font-medium"
-                />
+            {wording && (
+                <section className="space-y-2">
+                    <h3 className="text-ink text-sm font-semibold">{t("inTheirWords")}</h3>
+                    <blockquote className="border-line border-l-2 pl-4">
+                        <MarkdownMessage
+                            content={wording}
+                            className="text-ink-2 space-y-3 text-sm leading-relaxed [&_h2]:mt-4 [&_h2]:font-semibold [&_h3]:font-medium"
+                        />
+                    </blockquote>
+                </section>
             )}
         </div>
     );
@@ -452,19 +447,13 @@ export function ApplyingTab({
             ) : null}
             <FactList
                 items={[
-                    fact(t("details.howToApply"), details?.contact.routes),
-                    fact(t("details.applicationUrl"), details?.contact.applicationUrl, value => (
-                        <a
-                            href={value}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-brand-ink break-all hover:underline"
-                        >
-                            {value}
-                        </a>
-                    )),
+                    howToApply(t("details.howToApply"), details),
                     fact(t("details.cadence"), details?.batches.historicalCadence),
-                    fact(t("details.announcedStarts"), details?.batches.announcedStarts),
+                    // Start dates are published as a schedule, one line per cohort.
+                    {
+                        ...fact(t("details.announcedStarts"), details?.batches.announcedStarts),
+                        wide: true,
+                    },
                     fact(t("details.nextDeadline"), details?.batches.nextDeadline),
                     fact(t("details.residencyEnd"), details?.batches.residencyEnd),
                     fact(

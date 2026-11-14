@@ -192,7 +192,6 @@
     "comparable": "Comparable dilution",
     "comparableYes": "Published terms are comparable",
     "comparableNo": "Dilution is conditional or not directly comparable",
-    "applicationUrl": "Application URL",
     "announcedStarts": "Announced starts",
     "residencyEnd": "Residency end",
     "cash": "Upfront cash",
@@ -214,7 +213,9 @@
     "showFewerSources": "Show fewer sources",
     "closesOn": "Closes {date}",
     "notPublishedList": "Not published: {fields}",
-    "notCheckedList": "Not checked yet: {fields}"
+    "notCheckedList": "Not checked yet: {fields}",
+    "upTo": "Up to {amount}",
+    "inTheirWords": "In the program's words"
   },
   "vision": {
     "sectors": "Sectors",

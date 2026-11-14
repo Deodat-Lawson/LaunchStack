@@ -94,7 +94,8 @@ type DiscoveryFile = {
     pages?: ProgramIntelligence["discovery"]["pages"];
 };
 
-type Finding<T> = { value: T; evidenceId: string };
+/** One thing scrape.py read on a page, with the excerpt that shows it. */
+export type Finding<T> = { value: T; evidenceId: string };
 
 /** Written by services/accelerator-scraper: what the official pages stated, with excerpts. */
 type ChecksFile = {
@@ -916,6 +917,103 @@ function distinct<T>(findings: Finding<T>[]): { values: T[]; evidenceIds: string
     return { values, evidenceIds: [...new Set(findings.map(finding => finding.evidenceId))] };
 }
 
+const TRACKING_PARAM = /^(?:utm_.+|fbclid|gclid|mc_cid|mc_eid)$/i;
+
+/**
+ * Application routes once each: tracking parameters and fragments are dropped, and
+ * the same page reached over http/https, with or without "www." or a trailing slash
+ * is one route (the https form is kept). Addresses and other text pass through.
+ */
+export function applicationRoutes(findings: Finding<string>[]): {
+    values: string[];
+    evidenceIds: string[];
+} {
+    const byKey = new Map<string, string>();
+    for (const { value } of findings) {
+        const url = URL.canParse(value) ? new URL(value) : null;
+        if (!url || (url.protocol !== "http:" && url.protocol !== "https:")) {
+            // An application address (mailto:, plain email) or text, kept as written.
+            if (!byKey.has(value.toLowerCase())) byKey.set(value.toLowerCase(), value);
+            continue;
+        }
+        for (const name of [...url.searchParams.keys()]) {
+            if (TRACKING_PARAM.test(name)) url.searchParams.delete(name);
+        }
+        url.hash = "";
+        const clean = url.toString();
+        const key =
+            `${url.hostname.replace(/^www\./, "")}${url.pathname.replace(/\/+$/, "")}${url.search}`.toLowerCase();
+        const seen = byKey.get(key);
+        if (!seen || (seen.startsWith("http:") && clean.startsWith("https:")))
+            byKey.set(key, clean);
+    }
+    return {
+        values: [...byKey.values()],
+        evidenceIds: [...new Set(findings.map(finding => finding.evidenceId))],
+    };
+}
+
+/** Overlap, in characters, that shows two quote windows are neighbouring cuts of one passage. */
+const MIN_WINDOW_OVERLAP = 20;
+
+/** How far `left`'s end runs into `right`'s start, or 0 when they do not overlap. */
+function windowOverlap(left: string, right: string): number {
+    for (let size = Math.min(left.length, right.length); size >= MIN_WINDOW_OVERLAP; size--) {
+        if (left.endsWith(right.slice(0, size))) return size;
+    }
+    return 0;
+}
+
+/**
+ * Make a quote window read as a passage. A leading fragment and a trailing one are cut at
+ * a sentence boundary; wording without one (feature lists, headings run together) is kept
+ * and its cut edge marked with "…", so no stated term is lost and no cut is hidden.
+ */
+function readablePassage(passage: string): string {
+    let text = passage.trim();
+    if (/^[a-z,;)]/.test(text)) {
+        const start = text.search(/[.!?]\s+[A-Z$€£\d]/);
+        text = start >= 0 ? text.slice(start + 1).trimStart() : `…${text}`;
+    }
+    if (/[.!?]["')]?$/.test(text)) return text;
+    const end = Math.max(text.lastIndexOf(". "), text.lastIndexOf("! "), text.lastIndexOf("? "));
+    return end > 0 ? text.slice(0, end + 1) : `${text.replace(/[,;:]$/, "")}…`;
+}
+
+/**
+ * The scraper quotes deal wording as fixed-length windows that overlap and cut mid-word.
+ * Neighbouring windows are joined back into the passage they came from, windows already
+ * inside another are dropped, and each passage is made readable. Joining only on a shared
+ * overlap keeps every passage verbatim from the page, apart from the "…" marks.
+ */
+export function dealPassages(findings: Finding<string>[]): {
+    values: string[];
+    evidenceIds: string[];
+} {
+    const passages = distinct(findings).values.map(value => value.replace(/\s+/g, " ").trim());
+    let merged = true;
+    while (merged) {
+        merged = false;
+        outer: for (let i = 0; i < passages.length; i++) {
+            for (let j = 0; j < passages.length; j++) {
+                if (i === j) continue;
+                const left = passages[i]!;
+                const right = passages[j]!;
+                const overlap = right.includes(left) ? -1 : windowOverlap(left, right);
+                if (overlap === 0) continue;
+                passages[j] = overlap === -1 ? right : left + right.slice(overlap);
+                passages.splice(i, 1);
+                merged = true;
+                break outer;
+            }
+        }
+    }
+    return {
+        values: [...new Set(passages.map(readablePassage))],
+        evidenceIds: [...new Set(findings.map(finding => finding.evidenceId))],
+    };
+}
+
 /**
  * Fill groups that the stored sources left not checked from scrape.py's reading of the
  * official pages. A group that was read and states nothing becomes unavailable, never a
@@ -981,7 +1079,7 @@ function applyChecks(
             : unavailable(`No public phone link on the checked pages (${read}).`);
     }
     if (open(dossier.contact.routes)) {
-        const routes = distinct(findings.routes);
+        const routes = applicationRoutes(findings.routes);
         dossier.contact.routes = routes.values.length
             ? available(routes.values, routes.evidenceIds, "fact")
             : unavailable(
@@ -990,7 +1088,7 @@ function applyChecks(
     }
     if (open(dossier.contact.applicationUrl)) {
         const linked = distinct(findings.applicationUrl);
-        const routes = distinct(findings.routes);
+        const routes = applicationRoutes(findings.routes);
         const found = linked.values[0] ?? routes.values.find(value => /^https?:\/\//i.test(value));
         dossier.contact.applicationUrl = found
             ? available(
@@ -1141,7 +1239,7 @@ function applyChecks(
     }
     if (dossier.deal.state === "not_checked") {
         const components = findings.dealComponents ?? [];
-        const wording = distinct(findings.dealText);
+        const wording = dealPassages(findings.dealText);
         if (components.length) {
             const built: DealComponent[] = components.map((finding, index) => ({
                 id: `c${program.id.replace(/[^a-z0-9]/g, "").slice(0, 20)}${index}${finding.value.kind}`.slice(
@@ -1162,32 +1260,25 @@ function applyChecks(
             dossier.deal.components = built;
             dossier.deal.comparableDilution = singleFixedDilution(built);
             const text = wording.values.join("\n\n");
-            dossier.deal.formatted = available(
-                text || built.map(component => component.label).join("; "),
-                wording.evidenceIds.length
-                    ? wording.evidenceIds
-                    : built.flatMap(component => component.evidenceIds),
-                "fact"
+            // No whole-sentence passage: the components carry the terms, and repeating
+            // their labels ("Cash; Cash") as prose would only be noise.
+            dossier.deal.formatted = text
+                ? available(text, wording.evidenceIds, "fact")
+                : unavailable(
+                      "The checked pages state these terms only in passing; see the deal components.",
+                      built.flatMap(component => component.evidenceIds)
+                  );
+            // A one-line summary is written by a curator. Stringing the components together
+            // ("Cash 300000 USD; …") would repeat them, so it stays unpublished here.
+            dossier.deal.summary = unavailable(
+                "No one-line summary is published; the deal components carry the terms.",
+                built.flatMap(component => component.evidenceIds)
             );
-            dossier.deal.summary = available(
-                built
-                    .map(component =>
-                        [component.label, component.amount, component.currency, component.equity]
-                            .filter(Boolean)
-                            .join(" ")
-                    )
-                    .join("; "),
-                built.flatMap(component => component.evidenceIds),
-                "interpretation",
-                "Structured from the cited offer. It is not a second source."
-            );
-            dossier.deal.blocks = (text ? wording.values : [dossier.deal.summary.value ?? ""]).map(
-                block => ({
-                    type: "paragraph" as const,
-                    text: block,
-                    href: null,
-                })
-            );
+            dossier.deal.blocks = wording.values.map(block => ({
+                type: "paragraph" as const,
+                text: block,
+                href: null,
+            }));
         } else if (wording.values.length) {
             dossier.deal.state = "partial";
             dossier.deal.detail =

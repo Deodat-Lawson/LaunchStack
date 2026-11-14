@@ -192,7 +192,6 @@
     "comparable": "股权稀释可比性",
     "comparableYes": "公布的条款可直接比较",
     "comparableNo": "稀释取决于条件或无法直接比较",
-    "applicationUrl": "申请网址",
     "announcedStarts": "公布的开始时间",
     "residencyEnd": "驻留结束时间",
     "cash": "首期现金",
@@ -214,7 +213,9 @@
     "showFewerSources": "收起来源",
     "closesOn": "{date} 截止",
     "notPublishedList": "未公布：{fields}",
-    "notCheckedList": "尚未核查：{fields}"
+    "notCheckedList": "尚未核查：{fields}",
+    "upTo": "最高 {amount}",
+    "inTheirWords": "项目原文"
   },
   "vision": {
     "sectors": "行业",

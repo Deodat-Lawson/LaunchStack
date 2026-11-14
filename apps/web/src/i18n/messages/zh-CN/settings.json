@@ -814,6 +814,7 @@
       "resent": "{actor} 重新向 {target} 发送了邀请",
       "invitationRevoked": "{actor} 撤销了发给 {target} 的邀请",
       "invitationAccepted": "{actor} 接受邀请加入了工作区",
+      "invitationDeclined": "{actor} 拒绝了加入工作区的邀请",
       "joinLinkCreated": "{actor} 创建了一个加入链接",
       "joinLinkCreatedFor": "{actor} 创建了一个角色为 {role} 的加入链接",
       "joinLinkRequiresApproval": "{actor} 将一个加入链接设为需要审批",
@@ -878,7 +879,8 @@
         },
         "invitation": {
           "resent": "邀请 · 已重新发送",
-          "revoked": "邀请 · 已撤销"
+          "revoked": "邀请 · 已撤销",
+          "declined": "邀请 · 已拒绝"
         },
         "joinLink": {
           "created": "加入链接 · 已创建",
@@ -1096,6 +1098,7 @@
         "pending": "待接受",
         "accepted": "已接受",
         "revoked": "已撤销",
+        "declined": "已拒绝",
         "expired": "已过期"
       },
       "more": {
@@ -1932,7 +1935,7 @@
       "proposalsRewrite": "提案：改写",
       "proposalsReview": "提案：审阅",
       "scenarioInterview": "情景“{title}”：访谈",
-      "scenarioUnit": "情景“{title}”（{unit, select, brief {简报} cast {角色设定} report {报告} other {{unit}}}）",
+      "scenarioUnit": "情景“{title}”（{unit, select, brief {简报} cast {角色设定} report {报告} ontology {证据类型} graph {证据图谱} other {{unit}}}）",
       "scenarioRound": "情景“{title}”（第 {round} 轮）"
     },
     "workspaceDetails": {

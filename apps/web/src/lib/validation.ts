@@ -446,6 +446,11 @@ export const AcceptInvitationSchema = z
         message: V.tokenOrInvitation,
     });
 
+/** The invited person turning an invitation down, from their workspace list. */
+export const DeclineInvitationSchema = z.object({
+    invitationId: PositiveIdSchema,
+});
+
 export const CreateJoinLinkSchema = z.object({
     role: RoleSlugSchema,
     expiresInDays: z.number().int().min(1).max(365).nullable().optional(),

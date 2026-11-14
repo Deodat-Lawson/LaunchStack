@@ -578,6 +578,8 @@ function InvitationList({
                     <TableBody>
                         {sorted.map(inv => {
                             const open = inv.status === "pending";
+                            // Declined is closed, but a resend asks again.
+                            const resendable = open || inv.status === "declined";
                             const busy = busyId === inv.id;
                             return (
                                 <React.Fragment key={inv.id}>
@@ -611,7 +613,7 @@ function InvitationList({
                                             <InvitationStatus status={inv.status} />
                                         </TableCell>
                                         <TableCell className="text-right">
-                                            {open && (
+                                            {resendable && (
                                                 <div className="flex justify-end gap-1">
                                                     <Button
                                                         variant="ghost"
@@ -627,18 +629,20 @@ function InvitationList({
                                                               ? t("list.makingLink")
                                                               : t("list.newLink")}
                                                     </Button>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        className="text-danger hover:text-danger"
-                                                        disabled={busy}
-                                                        onClick={() => {
-                                                            setRevokeError(null);
-                                                            setRevoking(inv);
-                                                        }}
-                                                    >
-                                                        {tc("actions.revoke")}
-                                                    </Button>
+                                                    {open && (
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            className="text-danger hover:text-danger"
+                                                            disabled={busy}
+                                                            onClick={() => {
+                                                                setRevokeError(null);
+                                                                setRevoking(inv);
+                                                            }}
+                                                        >
+                                                            {tc("actions.revoke")}
+                                                        </Button>
+                                                    )}
                                                 </div>
                                             )}
                                         </TableCell>
@@ -685,6 +689,8 @@ function InvitationStatus({ status }: { status: Invitation["status"] }) {
             return <Badge variant="success">{t("accepted")}</Badge>;
         case "revoked":
             return <Badge variant="secondary">{t("revoked")}</Badge>;
+        case "declined":
+            return <Badge variant="danger">{t("declined")}</Badge>;
         case "expired":
             return <Badge variant="secondary">{t("expired")}</Badge>;
     }

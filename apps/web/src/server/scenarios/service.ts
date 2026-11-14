@@ -86,7 +86,30 @@ import { originalMediaDocument } from "~/server/workspace-sources";
 import { brandIdentity, visibleDocumentIds } from "./evidence";
 import { listLinkedPostTests } from "./track-record";
 import { dispatchRun, readScenariosExecutor, resumeIfStalled } from "./executor";
-import { leftWorkspaceName, recordSummary, toDetail, toPostTest, toSummary } from "./views";
+import { cancelV2, resumeV2IfStalled } from "./v2/executor";
+import { assertV2Readable, unreadableV2Runs, v2DetailContext, v2Progress } from "./v2/service";
+import {
+    leftWorkspaceName,
+    recordSummary,
+    toDetail,
+    toPostTest,
+    toSummary,
+    type V2Progress,
+} from "./views";
+
+/** A v2 run's stage comes from its units, not the v1 step counter. */
+async function progressOf(run: ScenarioRunRecord): Promise<V2Progress | undefined> {
+    if (run.contractVersion !== 2) return undefined;
+    const progress = await v2Progress([
+        {
+            id: run.id,
+            generation: run.generation,
+            status: run.status,
+            worldRound: run.world?.round ?? 0,
+        },
+    ]);
+    return progress.get(run.id);
+}
 
 /**
  * An expected failure with its status and machine `code`. The sentence is a
@@ -127,7 +150,7 @@ const notCreator = () => fail("notCreator", 403, "forbidden");
 
 type Ctx = Pick<WorkspaceContext, "authUserId" | "companyId" | "can" | "documentScope">;
 
-async function namesFor(
+export async function namesFor(
     companyId: bigint,
     ids: Iterable<string>,
     locale: Locale = "en"
@@ -147,6 +170,18 @@ async function readableRun(ctx: Ctx, id: number): Promise<ScenarioRunRecord> {
     return run;
 }
 
+/**
+ * The run if the viewer may read what it says. A v2 run is derived from every
+ * source it read, so its reader must still be able to open all of them —
+ * the creator included (design §3.1). Managing a run (cancel, delete) only
+ * needs `ownRun`: losing a file never traps a run that is spending credits.
+ */
+async function readableContent(ctx: Ctx, id: number): Promise<ScenarioRunRecord> {
+    const run = await readableRun(ctx, id);
+    if (run.contractVersion === 2) await assertV2Readable(ctx, run);
+    return run;
+}
+
 async function ownRun(ctx: Ctx, id: number): Promise<ScenarioRunRecord> {
     const run = await readableRun(ctx, id);
     if (run.createdByUserId !== ctx.authUserId) throw notCreator();
@@ -161,7 +196,7 @@ function requireRead(ctx: Ctx): void {
 
 // ─── Estimate and create ─────────────────────────────────────────────────────
 
-function clampInt(value: unknown, min: number, max: number, fallback: number): number {
+export function clampInt(value: unknown, min: number, max: number, fallback: number): number {
     const n = typeof value === "number" && Number.isFinite(value) ? Math.round(value) : fallback;
     return Math.max(min, Math.min(max, n));
 }
@@ -247,18 +282,16 @@ function cleanSources(raw: Partial<ScenarioSourcesInput> | undefined): ScenarioS
     };
 }
 
-export async function createScenario(
-    ctx: Ctx,
-    input: Partial<CreateScenarioInput>,
-    locale: Locale = "en"
-): Promise<ScenarioSummary> {
-    requireRead(ctx);
-    const subject = typeof input.subject === "string" ? input.subject.trim() : "";
-    if (!subject) throw fail("describeSituation", 400, "invalid");
-    if (subject.length > SCENARIO_LIMITS.subjectMax) {
-        throw fail("situationTooLong", 400, "invalid", { max: String(SCENARIO_LIMITS.subjectMax) });
-    }
-    const sources = cleanSources(input.sources);
+/**
+ * The sources a run may read: well-formed, within limits, without Growth's
+ * sources while beta apps are off, and only files the creator can open
+ * (dropped here and again when evidence is gathered).
+ */
+export async function cleanScenarioSources(
+    ctx: Pick<Ctx, "companyId" | "documentScope">,
+    raw: Partial<ScenarioSourcesInput> | undefined
+): Promise<ScenarioSourcesInput> {
+    const sources = cleanSources(raw);
     // Prospects and post comments are Growth's: not read while the workspace
     // has its beta apps off, whatever the form sent.
     if ((sources.prospects || sources.brandComments) && !(await betaAppsOn(ctx.companyId))) {
@@ -271,13 +304,27 @@ export async function createScenario(
     if (sources.notes.length > SCENARIO_LIMITS.notesMax) {
         throw fail("notesTooLong", 400, "invalid", { max: String(SCENARIO_LIMITS.notesMax) });
     }
-    // Files the creator can't open are dropped here and again when evidence is gathered.
     const visible = await visibleDocumentIds(
         ctx.companyId,
         await ctx.documentScope(),
         sources.documentIds
     );
     sources.documentIds = sources.documentIds.filter(id => visible.has(id));
+    return sources;
+}
+
+export async function createScenario(
+    ctx: Ctx,
+    input: Partial<CreateScenarioInput>,
+    locale: Locale = "en"
+): Promise<ScenarioSummary> {
+    requireRead(ctx);
+    const subject = typeof input.subject === "string" ? input.subject.trim() : "";
+    if (!subject) throw fail("describeSituation", 400, "invalid");
+    if (subject.length > SCENARIO_LIMITS.subjectMax) {
+        throw fail("situationTooLong", 400, "invalid", { max: String(SCENARIO_LIMITS.subjectMax) });
+    }
+    const sources = await cleanScenarioSources(ctx, input.sources);
 
     const agents = clampInt(
         input.agents,
@@ -330,12 +377,27 @@ export async function listScenarios(ctx: Ctx, locale: Locale = "en"): Promise<Sc
         viewerUserId: ctx.authUserId,
         kind: "scenario",
     });
-    const names = await namesFor(
-        ctx.companyId,
-        rows.map(r => r.createdByUserId),
-        locale
+    const [names, progress, unreadable] = await Promise.all([
+        namesFor(
+            ctx.companyId,
+            rows.map(r => r.createdByUserId),
+            locale
+        ),
+        v2Progress(rows.filter(r => r.contractVersion === 2)),
+        // Only a finished report has a headline to hide.
+        unreadableV2Runs(
+            ctx,
+            rows.filter(r => r.contractVersion === 2 && r.headline)
+        ),
+    ]);
+    return rows.map(r =>
+        toSummary(
+            unreadable.has(r.id) ? { ...r, headline: null } : r,
+            ctx.authUserId,
+            names,
+            progress.get(r.id)
+        )
     );
-    return rows.map(r => toSummary(r, ctx.authUserId, names));
 }
 
 /**
@@ -453,16 +515,20 @@ export async function getScenarioDetail(
     id: number,
     locale: Locale = "en"
 ): Promise<ScenarioDetail> {
-    const run = await readableRun(ctx, id);
-    resumeIfStalled(run);
+    const run = await readableContent(ctx, id);
+    if (run.contractVersion === 2) resumeV2IfStalled(run);
+    else resumeIfStalled(run);
     const isCreator = run.createdByUserId === ctx.authUserId;
     const cited = (run.evidence ?? []).flatMap(e => e.documentIds);
     const visibleDocIds = isCreator
         ? new Set<number>()
         : await visibleDocumentIds(ctx.companyId, await ctx.documentScope(), cited);
-    const [injections, names] = await Promise.all([
+    const [injections, names, v2] = await Promise.all([
         listInjections(run.id),
         namesFor(ctx.companyId, [run.createdByUserId], locale),
+        run.contractVersion === 2
+            ? v2DetailContext(run, isCreator, visibleDocIds, locale)
+            : Promise.resolve(undefined),
     ]);
     return toDetail(run, {
         viewerUserId: ctx.authUserId,
@@ -470,6 +536,7 @@ export async function getScenarioDetail(
         visibleDocIds,
         injections: injections.map(toInjection),
         locale,
+        v2,
     });
 }
 
@@ -490,7 +557,8 @@ export async function updateScenario(
     return recordSummary(
         run,
         ctx.authUserId,
-        await namesFor(ctx.companyId, [run.createdByUserId], locale)
+        await namesFor(ctx.companyId, [run.createdByUserId], locale),
+        await progressOf(run)
     );
 }
 
@@ -505,7 +573,9 @@ export async function cancelScenario(
     locale: Locale = "en"
 ): Promise<ScenarioSummary> {
     const run = await ownRun(ctx, id);
-    if (run.status === "queued" || run.status === "running") {
+    if (run.contractVersion === 2 && (run.status === "queued" || run.status === "running")) {
+        await cancelV2(run, new Date());
+    } else if (run.status === "queued" || run.status === "running") {
         const now = new Date();
         await requestCancel(ctx.companyId, id, now);
         // No live in-process executor: nothing will look at the flag, so stop it here.
@@ -518,7 +588,8 @@ export async function cancelScenario(
     return recordSummary(
         fresh,
         ctx.authUserId,
-        await namesFor(ctx.companyId, [fresh.createdByUserId], locale)
+        await namesFor(ctx.companyId, [fresh.createdByUserId], locale),
+        await progressOf(fresh)
     );
 }
 
@@ -531,7 +602,8 @@ export async function addScenarioEvent(
     if (run.status !== "running" && run.status !== "queued") {
         throw fail("eventsClosed", 409, "not_running");
     }
-    if (run.step >= 2 + run.roundCount || run.eventsClosedAt) {
+    // v2 runs have many more units; their final round closes the window itself.
+    if ((run.contractVersion !== 2 && run.step >= 2 + run.roundCount) || run.eventsClosedAt) {
         throw fail("lastRoundFinished", 409, "not_running");
     }
     const text = typeof textRaw === "string" ? textRaw.trim() : "";
@@ -571,7 +643,7 @@ function toInterview(row: {
 }
 
 export async function listScenarioInterviews(ctx: Ctx, id: number): Promise<ScenarioInterview[]> {
-    await readableRun(ctx, id);
+    await readableContent(ctx, id);
     return (await listInterviews(id, ctx.authUserId)).map(toInterview);
 }
 
@@ -582,7 +654,7 @@ export async function askScenario(
     questionRaw: unknown
 ): Promise<ScenarioInterview> {
     requireRead(ctx);
-    const run = await readableRun(ctx, id);
+    const run = await readableContent(ctx, id);
     const world = run.world;
     if (!world || world.round < 1) {
         throw fail("interviewsNotOpen", 409, "not_ready");

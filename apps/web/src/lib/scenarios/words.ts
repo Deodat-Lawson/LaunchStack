@@ -126,6 +126,8 @@ function stageWords(run: {
     switch (run.stage) {
         case "gathering":
             return "Gathering sources";
+        case "grounding":
+            return "Mapping the evidence";
         case "casting":
             return `Building ${run.agents} people`;
         case "simulating":
@@ -149,6 +151,8 @@ export function progressValue(run: {
     switch (run.stage) {
         case "gathering":
             return 6;
+        case "grounding":
+            return 10;
         case "casting":
             return 14;
         case "simulating":
@@ -243,6 +247,8 @@ export function progressLabel(
             switch (run.stage) {
                 case "gathering":
                     return t("progress.gathering");
+                case "grounding":
+                    return t("progress.grounding");
                 case "casting":
                     return t("progress.casting", { count: run.agents });
                 case "simulating":

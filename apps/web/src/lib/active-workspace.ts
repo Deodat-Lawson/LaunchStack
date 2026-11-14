@@ -2,11 +2,15 @@
  * Active workspace selection.
  *
  * A user can belong to multiple companies via `userCompanyMemberships`. Per
- * request we resolve the active workspace from a signed cookie, falling back
- * to the user's default company (`users.companyId`) when the cookie is absent
- * or stale. A workspace resolves only when a membership row exists for it —
- * of any status; whether that membership may act is `requireWorkspaceContext`'s
- * question, not this module's.
+ * request we resolve the active workspace from a cookie, which is honoured
+ * only for a membership the user can enter (status `active`). Otherwise the
+ * user's most recently opened active membership wins. The cookie is
+ * browser-wide, and one browser can hold several accounts (the account
+ * menu): without the status check, an account suspended or still pending in
+ * the workspace the previous account had open would resolve into it and get
+ * an empty shell. Someone with no active membership at all resolves to their
+ * default company, or else their latest membership, so the pending page has
+ * one to talk about.
  *
  * Server code that previously did:
  *
@@ -55,8 +59,8 @@ const parseCompanyId = (raw: string | undefined): bigint | null => {
 };
 
 /**
- * Resolve the active companyId for a signed-in user, or null when neither the
- * cookie nor the default points at a workspace the user is a member of.
+ * Resolve the active companyId for a signed-in user, or null when they hold
+ * no membership at all. See resolveActiveCompanyForUser for the order.
  */
 export async function getActiveCompanyId(authUserId: string): Promise<bigint | null> {
     const [user] = await db
@@ -87,48 +91,30 @@ export async function resolveActiveCompanyForUser(
         typeof defaultCompanyId === "bigint" ? defaultCompanyId : BigInt(defaultCompanyId);
 
     const cookieStore = await cookies();
-    const cookieValue = cookieStore.get(ACTIVE_WORKSPACE_COOKIE)?.value;
-    const cookieCompanyId = parseCompanyId(cookieValue);
+    const cookieCompanyId = parseCompanyId(cookieStore.get(ACTIVE_WORKSPACE_COOKIE)?.value);
 
-    if (cookieCompanyId !== null && cookieCompanyId !== defaultBig) {
-        const [membership] = await db
-            .select({ companyId: userCompanyMemberships.companyId })
-            .from(userCompanyMemberships)
-            .where(
-                and(
-                    eq(userCompanyMemberships.userId, userPkBig),
-                    eq(userCompanyMemberships.companyId, cookieCompanyId)
-                )
-            );
-        if (membership) {
-            return cookieCompanyId;
-        }
-        // cookie points at a workspace the user no longer belongs to; fall through
-    }
-
-    const [defaultMembership] = await db
-        .select({ companyId: userCompanyMemberships.companyId })
-        .from(userCompanyMemberships)
-        .where(
-            and(
-                eq(userCompanyMemberships.userId, userPkBig),
-                eq(userCompanyMemberships.companyId, defaultBig)
-            )
-        );
-
-    if (defaultMembership) return defaultMembership.companyId;
-
-    // Neither the cookie nor the default is a live membership. Fall back to
-    // the membership opened most recently so a person whose default workspace
-    // removed them still lands somewhere they belong.
-    const [anyMembership] = await db
-        .select({ companyId: userCompanyMemberships.companyId })
+    // Every membership, most recently opened first: one small read answers
+    // all of the cases below.
+    const memberships = await db
+        .select({
+            companyId: userCompanyMemberships.companyId,
+            status: userCompanyMemberships.status,
+        })
         .from(userCompanyMemberships)
         .where(eq(userCompanyMemberships.userId, userPkBig))
-        .orderBy(desc(userCompanyMemberships.lastOpenedAt))
-        .limit(1);
+        .orderBy(desc(userCompanyMemberships.lastOpenedAt));
 
-    return anyMembership?.companyId ?? null;
+    const active = memberships.filter(m => m.status === "active");
+    if (cookieCompanyId !== null && active.some(m => m.companyId === cookieCompanyId)) {
+        return cookieCompanyId;
+    }
+    // The cookie is missing, stale, or names a workspace this user is
+    // suspended or still pending in: their own last-opened workspace.
+    if (active[0]) return active[0].companyId;
+
+    // Nothing to enter. The pending page still wants a workspace to name.
+    const fallback = memberships.find(m => m.companyId === defaultBig) ?? memberships[0] ?? null;
+    return fallback?.companyId ?? null;
 }
 
 /**

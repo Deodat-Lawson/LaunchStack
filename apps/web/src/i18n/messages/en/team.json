@@ -438,6 +438,7 @@
       "invitationTokenRequired": "Invitation token is required",
       "invitationUsed": "This invitation has already been used.",
       "invitationRevoked": "This invitation was revoked.",
+      "invitationDeclined": "You declined this invitation. Ask whoever invited you to send it again.",
       "invitationExpired": "This invitation has expired. Ask for a new one.",
       "invitationOtherEmail": "This invitation was sent to a different email address.",
       "groupCreatorOrAdmin": "Only the person who created this group, or an admin, can change it.",

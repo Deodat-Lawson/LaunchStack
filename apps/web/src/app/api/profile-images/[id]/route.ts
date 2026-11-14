@@ -3,8 +3,12 @@
  *
  * Session only — a photo is not workspace-scoped the way `/api/files` is,
  * because one person's photo appears in every workspace they belong to.
- * Who may see which photo is `canViewProfileImage`; anyone else gets the
- * same 404 as a missing id, so ids can't be probed.
+ * Who may see which photo is `canViewProfileImage`, plus one rule of its
+ * own: someone's own photo (not a workspace one) shows to every account
+ * signed in on this browser, so the account menu can show it. Those
+ * accounts come from the browser's signed session cookies, never from
+ * anything the client says. Anyone else gets the same 404 as a missing id,
+ * so ids can't be probed.
  *
  * Ids are minted per upload, so a URL's bytes never change: cache forever.
  */
@@ -15,7 +19,8 @@ import { eq } from "drizzle-orm";
 import { requireAuthIdentity } from "~/lib/require-workspace-context";
 import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
-import { canViewProfileImage, readProfileImage } from "~/server/profile/store";
+import { deviceAccountUserIds } from "~/server/auth";
+import { authUserIdOf, canViewProfileImage, readProfileImage } from "~/server/profile/store";
 import { requestTranslator } from "~/i18n/server";
 
 export const dynamic = "force-dynamic";
@@ -45,7 +50,12 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
         const image = await readProfileImage(id);
         if (!image) return notFound(request);
-        if (!(await canViewProfileImage(BigInt(viewer.id), image))) return notFound(request);
+        if (
+            !(await canViewProfileImage(BigInt(viewer.id), image)) &&
+            !(await isSignedInHereToo(request, image))
+        ) {
+            return notFound(request);
+        }
 
         return new NextResponse(new Uint8Array(image.data), {
             status: 200,
@@ -63,4 +73,15 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
             { status: 500 }
         );
     }
+}
+
+/** Someone's own photo, and they are signed in on this browser as well. */
+async function isSignedInHereToo(
+    request: Request,
+    image: { userId: bigint; companyId: bigint | null }
+): Promise<boolean> {
+    if (image.companyId !== null) return false;
+    const owner = await authUserIdOf(image.userId);
+    if (!owner) return false;
+    return (await deviceAccountUserIds(request.headers)).includes(owner);
 }

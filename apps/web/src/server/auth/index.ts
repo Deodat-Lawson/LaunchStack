@@ -23,6 +23,12 @@
  * a client ID metadata document), the person signs in here, picks a
  * workspace, consents, and the assistant gets a JWT bound to that workspace.
  * See ~/server/mcp. Off when ~/server/mcp/config says so.
+ *
+ * One browser can hold several accounts at once and switch between them
+ * (the account menu on /workspaces). The session cookie is always the
+ * active account, so everything that reads a session — this module's
+ * helpers, the middleware, the MCP consent screens — sees exactly one
+ * person. See ./device-sessions.
  */
 import { betterAuth } from "better-auth";
 import { createAuthMiddleware } from "better-auth/api";
@@ -54,6 +60,7 @@ import {
 import { MCP_OAUTH_SCOPES, mcpAvailability } from "~/server/mcp/config";
 import { workspaceAccessTokenClaims, workspacePostLogin } from "~/server/mcp/oauth-workspace";
 import { accountLinkingHooks } from "./account-linking";
+import { deviceSessionPlugins } from "./device-sessions";
 import { sendAuthEmail } from "./email";
 import { enabledSocialProviders, microsoftSignInConfig, oidcSignInConfig } from "./providers";
 
@@ -174,6 +181,9 @@ const buildAuth = () => {
             // session ("email", "google", "microsoft", "oidc"…), so the sign-in
             // page can mark it "Last used". Cookie only — no column, no migration.
             lastLoginMethod(),
+            // Stay signed in to several accounts in this browser; a sign-in
+            // adds one instead of replacing the last. ./device-sessions.
+            ...deviceSessionPlugins(),
             // A self-hoster's own identity provider (Okta, Entra, Keycloak,
             // Authentik…), found through its discovery document. Better Auth
             // registers it as one more social provider: same /sign-in/social
@@ -284,6 +294,16 @@ export const auth: Auth = new Proxy({} as Auth, {
         return value;
     },
 });
+
+/**
+ * The auth user ids of every account signed in on the browser that sent
+ * `headers`, from its signed multi-session cookies (verified here, never
+ * taken from the client). Empty when there are none.
+ */
+export async function deviceAccountUserIds(headers: Headers): Promise<string[]> {
+    const sessions = await getAuth().api.listDeviceSessions({ headers });
+    return sessions.map(s => s.user.id);
+}
 
 /** Session read for middleware, which already holds the request's headers. */
 export async function getSessionFromHeaders(headers: Headers) {

@@ -33,6 +33,7 @@ export {
     personaSystem,
     DECISION_SCHEMA,
     ACTION_TYPES,
+    MAX_KNOWN_FACTS,
 } from "./decide";
 export {
     runRound,

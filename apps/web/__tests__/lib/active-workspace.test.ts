@@ -22,6 +22,7 @@ jest.mock("~/server/db/schema", () => ({
     userCompanyMemberships: {
         userId: "membership.userId",
         companyId: "membership.companyId",
+        status: "membership.status",
         lastOpenedAt: "membership.lastOpenedAt",
     },
 }));
@@ -33,25 +34,23 @@ jest.mock("drizzle-orm", () => ({
 }));
 
 /**
- * Each queued row set answers one SELECT. The builder resolves when awaited
- * directly after `.where()` and also when the query goes on through
- * `.orderBy().limit()` (the most-recently-opened fallback).
+ * The resolver reads every membership in one SELECT, most recently opened
+ * first: `.select().from().where().orderBy()`.
  */
 function setupRows(...rows: unknown[][]) {
     queuedRows = [...rows];
     mockSelect.mockImplementation(() => {
         const result = queuedRows.shift() ?? [];
-        const terminal = {
-            then: (resolve: (value: unknown) => unknown, reject?: (reason: unknown) => unknown) =>
-                Promise.resolve(result).then(resolve, reject),
-            orderBy: () => ({ limit: () => Promise.resolve(result) }),
-        };
         return {
             from: jest.fn().mockReturnThis(),
-            where: jest.fn().mockReturnValue(terminal),
+            where: jest.fn().mockReturnValue({ orderBy: () => Promise.resolve(result) }),
         };
     });
 }
+
+const active = (id: number) => ({ companyId: BigInt(id), status: "active" });
+const suspended = (id: number) => ({ companyId: BigInt(id), status: "suspended" });
+const pending = (id: number) => ({ companyId: BigInt(id), status: "pending" });
 
 describe("resolveActiveCompanyForUser", () => {
     beforeEach(() => {
@@ -61,43 +60,60 @@ describe("resolveActiveCompanyForUser", () => {
     });
 
     it("returns null when the user holds no membership anywhere", async () => {
-        setupRows([], []);
+        setupRows([]);
 
         await expect(resolveActiveCompanyForUser(7, 10)).resolves.toBeNull();
     });
 
-    it("accepts the default company when a membership for it exists", async () => {
-        setupRows([{ companyId: BigInt(10) }]);
-
-        await expect(resolveActiveCompanyForUser(7, 10)).resolves.toBe(BigInt(10));
-    });
-
-    it("uses a valid alternate workspace cookie", async () => {
+    it("uses the cookie for a workspace the user is active in", async () => {
         mockCookieGet.mockReturnValue({ value: "20" });
-        setupRows([{ companyId: BigInt(20) }]);
+        setupRows([active(30), active(20), active(10)]);
 
         await expect(resolveActiveCompanyForUser(7, 10)).resolves.toBe(BigInt(20));
     });
 
-    it("ignores a cookie pointing at a workspace the user left", async () => {
-        mockCookieGet.mockReturnValue({ value: "20" });
-        setupRows([], [{ companyId: BigInt(10) }]);
-
-        await expect(resolveActiveCompanyForUser(7, 10)).resolves.toBe(BigInt(10));
-    });
-
-    it("falls back to the most recently opened membership when the default is stale", async () => {
-        setupRows([], [{ companyId: BigInt(30) }]);
+    it("without a cookie, opens the user's last-opened workspace, not the default", async () => {
+        setupRows([active(30), active(10)]);
 
         await expect(resolveActiveCompanyForUser(7, 10)).resolves.toBe(BigInt(30));
     });
 
-    it("never consults a global account status", async () => {
-        setupRows([{ companyId: BigInt(10) }]);
+    it("ignores a cookie pointing at a workspace the user left", async () => {
+        mockCookieGet.mockReturnValue({ value: "20" });
+        setupRows([active(10)]);
+
+        await expect(resolveActiveCompanyForUser(7, 10)).resolves.toBe(BigInt(10));
+    });
+
+    // The cookie is browser-wide: the previous account in this browser may
+    // have left it on a workspace where this one is suspended or pending.
+    it.each([
+        ["suspended", suspended(62)],
+        ["pending", pending(62)],
+    ])("ignores a cookie for a workspace the user is %s in", async (_label, row) => {
+        mockCookieGet.mockReturnValue({ value: "62" });
+        setupRows([row, active(50)]);
+
+        await expect(resolveActiveCompanyForUser(36, 50)).resolves.toBe(BigInt(50));
+    });
+
+    it("with nothing active, names the default membership for the pending page", async () => {
+        setupRows([pending(30), pending(10)]);
+
+        await expect(resolveActiveCompanyForUser(7, 10)).resolves.toBe(BigInt(10));
+    });
+
+    it("with nothing active and a stale default, names the latest membership", async () => {
+        setupRows([suspended(30), pending(40)]);
+
+        await expect(resolveActiveCompanyForUser(7, 10)).resolves.toBe(BigInt(30));
+    });
+
+    it("reads once, and never consults a global account status", async () => {
+        setupRows([active(10)]);
 
         await resolveActiveCompanyForUser(7, 10);
 
-        // One SELECT — the membership check — and nothing against `users`.
         expect(mockSelect).toHaveBeenCalledTimes(1);
     });
 });

@@ -814,6 +814,7 @@
       "resent": "{actor} resent the invitation to {target}",
       "invitationRevoked": "{actor} revoked the invitation to {target}",
       "invitationAccepted": "{actor} accepted an invitation to join",
+      "invitationDeclined": "{actor} declined an invitation to join",
       "joinLinkCreated": "{actor} created a join link",
       "joinLinkCreatedFor": "{actor} created a join link for {role}s",
       "joinLinkRequiresApproval": "{actor} made a join link require approval",
@@ -878,7 +879,8 @@
         },
         "invitation": {
           "resent": "Invitation · resent",
-          "revoked": "Invitation · revoked"
+          "revoked": "Invitation · revoked",
+          "declined": "Invitation · declined"
         },
         "joinLink": {
           "created": "Join link · created",
@@ -1096,6 +1098,7 @@
         "pending": "Pending",
         "accepted": "Accepted",
         "revoked": "Revoked",
+        "declined": "Declined",
         "expired": "Expired"
       },
       "more": {
@@ -1932,7 +1935,7 @@
       "proposalsRewrite": "Proposals: rewrite",
       "proposalsReview": "Proposals: review",
       "scenarioInterview": "Scenario \"{title}\": interview",
-      "scenarioUnit": "Scenario \"{title}\" ({unit})",
+      "scenarioUnit": "Scenario \"{title}\" ({unit, select, ontology {evidence types} graph {evidence map} other {{unit}}})",
       "scenarioRound": "Scenario \"{title}\" (round {round})"
     },
     "workspaceDetails": {

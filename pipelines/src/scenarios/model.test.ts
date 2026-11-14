@@ -9,7 +9,7 @@ import {
     type ModelRequest,
 } from "@launchstack/simulation";
 
-import { SCENARIO_SCHEMAS } from "./model";
+import { callTimeoutMs, SCENARIO_MODELS, SCENARIO_SCHEMAS, V2_MODEL_OPTIONS } from "./model";
 
 /** Keys of the zod object at `path` (array items are stepped into). */
 function zodKeys(schema: z.ZodTypeAny, path: string[] = []): string[] {
@@ -44,5 +44,22 @@ describe("the model's reply shapes", () => {
         expect(zodKeys(SCENARIO_SCHEMAS[purpose] as z.ZodTypeAny, path)).toEqual(
             jsonKeys(engine, path)
         );
+    });
+});
+
+describe("a call's timeout", () => {
+    const floor = V2_MODEL_OPTIONS.floorTokensPerSecond;
+
+    it("keeps the policy's timeout for a short reply", () => {
+        expect(callTimeoutMs(SCENARIO_MODELS.decide.timeoutMs, 300, floor)).toBe(90_000);
+    });
+
+    it("stretches for a ten-person cast batch on a slow, self-hosted model", () => {
+        // 200 + 10 × 520 tokens at 12 a second, plus a minute to read the prompt.
+        expect(callTimeoutMs(SCENARIO_MODELS.cast_v2.timeoutMs, 5_400, floor)).toBe(510_000);
+    });
+
+    it("never stretches without a floor (contract v1)", () => {
+        expect(callTimeoutMs(SCENARIO_MODELS.cast.timeoutMs, 20_000, undefined)).toBe(180_000);
     });
 });

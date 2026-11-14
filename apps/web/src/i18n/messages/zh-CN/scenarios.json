@@ -20,6 +20,7 @@
       "cancelled": "已取消",
       "done": "已完成",
       "gathering": "正在收集来源",
+      "grounding": "正在梳理证据",
       "casting": "{count, plural, other {正在构建 # 个人物}}",
       "simulating": "第 {round, number} 轮，共 {rounds, number} 轮",
       "reporting": "正在撰写报告"
@@ -148,6 +149,7 @@
       "budget": "预算",
       "buyingRole": "采购角色",
       "switchingCost": "转换成本",
+      "notKnown": "未知",
       "budgets": {
         "none": "没有预算",
         "tight": "紧张",
@@ -170,6 +172,13 @@
       },
       "holdingBack": "上一轮的顾虑",
       "firstDoubt": "最初的疑虑"
+    },
+    "basis": {
+      "source": "来自",
+      "inferred": "推断",
+      "assumed": "假设",
+      "unknown": "未知",
+      "openSource": "打开来源 {id}"
     }
   },
   "report": {
@@ -238,7 +247,37 @@
     "builtFrom": "构建依据：{used}",
     "redacted": "你无权访问的文件",
     "openPerson": "打开 {name}",
-    "peopleBuilt": "据此构建了 {count, number} 人"
+    "peopleBuilt": "据此构建了 {count, number} 人",
+    "coverage": {
+      "title": "读取了什么",
+      "read": "{files, plural, other {# 个文件}}中的 {sections, plural, other {# 段内容}}",
+      "readMixed": "共 {sections, plural, other {# 段内容}}：{fileSections} 段来自 {files, plural, other {# 个文件}}，{other} 段来自笔记等其他来源",
+      "readOther": "{sections, plural, other {# 段内容}}，来自笔记等其他来源",
+      "mode": {
+        "passage": "每个人物都基于与其最相关的段落构建。",
+        "facts": "每个人物先基于公司事实，再基于与其最相关的段落构建。",
+        "graph": "每个人物都基于一张证据图谱构建：来源中提到的人和事，每条事实都附有出处段落。"
+      },
+      "fallback": {
+        "graph_not_configured": "此服务器未配置证据图谱，因此改用段落。",
+        "graph_unavailable": "本次运行开始时证据图谱不可用，因此改用段落。",
+        "workspace_endpoint": "你的工作区使用自己的模型，因此改用段落：证据图谱会把你的文件发送给此服务器的模型。",
+        "no_documents": "没有选择文件，无可构建图谱，因此改用段落。"
+      },
+      "waiting": "正在等待证据图谱服务。服务恢复后，运行会从中断处继续。",
+      "degraded": "{count, plural, other {第 {rounds} 轮中很多回合失败，这些人物跳过了该轮。}}",
+      "skipped": "{count, plural, other {# 个回合失败并被跳过。}}",
+      "unfilled": "{count, plural, other {有 # 个人物无法根据证据构建，已被略去。}}",
+      "leftOut": "{count, plural, other {略去了 # 个来源}}",
+      "reason": {
+        "budget": "超出读取上限",
+        "not_ready": "仍在处理中",
+        "no_access": "你无权打开",
+        "empty": "没有可读内容",
+        "unsupported": "无法在此读取"
+      },
+      "redacted": "你无权访问的文件"
+    }
   },
   "chart": {
     "start": "开始",
@@ -468,7 +507,11 @@
       "noAnswer": "没有收到回答，请重试。",
       "roleCantTestPosts": "你的角色可以查看品牌，但不能测试帖子。",
       "writePostFirst": "请先写好帖子。",
-      "postTooLong": "超过 3,000 个字符的帖子无法测试。"
+      "postTooLong": "超过 3,000 个字符的帖子无法测试。",
+      "idempotencyConflict": "这个请求密钥已用于另一个情景。请重新开始以创建新的情景。",
+      "sourcesUnavailable": "这个情景用到了你已无法打开的文件。",
+      "replayNotReady": "运行结束后才能回放。",
+      "replayModeUnsupported": "仅支持按记录回放。"
     },
     "leftWorkspace": "已离开的成员",
     "sourceLabels": {
@@ -500,7 +543,15 @@
       "noWorld": "这次运行没有模拟世界",
       "reportUnreadable": "无法读取报告",
       "runFailed": "运行失败",
-      "creatorGone": "发起这次运行的人已不再是工作区的活跃成员。"
+      "creatorGone": "发起这次运行的人已不再是工作区的活跃成员。",
+      "accessRevoked": "运行已停止：创建者已无法打开其中部分来源。",
+      "graphUnavailable": "运行已停止：图谱服务一直不可用。",
+      "missingSpec": "找不到这次运行的请求。",
+      "unitFailed": "运行失败。",
+      "stalled": "运行已停止推进。",
+      "budgetExhausted": "运行已达到创建时设定的花费上限。",
+      "modelTimedOut": "模型未能及时作答，运行已停止。",
+      "modelFailed": "模型持续返回错误，运行已停止。"
     }
   }
 }

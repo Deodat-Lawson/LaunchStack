@@ -25,13 +25,17 @@ import { Slider } from "~/components/ui/slider";
 import { Switch } from "~/components/ui/switch";
 import { Textarea } from "~/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
-import { SCENARIO_LIMITS, type ScenarioEstimate } from "~/lib/scenarios/types";
+import {
+    SCENARIO_LIMITS,
+    type CreateScenarioInput,
+    type ScenarioEstimate,
+} from "~/lib/scenarios/types";
 import { useToolFormat } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
 import { cn } from "~/lib/utils";
 import { useErrorText } from "~/lib/tools/errorText";
 
-import { ScenariosApiError, scenariosApi } from "../api";
+import { ScenariosApiError, newIdempotencyKey, scenariosApi } from "../api";
 import { FilePickerDialog } from "../_components/FilePickerDialog";
 import { SituationComposer, type PickedFile } from "../_components/SituationComposer";
 import { useScenarios } from "../_lib/context";
@@ -142,6 +146,7 @@ export function NewScreen() {
     const [problem, setProblem] = useState<{ message: string; credits: boolean } | null>(null);
     const estimate = useEstimate(agents, rounds, t("estimateError"));
     const fileInput = useRef<HTMLInputElement>(null);
+    const attempt = useRef<{ payload: string; key: string } | null>(null);
 
     const offered = options.data;
     const reloadOptions = options.reload;
@@ -272,22 +277,29 @@ export function NewScreen() {
     const submit = async () => {
         setSubmitting(true);
         setProblem(null);
+        const input: CreateScenarioInput = {
+            contractVersion: 2,
+            title: title.trim() || undefined,
+            subject: subject.trim(),
+            sources: {
+                documentIds: docs,
+                searchFiles,
+                prospects: growthSources && prospects && (offered?.prospects ?? 0) > 0,
+                brandComments: growthSources && brandComments && (offered?.brandComments ?? 0) > 0,
+                companyProfile: profileOn,
+                notes: notes.trim(),
+            },
+            agents,
+            rounds,
+        };
+        // A retry of the same form (a dropped connection, a double click) reuses
+        // its key, so the server returns the run it already accepted.
+        const payload = JSON.stringify(input);
+        if (attempt.current?.payload !== payload) {
+            attempt.current = { payload, key: newIdempotencyKey() };
+        }
         try {
-            const { run } = await scenariosApi.create({
-                title: title.trim() || undefined,
-                subject: subject.trim(),
-                sources: {
-                    documentIds: docs,
-                    searchFiles,
-                    prospects: growthSources && prospects && (offered?.prospects ?? 0) > 0,
-                    brandComments:
-                        growthSources && brandComments && (offered?.brandComments ?? 0) > 0,
-                    companyProfile: profileOn,
-                    notes: notes.trim(),
-                },
-                agents,
-                rounds,
-            });
+            const { run } = await scenariosApi.create(input, attempt.current.key);
             expectLive();
             router.push(runPath(run.id));
         } catch (e) {

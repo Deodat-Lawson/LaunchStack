@@ -2,6 +2,7 @@
  * Scenarios vertical — domain types shared by the schema, the run loop and
  * the host. The simulation itself lives in `@launchstack/simulation`.
  */
+import type { ContextMode, RunFlagsV2 } from "./v2/contracts";
 import type {
     Brief,
     EvidenceItem,
@@ -16,7 +17,14 @@ export type ScenarioKind = (typeof SCENARIO_KINDS)[number];
 export const SCENARIO_STATUSES = ["queued", "running", "done", "failed", "cancelled"] as const;
 export type ScenarioStatus = (typeof SCENARIO_STATUSES)[number];
 
-export type ScenarioStage = "gathering" | "casting" | "simulating" | "reporting" | "done";
+/** "grounding" is v2 only: planning the ontology and building the evidence graph. */
+export type ScenarioStage =
+    | "gathering"
+    | "grounding"
+    | "casting"
+    | "simulating"
+    | "reporting"
+    | "done";
 
 export interface ScenarioSourcesInput {
     documentIds: number[];
@@ -108,6 +116,15 @@ export interface ScenarioRunRecord {
     finishedAt: Date | null;
     /** The final round has started: no more events can be added. */
     eventsClosedAt: Date | null;
+    /** 1 = the original unit loop (`advanceRun`); 2 = durable, evidence-grounded (`v2/engine`). */
+    contractVersion: number;
+    requestSpecId: number | null;
+    worldSpecId: number | null;
+    generation: number;
+    leaseOwner: string | null;
+    leaseEpoch: number;
+    contextMode: ContextMode | null;
+    flags: RunFlagsV2 | null;
 }
 
 /** Units in a run: brief, cast, one per round, report. */

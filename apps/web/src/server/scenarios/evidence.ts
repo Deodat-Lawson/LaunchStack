@@ -56,13 +56,13 @@ export async function visibleDocumentIds(
     return new Set(rows.map(r => Number(r.id)));
 }
 
-function overlap(subject: Set<string>, text: string): number {
+export function overlap(subject: Set<string>, text: string): number {
     let n = 0;
     for (const t of tokenize(text)) if (subject.has(t)) n++;
     return n;
 }
 
-function notesDrafts(notes: string): EvidenceDraft[] {
+export function notesDrafts(notes: string): EvidenceDraft[] {
     const parts: string[] = [];
     let current = "";
     for (const para of notes.split(/\n\s*\n/)) {
@@ -174,7 +174,7 @@ async function searchDrafts(
         });
 }
 
-async function prospectDrafts(companyId: bigint): Promise<EvidenceDraft[]> {
+export async function prospectDrafts(companyId: bigint): Promise<EvidenceDraft[]> {
     const items = await listPartners(companyId);
     return items
         .slice()
@@ -198,7 +198,7 @@ async function prospectDrafts(companyId: bigint): Promise<EvidenceDraft[]> {
         }));
 }
 
-async function commentDrafts(companyId: bigint): Promise<EvidenceDraft[]> {
+export async function commentDrafts(companyId: bigint): Promise<EvidenceDraft[]> {
     const rows = await db
         .select({
             id: brandComments.id,

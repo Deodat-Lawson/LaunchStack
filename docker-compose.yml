@@ -24,6 +24,10 @@
 #   --profile search — SearXNG, a free self-hosted web search engine. Pair it
 #                    with SEARCH_PROVIDER=searxng and
 #                    SEARXNG_URL=http://searxng:8080 (see the `searxng` service)
+#   --profile scenarios-graph — Neo4j Community + the private scenario-graph
+#                    service (Graphiti) for Scenarios graph mode (~1 GB RAM).
+#                    Pair it with SCENARIOS_GRAPH_URL=http://scenario-graph:8000,
+#                    SCENARIO_GRAPH_TOKEN and the GRAPH_* provider settings.
 
 # Environment shared by the app (command acceptance + reads) and the worker
 # (durable execution). One authority so the two processes can never disagree
@@ -461,7 +465,7 @@ services:
       # First alternative is Gotenberg's own default (block file: outside its
       # /tmp working dir) — overriding the flag replaces it, so it is repeated.
       - >-
-        --chromium-deny-list=^file:(?!//\/tmp/).*|^https?://(?:[^/]*@)?(?:localhost|127\.[0-9.]+|0\.0\.0\.0|10\.[0-9.]+|172\.(?:1[6-9]|2[0-9]|3[01])\.[0-9.]+|192\.168\.[0-9.]+|169\.254\.[0-9.]+|\[::1\]|db|seaweedfs|app|worker|transcription|adeu-docs-editing|document-converter|docling-serve|searxng|inngest-dev|inngest|inngest-redis|gotenberg)(?::[0-9]+)?(?:/.*)?$$
+        --chromium-deny-list=^file:(?!//\/tmp/).*|^https?://(?:[^/]*@)?(?:localhost|127\.[0-9.]+|0\.0\.0\.0|10\.[0-9.]+|172\.(?:1[6-9]|2[0-9]|3[01])\.[0-9.]+|192\.168\.[0-9.]+|169\.254\.[0-9.]+|\[::1\]|db|seaweedfs|app|worker|transcription|adeu-docs-editing|document-converter|docling-serve|searxng|inngest-dev|inngest|inngest-redis|gotenberg|neo4j|scenario-graph)(?::[0-9]+)?(?:/.*)?$$
     environment:
       GOTENBERG_API_BASIC_AUTH_USERNAME: launchstack
       GOTENBERG_API_BASIC_AUTH_PASSWORD: ${GOTENBERG_SERVICE_PASSWORD:-pdr_local_gotenberg_key}
@@ -514,6 +518,69 @@ services:
       retries: 5
       start_period: 30s
 
+  # Optional: Scenarios graph mode (contract v2). Neo4j Community (GPLv3),
+  # unmodified, as its own container; only scenario-graph reaches it, over the
+  # Compose network — no published ports. Heap and page cache are bounded for
+  # an 8 GB host; raise NEO4J_HEAP_SIZE / NEO4J_PAGECACHE_SIZE for big graphs.
+  neo4j:
+    image: neo4j:5.26-community
+    profiles: ["scenarios-graph"]
+    restart: unless-stopped
+    environment:
+      # Neo4j 5 refuses passwords shorter than 8 characters. The local default
+      # keeps the profile booting without a .env — override it in production.
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-pdr_local_neo4j_password}
+      NEO4J_server_memory_heap_initial__size: ${NEO4J_HEAP_SIZE:-512m}
+      NEO4J_server_memory_heap_max__size: ${NEO4J_HEAP_SIZE:-512m}
+      NEO4J_server_memory_pagecache_size: ${NEO4J_PAGECACHE_SIZE:-256m}
+      NEO4J_dbms_usage__report_enabled: "false"
+    volumes:
+      - neo4j_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO /dev/null http://127.0.0.1:7474 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+
+  # Optional: the private graph service (services/scenario-graph). Owns
+  # Graphiti and the Neo4j connection; only the worker calls it, with
+  # SCENARIO_GRAPH_TOKEN (fail-closed: unset = every call is 401). Its model
+  # and embedding providers are configured here, separately from the app's.
+  # No published port.
+  scenario-graph:
+    build:
+      context: ./services/scenario-graph
+      dockerfile: Dockerfile
+    profiles: ["scenarios-graph"]
+    restart: unless-stopped
+    depends_on:
+      neo4j:
+        condition: service_healthy
+    environment:
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USER: neo4j
+      NEO4J_PASSWORD: ${NEO4J_PASSWORD:-pdr_local_neo4j_password}
+      GRAPH_LLM_BASE_URL: ${GRAPH_LLM_BASE_URL:-}
+      GRAPH_LLM_API_KEY: ${GRAPH_LLM_API_KEY:-}
+      GRAPH_LLM_MODEL: ${GRAPH_LLM_MODEL:-}
+      GRAPH_LLM_SMALL_MODEL: ${GRAPH_LLM_SMALL_MODEL:-}
+      GRAPH_LLM_STRUCTURED_OUTPUT: ${GRAPH_LLM_STRUCTURED_OUTPUT:-}
+      GRAPH_LLM_EXTRA_BODY: ${GRAPH_LLM_EXTRA_BODY:-}
+      GRAPH_EMBEDDING_BASE_URL: ${GRAPH_EMBEDDING_BASE_URL:-}
+      GRAPH_EMBEDDING_API_KEY: ${GRAPH_EMBEDDING_API_KEY:-}
+      GRAPH_EMBEDDING_MODEL: ${GRAPH_EMBEDDING_MODEL:-}
+      GRAPH_EMBEDDING_DIM: ${GRAPH_EMBEDDING_DIM:-}
+      GRAPH_INGEST_CONCURRENCY: ${GRAPH_INGEST_CONCURRENCY:-}
+      GRAPH_MAX_COROUTINES: ${GRAPH_MAX_COROUTINES:-}
+      SCENARIO_GRAPH_TOKEN: ${SCENARIO_GRAPH_TOKEN:-}
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=4)\""]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
   # The sole durable workflow coordinator (ADR-003): outbox consumer +
   # Inngest serve endpoint. The app accepts commands; this executes them.
   worker:
@@ -536,6 +603,12 @@ services:
       # app reads, or the two processes run different models (ADR-003).
       CHAT_MODELS_CONFIG: /app/apps/web/${CHAT_MODELS_CONFIG:-config/chat-models.yaml}
       WORKER_PORT: "8020"
+      # Scenarios graph mode (`--profile scenarios-graph`). Worker only: it is
+      # the sole caller of the graph service. Empty = graph not configured,
+      # and runs that ask for graph mode fall back. With the profile up, set
+      # SCENARIOS_GRAPH_URL=http://scenario-graph:8000 and a shared token.
+      SCENARIOS_GRAPH_URL: ${SCENARIOS_GRAPH_URL:-}
+      SCENARIO_GRAPH_TOKEN: ${SCENARIO_GRAPH_TOKEN:-}
     ports:
       - "8020:8020"
     healthcheck:
@@ -574,6 +647,10 @@ services:
       - ./apps/web/config:/app/apps/web/config:ro
     environment:
       <<: *shared-env
+      # Scenarios graph mode: the app only reads the graph service's
+      # unauthenticated health check to pick a new run's mode, so it gets the
+      # URL and never the token (the worker drives units and holds that).
+      SCENARIOS_GRAPH_URL: ${SCENARIOS_GRAPH_URL:-}
     ports:
       - "3000:3000"
 
@@ -592,3 +669,4 @@ volumes:
   postgres_data:
   seaweedfs_data:
   docling_models:
+  neo4j_data:

@@ -19,6 +19,12 @@
  *   POST   /api/scenarios/:id/events {text}       → { injection }              creator only, 409 unless running
  *   GET    /api/scenarios/:id/interviews          → { interviews: ScenarioInterview[] }  the viewer's own
  *   POST   /api/scenarios/:id/interviews {agentId, question} → { interview }  409 before round 1 finishes
+ *   POST   /api/scenarios  { contractVersion: 2, … } + Idempotency-Key header
+ *                                                → 201 { run, runId, requestSpecId, worldSpecId: null }
+ *                                                  same key + payload → 200 with the original run; other payload → 409
+ *   GET    /api/scenarios/:id/provenance?after&limit → ScenarioProvenance   (v2)
+ *   GET    /api/scenarios/:id/trace?afterSeq&limit   → ScenarioTrace        (v2)
+ *   POST   /api/scenarios/:id/replay {mode:"recorded"} → ScenarioReplay     (v2, finished runs)
  *   POST   /api/brand/post-tests CreatePostTestInput → { test: PostTestResult } needs social.publish
  *   GET    /api/brand/post-tests/:id              → { test: PostTestResult }
  *   GET    /api/brand/post-tests/track-record     → { record: TrackRecord }
@@ -30,8 +36,14 @@ export type ScenarioKind = "scenario" | "post_test";
 
 export type ScenarioStatus = "queued" | "running" | "done" | "failed" | "cancelled";
 
-/** Where a running scenario is, for progress copy. */
-export type ScenarioStage = "gathering" | "casting" | "simulating" | "reporting" | "done";
+/** Where a running scenario is, for progress copy. "grounding" is v2 only (ontology and evidence graph). */
+export type ScenarioStage =
+    | "gathering"
+    | "grounding"
+    | "casting"
+    | "simulating"
+    | "reporting"
+    | "done";
 
 export const SCENARIO_LIMITS = {
     agents: { min: 5, max: 200, default: 30 },
@@ -67,7 +79,14 @@ export interface ScenarioSources {
     notes: string;
 }
 
+/** How each person's context is assembled in a v2 run. */
+export type ScenarioContextMode = "passage" | "facts" | "graph";
+
 export interface CreateScenarioInput {
+    /** 2 starts a durable, evidence-grounded run; absent or 1 is the original loop. */
+    contractVersion?: 1 | 2;
+    /** v2: the context mode to ask for; the server falls back (and says why) when it can't. */
+    contextMode?: ScenarioContextMode;
     title?: string;
     /**
      * The situation or question, e.g. "We raise prices 20% for new customers in
@@ -147,6 +166,8 @@ export interface ScenarioSummary {
     shared: boolean;
     /** The report headline once done. */
     headline: string | null;
+    /** 1 for the original loop, 2 for durable, evidence-grounded runs. */
+    contractVersion: 1 | 2;
 }
 
 /** One piece of evidence people were built from. Redacted when the viewer can't see the file. */
@@ -208,6 +229,31 @@ export interface ScenarioPerson {
     wouldPay: ScenarioWouldPay | null;
     /** What still held them back on their last turn. */
     objection: string | null;
+    /**
+     * v2: where each cast field came from. Null for runs cast before v2.
+     * A field missing from the map has no recorded basis.
+     */
+    basis: Partial<Record<ScenarioAttributedField, ScenarioFieldBasis>> | null;
+}
+
+/** Cast fields that carry a basis in v2 runs. */
+export type ScenarioAttributedField =
+    | "role"
+    | "currentSolution"
+    | "budget"
+    | "buyingRole"
+    | "switchingCost"
+    | "objection";
+
+/** source: read in the evidence; inferred: reasoned from it; assumed: a stated default; unknown: not known. */
+export type ScenarioBasis = "source" | "inferred" | "assumed" | "unknown";
+
+export interface ScenarioFieldBasis {
+    basis: ScenarioBasis;
+    /** Source ids ("E2") behind it. */
+    sources: string[];
+    /** Why, for inferred and assumed values. */
+    explanation: string | null;
 }
 
 export interface ScenarioComment {
@@ -312,6 +358,140 @@ export interface ScenarioDetail extends ScenarioSummary {
     canManage: boolean;
     /** Post tests only: the draft that was tested. */
     draft: { text: string; networks: string[] } | null;
+    /** v2 only: grounding, coverage and completeness. Null for v1 runs. */
+    v2: ScenarioV2Detail | null;
+}
+
+export type ScenarioOmissionReason = "budget" | "not_ready" | "no_access" | "empty" | "unsupported";
+
+/** A selected source the run didn't read, and why. */
+export interface ScenarioOmission {
+    label: string;
+    kind: ScenarioSource["kind"];
+    reason: ScenarioOmissionReason;
+    /** True when the viewer can't see the file; the label is withheld. */
+    redacted: boolean;
+}
+
+export type ScenarioFallbackReason =
+    | "graph_not_configured"
+    | "graph_unavailable"
+    | "workspace_endpoint"
+    | "no_documents";
+
+export interface ScenarioV2Detail {
+    /** sha-256 of the frozen request spec. */
+    specHash: string | null;
+    /** sha-256 of the frozen world, once the cast is final. */
+    worldSpecHash: string | null;
+    contextMode: ScenarioContextMode;
+    /** Why the run isn't in the mode it asked for. */
+    fallbackReason: ScenarioFallbackReason | null;
+    coverage: {
+        /** Captured passages and facts. */
+        sections: number;
+        /** How many of them came from files (picked or found by search). */
+        fileSections: number;
+        /** The files those came from. */
+        files: number;
+        omitted: ScenarioOmission[];
+    };
+    /** Rounds where more than a third of the turns failed. */
+    degradedRounds: number[];
+    /** Turns that failed and were skipped. */
+    skippedTurns: number;
+    /** Cast slots that stayed empty after repair. */
+    unfilledSlots: number;
+    /** Physical model attempts by outcome; unknown ones may still have cost money. */
+    attempts: { succeeded: number; failed: number; unknown: number };
+    /** A finished run can be replayed from its recorded turns with no model calls. */
+    replayAvailable: boolean;
+    /** Set while the run waits on the graph service. */
+    waitingSince: string | null;
+}
+
+/** GET /api/scenarios/:id/provenance */
+export interface ScenarioProvenance {
+    runId: number;
+    specHash: string | null;
+    manifestHash: string | null;
+    contextMode: ScenarioContextMode;
+    fallbackReason: ScenarioFallbackReason | null;
+    /** Captured evidence with where it sits in its source. */
+    sources: Array<
+        ScenarioSource & {
+            page: number | null;
+            section: string | null;
+            versionId: string | null;
+            contentHash: string | null;
+        }
+    >;
+    omitted: ScenarioOmission[];
+    ontology: {
+        ontologyHash: string;
+        entities: Array<{ name: string; origin: "base" | "extension"; source: string | null }>;
+        edges: Array<{
+            name: string;
+            endpoints: Array<{ source: string; target: string }>;
+            origin: "base" | "extension";
+            source: string | null;
+        }>;
+        valid: boolean;
+        repairs: number;
+    } | null;
+    graph: {
+        graphHash: string;
+        nodes: number;
+        edges: number;
+        supportedEdges: number;
+        unresolvedIdentities: number;
+    } | null;
+    /** One per cast slot, paged. */
+    contexts: Array<{
+        slotId: string;
+        personId: string | null;
+        segment: string;
+        mode: ScenarioContextMode;
+        facts: Array<{ text: string; sources: string[] }>;
+        passages: string[];
+        tokens: number;
+        contextHash: string;
+    }>;
+    /** Pass as `after` for the next page of contexts; null at the end. */
+    nextAfter: string | null;
+}
+
+/** GET /api/scenarios/:id/trace */
+export interface ScenarioTrace {
+    runId: number;
+    stage: ScenarioStage;
+    /** Units committed so far. */
+    committed: number;
+    /** Milliseconds since the driver last renewed its lease; null when none holds it. */
+    heartbeatAgeMs: number | null;
+    units: Array<{
+        seq: number;
+        key: string;
+        kind: string;
+        status: "pending" | "running" | "committed" | "failed" | "skipped";
+        attempts: number;
+        credits: number;
+        durationMs: number | null;
+        /** A classified error code, never provider text. */
+        error: string | null;
+        calls: number;
+        callAttempts: { succeeded: number; failed: number; unknown: number };
+    }>;
+    nextAfterSeq: number | null;
+}
+
+/** POST /api/scenarios/:id/replay */
+export interface ScenarioReplay {
+    available: boolean;
+    reason: "replay_unavailable" | "not_finished" | "unsupported_version" | null;
+    matches: boolean;
+    modelCalls: 0;
+    rounds: Array<{ round: number; expected: string; actual: string; matches: boolean }>;
 }
 
 export interface ScenarioInterview {

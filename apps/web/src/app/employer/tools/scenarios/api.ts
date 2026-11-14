@@ -9,6 +9,7 @@ import type {
     ScenarioEstimate,
     ScenarioInjection,
     ScenarioInterview,
+    ScenarioProvenance,
     ScenarioSourceOptions,
     ScenarioSummary,
 } from "~/lib/scenarios/types";
@@ -75,7 +76,17 @@ export const scenariosApi = {
     sources: () => call<ScenarioSourceOptions>("/api/scenarios/sources"),
     estimate: (input: { agents: number; rounds: number }) =>
         send<ScenarioEstimate>("/api/scenarios/estimate", input),
-    create: (input: CreateScenarioInput) => send<{ run: ScenarioSummary }>("/api/scenarios", input),
+    /** With a key, a retry of the same request returns the run the server already accepted. */
+    create: (input: CreateScenarioInput, idempotencyKey?: string) =>
+        call<{ run: ScenarioSummary }>("/api/scenarios", {
+            method: "POST",
+            body: JSON.stringify(input),
+            headers: idempotencyKey ? { "Idempotency-Key": idempotencyKey } : undefined,
+        }),
+    provenance: (id: number, after?: string) =>
+        call<ScenarioProvenance>(
+            `/api/scenarios/${id}/provenance${after ? `?after=${encodeURIComponent(after)}` : ""}`
+        ),
     get: (id: number) => call<{ run: ScenarioDetail }>(`/api/scenarios/${id}`),
     patch: (id: number, patch: { title?: string; shared?: boolean }) =>
         send<{ run: ScenarioSummary }>(`/api/scenarios/${id}`, patch, "PATCH"),
@@ -92,6 +103,12 @@ export const scenariosApi = {
             question,
         }),
 };
+
+/** A fresh Idempotency-Key for one create attempt. */
+export function newIdempotencyKey(): string {
+    if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
+    return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+}
 
 /** The person id the contract uses for questions about the whole run. */
 export const ANALYST_ID = "analyst";

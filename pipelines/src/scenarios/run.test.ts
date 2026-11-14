@@ -63,6 +63,14 @@ function baseRun(overrides: Partial<ScenarioRunRecord> = {}): ScenarioRunRecord 
         startedAt: null,
         finishedAt: null,
         eventsClosedAt: null,
+        contractVersion: 1,
+        requestSpecId: null,
+        worldSpecId: null,
+        generation: 1,
+        leaseOwner: null,
+        leaseEpoch: 0,
+        contextMode: null,
+        flags: null,
         ...overrides,
     };
 }
@@ -286,6 +294,16 @@ describe("advanceRun", () => {
         store.runs.get(1)!.cancelRequestedAt = new Date();
         expect(await advanceRun(p, 1)).toEqual({ state: "cancelled" });
         expect(store.runs.get(1)!.status).toBe("cancelled");
+    });
+
+    it("leaves contract v2 runs to the v2 engine", async () => {
+        const store = memoryStore(baseRun({ contractVersion: 2 }));
+        expect(await advanceRun(ports(store), 1)).toEqual({
+            state: "skipped",
+            reason: "contract_v2",
+        });
+        expect(store.runs.get(1)!.step).toBe(0);
+        expect(store.runs.get(1)!.status).toBe("queued");
     });
 
     it("applies an injected event in the next round and marks it with that round", async () => {

@@ -1913,7 +1913,7 @@
       "proposalsRewrite": "Proposals: rewrite",
       "proposalsReview": "Proposals: review",
       "scenarioInterview": "Scenario \"{title}\": interview",
-      "scenarioUnit": "Scenario \"{title}\" ({unit})",
+      "scenarioUnit": "Scenario \"{title}\" ({unit, select, ontology {evidence types} graph {evidence map} other {{unit}}})",
       "scenarioRound": "Scenario \"{title}\" (round {round})"
     },
     "workspaceDetails": {

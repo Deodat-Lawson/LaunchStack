@@ -1,0 +1,132 @@
+{
+  "entities": [
+    {
+      "name": "Organization",
+      "description": "A company, team or institution named in the evidence.",
+      "attributes": [
+        {
+          "name": "industry",
+          "type": "string",
+          "description": "What the organization does."
+        },
+        {
+          "name": "size",
+          "type": "string",
+          "description": "Headcount or size band, as stated."
+        }
+      ],
+      "origin": "base",
+      "motivating_evidence_id": null
+    },
+    {
+      "name": "Person",
+      "description": "A named or described individual and their role.",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "description": "Job title or role, as stated."
+        }
+      ],
+      "origin": "base",
+      "motivating_evidence_id": null
+    },
+    {
+      "name": "Product",
+      "description": "A product, tool or service someone uses, sells or evaluates.",
+      "attributes": [
+        {
+          "name": "category",
+          "type": "string",
+          "description": "What kind of product it is."
+        }
+      ],
+      "origin": "base",
+      "motivating_evidence_id": null
+    },
+    {
+      "name": "PurchaseDecision",
+      "description": "A buying, renewal or switching decision under way or described.",
+      "attributes": [
+        {
+          "name": "status",
+          "type": "string",
+          "description": "Where the decision stands."
+        }
+      ],
+      "origin": "base",
+      "motivating_evidence_id": null
+    }
+  ],
+  "edges": [
+    {
+      "name": "WORKS_FOR",
+      "description": "A person is employed by or works at an organization.",
+      "attributes": [],
+      "endpoints": [
+        {
+          "source": "Person",
+          "target": "Organization"
+        }
+      ],
+      "origin": "base",
+      "motivating_evidence_id": null
+    },
+    {
+      "name": "USES",
+      "description": "An organization or person uses a product today.",
+      "attributes": [],
+      "endpoints": [
+        {
+          "source": "Organization",
+          "target": "Product"
+        },
+        {
+          "source": "Person",
+          "target": "Product"
+        }
+      ],
+      "origin": "base",
+      "motivating_evidence_id": null
+    },
+    {
+      "name": "INFLUENCES",
+      "description": "A person sways a purchase decision without making it.",
+      "attributes": [],
+      "endpoints": [
+        {
+          "source": "Person",
+          "target": "PurchaseDecision"
+        }
+      ],
+      "origin": "base",
+      "motivating_evidence_id": null
+    },
+    {
+      "name": "APPROVES",
+      "description": "A person signs off on a purchase decision.",
+      "attributes": [],
+      "endpoints": [
+        {
+          "source": "Person",
+          "target": "PurchaseDecision"
+        }
+      ],
+      "origin": "base",
+      "motivating_evidence_id": null
+    },
+    {
+      "name": "DECIDES_ON",
+      "description": "An organization is the buyer in a purchase decision.",
+      "attributes": [],
+      "endpoints": [
+        {
+          "source": "Organization",
+          "target": "PurchaseDecision"
+        }
+      ],
+      "origin": "base",
+      "motivating_evidence_id": null
+    }
+  ]
+}

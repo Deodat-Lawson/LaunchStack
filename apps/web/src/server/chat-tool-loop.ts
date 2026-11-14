@@ -102,6 +102,7 @@ const EVIDENCE_TOOLS = new Set([
     "search_sources",
     "read_source",
     "ask_each",
+    "read_extraction_table",
     "search_web",
     "fetch_page",
 ]);

@@ -115,8 +115,8 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
     [
         "apps/web/src/server/assistant-conversations/follow-up-model.ts",
         {
-            scopedBy: [`${API}/mcp/route.ts`],
-            note: "save_conversation over MCP; the follow-up runs in after(), which keeps the scope",
+            scopedBy: [`${API}/mcp/route.ts`, `${JOBS}/assistantConversationFollowUp.ts`],
+            note: "save_conversation over MCP; the follow-up runs in after() (which keeps the scope) or on the worker, scoped inside the generate step",
         },
     ],
 
@@ -295,6 +295,13 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
                 "apps/web/src/server/scenarios/service.ts",
             ],
             note: "inline runs scope each unit in driveRun (after()); the worker scopes inside each unit step; interviews scope the call in askScenario",
+        },
+    ],
+    [
+        "apps/web/src/server/extraction/documents.ts",
+        {
+            scopedBy: ["apps/web/src/server/extraction/executor.ts", `${JOBS}/extractionRun.ts`],
+            note: "the engine's extract and vision ports: inline tables scope each unit in driveTable (after()); the worker scopes inside each unit step",
         },
     ],
     [

@@ -10,7 +10,6 @@ import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -80,10 +79,9 @@ function ItemDialog({
     };
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-lg">
+            <DialogContent className="sm:max-w-lg" aria-describedby={undefined}>
                 <DialogHeader>
                     <DialogTitle>{item ? t("dialog.editTitle") : t("saveAnswer")}</DialogTitle>
-                    <DialogDescription>{t("dialog.description")}</DialogDescription>
                 </DialogHeader>
                 <form
                     className="grid gap-3"

@@ -138,7 +138,7 @@ export function MemberAllowancesBlock({
     const canEdit = data?.canEdit ?? false;
 
     return (
-        <Section title={t("title")} description={t("description")}>
+        <Section title={t("title")}>
             <Card>
                 <SettingRow settingKey={MEMBER_LIMIT_SETTING_KEY} scope="workspace" />
             </Card>

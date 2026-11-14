@@ -18,9 +18,24 @@ function escapeXml(text: string): string {
         .replace(/"/g, "&quot;");
 }
 
+/** `**bold**` and `*italic*` as Word runs; everything else as plain text. */
+function runs(text: string): string {
+    return text
+        .split(/(\*\*[^*]+\*\*|\*[^*\s][^*]*\*)/)
+        .filter(part => part !== "")
+        .map(part => {
+            const bold = /^\*\*([^*]+)\*\*$/.exec(part);
+            const italic = bold ? null : /^\*([^*]+)\*$/.exec(part);
+            const props = bold ? "<w:rPr><w:b/></w:rPr>" : italic ? "<w:rPr><w:i/></w:rPr>" : "";
+            const value = bold?.[1] ?? italic?.[1] ?? part;
+            return `<w:r>${props}<w:t xml:space="preserve">${escapeXml(value)}</w:t></w:r>`;
+        })
+        .join("");
+}
+
 function paragraph(text: string, style?: string): string {
     const properties = style ? `<w:pPr><w:pStyle w:val="${style}"/></w:pPr>` : "";
-    return `<w:p>${properties}<w:r><w:t xml:space="preserve">${escapeXml(text)}</w:t></w:r></w:p>`;
+    return `<w:p>${properties}${runs(text)}</w:p>`;
 }
 
 function bodyXml(markdown: string): string {

@@ -22,12 +22,6 @@ export interface AgentToolSpec {
     description: string;
     /** Where the tool is honoured. Meetings ground on retrieval only today. */
     surfaces: readonly AgentToolSurface[];
-    /**
-     * Whether the person's own toggle is also needed for the tool to run on a
-     * turn (web search and reasoning are opt-in per message; retrieval is
-     * always on unless the agent lacks it).
-     */
-    perTurnToggle: boolean;
 }
 
 export const AGENT_TOOLS: readonly AgentToolSpec[] = [
@@ -36,35 +30,30 @@ export const AGENT_TOOLS: readonly AgentToolSpec[] = [
         label: "Workspace retrieval",
         description: "Search the workspace's sources and cite passages from them.",
         surfaces: ["chat", "meeting"],
-        perTurnToggle: false,
     },
     {
         id: "web",
         label: "Web search",
-        description: "Search the web when the person turns Web on for a message.",
+        description: "Search the web and read pages when a question needs it.",
         surfaces: ["chat"],
-        perTurnToggle: true,
     },
     {
         id: "reasoning",
         label: "Extended reasoning",
-        description: "Use the reasoning route and think before answering when Think is on.",
+        description: "Think before answering.",
         surfaces: ["chat"],
-        perTurnToggle: true,
     },
     {
         id: "attachments",
         label: "Attachments and images",
         description: "Read files and images attached to a message.",
         surfaces: ["chat"],
-        perTurnToggle: false,
     },
     {
         id: "write",
         label: "Write documents",
         description: "Create a document in the workspace when the person asks for one.",
         surfaces: ["chat"],
-        perTurnToggle: false,
     },
 ];
 

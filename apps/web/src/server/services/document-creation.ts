@@ -15,6 +15,7 @@ export {
     createDocumentLifecycle,
     createDocumentVersionLifecycle,
     findDocumentByCreationKey,
+    StaleDocumentVersionError,
     type CreateDocumentLifecycleParams,
     type CreateDocumentVersionLifecycleParams,
     type CreatedDocumentLifecycle,

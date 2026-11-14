@@ -15,8 +15,9 @@
  * citations, notes and the link keep pointing at one source. Only the person
  * who saved a conversation can update it; an identical transcript is a no-op.
  *
- * After each save that changed something, the follow-up note is written
- * after the response (`./follow-up`).
+ * After each save that changed something, the follow-up note is queued
+ * (`./follow-up-queue`): an Inngest job on the worker, or written after the
+ * response in this process (`./follow-up`).
  */
 import { randomUUID } from "node:crypto";
 
@@ -45,9 +46,8 @@ import { authorizeInternalFileRef } from "~/server/services/internal-file-ref";
 import { recordUpload } from "~/server/workspace/added-documents";
 import { canEditDocument } from "~/server/workspace/item-access";
 
-import { runAfterResponse } from "./after-response";
-import { writeFollowUp } from "./follow-up";
 import { followUpModelUnavailable } from "./follow-up-model";
+import { queueFollowUpNote } from "./follow-up-queue";
 import {
     assertTranscriptSize,
     conversationContentHash,
@@ -98,27 +98,25 @@ function documentMetadata(save: PreparedSave): Record<string, unknown> {
  * Queue the follow-up for this save, or say why there will be none. The row
  * already carries the matching status (`pending` or `skipped`).
  */
-function queueFollowUp(
+async function queueFollowUp(
     save: PreparedSave,
     rowId: number,
     documentId: number,
     skipReason: string | null
-): "queued" | "skipped" {
+): Promise<"queued" | "skipped"> {
     if (skipReason) return "skipped";
     const { ctx } = save;
-    runAfterResponse(`follow-up for conversation ${documentId}`, () =>
-        writeFollowUp({
-            conversationRowId: rowId,
-            documentId,
-            companyId: ctx.companyId,
-            authUserId: ctx.authUserId,
-            title: save.conversation.title,
-            family: save.family,
-            contentHash: save.contentHash,
-            messages: save.conversation.messages,
-            documentScope: () => ctx.documentScope(),
-        })
-    );
+    await queueFollowUpNote({
+        conversationRowId: rowId,
+        documentId,
+        companyId: ctx.companyId,
+        authUserId: ctx.authUserId,
+        title: save.conversation.title,
+        family: save.family,
+        contentHash: save.contentHash,
+        messages: save.conversation.messages,
+        documentScope: () => ctx.documentScope(),
+    });
     return "queued";
 }
 
@@ -175,7 +173,7 @@ async function createConversation(save: PreparedSave): Promise<SaveConversationR
         status: "created",
         title: conversation.title,
         url: conversationUrl(save.origin, documentId),
-        followUp: queueFollowUp(save, row.id, documentId, skipReason),
+        followUp: await queueFollowUp(save, row.id, documentId, skipReason),
     };
 }
 
@@ -293,7 +291,7 @@ async function updateConversation(
         status: "updated",
         title: conversation.title,
         url: conversationUrl(save.origin, documentId),
-        followUp: queueFollowUp(save, row.id, documentId, skipReason),
+        followUp: await queueFollowUp(save, row.id, documentId, skipReason),
     };
 }
 

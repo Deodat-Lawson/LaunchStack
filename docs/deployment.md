@@ -2,6 +2,11 @@
 
 This document covers deployment options for Launchstack.
 
+**Most people want the installer.** One machine with Docker, two commands, and
+a `launchstack` command for updates, backups and diagnostics: see the
+[self-hosting guide](./self-hosting.md). The options below are for running from
+source, composing the images yourself, or running without containers.
+
 ## Self-hosting defaults
 
 A deployment is **self-hosted unless it says otherwise** (`DEPLOYMENT_MODE`
@@ -32,9 +37,12 @@ The public marketing site is **not** part of a self-hosted deployment. It is a
 separate app (`apps/landing`, deployed independently); Docker and Compose build
 `apps/web` only. On a self-hosted instance `/` redirects to `/signin`.
 
-**The first person to sign up becomes the owner** of the workspace they create,
-already verified — there is no separate admin bootstrap step and no approval
-queue to clear for that first account.
+**Whoever signs up owns the workspace they create**, already verified — there
+is no separate admin bootstrap step and no approval queue. That also means
+sign-up is open: anyone who can reach the instance can create an account and a
+workspace of their own, which uses your model keys. There is no invite-only
+switch yet; keep a private instance off the public internet or set
+`AI_MONTHLY_TOKEN_LIMIT_PER_USER`.
 
 ## Prerequisites
 
@@ -101,13 +109,21 @@ projection. Operations (replaying dead events, monitoring) are documented in
 
 ## Option 2: Container images (any container host)
 
-`.github/workflows/docker.yml` builds and publishes two images to GHCR on every
-push to `main` and on version tags:
+`.github/workflows/docker.yml` builds and publishes these images to GHCR on
+every push to `main` and on version tags (x86-64):
 
 - `ghcr.io/<owner>/<repo>-web` — the Next.js app (`apps/web/Dockerfile`)
 - `ghcr.io/<owner>/<repo>-web-worker` — the durable worker (`apps/worker/Dockerfile`)
+- `ghcr.io/<owner>/<repo>-web-migrate` — the one-shot migration job, which also
+  carries the configuration preflight (`node scripts/deploy-check.mjs`)
+- `ghcr.io/<owner>/<repo>-document-converter`, `-adeu-docs-editing` and
+  `-transcription` — the compute services under `services/`
 
-Deploy both to any container host (Fly.io / Railway / Cloud Run / ECS / your own
+A version tag also attaches `launchstack-self-host.tar.gz` and `install.sh` to
+the GitHub release; that bundle is what the [installer](./self-hosting.md) lays
+down.
+
+Deploy the app and the worker to any container host (Fly.io / Railway / Cloud Run / ECS / your own
 Kubernetes) alongside managed PostgreSQL with pgvector:
 
 1. Provision Postgres with pgvector (Neon, Supabase, RDS, Cloud SQL, …) and set

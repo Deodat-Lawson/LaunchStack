@@ -65,6 +65,23 @@ interface PullContext {
     connection: ConnectorConnection;
     force: boolean;
     requestUrl?: string;
+    /** Who the version is credited to; the linking user when absent. */
+    actor?: string;
+    /** The version's changelog; "Edited in Google Docs/Drive by …" when absent. */
+    changelog?: string;
+}
+
+/** Options for {@link pullDriveLink}. */
+export interface PullOptions {
+    /** Skip the settle window (Sync now, or a save from the in-app editor). */
+    force?: boolean;
+    requestUrl?: string;
+    /**
+     * Credit the version to this auth user id instead of the linking user —
+     * the in-app editor pushes a save to Drive, then pulls it back as theirs.
+     */
+    actor?: string;
+    changelog?: string;
 }
 
 async function loadConnection(connectionId: number): Promise<ConnectorConnection | null> {
@@ -90,7 +107,7 @@ async function updateLink(
  * The ingestion worker fetches the blob from another process, so a relative
  * database-storage URL must be absolutized (same rule as the upload flow).
  */
-function toProcessingUrl(blobUrl: string, requestUrl: string | undefined): string {
+export function toProcessingUrl(blobUrl: string, requestUrl: string | undefined): string {
     if (blobUrl.startsWith("http://") || blobUrl.startsWith("https://")) return blobUrl;
     const base = requestUrl ?? env.server.APP_PUBLIC_URL;
     if (!base) {
@@ -225,7 +242,7 @@ async function performPull(ctx: PullContext): Promise<PullOutcome> {
     }
 
     getEngine();
-    const actor = await resolveActor(link);
+    const actor = ctx.actor ?? (await resolveActor(link));
     const filename = linkedFilename(doc.title, canonicalMime);
     const blob = await uploadFile({
         filename,
@@ -250,7 +267,7 @@ async function performPull(ctx: PullContext): Promise<PullOutcome> {
         creationKey: `gdrive:${link.driveFileId}:${marker ?? `t${meta.modifiedTime ?? Date.now()}`}`,
         mimeType: canonicalMime,
         fileSize: bytes.length,
-        changelog: `Edited in ${editorLabel}${byWhom}`,
+        changelog: ctx.changelog ?? `Edited in ${editorLabel}${byWhom}`,
         originalFilename: filename,
     });
 
@@ -276,7 +293,7 @@ async function performPull(ctx: PullContext): Promise<PullOutcome> {
 
 export async function pullDriveLink(
     link: DocumentDriveLink,
-    options?: { force?: boolean; requestUrl?: string }
+    options?: PullOptions
 ): Promise<PullOutcome> {
     if (!isDriveLinkingEnabled()) return { kind: "disabled" };
     if (link.status === "unlinked") return { kind: "noop", reason: "not_linked" };
@@ -294,6 +311,8 @@ export async function pullDriveLink(
             connection,
             force: options?.force ?? false,
             requestUrl: options?.requestUrl,
+            actor: options?.actor,
+            changelog: options?.changelog,
         });
     } catch (err) {
         const retryable = err instanceof GoogleDriveError ? err.isRetryable : true;

@@ -243,10 +243,7 @@ export function ModelsSection({ onActions }: SettingsSectionProps) {
                             </Table>
                         </Card>
 
-                        <SubHeading
-                            title={t("declared.title")}
-                            description={t("declared.description")}
-                        />
+                        <SubHeading title={t("declared.title")} />
                         <div className="grid gap-3.5 md:grid-cols-2">
                             {overview.models.map(model => (
                                 <Card key={model.name} padding={16}>
@@ -451,11 +448,13 @@ function WebSearchSection({ search }: { search: WebSearchInfo }) {
 }
 
 /** A heading inside a section (Routes, Declared models, Engines). */
-function SubHeading({ title, description }: { title: string; description: string }) {
+function SubHeading({ title, description }: { title: string; description?: string }) {
     return (
         <div className="mb-3 mt-6">
             <h3 className="text-ink m-0 text-[13.5px] font-semibold">{title}</h3>
-            <div className="text-ink-3 mt-1 text-[12.5px] leading-normal">{description}</div>
+            {description && (
+                <div className="text-ink-3 mt-1 text-[12.5px] leading-normal">{description}</div>
+            )}
         </div>
     );
 }

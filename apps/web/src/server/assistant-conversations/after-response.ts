@@ -1,12 +1,15 @@
 /**
- * Run work after the tool call has answered.
+ * Run work after the tool call has answered: the in-process executor for the
+ * follow-up note (`./follow-up-queue`), used unless the deployment runs it on
+ * the worker.
  *
  * Next's `after()` is how this app does post-response work for a request
  * (company-profile builds, proposals runs): the response goes out, then the
- * callback runs in the same process, which the platform keeps alive for it.
- * It needs no queue, no worker registration and no new event type, and the
- * work it does here is recoverable by design — its state is on the
- * `assistant_conversations` row and a re-save queues it again.
+ * callback runs in the same process, which the platform keeps alive for it,
+ * in the request's async context (so the MCP route's workspace models still
+ * apply). It needs no worker — but it is not durable: a restart in that
+ * window drops the work, which is why a deployment with the worker attached
+ * queues the note through Inngest instead.
  *
  * Outside a request (a script, a test) `after()` throws; the work then runs
  * detached instead of being dropped.

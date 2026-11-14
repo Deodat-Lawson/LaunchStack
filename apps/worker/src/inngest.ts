@@ -31,6 +31,7 @@ import { brandPublishDueCron } from "~/server/inngest/functions/brandPublishDue"
 import { brandSyncInsightsCron } from "~/server/inngest/functions/brandSyncInsights";
 import { proposalsRunJob } from "~/server/inngest/functions/proposalsRun";
 import { scenarioRunJob } from "~/server/inngest/functions/scenarioRun";
+import { extractionRunJob } from "~/server/inngest/functions/extractionRun";
 import { marketingRunJob } from "~/server/inngest/functions/marketingRun";
 import {
     googleDriveSyncCron,
@@ -43,6 +44,7 @@ import {
     microsoft365SyncJob,
 } from "~/server/inngest/functions/microsoft365Sync";
 import { outlookSyncCron, outlookSyncJob } from "~/server/inngest/functions/outlookSync";
+import { assistantConversationFollowUpJob } from "~/server/inngest/functions/assistantConversationFollowUp";
 
 export function createInngestHandler() {
     return serve({
@@ -76,7 +78,9 @@ export function createInngestHandler() {
             brandSyncInsightsCron,
             proposalsRunJob,
             scenarioRunJob,
+            extractionRunJob,
             marketingRunJob,
+            assistantConversationFollowUpJob,
         ],
     });
 }

@@ -1,0 +1,31 @@
+# Caddyfile for the self-host stack in domain mode (mounted by
+# deploy/compose.yml, `domain` profile). Caddy provisions and renews the
+# Let's Encrypt certificates for both hosts; both names must resolve to this
+# machine and ports 80 and 443 must be reachable from the internet.
+#
+# Same as Caddyfile.prod without the marketing-site host: a self-hosted
+# install serves the product only.
+#
+# ACME_EMAIL is optional, and Caddy rejects an empty `tls` or `email` line, so
+# compose.yml passes the whole directive as TLS_DIRECTIVE: `tls <email>` when
+# ACME_EMAIL is set (the ACME account contact, for expiry notices), nothing
+# when it is not. Caddy substitutes {$...} before it parses, so the empty
+# case is just a blank line.
+
+{$DOMAIN} {
+	{$TLS_DIRECTIVE}
+
+	# The worker's /api/inngest is not routed: the self-hosted Inngest server
+	# reaches it on the Compose network, and nothing outside the machine
+	# should.
+	reverse_proxy app:3000
+}
+
+# Object storage: SeaweedFS S3, anonymous read only (writes require the
+# signed credentials only the app and worker hold). Object keys contain
+# UUIDs. Kept on its own hostname so stored object URLs have one origin.
+files.{$DOMAIN} {
+	{$TLS_DIRECTIVE}
+
+	reverse_proxy {$FILES_UPSTREAM:seaweedfs:8333}
+}

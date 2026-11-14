@@ -79,8 +79,10 @@ export const IconDrive = (p: BrandIconProps) => (
 );
 
 /**
- * Google Drive's own full-colour mark, where a control stands for Drive
- * itself rather than sitting in a row of glyphs. A file, not an inline SVG:
+ * Google Drive's own full-colour mark, wherever a control stands for Drive
+ * itself — the Drive bar and the viewer's button that shows and hides it,
+ * even among lucide glyphs, since the line glyph above does not read as
+ * Drive on its own. A file, not an inline SVG:
  * the colours are Google's, not tokens, and stay the same in both themes.
  */
 export const GoogleDriveLogo = ({ size = 16, style, className }: BrandIconProps) => (

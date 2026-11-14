@@ -94,6 +94,11 @@ const ScenariosTool = dynamic(
     { loading: () => <LoadingPage variant="pane" /> }
 );
 
+const ExtractTool = dynamic(
+    () => import("~/app/employer/tools/extract/ExtractTool").then(m => m.ExtractTool),
+    { loading: () => <LoadingPage variant="pane" /> }
+);
+
 const SettingsHub = dynamic(() => import("./SettingsHub").then(m => m.SettingsHub), {
     loading: () => <LoadingPage variant="pane" />,
 });
@@ -135,7 +140,7 @@ function PaneShell({
 }: {
     title: string;
     body?: string;
-    children: ReactNode;
+    children?: ReactNode;
     footer: ReactNode;
 }) {
     return (
@@ -230,7 +235,7 @@ export function ChatPane(_: PaneProps) {
 
 interface ComingSoonPaneProps extends PaneProps {
     title: string;
-    body: string;
+    body?: string;
     bullets: string[];
 }
 
@@ -354,7 +359,6 @@ export function WorkflowsPane({ onClose }: PaneProps) {
     return (
         <PaneShell
             title={t("workflows.title")}
-            body={t("workflows.body")}
             footer={
                 <>
                     <SecondaryLink onClick={onClose}>{tc("actions.close")}</SecondaryLink>
@@ -364,11 +368,7 @@ export function WorkflowsPane({ onClose }: PaneProps) {
                     </Button>
                 </>
             }
-        >
-            <BulletList
-                items={[t("workflows.scheduled"), t("workflows.composable"), t("workflows.dryRun")]}
-            />
-        </PaneShell>
+        />
     );
 }
 
@@ -500,6 +500,8 @@ export function renderStudioPane(
             return <VantageTool host={context?.tool} />;
         case "scenarios":
             return <ScenariosTool host={context?.tool} />;
+        case "extract":
+            return <ExtractTool host={context?.tool} />;
         case "usage":
             return <UsageTool host={context?.tool} />;
         // Yours alone: account, appearance, shortcuts, privacy.

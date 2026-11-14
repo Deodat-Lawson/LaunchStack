@@ -65,7 +65,8 @@ export function oauthEndpoints(origin: string): OAuthEndpoints {
         token: `${issuer}/oauth2/token`,
         discovery: `${issuer}/.well-known/openid-configuration`,
         // offline_access so the assistant gets a refresh token instead of a
-        // fresh sign-in every hour; write so it can save conversations.
+        // fresh sign-in every hour; write so it can save conversations and
+        // add documents.
         scopes: ["openid", "offline_access", MCP_SCOPE_READ, MCP_SCOPE_WRITE].join(" "),
     };
 }

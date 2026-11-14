@@ -7,7 +7,7 @@
  */
 import mammoth from "mammoth";
 
-import { handleGoogleRequest } from "~/app/dev/stand-ins/google/dispatch";
+import { acceptableRedirect, handleGoogleRequest } from "~/app/dev/stand-ins/google/dispatch";
 import {
     DRIVE_FILE_SCOPE,
     DRIVE_READONLY_SCOPE,
@@ -136,6 +136,12 @@ describe("Google stand-in OAuth", () => {
             redirect_uri: "https://evil.example/callback",
         });
         expect(res.status).toBe(400);
+        // A name that only looks local is still somewhere else.
+        expect(acceptableRedirect("http://localhost.evil.example/cb")).toBeNull();
+        // *.localhost is loopback: the preview harness serves worktrees there.
+        expect(acceptableRedirect("http://fileedit.localhost:3127/cb")?.hostname).toBe(
+            "fileedit.localhost"
+        );
     });
 });
 
@@ -234,5 +240,124 @@ describe("Google stand-in Drive scopes", () => {
         const { access_token } = await connect([DRIVE_READONLY_SCOPE]);
         googleWorld().tokens[access_token]!.expiresAt = 0;
         expect((await get("/drive/v3/files/sa-readme", access_token)).status).toBe(401);
+    });
+});
+
+describe("Google stand-in Drive writes", () => {
+    const DOC = "application/vnd.google-apps.document";
+    const FOLDER = "application/vnd.google-apps.folder";
+
+    function send(method: string, path: string, token: string, body: string, type: string) {
+        return handleGoogleRequest(
+            new Request(`${BASE}${path}`, {
+                method,
+                headers: { authorization: `Bearer ${token}`, "content-type": type },
+                body,
+            })
+        );
+    }
+
+    /** The same multipart/related body @launchstack/google-drive sends. */
+    function multipart(metadata: Record<string, unknown>, mediaType: string, media: string) {
+        const boundary = "launchstack-test";
+        return {
+            type: `multipart/related; boundary=${boundary}`,
+            body:
+                `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n` +
+                `${JSON.stringify(metadata)}\r\n--${boundary}\r\nContent-Type: ${mediaType}\r\n\r\n` +
+                `${media}\r\n--${boundary}--`,
+        };
+    }
+
+    async function exportHtml(token: string, id: string) {
+        const res = await get(
+            `/drive/v3/files/${id}/export?mimeType=${encodeURIComponent(DOCX_MIME)}`,
+            token
+        );
+        expect(res.status).toBe(200);
+        const buffer = Buffer.from(await res.arrayBuffer());
+        return (await mammoth.convertToHtml({ buffer })).value;
+    }
+
+    it("finds the folder it made by name, the way ensureFolder looks it up", async () => {
+        const { access_token } = await connect([DRIVE_FILE_SCOPE]);
+        const q = encodeURIComponent(
+            `name = 'LaunchStack' and mimeType = '${FOLDER}' and trashed = false`
+        );
+        const before = (await (await get(`/drive/v3/files?q=${q}`, access_token)).json()) as {
+            files: unknown[];
+        };
+        expect(before.files).toEqual([]);
+
+        const made = await send(
+            "POST",
+            "/drive/v3/files?fields=id",
+            access_token,
+            JSON.stringify({ name: "LaunchStack", mimeType: FOLDER }),
+            "application/json"
+        );
+        expect(made.status).toBe(200);
+        const { id } = (await made.json()) as { id: string };
+
+        const after = (await (await get(`/drive/v3/files?q=${q}`, access_token)).json()) as {
+            files: { id: string }[];
+        };
+        expect(after.files.map(f => f.id)).toEqual([id]);
+    });
+
+    it("converts HTML into a new Doc, then replaces its content, bumping the version", async () => {
+        const { access_token } = await connect([DRIVE_FILE_SCOPE]);
+        const create = multipart(
+            { name: "Plan", mimeType: DOC, parents: ["root"] },
+            "text/html",
+            "<h1>Plan</h1><p>Ship the <strong>editor</strong>.</p>"
+        );
+        const res = await send(
+            "POST",
+            "/upload/drive/v3/files?uploadType=multipart",
+            access_token,
+            create.body,
+            create.type
+        );
+        expect(res.status).toBe(200);
+        const doc = (await res.json()) as { id: string; version: string; webViewLink: string };
+        expect(doc.version).toBe("1");
+        expect(doc.webViewLink).toContain(`#${doc.id}`);
+        expect(await exportHtml(access_token, doc.id)).toContain("<strong>editor</strong>");
+
+        const update = await send(
+            "PATCH",
+            `/upload/drive/v3/files/${doc.id}?uploadType=media`,
+            access_token,
+            "<html><body><h1>Plan</h1><p>Now with <em>edits</em>.</p></body></html>",
+            "text/html"
+        );
+        expect(update.status).toBe(200);
+        expect(((await update.json()) as { version: string }).version).toBe("2");
+        const html = await exportHtml(access_token, doc.id);
+        expect(html).toContain("<em>edits</em>");
+        expect(html).not.toContain("editor");
+    });
+
+    it("refuses writes it does not model, and anything the token cannot see", async () => {
+        const { access_token } = await connect([DRIVE_FILE_SCOPE]);
+        // sa-readme exists but was never picked: invisible under drive.file.
+        const hidden = await send(
+            "PATCH",
+            "/upload/drive/v3/files/sa-readme?uploadType=media",
+            access_token,
+            "<p>x</p>",
+            "text/html"
+        );
+        expect(hidden.status).toBe(404);
+        const plain = multipart({ name: "a.txt", mimeType: "text/plain" }, "text/plain", "x");
+        const res = await send(
+            "POST",
+            "/upload/drive/v3/files?uploadType=multipart",
+            access_token,
+            plain.body,
+            plain.type
+        );
+        expect(res.status).toBe(501);
     });
 });

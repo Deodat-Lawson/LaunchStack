@@ -148,7 +148,6 @@ export function AuditTab({ can }: AuditTabProps) {
         <div>
             <TabIntro
                 title={t("title")}
-                description={t("description")}
                 actions={
                     <Button asChild variant="outline" size="sm">
                         <a href={csvUrl} download>

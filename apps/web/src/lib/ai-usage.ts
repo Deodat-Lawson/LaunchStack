@@ -19,6 +19,7 @@ export const AI_FEATURES = [
     "distribution",
     "proposals",
     "scenarios",
+    "extraction",
     "trends",
     "predictiveAnalysis",
     "repoExplainer",

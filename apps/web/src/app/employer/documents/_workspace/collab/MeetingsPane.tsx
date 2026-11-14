@@ -1596,20 +1596,6 @@ function Composer({
                 flexShrink: 0,
             }}
         >
-            {holdsFloor && (
-                <div
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 6,
-                        fontSize: 11,
-                        color: "oklch(0.45 0.13 55)",
-                        marginBottom: 7,
-                    }}
-                >
-                    <IconHand size={11} /> {t("pausedNote")}
-                </div>
-            )}
             <div
                 style={{
                     display: "flex",

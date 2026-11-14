@@ -207,7 +207,7 @@ export function InvitationsTab({ can }: InvitationsTabProps) {
 
     return (
         <div className="flex flex-col gap-6">
-            <TabIntro title={t("intro.title")} description={t("intro.description")} />
+            <TabIntro title={t("intro.title")} />
 
             {error && <ErrorNote message={error} onRetry={() => void load()} />}
 

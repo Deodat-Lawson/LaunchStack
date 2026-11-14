@@ -77,6 +77,12 @@ FROM deps AS migrate
 COPY packages/store/drizzle ./packages/store/drizzle
 COPY packages/store/scripts ./packages/store/scripts
 COPY apps/web/drizzle ./apps/web/drizzle
+# The deployment preflight (`launchstack doctor`, `pnpm deploy:check`) rides in
+# this image because it is the one-shot container that already sits on the
+# Compose network with the configuration loaded and the `postgres` driver
+# installed. Placed beside migrate.mjs so it resolves that driver the same way:
+#   docker compose run --rm --no-deps -T migrate node scripts/deploy-check.mjs --probe
+COPY apps/web/scripts/deploy-check.mjs ./packages/store/scripts/deploy-check.mjs
 
 WORKDIR /app/packages/store
 # Engine set first, then product: product migrations carry foreign keys into

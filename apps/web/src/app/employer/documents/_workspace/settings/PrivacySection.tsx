@@ -162,7 +162,7 @@ export function PrivacySection(_: SettingsSectionProps) {
         <>
             {error && <StatusNote tone="danger">{error}</StatusNote>}
 
-            <Section title={t("outside.title")} description={t("outside.description")}>
+            <Section title={t("outside.title")}>
                 <Card>
                     {!overview ? (
                         <StatusNote tone="muted" style={{ marginBottom: 0 }}>
@@ -208,7 +208,7 @@ export function PrivacySection(_: SettingsSectionProps) {
                 </Card>
             </Section>
 
-            <Section title={t("kept.title")} description={t("kept.description")}>
+            <Section title={t("kept.title")}>
                 <Card>
                     <StatusRow
                         label={t("kept.audit.label")}

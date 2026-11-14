@@ -8,9 +8,8 @@ import { TooltipProvider } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
 
 import { setActivePage, zoomByStep } from "../model/commands";
-import { counterpartTheme, THEME_BY_ID, themeMode, type ThemeMode } from "../model/palette";
 import { EditorStore, type EditorState } from "../model/store";
-import { applyThemeToDoc } from "../model/theme";
+import { litForReader } from "../model/theme";
 import type { MindmapDoc } from "../model/types";
 import { Canvas } from "./Canvas";
 import { EditorProvider, useCommittedDoc, useEditor, useStore } from "./EditorContext";
@@ -39,35 +38,6 @@ const NO_EDIT_CALLBACKS: CanvasCallbacks = {
     onContextMenuAt: () => undefined,
     onEditText: () => undefined,
 };
-
-/**
- * The same board, lit for whoever is reading it.
- *
- * Board paper is document data, not a viewer preference — picking Midnight is
- * meant to make a board dark for everyone who opens the file. That stays true:
- * nothing here writes to the document. But the ten themes are five identities
- * in two lightings, paired exactly so a board can be shown the other way up,
- * and a white page dropped into a dark app is the one case where honouring the
- * stored lighting serves nobody.
- *
- * So a *read-only* preview renders the counterpart when the two disagree:
- * same identity, same hues, lit to match the app. The editor deliberately does
- * not do this — there, the colours on screen are the colours about to be saved,
- * and showing one thing while storing another is how a document quietly
- * becomes a different document. The Theme picker's "switch to match the app"
- * hint stays the way an author changes it for real.
- */
-function litForReader(doc: MindmapDoc, appMode: ThemeMode): MindmapDoc {
-    const paletteId = doc.settings.paletteId;
-    if (!paletteId || themeMode(paletteId) === appMode) return doc;
-
-    const counterpart = THEME_BY_ID[counterpartTheme(paletteId)];
-    // No twin (a custom or unpaired theme) means there is nothing faithful to
-    // switch to, so the board is shown as its author left it.
-    if (!counterpart || counterpart.mode !== appMode) return doc;
-
-    return applyThemeToDoc(doc, counterpart.id);
-}
 
 export interface MindmapPreviewProps {
     doc: MindmapDoc;

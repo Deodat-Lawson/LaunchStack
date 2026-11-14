@@ -2,8 +2,9 @@
  * The `instructions` the MCP server sends in its `initialize` result. Clients
  * (Claude, ChatGPT, Gemini) add it to the model's context, so it is written
  * for the model: what LaunchStack is, when to reach for which tool, how to
- * cite, and the rules that matter most — never save a conversation or add a
- * document the person did not ask for, and ask where a document goes.
+ * cite, and the rules that matter most — never save a conversation, add a
+ * document or draw a diagram the person did not ask for, and ask where a
+ * document goes.
  */
 export const MCP_INSTRUCTIONS = `LaunchStack is this person's company workspace: the documents their team has uploaded, written or connected (plans, specs, research, contracts, meeting notes, saved assistant conversations), organised in folders. Every tool acts as this person, in one workspace, and only ever sees what they are allowed to open there.
 
@@ -22,4 +23,9 @@ Adding documents
 - Call \`add_document\` only when the person asks to add, save, upload or put something into LaunchStack: an artifact, a document, a file.
 - The folder decides who can see it. Unless the person named a folder, leave \`folder\` out: LaunchStack keeps the content as a draft and either shows the person a form or lists the folders for you to offer. Ask them, then call again with the \`draftId\` and their answer; never send the content twice.
 - Send content exactly as it is; never summarise or shorten it. For a file on the person's computer, call \`start_upload\`, run the curl command it gives, then call \`add_document\` with the \`uploadId\`.
-- Tell the person where it went, who can see it, and the link.`;
+- Tell the person where it went, who can see it, and the link.
+
+Diagrams
+- LaunchStack has a diagram editor. When the person asks you to draw, map out or visualise something in LaunchStack — a mind map, flowchart, org chart or tree — call \`create_diagram\`: an indented outline for mind maps, org charts and trees, a Mermaid flowchart for flowcharts. It lands in their Private section unless they name a folder. Never create one they did not ask for.
+- To change one, find it with \`list_diagrams\` (with no query, the first is the one opened most recently — usually the one on their screen), read it with \`read_diagram\`, then call \`edit_diagram\` with operations naming the shape ids it shows (n_…). Prefer small edits to drawing it again.
+- Tell the person what you drew or changed and give the link.`;

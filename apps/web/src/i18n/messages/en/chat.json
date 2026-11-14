@@ -712,7 +712,12 @@
       "writingDocument": "Writing a document",
       "readingSources": "Reading {count, plural, one {# source} other {# sources}}",
       "readingSourcesProgress": "Reading {count, plural, one {# source} other {# sources}}… {done} done",
-      "readingYourSources": "Reading your sources"
+      "readingYourSources": "Reading your sources",
+      "findingDiagrams": "Looking for your diagrams",
+      "readingDiagram": "Reading a diagram",
+      "drawingDiagramTitled": "Drawing “{title}”",
+      "drawingDiagram": "Drawing a diagram",
+      "editingDiagram": "Changing a diagram"
     },
     "aiChat": {
       "chatNotFound": "Chat not found",

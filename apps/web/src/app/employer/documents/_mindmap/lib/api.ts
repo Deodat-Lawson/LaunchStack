@@ -110,8 +110,14 @@ export async function createMindmap(input: {
     return body.mindmap;
 }
 
-export async function getMindmap(id: number): Promise<MindmapDetail> {
-    const body = await request<{ mindmap: MindmapDetail }>(`/api/mindmaps/${id}`);
+/** `quiet` reads it without counting as opening it (no "recent" stamp). */
+export async function getMindmap(
+    id: number,
+    options: { quiet?: boolean } = {}
+): Promise<MindmapDetail> {
+    const body = await request<{ mindmap: MindmapDetail }>(
+        `/api/mindmaps/${id}${options.quiet ? "?quiet=1" : ""}`
+    );
     return body.mindmap;
 }
 

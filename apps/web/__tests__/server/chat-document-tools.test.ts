@@ -16,7 +16,7 @@ import {
     DocumentWriteDenied,
     type WriteDocumentInput,
 } from "~/server/chat-document-tools";
-import type { ChatCreatedSource } from "~/lib/chat-turns";
+import type { ChatCreatedDocument } from "~/lib/chat-turns";
 import { uploadFile } from "~/lib/storage";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { canEditFolder } from "~/server/services/folder-access";
@@ -42,7 +42,7 @@ function toolWith(write: jest.Mock) {
 
 function writes(documentId = 41, folder = "Unfiled") {
     return jest.fn(
-        async (_ctx: unknown, input: WriteDocumentInput): Promise<ChatCreatedSource> => ({
+        async (_ctx: unknown, input: WriteDocumentInput): Promise<ChatCreatedDocument> => ({
             documentId,
             title: input.title,
             folder,

@@ -591,7 +591,8 @@
     "ungroup": "Ungroup",
     "lock": "Lock / unlock",
     "selectShape": "Select all of this shape",
-    "selectConnected": "Select connected"
+    "selectConnected": "Select connected",
+    "expandWithAi": "Expand with AI"
   },
   "commands": {
     "groups": {
@@ -629,7 +630,8 @@
     "edgeCurved": "Connector style: curved",
     "description": "Search for an action by name",
     "placeholder": "Type a command…",
-    "noMatch": "No commands match “{query}”."
+    "noMatch": "No commands match “{query}”.",
+    "expandWithAi": "Expand topic with AI"
   },
   "help": {
     "title": "Keyboard shortcuts",
@@ -715,7 +717,9 @@
     },
     "previousPage": "Previous page",
     "nextPage": "Next page",
-    "exitPresent": "Exit · Esc"
+    "exitPresent": "Exit · Esc",
+    "updatedElsewhere": "Updated with changes saved elsewhere",
+    "updatedElsewhereBody": "Someone, or the chat, changed this map. ⌘Z takes the change back."
   },
   "clipboard": {
     "readFailed": "Couldn't read {name}",
@@ -822,7 +826,8 @@
     "createdFromTemplate": "Created from template",
     "restoredFrom": "Restored from v{revision}",
     "meta": "{when} · {count, plural, one {# shape} other {# shapes}}",
-    "restore": "Restore version {revision}"
+    "restore": "Restore version {revision}",
+    "beforeAiEdit": "Before an AI edit"
   },
   "emptyCanvas": {
     "start": "Type your idea",
@@ -875,7 +880,17 @@
       "editDenied": "You can view this mindmap but not change it.",
       "deleteDenied": "Only the person who made this mindmap, or someone who manages its folder, can delete it.",
       "unfiledDenied": "Only the person who made this mindmap can move it to Unfiled: drafts there are private to whoever made them.",
-      "moveWidens": "Moving this mindmap there would show it to people who can't see it now. A draft takes its folder's access, so publish it to share it, or change who can see the folder."
+      "moveWidens": "Moving this mindmap there would show it to people who can't see it now. A draft takes its folder's access, so publish it to share it, or change who can see the folder.",
+      "generateFailed": "Couldn't draw that. Try describing it another way.",
+      "expandFailed": "Couldn't suggest subtopics just now. Try again."
     }
+  },
+  "ai": {
+    "pickTopic": "Select one topic to expand.",
+    "expanding": "Thinking of subtopics for “{topic}”…",
+    "expanded": "{count, plural, one {Added # subtopic} other {Added # subtopics}}. ⌘Z takes them back.",
+    "expandFailed": "Couldn't suggest subtopics just now. Try again.",
+    "topicGone": "That topic was deleted while the suggestions were on their way.",
+    "expandUndo": "Expand with AI"
   }
 }

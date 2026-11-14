@@ -59,22 +59,26 @@ resize keeps the opposite corner pinned) rather than screenshots.
 
 ### model/
 
-| Module         | Responsibility                                                                                                       |
-| -------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `types.ts`     | The document shape. `DOC_SCHEMA_VERSION` lives here.                                                                 |
-| `factory.ts`   | The only place a node/edge/page/doc literal is constructed.                                                          |
-| `shapes.ts`    | ~60 shapes as pure `(w, h) → SVG path` functions. One registry drives the canvas, the palette thumbnails and export. |
-| `geometry.ts`  | Rects, rotation, ports, polylines, viewport transforms.                                                              |
-| `routing.ts`   | Straight / elbow / curved connectors, arrowhead orientation, bend insertion.                                         |
-| `layout.ts`    | Tidy-tree layouts: mindmap (both sides), tree, org, radial, grid.                                                    |
-| `snapping.ts`  | Grid quantisation, edge/centre alignment, equal-spacing detection.                                                   |
-| `resize.ts`    | Resize in the shape's own rotated frame; multi-select box scaling.                                                   |
-| `text.ts`      | Measurement and wrapping — SVG has no line breaking.                                                                 |
-| `doc.ts`       | Queries and immutable edits. Two hierarchies: containment (`parentId`) and graph (edges).                            |
-| `commands.ts`  | Every user-facing operation. Toolbar, menu, shortcut and palette all route through here, so they cannot drift.       |
-| `store.ts`     | External store + snapshot-based undo/redo with gesture coalescing.                                                   |
-| `serialize.ts` | The trust boundary. `parseDoc` never throws. Markdown/Mermaid/CSV import and export.                                 |
-| `templates.ts` | Starter documents, built from the same factories.                                                                    |
+| Module           | Responsibility                                                                                                       |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `types.ts`       | The document shape. `DOC_SCHEMA_VERSION` lives here.                                                                 |
+| `factory.ts`     | The only place a node/edge/page/doc literal is constructed.                                                          |
+| `shapes.ts`      | ~60 shapes as pure `(w, h) → SVG path` functions. One registry drives the canvas, the palette thumbnails and export. |
+| `geometry.ts`    | Rects, rotation, ports, polylines, viewport transforms.                                                              |
+| `routing.ts`     | Straight / elbow / curved connectors, arrowhead orientation, bend insertion.                                         |
+| `layout.ts`      | Tidy-tree layouts: mindmap (both sides), tree, org, radial, grid.                                                    |
+| `layered.ts`     | Layered (Sugiyama) layout for flowcharts: loops, merges, long edges, subgraph clusters.                              |
+| `mermaid.ts`     | Mermaid flowchart parser and builder (shapes, labels, chains, subgraphs → frames), laid out by `layered.ts`.         |
+| `generate.ts`    | AI specs → documents: an outline (mindmap, org chart, tree) or Mermaid (flowchart), themed and laid out.             |
+| `agent-edits.ts` | How a model reads a page (`describeDiagram`) and changes it (`runDiagramEdits` / `applyDiagramEdits`).               |
+| `snapping.ts`    | Grid quantisation, edge/centre alignment, equal-spacing detection.                                                   |
+| `resize.ts`      | Resize in the shape's own rotated frame; multi-select box scaling.                                                   |
+| `text.ts`        | Measurement and wrapping — SVG has no line breaking.                                                                 |
+| `doc.ts`         | Queries and immutable edits. Two hierarchies: containment (`parentId`) and graph (edges).                            |
+| `commands.ts`    | Every user-facing operation. Toolbar, menu, shortcut and palette all route through here, so they cannot drift.       |
+| `store.ts`       | External store + snapshot-based undo/redo with gesture coalescing.                                                   |
+| `serialize.ts`   | The trust boundary. `parseDoc` never throws. Markdown/Mermaid/CSV import and export (Mermaid via `mermaid.ts`).      |
+| `templates.ts`   | Starter documents, built from the same factories.                                                                    |
 
 ### Nodes vs. annotations
 
@@ -346,6 +350,60 @@ inside the hidden preview, and it was not painted. Because the defs live inside
 the `<svg>` that export clones, the scoped ids still resolve in the file.
 `__tests__/canvas-ids.test.tsx` holds any new `<defs>` to the same rule.
 
+## AI: diagrams as a tool
+
+The editor is also something an AI can draw in. Four ways in, one engine:
+
+| Where                    | What                                                                                             | Code                                                          |
+| ------------------------ | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------- |
+| Ask (the chat)           | `find_diagrams`, `read_diagram`, `create_diagram`, `edit_diagram` — model-called tools           | `~/server/chat-diagram-tools.ts`                              |
+| Assistants over MCP      | `list_diagrams`, `read_diagram`, `create_diagram`, `edit_diagram` for Claude, ChatGPT and others | `~/server/mcp/tools/diagrams.ts`                              |
+| Gallery → "Describe it…" | The workspace's model drafts a whole map from a description (`POST /api/mindmaps/generate`)      | `_workspace/GenerateDiagramForm`, `~/server/mindmap/generate` |
+| Topic → "Expand with AI" | Subtopics for one topic (`POST /api/mindmaps/expand`), added by the editor's own commands        | `ui/useAiExpand.ts`                                           |
+
+**Models write text, never coordinates.** A model is asked for what models
+write well: an indented outline for anything tree-shaped and Mermaid for
+flowcharts. `generate.ts` turns either into an ordinary document with the
+same factories, theme painter and layouts as a map someone drew — so a
+generated map opens, edits, presents and publishes like any other, and the
+Theme picker repaints it the same way. Outlines tolerate what models
+actually send (bullets or not, headings, a plain title line over its
+bullets, Mermaid's `mindmap` syntax); Mermaid tolerates chains, `&`,
+both label forms, quoted labels and nested subgraphs.
+
+**Edits are operations on ids, run through the editor's commands.**
+`describeDiagram` writes the active page out with every shape's id beside its
+label as `(id: n_…)` — never in square brackets, which Ask reads as a
+citation. `edit_diagram` takes `add`, `rename`, `remove`, `move`, `connect`,
+`disconnect` and `arrange`; a topic added this way is made by `addChildTopic`,
+so it is the topic Tab would have made. A batch is all or nothing
+(`runDiagramEdits` works on a scratch `EditorStore`). On the server
+(`~/server/mindmap/agent`) the result is written only over the revision it
+read, retried once on a fresh read, and the version before is kept in the
+history as "Before an AI edit". In the editor (`applyDiagramEdits`) it lands
+as one undo entry and autosave writes it.
+
+**Access is the editor's.** Reading sees the drafts the person may open;
+creating goes through `createMindmapDraft` (no folder is their Private
+section; a folder takes edit access) and needs `documents.upload`; editing
+takes edit access to the draft and `documents.edit`. Ask offers the tools
+only to an agent allowed sources (reading) and writing (drawing, editing).
+The editor's own AI calls run on the workspace's models, count as the
+`mindmap` AI feature and stop at the person's AI allowance.
+
+**An open editor follows saves made elsewhere.** When the presence heartbeat
+sees a newer revision and nothing here is unsaved, the editor loads it in
+place as one undo step ("Updated with changes saved elsewhere") instead of
+asking for a reload — so a change the chat makes appears on the canvas within
+seconds. With unsaved work the stale banner stays: that is a real conflict.
+
+**Containers sit under connectors.** The canvas (and the thumbnails) draw
+frames, swimlanes and groups first, then connectors, then everything else; a
+filled frame drawn in page order used to cover every arrow inside it (the
+Swimlane template showed none). A frame left as plain paper stays paper when
+the board is relit or rethemed (`FRAME_PAPER` in `palette.ts`); a frame
+someone coloured, like a SWOT quadrant, still takes the theme's colours.
+
 ## Chrome depths
 
 The editor is a full diagramming application, and most people who open it
@@ -354,7 +412,7 @@ the document's kind picks which one it opens at:
 
 | Depth          | What is on screen                                                                              | Opens for                            |
 | -------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------ |
-| **Focus**      | The canvas, a rail of five tools, a toolbar on the selection, a 7‑item context menu, ⌘K        | `kind: "mindmap"` and `"board"`      |
+| **Focus**      | The canvas, a rail of five tools, a toolbar on the selection, an 8‑item context menu, ⌘K       | `kind: "mindmap"` and `"board"`      |
 | **Everything** | Both side panels, the 60‑shape library, the full inspector, snapping, arrange — today's editor | `kind: "flowchart"` and `"freeform"` |
 
 `DocSettings.kind` is set from the template's category by `buildTemplate`

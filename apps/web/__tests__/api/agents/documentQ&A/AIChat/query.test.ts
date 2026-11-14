@@ -298,6 +298,50 @@ const mockCreateDocumentTools = jest.fn((..._args: unknown[]) => {
     }
     return session;
 });
+// Diagrams as tools: off unless a test turns them on, like the document
+// tool; their behaviour is tested in __tests__/server/chat-diagram-tools.test.ts.
+let mockDiagramToolsOn = false;
+const mockDrawDiagram = jest.fn(
+    async (..._args: unknown[]) => 'Created the flowchart "Refunds" (m7)'
+);
+const mockCreateDiagramTools = jest.fn((..._args: unknown[]) => {
+    const session = { touched: [] as unknown[], tools: [] as unknown[], writes: false };
+    if (mockDiagramToolsOn) {
+        session.writes = true;
+        for (const name of ["find_diagrams", "read_diagram"]) {
+            session.tools.push({
+                name,
+                description: name,
+                parameters: { type: "object", properties: {} },
+                describe: () => name,
+                run: async () => "No diagrams.",
+            });
+        }
+        session.tools.push({
+            name: "create_diagram",
+            description: "draw",
+            parameters: { type: "object", properties: {} },
+            describe: () => "Drawing “Refunds”",
+            run: async (args: unknown) => {
+                const text = await mockDrawDiagram(args);
+                session.touched.push({
+                    kind: "diagram",
+                    mindmapId: 7,
+                    title: "Refunds",
+                    folder: "Unfiled",
+                });
+                return text;
+            },
+        });
+    }
+    return session;
+});
+jest.mock("~/server/chat-diagram-tools", () => ({
+    createDiagramTools: (...args: unknown[]) => mockCreateDiagramTools(...args),
+    diagramToolsPrompt: () => "## Diagrams",
+}));
+jest.mock("~/server/mindmap/agent", () => ({ creatorThemeMode: () => "dark" }));
+
 jest.mock("~/server/chat-document-tools", () => ({
     createDocumentTools: (...args: unknown[]) => mockCreateDocumentTools(...args),
     documentToolsPrompt: () => "## Writing documents",
@@ -3427,6 +3471,131 @@ describe("documents the model writes into the workspace", () => {
 
         expect(mockCreateDocumentTools).not.toHaveBeenCalled();
         expect(mockBindTools).not.toHaveBeenCalled();
+    });
+});
+
+describe("diagrams the model draws in the Mindmap editor", () => {
+    const TOOL_MODEL = {
+        input: ["text"],
+        reasoning: { mode: "none" },
+        nativeStructuredOutput: ["json-schema", "tool-calling"],
+        parameters: { temperature: "supported", systemMessages: "supported" },
+    };
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        mockQueuedRows = [];
+        useContext({ role: "owner" });
+        mockBehavior = TOOL_MODEL;
+        mockSearchProvider = null;
+        mockChatSource = "deployment";
+        mockSourcesOverview = NO_SOURCES;
+        mockDocumentToolsOn = true;
+        mockDiagramToolsOn = true;
+        mockUsage = { inputTokens: 10, outputTokens: 2, totalTokens: 12 };
+        mockInvoke.mockReset();
+        mockStream.mockReset();
+        mockBuildReferences.mockImplementation(() => []);
+        (validateQAResponse as jest.Mock).mockReturnValue({ approved: true, issues: [] });
+    });
+
+    afterAll(() => {
+        mockDocumentToolsOn = false;
+        mockDiagramToolsOn = false;
+        mockBehavior = {};
+    });
+
+    const toolNames = () =>
+        (mockBindTools.mock.calls[0] as unknown as [{ function: { name: string } }[]])[0].map(
+            tool => tool.function.name
+        );
+    const systemPrompt = (call = 0) =>
+        String((mockInvoke.mock.calls[call] as [{ content: unknown }[]])[0][0]?.content);
+
+    it("offers the diagram tools after the document tool, with their prompt", async () => {
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+
+        await POST(queryRequest({ question: "hi", searchScope: "none" }));
+
+        expect(toolNames()).toEqual([
+            "create_document",
+            "find_diagrams",
+            "read_diagram",
+            "create_diagram",
+        ]);
+        expect(systemPrompt()).toContain("## Diagrams");
+        // Drawn in the person's lighting; made and changed by what their role allows.
+        expect(mockCreateDiagramTools).toHaveBeenCalledWith(
+            expect.objectContaining({ companyId: BigInt(5) }),
+            { locale: "en", mode: "dark", canCreate: true, canEdit: true }
+        );
+    });
+
+    it("returns the diagram it drew for the chat to show and open", async () => {
+        mockInvoke
+            .mockResolvedValueOnce({
+                content: "",
+                tool_calls: [
+                    {
+                        id: "call_1",
+                        name: "create_diagram",
+                        args: {
+                            title: "Refunds",
+                            type: "flowchart",
+                            mermaid: "flowchart TD\n A --> B",
+                        },
+                    },
+                ],
+                response_metadata: {},
+            })
+            .mockResolvedValueOnce({ content: "I drew the refunds flow.", response_metadata: {} });
+
+        const response = await POST(
+            queryRequest({ question: "map out our refunds flow", searchScope: "none" })
+        );
+
+        const body = (await response.json()) as Record<string, unknown>;
+        expect(mockDrawDiagram).toHaveBeenCalledTimes(1);
+        expect(body).toMatchObject({
+            success: true,
+            createdSources: [
+                { kind: "diagram", mindmapId: 7, title: "Refunds", folder: "Unfiled" },
+            ],
+        });
+    });
+
+    it("lets a viewer read diagrams but neither draw nor change them", async () => {
+        useContext({ role: "viewer" });
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+
+        await POST(
+            queryRequest({ question: "what does the launch map say?", searchScope: "none" })
+        );
+
+        expect(mockCreateDiagramTools).toHaveBeenCalledWith(expect.anything(), {
+            locale: "en",
+            mode: "dark",
+            canCreate: false,
+            canEdit: false,
+        });
+    });
+
+    it("offers no diagram tools to an agent kept from the sources", async () => {
+        mockAgentTools = ["web"];
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+        try {
+            await POST(
+                queryRequest({
+                    question: "draw a map",
+                    searchScope: "none",
+                    agentKey: "restricted",
+                })
+            );
+            expect(mockCreateDiagramTools).not.toHaveBeenCalled();
+            expect(systemPrompt()).not.toContain("## Diagrams");
+        } finally {
+            mockAgentTools = null;
+        }
     });
 });
 

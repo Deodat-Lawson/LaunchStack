@@ -208,7 +208,24 @@
       "createFailed": "无法创建该思维导图",
       "intro": "在这里绘制，准备好后再设为可引用。",
       "untitled": "未命名思维导图",
-      "openingEditor": "正在打开编辑器…"
+      "openingEditor": "正在打开编辑器…",
+      "generate": {
+        "label": "描述一下，AI 来绘制",
+        "placeholder": "例如：客户退款的流程，从申请到打款",
+        "kindLabel": "图表类型",
+        "kinds": {
+          "auto": "任意类型",
+          "mindmap": "思维导图",
+          "flowchart": "流程图",
+          "org_chart": "组织结构图",
+          "tree": "树状图"
+        },
+        "generate": "生成",
+        "drawing": "正在绘制…",
+        "hint": "或者从下面的模板开始。",
+        "drawingHint": "正在绘制图表，需要几秒钟。",
+        "failed": "无法绘制，请重试。"
+      }
     },
     "file": {
       "titleLabel": "标题",
@@ -728,7 +745,14 @@
       "private": "仅你可见",
       "shared": "已共享",
       "workspace": "工作区所有成员"
-    }
+    },
+    "ariaMade": "已在工作区中创建",
+    "diagramsCount": "{count, plural, other {已绘制 # 个图表}}",
+    "changedCount": "{count, plural, other {已修改 # 个图表}}",
+    "mixedCount": "{count, plural, other {已创建或修改 # 项}}",
+    "diagramMade": "图表 · {place}",
+    "diagramChanged": "已修改 · {place}",
+    "openDiagram": "打开 {title}"
   },
   "failure": {
     "categories": {

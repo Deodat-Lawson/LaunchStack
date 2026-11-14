@@ -994,13 +994,23 @@ export const SessionMessageSchema = z.object({
                 .optional(),
             createdSources: z
                 .array(
-                    z.object({
-                        documentId: z.number().int().positive(),
-                        title: z.string().max(300),
-                        folder: z.string().max(300),
-                    })
+                    z.union([
+                        z.object({
+                            kind: z.literal("document").optional(),
+                            documentId: z.number().int().positive(),
+                            title: z.string().max(300),
+                            folder: z.string().max(300),
+                        }),
+                        z.object({
+                            kind: z.literal("diagram"),
+                            mindmapId: z.number().int().positive(),
+                            title: z.string().max(300),
+                            folder: z.string().max(300),
+                            edited: z.boolean().optional(),
+                        }),
+                    ])
                 )
-                .max(5)
+                .max(8)
                 .optional(),
         })
         .optional(),

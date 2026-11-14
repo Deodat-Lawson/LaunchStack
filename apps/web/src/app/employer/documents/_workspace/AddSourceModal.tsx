@@ -42,6 +42,7 @@ import { startFileUploads, startLinkTask } from "./processing/uploadTasks";
 import { DOCUMENT_LIMITS } from "~/lib/constants";
 import { detectSourceType } from "@launchstack/conversion/types";
 import { ArtifactImportPanel } from "./ArtifactImportPanel";
+import { GenerateDiagramForm } from "./GenerateDiagramForm";
 import { IconGoogleDocs } from "~/components/icons/brand";
 import { Label } from "~/components/ui/label";
 import { createFile } from "./fileEditing";
@@ -712,6 +713,9 @@ const NO_ACCESS: Readonly<Record<string, ItemAccessView>> = {};
 // Create → Mindmap
 // ---------------------------------------------------------------------------
 
+/** `busy` while the AI is drawing rather than a template opening. */
+const AI_BUSY = "\u0000ai";
+
 /**
  * Creating a mindmap does not ingest anything: it makes the row and opens the
  * editor in place. Only the template id is posted — the editor owns the
@@ -753,6 +757,15 @@ function MindmapPanel({
 
     return (
         <div>
+            <GenerateDiagramForm
+                folder={folder}
+                disabled={busy !== null && busy !== AI_BUSY}
+                onBusyChange={generating => setBusy(generating ? AI_BUSY : null)}
+                onCreated={id => {
+                    if (onCreated) onCreated(id);
+                    else router.push(`/employer/documents?source=m${id}&edit=1`);
+                }}
+            />
             <p style={{ fontSize: 13, color: "var(--ink-3)", marginBottom: 14, lineHeight: 1.55 }}>
                 {t("intro")}
             </p>

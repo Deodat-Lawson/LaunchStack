@@ -1,7 +1,8 @@
 /** @jest-environment jsdom */
 
 import React from "react";
-import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
 import { ContextMenuProvider } from "~/components/context-menu";
@@ -55,7 +56,7 @@ describe("StudioTabs", () => {
             onFocus: jest.fn(),
             registerSlot: jest.fn(),
         };
-        render(
+        const ui = (next: typeof overrides) => (
             <ContextMenuProvider>
                 <StudioTabs
                     groupId="g0"
@@ -66,11 +67,12 @@ describe("StudioTabs", () => {
                     focused
                     canSplit
                     {...props}
-                    {...overrides}
+                    {...next}
                 />
             </ContextMenuProvider>
         );
-        return { props };
+        const view = render(ui(overrides));
+        return { props, rerender: (next: typeof overrides) => view.rerender(ui(next)) };
     }
 
     it("shows one tab per open app, with only one selected", () => {
@@ -101,6 +103,40 @@ describe("StudioTabs", () => {
         fireEvent.mouseDown(knowledge, { button: 0 });
         expect(props.onSelect).toHaveBeenCalledWith("knowledge");
         expect(props.onFocus).toHaveBeenCalled();
+    });
+
+    it("keeps a newly opened note selected when focus returns to the previous tab", () => {
+        const { props, rerender } = renderStrip();
+        const previous = screen.getByRole("tab", { name: "Chat" });
+        act(() => previous.focus());
+        act(() => previous.blur());
+
+        // Creating a note opens its tab without clicking its trigger. The
+        // browser or a closing menu can subsequently restore the old focus.
+        rerender({ tabs: [...TABS, tab("source:d2", "New note")], activeId: "source:d2" });
+        act(() => previous.focus());
+
+        expect(props.onSelect).not.toHaveBeenCalled();
+        expect(screen.getByRole("tab", { name: "New note" })).toHaveAttribute(
+            "aria-selected",
+            "true"
+        );
+    });
+
+    it("does not navigate merely because a tab receives keyboard or restored focus", async () => {
+        const user = userEvent.setup();
+        const { props } = renderStrip({ activeId: "knowledge" });
+        act(() => screen.getByRole("tab", { name: "Knowledge" }).focus());
+
+        await user.keyboard("{ArrowRight}");
+        expect(screen.getByRole("tab", { name: "Drafts" })).toHaveFocus();
+        expect(props.onSelect).not.toHaveBeenCalled();
+
+        await user.keyboard("{Enter}");
+        expect(props.onSelect).toHaveBeenLastCalledWith("draft");
+        props.onSelect.mockClear();
+        await user.keyboard(" ");
+        expect(props.onSelect).toHaveBeenLastCalledWith("draft");
     });
 
     it("closes from the X and from a middle click, but not a left click on the strip", () => {

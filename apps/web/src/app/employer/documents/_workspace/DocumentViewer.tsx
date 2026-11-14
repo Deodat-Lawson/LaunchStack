@@ -507,7 +507,13 @@ export function DocumentViewer({
     const [pdfNotes, setPdfNotes] = useState<DocumentNote[]>([]);
     const [notesNonce, setNotesNonce] = useState(0);
     const [pdfAnchorDraft, setPdfAnchorDraft] = useState<PrefilledAnchor | null>(null);
-    const [pdfScrollToNoteId, setPdfScrollToNoteId] = useState<number | null>(null);
+    const [pdfNoteRequest, setPdfNoteRequest] = useState<{ id: number; nonce: number } | null>(
+        null
+    );
+    const pdfScrollToNoteId = pdfNoteRequest?.id ?? null;
+    const requestPdfNote = useCallback((id: number) => {
+        setPdfNoteRequest(previous => ({ id, nonce: (previous?.nonce ?? 0) + 1 }));
+    }, []);
     /**
      * A note click locates its passage by text, the same way a citation does.
      * Kept separate from the `highlight` prop so a later citation click wins:
@@ -517,7 +523,10 @@ export function DocumentViewer({
 
     // A new citation from the shell supersedes whatever note was being shown.
     useEffect(() => {
-        if (highlight) setNoteHighlight(null);
+        if (highlight) {
+            setNoteHighlight(null);
+            setPdfNoteRequest(null);
+        }
     }, [highlight]);
     /** A passage handed to the notes panel by the context menu, as a new note's body. */
     const [noteSeed, setNoteSeed] = useState<string | null>(null);
@@ -1491,6 +1500,7 @@ export function DocumentViewer({
                                     notes={toPdfNoteLites(pdfNotes)}
                                     citationHighlight={noteHighlight ?? highlight ?? null}
                                     scrollToNoteId={pdfScrollToNoteId}
+                                    scrollToNoteNonce={pdfNoteRequest?.nonce}
                                     onCreateAnchoredNote={anchor => {
                                         setPdfAnchorDraft({
                                             page: anchor.page,
@@ -1523,7 +1533,7 @@ export function DocumentViewer({
                                             : undefined
                                     }
                                     onNotePinClick={id => {
-                                        setPdfScrollToNoteId(id);
+                                        requestPdfNote(id);
                                         setSidebarTab("notes");
                                         // A pin opens its card, so the rail
                                         // holding it has to be showing.
@@ -1705,7 +1715,7 @@ export function DocumentViewer({
                                     // line entirely.
                                     if (located) {
                                         setNoteHighlight(null);
-                                        setPdfScrollToNoteId(id);
+                                        requestPdfNote(id);
                                     } else if (quote) {
                                         // No position: agent-captured notes store
                                         // page 1 with no quads, so the quote is
@@ -1715,9 +1725,9 @@ export function DocumentViewer({
                                             page: null,
                                             nonce: Date.now(),
                                         });
-                                        setPdfScrollToNoteId(id);
+                                        requestPdfNote(id);
                                     } else if (page !== null) {
-                                        setPdfScrollToNoteId(id);
+                                        requestPdfNote(id);
                                     }
                                 }}
                                 onDeleted={id => {
@@ -1726,7 +1736,7 @@ export function DocumentViewer({
                                     // marking a passage nothing annotates.
                                     if (id !== pdfScrollToNoteId) return;
                                     setNoteHighlight(null);
-                                    setPdfScrollToNoteId(null);
+                                    setPdfNoteRequest(null);
                                 }}
                             />
                         </div>

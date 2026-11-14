@@ -274,6 +274,10 @@ export function StudioTabs({
         <Tabs
             value={activeId}
             onValueChange={onSelect}
+            // Restoring focus after opening a source or closing a menu must
+            // not reopen the previously focused tab. Selection belongs to an
+            // explicit click or Enter/Space; arrows only move keyboard focus.
+            activationMode="manual"
             // Pointer down rather than click: the column should be current
             // before whatever was clicked acts on it.
             onPointerDownCapture={onFocus}
@@ -468,9 +472,9 @@ export function StudioTabs({
                                                         event.key === "ArrowRight")
                                                 ) {
                                                     event.preventDefault();
-                                                    // Radix moves selection on
-                                                    // bare arrows; a reorder
-                                                    // must not also navigate.
+                                                    // Radix moves focus on bare
+                                                    // arrows; a reorder must
+                                                    // keep focus on this tab.
                                                     event.stopPropagation();
                                                     moveByKeyboard(
                                                         tab,

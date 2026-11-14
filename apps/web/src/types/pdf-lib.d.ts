@@ -5,6 +5,10 @@ declare module "pdf-lib" {
     export interface PDFPage {
         getWidth(): number;
         getHeight(): number;
+        drawText(
+            text: string,
+            options?: { x?: number; y?: number; size?: number; font?: PDFFont }
+        ): void;
         node: {
             Resources(): PDFDict | undefined;
         };

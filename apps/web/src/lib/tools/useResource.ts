@@ -57,6 +57,7 @@ export function useResource<T>(
     const keyRef = useRef(key);
     const seq = useRef(0);
     const inflight = useRef(false);
+    const lastShown = useRef<T | null>(data);
     const keepRef = useRef(keep);
     keepRef.current = keep;
 
@@ -65,8 +66,13 @@ export function useResource<T>(
         inflight.current = true;
         if (first) setLoading(true);
         try {
-            const next = await fetcherRef.current();
+            const fetched = await fetcherRef.current();
             if (mine !== seq.current) return;
+            // A refresh that brings back what is on screen keeps the same
+            // object, so lists don't re-render (and pictures don't flicker)
+            // every time a screen is reopened or a poll lands.
+            const next = sameAsShown(lastShown.current, fetched) ? lastShown.current! : fetched;
+            lastShown.current = next;
             if (keepRef.current && keyRef.current !== null) remember(keyRef.current, next);
             setData(next);
             setError(null);
@@ -93,6 +99,7 @@ export function useResource<T>(
         }
         // A remembered result shows now; this fetch only refreshes it.
         const known = keepRef.current && remembered.has(key);
+        lastShown.current = known ? (remembered.get(key) as T) : null;
         if (known) {
             setData(remembered.get(key) as T);
             setLoading(false);
@@ -114,6 +121,7 @@ export function useResource<T>(
         setData(current => {
             if (current === null) return current;
             const next = updater(current);
+            lastShown.current = next;
             if (keepRef.current && keyRef.current !== null) remember(keyRef.current, next);
             return next;
         });
@@ -135,4 +143,30 @@ function remember(key: string, value: unknown): void {
 /** Forget remembered results (sign-out, workspace switch, tests). */
 export function forgetResources(): void {
     remembered.clear();
+}
+
+/**
+ * Fetch a result into the `keepAcrossMounts` memory before its screen opens
+ * (the tab next door), so opening it shows data at once. Does nothing when
+ * the key is already remembered; failures are left for the screen to show.
+ */
+export function preloadResource<T>(key: string, fetcher: () => Promise<T>): void {
+    if (remembered.has(key) || preloading.has(key)) return;
+    preloading.add(key);
+    void fetcher()
+        .then(value => {
+            if (!remembered.has(key)) remember(key, value);
+        })
+        .catch(() => undefined)
+        .finally(() => preloading.delete(key));
+}
+const preloading = new Set<string>();
+
+function sameAsShown(shown: unknown, fetched: unknown): boolean {
+    if (shown === null || shown === undefined) return false;
+    try {
+        return JSON.stringify(shown) === JSON.stringify(fetched);
+    } catch {
+        return false;
+    }
 }

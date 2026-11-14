@@ -21,6 +21,7 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 
 import { prospectsApi, type EmailStatusKind } from "../api";
+import { peopleKey, preloadCompanies } from "../_lib/lists";
 import { useCopyText } from "~/lib/tools/copyText";
 import { useProspects } from "../_lib/context";
 import { useErrorText } from "~/lib/tools/errorText";
@@ -48,7 +49,7 @@ export function PeopleScreen() {
     }, [q]);
 
     const res = useResource(
-        segmentId ? `people:${segmentId}:${status}:${debounced}` : null,
+        segmentId ? peopleKey(segmentId, status, debounced) : null,
         () =>
             prospectsApi.people({
                 segmentId: segmentId!,
@@ -57,6 +58,11 @@ export function PeopleScreen() {
             }),
         { keepAcrossMounts: true }
     );
+    // Once this list is in, fetch Companies' so switching tabs is instant.
+    const listLoaded = res.data !== null;
+    useEffect(() => {
+        if (segmentId && listLoaded) preloadCompanies(segmentId);
+    }, [segmentId, listLoaded]);
     const people = useMemo(() => res.data?.people ?? [], [res.data]);
     const [selected, setSelected] = useState<Set<string>>(new Set());
     useEffect(() => setSelected(new Set()), [status, debounced, segmentId]);

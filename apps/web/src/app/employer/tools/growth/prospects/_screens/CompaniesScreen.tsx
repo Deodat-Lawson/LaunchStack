@@ -35,6 +35,7 @@ import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { cn } from "~/lib/utils";
 
 import { prospectsApi, type CompaniesSort, type CompaniesView, type CompanyRow } from "../api";
+import { companiesKey, preloadPeople } from "../_lib/lists";
 import { useCopyText } from "~/lib/tools/copyText";
 import { useGrowthFormat } from "../../_lib/format";
 import { useProspects } from "../_lib/context";
@@ -111,10 +112,15 @@ export function CompaniesScreen() {
     }, [draft, query, setParam]);
 
     const list = useResource(
-        segmentId ? `companies:${segmentId}:${view}:${sort}:${query}` : null,
+        segmentId ? companiesKey(segmentId, view, sort, query) : null,
         () => prospectsApi.companies({ segmentId: segmentId!, view, sort, q: query }),
         { keepAcrossMounts: true }
     );
+    // Once this list is in, fetch People's so switching tabs is instant.
+    const listLoaded = list.data !== null;
+    useEffect(() => {
+        if (segmentId && listLoaded) preloadPeople(segmentId);
+    }, [segmentId, listLoaded]);
     const finished = activeRun?.status === "completed";
     const reload = list.reload;
     useEffect(() => {

@@ -46,6 +46,16 @@ export const IconGmail = (p: BrandIconProps) => (
     </Ic>
 );
 
+/** Outlook: the "O" tile in front of an envelope. */
+export const IconOutlook = (p: BrandIconProps) => (
+    <Ic {...p}>
+        <rect x="2.5" y="6" width="8" height="8" rx="1.5" />
+        <circle cx="6.5" cy="10" r="1.9" />
+        <path d="M10.5 5H16a1.5 1.5 0 0 1 1.5 1.5v7A1.5 1.5 0 0 1 16 15h-5.5" />
+        <path d="m10.5 8.6 2.9 1.9 4.1-3" />
+    </Ic>
+);
+
 export const IconNotion = (p: BrandIconProps) => (
     <Ic {...p}>
         <rect x="3.5" y="3.5" width="13" height="13" rx="1.5" />
@@ -124,6 +134,22 @@ export const IconMicrosoft = (p: BrandIconProps) => (
         <rect x="11" y="3" width="6" height="6" rx="0.5" />
         <rect x="3" y="11" width="6" height="6" rx="0.5" />
         <rect x="11" y="11" width="6" height="6" rx="0.5" />
+    </Ic>
+);
+
+/** OneDrive: the cloud, in outline. */
+export const IconOneDrive = (p: BrandIconProps) => (
+    <Ic {...p}>
+        <path d="M5.8 15.5a3.3 3.3 0 0 1-.7-6.5 4.6 4.6 0 0 1 8.6-1.3 3.9 3.9 0 0 1 1.1 7.8Z" />
+    </Ic>
+);
+
+/** SharePoint: the three overlapping discs. */
+export const IconSharePoint = (p: BrandIconProps) => (
+    <Ic {...p}>
+        <circle cx="8" cy="7" r="4.2" />
+        <circle cx="13.2" cy="11.2" r="3.3" />
+        <circle cx="8.6" cy="14.4" r="2.6" />
     </Ic>
 );
 

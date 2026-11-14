@@ -93,7 +93,7 @@ export interface ProcessingQueueItem {
     canRetry: boolean;
 }
 
-export type ConnectorSyncProvider = "google-drive" | "gmail";
+export type ConnectorSyncProvider = "google-drive" | "microsoft-365" | "gmail" | "outlook";
 
 /** A connector sync the viewer can see that is running or finished recently. */
 export interface ConnectorSyncSummary {

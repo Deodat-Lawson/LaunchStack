@@ -189,6 +189,26 @@ export type NotionSyncEvent = {
     };
 };
 
+export type Microsoft365SyncEvent = {
+    name: "microsoft-365/sync.requested";
+    data: {
+        /** Serialized bigint — event payloads must be JSON. */
+        connectionId: string;
+        companyId: string;
+        force?: boolean;
+    };
+};
+
+export type OutlookSyncEvent = {
+    name: "outlook/sync.requested";
+    data: {
+        /** Serialized bigint — event payloads must be JSON. */
+        connectionId: string;
+        companyId: string;
+        force?: boolean;
+    };
+};
+
 /**
  * Write the follow-up note for one save of an assistant conversation
  * (ASSISTANT_CONVERSATIONS_EXECUTOR=worker). Ids and short values only: the
@@ -226,6 +246,8 @@ export type Events =
     | GoogleDriveSyncEvent
     | GmailSyncEvent
     | NotionSyncEvent
+    | Microsoft365SyncEvent
+    | OutlookSyncEvent
     | DistributionRunEvent
     | ProposalsRunEvent
     | ScenarioRunEvent

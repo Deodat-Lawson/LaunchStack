@@ -43,6 +43,8 @@
     "./connectors/agent-sessions": "./src/connectors/agent-sessions/index.ts",
     "./connectors/google-drive": "./src/connectors/google-drive/index.ts",
     "./connectors/gmail": "./src/connectors/gmail/index.ts",
+    "./connectors/microsoft-365": "./src/connectors/microsoft-365/index.ts",
+    "./connectors/outlook": "./src/connectors/outlook/index.ts",
     "./connectors/notion": "./src/connectors/notion/index.ts",
     "./connectors/obsidian": "./src/connectors/obsidian/index.ts",
     "./connectors/obsidian/paths": "./src/connectors/obsidian/paths.ts",

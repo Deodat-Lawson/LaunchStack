@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * The sync-request lifecycle the Drive and Gmail panels share.
+ * The sync-request lifecycle the Drive, Gmail and Outlook panels share.
  *
  * "Sync now" only queues an Inngest event; the run starts when the worker
  * picks it up a few seconds later, or never, when the server's job runner is

@@ -89,6 +89,10 @@
       "connect": "Connect"
     },
     "tabs": {
+      "microsoft365": {
+        "label": "OneDrive and SharePoint",
+        "desc": "Files and folders stay in sync"
+      },
       "mindmap": {
         "label": "Mindmap",
         "desc": "Diagram it, then cite it"
@@ -133,6 +137,10 @@
         "label": "Gmail",
         "desc": "Your mailbox, private to you"
       },
+      "outlook": {
+        "label": "Outlook",
+        "desc": "Your mailbox, private to you"
+      },
       "notion": {
         "label": "Notion",
         "desc": "Pick pages or databases"
@@ -161,6 +169,7 @@
     "mindmapAudienceNote": "This applies to the published copy, the one the workspace can cite.",
     "fixedDestination": {
       "gmail": "Gmail/your mailbox",
+      "outlook": "Outlook/your mailbox",
       "notion": "Notion/your workspace",
       "obsidian": "Obsidian/your vault"
     },
@@ -168,6 +177,10 @@
       "gmail": {
         "headline": "Only you",
         "detail": "Mail lands in your own Gmail folder. Nobody else in the workspace can open it."
+      },
+      "outlook": {
+        "headline": "Only you",
+        "detail": "Mail lands in your own Outlook folder. Nobody else in the workspace can open it."
       },
       "notion": {
         "headline": "Only you, until you share it",
@@ -307,6 +320,10 @@
         "gmailPrivate": "Private to you — lands in your own folder",
         "gmailResync": "Re-syncs every 15 minutes, read-only",
         "gmailAttachments": "PDF and Office attachments included",
+        "outlookFolders": "Pick mail folders or Outlook searches",
+        "outlookPrivate": "Private to you. It lands in your own folder",
+        "outlookResync": "Syncs again every 15 minutes, read-only",
+        "outlookAttachments": "PDF and Office attachments included",
         "slackMirror": "Mirrors agent meetings into a Slack channel",
         "slackNotAdded": "Messages and files aren't added to your sources",
         "slackExport": "To search Slack, upload an export's JSON files",
@@ -388,7 +405,7 @@
   },
   "deletedHere": {
     "title": "DELETED HERE ({count})",
-    "body": "{provider, select, notion {These pages stay deleted here: syncing leaves them out. Nothing was changed in Notion.} other {These files stay deleted here: syncing leaves them out. Nothing was changed in Google Drive.}}",
+    "body": "{provider, select, notion {These pages stay deleted here: syncing leaves them out. Nothing was changed in Notion.} microsoft365 {These files stay deleted here: syncing leaves them out. Nothing was changed in OneDrive or SharePoint.} other {These files stay deleted here: syncing leaves them out. Nothing was changed in Google Drive.}}",
     "syncAgain": "Sync again",
     "syncAgainAria": "Sync {name} again",
     "syncAllAgain": "Sync all {count} again",
@@ -469,6 +486,67 @@
     "starting": "Starting…",
     "syncNow": "Sync now",
     "disconnectConfirm": "Disconnect? Imported emails are kept."
+  },
+  "outlookConnect": {
+    "checking": "Checking Outlook…",
+    "loadError": "Could not load your Outlook connection. Try again in a moment.",
+    "retry": "Try again",
+    "notEnabledTitle": "Outlook is not enabled on this server",
+    "notEnabledAdmin": "Set <code>OUTLOOK_CONNECTOR_ENABLED=true</code> next to <code>MICROSOFT_OAUTH_CLIENT_ID</code> and <code>MICROSOFT_OAUTH_CLIENT_SECRET</code>, and give the Microsoft app registration the delegated <code>Mail.Read</code> permission. The steps are in <code>.env.example</code> under “Microsoft 365”.",
+    "notEnabledMember": "Ask whoever runs LaunchStack to turn on the Outlook connector. Nothing needs changing on your side.",
+    "notEnabledStillConnected": "{account} was connected before the connector was turned off. Nothing new syncs. You can still disconnect it.",
+    "connectTitle": "Connect your Outlook",
+    "connectBody": "Read-only. Pick mail folders or searches afterwards. Conversations land in a folder only you can see.",
+    "connectButton": "Connect Outlook",
+    "reconnectTitle": "Reconnect your Outlook",
+    "reconnectBody": "Microsoft access was revoked or expired. Connect again to resume syncing.",
+    "reconnectBodyDetail": "Microsoft access was revoked or expired ({detail}). Connect again to resume syncing.",
+    "reconnectButton": "Reconnect Outlook",
+    "noPermission": "Your role can’t add sources to this workspace, so it can’t connect a mailbox. Ask an admin for upload access.",
+    "noPermissionConnected": "Your role can no longer add sources to this workspace, so syncing is paused. You can still disconnect.",
+    "syncedTo": "Synced conversations go to <b>{folder}</b>, a folder only you can see. Every 15 minutes, read-only.",
+    "lastSyncFailed": "Last sync failed: {error}",
+    "lastRun": "Last run: {conversations, plural, one {# conversation} other {# conversations}} and {attachments, plural, one {# attachment} other {# attachments}} imported, {unchanged} unchanged, {failed} failed.",
+    "lastRunDeltaExpired": "Last run: {conversations, plural, one {# conversation} other {# conversations}} and {attachments, plural, one {# attachment} other {# attachments}} imported, {unchanged} unchanged, {failed} failed. Outlook’s change history had expired, so every chosen folder was checked again.",
+    "syncedHeading": "Syncing from Outlook ({count})",
+    "nothingSelected": "Nothing chosen yet. Choose mail folders or add a search to start syncing.",
+    "kindFolder": "Folder",
+    "kindSearch": "Search",
+    "stopSyncing": "Stop syncing {name}. Imported mail is kept.",
+    "removeFailed": "Could not remove that from the sync",
+    "chooseFolders": "Choose folders",
+    "chooseFoldersTitle": "Choose mail folders to sync",
+    "chooseFoldersHint": "A folder syncs its own mail. Tick the folders inside it too if you want them.",
+    "loadingFolders": "Loading folders…",
+    "noFolders": "No mail folders found in this mailbox.",
+    "foldersLoadFailed": "Could not load your mail folders. Try reconnecting Outlook.",
+    "expandFolder": "Show folders inside {name}",
+    "collapseFolder": "Hide folders inside {name}",
+    "alreadySyncing": "syncing",
+    "addFolders": "{count, plural, =0 {Add folders} one {Add # folder} other {Add # folders}}",
+    "foldersAdded": "{count, plural, one {# folder added} other {# folders added}}. Syncing now.",
+    "foldersAddedNoSync": "{count, plural, one {# folder added} other {# folders added}}, but the sync could not start.",
+    "saveSelectionFailed": "Could not save the selection",
+    "searchPlaceholder": "Outlook search, e.g. from:investor@fund.com subject:contract",
+    "searchAria": "Outlook search to sync",
+    "searchHint": "Uses Outlook’s own search words, such as from:, subject: and hasattachments:true.",
+    "addSearch": "Add search",
+    "searchAdded": "Search added. Syncing now.",
+    "searchAddedNoSync": "Search added, but the sync could not start.",
+    "saveSearchFailed": "Could not save the search",
+    "syncNow": "Sync now",
+    "syncing": "Syncing…",
+    "starting": "Starting…",
+    "syncRequested": "Sync requested",
+    "syncStartFailed": "Could not start the sync",
+    "disconnect": "Disconnect",
+    "disconnectTitle": "Disconnect Outlook?",
+    "disconnectBody": "LaunchStack deletes its saved access to {account} and stops syncing. Mail already imported stays in your folder. Microsoft keeps LaunchStack in your account’s list of apps until you remove it there.",
+    "disconnectAccountFallback": "your mailbox",
+    "disconnected": "Outlook disconnected. Imported mail was kept.",
+    "disconnectedRemoveApp": "LaunchStack deleted its saved access. To remove it from your Microsoft account too, open My Apps (work or school) or your Microsoft account’s app permissions.",
+    "openMicrosoftApps": "Open My Apps",
+    "disconnectFailed": "Could not disconnect Outlook"
   },
   "notionConnect": {
     "perks": {
@@ -832,8 +910,11 @@
   },
   "externalLink": {
     "openGoogleDrive": "Open in Google Drive",
+    "openOneDrive": "Open in OneDrive",
+    "openSharePoint": "Open in SharePoint",
     "openNotion": "Open in Notion",
     "openGmail": "Open in Gmail",
+    "openOutlook": "Open in Outlook",
     "openObsidian": "Open in Obsidian",
     "openGithub": "Open on GitHub",
     "openYoutube": "Open on YouTube",
@@ -845,8 +926,11 @@
     "hintFile": "Opens the file itself in a new browser tab",
     "detailsLabel": "Opens in",
     "placeGoogleDrive": "Google Drive",
+    "placeOneDrive": "OneDrive",
+    "placeSharePoint": "SharePoint",
     "placeNotion": "Notion",
     "placeGmail": "Gmail",
+    "placeOutlook": "Outlook",
     "placeObsidian": "Obsidian",
     "placeYoutube": "YouTube",
     "placeFile": "Your browser"
@@ -878,6 +962,99 @@
     "registerFailed": "{name}: couldn't be added (HTTP {status})",
     "connectionLost": "{name}: the connection dropped during the upload"
   },
+  "microsoft365Source": {
+    "title": "OneDrive and SharePoint",
+    "subtitle": "Add files and folders from Microsoft 365. They stay in sync.",
+    "perks": {
+      "pick": "Browse your OneDrive and your SharePoint sites, or paste a link",
+      "sync": "What you add stays in sync, about every 15 minutes",
+      "readOnly": "Read only. LaunchStack never changes anything in Microsoft 365"
+    },
+    "checking": "Checking Microsoft 365…",
+    "loadError": "Could not load the Microsoft 365 connection. Try again in a moment.",
+    "forbidden": "OneDrive and SharePoint are connected for the whole workspace, so only people who manage connections can add from them. Ask a workspace admin to connect Microsoft 365 or to add the files you need.",
+    "notConfigured": "Microsoft 365 is not configured on this server. Whoever runs LaunchStack needs to set <code>MICROSOFT_OAUTH_CLIENT_ID</code>, <code>MICROSOFT_OAUTH_CLIENT_SECRET</code> and <code>EMBEDDING_SECRETS_KEY</code>. The steps are in <code>.env.example</code>.",
+    "connect": "Connect Microsoft 365",
+    "connectHint": "Microsoft asks you to sign in and allow LaunchStack to read files. Your organisation may need an administrator to approve this first.",
+    "reconnectTitle": "Reconnect Microsoft 365",
+    "reconnectBody": "Microsoft access was revoked or has expired. Connect again to keep syncing. What was picked is kept.",
+    "reconnect": "Reconnect Microsoft 365",
+    "connectedAs": "Connected as {account}",
+    "connectedFallback": "Connected to Microsoft 365",
+    "browse": "Browse",
+    "browseHint": "Pick from your OneDrive or from a SharePoint site.",
+    "pasteLinkLabel": "Or paste a OneDrive or SharePoint link",
+    "add": "Add",
+    "adding": "Adding…",
+    "notMicrosoftLink": "That isn't a OneDrive or SharePoint link. In OneDrive or SharePoint, use Share, then Copy link.",
+    "linkHintAccount": "Works for any file or folder {account} can open, including ones shared with it.",
+    "linkHintThis": "Works for any file or folder this account can open, including ones shared with it.",
+    "addedOne": "Adding “{name}” from Microsoft 365. It shows up in a moment and stays in sync.",
+    "addedFolder": "Adding the folder “{name}” from Microsoft 365. It fills in over the next minute and stays in sync.",
+    "addedMany": "Adding {count} items from Microsoft 365. They show up in a moment and stay in sync.",
+    "addFailed": "Couldn’t add that from Microsoft 365",
+    "syncLater": "Added. The sync hasn’t started yet. It runs on its own shortly.",
+    "destinationHint": "Files go to the folder shown above. A folder you add is rebuilt inside it, subfolders included.",
+    "manageHint": "To see what syncs, stop syncing something or disconnect, open Settings, then Integrations.",
+    "browser": {
+      "title": "Add from Microsoft 365",
+      "description": "Choose files or folders. A folder brings in everything inside it, and files added to it later.",
+      "myOneDrive": "My OneDrive",
+      "sites": "SharePoint sites",
+      "searchSites": "Search SharePoint sites",
+      "search": "Search",
+      "location": "Location",
+      "loading": "Loading…",
+      "loadFailed": "Could not load this. Try again.",
+      "retry": "Try again",
+      "emptyFolder": "This folder is empty.",
+      "noSites": "No sites found.",
+      "noLibraries": "This site has no document libraries.",
+      "truncated": "Showing the first {count} items. To add something further down, paste its link instead.",
+      "unsupported": "This file type can't be read",
+      "selectItem": "Select {name}",
+      "openItem": "Open {name}",
+      "site": "Site",
+      "library": "Document library",
+      "selected": "{count, plural, =0 {Nothing selected} other {# selected}}",
+      "limit": "You can add up to {max} at a time.",
+      "addSelected": "{count, plural, =0 {Add} other {Add #}}",
+      "clear": "Clear selection"
+    }
+  },
+  "microsoft365Sync": {
+    "cardTitle": "Synced from OneDrive and SharePoint",
+    "checking": "Checking Microsoft 365…",
+    "notConnected": "Nothing syncs from OneDrive or SharePoint yet. Connect Microsoft 365 in Add source, under OneDrive and SharePoint. What you pick there is listed here.",
+    "reconnectTitle": "Reconnect Microsoft 365",
+    "reconnectBody": "Microsoft access was revoked or has expired. Connect again to keep syncing. What was picked is kept.",
+    "lastSyncFailed": "Last sync failed: {error}",
+    "lastRun": "Last run: {stored} imported, {unchanged} unchanged, {failed} failed.",
+    "empty": "Nothing came in from {names}. Microsoft lists {count, plural, one {it} other {them}} as empty.",
+    "accessLost": "{count, plural, one {# item} other {# items}} can no longer be opened. They were deleted, or are no longer shared with the connected account.",
+    "truncated": "The last sync reached its file limit, so some files were left out.",
+    "syncedTitle": "SYNCED ({count})",
+    "nothingYet": "Nothing yet. Pick files or a folder in Add source, under OneDrive and SharePoint.",
+    "stopSyncingTitle": "Stop syncing (keeps imported documents)",
+    "stopSyncingAria": "Stop syncing {name}",
+    "stopFailed": "Could not stop syncing that. Try again.",
+    "syncing": "Syncing…",
+    "starting": "Starting…",
+    "syncNow": "Sync now",
+    "syncRequested": "Sync requested",
+    "syncStartFailed": "Could not start the sync",
+    "destination": {
+      "inFolder": "In {path}",
+      "inPrivateFolder": "In a private folder of whoever picked it",
+      "inDefault": "In Microsoft 365",
+      "becomesFolder": "Becomes its own folder on the next sync"
+    },
+    "names": {
+      "one": "“{name}”",
+      "two": "“{first}” and “{second}”",
+      "more": "“{first}”, “{second}” and {count} more"
+    }
+  },
   "sourceTypes": {
     "doc": "File",
     "audio": "Audio",
@@ -885,6 +1062,7 @@
     "github": "GitHub",
     "notion": "Notion",
     "gmail": "Gmail",
+    "outlook": "Outlook",
     "drive": "Drive",
     "slack": "Slack",
     "dropbox": "Dropbox",
@@ -986,6 +1164,28 @@
       "notManager": "You do not manage this folder.",
       "noEditAccessDestination": "You do not have edit access to the folder you are moving it into."
     },
+    "microsoft": {
+      "notConfigured": "Microsoft 365 is not configured on this server. Set MICROSOFT_OAUTH_CLIENT_ID, MICROSOFT_OAUTH_CLIENT_SECRET and EMBEDDING_SECRETS_KEY."
+    },
+    "microsoft365": {
+      "notConnected": "No Microsoft 365 connection.",
+      "connectFirst": "Connect Microsoft 365 first.",
+      "revoked": "Microsoft access was revoked. Reconnect first.",
+      "invalidBody": "Invalid request body.",
+      "syncStarted": "Sync started.",
+      "itemAdded": "\"{name}\" added.",
+      "itemsAdded": "{count} items added.",
+      "itemNotFound": "The connected Microsoft account can't open that item. It may have been deleted or is no longer shared.",
+      "itemUnsupported": "That item is not a file or a folder, so it can't be added.",
+      "selectionUpdated": "Selection updated. Already-imported documents were kept.",
+      "browseInvalid": "That is not something the browser can open.",
+      "browseNotFound": "The connected Microsoft account can't open that. It may have been deleted or is no longer shared.",
+      "libraryFallback": "Documents",
+      "myOneDrive": "My OneDrive",
+      "linkNotFound": "{account} can't open that link. Ask its owner to share it with {account}, then paste it again.",
+      "linkNotFoundAccount": "The connected Microsoft account can't open that link. Ask its owner to share it with that account, then paste it again.",
+      "linkUnsupported": "\"{name}\" is not a file or a folder, so it can't be added."
+    },
     "drive": {
       "notEnabled": "Google Drive linking is not enabled on this deployment.",
       "notConfigured": "Google Drive linking is not configured. Set GOOGLE_OAUTH_CLIENT_ID and GOOGLE_OAUTH_CLIENT_SECRET (and GOOGLE_DOCS_EDITING_ENABLED=true).",
@@ -1051,6 +1251,7 @@
       "obsidianNeedsUpload": "Importing notes needs permission to add documents.",
       "driveConnectsElsewhere": "Google Drive connects via /api/connectors/google/oauth/start.",
       "gmailConnectsElsewhere": "Gmail connects via /api/connectors/google/oauth/start?provider=gmail.",
+      "outlookConnectsElsewhere": "Outlook connects via /api/connectors/microsoft/oauth/start?provider=outlook.",
       "unknownProvider": "Unknown connector provider: {provider}",
       "deletedDriveNotionOnly": "Deleted files are tracked only for google-drive and notion.",
       "deletedRestored": "{count, plural, =0 {Nothing to bring back.} one {# file will come back on the next sync.} other {# files will come back on the next sync.}}"
@@ -1070,6 +1271,15 @@
         "starred": "Starred",
         "important": "Important"
       }
+    },
+    "outlook": {
+      "notConfigured": "The Outlook connector is not enabled on this server. Set OUTLOOK_CONNECTOR_ENABLED=true, MICROSOFT_OAUTH_CLIENT_ID, MICROSOFT_OAUTH_CLIENT_SECRET and EMBEDDING_SECRETS_KEY.",
+      "connectFirst": "Connect Outlook first.",
+      "accessRevoked": "Outlook access was revoked. Reconnect first.",
+      "disconnected": "Outlook disconnected. LaunchStack deleted its saved access and stopped syncing; mail already imported was kept in your folder. Microsoft still lists LaunchStack among your account's apps: to remove it there too, open https://myapps.microsoft.com (work or school) or https://account.live.com/consent/Manage (personal).",
+      "pickSomething": "Pick at least one mail folder or search to sync.",
+      "itemsAdded": "{count, plural, one {# item added.} other {# items added.}}",
+      "selectionUpdated": "Selection updated. Mail already imported was kept."
     }
   }
 }

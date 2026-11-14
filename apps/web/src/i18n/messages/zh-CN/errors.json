@@ -124,6 +124,7 @@
     "githubUrlRequired": "请输入 GitHub 链接",
     "valueOrReset": "请发送一个值，或 reset: true",
     "notGmailLabel": "不是有效的 Gmail 标签 ID",
+    "notOutlookFolder": "不是有效的 Outlook 邮件文件夹 ID",
     "clientNameRequired": "请为客户端命名",
     "redirectUriFullUrl": "每个重定向 URI 都必须是完整的网址",
     "redirectUriHttps": "重定向 URI 必须使用 https",

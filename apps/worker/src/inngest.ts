@@ -43,6 +43,11 @@ import {
 } from "~/server/inngest/functions/googleDriveSync";
 import { gmailSyncCron, gmailSyncJob } from "~/server/inngest/functions/gmailSync";
 import { notionSyncCron, notionSyncJob } from "~/server/inngest/functions/notionSync";
+import {
+    microsoft365SyncCron,
+    microsoft365SyncJob,
+} from "~/server/inngest/functions/microsoft365Sync";
+import { outlookSyncCron, outlookSyncJob } from "~/server/inngest/functions/outlookSync";
 import { assistantConversationFollowUpJob } from "~/server/inngest/functions/assistantConversationFollowUp";
 
 export function createInngestHandler() {
@@ -68,6 +73,10 @@ export function createInngestHandler() {
             gmailSyncCron,
             notionSyncJob,
             notionSyncCron,
+            microsoft365SyncJob,
+            microsoft365SyncCron,
+            outlookSyncJob,
+            outlookSyncCron,
             distributionRunJob,
             brandPublishDueCron,
             brandSyncInsightsCron,

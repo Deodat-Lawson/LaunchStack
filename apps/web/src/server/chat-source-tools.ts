@@ -34,6 +34,7 @@ import { parseDocumentId } from "~/server/mcp/tools/shared";
 import { isPerUserProvider } from "~/server/db/schema/connectors";
 import { listConnectionsForCompany } from "~/server/services/connectors/connection-store";
 import { getSyncState } from "~/server/services/connectors/google-drive/store";
+import { getSyncState as getMicrosoft365SyncState } from "~/server/services/connectors/microsoft-365/store";
 import { getSyncState as getNotionSyncState } from "~/server/services/connectors/notion/store";
 import {
     SOURCE_ORIGIN_FILTERS,
@@ -275,7 +276,7 @@ export function createSourceTools(
         name: "list_sources",
         description:
             "List the sources in this workspace that the person can open: the folders that hold them (with how many sources each holds) and the sources themselves, newest first, each with its id, folder and the app it came from (e.g. Google Drive). " +
-            "Use it when the person asks what they have — what is in the workspace, a folder, or their Google Drive or Gmail — or to find a source by browsing. " +
+            "Use it when the person asks what they have — what is in the workspace, a folder, or their Google Drive, Gmail or Outlook — or to find a source by browsing. " +
             "Pass from to list only what came from one app, and folder to list one folder and its subfolders.",
         parameters: {
             type: "object",
@@ -799,12 +800,15 @@ export function citedPassages(passages: readonly SearchResult[], answer: string)
 // --- what the model is told about the workspace ------------------------------
 
 /** Apps whose imports become sources, as connector providers. */
-const SOURCE_PROVIDERS = new Set(["google-drive", "gmail", "notion"]);
+const SOURCE_PROVIDERS = new Set(["google-drive", "microsoft-365", "gmail", "outlook", "notion"]);
 
-/** When a source-importing connection last synced; Gmail keeps no run time here. */
+/** When a source-importing connection last synced; Gmail and Outlook keep no run time here. */
 async function lastSyncAtFor(provider: string, connectionId: number): Promise<Date | null> {
     if (provider === "google-drive") return (await getSyncState(connectionId))?.lastSyncAt ?? null;
     if (provider === "notion") return (await getNotionSyncState(connectionId))?.lastSyncAt ?? null;
+    if (provider === "microsoft-365") {
+        return (await getMicrosoft365SyncState(connectionId))?.lastSyncAt ?? null;
+    }
     return null;
 }
 
@@ -823,7 +827,7 @@ export interface SourcesOverview {
 /**
  * What the person can open, by origin, and which source-importing apps are
  * connected. Any member may see a workspace's connections in Settings; a
- * Gmail or Notion connection is personal, so only its owner's shows (as there).
+ * Gmail, Outlook or Notion connection is personal, so only its owner's shows (as there).
  */
 export async function loadSourcesOverview(ctx: WorkspaceContext): Promise<SourcesOverview> {
     const [inventory, connections] = await Promise.all([
@@ -878,13 +882,17 @@ function connectionLines(overview: SourcesOverview): string[] {
                 ? " LaunchStack imports the files and folders someone chose to add from Google Drive, not the whole Drive, so what you can list is what was imported."
                 : app.provider === "notion"
                   ? " LaunchStack imports the Notion pages this person picked on Notion's consent screen, not the whole Notion workspace, so what you can list is what was imported."
-                  : "";
+                  : app.provider === "microsoft-365"
+                    ? " LaunchStack imports the OneDrive and SharePoint files and folders someone chose to add, not everything the account can open, so what you can list is what was imported."
+                    : "";
         const where =
             app.provider === "google-drive"
                 ? " — nothing has been imported yet, or the imports are in folders they cannot open; files are added from Add a source → Google Drive"
                 : app.provider === "notion"
                   ? " — nothing has been imported yet, or the pages are in a folder they cannot open; pages are chosen from Add a source → Notion"
-                  : "";
+                  : app.provider === "microsoft-365"
+                    ? ": nothing has been imported yet, or the imports are in folders they cannot open; files are added from Add a source → OneDrive and SharePoint"
+                    : "";
         const none = imported
             ? ""
             : ` None of its files are among the sources this person can open${where}.`;
@@ -900,7 +908,7 @@ function connectionLines(overview: SourcesOverview): string[] {
 export function sourceToolsPrompt(overview: SourcesOverview, attached: boolean): string {
     return [
         "## The workspace's sources",
-        "This workspace's sources are the files people put in LaunchStack: uploaded, written here, or imported from a connected app such as Google Drive or Gmail. You can look through the ones this person can open with `list_sources` (what is there), `search_sources` (passages that match a query), `read_source` (one source's full text) and `ask_each` (one question asked of every source in a set, with one answer per source).",
+        "This workspace's sources are the files people put in LaunchStack: uploaded, written here, or imported from a connected app such as Google Drive, Gmail or Outlook. You can look through the ones this person can open with `list_sources` (what is there), `search_sources` (passages that match a query), `read_source` (one source's full text) and `ask_each` (one question asked of every source in a set, with one answer per source).",
         inventoryLine(overview.inventory),
         ...connectionLines(overview),
         attached

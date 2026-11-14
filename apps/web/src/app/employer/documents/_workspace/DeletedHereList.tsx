@@ -29,7 +29,14 @@ export interface DeletedHereSummary {
     readonly others: number;
 }
 
-export type DeletedHereProvider = "google-drive" | "notion";
+export type DeletedHereProvider = "google-drive" | "notion" | "microsoft-365";
+
+/** The provider as the messages name it: a select key takes no hyphen. */
+const SELECT_KEY: Record<DeletedHereProvider, string> = {
+    "google-drive": "google-drive",
+    notion: "notion",
+    "microsoft-365": "microsoft365",
+};
 
 export function DeletedHereList({
     className = "mb-4",
@@ -86,7 +93,9 @@ export function DeletedHereList({
             <div className="text-ink-3 mb-1 text-xs font-semibold">
                 {t("title", { count: total })}
             </div>
-            <p className="text-ink-3 mb-2 text-[12px] leading-relaxed">{t("body", { provider })}</p>
+            <p className="text-ink-3 mb-2 text-[12px] leading-relaxed">
+                {t("body", { provider: SELECT_KEY[provider] })}
+            </p>
             <ul className="flex max-h-48 flex-col gap-1.5 overflow-y-auto">
                 {items.map(item => (
                     <li

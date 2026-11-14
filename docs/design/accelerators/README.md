@@ -4,7 +4,7 @@
 
 Help a startup find accelerator **Programs**, understand how they fit its **Core profile**, and reach the official website or application portal.
 
-This branch keeps the latest Program list/detail layout, sourced logos and locations, saved fit scores, and Program detail preview. It removes the LaunchStack Form-filling workflow: Form navigation, Application creation, answer editing, autosave, submission tracking, AI drafting, and selected-text suggestions. These are not hidden behind a beta switch; their active UI, API, and execution paths are removed.
+This branch delivers the whole discovery loop: a scraped, sourced Catalogue; browsing, search and tag filters; rubric-based company fit with a chosen scoring scope; ranking; similar past companies for YC; and a manual application tracker. It does not fill, draft or submit applications: the LaunchStack Form workflow (Form navigation, Application creation, answer editing, AI drafting) stays removed, and the tracker only records what the founder did on the Program's own site.
 
 Kien will investigate application assistance separately, including a possible browser extension. That research does not block this delivery. Do not reintroduce the removed workflow as a dependency of Program discovery.
 
@@ -21,30 +21,16 @@ This scope replaces the Form-related assignments in [issue #510](https://github.
 | Core profile    | The existing company profile and its supporting evidence, not a new profile store.                                 |
 | Fit result      | A company-specific comparison of a Program profile with the Core profile. A score is not an admission probability. |
 
-## What this branch must do
+## What this branch does
 
-- Show compact, fully clickable Program rows with official logos, sourced locations when available, and saved fit rings.
-- Open a Program detail preview with a sticky company-fit evaluation on the left and sourced Program information, Cycles/deadlines, and official links in the main column. Narrow panes stack these sections without clipping the evaluation.
-- Read saved fit results without starting paid work. Matching starts only when the user selects **Match Programs**.
-- Mark affected results out of date when the Core profile or Program record changes. Do not present an unknown score as zero.
-- Keep the public Catalogue separate from company-private fit results.
-- Require active membership, unrestricted access to all company documents, and the existing read/edit permission for the requested action. Enforce this on direct APIs and background work as well as the UI.
-- Recheck access before committing matching output. Save output, complete the run, and debit credits atomically; a failed final check publishes no output or debit.
-- Keep historical Accelerator Applications and runs out of Grants screens, APIs, counts, and actions.
-
-The existing matching price is **2,000 credits per successful matching run**, shown before the action. Opening a Program does not run matching. A Program remains useful even when its application Form is inaccessible or unknown.
-
-The current base provides Catalogue browsing, text search, factual filters, and saved-fit ranking. Classification, automated collection schedules, application assistance, and extension support remain outside this delivery.
-
-### Search and filters
-
-- Search matches all entered terms across the Program name, description, target applicants, optional location, and Cycle labels, without case sensitivity.
-- Saved-fit filters distinguish current numeric scores, unmatched Programs, current unscorable results, and out-of-date results. A genuine score of zero remains a score.
-- Minimum-score filters include only current numeric scores at or above the selected threshold. **Any score** also includes unknown, unmatched, and out-of-date results.
-- Intake filters use recorded facts: rolling intake, a recorded deadline, or neither confirmed. A Program can have both rolling and dated Cycles. A recorded deadline is not a claim that applications are open.
-- Search and filters combine with AND, show the result count, and can be reset together. They survive opening a Program and returning with **All Programs**.
-- Filtering only reads saved data. It does not classify Programs, infer eligibility, or start paid matching.
-- Wide-pane evaluation cards stay visible while Program information scrolls, with keyboard-accessible scrolling for long assessments. Short Studio panes size the card to the pane, not the browser window.
+- **Browse:** compact, fully clickable Program rows with verified logos (a lettered tile when no logo could be verified), location, stages, upcoming deadline and saved fit ring.
+- **Program page:** hero with upfront cash, fixed equity, next deadline and acceptance rate; tabs for Overview, Deal, Applying and Similar companies; fit panel and "Your application" tracker beside them. Every fact comes from the Program's dossier with its source link, or reads **Not published** (checked, not found) or **Not checked**.
+- **Search and filters:** search covers name, real narrative, location and tags (scraper boilerplate is excluded). Facets for sectors, stage, region, deal (equity-free, fixed equity, not published), deadline window, tracking (all, tracked, awaiting decision, untracked) and priority run on dossier tags for the whole Catalogue; an unknown value never matches a facet. Filters combine with AND and survive opening a Program.
+- **Scoring:** the **Score** control scores the chosen Programs, not the whole Catalogue: the top N of the current filtered and sorted list (default 30) or everything filtered. The button shows how many Programs will be sent and the credit estimate (167 credits per Program). Programs whose saved result is still current for the same profile, Program and rubric are skipped unless **Re-score current results** is ticked, so unchanged inputs keep their grades and are not charged again.
+- **Fit rubric `fit-v2`:** seven weighted areas (sector 20, stage 15, business model 15, past companies 15, deal 15, operations 10, value 10). The model grades six areas in batches of up to 10 Programs, citing Program and company evidence for every grade; a Program whose grades fail validation keeps its previous result. "Similar past companies" is graded by rule for Supported accelerators (YC) from the similarity of the five closest past companies, and does not apply elsewhere. An overall score appears only when graded areas cover at least 70% of the applicable weight. A score is not an admission probability, and unknown is never shown as 0.
+- **Ranking:** current scores high to low, then current results without enough evidence, then out of date, then not scored; other sorts are nearest deadline, name and your priority. Results go out of date when the profile, the Program record or the rubric changes.
+- **Tracker:** one company-private opportunity per Program and cycle with priority, status (shortlisted to accepted/rejected/withdrawn), notes, next action, submission date, tasks and the deadline planned against (an instant, or a date when the Program gave no time). Tracking never submits anything and never starts paid scoring.
+- **Access:** active membership, unrestricted access to all company documents, and read/edit permission per action, enforced on APIs and background work; output, run completion and debit commit atomically.
 
 ## Team responsibilities
 
@@ -143,51 +129,52 @@ Run from the repository root. Set `DATABASE_URL` to an explicit, isolated develo
 ```sh
 pnpm install --frozen-lockfile
 pnpm --filter @launchstack/web db:migrate
-
-# Validation does not write to a database.
-pnpm --filter @launchstack/web accelerators:import -- --validate \
-  ../../fixtures/accelerators/programs/y-combinator.json \
-  ../../fixtures/accelerators/programs/abovea-startup-accelerator.json \
-  ../../fixtures/accelerators/programs/techstars-london.json
-
-# Trusted operator only. DATABASE_URL selects the target; the label does not.
-pnpm --filter @launchstack/web accelerators:import -- --installation local-accelerators \
-  ../../fixtures/accelerators/programs/y-combinator.json \
-  ../../fixtures/accelerators/programs/abovea-startup-accelerator.json \
-  ../../fixtures/accelerators/programs/techstars-london.json
 ```
 
-For a local synthetic demonstration, set `DEV_SEED_PASSWORD` yourself, then run:
+### Refreshing the Catalogue (`services/accelerator-scraper`)
+
+The scraper is deterministic Python with no model calls; see `services/accelerator-scraper/README.md`. It honours robots.txt and crawl-delay, caches pages so reruns are stable, reads up to 15 relevant pages per Program (sitemap, apply, FAQ, terms, dates) and renders JavaScript pages with headless Chromium only when the static page is too thin. Every extracted value keeps its excerpt; a field it checked and could not find is recorded as not published with the pages checked. Y Combinator's pages are in scope by product decision, with robots.txt honoured.
 
 ```sh
-DEV_SEED_WORKSPACE='Accelerators Demo — Northwind fixture' pnpm --filter @launchstack/web db:seed
-DEV_SEED_WORKSPACE='Accelerators Demo — Northwind fixture' pnpm --filter @launchstack/web accelerators:demo
-PROPOSALS_EXECUTOR=inline pnpm --filter @launchstack/web dev
+uv venv --python 3.12 services/accelerator-scraper/.venv
+uv pip install --python services/accelerator-scraper/.venv/bin/python \
+  -r services/accelerator-scraper/requirements.txt -r services/accelerator-scraper/requirements-render.txt
+services/accelerator-scraper/.venv/bin/python -m playwright install chromium
+
+S=services/accelerator-scraper/.venv/bin/python
+$S services/accelerator-scraper/scrape.py refresh            # every Program
+$S services/accelerator-scraper/scrape.py discover vet       # rule-based accept/reject of candidates, with reasons
+$S services/accelerator-scraper/scrape.py discover add-confirmed
+$S services/accelerator-scraper/scrape.py coverage           # rewrites fixtures/accelerators/COVERAGE.md
+
+# Validate, then import records and their dossiers (records first; dossiers reference them).
+pnpm --filter @launchstack/web accelerators:import -- --validate ../../fixtures/accelerators/programs/*.json
+pnpm --filter @launchstack/web accelerators:import -- --installation local-accelerators ../../fixtures/accelerators/programs/*.json
+pnpm --filter @launchstack/web accelerators:import-intelligence -- --installation local-accelerators
 ```
 
-The demo seeder requires a named workspace and loopback database, and refuses to overwrite an existing Core profile. It uses synthetic Northwind facts; its fit results are not evidence of production matching accuracy. Configure the existing model provider and credit balance, open `/employer/documents?feature=accelerators&at=/programs`, and explicitly select **Match Programs** for real model output. For local execution without a configured worker, use the existing `PROPOSALS_EXECUTOR=inline` setting; production must use its configured worker and credit policy.
+### Similar YC companies
 
-YC, aboveA Startup Accelerator, and Techstars London remain reference records. They demonstrate the record format, logos, descriptions, fit inputs, and location/Cycle metadata where known. They do not establish adequate release coverage or current accuracy for every deadline. Recheck sources for the target release.
-
-### Similar YC companies and the vision demo
-
-Y Combinator is the only Supported accelerator. Its past companies come from the public [yc-oss](https://github.com/yc-oss/api) mirror of YC's directory, and published applications come from the founders' own pages or collection sites listed in `apps/web/scripts/yc-application-sources.ts`. The collector never requests ycombinator.com: YC's Terms of Use forbid scraping its site, so YC-hosted applications stay links. The data lands only in the target database and is never committed; neither yc-oss nor the founders grant reuse rights, so do not republish it.
-
-A Program's **Similar companies** tab lists the twelve past companies closest to the Core profile. Each row shows how the company pitches itself in YC's directory (its yc-oss description) and, when that company published its application, a link to read it. Applications of companies outside that list are not shown.
+Y Combinator is the only Supported accelerator. Its past companies come from the public [yc-oss](https://github.com/yc-oss/api) mirror of YC's directory, and published applications from the founders' own pages or collection sites listed in `apps/web/scripts/yc-application-sources.ts`. That collector does not request ycombinator.com, and an application whose page no longer has both of its anchors is skipped rather than stored with the page around it. The data lands only in the target database and is never committed; neither yc-oss nor the founders grant reuse rights, so do not republish it.
 
 ```sh
 # After importing the y-combinator Program. Embeddings use EMBEDDING_API_BASE_URL/EMBEDDING_API_KEY
 # and wait out per-minute rate limits; re-runs embed only changed companies.
 pnpm --filter @launchstack/web accelerators:collect-yc -- --installation local-accelerators
-
-# Workstream 1's catalogue: Program records, then their public dossiers (deal, batches, tags,
-# portfolio listings). Import the records first; the dossier table references them.
-pnpm --filter @launchstack/web accelerators:import -- --installation local-accelerators \
-  ../../fixtures/accelerators/programs/*.json
-pnpm --filter @launchstack/web accelerators:import-intelligence -- --installation local-accelerators
 ```
 
-Program details shown on screen (deal, batches, contacts, tags) still come from the twelve stand-ins in `apps/web/src/server/accelerators/demo/programs/`; the screens do not read Workstream 1's dossiers (`accelerator_program_intelligence`) yet. The UI does not label the stand-ins as demo data, so do not show this build to anyone as production output. Company fit is real: **Match Programs** scores every Program under rubric `fit-v1` (Workstream 2), the homepage sorts and filters on the saved result, and the Program page shows each area with its note and cited sources. Under `fit-v1` the "Similar past companies" area does not count toward the score for any Program, including YC. The tracker and similar-company matching are real features: tracker rows are company-private and need `documents.edit` to change.
+A Program's **Similar companies** tab lists the past companies closest to the Core profile, each with its yc-oss pitch and, when the founders published it, a link to the application. The same similarity feeds YC's "Similar past companies" grade.
+
+## Open decision: classifying what the rules cannot
+
+Filters only offer options that match at least one Program, with counts and "Known for N of M" per facet. Coverage from the rule-based scraper on 255 Programs (November 2026): program type 230, region 208, sector 206, technology 174, stage 171, benefits 133, deal terms 114, customers 88, business model 65, instrument 28, dated next deadline 21, acceptance rate 14.
+
+Two kinds of gap remain, and they need different fixes:
+
+- **Classification** (sector, stage, business model, customers, instrument, benefits): Programs usually describe these in words the rules do not match. A model-based classifier could fill them from text the scraper already cached, without fetching: fixed tag vocabulary only, a cited excerpt for every tag, labelled "AI-classified" rather than shown as fact, and rerun only when a Program's pages change.
+- **Facts** (deadline dates, cash amounts, acceptance rates): published or not. A model must never fill these; they stay "Not published".
+
+Deferred by product decision (14 November 2026): decide whether to add the classifier before release.
 
 ## Development and acceptance guidelines
 
@@ -199,19 +186,12 @@ Program details shown on screen (deal, batches, contacts, tags) still come from 
 - Run pipeline/web typechecks and affected behavioral suites. Validate record/logo assets with the real import command. UI changes need actual browser proof at desktop and narrow widths.
 - For the release, prove that a startup can find relevant Programs within the agreed coverage, understand fit and uncertainty, and reach an official application link **without using a LaunchStack Form**.
 
-## Cutover verification
+## Verification (14 November 2026)
 
-- Pipeline suite: 55 files, 629 tests passed. Pipeline and web typechecks passed.
-- Affected web coverage: 19 suites, 261 tests passed, including actual disposable-Postgres matching, Grants isolation, retired-run rejection, access revocation, debit rollback, self-host recording, fit-state presentation, interpretation labels, and localized credit failures.
-- Affected-feature lint passed. The repository-wide lint command was not rerun: its previous attempts exhausted the Node heap. Do not report a full-repository lint or production-build pass for this cutover.
-- Drizzle's snapshot check passed. The 16 Run columns have the same physical order in the migrated review database and the schema declaration, with historical `result` last.
-- All three reference records and their local logo assets passed the real import command's validation mode.
-- In the running app, checked Program rows and the YC detail preview at desktop and 400px widths. Form navigation and visible answer editors were absent.
-- Clicked Match Programs once with the configured model and synthetic Core profile. All three fits refreshed, reload recovered progress/results, and the ledger recorded exactly one 2,000-credit debit.
-- A temporary matching-progress `503` retained the stored run reference, showed the error, and prevented duplicate matching. Restoring access to the endpoint recovered the result and cleared the reference.
-- All eight removed Application/Form API operations and a historical selected-edit run returned `404`. Restoring that retired run reference cleared recovery storage and left matching available. Grants APIs still returned only the existing grant and excluded Accelerator runs.
-- Fingerprints of the local review database's historical Application, ten answer sections, and eight retired runs were unchanged after the smoke checks. No migrations or resets were applied to the demo database during this cutover.
+- Scraper: 64 tests pass (`scrape.py test`, also run in CI's python-services job). Four full refreshes of the 255 Programs; the record and check files each run changed went 28/52, 19/5, then 7/18. The last run's changes were compared field by field against the previous run: rotating links on the sites (member spotlights, news lists), CDN images renamed, quotes whose page text changed, and two logos that became available. The crawl itself is ordered by page kind, depth and URL, so the same site gives the same pages. Two scraper defects found this way were fixed: login and admin URLs were crawled as Program pages, and gaining a logo deleted the shared `none.png`.
+- Coverage after the last refresh (`fixtures/accelerators/COVERAGE.md`): application route 245, sector 202, region 198, stage 164, deal components 108, intake 92, public email 89, instrument 28, dated next deadline 12, selectivity 5. Twelve sources on ten Programs block crawlers and were not read.
+- Both import commands validated and imported all 255 records and dossiers, including every logo asset, into the local review database.
+- Pipelines: typecheck and 12 files / 116 tests pass. Web: typecheck, lint of every accelerator path, and 22 suites / 327 tests pass, including the disposable-Postgres tracker and scoring tests and English/Chinese message parity.
+- Browser, desktop and 420px: search, filters with counts, Program pages (facts, titled application links, the program's quoted deal wording, one source list), scoring two filtered Programs from the score control (334 credits debited, results ranked), and the tracker.
 
-The matching port also now rejects a `null` ledger debit result inside the existing finalization transaction. This closes a pre-existing failure path where an exhausted cloud balance could otherwise publish output without a debit; it does not change the deployment's negative-balance policy.
-
-Verification limits: the live model smoke used the inline executor, not a live worker. Restored-run `404` and temporary `503` recovery have browser proof, but the provider has no automated lifecycle tests for a `403` racing a late Home response or disposal during polling. LSP was unavailable; surviving static callers were checked by text search and typechecks, not by a complete dynamic/external-caller inventory.
+Limits: a tag the rules cannot read stays unknown (see the open decision above). Scoring is not fully repeatable: two runs on the same inputs changed 18 of 84 area grades. The matching port still rejects a `null` ledger debit inside the finalization transaction, so a run never publishes output without a debit.

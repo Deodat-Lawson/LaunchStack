@@ -9,13 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Accelerator discovery controls** - search existing Program information and
-  combine saved-fit status, minimum-score, and factual intake filters; keep
-  filters when opening a Program and returning to the Catalogue.
-  - Program details separate the sticky company-fit evaluation from sourced
-    information and deadlines, adapting to narrow and vertically split Studio
-    panes. Filtering uses saved data only; classification and Form filling are
-    not added.
+- **Accelerators: find, score and track Programs** - a scraped Catalogue of
+  sourced accelerator Programs with deal terms, deadlines, application routes and
+  tags; anything the official pages did not publish says "Not published".
+  - Minimal Program pages: known facts, one line naming what was not published,
+    titled application links, deal amounts with the program's own wording, and
+    the pages used listed once per Program.
+  - Search and tag filters (sector, stage, region, deal, deadline, tracking,
+    priority) across the whole Catalogue; filters survive opening a Program.
+  - Score the Programs you choose (top N of the filtered list, or all of it)
+    with the credit estimate on the button; results that are still current are
+    reused, not re-scored. Fit uses seven weighted areas and shows an overall
+    score only with enough evidence. A score is not an admission probability.
+  - For Y Combinator, the most similar past companies and their published
+    applications, which also grade the "Similar past companies" area.
+  - A private application tracker: priority, status, notes, next action, tasks
+    and the deadline planned against. Nothing is filled in or submitted for you.
 
 - **Watch and listen to media sources** - audio and video play in the source
   viewer, opened from the recording or from its transcript
@@ -77,7 +86,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     (⌘⌥⇧\), maximize (⌘⇧↩), focus the next or previous pane (⌘⌥] and ⌘⌥[),
     close the current app (⌘⌥W)
   - Apps fit the pane they are in, not the window: the composer drops to icons
-    and Meetings stacks its channel list in a narrow pane  - The document viewer folds its versions and notes rail into a Details
+    and Meetings stacks its channel list in a narrow pane - The document viewer folds its versions and notes rail into a Details
     panel once its column is too narrow for both
 - **Resizable sidebar** - drag its edge (or use the arrow keys) between 220 and
   520px; the width is remembered

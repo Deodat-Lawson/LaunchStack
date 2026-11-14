@@ -144,7 +144,8 @@ export function buildInvitationMenuItems(
     t: PeopleMenuT
 ): ActionMenuItem[] {
     const items: ActionMenuItem[] = [{ type: "label", id: "title", label: invitation.email }];
-    if (state.open) {
+    // A declined invitation is closed, but asking again is how it reopens.
+    if (state.open || invitation.status === "declined") {
         items.push({
             type: "item",
             id: "resend",

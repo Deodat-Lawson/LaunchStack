@@ -795,6 +795,7 @@
       "resent": "{actor} 重新向 {target} 发送了邀请",
       "invitationRevoked": "{actor} 撤销了发给 {target} 的邀请",
       "invitationAccepted": "{actor} 接受邀请加入了工作区",
+      "invitationDeclined": "{actor} 拒绝了加入工作区的邀请",
       "joinLinkCreated": "{actor} 创建了一个加入链接",
       "joinLinkCreatedFor": "{actor} 创建了一个角色为 {role} 的加入链接",
       "joinLinkRequiresApproval": "{actor} 将一个加入链接设为需要审批",
@@ -859,7 +860,8 @@
         },
         "invitation": {
           "resent": "邀请 · 已重新发送",
-          "revoked": "邀请 · 已撤销"
+          "revoked": "邀请 · 已撤销",
+          "declined": "邀请 · 已拒绝"
         },
         "joinLink": {
           "created": "加入链接 · 已创建",
@@ -1077,6 +1079,7 @@
         "pending": "待接受",
         "accepted": "已接受",
         "revoked": "已撤销",
+        "declined": "已拒绝",
         "expired": "已过期"
       },
       "more": {

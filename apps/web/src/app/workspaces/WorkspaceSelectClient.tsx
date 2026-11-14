@@ -1,13 +1,14 @@
 "use client";
 
-import { ArrowRight, Check, ChevronDown, Moon, Plus, Search, Sun, Upload, X } from "lucide-react";
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { ArrowRight, Check, Moon, Plus, Search, Sun, X } from "lucide-react";
+import { Fragment, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
+import { toast } from "sonner";
 import { LanguageToggle } from "~/components/i18n/LanguageMenu";
 import { ProfileAvatar } from "~/components/ProfileAvatar";
-import { useAuth } from "~/lib/auth-client";
+import { MAX_DEVICE_ACCOUNTS, withAddAccount } from "~/lib/auth/device-accounts";
 import { resetMyProfile, useMyProfile } from "~/lib/profile/use-my-profile";
 import { LANDING_CONTACT_HREF } from "~/config/landing";
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
@@ -16,6 +17,7 @@ import { useInstanceHost } from "~/lib/instance-host";
 import { isBuiltinRole, normalizeRoleSlug, roleLabel } from "~/lib/authz/permissions";
 import { WORKSPACE_TEAM_SIZES } from "~/lib/workspace-details";
 
+import { AccountMenu } from "./AccountMenu";
 import styles from "./workspace-select.module.css";
 
 type Workspace = {
@@ -62,9 +64,17 @@ type Props = {
     account: Account;
     fromSignup: boolean;
     pendingInvites?: PendingInvite[];
+    /**
+     * This browser already holds the most accounts it keeps (read from the
+     * cookies on the server): adding one is off, and says why.
+     */
+    accountLimitReached?: boolean;
 };
 
 const SWATCH_COUNT = 6;
+
+/** A sentence under one row: why it can't open, or what went wrong with it. */
+type RowNote = { tone: "info" | "error"; text: string };
 
 const SLUG_RE = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/;
 
@@ -138,19 +148,20 @@ export function WorkspaceSelectClient({
     account,
     fromSignup,
     pendingInvites = [],
+    accountLimitReached = false,
 }: Props) {
     const t = useTranslations("auth.workspaces");
     const tRelative = useTranslations("auth.workspaces.relative");
     const tRoles = useTranslations("auth.roles");
     const tChrome = useTranslations("auth.chrome");
     const tc = useTranslations("common");
+    const tAdd = useTranslations("auth.addAccount");
     const when = (iso: string) => relativeTime(tRelative, tc("time.justNow"), iso);
     const roleName = (role: string) => {
         const slug = normalizeRoleSlug(role);
         return isBuiltinRole(slug) ? tRoles(slug) : roleLabel(role);
     };
     const router = useRouter();
-    const { signOut } = useAuth();
     // Your profile photo (not a workspace's override): no workspace is open here.
     const myPhoto = useMyProfile().data?.profile.avatarUrl ?? null;
     // Read only in the toggle's click handler. The server can't know the
@@ -169,11 +180,28 @@ export function WorkspaceSelectClient({
     const [teamSize, setTeamSize] = useState<string>(WORKSPACE_TEAM_SIZES[0].value);
     const [description, setDescription] = useState("");
     const [submitting, setSubmitting] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    // Errors live next to what was clicked: the editor's here, a row's in
+    // rowNotes (keyed "ws:<id>" or "inv:<id>").
+    const [createError, setCreateError] = useState<string | null>(null);
+    const [rowNotes, setRowNotes] = useState<Record<string, RowNote>>({});
     const [switchingId, setSwitchingId] = useState<string | null>(null);
     const [slugAvailable, setSlugAvailable] = useState<null | boolean>(null);
     const [dismissedPendingIds, setDismissedPendingIds] = useState(() => new Set<string>());
     const [acceptingId, setAcceptingId] = useState<string | null>(null);
+    const [decliningId, setDecliningId] = useState<string | null>(null);
+    // Invitations the server says are no longer open (used, withdrawn,
+    // expired, or not this account's). The refreshed list leaves them out;
+    // they stay on screen with the reason under them and no buttons until the
+    // page is next loaded, so the reason isn't gone before it can be read.
+    const [closedInvites, setClosedInvites] = useState<Record<string, PendingInvite>>({});
+
+    const noteRow = (key: string, note: RowNote | null) =>
+        setRowNotes(notes => {
+            const next = { ...notes };
+            if (note) next[key] = note;
+            else delete next[key];
+            return next;
+        });
 
     const searchRef = useRef<HTMLInputElement>(null);
     const nameRef = useRef<HTMLInputElement>(null);
@@ -198,12 +226,16 @@ export function WorkspaceSelectClient({
 
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
-            if (e.key === "/") {
-                const el = document.activeElement;
+            if (e.defaultPrevented) return;
+            if (e.key === "/" && !e.metaKey && !e.ctrlKey && !e.altKey) {
+                const el = document.activeElement as HTMLElement | null;
                 if (
                     el?.tagName !== "INPUT" &&
                     el?.tagName !== "TEXTAREA" &&
-                    !(el as HTMLElement | null)?.isContentEditable
+                    el?.tagName !== "SELECT" &&
+                    !el?.isContentEditable &&
+                    // An open menu (the account menu) keeps its keys.
+                    !el?.closest('[role="menu"]')
                 ) {
                     e.preventDefault();
                     searchRef.current?.focus();
@@ -275,19 +307,32 @@ export function WorkspaceSelectClient({
         setSlugEdited(v.length > 0);
     }
 
-    async function switchTo(id: string) {
+    async function switchTo(ws: Workspace) {
         if (switchingId) return;
-        setSwitchingId(id);
-        setError(null);
+        const key = `ws:${ws.id}`;
+        // A membership that can't act yet: say why here instead of opening a
+        // workspace that would only turn the person away.
+        if (ws.status === "pending" || ws.status === "suspended") {
+            noteRow(key, {
+                tone: "info",
+                text:
+                    ws.status === "pending"
+                        ? t("pendingExplain", { name: ws.name })
+                        : t("suspendedExplain", { name: ws.name }),
+            });
+            return;
+        }
+        setSwitchingId(ws.id);
+        noteRow(key, null);
         try {
-            const res = await fetch(`/api/workspaces/${id}/switch`, {
+            const res = await fetch(`/api/workspaces/${ws.id}/switch`, {
                 method: "POST",
             });
             if (!res.ok) {
                 const data = (await res.json().catch(() => ({}))) as {
                     error?: string;
                 };
-                setError(data.error ?? t("errors.switchFailed"));
+                noteRow(key, { tone: "error", text: data.error ?? t("errors.switchFailed") });
                 setSwitchingId(null);
                 return;
             }
@@ -296,7 +341,7 @@ export function WorkspaceSelectClient({
             router.push(data.redirectTo ?? "/employer/documents");
         } catch (err) {
             console.error(err);
-            setError(t("errors.switchFailed"));
+            noteRow(key, { tone: "error", text: t("errors.switchFailed") });
             setSwitchingId(null);
         }
     }
@@ -306,15 +351,15 @@ export function WorkspaceSelectClient({
         const trimmedName = name.trim();
         const trimmedSlug = slugValue.trim().toLowerCase();
         if (trimmedName.length < 1) {
-            setError(t("errors.nameRequired"));
+            setCreateError(t("errors.nameRequired"));
             return;
         }
         if (trimmedSlug.length < 2 || !SLUG_RE.test(trimmedSlug)) {
-            setError(t("errors.badUrl"));
+            setCreateError(t("errors.badUrl"));
             return;
         }
         setSubmitting(true);
-        setError(null);
+        setCreateError(null);
         try {
             const res = await fetch("/api/workspaces", {
                 method: "POST",
@@ -331,7 +376,7 @@ export function WorkspaceSelectClient({
                 const data = (await res.json().catch(() => ({}))) as {
                     error?: string;
                 };
-                setError(data.error ?? t("errors.createFailed"));
+                setCreateError(data.error ?? t("errors.createFailed"));
                 setSubmitting(false);
                 return;
             }
@@ -341,15 +386,16 @@ export function WorkspaceSelectClient({
             router.refresh();
         } catch (err) {
             console.error(err);
-            setError(t("errors.createFailed"));
+            setCreateError(t("errors.createFailed"));
             setSubmitting(false);
         }
     }
 
     async function acceptInvite(id: string) {
-        if (acceptingId) return;
+        if (acceptingId || decliningId) return;
+        const key = `inv:${id}`;
         setAcceptingId(id);
-        setError(null);
+        noteRow(key, null);
         try {
             const res = await fetch("/api/workspace/invitations/accept", {
                 method: "POST",
@@ -361,10 +407,12 @@ export function WorkspaceSelectClient({
                 redirectTo?: string;
             };
             if (!res.ok) {
-                setError(
+                const text =
                     data.error ??
-                        (res.status === 410 ? t("errors.inviteExpired") : t("errors.acceptFailed"))
-                );
+                    (res.status === 410 ? t("errors.inviteExpired") : t("errors.acceptFailed"));
+                const inv = pendingInvites.find(p => p.id === id);
+                if (inv && (res.status === 410 || res.status === 404)) closeInvite(inv, text);
+                else noteRow(key, { tone: "error", text });
                 setAcceptingId(null);
                 return;
             }
@@ -373,10 +421,77 @@ export function WorkspaceSelectClient({
             router.refresh();
         } catch (err) {
             console.error(err);
-            setError(t("errors.acceptFailed"));
+            noteRow(key, { tone: "error", text: t("errors.acceptFailed") });
             setAcceptingId(null);
         }
     }
+
+    /** The invitation can't be acted on any more: say why under it, then refresh. */
+    function closeInvite(inv: PendingInvite, text: string) {
+        setClosedInvites(closed => ({ ...closed, [inv.id]: inv }));
+        noteRow(`inv:${inv.id}`, { tone: "error", text });
+        router.refresh();
+    }
+
+    /** Declines for good (the server records it), then drops the row. */
+    async function declineInvite(inv: PendingInvite) {
+        if (acceptingId || decliningId) return;
+        const key = `inv:${inv.id}`;
+        setDecliningId(inv.id);
+        noteRow(key, null);
+        try {
+            const res = await fetch("/api/workspace/invitations/decline", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ invitationId: Number(inv.id) }),
+            });
+            const data = (await res.json().catch(() => ({}))) as {
+                error?: string;
+                reason?: string;
+            };
+            // Only a decline, or one that had already happened, is a decline.
+            // Used, withdrawn or expired (410) or not this account's (404):
+            // say which, under the row.
+            if (res.status === 410 || res.status === 404) {
+                closeInvite(inv, data.error ?? t("errors.declineFailed"));
+                return;
+            }
+            if (!res.ok) {
+                noteRow(key, { tone: "error", text: data.error ?? t("errors.declineFailed") });
+                return;
+            }
+            setDismissedPendingIds(s => new Set(s).add(inv.id));
+            toast.success(t("declinedToast", { name: inv.companyName }));
+            router.refresh();
+        } catch (err) {
+            console.error(err);
+            noteRow(key, { tone: "error", text: t("errors.declineFailed") });
+        } finally {
+            setDecliningId(null);
+        }
+    }
+
+    const visibleInvites = [
+        ...pendingInvites,
+        ...Object.values(closedInvites).filter(c => !pendingInvites.some(p => p.id === c.id)),
+    ].filter(p => !dismissedPendingIds.has(p.id));
+
+    const noteId = (key: string) => (rowNotes[key] ? `note-${key.replace(":", "-")}` : undefined);
+
+    /** The sentence under a row, if it has one; its id describes the row. */
+    const renderNote = (key: string) => {
+        const note = rowNotes[key];
+        if (!note) return null;
+        return (
+            <div
+                id={noteId(key)}
+                className={`${styles.rowNote} ${note.tone === "error" ? styles.rowNoteError : ""}`}
+                role={note.tone === "error" ? "alert" : "status"}
+            >
+                {note.text}
+            </div>
+        );
+    };
 
     return (
         <div className={styles.body}>
@@ -393,27 +508,15 @@ export function WorkspaceSelectClient({
                     Launchstack
                 </LogoLink>
                 <div className={styles.spacer} />
-                <div className={styles.me} title={t("switchAccount")}>
-                    <ProfileAvatar
-                        name={account.name}
-                        email={account.email}
-                        src={myPhoto}
-                        className="size-[22px]"
-                        fallbackClassName="text-[10px]"
-                    />
-                    <span>{account.name}</span>
-                    {account.email ? (
-                        <span className={styles.meEmail}>· {account.email}</span>
-                    ) : null}
-                    <ChevronDown className={styles.meChevron} size={12} aria-hidden />
-                </div>
-                <button
-                    className={styles.signout}
-                    type="button"
-                    onClick={() => void signOut({ redirectUrl: "/signin" })}
-                >
-                    {tc("actions.signOut")}
-                </button>
+                {/* Switch, add and sign out of accounts; sign-out lives here too. */}
+                <AccountMenu
+                    account={account}
+                    photo={myPhoto}
+                    triggerClassName={styles.me}
+                    emailClassName={styles.meEmail}
+                    chevronClassName={styles.meChevron}
+                    limitReached={accountLimitReached}
+                />
                 <LanguageToggle />
                 <button
                     type="button"
@@ -509,130 +612,134 @@ export function WorkspaceSelectClient({
                                 ...ws.teammates,
                             ].slice(0, PILE_FACES);
                             const hidden = Math.max(0, ws.memberCount - pile.length);
+                            const rowKey = `ws:${ws.id}`;
                             return (
-                                <button
-                                    key={ws.id}
-                                    type="button"
-                                    className={`${styles.ws} ${ws.isActive ? styles.wsActive : ""} ${showPile ? "" : styles.wsSolo}`}
-                                    data-name={ws.name}
-                                    data-url={ws.slug || ""}
-                                    data-active={ws.isActive ? "true" : undefined}
-                                    onClick={() => switchTo(ws.id)}
-                                    disabled={isSwitching}
-                                    aria-label={
-                                        ws.isActive
-                                            ? t("activeLabel", { name: ws.name })
-                                            : t("openLabel", { name: ws.name })
-                                    }
-                                    aria-current={ws.isActive ? "true" : undefined}
-                                >
-                                    <div className={`${styles.wsMark} ${gradientClass(ws.swatch)}`}>
-                                        {initials}
-                                    </div>
-                                    <div className={styles.wsBody}>
-                                        <div className={styles.wsName}>
-                                            <span className={styles.wsNameText}>{ws.name}</span>
-                                            {ws.isActive ? (
-                                                <span className={styles.activeChip}>
-                                                    {t("activeChip")}
-                                                </span>
-                                            ) : null}
-                                            {ws.status === "suspended" ? (
-                                                <span
-                                                    className={`${styles.statusChip} ${styles.statusChipSuspended}`}
-                                                    title={t("suspendedHint")}
-                                                >
-                                                    {t("suspended")}
-                                                </span>
-                                            ) : ws.status === "pending" ? (
-                                                <span
-                                                    className={styles.statusChip}
-                                                    title={t("pendingHint")}
-                                                >
-                                                    {t("pending")}
-                                                </span>
-                                            ) : null}
-                                        </div>
-                                        <div className={styles.wsMeta}>
-                                            {ws.slug ? (
-                                                <>
-                                                    <span className={styles.url}>
-                                                        {instanceHost}/{ws.slug}
-                                                    </span>
-                                                    <span className={styles.sep}>·</span>
-                                                </>
-                                            ) : null}
-                                            <span>{memberLabel}</span>
-                                            <span className={styles.sep}>·</span>
-                                            <span>
-                                                {t("opened", { when: when(ws.lastOpenedAt) })}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    {showPile ? (
+                                <Fragment key={ws.id}>
+                                    <button
+                                        type="button"
+                                        className={`${styles.ws} ${ws.isActive ? styles.wsActive : ""} ${showPile ? "" : styles.wsSolo}`}
+                                        data-name={ws.name}
+                                        data-url={ws.slug || ""}
+                                        data-active={ws.isActive ? "true" : undefined}
+                                        onClick={() => void switchTo(ws)}
+                                        disabled={isSwitching}
+                                        aria-label={
+                                            ws.isActive
+                                                ? t("activeLabel", { name: ws.name })
+                                                : t("openLabel", { name: ws.name })
+                                        }
+                                        aria-describedby={noteId(rowKey)}
+                                        aria-current={ws.isActive ? "true" : undefined}
+                                    >
                                         <div
-                                            className={styles.pile}
-                                            aria-label={
-                                                hidden > 0
-                                                    ? t("pileLabelMore", {
-                                                          names: pile
-                                                              .map(p => p.name)
-                                                              .join(t("nameSeparator")),
-                                                          count: hidden,
-                                                      })
-                                                    : t("pileLabel", {
-                                                          names: pile
-                                                              .map(p => p.name)
-                                                              .join(t("nameSeparator")),
-                                                      })
-                                            }
+                                            className={`${styles.wsMark} ${gradientClass(ws.swatch)}`}
                                         >
-                                            {pile.map((p, i) => (
-                                                <ProfileAvatar
-                                                    key={`${ws.id}-pile-${i}`}
-                                                    name={p.name}
-                                                    src={p.avatarUrl}
-                                                    className={`${styles.av} size-[22px]`}
-                                                    fallbackClassName="text-[9.5px]"
-                                                />
-                                            ))}
-                                            {hidden > 0 ? (
-                                                <span className={`${styles.av} ${styles.avMore}`}>
-                                                    +{hidden}
-                                                </span>
-                                            ) : null}
+                                            {initials}
                                         </div>
-                                    ) : null}
-                                    <span className={roleBadgeClass(ws.role)}>
-                                        {roleName(ws.role)}
-                                    </span>
-                                </button>
+                                        <div className={styles.wsBody}>
+                                            <div className={styles.wsName}>
+                                                <span className={styles.wsNameText}>{ws.name}</span>
+                                                {ws.isActive ? (
+                                                    <span className={styles.activeChip}>
+                                                        {t("activeChip")}
+                                                    </span>
+                                                ) : null}
+                                                {ws.status === "suspended" ? (
+                                                    <span
+                                                        className={`${styles.statusChip} ${styles.statusChipSuspended}`}
+                                                        title={t("suspendedHint")}
+                                                    >
+                                                        {t("suspended")}
+                                                    </span>
+                                                ) : ws.status === "pending" ? (
+                                                    <span
+                                                        className={styles.statusChip}
+                                                        title={t("pendingHint")}
+                                                    >
+                                                        {t("pending")}
+                                                    </span>
+                                                ) : null}
+                                            </div>
+                                            <div className={styles.wsMeta}>
+                                                {ws.slug ? (
+                                                    <>
+                                                        <span className={styles.url}>
+                                                            {instanceHost}/{ws.slug}
+                                                        </span>
+                                                        <span className={styles.sep}>·</span>
+                                                    </>
+                                                ) : null}
+                                                <span>{memberLabel}</span>
+                                                <span className={styles.sep}>·</span>
+                                                <span>
+                                                    {t("opened", { when: when(ws.lastOpenedAt) })}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        {showPile ? (
+                                            <div
+                                                className={styles.pile}
+                                                aria-label={
+                                                    hidden > 0
+                                                        ? t("pileLabelMore", {
+                                                              names: pile
+                                                                  .map(p => p.name)
+                                                                  .join(t("nameSeparator")),
+                                                              count: hidden,
+                                                          })
+                                                        : t("pileLabel", {
+                                                              names: pile
+                                                                  .map(p => p.name)
+                                                                  .join(t("nameSeparator")),
+                                                          })
+                                                }
+                                            >
+                                                {pile.map((p, i) => (
+                                                    <ProfileAvatar
+                                                        key={`${ws.id}-pile-${i}`}
+                                                        name={p.name}
+                                                        src={p.avatarUrl}
+                                                        className={`${styles.av} size-[22px]`}
+                                                        fallbackClassName="text-[9.5px]"
+                                                    />
+                                                ))}
+                                                {hidden > 0 ? (
+                                                    <span
+                                                        className={`${styles.av} ${styles.avMore}`}
+                                                    >
+                                                        +{hidden}
+                                                    </span>
+                                                ) : null}
+                                            </div>
+                                        ) : null}
+                                        <span className={roleBadgeClass(ws.role)}>
+                                            {roleName(ws.role)}
+                                        </span>
+                                    </button>
+                                    {renderNote(rowKey)}
+                                </Fragment>
                             );
                         })
                     )}
                 </div>
 
-                {pendingInvites.filter(p => !dismissedPendingIds.has(p.id)).length > 0 ? (
+                {visibleInvites.length > 0 ? (
                     <>
                         <div className={styles.sectionHead}>
                             <div className={styles.sectionTitle}>
                                 {t("pendingInvites")}{" "}
-                                <span className={styles.ct}>
-                                    {
-                                        pendingInvites.filter(p => !dismissedPendingIds.has(p.id))
-                                            .length
-                                    }
-                                </span>
+                                <span className={styles.ct}>{visibleInvites.length}</span>
                             </div>
                             <span className={styles.sectionAside}>{t("fromTeammates")}</span>
                         </div>
                         <div className={styles.wsList}>
-                            {pendingInvites
-                                .filter(p => !dismissedPendingIds.has(p.id))
-                                .map(inv => {
-                                    const mark = initialsOf(inv.companyName);
-                                    return (
-                                        <div key={inv.id} className={styles.wsPending}>
+                            {visibleInvites.map(inv => {
+                                const mark = initialsOf(inv.companyName);
+                                const rowKey = `inv:${inv.id}`;
+                                const rowBusy = acceptingId !== null || decliningId !== null;
+                                return (
+                                    <Fragment key={inv.id}>
+                                        <div className={styles.wsPending}>
                                             <div
                                                 className={`${styles.wsMark} ${gradientClass(inv.swatch)}`}
                                             >
@@ -669,34 +776,39 @@ export function WorkspaceSelectClient({
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div className={styles.inviteActions}>
-                                                <button
-                                                    type="button"
-                                                    className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}
-                                                    onClick={() =>
-                                                        setDismissedPendingIds(s => {
-                                                            const n = new Set(s);
-                                                            n.add(inv.id);
-                                                            return n;
-                                                        })
-                                                    }
+                                            {/* No buttons on an invitation that has closed. */}
+                                            {closedInvites[inv.id] ? null : (
+                                                <div
+                                                    className={styles.inviteActions}
+                                                    aria-describedby={noteId(rowKey)}
                                                 >
-                                                    {t("decline")}
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    className={`${styles.btn} ${styles.btnAccent} ${styles.btnSm}`}
-                                                    onClick={() => void acceptInvite(inv.id)}
-                                                    disabled={acceptingId !== null}
-                                                >
-                                                    {acceptingId === inv.id
-                                                        ? t("joining")
-                                                        : t("acceptOpen")}
-                                                </button>
-                                            </div>
+                                                    <button
+                                                        type="button"
+                                                        className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}
+                                                        onClick={() => void declineInvite(inv)}
+                                                        disabled={rowBusy}
+                                                    >
+                                                        {decliningId === inv.id
+                                                            ? t("declining")
+                                                            : t("decline")}
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        className={`${styles.btn} ${styles.btnAccent} ${styles.btnSm}`}
+                                                        onClick={() => void acceptInvite(inv.id)}
+                                                        disabled={rowBusy}
+                                                    >
+                                                        {acceptingId === inv.id
+                                                            ? t("joining")
+                                                            : t("acceptOpen")}
+                                                    </button>
+                                                </div>
+                                            )}
                                         </div>
-                                    );
-                                })}
+                                        {renderNote(rowKey)}
+                                    </Fragment>
+                                );
+                            })}
                         </div>
                     </>
                 ) : null}
@@ -718,20 +830,6 @@ export function WorkspaceSelectClient({
                         <div style={{ flex: 1, minWidth: 0 }}>
                             <div className={styles.ctTitle}>{t("createTitle")}</div>
                             <div className={styles.ctHelp}>{t("createHelp")}</div>
-                        </div>
-                        <ArrowRight className={styles.ctArrow} size={14} />
-                    </button>
-                    <button
-                        type="button"
-                        className={`${styles.createCard} ${styles.createCardAlt}`}
-                        onClick={() => setError(t("importSoon"))}
-                    >
-                        <div className={`${styles.createIcon} ${styles.createIconAlt}`}>
-                            <Upload size={16} />
-                        </div>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                            <div className={styles.ctTitle}>{t("importTitle")}</div>
-                            <div className={styles.ctHelp}>{t("importHelp")}</div>
                         </div>
                         <ArrowRight className={styles.ctArrow} size={14} />
                     </button>
@@ -869,6 +967,12 @@ export function WorkspaceSelectClient({
                             </div>
                         </div>
 
+                        {createError ? (
+                            <div className={styles.error} role="alert">
+                                {createError}
+                            </div>
+                        ) : null}
+
                         <div className={styles.ceFoot}>
                             <div className={styles.previewPill}>
                                 <span
@@ -916,18 +1020,17 @@ export function WorkspaceSelectClient({
                     </div>
                 ) : null}
 
-                {error ? (
-                    <div className={styles.error} role="alert">
-                        {error}
-                    </div>
-                ) : null}
-
                 <p className={styles.foot}>
                     {account.email
                         ? t.rich("foot", { email: account.email, b: footBold })
                         : t.rich("footNoEmail", { b: footBold })}
                     <br />
-                    <a href="/signin">{t("differentAccount")}</a>
+                    {accountLimitReached ? (
+                        // The link would only lead to the same sentence.
+                        <span>{tAdd("limit", { max: MAX_DEVICE_ACCOUNTS })}</span>
+                    ) : (
+                        <a href={withAddAccount("/signin")}>{t("differentAccount")}</a>
+                    )}
                     <span className={styles.sepDot}>·</span>
                     {/* Cross-origin — support lives on the public site. */}
                     <a href={LANDING_CONTACT_HREF} rel="noopener">

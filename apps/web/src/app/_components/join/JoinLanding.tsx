@@ -20,7 +20,16 @@ import { AuthChrome } from "~/app/_components/AuthChrome";
 import { SignInForm, SignUpForm } from "~/app/_components/CredentialsForm";
 import { Button } from "~/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { useAuth, useUser } from "~/lib/auth-client";
+import {
+    switchDeviceAccount,
+    useAuth,
+    useDeviceAccounts,
+    useUser,
+    type DeviceAccount,
+} from "~/lib/auth-client";
+import { announceAccountChange } from "~/lib/auth/account-sync";
+import { withAddAccount } from "~/lib/auth/device-accounts";
+import { withNext } from "~/components/auth/next-path";
 import { isBuiltinRole, normalizeRoleSlug } from "~/lib/authz/permissions";
 import {
     clearJoinIntent,
@@ -63,6 +72,7 @@ type Problem =
               | "linkExhausted"
               | "linkInactive"
               | "inviteGone"
+              | "inviteDeclined"
               | "inviteUsed"
               | "sessionEnded"
               | "joinFailed";
@@ -194,7 +204,12 @@ async function loadDetails(source: JoinSource): Promise<LoadState> {
     if (body.status !== "pending") {
         return {
             phase: "dead",
-            problem: body.status === "accepted" ? { key: "inviteUsed" } : INVITE_GONE,
+            problem:
+                body.status === "accepted"
+                    ? { key: "inviteUsed" }
+                    : body.status === "declined"
+                      ? { key: "inviteDeclined" }
+                      : INVITE_GONE,
         };
     }
     return {
@@ -222,8 +237,9 @@ export function JoinLanding({
     const tc = useTranslations("common.actions");
     const problemText = useProblemText();
     const roleNameOf = useRoleName();
-    const { isLoaded, isSignedIn, signOut } = useAuth();
+    const { isLoaded, isSignedIn } = useAuth();
     const { user } = useUser();
+    const { accounts, activeUserId } = useDeviceAccounts();
     const key = sourceKey(source);
     const here = selfPath(source);
 
@@ -355,11 +371,36 @@ export function JoinLanding({
         reloadPending.current = true;
     }, [source.kind, key]);
 
-    const useDifferentAccount = () => {
-        clearJoinIntent();
-        setJoin({ phase: "idle" });
-        setTab("signin");
-        void signOut();
+    // The invited address, when it is another account already signed in on
+    // this browser: switching to it is one click, and nobody signs out.
+    const invitedEmail = load.phase === "ready" ? load.details.email : null;
+    const invitedAccount = invitedEmail
+        ? (accounts.find(
+              a => a.userId !== activeUserId && a.email.toLowerCase() === invitedEmail.toLowerCase()
+          ) ?? null)
+        : null;
+
+    /**
+     * Another account, without ending this one or any other signed in here:
+     * switch to the invited one if it is here, else add an account through
+     * the sign-in page, which comes back to this page. `join` means the
+     * person already asked to join, so the page joins once it is back.
+     */
+    const continueAsAnotherAccount = async (join: boolean) => {
+        if (join) rememberJoinIntent(source.kind, key);
+        else clearJoinIntent();
+        if (invitedAccount) {
+            try {
+                await switchDeviceAccount(invitedAccount.sessionToken);
+                resetMyProfile();
+                announceAccountChange();
+                enterWorkspace(here);
+                return;
+            } catch {
+                // That session has ended: sign in to it instead.
+            }
+        }
+        enterWorkspace(withAddAccount(withNext("/signin", here)));
     };
 
     return (
@@ -420,7 +461,8 @@ export function JoinLanding({
                             onAuthStart={remember}
                             onSignInStart={rememberForReload}
                             onJoin={() => void accept(load.details)}
-                            onUseDifferentAccount={useDifferentAccount}
+                            invitedAccount={invitedAccount}
+                            onUseAnotherAccount={join => void continueAsAnotherAccount(join)}
                         />
                     )}
                 </div>
@@ -443,7 +485,8 @@ function Ready({
     onAuthStart,
     onSignInStart,
     onJoin,
-    onUseDifferentAccount,
+    invitedAccount,
+    onUseAnotherAccount,
 }: {
     details: JoinDetails;
     source: JoinSource;
@@ -458,7 +501,9 @@ function Ready({
     onAuthStart: () => void;
     onSignInStart: () => void;
     onJoin: () => void;
-    onUseDifferentAccount: () => void;
+    /** The invited address, signed in on this browser as another account. */
+    invitedAccount: DeviceAccount | null;
+    onUseAnotherAccount: (join: boolean) => void;
 }) {
     const t = useTranslations("auth.join");
     const tc = useTranslations("common.actions");
@@ -591,8 +636,10 @@ function Ready({
 
                     <div className="mt-4 flex flex-wrap gap-2">
                         {join.phase === "mismatch" ? (
-                            <Button onClick={onUseDifferentAccount}>
-                                {t("useAddress", { email: join.invitedEmail })}
+                            <Button onClick={() => onUseAnotherAccount(true)}>
+                                {invitedAccount
+                                    ? t("switchToAddress", { email: invitedAccount.email })
+                                    : t("signInAsAddress", { email: join.invitedEmail })}
                             </Button>
                         ) : join.phase === "pending" ? (
                             <Button asChild>
@@ -605,8 +652,14 @@ function Ready({
                             </Button>
                         )}
                         {join.phase !== "mismatch" && join.phase !== "entering" && (
-                            <Button variant="ghost" onClick={onUseDifferentAccount} disabled={busy}>
-                                {t("differentAccount")}
+                            <Button
+                                variant="ghost"
+                                onClick={() => onUseAnotherAccount(false)}
+                                disabled={busy}
+                            >
+                                {invitedAccount
+                                    ? t("switchToAddress", { email: invitedAccount.email })
+                                    : t("differentAccount")}
                             </Button>
                         )}
                     </div>

@@ -22,9 +22,17 @@ import "@testing-library/jest-dom";
 const mockAuth = { isLoaded: true, isSignedIn: false, signOut: jest.fn() };
 const mockUser: { user: { email: string; name: string } | null } = { user: null };
 const mockSignInEmail = jest.fn();
+type Device = { sessionToken: string; userId: string; name: string; email: string; image: null };
+let mockDevice: { accounts: Device[]; activeUserId: string | null } = {
+    accounts: [],
+    activeUserId: null,
+};
+const mockSwitch = jest.fn<Promise<void>, [string]>();
 jest.mock("~/lib/auth-client", () => ({
     useAuth: () => mockAuth,
     useUser: () => mockUser,
+    useDeviceAccounts: () => mockDevice,
+    switchDeviceAccount: (token: string) => mockSwitch(token),
     authClient: {
         getLastUsedLoginMethod: () => null,
         signIn: { email: (...args: unknown[]) => mockSignInEmail(...args), social: jest.fn() },
@@ -66,6 +74,8 @@ beforeEach(() => {
     calls = [];
     mockAssign.mockReset();
     mockSignInEmail.mockReset();
+    mockSwitch.mockReset().mockResolvedValue(undefined);
+    mockDevice = { accounts: [], activeUserId: null };
     window.sessionStorage.clear();
     mockAuth.isLoaded = true;
     mockAuth.isSignedIn = false;
@@ -331,10 +341,75 @@ describe("JoinLanding", () => {
             render(<JoinLanding source={invite} socialProviders={[]} />);
             await user.click(await screen.findByRole("button", { name: "Join Acme" }));
 
-            expect(
-                await screen.findByRole("button", { name: "Sign out and use bob@example.com" })
-            ).toBeInTheDocument();
+            const signInAs = await screen.findByRole("button", {
+                name: "Sign in as bob@example.com",
+            });
             expect(mockAssign).not.toHaveBeenCalled();
+
+            // Adds bob as another account and comes back here; nobody signs out.
+            await user.click(signInAs);
+            expect(mockAssign).toHaveBeenCalledWith(
+                `/signin?next=${encodeURIComponent("/invite/tok_abcdefghijklmnopqrstuvwxyz")}&add=1`
+            );
+            expect(mockAuth.signOut).not.toHaveBeenCalled();
+            expect(mockSwitch).not.toHaveBeenCalled();
+        });
+
+        it("switches in one click when the invited address is signed in here too", async () => {
+            routes["/api/workspace/invitations/accept"] = {
+                status: 403,
+                body: { error: "This invitation was sent to a different email address." },
+            };
+            signedIn();
+            mockDevice = {
+                activeUserId: "u-newt",
+                accounts: [
+                    {
+                        sessionToken: "tok-newt",
+                        userId: "u-newt",
+                        name: "Newt",
+                        email: "newt@example.com",
+                        image: null,
+                    },
+                    {
+                        sessionToken: "tok-bob",
+                        userId: "u-bob",
+                        name: "Bob",
+                        email: "Bob@Example.com",
+                        image: null,
+                    },
+                ],
+            };
+            const user = userEvent.setup();
+
+            render(<JoinLanding source={invite} socialProviders={[]} />);
+            // Offered before any attempt to join, too.
+            expect(
+                await screen.findByRole("button", { name: "Switch to Bob@Example.com" })
+            ).toBeInTheDocument();
+            await user.click(screen.getByRole("button", { name: "Join Acme" }));
+            await user.click(
+                await screen.findByRole("button", { name: "Switch to Bob@Example.com" })
+            );
+
+            await waitFor(() => expect(mockSwitch).toHaveBeenCalledWith("tok-bob"));
+            expect(mockAssign).toHaveBeenCalledWith("/invite/tok_abcdefghijklmnopqrstuvwxyz");
+            expect(mockAuth.signOut).not.toHaveBeenCalled();
+        });
+
+        it("sends “Use a different account” to add-account mode, keeping this page", async () => {
+            signedIn();
+            const user = userEvent.setup();
+
+            render(<JoinLanding source={invite} socialProviders={[]} />);
+            await user.click(
+                await screen.findByRole("button", { name: "Use a different account" })
+            );
+
+            expect(mockAssign).toHaveBeenCalledWith(
+                `/signin?next=${encodeURIComponent("/invite/tok_abcdefghijklmnopqrstuvwxyz")}&add=1`
+            );
+            expect(mockAuth.signOut).not.toHaveBeenCalled();
         });
 
         it("says so when the invitation was already used", async () => {

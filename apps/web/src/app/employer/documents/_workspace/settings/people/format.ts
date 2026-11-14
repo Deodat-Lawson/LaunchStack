@@ -234,6 +234,8 @@ export function auditSentence(
             return t("resent", { actor, target });
         case "invitation.revoked":
             return t("invitationRevoked", { actor, target });
+        case "invitation.declined":
+            return t("invitationDeclined", { actor });
         case "invitation.accepted":
             return t("invitationAccepted", { actor });
         case "join_link.created":

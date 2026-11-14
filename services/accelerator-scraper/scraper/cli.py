@@ -27,8 +27,11 @@ USAGE = """\
   scrape.py add acme-labs --name "Acme Labs" --url https://acme.example/ [--apply URL]
   scrape.py discover harvest             refresh us-candidates.json from discovery-sources.json
   scrape.py discover report
-  scrape.py discover add-confirmed       add the candidates an operator confirmed
+  scrape.py discover vet                 accept or reject new and review candidates
+  scrape.py discover add-confirmed       add the candidates an operator (or vet) confirmed
+  scrape.py coverage                     regenerate COVERAGE.md from the dossiers
   scrape.py test                         run the scraper's unit tests (no network)
+  scrape.py --data fixtures/accelerators refresh
 """
 
 
@@ -113,9 +116,22 @@ def run_discover(args: argparse.Namespace) -> int:
         discover.harvest(now())
     elif args.action == "add-confirmed":
         discover.add_confirmed(now())
+    elif args.action == "vet":
+        discover.vet(now(), workers=args.workers)
     else:
         print(discover.summary(discover.load()))
     return 0
+
+
+def coverage(_: argparse.Namespace) -> int:
+    import subprocess
+
+    from . import REPO
+
+    return subprocess.call(
+        ["pnpm", "--filter", "@launchstack/web", "accelerators:publish-intelligence"],
+        cwd=REPO,
+    )
 
 
 def test(_: argparse.Namespace) -> int:
@@ -141,7 +157,7 @@ def main(argv: list[str] | None = None) -> int:
     checking.set_defaults(handler=refresh, check=True, due=False, stamp=False, no_enrich=True)
     for command in (refreshing, checking):
         command.add_argument("ids", nargs="*", help="Program ids; default is every file in programs/")
-        command.add_argument("--workers", type=int, default=6, help="Programs fetched in parallel (default 6)")
+        command.add_argument("--workers", type=int, default=8, help="Programs fetched in parallel (default 8)")
     adding = commands.add_parser("add", help="create a homepage record for a new Program")
     adding.add_argument("id")
     adding.add_argument("--name", required=True)
@@ -150,8 +166,10 @@ def main(argv: list[str] | None = None) -> int:
     adding.add_argument("--dry-run", action="store_true")
     adding.set_defaults(handler=add)
     discovering = commands.add_parser("discover", help="find US startup programs for operator review")
-    discovering.add_argument("action", choices=("harvest", "report", "add-confirmed"))
+    discovering.add_argument("action", choices=("harvest", "report", "vet", "add-confirmed"))
+    discovering.add_argument("--workers", type=int, default=8, help="candidates fetched in parallel (default 8)")
     discovering.set_defaults(handler=run_discover)
+    commands.add_parser("coverage", help="regenerate COVERAGE.md").set_defaults(handler=coverage)
     commands.add_parser("test", help="run the unit tests").set_defaults(handler=test)
     args = parser.parse_args(argv)
     return args.handler(args)

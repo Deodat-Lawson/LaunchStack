@@ -68,6 +68,16 @@ class Rules(unittest.TestCase):
         news = read("<p>Our news. Portfolio company Zed raises $40M Series B led by Big Fund, and we are proud of them.</p>", "https://acme.example/news")
         self.assertEqual(news.found["dealText"], [])
 
+    def test_a_firms_fund_size_is_not_a_program_deal(self) -> None:
+        # 500 Global's homepage: an offer word next to the firm's AUM was stored as "USD 2".
+        page = read(
+            "<p>We invest in the world's potential. 500 Global is a VC firm with $2.0B in AUM investing in founders.</p>",
+            "https://acme.example/",
+        )
+        self.assertEqual(page.found["dealComponents"], [])
+        fund = read("<p>We invest from our $250M fund. Each startup receives $150,000 for 6% equity.</p>", "https://acme.example/")
+        self.assertEqual([item["value"]["amount"] for item in fund.found["dealComponents"]], ["150000"])
+
     def test_every_finding_cites_evidence_on_this_program(self) -> None:
         for items in self.findings.found.values():
             for item in items:

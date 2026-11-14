@@ -1,0 +1,3 @@
+# Optional. Install when static HTML is not enough. The scraper records
+# playwright_missing and continues when this package is absent.
+playwright>=1.49,<2

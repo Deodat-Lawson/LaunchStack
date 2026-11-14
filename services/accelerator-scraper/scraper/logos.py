@@ -17,6 +17,12 @@ from .parse import BODY_LOGO, DECLARED_LOGO, ICON, NAMED_HEADER_IMAGE, RANK_ORDE
 
 LOGO_EDGE = 512
 MIN_ICON_EDGE = 64
+NONE_PATH = "/accelerators/logos/none.png"
+# 1x1 transparent PNG. Used when no rule-validated mark can be fetched, so another company's logo is not kept.
+NONE_PNG = bytes.fromhex(
+    "89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c489"
+    "0000000a49444154789c63000100000500010d0a2db40000000049454e44ae426082"
+)
 GENERIC_NAME_WORDS = {
     "the", "and", "for", "startup", "startups", "accelerator", "incubator", "ventures", "venture",
     "capital", "labs", "lab", "program", "programme", "fund", "innovation", "global", "partners", "hub",
@@ -70,7 +76,14 @@ def file_words(url: str) -> list[str]:
     ]
 
 
+# A logo shipped inside a WordPress theme's own asset folder is the theme's placeholder
+# (Berkeley SkyDeck showed the "Bridge" theme's mark). Sites upload their real logo instead.
+THEME_DEFAULT = re.compile(r"/wp-content/themes/[^/]+/(?:img|images|assets(?:/img|/images)?)/[^/]*logo", re.I)
+
+
 def names_someone_else(url: str, tokens: set[str]) -> bool:
+    if THEME_DEFAULT.search(url):
+        return True
     words = file_words(url)
     return bool(words) and not names_program(" ".join(words), tokens)
 
@@ -81,6 +94,8 @@ def ranked(page: Page, tokens: set[str] | None = None, marks_only: bool = False)
     structured-data logo counts only when it names the Program. marks_only drops site icons."""
     ordered: list[str] = []
     for candidate in sorted(page.candidates, key=lambda item: (RANK_ORDER[item.rank], item.order)):
+        if THEME_DEFAULT.search(candidate.url):
+            continue
         named = tokens is not None and names_program(candidate.hint, tokens)
         if candidate.rank == NAMED_HEADER_IMAGE and not named:
             continue
@@ -147,24 +162,19 @@ def refresh_logo(fetcher: Fetcher, outcome: Outcome, html: str, page: Page, now:
     stored_icon = stored.endswith("/favicon.ico") or any(
         candidate.url == stored and candidate.rank in {TOUCH_ICON, ICON} for candidate in page.candidates
     )
-    replacements = [url for url in own_marks + (icons if foreign and not stored_icon else []) if url != stored]
-    if local.exists() and on_page and not (borrowed and replacements):
-        if borrowed:
-            outcome.suspect_logo = stored
-            outcome.note("logo-suspect", f"{stored} is a page image that does not name the Program")
+    validated = bool(stored) and (stored in own_marks or (stored_icon and not foreign))
+    replacements = [url for url in own_marks + icons if url != stored]
+    if local.exists() and on_page and validated:
         if stamp:
             source["checkedAt"] = iso(now)
             outcome.stamped = True
         return
-    if local.exists():
-        tries = replacements if on_page else own_marks
-    else:
-        tries = list(dict.fromkeys(([stored] if stored else []) + ranked(page, tokens)))
+    tries = replacements if local.exists() else list(dict.fromkeys(([stored] if stored and not foreign else []) + ranked(page, tokens)))
     failures: list[str] = []
     for url in tries:
         try:
             response = fetcher.fetch(url, attempts=2)
-            png = to_png(response.body, response.content_type, response.url, MIN_ICON_EDGE if local.exists() and url in icons else 16)
+            png = to_png(response.body, response.content_type, response.url, MIN_ICON_EDGE if url in icons and not foreign else 16)
         except Exception as error:
             failures.append(f"{url}: {error}")
             continue
@@ -179,19 +189,15 @@ def refresh_logo(fetcher: Fetcher, outcome: Outcome, html: str, page: Page, now:
         outcome.note("logo", url)
         return
     reason = failures[-1] if failures else "no header mark on the page names the Program"
-    if local.exists() and on_page:
-        outcome.suspect_logo = stored
-        outcome.note("logo-suspect", f"{stored} may not be the Program's own mark; no replacement could be downloaded ({reason})")
+    if program["logo"]["path"] == NONE_PATH:
+        outcome.note("logo-none", reason)
         return
-    if local.exists():
-        outcome.drift = True
-        outcome.note("logo-kept", reason)
-        outcome.observe(
-            "official-logo",
-            "stale",
-            now,
-            "The stored logo URL is no longer on the page and no header mark could replace it. The stored logo was kept.",
-        )
-        return
-    outcome.note("logo-failed", reason)
-    outcome.observe("official-logo", "inaccessible", now, "No mark on the page could be downloaded and rasterized.")
+    program["logo"]["path"] = NONE_PATH
+    source["quote"] = "no-validated-logo"
+    source["title"] = f"{program['name']} — no rule-validated official mark"
+    source["checkedAt"] = iso(now)
+    outcome.logo = (LOGOS / "none.png", NONE_PNG)
+    if local.exists() and local.name != "none.png":
+        outcome.old_logo = local
+    outcome.changed = outcome.drift = True
+    outcome.note("logo-none", reason)

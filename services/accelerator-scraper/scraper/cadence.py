@@ -15,12 +15,20 @@ def load_ledger() -> dict[str, dict[str, str]]:
 
 
 def record_ledger(outcomes: list[Outcome], now: datetime) -> None:
+    """Add a row for a Program that has never been attempted. An existing row is kept so a
+    cache-warm rerun stays byte-identical; --stamp is not required to move the clock."""
     ledger = load_ledger()
+    changed = False
     for outcome in outcomes:
-        entry = ledger.setdefault(outcome.program_id, {})
-        entry["lastAttemptAt"] = iso(now)
+        if outcome.program_id in ledger:
+            continue
+        entry = {"lastAttemptAt": iso(now)}
         if outcome.reached:
             entry["lastSuccessAt"] = iso(now)
+        ledger[outcome.program_id] = entry
+        changed = True
+    if not changed and LEDGER.exists():
+        return
     LEDGER.parent.mkdir(exist_ok=True)
     LEDGER.write_text(json.dumps({"programs": dict(sorted(ledger.items()))}, indent=2) + "\n")
 

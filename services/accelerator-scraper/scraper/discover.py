@@ -121,7 +121,8 @@ def aliases_for(name: str) -> list[str]:
 def website_of(value: str | None) -> str | None:
     if not value:
         return None
-    value = value.strip().rstrip(".,;")
+    # Directory PDFs carry line breaks and other control characters inside URLs.
+    value = re.sub(r"[\x00-\x20\x7f]+", "", value).rstrip(".,;")
     if not re.match(r"^https?://", value, re.I):
         value = "https://" + value.lstrip("/")
     parsed = urlparse(value)
@@ -454,7 +455,7 @@ def load() -> dict[str, dict]:
     return {entry["key"]: entry for entry in data["candidates"]}
 
 
-def save_candidates(entries: dict[str, dict], now: datetime, sources: list[dict]) -> None:
+def save_candidates(entries: dict[str, dict], now: datetime, sources: list[dict], harvested_at: str | None = None) -> None:
     CANDIDATES.write_text(
         json.dumps(
             {
@@ -462,9 +463,9 @@ def save_candidates(entries: dict[str, dict], now: datetime, sources: list[dict]
                     "Operator review file. For each entry you keep, set website to the official site and status to "
                     "confirmed; otherwise set status to rejected with a note. Entries in review already carry the "
                     "website a source listed; check it before confirming. A harvest never overwrites status, website, "
-                    "applyUrl, kind, or note."
+                    "applyUrl, kind, or note. discover vet records a reason on every new or review entry."
                 ),
-                "harvestedAt": iso(now),
+                "harvestedAt": harvested_at or iso(now),
                 "sources": sources,
                 "candidates": list(entries.values()),
             },
@@ -578,10 +579,123 @@ def add_confirmed(now: datetime, fetcher: Fetcher | None = None) -> list[str]:
         taken.add(program_id)
         added.append(program_id)
         entry["status"], entry["programId"] = "added", program_id
-        entry["note"] = f"Startup wording on the official site: {excerpt}"
+        reason = (entry.get("vetting") or {}).get("reason")
+        entry["note"] = f"{reason} Startup wording on the official site: {excerpt}" if reason else f"Startup wording on the official site: {excerpt}"
         print(f"added\t{program_id}\t{website}")
     if added:
         derive_tags(now)
     save_candidates(entries, now, json.loads(CANDIDATES.read_text()).get("sources", []) if CANDIDATES.exists() else [])
     print(f"added {len(added)} programs\n{summary(entries)}")
     return added
+
+
+ACCELERATOR_SIGNALS = (
+    ("accelerator", re.compile(r"\baccelerators?\b(?! (?:pedal|card))", re.I)),
+    ("cohort", re.compile(r"\b(?:cohorts?|batches?)\b", re.I)),
+    # Investment wording only. "safe" and "equity" alone are ordinary words ("a safe space",
+    # "equity and inclusion"); SAFE counts only in capitals, equity only next to a stake or a percentage.
+    (
+        "investment",
+        re.compile(
+            r"\b(?:we invest|invests? (?:up to )?\$|investment of|pre-seed investment|seed investment|"
+            r"convertible note|equity (?:stake|investment)|in exchange for (?:\d+(?:\.\d+)?\s?%|equity)|"
+            r"\d+(?:\.\d+)?\s?% (?:equity|of (?:the )?(?:company|equity)))\b",
+            re.I,
+        ),
+    ),
+    ("investment", re.compile(r"\bSAFEs?\b")),
+    ("demo-day", re.compile(r"\bdemo days?\b", re.I)),
+    ("application", re.compile(r"\b(?:apply|application|applications)\b", re.I)),
+    ("startup-program", re.compile(r"\b(?:startup program|accelerator program|for founders|for startups|early-stage startups)\b", re.I)),
+)
+COWORKING = re.compile(r"\bco-?working\b", re.I)
+INCUBATOR = re.compile(r"\bincubat\w*\b", re.I)
+COURSE = re.compile(r"\b(?:syllabus|course credits?|undergraduate course|enroll in (?:the|this) course)\b", re.I)
+DEFUNCT = re.compile(r"\b(?:domain (?:is )?for sale|this domain has expired|buy this domain|parkingcrew|hugedomains)\b", re.I)
+# Customer-discovery training and member organisations run cohorts without being accelerators.
+NOT_AN_ACCELERATOR = re.compile(r"\b(?:I-Corps|chamber of commerce|customer discovery training)\b", re.I)
+
+
+def vet_text(text: str) -> tuple[str, str, list[str]]:
+    """Return (accept|reject, reason, signals) from visible page text. No network.
+
+    An accelerator names itself as one (or runs a demo day), runs a cohort or invests on stated
+    terms, and takes applications. Anything less is rejected with the signals that were found.
+    """
+    signals = list(dict.fromkeys(name for name, pattern in ACCELERATOR_SIGNALS if pattern.search(text)))
+    found = ", ".join(signals) if signals else "none"
+    if DEFUNCT.search(text):
+        return "reject", "Defunct or parked domain.", signals
+    if NOT_AN_ACCELERATOR.search(text):
+        return "reject", f"Training program or member organisation, not an accelerator (found: {found}).", signals
+    if COURSE.search(text) and "investment" not in signals and "cohort" not in signals:
+        return "reject", "University course, not an accelerator program.", signals
+    identity = {"accelerator", "demo-day"} & set(signals)
+    structure = {"cohort", "investment"} & set(signals)
+    if COWORKING.search(text) and not identity:
+        return "reject", f"Coworking space that does not run an accelerator (found: {found}).", signals
+    if INCUBATOR.search(text) and not identity:
+        return "reject", f"Incubator that does not run an accelerator (found: {found}).", signals
+    if identity and structure and "application" in signals:
+        return "accept", f"Accelerator signals: {found}.", signals
+    return "reject", f"Insufficient accelerator signals (found: {found}).", signals
+
+
+# Errors that mean the site no longer exists, as opposed to a slow or failing server.
+GONE = re.compile(r"nodename nor servname|Name or service not known|getaddrinfo failed|HTTP Error 40[14]|HTTP Error 410|\b(?:404|410)\b")
+
+
+def vet(now: datetime, fetcher: Fetcher | None = None, workers: int = 8) -> dict[str, int]:
+    """Rule-based accept/reject for status new, review and held. Every entry gets a reason.
+
+    A site that is gone (no DNS name, HTTP 404/410) is rejected. A timeout, server error or
+    unreadable robots.txt is held and tried again on the next vet, never rejected on one attempt.
+    """
+    from concurrent.futures import ThreadPoolExecutor
+
+    fetcher = fetcher or Fetcher()
+    raw = json.loads(CANDIDATES.read_text()) if CANDIDATES.exists() else {"sources": [], "harvestedAt": iso(now)}
+    entries = load()
+    pending = [entry for entry in entries.values() if entry["status"] in {"new", "review", "held"}]
+
+    def decide(entry: dict) -> None:
+        website = website_of(entry.get("website"))
+        if not website:
+            entry["vetting"] = {"decision": "reject", "reason": "No official website; accelerator signals could not be checked.", "signals": []}
+            entry["status"] = "rejected"
+            entry["note"] = entry["vetting"]["reason"]
+            print(f"reject\t{entry['key']}\t{entry['note']}")
+            return
+        try:
+            _html, page = read(fetcher, website)
+        except Exception as error:
+            gone = GONE.search(str(error)) is not None
+            reason = f"{'Defunct domain' if gone else 'Unreachable, will retry'}: {error}"
+            entry["vetting"] = {"decision": "reject" if gone else "held", "reason": reason, "signals": []}
+            entry["status"] = "rejected" if gone else "held"
+            entry["note"] = reason
+            print(f"{'reject' if gone else 'held'}\t{entry['key']}\t{reason}")
+            return
+        decision, reason, signals = vet_text(page.visible())
+        entry["vetting"] = {"decision": decision, "reason": reason, "signals": signals}
+        entry["website"] = website
+        if decision == "accept":
+            entry["status"] = "confirmed"
+            entry["note"] = reason
+            print(f"accept\t{entry['key']}\t{reason}")
+        else:
+            entry["status"] = "rejected"
+            entry["note"] = reason
+            print(f"reject\t{entry['key']}\t{reason}")
+
+    with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
+        list(pool.map(decide, pending))
+    save_candidates(entries, now, raw.get("sources", []), harvested_at=raw.get("harvestedAt"))
+    counts = {"accept": 0, "reject": 0}
+    for entry in pending:
+        counts[entry["vetting"]["decision"]] = counts.get(entry["vetting"]["decision"], 0) + 1
+    print(
+        f"vetted {len(pending)} candidates: {counts.get('accept', 0)} accepted, "
+        f"{counts.get('reject', 0)} rejected, {counts.get('held', 0)} held for retry"
+    )
+    return counts

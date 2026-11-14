@@ -77,15 +77,27 @@ class LogoChoice(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder, mock.patch.object(logos, "LOGOS", Path(folder)):
             (Path(folder) / "zinc.png").write_bytes(b"png")
             outcome = Outcome("zinc", program, Path(folder) / "zinc.json")
-            fetcher = mock.Mock()
-            logos.refresh_logo(fetcher, outcome, '<link href="/cropped-half-180x180.png">', page, datetime(2026, 11, 11, tzinfo=timezone.utc), False)
-        fetcher.fetch.assert_not_called()
-        self.assertFalse(outcome.changed)
+        fetcher = mock.Mock()
+        fetcher.fetch.side_effect = RuntimeError("no replacement")
+        logos.refresh_logo(fetcher, outcome, '<link href="/cropped-half-180x180.png">', page, datetime(2026, 11, 11, tzinfo=timezone.utc), False)
+        fetched = [call.args[0] for call in fetcher.fetch.call_args_list]
+        self.assertNotIn("https://zinc.example/cropped-half-180x180.png", fetched)
+        self.assertEqual(program["logo"]["path"], "/accelerators/logos/none.png")
+        self.assertEqual(program["sources"][0]["quote"], "no-validated-logo")
 
     def test_generic_file_names_name_nobody(self) -> None:
         self.assertFalse(names_someone_else("https://x.example/2026/07/Logo-Round-3-600x595.jpg", program_tokens("ClimateLaunchpad", "https://climatelaunchpad.org/")))
         self.assertFalse(names_someone_else("https://cdn.example/6749cd4bf1f583e1b4ab5c5c_Horizontal%20logo%2C%20full.png", program_tokens("Catalyst Fund", "https://catalyst.example/")))
         self.assertFalse(names_someone_else("https://x.example/logo_corfo2024_azul_min.png", program_tokens("CORFO", "https://www.corfo.gob.cl/")))
+
+    def test_a_wordpress_themes_own_logo_is_a_placeholder(self) -> None:
+        skydeck = program_tokens("Berkeley SkyDeck", "https://skydeck.berkeley.edu/")
+        self.assertTrue(
+            names_someone_else("https://skydeck.berkeley.edu/wp-content/themes/bridge/img/logo_black.png", skydeck)
+        )
+        self.assertFalse(
+            names_someone_else("https://skydeck.berkeley.edu/wp-content/uploads/2024/01/logo.png", skydeck)
+        )
 
 
 if __name__ == "__main__":

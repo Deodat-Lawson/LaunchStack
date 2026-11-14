@@ -10,25 +10,47 @@ from .logos import refresh_logo
 from .net import Fetcher, unreachable
 from .outcome import Outcome
 from .parse import Page
-from .records import dump, is_homepage_record, load_program, narratives
-from .text import bot_wall, clip, collapse, mostly_quoted, searchable, still_quoted
+from .records import _junk_narrative, _without, dump, is_homepage_record, load_program, narrative_from
+from .render import render_gap_for
+from .text import bot_wall, clip, collapse, mostly_quoted, needs_render, searchable, still_quoted
 
 
 def read(fetcher: Fetcher, url: str) -> tuple[str, Page]:
     response = fetcher.fetch(url)
     html = response.text()
-    return html, Page.read(response.url, html)
+    page = Page.read(response.url, html)
+    if needs_render(html, page.visible()) or bot_wall(page.visible()):
+        rendered, gap = render_gap_for(fetcher, response.url)
+        if rendered:
+            rendered_page = Page.read(response.url, rendered)
+            if not bot_wall(rendered_page.visible()) and len(rendered_page.visible()) >= len(page.visible()):
+                return rendered, rendered_page
+        page.render_gap = gap
+    return html, page
+
+
+def _strip_form(program: dict) -> bool:
+    """Homepage records do not carry a Form. Curated records are left alone by the caller."""
+    changed = False
+    for cycle in program.get("cycles", []):
+        if "form" in cycle:
+            cycle.pop("form", None)
+            changed = True
+    return changed
 
 
 def refresh_homepage(fetcher: Fetcher, outcome: Outcome, now: datetime, stamp: bool) -> None:
     program = outcome.program
     source = next(item for item in program["sources"] if item["id"] == "homepage")
+    if _strip_form(program):
+        outcome.changed = True
     try:
         html, page = read(fetcher, source["url"])
     except Exception as error:
         status, detail = unreachable(error)
         outcome.note(status, f"{source['url']}\t{error}")
         outcome.observe("homepage", "inaccessible", now, detail)
+        _replace_junk_narrative(outcome, None)
         return
     outcome.reached = True
     visible = page.visible()
@@ -36,20 +58,39 @@ def refresh_homepage(fetcher: Fetcher, outcome: Outcome, now: datetime, stamp: b
     if wall:
         outcome.note("blocked", wall)
         outcome.observe("homepage", "inaccessible", now, wall + " The stored excerpt was kept.")
+        _replace_junk_narrative(outcome, page)
+        refresh_logo(fetcher, outcome, html, page, now, stamp)
         return
     if mostly_quoted(source["quote"], searchable(visible, html)):
         outcome.note("current", source["url"])
         if stamp:
             source["checkedAt"] = iso(now)
             outcome.stamped = True
+        _replace_junk_narrative(outcome, page)
     else:
         quote = clip(visible)
         source["quote"] = quote
         source["checkedAt"] = iso(now)
-        program["description"], program["targetApplicants"] = narratives(quote, now)
+        program["description"], program["targetApplicants"] = narrative_from(page)
         outcome.changed = outcome.drift = True
         outcome.note("updated", f"{source['url']}\t{quote[:80]}")
     refresh_logo(fetcher, outcome, html, page, now, stamp)
+
+
+def _replace_junk_narrative(outcome: Outcome, page: Page | None) -> None:
+    program = outcome.program
+    description = program.get("description", {}).get("text", "")
+    target = program.get("targetApplicants", {}).get("text", "")
+    if not _junk_narrative(description) and not _junk_narrative(target):
+        return
+    if page is None:
+        from .records import MISSING_NARRATIVE
+
+        blank = {"text": MISSING_NARRATIVE, "sourceIds": ["homepage"], "interpretation": True}
+        program["description"], program["targetApplicants"] = dict(blank), dict(blank)
+    else:
+        program["description"], program["targetApplicants"] = narrative_from(page)
+    outcome.changed = True
 
 
 def recheck_curated(fetcher: Fetcher, outcome: Outcome, now: datetime, stamp: bool) -> None:
@@ -95,11 +136,20 @@ def commit(outcomes: list[Outcome]) -> None:
         if outcome.logo:
             target, png = outcome.logo
             target.parent.mkdir(parents=True, exist_ok=True)
-            target.write_bytes(png)
-            if outcome.old_logo:
+            if not target.exists() or target.read_bytes() != png:
+                target.write_bytes(png)
+            if outcome.old_logo and outcome.old_logo.exists() and outcome.old_logo != target:
                 outcome.old_logo.unlink()
-        if outcome.changed or outcome.stamped:
-            outcome.path.write_text(dump(outcome.program))
+        if not (outcome.changed or outcome.stamped):
+            continue
+        if outcome.path.exists():
+            previous = json.loads(outcome.path.read_text())
+            if previous == outcome.program:
+                continue
+            unchanged = _without(previous, ("checkedAt",)) == _without(outcome.program, ("checkedAt",))
+            if unchanged and not outcome.stamped:
+                continue
+        outcome.path.write_text(dump(outcome.program))
 
 
 def merge_report(path, outcomes: list[Outcome], items: list[dict], header: dict) -> None:
@@ -111,8 +161,11 @@ def merge_report(path, outcomes: list[Outcome], items: list[dict], header: dict)
     merged = sorted(kept + items, key=lambda item: (item["programId"], item.get("evidenceId", "")))
     if not merged and not path.exists():
         return
+    document = {**header, "items": merged}
+    if path.exists() and _without(json.loads(path.read_text()), ("checkedAt",)) == _without(document, ("checkedAt",)):
+        return
     path.parent.mkdir(exist_ok=True)
-    path.write_text(json.dumps({**header, "items": merged}, indent=2, ensure_ascii=False) + "\n")
+    path.write_text(json.dumps(document, indent=2, ensure_ascii=False) + "\n")
 
 
 def record_observations(outcomes: list[Outcome], now: datetime) -> None:

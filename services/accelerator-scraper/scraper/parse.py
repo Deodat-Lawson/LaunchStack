@@ -44,8 +44,12 @@ class Page(HTMLParser):
         self.anchors: list[Anchor] = []
         self.candidates: list[Candidate] = []
         self.structured_blocks: list[str] = []
+        self.meta_description = ""
+        self.paragraphs: list[str] = []
+        self.render_gap: str | None = None
         self._hidden = 0
         self._chrome = 0
+        self._paragraph: list[str] | None = None
         self._logo_scopes: list[str] = []
         self._href: str | None = None
         self._title = ""
@@ -70,8 +74,14 @@ class Page(HTMLParser):
         if tag in HIDDEN:
             self._hidden += 1
         names = f"{values.get('class', '')} {values.get('id', '')}".lower()
-        if tag in {"header", "nav"}:
+        if tag == "meta" and not self.meta_description:
+            key = (values.get("name") or values.get("property") or "").lower()
+            if key in {"description", "og:description"}:
+                self.meta_description = collapse(values.get("content", ""))
+        if tag in {"header", "nav", "footer"}:
             self._chrome += 1
+        if tag == "p" and self._hidden == 0 and self._chrome == 0 and self._paragraph is None:
+            self._paragraph = []
         if tag in LABELS and self._label_tag is None:
             self._label_tag, self._label_text = tag, []
         if tag == "a" and values.get("href"):
@@ -118,6 +128,8 @@ class Page(HTMLParser):
             self._anchor_text.append(data)
         if self._label_tag is not None:
             self._label_text.append(data)
+        if self._paragraph is not None and self._hidden == 0:
+            self._paragraph.append(data)
 
     def handle_endtag(self, tag: str) -> None:
         if tag == "script" and self._json_ld is not None:
@@ -138,7 +150,12 @@ class Page(HTMLParser):
                 href = urljoin(self.base, href)
             self.anchors.append(Anchor(href, collapse(" ".join(self._anchor_text)), collapse(self._title), self._heading, self._bold))
             self._href = None
-        if tag in {"header", "nav"} and self._chrome:
+        if tag == "p" and self._paragraph is not None:
+            text = collapse(" ".join(self._paragraph))
+            if len(text) >= 80:
+                self.paragraphs.append(text)
+            self._paragraph = None
+        if tag in {"header", "nav", "footer"} and self._chrome:
             self._chrome -= 1
         if self._logo_scopes and self._logo_scopes[-1] == tag:
             self._logo_scopes.pop()

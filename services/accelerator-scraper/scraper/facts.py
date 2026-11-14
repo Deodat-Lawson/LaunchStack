@@ -18,10 +18,10 @@ from .text import window
 MAX_ITEMS = 6
 PAGE_RULES = (
     ("portfolio", ("portfolio", "companies", "alumni")),
-    ("terms", ("/deal", "deal", "faq", "investment-terms")),
-    ("batches", ("cohort", "batch", "deadline", "dates")),
+    ("terms", ("/deal", "deal", "faq", "investment-terms", "investment", "terms")),
+    ("batches", ("cohort", "batch", "deadline", "dates", "timeline")),
     ("application", ("apply", "application")),
-    ("details", ("about", "program", "overview")),
+    ("details", ("eligibility", "about", "program", "overview", "accelerator")),
 )
 FORM_HOSTS = (
     "typeform.com", "airtable.com", "jotform.com", "f6s.com", "forms.gle", "docs.google.com",
@@ -104,23 +104,29 @@ SELECTIVITY = (
     ),
 )
 AMOUNT = re.compile(
-    r"(?:[$€£¥₹]\s?\d[\d,.]*\s?(?:k|m|mm|million|thousand|bn)?\b|"
-    r"\b\d[\d,.]*\s?(?:k|m|million|thousand)?\s?(?:USD|EUR|GBP|SGD|CAD|AUD|INR|CHF|AED)\b|"
-    r"\b(?:USD|EUR|GBP|SGD|CAD|AUD|INR|CHF|AED)\s?\d[\d,.]*\s?(?:k|m|million|thousand)?\b)",
+    r"(?:[$€£¥₹]\s?\d[\d,.]*\s?(?:k|m|mm|million|thousand|b|bn|billion)?\b|"
+    r"\b\d[\d,.]*\s?(?:k|m|million|thousand|b|bn|billion)?\s?(?:USD|EUR|GBP|SGD|CAD|AUD|INR|CHF|AED)\b|"
+    r"\b(?:USD|EUR|GBP|SGD|CAD|AUD|INR|CHF|AED)\s?\d[\d,.]*\s?(?:k|m|million|thousand|b|bn|billion)?\b)",
     re.I,
 )
 OFFER_WORDS = re.compile(
     r"\b(?:we|will)\s+(?:invest|provide|offer|give)\b|\binvests?\s+(?:up to\s+)?(?:[$€£]|USD|EUR|GBP)|"
     r"\bin exchange for\b|\bche(?:ck|que) sizes?\b|\b(?:receive|get)\s+(?:up to\s+)?(?:[$€£]|USD|EUR|GBP)|"
     r"\bper (?:startup|company|team|founder)\b|\binvestment terms\b|\bgrant funding\b|\bstipend\b|"
-    r"\bnon-dilutive\b|\bfor\s+\d+(?:\.\d+)?\s?%\s+(?:equity|of)\b|\bpre-money\b|\bpost-money\b|\bSAFE\b",
+    r"\bnon-dilutive\b|\bequity-free\b|\bgrant of\b|\bconvertible note\b|\bprogram fee\b|\bparticipation fee\b|"
+    r"\bfor\s+\d+(?:\.\d+)?\s?%\s+(?:equity|of)\b|\bpre-money\b|\bpost-money\b|\bSAFE\b",
     re.I,
 )
+# A firm's own numbers (fund size, assets under management, portfolio results) are not what a
+# startup receives, even when an offer word sits nearby ("We invest… a VC firm with $2.0B in AUM").
 NEWS_WORDS = re.compile(
     r"\b(?:raises?|raised|raising|valuation|valued|series\s+[a-f]|ARR|revenue|exits?|acquired|unicorns?|"
-    r"portfolio value|fund size|\$\d[\d.,]*\s?(?:bn|billion)|news)\b",
+    r"portfolio value|fund size|AUM|assets under management|under management|VC firm|venture (?:capital )?firm|"
+    r"\$\d[\d.,]*\s?(?:b|bn|billion)|billion|news)\b",
     re.I,
 )
+# No accelerator check is this large; a bigger amount is a fund or portfolio figure.
+MAX_PROGRAM_AMOUNT = 10_000_000
 EXAMPLE_WORDS = re.compile(
     r"\b(?:sample|example|past|successful|winning|accepted)\s+applications?\b|\bapplications?\s+(?:examples?|samples?)\b",
     re.I,
@@ -132,8 +138,50 @@ PORTFOLIO_SEGMENTS = {
 PORTFOLIO_ANCHORS = {"portfolio", "our portfolio", "companies", "our companies", "alumni", "startups", "our startups"}
 FINDING_KEYS = (
     "emails", "phones", "routes", "applicationUrl", "applicationsOpen", "operatingStatus",
-    "deadlines", "selectivity", "dealText", "portfolioPages", "name", "examplePages",
+    "deadlines", "rolling", "announcedIntake", "cohortStarts", "durationWeeks", "format",
+    "location", "selectivity", "dealText", "dealComponents", "portfolioPages", "name", "examplePages",
 )
+MONTH_WORD = (
+    r"(?:january|february|march|april|may|june|july|august|september|october|november|december|"
+    r"jan|feb|mar|apr|jun|jul|aug|sept|sep|oct|nov|dec)\.?"
+)
+SEASON_OR_MONTH = rf"(?:{MONTH_WORD}|spring|summer|autumn|fall|winter)"
+ROLLING_WORDS = re.compile(
+    r"\brolling\s+(?:admissions|applications|intake|basis|deadlines?)\b|"
+    r"\bapplications?\s+(?:are\s+)?(?:accepted|open)\s+(?:year-round|on a rolling basis)\b|"
+    r"\bon a rolling basis\b",
+    re.I,
+)
+ANNOUNCED_INTAKE = re.compile(
+    rf"\b(?:deadline|applications?\s+(?:close|closes|open|due)|apply\s+by|cohort|batch)\b.{{0,40}}?\b({SEASON_OR_MONTH})\b",
+    re.I,
+)
+COHORT_START = re.compile(
+    rf"\b(?:cohort|program|programme|batch)\s+(?:starts|begins|kicks off|runs)\s+(?:in\s+)?({SEASON_OR_MONTH})(?:\s+(20\d\d))?",
+    re.I,
+)
+DURATION = re.compile(r"\b(\d{1,2})\s*-\s*(week|month)s?\b|\b(\d{1,2})\s+(week|month)s?\b", re.I)
+FORMAT_WORDS = re.compile(
+    r"\b(in-person|in person|hybrid|remote|virtual)(?!\s+(?:office|tour|event|events|room|desk|space|parking))\b",
+    re.I,
+)
+LOCATION_WORDS = re.compile(
+    r"\b(?:based|located|headquartered)\s+in\s+([A-Z][A-Za-z&'-]+(?:\s+[A-Z][A-Za-z&'-]+){0,3})"
+)
+MONEY = re.compile(
+    r"(?P<prefix>[$€£¥₹]|USD|EUR|GBP|SGD|CAD|AUD|INR|CHF|AED)\s?(?P<num>\d[\d,]*(?:\.\d+)?)\s?(?P<scale>k|m|mm|million|thousand|b|bn|billion)?\b|"
+    r"\b(?P<num2>\d[\d,]*(?:\.\d+)?)\s?(?P<scale2>k|m|million|thousand|b|bn|billion)?\s?(?P<suffix>USD|EUR|GBP|SGD|CAD|AUD|INR|CHF|AED)\b",
+    re.I,
+)
+CURRENCY = {
+    "$": "USD", "€": "EUR", "£": "GBP", "¥": "JPY", "₹": "INR",
+    "usd": "USD", "eur": "EUR", "gbp": "GBP", "sgd": "SGD", "cad": "CAD", "aud": "AUD",
+    "inr": "INR", "chf": "CHF", "aed": "AED", "jpy": "JPY",
+}
+SCALE = {
+    "k": 1_000, "thousand": 1_000, "m": 1_000_000, "mm": 1_000_000, "million": 1_000_000,
+    "b": 1_000_000_000, "bn": 1_000_000_000, "billion": 1_000_000_000,
+}
 
 
 def classify(url: str, anchor: str) -> str:
@@ -147,9 +195,14 @@ def classify(url: str, anchor: str) -> str:
     return "other"
 
 
+def _host(url: str) -> str:
+    return urlparse(url).netloc.lower().removeprefix("www.")
+
+
 def same_site(url: str, seeds: list[str]) -> bool:
-    host = urlparse(url).netloc.lower()
-    return any(host == urlparse(seed).netloc.lower() or host.endswith("." + urlparse(seed).netloc.lower()) for seed in seeds)
+    """True when url is the seed host, a subdomain of it, or the same host with or without www."""
+    host = _host(url)
+    return any(host == _host(seed) or host.endswith("." + _host(seed)) for seed in seeds)
 
 
 def base_domain(host: str) -> str:
@@ -205,7 +258,8 @@ class Findings:
     def read(self, url: str, kind: str, page: Page) -> None:
         name = self.program["name"]
         homepage = url == self.program["websiteUrl"]
-        title = f"{name} — {'homepage' if kind == 'details' and homepage else kind + ' page'} checked by scrape.py"
+        page_name = "homepage" if homepage else "program page" if kind == "details" else f"{kind} page"
+        title = f"{name} — {page_name}"
         text = page.visible()
         at = text.lower().find(name.lower())
         if at >= 0 and homepage:
@@ -215,6 +269,8 @@ class Findings:
         self._contacts(url, kind, text, title)
         self._status(url, kind, text, title)
         self._deadlines(url, kind, text, title)
+        self._intake(url, kind, text, title)
+        self._program_shape(url, kind, text, title)
         self._selectivity(url, kind, text, title)
         self._deal(url, kind, text, title)
 
@@ -250,7 +306,10 @@ class Findings:
         if EXAMPLE_WORDS.search(f"{text} {urlparse(href).path.replace('-', ' ')}"):
             self.add("examplePages", href, self.cite("example", url, kind, excerpt, title))
         if page == "application" and (official or any(host.endswith(form) for form in FORM_HOSTS)):
-            self.add("routes", href, self.cite("route", url, kind, excerpt, title))
+            evidence = self.cite("route", url, kind, excerpt, title)
+            self.add("routes", href, evidence)
+            if official and not self.found["applicationUrl"]:
+                self.add("applicationUrl", href, evidence)
         segment = urlparse(href).path.rstrip("/").rsplit("/", 1)[-1].lower()
         if official and (segment in PORTFOLIO_SEGMENTS or text.lower() in PORTFOLIO_ANCHORS):
             self.add("portfolioPages", href, self.cite("portfolio", url, kind, excerpt, title))
@@ -308,6 +367,39 @@ class Findings:
                     self.add("deadlines", day.isoformat(), self.cite("deadline", url, kind, excerpt, title))
                 break
 
+    def _intake(self, url: str, kind: str, text: str, title: str) -> None:
+        """Rolling intake, and months or seasons that have no year. A year is never invented."""
+        match = ROLLING_WORDS.search(text)
+        if match:
+            self.add("rolling", True, self.cite("rolling", url, kind, window(text, match.start(), match.end(), 80), title))
+        for found in ANNOUNCED_INTAKE.finditer(text):
+            around = text[max(0, found.start() - 12) : found.end() + 20]
+            if re.search(r"20\d\d", around):
+                continue
+            label = found.group(1).rstrip(".")
+            self.add("announcedIntake", label, self.cite("announced", url, kind, window(text, found.start(), found.end(), 70), title))
+        for found in COHORT_START.finditer(text):
+            label = found.group(1).rstrip(".")
+            year = found.group(2)
+            value = f"{label} {year}" if year else label
+            self.add("cohortStarts", value, self.cite("start", url, kind, window(text, found.start(), found.end(), 60), title))
+
+    def _program_shape(self, url: str, kind: str, text: str, title: str) -> None:
+        for match in DURATION.finditer(text):
+            number = match.group(1) or match.group(3)
+            unit = (match.group(2) or match.group(4) or "").lower()
+            if not number or not unit:
+                continue
+            value = number if unit.startswith("week") else ("1 month" if number == "1" else f"{number} months")
+            self.add("durationWeeks", value, self.cite("duration", url, kind, window(text, match.start(), match.end(), 50), title))
+        for match in FORMAT_WORDS.finditer(text):
+            raw = match.group(1).lower().replace(" ", "-")
+            value = {"virtual": "remote", "in-person": "in-person", "remote": "remote", "hybrid": "hybrid"}[raw]
+            self.add("format", value, self.cite("format", url, kind, window(text, match.start(), match.end(), 60), title))
+        match = LOCATION_WORDS.search(text)
+        if match:
+            self.add("location", match.group(1).strip(" .,"), self.cite("location", url, kind, window(text, match.start(), match.end(), 40), title))
+
     def _selectivity(self, url: str, kind: str, text: str, title: str) -> None:
         for pattern in SELECTIVITY:
             for match in pattern.finditer(text):
@@ -318,17 +410,86 @@ class Findings:
 
     def _deal(self, url: str, kind: str, text: str, title: str) -> None:
         """An amount next to offer wording ('we invest $150K for 7%'), never next to news wording."""
-        covered = -1
         for match in AMOUNT.finditer(text):
-            if match.start() < covered:
-                continue
-            local = text[max(0, match.start() - 80) : match.end() + 80]
+            local = text[max(0, match.start() - 90) : match.end() + 70]
             near = text[max(0, match.start() - 40) : match.end() + 40]
             if not OFFER_WORDS.search(local) or NEWS_WORDS.search(near):
                 continue
-            excerpt = window(text, match.start(), match.end(), 160)
-            covered = match.end() + 160
-            self.add("dealText", excerpt, self.cite("deal", url, kind, excerpt, title))
+            component = _component(match.group(), local, match.start() - max(0, match.start() - 90))
+            if component is not None and component["amount"] and int(component["amount"]) > MAX_PROGRAM_AMOUNT:
+                continue
+            excerpt = window(text, match.start(), match.end(), 70)
+            evidence = self.cite("deal", url, kind, excerpt, title)
+            self.add("dealText", excerpt, evidence)
+            if component is not None:
+                self.add("dealComponents", component, evidence)
+            if re.search(r"\bno fees\b|\bwithout fees\b|\bfee-free\b|\bno program fee\b", local, re.I):
+                self.add(
+                    "dealComponents",
+                    {"kind": "fee", "amount": "0", "currency": None, "equity": None, "label": "Fee", "contingent": False, "condition": "no fees"},
+                    evidence,
+                )
+
+
+def _parsed_money(match: re.Match[str]) -> tuple[str, str] | None:
+    if match.group("num"):
+        number, scale, symbol = match.group("num"), match.group("scale"), match.group("prefix")
+    else:
+        number, scale, symbol = match.group("num2"), match.group("scale2"), match.group("suffix")
+    if not number or not symbol:
+        return None
+    try:
+        value = float(number.replace(",", ""))
+    except ValueError:
+        return None
+    if scale:
+        value *= SCALE[scale.lower()]
+    rounded = int(round(value))
+    if rounded < 1 or abs(value - rounded) > 0.01 or rounded > 1_000_000_000_000:
+        return None
+    return str(rounded), CURRENCY[symbol.lower()]
+
+
+def _instrument(local: str, amount_at: int) -> str:
+    """The offer word closest to the amount, so a later fee is not labelled with an earlier SAFE."""
+    patterns = (
+        ("safe", re.compile(r"\bSAFE\b")),
+        ("convertible", re.compile(r"\bconvertible(?:\s+note)?\b", re.I)),
+        ("grant", re.compile(r"equity[-\s]?free|\bnon-dilutive\b|\bno equity\b|\bgrants?\b", re.I)),
+        ("fee", re.compile(r"\b(?:program|participation|tuition)\s+fees?\b|\bfees?\b", re.I)),
+        ("equity", re.compile(r"\b(?:for\s+)?\d+(?:\.\d+)?\s?%\s+equity\b|\bequity\b", re.I)),
+    )
+    best = "cash"
+    best_distance = 10**9
+    for kind, pattern in patterns:
+        for found in pattern.finditer(local):
+            distance = min(abs(found.start() - amount_at), abs(found.end() - amount_at))
+            if distance < best_distance:
+                best, best_distance = kind, distance
+    return best
+
+
+def _component(amount_text: str, local: str, amount_at: int) -> dict | None:
+    money = next((parsed for match in MONEY.finditer(amount_text) if (parsed := _parsed_money(match))), None)
+    equity_match = re.search(r"(\d+(?:\.\d+)?)\s?%", local)
+    equity = None
+    if equity_match and re.search(r"equity|SAFE|convertible|ownership", local, re.I):
+        equity = equity_match.group(1) + "%"
+    kind = _instrument(local, amount_at)
+    if money is None and equity is None and kind not in {"grant", "fee"}:
+        return None
+    amount, currency = money if money else (None, None)
+    contingent = bool(re.search(r"\bup to\b|\bmaximum of\b", local, re.I))
+    labels = {"safe": "SAFE", "convertible": "Convertible note", "grant": "Grant", "fee": "Fee", "equity": "Equity", "cash": "Cash"}
+    return {
+        "kind": kind,
+        "amount": amount,
+        "currency": currency if amount else None,
+        "equity": equity,
+        "label": labels[kind],
+        "contingent": contingent,
+        "condition": "up to" if contingent else None,
+    }
 
 
 def _strings(value: object) -> list[str]:

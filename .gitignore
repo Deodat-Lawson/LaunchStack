@@ -93,3 +93,7 @@ test-output/
 # note above for what a pattern that matches at any depth can swallow.
 apps/web/test-results/
 apps/web/playwright-report/
+
+# Accelerator scraper cache and local interpreter. Not catalogue data.
+fixtures/accelerators/.http-cache/
+services/accelerator-scraper/.venv/

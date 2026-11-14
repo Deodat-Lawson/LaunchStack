@@ -80,9 +80,9 @@ The shared Program record stays schema version 2. Program intelligence is a sepa
 | `COVERAGE.md`                           | Counts by information group.                                                                                                                                                         |
 
 ```sh
-python3 fixtures/accelerators/collect.py --self-test
-python3 fixtures/accelerators/collect.py --discover a16z-speedrun
-python3 fixtures/accelerators/refresh.py --check a16z-speedrun
+python3 services/accelerator-scraper/scrape.py test
+python3 services/accelerator-scraper/scrape.py refresh a16z-speedrun
+python3 services/accelerator-scraper/scrape.py check a16z-speedrun
 pnpm --filter @launchstack/web accelerators:publish-intelligence
 pnpm --filter @launchstack/web accelerators:import-intelligence -- --validate
 ```
@@ -92,11 +92,11 @@ pnpm --filter @launchstack/web accelerators:import-intelligence -- --validate
 `scrape.py` keeps the whole catalogue current from the official pages, so a refresh does not need an assistant to re-read the sites. The code is the `scraper/` package (one module per step, unit tests in `scraper/tests/`). It uses the Python standard library plus Pillow for logos, `rsvg-convert` or ImageMagick for SVG logos, and `pdftotext` for PDF discovery sources. Every fetch is an anonymous GET that honours robots.txt including `Crawl-delay`, waits at least a second between requests to one host, and backs off on `429`/`5xx` for as long as the server asks.
 
 ```sh
-python3 fixtures/accelerators/scrape.py test             # unit tests, no network
-python3 fixtures/accelerators/scrape.py check            # report drift, write nothing, exit 1 on drift
-python3 fixtures/accelerators/scrape.py refresh --due    # what the refresh cadence says is due
-python3 fixtures/accelerators/scrape.py refresh          # refresh every Program
-python3 fixtures/accelerators/scrape.py refresh antler hf0
+python3 services/accelerator-scraper/scrape.py test          # unit tests, no network
+python3 services/accelerator-scraper/scrape.py check         # report drift, write nothing, exit 1 on drift
+python3 services/accelerator-scraper/scrape.py refresh --due # what the refresh cadence says is due
+python3 services/accelerator-scraper/scrape.py refresh       # refresh every Program
+python3 services/accelerator-scraper/scrape.py refresh antler hf0
 python3 fixtures/accelerators/scrape.py add acme-labs --name "Acme Labs" \
   --url https://acme.example/ --apply https://acme.example/apply
 

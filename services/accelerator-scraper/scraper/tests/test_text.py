@@ -1,12 +1,18 @@
 import unittest
 
 from scraper.parse import Page
-from scraper.text import QUOTE_LIMIT, bot_wall, clip, mostly_quoted, searchable, still_quoted
+from scraper.text import QUOTE_LIMIT, bot_wall, clip, collapse, mostly_quoted, searchable, still_quoted
 
 FIRST = "We invest in technical teams at the earliest stage and work beside them for twelve weeks of building, selling, and hiring before a demo day for investors."
 SECOND = "Founders keep full control of their company, receive office space in three cities, and join an alumni network that answers questions long after the program ends."
 HTML = f"""<html><head><title>Acme Labs | Accelerator</title><style>.x{{}}</style><script>var hidden = 1;</script></head>
 <body><main><p>Acme Labs backs   pre-seed founders .</p><p>{FIRST}</p><p>{SECOND}</p></main></body></html>"""
+
+
+class ControlCharacters(unittest.TestCase):
+    def test_nul_and_controls_never_reach_stored_text(self) -> None:
+        # Postgres text rejects NUL, so one stray byte in a PDF excerpt failed the whole import.
+        self.assertEqual(collapse("Apply\x00 by\x0bMarch\x7f 1"), "Apply by March 1")
 
 
 class QuoteMatching(unittest.TestCase):

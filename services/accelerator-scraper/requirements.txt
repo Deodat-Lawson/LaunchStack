@@ -1,0 +1,3 @@
+# Logos are rasterized with Pillow. Fetching, parsing, and extraction use the
+# standard library only. Headless rendering is optional: see requirements-render.txt.
+pillow>=10.4,<12

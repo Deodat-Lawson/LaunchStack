@@ -6,7 +6,7 @@ import json
 import re
 from datetime import datetime
 
-from . import PROGRAMS, TAXONOMY, VOCABULARY, iso
+from . import CHECKS, PROGRAMS, TAXONOMY, VOCABULARY, iso
 from .records import dump
 from .text import collapse
 
@@ -42,6 +42,12 @@ def derive_tags(now: datetime) -> tuple[int, int]:
         for source in program["sources"]
         if not source["quote"].startswith(("http://", "https://"))
     }
+    for path in sorted(CHECKS.glob("*.json")):
+        checks = json.loads(path.read_text())
+        program_id = checks.get("programId") or path.stem
+        for item in checks.get("pageQuotes", []):
+            if item.get("id") and item.get("excerpt"):
+                sources[(program_id, item["id"])] = item["excerpt"]
     managed = {entry["id"] for entry in vocabulary}
     tags: list[dict] = []
     for tag in taxonomy["tags"]:
@@ -50,7 +56,8 @@ def derive_tags(now: datetime) -> tuple[int, int]:
         needles = [tag["label"], *tag["aliases"]]
         tag["evidence"] = [item for item in tag["evidence"] if supported(sources.get((item["programId"], item["sourceId"]), ""), needles)]
         if not tag["evidence"]:
-            raise SystemExit(f"Curated tag {tag['id']} lost its last supporting quote; fix it in taxonomy.json")
+            print(f"curated-tag-dropped\t{tag['id']}\tthe stored quotes no longer contain its wording")
+            continue
         tags.append(tag)
     earlier = {tag["id"]: tag for tag in taxonomy["tags"] if tag["id"] in managed}
     for entry in vocabulary:

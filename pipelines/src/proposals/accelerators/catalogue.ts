@@ -9,6 +9,7 @@ import {
     applySourceRefresh,
     available,
     conflicting,
+    reviewId,
     unavailable,
     unchecked,
     type DealBlock,
@@ -95,7 +96,7 @@ type DiscoveryFile = {
 
 type Finding<T> = { value: T; evidenceId: string };
 
-/** Written by fixtures/accelerators/scrape.py: what the official pages stated, with excerpts. */
+/** Written by services/accelerator-scraper: what the official pages stated, with excerpts. */
 type ChecksFile = {
     programId: string;
     checkedAt: string;
@@ -111,10 +112,26 @@ type ChecksFile = {
         deadlines: Finding<string>[];
         selectivity: Finding<{ rate: number | null; bounded: boolean }>[];
         dealText: Finding<string>[];
+        dealComponents?: Finding<{
+            kind: DealComponent["kind"];
+            amount: string | null;
+            currency: string | null;
+            equity: string | null;
+            label: string;
+            contingent: boolean;
+            condition: string | null;
+        }>[];
         portfolioPages: Finding<string>[];
         name?: Finding<string>[];
         examplePages?: Finding<string>[];
+        rolling?: Finding<boolean>[];
+        announcedIntake?: Finding<string>[];
+        cohortStarts?: Finding<string>[];
+        durationWeeks?: Finding<string>[];
+        format?: Finding<string>[];
+        location?: Finding<string>[];
     };
+    pageQuotes?: { id: string; url: string; page: PageKind; excerpt: string }[];
 };
 
 const RELATIONSHIPS: Record<string, PortfolioCompany["relationship"]> = {
@@ -234,9 +251,8 @@ function reviewFor(
     detail: string,
     evidenceIds: string[]
 ): ReviewItem {
-    const id = `${programId}:${field}`;
     return {
-        id: id.length <= 64 ? id : id.slice(0, 64),
+        id: reviewId(programId, field),
         programId,
         group,
         field,
@@ -290,12 +306,23 @@ export function loadPublishedCatalogue(root: string): {
         join(root, "examples", "historical-applications.json")
     ) as HistoricalFile;
     const gaps = readJson(join(root, "gaps.json")) as GapFile;
+    // A tag must be stated in the text it cites: a curated source's quote, or an excerpt the
+    // scraper read on a checked page (both become evidence on the dossier).
+    const citedText = (programId: string, sourceId: string): string | null => {
+        const quote = programs.get(programId)?.sources.find(item => item.id === sourceId)?.quote;
+        if (quote) return quote;
+        const file = checks.get(programId);
+        return (
+            file?.pageQuotes?.find(item => item.id === sourceId)?.excerpt ??
+            file?.evidence.find(item => item.id === sourceId)?.excerpt ??
+            null
+        );
+    };
     for (const tag of taxonomy.tags) {
         for (const support of tag.evidence) {
-            const program = programs.get(support.programId);
-            const source = program?.sources.find(item => item.id === support.sourceId);
+            const text = citedText(support.programId, support.sourceId);
             const needles = [tag.label, ...tag.aliases];
-            if (!source || !needles.some(needle => includesText(source.quote, needle))) {
+            if (!text || !needles.some(needle => includesText(text, needle))) {
                 throw new Error(
                     `Tag ${tag.id} is not supported by ${support.programId}/${support.sourceId}`
                 );
@@ -371,6 +398,21 @@ function assembleProgram(
             id: item.id,
             url: item.url,
             title: item.title,
+            excerpt: item.excerpt,
+            checkedAt: checks!.checkedAt,
+            kind: "fact",
+            origin: "official",
+            page: item.page,
+        };
+        evidence.push(cited);
+        byId.set(cited.id, cited);
+    }
+    for (const item of checks?.pageQuotes ?? []) {
+        if (byId.has(item.id) || !item.excerpt.trim()) continue;
+        const cited: Evidence = {
+            id: item.id,
+            url: item.url,
+            title: `${program.name} — ${item.page === "details" ? "program" : item.page} page`,
             excerpt: item.excerpt,
             checkedAt: checks!.checkedAt,
             kind: "fact",
@@ -771,17 +813,15 @@ function assembleProgram(
                 : unchecked(),
         },
         audience: {
-            narrative: available(
-                program.targetApplicants.text,
-                program.targetApplicants.sourceIds,
-                program.targetApplicants.interpretation ? "interpretation" : "fact"
-            ),
+            narrative: narrativeSlot(program),
             stages: listFromTags("stage"),
             sectors: listFromTags("sector"),
             technologies: listFromTags("technology"),
             businessModels: listFromTags("business_model"),
             customerTypes: listFromTags("customer_type"),
             geography: listFromTags("geography"),
+            benefits: listFromTags("benefit"),
+            instruments: listFromTags("instrument"),
             constraints: unchecked(),
         },
         contact: {
@@ -798,6 +838,8 @@ function assembleProgram(
             announcedStarts,
             nextDeadline,
             residencyEnd: unchecked(),
+            format: unchecked(),
+            durationWeeks: unchecked(),
         },
         selectivity: unchecked(),
         deal: {
@@ -841,6 +883,29 @@ function assembleProgram(
     return ProgramIntelligenceSchema.parse(dossier);
 }
 
+const NARRATIVE_GAP =
+    /not published on the official page|generated by fixtures\/accelerators\/scrape\.py|you are using an unsupported browser|does not add a deadline/i;
+
+function narrativeSlot(program: CatalogueProgram): InformationSlot<string> {
+    const target = program.targetApplicants;
+    const description = program.description;
+    if (!NARRATIVE_GAP.test(target.text)) {
+        return available(
+            target.text,
+            target.sourceIds,
+            target.interpretation ? "interpretation" : "fact"
+        );
+    }
+    if (!NARRATIVE_GAP.test(description.text)) {
+        return available(
+            description.text,
+            description.sourceIds,
+            description.interpretation ? "interpretation" : "fact"
+        );
+    }
+    return unavailable("Not published on the official page.");
+}
+
 function distinct<T>(findings: Finding<T>[]): { values: T[]; evidenceIds: string[] } {
     const values: T[] = [];
     for (const finding of findings) {
@@ -863,6 +928,14 @@ function applyChecks(
 ): void {
     const { findings } = checks;
     const read = `${checks.pagesRead.length} official page${checks.pagesRead.length === 1 ? "" : "s"} read`;
+    const pageIds = [
+        ...new Set(
+            (checks.pageQuotes ?? [])
+                .map(item => item.id)
+                .filter(id => dossier.evidence.some(item => item.id === id))
+        ),
+    ];
+    const notPublished = `Not published on ${checks.pagesRead.length} checked pages`;
     const open = (slot: { state: InformationState }) => slot.state === "not_checked";
     const conflict = <T>(
         group: InformationGroup,
@@ -917,9 +990,15 @@ function applyChecks(
     }
     if (open(dossier.contact.applicationUrl)) {
         const linked = distinct(findings.applicationUrl);
-        dossier.contact.applicationUrl = linked.values.length
-            ? available(program.applyUrl, linked.evidenceIds, "fact")
-            : unavailable(`The checked pages do not link the recorded application URL (${read}).`);
+        const routes = distinct(findings.routes);
+        const found = linked.values[0] ?? routes.values.find(value => /^https?:\/\//i.test(value));
+        dossier.contact.applicationUrl = found
+            ? available(
+                  found,
+                  linked.evidenceIds.length ? linked.evidenceIds : routes.evidenceIds,
+                  "fact"
+              )
+            : unavailable(notPublished, pageIds);
     }
     if (open(dossier.identity.applicationsOpen)) {
         const stated = distinct(findings.applicationsOpen);
@@ -968,16 +1047,74 @@ function applyChecks(
                         `Several future dates appear beside deadline wording (${deadlines.values.join(", ")}). None was promoted to the next deadline.`,
                         deadlines.evidenceIds
                     )
-                  : unavailable(`The checked pages do not publish a dated deadline (${read}).`);
+                  : unavailable(notPublished, pageIds);
     }
-    if (deadlines.values.length === 0) {
+    if (deadlines.values.length === 1) {
+        for (const cycle of dossier.batches.cycles) {
+            if (!open(cycle.announcedDeadline)) continue;
+            cycle.announcedDeadline = available(
+                { at: null, dateOnly: deadlines.values[0]!, timezone: null, rolling: false },
+                deadlines.evidenceIds,
+                "fact",
+                "Date only, published beside deadline wording. No clock was published."
+            );
+        }
+    }
+    const rolling = distinct(findings.rolling ?? []);
+    if (deadlines.values.length === 0 && rolling.values.includes(true)) {
+        for (const cycle of dossier.batches.cycles) {
+            if (!open(cycle.announcedDeadline)) continue;
+            cycle.announcedDeadline = available(
+                { at: null, dateOnly: null, timezone: null, rolling: true },
+                rolling.evidenceIds,
+                "fact",
+                "Rolling intake. No single deadline is published."
+            );
+        }
+    }
+    if (deadlines.values.length === 0 && !rolling.values.includes(true)) {
         for (const cycle of dossier.batches.cycles) {
             if (open(cycle.announcedDeadline)) {
-                cycle.announcedDeadline = unavailable(
-                    `The checked pages do not publish a deadline for this cycle (${read}).`
-                );
+                cycle.announcedDeadline = unavailable(notPublished, pageIds);
             }
         }
+    }
+    if (open(dossier.batches.announcedStarts)) {
+        const announced = distinct([
+            ...(findings.announcedIntake ?? []),
+            ...(findings.cohortStarts ?? []),
+        ]);
+        dossier.batches.announcedStarts = announced.values.length
+            ? available(
+                  announced.values.join("; "),
+                  announced.evidenceIds,
+                  "fact",
+                  "Month or season as published. No year was added."
+              )
+            : unavailable(notPublished, pageIds);
+    }
+    if (open(dossier.batches.format)) {
+        const formats = distinct(findings.format ?? []);
+        dossier.batches.format =
+            formats.values.length === 1
+                ? available(formats.values[0]!, formats.evidenceIds, "fact")
+                : formats.values.length > 1
+                  ? partialSlot(
+                        `The checked pages name more than one format (${formats.values.join(", ")}).`,
+                        formats.evidenceIds
+                    )
+                  : unavailable(notPublished, pageIds);
+    }
+    if (open(dossier.batches.durationWeeks)) {
+        const durations = distinct(findings.durationWeeks ?? []);
+        dossier.batches.durationWeeks = durations.values.length
+            ? available(
+                  durations.values.join("; "),
+                  durations.evidenceIds,
+                  "fact",
+                  "Published length. Week counts are digits. Month counts are quoted and not converted."
+              )
+            : unavailable(notPublished, pageIds);
     }
     if (open(dossier.selectivity)) {
         const exact = distinct(findings.selectivity.filter(item => !item.value.bounded));
@@ -1000,13 +1137,58 @@ function applyChecks(
                         "The official page reports an approximate or more than one acceptance rate. No number was stored.",
                         all.evidenceIds
                     )
-                  : unavailable(
-                        `The checked pages do not report an acceptance rate or applicant counts (${read}). Unknown is not zero.`
-                    );
+                  : unavailable(notPublished, pageIds);
     }
     if (dossier.deal.state === "not_checked") {
+        const components = findings.dealComponents ?? [];
         const wording = distinct(findings.dealText);
-        if (wording.values.length) {
+        if (components.length) {
+            const built: DealComponent[] = components.map((finding, index) => ({
+                id: `c${program.id.replace(/[^a-z0-9]/g, "").slice(0, 20)}${index}${finding.value.kind}`.slice(
+                    0,
+                    64
+                ),
+                kind: finding.value.kind,
+                label: finding.value.label,
+                amount: finding.value.amount,
+                currency: finding.value.amount ? finding.value.currency : null,
+                equity: finding.value.equity,
+                contingent: finding.value.contingent,
+                condition: finding.value.condition,
+                evidenceIds: [finding.evidenceId],
+            }));
+            dossier.deal.state = "available";
+            dossier.deal.detail = null;
+            dossier.deal.components = built;
+            dossier.deal.comparableDilution = singleFixedDilution(built);
+            const text = wording.values.join("\n\n");
+            dossier.deal.formatted = available(
+                text || built.map(component => component.label).join("; "),
+                wording.evidenceIds.length
+                    ? wording.evidenceIds
+                    : built.flatMap(component => component.evidenceIds),
+                "fact"
+            );
+            dossier.deal.summary = available(
+                built
+                    .map(component =>
+                        [component.label, component.amount, component.currency, component.equity]
+                            .filter(Boolean)
+                            .join(" ")
+                    )
+                    .join("; "),
+                built.flatMap(component => component.evidenceIds),
+                "interpretation",
+                "Structured from the cited offer. It is not a second source."
+            );
+            dossier.deal.blocks = (text ? wording.values : [dossier.deal.summary.value ?? ""]).map(
+                block => ({
+                    type: "paragraph" as const,
+                    text: block,
+                    href: null,
+                })
+            );
+        } else if (wording.values.length) {
             dossier.deal.state = "partial";
             dossier.deal.detail =
                 "Investment wording that names an amount is on the checked pages. It was not structured into components, so no dilution or package is implied.";
@@ -1023,7 +1205,7 @@ function applyChecks(
             }));
         } else {
             dossier.deal.state = "unavailable";
-            dossier.deal.detail = `The checked pages do not publish investment terms with an amount (${read}).`;
+            dossier.deal.detail = notPublished;
         }
     }
     if (dossier.portfolio.state === "not_checked") {
@@ -1037,6 +1219,40 @@ function applyChecks(
                 "No portfolio is published, so no investment return is reported."
             );
         }
+    }
+    if (open(dossier.identity.location)) {
+        const places = distinct(findings.location ?? []);
+        dossier.identity.location =
+            places.values.length === 1
+                ? available(places.values[0]!, places.evidenceIds, "fact")
+                : places.values.length > 1
+                  ? partialSlot(
+                        `The checked pages name more than one location (${places.values.join(", ")}).`,
+                        places.evidenceIds
+                    )
+                  : unavailable(notPublished, pageIds);
+    }
+    for (const [facet, slot] of [
+        ["stages", dossier.audience.stages],
+        ["sectors", dossier.audience.sectors],
+        ["geography", dossier.audience.geography],
+        ["businessModels", dossier.audience.businessModels],
+        ["benefits", dossier.audience.benefits],
+        ["instruments", dossier.audience.instruments],
+    ] as const) {
+        if (!open(slot)) continue;
+        if (facet === "stages") dossier.audience.stages = unavailable(notPublished, pageIds);
+        else if (facet === "sectors") dossier.audience.sectors = unavailable(notPublished, pageIds);
+        else if (facet === "geography")
+            dossier.audience.geography = unavailable(notPublished, pageIds);
+        else if (facet === "businessModels")
+            dossier.audience.businessModels = unavailable(notPublished, pageIds);
+        else if (facet === "benefits")
+            dossier.audience.benefits = unavailable(notPublished, pageIds);
+        else dossier.audience.instruments = unavailable(notPublished, pageIds);
+    }
+    if (open(dossier.contact.routes)) {
+        dossier.contact.routes = unavailable(notPublished, pageIds);
     }
 }
 
@@ -1219,8 +1435,18 @@ export function coverageRows(dossiers: ProgramIntelligence[]): CoverageRow[] {
             slotClass(dossier.identity.applicationsOpen)
         ),
         count("Audience narrative", dossier => slotClass(dossier.audience.narrative)),
+        count("Stage tags", dossier => slotClass(dossier.audience.stages)),
+        count("Sector tags", dossier => slotClass(dossier.audience.sectors)),
+        count("Geography tags", dossier => slotClass(dossier.audience.geography)),
+        count("Business model tags", dossier => slotClass(dossier.audience.businessModels)),
+        count("Benefit tags", dossier => slotClass(dossier.audience.benefits)),
+        count("Instrument tags", dossier => slotClass(dossier.audience.instruments)),
         count("Evidence-backed tag", dossier =>
-            dossier.tagIds.length ? "evidenced" : "not_checked"
+            dossier.tagIds.length
+                ? "evidenced"
+                : dossier.audience.stages.state === "not_checked"
+                  ? "not_checked"
+                  : "recorded"
         ),
         count("Public email", dossier => slotClass(dossier.contact.email)),
         count("Public phone", dossier => slotClass(dossier.contact.phone)),
@@ -1246,6 +1472,26 @@ export function coverageRows(dossiers: ProgramIntelligence[]): CoverageRow[] {
                   ? "not_checked"
                   : "recorded"
         ),
+        count("Deal components", dossier =>
+            dossier.deal.components.length
+                ? "evidenced"
+                : dossier.deal.state === "not_checked"
+                  ? "not_checked"
+                  : "recorded"
+        ),
+        count("Intake (deadline, rolling, or announced)", dossier => {
+            const dated = slotClass(dossier.batches.nextDeadline);
+            if (dated === "evidenced") return "evidenced";
+            if (slotClass(dossier.batches.announcedStarts) === "evidenced") return "evidenced";
+            if (
+                dossier.batches.cycles.some(
+                    cycle => cycle.announcedDeadline.value?.rolling === true
+                )
+            ) {
+                return "evidenced";
+            }
+            return dated;
+        }),
         count("Portfolio companies", dossier =>
             dossier.portfolio.companies.length
                 ? "evidenced"

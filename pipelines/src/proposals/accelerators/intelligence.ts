@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+
 import { z } from "zod";
 
 /**
@@ -243,6 +245,7 @@ export const DEAL_COMPONENT_KINDS = [
     "benefit",
     "follow_on",
     "unspecified_investment",
+    "convertible",
 ] as const;
 
 export const DealComponentSchema = z
@@ -384,7 +387,7 @@ export const DiscoveredPageSchema = z
         page: PageKindSchema,
         anchor: z.string(),
         fetched: z.boolean(),
-        blocked: z.enum(["robots", "fetch_failed"]).nullable(),
+        blocked: z.enum(["robots", "fetch_failed", "playwright_missing"]).nullable(),
         origin: z.enum(["official", "secondary"]),
     })
     .strict();
@@ -447,6 +450,8 @@ export const ProgramIntelligenceSchema = z
                 businessModels: StringListSlot,
                 customerTypes: StringListSlot,
                 geography: StringListSlot,
+                benefits: StringListSlot,
+                instruments: StringListSlot,
                 constraints: TextSlot,
             })
             .strict(),
@@ -473,6 +478,8 @@ export const ProgramIntelligenceSchema = z
                 announcedStarts: TextSlot,
                 nextDeadline: TextSlot,
                 residencyEnd: TextSlot,
+                format: TextSlot,
+                durationWeeks: TextSlot,
             })
             .strict(),
         selectivity: informationSlot(SelectivityValueSchema),
@@ -759,10 +766,11 @@ export type RefreshObservation = {
     detail: string;
 };
 
-function reviewId(programId: string, field: string): string {
+export function reviewId(programId: string, field: string): string {
     const id = `${programId}:${field}`;
     if (id.length <= 64) return id;
-    return id.slice(0, 64);
+    const digest = createHash("sha256").update(id).digest("hex").slice(0, 10);
+    return `${id.slice(0, 64 - digest.length - 1)}-${digest}`;
 }
 
 /**

@@ -7,6 +7,7 @@ import {
     UpdateTrackerOpportunitySchema,
     UpdateTrackerTaskSchema,
     assertTrackerCycleChange,
+    type OfficialDeadline,
 } from "@launchstack/pipelines/accelerators";
 import { getCatalogueProgram } from "@launchstack/pipelines/accelerators/db";
 import {
@@ -33,15 +34,18 @@ export async function trackerRequestBody(request: Request): Promise<unknown> {
     }
 }
 
-async function cycleDeadline(programId: string, cycleId: string | null): Promise<string | null> {
+async function cycleDeadline(
+    programId: string,
+    cycleId: string | null
+): Promise<OfficialDeadline | null> {
     const record = await getCatalogueProgram(programId);
     if (!record) throw new AcceleratorError("Program not found", 404, "program_not_found");
     if (cycleId === null) return null;
     const cycle = record.program.cycles.find(candidate => candidate.id === cycleId);
     if (!cycle)
         throw new AcceleratorError("Cycle must belong to this Program", 400, "invalid_cycle");
-    // A date-only deadline has no established time or timezone; do not invent a timestamp.
-    return cycle.deadlineAt;
+    // A date-only deadline keeps its date; no time or timezone is invented for it.
+    return { at: cycle.deadlineAt, on: cycle.deadlineAt ? null : (cycle.dateOnly ?? null) };
 }
 
 export async function loadTracker(member: WorkspaceContext) {
@@ -67,7 +71,7 @@ export async function editOpportunity(member: WorkspaceContext, id: string, body
     await assertAcceleratorAccess(member, "documents.edit");
     const input = UpdateTrackerOpportunitySchema.parse(body);
     const existing = await loadTrackerOpportunity(member, id);
-    let deadline: string | null = null;
+    let deadline: OfficialDeadline | null = null;
     if (input.cycleId !== undefined) {
         assertTrackerCycleChange(existing.cycleId, input.cycleId);
         deadline = await cycleDeadline(existing.programId, input.cycleId);

@@ -18,9 +18,10 @@ import {
     SelectValue,
 } from "~/components/ui/select";
 import { Switch } from "~/components/ui/switch";
-import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 
-import { INVESTMENT_STAGES, REGIONS, SECTOR_TAGS, type SectorTag } from "../_lib/demo";
+import type { TagFacet } from "@launchstack/pipelines/accelerators/intelligence";
+
+import { facetOptions, knowsFacet, publishedValue, type ProgramDetailsMap } from "../_lib/details";
 import {
     FIT_FILTERS,
     INTAKE_FILTERS,
@@ -36,12 +37,38 @@ import {
 } from "../_lib/vision-filters";
 
 const CHIP = "h-8 w-auto gap-1.5 rounded-full px-3 text-xs";
-const VIEWS = ["any", "tracked", "pending"] as const;
+const VIEWS = ["any", "tracked", "pending", "untracked"] as const;
+
+/**
+ * Options with how many Programs each would show alongside the other filters. Options
+ * that would show none are left out, except the one already chosen; "any" has no count.
+ */
+function counted<T extends string>(
+    options: readonly T[],
+    value: T,
+    count?: (option: T) => number | null
+): { option: T; count: number | null }[] {
+    const rows = options.map(option => ({ option, count: count ? count(option) : null }));
+    return rows.filter(row => row.option === value || row.count === null || row.count > 0);
+}
+
+function OptionLabel({ label, count }: { label: string; count: number | null }) {
+    const format = useFormatter();
+    return (
+        <span className="flex w-full items-center justify-between gap-3">
+            <span className="truncate">{label}</span>
+            {count !== null && (
+                <span className="text-ink-3 tabular-nums">{format.number(count)}</span>
+            )}
+        </span>
+    );
+}
 
 function ChipSelect<T extends string>({
     value,
     options,
     optionLabel,
+    count,
     onChange,
     ariaLabel,
     active,
@@ -49,6 +76,7 @@ function ChipSelect<T extends string>({
     value: T;
     options: readonly T[];
     optionLabel: (option: T) => string;
+    count?: (option: T) => number | null;
     onChange: (value: T) => void;
     ariaLabel: string;
     active: boolean;
@@ -60,12 +88,12 @@ function ChipSelect<T extends string>({
                 aria-label={ariaLabel}
                 className={`${CHIP} ${active ? "border-brand/50 bg-brand-soft text-brand-ink" : ""}`}
             >
-                <SelectValue />
+                <SelectValue>{optionLabel(value)}</SelectValue>
             </SelectTrigger>
             <SelectContent>
-                {options.map(option => (
-                    <SelectItem key={option} value={option}>
-                        {optionLabel(option)}
+                {counted(options, value, count).map(row => (
+                    <SelectItem key={row.option} value={row.option}>
+                        <OptionLabel label={optionLabel(row.option)} count={row.count} />
                     </SelectItem>
                 ))}
             </SelectContent>
@@ -73,13 +101,24 @@ function ChipSelect<T extends string>({
     );
 }
 
-function Field({ label, children }: { label: string; children: (id: string) => ReactNode }) {
+function Field({
+    label,
+    hint,
+    children,
+}: {
+    label: string;
+    hint?: string;
+    children: (id: string) => ReactNode;
+}) {
     const id = useId();
     return (
         <div className="space-y-1.5">
-            <Label htmlFor={id} className="text-ink-2 text-xs">
-                {label}
-            </Label>
+            <div className="flex items-baseline justify-between gap-2">
+                <Label htmlFor={id} className="text-ink-2 text-xs">
+                    {label}
+                </Label>
+                {hint && <span className="text-ink-3 text-xs">{hint}</span>}
+            </div>
             {children(id)}
         </div>
     );
@@ -90,23 +129,25 @@ function FieldSelect<T extends string>({
     value,
     options,
     optionLabel,
+    count,
     onChange,
 }: {
     id: string;
     value: T;
     options: readonly T[];
     optionLabel: (option: T) => string;
+    count?: (option: T) => number | null;
     onChange: (value: T) => void;
 }) {
     return (
         <Select value={value} onValueChange={next => onChange(next as T)}>
             <SelectTrigger id={id} size="sm">
-                <SelectValue />
+                <SelectValue>{optionLabel(value)}</SelectValue>
             </SelectTrigger>
             <SelectContent>
-                {options.map(option => (
-                    <SelectItem key={option} value={option}>
-                        {optionLabel(option)}
+                {counted(options, value, count).map(row => (
+                    <SelectItem key={row.option} value={row.option}>
+                        <OptionLabel label={optionLabel(row.option)} count={row.count} />
                     </SelectItem>
                 ))}
             </SelectContent>
@@ -115,30 +156,54 @@ function FieldSelect<T extends string>({
 }
 
 /**
- * One control surface for list views, result count, search, and filters.
- * Advanced facets sit behind More filters; active filters stay removable.
+ * Search, one Filters panel and sort on a single row, with the result count and the
+ * active filters (each removable) on one quiet line beneath.
  */
 export function DiscoveryToolbar({
     catalogue,
     vision,
+    details,
     resultCount,
     totalCount,
+    countVision,
+    countCatalogue,
     onCatalogue,
     onVision,
     onReset,
 }: {
     catalogue: DiscoveryFilters;
     vision: VisionFilters;
+    details: ProgramDetailsMap;
     resultCount: number;
     totalCount: number;
+    /** How many Programs would show with this change to the facet filters. */
+    countVision: (patch: Partial<VisionFilters>) => number;
+    /** How many Programs would show with this change to the saved-fit and intake filters. */
+    countCatalogue: (patch: Partial<DiscoveryFilters>) => number;
     onCatalogue: (patch: Partial<DiscoveryFilters>) => void;
     onVision: (patch: Partial<VisionFilters>) => void;
     onReset: () => void;
 }) {
     const t = useTranslations("accelerators");
     const format = useFormatter();
-    const sectorLabel = (sector: SectorTag) => t(`details.sectors.${sector}`);
+    const sectors = facetOptions(details, ["sector"]);
+    const stages = facetOptions(details, ["stage"]);
+    const regions = facetOptions(details, ["geography"]);
+    const labelFor = (options: { id: string; label: string }[], id: string) =>
+        options.find(option => option.id === id)?.label ?? id;
+    const sectorLabel = (sector: string) => labelFor(sectors, sector);
     const minScoreValue = catalogue.minScore === null ? "any" : String(catalogue.minScore);
+    const all = Object.values(details);
+    /** "Known for 171 of 255": how much of the Catalogue a facet can filter at all. */
+    const knownHint = (facet: TagFacet) =>
+        t("vision.knownFor", {
+            count: all.filter(item => knowsFacet(item, facet)).length,
+            total: totalCount,
+        });
+    const visionCount =
+        <K extends keyof VisionFilters>(key: K, none: VisionFilters[K]) =>
+        (option: VisionFilters[K]) =>
+            option === none ? null : countVision({ [key]: option } as Partial<VisionFilters>);
     const advanced = [
         vision.deal !== "any",
         vision.region !== "any",
@@ -147,6 +212,13 @@ export function DiscoveryToolbar({
         catalogue.minScore !== null,
         catalogue.intake !== "all",
         vision.includeIneligible,
+        ...[
+            vision.technology,
+            vision.businessModel,
+            vision.customerType,
+            vision.instrument,
+            vision.benefit,
+        ].map(value => value !== "any"),
     ].filter(Boolean).length;
 
     const chips: { key: string; label: string; clear: () => void }[] = [];
@@ -167,7 +239,7 @@ export function DiscoveryToolbar({
     if (vision.stage !== "any") {
         chips.push({
             key: "stage",
-            label: t(`details.stages.${vision.stage}`),
+            label: labelFor(stages, vision.stage),
             clear: () => onVision({ stage: "any" }),
         });
     }
@@ -188,7 +260,7 @@ export function DiscoveryToolbar({
     if (vision.region !== "any") {
         chips.push({
             key: "region",
-            label: t(`details.regionNames.${vision.region}`),
+            label: labelFor(regions, vision.region),
             clear: () => onVision({ region: "any" }),
         });
     }
@@ -229,32 +301,40 @@ export function DiscoveryToolbar({
             clear: () => onVision({ includeIneligible: false }),
         });
     }
+    const taxonomyFacets = [
+        { key: "technology", facet: "technology" },
+        { key: "businessModel", facet: "business_model" },
+        { key: "customerType", facet: "customer_type" },
+        { key: "instrument", facet: "instrument" },
+        { key: "benefit", facet: "benefit" },
+    ] as const;
+    for (const { key, facet } of taxonomyFacets) {
+        if (vision[key] !== "any")
+            chips.push({
+                key,
+                label: labelFor(facetOptions(details, [facet]), vision[key]),
+                clear: () => onVision({ [key]: "any" }),
+            });
+    }
+    if (vision.tracked !== "any") {
+        chips.push({
+            key: "tracked",
+            label: t(`vision.trackedOptions.${vision.tracked}`),
+            clear: () => onVision({ tracked: "any" }),
+        });
+    }
+
+    const active =
+        advanced +
+        vision.sectors.length +
+        [vision.stage !== "any", vision.deadline !== "any", vision.tracked !== "any"].filter(
+            Boolean
+        ).length;
 
     return (
-        <div className="border-line bg-panel min-w-0 space-y-3 rounded-xl border p-3">
-            <div className="border-line flex flex-wrap items-center justify-between gap-3 border-b pb-3">
-                <ToggleGroup
-                    type="single"
-                    size="sm"
-                    value={VIEWS.find(value => value === vision.tracked) ?? "any"}
-                    onValueChange={value =>
-                        value && onVision({ tracked: value as VisionFilters["tracked"] })
-                    }
-                    aria-label={t("vision.tracked")}
-                    className="flex-wrap justify-start"
-                >
-                    {VIEWS.map(value => (
-                        <ToggleGroupItem key={value} value={value} className="px-3 text-xs">
-                            {t(`vision.trackedOptions.${value}`)}
-                        </ToggleGroupItem>
-                    ))}
-                </ToggleGroup>
-                <p role="status" aria-live="polite" className="text-ink-3 text-xs tabular-nums">
-                    {t("discovery.results", { count: resultCount, total: totalCount })}
-                </p>
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-                <div className="relative min-w-0 flex-1 basis-full sm:min-w-52 sm:basis-0">
+        <div className="min-w-0 space-y-2">
+            <div className="flex items-center gap-2">
+                <div className="relative min-w-0 flex-1">
                     <Search className="text-ink-3 pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2" />
                     <Input
                         type="search"
@@ -270,100 +350,159 @@ export function DiscoveryToolbar({
                         <Button
                             variant="outline"
                             size="sm"
-                            className={`${CHIP} ${vision.sectors.length > 0 ? "border-brand/50 bg-brand-soft text-brand-ink" : ""}`}
-                        >
-                            {t("vision.sectors")}
-                            {vision.sectors.length > 0 && (
-                                <span className="tabular-nums">· {vision.sectors.length}</span>
-                            )}
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent align="start" className="w-80 space-y-3">
-                        <div className="grid grid-cols-2 gap-x-3 gap-y-2">
-                            {SECTOR_TAGS.map(sector => {
-                                const id = `sector-${sector}`;
-                                return (
-                                    <div key={sector} className="flex items-center gap-2">
-                                        <Checkbox
-                                            id={id}
-                                            checked={vision.sectors.includes(sector)}
-                                            onCheckedChange={checked =>
-                                                onVision({
-                                                    sectors:
-                                                        checked === true
-                                                            ? [...vision.sectors, sector]
-                                                            : vision.sectors.filter(
-                                                                  item => item !== sector
-                                                              ),
-                                                })
-                                            }
-                                        />
-                                        <Label
-                                            htmlFor={id}
-                                            className="text-ink-2 text-xs font-normal"
-                                        >
-                                            {sectorLabel(sector)}
-                                        </Label>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                        <p className="text-ink-3 text-xs">{t("vision.sectorsHint")}</p>
-                    </PopoverContent>
-                </Popover>
-                <ChipSelect
-                    ariaLabel={t("vision.stage")}
-                    value={vision.stage}
-                    active={vision.stage !== "any"}
-                    options={["any", ...INVESTMENT_STAGES] as const}
-                    optionLabel={option =>
-                        option === "any" ? t("vision.anyStage") : t(`details.stages.${option}`)
-                    }
-                    onChange={stage => onVision({ stage })}
-                />
-                <ChipSelect
-                    ariaLabel={t("vision.deadline")}
-                    value={vision.deadline}
-                    active={vision.deadline !== "any"}
-                    options={DEADLINE_WINDOWS}
-                    optionLabel={option => t(`vision.deadlineOptions.${option}`)}
-                    onChange={deadline => onVision({ deadline })}
-                />
-                <Popover>
-                    <PopoverTrigger asChild>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className={`${CHIP} ${advanced > 0 ? "border-brand/50 bg-brand-soft text-brand-ink" : ""}`}
+                            className={`${CHIP} ${active > 0 ? "border-brand/50 bg-brand-soft text-brand-ink" : ""}`}
                         >
                             <SlidersHorizontal className="size-3.5" />
-                            {t("vision.moreFilters")}
-                            {advanced > 0 && <span className="tabular-nums">· {advanced}</span>}
+                            {t("vision.filters")}
+                            {active > 0 && <span className="tabular-nums">· {active}</span>}
                         </Button>
                     </PopoverTrigger>
-                    <PopoverContent align="end" className="w-80 space-y-3">
-                        <Field label={t("vision.deal")}>
+                    <PopoverContent
+                        align="end"
+                        className="max-h-[70vh] w-80 space-y-3 overflow-y-auto"
+                    >
+                        <Field label={t("vision.tracked")}>
+                            {id => (
+                                <FieldSelect
+                                    id={id}
+                                    value={VIEWS.find(value => value === vision.tracked) ?? "any"}
+                                    options={VIEWS}
+                                    optionLabel={option => t(`vision.trackedOptions.${option}`)}
+                                    count={visionCount("tracked", "any")}
+                                    onChange={tracked => onVision({ tracked })}
+                                />
+                            )}
+                        </Field>
+                        <div className="space-y-1.5">
+                            <div className="flex items-baseline justify-between gap-2">
+                                <p className="text-ink-2 text-xs">{t("vision.sectors")}</p>
+                                <span className="text-ink-3 text-xs">{knownHint("sector")}</span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-x-3 gap-y-2">
+                                {sectors
+                                    .map(({ id: sector }) => ({
+                                        sector,
+                                        count: countVision({ sectors: [sector] }),
+                                    }))
+                                    .filter(
+                                        ({ sector, count }) =>
+                                            count > 0 || vision.sectors.includes(sector)
+                                    )
+                                    .map(({ sector, count }) => {
+                                        const id = `sector-${sector}`;
+                                        return (
+                                            <div key={sector} className="flex items-center gap-2">
+                                                <Checkbox
+                                                    id={id}
+                                                    checked={vision.sectors.includes(sector)}
+                                                    onCheckedChange={checked =>
+                                                        onVision({
+                                                            sectors:
+                                                                checked === true
+                                                                    ? [...vision.sectors, sector]
+                                                                    : vision.sectors.filter(
+                                                                          item => item !== sector
+                                                                      ),
+                                                        })
+                                                    }
+                                                />
+                                                <Label
+                                                    htmlFor={id}
+                                                    className="text-ink-2 flex min-w-0 flex-1 justify-between gap-2 text-xs font-normal"
+                                                >
+                                                    <span className="truncate">
+                                                        {sectorLabel(sector)}
+                                                    </span>
+                                                    <span className="text-ink-3 tabular-nums">
+                                                        {format.number(count)}
+                                                    </span>
+                                                </Label>
+                                            </div>
+                                        );
+                                    })}
+                            </div>
+                        </div>
+                        <Field label={t("vision.stage")} hint={knownHint("stage")}>
+                            {id => (
+                                <FieldSelect
+                                    id={id}
+                                    value={vision.stage}
+                                    options={["any", ...stages.map(option => option.id)]}
+                                    optionLabel={option =>
+                                        option === "any"
+                                            ? t("vision.anyStage")
+                                            : labelFor(stages, option)
+                                    }
+                                    count={visionCount("stage", "any")}
+                                    onChange={stage => onVision({ stage })}
+                                />
+                            )}
+                        </Field>
+                        <Field label={t("vision.deadline")}>
+                            {id => (
+                                <FieldSelect
+                                    id={id}
+                                    value={vision.deadline}
+                                    options={DEADLINE_WINDOWS}
+                                    optionLabel={option => t(`vision.deadlineOptions.${option}`)}
+                                    count={visionCount("deadline", "any")}
+                                    onChange={deadline => onVision({ deadline })}
+                                />
+                            )}
+                        </Field>
+                        <Field
+                            label={t("vision.deal")}
+                            hint={t("vision.knownFor", {
+                                count: all.filter(
+                                    item => (publishedValue(item.deal.equity)?.length ?? 0) > 0
+                                ).length,
+                                total: totalCount,
+                            })}
+                        >
                             {id => (
                                 <FieldSelect
                                     id={id}
                                     value={vision.deal}
                                     options={DEAL_FILTERS}
                                     optionLabel={option => t(`vision.dealOptions.${option}`)}
+                                    count={visionCount("deal", "any")}
                                     onChange={deal => onVision({ deal })}
                                 />
                             )}
                         </Field>
-                        <Field label={t("vision.region")}>
+                        {taxonomyFacets.map(({ key, facet }) => {
+                            const options = facetOptions(details, [facet]);
+                            return (
+                                <Field key={key} label={t(`vision.${key}`)} hint={knownHint(facet)}>
+                                    {id => (
+                                        <FieldSelect
+                                            id={id}
+                                            value={vision[key]}
+                                            options={["any", ...options.map(option => option.id)]}
+                                            optionLabel={option =>
+                                                option === "any"
+                                                    ? t("vision.any")
+                                                    : labelFor(options, option)
+                                            }
+                                            count={visionCount(key, "any")}
+                                            onChange={value => onVision({ [key]: value })}
+                                        />
+                                    )}
+                                </Field>
+                            );
+                        })}
+                        <Field label={t("vision.region")} hint={knownHint("geography")}>
                             {id => (
                                 <FieldSelect
                                     id={id}
                                     value={vision.region}
-                                    options={["any", ...REGIONS] as const}
+                                    options={["any", ...regions.map(option => option.id)]}
                                     optionLabel={option =>
                                         option === "any"
                                             ? t("vision.any")
-                                            : t(`details.regionNames.${option}`)
+                                            : labelFor(regions, option)
                                     }
+                                    count={visionCount("region", "any")}
                                     onChange={region => onVision({ region })}
                                 />
                             )}
@@ -379,6 +518,7 @@ export function DiscoveryToolbar({
                                             ? t("vision.any")
                                             : t(`tracker.priorities.${option}`)
                                     }
+                                    count={visionCount("priority", "any")}
                                     onChange={priority => onVision({ priority })}
                                 />
                             )}
@@ -392,6 +532,11 @@ export function DiscoveryToolbar({
                                         value={catalogue.fit}
                                         options={FIT_FILTERS}
                                         optionLabel={option => t(`discovery.fitOptions.${option}`)}
+                                        count={option =>
+                                            option === "all"
+                                                ? null
+                                                : countCatalogue({ fit: option })
+                                        }
                                         onChange={fit => onCatalogue({ fit })}
                                     />
                                 )}
@@ -407,6 +552,16 @@ export function DiscoveryToolbar({
                                                 ? t("discovery.anyScore")
                                                 : t("discovery.minimumOption", {
                                                       score: format.number(Number(option)),
+                                                  })
+                                        }
+                                        count={option =>
+                                            option === "any"
+                                                ? null
+                                                : countCatalogue({
+                                                      minScore:
+                                                          MINIMUM_SCORES.find(
+                                                              score => String(score) === option
+                                                          ) ?? null,
                                                   })
                                         }
                                         onChange={value =>
@@ -428,6 +583,11 @@ export function DiscoveryToolbar({
                                         options={INTAKE_FILTERS}
                                         optionLabel={option =>
                                             t(`discovery.intakeOptions.${option}`)
+                                        }
+                                        count={option =>
+                                            option === "all"
+                                                ? null
+                                                : countCatalogue({ intake: option })
                                         }
                                         onChange={intake => onCatalogue({ intake })}
                                     />
@@ -457,25 +617,32 @@ export function DiscoveryToolbar({
                     onChange={sort => onVision({ sort })}
                 />
             </div>
-            {chips.length > 0 && (
-                <div className="flex flex-wrap items-center gap-1.5">
-                    {chips.map(chip => (
-                        <Badge
-                            key={chip.key}
-                            asChild
-                            variant="secondary"
-                            className="cursor-pointer gap-1"
+            <div className="flex flex-wrap items-center gap-1.5">
+                <p
+                    role="status"
+                    aria-live="polite"
+                    className="text-ink-3 mr-1 text-xs tabular-nums"
+                >
+                    {t("discovery.results", { count: resultCount, total: totalCount })}
+                </p>
+                {chips.map(chip => (
+                    <Badge
+                        key={chip.key}
+                        asChild
+                        variant="secondary"
+                        className="cursor-pointer gap-1"
+                    >
+                        <button
+                            type="button"
+                            onClick={chip.clear}
+                            aria-label={t("vision.removeFilter", { filter: chip.label })}
                         >
-                            <button
-                                type="button"
-                                onClick={chip.clear}
-                                aria-label={t("vision.removeFilter", { filter: chip.label })}
-                            >
-                                {chip.label}
-                                <X />
-                            </button>
-                        </Badge>
-                    ))}
+                            {chip.label}
+                            <X />
+                        </button>
+                    </Badge>
+                ))}
+                {chips.length > 0 && (
                     <Button
                         variant="ghost"
                         size="sm"
@@ -484,8 +651,8 @@ export function DiscoveryToolbar({
                     >
                         {t("discovery.reset")}
                     </Button>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 }

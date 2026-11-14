@@ -70,7 +70,7 @@ describe("normalizeYcOssCompany", () => {
 });
 
 describe("application text", () => {
-    it("fails rather than storing the page when the start anchor moved", () => {
+    it("fails rather than storing the page when either anchor moved", () => {
         expect(
             extractApplicationWindow("Nav\nBody", {
                 startAt: "What is your company going to make?",
@@ -82,6 +82,12 @@ describe("application text", () => {
                 endBefore: "Footer",
             })
         ).toBe("What is it?\nAnswer");
+        expect(
+            extractApplicationWindow("Nav\nWhat is it?\nAnswer\nNew footer\nComments", {
+                startAt: "What is it?",
+                endBefore: "Footer",
+            })
+        ).toBeNull();
     });
 
     it("splits one-question-per-line applications and keeps answers that end in a question mark", () => {

@@ -73,6 +73,7 @@ const opportunity: TrackerOpportunity = {
     submittedOn: null,
     nextAction: null,
     plannedDeadline: null,
+    plannedDeadlineOn: null,
     createdAt: "2026-11-07T00:00:00.000Z",
     updatedAt: "2026-11-07T00:00:00.000Z",
     tasks: [],
@@ -110,7 +111,7 @@ beforeEach(() => {
             id: "program",
             cycles: [
                 { id: "spring", deadlineAt: deadline },
-                { id: "fall", deadlineAt: null },
+                { id: "fall", deadlineAt: null, dateOnly: "2027-03-01" },
             ],
         } as CatalogueProgram,
         contentHash: "hash",
@@ -143,7 +144,7 @@ describe("tracker routes and service", () => {
         expect(mockSave).toHaveBeenCalledWith(
             9n,
             { programId: "program", cycleId: "spring" },
-            deadline
+            { at: deadline, on: null }
         );
         expect(mockRecheck).toHaveBeenCalledWith("u1", 9n, "documents.edit");
     });
@@ -165,7 +166,12 @@ describe("tracker routes and service", () => {
 
     it("allows Program-only upgrade and prevents retargeting a historical cycle", async () => {
         expect((await edit(request("PATCH", { cycleId: "spring" }), params)).status).toBe(200);
-        expect(mockUpdate).toHaveBeenCalledWith(9n, id, { cycleId: "spring" }, deadline);
+        expect(mockUpdate).toHaveBeenCalledWith(
+            9n,
+            id,
+            { cycleId: "spring" },
+            { at: deadline, on: null }
+        );
         mockUpdate.mockClear();
         mockGet.mockResolvedValue({ ...opportunity, cycleId: "spring", status: "rejected" });
         expect((await edit(request("PATCH", { cycleId: "fall" }), params)).status).toBe(409);
@@ -174,7 +180,12 @@ describe("tracker routes and service", () => {
         expect(
             (await save(request("POST", { programId: "program", cycleId: "fall" }))).status
         ).toBe(200);
-        expect(mockSave).toHaveBeenCalledWith(9n, { programId: "program", cycleId: "fall" }, null);
+        // A date-only deadline is planned against as a date, never given an invented time.
+        expect(mockSave).toHaveBeenCalledWith(
+            9n,
+            { programId: "program", cycleId: "fall" },
+            { at: null, on: "2027-03-01" }
+        );
     });
 
     it("leaves the planned deadline unchanged on normal edits, even if the catalogue changes", async () => {

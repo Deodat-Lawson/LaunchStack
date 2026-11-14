@@ -1,16 +1,13 @@
+import { join } from "node:path";
 import {
     CatalogueProgramSchema,
-    FIT_DIMENSION_KEYS,
-    FIT_RUBRIC_VERSION,
-    type FitDimensionResult,
-    type FitDimensions,
-    type FitEligibility,
     type ProgramView,
     type TrackerOpportunity,
 } from "@launchstack/pipelines/accelerators";
-
+import { loadPublishedCatalogue } from "@launchstack/pipelines/accelerators/catalogue";
+import { available } from "@launchstack/pipelines/accelerators/intelligence";
 import programFixture from "../../../../fixtures/accelerators/programs/abovea-startup-accelerator.json";
-import type { DemoLayer, ProgramDetails } from "~/app/employer/tools/accelerators/_lib/demo";
+import type { ProgramDetailsMap } from "~/app/employer/tools/accelerators/_lib/details";
 import {
     DEFAULT_VISION_FILTERS,
     applyVisionFilters,
@@ -19,246 +16,158 @@ import {
     updateVisionParams,
     type VisionFilters,
 } from "~/app/employer/tools/accelerators/_lib/vision-filters";
+import { programDetails } from "~/server/accelerators/details";
 
+jest.mock("@launchstack/pipelines/accelerators/db", () => ({}));
 const program = CatalogueProgramSchema.parse(programFixture);
+const baseline = loadPublishedCatalogue(join(__dirname, "../../../../fixtures/accelerators"))
+    .dossiers[0]!;
 const TODAY = "2026-11-07";
-
-function view(id: string, cycles: ProgramView["program"]["cycles"] = []): ProgramView {
+function view(id: string): ProgramView {
     return {
-        program: { ...program, id, name: id, cycles },
-        contentHash: "program-version",
+        program: { ...program, id, name: id },
+        contentHash: "v1",
         fit: null,
         freshness: { status: "not_assessed", reasons: [], assessedAt: null },
     };
 }
+function run(
+    details: ProgramDetailsMap,
+    filters: Partial<VisionFilters> = {},
+    tracker: TrackerOpportunity[] = []
+) {
+    return applyVisionFilters(
+        [view("known"), view("unknown")],
+        { ...DEFAULT_VISION_FILTERS, ...filters },
+        { details, tracker, today: TODAY }
+    ).map(item => item.program.id);
+}
 
-const unknownDimension: FitDimensionResult = {
-    score: null,
-    applicable: true,
-    note: "Unknown",
-    evidence: { sourceIds: [], companyEvidenceIds: [] },
-};
-const dimensions = Object.fromEntries(
-    FIT_DIMENSION_KEYS.map(key => [key, unknownDimension])
-) as FitDimensions;
-
-/** A saved fit with the given eligibility, current unless `stale`. */
-function assessed(id: string, status: FitEligibility["status"], stale = false): ProgramView {
-    return {
-        ...view(id),
-        fit: {
-            rubricVersion: FIT_RUBRIC_VERSION,
-            eligibility: { status, note: "Published requirement" },
-            dimensions,
-            overall: { score: null, coverage: 0 },
+it("matches published taxonomy facets across the catalogue but never unknowns", () => {
+    const dossier = structuredClone(baseline);
+    dossier.tags = [
+        {
+            id: "sector-climate",
+            facet: "sector",
+            label: "Climate",
+            evidenceIds: [dossier.evidence[0]!.id],
         },
-        freshness: stale
-            ? {
-                  status: "out_of_date",
-                  reasons: ["program_changed"],
-                  assessedAt: "2026-11-02T00:00:00Z",
-              }
-            : { status: "current", reasons: [], assessedAt: "2026-11-02T00:00:00Z" },
-    };
-}
+        { id: "stage-seed", facet: "stage", label: "Seed", evidenceIds: [dossier.evidence[0]!.id] },
+        {
+            id: "technology-ai",
+            facet: "technology",
+            label: "AI",
+            evidenceIds: [dossier.evidence[0]!.id],
+        },
+        {
+            id: "geography-europe",
+            facet: "geography",
+            label: "Europe",
+            evidenceIds: [dossier.evidence[0]!.id],
+        },
+        {
+            id: "business-saas",
+            facet: "business_model",
+            label: "SaaS",
+            evidenceIds: [dossier.evidence[0]!.id],
+        },
+        {
+            id: "customer-b2b",
+            facet: "customer_type",
+            label: "B2B",
+            evidenceIds: [dossier.evidence[0]!.id],
+        },
+        {
+            id: "instrument-safe",
+            facet: "instrument",
+            label: "SAFE",
+            evidenceIds: [dossier.evidence[0]!.id],
+        },
+        {
+            id: "benefit-mentoring",
+            facet: "benefit",
+            label: "Mentoring",
+            evidenceIds: [dossier.evidence[0]!.id],
+        },
+    ];
+    const details = { known: programDetails(dossier) };
+    expect(
+        run(details, {
+            sectors: ["sector-climate"],
+            stage: "stage-seed",
+            region: "geography-europe",
+            technology: "technology-ai",
+            businessModel: "business-saas",
+            customerType: "customer-b2b",
+            instrument: "instrument-safe",
+            benefit: "benefit-mentoring",
+        })
+    ).toEqual(["known"]);
+    expect(run(details, { sectors: ["not-a-published-sector"] })).toEqual([]);
+    expect(run({}, { stage: "stage-seed" })).toEqual([]);
+    expect(run({}, { deal: "equity_free" })).toEqual([]);
+    expect(run({}, { deal: "fixed_equity" })).toEqual([]);
+});
 
-function details(fields: Partial<ProgramDetails> = {}): ProgramDetails {
-    return {
-        operatingStatus: "active",
-        stages: ["seed"],
-        generalist: false,
-        sectors: [],
-        regions: [],
-        format: null,
-        durationWeeks: null,
-        contact: { email: null, phone: null, contactUrl: null },
-        applyRoutes: [],
-        batches: { cadence: null, next: null, recent: [] },
-        selectivity: { acceptanceRatePercent: null, note: null },
-        deal: null,
-        sources: [],
-        ...fields,
-    };
-}
+it("only counts real upcoming dossier dates, not narrative dates or catalogue guesses", () => {
+    const dossier = structuredClone(baseline);
+    dossier.batches.nextDeadline = available(
+        "Expected November 2026",
+        [dossier.evidence[0]!.id],
+        "interpretation"
+    );
+    dossier.batches.cycles = [];
+    const details = { known: programDetails(dossier) };
+    expect(nextDeadline(program, details, TODAY)).toBeNull();
+    expect(run(details, { deadline: "30" })).toEqual([]);
+    dossier.batches.cycles = [
+        {
+            id: "next",
+            label: "Winter",
+            announcedDeadline: available(
+                { at: null, dateOnly: "2026-12-07", timezone: null, rolling: false },
+                [dossier.evidence[0]!.id],
+                "fact"
+            ),
+        },
+    ];
+    details.known = programDetails(dossier);
+    expect(nextDeadline(view("known").program, details, TODAY)).toBe("2026-12-07");
+    expect(run(details, { deadline: "30" })).toEqual(["known"]);
+    expect(nextDeadline(view("known").program, details, "2026-12-08")).toBeNull();
+});
 
-function opportunity(
-    programId: string,
-    fields: Partial<TrackerOpportunity> = {}
-): TrackerOpportunity {
-    return {
-        id: `${programId}-opportunity`,
-        programId,
+it("keeps pending and untracked views distinct", () => {
+    const opportunity: TrackerOpportunity = {
+        id: "o1",
+        programId: "known",
         cycleId: null,
         priority: "medium",
-        status: "shortlisted",
+        status: "applied",
         notes: "",
         submittedOn: null,
         nextAction: null,
         plannedDeadline: null,
+        plannedDeadlineOn: null,
         createdAt: "2026-11-01T00:00:00Z",
         updatedAt: "2026-11-01T00:00:00Z",
         tasks: [],
-        ...fields,
     };
-}
-
-function ids(
-    programs: string[],
-    demo: DemoLayer,
-    filters: Partial<VisionFilters>,
-    tracker: TrackerOpportunity[] = []
-): string[] {
-    return applyVisionFilters(
-        programs.map(id => view(id)),
-        { ...DEFAULT_VISION_FILTERS, ...filters },
-        {
-            demo,
-            tracker,
-            today: TODAY,
-        }
-    ).map(item => item.program.id);
-}
-
-describe("sector facet", () => {
-    it("matches any selected sector, keeps generalists, and never matches unknown details", () => {
-        const demo: DemoLayer = {
-            details: {
-                climate: details({ sectors: ["climate"] }),
-                hardware: details({ sectors: ["hardware"] }),
-                generalist: details({ generalist: true }),
-                fintech: details({ sectors: ["fintech"] }),
-            },
-        };
-        expect(
-            ids(["climate", "hardware", "generalist", "fintech", "undocumented"], demo, {
-                sectors: ["climate", "hardware"],
-                sort: "name",
-            })
-        ).toEqual(["climate", "generalist", "hardware"]);
-    });
+    expect(run({}, { tracked: "pending" }, [opportunity])).toEqual(["known"]);
+    expect(run({}, { tracked: "untracked" }, [opportunity])).toEqual(["unknown"]);
 });
 
-describe("deadline window", () => {
-    const next = (deadline: string, deadlineKind: "announced" | "expected" = "announced") =>
-        details({
-            batches: { cadence: null, next: { label: "x", deadline, deadlineKind }, recent: [] },
-        });
-    const demo: DemoLayer = {
-        details: {
-            inThirty: next("2026-12-07"),
-            inForty: next("2026-12-17"),
-            past: next("2026-11-01"),
-            expected: next("2026-11-20", "expected"),
-        },
-    };
-    const all = ["inThirty", "inForty", "past", "expected"];
-
-    it("counts only announced, upcoming deadlines inside the window", () => {
-        expect(ids(all, demo, { deadline: "30", sort: "name" })).toEqual(["inThirty"]);
-        expect(ids(all, demo, { deadline: "90", sort: "name" })).toEqual(["inForty", "inThirty"]);
-    });
-
-    it("sorts by the nearest announced deadline and puts unknown ones last", () => {
-        expect(ids(all, demo, { sort: "deadline" })).toEqual([
-            "inThirty",
-            "inForty",
-            "past",
-            "expected",
-        ]);
-    });
-
-    it("prefers the nearest recorded Cycle deadline over an announced intake", () => {
-        const recorded = view("recorded", [
-            {
-                id: "closed",
-                label: "Closed",
-                deadlineAt: null,
-                deadlineTimezone: null,
-                dateOnly: "2026-11-01",
-                rolling: false,
-                sourceIds: [program.sources[0]!.id],
-            },
-            {
-                id: "open",
-                label: "Open",
-                deadlineAt: "2026-11-20T23:59:00-08:00",
-                deadlineTimezone: "America/Los_Angeles",
-                rolling: false,
-                sourceIds: [program.sources[0]!.id],
-            },
-        ]);
-        expect(nextDeadline(recorded.program, demo, TODAY)).toBe("2026-11-20");
-        expect(nextDeadline(view("inForty").program, demo, TODAY)).toBe("2026-12-17");
-    });
-});
-
-describe("tracker facets", () => {
-    const demo: DemoLayer = { details: {} };
-    const tracker = [
-        opportunity("applied", { status: "applied", priority: "low" }),
-        opportunity("interviewing", { status: "interviewing" }),
-        opportunity("rejected", { status: "rejected", priority: "high" }),
-    ];
-    const all = ["applied", "interviewing", "rejected", "untracked"];
-
-    it("treats applied and interviewing as pending, and separates untracked Programs", () => {
-        expect(ids(all, demo, { tracked: "pending", sort: "name" }, tracker)).toEqual([
-            "applied",
-            "interviewing",
-        ]);
-        expect(ids(all, demo, { tracked: "untracked" }, tracker)).toEqual(["untracked"]);
-    });
-
-    it("sorts tracked Programs by priority with untracked ones last", () => {
-        expect(ids(all, demo, { sort: "priority" }, tracker)).toEqual([
-            "rejected",
-            "interviewing",
-            "applied",
-            "untracked",
-        ]);
-    });
-});
-
-describe("eligibility", () => {
-    const views = [
-        assessed("eligible", "eligible"),
-        assessed("excluded", "ineligible"),
-        assessed("was-excluded", "ineligible", true),
-        view("unassessed"),
-    ];
-    const run = (filters: Partial<VisionFilters>) =>
-        applyVisionFilters(
-            views,
-            { ...DEFAULT_VISION_FILTERS, ...filters },
-            {
-                demo: { details: {} },
-                tracker: [],
-                today: TODAY,
-            }
-        ).map(item => item.program.id);
-
-    it("hides only currently confirmed ineligible Programs unless asked to include them", () => {
-        expect(run({})).toEqual(["eligible", "was-excluded", "unassessed"]);
-        expect(run({ includeIneligible: true })).toEqual([
-            "eligible",
-            "excluded",
-            "was-excluded",
-            "unassessed",
-        ]);
-    });
-});
-
-it("round-trips filters through the URL and leaves defaults out of it", () => {
+it("round-trips dossier tag identifiers and excludes defaults from URLs", () => {
     const filters: Partial<VisionFilters> = {
-        sectors: ["climate", "hardware"],
-        stage: "seed",
+        sectors: ["sector-climate"],
+        stage: "stage-seed",
+        benefit: "benefit-mentoring",
+        tracked: "untracked",
         deadline: "30",
-        tracked: "pending",
         sort: "deadline",
         includeIneligible: true,
     };
     const params = updateVisionParams(new URLSearchParams("q=cold"), filters);
     expect(readVisionFilters(params)).toEqual({ ...DEFAULT_VISION_FILTERS, ...filters });
-    const cleared = updateVisionParams(params, DEFAULT_VISION_FILTERS);
-    expect(cleared.toString()).toBe("q=cold");
+    expect(updateVisionParams(params, DEFAULT_VISION_FILTERS).toString()).toBe("q=cold");
 });

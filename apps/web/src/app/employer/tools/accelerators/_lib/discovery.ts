@@ -1,4 +1,5 @@
 import type { ProgramView } from "@launchstack/pipelines/accelerators";
+import { hasRollingIntake, publishedValue, type ProgramDetailsMap } from "./details";
 
 export const FIT_FILTERS = ["all", "scored", "unmatched", "unscorable", "stale"] as const;
 export const MINIMUM_SCORES = [0, 25, 50, 75] as const;
@@ -70,10 +71,12 @@ export function rankPrograms(programs: readonly ProgramView[], locale: string): 
 
 export function filterPrograms(
     programs: readonly ProgramView[],
-    filters: DiscoveryFilters
+    filters: DiscoveryFilters,
+    details: ProgramDetailsMap = {}
 ): ProgramView[] {
     const terms = filters.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
     return programs.filter(view => {
+        const dossier = details[view.program.id];
         const score = currentScore(view);
         const { status } = view.freshness;
         if (filters.fit === "scored" && score === null) return false;
@@ -83,10 +86,12 @@ export function filterPrograms(
         if (filters.minScore !== null && (score === null || score < filters.minScore)) return false;
 
         if (filters.intake !== "all") {
-            const rolling = view.program.cycles.some(cycle => cycle.rolling);
-            const dated = view.program.cycles.some(
-                cycle => cycle.deadlineAt !== null || cycle.dateOnly !== undefined
-            );
+            const rolling = hasRollingIntake(dossier);
+            const dated =
+                dossier?.batches.cycles.some(cycle => {
+                    const value = publishedValue(cycle.announcedDeadline);
+                    return !!(value?.at ?? value?.dateOnly);
+                }) ?? false;
             if (filters.intake === "rolling" && !rolling) return false;
             if (filters.intake === "dated" && !dated) return false;
             if (filters.intake === "unknown" && (rolling || dated)) return false;
@@ -95,10 +100,13 @@ export function filterPrograms(
         if (terms.length > 0) {
             const text = [
                 view.program.name,
-                view.program.description.text,
-                view.program.targetApplicants.text,
-                view.program.location?.text ?? "",
-                ...view.program.cycles.map(cycle => cycle.label),
+                publishedValue(dossier?.audience.narrative) ?? "",
+                publishedValue(dossier?.identity.location) ?? view.program.location?.text ?? "",
+                ...(dossier?.tags.map(tag => tag.label) ?? []),
+                ...Object.values(dossier?.audience ?? {}).flatMap(slot => {
+                    const value = publishedValue<string | string[]>(slot);
+                    return Array.isArray(value) ? value : [];
+                }),
             ]
                 .join(" ")
                 .toLowerCase();

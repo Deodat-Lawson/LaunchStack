@@ -15,7 +15,10 @@ export function RunStatus() {
     const format = useFormatter();
     const errorText = useErrorText();
     const say = useCopyText();
+    const ts = useTranslations("accelerators.scoring");
     const { activeRun: run, pollError, resumePolling } = useAccelerators();
+    const scored = run?.status === "completed" ? run.summary?.counts?.matched : undefined;
+    const notAssessed = run?.status === "completed" ? run.summary?.counts?.notAssessed : 0;
     if (!run && !pollError) return null;
     return (
         <section
@@ -62,6 +65,12 @@ export function RunStatus() {
                                 </li>
                             ))}
                         </ol>
+                    )}
+                    {scored !== undefined && (
+                        <p className="text-ink-2 text-sm">
+                            {ts("summary", { scored })}
+                            {notAssessed ? ` ${ts("notAssessed", { count: notAssessed })}` : null}
+                        </p>
                     )}
                     {run.error && (
                         <p role="alert" className="text-danger text-sm">

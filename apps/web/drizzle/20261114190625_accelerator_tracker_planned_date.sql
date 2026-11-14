@@ -1,0 +1,1 @@
+ALTER TABLE "pdr_ai_v2_accelerator_tracker_opportunities" ADD COLUMN "planned_deadline_on" date;

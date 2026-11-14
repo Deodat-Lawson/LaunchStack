@@ -20,9 +20,6 @@
   "home": {
     "title": "寻找适合你的加速器",
     "description": "将加速器与公司档案对比，借鉴已录取的相似公司，并追踪你的申请。",
-    "match": "匹配项目 · {credits} 积分",
-    "matching": "正在匹配项目…",
-    "matchHint": "匹配会将 {count, number} 个项目与当前公司档案进行比较；列表中的其余项目尚未匹配。匹配分数不是录取概率。",
     "profileMissing": "请先在“设置 → 公司”中建立公司档案，再匹配项目。",
     "emptyTitle": "尚未导入项目",
     "emptyBody": "需要由受信任的安装实例操作人员导入经过审阅的项目记录。这里没有示例或自动生成的结果。"
@@ -60,14 +57,14 @@
     "unmatched": "尚未匹配",
     "unknown": "信息不足，无法评分",
     "stale": "已过期",
-    "staleBecause": "已过期：{reasons}。点击“匹配项目”更新；系统不会自动重新匹配。",
+    "staleBecause": "已过期：{reasons}。",
     "staleReasons": {
       "profile_changed": "公司档案已更改",
       "program_changed": "项目信息已更改",
       "rubric_changed": "评分规则已更改"
     },
-    "checked": "匹配于 {date}",
-    "unmatchedHint": "尚无已保存的匹配评估。只有你选择“匹配项目”时才会启动匹配。",
+    "checked": "评分于 {date}",
+    "unmatchedHint": "没有已保存的匹配评估。只有在你选择为项目评分时才会开始评分。",
     "short": "匹配",
     "about": "关于此评分"
   },
@@ -89,8 +86,33 @@
       "similar": "相似公司"
     }
   },
+  "scoring": {
+    "button": "评分 {count, number} 个项目 · {credits} 积分",
+    "scoring": "正在为项目评分…",
+    "title": "选择要评分的项目",
+    "hint": "将所选项目与当前公司档案进行比较。其他项目保留已保存的结果。匹配分数不是录取概率。",
+    "scopeTop": "当前排序中的前几个项目",
+    "scopeTopCount": "要评分的前几个项目数量",
+    "ofVisible": "共显示 {count, number} 个",
+    "scopeFiltered": "全部 {count, number} 个筛选后的项目",
+    "estimate": "{count, number} 个项目 × {rate} 积分 = {credits} 积分",
+    "estimateHint": "只对成功评分的项目扣除积分。运行失败不收费。",
+    "capped": "每次运行最多为 {max, number} 个项目评分。",
+    "nothingSelected": "没有项目符合当前筛选条件。",
+    "start": "开始为 {count, number} 个项目评分",
+    "rescore": "重新评分当前结果",
+    "rescoreHint": "关闭时，已保存结果仍为最新的所选项目会被跳过，且不收费。",
+    "skippedCurrent": "所选项目中有 {count, number} 个已评分且为最新，将被跳过。",
+    "allCurrent": "所选的 {count, number} 个项目均已评分且为最新。开启重新评分即可再次评分。",
+    "allCurrentShort": "{count, number} 个均已评分且为最新",
+    "running": "评分任务正在进行中。",
+    "summary": "已为 {scored, number} 个项目评分。",
+    "notAssessed": "{count, number} 个项目无法评估，已保留其之前的结果。",
+    "portfolioMatches": "最相似的往期公司",
+    "similarity": "相似度 {percent}"
+  },
   "run": {
-    "programs": "正在匹配项目",
+    "programs": "项目评分",
     "queued": "排队中",
     "running": "运行中",
     "completed": "已完成",
@@ -98,7 +120,7 @@
     "generate": "正在依据公司证据比较项目",
     "save": "正在保存匹配结果",
     "credits": "已使用 {credits} 积分",
-    "pollFailed": "无法刷新匹配进度。任务可能仍在运行。",
+    "pollFailed": "无法刷新评分进度。任务可能仍在运行。",
     "resume": "刷新任务状态",
     "waiting": "等待中",
     "done": "完成",
@@ -108,7 +130,7 @@
     "realData": "真实 YC 数据",
     "loading": "正在查找相似公司…",
     "loadFailed": "无法加载相似公司。",
-    "unsupported": "相似公司需要该加速器的往期批次数据。本演示中仅 Y Combinator 有这些数据。",
+    "unsupported": "收集并建立该加速器往期公司数据的索引后，即可查看相似公司。",
     "intro": "从 {total, number} 家往期公开列出的 YC 公司中，按业务与你档案的接近程度排序。每家公司都附有它在 YC 目录中的自我陈述；如果创始人或 YC 公开了其录取申请，也可以阅读。",
     "profileMissing": "请先在“设置 → 公司”中建立公司档案，以查看相似公司。",
     "sharedTerms": "与你的档案相同：{terms}",
@@ -155,25 +177,27 @@
   },
   "details": {
     "regions": "地区",
-    "format": "形式",
     "howToApply": "申请方式",
     "contact": "公开联系方式",
     "unknown": "未公布",
-    "generalist": "不限行业",
-    "weeks": "{weeks} 周",
-    "noPublicContact": "无公开的项目联系方式",
-    "contactPage": "联系页面",
-    "noDeal": "未公布投资条款。",
+    "notChecked": "尚未核查",
+    "technologies": "技术",
+    "businessModels": "商业模式",
+    "customerTypes": "客户",
+    "benefits": "项目支持",
+    "constraints": "申请要求",
+    "portfolio": "已公布的投资组合",
+    "portfolioCount": "{count, plural, other {# 家公司}}",
+    "instrument": "投资工具",
+    "comparable": "股权稀释可比性",
+    "comparableYes": "公布的条款可直接比较",
+    "comparableNo": "稀释取决于条件或无法直接比较",
+    "applicationUrl": "申请网址",
+    "announcedStarts": "公布的开始时间",
+    "residencyEnd": "驻留结束时间",
     "cash": "首期现金",
     "fixedEquity": "固定股权",
-    "percent": "{value}%",
-    "dealHint": "仅指固定股权。无估值上限的 SAFE 和附条件金额带来的稀释取决于后续融资；请阅读下方完整条款。",
     "cadence": "通常频率",
-    "notAnnounced": "尚未公布",
-    "deadlineKind": {
-      "announced": "项目已公布",
-      "expected": "根据往期推测"
-    },
     "selectivity": "录取率",
     "checked": "核对于 {date}",
     "operatingStatus": {
@@ -182,62 +206,25 @@
       "closed": "已关闭",
       "unknown": "未知"
     },
-    "stages": {
-      "idea": "想法阶段",
-      "pre_seed": "种子前",
-      "seed": "种子轮",
-      "series_a": "A 轮",
-      "later": "更后期"
-    },
-    "sectors": {
-      "ai": "人工智能",
-      "b2b_software": "B2B 软件",
-      "developer_tools": "开发者工具",
-      "fintech": "金融科技",
-      "healthcare": "医疗健康",
-      "biotech": "生物科技",
-      "climate": "气候",
-      "hardware": "硬件",
-      "robotics": "机器人",
-      "logistics": "物流",
-      "consumer": "消费",
-      "marketplaces": "交易平台",
-      "education": "教育",
-      "deep_tech": "硬科技",
-      "space": "航天",
-      "food_agriculture": "食品与农业",
-      "mobility": "出行",
-      "social_impact": "社会影响"
-    },
-    "regionNames": {
-      "north_america": "北美",
-      "europe": "欧洲",
-      "asia_pacific": "亚太",
-      "middle_east_africa": "中东和非洲",
-      "latin_america": "拉丁美洲",
-      "global": "全球"
-    },
-    "applyRoutes": {
-      "online_application": "在线申请",
-      "rolling_application": "滚动申请",
-      "referral": "推荐",
-      "email": "电子邮件",
-      "invitation": "仅限邀请"
-    },
-    "varies": "视情况而定",
-    "equityFree": "不占股权",
     "nextDeadline": "下一截止日期",
     "rolling": "滚动招生",
     "inDays": "{days, plural, =0 {今天} other {# 天后}}",
-    "closed": "已截止",
     "sourcesCount": "{count, plural, other {# 个来源}}",
-    "instrumentIs": "投资工具：{instrument}"
+    "showAllSources": "显示全部 {count, number} 个来源",
+    "showFewerSources": "收起来源",
+    "closesOn": "{date} 截止",
+    "notPublishedList": "未公布：{fields}",
+    "notCheckedList": "尚未核查：{fields}"
   },
   "vision": {
     "sectors": "行业",
-    "sectorsHint": "显示提及任一所选行业的项目。不限行业的项目也会包含在内。",
     "stage": "投资阶段",
     "region": "地区",
+    "technology": "技术",
+    "businessModel": "商业模式",
+    "customerType": "客户",
+    "instrument": "投资工具",
+    "benefit": "项目支持",
     "deadline": "截止日期",
     "deal": "投资条款",
     "tracked": "追踪状态",
@@ -253,13 +240,13 @@
     "dealOptions": {
       "any": "不限条款",
       "equity_free": "不占股权",
-      "fixed_equity": "占固定股权",
-      "unknown": "股权未公布"
+      "fixed_equity": "占固定股权"
     },
     "trackedOptions": {
       "any": "全部",
       "tracked": "已追踪",
-      "pending": "等待结果"
+      "pending": "等待结果",
+      "untracked": "未追踪"
     },
     "sortOptions": {
       "fit": "最佳匹配",
@@ -268,10 +255,11 @@
       "priority": "你的优先级"
     },
     "anyStage": "不限阶段",
-    "moreFilters": "更多筛选",
-    "aiMatchHint": "以下筛选使用“匹配项目”保存的 AI 匹配结果。",
+    "aiMatchHint": "以下筛选使用“项目评分”保存的匹配结果。",
     "priorityChip": "{priority}优先级",
-    "removeFilter": "移除筛选：{filter}"
+    "removeFilter": "移除筛选：{filter}",
+    "knownFor": "已知 {count, number} / {total, number} 个",
+    "filters": "筛选"
   },
   "tracker": {
     "panelTitle": "你的申请",
@@ -349,13 +337,13 @@
     }
   },
   "errors": {
-    "runInProgress": "公司任务正在启动或运行。请等它完成后再匹配项目。",
+    "runInProgress": "公司任务正在启动或运行。请等它完成后再为项目评分。",
     "fullAccess": "加速器需要访问公司全部文档的权限。",
-    "profileRequired": "匹配项目前请先建立公司档案。",
-    "notFound": "找不到此项目或匹配任务。",
+    "profileRequired": "为项目评分前请先建立公司档案。",
+    "notFound": "找不到此项目或评分任务。",
     "conflict": "已保存的数据发生了变化。请刷新后重试。",
-    "invalid": "匹配请求无效。",
-    "credits": "积分不足，无法运行匹配。",
+    "invalid": "评分请求无效。",
+    "credits": "积分不足，无法为这些项目评分。",
     "internal": "无法完成此请求。"
   }
 }

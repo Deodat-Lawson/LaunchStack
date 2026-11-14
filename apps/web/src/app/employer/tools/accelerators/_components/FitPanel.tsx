@@ -2,7 +2,7 @@
 
 import { CheckCircle2, ChevronDown, CircleHelp, Info, XCircle } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
-import { useId, useState } from "react";
+import { useId, useMemo, useState } from "react";
 
 import {
     FIT_DIMENSIONS,
@@ -10,15 +10,14 @@ import {
     type FitDimensionResult,
     type ProgramFit,
 } from "@launchstack/pipelines/accelerators/fit";
-import type { ProgramSource } from "@launchstack/pipelines/accelerators/types";
 
-import { Card, CardContent } from "~/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { Progress } from "~/components/ui/progress";
 import { cn } from "~/lib/utils";
 
 import type { ProgramView } from "../api";
+import { useAccelerators } from "../_lib/context";
 import { ScoreRing } from "./ProgramFacts";
 
 const ELIGIBILITY = {
@@ -27,17 +26,32 @@ const ELIGIBILITY = {
     ineligible: { icon: XCircle, tone: "text-danger" },
 } as const;
 
+/** What a grade can cite: one of the Program's sources or an entry of its dossier evidence. */
+interface Citation {
+    id: string;
+    title: string;
+    url: string;
+}
+
 /**
- * One fit card: the overall score and eligibility at a glance, each area on
- * demand, then when it was assessed and whether it is still current. Coverage,
- * the eligibility reasoning and the not-a-probability caveat sit behind the
- * info button.
+ * The fit at a glance: overall score and eligibility, each area on demand, then when it
+ * was assessed and whether it is still current. Coverage, the eligibility reasoning and
+ * the not-a-probability caveat sit behind the info button.
  */
 export function FitPanel({ view }: { view: ProgramView }) {
     const t = useTranslations("accelerators.fit");
     const td = useTranslations("accelerators.dimensions");
+    const { home } = useAccelerators();
     const headingId = useId();
     const { fit, freshness } = view;
+    const evidence = home?.details[view.program.id]?.evidence;
+    const citations = useMemo(() => {
+        const byId = new Map<string, Citation>();
+        for (const item of [...view.program.sources, ...(evidence ?? [])]) {
+            if (!byId.has(item.id)) byId.set(item.id, item);
+        }
+        return [...byId.values()];
+    }, [view.program.sources, evidence]);
     const score = fit?.overall.score ?? null;
     const label =
         freshness.status === "not_assessed"
@@ -48,14 +62,10 @@ export function FitPanel({ view }: { view: ProgramView }) {
                 ? td("insufficient")
                 : td("overall", { score });
     return (
-        <Card
-            role="region"
-            aria-labelledby={headingId}
-            className="border-line gap-0 py-0 shadow-sm"
-        >
-            <CardContent className="space-y-4 p-5">
+        <section role="region" aria-labelledby={headingId} className="space-y-4">
+            <div className="space-y-4">
                 <div className="flex items-center gap-4">
-                    <ScoreRing score={score} label={label} size="lg" />
+                    <ScoreRing score={score} label={label} size="md" />
                     <div className="min-w-0 flex-1 space-y-1.5">
                         <div className="flex items-center justify-between gap-2">
                             <h2 id={headingId} className="text-ink text-sm font-semibold">
@@ -93,10 +103,10 @@ export function FitPanel({ view }: { view: ProgramView }) {
                         {fit && <Eligibility fit={fit} />}
                     </div>
                 </div>
-                {fit && <DimensionList fit={fit} sources={view.program.sources} />}
+                {fit && <DimensionList fit={fit} citations={citations} />}
                 <Freshness view={view} />
-            </CardContent>
-        </Card>
+            </div>
+        </section>
     );
 }
 
@@ -112,7 +122,7 @@ function Eligibility({ fit }: { fit: ProgramFit }) {
     );
 }
 
-function DimensionList({ fit, sources }: { fit: ProgramFit; sources: readonly ProgramSource[] }) {
+function DimensionList({ fit, citations }: { fit: ProgramFit; citations: readonly Citation[] }) {
     const td = useTranslations("accelerators.dimensions");
     return (
         <ul className="divide-line divide-y">
@@ -122,7 +132,7 @@ function DimensionList({ fit, sources }: { fit: ProgramFit; sources: readonly Pr
                     name={td(`names.${key}`)}
                     weight={weight}
                     dimension={fit.dimensions[key]}
-                    sources={sources}
+                    citations={citations}
                 />
             ))}
         </ul>
@@ -133,18 +143,20 @@ function DimensionRow({
     name,
     weight,
     dimension,
-    sources,
+    citations,
 }: {
     name: string;
     weight: number;
     dimension: FitDimensionResult;
-    sources: readonly ProgramSource[];
+    citations: readonly Citation[];
 }) {
     const td = useTranslations("accelerators.dimensions");
+    const ts = useTranslations("accelerators.scoring");
     const format = useFormatter();
     const [open, setOpen] = useState(false);
     const rated = dimension.applicable && dimension.score !== null;
-    const cited = sources.filter(source => dimension.evidence.sourceIds.includes(source.id));
+    const cited = citations.filter(source => dimension.evidence.sourceIds.includes(source.id));
+    const portfolio = dimension.evidence.portfolioCompanies ?? [];
     return (
         <li>
             <Collapsible open={open} onOpenChange={setOpen}>
@@ -201,6 +213,31 @@ function DimensionRow({
                             ))}
                         </p>
                     )}
+                    {portfolio.length > 0 && (
+                        <div className="text-ink-3 space-y-1 text-xs leading-relaxed">
+                            <p>{ts("portfolioMatches")}</p>
+                            <ul className="space-y-0.5">
+                                {portfolio.map(match => (
+                                    <li key={match.companyId} className="flex gap-2">
+                                        <span className="text-ink-2 min-w-0 flex-1 truncate">
+                                            {match.name}
+                                            {match.batch && (
+                                                <span className="text-ink-3"> · {match.batch}</span>
+                                            )}
+                                        </span>
+                                        <span className="shrink-0 tabular-nums">
+                                            {ts("similarity", {
+                                                percent: format.number(match.similarity, {
+                                                    style: "percent",
+                                                    maximumFractionDigits: 0,
+                                                }),
+                                            })}
+                                        </span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                 </CollapsibleContent>
             </Collapsible>
         </li>
@@ -216,7 +253,7 @@ function Freshness({ view }: { view: ProgramView }) {
         return <p className="text-ink-3 text-xs leading-relaxed">{t("unmatchedHint")}</p>;
     }
     return (
-        <div className="border-line space-y-1.5 border-t pt-3 text-xs leading-relaxed">
+        <div className="space-y-1 text-xs leading-relaxed">
             {freshness.status === "out_of_date" && (
                 <p role="status" className="text-warn">
                     {t("staleBecause", {

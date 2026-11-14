@@ -89,14 +89,20 @@ export function TrackerScreen() {
         );
     /** The deadline this application plans against: its own Cycle when chosen, else the Program's next one. */
     const deadlineOf = (item: TrackerOpportunity) => {
-        if (item.plannedDeadline) return item.plannedDeadline.slice(0, 10);
+        const planned = item.plannedDeadline?.slice(0, 10) ?? item.plannedDeadlineOn;
+        if (planned) return planned;
         const view = programs.get(item.programId);
         if (!view) return null;
         if (item.cycleId) {
-            const cycle = view.program.cycles.find(entry => entry.id === item.cycleId);
-            return cycle?.deadlineAt?.slice(0, 10) ?? cycle?.dateOnly ?? null;
+            const cycle = home.details[item.programId]?.batches.cycles.find(
+                entry => entry.id === item.cycleId
+            );
+            const value = cycle?.announcedDeadline;
+            if (value && ["available", "partial", "stale"].includes(value.state))
+                return value.value?.at?.slice(0, 10) ?? value.value?.dateOnly ?? null;
+            return null;
         }
-        return nextDeadline(view.program, home.demo, today);
+        return nextDeadline(view.program, home.details, today);
     };
     const subtitleOf = (item: TrackerOpportunity) => {
         const view = programs.get(item.programId);

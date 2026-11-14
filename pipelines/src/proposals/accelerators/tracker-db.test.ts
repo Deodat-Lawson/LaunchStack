@@ -26,6 +26,7 @@ const saved = {
     submittedOn: "2026-11-01",
     nextAction: "Review",
     plannedDeadline: originalDeadline,
+    plannedDeadlineOn: null as string | null,
     createdAt,
     updatedAt: createdAt,
 };
@@ -109,7 +110,7 @@ describe("tracker storage invariants", () => {
         const result = await saveTrackerOpportunity(
             9n,
             { programId: "program", cycleId: "spring" },
-            "2027-01-01T00:00:00Z"
+            { at: "2027-01-01T00:00:00Z", on: null }
         );
         expect(result).toMatchObject({
             id,
@@ -123,11 +124,7 @@ describe("tracker storage invariants", () => {
         expect(writes).toEqual([
             {
                 kind: "update",
-                values: {
-                    cycleId: "spring",
-                    plannedDeadline: originalDeadline,
-                    updatedAt: expect.any(Date),
-                },
+                values: { cycleId: "spring", updatedAt: expect.any(Date) },
                 where: expect.anything(),
             },
         ]);
@@ -140,7 +137,7 @@ describe("tracker storage invariants", () => {
         const result = await saveTrackerOpportunity(
             9n,
             { programId: "program", cycleId: "spring" },
-            "2028-01-01T00:00:00Z"
+            { at: "2028-01-01T00:00:00Z", on: null }
         );
         expect(result.id).toBe(id);
         expect(result.plannedDeadline).toBe(originalDeadline.toISOString());
@@ -164,8 +161,42 @@ describe("tracker storage invariants", () => {
         expect(executor.update).not.toHaveBeenCalled();
         expect(writes[0]).toMatchObject({
             kind: "insert",
-            values: { companyId: 9n, programId: "program", cycleId: "fall", plannedDeadline: null },
+            values: {
+                companyId: 9n,
+                programId: "program",
+                cycleId: "fall",
+                plannedDeadline: null,
+                plannedDeadlineOn: null,
+            },
         });
+    });
+
+    it("plans against a date-only deadline without inventing a time", async () => {
+        const laterId = "99999999-9999-4999-8999-999999999999";
+        results.push(
+            [],
+            [{ id: laterId }],
+            [
+                {
+                    ...saved,
+                    id: laterId,
+                    cycleId: "fall",
+                    plannedDeadline: null,
+                    plannedDeadlineOn: "2027-01-15",
+                },
+            ],
+            []
+        );
+        const result = await saveTrackerOpportunity(
+            9n,
+            { programId: "program", cycleId: "fall" },
+            { at: null, on: "2027-01-15" }
+        );
+        expect(writes[0]?.values).toMatchObject({
+            plannedDeadline: null,
+            plannedDeadlineOn: "2027-01-15",
+        });
+        expect(result).toMatchObject({ plannedDeadline: null, plannedDeadlineOn: "2027-01-15" });
     });
 
     it("keeps catalogue changes out of an unrelated edit", async () => {
@@ -174,13 +205,10 @@ describe("tracker storage invariants", () => {
             9n,
             id,
             { notes: "Updated" },
-            "2029-01-01T00:00:00Z"
+            { at: "2029-01-01T00:00:00Z", on: null }
         );
         expect(result.notes).toBe("Updated");
-        expect(writes[0]?.values).toMatchObject({
-            plannedDeadline: originalDeadline,
-            notes: "Updated",
-        });
+        expect(writes[0]?.values).toEqual({ notes: "Updated", updatedAt: expect.any(Date) });
     });
 
     it("returns no opportunity across company boundaries and filters SQL by session company", async () => {

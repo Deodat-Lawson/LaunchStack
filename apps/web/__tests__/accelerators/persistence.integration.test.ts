@@ -267,15 +267,14 @@ describeDb("Accelerator discovery persistence and Grants isolation", () => {
         expect(Object.keys(home).sort()).toEqual([
             "canEdit",
             "costs",
-            "demo",
-            "matchCount",
+            "details",
             "profileReady",
             "programs",
         ]);
         expect(home).toMatchObject({
             profileReady: true,
             canEdit: true,
-            costs: { match: PROPOSAL_CREDITS.programs },
+            costs: { matchPerProgram: PROPOSAL_CREDITS.programs },
         });
         expect(JSON.stringify(home)).not.toContain("Private historical");
         expect(await getApplication(applicationId, companyId)).toBeNull();
@@ -448,7 +447,7 @@ describeDb("Accelerator discovery persistence and Grants isolation", () => {
             companyId,
             userId: "regression-author",
             kind: "programs",
-            input: {},
+            input: { programs: { programIds: [program.id] } },
         });
         let currentMember = member();
         const meter = createProposalPorts(companyId).debitCredits!;

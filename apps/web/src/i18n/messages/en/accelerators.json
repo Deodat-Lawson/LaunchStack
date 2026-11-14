@@ -20,9 +20,6 @@
   "home": {
     "title": "Find your accelerator",
     "description": "Compare accelerators with your company profile, learn from similar companies that got in, and track where you apply.",
-    "match": "Match Programs · {credits} credits",
-    "matching": "Matching Programs…",
-    "matchHint": "Matching compares {count, plural, one {# Program} other {# Programs}} with the current company profile; the rest of the list is not matched yet. A fit score is not a probability of acceptance.",
     "profileMissing": "Build the company profile in Settings → Company before matching Programs.",
     "emptyTitle": "No Programs imported yet",
     "emptyBody": "A trusted installation operator must import reviewed Program records. There are no sample or automatically generated results here."
@@ -60,14 +57,14 @@
     "unmatched": "Not matched yet",
     "unknown": "Not enough information to score",
     "stale": "Out of date",
-    "staleBecause": "Out of date: {reasons}. Click Match Programs to update it; no rematch happens automatically.",
+    "staleBecause": "Out of date: {reasons}.",
     "staleReasons": {
       "profile_changed": "your company profile changed",
       "program_changed": "the Program's details changed",
       "rubric_changed": "the scoring rules changed"
     },
-    "checked": "Matched {date}",
-    "unmatchedHint": "No saved fit assessment. Matching starts only when you choose Match Programs.",
+    "checked": "Scored {date}",
+    "unmatchedHint": "No saved fit assessment. Scoring starts only when you choose Score Programs.",
     "short": "fit",
     "about": "About this score"
   },
@@ -89,8 +86,33 @@
       "similar": "Similar companies"
     }
   },
+  "scoring": {
+    "button": "Score {count, plural, one {# Program} other {# Programs}} · {credits} credits",
+    "scoring": "Scoring Programs…",
+    "title": "Choose what to score",
+    "hint": "Compares the chosen Programs with the current company profile. Other Programs keep their saved results. A fit score is not a probability of acceptance.",
+    "scopeTop": "Top Programs in the current order",
+    "scopeTopCount": "Number of top Programs to score",
+    "ofVisible": "of {count, number} shown",
+    "scopeFiltered": "All {count, plural, one {# filtered Program} other {# filtered Programs}}",
+    "estimate": "{count, plural, one {# Program} other {# Programs}} × {rate} credits = {credits} credits",
+    "estimateHint": "Credits are debited only for Programs that get scored. A failed run costs nothing.",
+    "capped": "One run scores at most {max, number} Programs.",
+    "nothingSelected": "No Programs match the current filters.",
+    "start": "Start scoring {count, plural, one {# Program} other {# Programs}}",
+    "rescore": "Re-score current results",
+    "rescoreHint": "When off, chosen Programs whose saved result is still current are skipped and not charged.",
+    "skippedCurrent": "{count, plural, one {# chosen Program is} other {# chosen Programs are}} already scored and current and will be skipped.",
+    "allCurrent": "All {count, plural, one {# chosen Program is} other {# chosen Programs are}} already scored and current. Turn on re-scoring to score {count, plural, one {it} other {them}} again.",
+    "allCurrentShort": "All {count, number} scored and current",
+    "running": "A scoring run is already in progress.",
+    "summary": "Scored {scored, plural, one {# Program} other {# Programs}}.",
+    "notAssessed": "{count, plural, one {# Program} other {# Programs}} could not be assessed; {count, plural, one {its} other {their}} previous results were kept.",
+    "portfolioMatches": "Closest past companies",
+    "similarity": "{percent} similar"
+  },
   "run": {
-    "programs": "Matching Programs",
+    "programs": "Scoring Programs",
     "queued": "Queued",
     "running": "Running",
     "completed": "Completed",
@@ -98,7 +120,7 @@
     "generate": "Comparing Programs with company evidence",
     "save": "Saving fit results",
     "credits": "{credits} credits used",
-    "pollFailed": "Could not refresh matching progress. The run may still be in progress.",
+    "pollFailed": "Could not refresh scoring progress. The run may still be in progress.",
     "resume": "Refresh run status",
     "waiting": "Waiting",
     "done": "Done",
@@ -108,7 +130,7 @@
     "realData": "Real YC data",
     "loading": "Finding similar companies…",
     "loadFailed": "Could not load similar companies.",
-    "unsupported": "Similar companies need the accelerator's past batches. In this demo, only Y Combinator has them.",
+    "unsupported": "Similar companies are available when this accelerator's past companies have been collected and indexed.",
     "intro": "Out of {total, number} publicly listed YC companies from past batches, ordered by how closely what they do matches your profile. Each shows how it pitches itself in YC's directory, and the application it got in with when the founders or YC published it.",
     "profileMissing": "Build the company profile in Settings → Company to see similar companies.",
     "sharedTerms": "Shared with your profile: {terms}",
@@ -155,25 +177,27 @@
   },
   "details": {
     "regions": "Regions",
-    "format": "Format",
     "howToApply": "How to apply",
     "contact": "Public contact",
     "unknown": "Not published",
-    "generalist": "Any sector",
-    "weeks": "{weeks} weeks",
-    "noPublicContact": "No public program contact",
-    "contactPage": "Contact page",
-    "noDeal": "No investment terms are published.",
+    "notChecked": "Not checked",
+    "technologies": "Technology",
+    "businessModels": "Business model",
+    "customerTypes": "Customers",
+    "benefits": "Benefits",
+    "constraints": "Requirements",
+    "portfolio": "Published portfolio",
+    "portfolioCount": "{count, plural, one {# company} other {# companies}}",
+    "instrument": "Investment instrument",
+    "comparable": "Comparable dilution",
+    "comparableYes": "Published terms are comparable",
+    "comparableNo": "Dilution is conditional or not directly comparable",
+    "applicationUrl": "Application URL",
+    "announcedStarts": "Announced starts",
+    "residencyEnd": "Residency end",
     "cash": "Upfront cash",
     "fixedEquity": "Fixed equity",
-    "percent": "{value}%",
-    "dealHint": "Fixed equity only. Uncapped SAFEs and conditional amounts add dilution that depends on later rounds; read the full terms below.",
     "cadence": "Usual cadence",
-    "notAnnounced": "Not announced",
-    "deadlineKind": {
-      "announced": "Announced by the Program",
-      "expected": "Expected from past cycles"
-    },
     "selectivity": "Acceptance rate",
     "checked": "Checked {date}",
     "operatingStatus": {
@@ -182,62 +206,25 @@
       "closed": "Closed",
       "unknown": "Unknown"
     },
-    "stages": {
-      "idea": "Idea",
-      "pre_seed": "Pre-seed",
-      "seed": "Seed",
-      "series_a": "Series A",
-      "later": "Later"
-    },
-    "sectors": {
-      "ai": "AI",
-      "b2b_software": "B2B software",
-      "developer_tools": "Developer tools",
-      "fintech": "Fintech",
-      "healthcare": "Healthcare",
-      "biotech": "Biotech",
-      "climate": "Climate",
-      "hardware": "Hardware",
-      "robotics": "Robotics",
-      "logistics": "Logistics",
-      "consumer": "Consumer",
-      "marketplaces": "Marketplaces",
-      "education": "Education",
-      "deep_tech": "Deep tech",
-      "space": "Space",
-      "food_agriculture": "Food and agriculture",
-      "mobility": "Mobility",
-      "social_impact": "Social impact"
-    },
-    "regionNames": {
-      "north_america": "North America",
-      "europe": "Europe",
-      "asia_pacific": "Asia-Pacific",
-      "middle_east_africa": "Middle East and Africa",
-      "latin_america": "Latin America",
-      "global": "Global"
-    },
-    "applyRoutes": {
-      "online_application": "Online application",
-      "rolling_application": "Rolling applications",
-      "referral": "Referral",
-      "email": "Email",
-      "invitation": "Invitation only"
-    },
-    "varies": "Varies",
-    "equityFree": "Equity-free",
     "nextDeadline": "Next deadline",
     "rolling": "Rolling",
     "inDays": "{days, plural, =0 {Today} one {In # day} other {In # days}}",
-    "closed": "Closed",
     "sourcesCount": "{count, plural, one {# source} other {# sources}}",
-    "instrumentIs": "Instrument: {instrument}"
+    "showAllSources": "Show all {count, number} sources",
+    "showFewerSources": "Show fewer sources",
+    "closesOn": "Closes {date}",
+    "notPublishedList": "Not published: {fields}",
+    "notCheckedList": "Not checked yet: {fields}"
   },
   "vision": {
     "sectors": "Sectors",
-    "sectorsHint": "Shows Programs that name any selected sector. Programs open to any sector are included.",
     "stage": "Investment stage",
     "region": "Region",
+    "technology": "Technology",
+    "businessModel": "Business model",
+    "customerType": "Customers",
+    "instrument": "Investment instrument",
+    "benefit": "Benefit",
     "deadline": "Deadline",
     "deal": "Deal",
     "tracked": "Tracking",
@@ -253,13 +240,13 @@
     "dealOptions": {
       "any": "Any terms",
       "equity_free": "Equity-free",
-      "fixed_equity": "Takes fixed equity",
-      "unknown": "Equity not published"
+      "fixed_equity": "Takes fixed equity"
     },
     "trackedOptions": {
       "any": "All",
       "tracked": "Tracked",
-      "pending": "Awaiting decision"
+      "pending": "Awaiting decision",
+      "untracked": "Untracked"
     },
     "sortOptions": {
       "fit": "Best fit",
@@ -268,10 +255,11 @@
       "priority": "Your priority"
     },
     "anyStage": "Any stage",
-    "moreFilters": "More filters",
-    "aiMatchHint": "These use the saved AI match from Match Programs.",
+    "aiMatchHint": "These use the saved fit from Score Programs.",
     "priorityChip": "{priority} priority",
-    "removeFilter": "Remove filter: {filter}"
+    "removeFilter": "Remove filter: {filter}",
+    "knownFor": "Known for {count, number} of {total, number}",
+    "filters": "Filters"
   },
   "tracker": {
     "panelTitle": "Your application",
@@ -349,13 +337,13 @@
     }
   },
   "errors": {
-    "runInProgress": "A company run is already starting or running. Wait for it to finish before matching Programs.",
+    "runInProgress": "A company run is already starting or running. Wait for it to finish before scoring Programs.",
     "fullAccess": "Accelerators requires access to all company documents.",
-    "profileRequired": "Build the company profile before matching Programs.",
-    "notFound": "This Program or matching run was not found.",
+    "profileRequired": "Build the company profile before scoring Programs.",
+    "notFound": "This Program or scoring run was not found.",
     "conflict": "The saved data changed. Refresh and try again.",
-    "invalid": "The matching request is not valid.",
-    "credits": "There are not enough credits for matching.",
+    "invalid": "The scoring request is not valid.",
+    "credits": "There are not enough credits to score these Programs.",
     "internal": "Could not complete the request."
   }
 }

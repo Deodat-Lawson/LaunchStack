@@ -1,29 +1,26 @@
 import type { ProgramView, TrackerOpportunity, TrackerPriority } from "../api";
-import {
-    INVESTMENT_STAGES,
-    REGIONS,
-    SECTOR_TAGS,
-    type DemoLayer,
-    type InvestmentStage,
-    type Region,
-    type SectorTag,
-} from "./demo";
+import { hasFacet, publishedValue, type ProgramDetailsMap } from "./details";
 
 /**
- * Facets over the demo Program details, the saved fit and the saved tracker.
+ * Facets over sourced Program dossiers, saved fit and the saved tracker.
  * Applied after the catalogue filters in discovery.ts; OR within a facet, AND
  * across facets. Unknown facts never satisfy a facet.
  */
 export const DEADLINE_WINDOWS = ["any", "30", "90"] as const;
-export const DEAL_FILTERS = ["any", "equity_free", "fixed_equity", "unknown"] as const;
+export const DEAL_FILTERS = ["any", "equity_free", "fixed_equity"] as const;
 export const TRACK_FILTERS = ["any", "tracked", "pending", "untracked"] as const;
 export const PRIORITY_FILTERS = ["any", "high", "medium", "low"] as const;
 export const SORTS = ["fit", "deadline", "name", "priority"] as const;
 
 export interface VisionFilters {
-    sectors: SectorTag[];
-    stage: InvestmentStage | "any";
-    region: Region | "any";
+    sectors: string[];
+    stage: string;
+    region: string;
+    technology: string;
+    businessModel: string;
+    customerType: string;
+    instrument: string;
+    benefit: string;
     deadline: (typeof DEADLINE_WINDOWS)[number];
     deal: (typeof DEAL_FILTERS)[number];
     tracked: (typeof TRACK_FILTERS)[number];
@@ -37,6 +34,11 @@ export const DEFAULT_VISION_FILTERS: VisionFilters = {
     stage: "any",
     region: "any",
     deadline: "any",
+    technology: "any",
+    businessModel: "any",
+    customerType: "any",
+    instrument: "any",
+    benefit: "any",
     deal: "any",
     tracked: "any",
     priority: "any",
@@ -48,6 +50,11 @@ export const VISION_PARAM_KEYS = [
     "sector",
     "stage",
     "region",
+    "technology",
+    "businessModel",
+    "customerType",
+    "instrument",
+    "benefit",
     "deadline",
     "deal",
     "tracked",
@@ -66,13 +73,16 @@ function pick<T extends string>(options: readonly T[], value: string | null, fal
 }
 
 export function readVisionFilters(params: URLSearchParams): VisionFilters {
-    const sectors = (params.get("sector") ?? "")
-        .split(",")
-        .filter((value): value is SectorTag => (SECTOR_TAGS as readonly string[]).includes(value));
+    const sectors = (params.get("sector") ?? "").split(",").filter(Boolean);
     return {
         sectors,
-        stage: pick(["any", ...INVESTMENT_STAGES], params.get("stage"), "any"),
-        region: pick(["any", ...REGIONS], params.get("region"), "any"),
+        stage: params.get("stage") ?? "any",
+        region: params.get("region") ?? "any",
+        technology: params.get("technology") ?? "any",
+        businessModel: params.get("businessModel") ?? "any",
+        customerType: params.get("customerType") ?? "any",
+        instrument: params.get("instrument") ?? "any",
+        benefit: params.get("benefit") ?? "any",
         deadline: pick(DEADLINE_WINDOWS, params.get("deadline"), "any"),
         deal: pick(DEAL_FILTERS, params.get("deal"), "any"),
         tracked: pick(TRACK_FILTERS, params.get("tracked"), "any"),
@@ -92,6 +102,11 @@ export function updateVisionParams(
         sector: merged.sectors.length > 0 ? merged.sectors.join(",") : null,
         stage: merged.stage === "any" ? null : merged.stage,
         region: merged.region === "any" ? null : merged.region,
+        technology: merged.technology === "any" ? null : merged.technology,
+        businessModel: merged.businessModel === "any" ? null : merged.businessModel,
+        customerType: merged.customerType === "any" ? null : merged.customerType,
+        instrument: merged.instrument === "any" ? null : merged.instrument,
+        benefit: merged.benefit === "any" ? null : merged.benefit,
         deadline: merged.deadline === "any" ? null : merged.deadline,
         deal: merged.deal === "any" ? null : merged.deal,
         tracked: merged.tracked === "any" ? null : merged.tracked,
@@ -117,23 +132,21 @@ function topPriority(opportunities: TrackerOpportunity[]): TrackerPriority | nul
     );
 }
 
-/**
- * The nearest upcoming deadline the Program published: a recorded Cycle deadline
- * first, then an announced intake. Inferred and past dates are never a next deadline.
- */
+/** Only published, dated dossier values are deadlines; prose about cadence is not. */
 export function nextDeadline(
     program: ProgramView["program"],
-    demo: DemoLayer,
+    details: ProgramDetailsMap,
     today: string
 ): string | null {
-    const recorded = program.cycles
-        .map(cycle => cycle.deadlineAt?.slice(0, 10) ?? cycle.dateOnly ?? null)
-        .filter((date): date is string => date !== null && date >= today)
-        .sort()[0];
-    if (recorded) return recorded;
-    const next = demo.details[program.id]?.batches.next;
-    if (next?.deadlineKind !== "announced" || !next.deadline) return null;
-    return next.deadline >= today ? next.deadline : null;
+    return (
+        details[program.id]?.batches.cycles
+            .flatMap(cycle => {
+                const value = publishedValue(cycle.announcedDeadline);
+                const date = value?.dateOnly ?? value?.at?.slice(0, 10);
+                return date && date >= today ? [date] : [];
+            })
+            .sort()[0] ?? null
+    );
 }
 
 export function daysBetween(from: string, to: string): number {
@@ -145,9 +158,9 @@ export function daysBetween(from: string, to: string): number {
 export function applyVisionFilters(
     views: readonly ProgramView[],
     filters: VisionFilters,
-    context: { demo: DemoLayer; tracker: readonly TrackerOpportunity[]; today: string }
+    context: { details: ProgramDetailsMap; tracker: readonly TrackerOpportunity[]; today: string }
 ): ProgramView[] {
-    const { demo, tracker, today } = context;
+    const { details: allDetails, tracker, today } = context;
     const trackedBy = new Map<string, TrackerOpportunity[]>();
     for (const opportunity of tracker) {
         trackedBy.set(opportunity.programId, [
@@ -157,36 +170,44 @@ export function applyVisionFilters(
     }
     const kept = views.filter(view => {
         const id = view.program.id;
-        const details = demo.details[id];
+        const details = allDetails[id];
         const mine = trackedBy.get(id) ?? [];
         if (!filters.includeIneligible && isConfirmedIneligible(view)) return false;
         if (
-            filters.sectors.length > 0 &&
-            !(
-                details &&
-                (details.generalist ||
-                    filters.sectors.some(sector => details.sectors.includes(sector)))
-            )
+            filters.sectors.length &&
+            !filters.sectors.some(sector => hasFacet(details, ["sector"], sector))
         )
             return false;
-        if (filters.stage !== "any" && !details?.stages.includes(filters.stage)) return false;
-        if (
-            filters.region !== "any" &&
-            !(
-                details &&
-                (details.regions.includes(filters.region) || details.regions.includes("global"))
-            )
-        )
+        if (filters.stage !== "any" && !hasFacet(details, ["stage"], filters.stage)) return false;
+        if (filters.region !== "any" && !hasFacet(details, ["geography"], filters.region))
             return false;
+        for (const [key, facet] of [
+            ["technology", "technology"],
+            ["businessModel", "business_model"],
+            ["customerType", "customer_type"],
+            ["instrument", "instrument"],
+            ["benefit", "benefit"],
+        ] as const) {
+            if (filters[key] !== "any" && !hasFacet(details, [facet], filters[key])) return false;
+        }
         if (filters.deadline !== "any") {
-            const deadline = nextDeadline(view.program, demo, today);
+            const deadline = nextDeadline(view.program, allDetails, today);
             if (!deadline || daysBetween(today, deadline) > Number(filters.deadline)) return false;
         }
         if (filters.deal !== "any") {
-            const equity = details?.deal?.equityPercent ?? null;
-            if (filters.deal === "equity_free" && equity !== 0) return false;
-            if (filters.deal === "fixed_equity" && !(equity !== null && equity > 0)) return false;
-            if (filters.deal === "unknown" && equity !== null) return false;
+            const equity = publishedValue(details?.deal.equity);
+            if (!equity?.length) return false;
+            const percentages = equity
+                .map(value => /^(\d+(?:\.\d+)?)\s*%$/.exec(value.trim())?.[1])
+                .filter((value): value is string => value !== undefined)
+                .map(Number);
+            if (
+                filters.deal === "equity_free" &&
+                !(percentages.length > 0 && percentages.every(value => value === 0))
+            )
+                return false;
+            if (filters.deal === "fixed_equity" && !percentages.some(value => value > 0))
+                return false;
         }
         if (filters.tracked === "tracked" && mine.length === 0) return false;
         if (filters.tracked === "untracked" && mine.length > 0) return false;
@@ -203,8 +224,8 @@ export function applyVisionFilters(
     if (filters.sort === "fit") return kept;
     return kept.sort((left, right) => {
         if (filters.sort === "deadline") {
-            const a = nextDeadline(left.program, demo, today) ?? "9999-12-31";
-            const b = nextDeadline(right.program, demo, today) ?? "9999-12-31";
+            const a = nextDeadline(left.program, allDetails, today) ?? "9999-12-31";
+            const b = nextDeadline(right.program, allDetails, today) ?? "9999-12-31";
             return a.localeCompare(b);
         }
         const a = topPriority(trackedBy.get(left.program.id) ?? []);

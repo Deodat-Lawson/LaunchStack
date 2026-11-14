@@ -1,15 +1,13 @@
 "use client";
 
-import { Loader2, RefreshCw, Sparkles } from "lucide-react";
-import { useFormatter, useLocale, useTranslations } from "next-intl";
-import { useMemo, useRef, useState } from "react";
+import { Loader2 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { useMemo } from "react";
 
 import { useToolPathname, useToolRouter, useToolSearchParams } from "~/components/tool-app/nav";
-import { Button } from "~/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
-import { useErrorText } from "~/lib/tools/errorText";
 
 import { DiscoveryToolbar } from "../_components/DiscoveryToolbar";
+import { ScoreControl } from "../_components/ScoreControl";
 import { Notice } from "../_components/ProgramFacts";
 import { ProgramRow } from "../_components/ProgramRow";
 import { useAccelerators } from "../_lib/context";
@@ -34,10 +32,8 @@ import {
 
 export function ProgramsScreen() {
     const t = useTranslations("accelerators");
-    const format = useFormatter();
     const locale = useLocale();
-    const errorText = useErrorText();
-    const { home, runBusy, match, refresh } = useAccelerators();
+    const { home } = useAccelerators();
     const { opportunities } = useTracker();
     const router = useToolRouter();
     const pathname = useToolPathname();
@@ -49,20 +45,22 @@ export function ProgramsScreen() {
     const ranked = useMemo(() => rankPrograms(programs ?? [], locale), [programs, locale]);
     const { q, fit, minScore, intake } = catalogue;
     const catalogueVisible = useMemo(
-        () => filterPrograms(ranked, { q, fit, minScore, intake }),
-        [ranked, q, fit, minScore, intake]
+        () => filterPrograms(ranked, { q, fit, minScore, intake }, home?.details),
+        [ranked, q, fit, minScore, intake, home?.details]
     );
-    const [pending, setPending] = useState(false);
-    const pendingRef = useRef(false);
-    const [refreshing, setRefreshing] = useState(false);
-    const [failure, setFailure] = useState<unknown>(null);
     if (!home) return null;
 
-    const visible = applyVisionFilters(catalogueVisible, vision, {
-        demo: home.demo,
-        tracker: opportunities ?? [],
-        today,
-    });
+    const visionContext = { details: home.details, tracker: opportunities ?? [], today };
+    const visible = applyVisionFilters(catalogueVisible, vision, visionContext);
+    // Facet counts: what each option would show alongside every other active filter.
+    const countVision = (patch: Partial<VisionFilters>) =>
+        applyVisionFilters(catalogueVisible, { ...vision, ...patch }, visionContext).length;
+    const countCatalogue = (patch: Partial<DiscoveryFilters>) =>
+        applyVisionFilters(
+            filterPrograms(ranked, { q, fit, minScore, intake, ...patch }, home.details),
+            vision,
+            visionContext
+        ).length;
     const queryString = params.toString();
     const navigate = (next: URLSearchParams) => {
         const search = next.toString();
@@ -80,20 +78,6 @@ export function ProgramsScreen() {
                 sort: vision.sort,
             })
         );
-    const matchPrograms = async () => {
-        if (pendingRef.current) return;
-        pendingRef.current = true;
-        setPending(true);
-        setFailure(null);
-        try {
-            await match();
-        } catch (error) {
-            setFailure(error);
-        } finally {
-            pendingRef.current = false;
-            setPending(false);
-        }
-    };
     const trackedFor = (programId: string) =>
         (opportunities ?? [])
             .filter(item => item.programId === programId)
@@ -102,87 +86,19 @@ export function ProgramsScreen() {
         opportunities === null && (vision.tracked !== "any" || vision.priority !== "any");
 
     return (
-        <div className="min-w-0 space-y-5">
-            <header className="flex flex-wrap items-start justify-between gap-4">
-                <div className="max-w-xl space-y-1.5">
-                    <h1 className="display text-ink text-2xl tracking-tight">{t("home.title")}</h1>
-                    <p className="text-ink-3 text-sm leading-relaxed">{t("home.description")}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                size="icon"
-                                aria-label={t("common.refresh")}
-                                disabled={refreshing}
-                                onClick={async () => {
-                                    setRefreshing(true);
-                                    try {
-                                        await refresh();
-                                    } catch {
-                                        /* The frame renders load errors. */
-                                    } finally {
-                                        setRefreshing(false);
-                                    }
-                                }}
-                            >
-                                <RefreshCw
-                                    className={
-                                        refreshing ? "animate-spin motion-reduce:animate-none" : ""
-                                    }
-                                />
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>{t("common.refresh")}</TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <span tabIndex={-1}>
-                                <Button
-                                    type="button"
-                                    disabled={
-                                        !home.canEdit ||
-                                        !home.profileReady ||
-                                        home.programs.length === 0 ||
-                                        pending ||
-                                        runBusy
-                                    }
-                                    onClick={matchPrograms}
-                                >
-                                    {pending ? (
-                                        <Loader2 className="animate-spin motion-reduce:animate-none" />
-                                    ) : (
-                                        <Sparkles />
-                                    )}
-                                    {pending
-                                        ? t("home.matching")
-                                        : t("home.match", {
-                                              credits: format.number(home.costs.match),
-                                          })}
-                                </Button>
-                            </span>
-                        </TooltipTrigger>
-                        <TooltipContent className="max-w-64">
-                            {home.profileReady
-                                ? t("home.matchHint", { count: home.matchCount })
-                                : t("home.profileMissing")}
-                        </TooltipContent>
-                    </Tooltip>
-                </div>
+        <div className="min-w-0 space-y-4">
+            <header className="flex flex-wrap items-center justify-between gap-3">
+                <h1 className="display text-ink text-2xl tracking-tight">{t("home.title")}</h1>
+                <ScoreControl visible={visible} />
             </header>
-
-            {failure != null && (
-                <p role="alert" className="text-danger text-sm">
-                    {errorText(failure, t("common.actionFailed"))}
-                </p>
-            )}
             <DiscoveryToolbar
                 catalogue={catalogue}
                 vision={vision}
+                details={home.details}
                 resultCount={visible.length}
                 totalCount={home.programs.length}
+                countVision={countVision}
+                countCatalogue={countCatalogue}
                 onCatalogue={setCatalogue}
                 onVision={setVision}
                 onReset={resetFilters}
@@ -204,14 +120,14 @@ export function ProgramsScreen() {
                     <p className="mt-1">{t("discovery.noResultsBody")}</p>
                 </Notice>
             ) : (
-                <div className="space-y-2">
+                <div className="-mx-2 space-y-0.5">
                     {visible.map(item => (
                         <ProgramRow
                             key={item.program.id}
                             view={item}
-                            demo={home.demo}
+                            details={home.details[item.program.id]}
                             tracked={trackedFor(item.program.id)}
-                            deadline={nextDeadline(item.program, home.demo, today)}
+                            deadline={nextDeadline(item.program, home.details, today)}
                             today={today}
                             href={`${programPath(item.program.id)}${queryString ? `?${queryString}` : ""}`}
                         />

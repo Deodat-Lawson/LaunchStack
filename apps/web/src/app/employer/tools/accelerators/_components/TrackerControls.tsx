@@ -2,7 +2,7 @@
 
 import { BookmarkPlus, ChevronDown, Loader2, Trash2 } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
-import { useState, type FormEvent } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -121,6 +121,30 @@ export function TrackerControls({
     );
 }
 
+/**
+ * A text field's own draft. The server's value replaces it only while the field
+ * is not being edited, so saving another field never wipes what is being typed here.
+ */
+function useDraft(saved: string) {
+    const [draft, setDraft] = useState(saved);
+    const [editing, setEditing] = useState(false);
+    const [lastSaved, setLastSaved] = useState(saved);
+    if (saved !== lastSaved) {
+        setLastSaved(saved);
+        if (!editing) setDraft(saved);
+    }
+    return {
+        draft,
+        blur: () => setEditing(false),
+        bind: {
+            value: draft,
+            onFocus: () => setEditing(true),
+            onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+                setDraft(event.target.value),
+        },
+    };
+}
+
 export function OpportunityEditor({
     opportunity,
     cycles,
@@ -138,6 +162,9 @@ export function OpportunityEditor({
     const errorText = useErrorText();
     const { update, untrack, track } = useTracker();
     const [failure, setFailure] = useState<unknown>(null);
+    const nextAction = useDraft(opportunity.nextAction ?? "");
+    const submittedOn = useDraft(opportunity.submittedOn ?? "");
+    const notes = useDraft(opportunity.notes);
     const [confirming, setConfirming] = useState(false);
     const save = async (patch: UpdateTrackerOpportunity) => {
         setFailure(null);
@@ -203,13 +230,13 @@ export function OpportunityEditor({
                 </Label>
                 <Input
                     id={`${id}-next`}
-                    key={`next-${opportunity.updatedAt}`}
-                    defaultValue={opportunity.nextAction ?? ""}
+                    {...nextAction.bind}
                     disabled={!canEdit}
                     placeholder={t("nextActionPlaceholder")}
                     className="h-8 text-sm"
-                    onBlur={event => {
-                        const value = event.target.value.trim() || null;
+                    onBlur={() => {
+                        nextAction.blur();
+                        const value = nextAction.draft.trim() || null;
                         if (value !== opportunity.nextAction) void save({ nextAction: value });
                     }}
                 />
@@ -233,16 +260,20 @@ export function OpportunityEditor({
                         {opportunity.cycleId !== null ? (
                             <p id={`${id}-cycle`} className="text-ink-2 text-sm">
                                 {cycle?.label ?? opportunity.cycleId}
-                                {opportunity.plannedDeadline && (
+                                {(opportunity.plannedDeadline ?? opportunity.plannedDeadlineOn) && (
                                     <span className="text-ink-3 block text-xs">
                                         {t("plannedDeadline", {
-                                            date: format.dateTime(
-                                                new Date(opportunity.plannedDeadline),
-                                                {
-                                                    dateStyle: "medium",
-                                                    timeStyle: "short",
-                                                }
-                                            ),
+                                            date: opportunity.plannedDeadline
+                                                ? format.dateTime(
+                                                      new Date(opportunity.plannedDeadline),
+                                                      { dateStyle: "medium", timeStyle: "short" }
+                                                  )
+                                                : format.dateTime(
+                                                      new Date(
+                                                          `${opportunity.plannedDeadlineOn}T00:00:00Z`
+                                                      ),
+                                                      { dateStyle: "medium", timeZone: "UTC" }
+                                                  ),
                                         })}
                                     </span>
                                 )}
@@ -299,11 +330,11 @@ export function OpportunityEditor({
                             <Input
                                 id={`${id}-submitted`}
                                 type="date"
-                                key={`submitted-${opportunity.updatedAt}`}
-                                defaultValue={opportunity.submittedOn ?? ""}
+                                {...submittedOn.bind}
                                 disabled={!canEdit}
-                                onBlur={event => {
-                                    const value = event.target.value || null;
+                                onBlur={() => {
+                                    submittedOn.blur();
+                                    const value = submittedOn.draft || null;
                                     if (value !== opportunity.submittedOn)
                                         void save({ submittedOn: value });
                                 }}
@@ -317,14 +348,14 @@ export function OpportunityEditor({
                         </Label>
                         <Textarea
                             id={`${id}-notes`}
-                            key={`notes-${opportunity.updatedAt}`}
-                            defaultValue={opportunity.notes}
+                            {...notes.bind}
                             disabled={!canEdit}
                             rows={3}
                             placeholder={t("notesPlaceholder")}
-                            onBlur={event => {
-                                if (event.target.value !== opportunity.notes)
-                                    void save({ notes: event.target.value });
+                            onBlur={() => {
+                                notes.blur();
+                                if (notes.draft !== opportunity.notes)
+                                    void save({ notes: notes.draft });
                             }}
                         />
                     </div>

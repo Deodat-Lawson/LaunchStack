@@ -1,54 +1,233 @@
 "use client";
 
-import {
-    CalendarClock,
-    ChevronDown,
-    ExternalLink,
-    Library,
-    Mail,
-    MapPin,
-    Phone,
-    Repeat,
-} from "lucide-react";
-import Image from "next/image";
+import { ExternalLink } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 import MarkdownMessage from "~/app/_components/MarkdownMessage";
-import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import { Card, CardContent } from "~/components/ui/card";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
-import { cn } from "~/lib/utils";
 
-import type { ProgramCycle, ProgramView, TrackerOpportunity } from "../api";
-import type { ProgramDetails } from "../_lib/demo";
+import type { ProgramView, TrackerOpportunity } from "../api";
+import {
+    publishedValue,
+    hasRollingIntake,
+    type DetailSlot,
+    type DetailSource,
+    type ProgramDetails,
+} from "../_lib/details";
 import { daysBetween } from "../_lib/vision-filters";
-import { Narrative, Notice } from "./ProgramFacts";
+import { ProgramLogo } from "./ProgramFacts";
 
-function Stat({ label, value, hint }: { label: string; value: ReactNode; hint?: ReactNode }) {
+/** "500.co/fellowship": which page it is, readable at a glance. */
+function pageLabel(url: string): string {
+    try {
+        const { hostname, pathname } = new URL(url);
+        const path = pathname.replace(/\/+$/, "");
+        const label = hostname.replace(/^www\./, "") + path;
+        return label.length > 48 ? `${label.slice(0, 47)}…` : label;
+    } catch {
+        return url;
+    }
+}
+
+/** One entry per page; several excerpts from the same page are one source. */
+function uniqueSources(sources: readonly DetailSource[]): DetailSource[] {
+    const byUrl = new Map<string, DetailSource>();
+    for (const source of sources) {
+        const seen = byUrl.get(source.url);
+        if (!seen || source.checkedAt > seen.checkedAt) byUrl.set(source.url, source);
+    }
+    return [...byUrl.values()];
+}
+
+/** A readable page title: the scraper's "Name — application page checked by …" becomes "Application page". */
+function sourceTitle(source: DetailSource): string {
+    const generated = /^.+? — (.+?) checked by \S+$/.exec(source.title);
+    const title = generated ? generated[1]! : source.title;
+    return title.charAt(0).toUpperCase() + title.slice(1);
+}
+
+const SOURCES_SHOWN = 6;
+
+/** Every page the Program's facts come from, once each, newest check first. */
+function SourceList({ sources }: { sources: readonly DetailSource[] }) {
+    const t = useTranslations("accelerators.details");
+    const format = useFormatter();
+    const [expanded, setExpanded] = useState(false);
+    const unique = uniqueSources(sources).sort((left, right) =>
+        right.checkedAt.localeCompare(left.checkedAt)
+    );
+    if (unique.length === 0) return null;
+    const visible = expanded ? unique : unique.slice(0, SOURCES_SHOWN);
+    return (
+        <section className="space-y-2">
+            <h3 className="text-ink text-sm font-semibold">
+                {t("sourcesCount", { count: unique.length })}
+            </h3>
+            <ul className="border-line divide-line divide-y rounded-xl border">
+                {visible.map(source => (
+                    <li key={source.url}>
+                        <a
+                            href={source.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:bg-panel-2 group flex items-center gap-3 px-3 py-2.5 transition-colors first:rounded-t-xl last:rounded-b-xl"
+                        >
+                            <span className="min-w-0 flex-1">
+                                <span className="text-ink group-hover:text-brand-ink block truncate text-sm">
+                                    {sourceTitle(source)}
+                                </span>
+                                <span className="text-ink-3 block truncate text-xs">
+                                    {pageLabel(source.url)}
+                                </span>
+                            </span>
+                            <span className="text-ink-3 shrink-0 text-xs">
+                                {t("checked", {
+                                    date: format.dateTime(new Date(source.checkedAt), {
+                                        dateStyle: "medium",
+                                    }),
+                                })}
+                            </span>
+                            <ExternalLink
+                                aria-hidden="true"
+                                className="text-ink-3 group-hover:text-ink size-3.5 shrink-0"
+                            />
+                        </a>
+                    </li>
+                ))}
+            </ul>
+            {unique.length > SOURCES_SHOWN && (
+                <Button variant="ghost" size="sm" onClick={() => setExpanded(open => !open)}>
+                    {expanded
+                        ? t("showFewerSources")
+                        : t("showAllSources", { count: unique.length })}
+                </Button>
+            )}
+        </section>
+    );
+}
+
+/** A missing value is never replaced with catalogue boilerplate or a guessed fact. */
+function Slot<T>({
+    slot,
+    render,
+}: {
+    slot: DetailSlot<T> | undefined;
+    render?: (value: T) => ReactNode;
+}) {
+    const t = useTranslations("accelerators.details");
+    const value = publishedValue(slot);
+    return (
+        <span className="whitespace-pre-wrap break-words">
+            {value === null
+                ? t(!slot || slot.state === "not_checked" ? "notChecked" : "unknown")
+                : render
+                  ? render(value)
+                  : Array.isArray(value)
+                    ? value.join(" · ")
+                    : String(value)}
+        </span>
+    );
+}
+
+/** Public email and phone on one line; "Not published" once when neither was found. */
+function contactLine(details: ProgramDetails | undefined): string | null {
+    const parts = [
+        publishedValue(details?.contact.email),
+        publishedValue(details?.contact.phone),
+    ].filter((part): part is string => Boolean(part));
+    return parts.length > 0 ? parts.join(" · ") : null;
+}
+
+/**
+ * Collected narratives can open with how they were written ("AI-written interpretation of
+ * the flagship page, prepared by …:"). The interpretation badge carries that; the reader
+ * gets the narrative itself.
+ */
+function readableNarrative(text: string): string {
+    const body = text.replace(/^AI-written (?:synthesis|interpretation)\b[^:]*:\s*/i, "");
+    return body.charAt(0).toUpperCase() + body.slice(1);
+}
+
+/** "USD 150000 · per company" reads as "$150,000 · per company" in the reader's locale. */
+function useFormatCash(): (value: string) => string {
+    const format = useFormatter();
+    return value => {
+        const match = /^([A-Z]{3}) (\d+)(.*)$/.exec(value);
+        if (!match) return value;
+        const [, currency, amount, rest] = match;
+        return (
+            format.number(Number(amount), {
+                style: "currency",
+                currency: currency!,
+                maximumFractionDigits: 0,
+            }) + rest
+        );
+    };
+}
+
+function Fact({ label, children }: { label: string; children: ReactNode }) {
     return (
         <div className="min-w-0 space-y-0.5">
             <dt className="text-ink-3 text-xs">{label}</dt>
-            <dd className="text-ink text-sm font-semibold">{value}</dd>
-            {hint && <dd className="text-ink-3 text-xs">{hint}</dd>}
+            <dd className="text-ink text-sm leading-relaxed">{children}</dd>
         </div>
     );
 }
 
-function useDeadlineText() {
-    const t = useTranslations("accelerators.details");
-    const format = useFormatter();
-    return (date: string, today: string) => ({
-        date: format.dateTime(new Date(`${date}T00:00:00Z`), {
-            dateStyle: "medium",
-            timeZone: "UTC",
-        }),
-        relative: t("inDays", { days: daysBetween(today, date) }),
-    });
+type FactItem = { label: string; state: "known" | "unpublished" | "unchecked"; node: ReactNode };
+
+function fact<T>(
+    label: string,
+    slot: DetailSlot<T> | undefined,
+    render?: (value: T) => ReactNode
+): FactItem {
+    const value = publishedValue(slot);
+    const known = value !== null && !(Array.isArray(value) && value.length === 0);
+    return {
+        label,
+        state: known ? "known" : slot && slot.state !== "not_checked" ? "unpublished" : "unchecked",
+        node: <Slot slot={slot} render={render} />,
+    };
 }
 
-/** Who the Program is, the four facts that decide whether to look further, and how to apply. */
+/**
+ * Known facts as a plain list. Facts the pages did not publish, or that were not
+ * checked yet, collapse into one quiet line each instead of a field per gap.
+ */
+function FactList({ items }: { items: FactItem[] }) {
+    const t = useTranslations("accelerators.details");
+    const format = useFormatter();
+    const known = items.filter(item => item.state === "known");
+    const missing = (state: FactItem["state"]) =>
+        format.list(items.filter(item => item.state === state).map(item => item.label));
+    const unpublished = items.some(item => item.state === "unpublished");
+    const unchecked = items.some(item => item.state === "unchecked");
+    return (
+        <div className="space-y-3">
+            {known.length > 0 && (
+                <dl className="grid gap-x-6 gap-y-3 [@container(min-width:560px)]:grid-cols-2">
+                    {known.map(item => (
+                        <Fact key={item.label} label={item.label}>
+                            {item.node}
+                        </Fact>
+                    ))}
+                </dl>
+            )}
+            {unpublished && (
+                <p className="text-ink-3 text-xs">
+                    {t("notPublishedList", { fields: missing("unpublished") })}
+                </p>
+            )}
+            {unchecked && (
+                <p className="text-ink-3 text-xs">
+                    {t("notCheckedList", { fields: missing("unchecked") })}
+                </p>
+            )}
+        </div>
+    );
+}
+
 export function ProgramHero({
     view,
     details,
@@ -66,292 +245,159 @@ export function ProgramHero({
 }) {
     const t = useTranslations("accelerators");
     const format = useFormatter();
-    const deadlineText = useDeadlineText();
     const program = view.program;
-    const deal = details?.deal ?? null;
-    const rolling =
-        program.cycles.some(cycle => cycle.rolling) ||
-        (details?.applyRoutes.includes("rolling_application") ?? false);
-    const stages = details?.stages ?? [];
+    const applicationUrl = publishedValue(details?.contact.applicationUrl);
+    const status = publishedValue(details?.identity.operatingStatus);
+    const selectivity = publishedValue(details?.selectivity);
+    const location = publishedValue(details?.identity.location);
+    const stages = publishedValue(details?.audience.stages) ?? [];
+    const meta = [
+        location,
+        stages.length > 0 ? stages.join(" – ") : null,
+        status && status !== "active" ? t(`details.operatingStatus.${status}`) : null,
+        tracked ? t(`tracker.statuses.${tracked.status}`) : null,
+    ].filter(Boolean);
+    const formatCash = useFormatCash();
+    const cash = publishedValue(details?.deal.cash)?.map(formatCash);
+    const equity = publishedValue(details?.deal.equity);
+    const keyFacts = [
+        cash?.length ? { label: t("details.cash"), value: cash.join(" · ") } : null,
+        equity?.length ? { label: t("details.fixedEquity"), value: equity.join(" · ") } : null,
+        deadline
+            ? {
+                  label: t("details.nextDeadline"),
+                  value: `${format.dateTime(new Date(`${deadline}T00:00:00Z`), {
+                      dateStyle: "medium",
+                      timeZone: "UTC",
+                  })} · ${t("details.inDays", { days: daysBetween(today, deadline) })}`,
+              }
+            : hasRollingIntake(details)
+              ? { label: t("details.nextDeadline"), value: t("details.rolling") }
+              : null,
+        selectivity?.rate != null
+            ? {
+                  label: t("details.selectivity"),
+                  value: format.number(selectivity.rate, {
+                      style: "percent",
+                      maximumFractionDigits: 2,
+                  }),
+              }
+            : null,
+    ].filter((item): item is NonNullable<typeof item> => item !== null);
     return (
-        <Card className="border-line gap-0 py-0">
-            <CardContent className="space-y-5 p-5">
-                <div className="flex flex-wrap items-start gap-4">
-                    <Image
-                        src={program.logo.path}
-                        alt=""
-                        width={64}
-                        height={64}
-                        className="size-16 shrink-0 rounded-xl bg-[var(--paper-panel)] object-contain p-1.5"
-                    />
-                    <div className="min-w-0 flex-1 space-y-2">
-                        <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-3">
-                            <div className="flex min-w-0 flex-wrap items-center gap-2">
-                                <h1 className="display text-ink min-w-0 break-words text-2xl tracking-tight">
-                                    {program.name}
-                                </h1>
-                                {details && details.operatingStatus !== "active" && (
-                                    <Badge variant="secondary">
-                                        {t(`details.operatingStatus.${details.operatingStatus}`)}
-                                    </Badge>
-                                )}
-                                {tracked && (
-                                    <Badge variant="info">
-                                        {t(`tracker.statuses.${tracked.status}`)}
-                                    </Badge>
-                                )}
-                            </div>
-                            <div className="flex shrink-0 flex-wrap gap-2">
-                                <Button asChild variant="outline" size="sm">
-                                    <a
-                                        href={program.websiteUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        {t("common.website")}
-                                        <ExternalLink className="size-3.5" />
-                                    </a>
-                                </Button>
-                                <Button asChild size="sm">
-                                    <a
-                                        href={program.applyUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        {t("common.portal")}
-                                        <ExternalLink className="size-3.5" />
-                                    </a>
-                                </Button>
-                            </div>
-                        </div>
-                        {program.location && (
-                            <p className="text-ink-3 flex items-start gap-1.5 text-sm">
-                                <MapPin className="mt-0.5 size-3.5 shrink-0" />
-                                <span className="min-w-0">{program.location.text}</span>
-                            </p>
-                        )}
-                        <div className="flex flex-wrap items-center gap-1.5">
-                            {stages.length > 0 && (
-                                <Badge variant="outline">
-                                    {stages.map(stage => t(`details.stages.${stage}`)).join(" – ")}
-                                </Badge>
-                            )}
-                            {details?.generalist && (
-                                <Badge variant="secondary">{t("details.generalist")}</Badge>
-                            )}
-                            {details?.sectors.map(sector => (
-                                <Badge key={sector} variant="secondary">
-                                    {t(`details.sectors.${sector}`)}
-                                </Badge>
-                            ))}
-                        </div>
-                    </div>
-                    <div className="[@container(min-width:860px)]:hidden">{mobileScore}</div>
+        <header className="space-y-4">
+            <div className="flex flex-wrap items-center gap-4">
+                <ProgramLogo program={program} size="md" />
+                <div className="min-w-0 flex-1">
+                    <h1 className="display text-ink break-words text-2xl tracking-tight">
+                        {program.name}
+                    </h1>
+                    {meta.length > 0 && <p className="text-ink-3 text-sm">{meta.join(" · ")}</p>}
                 </div>
-
-                <dl className="border-line grid grid-cols-2 gap-4 border-t pt-4 [@container(min-width:640px)]:grid-cols-4">
-                    <Stat
-                        label={t("details.cash")}
-                        value={
-                            deal?.cashUsd != null
-                                ? format.number(deal.cashUsd, {
-                                      style: "currency",
-                                      currency: "USD",
-                                      maximumFractionDigits: 0,
-                                  })
-                                : deal
-                                  ? t("details.varies")
-                                  : t("details.unknown")
-                        }
-                    />
-                    <Stat
-                        label={t("details.fixedEquity")}
-                        value={
-                            deal?.equityPercent === 0
-                                ? t("details.equityFree")
-                                : deal?.equityPercent != null
-                                  ? t("details.percent", { value: deal.equityPercent })
-                                  : t("details.unknown")
-                        }
-                    />
-                    <Stat
-                        label={t("details.nextDeadline")}
-                        value={
-                            deadline
-                                ? deadlineText(deadline, today).date
-                                : rolling
-                                  ? t("details.rolling")
-                                  : t("details.notAnnounced")
-                        }
-                        hint={deadline ? deadlineText(deadline, today).relative : undefined}
-                    />
-                    <Stat
-                        label={t("details.selectivity")}
-                        value={
-                            details?.selectivity.acceptanceRatePercent != null
-                                ? t("details.percent", {
-                                      value: details.selectivity.acceptanceRatePercent,
-                                  })
-                                : t("details.unknown")
-                        }
-                    />
+                <div className="shrink-0 [@container(min-width:860px)]:hidden">{mobileScore}</div>
+                <div className="flex flex-wrap items-center gap-2">
+                    <Button asChild variant="ghost" size="sm">
+                        <a href={program.websiteUrl} target="_blank" rel="noopener noreferrer">
+                            {t("common.website")}
+                            <ExternalLink className="size-3.5" />
+                        </a>
+                    </Button>
+                    {applicationUrl && (
+                        <Button asChild size="sm">
+                            <a href={applicationUrl} target="_blank" rel="noopener noreferrer">
+                                {t("common.portal")}
+                                <ExternalLink className="size-3.5" />
+                            </a>
+                        </Button>
+                    )}
+                </div>
+            </div>
+            {keyFacts.length > 0 && (
+                <dl className="flex flex-wrap gap-x-8 gap-y-2">
+                    {keyFacts.map(item => (
+                        <Fact key={item.label} label={item.label}>
+                            {item.value}
+                        </Fact>
+                    ))}
                 </dl>
-            </CardContent>
-        </Card>
+            )}
+        </header>
     );
 }
 
-function Fact({ label, children }: { label: string; children: ReactNode }) {
-    return (
-        <div className="min-w-0 space-y-1">
-            <dt className="text-ink-3 text-xs">{label}</dt>
-            <dd className="text-ink-2 text-sm leading-relaxed">{children}</dd>
-        </div>
-    );
-}
-
-/** What the Program is and who it is for, with logistics and sources on the side. */
 export function OverviewTab({
-    view,
     details,
 }: {
     view: ProgramView;
     details: ProgramDetails | undefined;
 }) {
     const t = useTranslations("accelerators");
-    const program = view.program;
-    const sources = [
-        ...(details?.sources ?? []),
-        ...program.sources.map(({ title, url, checkedAt }) => ({ title, url, checkedAt })),
-    ].filter((source, index, all) => all.findIndex(item => item.url === source.url) === index);
     return (
         <div className="space-y-6">
-            <Narrative title={t("program.description")} narrative={program.description} />
-            <Narrative title={t("program.targetApplicants")} narrative={program.targetApplicants} />
-            {details && (
-                <dl className="bg-panel-2 grid grid-cols-1 gap-4 rounded-xl p-4 [@container(min-width:560px)]:grid-cols-2">
-                    <Fact label={t("details.format")}>
-                        {details.format ?? t("details.unknown")}
-                        {details.durationWeeks !== null && (
-                            <span className="text-ink-3">
-                                {" "}
-                                · {t("details.weeks", { weeks: details.durationWeeks })}
-                            </span>
-                        )}
-                    </Fact>
-                    <Fact label={t("details.regions")}>
-                        {details.regions.length === 0
-                            ? t("details.unknown")
-                            : details.regions
-                                  .map(region => t(`details.regionNames.${region}`))
-                                  .join(" · ")}
-                    </Fact>
-                    <Fact label={t("details.contact")}>
-                        <ContactLinks details={details} />
-                    </Fact>
-                </dl>
-            )}
-            <Collapsible>
-                <CollapsibleTrigger className="text-ink-3 hover:text-ink group flex items-center gap-1.5 text-xs font-medium">
-                    <Library className="size-3.5" />
-                    {t("details.sourcesCount", { count: sources.length })}
-                    <ChevronDown className="size-3.5 transition-transform group-data-[state=open]:rotate-180" />
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                    <SourceList sources={sources} />
-                </CollapsibleContent>
-            </Collapsible>
+            <section className="space-y-2">
+                <h3 className="text-ink text-sm font-semibold">{t("program.targetApplicants")}</h3>
+                <div className="text-ink-2 text-sm leading-relaxed">
+                    <Slot slot={details?.audience.narrative} render={readableNarrative} />
+                </div>
+            </section>
+            <FactList
+                items={[
+                    fact(t("details.regions"), details?.audience.geography),
+                    fact(t("vision.stage"), details?.audience.stages),
+                    fact(t("vision.sectors"), details?.audience.sectors),
+                    fact(t("details.technologies"), details?.audience.technologies),
+                    fact(t("details.businessModels"), details?.audience.businessModels),
+                    fact(t("details.customerTypes"), details?.audience.customerTypes),
+                    fact(t("details.benefits"), details?.deal.benefits),
+                    fact(t("details.constraints"), details?.audience.constraints),
+                    fact(t("details.portfolio"), details?.portfolio, value =>
+                        t("details.portfolioCount", { count: value })
+                    ),
+                    contactLine(details)
+                        ? {
+                              label: t("details.contact"),
+                              state: "known",
+                              node: contactLine(details),
+                          }
+                        : fact(t("details.contact"), details?.contact.email),
+                ]}
+            />
+            <SourceList sources={details?.sources ?? []} />
         </div>
     );
 }
 
-function SourceList({ sources }: { sources: { title: string; url: string; checkedAt: string }[] }) {
-    const t = useTranslations("accelerators.details");
-    const format = useFormatter();
-    return (
-        <ul className="mt-3 space-y-2">
-            {sources.map(source => (
-                <li key={source.url} className="text-xs">
-                    <a
-                        href={source.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-brand-ink inline-flex items-center gap-1 underline underline-offset-2"
-                    >
-                        {source.title}
-                        <ExternalLink className="size-3" />
-                    </a>
-                    <span className="text-ink-3 ml-2">
-                        {t("checked", {
-                            date: format.dateTime(new Date(source.checkedAt), {
-                                dateStyle: "medium",
-                            }),
-                        })}
-                    </span>
-                </li>
-            ))}
-        </ul>
-    );
-}
-
-function ContactLinks({ details }: { details: ProgramDetails }) {
-    const t = useTranslations("accelerators.details");
-    const { email, phone, contactUrl } = details.contact;
-    if (!email && !phone && !contactUrl) return <>{t("noPublicContact")}</>;
-    const link = "text-brand-ink inline-flex items-center gap-1 underline underline-offset-2";
-    return (
-        <span className="flex flex-col gap-1">
-            {email && (
-                <a href={`mailto:${email}`} className={link}>
-                    <Mail className="size-3.5" />
-                    {email}
-                </a>
-            )}
-            {phone && (
-                <a href={`tel:${phone.replace(/[^+\d]/g, "")}`} className={link}>
-                    <Phone className="size-3.5" />
-                    {phone}
-                </a>
-            )}
-            {contactUrl && (
-                <a href={contactUrl} target="_blank" rel="noopener noreferrer" className={link}>
-                    {t("contactPage")}
-                    <ExternalLink className="size-3.5" />
-                </a>
-            )}
-        </span>
-    );
-}
-
-/** The terms page as published, under a one-line headline; nothing is derived from it. */
 export function DealTab({ details }: { details: ProgramDetails | undefined }) {
     const t = useTranslations("accelerators.details");
-    const deal = details?.deal;
-    if (!deal) return <Notice>{t("noDeal")}</Notice>;
+    const formatCash = useFormatCash();
+    const summary = publishedValue(details?.deal.summary);
     return (
         <div className="space-y-4">
-            <div className="space-y-1">
-                <p className="text-ink text-base font-semibold">{deal.summary}</p>
-                {deal.instrument && (
-                    <p className="text-ink-3 text-sm">
-                        {t("instrumentIs", { instrument: deal.instrument })}
-                    </p>
-                )}
-            </div>
-            <p className="bg-panel-2 text-ink-3 rounded-lg px-3 py-2 text-xs leading-relaxed">
-                {t("dealHint")}
-            </p>
-            <MarkdownMessage
-                content={deal.terms}
-                className="text-ink-2 [&_h2]:text-ink [&_h3]:text-ink space-y-2 text-sm [&_h2]:mt-4 [&_h2]:font-semibold [&_h3]:font-medium"
+            {summary && <p className="text-ink text-base font-semibold">{summary}</p>}
+            <FactList
+                items={[
+                    fact(t("cash"), details?.deal.cash, values =>
+                        values.map(formatCash).join(" · ")
+                    ),
+                    fact(t("fixedEquity"), details?.deal.equity),
+                    fact(t("instrument"), details?.deal.instrument),
+                    fact(t("comparable"), details?.deal.comparable, value =>
+                        t(value ? "comparableYes" : "comparableNo")
+                    ),
+                    fact(t("benefits"), details?.deal.benefits),
+                ]}
             />
+            {publishedValue(details?.deal.formatted) && (
+                <MarkdownMessage
+                    content={publishedValue(details?.deal.formatted) ?? ""}
+                    className="text-ink-2 space-y-2 text-sm [&_h2]:mt-4 [&_h2]:font-semibold [&_h3]:font-medium"
+                />
+            )}
         </div>
     );
 }
 
-/** When to apply and how: the recorded Cycles as a timeline, then cadence, odds and routes. */
 export function ApplyingTab({
-    view,
     details,
     today,
 }: {
@@ -360,142 +406,87 @@ export function ApplyingTab({
     today: string;
 }) {
     const t = useTranslations("accelerators");
-    const program = view.program;
-    const next = details?.batches.next;
+    const format = useFormatter();
     return (
-        <div className="space-y-6">
-            {program.cycles.length > 0 ? (
-                <ol className="space-y-2">
-                    {program.cycles.map(cycle => (
-                        <CycleItem key={cycle.id} cycle={cycle} today={today} />
+        <div className="space-y-5">
+            {details?.batches.cycles.length ? (
+                <ol className="divide-line divide-y">
+                    {details.batches.cycles.map(cycle => (
+                        <li
+                            key={cycle.id}
+                            className="flex flex-wrap items-baseline justify-between gap-2 py-2 first:pt-0"
+                        >
+                            <span className="text-ink text-sm font-medium">{cycle.label}</span>
+                            <span className="text-ink-2 text-sm">
+                                <Slot
+                                    slot={cycle.announcedDeadline}
+                                    render={value => {
+                                        const date = value.dateOnly ?? value.at?.slice(0, 10);
+                                        return date ? (
+                                            <>
+                                                {format.dateTime(new Date(`${date}T00:00:00Z`), {
+                                                    dateStyle: "long",
+                                                    timeZone: "UTC",
+                                                })}
+                                                {date >= today && (
+                                                    <span className="text-ink-3">
+                                                        {" "}
+                                                        ·{" "}
+                                                        {t("details.inDays", {
+                                                            days: daysBetween(today, date),
+                                                        })}
+                                                    </span>
+                                                )}
+                                            </>
+                                        ) : value.rolling ? (
+                                            t("details.rolling")
+                                        ) : (
+                                            t("details.unknown")
+                                        );
+                                    }}
+                                />
+                            </span>
+                        </li>
                     ))}
                 </ol>
-            ) : next ? (
-                <ol>
-                    <CycleItem
-                        today={today}
-                        expected={next.deadlineKind === "expected"}
-                        cycle={{
-                            id: "announced",
-                            label: next.label,
-                            deadlineAt: null,
-                            deadlineTimezone: null,
-                            rolling: false,
-                            sourceIds: [],
-                            ...(next.deadline ? { dateOnly: next.deadline } : {}),
-                        }}
-                    />
-                </ol>
-            ) : (
-                <Notice>{t("program.noCycles")}</Notice>
-            )}
-            {details && (
-                <dl className="bg-panel-2 grid grid-cols-1 gap-4 rounded-xl p-4 [@container(min-width:560px)]:grid-cols-2">
-                    <Fact label={t("details.cadence")}>
-                        {details.batches.cadence ?? t("details.unknown")}
-                    </Fact>
-                    <Fact label={t("details.howToApply")}>
-                        {details.applyRoutes.length === 0
-                            ? t("details.unknown")
-                            : details.applyRoutes
-                                  .map(route => t(`details.applyRoutes.${route}`))
-                                  .join(" · ")}
-                    </Fact>
-                    {details.selectivity.note && (
-                        <Fact label={t("details.selectivity")}>{details.selectivity.note}</Fact>
-                    )}
-                </dl>
-            )}
-            <div className="flex flex-wrap items-center justify-between gap-3">
-                <p className="text-ink-3 max-w-md text-xs leading-relaxed">
-                    {t("program.portalNote")}
-                </p>
-                <Button asChild size="sm">
-                    <a href={program.applyUrl} target="_blank" rel="noopener noreferrer">
-                        {t("common.portal")}
-                        <ExternalLink className="size-3.5" />
-                    </a>
-                </Button>
-            </div>
+            ) : null}
+            <FactList
+                items={[
+                    fact(t("details.howToApply"), details?.contact.routes),
+                    fact(t("details.applicationUrl"), details?.contact.applicationUrl, value => (
+                        <a
+                            href={value}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-brand-ink break-all hover:underline"
+                        >
+                            {value}
+                        </a>
+                    )),
+                    fact(t("details.cadence"), details?.batches.historicalCadence),
+                    fact(t("details.announcedStarts"), details?.batches.announcedStarts),
+                    fact(t("details.nextDeadline"), details?.batches.nextDeadline),
+                    fact(t("details.residencyEnd"), details?.batches.residencyEnd),
+                    fact(
+                        t("details.selectivity"),
+                        details?.selectivity,
+                        value =>
+                            [
+                                value.rate !== null
+                                    ? format.number(value.rate, {
+                                          style: "percent",
+                                          maximumFractionDigits: 2,
+                                      })
+                                    : null,
+                                value.population,
+                                value.method,
+                            ]
+                                .filter(Boolean)
+                                .join(" · ") || t("details.unknown")
+                    ),
+                ]}
+            />
+            <p className="text-ink-3 text-xs">{t("program.portalNote")}</p>
         </div>
-    );
-}
-
-function CycleItem({
-    cycle,
-    today,
-    expected = false,
-}: {
-    cycle: ProgramCycle;
-    today: string;
-    expected?: boolean;
-}) {
-    const t = useTranslations("accelerators");
-    const format = useFormatter();
-    const iso = cycle.deadlineAt?.slice(0, 10) ?? cycle.dateOnly ?? null;
-    const date = cycle.deadlineAt
-        ? new Date(cycle.deadlineAt)
-        : cycle.dateOnly
-          ? new Date(`${cycle.dateOnly}T00:00:00Z`)
-          : null;
-    const days = iso ? daysBetween(today, iso) : null;
-    let when = t("program.deadlineUnknown");
-    if (cycle.deadlineAt && cycle.deadlineTimezone) {
-        when = t("program.deadlineTimezone", {
-            date: format.dateTime(new Date(cycle.deadlineAt), {
-                dateStyle: "long",
-                timeStyle: "short",
-                timeZone: cycle.deadlineTimezone,
-            }),
-            timezone: cycle.deadlineTimezone,
-        });
-    } else if (cycle.dateOnly) {
-        when = t("program.deadline", {
-            date: format.dateTime(new Date(`${cycle.dateOnly}T00:00:00Z`), {
-                dateStyle: "long",
-                timeZone: "UTC",
-            }),
-        });
-    } else if (cycle.rolling) when = t("program.rolling");
-    const status =
-        days === null ? null : days < 0 ? (
-            <Badge variant="secondary">{t("details.closed")}</Badge>
-        ) : (
-            <Badge variant={days <= 30 ? "warn" : "secondary"}>
-                {t("details.inDays", { days })}
-            </Badge>
-        );
-    return (
-        <li
-            className={cn(
-                "border-line flex items-center gap-4 rounded-xl border p-3",
-                days !== null && days >= 0 && "border-brand/40 bg-brand-soft/20"
-            )}
-        >
-            <div className="bg-panel-2 text-ink flex size-12 shrink-0 flex-col items-center justify-center rounded-lg">
-                {date ? (
-                    <>
-                        <span className="text-ink-3 text-[10px] uppercase leading-none">
-                            {format.dateTime(date, { month: "short", timeZone: "UTC" })}
-                        </span>
-                        <span className="text-lg font-semibold tabular-nums leading-tight">
-                            {format.dateTime(date, { day: "numeric", timeZone: "UTC" })}
-                        </span>
-                    </>
-                ) : cycle.rolling ? (
-                    <Repeat className="text-ink-3 size-5" />
-                ) : (
-                    <CalendarClock className="text-ink-3 size-5" />
-                )}
-            </div>
-            <div className="min-w-0 flex-1 space-y-0.5">
-                <p className="text-ink text-sm font-medium">{cycle.label}</p>
-                <p className="text-ink-3 text-xs">
-                    {when}
-                    {expected && ` · ${t("details.deadlineKind.expected")}`}
-                </p>
-            </div>
-            {status ?? (cycle.rolling && <Badge variant="info">{t("details.rolling")}</Badge>)}
-        </li>
     );
 }

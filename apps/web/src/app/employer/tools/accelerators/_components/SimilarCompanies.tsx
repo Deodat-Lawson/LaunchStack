@@ -146,7 +146,7 @@ function CompanyRow({
             <div className="flex items-start gap-3">
                 <div className="min-w-0 flex-1 space-y-1">
                     <p className="flex flex-wrap items-baseline gap-x-2">
-                        {company.website ? (
+                        {company.website && /^https?:\/\//i.test(company.website) ? (
                             <a
                                 href={company.website}
                                 target="_blank"

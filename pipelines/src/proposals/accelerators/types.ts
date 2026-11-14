@@ -284,7 +284,8 @@ export interface HomeResponse {
     programs: ProgramView[];
     profileReady: boolean;
     canEdit: boolean;
-    costs: { match: number };
+    /** Credits per Program scored; a run's estimate and debit are count × this rate. */
+    costs: { matchPerProgram: number };
 }
 export interface RunView {
     id: string;

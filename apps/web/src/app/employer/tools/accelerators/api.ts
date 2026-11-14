@@ -11,9 +11,10 @@ import type { HomeResponse, ProgramView, RunView } from "@launchstack/pipelines/
 
 import type { Copy } from "~/i18n/copy";
 
-import type { DemoLayer } from "./_lib/demo";
+import type { ProgramDetailsMap } from "./_lib/details";
 
 export type {
+    CatalogueProgram,
     HomeResponse,
     ProgramCycle,
     ProgramView,
@@ -33,11 +34,8 @@ export type {
 } from "@launchstack/pipelines/accelerators";
 
 export type AcceleratorRunView = RunView & { errorCopy?: Copy };
-/**
- * The catalogue home plus demo stand-ins for other workstreams' data. `matchCount` is
- * how many of the listed Programs Match Programs scores.
- */
-export type AcceleratorsHome = HomeResponse & { demo: DemoLayer; matchCount: number };
+/** Public, sourced dossier facts alongside company-specific fit results. */
+export type AcceleratorsHome = HomeResponse & { details: ProgramDetailsMap };
 export class AcceleratorsApiError extends Error {
     constructor(
         message: string,
@@ -88,10 +86,10 @@ export const acceleratorsApi = {
     home: () => call<AcceleratorsHome>("/api/accelerators"),
     program: (id: string) =>
         call<{ program: ProgramView }>(`/api/accelerators/programs/${encodeURIComponent(id)}`),
-    match: () =>
+    match: (programIds: string[], rescore: boolean) =>
         call<{ run: AcceleratorRunView }>("/api/accelerators/match", {
             method: "POST",
-            body: JSON.stringify({}),
+            body: JSON.stringify({ programIds, rescore }),
         }),
     run: (id: string) =>
         call<{ run: AcceleratorRunView }>(`/api/accelerators/runs/${encodeURIComponent(id)}`),

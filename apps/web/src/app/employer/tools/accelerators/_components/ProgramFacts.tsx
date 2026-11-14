@@ -1,12 +1,57 @@
 "use client";
 
+import Image from "next/image";
 import { useFormatter, useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 
 import { Badge } from "~/components/ui/badge";
 import { cn } from "~/lib/utils";
 
-import type { ProgramView, SourcedNarrative } from "../api";
+import type { CatalogueProgram, ProgramView, SourcedNarrative } from "../api";
+
+/** The scraper's placeholder when no logo could be verified as the Program's own. */
+const NO_LOGO = "/accelerators/logos/none.png";
+
+/** The Program's verified logo, or its initial on a tile when none was verified. */
+export function ProgramLogo({
+    program,
+    size,
+}: {
+    program: CatalogueProgram;
+    size: "sm" | "md" | "lg";
+}) {
+    const box = { sm: "size-9 rounded-md", md: "size-12 rounded-lg", lg: "size-16 rounded-xl" }[
+        size
+    ];
+    if (program.logo.path === NO_LOGO) {
+        return (
+            <span
+                aria-hidden="true"
+                className={cn(
+                    "bg-brand-soft text-brand-ink flex shrink-0 items-center justify-center font-semibold",
+                    box,
+                    size === "sm" ? "text-sm" : size === "md" ? "text-lg" : "text-2xl"
+                )}
+            >
+                {program.name.trim().charAt(0).toUpperCase()}
+            </span>
+        );
+    }
+    const pixels = { sm: 36, md: 48, lg: 64 }[size];
+    return (
+        <Image
+            src={program.logo.path}
+            alt=""
+            width={pixels}
+            height={pixels}
+            className={cn(
+                "shrink-0 bg-[var(--paper-panel)] object-contain",
+                box,
+                size === "sm" ? "p-0.5" : "p-1"
+            )}
+        />
+    );
+}
 
 /** A 0–100 score as a ring; an unknown score is an empty ring, never zero. */
 export function ScoreRing({

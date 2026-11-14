@@ -28,7 +28,8 @@ interface AcceleratorsContextValue {
     runBusy: boolean;
     pollError: unknown;
     resumePolling: () => void;
-    match: () => Promise<void>;
+    /** Starts scoring these Programs; the server skips current results unless `rescore`. */
+    match: (programIds: string[], rescore: boolean) => Promise<void>;
 }
 
 const Context = createContext<AcceleratorsContextValue | null>(null);
@@ -137,7 +138,9 @@ export function AcceleratorsProvider({
                 setActiveRun(run);
                 setRestoredRunId(null);
                 setPollError(null);
-                await refresh();
+                // The run-status poll is light; the home (every Program and fit) reloads
+                // once, when the run settles.
+                if (!runIsLive(run)) await refresh();
                 if (disposed || accessDenied.current) return;
                 if (runIsLive(run))
                     timer = window.setTimeout(() => {
@@ -167,36 +170,39 @@ export function AcceleratorsProvider({
         };
     }, [runId, denied, pollNonce, refresh, guardError, clearStoredRun]);
 
-    const match = useCallback(async () => {
-        if (startingRunRef.current || runLiveRef.current) throw new Error(t("runInProgress"));
-        startingRunRef.current = true;
-        setStartingRun(true);
-        try {
-            const { run } = await acceleratorsApi.match();
-            if (accessDenied.current) return;
-            runLiveRef.current = runIsLive(run);
-            setActiveRun(run);
-            setRestoredRunId(null);
-            setPollError(null);
-            if (storageKey && runIsLive(run)) {
-                try {
-                    window.sessionStorage.setItem(storageKey, run.id);
-                } catch {
-                    /* Storage is optional. */
+    const match = useCallback(
+        async (programIds: string[], rescore: boolean) => {
+            if (startingRunRef.current || runLiveRef.current) throw new Error(t("runInProgress"));
+            startingRunRef.current = true;
+            setStartingRun(true);
+            try {
+                const { run } = await acceleratorsApi.match(programIds, rescore);
+                if (accessDenied.current) return;
+                runLiveRef.current = runIsLive(run);
+                setActiveRun(run);
+                setRestoredRunId(null);
+                setPollError(null);
+                if (storageKey && runIsLive(run)) {
+                    try {
+                        window.sessionStorage.setItem(storageKey, run.id);
+                    } catch {
+                        /* Storage is optional. */
+                    }
                 }
+                if (!runIsLive(run)) {
+                    clearStoredRun();
+                    void refresh().catch(() => undefined);
+                }
+            } catch (failure) {
+                guardError(failure);
+                throw failure;
+            } finally {
+                startingRunRef.current = false;
+                setStartingRun(false);
             }
-            if (!runIsLive(run)) {
-                clearStoredRun();
-                void refresh().catch(() => undefined);
-            }
-        } catch (failure) {
-            guardError(failure);
-            throw failure;
-        } finally {
-            startingRunRef.current = false;
-            setStartingRun(false);
-        }
-    }, [storageKey, clearStoredRun, refresh, guardError, t]);
+        },
+        [storageKey, clearStoredRun, refresh, guardError, t]
+    );
 
     return (
         <Context.Provider

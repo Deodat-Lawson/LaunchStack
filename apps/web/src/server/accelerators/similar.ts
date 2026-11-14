@@ -85,7 +85,13 @@ export async function loadSimilarCompanies(
         profileReady: true,
         totalCompanies: counts.companies,
         companies: nearest.map(({ company }) => ({
-            company,
+            company: {
+                ...company,
+                website:
+                    company.website && /^https?:\/\//i.test(company.website)
+                        ? company.website
+                        : null,
+            },
             sharedTerms: sharedTerms(company, profileText),
             application: applicationOf.get(company.id) ?? null,
         })),

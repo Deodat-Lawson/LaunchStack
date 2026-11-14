@@ -30,18 +30,26 @@ export const PROPOSALS_MODELS = {
     draft: { route: "default", temperature: 0.4 },
     rewrite: { route: "default", temperature: 0.3 },
     review: { route: "default", temperature: 0.2 },
+    /**
+     * Accelerator fit grading: temperature 0 so re-scoring the same inputs repeats its
+     * grades on models that accept a temperature (some, like GPT-6 Luna, ignore it).
+     */
+    acceleratorScore: { route: "fast", temperature: 0 },
 } as const satisfies Record<string, ResolveChatModelOptions>;
 
 export type ProposalStage = keyof typeof PROPOSALS_MODELS;
 
-/** Credits per stage, in the ledger's token units. */
+/**
+ * Credits per stage, in the ledger's token units. `programs` is per Program scored:
+ * 167 × 12 ≈ the former flat 2,000 for the twelve-Program matching run.
+ */
 export const PROPOSAL_CREDITS = {
     funders: 2_000,
     extract: 1_000,
     draft: 1_500,
     rewrite: 1_000,
     review: 2_000,
-    programs: 2_000,
+    programs: 167,
 } as const;
 
 export interface RetrieveArgs {

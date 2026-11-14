@@ -1,3 +1,11 @@
+import { join } from "node:path";
+import { loadPublishedCatalogue } from "@launchstack/pipelines/accelerators/catalogue";
+import { available } from "@launchstack/pipelines/accelerators/intelligence";
+import { programDetails } from "~/server/accelerators/details";
+
+jest.mock("@launchstack/pipelines/accelerators/db", () => ({}));
+const baseline = loadPublishedCatalogue(join(__dirname, "../../../../fixtures/accelerators"))
+    .dossiers[0]!;
 import {
     CatalogueProgramSchema,
     FIT_DIMENSION_KEYS,
@@ -80,7 +88,46 @@ function cycle(id: string, fields: Partial<ProgramCycle> = {}): ProgramCycle {
 }
 
 function ids(programs: readonly ProgramView[], filters: Partial<DiscoveryFilters> = {}) {
-    return filterPrograms(programs, { ...DEFAULT_DISCOVERY_FILTERS, ...filters }).map(
+    const details = Object.fromEntries(
+        programs.map(view => {
+            const dossier = structuredClone(baseline);
+            const evidenceIds = [dossier.evidence[0]!.id];
+            dossier.audience.narrative = available(
+                `${view.program.description.text} ${view.program.targetApplicants.text}`,
+                evidenceIds,
+                "fact"
+            );
+            dossier.identity.location = view.program.location
+                ? available(view.program.location.text, evidenceIds, "fact")
+                : { state: "not_checked", value: null, evidenceIds: [], claim: null, detail: null };
+            dossier.tags = [];
+            dossier.batches.cycles = view.program.cycles.map(cycle => ({
+                id: cycle.id,
+                label: cycle.label,
+                announcedDeadline:
+                    cycle.rolling || cycle.deadlineAt || cycle.dateOnly
+                        ? available(
+                              {
+                                  at: cycle.deadlineAt,
+                                  dateOnly: cycle.dateOnly ?? null,
+                                  timezone: cycle.deadlineTimezone,
+                                  rolling: cycle.rolling,
+                              },
+                              evidenceIds,
+                              "fact"
+                          )
+                        : {
+                              state: "not_checked",
+                              value: null,
+                              evidenceIds: [],
+                              claim: null,
+                              detail: null,
+                          },
+            }));
+            return [view.program.id, programDetails(dossier)];
+        })
+    );
+    return filterPrograms(programs, { ...DEFAULT_DISCOVERY_FILTERS, ...filters }, details).map(
         item => item.program.id
     );
 }
@@ -104,15 +151,14 @@ describe("Program text search", () => {
         ["description", "rObOtics"],
         ["target applicants", "SCIENTISTS"],
         ["location", "sINGAPORE"],
-        ["Cycle label", "WINTER"],
     ])("finds case-insensitive terms in the %s", (_field, q) => {
         expect(ids(programs, { q })).toEqual(["match"]);
     });
 
     it("requires every term while allowing terms to occur in different fields", () => {
-        expect(
-            ids(programs, { q: "  NORTHSTAR\t robotics scientists\n singapore winter  " })
-        ).toEqual(["match"]);
+        expect(ids(programs, { q: "  NORTHSTAR\t robotics scientists\n singapore  " })).toEqual([
+            "match",
+        ]);
         expect(ids(programs, { q: "northstar robotics missing" })).toEqual([]);
     });
 
@@ -132,6 +178,22 @@ describe("Program text search", () => {
         expect(ids([sourceOnly], { q: "source-only-healthcare" })).toEqual([]);
         expect(ids([sourceOnly], { q: "metadata-only" })).toEqual([]);
     });
+});
+
+it("ignores catalogue boilerplate and cycle labels when no published narrative supports them", () => {
+    const views = [
+        view("plain", "unmatched", {
+            program: {
+                description: {
+                    ...program.description,
+                    text: "Official pages were checked. Investment terms are not published.",
+                },
+                cycles: [cycle("winter")],
+            },
+        }),
+    ];
+    expect(filterPrograms(views, { ...DEFAULT_DISCOVERY_FILTERS, q: "published" })).toEqual([]);
+    expect(filterPrograms(views, { ...DEFAULT_DISCOVERY_FILTERS, q: "winter" })).toEqual([]);
 });
 
 describe("saved fit filters", () => {

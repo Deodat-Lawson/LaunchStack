@@ -14,11 +14,12 @@ import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { startProposalRun } from "~/server/proposals/executor";
 import { runCopy } from "~/server/proposals/copy";
 
-import { DEMO_LAYER } from "./demo";
-import { isMatchedProgram } from "./matching-scope";
+import { loadProgramDetails } from "./details";
+import { validateProgramIds } from "./run";
 
+/** Scoring is priced per Program scored; the button's estimate is count × this rate. */
 export const ACCELERATOR_COSTS = {
-    match: PROPOSAL_CREDITS.programs,
+    matchPerProgram: PROPOSAL_CREDITS.programs,
 };
 
 export function toAcceleratorRunView(run: RunRecord): AcceleratorRunView {
@@ -41,10 +42,11 @@ export function toAcceleratorRunView(run: RunRecord): AcceleratorRunView {
 }
 
 export async function loadAccelerators(member: WorkspaceContext): Promise<AcceleratorsHome> {
-    const [catalogue, matches, profile] = await Promise.all([
+    const [catalogue, matches, profile, details] = await Promise.all([
         listCatalogue(),
         listCompanyMatches(member.companyId),
         loadOrgProfile(member.companyId, await member.documentScope()),
+        loadProgramDetails(),
     ]);
     const profileHash = profile ? hashValue(profile) : null;
     // No ranking here: the homepage sorts and filters, and fit is one field among many.
@@ -61,8 +63,7 @@ export async function loadAccelerators(member: WorkspaceContext): Promise<Accele
             profile !== null && (profile.facts.length > 0 || profile.summary.trim().length > 0),
         canEdit: member.can("documents.edit"),
         costs: ACCELERATOR_COSTS,
-        matchCount: catalogue.filter(({ program }) => isMatchedProgram(program.id)).length,
-        demo: DEMO_LAYER,
+        details,
     };
 }
 
@@ -82,21 +83,58 @@ async function assertNoLiveRun(companyId: bigint): Promise<void> {
     }
 }
 
-export async function matchPrograms(member: WorkspaceContext): Promise<AcceleratorRunView> {
+/**
+ * Starts scoring the chosen Programs. Pre-checks consider only those Programs. Unless
+ * `rescore` is set, Programs whose saved result is current (same profile, Program and
+ * rubric) are left out, so the run sends, and charges for, only what would change.
+ * The run re-validates its Programs, since the catalogue may change before it executes.
+ */
+export async function matchPrograms(
+    member: WorkspaceContext,
+    programIds: unknown,
+    rescore = false
+): Promise<AcceleratorRunView> {
     const profile = await loadOrgProfile(member.companyId, await member.documentScope());
     if (!profile || (!profile.facts.length && !profile.summary.trim())) {
         throw new AcceleratorError("Build the company profile first", 409, "profile_required");
     }
-    if (!(await listCatalogue()).length) {
+    const catalogue = await listCatalogue();
+    if (!catalogue.length) {
         throw new AcceleratorError("Import Programs before matching", 409, "catalogue_empty");
     }
     await assertNoLiveRun(member.companyId);
+    const chosen = validateProgramIds(
+        programIds,
+        new Set(catalogue.map(({ program }) => program.id))
+    );
+    let ids = chosen;
+    if (!rescore) {
+        const matches = await listCompanyMatches(member.companyId);
+        const programHashes = new Map(
+            catalogue.map(({ program, contentHash }) => [program.id, contentHash])
+        );
+        const profileHash = hashValue(profile);
+        ids = chosen.filter(
+            id =>
+                programFit(matches[id] ?? null, {
+                    profileHash,
+                    programHash: programHashes.get(id)!,
+                }).freshness.status !== "current"
+        );
+        if (!ids.length) {
+            throw new AcceleratorError(
+                "Every chosen Program already has a current result",
+                409,
+                "all_current"
+            );
+        }
+    }
     return toAcceleratorRunView(
         await startProposalRun({
             companyId: member.companyId,
             userId: member.authUserId,
             kind: "programs",
-            input: {},
+            input: { programs: { programIds: ids } },
         })
     );
 }

@@ -125,6 +125,8 @@ export const acceleratorTrackerOpportunities = pgTable(
         submittedOn: date("submitted_on"),
         nextAction: text("next_action"),
         plannedDeadline: timestamp("planned_deadline", { withTimezone: true }),
+        /** Set instead of plannedDeadline when the Program gave a date without a time. */
+        plannedDeadlineOn: date("planned_deadline_on"),
         createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
     },

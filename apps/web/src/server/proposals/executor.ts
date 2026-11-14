@@ -50,10 +50,13 @@ export class InsufficientCreditsError extends Error {
     }
 }
 
-/** What a run of this kind costs at most, for the pre-check. */
-export function creditsFor(kind: RunKind, sections = 1): number {
-    return kind === "draft"
-        ? PROPOSAL_CREDITS[kind] * Math.max(1, sections)
+/**
+ * What a run of this kind costs at most, for the pre-check. `units` counts sections
+ * for drafts and chosen Programs for accelerator scoring; other kinds are flat.
+ */
+export function creditsFor(kind: RunKind, units = 1): number {
+    return kind === "draft" || kind === "programs"
+        ? PROPOSAL_CREDITS[kind] * Math.max(1, units)
         : PROPOSAL_CREDITS[kind];
 }
 
@@ -89,9 +92,12 @@ export async function executeProposalRunForMember(
 /** Queue a run and hand it to the executor. Returns the queued row at once. */
 export async function startProposalRun(args: StartRunArgs): Promise<RunRecord> {
     const kind = RunKindSchema.parse(args.kind);
-    const sections = args.sectionLabels?.length ?? 1;
+    const units =
+        kind === "programs"
+            ? (args.input.programs?.programIds.length ?? 1)
+            : (args.sectionLabels?.length ?? 1);
     if (isMeteringEnforced()) {
-        const required = creditsFor(kind, sections);
+        const required = creditsFor(kind, units);
         if (!(await hasTokens(args.companyId, required)))
             throw new InsufficientCreditsError(required);
     }

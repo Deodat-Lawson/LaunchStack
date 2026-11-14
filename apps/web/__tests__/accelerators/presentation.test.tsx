@@ -13,6 +13,8 @@ import {
     type ProgramView,
 } from "@launchstack/pipelines/accelerators";
 
+import { DealTab } from "~/app/employer/tools/accelerators/_components/ProgramDetailsSections";
+import type { ProgramDetails } from "~/app/employer/tools/accelerators/_lib/details";
 import programFixture from "../../../../fixtures/accelerators/programs/abovea-startup-accelerator.json";
 import { FitPanel } from "~/app/employer/tools/accelerators/_components/FitPanel";
 import { FitStatus, Narrative } from "~/app/employer/tools/accelerators/_components/ProgramFacts";
@@ -25,6 +27,7 @@ jest.mock("~/app/employer/tools/accelerators/_lib/context", () => ({
     ...jest.requireActual("~/app/employer/tools/accelerators/_lib/context"),
     useAccelerators: () => mockUseAccelerators(),
 }));
+beforeEach(() => mockUseAccelerators.mockReturnValue({ home: null }));
 
 const program = CatalogueProgramSchema.parse(programFixture);
 const unknownDimension: FitDimensionResult = {
@@ -172,4 +175,44 @@ it("presents a persisted credit refusal in the reader's Chinese locale", () => {
     });
     renderWithLocale(<RunStatus />, "zh-CN");
     expect(screen.getByRole("alert")).toHaveTextContent(/\p{Script=Han}/u);
+});
+
+it("renders unpublished deal facts as Not published, without invented terms or per-fact links", () => {
+    const unpublished = {
+        state: "unavailable" as const,
+        value: null,
+        detail: null,
+        claim: null,
+        evidenceIds: ["checked"],
+        sources: [
+            {
+                title: "Official terms",
+                url: "https://example.com/terms",
+                checkedAt: "2026-11-01T00:00:00Z",
+            },
+        ],
+    };
+    const details = {
+        deal: {
+            summary: unpublished,
+            formatted: unpublished,
+            cash: unpublished,
+            equity: unpublished,
+            instrument: unpublished,
+            benefits: unpublished,
+            comparable: unpublished,
+        },
+    } as ProgramDetails;
+    renderWithLocale(<DealTab details={details} />, "en");
+    // Every unpublished deal fact is named once, on one line, instead of a field per gap.
+    expect(screen.getByText(/^Not published: /)).toHaveTextContent(/Upfront cash.*Fixed equity/);
+    expect(screen.queryByText(/[$€£]\s?\d|\d\s?%/)).not.toBeInTheDocument();
+    // Sources are listed once for the whole Program, not repeated under each fact.
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+});
+
+it("keeps unchecked facts distinct from unpublished facts", () => {
+    renderWithLocale(<DealTab details={undefined} />, "zh-CN");
+    expect(screen.getByText(/^尚未核查：/)).toBeInTheDocument();
+    expect(screen.queryByText(/^未公布/)).not.toBeInTheDocument();
 });

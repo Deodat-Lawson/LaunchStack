@@ -1,5 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { loadPublishedCatalogue } from "@launchstack/pipelines/accelerators/catalogue";
+import { programDetails } from "~/server/accelerators/details";
 
 import {
     CatalogueProgramSchema,
@@ -38,9 +40,11 @@ jest.mock("~/server/accelerators/access", () => ({
 
 const mockCatalogue = jest.fn();
 const mockMatches = jest.fn();
+const mockIntelligence = jest.fn();
 jest.mock("@launchstack/pipelines/accelerators/db", () => ({
     listCatalogue: (...args: unknown[]) => mockCatalogue(...args),
     listCompanyMatches: (...args: unknown[]) => mockMatches(...args),
+    listProgramIntelligence: (...args: unknown[]) => mockIntelligence(...args),
 }));
 const mockProfile = jest.fn();
 const mockFindLiveRun = jest.fn();
@@ -60,8 +64,6 @@ jest.mock("~/lib/credits", () => ({
 }));
 jest.mock("~/server/deployment", () => ({ isMeteringEnforced: () => true }));
 jest.mock("~/server/db", () => ({ db: {} }));
-const demoLayer = { details: {} };
-jest.mock("~/server/accelerators/demo", () => ({ DEMO_LAYER: { details: {} } }));
 jest.mock("~/lib/storage", () => ({ uploadFile: jest.fn() }));
 jest.mock("~/server/services/document-upload", () => ({ processDocumentUpload: jest.fn() }));
 jest.mock("~/server/inngest/client", () => ({ inngest: { send: jest.fn() } }));
@@ -138,6 +140,7 @@ beforeEach(() => {
         data: makeWorkspaceContext({ companyId: 9n, authUserId: "u1" }),
     });
     mockCatalogue.mockResolvedValue([{ program, contentHash: hashValue(program) }]);
+    mockIntelligence.mockResolvedValue([]);
     mockMatches.mockResolvedValue({});
     mockProfile.mockResolvedValue(profile);
     mockFindLiveRun.mockResolvedValue(null);
@@ -191,9 +194,8 @@ describe("discovery reads", () => {
             ],
             profileReady: true,
             canEdit: true,
-            costs: { match: 2_000 },
-            matchCount: 1,
-            demo: demoLayer,
+            costs: { matchPerProgram: 167 },
+            details: {},
         });
         const detail = await preview(
             new NextRequest(`http://x/api/accelerators/programs/${program.id}`),
@@ -204,6 +206,23 @@ describe("discovery reads", () => {
         expect(mockQueue).not.toHaveBeenCalled();
         expect(mockHasTokens).not.toHaveBeenCalled();
         expect(mockAfter).not.toHaveBeenCalled();
+    });
+
+    it("returns sourced details for every stored dossier, including unpublished fields", async () => {
+        const { dossiers } = loadPublishedCatalogue(
+            join(__dirname, "../../../../../../fixtures/accelerators")
+        );
+        mockIntelligence.mockResolvedValue(
+            dossiers.map(dossier => ({ dossier, contentHash: hashValue(dossier) }))
+        );
+        const response = await home(new NextRequest("http://x/api/accelerators"));
+        const body = await response.json();
+        expect(response.status).toBe(200);
+        expect(Object.keys(body.details)).toHaveLength(dossiers.length);
+        const dossier = dossiers.find(item => item.deal.summary.value === null)!;
+        expect(body.details[dossier.programId]).toEqual(programDetails(dossier));
+        expect(body.details[dossier.programId].deal.summary.value).toBeNull();
+        expect(body.details[dossier.programId].sources.length).toBeGreaterThan(0);
     });
 
     it("marks stale fit without hiding the score or claiming it is current", async () => {
@@ -451,10 +470,74 @@ describe("matching access and admission", () => {
     it("returns 402 without queueing when the company cannot pay the matching price", async () => {
         mockHasTokens.mockResolvedValue(false);
         const response = await match(
-            new NextRequest("http://x/api/accelerators/match", { method: "POST" })
+            new NextRequest("http://x/api/accelerators/match", {
+                method: "POST",
+                body: JSON.stringify({ programIds: [program.id] }),
+            })
         );
         expect(response.status).toBe(402);
         expect(await response.json()).toMatchObject({ code: "insufficient_credits" });
         expect(mockQueue).not.toHaveBeenCalled();
+    });
+
+    describe("reuse of current results", () => {
+        const current = (): StoredFit => ({
+            assessment: ratedAssessment,
+            profileHash: hashValue(profile),
+            programHash: hashValue(program),
+            rubricVersion: FIT_RUBRIC_VERSION,
+            checkedAt: "2026-11-14T00:00:00.000Z",
+        });
+        const post = (body: unknown) =>
+            match(
+                new NextRequest("http://x/api/accelerators/match", {
+                    method: "POST",
+                    body: JSON.stringify(body),
+                })
+            );
+
+        it("sends and prices only the chosen Programs whose result is not current", async () => {
+            const other = { ...program, id: "other-program" };
+            mockCatalogue.mockResolvedValue([
+                { program, contentHash: hashValue(program) },
+                { program: other, contentHash: hashValue(other) },
+            ]);
+            mockMatches.mockResolvedValue({ [program.id]: current() });
+            const response = await post({ programIds: [program.id, other.id] });
+            expect(response.status).toBe(200);
+            expect(mockHasTokens).toHaveBeenCalledWith(9n, 167);
+            expect(mockQueue).toHaveBeenCalledWith(
+                expect.objectContaining({ input: { programs: { programIds: [other.id] } } })
+            );
+        });
+
+        it("refuses a run when every chosen result is current, without charging", async () => {
+            mockMatches.mockResolvedValue({ [program.id]: current() });
+            const response = await post({ programIds: [program.id] });
+            expect(response.status).toBe(409);
+            expect(await response.json()).toMatchObject({ code: "all_current" });
+            expect(mockHasTokens).not.toHaveBeenCalled();
+            expect(mockQueue).not.toHaveBeenCalled();
+        });
+
+        it("re-scores current results only when asked", async () => {
+            mockMatches.mockResolvedValue({ [program.id]: current() });
+            const response = await post({ programIds: [program.id], rescore: true });
+            expect(response.status).toBe(200);
+            expect(mockQueue).toHaveBeenCalledWith(
+                expect.objectContaining({ input: { programs: { programIds: [program.id] } } })
+            );
+        });
+
+        it("re-scores an out-of-date result without being asked", async () => {
+            mockMatches.mockResolvedValue({
+                [program.id]: { ...current(), profileHash: "an-older-profile" },
+            });
+            const response = await post({ programIds: [program.id] });
+            expect(response.status).toBe(200);
+            expect(mockQueue).toHaveBeenCalledWith(
+                expect.objectContaining({ input: { programs: { programIds: [program.id] } } })
+            );
+        });
     });
 });

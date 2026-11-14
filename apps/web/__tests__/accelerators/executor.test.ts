@@ -27,7 +27,7 @@ jest.mock("@launchstack/pipelines/proposals", () => ({
         draft: 1_500,
         rewrite: 1_000,
         review: 2_000,
-        programs: 2_000,
+        programs: 167,
     },
     queueProposalRun: jest.fn(),
     executeProposalRun: jest.fn(),
@@ -87,21 +87,21 @@ describe("Program matching credit admission", () => {
     it.each<[RunKind, number, number]>([
         ["draft", 3, 4_500],
         ["draft", 0, 1_500],
-        ["programs", 1, 2_000],
-        ["programs", 3, 2_000],
-    ])("prices %s with %i sections at %i credits", (kind, count, expected) => {
+        ["programs", 1, 167],
+        ["programs", 12, 2_004],
+    ])("prices %s with %i units at %i credits", (kind, count, expected) => {
         expect(creditsFor(kind, count)).toBe(expected);
     });
 
-    it("queues company matching at its one fixed price", async () => {
+    it("queues company matching priced per chosen Program", async () => {
         const queued = await startProposalRun({
             companyId: 5n,
             userId: "writer",
             kind: "programs",
-            input: {},
+            input: { programs: { programIds: ["a", "b", "c"] } },
         });
         expect(queued).toEqual(run);
-        expect(mockCredits).toHaveBeenCalledWith(5n, 2_000);
+        expect(mockCredits).toHaveBeenCalledWith(5n, 501);
         expect(mockSend).toHaveBeenCalledWith({
             name: "proposals/run.requested",
             data: { runId: run.id, companyId: "5", userId: "writer" },
@@ -111,8 +111,13 @@ describe("Program matching credit admission", () => {
     it("returns the required credit amount without dispatching when the company cannot pay", async () => {
         mockCredits.mockResolvedValue(false);
         await expect(
-            startProposalRun({ companyId: 5n, userId: "writer", kind: "programs", input: {} })
-        ).rejects.toMatchObject({ status: 402, required: 2_000 });
+            startProposalRun({
+                companyId: 5n,
+                userId: "writer",
+                kind: "programs",
+                input: { programs: { programIds: ["a", "b"] } },
+            })
+        ).rejects.toMatchObject({ status: 402, required: 334 });
         expect(mockQueue).not.toHaveBeenCalled();
         expect(mockSend).not.toHaveBeenCalled();
     });

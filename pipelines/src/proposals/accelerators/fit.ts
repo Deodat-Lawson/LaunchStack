@@ -10,8 +10,11 @@ import { IdSchema } from "./types";
  * so that results are repeatable and testable.
  */
 
-/** Bump when weights, ratings, cutoff or grading rules change; older results then read as out of date. */
-export const FIT_RUBRIC_VERSION = "fit-v1";
+/**
+ * Bump when weights, ratings, cutoff or grading rules change; older results then read as out of date.
+ * fit-v2: the portfolio dimension is graded for Supported accelerators from similar past companies.
+ */
+export const FIT_RUBRIC_VERSION = "fit-v2";
 
 /** Keys match Workstream 3's screens. Weights sum to 100. */
 export const FIT_DIMENSIONS = [
@@ -36,6 +39,9 @@ export type FitRating = (typeof FIT_RATINGS)[number];
 /** Minimum share (percent) of applicable weight that must be rated for an overall score. */
 export const MIN_FIT_COVERAGE = 70;
 
+/** Most Programs one scoring run may cover; the user chooses which. */
+export const MAX_PROGRAMS_PER_RUN = 100;
+
 const FitRatingSchema = z.union([
     z.literal(0),
     z.literal(25),
@@ -44,12 +50,29 @@ const FitRatingSchema = z.union([
     z.literal(100),
 ]);
 
+/** A past accepted company cited as portfolio evidence, with how close it is to the profile. */
+export const PortfolioMatchSchema = z
+    .object({
+        /** `PastCompany.id` (`${programId}:${slug}`). */
+        companyId: z.string().trim().min(1).max(200),
+        name: z.string().trim().min(1),
+        batch: z.string(),
+        /** Cosine similarity of the profile and the company embeddings. */
+        similarity: z.number().min(-1).max(1),
+        /** Industries and tags the profile also names. */
+        sharedTerms: z.array(z.string()),
+    })
+    .strict();
+export type PortfolioMatch = z.infer<typeof PortfolioMatchSchema>;
+
 export const FitEvidenceSchema = z
     .object({
-        /** IDs from the Program's `sources`. */
+        /** IDs from the Program's `sources` or its dossier evidence. */
         sourceIds: z.array(IdSchema),
         /** Core-profile evidence numbers. */
         companyEvidenceIds: z.array(z.number().int().positive()),
+        /** Portfolio dimension only: the past companies the rating rests on (fit-v2). */
+        portfolioCompanies: z.array(PortfolioMatchSchema).optional(),
     })
     .strict();
 export type FitEvidence = z.infer<typeof FitEvidenceSchema>;
@@ -73,7 +96,10 @@ export const FitDimensionResultSchema = z
             });
         }
         if (result.score !== null) {
-            if (result.evidence.sourceIds.length === 0) {
+            if (
+                result.evidence.sourceIds.length === 0 &&
+                !result.evidence.portfolioCompanies?.length
+            ) {
                 ctx.addIssue({
                     code: z.ZodIssueCode.custom,
                     path: ["evidence", "sourceIds"],
@@ -148,31 +174,91 @@ export function summarizeFit(dimensions: Pick<FitDimensions, FitDimensionKey>): 
 }
 
 /**
- * Answers "has this Program's past-company data been collected?". Passed in rather
- * than looked up here, so scoring never depends on how or where that data is stored.
+ * What the portfolio dimension rests on, looked up per Program. Passed in rather than
+ * looked up here, so scoring never depends on how or where past-company data is stored.
+ * `matches` are the past companies nearest the profile, closest first;
+ * `companyEvidenceIds` are the profile excerpts behind the text that was compared.
  */
-export type IsSupportedAccelerator = (programId: string) => Promise<boolean>;
+export type PortfolioEvidence =
+    | { supported: false }
+    | { supported: true; matches: PortfolioMatch[]; companyEvidenceIds: number[] };
+export type PortfolioEvidenceLookup = (programId: string) => Promise<PortfolioEvidence>;
 
-const NO_PORTFOLIO_EVIDENCE: FitEvidence = { sourceIds: [], companyEvidenceIds: [] };
+/** How many of the nearest past companies the portfolio rating averages over. */
+export const PORTFOLIO_TOP_MATCHES = 5;
 
 /**
- * The portfolio dimension is decided by rubric rule, not by the model.
- * Under fit-v1 it does not apply to any Program: unsupported Programs have no
- * past-company data, and similar-company results are not yet connected for
- * supported ones. Connecting them changes the rules, so it needs a new rubric version.
+ * Mean cosine similarity of the five nearest past companies → anchored rating,
+ * highest threshold first. Calibrated on the YC portfolio (6,364 companies,
+ * text-embedding-3-large): an unrelated bakery profile averages 0.39, a profile
+ * with no product facts 0.45, adjacent markets 0.52–0.59, and a product that YC
+ * funded several times over 0.70. Recalibrate when the embedding model changes.
+ * Dissimilar past companies never prove incompatibility, so the rule never returns 0.
+ */
+export const PORTFOLIO_SIMILARITY_ANCHORS: readonly { min: number; score: FitRating }[] = [
+    { min: 0.68, score: 100 },
+    { min: 0.6, score: 75 },
+    { min: 0.52, score: 50 },
+    { min: Number.NEGATIVE_INFINITY, score: 25 },
+];
+
+/** The anchored rating for the mean similarity of the nearest matches; null without matches. */
+export function portfolioRating(matches: readonly Pick<PortfolioMatch, "similarity">[]): {
+    score: FitRating | null;
+    similarity: number | null;
+} {
+    const top = matches.slice(0, PORTFOLIO_TOP_MATCHES);
+    if (top.length === 0) return { score: null, similarity: null };
+    const similarity = top.reduce((sum, match) => sum + match.similarity, 0) / top.length;
+    const anchor = PORTFOLIO_SIMILARITY_ANCHORS.find(({ min }) => similarity >= min)!;
+    return { score: anchor.score, similarity };
+}
+
+/**
+ * The portfolio dimension is decided by rubric rule, not by the model. It does not
+ * apply outside the Supported set (no past-company data is collected there). Inside
+ * it, the nearest past companies are rated by `portfolioRating`; without them, or
+ * without profile excerpts behind the compared text, the dimension is unknown.
  */
 export async function portfolioDimension(
     programId: string,
-    isSupported: IsSupportedAccelerator
+    lookup: PortfolioEvidenceLookup
 ): Promise<FitDimensionResult> {
-    const supported = await isSupported(programId);
+    const found = await lookup(programId);
+    if (!found.supported) {
+        return {
+            score: null,
+            applicable: false,
+            note: "Past-company data is not collected for this accelerator.",
+            evidence: { sourceIds: [], companyEvidenceIds: [] },
+        };
+    }
+    const matches = found.matches.slice(0, PORTFOLIO_TOP_MATCHES);
+    const { score, similarity } = portfolioRating(matches);
+    if (score === null || similarity === null || found.companyEvidenceIds.length === 0) {
+        return {
+            score: null,
+            applicable: true,
+            note:
+                matches.length === 0
+                    ? "No past company of this accelerator could be compared with the profile."
+                    : "The profile's product and market facts cite no source excerpt to compare.",
+            evidence: { sourceIds: [], companyEvidenceIds: [] },
+        };
+    }
+    const names = matches.map(match => match.name).join(", ");
     return {
-        score: null,
-        applicable: false,
-        note: supported
-            ? "Similar past companies are not yet part of the score."
-            : "Past-company data is not collected for this accelerator.",
-        evidence: NO_PORTFOLIO_EVIDENCE,
+        score,
+        applicable: true,
+        note: `The ${matches.length} closest past companies (${names}) average ${Math.round(similarity * 100)}% similarity to the profile.`.slice(
+            0,
+            500
+        ),
+        evidence: {
+            sourceIds: [],
+            companyEvidenceIds: [...new Set(found.companyEvidenceIds)].sort((a, b) => a - b),
+            portfolioCompanies: matches,
+        },
     };
 }
 

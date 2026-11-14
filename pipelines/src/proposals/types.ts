@@ -314,6 +314,8 @@ export const RunInputSchema = z.object({
     rewrite: z
         .object({ preset: RewritePresetSchema, instruction: z.string().max(600).optional() })
         .optional(),
+    /** Accelerator scoring (`programs` runs): the Programs the user chose to score. */
+    programs: z.object({ programIds: z.array(z.string().min(1).max(64)) }).optional(),
 });
 export type RunInput = z.infer<typeof RunInputSchema>;
 

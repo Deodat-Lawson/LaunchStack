@@ -7,6 +7,9 @@ import {
     FitDimensionResultSchema,
     fitFreshness,
     portfolioDimension,
+    portfolioRating,
+    type PortfolioEvidence,
+    type PortfolioMatch,
     programFit,
     summarizeFit,
     type FitAssessmentV1,
@@ -220,27 +223,83 @@ describe("fitFreshness", () => {
 });
 
 describe("portfolioDimension", () => {
-    it.each([true, false])("does not apply under fit-v1 (supported: %s)", async supported => {
+    const match = (name: string, similarity: number): PortfolioMatch => ({
+        companyId: `y-combinator:${name.toLowerCase()}`,
+        name,
+        batch: "Winter 2021",
+        similarity,
+        sharedTerms: [],
+    });
+    const lookup = (found: PortfolioEvidence) => () => Promise.resolve(found);
+
+    it("asks about the Program it grades", async () => {
         const asked: string[] = [];
-        const result = await portfolioDimension("y-combinator", id => {
+        await portfolioDimension("y-combinator", id => {
             asked.push(id);
-            return Promise.resolve(supported);
+            return Promise.resolve({ supported: false });
         });
         expect(asked).toEqual(["y-combinator"]);
-        expect(result.applicable).toBe(false);
-        expect(result.score).toBeNull();
-        expect(FitDimensionResultSchema.safeParse(result).success).toBe(true);
     });
 
-    it("explains supported and unsupported Programs differently", async () => {
-        const supported = await portfolioDimension("y-combinator", () => Promise.resolve(true));
-        const unsupported = await portfolioDimension("antler", () => Promise.resolve(false));
-        expect(supported.note).not.toBe(unsupported.note);
-    });
-
-    it("leaves the total without lowering coverage", async () => {
-        const portfolio = await portfolioDimension("antler", () => Promise.resolve(false));
+    it("does not apply outside the Supported set and leaves the total", async () => {
+        const portfolio = await portfolioDimension("antler", lookup({ supported: false }));
+        expect(portfolio).toMatchObject({ score: null, applicable: false });
+        expect(FitDimensionResultSchema.safeParse(portfolio).success).toBe(true);
         expect(summarizeFit({ ...example, portfolio })).toEqual(summarizeFit(example));
+    });
+
+    it("is unknown, not inapplicable, for a Supported Program without matches", async () => {
+        const portfolio = await portfolioDimension(
+            "y-combinator",
+            lookup({ supported: true, matches: [], companyEvidenceIds: [1] })
+        );
+        expect(portfolio).toMatchObject({ score: null, applicable: true });
+        expect(FitDimensionResultSchema.safeParse(portfolio).success).toBe(true);
+        // Unknown stays in the total and lowers coverage.
+        expect(summarizeFit({ ...example, portfolio }).coverage).toBeLessThan(
+            summarizeFit(example).coverage
+        );
+    });
+
+    it("is unknown when no profile excerpt backs the compared text", async () => {
+        const portfolio = await portfolioDimension(
+            "y-combinator",
+            lookup({ supported: true, matches: [match("Acme", 0.7)], companyEvidenceIds: [] })
+        );
+        expect(portfolio).toMatchObject({ score: null, applicable: true });
+    });
+
+    it("rates a Supported Program from its nearest past companies, citing them", async () => {
+        const matches = [0.66, 0.64, 0.62, 0.6, 0.58, 0.2].map((similarity, index) =>
+            match(`Company${index}`, similarity)
+        );
+        const portfolio = await portfolioDimension(
+            "y-combinator",
+            lookup({ supported: true, matches, companyEvidenceIds: [4, 1, 4] })
+        );
+        expect(portfolio).toMatchObject({
+            score: 75,
+            applicable: true,
+            evidence: { sourceIds: [], companyEvidenceIds: [1, 4] },
+        });
+        expect(portfolio.evidence.portfolioCompanies).toEqual(matches.slice(0, 5));
+        expect(portfolio.note).toContain("Company0");
+        expect(FitDimensionResultSchema.safeParse(portfolio).success).toBe(true);
+    });
+
+    it.each([
+        [0.7, 100],
+        [0.68, 100],
+        [0.6, 75],
+        [0.55, 50],
+        [0.45, 25],
+        [-0.1, 25],
+    ] as const)("maps mean similarity %s to %s and never to 0", (similarity, score) => {
+        expect(portfolioRating([{ similarity }])).toEqual({ score, similarity });
+    });
+
+    it("has no rating without matches", () => {
+        expect(portfolioRating([])).toEqual({ score: null, similarity: null });
     });
 });
 

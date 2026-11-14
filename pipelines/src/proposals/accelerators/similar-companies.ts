@@ -186,10 +186,22 @@ export function normalizeYcOssCompany(raw: unknown, programId: string): PastComp
         regions: list(record.regions),
         status: text(record.status),
         teamSize: record.team_size ?? null,
-        website: text(record.website),
-        profileUrl: text(record.url),
+        website: httpUrl(record.website),
+        profileUrl: httpUrl(record.url),
         sourceUrl: record.api,
     };
+}
+
+/** Only http(s) links reach the screens; anything else (javascript:, data:) is dropped. */
+function httpUrl(value: string | null | undefined): string | null {
+    const candidate = text(value);
+    if (!candidate) return null;
+    try {
+        const { protocol } = new URL(candidate);
+        return protocol === "http:" || protocol === "https:" ? candidate : null;
+    } catch {
+        return null;
+    }
 }
 
 const EMBEDDING_TEXT_LIMIT = 2_000;
@@ -242,6 +254,16 @@ export function profileEmbeddingText(profile: {
     return parts.filter(Boolean).join("\n").slice(0, EMBEDDING_TEXT_LIMIT);
 }
 
+/** Profile excerpt numbers cited by the facts `profileEmbeddingText` compares, ascending. */
+export function profileEmbeddingEvidenceIds(profile: {
+    facts: { key: string; cites: number[] }[];
+}): number[] {
+    const cited = profile.facts
+        .filter(fact => PROFILE_FACT_KEYS.includes(fact.key))
+        .flatMap(fact => fact.cites);
+    return [...new Set(cited)].sort((a, b) => a - b);
+}
+
 /**
  * A past company's industries and tags that the profile also names, so a match
  * explains itself with evidence rather than a bare similarity number.
@@ -259,8 +281,8 @@ export function sharedTerms(company: PastCompany, profileText: string): string[]
 
 /**
  * The application text between two anchors of a fetched page, excluding the
- * page's navigation and footer. Returns null when the start anchor is missing,
- * so a changed page fails loudly instead of storing the wrong text.
+ * page's navigation and footer. Returns null when either anchor is missing, so a
+ * changed page fails loudly instead of storing the wrong text.
  */
 export function extractApplicationWindow(
     pageText: string,
@@ -268,8 +290,9 @@ export function extractApplicationWindow(
 ): string | null {
     const start = pageText.indexOf(anchors.startAt);
     if (start < 0) return null;
-    const end = anchors.endBefore ? pageText.indexOf(anchors.endBefore, start) : -1;
-    return pageText.slice(start, end > start ? end : undefined).trim();
+    if (!anchors.endBefore) return pageText.slice(start).trim();
+    const end = pageText.indexOf(anchors.endBefore, start + anchors.startAt.length);
+    return end < 0 ? null : pageText.slice(start, end).trim();
 }
 
 const QUESTION_OPENER =

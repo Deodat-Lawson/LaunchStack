@@ -11,6 +11,7 @@ import {
     selectTrackerOpportunity,
     trackerCompletionTime,
     type CreateTrackerTask,
+    type OfficialDeadline,
     type SaveTrackerOpportunity,
     type TrackerOpportunity,
     type TrackerTask,
@@ -45,6 +46,7 @@ function opportunityView(row: OpportunityRow, children: TaskRow[] = []): Tracker
         submittedOn: row.submittedOn,
         nextAction: row.nextAction,
         plannedDeadline: row.plannedDeadline?.toISOString() ?? null,
+        plannedDeadlineOn: row.plannedDeadlineOn,
         createdAt: row.createdAt.toISOString(),
         updatedAt: row.updatedAt.toISOString(),
         tasks: children.map(taskView),
@@ -115,10 +117,18 @@ async function withProgramLock<T>(
     });
 }
 
+/** The row values for a cycle's official deadline: an instant, a date, or nothing. */
+function plannedFrom(deadline: OfficialDeadline | null) {
+    return {
+        plannedDeadline: deadline?.at ? new Date(deadline.at) : null,
+        plannedDeadlineOn: deadline?.at ? null : (deadline?.on ?? null),
+    };
+}
+
 export async function saveTrackerOpportunity(
     companyId: bigint,
     input: SaveTrackerOpportunity,
-    officialDeadline: string | null
+    officialDeadline: OfficialDeadline | null
 ): Promise<TrackerOpportunity> {
     const id = await withProgramLock(companyId, input.programId, async tx => {
         const rows = await tx
@@ -132,14 +142,15 @@ export async function saveTrackerOpportunity(
             );
         const selection = selectTrackerOpportunity(rows, input.cycleId ?? null);
         if (selection.kind === "existing") return selection.opportunity.id;
-        const plannedDeadline = officialDeadline ? new Date(officialDeadline) : null;
+        const planned = plannedFrom(officialDeadline);
         if (selection.kind === "upgrade") {
             const row = selection.opportunity;
+            const hasPlan = row.plannedDeadline !== null || row.plannedDeadlineOn !== null;
             await tx
                 .update(opportunities)
                 .set({
                     cycleId: input.cycleId,
-                    plannedDeadline: row.plannedDeadline ?? plannedDeadline,
+                    ...(hasPlan ? {} : planned),
                     updatedAt: new Date(),
                 })
                 .where(and(eq(opportunities.companyId, companyId), eq(opportunities.id, row.id)));
@@ -151,7 +162,7 @@ export async function saveTrackerOpportunity(
                 companyId,
                 programId: input.programId,
                 cycleId: input.cycleId ?? null,
-                plannedDeadline,
+                ...planned,
             })
             .returning({ id: opportunities.id });
         return row!.id;
@@ -163,7 +174,7 @@ export async function updateTrackerOpportunity(
     companyId: bigint,
     id: string,
     patch: UpdateTrackerOpportunity,
-    officialDeadline: string | null
+    officialDeadline: OfficialDeadline | null
 ): Promise<TrackerOpportunity> {
     const existing = await getTrackerOpportunity(companyId, id);
     if (!existing) missing();
@@ -195,24 +206,24 @@ export async function updateTrackerOpportunity(
                     );
             }
         }
-        const { plannedDeadline, ...fields } = patch;
+        const { plannedDeadline, plannedDeadlineOn, ...fields } = patch;
+        const hasPlan = row.plannedDeadline !== null || row.plannedDeadlineOn !== null;
+        const choosingCycle = row.cycleId === null && patch.cycleId != null;
+        const planned =
+            plannedDeadline !== undefined || plannedDeadlineOn !== undefined
+                ? {
+                      ...(plannedDeadline !== undefined && {
+                          plannedDeadline:
+                              plannedDeadline === null ? null : new Date(plannedDeadline),
+                      }),
+                      ...(plannedDeadlineOn !== undefined && { plannedDeadlineOn }),
+                  }
+                : choosingCycle && !hasPlan
+                  ? plannedFrom(officialDeadline)
+                  : {};
         await tx
             .update(opportunities)
-            .set({
-                ...fields,
-                plannedDeadline:
-                    plannedDeadline !== undefined
-                        ? plannedDeadline === null
-                            ? null
-                            : new Date(plannedDeadline)
-                        : row.cycleId === null &&
-                            patch.cycleId != null &&
-                            row.plannedDeadline === null &&
-                            officialDeadline
-                          ? new Date(officialDeadline)
-                          : row.plannedDeadline,
-                updatedAt: new Date(),
-            })
+            .set({ ...fields, ...planned, updatedAt: new Date() })
             .where(and(eq(opportunities.companyId, companyId), eq(opportunities.id, id)));
     });
     return (await getTrackerOpportunity(companyId, id)) ?? missing();

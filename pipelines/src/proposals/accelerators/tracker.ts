@@ -30,6 +30,7 @@ const opportunityFields = {
     submittedOn: dateOnly.nullable(),
     nextAction: z.string().trim().max(4_000).nullable(),
     plannedDeadline: z.string().datetime({ offset: true }).nullable(),
+    plannedDeadlineOn: dateOnly.nullable(),
 };
 
 /** Saving is idempotent; edits to an existing opportunity use PATCH instead. */
@@ -88,10 +89,18 @@ export interface TrackerOpportunity {
     notes: string;
     submittedOn: string | null;
     nextAction: string | null;
+    /** The deadline planned against when the cycle was chosen: an instant, or a date the Program gave without a time. */
     plannedDeadline: string | null;
+    plannedDeadlineOn: string | null;
     createdAt: string;
     updatedAt: string;
     tasks: TrackerTask[];
+}
+
+/** A cycle's official deadline at the moment it is tracked; at most one side is set. */
+export interface OfficialDeadline {
+    at: string | null;
+    on: string | null;
 }
 
 /** Called under the company/Program transaction lock; cycles never replace past outcomes. */

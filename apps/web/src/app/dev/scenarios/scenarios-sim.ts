@@ -18,6 +18,7 @@
 import { moodWords } from "~/lib/scenarios/words";
 import {
     SCENARIO_LIMITS,
+    outcomeOf,
     type ScenarioDetail,
     type ScenarioFileOption,
     type ScenarioInterview,
@@ -467,6 +468,7 @@ function summaryOf(run: SimRun, phase: Phase): ScenarioSummary {
         createdByName: run.createdByName,
         shared: run.shared,
         headline: phase.status === "done" ? run.script.report.headline : null,
+        outcome: phase.status === "done" ? outcomeOf(run.script.report.factions) : null,
         contractVersion: run.v2 ? 2 : 1,
     };
 }

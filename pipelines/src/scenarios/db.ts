@@ -143,6 +143,8 @@ export interface RunListRow {
     generation: number;
     /** Rounds the world has completed (v2 progress). */
     worldRound: number;
+    /** People per camp from the report ({ supportive: 6, … }); null until there is a report. */
+    campSizes: Partial<Record<"supportive" | "neutral" | "critical", number>> | null;
 }
 
 /** Runs the viewer made, plus runs shared with the workspace. */
@@ -172,6 +174,12 @@ export async function listVisibleRuns(args: {
             worldRound: sql<number>`coalesce((${scenarioRuns.world} ->> 'round')::int, 0)`.mapWith(
                 Number
             ),
+            // Counts, not the member ids: the list shows each run's outcome without the world.
+            campSizes: sql<RunListRow["campSizes"]>`(
+                select jsonb_object_agg(f ->> 'stance', jsonb_array_length(f -> 'agentIds'))
+                from jsonb_array_elements(${scenarioRuns.report} -> 'factions') as f
+                where jsonb_typeof(f -> 'agentIds') = 'array'
+            )`,
         })
         .from(scenarioRuns)
         .where(
@@ -190,6 +198,7 @@ export async function listVisibleRuns(args: {
         ...r,
         sharedAt: r.sharedAt ?? null,
         finishedAt: r.finishedAt ?? null,
+        campSizes: r.campSizes ?? null,
     }));
 }
 

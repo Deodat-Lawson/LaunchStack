@@ -10,7 +10,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "~/components/ui/h
 import type { ScenarioPerson, Stance } from "~/lib/scenarios/types";
 import { cn } from "~/lib/utils";
 
-import { atHandle, stanceLabel } from "~/lib/scenarios/words";
+import { STANCE_RING, atHandle, stanceLabel } from "~/lib/scenarios/words";
 import { StanceDot } from "./Bits";
 
 /**
@@ -74,14 +74,6 @@ function portraitUri(handle: string): string {
     }
     return uri;
 }
-
-const STANCE_RING: Record<Stance, string> = {
-    [-2]: "ring-danger",
-    [-1]: "ring-danger/60",
-    [0]: "ring-ink-4/60",
-    [1]: "ring-info/60",
-    [2]: "ring-info",
-};
 
 /**
  * A person's face on their backdrop; the narrator and the draft under test
@@ -149,17 +141,22 @@ export function Portrait({
 /**
  * Hovering a name or a face in the feed shows who they are, the way a social
  * network does: face, role, bio, where they stand and their following.
- * Touch has no hover; the name still opens the full profile.
+ * Touch has no hover; the name still opens the full profile. With `at`, the
+ * card speaks for one round of the Room: where they stood then and what they
+ * said in it.
  */
 export function PersonHoverCard({
     person,
+    at,
     children,
 }: {
     person: ScenarioPerson | undefined;
+    at?: { round: number; stance: Stance; said: string | null };
     children: ReactNode;
 }) {
     const t = useTranslations("scenarios.people");
     const tw = useTranslations("scenarios.words");
+    const tr = useTranslations("scenarios.room");
     if (!person) return <>{children}</>;
     return (
         <HoverCard openDelay={350} closeDelay={80}>
@@ -171,26 +168,36 @@ export function PersonHoverCard({
                         <div className="text-ink truncate text-[14px] font-semibold">
                             {person.name}
                         </div>
-                        <div className="text-ink-3 truncate text-xs">
-                            {atHandle(person.handle)}
-                        </div>
+                        <div className="text-ink-3 truncate text-xs">{atHandle(person.handle)}</div>
                         <div className="text-ink-2 mt-1 line-clamp-2 text-[12.5px] leading-snug">
                             {person.role}
                         </div>
                     </div>
                 </div>
-                {person.bio && (
-                    <p className="text-ink-2 line-clamp-3 px-4 text-[13px] leading-snug">
-                        {person.bio}
+                {at?.said ? (
+                    <p className="text-ink line-clamp-4 px-4 text-[13px] leading-snug">
+                        “{at.said}”
                     </p>
+                ) : (
+                    person.bio && (
+                        <p className="text-ink-2 line-clamp-3 px-4 text-[13px] leading-snug">
+                            {person.bio}
+                        </p>
+                    )
                 )}
                 <div className="border-line-2 text-ink-3 mt-3 flex items-center justify-between gap-3 border-t px-4 py-2.5 text-xs">
                     <span className="text-ink-2 inline-flex min-w-0 items-center gap-1.5">
-                        <StanceDot stance={person.stance} />
-                        <span className="truncate">{stanceLabel(tw, person.stance)}</span>
+                        <StanceDot stance={at ? at.stance : person.stance} />
+                        <span className="truncate">
+                            {stanceLabel(tw, at ? at.stance : person.stance)}
+                        </span>
                     </span>
                     <span className="shrink-0 tabular-nums">
-                        {t("followers", { count: person.followers })}
+                        {at
+                            ? at.round === 0
+                                ? tr("atStart")
+                                : tr("afterRound", { round: at.round })
+                            : t("followers", { count: person.followers })}
                     </span>
                 </div>
             </HoverCardContent>

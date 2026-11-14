@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Pencil, Trash2, X } from "lucide-react";
+import { Check, CircleStop, MoreHorizontal, Pencil, Trash2, Users, X } from "lucide-react";
 import { useFormatter, useNow, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -14,10 +14,15 @@ import { SkeletonBlock, SkeletonRows } from "~/components/tools/SkeletonRows";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { ConfirmDialog } from "~/components/ui/confirm-dialog";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
 import { Progress } from "~/components/ui/progress";
-import { Switch } from "~/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
 import { SCENARIO_LIMITS, type ScenarioDetail } from "~/lib/scenarios/types";
@@ -34,7 +39,7 @@ import { ReportTab } from "../_components/ReportTab";
 import { SourcesTab } from "../_components/SourcesTab";
 import { useScenarios } from "../_lib/context";
 import { runPath, type RunTab, type ScenariosScreen } from "../_lib/screens";
-import { isLive, progressLabel, progressValue, sizeLabel } from "~/lib/scenarios/words";
+import { isLive, progressLabel, progressValue } from "~/lib/scenarios/words";
 import { useErrorText } from "~/lib/tools/errorText";
 
 type RunScreenProps = { screen: Extract<ScenariosScreen, { kind: "run" }> };
@@ -144,49 +149,30 @@ export function RunScreen({ screen }: RunScreenProps) {
 
             {run.canManage && live && <EventBox run={run} onAdded={() => void res.reload()} />}
 
-            <Tabs value={tab} onValueChange={v => setTab(v as RunTab)} className="gap-5">
-                <TabsList className="@max-sm:w-full max-w-full justify-start overflow-x-auto">
-                    <TabsTrigger
-                        value="report"
-                        className="@max-sm:flex-1 @max-sm:px-1.5 flex-none px-3"
-                    >
-                        {t("tabs.report")}
-                    </TabsTrigger>
-                    <TabsTrigger
-                        value="feed"
-                        className="@max-sm:flex-1 @max-sm:px-1.5 flex-none px-3"
-                    >
+            <Tabs value={tab} onValueChange={v => setTab(v as RunTab)} className="gap-7">
+                <TabsList variant="line" aria-label={t("tabsLabel")}>
+                    <TabsTrigger value="report">{t("tabs.report")}</TabsTrigger>
+                    <TabsTrigger value="feed">
                         {t("tabs.feed")}
                         {run.posts.length > 0 && (
-                            <span className="text-ink-3 @max-sm:hidden font-mono text-[11px] tabular-nums">
+                            <span className="text-ink-3 text-xs font-normal tabular-nums">
                                 {run.posts.length}
                             </span>
                         )}
                     </TabsTrigger>
-                    <TabsTrigger
-                        value="people"
-                        className="@max-sm:flex-1 @max-sm:px-1.5 flex-none px-3"
-                    >
+                    <TabsTrigger value="people">
                         {t("tabs.people")}
                         {run.people.length > 0 && (
-                            <span className="text-ink-3 @max-sm:hidden font-mono text-[11px] tabular-nums">
+                            <span className="text-ink-3 text-xs font-normal tabular-nums">
                                 {run.people.length}
                             </span>
                         )}
                     </TabsTrigger>
-                    <TabsTrigger
-                        value="ask"
-                        className="@max-sm:flex-1 @max-sm:px-1.5 flex-none px-3"
-                    >
-                        {t("tabs.ask")}
-                    </TabsTrigger>
-                    <TabsTrigger
-                        value="sources"
-                        className="@max-sm:flex-1 @max-sm:px-1.5 flex-none px-3"
-                    >
+                    <TabsTrigger value="ask">{t("tabs.ask")}</TabsTrigger>
+                    <TabsTrigger value="sources">
                         {t("tabs.sources")}
                         {run.sources.length > 0 && (
-                            <span className="text-ink-3 @max-sm:hidden font-mono text-[11px] tabular-nums">
+                            <span className="text-ink-3 text-xs font-normal tabular-nums">
                                 {run.sources.length}
                             </span>
                         )}
@@ -306,9 +292,10 @@ function RunHeader({
         }
     };
 
+    const when = format.relativeTime(new Date(run.finishedAt ?? run.createdAt), now);
     return (
-        <header className="flex flex-col gap-3">
-            <div className="@max-md:flex-col @max-md:items-stretch flex items-start justify-between gap-4">
+        <header className="flex flex-col gap-2.5">
+            <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
                     {editing ? (
                         <form
@@ -349,105 +336,95 @@ function RunHeader({
                             </Button>
                         </form>
                     ) : (
-                        <div className="flex items-start gap-1.5">
-                            <h1 className="display text-ink @max-md:text-[24px] text-balance text-[28px] leading-[1.1] tracking-[-0.02em]">
-                                {run.title}
-                            </h1>
-                            {run.canManage && (
+                        <h1 className="display text-ink @max-md:text-[21px] text-balance text-[24px] font-semibold leading-[1.2] tracking-[-0.02em]">
+                            {run.title}
+                        </h1>
+                    )}
+                </div>
+                {run.canManage && !editing && (
+                    <div className="flex shrink-0 items-center gap-1.5">
+                        <Button
+                            size="sm"
+                            variant="outline"
+                            aria-pressed={shared}
+                            title={t("shareLabel")}
+                            onClick={() => void share(!shared)}
+                        >
+                            {shared ? <Check aria-hidden /> : <Users aria-hidden />}
+                            <span className="@max-sm:sr-only">
+                                {shared ? t("sharedButton") : t("shareButton")}
+                            </span>
+                        </Button>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
                                 <Button
                                     size="icon"
                                     variant="ghost"
-                                    className="text-ink-3 mt-0.5 size-8 shrink-0"
-                                    aria-label={tc("actions.rename")}
-                                    onClick={() => {
+                                    className="text-ink-2 size-8"
+                                    aria-label={t("moreActions")}
+                                >
+                                    <MoreHorizontal aria-hidden />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="min-w-44">
+                                <DropdownMenuItem
+                                    onSelect={() => {
                                         setDraft(run.title);
                                         setEditing(true);
                                     }}
                                 >
-                                    <Pencil className="size-3.5" aria-hidden />
-                                </Button>
-                            )}
-                        </div>
-                    )}
-                    {/* A title that is the whole situation would repeat it word for word. */}
-                    {(run.kind === "post_test" || run.subject !== run.title) && (
-                        <SituationText
-                            lead={run.kind === "post_test" ? t("draftTested") : t("whatHappensIf")}
-                            text={
-                                run.kind === "post_test"
-                                    ? (run.draft?.text ?? run.subject)
-                                    : run.subject
-                            }
-                        />
-                    )}
-                    <div className="text-ink-3 mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
-                        <StatusPill run={run} />
-                        <span aria-hidden>·</span>
-                        <span>{sizeLabel(tw, run)}</span>
-                        <span aria-hidden>·</span>
-                        <span>
-                            {t("createdBy", {
-                                name: run.createdByMe ? t("you") : run.createdByName,
-                                when: format.relativeTime(new Date(run.createdAt), now),
-                            })}
-                        </span>
-                        {run.shared && (
-                            <Badge variant="secondary" className="ml-1">
-                                {t("shared")}
-                            </Badge>
-                        )}
-                    </div>
-                </div>
-                {run.canManage && (
-                    <div className="@max-md:justify-start flex shrink-0 flex-wrap items-center justify-end gap-2">
-                        <span className="flex items-center gap-2 pr-1">
-                            <Switch
-                                id={`scenario-share-${run.id}`}
-                                checked={shared}
-                                onCheckedChange={v => void share(v)}
-                            />
-                            <Label
-                                htmlFor={`scenario-share-${run.id}`}
-                                className="text-ink-2 text-xs font-normal"
-                            >
-                                {t("shareLabel")}
-                            </Label>
-                        </span>
-                        {live && (
-                            <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => setConfirm("cancel")}
-                            >
-                                {t("cancelRun")}
-                            </Button>
-                        )}
-                        <Button
-                            size="sm"
-                            variant="ghost"
-                            className="text-danger hover:text-danger"
-                            onClick={() => setConfirm("delete")}
-                        >
-                            <Trash2 aria-hidden />
-                            {tc("actions.delete")}
-                        </Button>
+                                    <Pencil aria-hidden />
+                                    {tc("actions.rename")}
+                                </DropdownMenuItem>
+                                {live && (
+                                    <DropdownMenuItem onSelect={() => setConfirm("cancel")}>
+                                        <CircleStop aria-hidden />
+                                        {t("cancelRun")}
+                                    </DropdownMenuItem>
+                                )}
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                    variant="destructive"
+                                    onSelect={() => setConfirm("delete")}
+                                >
+                                    <Trash2 aria-hidden />
+                                    {tc("actions.delete")}
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 )}
             </div>
 
+            {/* A title that is the whole situation would repeat it word for word. */}
+            {(run.kind === "post_test" || run.subject !== run.title) && (
+                <SituationText
+                    lead={run.kind === "post_test" ? t("draftTested") : t("whatHappensIf")}
+                    text={run.kind === "post_test" ? (run.draft?.text ?? run.subject) : run.subject}
+                />
+            )}
+
+            <div className="text-ink-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px]">
+                <StatusPill run={run} className="text-[13px]" />
+                <span className="tabular-nums">{tw("people", { count: run.agents })}</span>
+                <span className="tabular-nums">{tw("rounds", { count: run.rounds })}</span>
+                <span>
+                    {run.createdByMe
+                        ? t(run.finishedAt ? "finishedWhen" : "startedWhen", { when })
+                        : t(run.finishedAt ? "finishedBy" : "startedBy", {
+                              when,
+                              name: run.createdByName,
+                          })}
+                </span>
+                {run.shared && !run.canManage && <Badge variant="secondary">{t("shared")}</Badge>}
+            </div>
+
             {live && (
-                <div className="flex max-w-[640px] flex-col gap-1.5" aria-live="polite">
-                    <div className="text-ink-2 flex items-baseline justify-between text-xs">
-                        <span>{progressLabel(tw, run)}</span>
-                        <span className="text-ink-3 tabular-nums">
-                            {t("roundsDone", { round: run.round, rounds: run.rounds })}
-                        </span>
-                    </div>
+                <div className="mt-1 flex max-w-[640px] flex-col gap-1.5" aria-live="polite">
+                    <span className="text-ink-2 text-xs">{progressLabel(tw, run)}</span>
                     <Progress value={progressValue(run)} className="h-1.5" />
                 </div>
             )}
-
-            <p className="text-ink-3 text-xs">{tw("caveat")}</p>
 
             <ConfirmDialog
                 open={confirm !== null}

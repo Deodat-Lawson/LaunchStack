@@ -168,6 +168,28 @@ export interface ScenarioSummary {
     headline: string | null;
     /** 1 for the original loop, 2 for durable, evidence-grounded runs. */
     contractVersion: 1 | 2;
+    /** How many people ended on each side, from the report's camps; null until there is a report. */
+    outcome: ScenarioOutcome | null;
+}
+
+/** People per side after the last round. */
+export interface ScenarioOutcome {
+    critical: number;
+    neutral: number;
+    supportive: number;
+}
+
+/** A report's camps as counts per side; null when there are none. */
+export function outcomeOf(
+    factions:
+        | ReadonlyArray<{ stance: keyof ScenarioOutcome; agentIds: readonly string[] }>
+        | null
+        | undefined
+): ScenarioOutcome | null {
+    if (!factions || factions.length === 0) return null;
+    const out: ScenarioOutcome = { critical: 0, neutral: 0, supportive: 0 };
+    for (const f of factions) out[f.stance] += f.agentIds.length;
+    return out;
 }
 
 /** One piece of evidence people were built from. Redacted when the viewer can't see the file. */

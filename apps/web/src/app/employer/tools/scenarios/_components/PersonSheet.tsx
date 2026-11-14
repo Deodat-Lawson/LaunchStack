@@ -151,7 +151,7 @@ function Profile({
                             {person.interests.map(i => (
                                 <span
                                     key={i}
-                                    className="bg-panel-2 text-ink-2 rounded-full px-2.5 py-0.5 text-xs"
+                                    className="bg-panel-2 text-ink-2 rounded-md px-2 py-0.5 text-xs"
                                 >
                                     {i}
                                 </span>
@@ -357,7 +357,7 @@ function Wallet({
                 </dl>
             )}
             {doubt && (
-                <figure className="border-line border-l-2 pl-3">
+                <figure className="bg-panel-2 rounded-lg px-3 py-2.5">
                     <figcaption className="text-ink-3 text-xs">
                         {person.objection ? t("holdingBack") : t("firstDoubt")}
                     </figcaption>

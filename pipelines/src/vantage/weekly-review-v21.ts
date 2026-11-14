@@ -19,6 +19,12 @@ import {
     type ValidationJudge,
 } from "./validation/contracts";
 import type { PreparedScopedEvidence } from "./scoped-evidence";
+import {
+    validateWeeklyReviewRetrievalContext,
+    WEEKLY_REVIEW_RETRIEVAL_PROMPT,
+    type WeeklyReviewRetrievalContext,
+} from "./dynamic-retrieval-v3";
+export type { WeeklyReviewRetrievalContext } from "./dynamic-retrieval-v3";
 
 const text = (max: number) => z.string().trim().min(1).max(max);
 const ref = text(200);
@@ -95,6 +101,7 @@ export interface WeeklyReviewInput {
     role: string;
     mandatoryCoverage: { required: number; included: number };
     scopedEvidence?: PreparedScopedEvidence["dependency"][];
+    retrievalContext?: WeeklyReviewRetrievalContext;
     sources: {
         ref: string;
         version: string;
@@ -159,6 +166,8 @@ export function validateWeeklyReviewV21(raw: unknown, input: WeeklyReviewInput):
 }
 /** Structural binding only. The host must revalidate current authority and full parent hashes. */
 export function validateScopedWeeklyReviewInput(input: WeeklyReviewInput): void {
+    if (input.retrievalContext !== undefined)
+        validateWeeklyReviewRetrievalContext(input.retrievalContext);
     if (input.scopedEvidence === undefined) {
         if (input.sources.some(source => source.ref.startsWith("unit:")))
             throw Error("scoped_evidence_required");
@@ -221,6 +230,9 @@ function projectWeeklyReviewEvaluation(
                 week: input.week,
                 role: input.role,
                 mandatoryCoverage: input.mandatoryCoverage,
+                ...(input.retrievalContext === undefined
+                    ? {}
+                    : { retrievalContext: input.retrievalContext }),
             }),
             asOf: input.asOf,
             contextCompleteness: "complete",
@@ -328,6 +340,8 @@ export function calculateWeeklyReviewBudget(
     input: WeeklyReviewInput,
     profile: WeeklyReviewBudgetProfile = "legacy"
 ) {
+    if (input.retrievalContext !== undefined)
+        validateWeeklyReviewRetrievalContext(input.retrievalContext);
     const inputBytes = Buffer.byteLength(JSON.stringify(input));
     const sourceTextBytes = input.sources.reduce(
         (bytes, source) => bytes + Buffer.byteLength(source.text),
@@ -456,6 +470,9 @@ export async function runWeeklyReviewV21(
                         (input.scopedEvidence
                             ? " Scoped evidence covers exact spans with authorization determined by source purpose. Company-required scopes are administrator-approved. Personal-star scopes are selected by the actor as personal preferences. Preserve the visible coverage qualification. Never describe relevant_spans_reviewed as a full-document review or claim original PDF/OCR completeness when unknown. ID-only required sources still require their complete indexed text."
                             : "") +
+                        (input.retrievalContext === undefined
+                            ? ""
+                            : WEEKLY_REVIEW_RETRIEVAL_PROMPT) +
                         " Maximum serialized UTF-8 report bytes: " +
                         maxReportBytes +
                         ". Prefer fewer topics to fit this bound."

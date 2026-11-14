@@ -2,6 +2,8 @@ import { put, type PutBlobResult } from "@vercel/blob";
 import { randomUUID } from "node:crypto";
 
 import { env } from "~/env";
+import { currentStorageLocationId } from "./location";
+import type { ObjectRef } from "./object-ref";
 
 export interface PutFileInput {
     filename: string;
@@ -12,6 +14,7 @@ export interface PutFileInput {
 export interface StoredBlobMetadata {
     url: string;
     pathname: string;
+    ref: ObjectRef;
     contentType?: string;
     size?: number;
     checksum?: string | null;
@@ -40,6 +43,9 @@ export async function putFile({
     contentType,
 }: PutFileInput): Promise<StoredBlobMetadata> {
     const token = getBlobToken();
+    const storageLocationId = currentStorageLocationId("vercel-blob");
+    if (!storageLocationId)
+        throw new Error("BLOB_READ_WRITE_TOKEN has no parseable store identity");
     const safeName = sanitizeFilename(filename);
     const key = `documents/${randomUUID()}-${safeName.length > 0 ? safeName : "upload"}`;
 
@@ -69,6 +75,7 @@ export async function putFile({
     return {
         url: blob.url,
         pathname: blob.pathname,
+        ref: { adapter: "vercel-blob", storageLocationId, key: blob.pathname },
         contentType: blob.contentType,
         checksum: extended.contentHash ?? null,
     };

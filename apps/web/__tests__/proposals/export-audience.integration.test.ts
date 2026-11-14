@@ -302,6 +302,7 @@ describeDb("proposal export audience (integration)", () => {
             url: "/api/files/export-sink",
             pathname: "export-sink.md",
             provider: "database",
+            ref: { adapter: "database", storageLocationId: "database:file_uploads", key: "42" },
         });
         jest.mocked(processDocumentUpload).mockImplementation(async params => {
             // Keep the real creation-key convergence and saved source/version;

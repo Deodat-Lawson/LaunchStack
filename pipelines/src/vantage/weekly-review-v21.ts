@@ -210,8 +210,7 @@ function projectWeeklyReviewEvaluation(
     const required = input.sources.filter(
         source =>
             source.purpose === "company-architecture" ||
-            source.purpose === "workspace-required" ||
-            (input.scopedEvidence !== undefined && source.ref.startsWith("unit:"))
+            source.purpose === "workspace-required"
     );
     const projected: z.infer<typeof EvaluationInputSchema> = {
         version: EVALUATION_VERSION,
@@ -272,7 +271,7 @@ function projectWeeklyReviewEvaluation(
             version: SCOPED_EVALUATION_VERSION,
             scenario: {
                 ...projected.scenario,
-                version: "production-v21/scoped-2",
+                version: "production-v21/scoped-3",
                 contextCompleteness: "scoped",
                 scopedEvidence: structuredClone(input.scopedEvidence),
                 documents: input.sources.map(source => ({
@@ -286,7 +285,7 @@ function projectWeeklyReviewEvaluation(
                 expectations: projected.scenario.expectations.map(expected => ({
                     ...expected,
                     description:
-                        "Consider every administrator-authorized required span and preserve decision-relevant facts, exact scope qualifications and uncertainty. This requirement concerns supplied spans only. Do not infer whole-parent or original PDF/OCR completeness and do not force irrelevant claims.",
+                        "Consider this company-required source and preserve decision-relevant facts, exact scope qualifications and uncertainty. For finite scopes, this requirement concerns supplied spans only. Do not infer whole-parent or original PDF/OCR completeness and do not force irrelevant claims.",
                 })),
             },
         };
@@ -455,7 +454,7 @@ export async function runWeeklyReviewV21(
                 new SystemMessage(
                     WEEKLY_REVIEW_SYSTEM_PROMPT +
                         (input.scopedEvidence
-                            ? " Scoped evidence covers only administrator-authorized exact spans. Preserve the visible coverage qualification. Never describe relevant_spans_reviewed as a full-document review or claim original PDF/OCR completeness when unknown. ID-only required sources still require their complete indexed text."
+                            ? " Scoped evidence covers exact spans with authorization determined by source purpose. Company-required scopes are administrator-approved. Personal-star scopes are selected by the actor as personal preferences. Preserve the visible coverage qualification. Never describe relevant_spans_reviewed as a full-document review or claim original PDF/OCR completeness when unknown. ID-only required sources still require their complete indexed text."
                             : "") +
                         " Maximum serialized UTF-8 report bytes: " +
                         maxReportBytes +

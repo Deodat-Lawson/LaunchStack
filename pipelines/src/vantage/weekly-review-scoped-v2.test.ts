@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+import { createHash } from "node:crypto";
 import type { ResolvedChatModel } from "@launchstack/llm";
 import {
     canonicalParentText,
@@ -16,13 +17,23 @@ import {
     type WeeklyReviewV21,
 } from "./weekly-review-v21";
 import { outputUnits, parseEvaluationInput } from "./validation/input";
+import { evaluateVantage } from "./validation/evaluate";
 import {
     RATED_CRITERIA,
+    LEGACY_SCOPED_EVALUATION_VERSION,
+    LEGACY_SCOPED_RUBRIC_VERSION,
     SCOPED_EVALUATION_VERSION,
     SCOPED_RUBRIC_VERSION,
+    type EvaluationInput,
+    type Judgment,
+    type RubricVersion,
     type ValidationJudge,
 } from "./validation/contracts";
 import { createModelValidationJudge } from "./validation/judge";
+import {
+    LEGACY_SCOPED_VALIDATION_SYSTEM_PROMPT,
+    SCOPED_VALIDATION_SYSTEM_PROMPT,
+} from "./validation/rubric";
 
 function fixture() {
     const parent: ScopedParent = {
@@ -126,12 +137,16 @@ function fixture() {
     };
     return { parent, authority, prepared, input, report, ref };
 }
-function fixtureJudge(verdict: "met" | "missed" = "met", partial = false): ValidationJudge {
+function fixtureJudge(
+    verdict: "met" | "missed" = "met",
+    partial = false,
+    rubricVersion: RubricVersion = SCOPED_RUBRIC_VERSION
+): ValidationJudge {
     return {
         kind: "fixture-replay",
-        id: "synthetic-scoped-v2",
+        id: "synthetic-scoped-purpose-v3",
         evaluate: async request => {
-            expect(request.rubricVersion).toBe(SCOPED_RUBRIC_VERSION);
+            expect(request.rubricVersion).toBe(rubricVersion);
             const output = request.outputUnits[0]!;
             return {
                 judgment: {
@@ -166,6 +181,55 @@ function fixtureJudge(verdict: "met" | "missed" = "met", partial = false): Valid
         },
     };
 }
+function personalStar(input: WeeklyReviewInput) {
+    const text = "Personal preference: explore dashboard colors when useful.";
+    const parent: ScopedParent = {
+        companyId: "company",
+        documentId: "personal",
+        version: "1",
+        versionDate: "2026-11-01T00:00:00Z",
+        availableAt: "2026-11-02T00:00:00Z",
+        title: "Personal preference",
+        purpose: "personal-star",
+        originalCompleteness: "unknown",
+        chunks: [{ id: "personal-chunk", ordinal: 0, text }],
+    };
+    return compileScopedEvidence(
+        {
+            actorId: "actor",
+            companyId: "company",
+            documentId: "personal",
+            version: "1",
+            asOf: input.asOf,
+            expectedParentHash: hashScopedText(text),
+            selectedUnitIds: ["preference"],
+        },
+        parent,
+        {
+            actorId: "actor",
+            companyId: "company",
+            documentId: "personal",
+            version: "1",
+            authorized: true,
+            purpose: "personal-star",
+            audience: "actor",
+            companyReadable: false,
+            aclRevision: "acl-personal",
+            authorityRevision: "personal-selection-1",
+            finiteScope: {
+                qualification: "Personally selected preference, relevant when useful.",
+                requiredUnits: [
+                    {
+                        id: "preference",
+                        start: 0,
+                        end: text.length,
+                        excerptHash: hashScopedText(text),
+                    },
+                ],
+            },
+        }
+    );
+}
 function ports(report: WeeklyReviewV21, judge = fixtureJudge()) {
     return {
         generation: { modelId: "synthetic-generation" } as ResolvedChatModel,
@@ -177,7 +241,148 @@ function ports(report: WeeklyReviewV21, judge = fixtureJudge()) {
     };
 }
 
-describe("weekly review scoped-v2 experimental admission", () => {
+describe("weekly review finite evidence and purpose-aware admission", () => {
+    it("keeps whole and scoped personal Stars outside mandatory semantic admission", async () => {
+        const { input, report } = fixture();
+        const personal = personalStar(input);
+        const source = personal.modelFacingProjection.sources[0]!;
+        const wholeStar = structuredClone(input);
+        wholeStar.sources.push({ ...source, ref: "doc:personal@1" });
+        const scopedStar = structuredClone(input);
+        scopedStar.scopedEvidence!.push(personal.dependency);
+        scopedStar.sources.push(source);
+        const judge = fixtureJudge();
+        const assess = judge.evaluate;
+        judge.evaluate = async (request, signal) => {
+            const answer = await assess(request, signal);
+            const judgment = answer.judgment as Judgment;
+            for (const expected of request.input.scenario.expectations) {
+                if (expected.evidence.some(evidence => evidence.sourceId === source.ref))
+                    judgment.expectations.find(
+                        item => item.expectationId === expected.id
+                    )!.verdict = "missed";
+            }
+            return answer;
+        };
+        for (const candidate of [wholeStar, scopedStar]) {
+            const evaluated = weeklyReviewEvaluation(report, candidate);
+            expect(evaluated.scenario.expectations).toHaveLength(1);
+            const assessment = await evaluateVantage(evaluated, { judge });
+            expect(assessment).toMatchObject({ status: "assessed", verdict: "pass", error: null });
+        }
+        const invoke = vi.fn(async () => ({ result: report, usage: {} }));
+        const result = await runWeeklyReviewV21(scopedStar, {
+            ...ports(report, judge),
+            invoke: invoke as never,
+        });
+        const args = invoke.mock.calls[0] as unknown as [unknown, unknown, { content: string }[]];
+        const generationPrompt = args[2][0]!.content;
+        expect(generationPrompt).toContain("Company-required scopes are administrator-approved.");
+        expect(generationPrompt).toContain(
+            "Personal-star scopes are selected by the actor as personal preferences."
+        );
+        expect(generationPrompt).not.toContain("only administrator-authorized exact spans");
+        expect(result.evidence.evaluation.verdict).toBe("pass");
+        expect(result.evidence.scopedEvidence).toHaveLength(2);
+        await expect(
+            runWeeklyReviewV21(scopedStar, ports(report, fixtureJudge("missed")))
+        ).rejects.toThrow("judge_admission_failed");
+    });
+    it.each(["missing-unit", "corrupt-unit"])(
+        "still rejects a personal Star %s before dispatch",
+        async mode => {
+            const { input, report } = fixture();
+            const personal = personalStar(input);
+            input.scopedEvidence!.push(personal.dependency);
+            input.sources.push({ ...personal.modelFacingProjection.sources[0]! });
+            if (mode === "missing-unit") input.sources.pop();
+            else input.sources.at(-1)!.text += "corrupted";
+            const p = ports(report);
+            await expect(runWeeklyReviewV21(input, p)).rejects.toThrow("scoped_source_mismatch");
+            expect(p.authorizeDispatch).not.toHaveBeenCalled();
+        }
+    );
+    it("rejects a critical inclusion gate based solely on personal Star evidence", () => {
+        const { input, report } = fixture();
+        const personal = personalStar(input);
+        input.scopedEvidence!.push(personal.dependency);
+        const source = personal.modelFacingProjection.sources[0]!;
+        input.sources.push(source);
+        const evaluated = weeklyReviewEvaluation(report, input);
+        evaluated.scenario.expectations.push({
+            id: "personal-critical",
+            description: "Include the personal preference.",
+            kind: "must_include",
+            importance: "critical",
+            evidence: [{ sourceId: source.ref, quote: source.text }],
+        });
+        expect(() => parseEvaluationInput(evaluated)).toThrow("company-required source");
+    });
+    it("retains explicit V2 parsing and its original personal-unit critical gate", async () => {
+        const { input, report } = fixture();
+        const personal = personalStar(input);
+        input.scopedEvidence!.push(personal.dependency);
+        const source = personal.modelFacingProjection.sources[0]!;
+        input.sources.push(source);
+        const current = weeklyReviewEvaluation(report, input);
+        if (current.version !== SCOPED_EVALUATION_VERSION) throw Error("scoped fixture required");
+        const legacy: EvaluationInput = {
+            ...current,
+            version: LEGACY_SCOPED_EVALUATION_VERSION,
+            scenario: {
+                ...current.scenario,
+                version: "production-v21/scoped-2",
+                expectations: [
+                    ...current.scenario.expectations,
+                    {
+                        id: "personal-critical",
+                        description: "Original V2 personal-unit coverage expectation.",
+                        kind: "must_include",
+                        importance: "critical",
+                        evidence: [{ sourceId: source.ref, quote: source.text }],
+                    },
+                ],
+            },
+        };
+        expect(parseEvaluationInput(legacy)).toEqual(legacy);
+        const incomplete = structuredClone(legacy);
+        incomplete.scenario.expectations.pop();
+        expect(() => parseEvaluationInput(incomplete)).toThrow("Every required scoped unit");
+        const base = fixtureJudge("met", false, LEGACY_SCOPED_RUBRIC_VERSION);
+        const assessment = await evaluateVantage(legacy, {
+            judge: {
+                ...base,
+                id: "synthetic-legacy-scoped-v2",
+                evaluate: async (request, signal) => {
+                    expect(request.rubricVersion).toBe(LEGACY_SCOPED_RUBRIC_VERSION);
+                    const answer = await base.evaluate(request, signal);
+                    const judgment = answer.judgment as Judgment;
+                    judgment.expectations.find(
+                        item => item.expectationId === "personal-critical"
+                    )!.verdict = "missed";
+                    return answer;
+                },
+            },
+        });
+        expect(assessment).toMatchObject({
+            version: LEGACY_SCOPED_EVALUATION_VERSION,
+            rubricVersion: LEGACY_SCOPED_RUBRIC_VERSION,
+            scenarioVersion: "production-v21/scoped-2",
+            status: "assessed",
+            verdict: "fail",
+            error: null,
+        });
+    });
+    it("retains the exact legacy V2 prompt while versioning the purpose-aware rubric", () => {
+        expect(createHash("sha256").update(LEGACY_SCOPED_VALIDATION_SYSTEM_PROMPT).digest("hex")).toBe(
+            "554c2f536e7574a2b1f52dd7c407785532e6aa3b43ed952c5d46525700bc49f1"
+        );
+        expect(SCOPED_VALIDATION_SYSTEM_PROMPT).toContain(SCOPED_EVALUATION_VERSION);
+        expect(SCOPED_VALIDATION_SYSTEM_PROMPT).toContain(
+            "Personal-star units record the actor's selected preferences"
+        );
+        expect(SCOPED_VALIDATION_SYSTEM_PROMPT).not.toContain("administrator");
+    });
     it("admits the authorized spans of a 32KB/129-chunk required parent through the normal pipeline", async () => {
         const { parent, prepared, input, report } = fixture();
         expect(Buffer.byteLength(canonicalParentText(parent))).toBeGreaterThan(32000);
@@ -195,6 +400,7 @@ describe("weekly review scoped-v2 experimental admission", () => {
         expect(result.evidence.evaluation).toMatchObject({
             version: SCOPED_EVALUATION_VERSION,
             rubricVersion: SCOPED_RUBRIC_VERSION,
+            scenarioVersion: "production-v21/scoped-3",
             verdict: "pass",
             status: "assessed",
             contextCompleteness: "scoped",
@@ -281,14 +487,17 @@ describe("weekly review scoped-v2 experimental admission", () => {
         const result = await runWeeklyReviewV21(input, ports(report));
         expect(result.evidence.evaluation.verdict).toBe("pass");
         expect(result.evidence.evaluation.expectations).toHaveLength(2);
+        const evaluated = weeklyReviewEvaluation(report, input);
+        evaluated.scenario.expectations.pop();
+        expect(() => parseEvaluationInput(evaluated)).toThrow("Every company-required source");
     });
-    it("requires a critical semantic expectation for every administrator-required unit", () => {
+    it("requires a critical semantic expectation for every company-required unit", () => {
         const { input, report } = fixture();
         const evaluated = weeklyReviewEvaluation(report, input);
         evaluated.scenario.expectations[0]!.importance = "normal";
-        expect(() => parseEvaluationInput(evaluated)).toThrow("Every required scoped unit");
+        expect(() => parseEvaluationInput(evaluated)).toThrow("Every company-required source");
     });
-    it("preserves all canonical presented fields in the V2 projection", () => {
+    it("preserves all canonical presented fields in the current scoped projection", () => {
         const { input, report } = fixture();
         const evaluated = weeklyReviewEvaluation(report, input);
         const units = outputUnits(evaluated);
@@ -329,7 +538,52 @@ describe("weekly review scoped-v2 experimental admission", () => {
         expect(JSON.stringify(args[2])).toContain("relevant_spans_reviewed");
         expect(JSON.stringify(args[2])).toContain(SCOPED_RUBRIC_VERSION);
     });
-    it("pins a separate scoped Judge configuration and rejects a V1 Judge for V2 before invoking", async () => {
+    it.each([
+        {
+            version: LEGACY_SCOPED_EVALUATION_VERSION,
+            rubric: LEGACY_SCOPED_RUBRIC_VERSION,
+            otherVersion: SCOPED_EVALUATION_VERSION,
+            otherRubric: SCOPED_RUBRIC_VERSION,
+            prompt: LEGACY_SCOPED_VALIDATION_SYSTEM_PROMPT,
+        },
+        {
+            version: SCOPED_EVALUATION_VERSION,
+            rubric: SCOPED_RUBRIC_VERSION,
+            otherVersion: LEGACY_SCOPED_EVALUATION_VERSION,
+            otherRubric: LEGACY_SCOPED_RUBRIC_VERSION,
+            prompt: SCOPED_VALIDATION_SYSTEM_PROMPT,
+        },
+    ] as const)("pins the $version adapter and rejects the other scoped version", async config => {
+        const { input, report } = fixture();
+        const current = weeklyReviewEvaluation(report, input);
+        const evaluated = parseEvaluationInput({ ...current, version: config.version });
+        const invoke = vi.fn(async () => ({ result: {}, usage: {} }));
+        const judge = createModelValidationJudge(
+            {
+                modelId: "fixture",
+                behavior: { parameters: { systemMessages: "supported" } },
+            } as unknown as ResolvedChatModel,
+            { configurationId: "version-pinned", evaluationVersion: config.version },
+            invoke as never
+        );
+        expect(judge.id).toContain(config.rubric);
+        await judge.evaluate(
+            { rubricVersion: config.rubric, input: evaluated, outputUnits: outputUnits(evaluated) },
+            new AbortController().signal
+        );
+        expect(invoke).toHaveBeenCalledTimes(1);
+        const args = invoke.mock.calls[0] as unknown as [unknown, unknown, { content: unknown }[]];
+        expect(args[2][0]!.content).toEqual(expect.stringContaining(config.prompt));
+        const other = parseEvaluationInput({ ...current, version: config.otherVersion });
+        await expect(
+            judge.evaluate(
+                { rubricVersion: config.otherRubric, input: other, outputUnits: outputUnits(other) },
+                new AbortController().signal
+            )
+        ).rejects.toThrow("Judge configuration");
+        expect(invoke).toHaveBeenCalledTimes(1);
+    });
+    it("rejects a V1 Judge for current scoped evaluation before invoking", async () => {
         const { input, report } = fixture();
         const evaluated = weeklyReviewEvaluation(report, input);
         const invoke = vi.fn();

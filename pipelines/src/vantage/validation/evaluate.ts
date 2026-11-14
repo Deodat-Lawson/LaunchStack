@@ -2,6 +2,8 @@
     CRITERIA,
     EVALUATION_VERSION,
     RUBRIC_VERSION,
+    LEGACY_SCOPED_EVALUATION_VERSION,
+    LEGACY_SCOPED_RUBRIC_VERSION,
     SCOPED_EVALUATION_VERSION,
     SCOPED_RUBRIC_VERSION,
     JudgmentSchema,
@@ -190,8 +192,12 @@ export async function evaluateVantage(
     const report: EvaluationReport = {
         version: input.version,
         rubricVersion:
-            input.version === SCOPED_EVALUATION_VERSION ? SCOPED_RUBRIC_VERSION : RUBRIC_VERSION,
-        ...(input.version === SCOPED_EVALUATION_VERSION
+            input.version === SCOPED_EVALUATION_VERSION
+                ? SCOPED_RUBRIC_VERSION
+                : input.version === LEGACY_SCOPED_EVALUATION_VERSION
+                  ? LEGACY_SCOPED_RUBRIC_VERSION
+                  : RUBRIC_VERSION,
+        ...(input.version !== EVALUATION_VERSION
             ? { scopedEvidence: structuredClone(input.scenario.scopedEvidence) }
             : {}),
         scenarioId: input.scenario.id,

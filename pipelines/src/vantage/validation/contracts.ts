@@ -3,8 +3,18 @@ import type { ChatTokenUsage } from "@launchstack/llm";
 
 export const EVALUATION_VERSION = "vantage-evaluation/v1" as const;
 export const RUBRIC_VERSION = "vantage-quality/1.0" as const;
-export const SCOPED_EVALUATION_VERSION = "vantage-evaluation/v2" as const;
-export const SCOPED_RUBRIC_VERSION = "vantage-quality/2.0-scoped" as const;
+export const LEGACY_SCOPED_EVALUATION_VERSION = "vantage-evaluation/v2" as const;
+export const LEGACY_SCOPED_RUBRIC_VERSION = "vantage-quality/2.0-scoped" as const;
+export const SCOPED_EVALUATION_VERSION = "vantage-evaluation/v3" as const;
+export const SCOPED_RUBRIC_VERSION = "vantage-quality/3.0-scoped-purpose" as const;
+export type EvaluationVersion =
+    | typeof EVALUATION_VERSION
+    | typeof LEGACY_SCOPED_EVALUATION_VERSION
+    | typeof SCOPED_EVALUATION_VERSION;
+export type RubricVersion =
+    | typeof RUBRIC_VERSION
+    | typeof LEGACY_SCOPED_RUBRIC_VERSION
+    | typeof SCOPED_RUBRIC_VERSION;
 export const RATED_CRITERIA = [
     "grounding",
     "temporal",
@@ -123,7 +133,7 @@ export const EvaluationInputSchema = z
     })
     .strict();
 // Server-generated provenance. A descriptor is never authorization by itself. The host
-// must revalidate its actor, current ACL, administrator scope and full parent hash.
+// must revalidate its actor, current ACL, purpose-appropriate scope and full parent hash.
 const scopedId = z.string().min(1).max(200);
 const scopedHash = z.string().regex(/^[a-f0-9]{64}$/);
 const scopedRange = z
@@ -221,8 +231,13 @@ export const ScopedEvaluationInputSchema = EvaluationInputSchema.extend({
         })
         .strict(),
 }).strict();
+/** Explicit replay schema for the original all-scoped-units-critical semantics. */
+export const LegacyScopedEvaluationInputSchema = ScopedEvaluationInputSchema.extend({
+    version: z.literal(LEGACY_SCOPED_EVALUATION_VERSION),
+}).strict();
 export const VersionedEvaluationInputSchema = z.discriminatedUnion("version", [
     EvaluationInputSchema,
+    LegacyScopedEvaluationInputSchema,
     ScopedEvaluationInputSchema,
 ]);
 export type ScopedEvidenceDependency = z.infer<typeof ScopedEvidenceDependencySchema>;
@@ -265,7 +280,7 @@ export interface OutputUnit {
     unsupported?: boolean;
 }
 export interface JudgeRequest {
-    rubricVersion: typeof RUBRIC_VERSION | typeof SCOPED_RUBRIC_VERSION;
+    rubricVersion: RubricVersion;
     input: EvaluationInput;
     outputUnits: OutputUnit[];
 }
@@ -298,8 +313,8 @@ export interface MetricResult {
     evidence: Evidence[];
 }
 export interface EvaluationReport {
-    version: typeof EVALUATION_VERSION | typeof SCOPED_EVALUATION_VERSION;
-    rubricVersion: typeof RUBRIC_VERSION | typeof SCOPED_RUBRIC_VERSION;
+    version: EvaluationVersion;
+    rubricVersion: RubricVersion;
     scenarioId: string;
     scenarioVersion: string;
     scenarioFingerprint: string;

@@ -3,6 +3,8 @@ import { z } from "zod";
 import {
     VersionedEvaluationInputSchema,
     ScopedEvidenceDependencySchema,
+    EVALUATION_VERSION,
+    LEGACY_SCOPED_EVALUATION_VERSION,
     SCOPED_EVALUATION_VERSION,
     type ScopedEvidenceDependency,
     type EvaluationInput,
@@ -38,17 +40,26 @@ export function parseEvaluationInput(raw: unknown): EvaluationInput {
             "Invalid evaluation input. Use the versioned scenario/expectation/output schema."
         );
     const input = parsed.data;
-    if (input.version === SCOPED_EVALUATION_VERSION) {
+    if (input.version !== EVALUATION_VERSION) {
         validateScopedCoverage(
             input.scenario.scopedEvidence,
             input.scenario.documents,
             input.scenario.asOf
         );
-        const requiredRefs = input.scenario.scopedEvidence.flatMap(proof =>
-            proof.requiredUnits.map(
-                unit => proof.units.find(included => included.id === unit.id)!.ref
-            )
-        );
+        // V2 replays retain their original critical gate for every scoped unit.
+        // V3 binds every unit above and applies semantic criticality by source purpose.
+        const requiredRefs =
+            input.version === LEGACY_SCOPED_EVALUATION_VERSION
+                ? input.scenario.scopedEvidence.flatMap(proof =>
+                      proof.requiredUnits.map(
+                          unit => proof.units.find(included => included.id === unit.id)!.ref
+                      )
+                  )
+                : input.scenario.documents
+                      .filter(doc =>
+                          ["company-architecture", "workspace-required"].includes(doc.purpose)
+                      )
+                      .map(doc => doc.id);
         for (const ref of requiredRefs) {
             if (
                 !input.scenario.expectations.some(
@@ -59,7 +70,23 @@ export function parseEvaluationInput(raw: unknown): EvaluationInput {
                 )
             )
                 throw new Error(
-                    "Every required scoped unit needs a critical semantic coverage expectation."
+                    input.version === LEGACY_SCOPED_EVALUATION_VERSION
+                        ? "Every required scoped unit needs a critical semantic coverage expectation."
+                        : "Every company-required source needs a critical semantic coverage expectation."
+                );
+        }
+        if (input.version === SCOPED_EVALUATION_VERSION) {
+            const required = new Set(requiredRefs);
+            if (
+                input.scenario.expectations.some(
+                    expected =>
+                        expected.kind === "must_include" &&
+                        expected.importance === "critical" &&
+                        !expected.evidence.some(evidence => required.has(evidence.sourceId))
+                )
+            )
+                throw new Error(
+                    "Critical semantic coverage expectations require a company-required source."
                 );
         }
     }

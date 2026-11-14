@@ -9,6 +9,10 @@ import {
     SCOPED_EVALUATION_VERSION,
     SCOPED_RUBRIC_VERSION,
     EVALUATION_VERSION,
+    LEGACY_SCOPED_EVALUATION_VERSION,
+    LEGACY_SCOPED_RUBRIC_VERSION,
+    type EvaluationVersion,
+    type RubricVersion,
     type Judgment,
     type ValidationJudge,
 } from "./contracts";
@@ -18,7 +22,11 @@ import {
     parseEvaluationInput,
     MAX_EVALUATION_INPUT_BYTES,
 } from "./input";
-import { VALIDATION_SYSTEM_PROMPT, SCOPED_VALIDATION_SYSTEM_PROMPT } from "./rubric";
+import {
+    VALIDATION_SYSTEM_PROMPT,
+    LEGACY_SCOPED_VALIDATION_SYSTEM_PROMPT,
+    SCOPED_VALIDATION_SYSTEM_PROMPT,
+} from "./rubric";
 import {
     judgmentSchemaFor,
     JUDGE_EVIDENCE_INSTRUCTIONS,
@@ -32,7 +40,7 @@ export function createModelValidationJudge(
         configurationId: string;
         timeoutMs?: number;
         maxOutputTokens?: number;
-        evaluationVersion?: typeof EVALUATION_VERSION | typeof SCOPED_EVALUATION_VERSION;
+        evaluationVersion?: EvaluationVersion;
     },
     invoke: typeof invokeStructuredAttempt = invokeStructuredAttempt
 ): ValidationJudge {
@@ -50,7 +58,17 @@ export function createModelValidationJudge(
         throw new Error("Invalid validation judge limits or configuration identity.");
     const evaluationVersion = options.evaluationVersion ?? EVALUATION_VERSION;
     const rubricVersion =
-        evaluationVersion === SCOPED_EVALUATION_VERSION ? SCOPED_RUBRIC_VERSION : RUBRIC_VERSION;
+        evaluationVersion === SCOPED_EVALUATION_VERSION
+            ? SCOPED_RUBRIC_VERSION
+            : evaluationVersion === LEGACY_SCOPED_EVALUATION_VERSION
+              ? LEGACY_SCOPED_RUBRIC_VERSION
+              : RUBRIC_VERSION;
+    const prompt =
+        evaluationVersion === SCOPED_EVALUATION_VERSION
+            ? SCOPED_VALIDATION_SYSTEM_PROMPT
+            : evaluationVersion === LEGACY_SCOPED_EVALUATION_VERSION
+              ? LEGACY_SCOPED_VALIDATION_SYSTEM_PROMPT
+              : VALIDATION_SYSTEM_PROMPT;
     return {
         kind: "model",
         id: `${model.modelId}/${options.configurationId}/${rubricVersion}/${JUDGE_EVIDENCE_TRANSPORT_VERSION}`,
@@ -63,7 +81,7 @@ export function createModelValidationJudge(
                     "Judge configuration does not match the evaluation/rubric version."
                 );
             const payload = judgeInputPayload(request.input);
-            if (evaluationVersion === SCOPED_EVALUATION_VERSION) {
+            if (evaluationVersion !== EVALUATION_VERSION) {
                 parseEvaluationInput(request.input);
                 if (Buffer.byteLength(payload) > MAX_EVALUATION_INPUT_BYTES)
                     throw new Error("Scoped Judge input exceeds 14000 bytes.");
@@ -74,7 +92,7 @@ export function createModelValidationJudge(
                 [
                     ...systemMessageFor(
                         model.behavior,
-                        `${evaluationVersion === SCOPED_EVALUATION_VERSION ? SCOPED_VALIDATION_SYSTEM_PROMPT : VALIDATION_SYSTEM_PROMPT}\n${JUDGE_EVIDENCE_INSTRUCTIONS}`
+                        `${prompt}\n${JUDGE_EVIDENCE_INSTRUCTIONS}`
                     ),
                     new HumanMessage(payload),
                 ],
@@ -89,7 +107,7 @@ export function createModelValidationJudge(
 export function createRecordedValidationJudge(
     records: readonly {
         inputFingerprint: string;
-        rubricVersion: typeof RUBRIC_VERSION | typeof SCOPED_RUBRIC_VERSION;
+        rubricVersion: RubricVersion;
         judgment: Judgment;
     }[],
     id = "synthetic-calibration-v1"

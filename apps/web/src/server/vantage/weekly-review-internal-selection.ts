@@ -10,6 +10,8 @@ import {
     type WeeklyReviewInput,
 } from "@launchstack/pipelines/vantage/weekly-review-v21";
 import type { WeeklyReviewAuthorityActor } from "./weekly-review-authority";
+import { collectDynamicOptionalEvidence } from "./weekly-review-dynamic-selection";
+import type { DynamicRetrievalConfiguration } from "./weekly-review-dynamic-retrieval";
 import {
     WeeklyReviewConflict,
     type SourcePurpose,
@@ -235,7 +237,8 @@ export async function collectInternalWeeklyReviewContext(
     expected: WeeklyReviewActor,
     week: string,
     identity: ReviewInputIdentity,
-    scopedEnabled = false
+    scopedEnabled = false,
+    dynamic: DynamicRetrievalConfiguration = { mode: "baseline", maxFollowUpRounds: 1 }
 ): Promise<WeeklyReviewContext> {
     return database.transaction(async raw => {
         const { query, acquisition, deadlineAt } = boundedInternalQuery(raw);
@@ -300,6 +303,23 @@ export async function collectInternalWeeklyReviewContext(
                 dependencies.push(source);
             }
         }
+        if (dynamic.mode !== "baseline")
+            return collectDynamicOptionalEvidence({
+                query,
+                actor,
+                epoch,
+                week,
+                cutoff,
+                identity,
+                configuration: dynamic,
+                preference: pref,
+                sources,
+                dependencies,
+                scopedEvidence,
+                mandatoryCount,
+                acquisition,
+                read,
+            });
         const profile = scopedEvidence.length ? "scoped-v2" : "internal-v1";
         const budget = () =>
             calculateWeeklyReviewBudget(

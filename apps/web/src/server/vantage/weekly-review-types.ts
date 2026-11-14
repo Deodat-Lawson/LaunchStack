@@ -3,6 +3,7 @@ import type {
     ScopedEvidenceRequest,
 } from "@launchstack/pipelines/vantage/scoped-evidence";
 import type { SelectionDiagnostics } from "./weekly-review-internal-selection";
+import type { WeeklyReviewRetrievalContext } from "@launchstack/pipelines/vantage/dynamic-retrieval-v3";
 
 export interface WeeklyReviewActor {
     companyId: string;
@@ -62,4 +63,5 @@ export interface WeeklyReviewContext {
     scopedEvidence?: PreparedScopedEvidence["dependency"][];
     inputIdentity?: { candidateId: string; asOf: string };
     selectionDiagnostics?: SelectionDiagnostics;
+    retrievalContext?: WeeklyReviewRetrievalContext;
 }

@@ -5,7 +5,7 @@ import {
 } from "@launchstack/pipelines/vantage/weekly-review-validation";
 jest.mock("@launchstack/store/crypto", () => ({
     encryptSecret: jest.fn((value: string) => ({ ciphertext: "sealed:" + value, keyVersion: 1 })),
-    decryptSecret: jest.fn(),
+    decryptSecret: jest.fn((value: string) => value.slice("sealed:".length)),
 }));
 import {
     compileScopedEvidence,
@@ -22,7 +22,7 @@ import {
 import { createWeeklyReviewRepository } from "~/server/vantage/weekly-review-repository";
 import type { FrozenDependency, WeeklyReviewQuery } from "~/server/vantage/weekly-review-types";
 
-function fixture(reservedWeek: string | Date = "2026-11-09") {
+function fixture(reservedWeek: string | Date = "2026-11-09", dynamic = false) {
     const text = "Approved revenue evidence. Other details.";
     const asOf = "2026-11-13T12:00:00.000Z";
     const prepared = compileScopedEvidence(
@@ -99,6 +99,20 @@ function fixture(reservedWeek: string | Date = "2026-11-09") {
         purpose: "personal-star",
     };
     input.sources.push(ordinary);
+    const trace = {
+        schemaVersion: "vantage-dynamic-retrieval-trace/v3",
+        mode: "combined",
+        selectedRefs: input.sources.map(source => source.ref),
+        roleStatus: "missing",
+        ranking: [{ candidate: { id: "999", title: "Sensitive omitted discovery" } }],
+        followUp: { rounds: 0, queryCount: 0, acquired: [] },
+    };
+    if (dynamic)
+        input.retrievalContext = {
+            schemaVersion: "vantage-dynamic-retrieval/v3",
+            mode: "combined",
+            traceHash: reviewFingerprint(trace),
+        };
     const report: WeeklyReviewV21 = {
         schemaVersion: "vantage-weekly-review/v2.1",
         headline: "Revenue",
@@ -123,6 +137,8 @@ function fixture(reservedWeek: string | Date = "2026-11-09") {
             },
         ],
     };
+    // The normal runner assigns display topic identities before persistence.
+    Object.assign(report.topics[0]!, { id: "topic-0" });
     const dependencies: FrozenDependency[] = [
         {
             kind: "scoped-document",
@@ -142,6 +158,7 @@ function fixture(reservedWeek: string | Date = "2026-11-09") {
     });
     const projected = weeklyReviewEvaluation(report, input);
     const evidence = {
+        ...(dynamic ? { selectionDiagnostics: { dynamicRetrieval: trace, omitted: [] } } : {}),
         schemaVersion: "vantage-admission/v3",
         candidateId: id,
         reportHash: reviewFingerprint(report),
@@ -178,13 +195,19 @@ function fixture(reservedWeek: string | Date = "2026-11-09") {
     };
     const calls: string[] = [];
     let active: string | null = null;
-    const query: WeeklyReviewQuery = async sql => {
+    let ciphertext: unknown;
+    const query: WeeklyReviewQuery = async (sql, parameters = []) => {
         calls.push(sql);
+        if (sql.includes("SET status='accepted'")) ciphertext = parameters[1];
         if (sql.startsWith("SELECT * FROM pdr_ai_v2_vantage_weekly_review_runs"))
             return [
                 {
                     id,
-                    status: "reserved",
+                    status: ciphertext ? "accepted" : "reserved",
+                    ciphertext,
+                    key_version: 1,
+                    schema_version: "vantage-weekly-review/v2.1",
+                    review_version: 1,
                     week_start: reservedWeek,
                     dependencies,
                     generation_dispatched: true,
@@ -214,6 +237,7 @@ function fixture(reservedWeek: string | Date = "2026-11-09") {
         accept,
         id,
         report,
+        read: () => repository.get({ companyId: "1", userId: "actor" }, id),
         setActive: (value: string) => {
             active = value;
         },
@@ -221,6 +245,33 @@ function fixture(reservedWeek: string | Date = "2026-11-09") {
 }
 
 describe("scoped v3 activation recomputation (offline)", () => {
+    it("binds dynamic trace and omits private discovery identities from report readback", async () => {
+        const f = fixture("2026-11-09", true);
+        await expect(f.accept()).resolves.toBe(f.id);
+        const saved = await f.read();
+        expect(JSON.stringify(saved.evidence)).not.toContain("Sensitive omitted discovery");
+        expect(JSON.stringify(saved.evidence)).not.toContain('"999"');
+        expect(saved.evidence).toMatchObject({
+            selectionDiagnostics: {
+                dynamicRetrieval: { mode: "combined", rankingCandidateCount: 1 },
+            },
+        });
+    });
+    it.each(["traceHash", "mode", "selectedRefs"])(
+        "rejects dynamic %s substitution before activation",
+        async field => {
+            const f = fixture("2026-11-09", true);
+            const evidence = structuredClone(f.evidence);
+            if (field === "traceHash")
+                evidence.inputSnapshot.retrievalContext!.traceHash = "0".repeat(64);
+            if (field === "mode") evidence.selectionDiagnostics!.dynamicRetrieval.mode = "role";
+            if (field === "selectedRefs")
+                evidence.selectionDiagnostics!.dynamicRetrieval.selectedRefs = [];
+            evidence.inputHash = reviewFingerprint(evidence.inputSnapshot);
+            await expect(f.accept(evidence)).rejects.toThrow("candidate_admission_invalid");
+            expect(f.calls.some(sql => sql.includes("SET status='accepted'"))).toBe(false);
+        }
+    );
     it("accepts matching exact budget, evaluation, source registry and frozen scope", async () => {
         const f = fixture();
         await expect(f.accept()).resolves.toBe(f.id);

@@ -18,6 +18,10 @@ import {
     type WeeklyReviewActor,
 } from "./weekly-review-types";
 import { weeklyReviewTestPorts } from "./weekly-review-test-provider";
+import {
+    dynamicRetrievalConfiguration,
+    type DynamicRetrievalConfiguration,
+} from "./weekly-review-dynamic-retrieval";
 
 export function weeklyReviewEnabled() {
     return process.env.VANTAGE_WEEKLY_REVIEW_ENABLED === "true";
@@ -65,10 +69,13 @@ async function currentActor() {
         documentScope: await ctx.documentScope(),
     };
 }
-export function weeklyReviewServices() {
+export function weeklyReviewServices(
+    options: { dynamicRetrieval?: DynamicRetrievalConfiguration } = {}
+) {
     const authority = createWeeklyReviewAuthority(weeklyReviewDatabase, currentActor, {
         internalRetrievalV1: budgetAwareInternalRetrievalEnabled(),
         scopedEvidenceV2: scopedEvidenceV2Enabled(),
+        dynamicRetrieval: options.dynamicRetrieval,
     });
     return {
         authority,
@@ -84,8 +91,11 @@ export async function generateWeeklyReview(
     args: { weekStart: string; key: string; expectedActiveId: string | null }
 ) {
     if (!weeklyReviewEnabled()) throw new WeeklyReviewConflict("weekly_review_disabled", 404);
-    const { authority, repository } = weeklyReviewServices();
     const internalRetrievalV1 = budgetAwareInternalRetrievalEnabled();
+    const dynamicRetrieval = dynamicRetrievalConfiguration();
+    if (dynamicRetrieval.mode !== "baseline" && !internalRetrievalV1)
+        throw new WeeklyReviewConflict("dynamic_retrieval_requires_internal_v1", 409);
+    const { authority, repository } = weeklyReviewServices({ dynamicRetrieval });
     const identity = internalRetrievalV1
         ? { candidateId: randomUUID(), asOf: new Date().toISOString() }
         : undefined;
@@ -99,6 +109,7 @@ export async function generateWeeklyReview(
         mandatoryCoverage: context.mandatoryCoverage,
         sources: context.sources,
         ...(context.scopedEvidence?.length ? { scopedEvidence: context.scopedEvidence } : {}),
+        ...(context.retrievalContext ? { retrievalContext: context.retrievalContext } : {}),
     };
     const inputHash = reviewFingerprint({
         week: args.weekStart,
@@ -106,6 +117,8 @@ export async function generateWeeklyReview(
         role: context.role,
         sources: context.sources,
         epoch: context.authorityEpoch,
+        dynamicRetrieval,
+        ...(context.retrievalContext ? { retrievalContext: context.retrievalContext } : {}),
         ...(internalRetrievalV1
             ? { budgetProfile: context.scopedEvidence?.length ? "scoped-v2" : "internal-v1" }
             : {}),
@@ -208,6 +221,8 @@ export async function generateWeeklyReview(
             report,
             evidence: {
                 ...result.evidence,
+                retrievalMode: dynamicRetrieval.mode,
+                retrievalConfiguration: dynamicRetrieval,
                 qualityEvidence:
                     process.env.VANTAGE_WEEKLY_REVIEW_TEST_PROVIDER === "true"
                         ? "injected-deterministic"

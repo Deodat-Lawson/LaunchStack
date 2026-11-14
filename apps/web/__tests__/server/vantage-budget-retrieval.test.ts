@@ -8,6 +8,10 @@ import {
 } from "~/server/vantage/weekly-review-authority";
 import { calculateWeeklyReviewBudget } from "@launchstack/pipelines/vantage/weekly-review-v21";
 import type { WeeklyReviewQuery } from "~/server/vantage/weekly-review-types";
+import {
+    dynamicRetrievalConfiguration,
+    type DynamicRetrievalConfiguration,
+} from "~/server/vantage/weekly-review-dynamic-retrieval";
 
 const fixturePath = path.join(__dirname, "fixtures/vantage-budget-orbit-v1.json");
 const fixture = JSON.parse(readFileSync(fixturePath, "utf8"));
@@ -47,7 +51,8 @@ function setup(
     docs: Doc[],
     required: string[] = [],
     stars: string[] = [],
-    architecture = docs[0]!.id
+    architecture = docs[0]!.id,
+    businessRole?: unknown
 ) {
     const calls: { text: string; params: unknown[] }[] = [];
     const denied = docs.filter(d => d.expectedReadability !== "readable").map(d => Number(d.id));
@@ -76,7 +81,33 @@ function setup(
         if (text.includes("FROM pdr_ai_v2_vantage_weekly_review_policy"))
             return [{ architecture_document_id: architecture, required_document_ids: required }];
         if (text.includes("FROM pdr_ai_v2_vantage_weekly_review_preferences"))
-            return [{ star_document_ids: stars, version: 1 }];
+            return [{ star_document_ids: stars, version: 1, business_role_context: businessRole }];
+        if (text.includes("WITH eligible AS MATERIALIZED")) {
+            const excluded = params[2] as string[];
+            const terms = JSON.parse(String(params[3])) as string[][];
+            return docs
+                .filter(d => !excluded.includes(d.id))
+                .flatMap(d => {
+                    const version = [...d.versions]
+                        .filter(v => v.createdAt <= String(params[1]))
+                        .sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0];
+                    if (!version) return [];
+                    const text = (d.title + " " + version.text).toLowerCase();
+                    return [
+                        {
+                            id: d.id,
+                            version_id: version.id,
+                            title: d.title,
+                            category: d.category,
+                            available_at: version.createdAt,
+                            matched_query_indexes: terms.flatMap((words, i) =>
+                                words.some(word => text.includes(word)) ? [i] : []
+                            ),
+                        },
+                    ];
+                })
+                .slice(0, 64);
+        }
         if (text.includes("FROM pdr_ai_v2_document_settings"))
             return docs.find(d => d.id === String(params[0]))?.audience === "company"
                 ? []
@@ -155,7 +186,7 @@ function setup(
                                         String(a.version_created_at)
                                     )) || Number(b.id) - Number(a.id)
                     )
-                    .slice(0, 64);
+                    .slice(0, typeof params[3] === "number" ? params[3] : 64);
             }
             return [...docs]
                 .sort(
@@ -170,11 +201,11 @@ function setup(
         actor,
         calls,
         query,
-        authority: (flag?: boolean) =>
+        authority: (flag?: boolean, dynamicRetrieval?: DynamicRetrievalConfiguration) =>
             createWeeklyReviewAuthority(
                 { transaction: work => work(query) },
                 async () => actor,
-                flag === undefined ? undefined : { internalRetrievalV1: flag }
+                flag === undefined ? undefined : { internalRetrievalV1: flag, dynamicRetrieval }
             ),
     };
 }
@@ -618,5 +649,223 @@ describe("budget-aware internal selection acceptance (offline, no providers)", (
             mkdirSync(path.dirname(out), { recursive: true });
             writeFileSync(out, JSON.stringify(comparison, null, 2) + "\n");
         }
+    });
+});
+
+describe("integrated Dynamic Retrieval V3 modes", () => {
+    const confirmed = {
+        schemaVersion: "vantage-business-role/v1",
+        primaryRole: "Engineering lead",
+        responsibilities: ["release rollback security"],
+        priorities: ["rollback owner"],
+        confirmed: true,
+        confirmedBy: "synthetic-reader",
+        companyId: "1",
+        revision: 1,
+    };
+    const config = (mode: DynamicRetrievalConfiguration["mode"], maxFollowUpRounds: 0 | 1 = 1) => ({
+        mode,
+        maxFollowUpRounds,
+    });
+    it("defaults to baseline and rejects unsupported modes and unbounded rounds", () => {
+        expect(dynamicRetrievalConfiguration({})).toEqual(config("baseline"));
+        for (const mode of ["research", "public", "ROLE", ""])
+            expect(() =>
+                dynamicRetrievalConfiguration({ VANTAGE_DYNAMIC_RETRIEVAL_MODE: mode })
+            ).toThrow("invalid_retrieval_mode");
+        expect(() =>
+            dynamicRetrievalConfiguration({ VANTAGE_INTERNAL_FOLLOW_UP_ROUNDS: "2" })
+        ).toThrow("invalid_internal_follow_up_limit");
+    });
+    it("requires the existing Internal V1 opt-in", async () => {
+        const s = setup([document(1)]);
+        await expect(
+            s.authority(false, config("role")).collectWeeklyReviewContext(s.actor, week, identity)
+        ).rejects.toThrow("dynamic_retrieval_requires_internal_v1");
+    });
+    it("keeps explicit baseline identical and never derives a business role from membership", async () => {
+        const s = setup([document(1), document(2)]);
+        const before = await s.authority(true).collectWeeklyReviewContext(s.actor, week, identity);
+        const explicit = await s
+            .authority(true, config("baseline"))
+            .collectWeeklyReviewContext(s.actor, week, identity);
+        expect(explicit).toEqual(before);
+        const fallback = await s
+            .authority(true, config("role"))
+            .collectWeeklyReviewContext(s.actor, week, identity);
+        expect(fallback.retrievalContext).not.toHaveProperty("businessRole");
+        expect(fallback.selectionDiagnostics?.dynamicRetrieval).toMatchObject({
+            roleStatus: "missing",
+        });
+        expect(fallback.sources.map(s => s.ref)).toEqual(before.sources.map(s => s.ref));
+    });
+    it("preserves company requirements and Stars while ranking only authorized exact versions", async () => {
+        const docs = [document(1), document(2), document(3), document(4), document(5)];
+        docs[3]!.title = "Release rollback security";
+        docs[3]!.versions[0]!.createdAt = "2026-10-20T00:00:00Z";
+        docs[4]!.title = "Restricted release rollback security";
+        docs[4]!.expectedReadability = "denied";
+        const s = setup(docs, ["2"], ["3"], "1", confirmed);
+        const result = await s
+            .authority(true, config("role"))
+            .collectWeeklyReviewContext(s.actor, week, identity);
+        expect(result.sources.slice(0, 3).map(s => s.id)).toEqual(["1", "2", "3"]);
+        expect(result.sources[3]!.id).toBe("4");
+        expect(result.sources[3]!.version).toBe("1004");
+        expect(JSON.stringify(result)).not.toContain(docs[4]!.title);
+        expect(result.selectionDiagnostics?.deniedCount).toBe(1);
+        expect(result.retrievalContext?.businessRole?.primaryRole).toBe("Engineering lead");
+    });
+    it("runs at most one internal follow-up and preserves unresolved questions", async () => {
+        const docs = [
+            document(1, "Release rollback owner is unknown."),
+            ...Array.from({ length: 55 }, (_, i) =>
+                document(
+                    i + 2,
+                    "Routine update. " + "x".repeat(120),
+                    `2026-10-${String(21 + (i % 3)).padStart(2, "0")}T00:00:00Z`
+                )
+            ),
+        ];
+        docs[1]!.title = "Release rollback owner record";
+        docs[1]!.versions[0]!.createdAt = "2026-10-19T00:00:00Z";
+        docs[1]!.versions[0]!.text =
+            "Release rollback owner requires a human approval. Verification remains unknown.";
+        const s = setup(docs, [], [], "1", confirmed);
+        const result = await s
+            .authority(true, config("internal-research"))
+            .collectWeeklyReviewContext(s.actor, week, identity);
+        expect(result.sources.some(source => source.id === "2")).toBe(true);
+        expect(result.retrievalContext?.internalDecision?.outcome).toBe("INSUFFICIENT_EVIDENCE");
+        expect(result.retrievalContext?.internalDecision?.questions.length).toBeGreaterThan(0);
+        expect(result.selectionDiagnostics?.dynamicRetrieval).toMatchObject({
+            followUp: { rounds: 1 },
+        });
+        expect(
+            s.calls.filter(call => call.text.includes("WITH eligible AS MATERIALIZED"))
+        ).toHaveLength(1);
+        expect(result.selectionDiagnostics?.acquisition.loadedTextBytes).toBeLessThanOrEqual(
+            128000
+        );
+        expect(result.selectionDiagnostics?.budget.feasible).toBe(true);
+    });
+    it("supports zero follow-up rounds and STOP without a useful question", async () => {
+        for (const text of ["Release rollback owner is unknown.", "Operating policy approved."]) {
+            const s = setup([document(1, text)]);
+            const result = await s
+                .authority(true, config("internal-research", 0))
+                .collectWeeklyReviewContext(s.actor, week, identity);
+            expect(result.retrievalContext?.internalDecision?.outcome).toBe(
+                text.includes("unknown") ? "INSUFFICIENT_EVIDENCE" : "STOP"
+            );
+            expect(s.calls.some(call => call.text.includes("WITH eligible AS MATERIALIZED"))).toBe(
+                false
+            );
+        }
+    });
+    it("preserves supported future weeks without ranking beyond the as-of cutoff", async () => {
+        const s = setup([document(1), document(2)], [], [], "1", confirmed);
+        for (const mode of ["role", "combined"] as const) {
+            const context = await s
+                .authority(true, config(mode))
+                .collectWeeklyReviewContext(s.actor, "2026-12-07", identity);
+            expect(context.sources.map(source => source.id)).toEqual(["1", "2"]);
+            expect(context.selectionDiagnostics?.cutoff).toBe(identity.asOf);
+        }
+    });
+    it("compares all four modes on unchanged Orbit28 without inventing semantic gold", async () => {
+        const plan = fixture.contextPlan;
+        const docs = fixture.documents as Doc[];
+        const key = (key: string) => docs.find(doc => doc.key === key)!.id;
+        const results = [];
+        for (const mode of ["baseline", "role", "internal-research", "combined"] as const) {
+            const s = setup(
+                docs,
+                plan.requiredKeys.map(key),
+                plan.starredKeys.map(key),
+                key(plan.architectureKey),
+                confirmed
+            );
+            const started = performance.now();
+            try {
+                const context = await s
+                    .authority(true, config(mode))
+                    .collectWeeklyReviewContext(s.actor, week, {
+                        ...identity,
+                        asOf: fixture.reportWindow.exclusiveCutoff,
+                    });
+                expect(context.mandatoryCoverage).toEqual({ required: 6, included: 6 });
+                expect(
+                    context.sources.every(source => sourceHash(source.text) === source.hash)
+                ).toBe(true);
+                if (context.retrievalContext) {
+                    const trace = context.selectionDiagnostics!.dynamicRetrieval as {
+                        ranking: { candidate: { id: string } }[];
+                        initialSelected: string[];
+                        followUp: { acquired: { id: string }[] };
+                    };
+                    const selectedIds = new Set(context.sources.map(source => source.id));
+                    expect(trace.ranking.every(item => selectedIds.has(item.candidate.id))).toBe(
+                        true
+                    );
+                    expect(trace.followUp.acquired.every(item => selectedIds.has(item.id))).toBe(
+                        true
+                    );
+                    expect(
+                        trace.initialSelected.every(ref =>
+                            context.sources.some(source => source.ref === ref)
+                        )
+                    ).toBe(true);
+                    expect(sourceHash(JSON.stringify(trace))).toBe(
+                        context.retrievalContext.traceHash
+                    );
+                }
+                results.push({
+                    mode,
+                    status: "selected",
+                    sources: context.sources.map(({ id, version, ref, hash, purpose }) => ({
+                        id,
+                        version,
+                        ref,
+                        hash,
+                        purpose,
+                    })),
+                    budget: context.selectionDiagnostics?.budget,
+                    trace: context.selectionDiagnostics?.dynamicRetrieval,
+                    acquisition: context.selectionDiagnostics?.acquisition,
+                    elapsedMs: performance.now() - started,
+                });
+            } catch (error) {
+                results.push({
+                    mode,
+                    status: "rejected",
+                    error: (error as Error).message,
+                    elapsedMs: performance.now() - started,
+                });
+                throw error;
+            }
+        }
+        const output = process.env.VANTAGE_DYNAMIC_COMPARISON_OUTPUT;
+        if (output) {
+            expect(path.resolve(output)).toContain(path.sep + "test-output" + path.sep);
+            mkdirSync(path.dirname(output), { recursive: true });
+            writeFileSync(
+                output,
+                JSON.stringify(
+                    {
+                        origin: "actual collectors with controlled relational adapter",
+                        corpusSha256: sourceHash(readFileSync(fixturePath, "utf8")),
+                        cutoff: fixture.reportWindow.exclusiveCutoff,
+                        businessRole: confirmed,
+                        semanticGold: "unavailable",
+                        providerCalls: 0,
+                        results,
+                    },
+                    null,
+                    2
+                )
+            );
+        }
+        expect(results).toHaveLength(4);
     });
 });

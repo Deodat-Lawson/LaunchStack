@@ -81,7 +81,16 @@ function reportReadEvidence(value: unknown): unknown {
         typeof evidence.selectionDiagnostics !== "object"
     )
         return value;
-    const { omitted, ...diagnostics } = evidence.selectionDiagnostics as Record<string, unknown>;
+    const { omitted, dynamicRetrieval, ...diagnostics } = evidence.selectionDiagnostics as Record<
+        string,
+        unknown
+    >;
+    // Discovery may include sources that were never frozen and later became private.
+    // Preserve the full encrypted trace while exposing only aggregate discovery metadata.
+    const dynamic =
+        dynamicRetrieval && typeof dynamicRetrieval === "object"
+            ? (dynamicRetrieval as Record<string, unknown>)
+            : undefined;
     const omissionReasonCounts: Record<string, number> = {};
     if (Array.isArray(omitted))
         for (const item of omitted as unknown[]) {
@@ -97,6 +106,56 @@ function reportReadEvidence(value: unknown): unknown {
         ...evidence,
         selectionDiagnostics: {
             ...diagnostics,
+            ...(dynamic
+                ? {
+                      dynamicRetrieval: {
+                          schemaVersion: dynamic.schemaVersion,
+                          mode: dynamic.mode,
+                          roleStatus: dynamic.roleStatus,
+                          roleRevision: dynamic.roleRevision,
+                          rankingCandidateCount:
+                              typeof dynamic.rankingCandidateCount === "number"
+                                  ? dynamic.rankingCandidateCount
+                                  : Array.isArray(dynamic.ranking)
+                                    ? dynamic.ranking.length
+                                    : 0,
+                          bounds: dynamic.bounds,
+                          decision: dynamic.decision,
+                          finalDecision: dynamic.finalDecision,
+                          followUp:
+                              dynamic.followUp && typeof dynamic.followUp === "object"
+                                  ? {
+                                        rounds: (dynamic.followUp as Record<string, unknown>)
+                                            .rounds,
+                                        queryCount: (dynamic.followUp as Record<string, unknown>)
+                                            .queryCount,
+                                        acquiredCount:
+                                            typeof (dynamic.followUp as Record<string, unknown>)
+                                                .acquiredCount === "number"
+                                                ? (dynamic.followUp as Record<string, unknown>)
+                                                      .acquiredCount
+                                                : Array.isArray(
+                                                        (
+                                                            dynamic.followUp as Record<
+                                                                string,
+                                                                unknown
+                                                            >
+                                                        ).acquired
+                                                    )
+                                                  ? (
+                                                        (
+                                                            dynamic.followUp as Record<
+                                                                string,
+                                                                unknown
+                                                            >
+                                                        ).acquired as unknown[]
+                                                    ).length
+                                                  : 0,
+                                    }
+                                  : undefined,
+                      },
+                  }
+                : {}),
             omittedCount: Array.isArray(omitted) ? omitted.length : 0,
             omissionReasonCounts,
         },
@@ -339,6 +398,7 @@ export function createWeeklyReviewRepository(
                     evaluationInputBytes?: number;
                     judgeInputBytes?: number;
                     inputSnapshot?: WeeklyReviewInput;
+                    selectionDiagnostics?: Record<string, unknown>;
                     scopedEvidence?: WeeklyReviewInput["scopedEvidence"];
                     sourceRegistry?: unknown;
                     freezeHash?: string;
@@ -396,6 +456,20 @@ export function createWeeklyReviewRepository(
                             hash(evidence.inputSnapshot) !== evidence.inputHash
                         )
                             throw new Error("invalid_input");
+                        if (evidence.inputSnapshot.retrievalContext) {
+                            const context = evidence.inputSnapshot.retrievalContext;
+                            const trace = evidence.selectionDiagnostics?.dynamicRetrieval as
+                                | Record<string, unknown>
+                                | undefined;
+                            if (
+                                !trace ||
+                                hash(trace) !== context.traceHash ||
+                                trace.mode !== context.mode ||
+                                hash(trace.selectedRefs) !==
+                                    hash(evidence.inputSnapshot.sources.map(source => source.ref))
+                            )
+                                throw new Error("invalid_retrieval_trace");
+                        }
                         const budget = calculateWeeklyReviewBudget(
                             evidence.inputSnapshot,
                             evidence.schemaVersion === "vantage-admission/v3"

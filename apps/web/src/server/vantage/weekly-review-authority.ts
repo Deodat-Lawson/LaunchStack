@@ -3,6 +3,7 @@ import {
     type WeeklyReviewSourceScopes,
 } from "./weekly-review-scoped-selection";
 import { createHash } from "node:crypto";
+import type { DynamicRetrievalConfiguration } from "./weekly-review-dynamic-retrieval";
 import { scopeAllowsDocument, type DocumentScope } from "~/lib/authz/scope-types";
 import {
     boundedInternalQuery,
@@ -50,7 +51,11 @@ export type WeeklyReviewAuthorityActor = WeeklyReviewActor & {
 export function createWeeklyReviewAuthority(
     database: WeeklyReviewDatabase,
     loadActor: () => Promise<WeeklyReviewAuthorityActor>,
-    options: { internalRetrievalV1?: boolean; scopedEvidenceV2?: boolean } = {}
+    options: {
+        internalRetrievalV1?: boolean;
+        scopedEvidenceV2?: boolean;
+        dynamicRetrieval?: DynamicRetrievalConfiguration;
+    } = {}
 ) {
     async function fresh(
         query: WeeklyReviewQuery,
@@ -250,6 +255,12 @@ export function createWeeklyReviewAuthority(
             week: string,
             identity?: ReviewInputIdentity
         ): Promise<WeeklyReviewContext> {
+            if (
+                options.dynamicRetrieval?.mode &&
+                options.dynamicRetrieval.mode !== "baseline" &&
+                !options.internalRetrievalV1
+            )
+                throw new WeeklyReviewConflict("dynamic_retrieval_requires_internal_v1");
             if (options.internalRetrievalV1) {
                 if (!identity) throw new WeeklyReviewConflict("review_input_identity_required");
                 return collectInternalWeeklyReviewContext(
@@ -259,7 +270,8 @@ export function createWeeklyReviewAuthority(
                     expected,
                     week,
                     identity,
-                    options.scopedEvidenceV2
+                    options.scopedEvidenceV2,
+                    options.dynamicRetrieval
                 );
             }
             return database.transaction(async query => {

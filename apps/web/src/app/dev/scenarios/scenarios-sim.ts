@@ -105,6 +105,8 @@ interface SimRun {
     interviews: ScenarioInterview[];
     estimate: { calls: number; credits: number };
     draft: { text: string; networks: string[] } | null;
+    /** Contract v2: people carry each field's basis and the run reports its coverage. */
+    v2?: boolean;
 }
 
 export interface ScenariosSimOptions {
@@ -166,6 +168,7 @@ function seed(options: ScenariosSimOptions, now: number): Store {
         shared: false,
         sourcesUsed: PRICE_RUN_SOURCES_USED,
         script: priceScript(),
+        v2: true,
         progress: { kind: "done", finishedAt: priceCreated + 9 * MINUTE },
         cancelled: null,
         injections: [
@@ -464,6 +467,92 @@ function summaryOf(run: SimRun, phase: Phase): ScenarioSummary {
         createdByName: run.createdByName,
         shared: run.shared,
         headline: phase.status === "done" ? run.script.report.headline : null,
+        contractVersion: run.v2 ? 2 : 1,
+    };
+}
+
+/**
+ * Each field's basis for a v2 person, made up from what the script gave them:
+ * a field with a value cites their first source, buying role and switching
+ * cost are reasoned from it, and every third person's budget is unknown.
+ */
+function basisFor(person: ScenarioPerson, index: number): ScenarioPerson["basis"] {
+    const cited = person.sources.slice(0, 1);
+    const read = (value: unknown) =>
+        value && cited.length > 0
+            ? { basis: "source" as const, sources: cited, explanation: null }
+            : { basis: "unknown" as const, sources: [], explanation: null };
+    return {
+        role: cited.length
+            ? { basis: "source", sources: cited, explanation: null }
+            : {
+                  basis: "assumed",
+                  sources: [],
+                  explanation: "Nothing in the sources described this kind of person.",
+              },
+        currentSolution: read(person.currentSolution),
+        buyingRole: person.buyingRole
+            ? {
+                  basis: "inferred",
+                  sources: cited,
+                  explanation: "Their title in the source suggests they shape the decision.",
+              }
+            : { basis: "unknown", sources: [], explanation: null },
+        switchingCost: person.switchingCost
+            ? {
+                  basis: "inferred",
+                  sources: cited,
+                  explanation: "Moving their records over would take weeks, by the source.",
+              }
+            : { basis: "unknown", sources: [], explanation: null },
+        budget:
+            index % 3 === 2
+                ? { basis: "unknown", sources: [], explanation: null }
+                : {
+                      basis: "assumed",
+                      sources: [],
+                      explanation: "No source says what they spend; a typical budget was assumed.",
+                  },
+    };
+}
+
+/** The v2 grounding block for a run in the harness. */
+function v2DetailFor(run: SimRun, phase: Phase): ScenarioDetail["v2"] {
+    if (!run.v2) return null;
+    const sources = run.script.sources;
+    return {
+        specHash: "5c1e9a0f7b2d4c6e8a1f3b5d7e9c0a2b4d6f8e1a3c5b7d9f0e2a4c6b8d1f3e5a",
+        worldSpecHash:
+            phase.stage === "simulating" || phase.stage === "reporting" || phase.stage === "done"
+                ? "a8d3f1c9e7b5a3d1f9c7e5b3a1d9f7c5e3b1a9d7f5c3e1b9a7d5f3c1e9b7a5d3"
+                : null,
+        contextMode: "graph",
+        fallbackReason: null,
+        coverage: {
+            sections: sources.filter(s => !s.redacted).length,
+            fileSections: sources.filter(s => !s.redacted && s.kind === "document").length,
+            files: new Set(sources.filter(s => s.kind === "document").map(s => s.label)).size,
+            omitted: [
+                {
+                    label: "Board deck Q3.pdf",
+                    kind: "document",
+                    reason: "budget",
+                    redacted: false,
+                },
+                {
+                    label: "Customer calls (raw audio).m4a",
+                    kind: "document",
+                    reason: "not_ready",
+                    redacted: false,
+                },
+            ],
+        },
+        degradedRounds: phase.stage === "done" ? [4] : [],
+        skippedTurns: phase.stage === "done" ? 5 : 0,
+        unfilledSlots: 0,
+        attempts: { succeeded: run.estimate.calls, failed: 3, unknown: 1 },
+        replayAvailable: phase.status === "done",
+        waitingSince: null,
     };
 }
 
@@ -510,13 +599,15 @@ function detailAt(run: SimRun, now: number): ScenarioDetail {
 
     const people: ScenarioPerson[] = peopleVisible
         ? countActivity(
-              script.people.map(person => {
+              script.people.map((person, index) => {
                   const history = person.stanceHistory.slice(0, r + 1);
                   return {
                       ...person,
                       stanceHistory: history,
                       stance: history[history.length - 1]!,
                       lastThought: r >= 1 ? person.lastThought : null,
+                      basis: run.v2 ? basisFor(person, index) : null,
+                      budget: run.v2 && index % 3 === 2 ? null : person.budget,
                   };
               }),
               posts
@@ -560,6 +651,7 @@ function detailAt(run: SimRun, now: number): ScenarioDetail {
         },
         canManage: run.createdByMe,
         draft: run.draft,
+        v2: v2DetailFor(run, phase),
     };
 }
 
@@ -954,6 +1046,7 @@ function create(S: Store, body: Record<string, unknown>, now: number): Response 
         interviews: [],
         estimate,
         draft: null,
+        v2: true,
     };
     S.runs.push(run);
     return json({ run: summaryOf(run, phaseAt(run, now)) }, 201);

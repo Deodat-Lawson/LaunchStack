@@ -7,7 +7,13 @@ export {
     type ScenarioRunPorts,
     type ScenarioStore,
 } from "./run";
-export { createLlmSimulationModel, SCENARIO_MODELS } from "./model";
+export {
+    callTimeoutMs,
+    createLlmSimulationModel,
+    SCENARIO_MODELS,
+    V2_MODEL_OPTIONS,
+    type LlmSimulationModelOptions,
+} from "./model";
 export {
     actualEngagement,
     buildTrackRecord,

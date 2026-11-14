@@ -337,6 +337,13 @@
       "when": 1794545048261,
       "tag": "20261113044408_extraction_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1794545588825,
+      "tag": "20261113045308_scenario_durable_generation",
+      "breakpoints": true
     }
   ]
 }

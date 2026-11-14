@@ -532,6 +532,8 @@ test_lifecycle_commands() {
   assert_logged " up -d --remove-orphans --force-recreate\$" "restart"
   a="$(log_line_of 'deploy-check.mjs')" b="$(log_line_of ' up -d --remove-orphans --force-recreate$')"
   if [ "$a" -lt "$b" ]; then pass; else fail "restart must check the configuration before recreating ($a $b)"; fi
+  c="$(log_line_of ' exec -T worker node -e ')"
+  if [ -n "$c" ] && [ "$b" -lt "$c" ]; then pass; else fail "restart must re-register the worker's jobs after up ($b ${c:-none})"; fi
   run cli logs --no-follow app worker
   assert_logged " logs --tail 200 app worker\$" "logs"
   run cli logs
@@ -642,6 +644,11 @@ test_update_and_rollback() {
   local a b c
   a="$(log_line_of 'pg_dumpall')" b="$(log_line_of ' pull --policy always$')" c="$(log_line_of ' up -d')"
   if [ "$a" -lt "$b" ] && [ "$b" -lt "$c" ]; then pass; else fail "update order must be backup, pull, up ($a $b $c)"; fi
+  # Inngest's poll can miss new functions: the update re-registers them once healthy.
+  local d
+  d="$(log_line_of ' exec -T worker node -e ')"
+  if [ -n "$d" ] && [ "$c" -lt "$d" ]; then pass; else fail "update must re-register the worker's jobs after up (up $c, sync ${d:-none})"; fi
+  assert_contains "$OUT" "Background jobs registered with Inngest." "the job sync is reported"
   assert_no_file "$HOME/.local/bin/launchstack"
 
   # A release that never becomes healthy is rolled back.

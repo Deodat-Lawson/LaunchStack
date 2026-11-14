@@ -630,6 +630,21 @@ wait_healthy() {
   done
 }
 
+# Have the worker register its functions with the Inngest server. The server
+# syncs at boot and polls every 60s, but the poll does not reliably notice new
+# functions in an updated worker (2026-11-14: a release adding 17 stayed
+# unregistered), and their events then trigger nothing. Idempotent, and
+# INNGEST_SERVE_HOST pins the address the worker registers.
+sync_jobs() {
+  if compose exec -T "$LS_WORKER_SERVICE" node -e \
+    "fetch('http://localhost:8020/api/inngest',{method:'PUT'}).then(r=>process.exit(r.ok?0:1),()=>process.exit(1))" \
+    >/dev/null 2>&1; then
+    ok "Background jobs registered with Inngest."
+  else
+    warn "Could not register background jobs with Inngest; jobs this release added may not run. Fix it with: launchstack restart"
+  fi
+}
+
 # Prints one line per container and returns the number that are not healthy.
 health_summary() {
   local ids id line svc status health code bad=0 total=0 verdict
@@ -1396,6 +1411,7 @@ cmd_restart() {
     say "Look at the logs with: launchstack logs"
     return 1
   fi
+  sync_jobs
   print_ready
 }
 
@@ -1828,6 +1844,7 @@ cmd_update() {
     rollback_update "$old_tag" "$backup_file"
     return 1
   fi
+  sync_jobs
   ok "Updated to $new_tag."
   print_ready
 }

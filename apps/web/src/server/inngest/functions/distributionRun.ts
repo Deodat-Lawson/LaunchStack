@@ -37,6 +37,9 @@ function toErrorMessage(error: unknown): string {
     }
 }
 
+/** Candidates researched at once in a live run (a model call and page reads each). */
+const ENRICH_PARALLEL = 5;
+
 export const distributionRunJob = inngest.createFunction(
     {
         id: "distribution-run",
@@ -124,17 +127,28 @@ export const distributionRunJob = inngest.createFunction(
             inWorkspace(async () => prepareRun(ctx, await ports()))
         );
 
+        // Candidates are researched ENRICH_PARALLEL at a time: each is a model
+        // and a few page reads (~30s), so one by one a 25-company run took
+        // over ten minutes. Step ids stay `enrich-<index>`, so a retried run
+        // replays finished candidates instead of researching them again.
+        const ids = prepared.candidateRelationshipIds;
         const results: EnrichCandidateResult[] = [];
-        for (const [index, relationshipId] of prepared.candidateRelationshipIds.entries()) {
-            const result = await step.run(`enrich-${index}`, () =>
-                inWorkspace(async () =>
-                    enrichCandidate(ctx, await ports(), {
-                        relationshipId,
-                        profile: prepared.profile,
-                    })
-                )
+        for (let start = 0; start < ids.length; start += ENRICH_PARALLEL) {
+            const group = ids.slice(start, start + ENRICH_PARALLEL);
+            results.push(
+                ...(await Promise.all(
+                    group.map((relationshipId, offset) =>
+                        step.run(`enrich-${start + offset}`, () =>
+                            inWorkspace(async () =>
+                                enrichCandidate(ctx, await ports(), {
+                                    relationshipId,
+                                    profile: prepared.profile,
+                                })
+                            )
+                        )
+                    )
+                ))
             );
-            results.push(result);
         }
 
         // A picture for every company saved, not only the ones researched.

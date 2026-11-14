@@ -28,6 +28,7 @@ const program = {
     constraints: null,
     knownPartnerDomains: [],
     customerDomains: [],
+    intent: "partners",
     status: "active",
     createdAt: new Date(),
     updatedAt: null,

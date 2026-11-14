@@ -27,6 +27,13 @@ Also judge where it is. A company whose text places it somewhere other than wher
 A business that has closed or stopped trading, or whose website is for sale or parked, is not a fit, however well it once matched.
 Answer for every id. Keep each reason to one short sentence.`;
 
+const MATCH_SYSTEM = `You qualify companies for a list someone asked for. You are given their description of the companies they want and a list of companies, each with what its own listing, website or research says.
+For each company decide: does it match the description? Check every requirement the description states: industry or kind of business, size, revenue, valuation or market value, funding, headcount, ownership, and anything else it names.
+Use what you reliably know about well-known companies (a public company's market value, a famous company's size) as well as the text given. When a requirement cannot be checked from the text or what you know, and the company plausibly meets it, count it as a match and say what was not confirmed.
+Also judge where it is. A company in the same metropolitan area as the place asked for is there (Santa Monica, Irvine and Pasadena are in greater Los Angeles), unless the description says "only in" a place. A company headquartered elsewhere that has a real office in the place counts too. Naming other places as markets does not place it there.
+Articles, lists, directories and publishers are not companies, so they do not match. A business that has closed, or whose website is for sale or parked, does not match.
+Answer for every id. Keep each reason to one short sentence that names the facts you used ("Snap: Santa Monica tech company, market value about $15B").`;
+
 const BATCH = 20;
 const SELLER_KNOWLEDGE = 1_500;
 const CANDIDATE_TEXT = 2_000;
@@ -48,9 +55,24 @@ export function buildJudgePrompt(
     ].join("\n");
 }
 
+/** The `match` question: the description and place, no seller (it is not selling to them). */
+export function buildMatchPrompt(
+    brief: string,
+    where: string,
+    candidates: Array<{ id: string; name: string; text: string }>
+): string {
+    return [
+        `What they want: ${brief}`,
+        `Where: ${where}`,
+        "",
+        "Companies:",
+        ...candidates.map(c => `- id ${c.id}: ${c.text.slice(0, CANDIDATE_TEXT)}`),
+    ].join("\n");
+}
+
 /** The default judge: the workspace's fast chat route. */
 export function createFitJudge(): JudgeFit {
-    return async ({ brief, where, candidates, seller }) => {
+    return async ({ brief, where, candidates, seller, question = "buyer" }) => {
         const model = resolveChatModel({ route: "fast", temperature: 0 });
         const out = new Map<string, FitVerdict>();
         for (let i = 0; i < candidates.length; i += BATCH) {
@@ -59,8 +81,12 @@ export function createFitJudge(): JudgeFit {
                 model,
                 VerdictsSchema,
                 [
-                    new SystemMessage(SYSTEM),
-                    new HumanMessage(buildJudgePrompt(brief, where, batch, seller)),
+                    new SystemMessage(question === "match" ? MATCH_SYSTEM : SYSTEM),
+                    new HumanMessage(
+                        question === "match"
+                            ? buildMatchPrompt(brief, where, batch)
+                            : buildJudgePrompt(brief, where, batch, seller)
+                    ),
                 ],
                 { name: "prospect_fit" }
             );

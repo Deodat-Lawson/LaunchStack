@@ -100,6 +100,7 @@ const program = {
     constraints: null,
     knownPartnerDomains: ["partner.example"],
     customerDomains: ["customer-one.example", "customer-two.example"],
+    intent: "partners",
     status: "active",
     createdAt: new Date("2026-10-01T00:00:00Z"),
     updatedAt: null,

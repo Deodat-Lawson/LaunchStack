@@ -11,7 +11,7 @@ import { fileURLToPath } from "node:url";
 
 export const DISTRIBUTION_PLAYBOOK_VERSION = "distribution-playbook/v1";
 
-export type PlaybookName = "research" | "plan" | "score";
+export type PlaybookName = "research" | "plan" | "score" | "plan-companies" | "research-companies";
 
 export interface Playbook {
     name: PlaybookName;

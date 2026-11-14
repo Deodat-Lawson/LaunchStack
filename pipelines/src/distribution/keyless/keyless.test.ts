@@ -44,6 +44,7 @@ const program: ProgramRecord = {
     constraints: null,
     knownPartnerDomains: [],
     customerDomains: [],
+    intent: "partners",
     status: "active",
     createdAt: new Date("2026-09-01T00:00:00Z"),
     updatedAt: null,

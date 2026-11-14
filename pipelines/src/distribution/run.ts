@@ -47,6 +47,7 @@ import { bestTerritoryFit, placeLabel } from "./locate";
 import { buildRationaleInput, computeFit, deriveRiskFlags, templateRationale } from "./score";
 import {
     buyerBrief,
+    judgeQuestionFor,
     companyText,
     relevanceOf,
     relevanceShare,
@@ -451,6 +452,7 @@ export async function prepareRun(
                             brief: buyerBrief(program, partnerKinds, profile),
                             where: territories.map(placeLabel).join("; "),
                             seller: profile,
+                            question: judgeQuestionFor(program),
                             candidates: batch.map(o => ({
                                 id: o.resolveKey,
                                 name: o.name,
@@ -711,9 +713,13 @@ export async function enrichCandidate(
     // company that has closed, or turns out not to buy this, must not rank on
     // its website's evidence.
     let rejectedBecause: string | null = null;
+    // For a `companies` list, the check's reason for a yes ("Snap: Santa
+    // Monica tech company, market value about $15B") is the best rationale.
+    let matchReason: string | null = null;
     if (ports.judgeFit) {
         try {
             const verdicts = await ports.judgeFit({
+                question: judgeQuestionFor(program),
                 brief: buyerBrief(program, [relationship.kind], args.profile),
                 where: relationship.territory
                     ? placeLabel(relationship.territory)
@@ -739,6 +745,8 @@ export async function enrichCandidate(
             if (verdict && !verdict.fit) {
                 rejectedBecause = verdict.reason;
                 console.info(`${LOG_PREFIX} research ruled out ${org.name}: ${verdict.reason}`);
+            } else if (verdict?.fit && program.intent === "companies") {
+                matchReason = verdict.reason;
             }
         } catch (error) {
             console.warn(`${LOG_PREFIX} fit check after research failed for ${org.name}:`, error);
@@ -768,8 +776,11 @@ export async function enrichCandidate(
     if (screening.status === "flagged")
         riskFlags.unshift("compliance screening flagged (advisory)");
 
-    let rationale = templateRationale({ breakdown, orgName: org.name, kind: relationship.kind });
-    if (ports.writeRationale) {
+    let rationale =
+        matchReason && !breakdown.excludedBecause
+            ? matchReason
+            : templateRationale({ breakdown, orgName: org.name, kind: relationship.kind });
+    if (ports.writeRationale && !matchReason) {
         try {
             const written = await ports.writeRationale(
                 buildRationaleInput({

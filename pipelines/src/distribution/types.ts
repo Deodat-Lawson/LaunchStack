@@ -134,6 +134,15 @@ export const MAX_CUSTOMER_DOMAINS = 25;
 /** Seeds one run searches lookalikes for (each is a description plus a company search). */
 export const MAX_LOOKALIKE_SEEDS = 5;
 
+/**
+ * What a segment is for. `partners`: businesses that would buy, stock or
+ * resell what the seller offers (the original Prospects question).
+ * `companies`: companies that match a description, Apollo-style — each is
+ * judged on how well it matches, not on whether it would buy.
+ */
+export const PROGRAM_INTENTS = ["partners", "companies"] as const;
+export type ProgramIntent = (typeof PROGRAM_INTENTS)[number];
+
 export const ProgramInputSchema = z.object({
     name: z.string().min(1).max(256),
     /** What is being distributed, in the tenant's words. */
@@ -154,6 +163,8 @@ export const ProgramInputSchema = z.object({
      * seed lookalike searches and are never prospected themselves.
      */
     customerDomains: z.array(z.string().min(3).max(256)).max(MAX_CUSTOMER_DOMAINS).default([]),
+    /** See PROGRAM_INTENTS. For `companies`, `offering` holds the description of the companies wanted. */
+    intent: z.enum(PROGRAM_INTENTS).default("partners"),
 });
 export type ProgramInput = z.infer<typeof ProgramInputSchema>;
 
@@ -175,6 +186,7 @@ export interface ProgramRecord {
     constraints: string | null;
     knownPartnerDomains: string[];
     customerDomains: string[];
+    intent: ProgramIntent;
     status: "active" | "archived";
     createdAt: Date;
     updatedAt: Date | null;

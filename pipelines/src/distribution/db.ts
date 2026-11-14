@@ -81,6 +81,7 @@ function toProgram(row: DistributionProgramRow): ProgramRecord {
         constraints: row.constraints ?? null,
         knownPartnerDomains: row.knownPartnerDomains ?? [],
         customerDomains: row.customerDomains ?? [],
+        intent: row.intent ?? "partners",
         status: row.status,
         createdAt: row.createdAt,
         updatedAt: row.updatedAt ?? null,
@@ -233,6 +234,7 @@ export async function createProgram(args: {
             constraints: args.input.constraints ?? null,
             knownPartnerDomains: normalizeDomains(args.input.knownPartnerDomains),
             customerDomains: normalizeDomains(args.input.customerDomains ?? []),
+            intent: args.input.intent ?? "partners",
         })
         .returning();
     if (!row) throw new Error("Failed to create distribution program");
@@ -277,6 +279,7 @@ export async function updateProgram(
         values.knownPartnerDomains = normalizeDomains(patch.knownPartnerDomains);
     if (patch.customerDomains !== undefined)
         values.customerDomains = normalizeDomains(patch.customerDomains);
+    if (patch.intent !== undefined) values.intent = patch.intent;
     if (patch.status !== undefined) values.status = patch.status;
     if (Object.keys(values).length === 0) return getProgram(id, companyId);
     const [row] = await db

@@ -65,6 +65,10 @@ export const distributionPrograms = pgTable(
         // CI compares the migrated table with one built from this file.
         /** Domains of customers the tenant names: lookalike seeds, never prospected themselves. */
         customerDomains: jsonb("customer_domains").$type<string[]>().notNull().default([]),
+        /** "partners" (would buy what the seller offers) or "companies" (match a description). */
+        intent: varchar("intent", { length: 16, enum: ["partners", "companies"] })
+            .notNull()
+            .default("partners"),
     },
     table => ({
         companyIdx: index("distribution_programs_company_idx").on(table.companyId),

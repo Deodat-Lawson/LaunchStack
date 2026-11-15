@@ -14,7 +14,7 @@ import type { Clock } from "./clock";
 import { systemClock } from "./clock";
 import { phaseAt, phaseParticipants } from "./phases";
 import type { ChannelStore } from "./store";
-import { selectNextSpeaker } from "./turn-policy";
+import { roomRound, selectNextSpeaker } from "./turn-policy";
 import type {
     AgentPersona,
     ChannelMessage,
@@ -223,7 +223,7 @@ export class MeetingOrchestrator {
         try {
             result = await runtime.takeTurn({
                 persona: speaker,
-                context: this.turnContext(),
+                context: this.turnContext(transcript, speaker),
                 transcript,
             });
             this.consecutiveFailures = 0;
@@ -488,9 +488,9 @@ export class MeetingOrchestrator {
 
     /**
      * Speaker selection is the turn policy applied to the *phase's* room: the
-     * phase narrows who is eligible, and its turn offset restarts the rotation
-     * so every phase opens with its first speaker (the chair, under
-     * `moderated`). Without phases this is the plain policy over everyone.
+     * phase narrows who is eligible, and its turn offset starts a fresh round
+     * so every speaker the phase lists is heard before anyone in it speaks
+     * twice. Without phases this is the plain policy over everyone.
      */
     private peekNextSpeaker(transcript: ChannelMessage[]): AgentPersona | null {
         const position = phaseAt(this.config.phases, this.state.turnIndex);
@@ -499,6 +499,7 @@ export class MeetingOrchestrator {
             transcript,
             turnIndex: position ? position.offset : this.state.turnIndex,
             policy: this.config.turnPolicy,
+            turnsLeft: this.config.maxTurns - this.state.turnIndex,
         });
     }
 
@@ -537,7 +538,7 @@ export class MeetingOrchestrator {
         return this.runtimes.find(r => r.serves(persona)) ?? null;
     }
 
-    private turnContext(): TurnContext {
+    private turnContext(transcript: ChannelMessage[], speaker: AgentPersona): TurnContext {
         return {
             meetingId: this.config.id,
             title: this.config.title,
@@ -552,14 +553,25 @@ export class MeetingOrchestrator {
             turnIndex: this.state.turnIndex,
             maxTurns: this.config.maxTurns,
             completionMarker: this.completionMarker,
-            phase: this.phaseContext(),
+            phase: this.phaseContext(transcript, speaker),
         };
     }
 
-    private phaseContext(): TurnContext["phase"] {
+    private phaseContext(
+        transcript: ChannelMessage[],
+        speaker: AgentPersona
+    ): TurnContext["phase"] {
         const phases = this.config.phases ?? [];
         const position = phaseAt(phases, this.state.turnIndex);
         if (!position) return undefined;
+        const room = phaseParticipants(this.config.participants, position.phase);
+        // Nobody else speaks after the meeting's last turn, so no one is waiting.
+        const lastTurn = this.state.turnIndex + 1 >= this.config.maxTurns;
+        const waiting = lastTurn
+            ? []
+            : roomRound(room, transcript, position.offset)
+                  .waiting.filter(seat => seat.id !== speaker.id)
+                  .map(seat => seat.id);
         return {
             index: position.index,
             count: phases.length,
@@ -568,6 +580,7 @@ export class MeetingOrchestrator {
             offset: position.offset,
             turns: Math.max(1, Math.floor(position.phase.turns)),
             last: position.last,
+            waiting,
         };
     }
 }

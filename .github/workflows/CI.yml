@@ -96,6 +96,11 @@ jobs:
         run: pnpm lint
 
       - name: Typecheck (all workspace packages, worker included)
+        env:
+            # apps/web's program alone now outgrows the default ~2GB heap and
+            # fails intermittently (exit 134, "heap out of memory"), as `next
+            # build` does below.
+            NODE_OPTIONS: --max-old-space-size=8192
         run: pnpm typecheck
 
       # Contracts live inside their features (ADR-008); the schema generator
@@ -110,6 +115,7 @@ jobs:
           --filter @launchstack/retrieval
           --filter @launchstack/document-conversion-engine
           --filter @launchstack/simulation
+          --filter @launchstack/collab
           --filter @launchstack/worker test
 
       # Includes the outbox + lifecycle integration tests against the real
@@ -528,6 +534,10 @@ jobs:
 
     env:
       SKIP_ENV_VALIDATION: "1"
+      # `next build` of apps/web peaks above Node's default ~2GB heap and
+      # aborts with "heap out of memory" (exit 134) on some runs and not
+      # others. The runner has 16GB; the Dockerfile's builder stage matches.
+      NODE_OPTIONS: --max-old-space-size=8192
 
     steps:
       - name: Checkout code

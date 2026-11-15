@@ -55,6 +55,10 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # Force standalone on Linux (the Next config already enables it on non-
 # Windows, but being explicit keeps the Docker path deterministic).
 ENV STANDALONE_BUILD=1
+# `next build` peaks above Node's default ~2GB heap and aborts with "heap
+# out of memory" on some runs. Builder stage only; the runner stage starts
+# from a fresh image and does not inherit it.
+ENV NODE_OPTIONS=--max-old-space-size=8192
 
 
 RUN --mount=type=cache,id=nextjs-cache,target=/app/apps/web/.next/cache \

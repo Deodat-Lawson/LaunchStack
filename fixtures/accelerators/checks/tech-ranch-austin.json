@@ -1,0 +1,35 @@
+{
+  "programId": "tech-ranch-austin",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.techranchaustin.com"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-bb248d5207",
+      "url": "https://www.techranchaustin.com",
+      "title": "Tech Ranch Austin — homepage checked by scrape.py",
+      "excerpt": "Home - Tech Ranch Austin Tech Ranch Austin Programs Entrepreneurs Global Bridges",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Tech Ranch Austin",
+        "evidenceId": "check-name-bb248d5207"
+      }
+    ],
+    "examplePages": []
+  }
+}

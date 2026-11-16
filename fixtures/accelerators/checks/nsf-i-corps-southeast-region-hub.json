@@ -1,0 +1,36 @@
+{
+  "programId": "nsf-i-corps-southeast-region-hub",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://icorpssoutheasthub.org/",
+    "https://icorpssoutheasthub.org/about"
+  ],
+  "evidence": [
+    {
+      "id": "check-route-b6bd12e458",
+      "url": "https://icorpssoutheasthub.org/",
+      "title": "NSF I-Corps Southeast Region Hub — homepage checked by scrape.py",
+      "excerpt": "Home → https://icorpssoutheasthub.org/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://icorpssoutheasthub.org/",
+        "evidenceId": "check-route-b6bd12e458"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

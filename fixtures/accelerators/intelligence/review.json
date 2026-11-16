@@ -257,6 +257,19 @@
       "status": "open"
     },
     {
+      "id": "dallas-entrepreneur-center-dec:email",
+      "programId": "dallas-entrepreneur-center-dec",
+      "group": "contact",
+      "field": "email",
+      "state": "conflicting",
+      "evidenceIds": [
+        "official-logo",
+        "homepage"
+      ],
+      "detail": "More than one public address is in the checked excerpts. None was selected.",
+      "status": "open"
+    },
+    {
       "id": "entrepreneurs-first:stale:ef-apply-hub",
       "programId": "entrepreneurs-first",
       "group": "identity",

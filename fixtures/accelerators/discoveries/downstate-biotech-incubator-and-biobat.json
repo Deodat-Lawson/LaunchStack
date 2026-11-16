@@ -1,0 +1,262 @@
+{
+  "programId": "downstate-biotech-incubator-and-biobat",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pages": [
+    {
+      "url": "https://www.downstate.edu/patient-care/index.html",
+      "page": "details",
+      "anchor": "Patient Care Overview",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/patient-care/about/index.html",
+      "page": "details",
+      "anchor": "University Hospital at Downstate",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/education-training/index.html",
+      "page": "details",
+      "anchor": "Education & Training Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/education-training/program-finder.html",
+      "page": "details",
+      "anchor": "Find Your Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/education-training/fellowship-residency-programs/index.html",
+      "page": "details",
+      "anchor": "Residencies & Fellowships",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/about/our-administration/office-for-institutional-equity/index.html",
+      "page": "details",
+      "anchor": "Office for Institutional Equity",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/research/index.html",
+      "page": "details",
+      "anchor": "Research Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/research/biotech-incubators/internships.html",
+      "page": "application",
+      "anchor": "Biotechnology Incubator Application",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/news-events/index.html",
+      "page": "details",
+      "anchor": "News & Events Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/about/office-of-the-president/presidents-bulletin/index.html",
+      "page": "details",
+      "anchor": "Presidents Bulletin",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/about/index.html",
+      "page": "details",
+      "anchor": "About Downstate Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/about/office-of-the-president/index.html",
+      "page": "details",
+      "anchor": "Office of the President",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/about/our-administration/index.html",
+      "page": "details",
+      "anchor": "Our Administration",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/about/societies-funds/index.html",
+      "page": "details",
+      "anchor": "Societies & Funds",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/about/community-impact/index.html",
+      "page": "details",
+      "anchor": "Community Impact",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/about/fast-facts.html",
+      "page": "details",
+      "anchor": "Fast Facts",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/about/our-mission.html",
+      "page": "details",
+      "anchor": "Our Mission",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/about/our-administration/faculty/index.html",
+      "page": "details",
+      "anchor": "Faculty",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/about/contact-us/index.html",
+      "page": "details",
+      "anchor": "Contact Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/about/societies-funds/development-philanthropy/index.html",
+      "page": "details",
+      "anchor": "Office of Development & Philanthropy",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/about/our-administration/information-services-technology/index.html",
+      "page": "details",
+      "anchor": "Division of Information Services",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/education-training/alumni/index.html",
+      "page": "portfolio",
+      "anchor": "Alumni",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/about/our-administration/human-resources/self-service.html",
+      "page": "details",
+      "anchor": "Self Service",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/about/search-directories/index.html",
+      "page": "details",
+      "anchor": "Searches & Directories",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/research/biotech-incubators/about-us.html",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/research/biotech-incubators/entrepreneurship.html",
+      "page": "details",
+      "anchor": "Entrepreneurship Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/research/biotech-incubators/incentive.html",
+      "page": "details",
+      "anchor": "Incentive Programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/research/biotech-incubators/about-brooklyn.html",
+      "page": "details",
+      "anchor": "About Brooklyn",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/about/our-administration/human-resources/index.html",
+      "page": "details",
+      "anchor": "Job Opportunities",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/about/accessibility-statement.html",
+      "page": "details",
+      "anchor": "Accessibility",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/about/foil.html",
+      "page": "details",
+      "anchor": "FOIL",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.downstate.edu/about/contact-us/directions-locations-parking/index.html",
+      "page": "details",
+      "anchor": "Directions & Parking",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

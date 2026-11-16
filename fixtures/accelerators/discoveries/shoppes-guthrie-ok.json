@@ -1,0 +1,22 @@
+{
+  "programId": "shoppes-guthrie-ok",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pages": [
+    {
+      "url": "https://www.guthrieok.com/about",
+      "page": "details",
+      "anchor": "ABOUT",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.guthrieok.com/_files/ugd/a2b3c8_20fd33691e6948bcae069e2c972d76fa.pdf",
+      "page": "application",
+      "anchor": "Vendor Application",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

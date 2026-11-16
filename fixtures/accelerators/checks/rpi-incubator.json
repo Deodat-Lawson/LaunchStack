@@ -1,0 +1,69 @@
+{
+  "programId": "rpi-incubator",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://eship.rpi.edu/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-674eda7741",
+      "url": "https://eship.rpi.edu/",
+      "title": "RPI Incubator — homepage checked by scrape.py",
+      "excerpt": "\"email\": \"admissions@rpi.edu\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-8299fecafa",
+      "url": "https://eship.rpi.edu/",
+      "title": "RPI Incubator — homepage checked by scrape.py",
+      "excerpt": "518.276.2058",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-9b1af3d393",
+      "url": "https://eship.rpi.edu/",
+      "title": "RPI Incubator — homepage checked by scrape.py",
+      "excerpt": "\"telephone\": \"(518) 276-6000\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-d83cf84bc2",
+      "url": "https://eship.rpi.edu/",
+      "title": "RPI Incubator — homepage checked by scrape.py",
+      "excerpt": "(518) 276-6000",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "admissions@rpi.edu",
+        "evidenceId": "check-email-674eda7741"
+      }
+    ],
+    "phones": [
+      {
+        "value": "15182762058",
+        "evidenceId": "check-phone-8299fecafa"
+      },
+      {
+        "value": "15182766000",
+        "evidenceId": "check-phone-d83cf84bc2"
+      },
+      {
+        "value": "(518) 276-6000",
+        "evidenceId": "check-phone-9b1af3d393"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

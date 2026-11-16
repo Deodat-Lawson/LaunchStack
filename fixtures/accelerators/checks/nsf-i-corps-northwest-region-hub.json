@@ -1,0 +1,55 @@
+{
+  "programId": "nsf-i-corps-northwest-region-hub",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.nwicorps.org/",
+    "https://www.nwicorps.org/regional-program-2"
+  ],
+  "evidence": [
+    {
+      "id": "check-route-868ef077af",
+      "url": "https://www.nwicorps.org/",
+      "title": "NSF I-Corps Northwest Region Hub — homepage checked by scrape.py",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a6e7c2621d",
+      "url": "https://www.nwicorps.org/regional-program-2",
+      "title": "NSF I-Corps Northwest Region Hub — details page checked by scrape.py",
+      "excerpt": "Apply → https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b893109153",
+      "url": "https://www.nwicorps.org/",
+      "title": "NSF I-Corps Northwest Region Hub — homepage checked by scrape.py",
+      "excerpt": "https://www.nwicorps.org/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://airtable.com/appchtuZSEDR2xXod/pagM3WEdQVbm6uSlV/form",
+        "evidenceId": "check-route-868ef077af"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.nwicorps.org/",
+        "evidenceId": "check-route-b893109153"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

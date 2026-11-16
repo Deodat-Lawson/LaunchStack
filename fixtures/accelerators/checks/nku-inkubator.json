@@ -1,0 +1,46 @@
+{
+  "programId": "nku-inkubator",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "http://cob.nku.edu/inkubator.html"
+  ],
+  "evidence": [
+    {
+      "id": "check-phone-35ccefffb3",
+      "url": "http://cob.nku.edu/inkubator.html",
+      "title": "NKU Inkubator — homepage checked by scrape.py",
+      "excerpt": "(859) 572-5100",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-b6a78e826c",
+      "url": "http://cob.nku.edu/inkubator.html",
+      "title": "NKU Inkubator — homepage checked by scrape.py",
+      "excerpt": "859-572-5165",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "8595725165",
+        "evidenceId": "check-phone-b6a78e826c"
+      },
+      {
+        "value": "8595725100",
+        "evidenceId": "check-phone-35ccefffb3"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

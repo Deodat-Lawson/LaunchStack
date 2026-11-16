@@ -1,0 +1,36 @@
+{
+  "programId": "north-texas-enterprise-center-for-technology-ntec",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.ntec-inc.org",
+    "https://www.ntec-inc.org/about-ntec/frisco-accelerator-mission/"
+  ],
+  "evidence": [
+    {
+      "id": "check-route-8c95e6a55d",
+      "url": "https://www.ntec-inc.org",
+      "title": "North Texas Enterprise Center for Technology (NTEC) — homepage checked by scrape.py",
+      "excerpt": "NTEC | North Texas Enterprise Center → https://www.ntec-inc.org",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.ntec-inc.org",
+        "evidenceId": "check-route-8c95e6a55d"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

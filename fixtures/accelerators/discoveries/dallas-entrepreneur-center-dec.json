@@ -1,0 +1,70 @@
+{
+  "programId": "dallas-entrepreneur-center-dec",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pages": [
+    {
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "page": "details",
+      "anchor": "PROGRAMS",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://thedec.co/about/",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://thedec.co/about/blog/",
+      "page": "details",
+      "anchor": "BLOG",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://thedec.co/about/our-team/",
+      "page": "details",
+      "anchor": "Our Team",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://thedec.co/about/news/",
+      "page": "details",
+      "anchor": "News",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://thedec.co/about/contact/",
+      "page": "details",
+      "anchor": "CONTACT",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://thedec.co/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://thedec.co/programs/",
+      "page": "details",
+      "anchor": "Learn More",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

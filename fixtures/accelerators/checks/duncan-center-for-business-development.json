@@ -1,0 +1,65 @@
+{
+  "programId": "duncan-center-for-business-development",
+  "checkedAt": "2026-11-16T04:09:23.000Z",
+  "pagesRead": [
+    "https://www.ok-duncan.com"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-90ebeabf5a",
+      "url": "https://www.ok-duncan.com",
+      "title": "Duncan Center for Business Development — homepage checked by scrape.py",
+      "excerpt": "Fikes Engineering Read More I chose to locate in the Duncan Center for Business Development because I knew I'd have the support I needed to build my",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-b90eff7be6",
+      "url": "https://www.ok-duncan.com",
+      "title": "Duncan Center for Business Development — homepage checked by scrape.py",
+      "excerpt": "Fax: 580.255.2647",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-eda1f8d290",
+      "url": "https://www.ok-duncan.com",
+      "title": "Duncan Center for Business Development — homepage checked by scrape.py",
+      "excerpt": "Phone: 580.255.9675",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-fb2e10b8a5",
+      "url": "https://www.ok-duncan.com",
+      "title": "Duncan Center for Business Development — homepage checked by scrape.py",
+      "excerpt": "580.255.9675",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "580-255-9675",
+        "evidenceId": "check-phone-fb2e10b8a5"
+      },
+      {
+        "value": "580-255-2647",
+        "evidenceId": "check-phone-b90eff7be6"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Duncan Center for Business Development",
+        "evidenceId": "check-name-90ebeabf5a"
+      }
+    ],
+    "examplePages": []
+  }
+}

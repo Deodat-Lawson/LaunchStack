@@ -28,6 +28,7 @@ USAGE = """\
   scrape.py discover harvest             refresh us-candidates.json from discovery-sources.json
   scrape.py discover report
   scrape.py discover vet                 accept or reject new and review candidates
+  scrape.py discover confirm-listed      vet only review entries an official directory listed
   scrape.py discover add-confirmed       add the candidates an operator (or vet) confirmed
   scrape.py coverage                     regenerate COVERAGE.md from the dossiers
   scrape.py test                         run the scraper's unit tests (no network)
@@ -115,9 +116,11 @@ def run_discover(args: argparse.Namespace) -> int:
     if args.action == "harvest":
         discover.harvest(now())
     elif args.action == "add-confirmed":
-        discover.add_confirmed(now())
+        discover.add_confirmed(now(), workers=args.workers)
     elif args.action == "vet":
         discover.vet(now(), workers=args.workers)
+    elif args.action == "confirm-listed":
+        discover.confirm_listed(now(), workers=args.workers)
     else:
         print(discover.summary(discover.load()))
     return 0
@@ -166,8 +169,8 @@ def main(argv: list[str] | None = None) -> int:
     adding.add_argument("--dry-run", action="store_true")
     adding.set_defaults(handler=add)
     discovering = commands.add_parser("discover", help="find US startup programs for operator review")
-    discovering.add_argument("action", choices=("harvest", "report", "vet", "add-confirmed"))
-    discovering.add_argument("--workers", type=int, default=8, help="candidates fetched in parallel (default 8)")
+    discovering.add_argument("action", choices=("harvest", "report", "vet", "confirm-listed", "add-confirmed"))
+    discovering.add_argument("--workers", type=int, default=8, help="sites fetched in parallel (default 8)")
     discovering.set_defaults(handler=run_discover)
     commands.add_parser("coverage", help="regenerate COVERAGE.md").set_defaults(handler=coverage)
     commands.add_parser("test", help="run the unit tests").set_defaults(handler=test)

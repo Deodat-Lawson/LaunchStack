@@ -1,0 +1,174 @@
+{
+  "programId": "new-york-institute-of-technology",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pages": [
+    {
+      "url": "https://www.nyit.edu/apply",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/about/offices/academic-affairs/tech-talks/",
+      "page": "details",
+      "anchor": "Tech Talks: Promoting Civil Discourse",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/medicine/college-of-osteopathic-medicine/about",
+      "page": "details",
+      "anchor": "About",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/medicine/college-of-osteopathic-medicine/about/labs-and-facilities",
+      "page": "details",
+      "anchor": "Labs & Facilities",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/about/",
+      "page": "details",
+      "anchor": "About Home",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/about/at-a-glance",
+      "page": "details",
+      "anchor": "At a Glance",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/about/at-a-glance/accreditation",
+      "page": "details",
+      "anchor": "Accreditation",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/about/our-campuses",
+      "page": "details",
+      "anchor": "Our Campuses",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/about/leadership",
+      "page": "details",
+      "anchor": "Leadership",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/about/rankings-and-recognition/",
+      "page": "details",
+      "anchor": "Rankings & Recognition",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/about/offices",
+      "page": "details",
+      "anchor": "Office Directory",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/about/artificial-intelligence/",
+      "page": "details",
+      "anchor": "Artificial Intelligence",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/research/ospar/",
+      "page": "details",
+      "anchor": "Office of Sponsored Programs & Research (OSPAR)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/alumni",
+      "page": "portfolio",
+      "anchor": "Alumni",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/academics/engineering-and-computing-sciences/etic-partners/",
+      "page": "portfolio",
+      "anchor": "partner companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/engineering/etic_application",
+      "page": "application",
+      "anchor": "Become an ETIC Partner Company",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/academics/engineering-and-computing-sciences/etic/student-opportunities",
+      "page": "details",
+      "anchor": "Find Out About Student Opportunities",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/about/contact",
+      "page": "details",
+      "anchor": "Contact",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/about/statement_on_non_discrimination",
+      "page": "details",
+      "anchor": "Statement of Non-Discrimination",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/about/terms_and_conditions",
+      "page": "details",
+      "anchor": "Terms & Conditions",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nyit.edu/about/consumer_information",
+      "page": "details",
+      "anchor": "Consumer Information",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

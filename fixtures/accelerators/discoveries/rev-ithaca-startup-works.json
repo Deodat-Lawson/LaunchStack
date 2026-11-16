@@ -1,0 +1,62 @@
+{
+  "programId": "rev-ithaca-startup-works",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pages": [
+    {
+      "url": "https://www.revithaca.com/about-rev/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/about-rev/people/",
+      "page": "details",
+      "anchor": "Mentors & Team",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/hardware-accelerator-alumni/",
+      "page": "portfolio",
+      "anchor": "Hardware Accelerator Alumni",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/join-rev/",
+      "page": "application",
+      "anchor": "How to Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/event/entrepreneurship-essentials-filing-tax/",
+      "page": "batches",
+      "anchor": "Rev Entrepreneurship Essentials: Filing Deadlines, Tax, and Regulatory Obligations",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/category/rev-member-companies/",
+      "page": "portfolio",
+      "anchor": "Rev Member Companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.revithaca.com/category/alumni-stardom/",
+      "page": "portfolio",
+      "anchor": "Alumni Stardom",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

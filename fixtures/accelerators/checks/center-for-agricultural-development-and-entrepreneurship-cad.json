@@ -1,0 +1,36 @@
+{
+  "programId": "center-for-agricultural-development-and-entrepreneurship-cad",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://cadefarms.org/",
+    "https://www.cadefarms.org/about"
+  ],
+  "evidence": [
+    {
+      "id": "check-phone-a7082032bf",
+      "url": "https://cadefarms.org/",
+      "title": "Center for Agricultural Development and Entrepreneurship, Inc (CADE) — homepage checked by scrape.py",
+      "excerpt": "\"telephone\": \"607-433-2545​​​\"",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "607-433-2545​​​",
+        "evidenceId": "check-phone-a7082032bf"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

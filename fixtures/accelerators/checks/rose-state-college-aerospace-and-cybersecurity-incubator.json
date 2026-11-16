@@ -1,0 +1,99 @@
+{
+  "programId": "rose-state-college-aerospace-and-cybersecurity-incubator",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+    "https://www.workforce.rose.edu/aopa-program",
+    "https://www.workforce.rose.edu/s/RSC-Incubator-Application-Form_Fillable.pdf",
+    "https://www.workforce.rose.edu/faqs"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-6b2028b076",
+      "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — homepage checked by scrape.py",
+      "excerpt": "Incubator Incubator Mission Statement The mission of the Rose State College Aerospace and Cybersecurity Incubator is to bridge the gap between small businesses and key",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-3a5286d583",
+      "url": "https://www.workforce.rose.edu/aopa-program",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — details page checked by scrape.py",
+      "excerpt": "\"telephone\": \"405-733-7488\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-91f89c6ded",
+      "url": "https://www.workforce.rose.edu/faqs",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — terms page checked by scrape.py",
+      "excerpt": "\"telephone\": \"405-733-7488\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-c2a1a655f4",
+      "url": "https://www.workforce.rose.edu/faqs",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — terms page checked by scrape.py",
+      "excerpt": "405-733-7488",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-f4d045464b",
+      "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — homepage checked by scrape.py",
+      "excerpt": "\"telephone\": \"405-733-7488\"",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5a10e411d7",
+      "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — homepage checked by scrape.py",
+      "excerpt": "RSC Aerospace and Cybersecurity Incubator → https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+      "page": "details"
+    },
+    {
+      "id": "check-route-78b994b25f",
+      "url": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+      "title": "Rose State College Aerospace and Cybersecurity Incubator — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://www.workforce.rose.edu/s/RSC-Incubator-Application-Form_Fillable.pdf",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "405-733-7488",
+        "evidenceId": "check-phone-f4d045464b"
+      },
+      {
+        "value": "4057337488",
+        "evidenceId": "check-phone-c2a1a655f4"
+      }
+    ],
+    "routes": [
+      {
+        "value": "https://www.workforce.rose.edu/s/RSC-Incubator-Application-Form_Fillable.pdf",
+        "evidenceId": "check-route-78b994b25f"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
+        "evidenceId": "check-route-5a10e411d7"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Rose State College Aerospace and Cybersecurity Incubator",
+        "evidenceId": "check-name-6b2028b076"
+      }
+    ],
+    "examplePages": []
+  }
+}

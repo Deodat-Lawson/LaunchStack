@@ -1,0 +1,54 @@
+{
+  "programId": "hub-for-innovation-and-entrepreneurship-nycrin",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.nycinnovationhotspot.org"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-7346fe9196",
+      "url": "https://www.nycinnovationhotspot.org",
+      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — homepage checked by scrape.py",
+      "excerpt": "consideration. For any general inquiries, please email info@nycinnovationhotspot.org Follow us on LinkedIn ! © NYC Innovation Hot Spot, 2026",
+      "page": "details"
+    },
+    {
+      "id": "check-email-ff7884687f",
+      "url": "https://www.nycinnovationhotspot.org",
+      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — homepage checked by scrape.py",
+      "excerpt": "info@nycinnovationhotspot.org",
+      "page": "details"
+    },
+    {
+      "id": "check-route-550688f61b",
+      "url": "https://www.nycinnovationhotspot.org",
+      "title": "Hub for Innovation and Entrepreneurship (NYCRIN) — homepage checked by scrape.py",
+      "excerpt": "https://www.nycinnovationhotspot.org",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@nycinnovationhotspot.org",
+        "evidenceId": "check-email-ff7884687f"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.nycinnovationhotspot.org",
+        "evidenceId": "check-route-550688f61b"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

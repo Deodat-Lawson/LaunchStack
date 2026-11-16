@@ -1,0 +1,80 @@
+{
+  "programId": "dallas-entrepreneur-center-dec",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "http://thedec.co/",
+    "https://thedec.co/programs-page-8-13-2026/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-1a4ff582b3",
+      "url": "http://thedec.co/",
+      "title": "The Dallas Entrepreneur Center (DEC) — homepage checked by scrape.py",
+      "excerpt": "info@TheDEC.co",
+      "page": "details"
+    },
+    {
+      "id": "check-email-513dc9b7c0",
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "title": "The Dallas Entrepreneur Center (DEC) — details page checked by scrape.py",
+      "excerpt": "PROGRAMS – The DEC Network Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A",
+      "page": "details"
+    },
+    {
+      "id": "check-email-9c624b2b10",
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "title": "The Dallas Entrepreneur Center (DEC) — details page checked by scrape.py",
+      "excerpt": "info@TheDEC.co",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f9e1fe9910",
+      "url": "http://thedec.co/",
+      "title": "The Dallas Entrepreneur Center (DEC) — homepage checked by scrape.py",
+      "excerpt": "start, build and grow their businesses. Skip to content info@TheDEC.co Instagram Linkedin Tiktok Facebook-square X-twitter Book A",
+      "page": "details"
+    },
+    {
+      "id": "check-route-36b5f72a26",
+      "url": "http://thedec.co/",
+      "title": "The Dallas Entrepreneur Center (DEC) — homepage checked by scrape.py",
+      "excerpt": "APPLY TODAY → https://thedecnetwork.typeform.com/to/blyCGTBv?typeform-source=bit.ly",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8fef3ed878",
+      "url": "https://thedec.co/programs-page-8-13-2026/",
+      "title": "The Dallas Entrepreneur Center (DEC) — details page checked by scrape.py",
+      "excerpt": "apply here → https://thedecnetwork.typeform.com/programapp?typeform-source=qr.io",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@thedec.co",
+        "evidenceId": "check-email-1a4ff582b3"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://thedecnetwork.typeform.com/to/blyCGTBv?typeform-source=bit.ly",
+        "evidenceId": "check-route-36b5f72a26"
+      },
+      {
+        "value": "https://thedecnetwork.typeform.com/programapp?typeform-source=qr.io",
+        "evidenceId": "check-route-8fef3ed878"
+      }
+    ],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

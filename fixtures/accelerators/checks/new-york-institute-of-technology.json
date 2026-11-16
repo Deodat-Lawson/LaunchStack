@@ -1,0 +1,147 @@
+{
+  "programId": "new-york-institute-of-technology",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.nyit.edu/engineering/etic",
+    "https://www.nyit.edu/apply",
+    "https://www.nyit.edu/about/offices/academic-affairs/tech-talks/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-a71ac4ba0f",
+      "url": "https://www.nyit.edu/apply",
+      "title": "New York Institute of Technology — application page checked by scrape.py",
+      "excerpt": "admissions@nyit.edu",
+      "page": "application"
+    },
+    {
+      "id": "check-email-c9bde14534",
+      "url": "https://www.nyit.edu/apply",
+      "title": "New York Institute of Technology — application page checked by scrape.py",
+      "excerpt": "Contact Us Office of Admissions 800.345.NYIT 516.686.1116 admissions@nyit.edu Long Island Office of Admissions Gerry House Northern",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-4120148eca",
+      "url": "https://www.nyit.edu/apply",
+      "title": "New York Institute of Technology — application page checked by scrape.py",
+      "excerpt": "Alumni → https://www.nyit.edu/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5cc2722db4",
+      "url": "https://www.nyit.edu/engineering/etic",
+      "title": "New York Institute of Technology — homepage checked by scrape.py",
+      "excerpt": "Alumni → https://www.nyit.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b274e20406",
+      "url": "https://www.nyit.edu/about/offices/academic-affairs/tech-talks/",
+      "title": "New York Institute of Technology — details page checked by scrape.py",
+      "excerpt": "Alumni → https://www.nyit.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-route-287c00c7e0",
+      "url": "https://www.nyit.edu/engineering/etic",
+      "title": "New York Institute of Technology — homepage checked by scrape.py",
+      "excerpt": "Apply → https://www.nyit.edu/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-68e5a60e3a",
+      "url": "https://www.nyit.edu/engineering/etic",
+      "title": "New York Institute of Technology — homepage checked by scrape.py",
+      "excerpt": "Apply → https://www.nyit.edu/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6ee705f054",
+      "url": "https://www.nyit.edu/apply",
+      "title": "New York Institute of Technology — application page checked by scrape.py",
+      "excerpt": "Apply as a transfer student instead. → https://www.nyit.edu/admissions/transfer",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7b3ac04bd7",
+      "url": "https://www.nyit.edu/about/offices/academic-affairs/tech-talks/",
+      "title": "New York Institute of Technology — details page checked by scrape.py",
+      "excerpt": "Apply Now → https://www.nyit.edu/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9f2c783000",
+      "url": "https://www.nyit.edu/engineering/etic",
+      "title": "New York Institute of Technology — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://www.nyit.edu/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c7f70c8cd5",
+      "url": "https://www.nyit.edu/about/offices/academic-affairs/tech-talks/",
+      "title": "New York Institute of Technology — details page checked by scrape.py",
+      "excerpt": "Apply → https://www.nyit.edu/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-dcfcf47158",
+      "url": "https://www.nyit.edu/engineering/etic",
+      "title": "New York Institute of Technology — homepage checked by scrape.py",
+      "excerpt": "Become an ETIC Partner Company → https://www.nyit.edu/engineering/etic_application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f07ea62a08",
+      "url": "https://www.nyit.edu/about/offices/academic-affairs/tech-talks/",
+      "title": "New York Institute of Technology — details page checked by scrape.py",
+      "excerpt": "Apply → https://www.nyit.edu/apply",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "admissions@nyit.edu",
+        "evidenceId": "check-email-a71ac4ba0f"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.nyit.edu/apply",
+        "evidenceId": "check-route-68e5a60e3a"
+      },
+      {
+        "value": "https://www.nyit.edu/apply/",
+        "evidenceId": "check-route-287c00c7e0"
+      },
+      {
+        "value": "https://www.nyit.edu/engineering/etic_application",
+        "evidenceId": "check-route-dcfcf47158"
+      },
+      {
+        "value": "https://www.nyit.edu/admissions/transfer",
+        "evidenceId": "check-route-6ee705f054"
+      },
+      {
+        "value": "mailto:admissions@nyit.edu",
+        "evidenceId": "check-email-a71ac4ba0f"
+      }
+    ],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.nyit.edu/alumni",
+        "evidenceId": "check-portfolio-5cc2722db4"
+      }
+    ],
+    "name": [],
+    "examplePages": []
+  }
+}

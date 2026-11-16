@@ -1,0 +1,87 @@
+{
+  "programId": "nsf-i-corps-mid-south-region-hub",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.midsouthhub.org/",
+    "https://www.midsouthhub.org/about",
+    "https://www.midsouthhub.org/regional-cohorts"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-02468854da",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page checked by scrape.py",
+      "excerpt": "pioneered by the NSF. The program will provide infrastructure, advice, resources, networking opportunities, training, and potentially funding (awards of up to $3,000 per team) to enable teams to transition their work towards the marketplace or into becoming National I-Corps Team applicants. Dates Mason I-Corps Fall 2026",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-20f3d18488",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page checked by scrape.py",
+      "excerpt": "\"telephone\": \"6153431501\"",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-519c29c762",
+      "url": "https://www.midsouthhub.org/",
+      "title": "NSF I-Corps Mid-South Region Hub — homepage checked by scrape.py",
+      "excerpt": "\"telephone\": \"6153431501\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-f0f69fc6e9",
+      "url": "https://www.midsouthhub.org/about",
+      "title": "NSF I-Corps Mid-South Region Hub — details page checked by scrape.py",
+      "excerpt": "\"telephone\": \"6153431501\"",
+      "page": "details"
+    },
+    {
+      "id": "check-route-bebd13437e",
+      "url": "https://www.midsouthhub.org/",
+      "title": "NSF I-Corps Mid-South Region Hub — homepage checked by scrape.py",
+      "excerpt": "https://www.midsouthhub.org/",
+      "page": "details"
+    },
+    {
+      "id": "check-status-62239046e2",
+      "url": "https://www.midsouthhub.org/regional-cohorts",
+      "title": "NSF I-Corps Mid-South Region Hub — batches page checked by scrape.py",
+      "excerpt": "available cohorts are listed below. Most regional cohorts are held virtually. University of Kentucky applications are open. Vanderbilt University About The Builder program provides a step-by-step guide for aspiring",
+      "page": "batches"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "6153431501",
+        "evidenceId": "check-phone-519c29c762"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.midsouthhub.org/",
+        "evidenceId": "check-route-bebd13437e"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-62239046e2"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "pioneered by the NSF. The program will provide infrastructure, advice, resources, networking opportunities, training, and potentially funding (awards of up to $3,000 per team) to enable teams to transition their work towards the marketplace or into becoming National I-Corps Team applicants. Dates Mason I-Corps Fall 2026",
+        "evidenceId": "check-deal-02468854da"
+      }
+    ],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

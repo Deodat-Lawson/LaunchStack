@@ -1,0 +1,73 @@
+{
+  "programId": "link",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.sandspringschamber.org/the-link"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-0314cb8d4a",
+      "url": "https://www.sandspringschamber.org/the-link",
+      "title": "The LINK — homepage checked by scrape.py",
+      "excerpt": "Ave Sand Springs, OK 74063 Call Us 918-245-3221 Email Us info@sandspringschamber.org Hours of Operation Monday - Thursday: 8:30AM-5:00PM",
+      "page": "details"
+    },
+    {
+      "id": "check-email-08c9adc55b",
+      "url": "https://www.sandspringschamber.org/the-link",
+      "title": "The LINK — homepage checked by scrape.py",
+      "excerpt": "info@sandspringschamber.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f94f834987",
+      "url": "https://www.sandspringschamber.org/the-link",
+      "title": "The LINK — homepage checked by scrape.py",
+      "excerpt": "918-245-3221 109 N Garfield Ave Sand Springs, OK 74063 info@sandspringschamber.org Facebook Become a Member The Link The Link is the home of",
+      "page": "details"
+    },
+    {
+      "id": "check-name-cf4dd94bf1",
+      "url": "https://www.sandspringschamber.org/the-link",
+      "title": "The LINK — homepage checked by scrape.py",
+      "excerpt": "The Link - Sand Springs Chamber of Commerce Chamber About the",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-fca3ee5d85",
+      "url": "https://www.sandspringschamber.org/the-link",
+      "title": "The LINK — homepage checked by scrape.py",
+      "excerpt": "918-245-3221",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@sandspringschamber.org",
+        "evidenceId": "check-email-08c9adc55b"
+      }
+    ],
+    "phones": [
+      {
+        "value": "9182453221",
+        "evidenceId": "check-phone-fca3ee5d85"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "The LINK",
+        "evidenceId": "check-name-cf4dd94bf1"
+      }
+    ],
+    "examplePages": []
+  }
+}

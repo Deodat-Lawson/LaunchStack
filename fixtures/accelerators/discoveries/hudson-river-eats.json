@@ -1,0 +1,30 @@
+{
+  "programId": "hudson-river-eats",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pages": [
+    {
+      "url": "https://www.hudsonriverhousing.org/s/HowtoApplyFINAL72326.docx",
+      "page": "application",
+      "anchor": "How to Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hudsonriverhousing.org/apply-online",
+      "page": "application",
+      "anchor": "Apply Online",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hudsonriverhousing.org/apply",
+      "page": "application",
+      "anchor": "Folder: APPLY FOR HOUSING",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

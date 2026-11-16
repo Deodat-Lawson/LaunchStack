@@ -1,0 +1,85 @@
+{
+  "programId": "rev-ithaca-startup-works",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://revithaca.com/",
+    "https://www.revithaca.com/about-rev/",
+    "https://www.revithaca.com/join-rev/",
+    "https://www.revithaca.com/event/entrepreneurship-essentials-filing-tax/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-ca862ee7a7",
+      "url": "https://revithaca.com/",
+      "title": "Rev Ithaca Startup Works — homepage checked by scrape.py",
+      "excerpt": "Ryan Nadeau is currently the Operations Assistant at Rev Ithaca Startup Works. He oversees daily Rev operations along with its",
+      "page": "details"
+    },
+    {
+      "id": "check-route-74496f676b",
+      "url": "https://revithaca.com/",
+      "title": "Rev Ithaca Startup Works — homepage checked by scrape.py",
+      "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7569d06e80",
+      "url": "https://www.revithaca.com/about-rev/",
+      "title": "Rev Ithaca Startup Works — details page checked by scrape.py",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a1ddad2f53",
+      "url": "https://www.revithaca.com/event/entrepreneurship-essentials-filing-tax/",
+      "title": "Rev Ithaca Startup Works — batches page checked by scrape.py",
+      "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-a39498ffb1",
+      "url": "https://www.revithaca.com/event/entrepreneurship-essentials-filing-tax/",
+      "title": "Rev Ithaca Startup Works — batches page checked by scrape.py",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-ec1ca24d7b",
+      "url": "https://www.revithaca.com/about-rev/",
+      "title": "Rev Ithaca Startup Works — details page checked by scrape.py",
+      "excerpt": "How to Apply → https://www.revithaca.com/join-rev/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-eeae128acf",
+      "url": "https://revithaca.com/",
+      "title": "Rev Ithaca Startup Works — homepage checked by scrape.py",
+      "excerpt": "Apply → https://www.revithaca.com/join-rev/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.revithaca.com/join-rev/",
+        "evidenceId": "check-route-74496f676b"
+      }
+    ],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Rev Ithaca Startup Works",
+        "evidenceId": "check-name-ca862ee7a7"
+      }
+    ],
+    "examplePages": []
+  }
+}

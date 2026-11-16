@@ -1,0 +1,54 @@
+{
+  "programId": "csi-tech-incubator",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pages": [
+    {
+      "url": "https://www.csiinnovationhub.com/cohortalumni",
+      "page": "portfolio",
+      "anchor": "FOUNDERS",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/about",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/programs",
+      "page": "details",
+      "anchor": "Programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/emerging-tech",
+      "page": "batches",
+      "anchor": "Emerging Tech Impact Cohort",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/thriveprogram",
+      "page": "details",
+      "anchor": "Thrive Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.csiinnovationhub.com/faq",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

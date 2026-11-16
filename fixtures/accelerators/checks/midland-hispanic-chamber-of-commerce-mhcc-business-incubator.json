@@ -1,0 +1,49 @@
+{
+  "programId": "midland-hispanic-chamber-of-commerce-mhcc-business-incubator",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.midlandhcc.com",
+    "https://www.midlandhcc.com/about",
+    "https://www.midlandhcc.com/about-1"
+  ],
+  "evidence": [
+    {
+      "id": "check-phone-40761a0c3f",
+      "url": "https://www.midlandhcc.com",
+      "title": "Midland Hispanic Chamber of Commerce (MHCC) Business Incubator — homepage checked by scrape.py",
+      "excerpt": "\"telephone\": \"(432)704-5533\"",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5381335535",
+      "url": "https://www.midlandhcc.com",
+      "title": "Midland Hispanic Chamber of Commerce (MHCC) Business Incubator — homepage checked by scrape.py",
+      "excerpt": "https://www.midlandhcc.com",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "(432)704-5533",
+        "evidenceId": "check-phone-40761a0c3f"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.midlandhcc.com",
+        "evidenceId": "check-route-5381335535"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

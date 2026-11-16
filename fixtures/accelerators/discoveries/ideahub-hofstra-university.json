@@ -1,0 +1,182 @@
+{
+  "programId": "ideahub-hofstra-university",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pages": [
+    {
+      "url": "https://www.hofstra.edu/apply",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/alumni/ways-to-give/?ref=globalnav",
+      "page": "portfolio",
+      "anchor": "Make a Gift",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "page": "application",
+      "anchor": "Application Process",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/academics/academic-offerings/?interest&school&search&programs=undergraduate-programs",
+      "page": "details",
+      "anchor": "Undergraduate Programs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/academics/academic-offerings/?interest&school&search&programs=graduate-programs",
+      "page": "details",
+      "anchor": "Graduate Programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/about/visitors-guide/?ref=globalnav",
+      "page": "details",
+      "anchor": "Visitors Guide",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/about/?ref=globalnav",
+      "page": "details",
+      "anchor": "About",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/about/at-a-glance/?ref=globalnav",
+      "page": "details",
+      "anchor": "At a Glance",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/about/history/?ref=globalnav",
+      "page": "details",
+      "anchor": "History",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/about/administration/provosts-office/faculty/?ref=globalnav",
+      "page": "details",
+      "anchor": "Faculty",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/about/administration/?ref=globalnav",
+      "page": "details",
+      "anchor": "Administration",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/about/at-a-glance/accreditations/?ref=globalnav",
+      "page": "details",
+      "anchor": "Accreditations",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/about/experts/?ref=globalnav",
+      "page": "details",
+      "anchor": "Experts",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/research/office-for-research-and-sponsored-programs/?ref=globalnav",
+      "page": "details",
+      "anchor": "Office for Research and Sponsored Programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/alumni/?ref=globalbtm",
+      "page": "portfolio",
+      "anchor": "Alumni",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/about/at-a-glance/directories/",
+      "page": "details",
+      "anchor": "Directories",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/graduate/apply.html",
+      "page": "application",
+      "anchor": "Start Your Application",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/admission/apply/",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/about/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/alumni/",
+      "page": "portfolio",
+      "anchor": "Alumni",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hofstra.edu/about/policies.html",
+      "page": "details",
+      "anchor": "Hofstra University Policies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "programId": "nsf-i-corps-interior-northeast-region-hub",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.in-icorps.org/"
+  ],
+  "evidence": [
+    {
+      "id": "check-route-c42592a0d0",
+      "url": "https://www.in-icorps.org/",
+      "title": "NSF I-Corps Interior Northeast Region Hub — homepage checked by scrape.py",
+      "excerpt": "https://www.in-icorps.org/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.in-icorps.org/",
+        "evidenceId": "check-route-c42592a0d0"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

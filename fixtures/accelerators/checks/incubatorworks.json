@@ -1,0 +1,48 @@
+{
+  "programId": "incubatorworks",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://incubatorworks.org/",
+    "https://incubatorworks.org/programs/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-dc8e0d6a1b",
+      "url": "https://incubatorworks.org/",
+      "title": "IncubatorWorks — homepage checked by scrape.py",
+      "excerpt": "IncubatorWorks info@incworks.org (607) 962-6387 Home Programs Co.Starters",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a1eb930ea6",
+      "url": "https://incubatorworks.org/",
+      "title": "IncubatorWorks — homepage checked by scrape.py",
+      "excerpt": "https://incubatorworks.org/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://incubatorworks.org/",
+        "evidenceId": "check-route-a1eb930ea6"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "IncubatorWorks",
+        "evidenceId": "check-name-dc8e0d6a1b"
+      }
+    ],
+    "examplePages": []
+  }
+}

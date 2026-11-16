@@ -1,0 +1,42 @@
+{
+  "programId": "central-new-york-biotech-accelerator",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.cnybac.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-phone-824864f6e0",
+      "url": "https://www.cnybac.com/",
+      "title": "Central New York Biotech Accelerator — homepage checked by scrape.py",
+      "excerpt": "Email (+64-3154649288)",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-8c313bdc74",
+      "url": "https://www.cnybac.com/",
+      "title": "Central New York Biotech Accelerator — homepage checked by scrape.py",
+      "excerpt": "315-464-9288",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "+64-3154649288",
+        "evidenceId": "check-phone-824864f6e0"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

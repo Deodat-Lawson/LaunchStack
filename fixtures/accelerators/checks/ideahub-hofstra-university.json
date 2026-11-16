@@ -1,0 +1,260 @@
+{
+  "programId": "ideahub-hofstra-university",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+    "https://www.hofstra.edu/apply",
+    "https://www.hofstra.edu/academics/academic-offerings/?interest&school&search&programs=undergraduate-programs"
+  ],
+  "evidence": [
+    {
+      "id": "check-phone-00d0ca5533",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "title": "ideaHUb / Hofstra University — homepage checked by scrape.py",
+      "excerpt": "(516) 463-6600",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-6fbffa51f1",
+      "url": "https://www.hofstra.edu/academics/academic-offerings/?interest&school&search&programs=undergraduate-programs",
+      "title": "ideaHUb / Hofstra University — details page checked by scrape.py",
+      "excerpt": "(516) 463-6600",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-e2b670bbb3",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "excerpt": "(516) 463-6600",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-08f93c58c4",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "excerpt": "Alumni → https://www.hofstra.edu/alumni/?ref=globalbtm",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3775a59e90",
+      "url": "https://www.hofstra.edu/academics/academic-offerings/?interest&school&search&programs=undergraduate-programs",
+      "title": "ideaHUb / Hofstra University — details page checked by scrape.py",
+      "excerpt": "Alumni → https://www.hofstra.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8cb7be2a26",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "title": "ideaHUb / Hofstra University — homepage checked by scrape.py",
+      "excerpt": "Alumni → https://www.hofstra.edu/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-905c91484d",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "title": "ideaHUb / Hofstra University — homepage checked by scrape.py",
+      "excerpt": "Alumni → https://www.hofstra.edu/alumni/?ref=globalbtm",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ad2d30627b",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "excerpt": "Alumni → https://www.hofstra.edu/alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-e43108e73e",
+      "url": "https://www.hofstra.edu/academics/academic-offerings/?interest&school&search&programs=undergraduate-programs",
+      "title": "ideaHUb / Hofstra University — details page checked by scrape.py",
+      "excerpt": "Alumni → https://www.hofstra.edu/alumni/?ref=globalbtm",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0d71a03a52",
+      "url": "https://www.hofstra.edu/academics/academic-offerings/?interest&school&search&programs=undergraduate-programs",
+      "title": "ideaHUb / Hofstra University — details page checked by scrape.py",
+      "excerpt": "Apply → https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1bb4ad9dbb",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "excerpt": "Apply Now → https://www.hofstra.edu/admission/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-20a3421af3",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "excerpt": "Apply as a Visiting Student → https://www.hofstra.edu/admission/visiting-students/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2a3a655f80",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "excerpt": "Application Process → https://www.hofstra.edu/admission/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3611b4cd2d",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "excerpt": "Skip to main content → https://www.hofstra.edu/admission/apply/#main-content",
+      "page": "application"
+    },
+    {
+      "id": "check-route-39cc5768ab",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "title": "ideaHUb / Hofstra University — homepage checked by scrape.py",
+      "excerpt": "Application Process → https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3df3e0b3f9",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "title": "ideaHUb / Hofstra University — homepage checked by scrape.py",
+      "excerpt": "Apply → https://www.hofstra.edu/admission/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6add600031",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "excerpt": "Apply → https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6c1bf5111b",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "title": "ideaHUb / Hofstra University — homepage checked by scrape.py",
+      "excerpt": "Start Your Application → https://www.hofstra.edu/graduate/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-72cfe539ad",
+      "url": "https://www.hofstra.edu/academics/academic-offerings/?interest&school&search&programs=undergraduate-programs",
+      "title": "ideaHUb / Hofstra University — details page checked by scrape.py",
+      "excerpt": "Apply → https://www.hofstra.edu/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-94016415ec",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "excerpt": "Apply → https://www.hofstra.edu/admission/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a1662d9fa0",
+      "url": "https://www.hofstra.edu/academics/academic-offerings/?interest&school&search&programs=undergraduate-programs",
+      "title": "ideaHUb / Hofstra University — details page checked by scrape.py",
+      "excerpt": "Application Process → https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a53bb78ceb",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "title": "ideaHUb / Hofstra University — homepage checked by scrape.py",
+      "excerpt": "Apply → https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a5cbd50767",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "excerpt": "Application Process → https://www.hofstra.edu/admission/apply/?ref=globalnav",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b59ae9ce00",
+      "url": "https://www.hofstra.edu/academics/academic-offerings/?interest&school&search&programs=undergraduate-programs",
+      "title": "ideaHUb / Hofstra University — details page checked by scrape.py",
+      "excerpt": "Apply → https://www.hofstra.edu/admission/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-bf7161943c",
+      "url": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
+      "title": "ideaHUb / Hofstra University — homepage checked by scrape.py",
+      "excerpt": "Apply → https://www.hofstra.edu/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c4fc3f9c28",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "excerpt": "First-Year → https://www.hofstra.edu/admission/apply/#firstyear",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c6b08cedd8",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "excerpt": "Transfer → https://www.hofstra.edu/admission/apply/#transfer",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f38a82aa36",
+      "url": "https://www.hofstra.edu/apply",
+      "title": "ideaHUb / Hofstra University — application page checked by scrape.py",
+      "excerpt": "Apply as International → https://www.hofstra.edu/admission/international.html",
+      "page": "application"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "+15164636600",
+        "evidenceId": "check-phone-00d0ca5533"
+      }
+    ],
+    "routes": [
+      {
+        "value": "https://www.hofstra.edu/apply",
+        "evidenceId": "check-route-bf7161943c"
+      },
+      {
+        "value": "https://www.hofstra.edu/admission/apply/?ref=globalnav",
+        "evidenceId": "check-route-39cc5768ab"
+      },
+      {
+        "value": "https://www.hofstra.edu/admission/apply/?ref=globalbtm",
+        "evidenceId": "check-route-a53bb78ceb"
+      },
+      {
+        "value": "https://www.hofstra.edu/graduate/apply.html",
+        "evidenceId": "check-route-6c1bf5111b"
+      },
+      {
+        "value": "https://www.hofstra.edu/admission/apply/",
+        "evidenceId": "check-route-3df3e0b3f9"
+      },
+      {
+        "value": "https://www.hofstra.edu/admission/apply/#main-content",
+        "evidenceId": "check-route-3611b4cd2d"
+      }
+    ],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.hofstra.edu/alumni/?ref=globalbtm",
+        "evidenceId": "check-portfolio-905c91484d"
+      },
+      {
+        "value": "https://www.hofstra.edu/alumni/",
+        "evidenceId": "check-portfolio-8cb7be2a26"
+      }
+    ],
+    "name": [],
+    "examplePages": []
+  }
+}

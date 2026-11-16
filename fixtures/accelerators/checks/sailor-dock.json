@@ -1,0 +1,87 @@
+{
+  "programId": "sailor-dock",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.sailorandthedock.com"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-12bedbba06",
+      "url": "https://www.sailorandthedock.com",
+      "title": "Sailor & The Dock — homepage checked by scrape.py",
+      "excerpt": "page Contact us Call us at (844)-755-4820 Write us at info@sailorandthedock.com Powered by: Website design, Social Media marketing and",
+      "page": "details"
+    },
+    {
+      "id": "check-email-bc6e6d54b1",
+      "url": "https://www.sailorandthedock.com",
+      "title": "Sailor & The Dock — homepage checked by scrape.py",
+      "excerpt": "Write us at info@sailorandthedock.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c4f404545f",
+      "url": "https://www.sailorandthedock.com",
+      "title": "Sailor & The Dock — homepage checked by scrape.py",
+      "excerpt": "is off Contact us at (844)-755-4820 Send us an email at info@sailorandthedock.com map marker pin Visit us at 617 West Sheridan Avenue,",
+      "page": "details"
+    },
+    {
+      "id": "check-email-ccc22776eb",
+      "url": "https://www.sailorandthedock.com",
+      "title": "Sailor & The Dock — homepage checked by scrape.py",
+      "excerpt": "info@sailorandthedock.com",
+      "page": "details"
+    },
+    {
+      "id": "check-name-2a53327dd9",
+      "url": "https://www.sailorandthedock.com",
+      "title": "Sailor & The Dock — homepage checked by scrape.py",
+      "excerpt": "Must-Try Cocktail Bar in Downtown OKC | Sailor & The Dock Skip to main content Home Events sailors About POP UPS",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-1851b07ec9",
+      "url": "https://www.sailorandthedock.com",
+      "title": "Sailor & The Dock — homepage checked by scrape.py",
+      "excerpt": "(844)-755-4820",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-ce95d40761",
+      "url": "https://www.sailorandthedock.com",
+      "title": "Sailor & The Dock — homepage checked by scrape.py",
+      "excerpt": "Call us at (844)-755-4820",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@sailorandthedock.com",
+        "evidenceId": "check-email-ccc22776eb"
+      }
+    ],
+    "phones": [
+      {
+        "value": "+18447554820",
+        "evidenceId": "check-phone-1851b07ec9"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Sailor & The Dock",
+        "evidenceId": "check-name-2a53327dd9"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "programId": "lifesciky",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://LifeSciKY.com",
+    "https://lifesciky.com/apply/",
+    "https://lifesciky.com/about-us/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-1cf4bdcf96",
+      "url": "https://lifesciky.com/about-us/",
+      "title": "LifeSciKY — details page checked by scrape.py",
+      "excerpt": "info@lifesciky.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-379808285c",
+      "url": "https://LifeSciKY.com",
+      "title": "LifeSciKY — homepage checked by scrape.py",
+      "excerpt": "info@lifesciky.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-4f35ccf706",
+      "url": "https://LifeSciKY.com",
+      "title": "LifeSciKY — homepage checked by scrape.py",
+      "excerpt": "SUBSCRIBE 209 Greenup St, Suite 201, Covington, KY 41011 info@lifesciky.com 859-500-1229 Covington Life Sciences Partners, Inc., a",
+      "page": "details"
+    },
+    {
+      "id": "check-email-695e085a4e",
+      "url": "https://lifesciky.com/apply/",
+      "title": "LifeSciKY — application page checked by scrape.py",
+      "excerpt": "info@lifesciky.com",
+      "page": "application"
+    },
+    {
+      "id": "check-email-91e617cb36",
+      "url": "https://lifesciky.com/about-us/",
+      "title": "LifeSciKY — details page checked by scrape.py",
+      "excerpt": "SUBSCRIBE 209 Greenup St, Suite 201, Covington, KY 41011 info@lifesciky.com 859-500-1229 Covington Life Sciences Partners, Inc., a",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c86a398578",
+      "url": "https://lifesciky.com/apply/",
+      "title": "LifeSciKY — application page checked by scrape.py",
+      "excerpt": "SUBSCRIBE 209 Greenup St, Suite 201, Covington, KY 41011 info@lifesciky.com 859-500-1229 Covington Life Sciences Partners, Inc., a",
+      "page": "application"
+    },
+    {
+      "id": "check-name-0de45ccb02",
+      "url": "https://LifeSciKY.com",
+      "title": "LifeSciKY — homepage checked by scrape.py",
+      "excerpt": "Home - LifeSciKY Skip to content Apply Now Home About Us Lab Residency",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-1df881e3d3",
+      "url": "https://lifesciky.com/about-us/",
+      "title": "LifeSciKY — details page checked by scrape.py",
+      "excerpt": "859-500-1229",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-a768e87c6f",
+      "url": "https://lifesciky.com/apply/",
+      "title": "LifeSciKY — application page checked by scrape.py",
+      "excerpt": "859-500-1229",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-affbd4797b",
+      "url": "https://LifeSciKY.com",
+      "title": "LifeSciKY — homepage checked by scrape.py",
+      "excerpt": "859-500-1229",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0e176de4cc",
+      "url": "https://LifeSciKY.com",
+      "title": "LifeSciKY — homepage checked by scrape.py",
+      "excerpt": "Apply for Lab Space → https://lifesciky.com/apply-for-residency/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4d355240c3",
+      "url": "https://LifeSciKY.com",
+      "title": "LifeSciKY — homepage checked by scrape.py",
+      "excerpt": "Start at LifeSciKY → https://lifesciky.com/apply-for-residency/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-658b366177",
+      "url": "https://lifesciky.com/about-us/",
+      "title": "LifeSciKY — details page checked by scrape.py",
+      "excerpt": "Apply Now → https://lifesciky.com/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ec3c0b0e4d",
+      "url": "https://LifeSciKY.com",
+      "title": "LifeSciKY — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://lifesciky.com/apply/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@lifesciky.com",
+        "evidenceId": "check-email-379808285c"
+      }
+    ],
+    "phones": [
+      {
+        "value": "+18595001229",
+        "evidenceId": "check-phone-affbd4797b"
+      }
+    ],
+    "routes": [
+      {
+        "value": "https://lifesciky.com/apply/",
+        "evidenceId": "check-route-ec3c0b0e4d"
+      },
+      {
+        "value": "https://lifesciky.com/apply-for-residency/",
+        "evidenceId": "check-route-4d355240c3"
+      }
+    ],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "LifeSciKY",
+        "evidenceId": "check-name-0de45ccb02"
+      }
+    ],
+    "examplePages": []
+  }
+}

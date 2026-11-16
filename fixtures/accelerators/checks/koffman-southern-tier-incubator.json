@@ -1,0 +1,47 @@
+{
+  "programId": "koffman-southern-tier-incubator",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://southerntierincubator.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-65eb0626c2",
+      "url": "https://southerntierincubator.com/",
+      "title": "Koffman Southern Tier Incubator — homepage checked by scrape.py",
+      "excerpt": "Opened in 2017 in the heart of Binghamton, NY, the Koffman Southern Tier Incubator is a vibrant hub for start-up activity in the Southern",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-017466bd28",
+      "url": "https://southerntierincubator.com/",
+      "title": "Koffman Southern Tier Incubator — homepage checked by scrape.py",
+      "excerpt": "(607) 777-5094",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "6077775094",
+        "evidenceId": "check-phone-017466bd28"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Koffman Southern Tier Incubator",
+        "evidenceId": "check-name-65eb0626c2"
+      }
+    ],
+    "examplePages": []
+  }
+}

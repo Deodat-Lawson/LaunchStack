@@ -1,0 +1,65 @@
+{
+  "programId": "hudson-river-eats",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.hudsonriverhousing.org/openkitchen",
+    "https://www.hudsonriverhousing.org/s/HowtoApplyFINAL72326.docx"
+  ],
+  "evidence": [
+    {
+      "id": "check-route-381c5224a6",
+      "url": "https://www.hudsonriverhousing.org/openkitchen",
+      "title": "Hudson River EATS — homepage checked by scrape.py",
+      "excerpt": "APPLY FOR HOUSING → https://www.hudsonriverhousing.org/apply-online",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7726e3c3cd",
+      "url": "https://www.hudsonriverhousing.org/openkitchen",
+      "title": "Hudson River EATS — homepage checked by scrape.py",
+      "excerpt": "Folder: APPLY FOR HOUSING → https://www.hudsonriverhousing.org/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-78613f1f98",
+      "url": "https://www.hudsonriverhousing.org/openkitchen",
+      "title": "Hudson River EATS — homepage checked by scrape.py",
+      "excerpt": "Apply Online → https://www.hudsonriverhousing.org/apply-online",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b54b7202eb",
+      "url": "https://www.hudsonriverhousing.org/openkitchen",
+      "title": "Hudson River EATS — homepage checked by scrape.py",
+      "excerpt": "How to Apply → https://www.hudsonriverhousing.org/s/HowtoApplyFINAL72326.docx",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.hudsonriverhousing.org/s/HowtoApplyFINAL72326.docx",
+        "evidenceId": "check-route-b54b7202eb"
+      },
+      {
+        "value": "https://www.hudsonriverhousing.org/apply-online",
+        "evidenceId": "check-route-78613f1f98"
+      },
+      {
+        "value": "https://www.hudsonriverhousing.org/apply",
+        "evidenceId": "check-route-7726e3c3cd"
+      }
+    ],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

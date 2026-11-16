@@ -14,7 +14,8 @@ import { usePermissions } from "~/lib/use-permissions";
 
 import { vantagePath } from "./_lib/paths";
 import { VANTAGE_ROOTS, vantageScreenFor, type VantageScreen } from "./_lib/screens";
-import { WeeklyReviewEntry } from "./_screens/WeeklyReviewEntry";
+import { ThisWeekScreen } from "./_screens/ThisWeekScreen";
+import { ContextScreen } from "./_screens/ContextScreen";
 import { CommitmentsScreen } from "./_screens/CommitmentsScreen";
 import { EvidenceScreen } from "./_screens/EvidenceScreen";
 import { MetricsScreen } from "./_screens/MetricsScreen";
@@ -93,10 +94,10 @@ function VantageFrame() {
 function Screen({ screen }: { screen: VantageScreen }) {
     const t = useTranslations("vantage.frame");
     switch (screen.kind) {
-        case "overview":
-            return <WeeklyReviewEntry key="review" week={screen.week} />;
+        case "this-week":
+            return <ThisWeekScreen week={screen.week} />;
         case "context":
-            return <WeeklyReviewEntry key="context" view="context" week={screen.week} />;
+            return <ContextScreen week={screen.week} />;
         case "commitments":
             return <CommitmentsScreen />;
         case "evidence":

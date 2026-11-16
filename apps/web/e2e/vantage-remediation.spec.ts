@@ -2,9 +2,24 @@ import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { resolve } from "node:path";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Response as PlaywrightResponse } from "@playwright/test";
 import type postgres from "postgres";
 import { z } from "zod";
+
+/** Browser generation returns progress events and then the accepted report. */
+async function generatedReview(response: PlaywrightResponse): Promise<unknown> {
+    expect(response.headers()["content-type"]).toContain("application/x-ndjson");
+    const events = z.array(z.object({ type: z.string(), result: z.unknown().optional() })).parse(
+        (await response.text())
+            .trim()
+            .split("\n")
+            .map(line => JSON.parse(line) as unknown)
+    );
+    expect(events.filter(event => event.type === "error")).toEqual([]);
+    const completed = events.find(event => event.type === "result");
+    expect(completed).toBeDefined();
+    return completed?.result;
+}
 
 const database =
     "postgres://vantage_test:vantage_test_only@127.0.0.1:55569/vantage_production_acceptance";
@@ -352,23 +367,35 @@ test("authenticated scoped review, exact inspection, stale dispatch protection a
                 >`SELECT count(*)::int AS n FROM pdr_ai_v2_vantage_weekly_review_decisions WHERE run_id=${current.id}`
             ).n
         ).toBe(1);
-        await page.goto("/employer/tools/vantage/agenda");
+        await page.goto("/employer/tools/vantage?week=2026-11-09");
         await expect(page.getByText(current.report.headline, { exact: true })).toBeVisible({
             timeout: 120_000,
         });
         await page
+            .getByRole("button", { name: "Sources used in this report", exact: true })
+            .click();
+        await page
             .getByRole("button", {
-                name: `Inspect citation ${architectureSource.ref}`,
-                exact: true,
+                name: new RegExp(
+                    `^Synthetic scoped architecture.*version ${architecture.version}$`
+                ),
             })
             .first()
             .click();
-        const evidenceRegion = page.getByRole("region", { name: "Exact cited evidence" });
+        const evidenceRegion = page.getByRole("dialog", {
+            name: "Synthetic scoped architecture",
+            exact: true,
+        });
         await expect(evidenceRegion).toContainText(excerpt);
         await evidenceRegion.screenshot({ path: resolve(artifacts, "scoped-evidence.png") });
+        await evidenceRegion.getByRole("button", { name: "Close", exact: true }).click();
+        await page.getByRole("button", { name: "Change decision", exact: true }).first().click();
         const browserDecision =
             "Synthetic browser decision recorded. Execution remains unverified.";
-        await page.locator('textarea[id^="decision-"]').first().fill(browserDecision);
+        await page
+            .getByRole("textbox", { name: "Your decision", exact: true })
+            .first()
+            .fill(browserDecision);
         const browserSaved = page.waitForResponse(
             response =>
                 new URL(response.url()).pathname ===
@@ -444,14 +471,24 @@ test("authenticated scoped review, exact inspection, stale dispatch protection a
                 })
                 .parse(await missing.json()).preview
         ).toBeNull();
-        await page.reload();
-        const previewRegion = page.getByRole("region", { name: "Source scope preview" });
+        await page.goto("/employer/tools/vantage/context?week=2026-11-09");
+        const advanced = page.getByRole("button", {
+            name: "Advanced: limit a document to specific passages",
+            exact: true,
+        });
+        await advanced.click();
+        const previewRegion = page.locator('[data-slot="collapsible"]').filter({ has: advanced });
+        await page.getByLabel("Source to inspect", { exact: true }).click();
         await page
-            .getByLabel("Source to inspect", { exact: true })
-            .selectOption({ value: `personal-star:${star.id}` });
+            .getByRole("option", {
+                name: "Synthetic personal pinned source (Personal star)",
+                exact: true,
+            })
+            .click();
         await expect(previewRegion).toContainText("Pinned version is missing.");
         await previewRegion.screenshot({ path: resolve(artifacts, "missing-pin.png") });
-        await page.getByLabel("Source version", { exact: true }).selectOption(newStar.id);
+        await page.getByLabel("Source version", { exact: true }).click();
+        await page.getByRole("option", { name: new RegExp(`^${newStar.id} [(]`) }).click();
         await expect(page.getByLabel("Canonical indexed text", { exact: true })).toHaveValue(
             replacementText
         );
@@ -482,22 +519,29 @@ test("authenticated scoped review, exact inspection, stale dispatch protection a
                 .parse(await recovered.json()).pin.scope.version
         ).toBe(newStar.id);
         expect(await active()).toBe(current.id);
+        await expect(advanced).toHaveAttribute("aria-expanded", "false");
+        await advanced.click();
+        await page.getByLabel("Source to inspect", { exact: true }).click();
         await page
-            .getByLabel("Source to inspect", { exact: true })
-            .selectOption({ value: `personal-star:${star.id}` });
+            .getByRole("option", {
+                name: "Synthetic personal pinned source (Personal star)",
+                exact: true,
+            })
+            .click();
         await expect(page.getByLabel("Canonical indexed text", { exact: true })).toHaveValue(
             replacementText
         );
         await previewRegion.screenshot({ path: resolve(artifacts, "reapproved-pin.png") });
+        await page.goto("/employer/tools/vantage?week=2026-11-09");
         const regenerated = page.waitForResponse(
             response =>
                 new URL(response.url()).pathname === "/api/vantage/reviews" &&
                 response.request().method() === "POST"
         );
-        await page.getByRole("button", { name: "Generate review", exact: true }).click();
+        await page.getByRole("button", { name: "Generate review", exact: true }).first().click();
         const regeneratedResponse = await regenerated;
-        expect(regeneratedResponse.status(), await regeneratedResponse.text()).toBe(201);
-        const recoveredReview = reviewSchema.parse(await regeneratedResponse.json());
+        expect(regeneratedResponse.status()).toBe(200);
+        const recoveredReview = reviewSchema.parse(await generatedReview(regeneratedResponse));
         expect(await active()).toBe(recoveredReview.id);
         expect(
             recoveredReview.evidence.inputSnapshot.sources.some(

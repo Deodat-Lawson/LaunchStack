@@ -2,13 +2,29 @@ import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { resolve } from "node:path";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Response as PlaywrightResponse } from "@playwright/test";
 import type postgres from "postgres";
 import { z } from "zod";
 
 // This test is limited to the dedicated synthetic database and local application.
 // Authentication, the UI, PostgreSQL, and encryption are real; the configured
 // generation and judge ports are deterministic fixtures, not quality evidence.
+
+/** Browser generation returns progress events and then the accepted report. */
+async function generatedReview(response: PlaywrightResponse): Promise<unknown> {
+    expect(response.headers()["content-type"]).toContain("application/x-ndjson");
+    const events = z.array(z.object({ type: z.string(), result: z.unknown().optional() })).parse(
+        (await response.text())
+            .trim()
+            .split("\n")
+            .map(line => JSON.parse(line) as unknown)
+    );
+    expect(events.filter(event => event.type === "error")).toEqual([]);
+    const completed = events.find(event => event.type === "result");
+    expect(completed).toBeDefined();
+    return completed?.result;
+}
+
 const database =
     "postgres://vantage_test:vantage_test_only@127.0.0.1:55569/vantage_production_acceptance";
 const localRequire = createRequire(
@@ -282,10 +298,6 @@ test("authenticated combined retrieval preserves scope, role, decision and histo
         checks.push("synthetic signup, company and exact-version document fixture");
 
         await page.goto("/employer/tools/vantage/context?week=2026-11-09");
-        const roleDetails = page
-            .locator("details")
-            .filter({ hasText: "My business responsibilities" });
-        await roleDetails.locator("summary").click();
         await page.getByLabel("Primary business role", { exact: true }).fill("Engineering lead");
         await page.getByLabel("Responsibilities", { exact: true }).fill("Release rollback");
         await page.getByLabel("Priorities", { exact: true }).fill("Owner");
@@ -299,8 +311,12 @@ test("authenticated combined retrieval preserves scope, role, decision and histo
         );
         await page.getByRole("button", { name: "Confirm and save", exact: true }).click();
         expect((await savedRole).status()).toBe(200);
-        await expect(page.getByRole("button", { name: "Generate review", exact: true })).toHaveCount(0);
-        await expect(page.getByLabel("Human decision", { exact: true })).toHaveCount(0);
+        await expect(
+            page.getByRole("button", { name: "Generate review", exact: true }).first()
+        ).toHaveCount(0);
+        await expect(page.getByRole("textbox", { name: "Your decision", exact: true })).toHaveCount(
+            0
+        );
 
         const roleResponse = await page.request.get("/api/vantage/reviews/context/role");
         expect(roleResponse.status()).toBe(200);
@@ -361,11 +377,13 @@ test("authenticated combined retrieval preserves scope, role, decision and histo
             "browser business-role confirmation; stale role and star CAS rejected; star and role preserved"
         );
 
-        await page.getByRole("link", { name: "Open This Week", exact: true }).click();
-        await expect(page.getByText("My business responsibilities", { exact: true })).toHaveCount(0);
-        await expect(page.getByText("Required company context", { exact: true })).toHaveCount(0);
+        await page.getByRole("link", { name: "Go to This week", exact: true }).click();
+        await expect(page.getByRole("heading", { name: "Your role", exact: true })).toHaveCount(0);
         await expect(
-            page.getByRole("button", { name: "Generate review", exact: true })
+            page.getByRole("heading", { name: "Company documents", exact: true })
+        ).toHaveCount(0);
+        await expect(
+            page.getByRole("button", { name: "Generate review", exact: true }).first()
         ).toBeEnabled();
         await expect(page.getByLabel("Reporting week", { exact: true })).toHaveValue("2026-11-09");
         const generation = page.waitForResponse(
@@ -373,10 +391,10 @@ test("authenticated combined retrieval preserves scope, role, decision and histo
                 new URL(response.url()).pathname === "/api/vantage/reviews" &&
                 response.request().method() === "POST"
         );
-        await page.getByRole("button", { name: "Generate review", exact: true }).click();
+        await page.getByRole("button", { name: "Generate review", exact: true }).first().click();
         const generated = await generation;
-        expect(generated.status()).toBe(201);
-        const rawReview: unknown = await generated.json();
+        expect(generated.status()).toBe(200);
+        const rawReview: unknown = await generatedReview(generated);
         const review = reviewSchema.parse(rawReview);
         await saveAdmissionTrace(rawReview);
         const rawSnapshot = (rawReview as { evidence: { inputSnapshot: { sources: unknown } } })
@@ -496,7 +514,14 @@ test("authenticated combined retrieval preserves scope, role, decision and histo
                 new URL(response.url()).searchParams.get("ref") === scopedSource.ref
         );
         await page
-            .getByRole("button", { name: `Inspect citation ${scopedSource.ref}`, exact: true })
+            .getByRole("button", { name: "Sources used in this report", exact: true })
+            .click();
+        await page
+            .getByRole("button", {
+                name: new RegExp(
+                    `^Synthetic scoped architecture.*version ${architecture.version}$`
+                ),
+            })
             .first()
             .click();
         const evidenceHttp = await evidenceResponse;
@@ -514,13 +539,23 @@ test("authenticated combined retrieval preserves scope, role, decision and histo
             hash: digest(excerpt),
             scope: { start: 0, end: excerpt.length, parentHash: digest(architecture.text) },
         });
-        const evidenceRegion = page.getByRole("region", { name: "Exact cited evidence" });
+        const evidenceRegion = page.getByRole("dialog", {
+            name: "Synthetic scoped architecture",
+            exact: true,
+        });
         await expect(evidenceRegion).toContainText(excerpt);
+        await evidenceRegion
+            .getByRole("button", { name: "Technical details", exact: true })
+            .click();
         await expect(evidenceRegion).toContainText(digest(excerpt));
         await evidenceRegion.screenshot({ path: resolve(artifacts, "exact-scoped-citation.png") });
+        await evidenceRegion.getByRole("button", { name: "Close", exact: true }).click();
         const decisionText =
             "Synthetic human investigation recorded. Execution remains unverified.";
-        await page.locator('textarea[id^="decision-"]').first().fill(decisionText);
+        await page
+            .getByRole("textbox", { name: "Your decision", exact: true })
+            .first()
+            .fill(decisionText);
         const decisionSave = page.waitForResponse(
             response =>
                 new URL(response.url()).pathname ===
@@ -563,15 +598,15 @@ test("authenticated combined retrieval preserves scope, role, decision and histo
                 new URL(response.url()).pathname === "/api/vantage/reviews" &&
                 response.request().method() === "POST"
         );
-        await page.getByRole("button", { name: "Generate review", exact: true }).click();
+        await page.getByRole("button", { name: "Generate review", exact: true }).first().click();
         const replacementResponse = await replacementWait;
-        expect(replacementResponse.status()).toBe(201);
-        const rawReplacement: unknown = await replacementResponse.json();
+        expect(replacementResponse.status()).toBe(200);
+        const rawReplacement: unknown = await generatedReview(replacementResponse);
         const replacement = reviewSchema.parse(rawReplacement);
         await saveAdmissionTrace(rawReplacement);
         expect(replacement.id).not.toBe(review.id);
         await expect(
-            page.getByRole("button", { name: "Generate review", exact: true })
+            page.getByRole("button", { name: "Generate review", exact: true }).first()
         ).toBeEnabled();
         const historyAfterReplacement = z
             .object({

@@ -8,6 +8,7 @@ import type { HistoryEntry } from "~/lib/workspace-history";
 
 import { ContextMenuProvider } from "~/components/context-menu";
 import { HistoryRail, type HistoryRailProps } from "../HistoryRail";
+import { withSupportedHistoryTarget } from "../supported-history-targets";
 
 /**
  * The History tab. Two kinds of row live in one list and behave differently on
@@ -276,4 +277,31 @@ describe("HistoryRail", () => {
         fireEvent.click(screen.getByTestId("history-new-chat"));
         expect(props.onNewChat).toHaveBeenCalled();
     });
+});
+
+it("retains an unsupported Vantage record as a plain row with delete available", async () => {
+    const recorded = withSupportedHistoryTarget(
+        entry({
+            id: "vantage:old",
+            refId: "old",
+            kind: "vantage",
+            title: "Recorded weekly meeting",
+            href: "/employer/tools/vantage/agenda?week=2026-11-09",
+        })
+    );
+    const props = setup({ entries: [recorded] });
+    const row = screen.getByTestId("history-row-vantage:old");
+    expect(screen.getByText("Recorded weekly meeting")).toBeInTheDocument();
+    expect(row).not.toHaveAttribute("role");
+    expect(row).toHaveAttribute("tabindex", "-1");
+    fireEvent.click(row);
+    fireEvent.keyDown(row, { key: "Enter" });
+    fireEvent.keyDown(row, { key: " " });
+    expect(props.onOpenRun).not.toHaveBeenCalled();
+    expect(props.onResumeSession).not.toHaveBeenCalled();
+    fireEvent.contextMenu(row);
+    expect(screen.queryByText("Open")).not.toBeInTheDocument();
+    fireEvent.click(await screen.findByRole("menuitem", { name: /^Delete/ }));
+    fireEvent.click(await screen.findByTestId("confirm-accept"));
+    expect(props.onDeleteRun).toHaveBeenCalledWith(recorded);
 });

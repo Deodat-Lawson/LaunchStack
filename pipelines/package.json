@@ -64,6 +64,7 @@
     "./scenarios/db": "./src/scenarios/db.ts",
     "./scenarios/schema": "./src/scenarios/schema.ts",
     "./vantage": "./src/vantage/index.ts",
+    "./vantage/week": "./src/vantage/week.ts",
     "./vantage/schema": "./src/vantage/schema.ts",
     "./accelerators/schema": "./src/proposals/accelerators/schema.ts",
     "./accelerators/types": "./src/proposals/accelerators/types.ts",
@@ -289,6 +290,10 @@
       "./vantage": {
         "types": "./dist/vantage/index.d.ts",
         "default": "./dist/vantage/index.js"
+      },
+      "./vantage/week": {
+        "types": "./dist/vantage/week.d.ts",
+        "default": "./dist/vantage/week.js"
       },
       "./vantage/schema": {
         "types": "./dist/vantage/schema.d.ts",

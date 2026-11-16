@@ -62,9 +62,9 @@ describe("tool locations", () => {
             toolId: "growth",
             at: "/prospects",
         });
-        expect(toolTargetFromHref(toolTabHref("vantage", "/agenda?week=2026-09-28"))).toEqual({
+        expect(toolTargetFromHref(toolTabHref("vantage", "/context?week=2026-09-28"))).toEqual({
             toolId: "vantage",
-            at: "/agenda?week=2026-09-28",
+            at: "/context?week=2026-09-28",
         });
         expect(toolTargetFromHref("/employer/documents?feature=brand")).toEqual({
             toolId: "growth",

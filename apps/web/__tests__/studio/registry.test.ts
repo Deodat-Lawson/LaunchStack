@@ -189,9 +189,9 @@ describe("studio registry", () => {
             toolId: "proposals",
             at: "/write/7",
         });
-        expect(toolTargetFromHref("/employer/tools/vantage/agenda?week=2026-09-28")).toEqual({
+        expect(toolTargetFromHref("/employer/tools/vantage/context?week=2026-09-28")).toEqual({
             toolId: "vantage",
-            at: "/agenda?week=2026-09-28",
+            at: "/context?week=2026-09-28",
         });
     });
 

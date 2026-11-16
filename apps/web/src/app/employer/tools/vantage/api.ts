@@ -5,7 +5,6 @@
  */
 import type {
     AgendaDto,
-    AgendaSummaryDto,
     CommitmentDto,
     DeadlineDto,
     EvidenceDto,
@@ -25,7 +24,6 @@ import type { OverviewDto, TriageDto } from "~/server/vantage/service";
 
 export type {
     AgendaDto,
-    AgendaSummaryDto,
     CommitmentDto,
     DeadlineDto,
     EvidenceDto,
@@ -218,30 +216,12 @@ export const vantageApi = {
     importMetrics: (csv: string, source?: string | null) =>
         post<ImportResult>("/api/vantage/metrics/import", { csv, source: source ?? null }),
 
-    agendas: (week?: string) =>
-        call<{ week: string; agenda: AgendaDto | null; agendas: AgendaSummaryDto[] }>(
-            `/api/vantage/agendas${q({ week })}`
-        ),
-    prepare: (weekStart?: string) =>
-        post<{ agenda: AgendaDto }>("/api/vantage/agendas", { weekStart }),
-    agenda: (id: string) => call<{ agenda: AgendaDto }>(`/api/vantage/agendas/${id}`),
     setAgendaStatus: (id: string, status: VantageAgendaStatus) =>
         post<{ agenda: AgendaDto }>(`/api/vantage/agendas/${id}`, { status }, "PATCH"),
     addTopic: (agendaId: string, input: TopicInput) =>
         post<{ topic: TopicDto }>(`/api/vantage/agendas/${agendaId}/topics`, input),
-    reorder: (agendaId: string, ids: string[], expectedVersions: Record<string, number>) =>
-        post<{ agenda: AgendaDto }>(`/api/vantage/agendas/${agendaId}/reorder`, {
-            ids,
-            expectedVersions,
-        }),
-    weeklyUpdate: (agendaId: string, includePrivate = false) =>
-        call<{ markdown: string }>(
-            `/api/vantage/agendas/${agendaId}/update${includePrivate ? "?private=1" : ""}`
-        ),
     patchTopic: (id: string, patch: TopicPatch) =>
         post<{ topic: TopicDto }>(`/api/vantage/topics/${id}`, patch, "PATCH"),
-    deleteTopic: (id: string) =>
-        call<{ ok: true }>(`/api/vantage/topics/${id}`, { method: "DELETE" }),
     decide: async (topicId: string, input: DecisionInput) => {
         const body = JSON.stringify(input);
         const digest = await crypto.subtle.digest(
@@ -257,12 +237,6 @@ export const vantageApi = {
             headers: { "Content-Type": "application/json", "Idempotency-Key": key },
         });
     },
-    /** The Undo after a one-click commit: undecided again, that commitment removed. */
-    undoDecision: (topicId: string, commitmentId: string | null, expectedContentVersion: number) =>
-        call<{ topic: TopicDto }>(
-            `/api/vantage/topics/${topicId}/decide${q({ commitment: commitmentId ?? undefined, version: String(expectedContentVersion) })}`,
-            { method: "DELETE" }
-        ),
 
     commitments: (status?: string) =>
         call<{ commitments: CommitmentDto[] }>(`/api/vantage/commitments${q({ status })}`),
@@ -281,12 +255,147 @@ export const vantageApi = {
     },
     patchCommitment: (id: string, patch: CommitmentPatch) =>
         post<{ commitment: CommitmentDto }>(`/api/vantage/commitments/${id}`, patch, "PATCH"),
-    deleteCommitment: (id: string) =>
-        call<{ ok: true }>(`/api/vantage/commitments/${id}`, { method: "DELETE" }),
 
-    deadlines: () => call<{ deadlines: DeadlineDto[] }>("/api/vantage/deadlines"),
     addDeadline: (input: { title: string; dueOn: string; note?: string | null }) =>
         post<{ deadline: DeadlineDto }>("/api/vantage/deadlines", input),
     deleteDeadline: (id: string) =>
         call<{ ok: true }>(`/api/vantage/deadlines/${id}`, { method: "DELETE" }),
+};
+
+/** Weekly-review wire contracts are owned by the server and erased from client bundles. */
+export type * from "~/server/vantage/weekly-review-client-types";
+import type {
+    WeeklyReviewDto,
+    WeeklyReviewListDto,
+    WeeklyReviewContextDto,
+    WeeklyReviewRoleDto,
+    WeeklyReviewSourceQuery,
+    WeeklyReviewSourceInspectionDto,
+    WeeklyReviewEvidenceDto,
+    WeeklyReviewPolicyInput,
+    WeeklyReviewStarsInput,
+    WeeklyReviewRoleInput,
+    WeeklyReviewDecisionInput,
+    WeeklyReviewGenerateInput,
+    WeeklyReviewEvent,
+    WeeklyReviewStage,
+} from "~/server/vantage/weekly-review-client-types";
+
+const reviewRoot = "/api/vantage/reviews";
+const reviewKey = (key?: string) => ({ "Idempotency-Key": key ?? crypto.randomUUID() });
+
+/** Decode records across arbitrary byte/chunk boundaries, including split UTF-8 characters. */
+export async function readWeeklyReviewStream(
+    response: Response,
+    onStage?: (stage: WeeklyReviewStage) => void
+): Promise<WeeklyReviewDto> {
+    if (!response.body) throw new VantageApiError("review_unavailable", 503, null);
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let pending = "";
+    let result: WeeklyReviewDto | undefined;
+    const record = (line: string) => {
+        if (!line.trim()) return;
+        let event: WeeklyReviewEvent;
+        try {
+            event = JSON.parse(line) as WeeklyReviewEvent;
+        } catch {
+            throw new VantageApiError("review_unavailable", 503, null);
+        }
+        if (!event || typeof event !== "object" || result)
+            throw new VantageApiError("review_unavailable", 503, event);
+        if (event.type === "stage") {
+            if (!["gathering", "writing", "checking", "saving"].includes(event.stage))
+                throw new VantageApiError("review_unavailable", 503, event);
+            try {
+                onStage?.(event.stage);
+            } catch {
+                /* Observation cannot cancel a completed request. */
+            }
+        } else if (event.type === "error") {
+            if (
+                typeof event.error !== "string" ||
+                !Number.isInteger(event.status) ||
+                event.status < 400 ||
+                event.status > 599
+            )
+                throw new VantageApiError("review_unavailable", 503, event);
+            throw new VantageApiError(event.error, event.status, { error: event.error });
+        } else if (event.type === "result" && event.result) result = event.result;
+        else throw new VantageApiError("review_unavailable", 503, event);
+    };
+    try {
+        while (true) {
+            const chunk = await reader.read();
+            pending += decoder.decode(chunk.value, { stream: !chunk.done });
+            let newline: number;
+            while ((newline = pending.indexOf("\n")) >= 0) {
+                record(pending.slice(0, newline));
+                pending = pending.slice(newline + 1);
+            }
+            if (chunk.done) break;
+        }
+        record(pending);
+        if (!result) throw new VantageApiError("review_unavailable", 503, null);
+        return result;
+    } finally {
+        reader.releaseLock();
+    }
+}
+
+export const weeklyReviewApi = {
+    read: <T>(path: string) => call<T>(reviewRoot + path),
+    list: (week?: string) => call<WeeklyReviewListDto>(reviewRoot + q({ weekStart: week })),
+    get: (id: string) => call<WeeklyReviewDto>(`${reviewRoot}/${encodeURIComponent(id)}`),
+    context: () => call<WeeklyReviewContextDto>(reviewRoot + "/context"),
+    role: () => call<WeeklyReviewRoleDto>(reviewRoot + "/context/role"),
+    savePolicy: (input: WeeklyReviewPolicyInput) =>
+        post<{ version: number }>(reviewRoot + "/context", input),
+    saveStars: (input: WeeklyReviewStarsInput) =>
+        post<{ version: number }>(reviewRoot + "/context", input, "PATCH"),
+    saveRole: (input: WeeklyReviewRoleInput) =>
+        post<Pick<WeeklyReviewRoleDto, "role" | "version">>(
+            reviewRoot + "/context/role",
+            input,
+            "PATCH"
+        ),
+    source: (query: WeeklyReviewSourceQuery) =>
+        call<WeeklyReviewSourceInspectionDto>(reviewRoot + "/context/source" + q(query)),
+    evidence: (reportId: string, ref: string) =>
+        call<WeeklyReviewEvidenceDto>(
+            `${reviewRoot}/${encodeURIComponent(reportId)}/evidence${q({ ref })}`
+        ),
+    decide: (reportId: string, input: WeeklyReviewDecisionInput, key?: string) =>
+        call<{ version: number }>(`${reviewRoot}/${encodeURIComponent(reportId)}/decisions`, {
+            method: "POST",
+            body: JSON.stringify(input),
+            headers: reviewKey(key),
+        }),
+    generate: async (
+        input: WeeklyReviewGenerateInput,
+        onStage?: (stage: WeeklyReviewStage) => void,
+        key?: string
+    ): Promise<WeeklyReviewDto> => {
+        const response = await fetch(reviewRoot, {
+            method: "POST",
+            body: JSON.stringify(input),
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/x-ndjson",
+                ...reviewKey(key),
+            },
+        });
+        if (!response.ok) {
+            const body: unknown = await response.json().catch(() => null);
+            const code =
+                body &&
+                typeof body === "object" &&
+                "error" in body &&
+                typeof body.error === "string"
+                    ? body.error
+                    : "review_unavailable";
+            throw new VantageApiError(code, response.status, body);
+        }
+        return readWeeklyReviewStream(response, onStage);
+    },
 };

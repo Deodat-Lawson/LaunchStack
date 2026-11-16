@@ -5,11 +5,10 @@ import { parseToolHref } from "~/lib/tool-app/locations";
  * the whole table — every path, the selected `?week=`, the
  * program gate — is pinned by a unit test instead of by clicking around.
  *
- * Context owns generation setup. The old /agenda path remains a Context
- * alias, while This Week owns generated reports and decisions.
+ * Context owns generation setup. This week owns reports and decisions.
  */
 export type VantageScreen =
-    | { kind: "overview"; week: string | null }
+    | { kind: "this-week"; week: string | null }
     | { kind: "context"; week: string | null }
     | { kind: "commitments" }
     | { kind: "evidence" }
@@ -22,14 +21,7 @@ export type VantageScreen =
     | { kind: "not-found" };
 
 /** First path segments that are Vantage screens; the tab's `roots`. */
-export const VANTAGE_ROOTS = [
-    "context",
-    "agenda",
-    "commitments",
-    "evidence",
-    "metrics",
-    "program",
-] as const;
+export const VANTAGE_ROOTS = ["context", "commitments", "evidence", "metrics", "program"] as const;
 
 /** Whether the person may open Triage: still loading, yes, or no. */
 export type ProgramAccess = "pending" | "allowed" | "denied";
@@ -42,10 +34,8 @@ export function vantageScreenFor(href: string, program: ProgramAccess = "allowed
     const week = requestedWeek && ISO_DATE.test(requestedWeek) ? requestedWeek : null;
     switch (path) {
         case "/":
-            return { kind: "overview", week };
-        case "/context":
-        case "/agenda": {
-            // A malformed week falls back to the default week, as the API does.
+            return { kind: "this-week", week };
+        case "/context": {
             return { kind: "context", week };
         }
         case "/commitments":

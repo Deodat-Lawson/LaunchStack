@@ -218,8 +218,7 @@ function projectWeeklyReviewEvaluation(
     });
     const required = input.sources.filter(
         source =>
-            source.purpose === "company-architecture" ||
-            source.purpose === "workspace-required"
+            source.purpose === "company-architecture" || source.purpose === "workspace-required"
     );
     const projected: z.infer<typeof EvaluationInputSchema> = {
         version: EVALUATION_VERSION,
@@ -416,6 +415,8 @@ export async function runWeeklyReviewV21(
         authorizeDispatch: (kind: "generation" | "judge") => Promise<void>;
         invoke?: typeof invokeStructuredAttempt;
         validationJudge?: ValidationJudge;
+        /** Observational only; failures must not alter admission or dispatch. */
+        onGenerationComplete?: () => void;
         generationTimeoutMs?: number;
         budgetProfile?: "internal-v1" | "scoped-v2";
         selectionDiagnostics?: Record<string, unknown>;
@@ -485,6 +486,11 @@ export async function runWeeklyReviewV21(
     ]).finally(() => {
         if (timer) clearTimeout(timer);
     });
+    try {
+        ports.onGenerationComplete?.();
+    } catch {
+        // Progress observers cannot affect validation or model calls.
+    }
     const parsed = validateWeeklyReviewV21(answer.result, input);
     if (Buffer.byteLength(JSON.stringify(parsed)) > maxReportBytes)
         throw Error("report_budget_exceeded");

@@ -635,8 +635,8 @@
     },
     "errors": {
       "loadHistoryFailed": "无法加载历史记录",
-      "reviewDeleteForbidden": "??????????????",
-      "reviewHistoryRetained": "??????????",
+      "reviewDeleteForbidden": "你无权删除回顾历史记录",
+      "reviewHistoryRetained": "必须保留回顾历史记录",
       "unknownHistoryKind": "未知的历史记录类型",
       "deleteChatViaSessions": "请通过会话 API 删除对话",
       "missingId": "缺少 ID",

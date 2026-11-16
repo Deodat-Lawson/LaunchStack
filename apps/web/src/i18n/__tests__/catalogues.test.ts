@@ -14,6 +14,19 @@ type Tree = { [key: string]: string | Tree };
 
 const CATALOGUES: Record<string, Tree> = { "zh-CN": zhCN as unknown as Tree };
 
+it("has no corrupted message values in any locale or namespace", () => {
+    // Deliberately ignore I18N_NAMESPACES: corruption anywhere must fail this guard.
+    const corrupted = Object.entries({
+        en: englishMessages as unknown as Tree,
+        ...CATALOGUES,
+    }).flatMap(([locale, catalogue]) =>
+        [...leaves(catalogue)]
+            .filter(([, value]) => /\uFFFD|\?{2,}/u.test(value))
+            .map(([key]) => `${locale}.${key}`)
+    );
+    expect(corrupted).toEqual([]);
+});
+
 function leaves(tree: Tree, prefix = ""): Map<string, string> {
     const out = new Map<string, string>();
     for (const [key, value] of Object.entries(tree)) {

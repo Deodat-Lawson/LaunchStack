@@ -47,7 +47,7 @@ describe("ToolFrame", () => {
                     label: "The week",
                     items: [
                         { to: "/", label: "This week", exact: true },
-                        { to: "/agenda", label: "Agenda" },
+                        { to: "/context", label: "Context" },
                     ],
                 },
                 {
@@ -56,13 +56,13 @@ describe("ToolFrame", () => {
                     items: [{ to: "/evidence", label: "Evidence" }],
                 },
             ],
-            ["agenda", "evidence"]
+            ["context", "evidence"]
         );
         expect(screen.queryByRole("complementary")).not.toBeInTheDocument();
         const tabs = within(screens())
             .getAllByRole("link")
             .map(a => a.textContent);
-        expect(tabs).toEqual(["This week", "Agenda", "Evidence"]);
+        expect(tabs).toEqual(["This week", "Context", "Evidence"]);
         expect(screen.queryByRole("radiogroup", { name: "Area" })).not.toBeInTheDocument();
 
         fireEvent.click(within(screens()).getByRole("link", { name: "Evidence" }));

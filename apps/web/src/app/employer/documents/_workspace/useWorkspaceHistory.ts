@@ -18,6 +18,7 @@ import type {
     StoredSession,
 } from "./sessionApi";
 import * as sessionApi from "./sessionApi";
+import { withSupportedHistoryTarget } from "./supported-history-targets";
 
 export interface ArchivedHistoryState {
     /** The Archived view is showing in place of the list. */
@@ -112,7 +113,7 @@ export function useWorkspaceHistory(enabled: boolean): WorkspaceHistoryState {
         try {
             const page = await sessionApi.fetchHistory();
             if (id !== requestId.current) return;
-            setEntries(page.entries);
+            setEntries(page.entries.map(withSupportedHistoryTarget));
             setDegraded(page.degraded);
             if (typeof page.archivedCount === "number") {
                 const count = page.archivedCount;
@@ -136,7 +137,7 @@ export function useWorkspaceHistory(enabled: boolean): WorkspaceHistoryState {
             if (id !== archivedRequestId.current) return;
             setArchivedState(prev => ({
                 ...prev,
-                entries: page.entries,
+                entries: page.entries.map(withSupportedHistoryTarget),
                 count: page.entries.length,
                 loading: false,
                 error: null,

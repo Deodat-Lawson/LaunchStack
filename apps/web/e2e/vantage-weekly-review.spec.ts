@@ -216,14 +216,15 @@ test("authenticated V2.1 review, decision replay, reload and company isolation",
             >`SELECT ciphertext FROM pdr_ai_v2_vantage_weekly_review_runs WHERE id=${id}`
         );
         expect(encrypted.ciphertext).not.toContain("Company architecture");
-        await page.goto("/employer/tools/vantage/agenda");
+        await page.goto("/employer/tools/vantage?week=2026-11-09");
         await expect(page.getByText(review.report.headline, { exact: true })).toBeVisible({
             timeout: 120_000,
         });
         await page.reload();
         await expect(page.getByText(review.report.headline, { exact: true })).toBeVisible();
+        await page.getByRole("button", { name: "Change decision", exact: true }).first().click();
         await page
-            .locator('textarea[id^="decision-"]')
+            .getByRole("textbox", { name: "Your decision", exact: true })
             .first()
             .fill("Browser recorded decision; execution remains unverified.");
         const uiDecisionSaved = page.waitForResponse(

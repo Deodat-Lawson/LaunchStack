@@ -1,3 +1,5 @@
+import { weekStartOf, parseIsoDate, toIsoDate } from "@launchstack/pipelines/vantage";
+import type { WeeklyReviewStage } from "./weekly-review-client-types";
 import { randomUUID } from "node:crypto";
 import { sql } from "drizzle-orm";
 import { isChatRoute } from "@launchstack/llm";
@@ -86,10 +88,25 @@ export function weeklyReviewServices(
         ),
     };
 }
+/** Reject rather than normalize: stored idempotency and active pointers use exact dates. */
+export function assertWeeklyReviewWeek(week: string) {
+    const date = parseIsoDate(week);
+    if (!date || toIsoDate(date) !== week || weekStartOf(date) !== week)
+        throw new WeeklyReviewConflict("invalid_review_week", 400);
+}
 export async function generateWeeklyReview(
     actor: WeeklyReviewActor,
-    args: { weekStart: string; key: string; expectedActiveId: string | null }
+    args: { weekStart: string; key: string; expectedActiveId: string | null },
+    onStage?: (stage: WeeklyReviewStage) => void
 ) {
+    assertWeeklyReviewWeek(args.weekStart);
+    const stage = (value: WeeklyReviewStage) => {
+        try {
+            onStage?.(value);
+        } catch {
+            /* An observer cannot change the run. */
+        }
+    };
     if (!weeklyReviewEnabled()) throw new WeeklyReviewConflict("weekly_review_disabled", 404);
     const internalRetrievalV1 = budgetAwareInternalRetrievalEnabled();
     const dynamicRetrieval = dynamicRetrievalConfiguration();
@@ -99,6 +116,7 @@ export async function generateWeeklyReview(
     const identity = internalRetrievalV1
         ? { candidateId: randomUUID(), asOf: new Date().toISOString() }
         : undefined;
+    stage("gathering");
     const context = await authority.collectWeeklyReviewContext(actor, args.weekStart, identity);
     const current = { ...actor, authorityEpoch: context.authorityEpoch };
     const input: WeeklyReviewInput = {
@@ -156,6 +174,11 @@ export async function generateWeeklyReview(
               selectionDiagnostics: context.selectionDiagnostics,
           }
         : {};
+    const authorizeDispatch = async (kind: "generation" | "judge") => {
+        await repository.authorizeDispatch(current, reserved.id, kind, args.expectedActiveId);
+        if (kind === "generation") stage("writing");
+    };
+    const onGenerationComplete = () => stage("checking");
     try {
         const result = await withWorkspaceChatModels(
             BigInt(actor.companyId),
@@ -166,13 +189,8 @@ export async function generateWeeklyReview(
                     return runWeeklyReviewV21(input, {
                         ...test,
                         ...budgetPorts,
-                        authorizeDispatch: kind =>
-                            repository.authorizeDispatch(
-                                current,
-                                reserved.id,
-                                kind,
-                                args.expectedActiveId
-                            ),
+                        authorizeDispatch,
+                        onGenerationComplete,
                     });
                 const generationRoute =
                     process.env.VANTAGE_WEEKLY_REVIEW_GENERATION_ROUTE ?? "default";
@@ -200,13 +218,8 @@ export async function generateWeeklyReview(
                     generation,
                     judge,
                     ...budgetPorts,
-                    authorizeDispatch: kind =>
-                        repository.authorizeDispatch(
-                            current,
-                            reserved.id,
-                            kind,
-                            args.expectedActiveId
-                        ),
+                    authorizeDispatch,
+                    onGenerationComplete,
                 });
             }
         );
@@ -217,6 +230,7 @@ export async function generateWeeklyReview(
                 id: "topic-" + index,
             })),
         };
+        stage("saving");
         await repository.accept(current, reserved.id, {
             report,
             evidence: {

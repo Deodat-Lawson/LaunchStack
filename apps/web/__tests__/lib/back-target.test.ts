@@ -50,7 +50,7 @@ describe("backTargetFor", () => {
             "/employer/tools/growth/brand/calendar",
             "/employer/tools/proposals",
             "/employer/tools/proposals/write/abc",
-            "/employer/tools/vantage/agenda",
+            "/employer/tools/vantage/context",
             "/employer/tools/prospects/deals",
         ]) {
             expect(backTargetFor(path)).toEqual(STUDIO);

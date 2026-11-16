@@ -42,6 +42,16 @@ export function fmtDateLong(iso: string | null | undefined, locale?: string): st
     return d.toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" });
 }
 
+/** An actual timestamp, including its time, for distinguishing report revisions. */
+export function fmtDateTime(iso: string | null | undefined, locale?: string): string {
+    if (!iso) return "—";
+    const date = new Date(iso);
+    if (Number.isNaN(date.getTime())) return "—";
+    return new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(
+        date
+    );
+}
+
 /** Whole days from today to `iso`; negative when past. */
 export function daysUntil(iso: string, today = todayIso()): number {
     const a = parse(today)!;
@@ -99,6 +109,7 @@ export function vantageFormat(t: VantageT, locale: string) {
         locale,
         date,
         dateLong: (iso: string | null | undefined) => fmtDateLong(iso, locale),
+        dateTime: (iso: string | null | undefined) => fmtDateTime(iso, locale),
         number,
         /** "+25%" / "−8%" / "+12 days" (when there is no percentage) */
         change: (pct: number | null, delta: number | null, unit?: string): string => {

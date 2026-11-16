@@ -3,14 +3,21 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "~/components/ui/button";
+import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 import type {
-    BusinessRoleContext,
-    BusinessRoleInput,
-} from "~/server/vantage/weekly-review-business-role";
+    WeeklyReviewRoleDto,
+    WeeklyReviewRoleInput,
+} from "~/server/vantage/weekly-review-client-types";
+
+type BusinessRoleContext = WeeklyReviewRoleDto["role"];
+type BusinessRoleInput =
+    Exclude<WeeklyReviewRoleInput, { role: null }> extends infer T
+        ? Omit<T, "expectedVersion">
+        : never;
 
 const lines = (text: string) =>
     text
@@ -18,7 +25,7 @@ const lines = (text: string) =>
         .map(line => line.trim())
         .filter(Boolean);
 
-export function WeeklyReviewBusinessRole({
+export function ReviewBusinessRoleForm({
     role,
     disabled,
     onSave,
@@ -33,6 +40,7 @@ export function WeeklyReviewBusinessRole({
         role?.responsibilities.join("\n") ?? ""
     );
     const [priorities, setPriorities] = useState(role?.priorities.join("\n") ?? "");
+    const [clearOpen, setClearOpen] = useState(false);
     const [confirmed, setConfirmed] = useState(false);
     const responsibilityLines = lines(responsibilities);
     const priorityLines = lines(priorities);
@@ -42,9 +50,12 @@ export function WeeklyReviewBusinessRole({
         responsibilityLines.length <= 8 &&
         priorityLines.length <= 8 &&
         [...responsibilityLines, ...priorityLines].every(line => line.length <= 160);
+    const dirty =
+        primaryRole.trim() !== (role?.primaryRole ?? "") ||
+        JSON.stringify(responsibilityLines) !== JSON.stringify(role?.responsibilities ?? []) ||
+        JSON.stringify(priorityLines) !== JSON.stringify(role?.priorities ?? []);
     return (
-        <details className="border-line space-y-3 rounded border p-4">
-            <summary>{t("businessRole")}</summary>
+        <div className="space-y-3">
             <p className="text-ink-2 text-sm">{t("businessRoleHelp")}</p>
             <Label htmlFor="weekly-review-business-role">{t("primaryBusinessRole")}</Label>
             <Input
@@ -88,7 +99,7 @@ export function WeeklyReviewBusinessRole({
             </Label>
             <div className="flex gap-2">
                 <Button
-                    disabled={disabled || !confirmed || !valid}
+                    disabled={disabled || !confirmed || !valid || !dirty}
                     onClick={() =>
                         void onSave({
                             primaryRole: primaryRole.trim(),
@@ -100,10 +111,25 @@ export function WeeklyReviewBusinessRole({
                 >
                     {t("saveBusinessRole")}
                 </Button>
-                <Button disabled={disabled || !role} onClick={() => void onSave(null)}>
+                <Button
+                    variant="outline"
+                    disabled={disabled || !role}
+                    onClick={() => setClearOpen(true)}
+                >
                     {t("clearBusinessRole")}
                 </Button>
             </div>
-        </details>
+            <ConfirmDialog
+                open={clearOpen}
+                onOpenChange={setClearOpen}
+                title={t("clearRoleTitle")}
+                description={t("clearRoleDescription")}
+                confirmLabel={t("clearBusinessRole")}
+                destructive
+                onConfirm={() => {
+                    if (!disabled) void onSave(null);
+                }}
+            />
+        </div>
     );
 }

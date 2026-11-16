@@ -357,3 +357,36 @@ describe("canonical V2.1 contract and admission", () => {
         expect(p.authorizeDispatch.mock.calls.map(c => c[0])).toEqual(["generation"]);
     });
 });
+
+describe("observational generation completion", () => {
+    it("notifies before deterministic validation rejects the generated report", async () => {
+        const p = ports();
+        const complete = vi.fn();
+        p.invoke.mockResolvedValue({
+            result: { ...report(), schemaVersion: "invalid" } as never,
+            usage: { inputTokens: 10, outputTokens: 20, totalTokens: 30 },
+        });
+        await expect(
+            runWeeklyReviewV21(input(), {
+                ...p,
+                invoke: p.invoke as never,
+                onGenerationComplete: complete,
+            })
+        ).rejects.toThrow();
+        expect(complete).toHaveBeenCalledTimes(1);
+        expect(p.authorizeDispatch.mock.calls).toEqual([["generation"]]);
+    });
+    it("observer failure cannot change admission or add provider dispatches", async () => {
+        const p = ports();
+        const result = await runWeeklyReviewV21(input(), {
+            ...p,
+            invoke: p.invoke as never,
+            onGenerationComplete: () => {
+                throw Error("disconnected");
+            },
+        });
+        expect(result.report.headline).toBe(report().headline);
+        expect(p.authorizeDispatch.mock.calls).toEqual([["generation"], ["judge"]]);
+        expect(p.invoke).toHaveBeenCalledTimes(1);
+    });
+});

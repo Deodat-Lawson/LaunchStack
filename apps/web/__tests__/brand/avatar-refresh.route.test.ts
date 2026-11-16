@@ -42,6 +42,10 @@ jest.mock("~/server/db", () => ({
 jest.mock("~/env", () => ({
     env: { server: { NEXT_PUBLIC_S3_ENDPOINT: "https://s3.example", S3_BUCKET_NAME: "files" } },
 }));
+// Growth is a beta app: the workspace's switch is on for these routes.
+jest.mock("~/server/settings/store", () => ({
+    readWorkspaceSetting: jest.fn().mockResolvedValue(true),
+}));
 
 const CANONICAL = "https://s3.example/files/avatars/owned.png";
 

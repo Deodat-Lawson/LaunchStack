@@ -38,6 +38,11 @@ export interface ViewEvidence {
     title: string;
     page: number | null;
     quote: string;
+    /**
+     * "profile": a value someone typed into the company profile. It is cited like any
+     * excerpt; its title is the fact's label and it rests on no document.
+     */
+    origin?: "profile";
 }
 
 export interface ViewFact {
@@ -127,14 +132,27 @@ export function profileView(
     const evidenceKey = new Map<string, number>();
     const documents = new Set<number>();
 
+    /** Number one excerpt, once, however many facts cite it. */
+    const number = (key: string, entry: Omit<ViewEvidence, "n">): number => {
+        let n = evidenceKey.get(key);
+        if (n === undefined) {
+            n = evidence.length + 1;
+            evidenceKey.set(key, n);
+            evidence.push({ n, ...entry });
+        }
+        return n;
+    };
+
     /**
      * The fact if the viewer may see it, with the excerpt numbers it cites.
      * `whole`: shown only when every source is visible — for what was
      * written from several facts (summary, applicant type, focus areas),
-     * whose wording can carry what a hidden source said.
+     * whose wording can carry what a hidden source said. A typed value cites
+     * itself, under `label`, so it can be cited wherever a document excerpt can.
      */
     const read = (
         fact: MetadataFact<unknown> | undefined,
+        label: string,
         whole = false
     ): { fact: MetadataFact<unknown>; cites: number[] } | null => {
         if (!usable(fact)) return null;
@@ -148,19 +166,23 @@ export function profileView(
         for (const source of visible) {
             documents.add(source.doc_id);
             if (!source.quote) continue;
-            const key = `${source.doc_id}|${source.page ?? ""}|${source.quote}`;
-            let n = evidenceKey.get(key);
-            if (n === undefined) {
-                n = evidence.length + 1;
-                evidenceKey.set(key, n);
-                evidence.push({
-                    n,
-                    documentId: source.doc_id,
-                    title: source.doc_name,
-                    page: source.page ?? null,
-                    quote: source.quote,
-                });
-            }
+            const n = number(`${source.doc_id}|${source.page ?? ""}|${source.quote}`, {
+                documentId: source.doc_id,
+                title: source.doc_name,
+                page: source.page ?? null,
+                quote: source.quote,
+            });
+            if (!cites.includes(n)) cites.push(n);
+        }
+        if (fact.priority === "manual_override") {
+            const quote = textOf(fact.value);
+            const n = number(`profile|${label}|${quote}`, {
+                documentId: null,
+                title: label,
+                page: null,
+                quote,
+                origin: "profile",
+            });
             if (!cites.includes(n)) cites.push(n);
         }
         return { fact, cites };
@@ -193,7 +215,7 @@ export function profileView(
         ([a], [b]) => rank(COMPANY_ORDER, a) - rank(COMPANY_ORDER, b)
     );
     for (const [key, raw] of company) {
-        const got = read(raw);
+        const got = read(raw, labelFor(`company.${key}`));
         if (!got) continue;
         facts.push({
             path: `company.${key}`,
@@ -208,7 +230,7 @@ export function profileView(
         ([a], [b]) => rank(PROFILE_ORDER, a) - rank(PROFILE_ORDER, b)
     );
     for (const [key, raw] of profileFacts) {
-        const got = read(raw);
+        const got = read(raw, labelFor(`profile.facts.${key}`, raw));
         if (!got) continue;
         facts.push({
             path: `profile.facts.${key}`,
@@ -220,7 +242,7 @@ export function profileView(
         });
     }
     for (const [key, raw] of Object.entries(metadata.policies ?? {})) {
-        const got = read(raw);
+        const got = read(raw, key);
         if (!got) continue;
         facts.push({
             path: `policies.${key}`,
@@ -238,10 +260,13 @@ export function profileView(
     ): ViewEntry[] => {
         const out: ViewEntry[] = [];
         (metadata[section] ?? []).forEach((entry, i) => {
-            const name = read(entry.name);
+            const name = read(entry.name, labelFor(section));
             if (!name) return;
             const detailFact = entry[detailField] as MetadataFact<unknown> | undefined;
-            const detail = read(detailFact);
+            const detail = read(
+                detailFact,
+                `${String(name.fact.value)} — ${labelFor(`${section}.${i}.${detailField}`)}`
+            );
             out.push({
                 path: `${section}.${i}`,
                 name: String(name.fact.value),
@@ -262,23 +287,30 @@ export function profileView(
     const projects = entries("projects", "description");
     const legal = entries("legal", "summary");
 
-    const values = (list: MetadataFact[] | undefined, whole = false): string[] => [
+    const values = (list: MetadataFact[] | undefined, label: string, whole = false): string[] => [
         ...new Set(
             (list ?? [])
-                .map(f => read(f, whole))
+                .map(f => read(f, label, whole))
                 .filter(Boolean)
                 .map(g => String(g!.fact.value))
         ),
     ];
-    const geography = values(metadata.markets?.geographies);
+    const geography = values(metadata.markets?.geographies, labelFor("markets.geographies"));
     const markets = [
-        ...new Set([...values(metadata.markets?.primary), ...values(metadata.markets?.verticals)]),
+        ...new Set([
+            ...values(metadata.markets?.primary, labelFor("markets.primary")),
+            ...values(metadata.markets?.verticals, labelFor("markets.verticals")),
+        ]),
     ];
 
     // The summary cites the excerpts of the facts it rests on, so it reads last.
-    const summary = read(metadata.profile?.summary, true);
-    const applicant = read(metadata.profile?.applicant_type, true);
-    const focusAreas = values(metadata.profile?.focus_areas, true);
+    const summary = read(metadata.profile?.summary, labelFor("profile.summary"), true);
+    const applicant = read(
+        metadata.profile?.applicant_type,
+        labelFor("profile.applicant_type"),
+        true
+    );
+    const focusAreas = values(metadata.profile?.focus_areas, labelFor("profile.focus_areas"), true);
 
     return {
         summary: summary ? String(summary.fact.value) : null,

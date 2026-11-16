@@ -18,6 +18,10 @@ import {
 } from "./user-company-memberships";
 import { countUnmarkedWebsiteSources, markWebsiteSources } from "./website-source-markers";
 import { applyWorkspaceAccessBackfill, countWorkspaceAccessRows } from "./workspace-access";
+import {
+    backfillStorageLedgerFromFileUploads,
+    countStorageLedgerPointers,
+} from "./storage-ledger-from-file-uploads";
 
 /**
  * The backfill registry.
@@ -163,6 +167,14 @@ const documentFileUrls: Backfill = {
     step: normalizeDocumentFileUrls,
 };
 
+const storageLedgerFromFileUploads: Backfill = {
+    id: "2026-11-storage-ledger-from-file-uploads",
+    description: "Inventory owned database files and current-location S3 file-upload pointers",
+    requiresEngine: false,
+    estimate: ({ db, cursor }) => countStorageLedgerPointers(db, cursor),
+    step: backfillStorageLedgerFromFileUploads,
+};
+
 /**
  * Stamp file_uploads rows written without company_id after the backfill above
  * completed (the ledger never re-runs a finished entry). The Drive, Gmail and
@@ -264,4 +276,5 @@ export const BACKFILLS: Backfill[] = [
     workspaceAccessBackfill,
     websiteSourceMarkersBackfill,
     fileUploadsRestamp,
+    storageLedgerFromFileUploads,
 ];

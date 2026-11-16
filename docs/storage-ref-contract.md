@@ -156,3 +156,104 @@ deletes return 502 and retain the version row; deleted/not-found permits cleanup
 Website-preview replacement uses the same global reference guard before
 best-effort deletion, so a version's copied preview survives replacement.
 Internal signed reads, workspace stamping, and byte-range forwarding are unchanged.
+
+## Ledger
+
+`storage_objects` is the product-owned, durable inventory of written
+objects. `ledger.ts` accepts the caller's database or transaction executor
+(rather than importing the shared database and re-entering storage initialization).
+The unique `(adapter, storage_location_id, object_key)` triple is recorded with
+`ON CONFLICT DO NOTHING`; a repeated record never changes the original URL,
+company stamp or metadata. URL lookups are exact and use a HASH index because
+provider URLs can exceed PostgreSQL's btree tuple limit. Ref lookups match all
+three identity fields.
+
+The write primitives record the exact URL they return, content type, byte size
+and available checksum:
+
+| Writer                          | Source                 | Company stamp                                  |
+| ------------------------------- | ---------------------- | ---------------------------------------------- |
+| `uploadFile` (S3 or database)   | `upload-file`          | Input company, or null                         |
+| `putFile` (Vercel Blob)         | `vercel-blob`          | Required explicit company or null              |
+| UploadThing completion callback | `uploadthing`          | Active workspace captured in upload middleware |
+| `POST /api/storage/upload`      | `storage-upload-route` | Authorized workspace                           |
+
+Database uploads insert `file_uploads` and the inventory in the same transaction.
+S3 and Vercel Blob writes commit a write-ahead inventory row **before** the
+provider put: **the ledger is a superset of the objects we wrote**. A crash before
+the put may leave a row for bytes that were never written; deleting a missing S3
+key (or Blob pathname) is harmless. A crash after the put cannot hide those bytes
+from inventory. Failed puts trigger best-effort provider cleanup (a failed
+request can still have reached the provider), and remove the ledger row only
+after deletion is confirmed. Unconfirmed cleanup retains the inventory for audit.
+The S3 upload route inserts `file_uploads` only after the put; ownership-insert
+failure uses the same object-and-ledger cleanup, without rolling back the
+write-ahead record prematurely.
+
+Vercel Blob uses a locally generated UUID pathname and explicitly passes
+`addRandomSuffix: false`. Installed `@vercel/blob` v2.3 documents that `put`
+defaults this option to false and sends `x-add-random-suffix: 0` when explicit,
+so the pathname is known before the put. The attempted public/private access URL
+is recorded first; a private-store rejection changes the row's URL before the
+private retry, and successful completion finalizes returned metadata. Repeated
+`recordStoredObject` calls remain insert-only.
+
+UploadThing cannot write ahead: the browser has already uploaded bytes when the
+server completion callback runs. It records and returns `ufsUrl`, including for
+private ACL uploads (URL identity does not bypass ACL). Its company stamp comes
+from signed callback metadata, not callback cookies. A failed ledger insert is
+logged with the ref before compensation; rejected URLs also attempt cleanup
+using the configured app and provider key when no parsed ref is available. If no
+app location is recoverable, the key is logged for operator cleanup. A process
+crash before the callback records remains an unavoidable unledgered-object window.
+All compensating provider deletes share `discardUnrecordedObject`: only `deleted`
+and `not_found` confirm cleanup; absent results, other outcomes and thrown errors
+are logged without masking the original write failure.
+
+UploadThing v7.7.4 logs thrown completion errors without sending
+`/callback-result`, potentially leaving `awaitServerData` clients pending (the
+browser SDK sets no timeout). Therefore a compensated ledger failure returns
+typed `{ ok: false, error: "storage_record_failed" }` server data instead.
+Success returns `{ ok: true, fileUrl, ... }`; every client checks this union
+before persisting the URL and uses its existing upload-failed error path.
+
+`company_id` is nullable and intentionally has **no foreign key**. Neither tenant
+nor document deletion may erase the inventory needed to clean up or audit bytes.
+There are no document ownership columns: later deletion planning derives
+references from relational rows. `deleted_at` is reserved for the deletion
+lifecycle.
+
+Backfill legacy `file_uploads` pointers with
+`pnpm --filter @launchstack/web db:backfill --only=2026-11-storage-ledger-from-file-uploads --batch=500`.
+**Run it right after deploying this change**: until it has run, a file uploaded
+before the deploy (for example an uploaded-but-uncommitted batch file) cannot be
+attached to a document and gets `fileNotInWorkspace`.
+It requires `DATABASE_URL` and the current S3 endpoint/bucket configuration to
+recognize S3 pointers (including the configured public endpoint alias); on a
+deployment with S3 pointer rows it stops with an error if S3 is not configured
+in the running process, rather than finishing without them. Owned database rows
+become `/api/files/{id}` refs; owned `storage_provider = 's3'` rows are recorded
+only when their URL parses to S3 at the current location. Null-company rows,
+other providers, missing/unrecognized S3 URLs and foreign buckets are skipped,
+and each batch logs its `recorded` and `skipped` counts. Insert-only identity
+conflicts preserve existing inventory, including its original URL, owner and
+deletion marker. The backfill records URL, size, MIME type and checksum with
+source `backfill-file-uploads`. Batches resume by file id, and replay is
+idempotent. `--dry-run` reports pointer rows remaining to inspect without
+writing; this estimate includes S3 URLs that may be skipped.
+
+At document/version upload ingress, S3, Blob and UploadThing URLs parsed at the
+currently configured provider location must resolve to a live inventory row
+(`deleted_at IS NULL`) stamped with the active company. Foreign-company,
+unstamped, missing and deleted objects return the same `fileNotInWorkspace` 404.
+Parsed refs at other locations are external links and remain accepted without a
+ledger check. Database URLs retain their `file_uploads.company_id` check;
+unrecognized external links remain accepted. Consequently legacy unledgered
+objects at our current provider locations cannot be attached through client
+ingress until migrated; existing server-side re-embedding and version revert
+do not create a fresh client reference.
+
+The single unrecorded write path is `POST /api/storage/presign`: it returns a
+direct-upload capability but has no completion callback and no repository caller.
+Objects uploaded with it remain deletable via URL-to-ref recognition, but are
+not in this inventory.

@@ -358,6 +358,13 @@
       "when": 1794633769693,
       "tag": "20261114052249_microsoft_365_connectors",
       "breakpoints": true
+    },
+    {
+      "idx": 51,
+      "version": "7",
+      "when": 1794867000000,
+      "tag": "20261116221000_storage_objects",
+      "breakpoints": true
     }
   ]
 }

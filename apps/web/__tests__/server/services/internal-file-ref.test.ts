@@ -13,6 +13,17 @@ jest.mock("~/server/db", () => ({
     },
 }));
 
+jest.mock("~/env", () => ({
+    env: {
+        server: {
+            NEXT_PUBLIC_S3_ENDPOINT: "https://s3.example",
+            S3_BUCKET_NAME: "files",
+            BLOB_READ_WRITE_TOKEN: "vercel_blob_rw_store_secret",
+            UPLOADTHING_TOKEN: Buffer.from(JSON.stringify({ appId: "app" })).toString("base64"),
+        },
+    },
+}));
+
 function setupFileQuery(rows: Record<string, unknown>[]) {
     const where = jest.fn().mockResolvedValue(rows);
     const from = jest.fn().mockReturnValue({ where });
@@ -54,6 +65,60 @@ describe("authorizeInternalFileRef", () => {
         ).resolves.toBeNull();
         expect(mockDbSelect).not.toHaveBeenCalled();
     });
+
+    it.each([
+        "https://s3.example/files/documents/owned.pdf",
+        "https://store.public.blob.vercel-storage.com/owned.pdf",
+        "https://app.ufs.sh/f/owned",
+    ])("accepts a provider URL ledgered to this workspace: %s", async url => {
+        setupFileQuery([{ companyId: COMPANY }]);
+        await expect(authorizeInternalFileRef(url, COMPANY)).resolves.toBeNull();
+        expect(mockDbSelect).toHaveBeenCalledTimes(1);
+    });
+
+    it.each([
+        "https://s3.example/other-bucket/doc.pdf",
+        "https://other.public.blob.vercel-storage.com/doc.pdf",
+        "https://other.ufs.sh/f/doc",
+    ])("accepts another provider location as an external link: %s", async url => {
+        await expect(authorizeInternalFileRef(url, COMPANY)).resolves.toBeNull();
+        expect(mockDbSelect).not.toHaveBeenCalled();
+    });
+
+    it.each([
+        "https://s3.example/files/documents/deleted.pdf",
+        "https://store.public.blob.vercel-storage.com/deleted.pdf",
+        "https://app.ufs.sh/f/deleted",
+    ])("rejects a deleted ledger object even in this workspace: %s", async url => {
+        setupFileQuery([{ companyId: COMPANY, deletedAt: new Date() }]);
+        await expect(authorizeInternalFileRef(url, COMPANY)).rejects.toMatchObject({
+            status: 404,
+            copy: { key: "upload.server.errors.fileNotInWorkspace" },
+        });
+    });
+
+    it("rejects a ledgered S3 URL belonging to another company", async () => {
+        setupFileQuery([{ companyId: 999n }]);
+        await expect(
+            authorizeInternalFileRef("https://s3.example/files/documents/victim.pdf", COMPANY)
+        ).rejects.toMatchObject({
+            status: 404,
+            copy: { key: "upload.server.errors.fileNotInWorkspace" },
+        });
+    });
+
+    it.each([{ rows: [] }, { rows: [{ companyId: null }] }])(
+        "rejects an unledgered or unstamped provider URL without revealing existence",
+        async ({ rows }) => {
+            setupFileQuery(rows);
+            await expect(
+                authorizeInternalFileRef("https://s3.example/files/documents/missing.pdf", COMPANY)
+            ).rejects.toMatchObject({
+                status: 404,
+                copy: { key: "upload.server.errors.fileNotInWorkspace" },
+            });
+        }
+    );
 
     it("returns the file id when the workspace owns the row", async () => {
         setupFileQuery([{ companyId: COMPANY }]);

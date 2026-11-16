@@ -1,0 +1,543 @@
+{
+  "schemaVersion": "vantage-external-benchmark-v1",
+  "provenance": {
+    "datasetId": "rag-multi-corpus",
+    "repository": "https://github.com/udayallu/RAG-Multi-Corpus",
+    "revision": "39071af3f4dd25e59f5c59a6f9b6e8e99cd643b3",
+    "sourcePath": "datasets/Dataset categories - queries_01122025.csv",
+    "sourceSha256": "48c319a45a911cc3973e3f4e8ed34eeb39fa2eb49331a04f1433552d541c5457",
+    "license": {
+      "spdxId": "MIT",
+      "url": "https://raw.githubusercontent.com/udayallu/RAG-Multi-Corpus/39071af3f4dd25e59f5c59a6f9b6e8e99cd643b3/LICENSE",
+      "sha256": "98800da81937e7e782491cd00623c39f6958cf031e36441f9ed604997921a140",
+      "noticeFile": "LICENSE.upstream.txt"
+    },
+    "citation": "@Allu2025RAGMultiCorpus"
+  },
+  "selection": {
+    "algorithm": "coverage-balanced-sha256-v1",
+    "duplicatePolicy": "merge-identical",
+    "sourceRows": 1252,
+    "uniqueCases": 1075,
+    "duplicateRows": 177,
+    "count": 20,
+    "availableEnterprises": {
+      "Aventro Motors": 221,
+      "Cendara University": 187,
+      "Cloudway 24": 164,
+      "Velvera Technologies": 177,
+      "ZX Bank": 326
+    },
+    "availableQueryTypes": {
+      "Analytical": 158,
+      "Boolean": 155,
+      "Comparative": 185,
+      "Descriptive": 194,
+      "Eligibility": 1,
+      "Eligibility Inquiry": 1,
+      "Open-Ended": 100,
+      "Procedural": 248,
+      "Safety": 1,
+      "Supporting": 1,
+      "Temporal": 31
+    },
+    "selectedEnterprises": {
+      "Aventro Motors": 4,
+      "Cendara University": 4,
+      "Cloudway 24": 5,
+      "Velvera Technologies": 3,
+      "ZX Bank": 4
+    },
+    "selectedQueryTypes": {
+      "Analytical": 3,
+      "Boolean": 2,
+      "Comparative": 2,
+      "Descriptive": 2,
+      "Eligibility": 1,
+      "Eligibility Inquiry": 1,
+      "Open-Ended": 2,
+      "Procedural": 3,
+      "Safety": 1,
+      "Supporting": 1,
+      "Temporal": 2
+    }
+  },
+  "cases": [
+    {
+      "id": "rag-multi-corpus:003a7198f0f1494f36fe72baa37b698e28237b3c0fdba17f8924b8464376dd50",
+      "enterprise": "Velvera Technologies",
+      "queryType": "Procedural",
+      "question": "How can I contact the Velvera store in New Delhi?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "store_locations.md",
+            "text": "You can contact the Velvera City Centre Delhi store by calling 011-49300618. Alternatively, you can email Isha Rastogi at cp.delhi@velvera.com. The store is located at F-12, Connaught Place, New Delhi 110001, and operates daily from 10 AM to 8:30 PM."
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 865,
+          "startLine": 865
+        },
+        {
+          "recordNumber": 1042,
+          "startLine": 1042
+        }
+      ],
+      "vantageAnnotations": null
+    },
+    {
+      "id": "rag-multi-corpus:00bb4bdda464ae5a8d2a5bee9a58a0d326a03d42a5d5f21cd003bd9bfe0d6998",
+      "enterprise": "ZX Bank",
+      "queryType": "Analytical",
+      "question": "Why might ZX Bank choose Visakhapatnam for branch expansion?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "Visakhapatnam Branch Network.md",
+            "text": "ZX Bank Ltd. maintains a robust footprint in Visakhapatnam, ensuring accessible and modern banking solutions for residents across the city’s diverse regions. The distribution of branches guarantees convenient access in all major areas, fostering financial inclusion and economic growth within Visakhapatnam."
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 102,
+          "startLine": 102
+        }
+      ],
+      "vantageAnnotations": null
+    },
+    {
+      "id": "rag-multi-corpus:01f8ec3c4d8863131286bba6b54f0ea99400f07c298230f17ddbd47b938440fb",
+      "enterprise": "Cloudway 24",
+      "queryType": "Open-Ended",
+      "question": "What are the guidelines for traveling with medical equipment on CloudWay 24?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "Special Assistance.md",
+            "text": "Guidelines for traveling with medical equipment on CloudWay 24 include the need for advance notice and possibly the submission of medical documents. In certain cases, a Medical Information Form (MEDIF) may be required from a doctor. Additionally, mobility aids such as wheelchairs and crutches are carried free of charge, subject to space and safety regulations."
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 1207,
+          "startLine": 1207
+        }
+      ],
+      "vantageAnnotations": null
+    },
+    {
+      "id": "rag-multi-corpus:02d6f02eaf180a21d8b9b3014f29a8eca339dda430ba4e49fd8ca4e0578c9780",
+      "enterprise": "Aventro Motors",
+      "queryType": "Boolean",
+      "question": "Are Aventro Motors' part prices inclusive of GST?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "Parts-3.md",
+            "text": "Yes, the prices listed for Aventro Motors' parts are inclusive of GST but exclusive of installation charges."
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 721,
+          "startLine": 721
+        }
+      ],
+      "vantageAnnotations": null
+    },
+    {
+      "id": "rag-multi-corpus:0645c7ec307e272dba871d32629c579ee95da82c1ae9dd03885f28d4fad10101",
+      "enterprise": "Cendara University",
+      "queryType": "Comparative",
+      "question": "How do the professional interest groups at Cendara differ from traditional alumni chapters?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "alumni_directory.md",
+            "text": "Professional interest groups at Cendara University, such as the Women in STEM Network and the Cendara Entrepreneurs Collective, focus on specific fields or professional interests, providing targeted networking and resource sharing. In contrast, traditional alumni chapters are organized geographically and focus on broader community and networking activities, offering events like cultural evenings and guest speaker panels."
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 336,
+          "startLine": 336
+        }
+      ],
+      "vantageAnnotations": null
+    },
+    {
+      "id": "rag-multi-corpus:015ae9a63b2e18646447cd236dc2a1e820810eda91bfcc9e36fc9963d6fa85a4",
+      "enterprise": "ZX Bank",
+      "queryType": "Descriptive",
+      "question": "What documents are required for salaried individuals to get a personal loan at ZX Bank Ltd.?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "Personal Loan.md",
+            "text": "Documentation Required for Salaried Individuals:\n- Completed Personal Loan Application Form\n- Photo Identity Proof (Aadhaar Card, Passport, Voter ID, etc.)\n- Address Proof (Utility bill, Passport, Aadhar, etc.)\n- Latest 3 months’ Salary Slips\n- Last 6 months’ Bank Statements\n- 1 Passport-size Photograph\n- PAN Card (for Indian applicants)"
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 150,
+          "startLine": 150
+        }
+      ],
+      "vantageAnnotations": null
+    },
+    {
+      "id": "rag-multi-corpus:0aa129627d584fc897b37d85e86e2bab1a030610bf21aa88081dcf95a39aa414",
+      "enterprise": "Cendara University",
+      "queryType": "Temporal",
+      "question": "When are the main sessions for the Mathematics Proficiency Exam scheduled?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "entrance_exxam_guidelines.md",
+            "text": "| Exam Type | Main Session 1 | Main Session 2 | Format | Location |\n|---------------------------------|---------------------|---------------------|---------------|--------------------------------|\n| Mathematics Proficiency Exam | May 17, 2024 | July 13, 2024 | Computer-based| Pearson Computer Lab A |"
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 396,
+          "startLine": 396
+        }
+      ],
+      "vantageAnnotations": null
+    },
+    {
+      "id": "rag-multi-corpus:280a5829a65cb691b2c6be038e2a656e4ba4ff1e91f711322521f7338b5e9619",
+      "enterprise": "Cloudway 24",
+      "queryType": "Supporting",
+      "question": "What are the options for using SkyPoints 24 for upgrades at CloudWay 24?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "Upgrade Your Seat.md",
+            "text": "- Use your accumulated points for full or partial upgrades.\n- Tier status may offer complimentary or discounted upgrades on select flights (check your benefits)."
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 1165,
+          "startLine": 1165
+        }
+      ],
+      "vantageAnnotations": null
+    },
+    {
+      "id": "rag-multi-corpus:437d44b91ae15bcb7ef4de3294aea5e1d84e6feeba896c5bd721181e4eab1d49",
+      "enterprise": "Cloudway 24",
+      "queryType": "Eligibility Inquiry",
+      "question": "What are the eligibility criteria for CloudWay 24's Trainee Pilot Programme?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "Trainee Pilot Programme.md",
+            "text": "Nationality: Indian citizens or Overseas Citizens of India (OCI) eligible to work in India.\nAge: 18 – 28 years at the time of application.\nEducational Qualification: Minimum 10+2 with Physics and Mathematics from a recognized board. Graduates (any discipline) preferred.\nMedical Fitness: Must possess (or be able to obtain) DGCA Class 1 Medical Certificate.\nLanguage Proficiency: Proficiency in English (spoken & written). Additional language skills are a plus."
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 1214,
+          "startLine": 1214
+        }
+      ],
+      "vantageAnnotations": null
+    },
+    {
+      "id": "rag-multi-corpus:4c928b36bbdaca8282e533a32b1b27d01855edafd9b9e08c619312fd460d91e4",
+      "enterprise": "Cloudway 24",
+      "queryType": "Safety",
+      "question": "What safety measures are included in CloudWay 24's cab policy?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "Staff (Pilots and Cabin Crew) Cab Policy.md",
+            "text": "- 24/7 availability of cabs for day and night shifts.\n- GPS tracking enabled in all cabs.\n- Only authorized personnel allowed in staff cabs.\n- Crew must wear airline ID while in transit."
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 1230,
+          "startLine": 1230
+        }
+      ],
+      "vantageAnnotations": null
+    },
+    {
+      "id": "rag-multi-corpus:fee87f9823605fb3e531fdf0fe30dcc63aa8ad96945b2939bbe602ba85d39168",
+      "enterprise": "Cloudway 24",
+      "queryType": "Eligibility",
+      "question": "Who is eligible for cab services under CloudWay 24's policy?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "Staff (Pilots and Cabin Crew) Cab Policy.md",
+            "text": "- Pilots: All full-time and contract cockpit crew operating CloudWay 24 flights.\n- Cabin Crew: All active CloudLux, CloudElite, CloudComfort, and CloudSaver in-flight crew members rostered on duty."
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 1227,
+          "startLine": 1227
+        }
+      ],
+      "vantageAnnotations": null
+    },
+    {
+      "id": "rag-multi-corpus:00aac84aff0bdf469685fa88ced124794e68f7f6100df1956d35e7f2fa6bb608",
+      "enterprise": "Aventro Motors",
+      "queryType": "Procedural",
+      "question": "What steps should I follow to close the hood of an Aventro vehicle?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "How to Open the Hood of an Aventro Vehicle.md",
+            "text": "1. **Remove the Prop Rod** (if applicable) and place it back into its holder.\n2. **Lower the Hood Gently** to about 30 cm (1 foot) above the latch, then allow it to drop shut.\n3. **Check it is Securely Latched** by pressing gently on the front edge—do not slam."
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 610,
+          "startLine": 610
+        }
+      ],
+      "vantageAnnotations": null
+    },
+    {
+      "id": "rag-multi-corpus:05f8612ed635290a7dffa4ed923beb7e741f4f87ab32fd3ba1b5383ab86f9594",
+      "enterprise": "Velvera Technologies",
+      "queryType": "Descriptive",
+      "question": "What are the defining features of the Velvera Nexus series?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "phone_catalog.md",
+            "text": "The Velvera Nexus series is AI-centric, designed for thinkers, builders, and creators. It features models equipped with AI capabilities such as on-device transcription, auto-summary, real-time captioning, Smart Edit, multi-language translation, and code inference, powered by NeuralCore X engines."
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 872,
+          "startLine": 872
+        },
+        {
+          "recordNumber": 1049,
+          "startLine": 1049
+        }
+      ],
+      "vantageAnnotations": null
+    },
+    {
+      "id": "rag-multi-corpus:0182ac4e3c849922509abffa92c3b7fe3bf4da26845dc8a1c37251025de92b2b",
+      "enterprise": "ZX Bank",
+      "queryType": "Open-Ended",
+      "question": "What services do ZX Bank ATMs offer?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "ATMs at Railway Stations and Airports.md",
+            "text": "**All ZX Bank ATMs at these locations support:** Cash Withdrawal, Balance Enquiry, Mini Statements, Fund Transfer (card-to-card), Fast Pay, and Recharge Services. Many ATMs have 24x7 security and multi-language interface."
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 221,
+          "startLine": 221
+        }
+      ],
+      "vantageAnnotations": null
+    },
+    {
+      "id": "rag-multi-corpus:0300f489ecce01faca790e592134bfd870a1b6671432430343b8d24d7bf39c1d",
+      "enterprise": "Cendara University",
+      "queryType": "Analytical",
+      "question": "Why was Dr. Priyanka Halson recognized with the Distinguished Alumni Achievement Award?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "awards_and_recognition.md",
+            "text": "Dr. Priyanka Halson was recognized with the Distinguished Alumni Achievement Award for pioneering advancements in heart disease diagnostics and her commitment to global health advocacy, exemplifying Cendara values."
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 508,
+          "startLine": 508
+        }
+      ],
+      "vantageAnnotations": null
+    },
+    {
+      "id": "rag-multi-corpus:067e93391b2bce3cd5e4295dccc0c1a28953f2810008ec48a5a4a5f49b7df756",
+      "enterprise": "Aventro Motors",
+      "queryType": "Comparative",
+      "question": "How does ABS differ in effectiveness on wet roads compared to loose gravel?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "What is ABS.md",
+            "text": "ABS is more effective on wet roads where it reduces stopping distances and enhances steering control. However, on loose gravel or snow, ABS may not decrease stopping distances as effectively because locked wheels can build up material in front of the tires, aiding in stopping. ABS is not a substitute for safe driving practices."
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 655,
+          "startLine": 655
+        }
+      ],
+      "vantageAnnotations": null
+    },
+    {
+      "id": "rag-multi-corpus:07b218d67f67b74bbd355a4c1657aee14203aad40b5b485aeadb07f152f9da3d",
+      "enterprise": "Velvera Technologies",
+      "queryType": "Boolean",
+      "question": "Does the Velvera One Ultra support reverse wireless charging?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "velvera_one_ultra.md",
+            "text": "The Velvera One Ultra supports reverse wireless charging at 15W. It also includes 50W fast wireless charging (Qi 2.0 certified) and 65W Velvera HyperCharge for wired charging, which can charge the phone from 0–100% in approximately 36 minutes."
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 883,
+          "startLine": 883
+        },
+        {
+          "recordNumber": 1060,
+          "startLine": 1060
+        }
+      ],
+      "vantageAnnotations": null
+    },
+    {
+      "id": "rag-multi-corpus:06ebe43363d8df12c771f58fc4ad3b8c21400f801b22aa52324f66166d57eb9e",
+      "enterprise": "ZX Bank",
+      "queryType": "Temporal",
+      "question": "When was the branch network directory for ZX Bank updated?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "Pune Branch Network.md",
+            "text": "The markdown does not provide a specific date for when the directory was last updated. It simply presents the current branch listing."
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 137,
+          "startLine": 137
+        }
+      ],
+      "vantageAnnotations": null
+    },
+    {
+      "id": "rag-multi-corpus:006de8c84185c4831d12f10dca3c6c15c5519403cc7373f42ccd0fb293060218",
+      "enterprise": "Cendara University",
+      "queryType": "Procedural",
+      "question": "How can students connect with alumni mentors at Cendara University?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "alumni_directory.md",
+            "text": "Students are encouraged to register for alumni mentors by signing up at [mentoring.cendara.edu](https://mentoring.cendara.edu). They can also attend Networking Nights scheduled monthly or access the Online Directory to contact alumni for informational interviews and internship opportunities."
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 334,
+          "startLine": 334
+        }
+      ],
+      "vantageAnnotations": null
+    },
+    {
+      "id": "rag-multi-corpus:04f17833242b4009d050c049ee40893af31f218091745c3bdcd9847dac1dcbdf",
+      "enterprise": "Aventro Motors",
+      "queryType": "Analytical",
+      "question": "Why is it important to use the parking brake when opening the fuel knob?",
+      "groundTruth": {
+        "kind": "supporting-facts",
+        "referenceAnswer": null,
+        "supportingFacts": [
+          {
+            "filename": "How to Open the Fuel Knob in Aventro Cars.md",
+            "text": "Ensure your car is completely stopped and the engine is turned off. Engage the parking brake for safety."
+          },
+          {
+            "filename": "How to Open the Fuel Knob in Aventro Cars.md",
+            "text": "Using the parking brake prevents accidental movement and provides additional safety during the process."
+          }
+        ]
+      },
+      "sourceRecords": [
+        {
+          "recordNumber": 539,
+          "startLine": 539
+        }
+      ],
+      "vantageAnnotations": null
+    }
+  ]
+}

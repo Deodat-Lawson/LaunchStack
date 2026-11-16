@@ -14,6 +14,7 @@ import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { startProposalRun } from "~/server/proposals/executor";
 import { runCopy } from "~/server/proposals/copy";
 
+import { companySharedScope } from "./access";
 import { loadProgramDetails } from "./details";
 import { validateProgramIds } from "./run";
 
@@ -45,7 +46,7 @@ export async function loadAccelerators(member: WorkspaceContext): Promise<Accele
     const [catalogue, matches, profile, details] = await Promise.all([
         listCatalogue(),
         listCompanyMatches(member.companyId),
-        loadOrgProfile(member.companyId, await member.documentScope()),
+        loadOrgProfile(member.companyId, await companySharedScope(member.companyId)),
         loadProgramDetails(),
     ]);
     const profileHash = profile ? hashValue(profile) : null;
@@ -59,8 +60,8 @@ export async function loadAccelerators(member: WorkspaceContext): Promise<Accele
     );
     return {
         programs,
-        profileReady:
-            profile !== null && (profile.facts.length > 0 || profile.summary.trim().length > 0),
+        // Every grade must cite the profile, so a profile with nothing citable cannot score.
+        profileReady: profile !== null && profile.evidence.length > 0,
         canEdit: member.can("documents.edit"),
         costs: ACCELERATOR_COSTS,
         details,
@@ -94,8 +95,11 @@ export async function matchPrograms(
     programIds: unknown,
     rescore = false
 ): Promise<AcceleratorRunView> {
-    const profile = await loadOrgProfile(member.companyId, await member.documentScope());
-    if (!profile || (!profile.facts.length && !profile.summary.trim())) {
+    const profile = await loadOrgProfile(
+        member.companyId,
+        await companySharedScope(member.companyId)
+    );
+    if (!profile || profile.evidence.length === 0) {
         throw new AcceleratorError("Build the company profile first", 409, "profile_required");
     }
     const catalogue = await listCatalogue();

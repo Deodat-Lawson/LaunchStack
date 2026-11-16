@@ -81,7 +81,7 @@ function AcceleratorsFrame() {
                     <p className="text-ink-2 text-sm leading-relaxed">{t("common.accessBody")}</p>
                     {error != null && (
                         <p role="alert" className="text-danger text-sm">
-                            {errorText(error, t("errors.fullAccess"))}
+                            {errorText(error, t("errors.noAccess"))}
                         </p>
                     )}
                     <Button

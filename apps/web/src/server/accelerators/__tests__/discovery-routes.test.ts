@@ -23,7 +23,11 @@ import type * as MockRequireWorkspaceContext from "../../../../__tests__/helpers
 import { makeWorkspaceContext } from "../../../../__tests__/helpers/workspace-context";
 
 import type { WorkspaceContextResult } from "~/lib/require-workspace-context";
-import { AcceleratorAccessError, resolveAcceleratorMember } from "~/server/accelerators/access";
+import {
+    AcceleratorAccessError,
+    companySharedScope,
+    resolveAcceleratorMember,
+} from "~/server/accelerators/access";
 
 const mockRequireWorkspaceContext = jest.fn<Promise<WorkspaceContextResult>, []>();
 jest.mock("~/lib/require-workspace-context", () =>
@@ -33,9 +37,18 @@ jest.mock("~/lib/require-workspace-context", () =>
         >("../../../../__tests__/helpers/mock-require-workspace-context")
         .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
 );
+/** What every member may read; a marker, so a test can tell it apart from a member's own view. */
+const SHARED_SCOPE = {
+    kind: "except" as const,
+    deniedCategories: ["Board"],
+    allowedCategories: [],
+    deniedDocumentIds: [41],
+    allowedDocumentIds: [],
+};
 jest.mock("~/server/accelerators/access", () => ({
     ...jest.requireActual("~/server/accelerators/access"),
     resolveAcceleratorMember: jest.fn(async () => undefined),
+    companySharedScope: jest.fn(),
 }));
 
 const mockCatalogue = jest.fn();
@@ -87,14 +100,33 @@ import { GET as progress } from "~/app/api/accelerators/runs/[id]/route";
 const mockQueue = jest.mocked(queueProposalRun);
 const mockGetRun = jest.mocked(getRun);
 const mockRecheck = jest.mocked(resolveAcceleratorMember);
+const mockSharedScope = jest.mocked(companySharedScope);
 const originalExecutor = process.env.PROPOSALS_EXECUTOR;
 const profile: OrgProfile = {
     summary: "We build software for growing companies.",
     applicantType: "any",
     focusAreas: [],
     geography: [],
-    facts: [],
-    evidence: [],
+    facts: [
+        {
+            key: "description",
+            label: "What it does",
+            value: "Software for growing companies",
+            cites: [1],
+            source: "manual",
+        },
+    ],
+    evidence: [
+        {
+            n: 1,
+            documentId: null,
+            title: "What it does",
+            page: null,
+            quote: "Software for growing companies",
+            url: null,
+            origin: "profile",
+        },
+    ],
     builtFrom: { documents: 0, snippets: 0 },
     builtAt: "2026-10-25T00:00:00Z",
     promptVersion: "fixture",
@@ -143,6 +175,7 @@ beforeEach(() => {
     mockIntelligence.mockResolvedValue([]);
     mockMatches.mockResolvedValue({});
     mockProfile.mockResolvedValue(profile);
+    mockSharedScope.mockResolvedValue(SHARED_SCOPE);
     mockFindLiveRun.mockResolvedValue(null);
     mockHasTokens.mockResolvedValue(true);
     mockQueue.mockResolvedValue(run);
@@ -350,7 +383,7 @@ describe("discovery reads", () => {
         expect(response.status).toBe(404);
     });
 
-    it("withholds read results when unrestricted document access is revoked during the read", async () => {
+    it("withholds read results when access is revoked during the read", async () => {
         mockRecheck.mockRejectedValue(new AcceleratorAccessError());
         const response = await home(new NextRequest("http://x/api/accelerators"));
         expect(response.status).toBe(403);
@@ -398,22 +431,7 @@ describe("matching access and admission", () => {
 
     it.each([
         { permissions: ["documents.read" as const] },
-        {
-            scope: {
-                kind: "except" as const,
-                deniedCategories: ["Finance"],
-                deniedDocumentIds: [],
-                allowedDocumentIds: [],
-            },
-        },
-        {
-            scope: {
-                kind: "only" as const,
-                allowedCategories: [],
-                deniedDocumentIds: [],
-                allowedDocumentIds: [1],
-            },
-        },
+        { role: "guest" },
         { status: "suspended" as const },
     ])(
         "refuses paid matching before reading company data when access is insufficient (%o)",
@@ -426,16 +444,40 @@ describe("matching access and admission", () => {
                 new NextRequest("http://x/api/accelerators/match", { method: "POST" })
             );
             expect(response.status).toBe(403);
-            expect(await response.json()).toMatchObject({
-                code: "accelerators_full_access_required",
-            });
+            expect(await response.json()).toMatchObject({ code: "accelerators_access_denied" });
             expect(mockProfile).not.toHaveBeenCalled();
             expect(mockQueue).not.toHaveBeenCalled();
         }
     );
 
-    it.each([null, { ...profile, summary: "", facts: [] }])(
-        "requires a built nonempty company profile",
+    it("lets a member who cannot see a private file score, from what the whole company can read", async () => {
+        mockRequireWorkspaceContext.mockResolvedValue({
+            success: true,
+            data: makeWorkspaceContext({
+                companyId: 9n,
+                role: "member",
+                scope: {
+                    kind: "except",
+                    deniedCategories: ["Finance"],
+                    deniedDocumentIds: [],
+                    allowedDocumentIds: [],
+                },
+            }),
+        });
+        const response = await match(
+            new NextRequest("http://x/api/accelerators/match", {
+                method: "POST",
+                body: JSON.stringify({ programIds: [program.id] }),
+            })
+        );
+        expect(response.status).toBe(200);
+        // The profile is read through the company-shared view, never the requester's own.
+        expect(mockSharedScope).toHaveBeenCalledWith(9n);
+        expect(mockProfile).toHaveBeenCalledWith(9n, SHARED_SCOPE);
+    });
+
+    it.each([null, { ...profile, evidence: [] }])(
+        "requires a profile with something to cite before charging",
         async missingProfile => {
             mockProfile.mockResolvedValue(missingProfile);
             const response = await match(

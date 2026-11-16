@@ -238,14 +238,7 @@ describe("tracker routes and service", () => {
 
     it.each([
         { permissions: ["documents.read" as const] },
-        {
-            scope: {
-                kind: "only" as const,
-                allowedCategories: [],
-                allowedDocumentIds: [1],
-                deniedDocumentIds: [],
-            },
-        },
+        { role: "guest" },
         { status: "suspended" as const },
     ])("denies every mutation before storage when access is insufficient (%o)", async overrides => {
         mockRequireWorkspaceContext.mockResolvedValue({

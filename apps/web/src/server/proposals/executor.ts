@@ -27,7 +27,7 @@ import { resolveMemberContext } from "~/lib/require-workspace-context";
 import { isMeteringEnforced } from "~/server/deployment";
 import { inngest } from "~/server/inngest/client";
 
-import { assertAcceleratorAccess } from "~/server/accelerators/access";
+import { assertAcceleratorAccess, companySharedScope } from "~/server/accelerators/access";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { createProposalPorts } from "./ports";
 
@@ -82,9 +82,14 @@ export async function executeProposalRunForMember(
     const ctx = { runId, companyId, userId: run.userId };
     const member = await resolveMemberContext(run.userId, companyId);
     if (!member) throw new Error("The run's writer is no longer an active workspace member.");
-    const scope = await member.documentScope();
+    // Accelerator fits are shared with every member, so they are built from what every
+    // member may read, never from the requester's private sources.
+    let scope;
     if (run.kind === "programs") {
-        await assertAcceleratorAccess(member, "documents.edit");
+        assertAcceleratorAccess(member, "documents.edit");
+        scope = await companySharedScope(companyId);
+    } else {
+        scope = await member.documentScope();
     }
     return executeProposalRun({ ...ctx, scope }, createProposalPorts(companyId, run.userId));
 }

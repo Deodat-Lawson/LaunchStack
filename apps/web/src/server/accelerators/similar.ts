@@ -16,6 +16,7 @@ import { loadOrgProfile } from "@launchstack/pipelines/proposals/db";
 
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 
+import { companySharedScope } from "./access";
 import { similarCompanyEmbeddings } from "./embeddings";
 
 const SIMILAR_LIMIT = 12;
@@ -55,7 +56,7 @@ export async function loadSimilarCompanies(
     if (!(await isSupportedAccelerator(programId))) return { supported: false };
 
     const [profile, counts] = await Promise.all([
-        loadOrgProfile(member.companyId, await member.documentScope()),
+        loadOrgProfile(member.companyId, await companySharedScope(member.companyId)),
         countPortfolio(programId),
     ]);
     const profileText = profile ? profileEmbeddingText(profile) : "";

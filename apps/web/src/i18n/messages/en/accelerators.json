@@ -14,8 +14,8 @@
     "readOnly": "You can read saved fit results, but your role cannot run matching.",
     "loadFailed": "Could not load Accelerators.",
     "actionFailed": "The action could not be completed.",
-    "accessTitle": "Full document access required",
-    "accessBody": "Accelerators is available only to active company members with access to all company documents and the required document permissions. Ask a company administrator to review your access."
+    "accessTitle": "No access to Accelerators",
+    "accessBody": "Accelerators is available to active company members who can read company documents. Ask a company administrator to review your role."
   },
   "home": {
     "title": "Find your accelerator",
@@ -339,7 +339,7 @@
   },
   "errors": {
     "runInProgress": "A company run is already starting or running. Wait for it to finish before scoring Programs.",
-    "fullAccess": "Accelerators requires access to all company documents.",
+    "noAccess": "Accelerators is available to active company members who can read company documents.",
     "profileRequired": "Build the company profile before scoring Programs.",
     "notFound": "This Program or scoring run was not found.",
     "conflict": "The saved data changed. Refresh and try again.",

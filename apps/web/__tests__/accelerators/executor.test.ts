@@ -15,6 +15,7 @@ import {
     executeProposalRunForMember,
     startProposalRun,
 } from "~/server/proposals/executor";
+import { companySharedScope } from "~/server/accelerators/access";
 
 import { makeWorkspaceContext } from "../helpers/workspace-context";
 
@@ -40,6 +41,11 @@ jest.mock("~/server/deployment", () => ({ isMeteringEnforced: jest.fn() }));
 jest.mock("~/server/inngest/client", () => ({ inngest: { send: jest.fn() } }));
 jest.mock("~/server/proposals/ports", () => ({ createProposalPorts: jest.fn() }));
 jest.mock("~/server/workspace-models/scope", () => ({ withWorkspaceChatModels: jest.fn() }));
+jest.mock("~/server/db", () => ({ db: {} }));
+jest.mock("~/server/accelerators/access", () => ({
+    ...jest.requireActual<object>("~/server/accelerators/access"),
+    companySharedScope: jest.fn(),
+}));
 
 const mockQueue = jest.mocked(queueProposalRun);
 const mockExecute = jest.mocked(executeProposalRun);
@@ -48,6 +54,7 @@ const mockMember = jest.mocked(resolveMemberContext);
 const mockCredits = jest.mocked(hasTokens);
 const mockMetering = jest.mocked(isMeteringEnforced);
 const mockSend = jest.mocked(inngest.send);
+const mockSharedScope = jest.mocked(companySharedScope);
 const originalExecutor = process.env.PROPOSALS_EXECUTOR;
 const run: RunRecord = {
     id: "run",
@@ -149,16 +156,26 @@ describe("deferred matching access", () => {
         expect(mockMember).not.toHaveBeenCalled();
     });
 
+    it("scores from what the whole company can read, not from the writer's own view", async () => {
+        const shared = {
+            kind: "except" as const,
+            deniedCategories: ["Board"],
+            allowedCategories: [],
+            deniedDocumentIds: [41],
+            allowedDocumentIds: [],
+        };
+        mockSharedScope.mockResolvedValue(shared);
+        mockMember.mockResolvedValue(
+            makeWorkspaceContext({ companyId: 5n, authUserId: "writer", role: "member" })
+        );
+        await executeProposalRunForMember(run.id, 5n);
+        expect(mockSharedScope).toHaveBeenCalledWith(5n);
+        expect(mockExecute.mock.calls[0]![0]).toMatchObject({ scope: shared });
+    });
+
     it.each([
         { permissions: ["documents.read" as const] },
-        {
-            scope: {
-                kind: "only" as const,
-                allowedCategories: [],
-                deniedDocumentIds: [],
-                allowedDocumentIds: [],
-            },
-        },
+        { role: "guest" },
         { status: "suspended" as const },
     ])("does not execute after the writer loses matching access (%o)", async overrides => {
         mockMember.mockResolvedValue(

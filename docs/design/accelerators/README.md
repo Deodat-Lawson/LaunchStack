@@ -30,7 +30,7 @@ This scope replaces the Form-related assignments in [issue #510](https://github.
 - **Fit rubric `fit-v2`:** seven weighted areas (sector 20, stage 15, business model 15, past companies 15, deal 15, operations 10, value 10). The model grades six areas in batches of up to 10 Programs, citing Program and company evidence for every grade; a Program whose grades fail validation keeps its previous result. "Similar past companies" is graded by rule for Supported accelerators (YC) from the similarity of the five closest past companies, and does not apply elsewhere. An overall score appears only when graded areas cover at least 70% of the applicable weight. A score is not an admission probability, and unknown is never shown as 0.
 - **Ranking:** current scores high to low, then current results without enough evidence, then out of date, then not scored; other sorts are nearest deadline, name and your priority. Results go out of date when the profile, the Program record or the rubric changes.
 - **Tracker:** one company-private opportunity per Program and cycle with priority, status (shortlisted to accepted/rejected/withdrawn), notes, next action, submission date, tasks and the deadline planned against (an instant, or a date when the Program gave no time). Tracking never submits anything and never starts paid scoring.
-- **Access:** active membership, unrestricted access to all company documents, and read/edit permission per action, enforced on APIs and background work; output, run completion and debit commit atomically.
+- **Access:** active company membership (guests excluded) and read/edit permission per action, enforced on APIs and background work. Fit is built only from what every member may read (`companySharedScope`: the workspace minus restricted folders and documents), because results are shared with the whole company; a private source never shapes them and never blocks anyone. Output, run completion and debit commit atomically.
 
 ## Team responsibilities
 
@@ -109,7 +109,7 @@ Importing a changed Program updates its content hash and makes affected saved fi
 
 ### Remaining HTTP API
 
-The server resolves the authenticated company; clients cannot supply tenancy. Reads require `documents.read`; matching requires `documents.edit`; both require unrestricted company-document access.
+The server resolves the authenticated company; clients cannot supply tenancy. Reads require `documents.read`; matching requires `documents.edit`; guests are refused. The company profile is always read through the company-shared view, whoever asks, so every member sees the same, current result.
 
 | Method and path                      | Result                                                                              |
 | ------------------------------------ | ----------------------------------------------------------------------------------- |

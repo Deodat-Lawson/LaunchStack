@@ -49,26 +49,26 @@ async function cycleDeadline(
 }
 
 export async function loadTracker(member: WorkspaceContext) {
-    await assertAcceleratorAccess(member);
+    assertAcceleratorAccess(member);
     return listTrackerOpportunities(member.companyId);
 }
 
 export async function loadTrackerOpportunity(member: WorkspaceContext, id: string) {
-    await assertAcceleratorAccess(member);
+    assertAcceleratorAccess(member);
     const opportunity = await getTrackerOpportunity(member.companyId, trackerId.parse(id));
     if (!opportunity) throw new AcceleratorError("Opportunity not found", 404, "tracker_not_found");
     return opportunity;
 }
 
 export async function saveOpportunity(member: WorkspaceContext, body: unknown) {
-    await assertAcceleratorAccess(member, "documents.edit");
+    assertAcceleratorAccess(member, "documents.edit");
     const input = SaveTrackerOpportunitySchema.parse(body);
     const deadline = await cycleDeadline(input.programId, input.cycleId ?? null);
     return saveTrackerOpportunity(member.companyId, input, deadline);
 }
 
 export async function editOpportunity(member: WorkspaceContext, id: string, body: unknown) {
-    await assertAcceleratorAccess(member, "documents.edit");
+    assertAcceleratorAccess(member, "documents.edit");
     const input = UpdateTrackerOpportunitySchema.parse(body);
     const existing = await loadTrackerOpportunity(member, id);
     let deadline: OfficialDeadline | null = null;
@@ -80,7 +80,7 @@ export async function editOpportunity(member: WorkspaceContext, id: string, body
 }
 
 export async function removeOpportunity(member: WorkspaceContext, id: string) {
-    await assertAcceleratorAccess(member, "documents.edit");
+    assertAcceleratorAccess(member, "documents.edit");
     await deleteTrackerOpportunity(member.companyId, trackerId.parse(id));
 }
 
@@ -89,7 +89,7 @@ export async function addTrackerTask(
     opportunityId: string,
     body: unknown
 ) {
-    await assertAcceleratorAccess(member, "documents.edit");
+    assertAcceleratorAccess(member, "documents.edit");
     return createTrackerTask(
         member.companyId,
         trackerId.parse(opportunityId),
@@ -103,7 +103,7 @@ export async function editTrackerTask(
     taskId: string,
     body: unknown
 ) {
-    await assertAcceleratorAccess(member, "documents.edit");
+    assertAcceleratorAccess(member, "documents.edit");
     return updateTrackerTask(
         member.companyId,
         trackerId.parse(opportunityId),
@@ -117,7 +117,7 @@ export async function removeTrackerTask(
     opportunityId: string,
     taskId: string
 ) {
-    await assertAcceleratorAccess(member, "documents.edit");
+    assertAcceleratorAccess(member, "documents.edit");
     await deleteTrackerTask(
         member.companyId,
         trackerId.parse(opportunityId),

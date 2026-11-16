@@ -255,8 +255,9 @@ export async function prepareAcceleratorRun(
     if (run.kind !== "programs") {
         throw new AcceleratorError("Run not found", 404, "run_not_found");
     }
+    // ctx.scope is the company-shared view (see executeProposalRunForMember).
     const profile = await loadOrgProfile(ctx.companyId, ctx.scope);
-    if (!profile || (!profile.facts.length && !profile.summary.trim())) {
+    if (!profile || profile.evidence.length === 0) {
         throw new AcceleratorError(
             "Build the company profile before matching",
             409,

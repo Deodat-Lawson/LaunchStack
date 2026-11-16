@@ -18,7 +18,7 @@ export async function acceleratorRequest(
     try {
         const auth = await requireWorkspaceContext();
         if (!auth.success) return auth.response;
-        await assertAcceleratorAccess(auth.data, permission);
+        assertAcceleratorAccess(auth.data, permission);
         const result = await work(auth.data);
         await resolveAcceleratorMember(auth.data.authUserId, auth.data.companyId, permission);
         return json(result);
@@ -36,7 +36,7 @@ export async function acceleratorRequest(
                 : failure.code === "run_in_progress"
                   ? "runInProgress"
                   : status === 403 || status === 401
-                    ? "fullAccess"
+                    ? "noAccess"
                     : status === 404
                       ? "notFound"
                       : status === 409

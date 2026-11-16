@@ -455,15 +455,8 @@ describeDb("Accelerator discovery persistence and Grants isolation", () => {
             ...createDefaultPorts({ enableFetch: false }),
             structured: async (_stage, schema) => {
                 if (outcome === "revoked access") {
-                    currentMember = makeWorkspaceContext({
-                        companyId,
-                        scope: {
-                            kind: "only",
-                            allowedCategories: [],
-                            deniedDocumentIds: [],
-                            allowedDocumentIds: [],
-                        },
-                    });
+                    // Demoted to guest while the model was working: guests are not members.
+                    currentMember = makeWorkspaceContext({ companyId, role: "guest" });
                 }
                 return {
                     result: schema.parse({ assessments: { [program.id]: modelAssessment() } }),
@@ -474,7 +467,8 @@ describeDb("Accelerator discovery persistence and Grants isolation", () => {
                 await meter(args, tx);
                 if (outcome === "debit error") throw new Error("debit error");
             },
-            assertAcceleratorAccess: () => assertAcceleratorAccess(currentMember, "documents.edit"),
+            assertAcceleratorAccess: async () =>
+                assertAcceleratorAccess(currentMember, "documents.edit"),
         };
         ports.prepareAcceleratorRun = (ctx, record) => prepareAcceleratorRun(ctx, ports, record);
         const ctx = {

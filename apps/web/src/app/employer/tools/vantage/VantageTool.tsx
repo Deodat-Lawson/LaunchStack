@@ -85,7 +85,16 @@ function VantageFrame() {
         admin ? "allowed" : loaded ? "denied" : "pending"
     );
     return (
-        <ToolFrame title="Vantage" mark={<VantageMark size={15} tile />} groups={groups}>
+        <ToolFrame
+            title="Vantage"
+            mark={<VantageMark size={15} tile />}
+            groups={groups}
+            contentClassName={
+                screen.kind === "this-week" || screen.kind === "context"
+                    ? "min-h-full !p-0"
+                    : undefined
+            }
+        >
             <Screen screen={screen} />
         </ToolFrame>
     );

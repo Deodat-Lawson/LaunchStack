@@ -222,7 +222,16 @@ test("authenticated V2.1 review, decision replay, reload and company isolation",
         });
         await page.reload();
         await expect(page.getByText(review.report.headline, { exact: true })).toBeVisible();
+        // Completed topics load collapsed; reopen the actual restored topic before editing.
+        const topicToggle = page
+            .getByTestId(`review-topic-${topic.id}`)
+            .getByRole("button")
+            .first();
+        await topicToggle.click();
         await page.getByRole("button", { name: "Change decision", exact: true }).first().click();
+        await expect(
+            page.getByRole("textbox", { name: "Your decision", exact: true }).first()
+        ).toHaveValue(decision.decision);
         await page
             .getByRole("textbox", { name: "Your decision", exact: true })
             .first()

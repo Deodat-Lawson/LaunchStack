@@ -18,6 +18,7 @@ import { useOptionalToolNav } from "~/components/tool-app/nav";
 import { toolTabHref } from "~/lib/tool-app/locations";
 import { vantageApi, type WeeklyReviewDto } from "../api";
 import { useWeeklyReviewErrorText } from "../_lib/weekly-review-errors";
+import s from "./review-layout.module.css";
 
 type Topic = WeeklyReviewDto["report"]["topics"][number];
 export function ReviewCommitmentDialog({
@@ -93,9 +94,9 @@ export function ReviewCommitmentDialog({
                 if (!open && !busy) onClose();
             }}
         >
-            <DialogContent className="max-h-[85dvh] overflow-y-auto">
+            <DialogContent className={`${s.typography} max-h-[85dvh] overflow-y-auto`}>
                 <DialogHeader>
-                    <DialogTitle>{t("founder.addCommitment")}</DialogTitle>
+                    <DialogTitle className={s.heading}>{t("founder.addCommitment")}</DialogTitle>
                     <DialogDescription>{t("founder.commitmentDescription")}</DialogDescription>
                 </DialogHeader>
                 <form

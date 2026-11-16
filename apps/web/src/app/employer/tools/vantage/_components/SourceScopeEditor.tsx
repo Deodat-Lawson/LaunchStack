@@ -1,4 +1,5 @@
 "use client";
+import styles from "./review-layout.module.css";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "~/components/ui/button";
@@ -131,7 +132,7 @@ export function SourceScopeEditor({
                     <SelectTrigger id="scope-source">
                         <SelectValue placeholder={t("selectDocument")} />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className={styles.typography}>
                         {sources.map(source => (
                             <SelectItem
                                 key={`${source.purpose}:${source.id}`}
@@ -305,7 +306,7 @@ function ScopePreview({
                         <SelectTrigger id="scope-version">
                             <SelectValue placeholder={t("chooseExplicitVersion")} />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className={styles.typography}>
                             {inspection.versions.map(item => (
                                 <SelectItem key={item.version} value={item.version}>
                                     {item.version} ({fmt.dateTime(item.createdAt)})

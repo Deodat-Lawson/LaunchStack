@@ -298,6 +298,7 @@ test("authenticated combined retrieval preserves scope, role, decision and histo
         checks.push("synthetic signup, company and exact-version document fixture");
 
         await page.goto("/employer/tools/vantage/context?week=2026-11-09");
+        await page.getByRole("button", { name: "Open Your role", exact: true }).click();
         await page.getByLabel("Primary business role", { exact: true }).fill("Engineering lead");
         await page.getByLabel("Responsibilities", { exact: true }).fill("Release rollback");
         await page.getByLabel("Priorities", { exact: true }).fill("Owner");
@@ -385,7 +386,7 @@ test("authenticated combined retrieval preserves scope, role, decision and histo
         await expect(
             page.getByRole("button", { name: "Generate review", exact: true }).first()
         ).toBeEnabled();
-        await expect(page.getByLabel("Reporting week", { exact: true })).toHaveValue("2026-11-09");
+        await expect(page.getByText(/^Week of /)).toContainText("Nov 9");
         const generation = page.waitForResponse(
             response =>
                 new URL(response.url()).pathname === "/api/vantage/reviews" &&
@@ -513,13 +514,11 @@ test("authenticated combined retrieval preserves scope, role, decision and histo
                 new URL(response.url()).pathname === `/api/vantage/reviews/${review.id}/evidence` &&
                 new URL(response.url()).searchParams.get("ref") === scopedSource.ref
         );
-        await page
-            .getByRole("button", { name: "Sources used in this report", exact: true })
-            .click();
+        await page.getByRole("button", { name: "Sources used", exact: true }).click();
         await page
             .getByRole("button", {
                 name: new RegExp(
-                    `^Synthetic scoped architecture.*version ${architecture.version}$`
+                    `^Source \\d+: Synthetic scoped architecture, version ${architecture.version}$`
                 ),
             })
             .first()
@@ -552,10 +551,12 @@ test("authenticated combined retrieval preserves scope, role, decision and histo
         await evidenceRegion.getByRole("button", { name: "Close", exact: true }).click();
         const decisionText =
             "Synthetic human investigation recorded. Execution remains unverified.";
-        await page
+        const decisionEditor = page
             .getByRole("textbox", { name: "Your decision", exact: true })
-            .first()
-            .fill(decisionText);
+            .first();
+        // The injected real-report fixture has no recommendation, so this editor stays blank.
+        await expect(decisionEditor).toHaveValue("");
+        await decisionEditor.fill(decisionText);
         const decisionSave = page.waitForResponse(
             response =>
                 new URL(response.url()).pathname ===
@@ -564,9 +565,9 @@ test("authenticated combined retrieval preserves scope, role, decision and histo
         );
         await page.getByRole("button", { name: "Record decision", exact: true }).first().click();
         expect((await decisionSave).status()).toBe(200);
-        await expect(page.getByText(decisionText, { exact: false })).toBeVisible();
+        await expect(page.getByText(decisionText, { exact: false }).first()).toBeVisible();
         await page.reload();
-        await expect(page.getByText(decisionText, { exact: false })).toBeVisible();
+        await expect(page.getByText(decisionText, { exact: false }).first()).toBeVisible();
         const history = z
             .object({
                 activeId: z.string(),
@@ -598,16 +599,14 @@ test("authenticated combined retrieval preserves scope, role, decision and histo
                 new URL(response.url()).pathname === "/api/vantage/reviews" &&
                 response.request().method() === "POST"
         );
-        await page.getByRole("button", { name: "Generate review", exact: true }).first().click();
+        await page.getByRole("button", { name: "Regenerate", exact: true }).click();
         const replacementResponse = await replacementWait;
         expect(replacementResponse.status()).toBe(200);
         const rawReplacement: unknown = await generatedReview(replacementResponse);
         const replacement = reviewSchema.parse(rawReplacement);
         await saveAdmissionTrace(rawReplacement);
         expect(replacement.id).not.toBe(review.id);
-        await expect(
-            page.getByRole("button", { name: "Generate review", exact: true }).first()
-        ).toBeEnabled();
+        await expect(page.getByRole("button", { name: "Regenerate", exact: true })).toBeEnabled();
         const historyAfterReplacement = z
             .object({
                 activeId: z.string(),
@@ -632,7 +631,7 @@ test("authenticated combined retrieval preserves scope, role, decision and histo
         );
         await page.getByRole("option").nth(1).click();
         expect((await historicalRead).status()).toBe(200);
-        await expect(page.getByText(decisionText, { exact: false })).toBeVisible();
+        await expect(page.getByText(decisionText, { exact: false }).first()).toBeVisible();
         await page.screenshot({
             path: resolve(artifacts, "historical-decision.png"),
             fullPage: true,

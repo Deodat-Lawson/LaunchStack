@@ -13,6 +13,7 @@ import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
 import { weeklyReviewApi, type WeeklyReviewEvidenceDto } from "../api";
 import { useWeeklyReviewErrorText } from "../_lib/weekly-review-errors";
+import styles from "./review-layout.module.css";
 
 export function ReviewCitationDialog({
     reportId,
@@ -66,10 +67,14 @@ export function ReviewCitationDialog({
                 }
             }}
         >
-            <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-2xl">
+            <DialogContent className="bg-panel max-h-[85dvh] overflow-y-auto text-[length:var(--fs-body)] font-normal sm:max-w-2xl">
                 <DialogHeader>
-                    <DialogTitle>{evidence?.title ?? t("founder.citationTitle")}</DialogTitle>
-                    <DialogDescription>{t("founder.citationDescription")}</DialogDescription>
+                    <DialogTitle className="text-[length:var(--fs-h3)] font-semibold">
+                        {evidence?.title ?? t("founder.citationTitle")}
+                    </DialogTitle>
+                    <DialogDescription className="text-ink-2 text-[length:var(--fs-small)]">
+                        {t("founder.citationDescription")}
+                    </DialogDescription>
                 </DialogHeader>
                 {current?.error ? (
                     <p role="alert" className="text-danger">
@@ -77,29 +82,35 @@ export function ReviewCitationDialog({
                     </p>
                 ) : evidence ? (
                     <>
-                        <p className="text-ink-2 text-sm">
+                        <p className="text-ink-2 text-[length:var(--fs-small)]">
                             {t("founder.sourceVersion", {
                                 title: evidence.title,
                                 version: evidence.version,
                             })}
                         </p>
-                        <p className="text-ink-2 text-sm">
+                        <p className="text-ink-2 text-[length:var(--fs-small)]">
                             {purpose ? t(`founder.purpose.${purpose}`) : t("founder.purposeOther")}
                         </p>
-                        <p className="whitespace-pre-wrap break-words text-sm">{evidence.text}</p>
+                        <p className="max-w-[68ch] whitespace-pre-wrap break-words leading-relaxed">
+                            {evidence.text}
+                        </p>
                         {evidence.scope ? (
-                            <p className="text-ink-2 text-sm">
+                            <p className="text-ink-2 text-[length:var(--fs-small)]">
                                 {evidence.scope.coverage.qualification}
                             </p>
                         ) : null}
                         <Collapsible>
                             <CollapsibleTrigger asChild>
-                                <Button variant="ghost" size="sm">
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="text-[length:var(--fs-small)] font-semibold"
+                                >
                                     {t("founder.technicalDetails")}
                                 </Button>
                             </CollapsibleTrigger>
-                            <CollapsibleContent>
-                                <pre className="bg-panel-2 overflow-auto rounded p-3 text-xs">
+                            <CollapsibleContent className={styles.accordionContent}>
+                                <pre className="bg-panel-2 overflow-auto rounded p-3 text-[length:var(--fs-small)]">
                                     {JSON.stringify(
                                         {
                                             ref: evidence.ref,

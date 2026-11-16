@@ -148,16 +148,30 @@ beforeEach(() => {
         return { role: roleContext.role, version };
     });
 });
+function openSection(title: string) {
+    const trigger = screen.getByRole("button", { name: title });
+    if (trigger.getAttribute("aria-expanded") !== "true") fireEvent.click(trigger);
+}
 function card(title: string) {
+    if (title !== "Setup checklist") openSection(title);
     return screen.getByRole("heading", { name: title }).closest<HTMLElement>('[data-slot="card"]')!;
 }
-async function renderContext() {
+async function renderContext(openRole = true) {
     renderWithLocale(<ContextScreen week="2026-11-12" />, "en");
-    await screen.findByLabelText("Primary business role");
+    await screen.findByRole("heading", { name: "Setup checklist" });
+    if (openRole && roleContext.enabled) openSection("Your role");
 }
 
-it("loads setup without report calls, shows persisted checklist and anchors the week", async () => {
-    await renderContext();
+it("loads setup without report calls, collapses completed sections and anchors the week", async () => {
+    await renderContext(false);
+    for (const section of ["Your role", "Company documents", "Your starred documents"])
+        expect(screen.getByRole("button", { name: section })).toHaveAttribute(
+            "aria-expanded",
+            "false"
+        );
+    expect(screen.getByText("Finance lead")).toBeInTheDocument();
+    expect(screen.getByText("Architecture + 1 required")).toBeInTheDocument();
+    expect(screen.getByText("1 of 8 starred")).toBeInTheDocument();
     expect(weeklyReviewApi.list).not.toHaveBeenCalled();
     expect(weeklyReviewApi.get).not.toHaveBeenCalled();
     expect(within(card("Setup checklist")).getAllByText("Done")).toHaveLength(3);
@@ -168,8 +182,67 @@ it("loads setup without report calls, shows persisted checklist and anchors the 
     expect(screen.queryByRole("button", { name: "Generate review" })).not.toBeInTheDocument();
     expect(screen.queryByLabelText("Human decision")).not.toBeInTheDocument();
     expect(screen.queryByLabelText("Source to inspect")).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Save required context" })).toBeDisabled();
+    card("Company documents");
+    expect(
+        screen.getByRole("button", { name: "Save required context", hidden: true })
+    ).toBeDisabled();
+    card("Your starred documents");
     expect(screen.getByRole("button", { name: "Save personal stars" })).toBeDisabled();
+});
+
+it.each(["role", "company", "stars"] as const)(
+    "opens the first incomplete %s section on load",
+    async missing => {
+        if (missing === "role") roleContext = { ...roleContext, role: null };
+        if (missing === "company") context = { ...context, policy: null };
+        if (missing === "stars")
+            context = {
+                ...context,
+                preferences: { ...context.preferences!, star_document_ids: [] },
+            };
+        await renderContext(false);
+        for (const [id, label] of [
+            ["role", "Your role"],
+            ["company", "Company documents"],
+            ["stars", "Your starred documents"],
+        ])
+            expect(screen.getByRole("button", { name: label })).toHaveAttribute(
+                "aria-expanded",
+                String(id === missing)
+            );
+    }
+);
+
+it("stepper opens and scrolls the selected section without losing a collapsed role draft", async () => {
+    const frame = jest
+        .spyOn(window, "requestAnimationFrame")
+        .mockImplementation((callback: FrameRequestCallback) => {
+            callback(0);
+            return 1;
+        });
+    await renderContext();
+    fireEvent.change(screen.getByLabelText("Responsibilities"), {
+        target: { value: "Unsaved founder responsibility" },
+    });
+    const company = document.getElementById("context-company")!;
+    const scroll = jest.fn();
+    company.scrollIntoView = scroll;
+    fireEvent.click(screen.getByRole("button", { name: "Open Company documents" }));
+    expect(screen.getByRole("button", { name: "Company documents" })).toHaveAttribute(
+        "aria-expanded",
+        "true"
+    );
+    expect(screen.getByRole("button", { name: "Your role" })).toHaveAttribute(
+        "aria-expanded",
+        "false"
+    );
+    expect(scroll).toHaveBeenCalledWith(expect.objectContaining({ block: "start" }));
+    fireEvent.click(screen.getByRole("button", { name: "Open Your role" }));
+    expect(screen.getByLabelText("Responsibilities")).toHaveValue("Unsaved founder responsibility");
+    expect(weeklyReviewApi.saveRole).not.toHaveBeenCalled();
+    expect(weeklyReviewApi.savePolicy).not.toHaveBeenCalled();
+    expect(weeklyReviewApi.saveStars).not.toHaveBeenCalled();
+    frame.mockRestore();
 });
 
 it("tracks unsaved edits without marking setup complete and filters document choices", async () => {
@@ -210,7 +283,9 @@ it("preserves unrelated scope maps when saving company and personal documents", 
         })
     );
     await waitFor(() =>
-        expect(screen.getByRole("button", { name: "Save required context" })).toBeDisabled()
+        expect(
+            screen.getByRole("button", { name: "Save required context", hidden: true })
+        ).toBeDisabled()
     );
     fireEvent.click(within(card("Your starred documents")).getByLabelText("Roadmap"));
     fireEvent.click(screen.getByRole("button", { name: "Save personal stars" }));
@@ -228,6 +303,7 @@ it("refreshes shared preference versions after saving stars and role", async () 
     fireEvent.click(within(card("Your starred documents")).getByLabelText("Roadmap"));
     fireEvent.click(screen.getByRole("button", { name: "Save personal stars" }));
     await waitFor(() => expect(weeklyReviewApi.role).toHaveBeenCalledTimes(2));
+    card("Your role");
     fireEvent.change(screen.getByLabelText("Responsibilities"), {
         target: { value: "Forecasting" },
     });
@@ -268,8 +344,12 @@ it("honors hidden configuration and current editing capabilities", async () => {
     expect(screen.getByLabelText("Primary business role")).toBeDisabled();
     expect(within(card("Company documents")).getByLabelText("Roadmap")).toBeDisabled();
     expect(within(card("Your starred documents")).getByLabelText("Roadmap")).toBeDisabled();
-    expect(screen.getByRole("button", { name: "Clear business role" })).toBeDisabled();
-    expect(screen.getByRole("button", { name: "Save personal stars" })).toBeDisabled();
+    expect(
+        within(card("Your role")).getByRole("button", { name: "Clear business role" })
+    ).toBeDisabled();
+    expect(
+        within(card("Your starred documents")).getByRole("button", { name: "Save personal stars" })
+    ).toBeDisabled();
 });
 
 it("keeps failed saves actionable and displays a plain localized error", async () => {
@@ -436,7 +516,7 @@ it("reapproves one personal pin through normal PATCH without dropping another sc
 it("hides the role editor when retrieval is disabled without inferring a role", async () => {
     roleContext = { ...roleContext, enabled: false, role: null };
     renderWithLocale(<ContextScreen week="2026-11-09" />, "en");
-    await screen.findByRole("button", { name: "Save personal stars" });
+    await screen.findByRole("heading", { name: "Setup checklist" });
     expect(screen.queryByLabelText("Primary business role")).not.toBeInTheDocument();
     expect(within(card("Setup checklist")).getByText("Not set")).toBeInTheDocument();
 });

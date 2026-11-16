@@ -3,6 +3,7 @@ import React from "react";
 import { fireEvent, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { renderWithLocale } from "~/i18n/testing/render";
+import zhVantage from "~/i18n/messages/zh-CN/vantage.json";
 import { ReportSources } from "~/app/employer/tools/vantage/_components/ReportSources";
 import type {
     WeeklyReviewContextDto,
@@ -61,7 +62,7 @@ it("keeps coverage collapsed at the bottom and preserves frozen qualifications w
         "en"
     );
     expect(screen.queryByText("Relevant configured spans reviewed")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Sources used in this report" }));
+    fireEvent.click(screen.getByRole("button", { name: "Sources used" }));
     expect(screen.getByText("Relevant configured spans reviewed")).toBeVisible();
     expect(screen.getByText("Pricing decision spans approved by the administrator")).toBeVisible();
     expect(screen.getByText("Reviewed 2 of 2 required evidence units.")).toBeVisible();
@@ -73,7 +74,11 @@ it("keeps coverage collapsed at the bottom and preserves frozen qualifications w
             "Review coverage is limited to the configured spans of canonical indexed text."
         )
     ).toBeVisible();
-    expect(screen.getByRole("button", { name: /Release evidence.*202/ })).toBeVisible();
+    const source = screen.getByRole("button", { name: "Source 1: Release evidence, version 202" });
+    expect(source).toBeVisible();
+    expect(source).toHaveTextContent(/^1$/);
+    expect(screen.getByText("Release evidence — version 202", { selector: "span" })).toBeVisible();
+    expect(screen.queryByText("doc:101@202")).not.toBeInTheDocument();
 });
 
 it("shows current readable sources not selected without performing retrieval", () => {
@@ -83,7 +88,7 @@ it("shows current readable sources not selected without performing retrieval", (
         <ReportSources review={review()} context={context} onInspect={jest.fn()} />,
         "en"
     );
-    fireEvent.click(screen.getByRole("button", { name: "Sources used in this report" }));
+    fireEvent.click(screen.getByRole("button", { name: "Sources used" }));
     expect(screen.getByText("Security review not selected")).toBeVisible();
     expect(fetch).not.toHaveBeenCalled();
 });
@@ -96,7 +101,7 @@ it.each([
         <ReportSources review={review(state)} context={context} onInspect={jest.fn()} />,
         "en"
     );
-    fireEvent.click(screen.getByRole("button", { name: "Sources used in this report" }));
+    fireEvent.click(screen.getByRole("button", { name: "Sources used" }));
     expect(screen.getByText(label)).toBeVisible();
     expect(
         screen.queryByText(
@@ -109,7 +114,7 @@ it("does not invent scoped coverage when a supported whole-document report has n
     const saved = review();
     saved.evidence = {};
     renderWithLocale(<ReportSources review={saved} context={null} onInspect={jest.fn()} />, "en");
-    fireEvent.click(screen.getByRole("button", { name: "Sources used in this report" }));
+    fireEvent.click(screen.getByRole("button", { name: "Sources used" }));
     expect(screen.queryByText("Relevant configured spans reviewed")).not.toBeInTheDocument();
     expect(screen.queryByText("Full canonical indexed text reviewed")).not.toBeInTheDocument();
 });
@@ -119,7 +124,9 @@ it("renders scope qualifications in Simplified Chinese", () => {
         <ReportSources review={review()} context={context} onInspect={jest.fn()} />,
         "zh-CN"
     );
-    fireEvent.click(screen.getByRole("button", { name: "本报告使用的来源" }));
+    fireEvent.click(
+        screen.getByRole("button", { name: zhVantage.weeklyReview.founder.sourcesUsed })
+    );
     expect(screen.getByText("已审阅配置的相关文本片段")).toBeVisible();
     expect(screen.getByText("原始 PDF 或 OCR 提取的完整性未知。")).toBeVisible();
 });

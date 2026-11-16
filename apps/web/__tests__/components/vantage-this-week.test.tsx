@@ -1,27 +1,11 @@
 /** @jest-environment jsdom */
 import React from "react";
-import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, screen, waitFor, within } from "@testing-library/react";
 import "@testing-library/jest-dom";
-jest.mock("next-intl", () => ({
-    useTranslations: () => (key: string, values?: Record<string, unknown>) =>
-        values ? `${key} ${Object.values(values).join(" ")}` : key,
-}));
-jest.mock("~/app/employer/tools/vantage/_lib/weekly-review-errors", () => ({
-    useWeeklyReviewErrorText: () => () => "Request failed",
-}));
-jest.mock("~/app/employer/tools/vantage/_lib/format", () => ({
-    useVantageFormat: () => ({
-        date: (value: string) => value,
-        dateLong: (value: string) => value,
-        dateTime: (value: string) => value,
-        list: (values: string[]) => values.join(", "),
-        number: (value: number) => String(value),
-    }),
-}));
-jest.mock("~/components/tool-app/nav", () => ({ useOptionalToolNav: () => null }));
-
+import { renderWithLocale } from "~/i18n/testing/render";
 import { ThisWeekScreen } from "~/app/employer/tools/vantage/_screens/ThisWeekScreen";
 import { useWeeklyReviewData } from "~/app/employer/tools/vantage/_lib/useWeeklyReviewData";
+jest.mock("~/components/tool-app/nav", () => ({ useOptionalToolNav: () => null }));
 jest.mock("~/app/employer/tools/vantage/_lib/useWeeklyReviewData", () => ({
     useWeeklyReviewData: jest.fn(),
 }));
@@ -32,7 +16,7 @@ jest.mock("~/app/employer/tools/vantage/api", () => ({
 jest.mock("~/components/ui/select", () => ({
     Select: ({ children, value, onValueChange }: any) => (
         <select
-            aria-label="history"
+            aria-label="Report history"
             value={value ?? ""}
             onChange={event => onValueChange(event.target.value)}
         >
@@ -44,29 +28,24 @@ jest.mock("~/components/ui/select", () => ({
     SelectContent: ({ children }: any) => <>{children}</>,
     SelectItem: ({ children, value }: any) => <option value={value}>{children}</option>,
 }));
-function deferred<T>() {
-    let resolve!: (value: T) => void;
-    const promise = new Promise<T>(done => {
-        resolve = done;
-    });
-    return { promise, resolve };
-}
+const proposal = "Propose five customer calls before increasing paid spend";
 function report(id = "run-a") {
     return {
         id,
+        version: 1,
         decisions: [],
         evidence: {},
         report: {
             headline: `Report ${id}`,
-            brief: "Brief",
-            summary: "Summary",
+            brief: "A calm weekly brief",
+            summary: "The longer summary",
             keyFigures: [],
             topics: [0, 1].map(index => ({
                 id: `topic-${index}`,
                 title: `Topic ${index}`,
                 decisionQuestion: `Question ${index}`,
                 recommendation: {
-                    call: "Proposed call",
+                    call: proposal,
                     confidence: "low",
                     because: "Reason",
                     wouldChangeIf: "New evidence",
@@ -87,15 +66,26 @@ function report(id = "run-a") {
     };
 }
 let data: any;
+const mockRecord = jest.fn();
+function card(index = 0) {
+    return within(screen.getByTestId(`review-topic-topic-${index}`));
+}
+function toggle(index = 0) {
+    fireEvent.click(
+        card(index).getByRole("button", { name: `Decision ${index + 1}: Question ${index}` })
+    );
+}
+const field = (index = 0) => card(index).getByRole("textbox");
 beforeEach(() => {
     sessionStorage.clear();
+    mockRecord.mockReset().mockResolvedValue(false);
     data = {
         enabled: true,
         loading: false,
         contextLoading: false,
         ready: true,
         review: report(),
-        context: { policy: { architecture_document_id: "1" }, documents: [] },
+        context: { canConfigure: true, policy: { architecture_document_id: "1" }, documents: [] },
         generation: {
             running: false,
             stage: null,
@@ -105,117 +95,187 @@ beforeEach(() => {
             startedAt: null,
             visitedStages: [],
         },
-        runs: [
-            { id: "run-a", status: "accepted", review_version: 1 },
-            { id: "history", status: "accepted", review_version: 2 },
-        ],
+        runs: [{ id: "run-a", status: "accepted", review_version: 1, created_at: "2026-11-16" }],
         generate: jest.fn(),
         reload: jest.fn(),
         reloadContext: jest.fn(),
-        recordDecision: jest.fn().mockResolvedValue(true),
+        recordDecision: mockRecord,
         selectReport: jest.fn(),
     };
     (useWeeklyReviewData as jest.Mock).mockImplementation(() => data);
 });
-test("starts with blank human drafts and normalizes the reporting week to Monday", () => {
-    render(<ThisWeekScreen week="2026-11-18" />);
+
+test("prefills only the undecided suggestion and does not save on mount, blur or collapsing", () => {
+    renderWithLocale(<ThisWeekScreen week="2026-11-18" />, "en");
     expect(useWeeklyReviewData).toHaveBeenCalledWith("2026-11-16");
-    expect(screen.getAllByRole("textbox")[0]).toHaveValue("");
-    expect(screen.getAllByRole("button", { name: "founder.recordDecision" })[0]).toBeDisabled();
-});
-test("saving clears only the submitted object and preserves newer and other-topic drafts", async () => {
-    const save = deferred<boolean>();
-    data.recordDecision.mockReturnValue(save.promise);
-    render(<ThisWeekScreen week="2026-11-16" />);
-    const fields = screen.getAllByRole("textbox");
-    fireEvent.change(fields[0]!, { target: { value: "First decision" } });
-    fireEvent.change(fields[1]!, { target: { value: "Other draft" } });
-    fireEvent.click(screen.getAllByRole("button", { name: "founder.recordDecision" })[0]!);
-    fireEvent.change(fields[0]!, { target: { value: "Newer draft" } });
-    await act(async () => {
-        save.resolve(true);
-    });
-    expect(fields[0]).toHaveValue("Newer draft");
-    expect(fields[1]).toHaveValue("Other draft");
-    expect(data.recordDecision).toHaveBeenCalledWith("topic-0", "First decision");
-});
-test("restores drafts when returning to a historical report and retains prior report on generation failure", () => {
-    const view = render(<ThisWeekScreen week="2026-11-16" />);
-    fireEvent.change(screen.getAllByRole("textbox")[0]!, { target: { value: "Saved locally" } });
-    data = { ...data, review: report("history") };
-    view.rerender(<ThisWeekScreen week="2026-11-16" />);
-    expect(screen.getAllByRole("textbox")[0]).toHaveValue("");
-    data = {
-        ...data,
-        review: report(),
-        generation: { ...data.generation, error: "Generation failed", failedStage: "checking" },
-    };
-    view.rerender(<ThisWeekScreen week="2026-11-16" />);
-    expect(screen.getAllByRole("textbox")[0]).toHaveValue("Saved locally");
-    expect(screen.getByText("Report run-a")).toBeVisible();
-    expect(screen.getByRole("alert")).toHaveTextContent("Request failed");
-});
-test("disabled feature has its own empty state", () => {
-    data = { ...data, enabled: false };
-    render(<ThisWeekScreen />);
-    expect(screen.getByText("founder.disabledTitle")).toBeVisible();
-    expect(screen.queryByText("Report run-a")).not.toBeInTheDocument();
-});
-
-test("successful save clears an unchanged draft and stale save preserves it", async () => {
-    const save = deferred<boolean>();
-    data.recordDecision.mockReturnValueOnce(save.promise);
-    render(<ThisWeekScreen week="2026-11-16" />);
-    fireEvent.change(screen.getAllByRole("textbox")[0]!, { target: { value: "Confirmed" } });
-    fireEvent.click(screen.getAllByRole("button", { name: "founder.recordDecision" })[0]!);
-    await act(async () => {
-        save.resolve(true);
-    });
-    expect(screen.getAllByRole("textbox")[0]).toHaveValue("");
-    data.recordDecision.mockResolvedValueOnce(false);
-    fireEvent.change(screen.getAllByRole("textbox")[0]!, { target: { value: "Keep stale draft" } });
-    fireEvent.click(screen.getAllByRole("button", { name: "founder.recordDecision" })[0]!);
-    await waitFor(() =>
-        expect(screen.getAllByRole("button", { name: "founder.recordDecision" })[0]).toBeEnabled()
-    );
-    expect(screen.getAllByRole("textbox")[0]).toHaveValue("Keep stale draft");
-});
-
-test("a newer edit with the same text is retained by draft identity", async () => {
-    const save = deferred<boolean>();
-    data.recordDecision.mockReturnValueOnce(save.promise);
-    render(<ThisWeekScreen week="2026-11-16" />);
-    const field = screen.getAllByRole("textbox")[0]!;
-    fireEvent.change(field, { target: { value: "Decision A" } });
-    fireEvent.click(screen.getAllByRole("button", { name: "founder.recordDecision" })[0]!);
-    fireEvent.change(field, { target: { value: "Decision B" } });
-    fireEvent.change(field, { target: { value: "Decision A" } });
-    await act(async () => {
-        save.resolve(true);
-    });
-    expect(field).toHaveValue("Decision A");
-});
-test("progress exposes only phases observed from the server", () => {
-    data = {
-        ...data,
-        generation: {
-            ...data.generation,
-            running: true,
-            startedAt: Date.now(),
-            stage: "checking",
-            visitedStages: ["gathering", "checking"],
-        },
-    };
-    render(<ThisWeekScreen week="2026-11-16" />);
+    expect(card().getByRole("textbox", { name: "Suggested decision" })).toHaveValue(proposal);
+    expect(card().getByRole("button", { name: "Confirm and save" })).toBeEnabled();
+    fireEvent.blur(field());
+    toggle();
+    toggle(1);
+    fireEvent.click(screen.getByRole("button", { name: "Next week" }));
+    expect(mockRecord).not.toHaveBeenCalled();
     expect(
-        screen.getByRole("list", { name: "founder.generation.progressLabel" })
-    ).toHaveTextContent("founder.generation.gathering");
-    expect(screen.getByRole("status")).toHaveTextContent("founder.generation.checking");
-    expect(document.querySelector('[data-stage="writing"]')).toHaveAttribute(
-        "data-state",
-        "pending"
+        screen.queryByText("Decide what matters this week, then choose what to commit to.")
+    ).not.toBeInTheDocument();
+});
+test("Confirm and save sends the displayed suggestion unchanged only after the click", async () => {
+    data.review.report.topics[0].recommendation.call = "  Keep this suggestion verbatim  ";
+    renderWithLocale(<ThisWeekScreen />, "en");
+    expect(mockRecord).not.toHaveBeenCalled();
+    fireEvent.click(card().getByRole("button", { name: "Confirm and save" }));
+    await waitFor(() =>
+        expect(mockRecord).toHaveBeenCalledWith("topic-0", "  Keep this suggestion verbatim  ")
     );
-    expect(document.querySelector('[data-stage="saving"]')).toHaveAttribute(
+});
+test("an edit switches to Your decision and Reset restores suggestion without saving", () => {
+    renderWithLocale(<ThisWeekScreen />, "en");
+    fireEvent.change(field(), { target: { value: "My edited decision" } });
+    expect(card().getByRole("textbox", { name: "Your decision" })).toHaveValue(
+        "My edited decision"
+    );
+    expect(
+        screen.getByTestId("review-topic-topic-0").querySelector('[data-suggested="false"]')
+    ).not.toBeNull();
+    fireEvent.click(card().getByRole("button", { name: "Reset to suggestion" }));
+    expect(card().getByRole("textbox", { name: "Suggested decision" })).toHaveValue(proposal);
+    expect(mockRecord).not.toHaveBeenCalled();
+});
+test("a deliberately cleared draft stays empty and disabled after folding and re-opening", () => {
+    renderWithLocale(<ThisWeekScreen />, "en");
+    fireEvent.change(field(), { target: { value: "" } });
+    toggle(1);
+    toggle();
+    expect(card().getByRole("textbox", { name: "Your decision" })).toHaveValue("");
+    expect(card().getByRole("button", { name: "Record decision" })).toBeDisabled();
+    expect(card().getByRole("button", { name: "Reset to suggestion" })).toBeVisible();
+    expect(mockRecord).not.toHaveBeenCalled();
+});
+test("topic drafts survive collapsing and report changes, including newer edits during a save", async () => {
+    let finish!: (value: boolean) => void;
+    mockRecord.mockReturnValue(
+        new Promise<boolean>(resolve => {
+            finish = resolve;
+        })
+    );
+    const view = renderWithLocale(<ThisWeekScreen />, "en");
+    fireEvent.change(field(), { target: { value: "Submitted" } });
+    fireEvent.click(card().getByRole("button", { name: "Record decision" }));
+    fireEvent.change(field(), { target: { value: "Newer" } });
+    toggle(1);
+    fireEvent.change(field(1), { target: { value: "Other topic" } });
+    await act(async () => {
+        finish(true);
+    });
+    toggle();
+    expect(field()).toHaveValue("Newer");
+    toggle(1);
+    expect(field(1)).toHaveValue("Other topic");
+    data.review = report("history");
+    view.rerender(<ThisWeekScreen />);
+    expect(field()).toHaveValue(proposal);
+    data.review = report();
+    view.rerender(<ThisWeekScreen />);
+    expect(field(1)).toHaveValue("Other topic");
+});
+test("topics without recommendations start empty and use Record decision", () => {
+    data.review.report.topics[0].recommendation = null;
+    renderWithLocale(<ThisWeekScreen />, "en");
+    expect(card().getByRole("textbox", { name: "Your decision" })).toHaveValue("");
+    expect(card().getByRole("button", { name: "Record decision" })).toBeDisabled();
+    expect(card().queryByRole("button", { name: "Reset to suggestion" })).not.toBeInTheDocument();
+});
+test("Change decision prefills the latest recorded text, then appends only on explicit save", async () => {
+    data.review.decisions = [
+        { topicId: "topic-0", decision: "Earlier", version: 2, recordedAt: "2026-11-16T10:00:00Z" },
+        {
+            topicId: "topic-0",
+            decision: "Human decision\nSecond line",
+            version: 3,
+            recordedAt: "2026-11-16T11:00:00Z",
+        },
+    ];
+    renderWithLocale(<ThisWeekScreen />, "en");
+    expect(screen.getByTestId("review-topic-topic-1")).toHaveAttribute("data-state", "open");
+    expect(card().getByRole("button", { name: "Decision 1: Question 0" })).toHaveTextContent(
+        "Human decision"
+    );
+    toggle();
+    fireEvent.click(card().getByRole("button", { name: "Change decision" }));
+    expect(card().getByRole("textbox", { name: "Your decision" })).toHaveValue(
+        "Human decision\nSecond line"
+    );
+    expect(mockRecord).not.toHaveBeenCalled();
+    expect(card().queryByText("Earlier")).not.toBeInTheDocument();
+    fireEvent.click(card().getByRole("button", { name: "Record decision" }));
+    await waitFor(() =>
+        expect(mockRecord).toHaveBeenCalledWith("topic-0", "Human decision\nSecond line")
+    );
+});
+test("successful saves tint the decided row, advance once and update the segmented count", async () => {
+    mockRecord.mockImplementation(async (topicId: string, text: string) => {
+        data = {
+            ...data,
+            review: {
+                ...data.review,
+                decisions: [
+                    ...data.review.decisions,
+                    { topicId, decision: text, version: 2, recordedAt: "2026-11-16T10:00:00Z" },
+                ],
+            },
+        };
+        return true;
+    });
+    renderWithLocale(<ThisWeekScreen />, "en");
+    fireEvent.click(card().getByRole("button", { name: "Confirm and save" }));
+    await waitFor(() =>
+        expect(screen.getByTestId("review-topic-topic-1")).toHaveAttribute("data-state", "open")
+    );
+    expect(screen.getByTestId("review-topic-topic-0")).toHaveAttribute("data-state", "closed");
+    expect(screen.getByText("1 of 2 topics decided")).toBeVisible();
+    expect(screen.getByRole("img", { name: "Decision 1: Decided" })).toHaveAttribute(
+        "data-decided",
+        "true"
+    );
+    fireEvent.click(card(1).getByRole("button", { name: "Confirm and save" }));
+    await waitFor(() => expect(screen.getByText("2 of 2 topics decided")).toBeVisible());
+    expect(screen.getByTestId("review-topic-topic-1")).toHaveAttribute("data-state", "closed");
+});
+test("week arrows replace the date input and the current report regenerates", () => {
+    renderWithLocale(<ThisWeekScreen week="2026-11-16" />, "en");
+    expect(document.querySelector('input[type="date"]')).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Previous week" }));
+    expect(useWeeklyReviewData).toHaveBeenLastCalledWith("2026-11-09");
+    fireEvent.click(screen.getByRole("button", { name: "Next week" }));
+    expect(useWeeklyReviewData).toHaveBeenLastCalledWith("2026-11-16");
+    fireEvent.click(screen.getByRole("button", { name: "Regenerate" }));
+    expect(data.generate).toHaveBeenCalledTimes(1);
+});
+test("summary is collapsed, caution omits zero and feature-off has a dedicated empty state", () => {
+    data.review.report.topics[0].unknowns = ["Unknown"];
+    const view = renderWithLocale(<ThisWeekScreen />, "en");
+    expect(screen.queryByText("The longer summary")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Read summary" }));
+    expect(screen.getByText("The longer summary")).toBeVisible();
+    expect(card().getByRole("button", { name: /Why and evidence/ })).toHaveTextContent("1 unknown");
+    expect(card().getByRole("button", { name: /Why and evidence/ })).not.toHaveTextContent(
+        "0 conflicts"
+    );
+    data = { ...data, enabled: false };
+    view.rerender(<ThisWeekScreen />);
+    expect(screen.getByText("Weekly reviews are unavailable")).toBeVisible();
+});
+test("progress exposes only server-observed phases", () => {
+    data.generation = {
+        ...data.generation,
+        running: true,
+        startedAt: Date.now(),
+        stage: "checking",
+        visitedStages: ["gathering", "checking"],
+    };
+    renderWithLocale(<ThisWeekScreen />, "en");
+    expect(screen.getByTestId("review-generation-stage")).toHaveTextContent("Checking the report");
+    expect(document.querySelector('[data-stage="writing"]')).toHaveAttribute(
         "data-state",
         "pending"
     );

@@ -6,6 +6,7 @@ import { Card, CardContent } from "~/components/ui/card";
 import { cn } from "~/lib/utils";
 import type { WeeklyReviewStage } from "../api";
 import type { ReviewGeneration } from "../_lib/useWeeklyReviewData";
+import s from "./review-layout.module.css";
 
 const stages: WeeklyReviewStage[] = ["gathering", "writing", "checking", "saving"];
 
@@ -29,14 +30,14 @@ export function ReviewGenerationProgress({ generation }: { generation: ReviewGen
               : t("founder.generation.failedBeforeStart")
           : t("founder.generation.complete");
     return (
-        <Card>
-            <CardContent className="space-y-3 p-4 text-sm">
+        <Card className={s.panel}>
+            <CardContent className={cn(s.label, "space-y-3 p-4")}>
                 <div className="flex flex-wrap items-center justify-between gap-2">
                     <p
                         aria-live="polite"
                         role="status"
                         data-testid="review-generation-stage"
-                        className="font-medium"
+                        className="font-semibold"
                     >
                         {status}
                     </p>
@@ -74,6 +75,7 @@ export function ReviewGenerationProgress({ generation }: { generation: ReviewGen
                                 data-stage={item}
                                 data-state={state}
                                 className={cn(
+                                    s.stage,
                                     "flex min-w-0 items-center gap-2",
                                     failed ? "text-danger" : active ? "text-brand" : "text-ink-2"
                                 )}
@@ -82,7 +84,7 @@ export function ReviewGenerationProgress({ generation }: { generation: ReviewGen
                                     aria-hidden="true"
                                     className={cn(
                                         "size-4 shrink-0",
-                                        active && "animate-spin motion-reduce:animate-none"
+                                        active && "motion-reduce:animate-none"
                                     )}
                                 />
                                 <span>{t(`founder.generation.${item}`)}</span>

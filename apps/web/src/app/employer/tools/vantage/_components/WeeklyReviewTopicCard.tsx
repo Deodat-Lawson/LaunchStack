@@ -1,24 +1,29 @@
 "use client";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { useTranslations } from "next-intl";
-import { ChevronDown, Check } from "lucide-react";
-import { Card, CardContent } from "~/components/ui/card";
+import { ArrowRight, CalendarDays, Check, ChevronDown, Sparkles, UserRound } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { Textarea } from "~/components/ui/textarea";
 import { Label } from "~/components/ui/label";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
+import { cn } from "~/lib/utils";
 import { ReviewCitationChips, type ReviewSource } from "./ReviewCitationChips";
 import { ReviewCommitmentDialog } from "./ReviewCommitmentDialog";
 import { useVantageFormat } from "../_lib/format";
 import type { WeeklyReviewContextDto, WeeklyReviewDto } from "../api";
+import s from "./review-layout.module.css";
 
 type Topic = WeeklyReviewDto["report"]["topics"][number];
 export function WeeklyReviewTopicCard({
     topic,
+    number,
+    open,
+    onOpenChange,
     decisions,
     draft,
     onDraft,
+    onReset,
     onRecord,
     saving,
     disabled,
@@ -30,9 +35,13 @@ export function WeeklyReviewTopicCard({
     onAdded,
 }: {
     topic: Topic;
+    number: number;
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
     decisions: WeeklyReviewDto["decisions"];
-    draft: string;
+    draft: string | undefined;
     onDraft: (text: string) => void;
+    onReset: () => void;
     onRecord: () => void;
     saving: boolean;
     disabled: boolean;
@@ -47,116 +56,308 @@ export function WeeklyReviewTopicCard({
     const fmt = useVantageFormat();
     const id = useId();
     const [editing, setEditing] = useState(false);
+    const [evidenceOpen, setEvidenceOpen] = useState(false);
     const [commitment, setCommitment] = useState(false);
     const versions = decisions
-        .filter(decision => decision.topicId === topic.id)
+        .filter(item => item.topicId === topic.id)
         .sort((a, b) => b.version - a.version);
     const latest = versions[0];
+    const latestVersion = latest?.version;
+    useEffect(() => {
+        setEditing(false);
+    }, [latestVersion]);
     const recommendation = topic.recommendation;
+    const suggested = !latest && Boolean(recommendation) && draft === undefined;
+    const text = draft ?? (!latest ? (recommendation?.call ?? "") : latest.decision);
+    const showEditor = !latest || editing || draft !== undefined;
+    const status = t(latest ? "founder.decided" : "founder.needsDecision");
+    const statusBadge = (
+        <Badge className={s.statusBadge} data-decided={Boolean(latest)}>
+            {status}
+        </Badge>
+    );
     return (
-        <Card>
-            <CardContent className="space-y-5 p-5 sm:p-6">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                    <p className="text-ink-2 text-sm font-medium">{topic.title}</p>
-                    <Badge variant={latest ? "success" : "warn"}>
-                        {t(latest ? "founder.decided" : "founder.needsDecision")}
-                    </Badge>
-                </div>
-                <h2 className="text-xl font-semibold">{topic.decisionQuestion}</h2>
-                {recommendation ? (
-                    <div className="bg-panel-2 space-y-2 rounded-lg p-4">
-                        <div className="flex flex-wrap items-center gap-2">
-                            <h3 className="text-ink-2 text-xs font-medium">
-                                {t("founder.recommendation")}
-                            </h3>
-                            <Badge variant="outline">
-                                {t("founder.confidence", {
-                                    level: t(
-                                        `founder.confidenceLevel.${recommendation.confidence}`
-                                    ),
-                                })}
-                            </Badge>
-                        </div>
-                        <p className="font-medium">{recommendation.call}</p>
-                        <p className="text-sm">
-                            <span className="text-ink-2">{t("founder.because")}: </span>
-                            {recommendation.because}
-                        </p>
-                        <p className="text-sm">
-                            <span className="text-ink-2">{t("founder.wouldChangeIf")}: </span>
-                            {recommendation.wouldChangeIf}
-                        </p>
+        <Collapsible
+            open={open}
+            onOpenChange={onOpenChange}
+            className={s.topic}
+            data-testid={`review-topic-${topic.id}`}
+        >
+            <CollapsibleTrigger asChild>
+                <Button
+                    variant="ghost"
+                    className={s.topicTrigger}
+                    aria-label={t("founder.topicNumber", {
+                        number,
+                        question: topic.decisionQuestion,
+                    })}
+                >
+                    <span className={s.topicNumber} aria-hidden="true">
+                        {number}
+                    </span>
+                    <span className="min-w-0 flex-1 space-y-1">
+                        <span className={cn("block", open ? s.label : s.body)}>
+                            {open ? topic.title : topic.decisionQuestion}
+                        </span>
+                        {!open && latest ? (
+                            <span className={cn("block truncate", s.label)}>
+                                {latest.decision.split(/\r?\n/)[0]}
+                            </span>
+                        ) : null}
+                    </span>
+                    {statusBadge}
+                    <ChevronDown
+                        aria-hidden="true"
+                        className={cn(
+                            "size-4 shrink-0 transition-transform motion-reduce:transition-none",
+                            open && "rotate-180"
+                        )}
+                    />
+                </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent
+                forceMount
+                aria-hidden={!open}
+                inert={!open}
+                className={s.accordionContent}
+            >
+                <div className={cn(s.topicBody, "space-y-4")}>
+                    <h2 className={cn(s.heading, s.prose)}>{topic.decisionQuestion}</h2>
+                    <section className={s.decisionBlock} data-suggested={suggested}>
+                        {showEditor ? (
+                            <div className="space-y-3">
+                                <div className="flex flex-wrap items-center gap-2">
+                                    {suggested ? (
+                                        <Sparkles
+                                            aria-hidden="true"
+                                            className="text-brand size-4"
+                                        />
+                                    ) : null}
+                                    <Label htmlFor={id} className={s.label}>
+                                        {t(
+                                            suggested
+                                                ? "founder.suggestedDecision"
+                                                : "founder.decisionDraft"
+                                        )}
+                                    </Label>
+                                    {suggested && recommendation ? (
+                                        <Badge variant="outline" className={s.label}>
+                                            {t("founder.confidence", {
+                                                level: t(
+                                                    `founder.confidenceLevel.${recommendation.confidence}`
+                                                ),
+                                            })}
+                                        </Badge>
+                                    ) : null}
+                                    {!latest && recommendation && draft !== undefined ? (
+                                        <Button
+                                            type="button"
+                                            variant="link"
+                                            size="sm"
+                                            className="ml-auto h-auto p-0"
+                                            disabled={disabled || saving}
+                                            onClick={onReset}
+                                        >
+                                            {t("founder.resetSuggestion")}
+                                        </Button>
+                                    ) : null}
+                                </div>
+                                <Textarea
+                                    id={id}
+                                    placeholder={t("founder.decisionPlaceholder")}
+                                    value={text}
+                                    onChange={event => onDraft(event.target.value)}
+                                    maxLength={2000}
+                                    disabled={disabled}
+                                />
+                            </div>
+                        ) : latest ? (
+                            <div className="space-y-3">
+                                <h3 className={s.label}>{t("founder.humanDecision")}</h3>
+                                <p className={cn(s.prose, "whitespace-pre-wrap")}>
+                                    {latest.decision}
+                                </p>
+                                <p className={s.label}>
+                                    {t("founder.decisionVersion", {
+                                        version: latest.version,
+                                        date: fmt.dateTime(latest.recordedAt),
+                                    })}
+                                </p>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    disabled={disabled}
+                                    onClick={() => {
+                                        onDraft(latest.decision);
+                                        setEditing(true);
+                                    }}
+                                >
+                                    {t("founder.changeDecision")}
+                                </Button>
+                            </div>
+                        ) : null}
+                        {error ? (
+                            <p role="alert" className="text-danger mt-3">
+                                {error}
+                            </p>
+                        ) : null}
+                    </section>
+                    {recommendation ? (
                         <ReviewCitationChips
                             refs={recommendation.refs}
                             sources={sources}
                             documents={documents}
                             onInspect={onInspect}
                         />
-                    </div>
-                ) : null}
-                <dl className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
-                    {(
-                        [
-                            ["nextStep", topic.proposedNextStep],
-                            ["owner", topic.proposedOwner],
-                            ["due", topic.proposedDue ? fmt.date(topic.proposedDue) : null],
-                            ["help", topic.helpRequested],
-                        ] as const
-                    )
-                        .filter(([, value]) => value)
-                        .map(([label, value]) => (
-                            <div key={label} className="flex flex-wrap gap-x-2">
-                                <dt className="text-ink-2">{t(`founder.${label}`)}</dt>
-                                <dd>{value}</dd>
-                            </div>
-                        ))}
-                </dl>
-                <section className="border-brand/30 space-y-3 rounded-lg border p-4">
-                    {latest ? (
-                        <>
-                            <h3 className="font-semibold">{t("founder.humanDecision")}</h3>
-                            <p className="whitespace-pre-wrap">{latest.decision}</p>
-                            <p className="text-ink-2 text-xs">
-                                {t("founder.decisionVersion", {
-                                    version: latest.version,
-                                    date: fmt.dateTime(latest.recordedAt),
-                                })}
-                            </p>
-                            {!editing && !draft ? (
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => setEditing(true)}
-                                    disabled={disabled}
-                                >
-                                    {t("founder.changeDecision")}
-                                </Button>
-                            ) : null}
-                        </>
                     ) : null}
-                    {!latest || editing || draft ? (
-                        <div className="space-y-2">
-                            <Label htmlFor={id}>{t("founder.decisionDraft")}</Label>
-                            <Textarea
-                                id={id}
-                                placeholder={t("founder.decisionPlaceholder")}
-                                value={draft}
-                                onChange={event => onDraft(event.target.value)}
-                                maxLength={2000}
-                            />
+                    <dl className={s.meta}>
+                        {topic.proposedNextStep ? (
+                            <div className="min-w-40 flex-1">
+                                <ArrowRight aria-hidden="true" />
+                                <dt className="sr-only">{t("founder.nextStep")}</dt>
+                                <dd>{topic.proposedNextStep}</dd>
+                            </div>
+                        ) : null}
+                        {topic.proposedOwner ? (
+                            <div>
+                                <UserRound aria-hidden="true" />
+                                <dt className="sr-only">{t("founder.owner")}</dt>
+                                <dd>{topic.proposedOwner}</dd>
+                            </div>
+                        ) : null}
+                        {topic.proposedDue ? (
+                            <div>
+                                <CalendarDays aria-hidden="true" />
+                                <dt className="sr-only">{t("founder.due")}</dt>
+                                <dd>{fmt.date(topic.proposedDue)}</dd>
+                            </div>
+                        ) : null}
+                    </dl>
+                    <div className={s.actionRow}>
+                        {showEditor ? (
                             <Button
-                                disabled={disabled || saving || !draft.trim()}
+                                disabled={disabled || saving || !text.trim()}
                                 onClick={onRecord}
                             >
-                                {t(saving ? "founder.savingDecision" : "founder.recordDecision")}
+                                {t(
+                                    saving
+                                        ? "founder.savingDecision"
+                                        : suggested
+                                          ? "founder.confirmDecision"
+                                          : "founder.recordDecision"
+                                )}
                             </Button>
-                        </div>
+                        ) : null}
+                        <Button
+                            variant="outline"
+                            disabled={disabled}
+                            onClick={() => setCommitment(true)}
+                        >
+                            {t("founder.addCommitment")}
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            className={cn(s.evidenceToggle, "gap-2")}
+                            aria-expanded={evidenceOpen}
+                            aria-controls={id + "-evidence"}
+                            onClick={() => setEvidenceOpen(previous => !previous)}
+                        >
+                            {t("founder.whyEvidence")}
+                            {topic.conflicts.length || topic.unknowns.length ? (
+                                <Badge variant="warn" className={s.label}>
+                                    {t("founder.cautionCount", {
+                                        conflicts: topic.conflicts.length,
+                                        unknowns: topic.unknowns.length,
+                                    })}
+                                </Badge>
+                            ) : null}
+                            <ChevronDown
+                                aria-hidden="true"
+                                className={cn(
+                                    "size-4 transition-transform motion-reduce:transition-none",
+                                    evidenceOpen && "rotate-180"
+                                )}
+                            />
+                        </Button>
+                    </div>
+                    {added ? (
+                        <Badge variant="success" className={s.label}>
+                            <Check aria-hidden="true" />
+                            {t("founder.added")}
+                        </Badge>
                     ) : null}
-                    {error ? (
-                        <p role="alert" className="text-danger text-sm">
-                            {error}
-                        </p>
-                    ) : null}
+                    <Collapsible open={evidenceOpen}>
+                        <CollapsibleContent id={id + "-evidence"} className={s.accordionContent}>
+                            <div className="space-y-4">
+                                {recommendation ? (
+                                    <>
+                                        <section>
+                                            <h3 className={s.label}>{t("founder.because")}</h3>
+                                            <p className={s.prose}>{recommendation.because}</p>
+                                        </section>
+                                        <section>
+                                            <h3 className={s.label}>
+                                                {t("founder.wouldChangeIf")}
+                                            </h3>
+                                            <p className={s.prose}>
+                                                {recommendation.wouldChangeIf}
+                                            </p>
+                                        </section>
+                                    </>
+                                ) : null}
+                                {(
+                                    [
+                                        ["facts", topic.facts],
+                                        ["conflicts", topic.conflicts],
+                                    ] as const
+                                ).map(([label, items]) =>
+                                    items.length ? (
+                                        <section key={label} className="space-y-2">
+                                            <h3 className={s.label}>{t(`founder.${label}`)}</h3>
+                                            <ul className="space-y-3">
+                                                {items.map((fact, index) => (
+                                                    <li key={index} className="space-y-2">
+                                                        <p className={s.prose}>{fact.text}</p>
+                                                        <ReviewCitationChips
+                                                            refs={fact.refs}
+                                                            sources={sources}
+                                                            documents={documents}
+                                                            onInspect={onInspect}
+                                                        />
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </section>
+                                    ) : null
+                                )}
+                                {(
+                                    [
+                                        ["whyItMatters", topic.whyItMatters],
+                                        ["whyNow", topic.whyNow],
+                                        ["rationale", topic.rationale],
+                                        ["help", topic.helpRequested],
+                                    ] as const
+                                ).map(([label, value]) =>
+                                    value ? (
+                                        <section key={label}>
+                                            <h3 className={s.label}>{t(`founder.${label}`)}</h3>
+                                            <p className={s.prose}>{value}</p>
+                                        </section>
+                                    ) : null
+                                )}
+                                {topic.unknowns.length ? (
+                                    <section>
+                                        <h3 className={s.label}>{t("founder.unknowns")}</h3>
+                                        <ul className="list-inside list-disc space-y-1">
+                                            {topic.unknowns.map((unknown, index) => (
+                                                <li key={index}>{unknown}</li>
+                                            ))}
+                                        </ul>
+                                    </section>
+                                ) : null}
+                            </div>
+                        </CollapsibleContent>
+                    </Collapsible>
                     {versions.length > 1 ? (
                         <Collapsible>
                             <CollapsibleTrigger asChild>
@@ -164,117 +365,34 @@ export function WeeklyReviewTopicCard({
                                     {t("founder.previousDecisions")}
                                 </Button>
                             </CollapsibleTrigger>
-                            <CollapsibleContent className="space-y-3">
-                                {versions.slice(1).map(decision => (
-                                    <div key={decision.version}>
-                                        <p className="whitespace-pre-wrap text-sm">
-                                            {decision.decision}
-                                        </p>
-                                        <p className="text-ink-2 text-xs">
-                                            {t("founder.decisionVersion", {
-                                                version: decision.version,
-                                                date: fmt.dateTime(decision.recordedAt),
-                                            })}
-                                        </p>
-                                    </div>
-                                ))}
+                            <CollapsibleContent className={s.accordionContent}>
+                                <div className="space-y-3 pt-3">
+                                    {versions.slice(1).map(decision => (
+                                        <div key={decision.version}>
+                                            <p className="whitespace-pre-wrap">
+                                                {decision.decision}
+                                            </p>
+                                            <p className={s.label}>
+                                                {t("founder.decisionVersion", {
+                                                    version: decision.version,
+                                                    date: fmt.dateTime(decision.recordedAt),
+                                                })}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
                             </CollapsibleContent>
                         </Collapsible>
                     ) : null}
-                </section>
-                <div className="flex items-center gap-2">
-                    <Button
-                        variant="outline"
-                        onClick={() => setCommitment(true)}
-                        disabled={disabled}
-                    >
-                        {t("founder.addCommitment")}
-                    </Button>
-                    {added ? (
-                        <Badge variant="success">
-                            <Check aria-hidden="true" />
-                            {t("founder.added")}
-                        </Badge>
+                    {commitment ? (
+                        <ReviewCommitmentDialog
+                            topic={topic}
+                            onClose={() => setCommitment(false)}
+                            onAdded={onAdded}
+                        />
                     ) : null}
                 </div>
-                <Collapsible>
-                    <CollapsibleTrigger asChild>
-                        <Button
-                            variant="ghost"
-                            className="max-w-full gap-2 whitespace-normal text-left"
-                        >
-                            <ChevronDown className="size-4 shrink-0" aria-hidden="true" />
-                            {t("founder.whyEvidence")}
-                            {topic.conflicts.length || topic.unknowns.length ? (
-                                <Badge variant="warn">
-                                    {t("founder.cautionCount", {
-                                        conflicts: topic.conflicts.length,
-                                        unknowns: topic.unknowns.length,
-                                    })}
-                                </Badge>
-                            ) : null}
-                        </Button>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent className="space-y-4 pt-3">
-                        {(
-                            [
-                                ["facts", topic.facts],
-                                ["conflicts", topic.conflicts],
-                            ] as const
-                        ).map(([label, items]) =>
-                            items.length ? (
-                                <section key={label}>
-                                    <h3 className="text-sm font-semibold">
-                                        {t(`founder.${label}`)}
-                                    </h3>
-                                    <ul className="space-y-3 pt-2">
-                                        {items.map((fact, index) => (
-                                            <li key={index} className="space-y-2 text-sm">
-                                                <p>{fact.text}</p>
-                                                <ReviewCitationChips
-                                                    refs={fact.refs}
-                                                    sources={sources}
-                                                    documents={documents}
-                                                    onInspect={onInspect}
-                                                />
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </section>
-                            ) : null
-                        )}
-                        {(
-                            [
-                                ["whyItMatters", topic.whyItMatters],
-                                ["whyNow", topic.whyNow],
-                                ["rationale", topic.rationale],
-                            ] as const
-                        ).map(([label, value]) => (
-                            <section key={label}>
-                                <h3 className="text-sm font-semibold">{t(`founder.${label}`)}</h3>
-                                <p className="text-ink-2 text-sm">{value}</p>
-                            </section>
-                        ))}
-                        {topic.unknowns.length ? (
-                            <section>
-                                <h3 className="text-sm font-semibold">{t("founder.unknowns")}</h3>
-                                <ul className="text-ink-2 list-inside list-disc text-sm">
-                                    {topic.unknowns.map((unknown, index) => (
-                                        <li key={index}>{unknown}</li>
-                                    ))}
-                                </ul>
-                            </section>
-                        ) : null}
-                    </CollapsibleContent>
-                </Collapsible>
-                {commitment ? (
-                    <ReviewCommitmentDialog
-                        topic={topic}
-                        onClose={() => setCommitment(false)}
-                        onAdded={onAdded}
-                    />
-                ) : null}
-            </CardContent>
-        </Card>
+            </CollapsibleContent>
+        </Collapsible>
     );
 }

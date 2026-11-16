@@ -45,7 +45,7 @@ function walk(dir: string): string[] {
     const out: string[] = [];
     for (const name of readdirSync(join(REPO_ROOT, dir))) {
         if (name === "node_modules" || name.startsWith(".")) continue;
-        const rel = join(dir, name);
+        const rel = join(dir, name).replaceAll("\\", "/");
         if (statSync(join(REPO_ROOT, rel)).isDirectory()) out.push(...walk(rel));
         else if (/\.(css|ts|tsx)$/.test(name)) out.push(rel);
     }

@@ -22,7 +22,11 @@ async function current(): Promise<WeeklyReviewDto> {
     const list = await (await request("reviews")).json();
     return (await request(`reviews/${list.activeId ?? list.runs[0].id}`)).json();
 }
-beforeEach(resetWeeklyReviewFixture);
+beforeEach(() => {
+    resetWeeklyReviewFixture();
+    jest.useFakeTimers();
+});
+afterEach(() => jest.useRealTimers());
 test("read, evidence and support routes work without login; obsolete routes are absent", async () => {
     const run = await current();
     expect(run.report.topics).toHaveLength(3);
@@ -74,11 +78,25 @@ test("generation emits actual operations, persists its result and supports JSON 
     const stages: string[] = [];
     const input = { weekStart: "2026-11-16", expectedActiveId: run.id };
     const headers = { Accept: "application/x-ndjson", "Idempotency-Key": "generate-1" };
-    const result = await readWeeklyReviewStream(
-        await request("reviews", "POST", input, headers),
-        s => stages.push(s)
+    const completed = readWeeklyReviewStream(await request("reviews", "POST", input, headers), s =>
+        stages.push(s)
     );
+    await jest.advanceTimersByTimeAsync(0);
+    expect(stages).toEqual(["gathering"]);
+    expect((await current()).id).toBe(run.id);
+    await jest.advanceTimersByTimeAsync(1199);
+    expect(stages).toEqual(["gathering"]);
+    await jest.advanceTimersByTimeAsync(1);
+    expect(stages).toEqual(["gathering", "writing"]);
+    await jest.advanceTimersByTimeAsync(1200);
+    expect(stages).toEqual(["gathering", "writing", "checking"]);
+    await jest.advanceTimersByTimeAsync(1200);
     expect(stages).toEqual(["gathering", "writing", "checking", "saving"]);
+    expect((await current()).id).toBe(run.id);
+    await jest.advanceTimersByTimeAsync(1199);
+    expect((await current()).id).toBe(run.id);
+    await jest.advanceTimersByTimeAsync(1);
+    const result = await completed;
     expect(result.id).not.toBe(run.id);
     expect((await current()).id).toBe(result.id);
     expect(result.decisions).toEqual([]);
@@ -92,14 +110,40 @@ test("generation emits actual operations, persists its result and supports JSON 
 test("stream and JSON map stale pointers consistently", async () => {
     const stages: string[] = [];
     const input = { weekStart: "2026-11-16", expectedActiveId: "stale" };
-    await expect(
+    const rejected = expect(
         readWeeklyReviewStream(
             await request("reviews", "POST", input, { Accept: "application/x-ndjson" }),
             s => stages.push(s)
         )
     ).rejects.toMatchObject({ message: "active_review_changed", status: 409 });
+    await jest.runAllTimersAsync();
+    await rejected;
     expect(stages).toEqual(["gathering"]);
     expect((await request("reviews", "POST", input)).status).toBe(409);
+});
+test("preview latency retains the final active-pointer check before saving", async () => {
+    const prior = await current();
+    const input = { weekStart: "2026-11-16", expectedActiveId: prior.id };
+    const stages: string[] = [];
+    const completed = readWeeklyReviewStream(
+        await request("reviews", "POST", input, {
+            Accept: "application/x-ndjson",
+            "Idempotency-Key": "slow-generation",
+        }),
+        stage => stages.push(stage)
+    );
+    const rejected = expect(completed).rejects.toMatchObject({
+        message: "active_review_changed",
+        status: 409,
+    });
+    await jest.advanceTimersByTimeAsync(3600);
+    expect(stages).toEqual(["gathering", "writing", "checking", "saving"]);
+    const replacement: WeeklyReviewDto = await (
+        await request("reviews", "POST", input, { "Idempotency-Key": "other-generation" })
+    ).json();
+    await jest.advanceTimersByTimeAsync(1200);
+    await rejected;
+    expect((await current()).id).toBe(replacement.id);
 });
 test("policy, stars, confirmed roles and versioned source previews enforce configuration semantics", async () => {
     expect(

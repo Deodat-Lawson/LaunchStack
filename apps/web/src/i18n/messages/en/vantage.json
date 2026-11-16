@@ -553,10 +553,9 @@
   },
   "weeklyReview": {
     "contextTitle": "Context",
-    "contextDescription": "Set your business responsibilities, required company documents, personal stars and source scopes for weekly review generation.",
-    "contextDisabled": "Context setup is unavailable while Weekly Review is disabled. Continue with the existing weekly agenda.",
+    "contextDescription": "Review your role and choose the documents to bring into each weekly review.",
+    "contextDisabled": "Context setup is unavailable while Weekly Review is disabled.",
     "openContext": "Open Context",
-    "openThisWeek": "Open This Week",
     "businessRole": "My business responsibilities",
     "businessRoleHelp": "Confirm your business role, responsibilities and priorities to personalize review focus. Your workspace permissions are managed separately.",
     "primaryBusinessRole": "Primary business role",
@@ -566,7 +565,6 @@
     "confirmBusinessRole": "I confirm these are my current business responsibilities and priorities.",
     "saveBusinessRole": "Confirm and save",
     "clearBusinessRole": "Clear business role",
-    "week": "Reporting week",
     "generate": "Generate review",
     "history": "Report history",
     "selectReport": "Select a report",
@@ -635,7 +633,6 @@
       "decisionCount": "{decided} of {total} topics decided",
       "needsDecision": "Needs decision",
       "decided": "Decided",
-      "recommendation": "Proposed recommendation",
       "confidence": "{level} confidence",
       "confidenceLevel": {
         "low": "Low",
@@ -662,7 +659,7 @@
       "whyItMatters": "Why it matters",
       "whyNow": "Why now",
       "rationale": "Rationale",
-      "cautionCount": "{conflicts} conflicts — {unknowns} unknowns",
+      "cautionCount": "{conflicts, plural, =0 {} one {# conflict} other {# conflicts}}{conflicts, plural, =0 {} other {{unknowns, plural, =0 {} other { — }}}}{unknowns, plural, =0 {} one {# unknown} other {# unknowns}}",
       "addCommitment": "Add to commitments",
       "added": "Added to commitments",
       "commitmentTitle": "Title",
@@ -673,7 +670,7 @@
       "confirmCommitment": "Create commitment",
       "cancel": "Cancel",
       "commitmentLink": "Open commitments",
-      "sourcesUsed": "Sources used in this report",
+      "sourcesUsed": "Sources used",
       "otherReadable": "Readable, but not selected for this report",
       "sourceVersion": "{title} — version {version}",
       "technicalDetails": "Technical details",
@@ -710,9 +707,23 @@
       },
       "savingDecision": "Recording decision",
       "reportVersion": "Version {version} — {date}",
-      "summary": "Summary",
       "unknownSource": "Document title unavailable",
-      "originalComplete": "Original source completeness was verified."
+      "originalComplete": "Original source completeness was verified.",
+      "regenerate": "Regenerate",
+      "weekOf": "Week of {date}",
+      "previousWeek": "Previous week",
+      "nextWeek": "Next week",
+      "injectedBadge": "Injected report",
+      "briefLabel": "Weekly brief",
+      "readSummary": "Read summary",
+      "suggestedDecision": "Suggested decision",
+      "confirmDecision": "Confirm and save",
+      "resetSuggestion": "Reset to suggestion",
+      "topicNumber": "Decision {number}: {question}",
+      "citationLabel": "Source {number}: {title}, version {version}",
+      "progressSegment": "Decision {number}: {status}",
+      "citationRefLabel": "Source {number}: {reference}",
+      "versionShort": "Version {version}"
     },
     "setupChecklist": "Setup checklist",
     "yourRole": "Your role",
@@ -761,6 +772,9 @@
       "notFound": "This report is no longer available in this workspace.",
       "alreadyRequested": "This request was already used for different changes. Reload before trying again.",
       "uncertain": "The request was interrupted. Check report history before generating another report."
-    }
+    },
+    "openContextSection": "Open {section}",
+    "contextCompanySummary": "Architecture + {count} required",
+    "contextStarsSummary": "{count} of {total} starred"
   }
 }

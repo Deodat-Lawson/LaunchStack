@@ -7,6 +7,8 @@ import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { cn } from "~/lib/utils";
+import styles from "./review-layout.module.css";
 import { Textarea } from "~/components/ui/textarea";
 import type {
     WeeklyReviewRoleDto,
@@ -55,41 +57,62 @@ export function ReviewBusinessRoleForm({
         JSON.stringify(responsibilityLines) !== JSON.stringify(role?.responsibilities ?? []) ||
         JSON.stringify(priorityLines) !== JSON.stringify(role?.priorities ?? []);
     return (
-        <div className="space-y-3">
-            <p className="text-ink-2 text-sm">{t("businessRoleHelp")}</p>
-            <Label htmlFor="weekly-review-business-role">{t("primaryBusinessRole")}</Label>
-            <Input
-                id="weekly-review-business-role"
-                value={primaryRole}
-                maxLength={80}
-                disabled={disabled}
-                onChange={event => {
-                    setPrimaryRole(event.target.value);
-                    setConfirmed(false);
-                }}
-            />
-            <Label htmlFor="weekly-review-responsibilities">{t("businessResponsibilities")}</Label>
-            <Textarea
-                id="weekly-review-responsibilities"
-                value={responsibilities}
-                disabled={disabled}
-                onChange={event => {
-                    setResponsibilities(event.target.value);
-                    setConfirmed(false);
-                }}
-            />
-            <Label htmlFor="weekly-review-priorities">{t("businessPriorities")}</Label>
-            <Textarea
-                id="weekly-review-priorities"
-                value={priorities}
-                disabled={disabled}
-                onChange={event => {
-                    setPriorities(event.target.value);
-                    setConfirmed(false);
-                }}
-            />
-            <p className="text-ink-2 text-sm">{t("businessRoleLimits")}</p>
-            <Label className="flex items-center gap-2">
+        <div className="space-y-5">
+            <p className={cn(styles.label, styles.prose)}>{t("businessRoleHelp")}</p>
+            <div className="space-y-2">
+                <Label htmlFor="weekly-review-business-role" className={styles.label}>
+                    {t("primaryBusinessRole")}
+                </Label>
+                <Input
+                    id="weekly-review-business-role"
+                    value={primaryRole}
+                    maxLength={80}
+                    disabled={disabled}
+                    className={styles.body}
+                    onChange={event => {
+                        setPrimaryRole(event.target.value);
+                        setConfirmed(false);
+                    }}
+                />
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                    <Label htmlFor="weekly-review-responsibilities" className={styles.label}>
+                        {t("businessResponsibilities")}
+                    </Label>
+                    <Textarea
+                        id="weekly-review-responsibilities"
+                        value={responsibilities}
+                        disabled={disabled}
+                        className={cn(styles.body, "min-h-28")}
+                        aria-describedby="weekly-review-role-limits"
+                        onChange={event => {
+                            setResponsibilities(event.target.value);
+                            setConfirmed(false);
+                        }}
+                    />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="weekly-review-priorities" className={styles.label}>
+                        {t("businessPriorities")}
+                    </Label>
+                    <Textarea
+                        id="weekly-review-priorities"
+                        value={priorities}
+                        disabled={disabled}
+                        className={cn(styles.body, "min-h-28")}
+                        aria-describedby="weekly-review-role-limits"
+                        onChange={event => {
+                            setPriorities(event.target.value);
+                            setConfirmed(false);
+                        }}
+                    />
+                </div>
+                <p id="weekly-review-role-limits" className={cn(styles.label, "sm:col-span-2")}>
+                    {t("businessRoleLimits")}
+                </p>
+            </div>
+            <Label className={cn(styles.label, "flex items-start gap-3 leading-relaxed")}>
                 <Checkbox
                     checked={confirmed}
                     disabled={disabled}
@@ -97,7 +120,7 @@ export function ReviewBusinessRoleForm({
                 />
                 {t("confirmBusinessRole")}
             </Label>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
                 <Button
                     disabled={disabled || !confirmed || !valid || !dirty}
                     onClick={() =>

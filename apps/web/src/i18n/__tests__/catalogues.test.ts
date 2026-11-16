@@ -27,6 +27,28 @@ it("has no corrupted message values in any locale or namespace", () => {
     expect(corrupted).toEqual([]);
 });
 
+describe("weekly review caution counts", () => {
+    const english = createTranslator({ locale: "en", messages: englishMessages });
+    const chinese = createTranslator({ locale: "zh-CN", messages: zhCN });
+    it.each([
+        [0, 0, "", ""],
+        [0, 1, "1 unknown", "1 项待确认"],
+        [1, 0, "1 conflict", "1 处冲突"],
+        [1, 1, "1 conflict — 1 unknown", "1 处冲突 · 1 项待确认"],
+        [2, 3, "2 conflicts — 3 unknowns", "2 处冲突 · 3 项待确认"],
+    ])(
+        "formats %i conflicts and %i unknowns without zero counts",
+        (conflicts, unknowns, en, zh) => {
+            expect(
+                english("vantage.weeklyReview.founder.cautionCount", { conflicts, unknowns })
+            ).toBe(en);
+            expect(
+                chinese("vantage.weeklyReview.founder.cautionCount", { conflicts, unknowns })
+            ).toBe(zh);
+        }
+    );
+});
+
 function leaves(tree: Tree, prefix = ""): Map<string, string> {
     const out = new Map<string, string>();
     for (const [key, value] of Object.entries(tree)) {

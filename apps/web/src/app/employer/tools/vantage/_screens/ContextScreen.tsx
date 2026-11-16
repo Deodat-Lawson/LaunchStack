@@ -1,10 +1,14 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Check, ChevronDown, CircleAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { parseIsoDate, weekStartOf } from "@launchstack/pipelines/vantage/week";
 import { Button } from "~/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { Card, CardContent } from "~/components/ui/card";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
+import { cn } from "~/lib/utils";
+import styles from "../_components/review-layout.module.css";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
@@ -35,72 +39,116 @@ export function ContextScreen({ week: initialWeek }: { week?: string | null }) {
     const week = weekStartOf(parseIsoDate(initialWeek) ?? new Date());
     const data = useWeeklyReviewData(week, { includeReport: false });
     const href = "/?week=" + encodeURIComponent(week);
-    const link = (label: string) =>
-        nav ? (
-            <ToolLink href={href} className="text-brand underline">
-                {label}
-            </ToolLink>
-        ) : (
-            <a href={toolTabHref("vantage", href)} className="text-brand underline">
-                {label}
-            </a>
-        );
+    const goToWeek = (
+        <Button asChild>
+            {nav ? (
+                <ToolLink href={href}>{t("goToThisWeek")}</ToolLink>
+            ) : (
+                <a href={toolTabHref("vantage", href)}>{t("goToThisWeek")}</a>
+            )}
+        </Button>
+    );
     const context = data.context;
     const role = data.roleContext;
     const loaded = data.ready && !data.contextLoading && context !== null && role !== null;
-    const roleDone = loaded && Boolean(role.role?.confirmed);
-    const companyDone =
-        loaded &&
-        Boolean(context.policy?.architecture_document_id) &&
-        !context.policy?.hasHiddenSources;
-    const starsDone =
-        loaded &&
-        Boolean(context.preferences?.star_document_ids.length) &&
-        !context.preferences?.hasHiddenSources;
     return (
-        <div className="mx-auto max-w-4xl space-y-5 p-6">
-            <h1 className="text-xl font-semibold">{t("contextTitle")}</h1>
-            <p className="text-ink-2 text-sm">{t("contextDescription")}</p>
-            <Card>
-                <CardHeader>
-                    <CardTitle>{t("setupChecklist")}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                    <ul className="space-y-2">
-                        {(
-                            [
-                                ["yourRole", roleDone],
-                                ["companyDocuments", companyDone],
-                                ["yourStarredDocuments", starsDone],
-                            ] as const
-                        ).map(([key, done]) => (
-                            <li key={key} className="flex justify-between gap-4">
-                                <span>{t(key)}</span>
-                                <span>{t(done ? "done" : "notSet")}</span>
-                            </li>
-                        ))}
-                    </ul>
-                    {companyDone && (!role?.enabled || roleDone)
-                        ? link(t("goToThisWeek"))
-                        : link(t("openThisWeek"))}
-                </CardContent>
-            </Card>
-            {data.loadError || data.contextError ? (
-                <p role="alert">{errorText(data.contextError ?? data.loadError)}</p>
-            ) : null}
-            {data.loading || data.contextLoading ? (
-                <p role="status">{t("loadingEvidence")}</p>
-            ) : null}
-            {data.enabled === false ? <p>{t("contextDisabled")}</p> : null}
-            {data.enabled && loaded && context && role ? (
-                <ContextForms
-                    key={`${context.policy?.version ?? 0}:${context.preferences?.version ?? 0}:${role.version}`}
-                    context={context}
-                    roleContext={role}
-                    reload={data.reloadContext}
-                />
-            ) : null}
+        <div className={styles.surface} data-review-surface>
+            <div className={cn(styles.column, "space-y-6")}>
+                <header className="space-y-2">
+                    <h1 className={styles.title}>{t("contextTitle")}</h1>
+                    <p className={cn(styles.label, styles.prose)}>{t("contextDescription")}</p>
+                </header>
+                {data.loadError || data.contextError ? (
+                    <p role="alert">{errorText(data.contextError ?? data.loadError)}</p>
+                ) : null}
+                {data.loading || data.contextLoading ? (
+                    <p role="status" className={styles.label}>
+                        {t("loadingEvidence")}
+                    </p>
+                ) : null}
+                {data.enabled === false ? <p>{t("contextDisabled")}</p> : null}
+                {data.enabled && loaded && context && role ? (
+                    <ContextForms
+                        key={`${context.policy?.version ?? 0}:${context.preferences?.version ?? 0}:${role.version}`}
+                        context={context}
+                        roleContext={role}
+                        reload={data.reloadContext}
+                        goToWeek={goToWeek}
+                    />
+                ) : null}
+            </div>
         </div>
+    );
+}
+
+type Section = "role" | "company" | "stars";
+function ContextSection({
+    id,
+    title,
+    summary,
+    done,
+    open,
+    onOpenChange,
+    children,
+}: {
+    id: Section;
+    title: string;
+    summary: string;
+    done: boolean;
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    children: ReactNode;
+}) {
+    const Icon = done ? Check : CircleAlert;
+    return (
+        <Card
+            id={`context-${id}`}
+            className={cn(styles.panel, "scroll-mt-5 gap-0", open && "border-brand")}
+        >
+            <Collapsible open={open} onOpenChange={onOpenChange}>
+                <h2 aria-label={title}>
+                    <CollapsibleTrigger asChild>
+                        <Button
+                            aria-label={title}
+                            variant="ghost"
+                            className="h-auto w-full justify-start gap-3 whitespace-normal p-5 text-left hover:bg-transparent"
+                        >
+                            <span
+                                className={cn(
+                                    "flex size-8 shrink-0 items-center justify-center rounded-full",
+                                    done
+                                        ? "bg-success-soft text-success-ink"
+                                        : "bg-warn-soft text-warn-ink"
+                                )}
+                            >
+                                <Icon className="size-4" aria-hidden="true" />
+                            </span>
+                            <span className="min-w-0 flex-1 space-y-1">
+                                <span className={cn(styles.heading, "block")}>{title}</span>
+                                <span className={cn(styles.label, "block truncate")}>
+                                    {summary}
+                                </span>
+                            </span>
+                            <ChevronDown
+                                className={cn(
+                                    "size-4 shrink-0 transition-transform duration-200 motion-reduce:transition-none",
+                                    open && "rotate-180"
+                                )}
+                                aria-hidden="true"
+                            />
+                        </Button>
+                    </CollapsibleTrigger>
+                </h2>
+                <CollapsibleContent
+                    forceMount
+                    className={styles.accordionContent}
+                    aria-hidden={!open}
+                    inert={!open}
+                >
+                    <div className="px-5 pb-5 pt-1">{children}</div>
+                </CollapsibleContent>
+            </Collapsible>
+        </Card>
     );
 }
 
@@ -108,10 +156,12 @@ function ContextForms({
     context,
     roleContext,
     reload,
+    goToWeek,
 }: {
     context: WeeklyReviewContextDto;
     roleContext: WeeklyReviewRoleDto;
     reload: () => Promise<unknown>;
+    goToWeek: ReactNode;
 }) {
     const t = useTranslations("vantage.weeklyReview");
     const errorText = useWeeklyReviewErrorText();
@@ -133,6 +183,31 @@ function ContextForms({
     }, []);
     const policy = context.policy;
     const preferences = context.preferences;
+    const roleDone = Boolean(roleContext.role?.confirmed);
+    const companyDone = Boolean(policy?.architecture_document_id) && !policy?.hasHiddenSources;
+    const starsDone =
+        Boolean(preferences?.star_document_ids.length) && !preferences?.hasHiddenSources;
+    const [openSection, setOpenSection] = useState<Section | "">(() =>
+        roleContext.enabled && !roleDone
+            ? "role"
+            : !companyDone
+              ? "company"
+              : !starsDone
+                ? "stars"
+                : ""
+    );
+    const sectionChange = (section: Section) => (open: boolean) =>
+        setOpenSection(open ? section : "");
+    function openStep(section: Section) {
+        setOpenSection(section);
+        requestAnimationFrame(() => {
+            const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+            document.getElementById(`context-${section}`)?.scrollIntoView?.({
+                block: "start",
+                behavior: reduceMotion ? "auto" : "smooth",
+            });
+        });
+    }
     const companyBlocked = busy || !context.canConfigure || Boolean(policy?.hasHiddenSources);
     const starsBlocked = busy || Boolean(preferences?.hasHiddenSources);
     const sameIds = (a: string[], b: string[]) =>
@@ -223,12 +298,65 @@ function ContextForms({
         );
     return (
         <div className="space-y-5">
+            <Card className={cn(styles.panel, "gap-0")}>
+                <CardContent className="space-y-5 p-5">
+                    <h2 className={styles.label}>{t("setupChecklist")}</h2>
+                    <ol className="grid gap-2 sm:grid-cols-3" aria-label={t("setupChecklist")}>
+                        {(
+                            [
+                                ["role", "yourRole", roleDone, roleContext.enabled],
+                                ["company", "companyDocuments", companyDone, true],
+                                ["stars", "yourStarredDocuments", starsDone, true],
+                            ] as const
+                        ).map(([id, key, done, available]) => {
+                            const Icon = done ? Check : CircleAlert;
+                            return (
+                                <li key={id}>
+                                    <Button
+                                        variant="ghost"
+                                        disabled={!available}
+                                        aria-label={t("openContextSection", { section: t(key) })}
+                                        aria-controls={`context-${id}`}
+                                        aria-expanded={openSection === id}
+                                        onClick={() => openStep(id)}
+                                        className="h-auto w-full justify-start gap-3 whitespace-normal rounded-lg px-3 py-3 text-left"
+                                    >
+                                        <span
+                                            className={cn(
+                                                "flex size-7 shrink-0 items-center justify-center rounded-full",
+                                                done
+                                                    ? "bg-success-soft text-success-ink"
+                                                    : "bg-warn-soft text-warn-ink"
+                                            )}
+                                        >
+                                            <Icon className="size-4" aria-hidden="true" />
+                                        </span>
+                                        <span className="min-w-0 space-y-1">
+                                            <span className={cn(styles.body, "block")}>
+                                                {t(key)}
+                                            </span>
+                                            <span className={cn(styles.label, "block")}>
+                                                {t(done ? "done" : "notSet")}
+                                            </span>
+                                        </span>
+                                    </Button>
+                                </li>
+                            );
+                        })}
+                    </ol>
+                    {companyDone && (!roleContext.enabled || roleDone) ? goToWeek : null}
+                </CardContent>
+            </Card>
             {roleContext.enabled ? (
-                <Card>
-                    <CardHeader>
-                        <CardTitle>{t("yourRole")}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                <ContextSection
+                    id="role"
+                    title={t("yourRole")}
+                    summary={roleContext.role?.primaryRole ?? t("notSet")}
+                    done={roleDone}
+                    open={openSection === "role"}
+                    onOpenChange={sectionChange("role")}
+                >
+                    <div className="space-y-4">
                         {!roleContext.canEdit ? <p>{t("roleReadOnly")}</p> : null}
                         <ReviewBusinessRoleForm
                             role={roleContext.role}
@@ -244,15 +372,25 @@ function ContextForms({
                             }
                         />
                         {errors.role ? <p role="alert">{errors.role}</p> : null}
-                    </CardContent>
-                </Card>
+                    </div>
+                </ContextSection>
             ) : null}
-            <Card>
-                <CardHeader>
-                    <CardTitle>{t("companyDocuments")}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                    <p className="text-ink-2 text-sm">{t("contextHelp")}</p>
+            <ContextSection
+                id="company"
+                title={t("companyDocuments")}
+                summary={
+                    companyDone
+                        ? t("contextCompanySummary", {
+                              count: policy?.required_document_ids.length ?? 0,
+                          })
+                        : t("notSet")
+                }
+                done={companyDone}
+                open={openSection === "company"}
+                onOpenChange={sectionChange("company")}
+            >
+                <div className="space-y-4">
+                    <p className={cn(styles.label, styles.prose)}>{t("contextHelp")}</p>
                     {policy?.hasHiddenSources ? (
                         <p role="alert">{t("hiddenConfiguration")}</p>
                     ) : null}
@@ -275,7 +413,7 @@ function ContextForms({
                         <SelectTrigger id="weekly-review-architecture">
                             <SelectValue placeholder={t("selectDocument")} />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className={styles.typography}>
                             {matching(companySearch).map(document => (
                                 <SelectItem key={document.id} value={document.id}>
                                     {document.title}
@@ -288,7 +426,10 @@ function ContextForms({
                         {matching(companySearch)
                             .filter(document => document.id !== architecture)
                             .map(document => (
-                                <Label key={document.id} className="flex items-center gap-2">
+                                <Label
+                                    key={document.id}
+                                    className="flex items-center gap-3 rounded-lg py-2"
+                                >
                                     <Checkbox
                                         disabled={companyBlocked}
                                         checked={required.includes(document.id)}
@@ -324,14 +465,21 @@ function ContextForms({
                         {t("saveContext")}
                     </Button>
                     {errors.company ? <p role="alert">{errors.company}</p> : null}
-                </CardContent>
-            </Card>
-            <Card>
-                <CardHeader>
-                    <CardTitle>{t("yourStarredDocuments")}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                    <p className="text-ink-2 text-sm">{t("starHelp")}</p>
+                </div>
+            </ContextSection>
+            <ContextSection
+                id="stars"
+                title={t("yourStarredDocuments")}
+                summary={t("contextStarsSummary", {
+                    count: preferences?.star_document_ids.length ?? 0,
+                    total: 8,
+                })}
+                done={starsDone}
+                open={openSection === "stars"}
+                onOpenChange={sectionChange("stars")}
+            >
+                <div className="space-y-4">
+                    <p className={cn(styles.label, styles.prose)}>{t("starHelp")}</p>
                     {preferences?.hasHiddenSources ? (
                         <p role="alert">{t("hiddenConfiguration")}</p>
                     ) : null}
@@ -344,7 +492,10 @@ function ContextForms({
                     <p>{t("selectedStars", { count: stars.length })}</p>
                     <div className="max-h-64 space-y-2 overflow-auto">
                         {matching(starSearch).map(document => (
-                            <Label key={document.id} className="flex items-center gap-2">
+                            <Label
+                                key={document.id}
+                                className="flex items-center gap-3 rounded-lg py-2"
+                            >
                                 <Checkbox
                                     disabled={
                                         starsBlocked ||
@@ -382,8 +533,8 @@ function ContextForms({
                         {t("saveStars")}
                     </Button>
                     {errors.stars ? <p role="alert">{errors.stars}</p> : null}
-                </CardContent>
-            </Card>
+                </div>
+            </ContextSection>
             {sourceChoices.length ? (
                 <SourceScopeEditor
                     sources={sourceChoices}

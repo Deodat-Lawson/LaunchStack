@@ -371,13 +371,11 @@ test("authenticated scoped review, exact inspection, stale dispatch protection a
         await expect(page.getByText(current.report.headline, { exact: true })).toBeVisible({
             timeout: 120_000,
         });
-        await page
-            .getByRole("button", { name: "Sources used in this report", exact: true })
-            .click();
+        await page.getByRole("button", { name: "Sources used", exact: true }).click();
         await page
             .getByRole("button", {
                 name: new RegExp(
-                    `^Synthetic scoped architecture.*version ${architecture.version}$`
+                    `^Source \\d+: Synthetic scoped architecture, version ${architecture.version}$`
                 ),
             })
             .first()
@@ -389,7 +387,15 @@ test("authenticated scoped review, exact inspection, stale dispatch protection a
         await expect(evidenceRegion).toContainText(excerpt);
         await evidenceRegion.screenshot({ path: resolve(artifacts, "scoped-evidence.png") });
         await evidenceRegion.getByRole("button", { name: "Close", exact: true }).click();
+        const topicToggle = page
+            .getByTestId(`review-topic-${current.report.topics[0]!.id}`)
+            .getByRole("button")
+            .first();
+        await topicToggle.click();
         await page.getByRole("button", { name: "Change decision", exact: true }).first().click();
+        await expect(
+            page.getByRole("textbox", { name: "Your decision", exact: true }).first()
+        ).toHaveValue(decision.decision);
         const browserDecision =
             "Synthetic browser decision recorded. Execution remains unverified.";
         await page
@@ -538,7 +544,7 @@ test("authenticated scoped review, exact inspection, stale dispatch protection a
                 new URL(response.url()).pathname === "/api/vantage/reviews" &&
                 response.request().method() === "POST"
         );
-        await page.getByRole("button", { name: "Generate review", exact: true }).first().click();
+        await page.getByRole("button", { name: "Regenerate", exact: true }).click();
         const regeneratedResponse = await regenerated;
         expect(regeneratedResponse.status()).toBe(200);
         const recoveredReview = reviewSchema.parse(await generatedReview(regeneratedResponse));

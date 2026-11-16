@@ -553,10 +553,9 @@
   },
   "weeklyReview": {
     "contextTitle": "上下文",
-    "contextDescription": "设置业务职责、公司必需文档、个人星标和来源范围，用于生成每周回顾。",
-    "contextDisabled": "每周回顾功能尚未启用，暂时无法设置上下文。请继续使用现有的每周议程。",
+    "contextDescription": "确认你的职责，并选择每周回顾需要参考的文档。",
+    "contextDisabled": "此工作区未启用每周回顾，暂时无法设置上下文。",
     "openContext": "打开上下文",
-    "openThisWeek": "打开本周",
     "businessRole": "我的业务职责",
     "businessRoleHelp": "确认你的业务角色、职责和优先事项，以个性化每周回顾的重点。工作区权限由单独的设置管理。",
     "primaryBusinessRole": "主要业务角色",
@@ -566,7 +565,6 @@
     "confirmBusinessRole": "我确认这些是我当前的业务职责和优先事项。",
     "saveBusinessRole": "确认并保存",
     "clearBusinessRole": "清除业务角色",
-    "week": "报告周",
     "generate": "生成回顾",
     "history": "报告历史",
     "selectReport": "选择报告",
@@ -635,7 +633,6 @@
       "decisionCount": "已对 {decided}/{total} 个议题作出决策",
       "needsDecision": "待决策",
       "decided": "已决策",
-      "recommendation": "建议方案",
       "confidence": "{level}置信度",
       "confidenceLevel": {
         "low": "低",
@@ -662,7 +659,7 @@
       "whyItMatters": "为何重要",
       "whyNow": "为何是现在",
       "rationale": "理由",
-      "cautionCount": "{conflicts} 个冲突 · {unknowns} 个未知项",
+      "cautionCount": "{conflicts, plural, =0 {} other {# 处冲突}}{conflicts, plural, =0 {} other {{unknowns, plural, =0 {} other { · }}}}{unknowns, plural, =0 {} other {# 项待确认}}",
       "addCommitment": "添加到承诺",
       "added": "已添加到承诺",
       "commitmentTitle": "标题",
@@ -673,7 +670,7 @@
       "confirmCommitment": "创建承诺",
       "cancel": "取消",
       "commitmentLink": "打开承诺",
-      "sourcesUsed": "本报告使用的来源",
+      "sourcesUsed": "使用的来源",
       "otherReadable": "可读取但未被选入此报告",
       "sourceVersion": "{title} · 第 {version} 版",
       "technicalDetails": "技术详情",
@@ -710,9 +707,23 @@
       },
       "savingDecision": "正在记录决策",
       "reportVersion": "第 {version} 版 · {date}",
-      "summary": "摘要",
       "unknownSource": "文档标题不可用",
-      "originalComplete": "已验证原始文档的完整性。"
+      "originalComplete": "已验证原始文档的完整性。",
+      "regenerate": "重新生成",
+      "weekOf": "{date} 所在周",
+      "previousWeek": "上一周",
+      "nextWeek": "下一周",
+      "injectedBadge": "注入式报告",
+      "briefLabel": "本周简报",
+      "readSummary": "阅读摘要",
+      "suggestedDecision": "建议的决策",
+      "confirmDecision": "确认并保存",
+      "resetSuggestion": "恢复建议",
+      "topicNumber": "第 {number} 项决策：{question}",
+      "citationLabel": "来源 {number}：{title}，版本 {version}",
+      "progressSegment": "决策 {number}：{status}",
+      "citationRefLabel": "来源 {number}：{reference}",
+      "versionShort": "版本 {version}"
     },
     "setupChecklist": "设置清单",
     "yourRole": "你的角色",
@@ -761,6 +772,9 @@
       "notFound": "此报告在此工作区中已不可用。",
       "alreadyRequested": "此请求已用于其他更改。请重新加载后重试。",
       "uncertain": "请求已中断。再次生成报告前请检查报告历史。"
-    }
+    },
+    "openContextSection": "打开{section}",
+    "contextCompanySummary": "架构文档 + {count} 份必读文档",
+    "contextStarsSummary": "已星标 {count}/{total} 份"
   }
 }

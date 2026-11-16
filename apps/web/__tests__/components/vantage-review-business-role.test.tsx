@@ -17,9 +17,6 @@ const role: NonNullable<WeeklyReviewRoleDto["role"]> = {
     confirmed: true,
 };
 const confirmName = "I confirm these are my current business responsibilities and priorities.";
-function expandRole() {
-    // The role form is visible in its Context card.
-}
 
 describe("confirmed business role form", () => {
     it("requires confirmation and sends normalized explicit fields", () => {
@@ -28,7 +25,6 @@ describe("confirmed business role form", () => {
             <ReviewBusinessRoleForm role={null} disabled={false} onSave={save} />,
             "en"
         );
-        expandRole();
         fireEvent.change(screen.getByLabelText("Primary business role"), {
             target: { value: " Finance lead " },
         });
@@ -55,7 +51,6 @@ describe("confirmed business role form", () => {
             <ReviewBusinessRoleForm role={role} disabled={false} onSave={jest.fn()} />,
             "en"
         );
-        expandRole();
         fireEvent.click(screen.getByRole("checkbox", { name: confirmName }));
         expect(screen.getByRole("button", { name: "Confirm and save" })).toBeDisabled();
         fireEvent.change(screen.getByLabelText("Responsibilities"), {
@@ -73,7 +68,6 @@ describe("confirmed business role form", () => {
             <ReviewBusinessRoleForm role={role} disabled={false} onSave={jest.fn()} />,
             "en"
         );
-        expandRole();
         fireEvent.change(screen.getByLabelText(label), { target: { value } });
         fireEvent.click(screen.getByRole("checkbox", { name: confirmName }));
         expect(screen.getByRole("button", { name: "Confirm and save" })).toBeDisabled();
@@ -85,7 +79,6 @@ describe("confirmed business role form", () => {
             <ReviewBusinessRoleForm role={role} disabled={false} onSave={save} />,
             "en"
         );
-        expandRole();
         fireEvent.click(screen.getByRole("button", { name: "Clear business role" }));
         expect(save).not.toHaveBeenCalled();
         expect(screen.getByRole("dialog")).toBeInTheDocument();
@@ -98,7 +91,6 @@ describe("confirmed business role form", () => {
             <ReviewBusinessRoleForm role={role} disabled={true} onSave={jest.fn()} />,
             "en"
         );
-        expandRole();
         expect(screen.getByLabelText("Primary business role")).toBeDisabled();
         expect(screen.getByLabelText("Responsibilities")).toBeDisabled();
         expect(screen.getByLabelText("Priorities")).toBeDisabled();

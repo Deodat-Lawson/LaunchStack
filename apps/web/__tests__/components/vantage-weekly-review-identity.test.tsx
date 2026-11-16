@@ -1,5 +1,6 @@
 /** @jest-environment jsdom */
 import React from "react";
+import { addDays } from "@launchstack/pipelines/vantage/week";
 import { TextEncoder, TextDecoder } from "node:util";
 import { ReadableStream } from "node:stream/web";
 import { act, fireEvent, screen, waitFor } from "@testing-library/react";
@@ -126,13 +127,21 @@ function history(id: string) {
         target: { value: id },
     });
 }
+let displayedWeek = weekA;
 function changeWeek(value: string) {
-    fireEvent.change(screen.getByLabelText("Reporting week"), { target: { value } });
+    while (displayedWeek !== value) {
+        const previous = displayedWeek > value;
+        fireEvent.click(
+            screen.getByRole("button", { name: previous ? "Previous week" : "Next week" })
+        );
+        displayedWeek = addDays(displayedWeek, previous ? -7 : 7);
+    }
 }
 function saveButton() {
     return screen.getAllByRole("button", { name: "Record decision" })[0]!;
 }
 beforeEach(() => {
+    displayedWeek = weekA;
     Object.defineProperty(globalThis, "TextEncoder", { configurable: true, value: TextEncoder });
     Object.defineProperty(globalThis, "TextDecoder", { configurable: true, value: TextDecoder });
     sessionStorage.clear();
@@ -178,6 +187,7 @@ it("preserves both newer same-topic edits and other-topic edits while a save wai
     await act(async () => {
         saving.resolve(response({}));
     });
+    fireEvent.click(screen.getByRole("button", { name: "Decision 1: Question" }));
     await waitFor(() => expect(saveButton()).toBeEnabled());
     expect(screen.getAllByLabelText("Your decision")[0]).toHaveValue("newer");
     expect(screen.getAllByLabelText("Your decision")[1]).toHaveValue("other topic");
@@ -189,7 +199,7 @@ it("uses the true active pointer while displaying history and filters the chosen
     expect(screen.queryByRole("option", { name: /2026-11-02/ })).not.toBeInTheDocument();
     history("history");
     await screen.findByRole("heading", { name: "Report history" });
-    fireEvent.click(screen.getByRole("button", { name: "Generate review" }));
+    fireEvent.click(screen.getByRole("button", { name: /Generate review|Regenerate/ }));
     await waitFor(() =>
         expect(mockFetch).toHaveBeenCalledWith(
             "/api/vantage/reviews",
@@ -209,7 +219,7 @@ it("loads context and permits replacement when the active report cannot be read"
     renderWithLocale(<ThisWeekScreen week={weekA} />, "en");
     await screen.findByRole("alert");
     expect(mockFetch).toHaveBeenCalledWith("/api/vantage/reviews/context", expect.anything());
-    fireEvent.click(screen.getByRole("button", { name: "Generate review" }));
+    fireEvent.click(screen.getByRole("button", { name: /Generate review|Regenerate/ }));
     await waitFor(() =>
         expect(mockFetch).toHaveBeenCalledWith(
             "/api/vantage/reviews",
@@ -227,7 +237,7 @@ it("ignores a late week list and disables generation until the selected week loa
     );
     renderWithLocale(<ThisWeekScreen week={weekA} />, "en");
     changeWeek(weekB);
-    expect(screen.getByRole("button", { name: "Generate review" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /Generate review|Regenerate/ })).toBeDisabled();
     await screen.findByText("Report B");
     await act(async () => {
         oldList.resolve(response(list("A")));
@@ -261,7 +271,7 @@ it("ignores late report and context results from the previous week", async () =>
         );
     });
     expect(screen.getByText("Report B")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Sources used in this report" }));
+    fireEvent.click(screen.getByRole("button", { name: "Sources used" }));
     expect(screen.getByText("Current context")).toBeInTheDocument();
     expect(screen.queryByText("Old context")).not.toBeInTheDocument();
 });
@@ -325,6 +335,7 @@ it("keeps a new edit even when it returns to the submitted text", async () => {
     await act(async () => {
         saving.resolve(response({}));
     });
+    fireEvent.click(screen.getByRole("button", { name: "Decision 1: Question" }));
     await waitFor(() => expect(saveButton()).toBeEnabled());
     expect(screen.getAllByLabelText("Your decision")[0]).toHaveValue("submitted");
 });
@@ -339,7 +350,7 @@ it("keeps generation disabled when the new week list fails", async () => {
     await screen.findByText("Report A");
     changeWeek(weekB);
     await screen.findByRole("alert");
-    expect(screen.getByRole("button", { name: "Generate review" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /Generate review|Regenerate/ })).toBeDisabled();
     expect(screen.queryByText("Report A")).not.toBeInTheDocument();
 });
 
@@ -366,7 +377,7 @@ it("keeps the accepted report and marks the observed stage when quality checks f
     });
     renderWithLocale(<ThisWeekScreen week={weekA} />, "en");
     await screen.findByText("Report A");
-    fireEvent.click(screen.getByRole("button", { name: "Generate review" }));
+    fireEvent.click(screen.getByRole("button", { name: /Generate review|Regenerate/ }));
     expect(await screen.findByRole("alert")).toHaveTextContent(
         "The new report did not pass quality checks, so your previous report is still shown."
     );
@@ -409,7 +420,7 @@ it("does not advance a stalled server stage on the elapsed timer", async () => {
     });
     renderWithLocale(<ThisWeekScreen week={weekA} />, "en");
     await screen.findByText("Report A");
-    fireEvent.click(screen.getByRole("button", { name: "Generate review" }));
+    fireEvent.click(screen.getByRole("button", { name: /Generate review|Regenerate/ }));
     await waitFor(() =>
         expect(document.querySelector('[data-stage="gathering"]')).toHaveAttribute(
             "data-state",

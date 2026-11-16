@@ -513,8 +513,15 @@ export async function simulateWeeklyReview(
             parsedWeek.getUTCDay() !== 1
         )
             return fail("invalid_review_week", 400);
+        const streamed = headers.get("Accept")?.includes("application/x-ndjson") ?? false;
         const generate = async (emit: (event: WeeklyReviewEvent) => void) => {
-            emit({ type: "stage", stage: "gathering" });
+            // Preview-only dwell makes each real local operation visible. The
+            // product tracker still advances exclusively from service events.
+            const stage = async (value: Extract<WeeklyReviewEvent, { type: "stage" }>["stage"]) => {
+                emit({ type: "stage", stage: value });
+                if (streamed) await new Promise<void>(resolve => setTimeout(resolve, 1200));
+            };
+            await stage("gathering");
             if (!context.policy?.architecture_document_id) {
                 emit({ type: "error", error: "required_context_incomplete", status: 409 });
                 return null;
@@ -524,7 +531,7 @@ export async function simulateWeeklyReview(
                 return null;
             }
             const selected = sources();
-            emit({ type: "stage", stage: "writing" });
+            await stage("writing");
             const candidate = writeReview(String(body.weekStart), selected);
             try {
                 await applyScopes(candidate);
@@ -536,7 +543,7 @@ export async function simulateWeeklyReview(
                 });
                 return null;
             }
-            emit({ type: "stage", stage: "checking" });
+            await stage("checking");
             const refs = new Set(candidate.evidence.inputSnapshot!.sources.map(s => s.ref));
             if (
                 candidate.report.topics.some(t =>
@@ -546,7 +553,7 @@ export async function simulateWeeklyReview(
                 emit({ type: "error", error: "candidate_not_admitted", status: 409 });
                 return null;
             }
-            emit({ type: "stage", stage: "saving" });
+            await stage("saving");
             if (body.expectedActiveId !== (activeIds.get(String(body.weekStart)) ?? null)) {
                 emit({ type: "error", error: "active_review_changed", status: 409 });
                 return null;
@@ -557,7 +564,7 @@ export async function simulateWeeklyReview(
             emit({ type: "result", result: candidate });
             return candidate;
         };
-        if (headers.get("Accept")?.includes("application/x-ndjson"))
+        if (streamed)
             return new Response(
                 new ReadableStream({
                     async start(controller) {

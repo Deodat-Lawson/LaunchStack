@@ -1,0 +1,32 @@
+{
+  "datasetId": "rag-multi-corpus",
+  "repository": "https://github.com/udayallu/RAG-Multi-Corpus",
+  "revision": "39071af3f4dd25e59f5c59a6f9b6e8e99cd643b3",
+  "citation": "@Allu2025RAGMultiCorpus",
+  "files": {
+    "queries": {
+      "path": "datasets/Dataset categories - queries_01122025.csv",
+      "url": "https://raw.githubusercontent.com/udayallu/RAG-Multi-Corpus/39071af3f4dd25e59f5c59a6f9b6e8e99cd643b3/datasets/Dataset%20categories%20-%20queries_01122025.csv",
+      "sha256": "48c319a45a911cc3973e3f4e8ed34eeb39fa2eb49331a04f1433552d541c5457"
+    },
+    "license": {
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/udayallu/RAG-Multi-Corpus/39071af3f4dd25e59f5c59a6f9b6e8e99cd643b3/LICENSE",
+      "sha256": "98800da81937e7e782491cd00623c39f6958cf031e36441f9ed604997921a140"
+    },
+    "readme": {
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/udayallu/RAG-Multi-Corpus/39071af3f4dd25e59f5c59a6f9b6e8e99cd643b3/README.md",
+      "sha256": "06ecad255d0d531a88df6d77542a939c2f115ab385b908f3a2ef337043364b43"
+    }
+  },
+  "license": {
+    "spdxId": "MIT",
+    "copyright": "Copyright (c) 2025 UDAY ALLU",
+    "noticeFile": "LICENSE.upstream.txt"
+  },
+  "notes": [
+    "Upstream README describes synthetic enterprises and research/experimentation use. Repository LICENSE grants MIT terms; retain its notice.",
+    "The actual pinned CSV, not README aggregate counts, is the source of truth."
+  ]
+}

@@ -81,6 +81,8 @@ export const EvidenceSchema = z.object({
     quote: z.string(),
     /** A web page, for evidence that came from a funder's site. */
     url: z.string().nullable(),
+    /** "profile": a value typed into the company profile; it rests on no document. */
+    origin: z.literal("profile").optional(),
 });
 export type Evidence = z.infer<typeof EvidenceSchema>;
 

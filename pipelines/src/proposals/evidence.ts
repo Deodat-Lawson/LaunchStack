@@ -121,11 +121,14 @@ export function generationSourceDocumentIds(input: {
         if (item.provenance.kind === "sources")
             for (const id of item.provenance.sourceDocumentIds) ids.add(id);
         for (const evidence of item.evidence) {
+            // A typed profile value rests on no document, so it adds no dependency.
+            if (evidence.origin === "profile") continue;
             if (evidence.documentId === null) return undefined;
             ids.add(evidence.documentId);
         }
     }
     for (const evidence of input.evidence) {
+        if (evidence.origin === "profile") continue;
         if (evidence.documentId === null) return undefined;
         ids.add(evidence.documentId);
     }

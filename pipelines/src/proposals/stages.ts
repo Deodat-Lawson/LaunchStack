@@ -257,7 +257,12 @@ export async function draftSection(
         policy: DRAFT_POLICY,
         scope: input.scope,
     });
-    const evidence: Evidence[] = numberEvidence(results);
+    const retrieved = numberEvidence(results);
+    // Values typed into the company profile are citable too, numbered after the excerpts.
+    const typed = (input.profile?.evidence ?? [])
+        .filter(e => e.origin === "profile")
+        .map((e, i) => ({ ...e, n: retrieved.length + i + 1 }));
+    const evidence: Evidence[] = [...retrieved, ...typed];
     const matches = matchLibrary(input.section.question, input.library);
     const request = input.application.extracted;
 

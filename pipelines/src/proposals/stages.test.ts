@@ -345,6 +345,34 @@ describe("draftSection", () => {
         expect(result.meta.evidence).toHaveLength(2);
         expect(result.meta.sourceDocumentIds?.sort((a, b) => a - b)).toEqual([11, 12, 13, 14, 99]);
     });
+
+    it("lets a draft cite a value typed into the profile, after the retrieved excerpts", async () => {
+        const typed = {
+            n: 1,
+            documentId: null,
+            title: "Headquarters",
+            page: null,
+            quote: "Portland, Oregon",
+            url: null,
+            origin: "profile" as const,
+        };
+        const p = ports((_stage, user) => {
+            expect(user).toContain("[3] Headquarters: Portland, Oregon");
+            return { draft: "Riverbend is based in Portland.", cites: [3], gaps: [] };
+        });
+        const result = await draftSection(p, {
+            companyId: 1,
+            scope: { kind: "everything" },
+            application: application(),
+            section: section({ key: "where", question: "Where do you work?" }),
+            profile: { ...PROFILE, evidence: [typed] },
+            library: [],
+        });
+        expect(result.meta.cites).toEqual([3]);
+        expect(result.meta.evidence[2]).toEqual({ ...typed, n: 3 });
+        // A typed value rests on no document, so the draft's dependencies stay known.
+        expect(result.meta.sourceDocumentIds?.sort((a, b) => a - b)).toEqual([11, 12, 99]);
+    });
 });
 
 describe("rewriteSection", () => {

@@ -60,7 +60,10 @@ export function orgProfileFromView(view: ProfileView, builtAt: Date): OrgProfile
         facts: facts.slice(0, MAX_FACTS),
         evidence: view.evidence.map(e => ({ ...e, url: null })),
         sourceDocumentIds: view.sourceDocumentIds,
-        builtFrom: { documents: view.documents, snippets: view.evidence.length },
+        builtFrom: {
+            documents: view.documents,
+            snippets: view.evidence.filter(e => e.documentId !== null).length,
+        },
         builtAt: builtAt.toISOString(),
         promptVersion: READER_VERSION,
     };

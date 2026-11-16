@@ -100,6 +100,8 @@ const serverSchema = z.object({
     // (http://localhost:3000); behind a proxy it is the outside hostname, so
     // callback URLs and trusted origins resolve there.
     BETTER_AUTH_URL: optionalString(),
+    // Exact aliases served by this same auth instance; unset preserves the canonical origin.
+    BETTER_AUTH_ADDITIONAL_ORIGINS: optionalString(),
     // Optional social sign-in. Auth works credentials-only without these;
     // a provider appears on the sign-in page only when both halves are set.
     AUTH_GOOGLE_CLIENT_ID: optionalString(),
@@ -599,6 +601,7 @@ function parseServerEnv() {
         HUGGINGFACE_EMBEDDING_VERSION: process.env.HUGGINGFACE_EMBEDDING_VERSION,
         BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
         BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
+        BETTER_AUTH_ADDITIONAL_ORIGINS: process.env.BETTER_AUTH_ADDITIONAL_ORIGINS,
         AUTH_GOOGLE_CLIENT_ID: process.env.AUTH_GOOGLE_CLIENT_ID,
         AUTH_GOOGLE_CLIENT_SECRET: process.env.AUTH_GOOGLE_CLIENT_SECRET,
         AUTH_GITHUB_CLIENT_ID: process.env.AUTH_GITHUB_CLIENT_ID,

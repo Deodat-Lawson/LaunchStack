@@ -35,6 +35,7 @@ export const INTERNAL_RETRIEVAL_DECISION_LIMITS = Object.freeze({
     sources: 64,
     sourceTextCharacters: 32_000,
     totalTextCharacters: 256_000,
+    // Unicode code points, matching canonical database character limits.
     titleCharacters: 300,
     refCharacters: 200,
     gaps: 3,
@@ -123,7 +124,9 @@ function validInput(input: InternalRetrievalDecisionInput): boolean {
             typeof source.text !== "string" ||
             source.text.length > limits.sourceTextCharacters ||
             (source.title !== undefined &&
-                (typeof source.title !== "string" || source.title.length > limits.titleCharacters))
+                (typeof source.title !== "string" ||
+                    source.title.length > limits.titleCharacters * 2 ||
+                    Array.from(source.title).length > limits.titleCharacters))
         )
             return false;
         refs.add(source.ref);

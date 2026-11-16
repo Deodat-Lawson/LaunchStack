@@ -739,7 +739,13 @@ describe("integrated Dynamic Retrieval V3 modes", () => {
         expect(result.retrievalContext?.internalDecision?.outcome).toBe("INSUFFICIENT_EVIDENCE");
         expect(result.retrievalContext?.internalDecision?.questions.length).toBeGreaterThan(0);
         expect(result.selectionDiagnostics?.dynamicRetrieval).toMatchObject({
-            followUp: { rounds: 1 },
+            followUp: {
+                rounds: 1,
+                acquiredCount: 1,
+                newlyAcquiredCount: 1,
+                cachedMatchCount: 0,
+                admittedCount: 1,
+            },
         });
         expect(
             s.calls.filter(call => call.text.includes("WITH eligible AS MATERIALIZED"))
@@ -748,6 +754,125 @@ describe("integrated Dynamic Retrieval V3 modes", () => {
             128000
         );
         expect(result.selectionDiagnostics?.budget.feasible).toBe(true);
+    });
+    it.each([400, 500])(
+        "fits the final questions before freezing with %i-byte optional bodies",
+        async size => {
+            const docs = [
+                document(1, "Release rollback owner is unknown."),
+                ...Array.from({ length: 48 }, (_, i) =>
+                    document(i + 10, "Routine. " + "x".repeat(size))
+                ),
+                document(
+                    2,
+                    "Release rollback owner is Alice. Deploymentownershipdatacollection environmentalapprovalverification regionalrolloutacceptancecriteria permissionsrevalidationcheckpoint continuousindependentobservation availabilitydependencyinspection accountabilityescalationprocedure is unknown. Incidentrecoveryauthorization operationalreadinessconfirmation rollbackverificationinstrumentation customercommunicationsownership riskacceptancerecordreconciliation is pending.",
+                    "2026-10-01T00:00:00Z"
+                ),
+            ];
+            const s = setup(docs);
+            const result = await s
+                .authority(true, config("internal-research"))
+                .collectWeeklyReviewContext(s.actor, week, identity);
+            expect(result.selectionDiagnostics?.budget.feasible).toBe(true);
+            expect(result.retrievalContext?.internalDecision?.questions).toHaveLength(3);
+            expect(result.sources.map(source => source.id)).toEqual(
+                expect.arrayContaining(["1", "2"])
+            );
+            const trace = result.selectionDiagnostics!.dynamicRetrieval as {
+                finalDecision: { gaps: { supportingRefs: string[] }[] };
+                selectedRefs: string[];
+            };
+            expect(
+                trace.finalDecision.gaps.every(gap =>
+                    gap.supportingRefs.every(ref => trace.selectedRefs.includes(ref))
+                )
+            ).toBe(true);
+            expect(result.retrievalContext?.traceHash).toBe(
+                createHash("sha256").update(JSON.stringify(trace)).digest("hex")
+            );
+            expect(result.selectionDiagnostics?.budget).toEqual(
+                calculateWeeklyReviewBudget(
+                    {
+                        ...identity,
+                        week,
+                        role: result.role,
+                        sources: result.sources,
+                        mandatoryCoverage: result.mandatoryCoverage,
+                        retrievalContext: result.retrievalContext,
+                    },
+                    "internal-v1"
+                )
+            );
+        }
+    );
+    it.each([
+        { followUp: false, titleCodePoints: 151 },
+        { followUp: true, titleCodePoints: 151 },
+        { followUp: false, titleCodePoints: 256 },
+        { followUp: true, titleCodePoints: 256 },
+    ])(
+        "preserves legal astral titles and questions (follow-up=$followUp, title=$titleCodePoints code points)",
+        async ({ followUp, titleCodePoints }) => {
+            const titled = document(
+                2,
+                "Release rollback owner is Alice.",
+                followUp ? "2026-10-01T00:00:00Z" : "2026-10-23T00:00:00Z"
+            );
+            titled.title = "\u{1f600}".repeat(titleCodePoints);
+            const docs = [
+                document(1, "Release rollback owner is unknown."),
+                ...(followUp
+                    ? Array.from({ length: 48 }, (_, i) => document(i + 10, "Routine."))
+                    : []),
+                titled,
+            ];
+            const s = setup(docs);
+            const result = await s
+                .authority(true, config("internal-research"))
+                .collectWeeklyReviewContext(s.actor, week, identity);
+            expect(result.retrievalContext?.internalDecision?.outcome).toBe(
+                "INSUFFICIENT_EVIDENCE"
+            );
+            expect(result.retrievalContext?.internalDecision?.questions.length).toBeGreaterThan(0);
+            expect(result.sources.find(source => source.id === "2")?.title).toBe(titled.title);
+            expect(s.calls.find(call => call.text.includes("LIMIT $4"))?.text).toContain(
+                "octet_length(d.title)<=1024"
+            );
+            expect(
+                s.calls.filter(call => call.text.includes("WITH eligible AS MATERIALIZED"))
+            ).toHaveLength(1);
+        }
+    );
+    it("counts each omitted version once and separates cached matches from new acquisition", async () => {
+        const docs = [
+            document(1, "Release rollback owner is unknown."),
+            ...Array.from({ length: 48 }, (_, i) =>
+                document(i + 10, "Release rollback owner record. " + "x".repeat(500))
+            ),
+        ];
+        const s = setup(docs);
+        const result = await s
+            .authority(true, config("internal-research"))
+            .collectWeeklyReviewContext(s.actor, week, identity);
+        const omitted = result.selectionDiagnostics!.omitted;
+        expect(new Set(omitted.map(item => item.id + "@" + item.version)).size).toBe(
+            omitted.length
+        );
+        expect(omitted.every(item => !result.sources.some(source => source.id === item.id))).toBe(
+            true
+        );
+        expect(result.selectionDiagnostics?.dynamicRetrieval).toMatchObject({
+            followUp: {
+                acquiredCount: 0,
+                newlyAcquiredCount: 0,
+                cachedMatchCount: expect.any(Number),
+                admittedCount: expect.any(Number),
+            },
+        });
+        const trace = result.selectionDiagnostics!.dynamicRetrieval as {
+            followUp: { cachedMatchCount: number };
+        };
+        expect(trace.followUp.cachedMatchCount).toBeGreaterThan(0);
     });
     it("supports zero follow-up rounds and STOP without a useful question", async () => {
         for (const text of ["Release rollback owner is unknown.", "Operating policy approved."]) {

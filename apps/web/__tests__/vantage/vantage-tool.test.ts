@@ -1,7 +1,7 @@
 /**
  * Vantage is a tab now, not a route tree. These pin the table that replaced
- * its pages: every old route has the same screen at the same app-relative
- * path, an agenda link keeps its `?week=`, Triage is gated on
+ * its pages: Context retains the old agenda path as an alias and both
+ * review and context links keep their `?week=`. Triage is gated on
  * `settings.manage`, and an unknown path is "not found" rather than a blank
  * tab. They also pin that old `/employer/tools/vantage/...` links resolve
  * into the tab at the same place.
@@ -29,21 +29,29 @@ describe("vantageScreenFor", () => {
         expect(vantageScreenFor("/commitments?view=all")).toEqual({ kind: "commitments" });
     });
 
-    it("opens the agenda on the week in ?week=", () => {
+    it("opens Context and retains the agenda compatibility alias and selected week", () => {
+        expect(vantageScreenFor("/context?week=2026-10-05")).toEqual({
+            kind: "context",
+            week: "2026-10-05",
+        });
+        expect(vantageScreenFor("/?week=2026-10-05")).toEqual({
+            kind: "overview",
+            week: "2026-10-05",
+        });
         expect(vantageScreenFor("/agenda?week=2026-10-05")).toEqual({
-            kind: "agenda",
+            kind: "context",
             week: "2026-10-05",
         });
         expect(vantageScreenFor("/agenda/?week=2026-09-28&x=1")).toEqual({
-            kind: "agenda",
+            kind: "context",
             week: "2026-09-28",
         });
     });
 
     it("falls back to the default week without a usable ?week=", () => {
-        expect(vantageScreenFor("/agenda")).toEqual({ kind: "agenda", week: null });
-        expect(vantageScreenFor("/agenda?week=")).toEqual({ kind: "agenda", week: null });
-        expect(vantageScreenFor("/agenda?week=next-week")).toEqual({ kind: "agenda", week: null });
+        expect(vantageScreenFor("/agenda")).toEqual({ kind: "context", week: null });
+        expect(vantageScreenFor("/agenda?week=")).toEqual({ kind: "context", week: null });
+        expect(vantageScreenFor("/agenda?week=next-week")).toEqual({ kind: "context", week: null });
     });
 
     it("gates Triage on settings.manage, and waits for the answer", () => {
@@ -51,7 +59,7 @@ describe("vantageScreenFor", () => {
         expect(vantageScreenFor("/program", "denied")).toEqual({ kind: "triage-denied" });
         expect(vantageScreenFor("/program", "pending")).toEqual({ kind: "triage-pending" });
         // The gate is Triage's alone: a founder's own screens never wait on it.
-        expect(vantageScreenFor("/agenda", "denied").kind).toBe("agenda");
+        expect(vantageScreenFor("/agenda", "denied").kind).toBe("context");
         expect(vantageScreenFor("/", "pending").kind).toBe("overview");
     });
 
@@ -72,7 +80,15 @@ describe("vantage paths inside the tab", () => {
     });
 
     it("are all the tab's own, so links stay inside it", () => {
-        for (const to of ["", "/agenda", "/commitments", "/evidence", "/metrics", "/program"]) {
+        for (const to of [
+            "",
+            "/context",
+            "/agenda",
+            "/commitments",
+            "/evidence",
+            "/metrics",
+            "/program",
+        ]) {
             expect(isToolPath(vantagePath(to), VANTAGE_ROOTS)).toBe(true);
         }
         expect(isToolPath("/employer/documents?docId=12", VANTAGE_ROOTS)).toBe(false);
@@ -88,7 +104,7 @@ describe("vantage paths inside the tab", () => {
         expect(vantageScreenFor(at("/employer/tools/vantage/metrics")).kind).toBe("metrics");
         // The history loader still builds this shape (src/server/history/loaders.ts).
         expect(vantageScreenFor(at("/employer/tools/vantage/agenda?week=2026-10-05"))).toEqual({
-            kind: "agenda",
+            kind: "context",
             week: "2026-10-05",
         });
         expect(toolTabHref("vantage", at("/employer/tools/vantage/program"))).toBe(
@@ -125,7 +141,7 @@ describe("the old /employer/tools/vantage pages", () => {
         await expect(redirectFor(["agenda"], { week: "2026-10-05" })).resolves.toBe(
             "/employer/documents?feature=vantage&at=%2Fagenda%3Fweek%3D2026-10-05"
         );
-        for (const screen of ["commitments", "evidence", "metrics", "program"]) {
+        for (const screen of ["context", "commitments", "evidence", "metrics", "program"]) {
             await expect(redirectFor([screen])).resolves.toBe(
                 `/employer/documents?feature=vantage&at=%2F${screen}`
             );

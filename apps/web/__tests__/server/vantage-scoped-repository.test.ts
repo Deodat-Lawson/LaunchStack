@@ -257,6 +257,83 @@ describe("scoped v3 activation recomputation (offline)", () => {
             },
         });
     });
+    it.each([false, true])(
+        "reads legacy and explicit follow-up counts without exposing unfrozen identities (new=%s)",
+        async explicit => {
+            const f = fixture("2026-11-09", true);
+            const evidence = structuredClone(f.evidence);
+            const diagnostics = evidence.selectionDiagnostics;
+            if (!diagnostics) throw new Error("Expected dynamic selection diagnostics");
+            const trace = diagnostics.dynamicRetrieval as Record<string, unknown>;
+            trace.followUp = {
+                rounds: 1,
+                queryCount: 1,
+                acquired: [{ id: "999", version: "9990" }],
+                ...(explicit
+                    ? {
+                          acquiredCount: 2,
+                          newlyAcquiredCount: 2,
+                          cachedMatchCount: 3,
+                          admittedCount: 1,
+                          admittedFromCacheCount: 1,
+                      }
+                    : {}),
+            };
+            trace.decision = {
+                outcome: "INSUFFICIENT_EVIDENCE",
+                gaps: [{ question: "Who approves release?", supportingRefs: ["doc:999@9990"] }],
+                unresolved: [
+                    { question: "Who approves release?", supportingRefs: ["doc:999@9990"] },
+                ],
+            };
+            Object.assign(diagnostics, {
+                omitted: [
+                    { id: "999", version: "9990", reason: "budget_exceeded" },
+                    { id: "999", version: "9990", reason: "budget_exceeded" },
+                ],
+            });
+            evidence.inputSnapshot.retrievalContext!.traceHash = reviewFingerprint(trace);
+            evidence.inputHash = reviewFingerprint(evidence.inputSnapshot);
+            // Recompute the ordinary admission identities changed by traceHash.
+            evidence.evaluationHash = reviewFingerprint(
+                weeklyReviewEvaluation(f.report, evidence.inputSnapshot)
+            );
+            const evaluation = weeklyReviewEvaluation(f.report, evidence.inputSnapshot);
+            evidence.evaluation.inputFingerprint = fingerprint(evaluation);
+            evidence.evaluation.scenarioFingerprint = fingerprint(evaluation.scenario);
+            Object.assign(evidence, weeklyReviewAdmissionBytes(f.report, evidence.inputSnapshot));
+            evidence.budget = calculateWeeklyReviewBudget(evidence.inputSnapshot, "scoped-v2");
+            await expect(f.accept(evidence)).resolves.toBe(f.id);
+            const saved = await f.read();
+            expect(JSON.stringify(saved.evidence)).not.toContain("doc:999@9990");
+            expect(JSON.stringify(saved.evidence)).not.toContain('"999"');
+            expect(saved.evidence).toMatchObject({
+                selectionDiagnostics: {
+                    omittedCount: 1,
+                    omissionReasonCounts: { budget_exceeded: 1 },
+                    dynamicRetrieval: {
+                        followUp: explicit
+                            ? {
+                                  acquiredCount: 2,
+                                  newlyAcquiredCount: 2,
+                                  cachedMatchCount: 3,
+                                  admittedCount: 1,
+                                  admittedFromCacheCount: 1,
+                              }
+                            : { acquiredCount: 1 },
+                    },
+                },
+            });
+            if (!explicit)
+                expect(
+                    (
+                        saved.evidence as {
+                            selectionDiagnostics: { dynamicRetrieval: { followUp: object } };
+                        }
+                    ).selectionDiagnostics.dynamicRetrieval.followUp
+                ).not.toHaveProperty("newlyAcquiredCount");
+        }
+    );
     it.each(["traceHash", "mode", "selectedRefs"])(
         "rejects dynamic %s substitution before activation",
         async field => {

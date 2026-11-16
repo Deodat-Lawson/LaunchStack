@@ -35,7 +35,7 @@ import { fetchClientMetadataResource } from "@better-auth/cimd/node";
 import { mcp } from "@better-auth/mcp";
 import bcrypt from "bcryptjs";
 import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
+import { getPostgresClient } from "~/server/dev-postgres";
 
 import {
     authAccount,
@@ -56,13 +56,15 @@ import { workspaceAccessTokenClaims, workspacePostLogin } from "~/server/mcp/oau
 import { accountLinkingHooks } from "./account-linking";
 import { sendAuthEmail } from "./email";
 import { enabledSocialProviders } from "./providers";
+import { authBaseURL } from "./base-url";
+import { logAuthDiagnostic, sessionLookupError } from "./error-diagnostics";
 
 // process.env directly, not ~/env — the same trade the middleware's own DB
 // client makes. This module sits in the middleware bundle, and ~/env drags
 // dotenv + import.meta resolution in with it; the variables read here are
 // still declared and validated in env.ts via the app's other import paths.
-const buildAuth = () => {
-    const client = postgres(process.env.DATABASE_URL!, { max: 5 });
+const authDatabase = () => {
+    const client = getPostgresClient({ consumer: "auth", url: process.env.DATABASE_URL!, max: 5 });
     const authTables = {
         user: authUser,
         session: authSession,
@@ -77,7 +79,11 @@ const buildAuth = () => {
         oauthConsent: authOauthConsent,
         oauthClientAssertion: authOauthClientAssertion,
     };
-    const db = drizzle(client, { schema: authTables });
+    return { db: drizzle(client, { schema: authTables }), authTables };
+};
+let _authDatabase: ReturnType<typeof authDatabase> | undefined;
+const buildAuth = (baseURL = process.env.BETTER_AUTH_URL) => {
+    const { db, authTables } = (_authDatabase ??= authDatabase());
 
     const social = enabledSocialProviders();
     const google = social.includes("google");
@@ -85,7 +91,8 @@ const buildAuth = () => {
 
     return betterAuth({
         secret: process.env.BETTER_AUTH_SECRET,
-        baseURL: process.env.BETTER_AUTH_URL,
+        baseURL,
+        logger: { log: logAuthDiagnostic },
         database: drizzleAdapter(db, { provider: "pg", schema: authTables }),
         emailAndPassword: {
             enabled: true,
@@ -224,11 +231,23 @@ function defaultMcpResource(resource: string) {
 
 type Auth = ReturnType<typeof buildAuth>;
 
-let _auth: Auth | null = null;
-const getAuth = (): Auth => (_auth ??= buildAuth());
+// Better Auth 1.7.10 initializes host-only cookie attributes per instance.
+// Keep one instance per explicitly configured origin, sharing the same DB pool,
+// so HTTP loopback and HTTPS retain their own correct Secure cookie settings.
+const authByOrigin = new Map<string | undefined, Auth>();
+const getAuth = (source?: Request | Headers): Auth => {
+    const origin = authBaseURL(process.env, source);
+    let instance = authByOrigin.get(origin);
+    if (!instance) {
+        instance = buildAuth(origin);
+        authByOrigin.set(origin, instance);
+    }
+    return instance;
+};
 
 export const auth: Auth = new Proxy({} as Auth, {
     get(_target, prop, receiver) {
+        if (prop === "handler") return (request: Request) => getAuth(request).handler(request);
         const instance = getAuth();
         const value = Reflect.get(instance, prop, receiver) as unknown;
         if (typeof value === "function") {
@@ -240,7 +259,11 @@ export const auth: Auth = new Proxy({} as Auth, {
 
 /** Session read for middleware, which already holds the request's headers. */
 export async function getSessionFromHeaders(headers: Headers) {
-    return getAuth().api.getSession({ headers });
+    try {
+        return await getAuth(headers).api.getSession({ headers });
+    } catch (error) {
+        throw sessionLookupError(error);
+    }
 }
 
 /**
@@ -249,7 +272,7 @@ export async function getSessionFromHeaders(headers: Headers) {
  */
 export async function getServerSession() {
     const { headers } = await import("next/headers");
-    return getAuth().api.getSession({ headers: await headers() });
+    return getSessionFromHeaders(await headers());
 }
 
 /**

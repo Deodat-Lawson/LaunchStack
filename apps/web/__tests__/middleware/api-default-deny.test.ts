@@ -81,7 +81,11 @@ describe("middleware /api default-deny", () => {
 
     it("treats a session cookie that fails verification as anonymous", async () => {
         // Cookie present, but the session read rejects (bad signature, DB gone).
-        mockGetSession.mockRejectedValue(new Error("verification failed"));
+        mockGetSession.mockRejectedValue(
+            new Error("SQL session_token=synthetic-private-token", {
+                cause: { code: "53300", params: ["synthetic-private-token"] },
+            })
+        );
         const consoleSpy = jest.spyOn(console, "error").mockImplementation();
 
         const req = new NextRequest(new URL("http://localhost/api/uploadDocument"), {
@@ -90,6 +94,10 @@ describe("middleware /api default-deny", () => {
         const response = await middleware(req);
 
         expect(response?.status).toBe(401);
+        expect(consoleSpy).toHaveBeenCalledWith("Middleware session read failed:", {
+            code: "53300",
+        });
+        expect(JSON.stringify(consoleSpy.mock.calls)).not.toContain("synthetic-private-token");
         consoleSpy.mockRestore();
     });
 });

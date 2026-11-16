@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
-import postgres from "postgres";
+import { getPostgresClient } from "~/server/dev-postgres";
+import { authErrorDiagnostic } from "~/server/auth/error-diagnostics";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { eq, count } from "drizzle-orm";
 import { users, userCompanyMemberships } from "~/server/db/schema";
@@ -110,7 +111,11 @@ let _middlewareDb: ReturnType<
 > | null = null;
 const getDb = () => {
     if (!_middlewareDb) {
-        const client = postgres(process.env.DATABASE_URL!, { max: 5 });
+        const client = getPostgresClient({
+            consumer: "middleware",
+            url: process.env.DATABASE_URL!,
+            max: 5,
+        });
         _middlewareDb = drizzle(client, { schema: { users, userCompanyMemberships } });
     }
     return _middlewareDb;
@@ -170,7 +175,7 @@ export default async function middleware(req: NextRequest) {
         } catch (error) {
             // An unreadable session is treated as signed out, mirroring how
             // the DB-failure catch below degrades instead of erroring.
-            console.error("Middleware session read failed:", error);
+            console.error("Middleware session read failed:", authErrorDiagnostic(error));
         }
     }
     const pathname = req.nextUrl.pathname;
@@ -314,7 +319,7 @@ export default async function middleware(req: NextRequest) {
                 // Active member on a protected route – let through
             } catch (error) {
                 // If DB query fails, let the request continue without redirect
-                console.error("Middleware DB query failed:", error);
+                console.error("Middleware DB query failed:", authErrorDiagnostic(error));
             }
         }
     } finally {

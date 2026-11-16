@@ -1,5 +1,5 @@
 import { coerceMessageLikeToMessage } from "@langchain/core/messages";
-import type { ResolvedChatModel } from "@launchstack/llm";
+import type { invokeStructuredAttempt, ResolvedChatModel } from "@launchstack/llm";
 import type {
     WeeklyReviewInput,
     WeeklyReviewV21,
@@ -32,9 +32,13 @@ export function weeklyReviewTestPorts(input: WeeklyReviewInput) {
         topics: [
             {
                 title: "Review the company context",
-                facts: input.sources
-                    .slice(0, 6)
-                    .map(source => ({ text: source.text.slice(0, 500), refs: [source.ref] })),
+                facts: input.sources.slice(0, 6).map(source => ({
+                    text: source.text
+                        .trimStart()
+                        .slice(0, 500)
+                        .replace(/[\uD800-\uDBFF]$/, ""),
+                    refs: [source.ref],
+                })),
                 conflicts: [],
                 whyItMatters: "Interpret the supplied context before choosing a next step.",
                 whyNow: "This reporting period requires a human review.",
@@ -49,6 +53,22 @@ export function weeklyReviewTestPorts(input: WeeklyReviewInput) {
             },
         ],
     };
+    // Internal/scoped selection guarantees this useful reserve, not a fixed
+    // character count. Include JSON escaping, refs and all report fields in it.
+    const facts = report.topics[0]!.facts;
+    while (Buffer.byteLength(JSON.stringify(report), "utf8") > 2800) {
+        const longest = facts
+            .filter(fact => Array.from(fact.text).length > 1)
+            .sort(
+                (a, b) =>
+                    Buffer.byteLength(JSON.stringify(b.text)) -
+                    Buffer.byteLength(JSON.stringify(a.text))
+            )[0];
+        if (longest) longest.text = Array.from(longest.text).slice(0, -1).join("");
+        // Unusually large citation metadata may require fewer facts.
+        else if (facts.length > 1) facts.pop();
+        else throw Error("test_provider_report_unavailable");
+    }
     const validationJudge: ValidationJudge = {
         kind: "fixture-replay",
         id: "synthetic-http-acceptance-judge",
@@ -91,6 +111,6 @@ export function weeklyReviewTestPorts(input: WeeklyReviewInput) {
         invoke: (async () => ({
             result: report,
             usage: { outputTokens: 100 },
-        })) as typeof import("@launchstack/llm").invokeStructuredAttempt,
+        })) as typeof invokeStructuredAttempt,
     };
 }

@@ -82,7 +82,7 @@
     },
     "nav": {
       "thisWeek": "This week",
-      "agenda": "Agenda",
+      "context": "Context",
       "commitments": "Commitments",
       "evidence": "Evidence",
       "metrics": "Metrics",
@@ -677,6 +677,12 @@
     }
   },
   "weeklyReview": {
+    "contextTitle": "Context",
+    "contextDescription": "Set your business responsibilities, required company documents, personal stars and source scopes for weekly review generation.",
+    "contextDisabled": "Context setup is unavailable while Weekly Review is disabled. Continue with the existing weekly agenda.",
+    "setupNeeded": "Set up required company context before generating your first review.",
+    "openContext": "Open Context",
+    "openThisWeek": "Open This Week",
     "title": "Weekly Review",
     "businessRole": "My business responsibilities",
     "businessRoleHelp": "Confirm your business role, responsibilities and priorities to personalize review focus. Your workspace permissions are managed separately.",

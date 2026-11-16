@@ -13,6 +13,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "~/components/ui/select";
+import { ToolLink } from "~/components/tool-app/ToolLink";
+import { useOptionalToolNav } from "~/components/tool-app/nav";
+import { toolTabHref } from "~/lib/tool-app/locations";
 import { AgendaScreen } from "./AgendaScreen";
 import { WeeklyReviewBusinessRole } from "./WeeklyReviewBusinessRole";
 import type { BusinessRoleContext } from "~/server/vantage/weekly-review-business-role";
@@ -98,7 +101,15 @@ function thisWeek() {
     now.setUTCDate(now.getUTCDate() - ((now.getUTCDay() + 6) % 7));
     return now.toISOString().slice(0, 10);
 }
-export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null }) {
+export function WeeklyReviewEntry({
+    week: initialWeek,
+    view = "review",
+}: {
+    week?: string | null;
+    view?: "review" | "context";
+}) {
+    const nav = useOptionalToolNav();
+    const isContext = view === "context";
     const t = useTranslations("vantage.weeklyReview");
     const errorText = (code: string) => {
         switch (code) {
@@ -181,7 +192,7 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                 // dependency must still allow replacement using the actual active pointer.
                 const results = await Promise.allSettled([
                     (async () => {
-                        const saved = chosen ? await call<Saved>("/" + chosen) : null;
+                        const saved = !isContext && chosen ? await call<Saved>("/" + chosen) : null;
                         if (current()) setReview(saved);
                     })(),
                     (async () => {
@@ -220,7 +231,7 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                 if (current()) setLoading(false);
             }
         },
-        [week]
+        [week, isContext]
     );
     useEffect(() => {
         void load();
@@ -301,71 +312,103 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
             if (current()) await load(review?.id);
         });
     }
-    if (enabled === false) return <AgendaScreen week={initialWeek ?? null} />;
+    const contextHref = "/context?week=" + encodeURIComponent(week);
+    const reviewHref = "/?week=" + encodeURIComponent(week);
+    const viewLink = (href: string, label: string) =>
+        nav ? (
+            <ToolLink className="text-primary underline" href={href}>
+                {label}
+            </ToolLink>
+        ) : (
+            <a className="text-primary underline" href={toolTabHref("vantage", href)}>
+                {label}
+            </a>
+        );
+    if (enabled === false) {
+        if (!isContext) return <AgendaScreen week={initialWeek ?? null} />;
+        return (
+            <div className="mx-auto max-w-[1100px] space-y-5 p-6">
+                <h1 className="text-xl font-semibold">{t("contextTitle")}</h1>
+                <p>{t("contextDisabled")}</p>
+                {viewLink(reviewHref, t("openThisWeek"))}
+            </div>
+        );
+    }
     return (
         <div className="mx-auto max-w-[1100px] space-y-5 p-6">
-            <h1 className="text-xl font-semibold">{t("title")}</h1>
-            <p className="text-ink-2 text-sm">{t("description")}</p>
+            <h1 className="text-xl font-semibold">{t(isContext ? "contextTitle" : "title")}</h1>
+            <p className="text-ink-2 text-sm">
+                {t(isContext ? "contextDescription" : "description")}
+            </p>
             {error && (
                 <p role="alert" className="text-danger">
                     {errorText(error)}
                 </p>
             )}
-            <div className="flex flex-wrap items-end gap-3">
-                <div>
-                    <Label htmlFor="weekly-review-week">{t("week")}</Label>
-                    <Input
-                        id="weekly-review-week"
-                        type="date"
-                        value={week}
-                        onChange={e => {
-                            invalidate();
-                            setBusy(false);
-                            setLoading(true);
-                            setReview(null);
-                            setWeek(e.target.value);
-                        }}
-                    />
-                </div>
-                <Button
-                    disabled={busy || !ready || enabled !== true}
-                    onClick={() =>
-                        act(async current => {
-                            const saved = await call<Saved>(
-                                "",
-                                { weekStart: week, expectedActiveId: activeId },
-                                crypto.randomUUID()
-                            );
-                            if (current()) await load(saved.id, false);
-                        })
-                    }
-                >
-                    {t("generate")}
-                </Button>
-                <div>
-                    <Label htmlFor="weekly-review-history">{t("history")}</Label>
-                    <Select
-                        disabled={busy || !ready}
-                        value={review?.id ?? undefined}
-                        onValueChange={value => act(() => load(value, false))}
+            {!isContext && (
+                <div className="flex flex-wrap items-end gap-3">
+                    <div>
+                        <Label htmlFor="weekly-review-week">{t("week")}</Label>
+                        <Input
+                            id="weekly-review-week"
+                            type="date"
+                            value={week}
+                            onChange={e => {
+                                invalidate();
+                                setBusy(false);
+                                setLoading(true);
+                                setReview(null);
+                                setWeek(e.target.value);
+                            }}
+                        />
+                    </div>
+                    <Button
+                        disabled={busy || !ready || enabled !== true}
+                        onClick={() =>
+                            act(async current => {
+                                const saved = await call<Saved>(
+                                    "",
+                                    { weekStart: week, expectedActiveId: activeId },
+                                    crypto.randomUUID()
+                                );
+                                if (current()) await load(saved.id, false);
+                            })
+                        }
                     >
-                        <SelectTrigger id="weekly-review-history">
-                            <SelectValue placeholder={t("selectReport")} />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {runs
-                                .filter(run => run.status === "accepted")
-                                .map(run => (
-                                    <SelectItem key={run.id} value={run.id}>
-                                        {String(run.week_start).slice(0, 10)} ?{" "}
-                                        {new Date(run.created_at).toLocaleString()}
-                                    </SelectItem>
-                                ))}
-                        </SelectContent>
-                    </Select>
+                        {t("generate")}
+                    </Button>
+                    <div>
+                        <Label htmlFor="weekly-review-history">{t("history")}</Label>
+                        <Select
+                            disabled={busy || !ready}
+                            value={review?.id ?? undefined}
+                            onValueChange={value => act(() => load(value, false))}
+                        >
+                            <SelectTrigger id="weekly-review-history">
+                                <SelectValue placeholder={t("selectReport")} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {runs
+                                    .filter(run => run.status === "accepted")
+                                    .map(run => (
+                                        <SelectItem key={run.id} value={run.id}>
+                                            {String(run.week_start).slice(0, 10)} ?{" "}
+                                            {new Date(run.created_at).toLocaleString()}
+                                        </SelectItem>
+                                    ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
                 </div>
-            </div>
-            {enabled && businessRoleEnabled && ready && contextReady && (
+            )}
+            {!isContext && ready && contextReady && !policy?.architecture_document_id && (
+                <div className="border-line space-y-2 rounded border p-4">
+                    <p>{t("setupNeeded")}</p>
+                    {viewLink(contextHref, t("openContext"))}
+                </div>
+            )}
+            {isContext && viewLink(reviewHref, t("openThisWeek"))}
+            {isContext && enabled && businessRoleEnabled && ready && contextReady && (
                 <WeeklyReviewBusinessRole
                     key={businessRoleVersion}
                     role={businessRole}
@@ -385,7 +428,7 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                     }
                 />
             )}
-            {ready && contextReady && admin && (
+            {isContext && ready && contextReady && admin && (
                 <details className="border-line rounded border p-4">
                     <summary>{t("requiredContext")}</summary>
                     <p className="text-ink-2 my-2 text-sm">{t("contextHelp")}</p>
@@ -446,7 +489,7 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                     </Button>
                 </details>
             )}
-            {enabled && ready && contextReady && (
+            {isContext && enabled && ready && contextReady && (
                 <details className="border-line rounded border p-4">
                     <summary>{t("personalStars")}</summary>
                     <p className="text-ink-2 my-2 text-sm">{t("starHelp")}</p>
@@ -489,7 +532,7 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                     </Button>
                 </details>
             )}
-            {ready && contextReady && sourceChoices.length > 0 && (
+            {isContext && ready && contextReady && sourceChoices.length > 0 && (
                 <SourceScopeEditor
                     key={`${week}:${policyVersion}:${preferenceVersion}`}
                     sources={sourceChoices}
@@ -499,7 +542,7 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                     onSave={saveScope}
                 />
             )}
-            {review && (
+            {!isContext && review && (
                 <article className="space-y-5">
                     {selectedRef && (
                         <EvidenceInspector

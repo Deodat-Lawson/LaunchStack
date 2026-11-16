@@ -460,7 +460,7 @@ it("makes figure, derivation, fact, conflict and recommendation citations inspec
 
 it("clears one company pin through the normal POST while preserving other scopes and all IDs", async () => {
     configureScreen();
-    renderWithLocale(<WeeklyReviewEntry week="2026-11-09" />, "en");
+    renderWithLocale(<WeeklyReviewEntry view="context" week="2026-11-09" />, "en");
     await screen.findByLabelText("Source to inspect");
     chooseSource();
     await screen.findByRole("button", { name: "Clear pinned scope" });
@@ -483,7 +483,7 @@ it("clears one company pin through the normal POST while preserving other scopes
 
 it("reapproves one personal pin through normal PATCH and preserves other stars and scope entries", async () => {
     configureScreen();
-    renderWithLocale(<WeeklyReviewEntry week="2026-11-09" />, "en");
+    renderWithLocale(<WeeklyReviewEntry view="context" week="2026-11-09" />, "en");
     await screen.findByLabelText("Source to inspect");
     chooseSource("personal-star:303");
     await screen.findByLabelText("Source version");
@@ -520,7 +520,7 @@ it("disables both full-configuration saves when their source sets are partially 
         policy: { ...context.policy, hasHiddenSources: true },
         preferences: { ...context.preferences, hasHiddenSources: true },
     });
-    renderWithLocale(<WeeklyReviewEntry week="2026-11-09" />, "en");
+    renderWithLocale(<WeeklyReviewEntry view="context" week="2026-11-09" />, "en");
     await screen.findByLabelText("Source to inspect");
     expect(screen.getByText("Save required context")).toBeDisabled();
     expect(screen.getByText("Save personal stars")).toBeDisabled();
@@ -531,7 +531,7 @@ it("disables both full-configuration saves when their source sets are partially 
 
 it("keeps a failed clear actionable when whole-document context cannot be admitted", async () => {
     configureScreen({}, true);
-    renderWithLocale(<WeeklyReviewEntry week="2026-11-09" />, "en");
+    renderWithLocale(<WeeklyReviewEntry view="context" week="2026-11-09" />, "en");
     await screen.findByLabelText("Source to inspect");
     chooseSource();
     await screen.findByRole("button", { name: "Clear pinned scope" });

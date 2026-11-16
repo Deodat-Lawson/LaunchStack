@@ -91,17 +91,52 @@ function reportReadEvidence(value: unknown): unknown {
         dynamicRetrieval && typeof dynamicRetrieval === "object"
             ? (dynamicRetrieval as Record<string, unknown>)
             : undefined;
+    // Historical traces may repeat the same omission across selection passes.
+    const uniqueOmitted = Array.isArray(omitted)
+        ? [
+              ...new Map(
+                  omitted.map((item: unknown, index: number) => {
+                      const entry =
+                          item && typeof item === "object"
+                              ? (item as Record<string, unknown>)
+                              : undefined;
+                      return [
+                          entry && typeof entry.id === "string"
+                              ? JSON.stringify([entry.id, entry.version ?? null])
+                              : index,
+                          item,
+                      ];
+                  })
+              ).values(),
+          ]
+        : [];
+    const publicDecision = (value: unknown): unknown => {
+        if (!value || typeof value !== "object") return value;
+        const decision = value as Record<string, unknown>;
+        const withoutRefs = (gaps: unknown) =>
+            Array.isArray(gaps)
+                ? gaps.map((gap: unknown) => {
+                      if (!gap || typeof gap !== "object") return gap;
+                      const publicGap = { ...(gap as Record<string, unknown>) };
+                      delete publicGap.supportingRefs;
+                      return publicGap;
+                  })
+                : gaps;
+        return {
+            ...decision,
+            gaps: withoutRefs(decision.gaps),
+            unresolved: withoutRefs(decision.unresolved),
+        };
+    };
+    const followUp =
+        dynamic?.followUp && typeof dynamic.followUp === "object"
+            ? (dynamic.followUp as Record<string, unknown>)
+            : undefined;
     const omissionReasonCounts: Record<string, number> = {};
-    if (Array.isArray(omitted))
-        for (const item of omitted as unknown[]) {
-            if (
-                item &&
-                typeof item === "object" &&
-                "reason" in item &&
-                typeof item.reason === "string"
-            )
-                omissionReasonCounts[item.reason] = (omissionReasonCounts[item.reason] ?? 0) + 1;
-        }
+    for (const item of uniqueOmitted) {
+        if (item && typeof item === "object" && "reason" in item && typeof item.reason === "string")
+            omissionReasonCounts[item.reason] = (omissionReasonCounts[item.reason] ?? 0) + 1;
+    }
     return {
         ...evidence,
         selectionDiagnostics: {
@@ -120,43 +155,36 @@ function reportReadEvidence(value: unknown): unknown {
                                     ? dynamic.ranking.length
                                     : 0,
                           bounds: dynamic.bounds,
-                          decision: dynamic.decision,
-                          finalDecision: dynamic.finalDecision,
-                          followUp:
-                              dynamic.followUp && typeof dynamic.followUp === "object"
-                                  ? {
-                                        rounds: (dynamic.followUp as Record<string, unknown>)
-                                            .rounds,
-                                        queryCount: (dynamic.followUp as Record<string, unknown>)
-                                            .queryCount,
-                                        acquiredCount:
-                                            typeof (dynamic.followUp as Record<string, unknown>)
-                                                .acquiredCount === "number"
-                                                ? (dynamic.followUp as Record<string, unknown>)
-                                                      .acquiredCount
-                                                : Array.isArray(
-                                                        (
-                                                            dynamic.followUp as Record<
-                                                                string,
-                                                                unknown
-                                                            >
-                                                        ).acquired
-                                                    )
-                                                  ? (
-                                                        (
-                                                            dynamic.followUp as Record<
-                                                                string,
-                                                                unknown
-                                                            >
-                                                        ).acquired as unknown[]
-                                                    ).length
-                                                  : 0,
-                                    }
-                                  : undefined,
+                          decision: publicDecision(dynamic.decision),
+                          finalDecision: publicDecision(dynamic.finalDecision),
+                          followUp: followUp
+                              ? {
+                                    rounds: followUp.rounds,
+                                    queryCount: followUp.queryCount,
+                                    // Older persisted acquiredCount included cached matches.
+                                    // Preserve its historical value without relabeling it as new.
+                                    acquiredCount:
+                                        typeof followUp.acquiredCount === "number"
+                                            ? followUp.acquiredCount
+                                            : Array.isArray(followUp.acquired)
+                                              ? followUp.acquired.length
+                                              : 0,
+                                    ...Object.fromEntries(
+                                        [
+                                            "newlyAcquiredCount",
+                                            "cachedMatchCount",
+                                            "admittedCount",
+                                            "admittedFromCacheCount",
+                                        ]
+                                            .filter(key => typeof followUp[key] === "number")
+                                            .map(key => [key, followUp[key]])
+                                    ),
+                                }
+                              : undefined,
                       },
                   }
                 : {}),
-            omittedCount: Array.isArray(omitted) ? omitted.length : 0,
+            omittedCount: uniqueOmitted.length,
             omissionReasonCounts,
         },
     };

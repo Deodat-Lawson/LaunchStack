@@ -152,20 +152,24 @@ describe("role and source preference refresh", () => {
                 });
             return respond({ enabled: true, activeId: null, runs: [] });
         });
-        renderWithLocale(<WeeklyReviewEntry week="2026-11-09" />, "en");
+        renderWithLocale(<WeeklyReviewEntry view="context" week="2026-11-09" />, "en");
         await screen.findByText("My business responsibilities");
         fireEvent.click(screen.getByText("Personal starred documents"));
         fireEvent.click(screen.getByRole("button", { name: "Save personal stars" }));
         await waitFor(() => expect(writes).toHaveLength(1));
         await waitFor(() =>
-            expect(screen.getByRole("button", { name: "Generate review" })).toBeEnabled()
+            expect(
+                screen.getByRole("button", { name: "Save personal stars", hidden: true })
+            ).toBeEnabled()
         );
         expandRole();
         fireEvent.click(screen.getByRole("checkbox", { name: confirmName }));
         fireEvent.click(screen.getByRole("button", { name: "Confirm and save" }));
         await waitFor(() => expect(writes).toHaveLength(2));
         await waitFor(() =>
-            expect(screen.getByRole("button", { name: "Generate review" })).toBeEnabled()
+            expect(
+                screen.getByRole("button", { name: "Save personal stars", hidden: true })
+            ).toBeEnabled()
         );
         expect(writes[0]).toMatchObject({
             path: "/api/vantage/reviews/context",
@@ -188,7 +192,7 @@ describe("role and source preference refresh", () => {
             if (path.endsWith("/context")) return respond({ documents: [], canConfigure: false });
             return respond({ enabled: true, activeId: null, runs: [] });
         });
-        renderWithLocale(<WeeklyReviewEntry week="2026-11-09" />, "en");
+        renderWithLocale(<WeeklyReviewEntry view="context" week="2026-11-09" />, "en");
         await screen.findByText("My business responsibilities");
         expandRole();
         expect(screen.getByLabelText("Primary business role")).toBeDisabled();
@@ -202,10 +206,143 @@ describe("role and source preference refresh", () => {
             if (path.endsWith("/context")) return respond({ documents: [], canConfigure: false });
             return respond({ enabled: true, activeId: null, runs: [] });
         });
-        renderWithLocale(<WeeklyReviewEntry week="2026-11-09" />, "en");
+        renderWithLocale(<WeeklyReviewEntry view="context" week="2026-11-09" />, "en");
         await waitFor(() =>
-            expect(screen.getByRole("button", { name: "Generate review" })).toBeEnabled()
+            expect(
+                screen.getByRole("button", { name: "Save personal stars", hidden: true })
+            ).toBeEnabled()
         );
         expect(screen.queryByText("My business responsibilities")).not.toBeInTheDocument();
+    });
+});
+
+describe("weekly review and Context separation", () => {
+    const fetchMock = jest.fn();
+    const saved = {
+        id: "accepted",
+        version: 1,
+        decisions: [],
+        evidence: {},
+        report: {
+            headline: "Generated weekly findings",
+            brief: "Brief",
+            summary: "Summary",
+            keyFigures: [],
+            topics: [
+                {
+                    id: "topic",
+                    title: "Decide next action",
+                    facts: [],
+                    conflicts: [],
+                    whyItMatters: "Why",
+                    whyNow: "Now",
+                    decisionQuestion: "Decision?",
+                    rationale: "Because",
+                    proposedNextStep: "Follow up",
+                    unknowns: [],
+                },
+            ],
+        },
+    };
+    beforeEach(() => {
+        global.fetch = fetchMock;
+        fetchMock.mockReset().mockImplementation(async (path: string) => ({
+            ok: true,
+            json: async () =>
+                path.includes("?weekStart=")
+                    ? {
+                          enabled: true,
+                          activeId: "accepted",
+                          runs: [
+                              {
+                                  id: "accepted",
+                                  status: "accepted",
+                                  week_start: "2026-11-09",
+                                  created_at: "2026-11-10",
+                              },
+                          ],
+                      }
+                    : path.endsWith("/context/role")
+                      ? { role, version: 3, canEdit: true, enabled: true }
+                      : path.endsWith("/context")
+                        ? {
+                              canConfigure: true,
+                              documents: [{ id: "101", title: "Company plan" }],
+                              policy: {
+                                  version: 1,
+                                  architecture_document_id: "101",
+                                  required_document_ids: [],
+                              },
+                              preferences: { version: 3, star_document_ids: ["101"] },
+                          }
+                        : saved,
+        }));
+    });
+
+    it("shows the generated review and decision editor without any generation setup in This Week", async () => {
+        renderWithLocale(<WeeklyReviewEntry week="2026-11-09" />, "en");
+        await screen.findByText("Generated weekly findings");
+        expect(screen.getByRole("button", { name: "Generate review" })).toBeEnabled();
+        expect(screen.getByLabelText("Human decision")).toBeInTheDocument();
+        expect(screen.getByText("Report history")).toBeInTheDocument();
+        for (const label of [
+            "My business responsibilities",
+            "Required company context",
+            "Personal starred documents",
+            "Source scopes",
+        ])
+            expect(screen.queryByText(label)).not.toBeInTheDocument();
+    });
+
+    it("shows all setup in Context without fetching or rendering generated reports and decisions", async () => {
+        renderWithLocale(<WeeklyReviewEntry view="context" week="2026-11-09" />, "en");
+        await screen.findByText("My business responsibilities");
+        expect(screen.getByText("Required company context")).toBeInTheDocument();
+        expect(screen.getByText("Personal starred documents")).toBeInTheDocument();
+        expect(screen.getByText("Source scopes")).toBeInTheDocument();
+        expect(screen.queryByText("Generated weekly findings")).not.toBeInTheDocument();
+        expect(screen.queryByLabelText("Human decision")).not.toBeInTheDocument();
+        expect(screen.queryByLabelText("Reporting week")).not.toBeInTheDocument();
+        expect(screen.queryByText("Report history")).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Generate review" })).not.toBeInTheDocument();
+        expect(fetchMock).not.toHaveBeenCalledWith(
+            "/api/vantage/reviews/accepted",
+            expect.anything()
+        );
+        expect(screen.getByRole("link", { name: "Open This Week" })).toHaveAttribute(
+            "href",
+            "/employer/documents?feature=vantage&at=%2F%3Fweek%3D2026-11-09"
+        );
+    });
+
+    it("links an unconfigured empty This Week to Context", async () => {
+        fetchMock.mockImplementation(async (path: string) => ({
+            ok: true,
+            json: async () =>
+                path.endsWith("/context/role")
+                    ? { role: null, version: 0, canEdit: true, enabled: true }
+                    : path.endsWith("/context")
+                      ? { canConfigure: true, policy: null, documents: [] }
+                      : { enabled: true, activeId: null, runs: [] },
+        }));
+        renderWithLocale(<WeeklyReviewEntry week="2026-11-09" />, "en");
+        expect(await screen.findByRole("link", { name: "Open Context" })).toHaveAttribute(
+            "href",
+            "/employer/documents?feature=vantage&at=%2Fcontext%3Fweek%3D2026-11-09"
+        );
+    });
+
+    it("does not open the legacy agenda or a broken editor from disabled Context", async () => {
+        fetchMock.mockImplementation(async () => ({
+            ok: true,
+            json: async () => ({ enabled: false, activeId: null, runs: [] }),
+        }));
+        renderWithLocale(<WeeklyReviewEntry view="context" week="2026-11-09" />, "en");
+        await screen.findByText(
+            "Context setup is unavailable while Weekly Review is disabled. Continue with the existing weekly agenda."
+        );
+        expect(screen.queryByText("Legacy agenda")).not.toBeInTheDocument();
+        expect(screen.queryByText("My business responsibilities")).not.toBeInTheDocument();
+        expect(fetchMock).toHaveBeenCalledTimes(1);
     });
 });

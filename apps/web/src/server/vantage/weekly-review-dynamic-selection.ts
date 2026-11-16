@@ -113,7 +113,7 @@ export async function collectDynamicOptionalEvidence(args: {
     // Internal modes reserve sixteen optional acquisition slots for their sole follow-up.
     const initialLimit = useFollowUp ? 48 : 64;
     const rows = await query(
-        "SELECT d.id,CASE WHEN octet_length(d.title)<=1000 THEN d.title ELSE NULL END AS title,d.category,v.id AS version_id,v.created_at AS version_created_at FROM pdr_ai_v2_document d LEFT JOIN LATERAL (SELECT id,created_at FROM pdr_ai_v2_document_versions WHERE document_id=d.id AND created_at<=$2::timestamptz ORDER BY created_at DESC,id DESC LIMIT 1) v ON true WHERE d.company_id=$1::bigint AND NOT (d.id=ANY($3::bigint[])) ORDER BY v.created_at DESC NULLS LAST,v.id DESC,d.id DESC LIMIT $4",
+        "SELECT d.id,CASE WHEN octet_length(d.title)<=1024 THEN d.title ELSE NULL END AS title,d.category,v.id AS version_id,v.created_at AS version_created_at FROM pdr_ai_v2_document d LEFT JOIN LATERAL (SELECT id,created_at FROM pdr_ai_v2_document_versions WHERE document_id=d.id AND created_at<=$2::timestamptz ORDER BY created_at DESC,id DESC LIMIT 1) v ON true WHERE d.company_id=$1::bigint AND NOT (d.id=ANY($3::bigint[])) ORDER BY v.created_at DESC NULLS LAST,v.id DESC,d.id DESC LIMIT $4",
         [actor.companyId, cutoff, reservedIds, initialLimit]
     );
     const candidates: Candidate[] = [];
@@ -232,6 +232,8 @@ export async function collectDynamicOptionalEvidence(args: {
     let finalDecision: InternalRetrievalDecision | undefined;
     let searched: Awaited<ReturnType<typeof searchInternalEvidence>> | undefined;
     let added: Candidate[] = [];
+    const newlyAcquired = new Set<string>();
+    const cachedMatches = new Set<string>();
     const initialSelected = sources.map(source => source.ref);
     if (useFollowUp) {
         decision = decideInternalFollowUp({
@@ -282,7 +284,10 @@ export async function collectDynamicOptionalEvidence(args: {
                 added = rankRoleAwareCandidates(added, role, rankingWindow).map(
                     item => item.candidate
                 );
+            for (const item of added) if (cached.has(item.id)) cachedMatches.add(item.id);
             await acquire(added);
+            for (const item of added)
+                if (cached.has(item.id) && !cachedMatches.has(item.id)) newlyAcquired.add(item.id);
             select([...added, ...ordered]);
             finalDecision = finalizeInternalFollowUp(decision, {
                 sources,
@@ -295,11 +300,59 @@ export async function collectDynamicOptionalEvidence(args: {
             outcome: finalDecision.outcome,
             questions: finalDecision.unresolved.map(gap => gap.question),
         };
+        // Final questions can grow after the follow-up. Fit that exact context
+        // monotonically: never refill slots or remove a retained question's evidence.
+        // Source count bounds this loop; protected-context overflow fails closed.
+        const protectedRefs = new Set([
+            ...fixed.map(source => source.ref),
+            ...finalDecision.gaps.flatMap(gap => [...gap.supportingRefs]),
+        ]);
+        for (let remaining = sources.length; !budget().feasible && remaining > 0; remaining--) {
+            let index = sources.length - 1;
+            while (index >= 0 && protectedRefs.has(sources[index]!.ref)) index--;
+            if (index < 0) throw new WeeklyReviewConflict("dynamic_context_budget_exceeded");
+            const [removed] = sources.splice(index, 1);
+            const dependencyIndex = dependencies.findIndex(
+                item =>
+                    item.id === removed!.id &&
+                    item.version === removed!.version &&
+                    item.kind === removed!.kind
+            );
+            if (dependencyIndex >= 0) dependencies.splice(dependencyIndex, 1);
+            diagnostics.omitted.push({
+                id: removed!.id,
+                version: removed!.version,
+                purpose: "retrieved",
+                reason: "budget_exceeded",
+                temporalEligibility: "eligible",
+            });
+            // Re-evaluate on the retained source set. Previous questions remain
+            // unresolved; their supporters above cannot become dangling references.
+            if (searched)
+                finalDecision = finalizeInternalFollowUp(finalDecision, {
+                    sources,
+                    role,
+                    roundsUsed: 1,
+                    maxRounds: configuration.maxFollowUpRounds,
+                });
+            context.internalDecision = {
+                outcome: finalDecision.outcome,
+                questions: finalDecision.unresolved.map(gap => gap.question),
+            };
+            for (const gap of finalDecision.gaps)
+                for (const ref of gap.supportingRefs) protectedRefs.add(ref);
+        }
     }
     const selectedIds = new Set(sources.map(source => source.id));
     // Older readers already remove omitted entries. Keep unfrozen discovery
     // identities there, so a compatible reader rollback cannot disclose them.
-    diagnostics.omitted = diagnostics.omitted.map(item => ({
+    diagnostics.omitted = [
+        ...new Map(
+            diagnostics.omitted
+                .filter(item => !selectedIds.has(item.id))
+                .map(item => [JSON.stringify([item.id, item.version ?? null]), item])
+        ).values(),
+    ].map(item => ({
         ...item,
         ranking: ranked.find(ranking => ranking.candidate.id === item.id),
     }));
@@ -310,6 +363,7 @@ export async function collectDynamicOptionalEvidence(args: {
         roleRevision: role?.revision ?? null,
         ranking: ranked.filter(item => selectedIds.has(item.candidate.id)),
         rankingCandidateCount: ranked.length,
+        rankingMeaning: "initial-discovery-order-before-budget-and-follow-up",
         discoveryDigest: reviewFingerprint(ranked),
         initialSelected: initialSelected.filter(ref => sources.some(source => source.ref === ref)),
         initialSelectedCount: initialSelected.length,
@@ -321,9 +375,14 @@ export async function collectDynamicOptionalEvidence(args: {
             queryCount: searched?.queryCount ?? 0,
             queries: decision?.queries ?? [],
             acquired: added
-                .filter(item => cached.has(item.id) && selectedIds.has(item.id))
+                .filter(item => newlyAcquired.has(item.id) && selectedIds.has(item.id))
                 .map(item => ({ id: item.id, version: item.version })),
-            acquiredCount: added.filter(item => cached.has(item.id)).length,
+            acquiredCount: newlyAcquired.size,
+            newlyAcquiredCount: newlyAcquired.size,
+            cachedMatchCount: cachedMatches.size,
+            admittedCount: sources.filter(source => added.some(item => item.id === source.id))
+                .length,
+            admittedFromCacheCount: sources.filter(source => cachedMatches.has(source.id)).length,
             admitted: sources
                 .filter(source => added.some(item => item.id === source.id))
                 .map(source => source.ref),

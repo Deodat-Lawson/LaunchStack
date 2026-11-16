@@ -160,6 +160,26 @@ describe("bounded deterministic internal retrieval decision", () => {
         });
     });
 
+    it("measures bounded titles in Unicode code points while preserving question supporters", () => {
+        const source = {
+            ref: "doc:2@20",
+            title: "\u{1f600}".repeat(256),
+            text: "Security review pending.",
+        };
+        const original = { ...input(), sources: [source] };
+        const decision = decideInternalFollowUp(original);
+        expect(decision.outcome).toBe("INTERNAL_FOLLOW_UP");
+        expect(
+            finalizeInternalFollowUp(decision, { ...original, roundsUsed: 1 }).unresolved
+        ).toEqual(decision.gaps);
+        expect(
+            decideInternalFollowUp({
+                ...original,
+                sources: [{ ...source, title: "\u{1f600}".repeat(301) }],
+            }).reason
+        ).toBe("invalid-input");
+    });
+
     it("honors cancellation without requesting a query", () => {
         const controller = new AbortController();
         controller.abort();

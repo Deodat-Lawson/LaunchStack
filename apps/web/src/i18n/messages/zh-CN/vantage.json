@@ -82,7 +82,7 @@
     },
     "nav": {
       "thisWeek": "本周",
-      "agenda": "议程",
+      "context": "上下文",
       "commitments": "承诺",
       "evidence": "证据",
       "metrics": "指标",
@@ -677,6 +677,12 @@
     }
   },
   "weeklyReview": {
+    "contextTitle": "上下文",
+    "contextDescription": "设置业务职责、公司必需文档、个人星标和来源范围，用于生成每周回顾。",
+    "contextDisabled": "每周回顾功能尚未启用，暂时无法设置上下文。请继续使用现有的每周议程。",
+    "setupNeeded": "请先设置公司必需的上下文，再生成第一份回顾。",
+    "openContext": "打开上下文",
+    "openThisWeek": "打开本周",
     "businessRole": "我的业务职责",
     "businessRoleHelp": "确认你的业务角色、职责和优先事项，以个性化每周回顾的重点。工作区权限由单独的设置管理。",
     "primaryBusinessRole": "主要业务角色",

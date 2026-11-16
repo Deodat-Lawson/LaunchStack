@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "corpusId": "harborlight-atlas-weekly-2026-11-16",
+  "cutoff": "2026-11-16T00:00:00Z",
+  "suggestedRole": {
+    "name": "Engineering lead",
+    "responsibilities": "Lead Atlas release decisions, rollback readiness, and security coordination.",
+    "priorities": "Determine current pilot scope and resolve accountable rollback ownership."
+  },
+  "suggestedRequiredKeys": [
+    "weekly-priorities",
+    "finance-definitions"
+  ],
+  "suggestedStarKeys": [
+    "release-plan",
+    "action-followup"
+  ],
+  "documents": [
+    {
+      "key": "weekly-priorities",
+      "title": "Atlas weekly priorities",
+      "category": "strategy",
+      "versions": [
+        {
+          "file": "weekly-priorities.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-09T14:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "release-plan",
+      "title": "Atlas monitored pilot release plan",
+      "category": "release",
+      "versions": [
+        {
+          "file": "release-plan-v1.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-10T16:00:00Z"
+        },
+        {
+          "file": "release-plan-v2.md",
+          "versionNumber": 2,
+          "createdAt": "2026-11-13T19:30:00Z"
+        }
+      ]
+    },
+    {
+      "key": "qa-retest",
+      "title": "Atlas export retest notes",
+      "category": "qa",
+      "versions": [
+        {
+          "file": "qa-retest.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-13T15:20:00Z"
+        }
+      ]
+    },
+    {
+      "key": "security-review",
+      "title": "Atlas pilot security review",
+      "category": "security",
+      "versions": [
+        {
+          "file": "security-review.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T21:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "rollback-runbook",
+      "title": "Atlas pilot rollback runbook",
+      "category": "operations",
+      "versions": [
+        {
+          "file": "rollback-runbook.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-13T20:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "pilot-support",
+      "title": "Atlas pilot customer and support notes",
+      "category": "customer",
+      "versions": [
+        {
+          "file": "pilot-support.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-14T17:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "pilot-metrics",
+      "title": "Atlas pilot usage report",
+      "category": "metrics",
+      "versions": [
+        {
+          "file": "pilot-metrics.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-15T18:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "finance-definitions",
+      "title": "Pilot reporting and finance definitions",
+      "category": "policy",
+      "versions": [
+        {
+          "file": "finance-definitions.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-09T18:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "infra-routine",
+      "title": "Infrastructure weekly maintenance digest",
+      "category": "infrastructure",
+      "versions": [
+        {
+          "file": "infra-routine.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-15T14:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "recruiting-template",
+      "title": "Engineering lead recruitment scorecard template",
+      "category": "recruitment",
+      "versions": [
+        {
+          "file": "recruiting-template.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-10T13:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "decision-log",
+      "title": "Atlas Thursday decision log",
+      "category": "meeting",
+      "versions": [
+        {
+          "file": "decision-log.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T18:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "action-followup",
+      "title": "Atlas open actions before weekly review",
+      "category": "followup",
+      "versions": [
+        {
+          "file": "action-followup.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-15T21:00:00Z"
+        }
+      ]
+    }
+  ]
+}

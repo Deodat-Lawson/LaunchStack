@@ -201,25 +201,37 @@ test("authenticated combined retrieval preserves scope, role, decision and histo
             >`SELECT id::text FROM pdr_ai_v2_company WHERE name=${companyName}`
         );
         const addDocument = async (title: string, text: string, date = "2026-11-08") => {
+            // Keep the manual trial usable through the normal source viewer too:
+            // these are pre-indexed synthetic text files, with real tenant-owned bytes.
+            const bytes = Buffer.from(text, "utf8");
+            const file = row(
+                await sql<
+                    { id: string }[]
+                >`INSERT INTO pdr_ai_v2_file_uploads(user_id,company_id,filename,mime_type,file_data,file_size,storage_provider) VALUES (${authId},${workspace.id},${"synthetic-" + randomUUID() + ".txt"},'text/plain',${bytes.toString("base64")},${bytes.length},'database') RETURNING id::text`
+            );
+            const url = `/api/files/${file.id}`;
             const document = row(
                 await sql<
                     { id: string }[]
-                >`INSERT INTO pdr_ai_v2_document(company_id,url,category,title,created_at,updated_at) VALUES (${workspace.id},'https://example.invalid/synthetic','Shared',${title},${date},${date}) RETURNING id::text`
+                >`INSERT INTO pdr_ai_v2_document(company_id,url,category,title,mime_type,ocr_processed,created_at,updated_at) VALUES (${workspace.id},${url},'Shared',${title},'text/plain',true,${date},${date}) RETURNING id::text`
             );
             const version = row(
                 await sql<
                     { id: string }[]
-                >`INSERT INTO pdr_ai_v2_document_versions(document_id,version_number,url,mime_type,created_at) VALUES (${document.id},1,'https://example.invalid/synthetic','text/plain',${date}) RETURNING id::text`
+                >`INSERT INTO pdr_ai_v2_document_versions(document_id,version_number,url,mime_type,file_size,ocr_processed,created_at) VALUES (${document.id},1,${url},'text/plain',${bytes.length},true,${date}) RETURNING id::text`
             );
             await sql`UPDATE pdr_ai_v2_document SET current_version_id=${version.id} WHERE id=${document.id}`;
             await sql`INSERT INTO pdr_ai_v2_document_context_chunks(document_id,version_id,content,page_number,line_start) VALUES (${document.id},${version.id},${text},1,1)`;
-            return { id: document.id, version: version.id, text };
+            return { id: document.id, version: version.id, text, url };
         };
         const excerpt = "Synthetic architecture context requires human review.";
         const architecture = await addDocument(
             "Synthetic scoped architecture",
             excerpt + "\n" + "Outside the approved scope. ".repeat(80)
         );
+        const preview = await page.request.get(architecture.url);
+        expect(preview.status()).toBe(200);
+        expect(await preview.text()).toBe(architecture.text);
         const required = await addDocument(
             "Synthetic required rollback context",
             "Release rollback owner is unknown."
@@ -269,7 +281,7 @@ test("authenticated combined retrieval preserves scope, role, decision and histo
         expect(z.object({ version: z.number() }).parse(await starred.json()).version).toBe(1);
         checks.push("synthetic signup, company and exact-version document fixture");
 
-        await page.goto("/employer/tools/vantage/agenda?week=2026-11-09");
+        await page.goto("/employer/tools/vantage/context?week=2026-11-09");
         const roleDetails = page
             .locator("details")
             .filter({ hasText: "My business responsibilities" });
@@ -287,9 +299,8 @@ test("authenticated combined retrieval preserves scope, role, decision and histo
         );
         await page.getByRole("button", { name: "Confirm and save", exact: true }).click();
         expect((await savedRole).status()).toBe(200);
-        await expect(
-            page.getByRole("button", { name: "Generate review", exact: true })
-        ).toBeEnabled();
+        await expect(page.getByRole("button", { name: "Generate review", exact: true })).toHaveCount(0);
+        await expect(page.getByLabel("Human decision", { exact: true })).toHaveCount(0);
 
         const roleResponse = await page.request.get("/api/vantage/reviews/context/role");
         expect(roleResponse.status()).toBe(200);
@@ -350,7 +361,9 @@ test("authenticated combined retrieval preserves scope, role, decision and histo
             "browser business-role confirmation; stale role and star CAS rejected; star and role preserved"
         );
 
-        await page.reload();
+        await page.getByRole("link", { name: "Open This Week", exact: true }).click();
+        await expect(page.getByText("My business responsibilities", { exact: true })).toHaveCount(0);
+        await expect(page.getByText("Required company context", { exact: true })).toHaveCount(0);
         await expect(
             page.getByRole("button", { name: "Generate review", exact: true })
         ).toBeEnabled();

@@ -50,7 +50,7 @@ function screenGroups(t: FrameT, admin: boolean): ToolNavGroup[] {
             label: t("groups.week"),
             items: [
                 { to: vantagePath(""), label: t("nav.thisWeek"), icon: CalendarCheck, exact: true },
-                { to: vantagePath("/agenda"), label: t("nav.agenda"), icon: ListChecks },
+                { to: vantagePath("/context"), label: t("nav.context"), icon: ListChecks },
                 { to: vantagePath("/commitments"), label: t("nav.commitments"), icon: Handshake },
             ],
         },
@@ -94,9 +94,9 @@ function Screen({ screen }: { screen: VantageScreen }) {
     const t = useTranslations("vantage.frame");
     switch (screen.kind) {
         case "overview":
-            return <WeeklyReviewEntry />;
-        case "agenda":
-            return <WeeklyReviewEntry week={screen.week} />;
+            return <WeeklyReviewEntry key="review" week={screen.week} />;
+        case "context":
+            return <WeeklyReviewEntry key="context" view="context" week={screen.week} />;
         case "commitments":
             return <CommitmentsScreen />;
         case "evidence":

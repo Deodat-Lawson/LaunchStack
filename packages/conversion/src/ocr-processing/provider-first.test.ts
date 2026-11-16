@@ -58,7 +58,6 @@ function serve(pdf: Uint8Array): void {
     configureStorage({
         provider: "test",
         upload: vi.fn(),
-        delete: vi.fn(),
         download: vi.fn(
             async () =>
                 new Response(Buffer.from(pdf), { headers: { "content-type": "application/pdf" } })

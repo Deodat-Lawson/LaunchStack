@@ -11,6 +11,7 @@
 import { and, eq } from "drizzle-orm";
 
 import { configureDatabase, type DbClient } from "@launchstack/store/client";
+import { configureOcr } from "@launchstack/conversion/ocr/config";
 import {
     company,
     document,
@@ -124,6 +125,7 @@ describeDb("re-embedding a source (integration)", () => {
         mockActiveDb = test.db;
         // The lifecycle and the index-key lookup read the engine's slot.
         configureDatabase(test.db);
+        configureOcr({ appPublicUrl: "https://current-app.test" });
         const [co] = await test.db
             .insert(company)
             .values({ name: "Acme", numberOfEmployees: "20" })
@@ -201,6 +203,40 @@ describeDb("re-embedding a source (integration)", () => {
             .where(eq(documentVersions.documentId, BigInt(pdf.id)));
         expect(versions).toHaveLength(2);
     });
+
+    it.each(["old-origin", "missing"] as const)(
+        "resolves a relative version URL on the current origin when its prior job is %s",
+        async priorJob => {
+            const pdf = await addProcessed(`relative-${priorJob}.pdf`);
+            const url = "/api/files/123";
+            await test.db.update(document).set({ url }).where(eq(document.id, pdf.id));
+            await test.db
+                .update(documentVersions)
+                .set({ url, ocrJobId: priorJob === "missing" ? null : pdf.jobId })
+                .where(eq(documentVersions.id, pdf.versionId));
+            if (priorJob === "old-origin") {
+                await test.db
+                    .update(ocrJobs)
+                    .set({ documentUrl: "https://previous-app.test/api/files/123" })
+                    .where(eq(ocrJobs.id, pdf.jobId));
+            }
+
+            const result = await reembedDocument({
+                target: await target(pdf.id),
+                userId: "auth_ada",
+            });
+
+            expect(result.status).toBe("reembedding");
+            if (result.status !== "reembedding") throw new Error("unreachable");
+            const [version] = await test.db
+                .select()
+                .from(documentVersions)
+                .where(eq(documentVersions.id, result.versionId));
+            const [job] = await test.db.select().from(ocrJobs).where(eq(ocrJobs.id, result.jobId));
+            expect(version!.url).toBe(url);
+            expect(job!.documentUrl).toBe("https://current-app.test/api/files/123");
+        }
+    );
 
     it("leaves a run that is under way alone", async () => {
         const pdf = await addProcessed("busy.pdf", { status: "processing" });

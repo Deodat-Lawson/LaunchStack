@@ -18,9 +18,12 @@ import { createHash, randomBytes } from "node:crypto";
 
 import { and, eq, gt, inArray, isNotNull, lt, ne, sql } from "drizzle-orm";
 
-import { deleteFile, uploadFile, type StorageBackend } from "~/lib/storage";
+import { uploadFile } from "~/lib/storage";
 import { db } from "~/server/db";
 import { mcpStagedFiles, users, type McpStagedFile, type McpStagedKind } from "~/server/db/schema";
+import { deleteStoredObjects } from "~/server/storage/delete-objects";
+import { refFromStoredUrl } from "~/server/storage/stored-url";
+import { hasStoredUrlReferences } from "~/server/storage/stored-url-references";
 
 /** A draft or upload must be filed within this long. */
 export const STAGED_TTL_MS = 60 * 60 * 1000;
@@ -56,6 +59,26 @@ export function hashUploadToken(token: string): string {
 }
 
 /**
+ * Deletes the bytes of a staged row that was never filed. Best effort: an
+ * orphan costs only space, and bytes a document points at are kept.
+ */
+async function forgetStagedBytes(id: string, url: string, why: string): Promise<void> {
+    try {
+        if (await hasStoredUrlReferences(url)) return;
+        const parsed = refFromStoredUrl(url);
+        if (!parsed.ok) throw new Error(`Stored staged-file URL is ${parsed.reason}`);
+        const [result] = await deleteStoredObjects([parsed.ref]);
+        if (!result || (result.outcome !== "deleted" && result.outcome !== "not_found")) {
+            throw new Error(
+                result?.message ?? result?.errorCode ?? "Storage deletion returned no result"
+            );
+        }
+    } catch (error) {
+        console.warn(`[mcp] could not delete ${why} staged file`, { id, error });
+    }
+}
+
+/**
  * Removes expired rows, deleting the stored bytes of any that were never
  * filed. Best effort: a failure is logged and never fails the caller.
  */
@@ -66,7 +89,6 @@ export async function sweepExpiredStagedFiles(now = new Date()): Promise<number>
                 id: mcpStagedFiles.id,
                 status: mcpStagedFiles.status,
                 storageUrl: mcpStagedFiles.storageUrl,
-                storageProvider: mcpStagedFiles.storageProvider,
             })
             .from(mcpStagedFiles)
             .where(lt(mcpStagedFiles.expiresAt, now))
@@ -74,15 +96,7 @@ export async function sweepExpiredStagedFiles(now = new Date()): Promise<number>
         if (expired.length === 0) return 0;
         for (const row of expired) {
             if (row.status !== "used" && row.storageUrl) {
-                await deleteFile(
-                    row.storageUrl,
-                    (row.storageProvider as StorageBackend | null) ?? undefined
-                ).catch((error: unknown) =>
-                    console.warn("[mcp] could not delete an expired staged file", {
-                        id: row.id,
-                        error,
-                    })
-                );
+                await forgetStagedBytes(row.id, row.storageUrl, "an expired");
             }
         }
         await db.delete(mcpStagedFiles).where(
@@ -370,14 +384,7 @@ export async function discardStagedFile(owner: StagingOwner, id: string): Promis
             )
         )
         .returning();
-    if (row?.storageUrl) {
-        await deleteFile(
-            row.storageUrl,
-            (row.storageProvider as StorageBackend | null) ?? undefined
-        ).catch((error: unknown) =>
-            console.warn("[mcp] could not delete a discarded staged file", { id, error })
-        );
-    }
+    if (row?.storageUrl) await forgetStagedBytes(id, row.storageUrl, "a discarded");
 }
 
 /** Staged rows still waiting in this person's workspace (for tests and Settings). */

@@ -9,6 +9,8 @@ import {
 } from "@launchstack/store/crypto";
 
 import { env } from "~/env";
+import { currentStorageLocationId } from "~/server/storage/location";
+import type { ObjectRef } from "~/server/storage/object-ref";
 
 // ---------------------------------------------------------------------------
 // StorageError — wraps provider errors with provider name context
@@ -80,6 +82,7 @@ export interface UploadResult {
     pathname: string;
     contentType?: string;
     provider: StorageBackend;
+    ref: ObjectRef;
 }
 
 // ---------------------------------------------------------------------------
@@ -111,6 +114,8 @@ async function uploadToS3(input: UploadInput): Promise<UploadResult> {
         const { putObject, getObjectUrl, ensureBucketExists } = await import(
             "~/server/storage/s3-client"
         );
+        const storageLocationId = currentStorageLocationId("s3");
+        if (!storageLocationId) throw new StorageError("S3 location is not configured", "s3");
 
         const safeName = sanitizeFilename(input.filename);
         const key = `documents/${randomUUID()}-${safeName || "upload"}`;
@@ -124,6 +129,7 @@ async function uploadToS3(input: UploadInput): Promise<UploadResult> {
             pathname: key,
             contentType: input.contentType,
             provider: "s3",
+            ref: { adapter: "s3", storageLocationId, key },
         };
     } catch (err) {
         if (err instanceof StorageError) throw err;
@@ -173,6 +179,11 @@ async function uploadToDatabase(input: UploadInput): Promise<UploadResult> {
             pathname,
             contentType: input.contentType,
             provider: "database",
+            ref: {
+                adapter: "database",
+                storageLocationId: currentStorageLocationId("database")!,
+                key: String(row.id),
+            },
         };
     } catch (err) {
         if (err instanceof StorageError) throw err;
@@ -182,107 +193,6 @@ async function uploadToDatabase(input: UploadInput): Promise<UploadResult> {
             err instanceof Error ? err : undefined
         );
     }
-}
-
-// ---------------------------------------------------------------------------
-// getFileUrl — resolve a storage key to a URL
-// ---------------------------------------------------------------------------
-
-export function getFileUrl(key: string, provider?: StorageBackend): string {
-    const resolvedProvider = provider ?? resolveStorageBackend();
-
-    if (resolvedProvider === "s3") {
-        const endpoint = env.server.NEXT_PUBLIC_S3_ENDPOINT ?? env.client.NEXT_PUBLIC_S3_ENDPOINT;
-        if (!endpoint) {
-            throw new StorageError("NEXT_PUBLIC_S3_ENDPOINT is not configured", "s3");
-        }
-        const bucket = env.server.S3_BUCKET_NAME;
-        const base = endpoint.replace(/\/+$/, "");
-        return bucket ? `${base}/${bucket}/${key}` : `${base}/${key}`;
-    }
-
-    // database: key is already a /api/files/<id> URL
-    return key;
-}
-
-// ---------------------------------------------------------------------------
-// deleteFile — remove an object from storage
-// ---------------------------------------------------------------------------
-
-export async function deleteFile(keyOrUrl: string, provider?: StorageBackend): Promise<void> {
-    const resolvedProvider = provider ?? resolveStorageBackend();
-
-    if (resolvedProvider === "s3") {
-        try {
-            const { deleteObject } = await import("~/server/storage/s3-client");
-            await deleteObject(keyOrUrl);
-        } catch (err) {
-            if (err instanceof StorageError) throw err;
-            throw new StorageError(
-                err instanceof Error ? err.message : String(err),
-                "s3",
-                err instanceof Error ? err : undefined
-            );
-        }
-        return;
-    }
-
-    // database: remove the fileUploads row matching this /api/files/<id> URL
-    try {
-        const match = /\/api\/files\/(\d+)/.exec(keyOrUrl);
-        if (!match?.[1]) return;
-        const id = parseInt(match[1], 10);
-        if (isNaN(id)) return;
-        // Use getEngine().db (hoisted fn) rather than the ~/server/db Proxy const:
-        // lib/storage sits inside the server/db → engine → storage/port → lib/storage
-        // cycle, so a dynamic import of the un-hoisted `db` const can resolve to
-        // undefined mid-init. getEngine() is immune (function declaration).
-        const { getEngine } = await import("~/server/engine");
-        const db = getEngine().db;
-        const { fileUploads } = await import("@launchstack/store/schema");
-        const { eq } = await import("drizzle-orm");
-        await db.delete(fileUploads).where(eq(fileUploads.id, id));
-    } catch (err) {
-        if (err instanceof StorageError) throw err;
-        throw new StorageError(
-            err instanceof Error ? err.message : String(err),
-            "database",
-            err instanceof Error ? err : undefined
-        );
-    }
-}
-
-/**
- * Delete a stored file by its URL, regardless of provider.
- *
- * This is the friendlier counterpart to `deleteFile(key, provider)` — most
- * callers only have the URL stored in the DB (e.g. `document_versions.url`)
- * and don't know which provider put it there. This helper inspects the URL,
- * strips the SeaweedFS endpoint prefix to recover the object key when needed,
- * and dispatches to `deleteFile` with the correct provider.
- *
- * Database-backed URLs (`/api/files/{id}`) are silently ignored because there
- * is nothing to delete from a blob provider — the row itself is the storage.
- */
-export async function deleteFileByUrl(url: string): Promise<void> {
-    if (!url) return;
-
-    // Database-backed storage: nothing to delete at the blob layer.
-    if (url.startsWith("/api/files/")) return;
-
-    const s3Endpoint = env.server.NEXT_PUBLIC_S3_ENDPOINT ?? env.client.NEXT_PUBLIC_S3_ENDPOINT;
-
-    if (s3Endpoint && url.startsWith(s3Endpoint)) {
-        // SeaweedFS is S3-compatible; recover the object key from the endpoint prefix.
-        // e.g. "http://localhost:8333/pdr-documents/documents/abc-file.pdf"
-        //   -> "pdr-documents/documents/abc-file.pdf"
-        const key = url.slice(s3Endpoint.replace(/\/+$/, "").length + 1);
-        return deleteFile(key, "s3");
-    }
-
-    // Vercel Blob has no delete handler wired up; fall through as a no-op via
-    // the database branch (the regex won't match a blob URL).
-    return deleteFile(url, "database");
 }
 
 // ---------------------------------------------------------------------------

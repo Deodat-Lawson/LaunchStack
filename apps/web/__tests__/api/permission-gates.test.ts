@@ -118,11 +118,12 @@ jest.mock("~/lib/authz/audit", () => ({ recordAuditEvent: jest.fn() }));
 jest.mock("~/lib/storage", () => ({
     uploadFile: jest.fn(),
     fetchFile: jest.fn(),
-    deleteFileByUrl: jest.fn(),
     isS3Storage: () => false,
     isLocalStorage: () => false,
     resolveStorageBackend: () => "database",
 }));
+jest.mock("~/server/storage/delete-objects", () => ({ deleteStoredObjects: jest.fn() }));
+jest.mock("~/server/storage/stored-url", () => ({ refFromStoredUrl: jest.fn() }));
 jest.mock("~/server/storage/vercel-blob", () => ({
     isPrivateBlobUrl: () => false,
     putFile: jest.fn(),

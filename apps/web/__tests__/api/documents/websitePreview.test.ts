@@ -28,14 +28,23 @@ jest.mock("~/lib/require-workspace-context", () =>
 
 const mockFetchFile = jest.fn();
 const mockUploadFile = jest.fn();
-const mockDeleteFile = jest.fn();
-const mockDeleteFileByUrl = jest.fn();
+const mockDeleteStoredObjects = jest.fn();
 
 jest.mock("~/lib/storage", () => ({
     fetchFile: (url: string) => mockFetchFile(url),
     uploadFile: (input: unknown) => mockUploadFile(input),
-    deleteFile: (url: string, provider: string) => mockDeleteFile(url, provider),
-    deleteFileByUrl: (url: string) => mockDeleteFileByUrl(url),
+}));
+
+jest.mock("~/server/storage/delete-objects", () => ({
+    deleteStoredObjects: (refs: unknown) => mockDeleteStoredObjects(refs),
+}));
+jest.mock("~/env", () => ({
+    env: {
+        server: {
+            NEXT_PUBLIC_S3_ENDPOINT: "http://localhost:8333",
+            S3_BUCKET_NAME: "pdr-documents",
+        },
+    },
 }));
 
 const mockGetGotenbergClient = jest.fn();
@@ -52,7 +61,7 @@ const mockUpdates: unknown[] = [];
 
 function mockThenable(next: () => unknown[]) {
     const builder: Record<string, unknown> = {};
-    for (const method of ["from", "where", "set", "returning"]) {
+    for (const method of ["from", "where", "set", "returning", "limit"]) {
         builder[method] = (value?: unknown) => {
             if (method === "set") mockUpdates.push(value);
             return builder;
@@ -138,6 +147,9 @@ beforeEach(async () => {
     mockSelectQueue.length = 0;
     mockUpdateQueue.length = 0;
     mockUpdates.length = 0;
+    mockDeleteStoredObjects.mockImplementation((refs: unknown[]) =>
+        Promise.resolve(refs.map(ref => ({ ref, outcome: "deleted" })))
+    );
     const shot = await chromiumShot();
     htmlToScreenshot = jest.fn().mockResolvedValue({
         image: shot,
@@ -265,7 +277,29 @@ describe("GET /api/documents/:id/website-preview", () => {
 
         expect(res.status).toBe(200);
         expect(htmlToScreenshot).toHaveBeenCalledTimes(1);
-        expect(mockDeleteFileByUrl).toHaveBeenCalledWith(storedRecord().url);
+        expect(mockDeleteStoredObjects).toHaveBeenCalledWith([
+            {
+                adapter: "s3",
+                storageLocationId: "s3:http://localhost:8333@pdr-documents",
+                key: "documents/old-preview.webp",
+            },
+        ]);
+    });
+
+    it("keeps an old preview copied into a version's OCR metadata", async () => {
+        grantContext();
+        queueDocument({
+            ...marker,
+            websitePreview: storedRecord({ source: "http://localhost:8333/old.html" }),
+        });
+        // No document references it after replacement, but a version still does.
+        mockSelectQueue.push([], [{ id: 19 }]);
+        mockFetchFile.mockResolvedValue(okBody(SAVED_HTML));
+        mockUpdateQueue.push([{ id: 7 }]);
+
+        expect((await call()).status).toBe(200);
+        expect(htmlToScreenshot).toHaveBeenCalledTimes(1);
+        expect(mockDeleteStoredObjects).not.toHaveBeenCalled();
     });
 
     it("takes the picture again when the stored file has gone", async () => {
@@ -291,9 +325,13 @@ describe("GET /api/documents/:id/website-preview", () => {
         const res = await call();
 
         expect(res.status).toBe(200);
-        expect(mockDeleteFileByUrl).toHaveBeenCalledWith(
-            "http://localhost:8333/pdr-documents/documents/new-preview.webp"
-        );
+        expect(mockDeleteStoredObjects).toHaveBeenCalledWith([
+            {
+                adapter: "s3",
+                storageLocationId: "s3:http://localhost:8333@pdr-documents",
+                key: "documents/new-preview.webp",
+            },
+        ]);
     });
 
     it("503s with a typed error when there is no renderer", async () => {

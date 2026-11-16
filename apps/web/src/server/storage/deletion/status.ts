@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { eventOutbox } from "@launchstack/store/schema";
+import { eventOutbox, type EventOutboxRow } from "@launchstack/store/schema";
 import { eventIds } from "@launchstack/orchestration/pipeline-events";
 
 import {
@@ -10,32 +10,38 @@ import {
 } from "~/server/db/schema/storage";
 import type { Executor, Tx } from "~/server/workspace/db-types";
 
-/** Delivery health is operational state, not durable outcomes. Pass null for known missing; omit to query. */
+export interface StorageDeletionOperationalState {
+    status: StorageDeletionRequest["status"];
+    errorCode: "event_missing" | "event_dead" | null;
+}
+
+/** Delivery health is operational state, not durable outcomes. A null delivery status means the event is missing. */
+export function operationalStateOf(
+    requestStatus: StorageDeletionRequest["status"],
+    deliveryStatus: EventOutboxRow["status"] | null
+): StorageDeletionOperationalState {
+    if (requestStatus === "completed") return { status: "completed", errorCode: null };
+    if (deliveryStatus === null && requestStatus === "pending")
+        return { status: "blocked", errorCode: "event_missing" };
+    if (deliveryStatus === "dead") return { status: "blocked", errorCode: "event_dead" };
+    return { status: requestStatus, errorCode: null };
+}
+
+/** Pass null for a known-missing delivery; omit it to query the request's event. */
 export async function storageDeletionOperationalState(
     tx: Executor,
     request: Pick<StorageDeletionRequest, "id" | "status">,
-    delivery?: Pick<typeof eventOutbox.$inferSelect, "status"> | null
-): Promise<{
-    status: StorageDeletionRequest["status"];
-    errorCode: "event_missing" | "event_dead" | null;
-}> {
-    if (request.status === "completed") return { status: "completed", errorCode: null };
-    const event =
-        delivery === undefined
-            ? (
-                  await tx
-                      .select({ status: eventOutbox.status })
-                      .from(eventOutbox)
-                      .where(eq(eventOutbox.eventId, eventIds.storageDeletionRequested(request.id)))
-              )[0]
-            : delivery;
-    if (!event && request.status === "pending")
-        return { status: "blocked", errorCode: "event_missing" };
-    if (event?.status === "dead") return { status: "blocked", errorCode: "event_dead" };
-    return { status: request.status, errorCode: null };
+    delivery?: Pick<EventOutboxRow, "status"> | null
+): Promise<StorageDeletionOperationalState> {
+    if (delivery === undefined && request.status !== "completed") {
+        [delivery] = await tx
+            .select({ status: eventOutbox.status })
+            .from(eventOutbox)
+            .where(eq(eventOutbox.eventId, eventIds.storageDeletionRequested(request.id)));
+    }
+    return operationalStateOf(request.status, delivery?.status ?? null);
 }
 
-/** Call in a transaction; the request lock serializes worker/operator decisions. */
 export async function recomputeDeletionRequestStatus(
     tx: Tx,
     requestId: number

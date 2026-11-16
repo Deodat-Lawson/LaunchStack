@@ -4,7 +4,6 @@ import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { createDb } from "@launchstack/store/client";
 
-// Match the application's root .env location without booting its engine.
 process.env.DOTENV_CONFIG_QUIET = "true";
 config({ path: fileURLToPath(new URL("../../../.env", import.meta.url)), quiet: true });
 
@@ -28,6 +27,9 @@ async function main() {
     const graceDays = rawGrace === undefined ? 7 : Number(rawGrace);
     if (!Number.isSafeInteger(graceDays)) throw new Error("--grace-days must be a safe integer");
     const actor = values.actor?.trim();
+    const note = values.note?.trim().length
+        ? values.note.trim()
+        : "Operator enqueued orphan-audit candidates";
     if (values.enqueue && (!actor || actor.length > 256))
         throw new Error("--enqueue requires --actor of 1 to 256 characters");
 
@@ -51,9 +53,7 @@ async function main() {
                 JSON.stringify({
                     event: "storage_orphan_audit_enqueue",
                     actor,
-                    note: values.note?.trim().length
-                        ? values.note.trim()
-                        : "Operator enqueued orphan-audit candidates",
+                    note,
                     requestIds: report.ledger.requestIds,
                     at: new Date().toISOString(),
                 })
@@ -79,9 +79,7 @@ async function main() {
                 JSON.stringify({
                     event: "storage_orphan_audit_enqueue_failed",
                     actor,
-                    note: values.note?.trim().length
-                        ? values.note.trim()
-                        : "Operator enqueued orphan-audit candidates",
+                    note,
                     committedRequestIds: error.report.ledger.requestIds,
                     error: error.message,
                 })

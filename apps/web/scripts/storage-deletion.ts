@@ -11,7 +11,6 @@ import {
     waiveStorageDeletionItem,
 } from "../src/server/storage/deletion/admin";
 
-// Match the application's root .env location without booting its engine.
 process.env.DOTENV_CONFIG_QUIET = "true";
 config({ path: fileURLToPath(new URL("../../../.env", import.meta.url)), quiet: true });
 

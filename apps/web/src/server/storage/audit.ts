@@ -117,7 +117,6 @@ function addCandidate(
     if (report.sampleKeys.length < sampleLimit) report.sampleKeys.push(ref);
 }
 
-/** Match active requests by all persisted identities, including URL-only quarantined items. */
 function hasNoActivePlan(tx: Executor) {
     const identities = [
         eq(storageDeletionItems.storedObjectId, storageObjects.id),
@@ -231,7 +230,6 @@ async function auditInventoryPage(
     sampleLimit: number
 ) {
     if (!candidates.length) return;
-    // One bounded anti-ledger lookup for the whole provider page, not per object.
     const ledger = await findStoredObjectsByRefs(
         db,
         candidates.map(candidate => candidate.ref)

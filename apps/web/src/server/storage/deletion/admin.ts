@@ -1,8 +1,7 @@
 import { and, asc, count, eq, inArray, isNull, ne, or, sql } from "drizzle-orm";
 import type { DbClient } from "@launchstack/store/client";
 import { company, eventOutbox } from "@launchstack/store/schema";
-import { enqueueOutboxEventsWithRevive } from "@launchstack/orchestration";
-import { eventIds, PROTOCOL_VERSION } from "@launchstack/orchestration/pipeline-events";
+import { eventIds } from "@launchstack/orchestration/pipeline-events";
 
 import {
     storageDeletionItems,
@@ -11,7 +10,12 @@ import {
     type StorageDeletionRequest,
 } from "~/server/db/schema/storage";
 import type { Executor } from "~/server/workspace/db-types";
-import { recomputeDeletionRequestStatus, storageDeletionOperationalState } from "./status";
+import { enqueueStorageDeletionRequested } from "./event";
+import {
+    operationalStateOf,
+    recomputeDeletionRequestStatus,
+    storageDeletionOperationalState,
+} from "./status";
 
 type ItemCounts = Record<StorageDeletionItem["state"], number>;
 const emptyItemCounts = (): ItemCounts => ({
@@ -24,6 +28,13 @@ const emptyItemCounts = (): ItemCounts => ({
     skipped: 0,
     waived: 0,
 });
+
+function operatorActor(raw: string): string {
+    const actor = raw.trim();
+    if (!actor || actor.length > 256)
+        throw new Error("actor is required and must be at most 256 characters");
+    return actor;
+}
 
 const deletionDeliveryJoin = eq(
     eventOutbox.eventId,
@@ -69,12 +80,7 @@ export async function getStorageDeletionSummary(db: Executor) {
         blocked: 0,
     };
     for (const row of requestRows) {
-        const operational = await storageDeletionOperationalState(
-            db,
-            { id: 0, status: row.status },
-            row.outboxStatus === null ? null : { status: row.outboxStatus }
-        );
-        requestsByStatus[operational.status] += row.count;
+        requestsByStatus[operationalStateOf(row.status, row.outboxStatus).status] += row.count;
     }
     const itemsByState = emptyItemCounts();
     for (const row of itemRows) itemsByState[row.state] = row.count;
@@ -195,9 +201,7 @@ export async function requeueStorageDeletionRequest(
     requestId: number,
     input: { actor: string; note?: string }
 ) {
-    const actor = input.actor.trim();
-    if (!actor || actor.length > 256)
-        throw new Error("actor is required and must be at most 256 characters");
+    const actor = operatorActor(input.actor);
     const note = input.note?.trim().length
         ? input.note.trim()
         : "Operator requeued storage deletion after remediation";
@@ -252,7 +256,6 @@ export async function requeueStorageDeletionRequest(
                     ((stranded && item.state === "pending") ||
                         (item.state === "blocked" &&
                             (item.errorCode === "retry_budget_exhausted" ||
-                                // Other blocked outcomes with a ref and code are provider-classified.
                                 (item.adapter !== null &&
                                     item.storageLocationId !== null &&
                                     item.objectKey !== null &&
@@ -281,17 +284,7 @@ export async function requeueStorageDeletionRequest(
                 .set({ status: "pending", completedAt: null, updatedAt: new Date() })
                 .where(eq(storageDeletionRequests.id, requestId));
         }
-        await enqueueOutboxEventsWithRevive(tx, [
-            {
-                eventId: eventIds.storageDeletionRequested(requestId),
-                eventType: "storage.deletion.requested",
-                schemaVersion: PROTOCOL_VERSION,
-                occurredAt: new Date().toISOString(),
-                traceId: request.traceId,
-                companyId: Number(request.companyId),
-                payload: { requestId },
-            },
-        ]);
+        await enqueueStorageDeletionRequested(tx, request);
         return {
             requestId,
             changedItemIds,
@@ -320,10 +313,8 @@ export async function waiveStorageDeletionItem(
     itemId: number,
     input: { actor: string; note: string }
 ) {
-    const actor = input.actor.trim();
+    const actor = operatorActor(input.actor);
     const note = input.note.trim();
-    if (!actor || actor.length > 256)
-        throw new Error("actor is required and must be at most 256 characters");
     if (!note) throw new Error("note is required");
     const result = await db.transaction(async tx => {
         // This non-locking lookup finds the parent; lock order is always request then items.

@@ -12,10 +12,7 @@ import {
     waiveStorageDeletionItem,
 } from "~/server/storage/deletion/admin";
 import { planObjectDeletion } from "~/server/storage/deletion/plan";
-import {
-    recomputeDeletionRequestStatus,
-    storageDeletionOperationalState,
-} from "~/server/storage/deletion/status";
+import { recomputeDeletionRequestStatus } from "~/server/storage/deletion/status";
 import {
     createFounderWeeklyReviewTestDatabase,
     type FounderWeeklyReviewTestDatabase,
@@ -416,19 +413,17 @@ describeDb("storage deletion operations (integration)", () => {
                 outboxStatus: null,
             }),
         ]);
-        for (const id of [missingId, completedId]) {
-            const shown = await showStorageDeletionRequest(test.db, id);
-            const expected = await storageDeletionOperationalState(test.db, shown.request);
-            expect(shown).toMatchObject({
-                operationalStatus: expected.status,
-                errorCode: expected.errorCode,
-                outboxStatus: null,
-            });
-        }
+        expect(await showStorageDeletionRequest(test.db, missingId)).toMatchObject({
+            request: { status: "pending" },
+            operationalStatus: "blocked",
+            errorCode: "event_missing",
+            outboxStatus: null,
+        });
         expect(await showStorageDeletionRequest(test.db, completedId)).toMatchObject({
             request: { status: "completed" },
             operationalStatus: "completed",
             errorCode: null,
+            outboxStatus: null,
         });
     });
 

@@ -1,19 +1,8 @@
-import { timingSafeEqual } from "node:crypto";
 import type { RequestListener } from "node:http";
 
 import type { LoggerPort } from "@launchstack/runtime";
 import { getMetricsSnapshot, metricsRegistry } from "~/server/metrics/registry";
-
-function bearerMatches(header: string | undefined, token: string): boolean {
-    if (!header?.startsWith("Bearer ")) return false;
-    const provided = header.slice("Bearer ".length).trim();
-    if (!provided || provided.length !== token.length) return false;
-    try {
-        return timingSafeEqual(Buffer.from(provided), Buffer.from(token));
-    } catch {
-        return false;
-    }
-}
+import { bearerMatches } from "~/server/metrics/scrape-auth";
 
 export function createMetricsHandler(options: {
     scrapeToken: string | undefined;

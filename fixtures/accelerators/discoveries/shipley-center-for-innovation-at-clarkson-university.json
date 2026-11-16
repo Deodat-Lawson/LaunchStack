@@ -1,0 +1,134 @@
+{
+  "programId": "shipley-center-for-innovation-at-clarkson-university",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pages": [
+    {
+      "url": "https://www.clarkson.edu/academics/majors-minors",
+      "page": "details",
+      "anchor": "Find Your Program",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/academics/honors",
+      "page": "details",
+      "anchor": "Honors Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/admissions-aid/clarkson-school",
+      "page": "details",
+      "anchor": "The Clarkson School: Early College Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/about",
+      "page": "details",
+      "anchor": "About",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/about/accreditation",
+      "page": "details",
+      "anchor": "Accreditation",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/about/snell-awards",
+      "page": "details",
+      "anchor": "Bertrand H. Snell Awards",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/about/history",
+      "page": "details",
+      "anchor": "History",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/about/clarkson-glance",
+      "page": "details",
+      "anchor": "Clarkson at a Glance",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/about/university-leadership",
+      "page": "details",
+      "anchor": "University Leadership",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/about/shared-community",
+      "page": "details",
+      "anchor": "Our Shared Community",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/about/visit-clarkson",
+      "page": "details",
+      "anchor": "Visit Clarkson",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/about/clarkson-brand",
+      "page": "details",
+      "anchor": "The Clarkson Brand",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/about/visit",
+      "page": "details",
+      "anchor": "Visit",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/apply",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/about/shared-community/non-discrimination",
+      "page": "details",
+      "anchor": "Non-Discrimination",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.clarkson.edu/about/visit/potsdam",
+      "page": "details",
+      "anchor": "Potsdam Campus",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

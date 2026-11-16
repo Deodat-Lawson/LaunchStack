@@ -1,0 +1,48 @@
+{
+  "programId": "accelerateh2o",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.accelerateh2o.org",
+    "https://www.accelerateh2o.org/about/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-a637fdfe5e",
+      "url": "https://www.accelerateh2o.org",
+      "title": "AccelerateH2O — homepage checked by scrape.py",
+      "excerpt": "Texas Water Infrastructure at Risk from Extreme Weather - accelerateh2o.org Skip to content Home About Blog Harnessing Future H2O:",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e8da8470a3",
+      "url": "https://www.accelerateh2o.org",
+      "title": "AccelerateH2O — homepage checked by scrape.py",
+      "excerpt": "Home → https://www.accelerateh2o.org/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.accelerateh2o.org/",
+        "evidenceId": "check-route-e8da8470a3"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "AccelerateH2O",
+        "evidenceId": "check-name-a637fdfe5e"
+      }
+    ],
+    "examplePages": []
+  }
+}

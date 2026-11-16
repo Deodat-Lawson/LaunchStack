@@ -1,0 +1,189 @@
+{
+  "programId": "ati-clean-energy-incubator-at-university-of-texas-at-austin",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "http://ati.utexas.edu/current-portfolio/clean-energy/",
+    "https://ati.utexas.edu/about/",
+    "https://ati.utexas.edu/about/faq/",
+    "https://ati.utexas.edu/apply/"
+  ],
+  "evidence": [
+    {
+      "id": "check-portfolio-130e953ebf",
+      "url": "http://ati.utexas.edu/current-portfolio/clean-energy/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — homepage checked by scrape.py",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-20cafd9813",
+      "url": "https://ati.utexas.edu/apply/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page checked by scrape.py",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-20f4cd86b1",
+      "url": "https://ati.utexas.edu/apply/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page checked by scrape.py",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-2dfec64292",
+      "url": "https://ati.utexas.edu/about/faq/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2ecc395ea3",
+      "url": "https://ati.utexas.edu/about/faq/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page checked by scrape.py",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-30dad7b4aa",
+      "url": "https://ati.utexas.edu/about/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3158466946",
+      "url": "https://ati.utexas.edu/apply/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-4f81de6652",
+      "url": "https://ati.utexas.edu/about/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — details page checked by scrape.py",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7adf355101",
+      "url": "http://ati.utexas.edu/current-portfolio/clean-energy/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://ati.utexas.edu/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ecd4ff5ae3",
+      "url": "https://ati.utexas.edu/about/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — details page checked by scrape.py",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f779995be7",
+      "url": "https://ati.utexas.edu/about/faq/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page checked by scrape.py",
+      "excerpt": "Companies → https://ati.utexas.edu/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-faa4cf9299",
+      "url": "http://ati.utexas.edu/current-portfolio/clean-energy/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — homepage checked by scrape.py",
+      "excerpt": "Alumni Companies → https://ati.utexas.edu/companies/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2e2a026af3",
+      "url": "https://ati.utexas.edu/about/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — details page checked by scrape.py",
+      "excerpt": "Apply → https://ati.utexas.edu/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-31f978e794",
+      "url": "http://ati.utexas.edu/current-portfolio/clean-energy/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — homepage checked by scrape.py",
+      "excerpt": "Apply → https://ati.utexas.edu/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-91282ca8d6",
+      "url": "https://ati.utexas.edu/about/faq/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page checked by scrape.py",
+      "excerpt": "Apply → https://ati.utexas.edu/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b1f8f366e8",
+      "url": "https://ati.utexas.edu/apply/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page checked by scrape.py",
+      "excerpt": "IMPACT Lab ATI + ACC manufacturing prototype lab Apply to IMPACT Lab → https://docs.google.com/forms/d/e/1FAIpQLSdqUUAhvN6vfHl-qG36ccjKNGgqfNTkDNO9Wcuwsf9gTAobDg/viewform",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bb7df37578",
+      "url": "https://ati.utexas.edu/apply/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — application page checked by scrape.py",
+      "excerpt": "Student Associates Educational experiences at ATI Apply for a student position → https://ati.utexas.edu/student-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d39fddc225",
+      "url": "https://ati.utexas.edu/about/faq/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — terms page checked by scrape.py",
+      "excerpt": "simple online form → https://ati.utexas.edu/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-selectivity-d5ab0a4934",
+      "url": "https://ati.utexas.edu/about/",
+      "title": "ATI Clean Energy Incubator at the University of Texas at Austin — details page checked by scrape.py",
+      "excerpt": "founders, 170 companies applied to participate in ATI’s inaugural cohort, with about 20% of applicants applying from out of state. From 2005 to 2017 alone, over 1000 companies have",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://ati.utexas.edu/apply/",
+        "evidenceId": "check-route-31f978e794"
+      },
+      {
+        "value": "https://docs.google.com/forms/d/e/1FAIpQLSdqUUAhvN6vfHl-qG36ccjKNGgqfNTkDNO9Wcuwsf9gTAobDg/viewform",
+        "evidenceId": "check-route-b1f8f366e8"
+      },
+      {
+        "value": "https://ati.utexas.edu/student-application/",
+        "evidenceId": "check-route-bb7df37578"
+      }
+    ],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [
+      {
+        "value": {
+          "rate": null,
+          "bounded": true
+        },
+        "evidenceId": "check-selectivity-d5ab0a4934"
+      }
+    ],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://ati.utexas.edu/companies/",
+        "evidenceId": "check-portfolio-130e953ebf"
+      },
+      {
+        "value": "https://ati.utexas.edu/companies/alumni/",
+        "evidenceId": "check-portfolio-faa4cf9299"
+      }
+    ],
+    "name": [],
+    "examplePages": []
+  }
+}

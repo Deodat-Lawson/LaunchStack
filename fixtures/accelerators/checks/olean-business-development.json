@@ -1,0 +1,88 @@
+{
+  "programId": "olean-business-development",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://oleanbd.com/",
+    "https://www.oleanbd.com/about-us"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-a5a6fd9533",
+      "url": "https://www.oleanbd.com/about-us",
+      "title": "Olean Business Development — details page checked by scrape.py",
+      "excerpt": "14760 4th Floor | Suite 401 Contact Details 716-701-4009 info@oleanbd.com 301 N. Union Street Olean, NY 14760 4th Floor | Suite 401",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b4836840c2",
+      "url": "https://oleanbd.com/",
+      "title": "Olean Business Development — homepage checked by scrape.py",
+      "excerpt": "info@oleanbd.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-bd6c5a742e",
+      "url": "https://oleanbd.com/",
+      "title": "Olean Business Development — homepage checked by scrape.py",
+      "excerpt": "Amy R., LBA Cohort Alumnus Contact Details 716-701-4009 info@oleanbd.com 301 N. Union Street Olean, NY 14760 4th Floor | Suite 401",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d760f1373e",
+      "url": "https://www.oleanbd.com/about-us",
+      "title": "Olean Business Development — details page checked by scrape.py",
+      "excerpt": "info@oleanbd.com",
+      "page": "details"
+    },
+    {
+      "id": "check-name-5705a9ab70",
+      "url": "https://oleanbd.com/",
+      "title": "Olean Business Development — homepage checked by scrape.py",
+      "excerpt": "Olean Business Development Corporation | Supporting business | 301 N. Union Street",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-5f8a5321e7",
+      "url": "https://oleanbd.com/",
+      "title": "Olean Business Development — homepage checked by scrape.py",
+      "excerpt": "716-701-4009",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-8aaed1bf2a",
+      "url": "https://www.oleanbd.com/about-us",
+      "title": "Olean Business Development — details page checked by scrape.py",
+      "excerpt": "716-701-4009",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@oleanbd.com",
+        "evidenceId": "check-email-b4836840c2"
+      }
+    ],
+    "phones": [
+      {
+        "value": "123-456-7890",
+        "evidenceId": "check-phone-5f8a5321e7"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Olean Business Development",
+        "evidenceId": "check-name-5705a9ab70"
+      }
+    ],
+    "examplePages": []
+  }
+}

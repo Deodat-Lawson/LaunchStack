@@ -7,6 +7,7 @@ from scraper.discover import (
     aliases_for,
     ap_state_list,
     directory_links,
+    display_name,
     key_for,
     kind_for,
     labelled_columns,
@@ -74,9 +75,24 @@ Washington: EatsPlace (2014); Halcyon Incubator (2015)
             directory_links("<p>new layout</p>", source("directory-links", start="<section>"))
 
     def test_texas_directory(self) -> None:
-        body = "Business Incubator Profiles\n3 Day Startup (3DS)\nLocation: Austin\nFounded: 2008\nWebsite: http://3daystartup.org/\n\nBUSINESS INCUBATORS\nAccelerated Ventures at Baylor University\nLocation: Waco\nWebsite: www.baylor.edu/ventures\n"
+        body = (
+            "Business Incubator Profiles\n3 Day Startup (3DS)\nLocation: Austin\nFounded: 2008\nWebsite: http://3daystartup.org/\n\n"
+            "BUSINESS INCUBATORS\nAccelerated Ventures at Baylor University\nLocation: Waco\nWebsite: www.baylor.edu/ventures\n\n"
+            "Coastal Bend Business Innovation Center (CBBIC)\nat Texas A&M University Corpus Christi\nLocation: Corpus Christi\nWebsite: www.cbbic.org\n\n"
+            "Biotechnology Commercialization Center (BCC) at the University of\nTexas Health Science Center at Houston (UTHSC-H)\nLocation: Houston\nWebsite: www.uth.edu/otm\n\n"
+            "Business Technology Center (BTC) at Houston Business Development\nInc. (HBDI)\nLocation: Houston\nWebsite: www.hbdinc.org/resources/business-technology-center/\n"
+        )
         rows = [(item.name, item.city, item.website) for item in texas_incubator_directory(body, source("texas-incubator-directory", state="TX"))]
-        self.assertEqual(rows, [("3 Day Startup (3DS)", "Austin", "http://3daystartup.org/"), ("Accelerated Ventures at Baylor University", "Waco", "https://www.baylor.edu/ventures")])
+        self.assertEqual(
+            rows,
+            [
+                ("3 Day Startup (3DS)", "Austin", "http://3daystartup.org/"),
+                ("Accelerated Ventures at Baylor University", "Waco", "https://www.baylor.edu/ventures"),
+                ("Coastal Bend Business Innovation Center (CBBIC) at Texas A&M University Corpus Christi", "Corpus Christi", "https://www.cbbic.org"),
+                ("Biotechnology Commercialization Center (BCC) at the University of Texas Health Science Center at Houston (UTHSC-H)", "Houston", "https://www.uth.edu/otm"),
+                ("Business Technology Center (BTC) at Houston Business Development Inc. (HBDI)", "Houston", "https://www.hbdinc.org/resources/business-technology-center/"),
+            ],
+        )
 
     def test_labelled_columns_split_and_wrapped_websites(self) -> None:
         body = (
@@ -132,6 +148,10 @@ class ReviewFile(unittest.TestCase):
         merged = merge(directory_links(body, source("directory-links")), {}, NOW)
         entry = merged["zed-startup-studio"]
         self.assertEqual((entry["status"], entry["website"]), ("review", "https://zed-studio.example/"))
+
+    def test_directory_region_labels_are_dropped_from_names(self) -> None:
+        self.assertEqual(display_name("Capital Region | Innovate 518"), "Innovate 518")
+        self.assertEqual(display_name("NextCorps"), "NextCorps")
 
     def test_startup_wording(self) -> None:
         self.assertTrue(STARTUP_WORDS.search("We help founders build companies"))

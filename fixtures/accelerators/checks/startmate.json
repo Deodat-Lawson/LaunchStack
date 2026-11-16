@@ -1,6 +1,6 @@
 {
   "programId": "startmate",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-16T04:09:23.000Z",
   "pagesRead": [
     "https://www.startmate.com/",
     "https://www.startmate.com/accelerator",
@@ -113,13 +113,6 @@
       "title": "Startmate — batches page checked by scrape.py",
       "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
       "page": "batches"
-    },
-    {
-      "id": "check-route-239132daaf",
-      "url": "https://www.startmate.com/",
-      "title": "Startmate — homepage checked by scrape.py",
-      "excerpt": "Apply to Accelerator → Apply to Accelerator → → https://www.startmate.com/accelerator",
-      "page": "details"
     },
     {
       "id": "check-route-4523c23783",

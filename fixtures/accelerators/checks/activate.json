@@ -1,21 +1,14 @@
 {
   "programId": "activate",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-16T04:09:23.000Z",
   "pagesRead": [
     "https://activate.org/",
-    "https://activate.org/apply",
+    "https://activate.org/la-bridge-info?hsLang=en",
     "https://activate.org/faq",
     "https://activate.org/global-programs",
     "https://activate.org/news/activate-welcomes-50-new-fellows-to-cohort-2026?hsLang=en"
   ],
   "evidence": [
-    {
-      "id": "check-deal-63058a7c26",
-      "url": "https://activate.org/apply",
-      "title": "Activate — application page checked by scrape.py",
-      "excerpt": "Fellowship Fit Preparing Your Application Activate Fellowship Selection Timeline Fellowship Benefits Financial Support for Personal & Business Expenses $100K living stipend per year $100K in R&D support $12K in travel and professional development funds per year Health insurance stipend Relocation allowance Focus on",
-      "page": "application"
-    },
     {
       "id": "check-deal-f7a54daaa4",
       "url": "https://activate.org/faq",
@@ -36,13 +29,6 @@
       "title": "Activate — terms page checked by scrape.py",
       "excerpt": "Most communications from Activate will come from the apply@activate.org email address. We recommend making sure emails from this",
       "page": "terms"
-    },
-    {
-      "id": "check-email-4c374bae62",
-      "url": "https://activate.org/apply",
-      "title": "Activate — application page checked by scrape.py",
-      "excerpt": "Contact Our Recruitment Team (apply@activate.org)",
-      "page": "application"
     },
     {
       "id": "check-email-4e4bd45d2f",
@@ -73,10 +59,10 @@
       "page": "terms"
     },
     {
-      "id": "check-name-037c7fc8e8",
+      "id": "check-name-364554a488",
       "url": "https://activate.org/",
       "title": "Activate — homepage checked by scrape.py",
-      "excerpt": "Activate—Driving Hard Tech for Good Skip to content US Fellowship",
+      "excerpt": "Activate—Driving Hard Tech for Good Skip to content Applications",
       "page": "details"
     },
     {
@@ -101,11 +87,39 @@
       "page": "details"
     },
     {
+      "id": "check-route-3b1e1bac1c",
+      "url": "https://activate.org/la-bridge-info?hsLang=en",
+      "title": "Activate — application page checked by scrape.py",
+      "excerpt": "Apply Now → https://activate.org/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5d3f626c16",
+      "url": "https://activate.org/global-programs",
+      "title": "Activate — details page checked by scrape.py",
+      "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info?hsLang=en",
+      "page": "details"
+    },
+    {
       "id": "check-route-6d0433be47",
       "url": "https://activate.org/global-programs",
       "title": "Activate — details page checked by scrape.py",
       "excerpt": "Apply Now → https://activate.org/apply",
       "page": "details"
+    },
+    {
+      "id": "check-route-74b2dc57d1",
+      "url": "https://activate.org/",
+      "title": "Activate — homepage checked by scrape.py",
+      "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info?hsLang=en",
+      "page": "details"
+    },
+    {
+      "id": "check-route-affe060cec",
+      "url": "https://activate.org/la-bridge-info?hsLang=en",
+      "title": "Activate — application page checked by scrape.py",
+      "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info",
+      "page": "application"
     },
     {
       "id": "check-route-c469da54f0",
@@ -122,6 +136,13 @@
       "page": "details"
     },
     {
+      "id": "check-route-c5f5082359",
+      "url": "https://activate.org/news/activate-welcomes-50-new-fellows-to-cohort-2026?hsLang=en",
+      "title": "Activate — batches page checked by scrape.py",
+      "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info",
+      "page": "batches"
+    },
+    {
       "id": "check-route-d1910dd8e7",
       "url": "https://activate.org/faq",
       "title": "Activate — terms page checked by scrape.py",
@@ -134,40 +155,82 @@
       "title": "Activate — terms page checked by scrape.py",
       "excerpt": "Apply Now → https://activate.org/apply",
       "page": "terms"
+    },
+    {
+      "id": "check-route-f2a9f99022",
+      "url": "https://activate.org/faq",
+      "title": "Activate — terms page checked by scrape.py",
+      "excerpt": "Applications Now Open: Louisiana BRIDGE → https://activate.org/la-bridge-info?hsLang=en",
+      "page": "terms"
+    },
+    {
+      "id": "check-status-2baf73e531",
+      "url": "https://activate.org/",
+      "title": "Activate — homepage checked by scrape.py",
+      "excerpt": "Activate—Driving Hard Tech for Good Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
+      "page": "details"
+    },
+    {
+      "id": "check-status-71d71f6b8b",
+      "url": "https://activate.org/news/activate-welcomes-50-new-fellows-to-cohort-2026?hsLang=en",
+      "title": "Activate — batches page checked by scrape.py",
+      "excerpt": "Activate Welcomes 50 New Fellows to Cohort 2026 Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
+      "page": "batches"
+    },
+    {
+      "id": "check-status-e0c4cba9fe",
+      "url": "https://activate.org/global-programs",
+      "title": "Activate — details page checked by scrape.py",
+      "excerpt": "Global Programs Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
+      "page": "details"
+    },
+    {
+      "id": "check-status-f7634c4e1e",
+      "url": "https://activate.org/la-bridge-info?hsLang=en",
+      "title": "Activate — application page checked by scrape.py",
+      "excerpt": "Activate's LSI BRIDGE Program: Learn More Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
+      "page": "application"
+    },
+    {
+      "id": "check-status-fef300c368",
+      "url": "https://activate.org/faq",
+      "title": "Activate — terms page checked by scrape.py",
+      "excerpt": "Activate Fellowship FAQ Skip to content Applications Now Open: Louisiana BRIDGE US Fellowship Our Fellowship Local Communities Apply Now Our Fellows FAQ Programs",
+      "page": "terms"
     }
   ],
   "findings": {
     "emails": [
       {
         "value": "apply@activate.org",
-        "evidenceId": "check-email-4c374bae62"
+        "evidenceId": "check-email-1bdeede3ea"
       }
     ],
     "phones": [],
     "routes": [
       {
+        "value": "https://activate.org/la-bridge-info?hsLang=en",
+        "evidenceId": "check-route-74b2dc57d1"
+      },
+      {
         "value": "https://activate.org/apply",
         "evidenceId": "check-route-c47de7fcbf"
       },
       {
-        "value": "mailto:apply@activate.org",
-        "evidenceId": "check-email-4c374bae62"
+        "value": "https://activate.org/la-bridge-info",
+        "evidenceId": "check-route-affe060cec"
       },
       {
         "value": "https://www.activate.org/apply/?hsLang=en",
         "evidenceId": "check-route-024b6e73f2"
       },
       {
+        "value": "mailto:apply@activate.org",
+        "evidenceId": "check-email-1bdeede3ea"
+      },
+      {
         "value": "https://activate.org/apply/#fellowship-fit",
         "evidenceId": "check-route-c469da54f0"
-      },
-      {
-        "value": "https://activate.org/apply?hsLang=en",
-        "evidenceId": "check-route-d1910dd8e7"
-      },
-      {
-        "value": "https://activate.org/singapore-apply?hsLang=en",
-        "evidenceId": "check-route-0e325a33cf"
       }
     ],
     "applicationUrl": [
@@ -176,15 +239,16 @@
         "evidenceId": "check-route-c47de7fcbf"
       }
     ],
-    "applicationsOpen": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-2baf73e531"
+      }
+    ],
     "operatingStatus": [],
     "deadlines": [],
     "selectivity": [],
     "dealText": [
-      {
-        "value": "Fellowship Fit Preparing Your Application Activate Fellowship Selection Timeline Fellowship Benefits Financial Support for Personal & Business Expenses $100K living stipend per year $100K in R&D support $12K in travel and professional development funds per year Health insurance stipend Relocation allowance Focus on",
-        "evidenceId": "check-deal-63058a7c26"
-      },
       {
         "value": "communities?” question for details.) Does Activate provide access to laboratory space? Activate does not have dedicated laboratory space, but: We provide $100,000 in research funding to each project / company in the fellowship that may be used to access laboratory space as needed In our geographically-connected",
         "evidenceId": "check-deal-f7a54daaa4"
@@ -194,7 +258,7 @@
     "name": [
       {
         "value": "Activate",
-        "evidenceId": "check-name-037c7fc8e8"
+        "evidenceId": "check-name-364554a488"
       }
     ],
     "examplePages": []

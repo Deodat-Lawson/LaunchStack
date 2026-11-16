@@ -1,0 +1,30 @@
+{
+  "programId": "nextcorps",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pages": [
+    {
+      "url": "https://nextcorps.org/about-us/",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/apply-to-nextcorps/",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://nextcorps.org/your-startups-codebase-has-rules-what-founders-should-know-about-software-licensing/",
+      "page": "details",
+      "anchor": "Read the blog",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

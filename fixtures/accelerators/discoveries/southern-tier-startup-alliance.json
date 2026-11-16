@@ -1,0 +1,22 @@
+{
+  "programId": "southern-tier-startup-alliance",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pages": [
+    {
+      "url": "https://www.ststartup.com/what-we-offer/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.ststartup.com/news-updates/",
+      "page": "batches",
+      "anchor": "News",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

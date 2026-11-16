@@ -1,6 +1,6 @@
 {
   "programId": "y-combinator",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-16T04:09:23.000Z",
   "pages": [
     {
       "url": "https://www.ycombinator.com/about",
@@ -30,14 +30,6 @@
       "url": "https://www.ycombinator.com/companies",
       "page": "portfolio",
       "anchor": "Companies",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://www.ycombinator.com/library/ks-how-to-build-the-future-paul-graham-amjad-masad",
-      "page": "details",
-      "anchor": "Video How To Build The Future: Paul Graham & Amjad Masad Replit co-founder and CEO Amjad Masad talks with Paul Graham about why Replit was so well positioned when coding agents arr",
       "fetched": false,
       "blocked": null,
       "origin": "official"

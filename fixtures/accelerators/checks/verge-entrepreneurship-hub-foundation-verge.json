@@ -1,0 +1,138 @@
+{
+  "programId": "verge-entrepreneurship-hub-foundation-verge",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.vergeokc.com",
+    "https://www.vergeokc.com/about",
+    "https://www.vergeokc.com/faqs"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-0c5e4d2b2a",
+      "url": "https://www.vergeokc.com/faqs",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page checked by scrape.py",
+      "excerpt": "it out. For any other questions, please send an email to hello@vergeokc.com . × Take your business to new heights with The Verge *",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-2a5b7566f9",
+      "url": "https://www.vergeokc.com/faqs",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page checked by scrape.py",
+      "excerpt": "Hello@VergeOKC.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-3550ecae09",
+      "url": "https://www.vergeokc.com/faqs",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page checked by scrape.py",
+      "excerpt": "hello@vergeokc.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-77e8026ed7",
+      "url": "https://www.vergeokc.com/about",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — details page checked by scrape.py",
+      "excerpt": "Anna Sheeley Membership Success Coordinator Contact us: hello@vergeokc.com Our Board Tyler Tokarczyk Board President and Senior",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8a97e08150",
+      "url": "https://www.vergeokc.com/about",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — details page checked by scrape.py",
+      "excerpt": "Robinson Ave, #500 Oklahoma City, OK 73102 (405) 362-0756 Hello@VergeOKC.com M-F / 9a–5p An independent 501(c)(3) nonprofit. This Is",
+      "page": "details"
+    },
+    {
+      "id": "check-email-9621c6451e",
+      "url": "https://www.vergeokc.com",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — homepage checked by scrape.py",
+      "excerpt": "Hello@VergeOKC.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-996f385b80",
+      "url": "https://www.vergeokc.com",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — homepage checked by scrape.py",
+      "excerpt": "Robinson Ave, #500 Oklahoma City, OK 73102 (405) 362-0756 Hello@VergeOKC.com M-F / 9a–5p An independent 501(c)(3) nonprofit. This Is",
+      "page": "details"
+    },
+    {
+      "id": "check-email-a4ce45bd95",
+      "url": "https://www.vergeokc.com/about",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — details page checked by scrape.py",
+      "excerpt": "Hello@VergeOKC.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c896041fc2",
+      "url": "https://www.vergeokc.com/faqs",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page checked by scrape.py",
+      "excerpt": "Robinson Ave, #500 Oklahoma City, OK 73102 (405) 362-0756 Hello@VergeOKC.com M-F / 9a–5p An independent 501(c)(3) nonprofit. This Is",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-d324838218",
+      "url": "https://www.vergeokc.com/faqs",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page checked by scrape.py",
+      "excerpt": "the team to get setup. If that still didn't work, email hello@vergeokc.com and we'll help figure it out. For any other questions,",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-1b5ebcef6a",
+      "url": "https://www.vergeokc.com/about",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — details page checked by scrape.py",
+      "excerpt": "(405) 362-0756",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-3635a543bd",
+      "url": "https://www.vergeokc.com/faqs",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — terms page checked by scrape.py",
+      "excerpt": "(405) 362-0756",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-644888d7ac",
+      "url": "https://www.vergeokc.com",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — homepage checked by scrape.py",
+      "excerpt": "(405) 362-0756",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cbe86ef358",
+      "url": "https://www.vergeokc.com/about",
+      "title": "The Verge Entrepreneurship Hub Foundation (The Verge) — details page checked by scrape.py",
+      "excerpt": "https://www.vergeokc.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "hello@vergeokc.com",
+        "evidenceId": "check-email-9621c6451e"
+      }
+    ],
+    "phones": [
+      {
+        "value": "(405) 362-0756",
+        "evidenceId": "check-phone-644888d7ac"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.vergeokc.com/",
+        "evidenceId": "check-route-cbe86ef358"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

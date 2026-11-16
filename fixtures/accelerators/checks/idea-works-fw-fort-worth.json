@@ -1,0 +1,81 @@
+{
+  "programId": "idea-works-fw-fort-worth",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "http://ideaworksfw.org/",
+    "https://ideaworksfw.org/about/",
+    "https://ideaworksfw.org/"
+  ],
+  "evidence": [
+    {
+      "id": "check-phone-a61ffac59d",
+      "url": "https://ideaworksfw.org/about/",
+      "title": "IDEA Works FW (Fort Worth) — details page checked by scrape.py",
+      "excerpt": "817-569-6869",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-c9ad39bb2a",
+      "url": "https://ideaworksfw.org/",
+      "title": "IDEA Works FW (Fort Worth) — application page checked by scrape.py",
+      "excerpt": "817-569-6869",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-fa79603249",
+      "url": "http://ideaworksfw.org/",
+      "title": "IDEA Works FW (Fort Worth) — homepage checked by scrape.py",
+      "excerpt": "817-569-6869",
+      "page": "details"
+    },
+    {
+      "id": "check-route-58cf1d40af",
+      "url": "http://ideaworksfw.org/",
+      "title": "IDEA Works FW (Fort Worth) — homepage checked by scrape.py",
+      "excerpt": "apply → https://ideaworksfw.org/#",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ab615889de",
+      "url": "https://ideaworksfw.org/",
+      "title": "IDEA Works FW (Fort Worth) — application page checked by scrape.py",
+      "excerpt": "Apply Now → https://ideaworksfw.org/membership/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c51980a327",
+      "url": "http://ideaworksfw.org/",
+      "title": "IDEA Works FW (Fort Worth) — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://ideaworksfw.org/membership/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "8175696869",
+        "evidenceId": "check-phone-fa79603249"
+      }
+    ],
+    "routes": [
+      {
+        "value": "https://ideaworksfw.org/#",
+        "evidenceId": "check-route-58cf1d40af"
+      },
+      {
+        "value": "https://ideaworksfw.org/membership/",
+        "evidenceId": "check-route-c51980a327"
+      }
+    ],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "programId": "shoppes-guthrie-ok",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.guthrieok.com/theshoppes",
+    "https://www.guthrieok.com/about",
+    "https://www.guthrieok.com/_files/ugd/a2b3c8_20fd33691e6948bcae069e2c972d76fa.pdf"
+  ],
+  "evidence": [
+    {
+      "id": "check-route-47b53cfe93",
+      "url": "https://www.guthrieok.com/theshoppes",
+      "title": "The Shoppes – Guthrie OK — homepage checked by scrape.py",
+      "excerpt": "The Shoppes → https://www.guthrieok.com/theshoppes",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5363d60286",
+      "url": "https://www.guthrieok.com/theshoppes",
+      "title": "The Shoppes – Guthrie OK — homepage checked by scrape.py",
+      "excerpt": "Vendor Application → https://www.guthrieok.com/_files/ugd/a2b3c8_20fd33691e6948bcae069e2c972d76fa.pdf",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.guthrieok.com/_files/ugd/a2b3c8_20fd33691e6948bcae069e2c972d76fa.pdf",
+        "evidenceId": "check-route-5363d60286"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.guthrieok.com/theshoppes",
+        "evidenceId": "check-route-47b53cfe93"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "programId": "technology-business-accelerator-techba-austin",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.ic2.utexas.edu/global/programs/techba/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-2adeaf887e",
+      "url": "https://www.ic2.utexas.edu/global/programs/techba/",
+      "title": "Technology Business Accelerator (TechBA) Austin — homepage checked by scrape.py",
+      "excerpt": "info@ic2.utexas.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-a792c3309a",
+      "url": "https://www.ic2.utexas.edu/global/programs/techba/",
+      "title": "Technology Business Accelerator (TechBA) Austin — homepage checked by scrape.py",
+      "excerpt": "TOUCH 2815 San Gabriel St Austin, TX 78705 (512) 475-8900 info@ic2.utexas.edu About Research BBR Programs News/Insights Events Connect",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-c701d6f4a6",
+      "url": "https://www.ic2.utexas.edu/global/programs/techba/",
+      "title": "Technology Business Accelerator (TechBA) Austin — homepage checked by scrape.py",
+      "excerpt": "\"telephone\": \"512 475 8900\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-df59132725",
+      "url": "https://www.ic2.utexas.edu/global/programs/techba/",
+      "title": "Technology Business Accelerator (TechBA) Austin — homepage checked by scrape.py",
+      "excerpt": "(512) 475-8900",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@ic2.utexas.edu",
+        "evidenceId": "check-email-2adeaf887e"
+      }
+    ],
+    "phones": [
+      {
+        "value": "(512) 475-8900",
+        "evidenceId": "check-phone-df59132725"
+      },
+      {
+        "value": "512 475 8900",
+        "evidenceId": "check-phone-c701d6f4a6"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

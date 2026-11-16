@@ -1,0 +1,55 @@
+{
+  "programId": "xleratehealth",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "http://www.xleratehealth.com",
+    "https://www.xleratehealth.com/about/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-e2ea5be41c",
+      "url": "http://www.xleratehealth.com",
+      "title": "XLerateHealth — homepage checked by scrape.py",
+      "excerpt": "XLerateHealth – Making the companies that are remaking healthcare Skip",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-757e41c973",
+      "url": "http://www.xleratehealth.com",
+      "title": "XLerateHealth — homepage checked by scrape.py",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b48080fad4",
+      "url": "https://www.xleratehealth.com/about/",
+      "title": "XLerateHealth — details page checked by scrape.py",
+      "excerpt": "Our Portfolio → https://www.xleratehealth.com/portfolio/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.xleratehealth.com/portfolio/",
+        "evidenceId": "check-portfolio-757e41c973"
+      }
+    ],
+    "name": [
+      {
+        "value": "XLerateHealth",
+        "evidenceId": "check-name-e2ea5be41c"
+      }
+    ],
+    "examplePages": []
+  }
+}

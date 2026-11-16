@@ -1,0 +1,194 @@
+{
+  "programId": "nextcorps",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://nextcorps.org/",
+    "https://nextcorps.org/about-us/",
+    "https://nextcorps.org/apply-to-nextcorps/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-2c91ff2501",
+      "url": "https://nextcorps.org/apply-to-nextcorps/",
+      "title": "NextCorps — application page checked by scrape.py",
+      "excerpt": "info@nextcorps.org",
+      "page": "application"
+    },
+    {
+      "id": "check-email-2d46f5f68e",
+      "url": "https://nextcorps.org/about-us/",
+      "title": "NextCorps — details page checked by scrape.py",
+      "excerpt": "info@nextcorps.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-72d72cfd02",
+      "url": "https://nextcorps.org/",
+      "title": "NextCorps — homepage checked by scrape.py",
+      "excerpt": "Main St. Suite 6000 Rochester, NY 14604 1-585-214-2400 info@nextcorps.org FOLLOW US Linkedin Facebook Instagram Youtube Access the",
+      "page": "details"
+    },
+    {
+      "id": "check-email-7e7feeed8a",
+      "url": "https://nextcorps.org/",
+      "title": "NextCorps — homepage checked by scrape.py",
+      "excerpt": "info@nextcorps.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-a7cd831cd3",
+      "url": "https://nextcorps.org/about-us/",
+      "title": "NextCorps — details page checked by scrape.py",
+      "excerpt": "Main St. Suite 6000 Rochester, NY 14604 1-585-214-2400 info@nextcorps.org FOLLOW US Linkedin Facebook Instagram Youtube Access the",
+      "page": "details"
+    },
+    {
+      "id": "check-email-a82449c060",
+      "url": "https://nextcorps.org/about-us/",
+      "title": "NextCorps — details page checked by scrape.py",
+      "excerpt": "reach out today (info@nextcorps.org)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c801d7278c",
+      "url": "https://nextcorps.org/apply-to-nextcorps/",
+      "title": "NextCorps — application page checked by scrape.py",
+      "excerpt": "Main St. Suite 6000 Rochester, NY 14604 1-585-214-2400 info@nextcorps.org FOLLOW US Linkedin Facebook Instagram Youtube Access the",
+      "page": "application"
+    },
+    {
+      "id": "check-name-51d8b093d2",
+      "url": "https://nextcorps.org/",
+      "title": "NextCorps — homepage checked by scrape.py",
+      "excerpt": "Home - NextCorps Skip to content About Us Facility Funders Board Staff News",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-69376efeae",
+      "url": "https://nextcorps.org/",
+      "title": "NextCorps — homepage checked by scrape.py",
+      "excerpt": "Our Startups → https://nextcorps.org/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6c2664ab70",
+      "url": "https://nextcorps.org/apply-to-nextcorps/",
+      "title": "NextCorps — application page checked by scrape.py",
+      "excerpt": "Incubation Services → https://nextcorps.org/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-711b595221",
+      "url": "https://nextcorps.org/about-us/",
+      "title": "NextCorps — details page checked by scrape.py",
+      "excerpt": "Incubation Services → https://nextcorps.org/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9732591c64",
+      "url": "https://nextcorps.org/",
+      "title": "NextCorps — homepage checked by scrape.py",
+      "excerpt": "Incubation Services → https://nextcorps.org/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9d5152f28b",
+      "url": "https://nextcorps.org/",
+      "title": "NextCorps — homepage checked by scrape.py",
+      "excerpt": "View Startups → https://nextcorps.org/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e79348b34c",
+      "url": "https://nextcorps.org/about-us/",
+      "title": "NextCorps — details page checked by scrape.py",
+      "excerpt": "Our Startups → https://nextcorps.org/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f6bc576ac8",
+      "url": "https://nextcorps.org/apply-to-nextcorps/",
+      "title": "NextCorps — application page checked by scrape.py",
+      "excerpt": "Our Startups → https://nextcorps.org/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-128e5445d0",
+      "url": "https://nextcorps.org/",
+      "title": "NextCorps — homepage checked by scrape.py",
+      "excerpt": "https://nextcorps.org",
+      "page": "details"
+    },
+    {
+      "id": "check-route-46aae85dca",
+      "url": "https://nextcorps.org/",
+      "title": "NextCorps — homepage checked by scrape.py",
+      "excerpt": "Apply → https://nextcorps.org/apply-to-nextcorps/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5d3b453199",
+      "url": "https://nextcorps.org/about-us/",
+      "title": "NextCorps — details page checked by scrape.py",
+      "excerpt": "From Prototype to Profits: NextCorps Opens Applications for Free Hardware Manufacturing Accelerator → https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c50f40bc97",
+      "url": "https://nextcorps.org/about-us/",
+      "title": "NextCorps — details page checked by scrape.py",
+      "excerpt": "Read More » → https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-dd2a74f1d6",
+      "url": "https://nextcorps.org/about-us/",
+      "title": "NextCorps — details page checked by scrape.py",
+      "excerpt": "Apply → https://nextcorps.org/apply-to-nextcorps/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@nextcorps.org",
+        "evidenceId": "check-email-7e7feeed8a"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://nextcorps.org/apply-to-nextcorps/",
+        "evidenceId": "check-route-46aae85dca"
+      },
+      {
+        "value": "https://nextcorps.org/from-prototype-to-profits-nextcorps-opens-applications-for-free-hardware-manufacturing-accelerator/",
+        "evidenceId": "check-route-5d3b453199"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://nextcorps.org",
+        "evidenceId": "check-route-128e5445d0"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://nextcorps.org/startups/",
+        "evidenceId": "check-portfolio-69376efeae"
+      }
+    ],
+    "name": [
+      {
+        "value": "NextCorps",
+        "evidenceId": "check-name-51d8b093d2"
+      }
+    ],
+    "examplePages": []
+  }
+}

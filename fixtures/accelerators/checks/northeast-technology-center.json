@@ -1,0 +1,108 @@
+{
+  "programId": "northeast-technology-center",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.netech.edu",
+    "https://www.netech.edu/page/about-us",
+    "https://www.netech.edu/page/board-meeting-dates",
+    "https://www.netech.edu/page/apply-now"
+  ],
+  "evidence": [
+    {
+      "id": "check-phone-1346fad389",
+      "url": "https://www.netech.edu",
+      "title": "Northeast Technology Center — homepage checked by scrape.py",
+      "excerpt": "(918) 825-7040",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-2eca7a1bc5",
+      "url": "https://www.netech.edu/page/apply-now",
+      "title": "Northeast Technology Center — application page checked by scrape.py",
+      "excerpt": "(918) 825-7040",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-6ea75a89a4",
+      "url": "https://www.netech.edu/page/about-us",
+      "title": "Northeast Technology Center — details page checked by scrape.py",
+      "excerpt": "(918) 825-7040",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-7f9332ab41",
+      "url": "https://www.netech.edu/page/board-meeting-dates",
+      "title": "Northeast Technology Center — batches page checked by scrape.py",
+      "excerpt": "(918) 825-7040",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-083ed5c59b",
+      "url": "https://www.netech.edu",
+      "title": "Northeast Technology Center — homepage checked by scrape.py",
+      "excerpt": "Northeast Tech - → https://www.netech.edu/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-15dadcb75f",
+      "url": "https://www.netech.edu/page/board-meeting-dates",
+      "title": "Northeast Technology Center — batches page checked by scrape.py",
+      "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-2f278e016f",
+      "url": "https://www.netech.edu",
+      "title": "Northeast Technology Center — homepage checked by scrape.py",
+      "excerpt": "apply now → https://www.netech.edu/o/ntc/page/apply-now",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4397814cd2",
+      "url": "https://www.netech.edu",
+      "title": "Northeast Technology Center — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5febb7f56b",
+      "url": "https://www.netech.edu/page/about-us",
+      "title": "Northeast Technology Center — details page checked by scrape.py",
+      "excerpt": "Apply Now → https://www.netech.edu/page/apply-now",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "(918) 825-7040",
+        "evidenceId": "check-phone-1346fad389"
+      }
+    ],
+    "routes": [
+      {
+        "value": "https://www.netech.edu/page/apply-now",
+        "evidenceId": "check-route-4397814cd2"
+      },
+      {
+        "value": "https://www.netech.edu/o/ntc/page/apply-now",
+        "evidenceId": "check-route-2f278e016f"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.netech.edu/",
+        "evidenceId": "check-route-083ed5c59b"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

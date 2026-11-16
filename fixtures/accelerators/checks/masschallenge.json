@@ -1,6 +1,6 @@
 {
   "programId": "masschallenge",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-16T04:09:23.000Z",
   "pagesRead": [
     "https://masschallenge.org/",
     "https://masschallenge.org/traction-program/"
@@ -35,10 +35,10 @@
       "page": "details"
     },
     {
-      "id": "check-name-21ec86ad28",
+      "id": "check-name-3df1230942",
       "url": "https://masschallenge.org/",
       "title": "MassChallenge — homepage checked by scrape.py",
-      "excerpt": "Home - MassChallenge MassChallenge Network Close Network Open Network OUR",
+      "excerpt": "MassChallenge | Startup Accelerator and Global Network MassChallenge",
       "page": "details"
     },
     {
@@ -133,6 +133,13 @@
       "page": "details"
     },
     {
+      "id": "check-route-e35e53dfb0",
+      "url": "https://masschallenge.org/",
+      "title": "MassChallenge — homepage checked by scrape.py",
+      "excerpt": "NOW ACCEPTING APPLICATIONS → https://apply.masschallenge.org/en-us/mcch-sustainable-food-challenge-2027",
+      "page": "details"
+    },
+    {
       "id": "check-route-fe3bb7214f",
       "url": "https://masschallenge.org/",
       "title": "MassChallenge — homepage checked by scrape.py",
@@ -213,7 +220,7 @@
     "name": [
       {
         "value": "MassChallenge",
-        "evidenceId": "check-name-21ec86ad28"
+        "evidenceId": "check-name-3df1230942"
       }
     ],
     "examplePages": []

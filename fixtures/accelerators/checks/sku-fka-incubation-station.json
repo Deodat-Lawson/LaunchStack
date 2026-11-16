@@ -1,0 +1,47 @@
+{
+  "programId": "sku-fka-incubation-station",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.sku.is"
+  ],
+  "evidence": [
+    {
+      "id": "check-route-ad919d5452",
+      "url": "https://www.sku.is",
+      "title": "SKU (FKA Incubation Station) — homepage checked by scrape.py",
+      "excerpt": "APPLY TODAY → https://airtable.com/appMr8f8kihRWiUEz/pagyTwbTTAneY06GS/form",
+      "page": "details"
+    },
+    {
+      "id": "check-status-149f3e3798",
+      "url": "https://www.sku.is",
+      "title": "SKU (FKA Incubation Station) — homepage checked by scrape.py",
+      "excerpt": "Blog Gift Guide Creating Lasting Change in CPG SKU: The Nation's Leading Consumer Products Accelerator Now Accepting Applications for Our Spring 2027 Program APPLY TODAY The SKU Ecosystem SKU surrounds stellar startups with a powerful",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://airtable.com/appMr8f8kihRWiUEz/pagyTwbTTAneY06GS/form",
+        "evidenceId": "check-route-ad919d5452"
+      }
+    ],
+    "applicationUrl": [],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-149f3e3798"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

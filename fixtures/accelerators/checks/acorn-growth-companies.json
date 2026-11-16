@@ -1,0 +1,46 @@
+{
+  "programId": "acorn-growth-companies",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.acorngrowthcompanies.com"
+  ],
+  "evidence": [
+    {
+      "id": "check-phone-2b98e35317",
+      "url": "https://www.acorngrowthcompanies.com",
+      "title": "Acorn Growth Companies — homepage checked by scrape.py",
+      "excerpt": "(405) 737-2676",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-3f36f36545",
+      "url": "https://www.acorngrowthcompanies.com",
+      "title": "Acorn Growth Companies — homepage checked by scrape.py",
+      "excerpt": "+44 (0)20 8863 8578",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "1-405-737-2676",
+        "evidenceId": "check-phone-2b98e35317"
+      },
+      {
+        "value": "1-44-0-20-8863-8578",
+        "evidenceId": "check-phone-3f36f36545"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "programId": "vogt-awards",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.vogtawards.com"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-0ed7079536",
+      "url": "https://www.vogtawards.com",
+      "title": "The Vogt Awards — homepage checked by scrape.py",
+      "excerpt": "same delivery mechanism for something a little better for the user.” Read more. 2026 Vogt Awards Cohort These six early-stage industry disruptors will receive $25,000 in non-dilutive grant funding and participate in a 10-week accelerator program where they will receive coaching, mentorship, strategic introductions, and other",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-5eddd1e7ef",
+      "url": "https://www.vogtawards.com",
+      "title": "The Vogt Awards — homepage checked by scrape.py",
+      "excerpt": "in the Louisville region a unique and exciting opportunity to take their businesses to the next level. Each year, up to six early-stage businesses receive $25,000 in non-dilutive grant funding, participation in a 10-week startup accelerator program, coaching, mentorship, strategic introductions, and recognition, all",
+      "page": "details"
+    },
+    {
+      "id": "check-name-d5feb752c5",
+      "url": "https://www.vogtawards.com",
+      "title": "The Vogt Awards — homepage checked by scrape.py",
+      "excerpt": "Awards is celebrating its 26th year. Since 1999, the Vogt Awards has offered entrepreneurs in the Louisville region a",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "in the Louisville region a unique and exciting opportunity to take their businesses to the next level. Each year, up to six early-stage businesses receive $25,000 in non-dilutive grant funding, participation in a 10-week startup accelerator program, coaching, mentorship, strategic introductions, and recognition, all",
+        "evidenceId": "check-deal-5eddd1e7ef"
+      },
+      {
+        "value": "same delivery mechanism for something a little better for the user.” Read more. 2026 Vogt Awards Cohort These six early-stage industry disruptors will receive $25,000 in non-dilutive grant funding and participate in a 10-week accelerator program where they will receive coaching, mentorship, strategic introductions, and other",
+        "evidenceId": "check-deal-0ed7079536"
+      }
+    ],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "The Vogt Awards",
+        "evidenceId": "check-name-d5feb752c5"
+      }
+    ],
+    "examplePages": []
+  }
+}

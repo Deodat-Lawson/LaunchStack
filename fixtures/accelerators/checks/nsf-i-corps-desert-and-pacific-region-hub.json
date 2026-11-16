@@ -1,0 +1,153 @@
+{
+  "programId": "nsf-i-corps-desert-and-pacific-region-hub",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://desertpacificicorps.org/",
+    "https://desertpacificicorps.org/about-us/",
+    "https://desertpacificicorps.org/get-involved/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-7506a3689e",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — details page checked by scrape.py",
+      "excerpt": "Contact us! (info@desertpacificicorps.org)",
+      "page": "details"
+    },
+    {
+      "id": "check-route-061b02a563",
+      "url": "https://desertpacificicorps.org/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — homepage checked by scrape.py",
+      "excerpt": "Apply → https://desertpacificicorps.org/get-involved/#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1e46ab8e65",
+      "url": "https://desertpacificicorps.org/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — homepage checked by scrape.py",
+      "excerpt": "Apply now → https://desertpacificicorps.org/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-267c4c0747",
+      "url": "https://desertpacificicorps.org/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — homepage checked by scrape.py",
+      "excerpt": "https://desertpacificicorps.org/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2c588f444f",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — details page checked by scrape.py",
+      "excerpt": "Apply now → https://desertpacificicorps.org/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4243c8d206",
+      "url": "https://desertpacificicorps.org/get-involved/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page checked by scrape.py",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-59bc707ad4",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — details page checked by scrape.py",
+      "excerpt": "Join us → https://desertpacificicorps.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7dbc63962f",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — details page checked by scrape.py",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-853287ccd1",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — details page checked by scrape.py",
+      "excerpt": "Apply → https://desertpacificicorps.org/get-involved/#apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8615c92c81",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — details page checked by scrape.py",
+      "excerpt": "apply page → https://desertpacificicorps.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9822ff5372",
+      "url": "https://desertpacificicorps.org/about-us/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — details page checked by scrape.py",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b9790e5947",
+      "url": "https://desertpacificicorps.org/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — homepage checked by scrape.py",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c4282ddc92",
+      "url": "https://desertpacificicorps.org/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — homepage checked by scrape.py",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e8d636fc0a",
+      "url": "https://desertpacificicorps.org/get-involved/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page checked by scrape.py",
+      "excerpt": "Apply → https://desertpacificicorps.org/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f6ce0adbf8",
+      "url": "https://desertpacificicorps.org/get-involved/",
+      "title": "NSF I-Corps Desert and Pacific Region Hub — application page checked by scrape.py",
+      "excerpt": "Apply now → https://desertpacificicorps.org/apply",
+      "page": "application"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@desertpacificicorps.org",
+        "evidenceId": "check-email-7506a3689e"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://desertpacificicorps.org/get-involved/#apply",
+        "evidenceId": "check-route-061b02a563"
+      },
+      {
+        "value": "https://desertpacificicorps.org/apply/",
+        "evidenceId": "check-route-b9790e5947"
+      },
+      {
+        "value": "https://desertpacificicorps.org/apply",
+        "evidenceId": "check-route-1e46ab8e65"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://desertpacificicorps.org/",
+        "evidenceId": "check-route-267c4c0747"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "programId": "center-for-agricultural-development-and-entrepreneurship-cad",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pages": [
+    {
+      "url": "https://www.cadefarms.org/about",
+      "page": "details",
+      "anchor": "About CADE",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

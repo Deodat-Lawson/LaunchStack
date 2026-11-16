@@ -1,0 +1,100 @@
+{
+  "programId": "new-paltz-venture-hub-hot-spot",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+    "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+    "https://www.newpaltz.edu/admissions/apply.html"
+  ],
+  "evidence": [
+    {
+      "id": "check-portfolio-2062c00b97",
+      "url": "https://www.newpaltz.edu/admissions/apply.html",
+      "title": "New Paltz Venture Hub – Hot Spot — application page checked by scrape.py",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-6ef68e43e0",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "title": "New Paltz Venture Hub – Hot Spot — details page checked by scrape.py",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a9588f29bc",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "title": "New Paltz Venture Hub – Hot Spot — homepage checked by scrape.py",
+      "excerpt": "Alumni Relations → https://www.newpaltz.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1a54987210",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "title": "New Paltz Venture Hub – Hot Spot — homepage checked by scrape.py",
+      "excerpt": "Apply → https://www.newpaltz.edu/admissions/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-361f0f6593",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "title": "New Paltz Venture Hub – Hot Spot — homepage checked by scrape.py",
+      "excerpt": "HV Venture Hub EIR Program Application → https://airtable.com/app8DwO8hNVIwtPkp/shrCACaXoPZ90dNXj",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3b87505fb3",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/hv-ecosystem-programs-and-resources",
+      "title": "New Paltz Venture Hub – Hot Spot — details page checked by scrape.py",
+      "excerpt": "Apply → https://www.newpaltz.edu/admissions/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4bda6bb06f",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "title": "New Paltz Venture Hub – Hot Spot — homepage checked by scrape.py",
+      "excerpt": "HV Venture Hub Accelerator Application → https://airtable.com/app8DwO8hNVIwtPkp/shrCACaXoPZ90dNXj",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4f0dfc1cce",
+      "url": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "title": "New Paltz Venture Hub – Hot Spot — homepage checked by scrape.py",
+      "excerpt": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://airtable.com/app8DwO8hNVIwtPkp/shrCACaXoPZ90dNXj",
+        "evidenceId": "check-route-4bda6bb06f"
+      },
+      {
+        "value": "https://www.newpaltz.edu/admissions/apply.html",
+        "evidenceId": "check-route-1a54987210"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
+        "evidenceId": "check-route-4f0dfc1cce"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.newpaltz.edu/alumni",
+        "evidenceId": "check-portfolio-a9588f29bc"
+      }
+    ],
+    "name": [],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "programId": "nsf-i-corps-great-plains-region-hub",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://gp-icorps.org/",
+    "https://gp-icorps.org/about/",
+    "https://gp-icorps.org/faq/",
+    "https://gp-icorps.org/get-involved/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-0f40a49766",
+      "url": "https://gp-icorps.org/",
+      "title": "NSF I-Corps Great Plains Region Hub — homepage checked by scrape.py",
+      "excerpt": "Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102",
+      "page": "details"
+    },
+    {
+      "id": "check-email-4a7d388673",
+      "url": "https://gp-icorps.org/about/",
+      "title": "NSF I-Corps Great Plains Region Hub — details page checked by scrape.py",
+      "excerpt": "Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102",
+      "page": "details"
+    },
+    {
+      "id": "check-email-52f493f8af",
+      "url": "https://gp-icorps.org/get-involved/",
+      "title": "NSF I-Corps Great Plains Region Hub — batches page checked by scrape.py",
+      "excerpt": "info@gp-icorps.org",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-5582a3ac5a",
+      "url": "https://gp-icorps.org/get-involved/",
+      "title": "NSF I-Corps Great Plains Region Hub — batches page checked by scrape.py",
+      "excerpt": "Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-b10289ec77",
+      "url": "https://gp-icorps.org/faq/",
+      "title": "NSF I-Corps Great Plains Region Hub — terms page checked by scrape.py",
+      "excerpt": "info@gp-icorps.org",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-be16ed9e65",
+      "url": "https://gp-icorps.org/about/",
+      "title": "NSF I-Corps Great Plains Region Hub — details page checked by scrape.py",
+      "excerpt": "info@gp-icorps.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-bfcf514185",
+      "url": "https://gp-icorps.org/faq/",
+      "title": "NSF I-Corps Great Plains Region Hub — terms page checked by scrape.py",
+      "excerpt": "Copyright © NSF I-Corps Hub Great Plains contact us info@gp-icorps.org 1854 NDSU Research Circle N. Suite 47A Fargo, ND 58102",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-cb50b65330",
+      "url": "https://gp-icorps.org/",
+      "title": "NSF I-Corps Great Plains Region Hub — homepage checked by scrape.py",
+      "excerpt": "info@gp-icorps.org",
+      "page": "details"
+    },
+    {
+      "id": "check-route-369265d811",
+      "url": "https://gp-icorps.org/",
+      "title": "NSF I-Corps Great Plains Region Hub — homepage checked by scrape.py",
+      "excerpt": "https://gp-icorps.org",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@gp-icorps.org",
+        "evidenceId": "check-email-cb50b65330"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://gp-icorps.org",
+        "evidenceId": "check-route-369265d811"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

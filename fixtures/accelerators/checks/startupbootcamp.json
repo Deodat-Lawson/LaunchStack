@@ -1,18 +1,18 @@
 {
   "programId": "startupbootcamp",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-16T04:09:23.000Z",
   "pagesRead": [
     "https://startupbootcamp.org/",
     "https://startupbootcamp.org/about/contact",
     "https://startupbootcamp.org/about/faq",
-    "https://startupbootcamp.org/articles/startupbootcamp-afritech-adds-dutch-entrepreneurial-development-bank-to-list-of-partners-for-cohort-3-of-the-asip-accelerator-program"
+    "https://startupbootcamp.org/articles/startupbootcamp-launches-new-accelerator-focused-on-food-agritech-to-foster-sustainable-food-and-agriculture-innovations"
   ],
   "evidence": [
     {
-      "id": "check-deal-161660eacb",
+      "id": "check-deal-d951dbae43",
       "url": "https://startupbootcamp.org/",
       "title": "Startupbootcamp — homepage checked by scrape.py",
-      "excerpt": "HealthTech Project in Africa, Supported by Gates Foundation and Run by SBC Afritech July 4, 2022 The pan-African accelerator will provide access to a grant of $50,000, market and government access events across the continent, and a connection to a global ecosystem in the healthcare community. Startupbootcamp Welcomes Ten",
+      "excerpt": "HealthTech Project in Africa, Supported by Gates Foundation and Run by SBC Afritech July 4, 2022 The pan-African accelerator will provide access to a grant of $50,000, market and government access events across the continent, and a connection to a global ecosystem in the healthcare community. Startupbootcamp Launches New",
       "page": "details"
     },
     {
@@ -65,10 +65,10 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-6bbcbf6b2a",
-      "url": "https://startupbootcamp.org/articles/startupbootcamp-afritech-adds-dutch-entrepreneurial-development-bank-to-list-of-partners-for-cohort-3-of-the-asip-accelerator-program",
+      "id": "check-portfolio-64dda8541b",
+      "url": "https://startupbootcamp.org/articles/startupbootcamp-launches-new-accelerator-focused-on-food-agritech-to-foster-sustainable-food-and-agriculture-innovations",
       "title": "Startupbootcamp — batches page checked by scrape.py",
-      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
       "page": "batches"
     },
     {
@@ -86,6 +86,13 @@
       "page": "terms"
     },
     {
+      "id": "check-portfolio-b1f904655f",
+      "url": "https://startupbootcamp.org/articles/startupbootcamp-launches-new-accelerator-focused-on-food-agritech-to-foster-sustainable-food-and-agriculture-innovations",
+      "title": "Startupbootcamp — batches page checked by scrape.py",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "batches"
+    },
+    {
       "id": "check-portfolio-b42583c04f",
       "url": "https://startupbootcamp.org/about/faq",
       "title": "Startupbootcamp — terms page checked by scrape.py",
@@ -93,10 +100,10 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-c8498dbd14",
-      "url": "https://startupbootcamp.org/articles/startupbootcamp-afritech-adds-dutch-entrepreneurial-development-bank-to-list-of-partners-for-cohort-3-of-the-asip-accelerator-program",
+      "id": "check-portfolio-c47138bf30",
+      "url": "https://startupbootcamp.org/articles/startupbootcamp-launches-new-accelerator-focused-on-food-agritech-to-foster-sustainable-food-and-agriculture-innovations",
       "title": "Startupbootcamp — batches page checked by scrape.py",
-      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
       "page": "batches"
     },
     {
@@ -121,17 +128,10 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-f33e500367",
-      "url": "https://startupbootcamp.org/articles/startupbootcamp-afritech-adds-dutch-entrepreneurial-development-bank-to-list-of-partners-for-cohort-3-of-the-asip-accelerator-program",
+      "id": "check-portfolio-d77569461d",
+      "url": "https://startupbootcamp.org/articles/startupbootcamp-launches-new-accelerator-focused-on-food-agritech-to-foster-sustainable-food-and-agriculture-innovations",
       "title": "Startupbootcamp — batches page checked by scrape.py",
-      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
-      "page": "batches"
-    },
-    {
-      "id": "check-portfolio-f87650c719",
-      "url": "https://startupbootcamp.org/articles/startupbootcamp-afritech-adds-dutch-entrepreneurial-development-bank-to-list-of-partners-for-cohort-3-of-the-asip-accelerator-program",
-      "title": "Startupbootcamp — batches page checked by scrape.py",
-      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
       "page": "batches"
     },
     {
@@ -442,8 +442,8 @@
     "selectivity": [],
     "dealText": [
       {
-        "value": "HealthTech Project in Africa, Supported by Gates Foundation and Run by SBC Afritech July 4, 2022 The pan-African accelerator will provide access to a grant of $50,000, market and government access events across the continent, and a connection to a global ecosystem in the healthcare community. Startupbootcamp Welcomes Ten",
-        "evidenceId": "check-deal-161660eacb"
+        "value": "HealthTech Project in Africa, Supported by Gates Foundation and Run by SBC Afritech July 4, 2022 The pan-African accelerator will provide access to a grant of $50,000, market and government access events across the continent, and a connection to a global ecosystem in the healthcare community. Startupbootcamp Launches New",
+        "evidenceId": "check-deal-d951dbae43"
       }
     ],
     "portfolioPages": [

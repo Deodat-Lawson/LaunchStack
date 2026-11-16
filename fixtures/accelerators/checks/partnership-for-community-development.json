@@ -1,0 +1,36 @@
+{
+  "programId": "partnership-for-community-development",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://hamiltonpcd.org/",
+    "https://www.hamiltonpcd.org/about-pcd"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-7f64bc63ab",
+      "url": "https://hamiltonpcd.org/",
+      "title": "Partnership for Community Development — homepage checked by scrape.py",
+      "excerpt": "Village and Town of Hamilton and the surrounding areas. Partnership for Community Development Help us transform Fayette St. Park! In 2025, the Village",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Partnership for Community Development",
+        "evidenceId": "check-name-7f64bc63ab"
+      }
+    ],
+    "examplePages": []
+  }
+}

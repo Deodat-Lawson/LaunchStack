@@ -1,6 +1,6 @@
 {
   "programId": "harvard-innovation-labs",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-16T04:09:23.000Z",
   "pages": [
     {
       "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
@@ -78,6 +78,14 @@
       "url": "https://innovationlabs.harvard.edu/articles/2026-27-launch-lab-x-cohort",
       "page": "portfolio",
       "anchor": "From Lifesaving Oxygen to Robots for Dynamic Manufacturing: Meet the 2026–27 Launch Lab X Cohort Meet the 26 Harvard Alumni-Led Startups Selected for 2026–27 Launch Lab X Accelerat",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
+      "page": "application",
+      "anchor": "Wed, Nov 18 Tips + Tricks for Applying to the 2027 President's Innovation Challenge Online 4:30 PM",
       "fetched": false,
       "blocked": null,
       "origin": "official"

@@ -1,0 +1,71 @@
+{
+  "programId": "nsf-i-corps-new-england-region-hub",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://neicorps.org/",
+    "https://neicorps.org/about/",
+    "https://neicorps.org/apply-now/",
+    "https://neicorps.org/calendar_event/hub-spark-online-10-2-3-2-3-3-2-3-2-2-3-2-3-3-2-2-2-4-2/"
+  ],
+  "evidence": [
+    {
+      "id": "check-route-0c3dfc5b3e",
+      "url": "https://neicorps.org/",
+      "title": "NSF I-Corps New England Region Hub — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://neicorps.org/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-97266db9d7",
+      "url": "https://neicorps.org/calendar_event/hub-spark-online-10-2-3-2-3-3-2-3-2-2-3-2-3-3-2-2-2-4-2/",
+      "title": "NSF I-Corps New England Region Hub — batches page checked by scrape.py",
+      "excerpt": "Apply Now → https://neicorps.org/apply-now/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-c1ea864274",
+      "url": "https://neicorps.org/calendar_event/hub-spark-online-10-2-3-2-3-3-2-3-2-2-3-2-3-3-2-2-2-4-2/",
+      "title": "NSF I-Corps New England Region Hub — batches page checked by scrape.py",
+      "excerpt": "Apply now → https://neicorps.org/apply-now/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-cc2745169b",
+      "url": "https://neicorps.org/",
+      "title": "NSF I-Corps New England Region Hub — homepage checked by scrape.py",
+      "excerpt": "https://neicorps.org/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d58bae9b2d",
+      "url": "https://neicorps.org/about/",
+      "title": "NSF I-Corps New England Region Hub — details page checked by scrape.py",
+      "excerpt": "Apply Now → https://neicorps.org/apply-now/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://neicorps.org/apply-now/",
+        "evidenceId": "check-route-0c3dfc5b3e"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://neicorps.org/",
+        "evidenceId": "check-route-cc2745169b"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

@@ -16,6 +16,7 @@ import shutil
 import subprocess
 import tempfile
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Callable
@@ -246,19 +247,42 @@ def meaningful(value: str) -> bool:
     )
 
 
+NAME_CONTINUATION = re.compile(
+    r"^(?:(?:at|of|and|or|the)\s+|Inc\.?\b|LLC\b|University\b|College\b|School\b|Institute\b|Center\b|Centre\b)",
+    re.I,
+)
+
+
+def texas_name_before(lines: list[str], index: int) -> str:
+    """Join a name that wraps across lines just above 'Location:' in the Texas PDF."""
+    parts: list[str] = []
+    for back in range(index - 1, max(index - 6, -1), -1):
+        line = lines[back]
+        if not line or line.isupper() or re.fullmatch(r"\d+", line) or line.endswith("Profiles"):
+            break
+        if parts and not (
+            NAME_CONTINUATION.match(parts[0])
+            or re.search(r"(?:\b(?:of|at|and|the|University|College)\s*$)", line, re.I)
+            or line.endswith("-")
+        ):
+            break
+        parts.insert(0, line)
+    return " ".join(parts).strip()
+
+
 def texas_incubator_directory(body: str, source: Source) -> list[Sighting]:
-    """Texas Governor's directory: the name line, then 'Location:', 'Founded:', 'Website:'."""
+    """Texas Governor's directory: the name line(s), then 'Location:', 'Founded:', 'Website:'."""
     lines = [line.strip() for line in body.splitlines()]
     sightings = []
     for index, line in enumerate(lines):
         if not line.startswith("Location:"):
             continue
-        previous = next((lines[back] for back in range(index - 1, max(index - 4, -1), -1) if lines[back]), "")
-        if not previous or previous.isupper() or re.fullmatch(r"\d+", previous) or previous.endswith("Profiles"):
+        name = texas_name_before(lines, index)
+        if not name:
             continue
         website = next((lines[ahead][8:].strip() for ahead in range(index + 1, min(index + 5, len(lines))) if lines[ahead].startswith("Website:")), None)
         sightings.append(
-            Sighting(previous, source.state, source.id, source.url, city=line[9:].strip() or None, year=source.year, website=website_of(website))
+            Sighting(name, source.state, source.id, source.url, city=line[9:].strip() or None, year=source.year, website=website_of(website))
         )
     return sightings
 
@@ -537,49 +561,69 @@ def program_id_for(entry: dict, taken: set[str]) -> str:
     return candidate
 
 
-def add_confirmed(now: datetime, fetcher: Fetcher | None = None) -> list[str]:
+def display_name(name: str) -> str:
+    """Directory labels such as 'Capital Region | Innovate 518' name the Program after the bar."""
+    return name.split(" | ")[-1].strip() or name
+
+
+def confirm_listed(now: datetime) -> int:
+    """Confirm every entry still in review whose website an official directory listed."""
+    entries = load()
+    confirmed = 0
+    for entry in entries.values():
+        if entry["status"] == "review" and entry.get("website") and any(source.get("website") for source in entry["sources"]):
+            entry["status"] = "confirmed"
+            entry["note"] = "Confirmed in bulk: the website is the one an official directory listed."
+            confirmed += 1
+    save_candidates(entries, now, json.loads(CANDIDATES.read_text()).get("sources", []) if CANDIDATES.exists() else [])
+    print(f"confirmed {confirmed} entries\n{summary(entries)}")
+    return confirmed
+
+
+def add_one(entry: dict, program_id: str, fetcher: Fetcher, now: datetime) -> tuple[str, str]:
+    """('added', note) or ('held', reason) for one confirmed entry."""
+    website = website_of(entry.get("website"))
+    if not website:
+        return "held", "Confirmed without a usable website."
+    try:
+        excerpt = startup_evidence(fetcher, website)
+    except Exception as error:
+        return "held", f"The official site could not be read: {error}"
+    if excerpt is None:
+        return "held", "The official pages do not mention startups, founders, entrepreneurs, incubation, or acceleration."
+    program = skeleton(program_id, display_name(entry["name"]), website, website_of(entry.get("applyUrl")) or website, now)
+    outcome = Outcome(program_id, program, PROGRAMS / f"{program_id}.json")
+    refresh_homepage(fetcher, outcome, now, stamp=True)
+    homepage = next(source for source in program["sources"] if source["id"] == "homepage")
+    if not homepage["quote"] or outcome.logo is None:
+        return "held", "The page text or an official logo could not be collected: " + "; ".join(outcome.lines[-2:])
+    commit([outcome])
+    checks, discovery = enrich(program, fetcher, now)
+    save(program_id, checks, discovery)
+    return "added", f"Startup wording on the official site: {excerpt}"
+
+
+def add_confirmed(now: datetime, fetcher: Fetcher | None = None, workers: int = 6) -> list[str]:
     """Scrape each confirmed entry into a homepage record. The official pages must speak to
     startups or founders, and the usual text and logo checks must pass; otherwise 'held'."""
     fetcher = fetcher or Fetcher()
     entries = load()
     taken = {path.stem for path in PROGRAMS.glob("*.json")}
-    added: list[str] = []
+    queue: list[tuple[dict, str]] = []
     for entry in entries.values():
-        if entry["status"] != "confirmed":
-            continue
-        website = website_of(entry.get("website"))
-
-        def hold(reason: str) -> None:
-            entry["status"], entry["note"] = "held", reason
-            print(f"held\t{entry['key']}\t{reason}")
-
-        if not website:
-            hold("Confirmed without a usable website.")
-            continue
-        try:
-            excerpt = startup_evidence(fetcher, website)
-        except Exception as error:
-            hold(f"The official site could not be read: {error}")
-            continue
-        if excerpt is None:
-            hold("The official pages do not mention startups, founders, entrepreneurs, incubation, or acceleration.")
-            continue
-        program_id = program_id_for(entry, taken)
-        program = skeleton(program_id, entry["name"], website, website_of(entry.get("applyUrl")) or website, now)
-        outcome = Outcome(program_id, program, PROGRAMS / f"{program_id}.json")
-        refresh_homepage(fetcher, outcome, now, stamp=True)
-        homepage = next(source for source in program["sources"] if source["id"] == "homepage")
-        if not homepage["quote"] or outcome.logo is None:
-            hold("The page text or an official logo could not be collected: " + "; ".join(outcome.lines[-2:]))
-            continue
-        commit([outcome])
-        checks, discovery = enrich(program, fetcher, now)
-        save(program_id, checks, discovery)
-        taken.add(program_id)
-        added.append(program_id)
-        entry["status"], entry["programId"] = "added", program_id
-        entry["note"] = f"Startup wording on the official site: {excerpt}"
-        print(f"added\t{program_id}\t{website}")
+        if entry["status"] == "confirmed":
+            program_id = program_id_for(entry, taken)
+            taken.add(program_id)
+            queue.append((entry, program_id))
+    with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
+        results = list(pool.map(lambda item: add_one(item[0], item[1], fetcher, now), queue))
+    added: list[str] = []
+    for (entry, program_id), (status, note) in zip(queue, results):
+        entry["status"], entry["note"] = status, note
+        if status == "added":
+            entry["programId"] = program_id
+            added.append(program_id)
+        print(f"{status}\t{program_id if status == 'added' else entry['key']}\t{note[:160]}")
     if added:
         derive_tags(now)
     save_candidates(entries, now, json.loads(CANDIDATES.read_text()).get("sources", []) if CANDIDATES.exists() else [])

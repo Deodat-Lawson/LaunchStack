@@ -1,6 +1,6 @@
 {
   "programId": "bessemer",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-16T04:09:23.000Z",
   "pages": [
     {
       "url": "https://www.bvp.com/portfolio",
@@ -214,6 +214,14 @@
       "url": "https://www.bvp.com/portfolio?sectors=cybersecurity",
       "page": "portfolio",
       "anchor": "Cybersecurity",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/atlas/the-ai-100-benchmarks-for-the-third-supercycle",
+      "page": "portfolio",
+      "anchor": "Article The AI 100: benchmarks for the third supercycle November 12, 2026 The inaugural list of the top 100 private AI companies is worth $3.6T, with ARR growth averaging 480%. A d",
       "fetched": false,
       "blocked": null,
       "origin": "official"

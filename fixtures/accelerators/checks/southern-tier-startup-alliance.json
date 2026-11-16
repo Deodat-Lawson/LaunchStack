@@ -1,0 +1,49 @@
+{
+  "programId": "southern-tier-startup-alliance",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.ststartup.com/",
+    "https://www.ststartup.com/what-we-offer/",
+    "https://www.ststartup.com/news-updates/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-5e464b4811",
+      "url": "https://www.ststartup.com/",
+      "title": "Southern Tier Startup Alliance — homepage checked by scrape.py",
+      "excerpt": "Southern Tier Startup Alliance – We support people starting and growing companies in the",
+      "page": "details"
+    },
+    {
+      "id": "check-route-548ab3da88",
+      "url": "https://www.ststartup.com/",
+      "title": "Southern Tier Startup Alliance — homepage checked by scrape.py",
+      "excerpt": "https://www.ststartup.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.ststartup.com/",
+        "evidenceId": "check-route-548ab3da88"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Southern Tier Startup Alliance",
+        "evidenceId": "check-name-5e464b4811"
+      }
+    ],
+    "examplePages": []
+  }
+}

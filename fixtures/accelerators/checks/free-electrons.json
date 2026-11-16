@@ -1,17 +1,17 @@
 {
   "programId": "free-electrons",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-16T04:09:23.000Z",
   "pagesRead": [
     "https://freeelectrons.org/",
-    "https://freeelectrons.org/2026-program/",
+    "https://freeelectrons.org/2027-program/",
     "https://freeelectrons.org/faqs/"
   ],
   "evidence": [
     {
-      "id": "check-deadline-4a34cd6ece",
+      "id": "check-deadline-32a9f9d05a",
       "url": "https://freeelectrons.org/",
       "title": "Free Electrons — homepage checked by scrape.py",
-      "excerpt": "More Get in touch HURRY! 19 D 03 H 01 M 55 S DAYS LEFT Apply before November 30th, 2026 and get these exclusive perks An exclusive Utility",
+      "excerpt": "More Get in touch HURRY! 14 D 19 H 56 M 16 S DAYS LEFT Apply before November 30th, 2026 and get these exclusive perks An exclusive Utility",
       "page": "details"
     },
     {
@@ -29,13 +29,6 @@
       "page": "terms"
     },
     {
-      "id": "check-portfolio-38cb865429",
-      "url": "https://freeelectrons.org/2026-program/",
-      "title": "Free Electrons — details page checked by scrape.py",
-      "excerpt": "Startups → https://freeelectrons.org/news/startups",
-      "page": "details"
-    },
-    {
       "id": "check-portfolio-7f8f1fbd95",
       "url": "https://freeelectrons.org/",
       "title": "Free Electrons — homepage checked by scrape.py",
@@ -43,8 +36,8 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-d5c0559758",
-      "url": "https://freeelectrons.org/2026-program/",
+      "id": "check-portfolio-99427fa7b9",
+      "url": "https://freeelectrons.org/2027-program/",
       "title": "Free Electrons — details page checked by scrape.py",
       "excerpt": "ALUMNI → https://freeelectrons.org/our-alumni/",
       "page": "details"
@@ -71,17 +64,17 @@
       "page": "details"
     },
     {
-      "id": "check-route-bd5638f7b7",
-      "url": "https://freeelectrons.org/2026-program/",
+      "id": "check-route-dfd8f729ba",
+      "url": "https://freeelectrons.org/2027-program/",
       "title": "Free Electrons — details page checked by scrape.py",
       "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
       "page": "details"
     },
     {
-      "id": "check-route-eae27fcbf9",
-      "url": "https://freeelectrons.org/2026-program/",
+      "id": "check-route-f290dfc23a",
+      "url": "https://freeelectrons.org/2027-program/",
       "title": "Free Electrons — details page checked by scrape.py",
-      "excerpt": "Applications → https://freeelectrons.org/news/applications",
+      "excerpt": "Download - PDF File → http://freeelectrons.org/guide-to-apply-to-free-electrons/",
       "page": "details"
     },
     {
@@ -90,6 +83,13 @@
       "title": "Free Electrons — terms page checked by scrape.py",
       "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
       "page": "terms"
+    },
+    {
+      "id": "check-status-13095760ab",
+      "url": "https://freeelectrons.org/2027-program/",
+      "title": "Free Electrons — details page checked by scrape.py",
+      "excerpt": "Oct. 17 th 2025 - Jan. 31 st 2026 Applications Open Worldwide From October 17th 2025, to January 31st 2026, applications are open to startups ready to scale their solutions and explore opportunities for pilots, investment, and shared",
+      "page": "details"
     },
     {
       "id": "check-status-b75bb3c562",
@@ -108,8 +108,8 @@
         "evidenceId": "check-route-08ad63cc7d"
       },
       {
-        "value": "https://freeelectrons.org/news/applications",
-        "evidenceId": "check-route-eae27fcbf9"
+        "value": "http://freeelectrons.org/guide-to-apply-to-free-electrons/",
+        "evidenceId": "check-route-f290dfc23a"
       }
     ],
     "applicationUrl": [
@@ -120,6 +120,10 @@
     ],
     "applicationsOpen": [
       {
+        "value": true,
+        "evidenceId": "check-status-13095760ab"
+      },
+      {
         "value": false,
         "evidenceId": "check-status-b75bb3c562"
       }
@@ -128,7 +132,7 @@
     "deadlines": [
       {
         "value": "2026-11-30",
-        "evidenceId": "check-deadline-4a34cd6ece"
+        "evidenceId": "check-deadline-32a9f9d05a"
       }
     ],
     "selectivity": [],
@@ -137,10 +141,6 @@
       {
         "value": "https://freeelectrons.org/our-alumni/",
         "evidenceId": "check-portfolio-d7947494e6"
-      },
-      {
-        "value": "https://freeelectrons.org/news/startups",
-        "evidenceId": "check-portfolio-38cb865429"
       }
     ],
     "name": [

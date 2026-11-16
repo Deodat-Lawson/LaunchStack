@@ -1,0 +1,35 @@
+{
+  "programId": "startup-405",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.startup405.com"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-92f26dff25",
+      "url": "https://www.startup405.com",
+      "title": "Startup 405 — homepage checked by scrape.py",
+      "excerpt": "Startup 405 Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week More",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Startup 405",
+        "evidenceId": "check-name-92f26dff25"
+      }
+    ],
+    "examplePages": []
+  }
+}

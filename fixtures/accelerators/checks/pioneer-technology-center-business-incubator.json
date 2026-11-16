@@ -1,0 +1,74 @@
+{
+  "programId": "pioneer-technology-center-business-incubator",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.pioneertech.edu/page/business-incubator",
+    "https://www.pioneertech.edu/page/about"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-9c2abc1e2d",
+      "url": "https://www.pioneertech.edu/page/about",
+      "title": "Pioneer Technology Center Business Incubator — details page checked by scrape.py",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d4a37fce93",
+      "url": "https://www.pioneertech.edu/page/business-incubator",
+      "title": "Pioneer Technology Center Business Incubator — homepage checked by scrape.py",
+      "excerpt": "Center 2101 N Ash Ponca City, OK 74601 Phone: 580.762.8336 info@pioneertech.edu Oklahoma Reporting Audit Report Stay Connected Pioneer",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-53fc6bd7b4",
+      "url": "https://www.pioneertech.edu/page/business-incubator",
+      "title": "Pioneer Technology Center Business Incubator — homepage checked by scrape.py",
+      "excerpt": "580.762.8336",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-f3baa53014",
+      "url": "https://www.pioneertech.edu/page/about",
+      "title": "Pioneer Technology Center Business Incubator — details page checked by scrape.py",
+      "excerpt": "580.762.8336",
+      "page": "details"
+    },
+    {
+      "id": "check-route-80ccbc9f13",
+      "url": "https://www.pioneertech.edu/page/business-incubator",
+      "title": "Pioneer Technology Center Business Incubator — homepage checked by scrape.py",
+      "excerpt": "Business Incubator → https://www.pioneertech.edu/page/business-incubator",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@pioneertech.edu",
+        "evidenceId": "check-email-d4a37fce93"
+      }
+    ],
+    "phones": [
+      {
+        "value": "580.762.8336",
+        "evidenceId": "check-phone-53fc6bd7b4"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.pioneertech.edu/page/business-incubator",
+        "evidenceId": "check-route-80ccbc9f13"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "programId": "western-new-york-win-wny-incubator-network",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pages": [
+    {
+      "url": "https://www.wnyincubators.com/about-us",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.wnyincubators.com/programs",
+      "page": "details",
+      "anchor": "Programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.wnyincubators.com/deals-discounts",
+      "page": "terms",
+      "anchor": "Deals & Discounts",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

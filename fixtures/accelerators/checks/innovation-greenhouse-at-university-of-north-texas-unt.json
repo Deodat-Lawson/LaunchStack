@@ -1,0 +1,35 @@
+{
+  "programId": "innovation-greenhouse-at-university-of-north-texas-unt",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "http://innovation.unt.edu"
+  ],
+  "evidence": [
+    {
+      "id": "check-phone-dfd562d024",
+      "url": "http://innovation.unt.edu",
+      "title": "Innovation Greenhouse at the University of North Texas (UNT) — homepage checked by scrape.py",
+      "excerpt": "940-369-7428",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "940-369-7428",
+        "evidenceId": "check-phone-dfd562d024"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

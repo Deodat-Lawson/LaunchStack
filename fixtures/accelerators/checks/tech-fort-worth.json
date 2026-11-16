@@ -1,0 +1,70 @@
+{
+  "programId": "tech-fort-worth",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "http://techfortworth.org",
+    "https://www.techfortworth.org/programs",
+    "https://www.techfortworth.org/faq"
+  ],
+  "evidence": [
+    {
+      "id": "check-phone-38caae8d4e",
+      "url": "http://techfortworth.org",
+      "title": "TECH Fort Worth — homepage checked by scrape.py",
+      "excerpt": "\"telephone\": \"(817) 339-8968\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-dca47bf958",
+      "url": "http://techfortworth.org",
+      "title": "TECH Fort Worth — homepage checked by scrape.py",
+      "excerpt": "(817) 339-8968",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1beb1ed7fe",
+      "url": "https://www.techfortworth.org/faq",
+      "title": "TECH Fort Worth — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.techfortworth.org/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-686bfd52c5",
+      "url": "http://techfortworth.org",
+      "title": "TECH Fort Worth — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.techfortworth.org/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d219746833",
+      "url": "https://www.techfortworth.org/programs",
+      "title": "TECH Fort Worth — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.techfortworth.org/portfolio",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "(817) 339-8968",
+        "evidenceId": "check-phone-dca47bf958"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.techfortworth.org/portfolio",
+        "evidenceId": "check-portfolio-686bfd52c5"
+      }
+    ],
+    "name": [],
+    "examplePages": []
+  }
+}

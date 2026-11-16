@@ -1,0 +1,48 @@
+{
+  "programId": "thinktiv",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "http://thinktiv.com",
+    "https://www.thinktiv.com/about"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-d45cf31783",
+      "url": "http://thinktiv.com",
+      "title": "Thinktiv — homepage checked by scrape.py",
+      "excerpt": "Thinktiv | Value Creation Architects Skip to content Solutions All",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5f12f9e500",
+      "url": "http://thinktiv.com",
+      "title": "Thinktiv — homepage checked by scrape.py",
+      "excerpt": "http://thinktiv.com",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "http://thinktiv.com",
+        "evidenceId": "check-route-5f12f9e500"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Thinktiv",
+        "evidenceId": "check-name-d45cf31783"
+      }
+    ],
+    "examplePages": []
+  }
+}

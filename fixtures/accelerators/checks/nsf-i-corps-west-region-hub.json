@@ -1,0 +1,81 @@
+{
+  "programId": "nsf-i-corps-west-region-hub",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.icorpshubwest.org/",
+    "https://www.icorpshubwest.org/program"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-1231febaeb",
+      "url": "https://www.icorpshubwest.org/",
+      "title": "NSF I-Corps West Region Hub — homepage checked by scrape.py",
+      "excerpt": "hello@icorpshubwest.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-78dee837a9",
+      "url": "https://www.icorpshubwest.org/",
+      "title": "NSF I-Corps West Region Hub — homepage checked by scrape.py",
+      "excerpt": "Let's Work Together Join Our Mailing List Email * Join hello@icorpshubwest.org United States I-Corps Hub West Contact Newsroom",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c11fbe617d",
+      "url": "https://www.icorpshubwest.org/program",
+      "title": "NSF I-Corps West Region Hub — details page checked by scrape.py",
+      "excerpt": "hello@icorpshubwest.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f3f09686dd",
+      "url": "https://www.icorpshubwest.org/program",
+      "title": "NSF I-Corps West Region Hub — details page checked by scrape.py",
+      "excerpt": "Let's Work Together Join Our Mailing List Email * Join hello@icorpshubwest.org United States I-Corps Hub West Contact Newsroom",
+      "page": "details"
+    },
+    {
+      "id": "check-route-91203ea965",
+      "url": "https://www.icorpshubwest.org/program",
+      "title": "NSF I-Corps West Region Hub — details page checked by scrape.py",
+      "excerpt": "Apply Now → https://www.icorpshubwest.org/schedule",
+      "page": "details"
+    },
+    {
+      "id": "check-route-98de53600a",
+      "url": "https://www.icorpshubwest.org/",
+      "title": "NSF I-Corps West Region Hub — homepage checked by scrape.py",
+      "excerpt": "Home → https://www.icorpshubwest.org",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "hello@icorpshubwest.org",
+        "evidenceId": "check-email-1231febaeb"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.icorpshubwest.org/schedule",
+        "evidenceId": "check-route-91203ea965"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.icorpshubwest.org",
+        "evidenceId": "check-route-98de53600a"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

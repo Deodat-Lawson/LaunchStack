@@ -1,0 +1,152 @@
+{
+  "programId": "shipley-center-for-innovation-at-clarkson-university",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.clarkson.edu/academics/research/labs-centers/shipley",
+    "https://www.clarkson.edu/academics/majors-minors",
+    "https://www.clarkson.edu/apply"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-34ea9a4884",
+      "url": "https://www.clarkson.edu/apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page checked by scrape.py",
+      "excerpt": "Aid Office Email Phone Office of Undergraduate Admissions admissions@clarkson.edu 315-268-6480 Office of Undergraduate Transfer Admissions",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-35fc61348e",
+      "url": "https://www.clarkson.edu/academics/research/labs-centers/shipley",
+      "title": "Shipley Center for Innovation at Clarkson University — homepage checked by scrape.py",
+      "excerpt": "Phone: 315-268-6400",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-36a1fef56a",
+      "url": "https://www.clarkson.edu/apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page checked by scrape.py",
+      "excerpt": "Phone: 518-631-9831",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-5cf6e74c0e",
+      "url": "https://www.clarkson.edu/apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page checked by scrape.py",
+      "excerpt": "Phone: 315-268-6400",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-807cf86fbf",
+      "url": "https://www.clarkson.edu/academics/research/labs-centers/shipley",
+      "title": "Shipley Center for Innovation at Clarkson University — homepage checked by scrape.py",
+      "excerpt": "Phone: 518-631-9831",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-958343fbb3",
+      "url": "https://www.clarkson.edu/academics/majors-minors",
+      "title": "Shipley Center for Innovation at Clarkson University — details page checked by scrape.py",
+      "excerpt": "Phone: 315-268-6400",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-dceb906109",
+      "url": "https://www.clarkson.edu/academics/majors-minors",
+      "title": "Shipley Center for Innovation at Clarkson University — details page checked by scrape.py",
+      "excerpt": "Phone: 518-631-9831",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2e945a93b6",
+      "url": "https://www.clarkson.edu/academics/research/labs-centers/shipley",
+      "title": "Shipley Center for Innovation at Clarkson University — homepage checked by scrape.py",
+      "excerpt": "The Shipley Center for Innovation → https://www.clarkson.edu/academics/research/labs-centers/shipley",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7495261c24",
+      "url": "https://www.clarkson.edu/academics/research/labs-centers/shipley",
+      "title": "Shipley Center for Innovation at Clarkson University — homepage checked by scrape.py",
+      "excerpt": "Apply → https://www.clarkson.edu/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-76328ebe2b",
+      "url": "https://www.clarkson.edu/apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page checked by scrape.py",
+      "excerpt": "Application Requirements → https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student",
+      "page": "application"
+    },
+    {
+      "id": "check-route-801871bff3",
+      "url": "https://www.clarkson.edu/apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page checked by scrape.py",
+      "excerpt": "Application Requirements → https://www.clarkson.edu/node/10568",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c75596e76c",
+      "url": "https://www.clarkson.edu/academics/majors-minors",
+      "title": "Shipley Center for Innovation at Clarkson University — details page checked by scrape.py",
+      "excerpt": "Apply → https://www.clarkson.edu/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-eb0df8181d",
+      "url": "https://www.clarkson.edu/apply",
+      "title": "Shipley Center for Innovation at Clarkson University — application page checked by scrape.py",
+      "excerpt": "Application Requirements → https://www.clarkson.edu/node/10577",
+      "page": "application"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "admissions@clarkson.edu",
+        "evidenceId": "check-email-34ea9a4884"
+      }
+    ],
+    "phones": [
+      {
+        "value": "315-268-6400",
+        "evidenceId": "check-phone-35fc61348e"
+      },
+      {
+        "value": "518-631-9831",
+        "evidenceId": "check-phone-807cf86fbf"
+      }
+    ],
+    "routes": [
+      {
+        "value": "https://www.clarkson.edu/apply",
+        "evidenceId": "check-route-7495261c24"
+      },
+      {
+        "value": "https://www.clarkson.edu/node/10568",
+        "evidenceId": "check-route-801871bff3"
+      },
+      {
+        "value": "https://www.clarkson.edu/node/10577",
+        "evidenceId": "check-route-eb0df8181d"
+      },
+      {
+        "value": "https://www.clarkson.edu/admissions-aid/clarkson-school/how-apply-clarkson-school-student",
+        "evidenceId": "check-route-76328ebe2b"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.clarkson.edu/academics/research/labs-centers/shipley",
+        "evidenceId": "check-route-2e945a93b6"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

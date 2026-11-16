@@ -1,0 +1,80 @@
+{
+  "programId": "economic-growth-business-incubator-egbi",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.egbi.org"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-34ef11ec83",
+      "url": "https://www.egbi.org",
+      "title": "Economic Growth Business Incubator (EGBI) — homepage checked by scrape.py",
+      "excerpt": "Email: hello@egbi.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-36f136e8da",
+      "url": "https://www.egbi.org",
+      "title": "Economic Growth Business Incubator (EGBI) — homepage checked by scrape.py",
+      "excerpt": "hello@egbi.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-510504cb93",
+      "url": "https://www.egbi.org",
+      "title": "Economic Growth Business Incubator (EGBI) — homepage checked by scrape.py",
+      "excerpt": "| Economic Growth Business Incubator (EGBI) (512)928-2594 hello@egbi.org Español English Home About Services Business Coaching",
+      "page": "details"
+    },
+    {
+      "id": "check-email-87adb0fae4",
+      "url": "https://www.egbi.org",
+      "title": "Economic Growth Business Incubator (EGBI) — homepage checked by scrape.py",
+      "excerpt": "TOASTMASTERS CLUB Contact Us Phone: (512)928-2594 Email: hello@egbi.org Address: 1144 Airport Blvd. Suite 260, Austin, Texas 78702",
+      "page": "details"
+    },
+    {
+      "id": "check-name-51fc900ee8",
+      "url": "https://www.egbi.org",
+      "title": "Economic Growth Business Incubator (EGBI) — homepage checked by scrape.py",
+      "excerpt": "EGBI Business Accelerator | Economic Growth Business Incubator (EGBI) (512)928-2594 hello@egbi.org Español English Home About",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-40b18029b3",
+      "url": "https://www.egbi.org",
+      "title": "Economic Growth Business Incubator (EGBI) — homepage checked by scrape.py",
+      "excerpt": "Phone: (512)928-2594",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "hello@egbi.org",
+        "evidenceId": "check-email-36f136e8da"
+      }
+    ],
+    "phones": [
+      {
+        "value": "+19282594",
+        "evidenceId": "check-phone-40b18029b3"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Economic Growth Business Incubator (EGBI)",
+        "evidenceId": "check-name-51fc900ee8"
+      }
+    ],
+    "examplePages": []
+  }
+}

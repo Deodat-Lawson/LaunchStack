@@ -1,6 +1,6 @@
 {
   "programId": "founder-institute",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-16T04:09:23.000Z",
   "pagesRead": [
     "https://fi.co/",
     "https://fi.co/banners/1453/click",
@@ -149,13 +149,6 @@
       "page": "application"
     },
     {
-      "id": "check-route-3b79dd5c99",
-      "url": "https://fi.co/",
-      "title": "Founder Institute — homepage checked by scrape.py",
-      "excerpt": "Apply now → https://fi.co/join/home",
-      "page": "details"
-    },
-    {
       "id": "check-route-5b98468562",
       "url": "https://fi.co/program",
       "title": "Founder Institute — details page checked by scrape.py",
@@ -247,32 +240,32 @@
       "page": "terms"
     },
     {
-      "id": "check-status-51db2b658a",
+      "id": "check-status-3b51ba7dde",
       "url": "https://fi.co/faq",
       "title": "Founder Institute — terms page checked by scrape.py",
-      "excerpt": "to us at fi.co/support . Local leaders are listed on your chapter page. See upcoming events Write to us Applications are now open Build your startup with AI agents doing the work Join the FI Agentic Program: an AI-powered curriculum,",
+      "excerpt": "to us at fi.co/support . Local leaders are listed on your chapter page. See upcoming events Write to us Applications are now open Build your startup with AI agents doing the work Join the FI Agentic Accelerator: an AI-powered curriculum,",
       "page": "terms"
     },
     {
-      "id": "check-status-95aeaf466c",
-      "url": "https://fi.co/banners/1453/click",
-      "title": "Founder Institute — application page checked by scrape.py",
-      "excerpt": "alumni network. Very Limited Spots Available Apply by the Final Deadline on Tuesday, December 29th Apply Now Applications are now open Build your startup with AI agents doing the work Join the FI Agentic Program: an AI-powered curriculum,",
-      "page": "application"
-    },
-    {
-      "id": "check-status-afd924a27b",
+      "id": "check-status-8ef512f595",
       "url": "https://fi.co/",
       "title": "Founder Institute — homepage checked by scrape.py",
-      "excerpt": ", where local leaders and mentors take questions, or write to us at fi.co/support . All questions Applications are now open Build your startup with AI agents doing the work Join the FI Agentic Program: an AI-powered curriculum,",
+      "excerpt": "to us at fi.co/support . All questions Stop Planning. Start Building. Apply in about 15 minutes Apply Now Applications are now open Build your startup with AI agents doing the work Join the FI Agentic Accelerator: an AI-powered curriculum,",
       "page": "details"
     },
     {
-      "id": "check-status-b7a5ea63d6",
+      "id": "check-status-9faaa7df4a",
       "url": "https://fi.co/program",
       "title": "Founder Institute — details page checked by scrape.py",
-      "excerpt": "Founders pledge 2.5 percent to the Equity Collective about two-thirds through the program. How it works Applications are now open Build your startup with AI agents doing the work Join the FI Agentic Program: an AI-powered curriculum,",
+      "excerpt": "Founders pledge 2.5 percent to the Equity Collective about two-thirds through the program. How it works Applications are now open Build your startup with AI agents doing the work Join the FI Agentic Accelerator: an AI-powered curriculum,",
       "page": "details"
+    },
+    {
+      "id": "check-status-e9fb6a18d6",
+      "url": "https://fi.co/banners/1453/click",
+      "title": "Founder Institute — application page checked by scrape.py",
+      "excerpt": "alumni network. Very Limited Spots Available Apply by the Final Deadline on Tuesday, December 29th Apply Now Applications are now open Build your startup with AI agents doing the work Join the FI Agentic Accelerator: an AI-powered curriculum,",
+      "page": "application"
     }
   ],
   "findings": {
@@ -298,7 +291,7 @@
       },
       {
         "value": "https://fi.co/join/home",
-        "evidenceId": "check-route-3b79dd5c99"
+        "evidenceId": "check-route-7fe9daa3f9"
       },
       {
         "value": "https://fi.co/register/15882/v5",
@@ -318,7 +311,7 @@
     "applicationsOpen": [
       {
         "value": true,
-        "evidenceId": "check-status-afd924a27b"
+        "evidenceId": "check-status-8ef512f595"
       }
     ],
     "operatingStatus": [],

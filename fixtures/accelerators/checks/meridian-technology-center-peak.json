@@ -1,0 +1,138 @@
+{
+  "programId": "meridian-technology-center-peak",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.meridiantech.edu",
+    "https://www.meridiantech.edu/full-time-programs"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-155e8e1d87",
+      "url": "https://www.meridiantech.edu/full-time-programs",
+      "title": "Meridian Technology Center – The Peak — details page checked by scrape.py",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-29bc1d8ace",
+      "url": "https://www.meridiantech.edu/full-time-programs",
+      "title": "Meridian Technology Center – The Peak — details page checked by scrape.py",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-3b58ba22a4",
+      "url": "https://www.meridiantech.edu",
+      "title": "Meridian Technology Center – The Peak — homepage checked by scrape.py",
+      "excerpt": "377-3334 3025 South Division Street Guthrie , OK 73044 info@meridiantech.edu Connect with Us Facebook (opens in new window/tab)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-4681c78a14",
+      "url": "https://www.meridiantech.edu",
+      "title": "Meridian Technology Center – The Peak — homepage checked by scrape.py",
+      "excerpt": "607-2509 1312 South Sangre Road Stillwater , OK 74074 info@meridiantech.edu South Campus Meridian Technology Center Phone: (405)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8eadc343f1",
+      "url": "https://www.meridiantech.edu",
+      "title": "Meridian Technology Center – The Peak — homepage checked by scrape.py",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f65dca3a3a",
+      "url": "https://www.meridiantech.edu/full-time-programs",
+      "title": "Meridian Technology Center – The Peak — details page checked by scrape.py",
+      "excerpt": "info@meridiantech.edu",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-0c383c72e8",
+      "url": "https://www.meridiantech.edu",
+      "title": "Meridian Technology Center – The Peak — homepage checked by scrape.py",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-683f50f0fe",
+      "url": "https://www.meridiantech.edu/full-time-programs",
+      "title": "Meridian Technology Center – The Peak — details page checked by scrape.py",
+      "excerpt": "(405) 377-3333",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-7b83a89b08",
+      "url": "https://www.meridiantech.edu/full-time-programs",
+      "title": "Meridian Technology Center – The Peak — details page checked by scrape.py",
+      "excerpt": "(888) 607-2509",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-98c05831d8",
+      "url": "https://www.meridiantech.edu/full-time-programs",
+      "title": "Meridian Technology Center – The Peak — details page checked by scrape.py",
+      "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-a8f4c839ca",
+      "url": "https://www.meridiantech.edu",
+      "title": "Meridian Technology Center – The Peak — homepage checked by scrape.py",
+      "excerpt": "(405) 377-3334",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-f036890d34",
+      "url": "https://www.meridiantech.edu",
+      "title": "Meridian Technology Center – The Peak — homepage checked by scrape.py",
+      "excerpt": "(405) 377-3333",
+      "page": "details"
+    },
+    {
+      "id": "check-route-bba73f0613",
+      "url": "https://www.meridiantech.edu/full-time-programs",
+      "title": "Meridian Technology Center – The Peak — details page checked by scrape.py",
+      "excerpt": "Home → https://www.meridiantech.edu/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@meridiantech.edu",
+        "evidenceId": "check-email-8eadc343f1"
+      }
+    ],
+    "phones": [
+      {
+        "value": "405-377-3333",
+        "evidenceId": "check-phone-f036890d34"
+      },
+      {
+        "value": "888-607-2509",
+        "evidenceId": "check-phone-0c383c72e8"
+      },
+      {
+        "value": "405-377-3334",
+        "evidenceId": "check-phone-a8f4c839ca"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.meridiantech.edu/",
+        "evidenceId": "check-route-bba73f0613"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

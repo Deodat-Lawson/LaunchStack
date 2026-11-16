@@ -1,0 +1,62 @@
+{
+  "programId": "csi-tech-incubator",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.csiinnovationhub.com/techincubator",
+    "https://www.csiinnovationhub.com/about",
+    "https://www.csiinnovationhub.com/emerging-tech",
+    "https://www.csiinnovationhub.com/faq"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-64c90a0212",
+      "url": "https://www.csiinnovationhub.com/emerging-tech",
+      "title": "CSI Tech Incubator — batches page checked by scrape.py",
+      "excerpt": "Strong interpersonal and teamwork skills Willingness to create progress reports Passion for mentorship, innovation, and giving back Requirements: Earn a $1,000 stipend for your time Apply your skills in a real-world, community program Gain mentorship experience , leadership, communication, and teamwork skills Create",
+      "page": "batches"
+    },
+    {
+      "id": "check-name-087ac9a268",
+      "url": "https://www.csiinnovationhub.com/techincubator",
+      "title": "CSI Tech Incubator — homepage checked by scrape.py",
+      "excerpt": "through the menu items. tech incubator program The CSI Tech Incubator is a 9-week intensive program designed to support startups",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d3414d8d85",
+      "url": "https://www.csiinnovationhub.com/techincubator",
+      "title": "CSI Tech Incubator — homepage checked by scrape.py",
+      "excerpt": "Tech Incubator → https://www.csiinnovationhub.com/techincubator",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.csiinnovationhub.com/techincubator",
+        "evidenceId": "check-route-d3414d8d85"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "Strong interpersonal and teamwork skills Willingness to create progress reports Passion for mentorship, innovation, and giving back Requirements: Earn a $1,000 stipend for your time Apply your skills in a real-world, community program Gain mentorship experience , leadership, communication, and teamwork skills Create",
+        "evidenceId": "check-deal-64c90a0212"
+      }
+    ],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "CSI Tech Incubator",
+        "evidenceId": "check-name-087ac9a268"
+      }
+    ],
+    "examplePages": []
+  }
+}

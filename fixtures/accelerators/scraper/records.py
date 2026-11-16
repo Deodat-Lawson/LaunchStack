@@ -87,6 +87,12 @@ def narratives(quote: str, now: datetime) -> tuple[dict, dict]:
     return description, target
 
 
+def form_id_for(program_id: str) -> str:
+    """Catalogue form ids are capped at 64 characters."""
+    suffix = "-unconfirmed"
+    return f"{program_id[: 64 - len(suffix)].rstrip('-')}{suffix}"
+
+
 def skeleton(program_id: str, name: str, url: str, apply_url: str, now: datetime) -> dict:
     stamp = iso(now)
     return {
@@ -111,7 +117,7 @@ def skeleton(program_id: str, name: str, url: str, apply_url: str, now: datetime
                 "rolling": False,
                 "sourceIds": ["homepage"],
                 "form": {
-                    "id": f"{program_id}-unconfirmed",
+                    "id": form_id_for(program_id),
                     "status": "unavailable",
                     "sourceUrl": apply_url,
                     "checkedAt": stamp,

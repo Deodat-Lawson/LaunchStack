@@ -1,12 +1,20 @@
 {
   "programId": "activate",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-16T04:09:23.000Z",
   "pages": [
+    {
+      "url": "https://activate.org/la-bridge-info?hsLang=en",
+      "page": "application",
+      "anchor": "Applications Now Open: Louisiana BRIDGE",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
     {
       "url": "https://activate.org/apply",
       "page": "application",
       "anchor": "Apply Now",
-      "fetched": true,
+      "fetched": false,
       "blocked": null,
       "origin": "official"
     },

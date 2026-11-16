@@ -1,0 +1,93 @@
+{
+  "programId": "inspyre-innovation-hub",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://inspyrehub.com/",
+    "https://inspyrehub.com/about/",
+    "https://inspyrehub.com/apply/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-6d4c373811",
+      "url": "https://inspyrehub.com/",
+      "title": "INSPYRE Innovation Hub — homepage checked by scrape.py",
+      "excerpt": "INSPYRE Innovation Hub: The Largest Entrepreneurship Hub in NY Contact",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0f9bb5dbfd",
+      "url": "https://inspyrehub.com/apply/",
+      "title": "INSPYRE Innovation Hub — application page checked by scrape.py",
+      "excerpt": "INSPYRE Meeting Space Inquiries → https://inspyrehub.com/venue-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2741acfa7d",
+      "url": "https://inspyrehub.com/",
+      "title": "INSPYRE Innovation Hub — homepage checked by scrape.py",
+      "excerpt": "Apply → https://inspyrehub.com/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7371b7fb9b",
+      "url": "https://inspyrehub.com/",
+      "title": "INSPYRE Innovation Hub — homepage checked by scrape.py",
+      "excerpt": "INSPYRE Meeting Space Inquiries → https://inspyrehub.com/venue-application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8f86ff58ca",
+      "url": "https://inspyrehub.com/",
+      "title": "INSPYRE Innovation Hub — homepage checked by scrape.py",
+      "excerpt": "HOME → https://inspyrehub.com/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b8bfd8b1ff",
+      "url": "https://inspyrehub.com/about/",
+      "title": "INSPYRE Innovation Hub — details page checked by scrape.py",
+      "excerpt": "INSPYRE Meeting Space Inquiries → https://inspyrehub.com/venue-application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c56d8059df",
+      "url": "https://inspyrehub.com/about/",
+      "title": "INSPYRE Innovation Hub — details page checked by scrape.py",
+      "excerpt": "Apply → https://inspyrehub.com/apply/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://inspyrehub.com/apply/",
+        "evidenceId": "check-route-2741acfa7d"
+      },
+      {
+        "value": "https://inspyrehub.com/venue-application/",
+        "evidenceId": "check-route-7371b7fb9b"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://inspyrehub.com/",
+        "evidenceId": "check-route-8f86ff58ca"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "INSPYRE Innovation Hub",
+        "evidenceId": "check-name-6d4c373811"
+      }
+    ],
+    "examplePages": []
+  }
+}

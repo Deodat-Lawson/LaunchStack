@@ -1,6 +1,6 @@
 {
   "programId": "harvard-innovation-labs",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-16T04:09:23.000Z",
   "pagesRead": [
     "https://innovationlabs.harvard.edu/",
     "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
@@ -241,6 +241,13 @@
       "page": "application"
     },
     {
+      "id": "check-route-bdd2b82836",
+      "url": "https://innovationlabs.harvard.edu/",
+      "title": "Harvard Innovation Labs — homepage checked by scrape.py",
+      "excerpt": "Wed, Nov 18 Tips + Tricks for Applying to the 2027 President's Innovation Challenge Online 4:30 PM → https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
+      "page": "details"
+    },
+    {
       "id": "check-route-bf0233ee29",
       "url": "https://innovationlabs.harvard.edu/",
       "title": "Harvard Innovation Labs — homepage checked by scrape.py",
@@ -292,6 +299,10 @@
         "evidenceId": "check-route-bf0233ee29"
       },
       {
+        "value": "https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
+        "evidenceId": "check-route-bdd2b82836"
+      },
+      {
         "value": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
         "evidenceId": "check-route-777d59a91b"
       },
@@ -302,10 +313,6 @@
       {
         "value": "https://innovationlabs.harvard.edu/how-to/put-forth-the-best-pic-application",
         "evidenceId": "check-route-2036bf1e49"
-      },
-      {
-        "value": "https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
-        "evidenceId": "check-route-68c2c1a10b"
       },
       {
         "value": "https://innovationlabs.harvard.edu/presidents-innovation-challenge/ingenuity-awards",

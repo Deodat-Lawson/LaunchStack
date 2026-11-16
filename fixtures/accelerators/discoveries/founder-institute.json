@@ -1,6 +1,6 @@
 {
   "programId": "founder-institute",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-16T04:09:23.000Z",
   "pages": [
     {
       "url": "https://fi.co/banners/1453/click",
@@ -59,17 +59,17 @@
       "origin": "official"
     },
     {
-      "url": "https://fi.co/join/home",
-      "page": "application",
-      "anchor": "Apply now",
+      "url": "https://fi.co/aifounder",
+      "page": "details",
+      "anchor": "See the program",
       "fetched": false,
       "blocked": null,
       "origin": "official"
     },
     {
-      "url": "https://fi.co/aifounder",
-      "page": "details",
-      "anchor": "See the program",
+      "url": "https://fi.co/join/home",
+      "page": "application",
+      "anchor": "Apply Now",
       "fetched": false,
       "blocked": null,
       "origin": "official"

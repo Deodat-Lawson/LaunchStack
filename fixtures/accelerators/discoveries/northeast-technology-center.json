@@ -1,0 +1,54 @@
+{
+  "programId": "northeast-technology-center",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pages": [
+    {
+      "url": "https://www.netech.edu/page/about-us",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/page/board-meeting-dates",
+      "page": "batches",
+      "anchor": "Board Meeting Dates",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/page/apply-now",
+      "page": "application",
+      "anchor": "Apply Now",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/page/business-industry",
+      "page": "details",
+      "anchor": "BIS Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/page/programmable-logic-controllers-plcs",
+      "page": "details",
+      "anchor": "Programmable Logic Controllers (PLCs)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.netech.edu/o/ntc/page/apply-now",
+      "page": "application",
+      "anchor": "apply now",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

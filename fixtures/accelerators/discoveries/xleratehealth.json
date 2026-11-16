@@ -1,0 +1,38 @@
+{
+  "programId": "xleratehealth",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pages": [
+    {
+      "url": "https://www.xleratehealth.com/about/",
+      "page": "details",
+      "anchor": "About XLH",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.xleratehealth.com/about/founders/",
+      "page": "details",
+      "anchor": "Founders",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.xleratehealth.com/about/team/",
+      "page": "details",
+      "anchor": "The Team",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.xleratehealth.com/portfolio/",
+      "page": "portfolio",
+      "anchor": "Our Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

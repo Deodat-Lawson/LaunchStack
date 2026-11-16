@@ -1,6 +1,6 @@
 {
   "note": "Operator review file. For each entry you keep, set website to the official site and status to confirmed; otherwise set status to rejected with a note. Entries in review already carry the website a source listed; check it before confirming. A harvest never overwrites status, website, applyUrl, kind, or note.",
-  "harvestedAt": "2026-11-12T00:28:45.000Z",
+  "harvestedAt": "2026-11-14T19:00:10.000Z",
   "sources": [
     {
       "id": "sba-gafc-2014-2016",
@@ -82,11 +82,11 @@
           "website": "http://3daystartup.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "http://3daystartup.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "3-day-startup-3ds",
+      "note": "Startup wording on the official site: Final message - 3 Day Startup - Skip to main content Close Search Menu Our Impact Financials Dear 3 Day",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -214,11 +214,11 @@
           "website": "http://abilenelaboratories.com/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://abilenelaboratories.com/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error timed out>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -248,7 +248,7 @@
     },
     {
       "key": "accelerate-long-island-hot-spot",
-      "name": "Accelerate Long Island – Hot Spot",
+      "name": "Accelerate Long Island \u2013 Hot Spot",
       "aliases": [],
       "kind": "accelerator",
       "state": "NY",
@@ -261,11 +261,11 @@
           "website": "https://www.accelerateli.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.accelerateli.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "accelerate-long-island-hot-spot",
+      "note": "Startup wording on the official site: Accelerate | Long Island Home Programs Events Portfolio Board Resources Apply Contact",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -333,11 +333,11 @@
           "website": "https://www.baylor.edu/business_new/entrepreneurship/index.php?id=89585"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.baylor.edu/business_new/entrepreneurship/index.php?id=89585",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -359,16 +359,16 @@
           "website": "https://www.accelerateh2o.org"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.accelerateh2o.org",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "accelerateh2o",
+      "note": "Startup wording on the official site: Texas Water Infrastructure at Risk from Extreme Weather - accelerateh2o.org Skip to content Home About Blog Harnessing Future H2O: Strategies for",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
       "key": "accelerateher",
-      "name": "AccelerateHER™, Inc.",
+      "name": "AccelerateHER\u2122, Inc.",
       "aliases": [],
       "state": "VA",
       "cities": [
@@ -410,11 +410,11 @@
           "website": "https://www.acceleratenfc.com"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.acceleratenfc.com",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official pages do not mention startups, founders, entrepreneurs, incubation, or acceleration.",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -436,11 +436,11 @@
           "website": "http://innovatetexastech.com/accelerator/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://innovatetexastech.com/accelerator/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error [Errno 101] Network is unreachable>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -485,11 +485,11 @@
           "website": "https://www.acorngrowthcompanies.com"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.acorngrowthcompanies.com",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "acorn-growth-companies",
+      "note": "Startup wording on the official site: is complete. We are dedicated to honoring the vision of each company\u2019s founder by immediately building on that vision to ensure the business is taken to the",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -559,11 +559,11 @@
           "website": "http://www.research.uky.edu/ASTECC/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://www.research.uky.edu/ASTECC/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official pages do not mention startups, founders, entrepreneurs, incubation, or acceleration.",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -609,11 +609,11 @@
           "website": "https://cbet.acphs.edu/amps/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://cbet.acphs.edu/amps/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "albany-college-of-pharmacy-and-health-sciences-amps",
+      "note": "Startup wording on the official site: Incubator - Albany College of Pharmacy and Health Sciences Skip Main Navigation Cookies",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -756,11 +756,11 @@
           "website": "https://www.artistincubation.com"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.artistincubation.com",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official pages do not mention startups, founders, entrepreneurs, incubation, or acceleration.",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -782,17 +782,20 @@
           "website": "http://developer.att.com/developer/forward.jsp?passedItemId=5300164"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://developer.att.com/developer/forward.jsp?passedItemId=5300164",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
-      "key": "at-texas-a-m-university-corpus-christi",
-      "name": "at Texas A&M University Corpus Christi",
-      "aliases": [],
+      "key": "coastal-bend-business-innovation-center-cbbic-at-texas-a-m-university-corpus-christi",
+      "name": "Coastal Bend Business Innovation Center (CBBIC) at Texas A&M University Corpus Christi",
+      "aliases": [
+        "at Texas A&M University Corpus Christi",
+        "Coastal Bend Business Innovation Center (CBBIC)"
+      ],
       "kind": "university program",
       "state": "TX",
       "cities": [
@@ -808,11 +811,11 @@
           "website": "https://www.coastalbendinnovation.com"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.coastalbendinnovation.com",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "coastal-bend-business-innovation-center",
+      "note": "Startup wording on the official site: Home - Coastal Bend Business Innovation Center Go to Sitemap Jump to Header Jump to Main Content Jump to Footer Skip to",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -834,11 +837,11 @@
           "website": "http://ati.utexas.edu/current-portfolio/clean-energy/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "http://ati.utexas.edu/current-portfolio/clean-energy/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "ati-clean-energy-incubator-at-university-of-texas-at-austin",
+      "note": "Startup wording on the official site: Energy \u2013 Austin Technology Incubator Skip to content About About ATI Contact Meet the Team Partners FAQ Success",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -864,11 +867,11 @@
           "website": "https://www.ati.utexas.edu"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.ati.utexas.edu",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "austin-technology-incubator-ati-at-ut-austin",
+      "note": "Startup wording on the official site: Austin Technology Incubator \u2013 Deep Tech Incubator from the University of Texas at Austin Skip to content",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -936,11 +939,11 @@
           "website": "http://www.awesomeinc.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "http://www.awesomeinc.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "awesome",
+      "note": "Startup wording on the official site: Hall of Fame 5 Across Finals Events Events Startups I Have an Idea 5 Across Startup Accelerator Awesome Fund Events Hall of Fame",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -1063,11 +1066,11 @@
           "website": "https://www.biohouston.org"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.biohouston.org",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "biohouston",
+      "note": "Startup wording on the official site: life science hub. We connect, convene, and catalyze a diverse community\u2014from startups to established organizations, fostering advancements in medicine, creating",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -1235,11 +1238,11 @@
           "website": "https://www.bmc-texas.org"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.bmc-texas.org",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 403: Forbidden",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -1284,11 +1287,11 @@
           "website": "http://bizownersed.com/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://bizownersed.com/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 403: Forbidden",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -1361,11 +1364,11 @@
           "website": "http://bootstrapdallas.com/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://bootstrapdallas.com/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error timed out>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -1437,11 +1440,11 @@
           "website": "http://breweryincubator.com"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://breweryincubator.com",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 403: Forbidden",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -1563,11 +1566,11 @@
           "website": "https://www.albany.edu/innovate518/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.albany.edu/innovate518/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "capital-region-innovate-518",
+      "note": "Startup wording on the official site: Innovate 518 | Capital Region Incubator | Startups and Entrepreneurs .full-width-banner { width: 100%; background:",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -1640,11 +1643,11 @@
           "website": "http://www.softlayer.com/catalyst"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://www.softlayer.com/catalyst",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error [Errno 101] Network is unreachable>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -1665,11 +1668,11 @@
           "website": "https://cadefarms.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://cadefarms.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "center-for-agricultural-development-and-entrepreneurship-cad",
+      "note": "Startup wording on the official site: CADE | Center for Agricultural Development & Entrepreneurship top of page Who We Are About CADE Staff and Board Vision 2050 Reports &",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -1695,11 +1698,11 @@
           "website": "https://www.getbusinesssmart.com"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.getbusinesssmart.com",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official pages do not mention startups, founders, entrepreneurs, incubation, or acceleration.",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -1750,11 +1753,11 @@
           "website": "https://www.thecenterforinnovation.org/center-innovation"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.thecenterforinnovation.org/center-innovation",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error timed out>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -1776,11 +1779,11 @@
           "website": "http://new.trinity.edu/academics/departments/center-innovation-and-entrepreneurship"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://new.trinity.edu/academics/departments/center-innovation-and-entrepreneurship",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Unknown site",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -1823,11 +1826,11 @@
           "website": "https://www.cnybac.com/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.cnybac.com/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "central-new-york-biotech-accelerator",
+      "note": "Startup wording on the official site: Board Members Location Staff Contact Us Resources Resources Mentors and Startup Support Organizations Mentors and Startup Support Organizations Mentor",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -1847,11 +1850,11 @@
           "website": "https://www.centraltech.edu"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.centraltech.edu",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official pages do not mention startups, founders, entrepreneurs, incubation, or acceleration.",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -2177,11 +2180,11 @@
           "website": "https://www.collidevillage.com"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.collidevillage.com",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official pages do not mention startups, founders, entrepreneurs, incubation, or acceleration.",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -2225,11 +2228,11 @@
           "website": "https://communitasamerica.org/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://communitasamerica.org/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The page text or an official logo could not be collected: updated\tcommunitas-america\thttps://communitasamerica.org/\tHome | Communitas America Communitas America Navigation Home About Vision Histor; logo-failed\tcommunitas-america\thttps://communitasamerica.org/favicon.ico: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -2320,11 +2323,11 @@
           "website": "https://www.thetechnologyfarm.com/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.thetechnologyfarm.com/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "cornell-food-and-ag",
+      "note": "Startup wording on the official site: Lakes Region\u2019s premier destination for food, beverage, and ag tech innovation, acceleration, and incubation. Our state-of-the-art facilities offer access to the",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -2419,11 +2422,11 @@
           "website": "https://www.csiinnovationhub.com/techincubator"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.csiinnovationhub.com/techincubator",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "csi-tech-incubator",
+      "note": "Startup wording on the official site: Tech Incubator | CSI Innovation Hub top of page FOUNDERS PARTNERS MEMBER LOGIN COMMUNITY Home",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -2519,11 +2522,11 @@
           "website": "http://thedec.co/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "http://thedec.co/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "dallas-entrepreneur-center-dec",
+      "note": "Startup wording on the official site: a 501c3 nonprofit organization driving parity and economic impact by helping entrepreneurs start, build and grow their businesses. Skip to content info@TheDEC.co",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -2637,11 +2640,11 @@
           "website": "https://www.dfwexcellerator.com/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.dfwexcellerator.com/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error timed out>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -2688,11 +2691,11 @@
           "website": "http://discoverypark.unt.edu/incubator"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://discoverypark.unt.edu/incubator",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official pages do not mention startups, founders, entrepreneurs, incubation, or acceleration.",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -2779,11 +2782,11 @@
           "website": "https://www.downstate.edu/research/biotech-incubators/park-incubator.html"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.downstate.edu/research/biotech-incubators/park-incubator.html",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "downstate-biotech-incubator-and-biobat",
+      "note": "Startup wording on the official site: Downstate Biotechnology Incubator - Facilities and Resources | SUNY Downstate Health Sciences University SUNY",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -2830,11 +2833,11 @@
           "website": "http://dreamit.com/programs/dream-it-austin/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://dreamit.com/programs/dream-it-austin/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -2854,11 +2857,11 @@
           "website": "https://www.ok-duncan.com"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.ok-duncan.com",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "duncan-center-for-business-development",
+      "note": "Startup wording on the official site: Proximity Featured Sites Sites and Buildings Site Maps Site Videos Business Incubator Target Industries Incentives Taxes Transportation Workforce Labor Data",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -2883,16 +2886,16 @@
           "website": "http://portal.utpa.edu/utpa_main/daa_home/coba_new_home/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://portal.utpa.edu/utpa_main/daa_home/coba_new_home/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'portal.utpa.edu'. (_ssl.c:1085)>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
       "key": "e2tech-environmental-energy-technology-council-of-maine",
-      "name": "E2Tech—Environmental & Energy Technology Council of Maine",
+      "name": "E2Tech\u2014Environmental & Energy Technology Council of Maine",
       "aliases": [],
       "state": "ME",
       "cities": [
@@ -3010,11 +3013,11 @@
           "website": "https://www.egbi.org"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.egbi.org",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "economic-growth-business-incubator-egbi",
+      "note": "Startup wording on the official site: EGBI Business Accelerator | Economic Growth Business Incubator (EGBI) (512)928-2594 hello@egbi.org",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -3039,11 +3042,11 @@
           "website": "https://www.edentexas.com/articles/view/incentives"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.edentexas.com/articles/view/incentives",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -3097,9 +3100,12 @@
       "kind": "unknown"
     },
     {
-      "key": "el-centro-college",
-      "name": "El Centro College",
-      "aliases": [],
+      "key": "business-incubation-center-bic-at-bill-j-priest-campus-of-el-centro-college",
+      "name": "The Business Incubation Center (BIC) at the Bill J. Priest Campus of El Centro College",
+      "aliases": [
+        "El Centro College",
+        "The Business Incubation Center (BIC)"
+      ],
       "kind": "university program",
       "state": "TX",
       "cities": [
@@ -3115,11 +3121,11 @@
           "website": "https://www.elcentrocollege.edu/bjp/business-incubation-center"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.elcentrocollege.edu/bjp/business-incubation-center",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error timed out>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -3212,11 +3218,11 @@
           "website": "https://www.etibio.com"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.etibio.com",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "emergent-incubator",
+      "note": "Startup wording on the official site: real-world applications. We offer this knowledge and innovation access to: Start-ups and Inventors seeking capital to grow a new business. Small Businesses seeking",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -3266,11 +3272,11 @@
           "website": "https://www.tec-centex.com"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.tec-centex.com",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error timed out>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -3320,11 +3326,11 @@
           "website": "https://www.cvced.org"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.cvced.org",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 301: The HTTP server returned a redirect error that would lead to an infinite loop.\nThe last 30x error message was:\nMoved Permanently",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -3367,11 +3373,11 @@
           "website": "https://www.essentialoffices.com"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.essentialoffices.com",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official pages do not mention startups, founders, entrepreneurs, incubation, or acceleration.",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -3687,11 +3693,11 @@
           "website": "https://www.utfoodlab.com"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.utfoodlab.com",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1085)>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -3714,11 +3720,11 @@
           "website": "https://www.tedcnet.com"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.tedcnet.com",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "forge",
+      "note": "Startup wording on the official site: Business Planning Programs The Power of Real Estate Investing Cash Flow for Entrepreneurs Leading Greenwood Entrepreneurship at Moton The Shoppes on Peoria JW Vann",
       "firstSeenAt": "2026-11-10T04:12:34.000Z",
       "kind": "unknown"
     },
@@ -3760,11 +3766,11 @@
           "website": "https://www.thrive-nexus.com"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.thrive-nexus.com",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: robots.txt disallows this URL",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -3931,11 +3937,11 @@
           "website": "https://www.joingradient.com"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.joingradient.com",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The page text or an official logo could not be collected: updated\tgradient-innovation-hub\thttps://www.joingradient.com\tGradient \u2013 Tulsa\u2019s Innovation Hub Global Entrepreneurship Week | Nov 16\u201322 at Gr; logo-failed\tgradient-innovation-hub\thttps://www.joingradient.com/favicon.ico: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -3955,11 +3961,11 @@
           "website": "https://www.greatplains.edu/business-resources/bdc"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.greatplains.edu/business-resources/bdc",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -4006,11 +4012,11 @@
           "website": "http://wenbiz.org/community/us/tx/austin/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://wenbiz.org/community/us/tx/austin/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error timed out>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -4032,11 +4038,11 @@
           "website": "https://www.gdhcc.com/programs_and_resources/business_assistance_center.aspx"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.gdhcc.com/programs_and_resources/business_assistance_center.aspx",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -4107,11 +4113,11 @@
           "website": "https://www.griffissinstitute.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.griffissinstitute.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "griffiss-institute-certified-business-incubator-gi",
+      "note": "Startup wording on the official site: next generation of STEM talent, disruptive technologies, and mission-driven startups to strengthen U.S. national security and expand economic opportunity for our",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -4263,11 +4269,13 @@
       "kind": "unknown"
     },
     {
-      "key": "hbdi",
-      "name": "Inc. (HBDI)",
+      "key": "business-technology-center-btc-at-houston-business-development-hbdi",
+      "name": "Business Technology Center (BTC) at Houston Business Development Inc. (HBDI)",
       "aliases": [
         "Inc.",
-        "HBDI"
+        "HBDI",
+        "Inc. (HBDI)",
+        "Business Technology Center (BTC)"
       ],
       "kind": "unknown",
       "state": "TX",
@@ -4284,11 +4292,11 @@
           "website": "https://www.hbdinc.org/resources/business-technology-center/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.hbdinc.org/resources/business-technology-center/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official pages do not mention startups, founders, entrepreneurs, incubation, or acceleration.",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -4314,11 +4322,11 @@
           "website": "http://healthwildcatters.com/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "http://healthwildcatters.com/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "health-wildcatters",
+      "note": "Startup wording on the official site: Health Wildcatters 0 Skip to Content Pitch Day Accelerator Overview / Apply Mentors Portfolio Sponsors Events News HW Venture Center Team",
       "firstSeenAt": "2026-11-10T04:12:34.000Z",
       "kind": "unknown"
     },
@@ -4350,7 +4358,7 @@
     },
     {
       "key": "ho-okahua-capacity-building-accelerator",
-      "name": "Ho’okahua Capacity-Building Accelerator",
+      "name": "Ho\u2019okahua Capacity-Building Accelerator",
       "aliases": [],
       "state": "HI",
       "cities": [
@@ -4418,11 +4426,11 @@
           "website": "https://www.houstonartsalliance.com"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.houstonartsalliance.com",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official pages do not mention startups, founders, entrepreneurs, incubation, or acceleration.",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -4471,11 +4479,11 @@
           "website": "https://www.nycinnovationhotspot.org"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.nycinnovationhotspot.org",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "hub-for-innovation-and-entrepreneurship-nycrin",
+      "note": "Startup wording on the official site: to sponsors and other industry partners, and by supporting formation of new start-up companies. The TCO facilitates transfer of CUNY innovations to industry by",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -4497,11 +4505,11 @@
           "website": "http://hubofhumaninnovation.org"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "http://hubofhumaninnovation.org",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "hub-of-human-innovation",
+      "note": "Startup wording on the official site: Us FAQ\u2019s Apply Services Pay for Services Programs \u201cShift\u201d Program Clean Energy Incubator Program Clean Energy Partners Program Manufacturing Partners Program Service",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -4519,11 +4527,11 @@
           "website": "https://www.hudsonriverhousing.org/openkitchen"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.hudsonriverhousing.org/openkitchen",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "hudson-river-eats",
+      "note": "Startup wording on the official site: 2025 Income Limits UPCOMING EVENTS DONATE Open Kitchen is a culinary business incubator and a network of professionally equipped shared-use commercial kitchens rented",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -4548,11 +4556,11 @@
           "website": "https://www.hatchbusiness.com/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.hatchbusiness.com/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 403: Forbidden",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -4625,11 +4633,11 @@
           "website": "https://www.ideafinishingschool.com"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.ideafinishingschool.com",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error timed out>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -4704,11 +4712,11 @@
           "website": "http://ideaworksfw.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "http://ideaworksfw.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "idea-works-fw-fort-worth",
+      "note": "Startup wording on the official site: IDEA Works FW is a Multi-Industry Incubator in Fort Worth Start Small. THINK BIG. About Member Profiles Support The Cause",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -4729,11 +4737,11 @@
           "website": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.hofstra.edu/academics/entrepreneurship/ideahub.html",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "ideahub-hofstra-university",
+      "note": "Startup wording on the official site: Apply News Events Athletics Alumni MyHofstra Give INSTITUTE OF INNOVATION AND ENTREPRENEURSHIP IDEAHUB Home Research Centers and Institutes Institute of Innovation and",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -4876,11 +4884,11 @@
           "website": "https://incubatorworks.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://incubatorworks.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "incubatorworks",
+      "note": "Startup wording on the official site: IncubatorWorks info@incworks.org (607) 962-6387 Home Programs Co.Starters Business",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -4902,16 +4910,16 @@
           "website": "https://www.incubelabs.com"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.incubelabs.com",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "incube-labs-san-antonio",
+      "note": "Startup wording on the official site: concept for Rani was developed by Mir Imran, a prolific medical inventor and entrepreneur who has founded more than twenty life sciences companies. Rani was established",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
       "key": "inge-s-place",
-      "name": "Inge’s Place",
+      "name": "Inge\u2019s Place",
       "aliases": [],
       "state": "MI",
       "cities": [
@@ -5027,11 +5035,11 @@
           "website": "http://innovation.unt.edu"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "http://innovation.unt.edu",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "innovation-greenhouse-at-university-of-north-texas-unt",
+      "note": "Startup wording on the official site: Submit an Invention Disclosure Commercialization Back Commercialization Startup Formation Available Technologies Events Contact Us Submit an Invention",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -5049,11 +5057,11 @@
           "website": "https://www.moreheadstate.edu/College-of-Business-and-Technology/Innovation-Launchpad"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.moreheadstate.edu/College-of-Business-and-Technology/Innovation-Launchpad",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -5101,11 +5109,11 @@
           "website": "http://iu.adventgx.com/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://iu.adventgx.com/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official pages do not mention startups, founders, entrepreneurs, incubation, or acceleration.",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -5146,11 +5154,11 @@
           "website": "https://inspyrehub.com/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://inspyrehub.com/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "inspyre-innovation-hub",
+      "note": "Startup wording on the official site: INSPYRE Innovation Hub: The Largest Entrepreneurship Hub in NY Contact CenterState CEO CLIENT PORTAL",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -5321,11 +5329,11 @@
           "website": "https://www.mccombs.utexas.edu/Centers/Texas-Venture-Labs.aspx"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.mccombs.utexas.edu/Centers/Texas-Venture-Labs.aspx",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -5442,11 +5450,11 @@
           "website": "http://khicenter.com/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://khicenter.com/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error timed out>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -5474,7 +5482,7 @@
     },
     {
       "key": "kiiln-keystone-for-incubating-innovation-in-life-sciences-network",
-      "name": "KiiLN—Keystone for Incubating Innovation in Life Sciences Network",
+      "name": "KiiLN\u2014Keystone for Incubating Innovation in Life Sciences Network",
       "aliases": [],
       "state": "NY",
       "cities": [
@@ -5544,11 +5552,11 @@
           "website": "http://knowledgeforsuccess.org/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://knowledgeforsuccess.org/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official pages do not mention startups, founders, entrepreneurs, incubation, or acceleration.",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -5571,11 +5579,11 @@
           "website": "https://southerntierincubator.com/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://southerntierincubator.com/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "koffman-southern-tier-incubator",
+      "note": "Startup wording on the official site: Home Page | Koffman Incubator | Binghamton N.Y. Skip to content About About Our Team Koffman Staff Program",
       "firstSeenAt": "2026-11-10T04:12:34.000Z",
       "kind": "incubator"
     },
@@ -5604,7 +5612,7 @@
     },
     {
       "key": "la-cocina-s-business-incubator-program",
-      "name": "La Cocina’s Business Incubator Program",
+      "name": "La Cocina\u2019s Business Incubator Program",
       "aliases": [],
       "state": "CA",
       "cities": [
@@ -5751,11 +5759,11 @@
           "website": "https://www.baylor.edu/launch/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.baylor.edu/launch/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -5942,11 +5950,11 @@
           "website": "https://LifeSciKY.com"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://LifeSciKY.com",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "lifesciky",
+      "note": "Startup wording on the official site: innovation, or exploring a future in science \u2014 LifeSciKY is built for you. For Founders Start & Scale Your Company Start and scale your company Access fully equipped",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -6040,11 +6048,11 @@
           "website": "https://www.sandspringschamber.org/the-link"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.sandspringschamber.org/the-link",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "link",
+      "note": "Startup wording on the official site: Chamber of Commerce. Office space is available for small businesses and entrepreneurs to flourish in their work. Office & Desk Space Private Office Space Prices",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -6165,11 +6173,11 @@
           "website": "https://www.1semesterstartup.com"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.1semesterstartup.com",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'www.1semesterstartup.com'. (_ssl.c:1085)>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -6241,11 +6249,11 @@
           "website": "https://www.lxstudio.com"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.lxstudio.com",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'www.lxstudio.com'. (_ssl.c:1085)>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -6401,9 +6409,9 @@
     },
     {
       "key": "maui-food-innovation-center-maui-accelerator-program-maui-food-industry-x-celerator",
-      "name": "Maui Food Innovation Center—Maui Accelerator Program/Maui Food Industry X-celerator",
+      "name": "Maui Food Innovation Center\u2014Maui Accelerator Program/Maui Food Industry X-celerator",
       "aliases": [
-        "Maui Food Innovation Center—Maui Accelerator Program",
+        "Maui Food Innovation Center\u2014Maui Accelerator Program",
         "Maui Food Industry X-celerator"
       ],
       "state": "HI",
@@ -6499,11 +6507,11 @@
           "website": "https://www.medicalinnovationlabs.com/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.medicalinnovationlabs.com/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official pages do not mention startups, founders, entrepreneurs, incubation, or acceleration.",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -6550,11 +6558,11 @@
           "website": "http://workthegarage.com/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://workthegarage.com/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error timed out>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -6585,7 +6593,7 @@
     },
     {
       "key": "meridian-technology-center-peak",
-      "name": "Meridian Technology Center – The Peak",
+      "name": "Meridian Technology Center \u2013 The Peak",
       "aliases": [],
       "kind": "university program",
       "state": "OK",
@@ -6600,11 +6608,11 @@
           "website": "https://www.meridiantech.edu"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.meridiantech.edu",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "meridian-technology-center-peak",
+      "note": "Startup wording on the official site: Industry Training Computer Training Industrial Training Health Care Training Entrepreneurial Services Startups start here Programs and Classes Clients About Meridian",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -6655,11 +6663,11 @@
           "website": "https://www.microsoft.com/en-us/mtc/default.aspx"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.microsoft.com/en-us/mtc/default.aspx",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -6685,11 +6693,11 @@
           "website": "https://www.midlandhcc.com"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.midlandhcc.com",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "midland-hispanic-chamber-of-commerce-mhcc-business-incubator",
+      "note": "Startup wording on the official site: in our business community and honor outstanding achievements in Hispanic entrepreneurship. Annual Awards Gala Celebrate excellence in our business community and honor",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -6765,11 +6773,11 @@
           "website": "https://www.miteftexas.org"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.miteftexas.org",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The page text or an official logo could not be collected: updated\tmit-enterprise-forum-mitef-of-texas\thttps://www.miteftexas.org\tMIT Enterprise Forum Texas : Houston, Texas LOGIN About Mission and History Lead; logo-failed\tmit-enterprise-forum-mitef-of-texas\thttps://miteftexas.org/favicon.ico: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -6787,11 +6795,11 @@
           "website": "https://thincubator.co/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://thincubator.co/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official pages do not mention startups, founders, entrepreneurs, incubation, or acceleration.",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -6866,11 +6874,11 @@
           "website": "https://www.silsbeeedc.com/incubator.html"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.mountainviewcollege.edu/business/econdev/Pages/businessincubator.aspx",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error timed out>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -6945,11 +6953,11 @@
           "website": "http://napkinventure.com"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://napkinventure.com",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error timed out>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7258,7 +7266,7 @@
     },
     {
       "key": "new-paltz-venture-hub-hot-spot",
-      "name": "New Paltz Venture Hub – Hot Spot",
+      "name": "New Paltz Venture Hub \u2013 Hot Spot",
       "aliases": [],
       "kind": "university program",
       "state": "NY",
@@ -7271,11 +7279,11 @@
           "website": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.newpaltz.edu/schoolofbusiness/hvventurehub/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "new-paltz-venture-hub-hot-spot",
+      "note": "Startup wording on the official site: & Faculty Funding Resources HV Ecosystem Programs & Resources Submit Your Founder Need Or Opportunity Accelerator Ecosystem News The Hudson Valley Innovation",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7316,11 +7324,11 @@
           "website": "https://www.nyit.edu/engineering/etic"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.nyit.edu/engineering/etic",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "new-york-institute-of-technology",
+      "note": "Startup wording on the official site: Entrepreneurship and Technology Innovation Center | New York Tech Alert Microsoft services are",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7366,11 +7374,11 @@
           "website": "https://nextcorps.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://nextcorps.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "nextcorps",
+      "note": "Startup wording on the official site: Skip to content About Us Facility Funders Board Staff News Careers Services Startups > Incubation Embark Luminate For ClimateTech Manufacturing Accelerator",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7417,11 +7425,11 @@
           "website": "https://www.houstonhealthventures.com/acceleration/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.houstonhealthventures.com/acceleration/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7462,11 +7470,11 @@
           "website": "http://cob.nku.edu/inkubator.html"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "http://cob.nku.edu/inkubator.html",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "nku-inkubator",
+      "note": "Startup wording on the official site: Sports Business & Construction Management Centers Center for Innovation and Entrepreneurship Center for Economic Analysis and Development Alternative Dispute Resolution",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7539,11 +7547,11 @@
           "website": "https://www.ntec-inc.org"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.ntec-inc.org",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "north-texas-enterprise-center-for-technology-ntec",
+      "note": "Startup wording on the official site: Effective March 1, 2017 Launch Pad City will assume management of Frisco's entrepreneurship center. Read More NTEC | North Texas Enterprise Center About Mission Facility",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7593,11 +7601,11 @@
           "website": "https://www.netech.edu"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.netech.edu",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "northeast-technology-center",
+      "note": "Startup wording on the official site: Business and Industry Services BIS Overview Register for Training Business Incubator Safety Training Industrial Maintenance Show submenu for Industrial Maintenance",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7619,11 +7627,11 @@
           "website": "https://www.nsbriforum.org"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.nsbriforum.org",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error timed out>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7641,11 +7649,11 @@
           "website": "https://desertpacificicorps.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://desertpacificicorps.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "nsf-i-corps-desert-and-pacific-region-hub",
+      "note": "Startup wording on the official site: your research into practical solutions. Together, we foster a culture of entrepreneurship that supports both your individual and collective success. Learn more Get",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7663,11 +7671,11 @@
           "website": "https://www.greatlakesicorps.org/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.greatlakesicorps.org/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 403: Forbidden",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7685,11 +7693,11 @@
           "website": "https://gp-icorps.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://gp-icorps.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "nsf-i-corps-great-plains-region-hub",
+      "note": "Startup wording on the official site: INVENTION TO IMPACT The Great Plains I-Corps Hub provides immersive, entrepreneurial training for scientists, researchers, engineers and innovators alike. With",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7707,11 +7715,11 @@
           "website": "https://www.in-icorps.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.in-icorps.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "nsf-i-corps-interior-northeast-region-hub",
+      "note": "Startup wording on the official site: rural regions and small cities. Intentional, Effective, Impactful What We Do Entrepreneurship Training for Scientists and Engineers This Hub will offer frequent regional",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7729,11 +7737,11 @@
           "website": "https://www.midatlanticicorps.com/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.midatlanticicorps.com/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The page text or an official logo could not be collected: updated\tnsf-i-corps-mid-atlantic-region-hub\thttps://www.midatlanticicorps.com/\tNSF I-Corps Hub: Mid-Atlantic Region Home Join Upcoming Programs Info Sessions M; logo-failed\tnsf-i-corps-mid-atlantic-region-hub\thttps://www.midatlanticicorps.com/favicon.ico: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7751,11 +7759,11 @@
           "website": "https://www.midsouthhub.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.midsouthhub.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "nsf-i-corps-mid-south-region-hub",
+      "note": "Startup wording on the official site: Innovation Open Mic Builder Program Mid-South Hub REACH CREST GAME Change Accelerator SXSW Events News & Media Sign Up for Newsletter Media Archive Press Impact",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7773,11 +7781,11 @@
           "website": "https://neicorps.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://neicorps.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "nsf-i-corps-new-england-region-hub",
+      "note": "Startup wording on the official site: New England I\u2011Corps Hub | Innovation and Entrepreneurial Training Founders\u2019 Stories About Programs Course Calendar Get Involved Hub",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7795,11 +7803,11 @@
           "website": "https://www.newyorkicorps.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.newyorkicorps.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "nsf-i-corps-new-york-region-hub",
+      "note": "Startup wording on the official site: the menu items. New York I-Corps From experiential education to successful entrepreneurship Learn More To play, press and hold the enter key. To stop, release the enter",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7817,11 +7825,11 @@
           "website": "https://icorpsnortheasthub.org/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://icorpsnortheasthub.org/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 403: Forbidden",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7839,11 +7847,11 @@
           "website": "https://www.nwicorps.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.nwicorps.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "nsf-i-corps-northwest-region-hub",
+      "note": "Startup wording on the official site: Apply NSF I-Corps Hub Northwest Transform your innovative technology into a startup About us The NSF I-Corps Northwest Hub offers Lean Startup courses, where",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7861,11 +7869,11 @@
           "website": "https://icorpssoutheasthub.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://icorpssoutheasthub.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "nsf-i-corps-southeast-region-hub",
+      "note": "Startup wording on the official site: Programs NSF I-Corps Program Regional I-Corps Courses Local I-Corps Courses Accelerate Program Get Involved I-Corps Mentor Network I-Corps Instructor Training Events",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7883,11 +7891,11 @@
           "website": "https://www.swicorps.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.swicorps.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "nsf-i-corps-southwest-region-hub",
+      "note": "Startup wording on the official site: News Contact Spurring Innovation The NSF I-Corps\u2122 Hub: Southwest fosters entrepreneurial thinking in academic research to create a thriving innovation ecosystem",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7905,11 +7913,11 @@
           "website": "https://www.icorpshubwest.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.icorpshubwest.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "nsf-i-corps-west-region-hub",
+      "note": "Startup wording on the official site: Hub West Impact 11 Partner Institutions 1612 Regional Teams Trained 170 Startups Formed 935 Jobs Created 11,600 Program Participants $303M Raised in Follow-up",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7927,11 +7935,11 @@
           "website": "https://engineering.nyu.edu/business/future-labs"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://engineering.nyu.edu/business/future-labs",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "nyu-tandon-future-labs",
+      "note": "Startup wording on the official site: Centers & Institutes Labs & Groups Student Research Student Life Career Hub Entrepreneurship Experiential Learning MakerSpace Support & Resources Alumni Giving Industry",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -7972,19 +7980,21 @@
           "website": "https://www.occamdesign.com"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.occamdesign.com",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "occam-design",
+      "note": "Startup wording on the official site: this should free up my time for another project!\u201d David Smith MD CEO/Founder, DeltaChase LLC & TBI Innovations LLC \u201cThank you again for putting the first",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
-      "key": "of-texas-at-brownsville-utb",
-      "name": "of Texas at Brownsville (UTB)",
+      "key": "entrepreneurship-commercialization-center-ecc-at-university-of-texas-at-brownsville-utb",
+      "name": "Entrepreneurship & Commercialization Center (ECC) at the University of Texas at Brownsville (UTB)",
       "aliases": [
         "of Texas at Brownsville",
-        "UTB"
+        "UTB",
+        "of Texas at Brownsville (UTB)",
+        "Entrepreneurship & Commercialization Center (ECC)"
       ],
       "kind": "university program",
       "state": "TX",
@@ -8001,11 +8011,11 @@
           "website": "https://www.utb.edu/edcs/iic"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.utb.edu/edcs/iic",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'www.utb.edu'. (_ssl.c:1085)>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -8069,11 +8079,11 @@
           "website": "https://oleanbd.com/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://oleanbd.com/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "olean-business-development",
+      "note": "Startup wording on the official site: is a 501(c)(3) not-for-profit dedicated to the continued development of the Entrepreneurial Ecosystem in the greater Olean area. OBDC strives to help entrepreneurs and",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -8168,11 +8178,11 @@
           "website": "http://owlspark.com"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://owlspark.com",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: robots.txt disallows this URL",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -8243,11 +8253,11 @@
           "website": "https://hamiltonpcd.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://hamiltonpcd.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "partnership-for-community-development",
+      "note": "Startup wording on the official site: PCD encompasses The Hamilton Chamber of Commerce and The Hub Small Business Incubator under its fiscal umbrella. These entities serve to enhance the business",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -8300,9 +8310,9 @@
     },
     {
       "key": "peninsula-technology-incubator-e-64-project-peninsula-technology-incubator",
-      "name": "Peninsula Technology Incubator “E-64 Project”/Peninsula Technology Incubator",
+      "name": "Peninsula Technology Incubator \u201cE-64 Project\u201d/Peninsula Technology Incubator",
       "aliases": [
-        "Peninsula Technology Incubator “E-64 Project”",
+        "Peninsula Technology Incubator \u201cE-64 Project\u201d",
         "Peninsula Technology Incubator"
       ],
       "state": "VA",
@@ -8394,11 +8404,11 @@
           "website": "https://www.pioneertech.edu/page/business-incubator"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.pioneertech.edu/page/business-incubator",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "pioneer-technology-center-business-incubator",
+      "note": "Startup wording on the official site: Business Incubator | PIONEER TECHNOLOGY CENTER Skip to content Rooms Support Search site PIONEER",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -8516,11 +8526,11 @@
           "website": "https://www.project3810.com/incubator"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.project3810.com/incubator",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: ",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -8625,11 +8635,11 @@
           "website": "http://portal.utpa.edu/utpa_main/daa_home/cose_home/rrmc_home"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://portal.utpa.edu/utpa_main/daa_home/cose_home/rrmc_home",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'portal.utpa.edu'. (_ssl.c:1085)>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -8654,11 +8664,11 @@
           "website": "http://redlabs.bauer.uh.edu/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://redlabs.bauer.uh.edu/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error timed out>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -8759,11 +8769,11 @@
           "website": "https://www.rvic.org"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.rvic.org",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: robots.txt disallows this URL",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -8781,11 +8791,11 @@
           "website": "https://revithaca.com/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://revithaca.com/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "rev-ithaca-startup-works",
+      "note": "Startup wording on the official site: Rev: Ithaca Startup Works \u2013 Business incubator space in Ithaca, NY About Mentors & Team Startup",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -8833,11 +8843,11 @@
           "website": "https://www.revtechaccelerator.com"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.revtechaccelerator.com",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1085)>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -8884,11 +8894,11 @@
           "website": "https://business.okstate.edu/riata"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://business.okstate.edu/riata",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: robots.txt disallows this URL",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -8910,11 +8920,11 @@
           "website": "https://www.alliance.rice.edu"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.alliance.rice.edu",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'www.alliance.rice.edu'. (_ssl.c:1085)>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -8936,11 +8946,11 @@
           "website": "http://rcel.rice.edu/ricelaunch"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://rcel.rice.edu/ricelaunch",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 406: Not Acceptable",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -8985,11 +8995,11 @@
           "website": "http://business.utsa.edu/cite/cite_rrincubator.aspx"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://business.utsa.edu/cite/cite_rrincubator.aspx",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -9034,16 +9044,16 @@
           "website": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.workforce.rose.edu/rose-state-colleges-aerospace-and-cybersecurity-incubator",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "rose-state-college-aerospace-and-cybersecurity-incubator",
+      "note": "Startup wording on the official site: Rose State College's Aerospace and Cybersecurity Incubator \u2014 Rose State College Workforce Development 0 Join us for Parent\u2019s Night Out!",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
       "key": "rosie-network-s-military-entrepreneur-center",
-      "name": "Rosie Network’s Military Entrepreneur Center",
+      "name": "Rosie Network\u2019s Military Entrepreneur Center",
       "aliases": [],
       "state": "CA",
       "cities": [
@@ -9081,11 +9091,11 @@
           "website": "https://eship.rpi.edu/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://eship.rpi.edu/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "rpi-incubator",
+      "note": "Startup wording on the official site: 11, 2026 4:30 PM RPI Biotech Center Auditorium 1623 15th Street Troy, NY 12180 Startup Tech Valley Social Night \u23f0 Decemb er 17, 2026 5:00 PM Location TBD View More",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -9113,7 +9123,7 @@
     },
     {
       "key": "rutgers-food-innovation-center-rutgers-food-accelerator",
-      "name": "Rutgers Food Innovation Center—Rutgers Food Accelerator",
+      "name": "Rutgers Food Innovation Center\u2014Rutgers Food Accelerator",
       "aliases": [],
       "state": "NJ",
       "cities": [
@@ -9151,11 +9161,11 @@
           "website": "https://www.sailorandthedock.com"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.sailorandthedock.com",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "sailor-dock",
+      "note": "Startup wording on the official site: of unique resources. For humanity, this is achieved through culture, art, and entrepreneurship. We live to embody this through the mission of providing creative spaces for",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -9180,11 +9190,11 @@
           "website": "http://texasenergy.utsa.edu/research/san-antonio-clean-energy-incubator"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://texasenergy.utsa.edu/research/san-antonio-clean-energy-incubator",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -9310,11 +9320,11 @@
           "website": "https://www.seedsumo.com"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.seedsumo.com",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: robots.txt disallows this URL",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -9336,11 +9346,11 @@
           "website": "https://www.shell.com/global/future-energy/innovation/innovate-with-shell/shellgamechanger.html#vanity-aHR0cDovL3d3dy5zaGVsbC5jb20vZ2FtZWNoYW5nZXI"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.shell.com/global/future-energy/innovation/innovate-with-shell/shellgamechanger.html#vanity-aHR0cDovL3d3dy5zaGVsbC5jb20vZ2FtZWNoYW5nZXI",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -9358,16 +9368,16 @@
           "website": "https://www.clarkson.edu/academics/research/labs-centers/shipley"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.clarkson.edu/academics/research/labs-centers/shipley",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "shipley-center-for-innovation-at-clarkson-university",
+      "note": "Startup wording on the official site: Do you have a great business idea? Enter the Shipley Center for Innovation, an entrepreneurial support hub where we help bring ideas to life. Through a collaborative,",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
       "key": "shoppes-guthrie-ok",
-      "name": "The Shoppes – Guthrie OK",
+      "name": "The Shoppes \u2013 Guthrie OK",
       "aliases": [],
       "kind": "unknown",
       "state": "OK",
@@ -9380,11 +9390,11 @@
           "website": "https://www.guthrieok.com/theshoppes"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.guthrieok.com/theshoppes",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "shoppes-guthrie-ok",
+      "note": "Startup wording on the official site: local creativity and community spirit. Designed to showcase local talent and entrepreneurial spirit, The Shoppes serves as a retail incubator that provides small",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -9409,11 +9419,11 @@
           "website": "https://www.sku.is"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.sku.is",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "sku-fka-incubation-station",
+      "note": "Startup wording on the official site: Creating Lasting Change in CPG SKU: The Nation's Leading Consumer Products Accelerator Now Accepting Applications for Our Spring 2027 Program APPLY TODAY The SKU",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -9598,11 +9608,11 @@
           "website": "https://www.ststartup.com/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.ststartup.com/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "southern-tier-startup-alliance",
+      "note": "Startup wording on the official site: Southern Tier Startup Alliance \u2013 We support people starting and growing companies in the region.",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -9677,11 +9687,11 @@
           "website": "https://www.txstate.edu/ocir/STAR-Park.html"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.txstate.edu/ocir/STAR-Park.html",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official pages do not mention startups, founders, entrepreneurs, incubation, or acceleration.",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -9775,11 +9785,11 @@
           "website": "https://www.startup405.com"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.startup405.com",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "startup-405",
+      "note": "Startup wording on the official site: Startup 405 Home ABOUT ABOUT OUR TEAM NEWS EVENTS Innovation Week More Home ABOUT",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -9801,11 +9811,11 @@
           "website": "http://startupaggieland.tamu.edu/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://startupaggieland.tamu.edu/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] ssl/tls alert handshake failure (_ssl.c:1085)>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -9910,11 +9920,11 @@
           "website": "http://startupweekend.org/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "http://startupweekend.org/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "startup-weekend",
+      "note": "Startup wording on the official site: Startup Weekend: Build a Startup in 54 Hours | Techstars Join Us Portfolio Locations I",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -9965,11 +9975,11 @@
           "website": "https://www.surgeaccelerator.com"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.surgeaccelerator.com",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "surge-accelerator",
+      "note": "Startup wording on the official site: wrong assumption can cost far more than the equipment or plan itself. Surge Accelerator gives homeowners and businesses practical guidance on electricity rates,",
       "firstSeenAt": "2026-11-10T04:12:34.000Z",
       "kind": "accelerator"
     },
@@ -10047,11 +10057,11 @@
           "website": "http://sxsw.com/interactive/accelerator"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://sxsw.com/interactive/accelerator",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -10073,11 +10083,11 @@
           "website": "http://t3dc.org/t3dc/accelerator/t3dc-accelerator-description-and-location"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://t3dc.org/t3dc/accelerator/t3dc-accelerator-description-and-location",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: robots.txt disallows this URL",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -10099,11 +10109,11 @@
           "website": "http://techfortworth.org"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "http://techfortworth.org",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "tech-fort-worth",
+      "note": "Startup wording on the official site: TechFW | Fort Worth Startup Accelerator & Tech Incubator top of page Contact Us Programs ThinkLab ThinkLab",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -10125,11 +10135,11 @@
           "website": "https://www.techranchaustin.com"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.techranchaustin.com",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "tech-ranch-austin",
+      "note": "Startup wording on the official site: Home - Tech Ranch Austin Tech Ranch Austin Programs Entrepreneurs Global Bridges Corporations Investors Events Blog About Us Contact Us",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -10170,11 +10180,11 @@
           "website": "https://www.tvcog.net/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.tvcog.net/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 403: Forbidden",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -10226,11 +10236,11 @@
           "website": "https://www.ic2.utexas.edu/global/programs/techba/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.ic2.utexas.edu/global/programs/techba/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "technology-business-accelerator-techba-austin",
+      "note": "Startup wording on the official site: & INSIGHTS > Student Spotlight: Luke McDonald Examining Northwest Arkansas's Entrepreneurial Ecosystem Continuing to Lead The IC 2 Institute is a globally respected",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -10255,11 +10265,11 @@
           "website": "https://www.TIWH.net"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.TIWH.net",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error timed out>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -10307,11 +10317,11 @@
           "website": "https://www.techstudios.net"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.techstudios.net",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 301: The HTTP server returned a redirect error that would lead to an infinite loop.\nThe last 30x error message was:\nMoved Permanently",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -10404,11 +10414,11 @@
           "website": "http://vpr.tamu.edu/resources/researchpark/businessaccelerator"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://vpr.tamu.edu/resources/researchpark/businessaccelerator",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -10437,11 +10447,13 @@
       "kind": "unknown"
     },
     {
-      "key": "texas-health-science-center-at-houston-uthsc-h",
-      "name": "Texas Health Science Center at Houston (UTHSC-H)",
+      "key": "biotechnology-commercialization-center-bcc-at-university-of-texas-health-science-center-at-houston-uthsc-h",
+      "name": "Biotechnology Commercialization Center (BCC) at the University of Texas Health Science Center at Houston (UTHSC-H)",
       "aliases": [
         "Texas Health Science Center at Houston",
-        "UTHSC-H"
+        "UTHSC-H",
+        "Texas Health Science Center at Houston (UTHSC-H)",
+        "Biotechnology Commercialization Center (BCC)"
       ],
       "kind": "university program",
       "state": "TX",
@@ -10458,11 +10470,11 @@
           "website": "https://www.uth.edu/otm/bcc-biotechnology-commercialization-center/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.uth.edu/otm/bcc-biotechnology-commercialization-center/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: robots.txt disallows this URL",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -10487,11 +10499,11 @@
           "website": "https://www.tmc-x.org"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.tmc-x.org",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error timed out>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -10513,11 +10525,11 @@
           "website": "http://thincspacewaco.com/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://thincspacewaco.com/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error timed out>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -10539,11 +10551,11 @@
           "website": "http://thinktiv.com"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "http://thinktiv.com",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "thinktiv",
+      "note": "Startup wording on the official site: Our value creation methodology is the fastest and most effective way to accelerate businesses to their fullest potential. Reach Out Strategy Consulting for",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -10569,11 +10581,11 @@
           "website": "https://www.ysletadelsurpueblo.org/news_detail.sstg?id=127"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.ysletadelsurpueblo.org/news_detail.sstg?id=127",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "tigua-business-center-tbc-incubator",
+      "note": "Startup wording on the official site: Division Department of Economic Development Financial Support Division Entrepreneurship Support Division Tribal Government Support Division Workforce Development",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -10598,11 +10610,11 @@
           "website": "https://www.tjc.edu/continuingstudies/businessIncubator"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.tjc.edu/continuingstudies/businessIncubator",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -10820,7 +10832,7 @@
     },
     {
       "key": "university-of-new-mexico-anderson-school-of",
-      "name": "University of New Mexico – Anderson School of Management",
+      "name": "University of New Mexico \u2013 Anderson School of Management",
       "aliases": [],
       "state": "NM",
       "cities": [],
@@ -10954,11 +10966,11 @@
           "website": "https://www.unltdusa.org"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.unltdusa.org",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "unltd-usa",
+      "note": "Startup wording on the official site: a simple yet powerful mindset shift that\u2019s gaining traction among creatives, entrepreneurs, and even burned-out 9-to-5ers. The idea is this: instead of cramming every",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -11033,11 +11045,11 @@
           "website": "http://uptechideas.org"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://uptechideas.org",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official pages do not mention startups, founders, entrepreneurs, incubation, or acceleration.",
       "firstSeenAt": "2026-11-10T04:12:34.000Z",
       "kind": "unknown"
     },
@@ -11111,11 +11123,11 @@
           "website": "http://research.utsa.edu/commercialization/nvi.php"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://research.utsa.edu/commercialization/nvi.php",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -11190,11 +11202,11 @@
           "website": "http://utdallas.edu/vdc"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://utdallas.edu/vdc",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -11288,11 +11300,11 @@
           "website": "https://www.vergeokc.com"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.vergeokc.com",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "verge-entrepreneurship-hub-foundation-verge",
+      "note": "Startup wording on the official site: is where OKC builds. Become a Member Book a Tour The community for scaling entrepreneurs. Many OKC resources do one thing well: funding, acceleration, space. The Verge",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -11410,11 +11422,11 @@
           "website": "https://www.vogtawards.com"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.vogtawards.com",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "vogt-awards",
+      "note": "Startup wording on the official site: Awards is celebrating its 26th year. Since 1999, the Vogt Awards has offered entrepreneurs in the Louisville region a unique and exciting opportunity to take their",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -11610,11 +11622,11 @@
           "website": "https://www.mckinneywerx.com/#home"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.mckinneywerx.com/#home",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: <urlopen error timed out>",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -11640,11 +11652,11 @@
           "website": "https://www.incubationwor ks.com"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "https://www.incubationwor ks.com",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The official site could not be read: URL can't contain control characters. 'www.incubationwor ks.com' (found at least ' ')",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -11687,11 +11699,11 @@
           "website": "https://www.wnyincubators.com/"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "https://www.wnyincubators.com/",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "western-new-york-win-wny-incubator-network",
+      "note": "Startup wording on the official site: WNY Incubator Network | WNY Incubator Network / WNY Innovation Hot Spot Menu Startup Week",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -11830,11 +11842,11 @@
           "website": "http://www.wku.edu/accelerator/"
         }
       ],
-      "status": "review",
+      "status": "held",
       "website": "http://www.wku.edu/accelerator/",
       "applyUrl": null,
       "programId": null,
-      "note": null,
+      "note": "The page text or an official logo could not be collected: updated\twku-small-business-accelerator\thttp://www.wku.edu/accelerator/\tWKU Innovation Campus | Western Kentucky University Website Privacy Notice We us; logo-failed\twku-small-business-accelerator\thttps://www.wku.edu/favicon.ico: HTTP Error 404: Not Found",
       "firstSeenAt": "2026-11-12T00:28:45.000Z"
     },
     {
@@ -11884,11 +11896,11 @@
           "website": "http://www.xleratehealth.com"
         }
       ],
-      "status": "review",
+      "status": "added",
       "website": "http://www.xleratehealth.com",
       "applyUrl": null,
-      "programId": null,
-      "note": null,
+      "programId": "xleratehealth",
+      "note": "Startup wording on the official site: the companies that are remaking healthcare Skip to content About XLH About XLH Founders The Team Mentors Accelerator Accelerator Our Portfolio Investor Partners",
       "firstSeenAt": "2026-11-10T04:12:34.000Z",
       "kind": "unknown"
     },

@@ -1,0 +1,22 @@
+{
+  "programId": "midland-hispanic-chamber-of-commerce-mhcc-business-incubator",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pages": [
+    {
+      "url": "https://www.midlandhcc.com/about",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.midlandhcc.com/about-1",
+      "page": "details",
+      "anchor": "Board of Directors",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

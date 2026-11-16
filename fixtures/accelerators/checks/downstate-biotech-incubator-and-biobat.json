@@ -1,0 +1,94 @@
+{
+  "programId": "downstate-biotech-incubator-and-biobat",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.downstate.edu/research/biotech-incubators/park-incubator.html",
+    "https://www.downstate.edu/patient-care/index.html",
+    "https://www.downstate.edu/research/biotech-incubators/internships.html"
+  ],
+  "evidence": [
+    {
+      "id": "check-phone-6aa4af3a1b",
+      "url": "https://www.downstate.edu/patient-care/index.html",
+      "title": "Downstate Biotech Incubator and BioBAT — details page checked by scrape.py",
+      "excerpt": "Call or Text Today (7185695618)",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-72e0ee7aee",
+      "url": "https://www.downstate.edu/patient-care/index.html",
+      "title": "Downstate Biotech Incubator and BioBAT — details page checked by scrape.py",
+      "excerpt": "Alumni → https://www.downstate.edu/education-training/alumni/index.html",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7a38756df3",
+      "url": "https://www.downstate.edu/research/biotech-incubators/park-incubator.html",
+      "title": "Downstate Biotech Incubator and BioBAT — homepage checked by scrape.py",
+      "excerpt": "Alumni → https://www.downstate.edu/education-training/alumni/index.html",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ef48d82a19",
+      "url": "https://www.downstate.edu/research/biotech-incubators/internships.html",
+      "title": "Downstate Biotech Incubator and BioBAT — application page checked by scrape.py",
+      "excerpt": "Alumni → https://www.downstate.edu/education-training/alumni/index.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2060d7bc37",
+      "url": "https://www.downstate.edu/research/biotech-incubators/park-incubator.html",
+      "title": "Downstate Biotech Incubator and BioBAT — homepage checked by scrape.py",
+      "excerpt": "Biotech Incubator → https://www.downstate.edu/research/biotech-incubators/park-incubator.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b470522339",
+      "url": "https://www.downstate.edu/research/biotech-incubators/park-incubator.html",
+      "title": "Downstate Biotech Incubator and BioBAT — homepage checked by scrape.py",
+      "excerpt": "Biotechnology Incubator Application → https://www.downstate.edu/research/biotech-incubators/internships.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e5159cc6f5",
+      "url": "https://www.downstate.edu/patient-care/index.html",
+      "title": "Downstate Biotech Incubator and BioBAT — details page checked by scrape.py",
+      "excerpt": "Biotechnology Incubator Application → https://www.downstate.edu/research/biotech-incubators/internships.html",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "7185695618",
+        "evidenceId": "check-phone-6aa4af3a1b"
+      }
+    ],
+    "routes": [
+      {
+        "value": "https://www.downstate.edu/research/biotech-incubators/internships.html",
+        "evidenceId": "check-route-b470522339"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.downstate.edu/research/biotech-incubators/park-incubator.html",
+        "evidenceId": "check-route-2060d7bc37"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.downstate.edu/education-training/alumni/index.html",
+        "evidenceId": "check-portfolio-7a38756df3"
+      }
+    ],
+    "name": [],
+    "examplePages": []
+  }
+}

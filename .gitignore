@@ -73,6 +73,7 @@ backups/
 
 
 .claude
+.cursor
 
 # test output
 test-output/

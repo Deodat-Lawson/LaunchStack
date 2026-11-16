@@ -1,6 +1,6 @@
 {
   "programId": "utrechtinc",
-  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "checkedAt": "2026-11-16T04:09:23.000Z",
   "pages": [
     {
       "url": "https://utrechtinc.nl/programs/",
@@ -91,6 +91,14 @@
       "origin": "official"
     },
     {
+      "url": "https://utrechtinc.nl/artikel/pitch-battle-20-nov/",
+      "page": "details",
+      "anchor": "Read more about Incubator Pitch Battle: Cast your vote!",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
       "url": "https://utrechtinc.nl/artikel/nestpod-goes-international/",
       "page": "details",
       "anchor": "Read more about Nestpod goes international",
@@ -102,14 +110,6 @@
       "url": "https://utrechtinc.nl/artikel/managing-director/",
       "page": "details",
       "anchor": "Read more about We’re hiring: Managing Director of UtrechtInc",
-      "fetched": false,
-      "blocked": null,
-      "origin": "official"
-    },
-    {
-      "url": "https://utrechtinc.nl/artikel/financefriday/",
-      "page": "details",
-      "anchor": "Read more about Finance Friday: Building the future, together • October 16",
       "fetched": false,
       "blocked": null,
       "origin": "official"

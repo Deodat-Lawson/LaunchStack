@@ -1,0 +1,79 @@
+{
+  "programId": "health-wildcatters",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "http://healthwildcatters.com/",
+    "https://www.healthwildcatters.com/accelerator"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-fcd6ccb5f4",
+      "url": "http://healthwildcatters.com/",
+      "title": "Health Wildcatters — homepage checked by scrape.py",
+      "excerpt": "Health Wildcatters 0 Skip to Content Pitch Day Accelerator Overview / Apply",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4589e77a1d",
+      "url": "http://healthwildcatters.com/",
+      "title": "Health Wildcatters — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.healthwildcatters.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8d2c849225",
+      "url": "https://www.healthwildcatters.com/accelerator",
+      "title": "Health Wildcatters — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.healthwildcatters.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3723dc85c8",
+      "url": "http://healthwildcatters.com/",
+      "title": "Health Wildcatters — homepage checked by scrape.py",
+      "excerpt": "Overview / Apply → https://www.healthwildcatters.com/accelerator",
+      "page": "details"
+    },
+    {
+      "id": "check-status-8d3e206efa",
+      "url": "https://www.healthwildcatters.com/accelerator",
+      "title": "Health Wildcatters — application page checked by scrape.py",
+      "excerpt": "Request Form Accelerator Accelerate your startup with a nationally-ranked program Health Wildcatters 2026 - Applications are closed The Health Wildcatters Accelerator Program continues to be ranked among the greatest in the nation according",
+      "page": "application"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.healthwildcatters.com/accelerator",
+        "evidenceId": "check-route-3723dc85c8"
+      }
+    ],
+    "applicationUrl": [],
+    "applicationsOpen": [
+      {
+        "value": false,
+        "evidenceId": "check-status-8d3e206efa"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.healthwildcatters.com/portfolio",
+        "evidenceId": "check-portfolio-4589e77a1d"
+      }
+    ],
+    "name": [
+      {
+        "value": "Health Wildcatters",
+        "evidenceId": "check-name-fcd6ccb5f4"
+      }
+    ],
+    "examplePages": []
+  }
+}

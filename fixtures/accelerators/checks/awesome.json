@@ -1,0 +1,88 @@
+{
+  "programId": "awesome",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "http://www.awesomeinc.org/",
+    "https://www.awesomeinc.org/events"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-1c6a5e2e4e",
+      "url": "https://www.awesomeinc.org/events",
+      "title": "Awesome Inc — details page checked by scrape.py",
+      "excerpt": "info@awesomeinc.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8c01448329",
+      "url": "http://www.awesomeinc.org/",
+      "title": "Awesome Inc — homepage checked by scrape.py",
+      "excerpt": "info@awesomeinc.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-a1ca4c171d",
+      "url": "http://www.awesomeinc.org/",
+      "title": "Awesome Inc — homepage checked by scrape.py",
+      "excerpt": "a time on our calendar 348 E Main St, Lexington, KY info@awesomeinc.org 859.960.4600 Hours: Mon-Fri, 9am-5pm Newsletter Sign Up",
+      "page": "details"
+    },
+    {
+      "id": "check-email-fe40b2a96c",
+      "url": "https://www.awesomeinc.org/events",
+      "title": "Awesome Inc — details page checked by scrape.py",
+      "excerpt": "Pitch Competition 348 E Main St, Lexington, KY info@awesomeinc.org 859.960.4600 Hours: Mon-Fri, 9am-5pm Newsletter Sign Up",
+      "page": "details"
+    },
+    {
+      "id": "check-name-088660ea3f",
+      "url": "http://www.awesomeinc.org/",
+      "title": "Awesome Inc — homepage checked by scrape.py",
+      "excerpt": "us create custom software for your business. Welcome to Awesome Inc Pursue your Definition of Awesome We exist to create and",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-1909fad785",
+      "url": "https://www.awesomeinc.org/events",
+      "title": "Awesome Inc — details page checked by scrape.py",
+      "excerpt": "859.960.4600",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-b60907486d",
+      "url": "http://www.awesomeinc.org/",
+      "title": "Awesome Inc — homepage checked by scrape.py",
+      "excerpt": "859.960.4600",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@awesomeinc.org",
+        "evidenceId": "check-email-8c01448329"
+      }
+    ],
+    "phones": [
+      {
+        "value": "8599604600",
+        "evidenceId": "check-phone-b60907486d"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Awesome Inc",
+        "evidenceId": "check-name-088660ea3f"
+      }
+    ],
+    "examplePages": []
+  }
+}

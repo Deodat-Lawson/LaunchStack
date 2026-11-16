@@ -1,0 +1,168 @@
+{
+  "programId": "forge",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.tedcnet.com",
+    "https://www.tedcnet.com/about/",
+    "https://www.tedcnet.com/resources/faq/",
+    "https://www.tedcnet.com/apply-now/"
+  ],
+  "evidence": [
+    {
+      "id": "check-phone-0db83766ed",
+      "url": "https://www.tedcnet.com/about/",
+      "title": "FORGE — details page checked by scrape.py",
+      "excerpt": "(9185858332)",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-2364518035",
+      "url": "https://www.tedcnet.com",
+      "title": "FORGE — homepage checked by scrape.py",
+      "excerpt": "(918) 585-8332",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-35877b695c",
+      "url": "https://www.tedcnet.com/about/",
+      "title": "FORGE — details page checked by scrape.py",
+      "excerpt": "\"telephone\": \"(918) 585-8332\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-388a23b0f3",
+      "url": "https://www.tedcnet.com/resources/faq/",
+      "title": "FORGE — terms page checked by scrape.py",
+      "excerpt": "(918) 585-8332",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-8211134afc",
+      "url": "https://www.tedcnet.com/apply-now/",
+      "title": "FORGE — application page checked by scrape.py",
+      "excerpt": "\"telephone\": \"(918) 585-8332\"",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-82efa51017",
+      "url": "https://www.tedcnet.com",
+      "title": "FORGE — homepage checked by scrape.py",
+      "excerpt": "(9185858332)",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-a3d52e21af",
+      "url": "https://www.tedcnet.com/apply-now/",
+      "title": "FORGE — application page checked by scrape.py",
+      "excerpt": "(9185858332)",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-b20d5455cf",
+      "url": "https://www.tedcnet.com/about/",
+      "title": "FORGE — details page checked by scrape.py",
+      "excerpt": "(918) 585-8332",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-c356c6a2a6",
+      "url": "https://www.tedcnet.com/resources/faq/",
+      "title": "FORGE — terms page checked by scrape.py",
+      "excerpt": "\"telephone\": \"(918) 585-8332\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-d0b631486c",
+      "url": "https://www.tedcnet.com/apply-now/",
+      "title": "FORGE — application page checked by scrape.py",
+      "excerpt": "(918) 585-8332",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-f2bceaae90",
+      "url": "https://www.tedcnet.com",
+      "title": "FORGE — homepage checked by scrape.py",
+      "excerpt": "\"telephone\": \"(918) 585-8332\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-f85c07cb15",
+      "url": "https://www.tedcnet.com/resources/faq/",
+      "title": "FORGE — terms page checked by scrape.py",
+      "excerpt": "(9185858332)",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-611f560d30",
+      "url": "https://www.tedcnet.com/about/",
+      "title": "FORGE — details page checked by scrape.py",
+      "excerpt": "APPLY NOW → https://www.tedcnet.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6927c2e3ce",
+      "url": "https://www.tedcnet.com",
+      "title": "FORGE — homepage checked by scrape.py",
+      "excerpt": "APPLY NOW → https://www.tedcnet.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-791d601d84",
+      "url": "https://www.tedcnet.com/resources/faq/",
+      "title": "FORGE — terms page checked by scrape.py",
+      "excerpt": "APPLY NOW → https://www.tedcnet.com/apply-now/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-932a2759d7",
+      "url": "https://www.tedcnet.com",
+      "title": "FORGE — homepage checked by scrape.py",
+      "excerpt": "https://www.tedcnet.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c7ddb70007",
+      "url": "https://www.tedcnet.com/apply-now/",
+      "title": "FORGE — application page checked by scrape.py",
+      "excerpt": "Government Debt Schedule → https://www.tedcnet.com/wp-content/uploads/2025/09/Application-Part-6-Previous-Govnt-Debt-Schedule-Certificate-1.xls",
+      "page": "application"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "9185858332",
+        "evidenceId": "check-phone-82efa51017"
+      },
+      {
+        "value": "(918) 585-8332",
+        "evidenceId": "check-phone-f2bceaae90"
+      }
+    ],
+    "routes": [
+      {
+        "value": "https://www.tedcnet.com/apply-now/",
+        "evidenceId": "check-route-6927c2e3ce"
+      },
+      {
+        "value": "https://www.tedcnet.com/wp-content/uploads/2025/09/Application-Part-6-Previous-Govnt-Debt-Schedule-Certificate-1.xls",
+        "evidenceId": "check-route-c7ddb70007"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.tedcnet.com",
+        "evidenceId": "check-route-932a2759d7"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "programId": "capital-region-innovate-518",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.albany.edu/innovate518/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-96043f5782",
+      "url": "https://www.albany.edu/innovate518/",
+      "title": "Innovate 518 — homepage checked by scrape.py",
+      "excerpt": "Innovate 518 | Capital Region Incubator | Startups and Entrepreneurs",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Innovate 518",
+        "evidenceId": "check-name-96043f5782"
+      }
+    ],
+    "examplePages": []
+  }
+}

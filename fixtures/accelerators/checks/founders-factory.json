@@ -1,17 +1,17 @@
 {
   "programId": "founders-factory",
-  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "checkedAt": "2026-11-16T04:09:23.000Z",
   "pagesRead": [
     "https://foundersfactory.com/",
     "https://foundersfactory.com/about-us/",
-    "https://foundersfactory.com/aviva/"
+    "https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/"
   ],
   "evidence": [
     {
-      "id": "check-deal-ef259c50e5",
-      "url": "https://foundersfactory.com/aviva/",
+      "id": "check-deal-e6b34f5420",
+      "url": "https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
       "title": "Founders Factory — application page checked by scrape.py",
-      "excerpt": "to our global network. Join the program GO FURTHER, FASTER Raise capital and grow your startup with the backing of Founders Factory and Aviva Capital Receive £50k cash investment. Our investment team will support your capital raise requirements in-program and in years to come. Operational Support Co-founder level",
+      "excerpt": "leaders. Request an invite go further, faster Build, fund and commercialise your technology with the backing of Northwestern Medicine and Founders Factory $150k Capital Receive $150k c ash investment and opportunities for follow-on funding through our investor networks. Operational Excellence Four months of expert-led",
       "page": "application"
     },
     {
@@ -22,10 +22,17 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-4cd0820937",
-      "url": "https://foundersfactory.com/aviva/",
+      "id": "check-portfolio-05d9674bb0",
+      "url": "https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
       "title": "Founders Factory — application page checked by scrape.py",
       "excerpt": "Our companies → https://foundersfactory.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-2d8ea68d33",
+      "url": "https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
+      "title": "Founders Factory — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
       "page": "application"
     },
     {
@@ -50,13 +57,6 @@
       "page": "details"
     },
     {
-      "id": "check-portfolio-d8c23ea474",
-      "url": "https://foundersfactory.com/aviva/",
-      "title": "Founders Factory — application page checked by scrape.py",
-      "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
-      "page": "application"
-    },
-    {
       "id": "check-portfolio-e834cff7b5",
       "url": "https://foundersfactory.com/",
       "title": "Founders Factory — homepage checked by scrape.py",
@@ -64,24 +64,17 @@
       "page": "details"
     },
     {
-      "id": "check-route-281f3db2f8",
-      "url": "https://foundersfactory.com/aviva/",
-      "title": "Founders Factory — application page checked by scrape.py",
-      "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
-      "page": "application"
+      "id": "check-route-1c5d2bf4f3",
+      "url": "https://foundersfactory.com/",
+      "title": "Founders Factory — homepage checked by scrape.py",
+      "excerpt": "Open Health Northwestern Medicine Healthcare Accelerator Apply → https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
+      "page": "details"
     },
     {
       "id": "check-route-2d621ee4cf",
       "url": "https://foundersfactory.com/",
       "title": "Founders Factory — homepage checked by scrape.py",
       "excerpt": "Open Nature WA Government Nature Tech Accelerator Apply → https://foundersfactory.com/western-australia-government-nature-tech-accelerator/",
-      "page": "details"
-    },
-    {
-      "id": "check-route-39cc3e420f",
-      "url": "https://foundersfactory.com/",
-      "title": "Founders Factory — homepage checked by scrape.py",
-      "excerpt": "Open Health MSWA MS & Neurological Care Accelerator Apply → https://foundersfactory.com/mswa-ms-neurological-care-accelerator/",
       "page": "details"
     },
     {
@@ -92,10 +85,17 @@
       "page": "details"
     },
     {
-      "id": "check-route-43673c7b61",
-      "url": "https://foundersfactory.com/aviva/",
+      "id": "check-route-6cee5fe18b",
+      "url": "https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
       "title": "Founders Factory — application page checked by scrape.py",
-      "excerpt": "Apply now → https://form.typeform.com/to/XdvluIs5",
+      "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
+      "page": "application"
+    },
+    {
+      "id": "check-route-70553c1e4c",
+      "url": "https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
+      "title": "Founders Factory — application page checked by scrape.py",
+      "excerpt": "Apply now → https://form.typeform.com/to/msm6uEkP",
       "page": "application"
     },
     {
@@ -136,6 +136,10 @@
         "evidenceId": "check-route-414c547108"
       },
       {
+        "value": "https://foundersfactory.com/northwestern-medicine-healthcare-accelerator/",
+        "evidenceId": "check-route-1c5d2bf4f3"
+      },
+      {
         "value": "https://foundersfactory.com/aviva/",
         "evidenceId": "check-route-ef81173244"
       },
@@ -148,8 +152,8 @@
         "evidenceId": "check-route-2d621ee4cf"
       },
       {
-        "value": "https://foundersfactory.com/mswa-ms-neurological-care-accelerator/",
-        "evidenceId": "check-route-39cc3e420f"
+        "value": "https://form.typeform.com/to/msm6uEkP",
+        "evidenceId": "check-route-70553c1e4c"
       }
     ],
     "applicationUrl": [
@@ -164,8 +168,8 @@
     "selectivity": [],
     "dealText": [
       {
-        "value": "to our global network. Join the program GO FURTHER, FASTER Raise capital and grow your startup with the backing of Founders Factory and Aviva Capital Receive £50k cash investment. Our investment team will support your capital raise requirements in-program and in years to come. Operational Support Co-founder level",
-        "evidenceId": "check-deal-ef259c50e5"
+        "value": "leaders. Request an invite go further, faster Build, fund and commercialise your technology with the backing of Northwestern Medicine and Founders Factory $150k Capital Receive $150k c ash investment and opportunities for follow-on funding through our investor networks. Operational Excellence Four months of expert-led",
+        "evidenceId": "check-deal-e6b34f5420"
       }
     ],
     "portfolioPages": [

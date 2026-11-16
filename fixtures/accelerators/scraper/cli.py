@@ -27,6 +27,7 @@ USAGE = """\
   scrape.py add acme-labs --name "Acme Labs" --url https://acme.example/ [--apply URL]
   scrape.py discover harvest             refresh us-candidates.json from discovery-sources.json
   scrape.py discover report
+  scrape.py discover confirm-listed      confirm every review entry whose website an official directory listed
   scrape.py discover add-confirmed       add the candidates an operator confirmed
   scrape.py test                         run the scraper's unit tests (no network)
 """
@@ -111,8 +112,10 @@ def add(args: argparse.Namespace) -> int:
 def run_discover(args: argparse.Namespace) -> int:
     if args.action == "harvest":
         discover.harvest(now())
+    elif args.action == "confirm-listed":
+        discover.confirm_listed(now())
     elif args.action == "add-confirmed":
-        discover.add_confirmed(now())
+        discover.add_confirmed(now(), workers=args.workers)
     else:
         print(discover.summary(discover.load()))
     return 0
@@ -150,7 +153,8 @@ def main(argv: list[str] | None = None) -> int:
     adding.add_argument("--dry-run", action="store_true")
     adding.set_defaults(handler=add)
     discovering = commands.add_parser("discover", help="find US startup programs for operator review")
-    discovering.add_argument("action", choices=("harvest", "report", "add-confirmed"))
+    discovering.add_argument("action", choices=("harvest", "report", "confirm-listed", "add-confirmed"))
+    discovering.add_argument("--workers", type=int, default=6, help="sites added in parallel (default 6)")
     discovering.set_defaults(handler=run_discover)
     commands.add_parser("test", help="run the unit tests").set_defaults(handler=test)
     args = parser.parse_args(argv)

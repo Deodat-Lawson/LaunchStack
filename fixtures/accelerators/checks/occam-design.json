@@ -1,0 +1,35 @@
+{
+  "programId": "occam-design",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.occamdesign.com"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-6dbe52f265",
+      "url": "https://www.occamdesign.com",
+      "title": "Occam Design — homepage checked by scrape.py",
+      "excerpt": "Home • Occam Design Cookies Settings This website stores cookies on your",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Occam Design",
+        "evidenceId": "check-name-6dbe52f265"
+      }
+    ],
+    "examplePages": []
+  }
+}

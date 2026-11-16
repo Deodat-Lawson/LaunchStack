@@ -1,0 +1,78 @@
+{
+  "programId": "meridian-technology-center-peak",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pages": [
+    {
+      "url": "https://www.meridiantech.edu/full-time-programs",
+      "page": "details",
+      "anchor": "Full-Time Programs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.meridiantech.edu/bes/classes",
+      "page": "details",
+      "anchor": "Programs and Classes",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.meridiantech.edu/about-meridian",
+      "page": "details",
+      "anchor": "About Meridian",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.meridiantech.edu/about-meridian/contact-us",
+      "page": "details",
+      "anchor": "Contact Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.meridiantech.edu/about-meridian/staff-directory",
+      "page": "details",
+      "anchor": "Staff Directory",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.meridiantech.edu/about-meridian/the-meridian-district",
+      "page": "details",
+      "anchor": "Meridian District",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.meridiantech.edu/about-meridian/leadership",
+      "page": "details",
+      "anchor": "MTC Leadership",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.meridiantech.edu/about-meridian/board-of-education",
+      "page": "details",
+      "anchor": "Board of Education",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.meridiantech.edu/about-meridian/work-at-meridian",
+      "page": "details",
+      "anchor": "Work at Meridian",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

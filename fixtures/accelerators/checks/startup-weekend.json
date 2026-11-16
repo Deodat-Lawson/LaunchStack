@@ -1,0 +1,35 @@
+{
+  "programId": "startup-weekend",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "http://startupweekend.org/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-2cac41fed7",
+      "url": "http://startupweekend.org/",
+      "title": "Startup Weekend — homepage checked by scrape.py",
+      "excerpt": "Startup Weekend: Build a Startup in 54 Hours | Techstars Join Us Portfolio",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Startup Weekend",
+        "evidenceId": "check-name-2cac41fed7"
+      }
+    ],
+    "examplePages": []
+  }
+}

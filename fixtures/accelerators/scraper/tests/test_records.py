@@ -6,7 +6,7 @@ from pathlib import Path
 
 from scraper import PROGRAMS
 from scraper.cadence import refresh_interval
-from scraper.records import ID_PATTERN, is_homepage_record, skeleton, write_if_changed
+from scraper.records import ID_PATTERN, form_id_for, is_homepage_record, skeleton, write_if_changed
 
 NOW = datetime(2026, 11, 11, tzinfo=timezone.utc)
 
@@ -14,6 +14,10 @@ NOW = datetime(2026, 11, 11, tzinfo=timezone.utc)
 class Records(unittest.TestCase):
     def test_new_records_are_homepage_records(self) -> None:
         self.assertTrue(is_homepage_record(skeleton("acme-labs", "Acme Labs", "https://acme.example/", "https://acme.example/apply", NOW)))
+        self.assertEqual(form_id_for("acme-labs"), "acme-labs-unconfirmed")
+        long_id = "ati-clean-energy-incubator-at-university-of-texas-at-austin"
+        self.assertLessEqual(len(form_id_for(long_id)), 64)
+        self.assertTrue(form_id_for(long_id).endswith("-unconfirmed"))
 
     def test_catalogue_kinds(self) -> None:
         if (PROGRAMS / "accel-atoms.json").exists():

@@ -1,0 +1,59 @@
+{
+  "programId": "cornell-food-and-ag",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.thetechnologyfarm.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-7e36b4d116",
+      "url": "https://www.thetechnologyfarm.com/",
+      "title": "Cornell Food and Ag — homepage checked by scrape.py",
+      "excerpt": "\"email\": \"info@thetechnologyfarm.com\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-1aeb35018d",
+      "url": "https://www.thetechnologyfarm.com/",
+      "title": "Cornell Food and Ag — homepage checked by scrape.py",
+      "excerpt": "\"telephone\": \"(315) 781-7341\"",
+      "page": "details"
+    },
+    {
+      "id": "check-route-134e321bad",
+      "url": "https://www.thetechnologyfarm.com/",
+      "title": "Cornell Food and Ag — homepage checked by scrape.py",
+      "excerpt": "Cornell Agriculture and Food Technology Park → https://www.thetechnologyfarm.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@thetechnologyfarm.com",
+        "evidenceId": "check-email-7e36b4d116"
+      }
+    ],
+    "phones": [
+      {
+        "value": "(315) 781-7341",
+        "evidenceId": "check-phone-1aeb35018d"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.thetechnologyfarm.com/",
+        "evidenceId": "check-route-134e321bad"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

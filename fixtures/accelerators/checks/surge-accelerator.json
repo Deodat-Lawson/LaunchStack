@@ -1,0 +1,35 @@
+{
+  "programId": "surge-accelerator",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.surgeaccelerator.com"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-3ea2dd669e",
+      "url": "https://www.surgeaccelerator.com",
+      "title": "SURGE Accelerator — homepage checked by scrape.py",
+      "excerpt": "can cost far more than the equipment or plan itself. Surge Accelerator gives homeowners and businesses practical guidance on",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "SURGE Accelerator",
+        "evidenceId": "check-name-3ea2dd669e"
+      }
+    ],
+    "examplePages": []
+  }
+}

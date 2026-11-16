@@ -1,0 +1,37 @@
+{
+  "programId": "western-new-york-win-wny-incubator-network",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.wnyincubators.com/",
+    "https://www.wnyincubators.com/about-us",
+    "https://www.wnyincubators.com/deals-discounts"
+  ],
+  "evidence": [
+    {
+      "id": "check-route-d78261ee97",
+      "url": "https://www.wnyincubators.com/",
+      "title": "WIN: WNY Incubator Network — homepage checked by scrape.py",
+      "excerpt": "https://www.wnyincubators.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.wnyincubators.com/",
+        "evidenceId": "check-route-d78261ee97"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "programId": "forge",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pages": [
+    {
+      "url": "https://www.tedcnet.com/about/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tedcnet.com/about/board-of-directors/",
+      "page": "details",
+      "anchor": "Board of Directors",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tedcnet.com/about/staff/",
+      "page": "details",
+      "anchor": "Staff",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tedcnet.com/about/testimonials/",
+      "page": "details",
+      "anchor": "Testimonials",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tedcnet.com/resources/faq/",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.tedcnet.com/apply-now/",
+      "page": "application",
+      "anchor": "APPLY NOW",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

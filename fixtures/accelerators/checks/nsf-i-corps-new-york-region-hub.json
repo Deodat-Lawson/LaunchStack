@@ -1,0 +1,36 @@
+{
+  "programId": "nsf-i-corps-new-york-region-hub",
+  "checkedAt": "2026-11-14T19:00:10.000Z",
+  "pagesRead": [
+    "https://www.newyorkicorps.org/",
+    "https://www.newyorkicorps.org/about-us"
+  ],
+  "evidence": [
+    {
+      "id": "check-route-69ed0d2509",
+      "url": "https://www.newyorkicorps.org/",
+      "title": "NSF I-Corps New York Region Hub — homepage checked by scrape.py",
+      "excerpt": "Home → https://www.newyorkicorps.org",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.newyorkicorps.org",
+        "evidenceId": "check-route-69ed0d2509"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

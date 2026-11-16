@@ -40,6 +40,9 @@ the deleted ZIP.
 Repointing a document URL (Adeu, DOCX editing, or version revert) and replacing a
 website preview plans the old URL in the same transaction as the update. This
 intentionally also plans URLs held by immutable history: shared bytes are retained.
+Expiring or discarding an unfiled MCP staged file (`mcp_staged_files`) plans its
+bytes in the transaction that removes the staged row; a filed row's bytes belong
+to the document and are left alone.
 
 ### Planning
 

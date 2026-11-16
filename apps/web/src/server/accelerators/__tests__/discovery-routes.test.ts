@@ -271,7 +271,7 @@ describe("discovery reads", () => {
         expect(await response.json()).toMatchObject({
             programs: [
                 {
-                    fit: { ...ratedAssessment, overall: { score: 88, coverage: 100 } },
+                    fit: { ...ratedAssessment, overall: { score: 88, missing: 0, deduction: 0 } },
                     freshness: {
                         status: "out_of_date",
                         reasons: ["profile_changed"],
@@ -327,13 +327,13 @@ describe("discovery reads", () => {
         });
         expect(view.fit).toMatchObject({
             eligibility: { status: "ineligible", note: "Requires US incorporation." },
-            overall: { score: 88, coverage: 100 },
+            overall: { score: 88, missing: 0, deduction: 0 },
         });
         expect(view.freshness.status).toBe("current");
     });
 
-    // AE8: thin evidence leaves unknowns, lowers coverage and asserts no overall score.
-    it("withholds the overall score below the coverage cutoff but keeps the grades", async () => {
+    // AE8: thin evidence leaves unknowns; they carry no weight and each take 5% off the score.
+    it("scores thin evidence with a deduction instead of withholding it, keeping the grades", async () => {
         const unknown = {
             score: null,
             applicable: true,
@@ -349,8 +349,9 @@ describe("discovery reads", () => {
                 deal: unknown,
             },
         });
-        // Rated sector 20 + operations 10 + value 10 = 40 of 85 applicable.
-        expect(view.fit.overall).toEqual({ score: null, coverage: 47 });
+        // Graded sector 50·20 + operations 100·10 + value 100·10 = 3000 / 40 = 75;
+        // three areas missing take 15% off: 75 × 0.85 = 63.75 → 64.
+        expect(view.fit.overall).toEqual({ score: 64, missing: 3, deduction: 15 });
         expect(view.fit.dimensions.sector.score).toBe(50);
         expect(view.fit.dimensions.deal.score).toBeNull();
         expect(view.freshness.status).toBe("current");

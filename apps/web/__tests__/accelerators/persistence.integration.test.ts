@@ -503,7 +503,7 @@ describeDb("Accelerator discovery persistence and Grants isolation", () => {
             });
             expect(await listCompanyMatches(otherCompanyId)).toEqual({});
             expect((await loadAccelerators(member())).programs[0]).toMatchObject({
-                fit: { overall: { score: null, coverage: 0 } },
+                fit: { overall: { score: null } },
                 freshness: { status: "current" },
             });
             expect(state).toEqual({

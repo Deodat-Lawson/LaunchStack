@@ -154,8 +154,9 @@
   "dimensions": {
     "overall": "{score} / 100 fit",
     "insufficient": "Not enough evidence",
-    "coverage": "Evidence covers {coverage}% of the weight.",
-    "insufficientHint": "Evidence covers {coverage}% of the applicable weight; an overall score needs at least {minimum}%.",
+    "complete": "Every area that applies was graded.",
+    "deduction": "{missing, plural, one {# area} other {# areas}} had nothing to go on, so {deduction}% was taken off the score. Missing areas carry no weight.",
+    "insufficientHint": "None of the areas that apply could be graded from the published evidence.",
     "weight": "Weight {weight}%.",
     "sources": "Sources:",
     "notApplicable": "Not applicable",

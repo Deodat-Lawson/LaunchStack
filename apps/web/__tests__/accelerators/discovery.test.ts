@@ -60,7 +60,7 @@ function view(
                       rubricVersion: FIT_RUBRIC_VERSION,
                       eligibility: { status: "unknown", note: "Unknown" },
                       dimensions,
-                      overall: { score, coverage: score === null ? 0 : 100 },
+                      overall: { score, missing: 0, deduction: 0 },
                   },
         freshness:
             score === "unmatched"

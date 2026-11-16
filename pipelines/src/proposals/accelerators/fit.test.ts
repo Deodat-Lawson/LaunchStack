@@ -52,52 +52,55 @@ describe("rubric", () => {
 
 describe("summarizeFit", () => {
     it("matches the worked example", () => {
-        // Rated 70 of 85 applicable weight; (50·20 + 25·15 + 75·15 + 25·10 + 50·10) / 70.
-        expect(summarizeFit(example)).toEqual({ score: 46, coverage: 82 });
+        // Graded 70 weight: (50·20 + 25·15 + 75·15 + 25·10 + 50·10) / 70 = 46.4;
+        // deal is missing, so 5% comes off: 46.4 × 0.95 = 44.
+        expect(summarizeFit(example)).toEqual({ score: 44, missing: 1, deduction: 5 });
     });
 
-    it("withholds the overall score below the coverage cutoff but keeps coverage", () => {
-        // Rated 55 of 85 = 64.7%.
-        expect(summarizeFit({ ...example, stage: unknown })).toEqual({ score: null, coverage: 65 });
-    });
-
-    it("scores at exactly the cutoff and not just below it", () => {
-        // All 100 applicable; rated 20+15+15+10+10 = 70 → exactly 70%.
+    it("gives a missing area no weight and takes a small, fixed share off per gap", () => {
         const dimensions: FitDimensions = {
             sector: rated(100),
             stage: rated(100),
             businessModel: rated(100),
-            portfolio: unknown,
+            portfolio: notApplicable,
             deal: unknown,
             operations: rated(100),
             value: rated(100),
         };
-        expect(summarizeFit(dimensions)).toEqual({ score: 100, coverage: 70 });
-        // Rated 60 of 100 → 60%.
+        expect(summarizeFit(dimensions)).toEqual({ score: 95, missing: 1, deduction: 5 });
         expect(summarizeFit({ ...dimensions, value: unknown })).toEqual({
-            score: null,
-            coverage: 60,
+            score: 90,
+            missing: 2,
+            deduction: 10,
         });
+    });
+
+    it("still scores when most areas are missing, without a coverage cutoff", () => {
+        // Only sector graded; six areas missing: 75 × 0.70 = 52.5 → 53.
+        const thin = Object.fromEntries(
+            FIT_DIMENSIONS.map(({ key }) => [key, key === "sector" ? rated(75) : unknown])
+        ) as FitDimensions;
+        expect(summarizeFit(thin)).toEqual({ score: 53, missing: 6, deduction: 30 });
     });
 
     it("treats an unknown as missing, not as zero", () => {
         const allButDeal = { ...example, deal: rated(0) };
-        // Rating deal 0 lowers the score; leaving it unknown does not.
+        // Rating deal 0 drags the score down; leaving it unknown only costs the deduction.
         expect(summarizeFit(allButDeal).score).toBeLessThan(summarizeFit(example).score!);
     });
 
-    it("gives no score and zero coverage when everything is unknown", () => {
+    it("gives no score when everything that applies is unknown", () => {
         const all = Object.fromEntries(
             FIT_DIMENSIONS.map(({ key }) => [key, unknown])
         ) as FitDimensions;
-        expect(summarizeFit(all)).toEqual({ score: null, coverage: 0 });
+        expect(summarizeFit(all)).toEqual({ score: null, missing: 7, deduction: 35 });
     });
 
-    it("gives no score when nothing applies", () => {
+    it("gives no score and no deduction when nothing applies", () => {
         const none = Object.fromEntries(
             FIT_DIMENSIONS.map(({ key }) => [key, notApplicable])
         ) as FitDimensions;
-        expect(summarizeFit(none)).toEqual({ score: null, coverage: 0 });
+        expect(summarizeFit(none)).toEqual({ score: null, missing: 0, deduction: 0 });
     });
 });
 
@@ -255,9 +258,9 @@ describe("portfolioDimension", () => {
         );
         expect(portfolio).toMatchObject({ score: null, applicable: true });
         expect(FitDimensionResultSchema.safeParse(portfolio).success).toBe(true);
-        // Unknown stays in the total and lowers coverage.
-        expect(summarizeFit({ ...example, portfolio }).coverage).toBeLessThan(
-            summarizeFit(example).coverage
+        // A missing grade carries no weight but costs the deduction.
+        expect(summarizeFit({ ...example, portfolio }).deduction).toBeGreaterThan(
+            summarizeFit(example).deduction
         );
     });
 
@@ -326,7 +329,7 @@ describe("programFit", () => {
 
     it("serves the grades with the computed overall result", () => {
         const { fit, freshness } = programFit({ ...basis, assessment }, current);
-        expect(fit).toEqual({ ...assessment, overall: { score: 46, coverage: 82 } });
+        expect(fit).toEqual({ ...assessment, overall: { score: 44, missing: 1, deduction: 5 } });
         expect(freshness.status).toBe("current");
     });
 
@@ -335,7 +338,7 @@ describe("programFit", () => {
             { ...basis, assessment },
             { ...current, programHash: "g2" }
         );
-        expect(fit?.overall.score).toBe(46);
+        expect(fit?.overall.score).toBe(44);
         expect(freshness).toMatchObject({ status: "out_of_date", reasons: ["program_changed"] });
     });
 

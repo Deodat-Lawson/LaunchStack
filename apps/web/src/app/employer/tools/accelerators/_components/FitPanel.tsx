@@ -6,7 +6,6 @@ import { useId, useMemo, useState } from "react";
 
 import {
     FIT_DIMENSIONS,
-    MIN_FIT_COVERAGE,
     type FitDimensionResult,
     type ProgramFit,
 } from "@launchstack/pipelines/accelerators/fit";
@@ -86,13 +85,13 @@ export function FitPanel({ view }: { view: ProgramView }) {
                                     {fit && (
                                         <p>
                                             {fit.overall.score === null
-                                                ? td("insufficientHint", {
-                                                      coverage: fit.overall.coverage,
-                                                      minimum: MIN_FIT_COVERAGE,
-                                                  })
-                                                : td("coverage", {
-                                                      coverage: fit.overall.coverage,
-                                                  })}
+                                                ? td("insufficientHint")
+                                                : fit.overall.missing === 0
+                                                  ? td("complete")
+                                                  : td("deduction", {
+                                                        missing: fit.overall.missing,
+                                                        deduction: fit.overall.deduction,
+                                                    })}
                                         </p>
                                     )}
                                     <p className="text-ink-3">{t("disclaimer")}</p>

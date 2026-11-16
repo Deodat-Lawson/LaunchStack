@@ -48,7 +48,7 @@ function view(score: number | null, matched = true): ProgramView {
                   rubricVersion: FIT_RUBRIC_VERSION,
                   eligibility: { status: "unknown", note: "Unknown" },
                   dimensions: unknownDimensions,
-                  overall: { score, coverage: score === null ? 0 : 100 },
+                  overall: { score, missing: 0, deduction: 0 },
               }
             : null,
         freshness: matched

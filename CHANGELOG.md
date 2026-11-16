@@ -19,8 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     priority) across the whole Catalogue; filters survive opening a Program.
   - Score the Programs you choose (top N of the filtered list, or all of it)
     with the credit estimate on the button; results that are still current are
-    reused, not re-scored. Fit uses seven weighted areas and shows an overall
-    score only with enough evidence. A score is not an admission probability.
+    reused, not re-scored. Fit uses seven weighted areas; an area with nothing
+    to go on carries no weight and takes 5% off the overall score. A score is
+    not an admission probability.
   - For Y Combinator, the most similar past companies and their published
     applications, which also grade the "Similar past companies" area.
   - A private application tracker: priority, status, notes, next action, tasks

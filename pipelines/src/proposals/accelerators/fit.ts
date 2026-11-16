@@ -11,7 +11,9 @@ import { IdSchema } from "./types";
  */
 
 /**
- * Bump when weights, ratings, cutoff or grading rules change; older results then read as out of date.
+ * Bump when weights, ratings or the model's grading rules change; older results then read
+ * as out of date. How grades combine into the overall score (`summarizeFit`) runs when a
+ * result is read, so changing it applies to stored grades without re-scoring.
  * fit-v2: the portfolio dimension is graded for Supported accelerators from similar past companies.
  */
 export const FIT_RUBRIC_VERSION = "fit-v2";
@@ -36,8 +38,12 @@ export const FIT_DIMENSION_KEYS = FIT_DIMENSIONS.map(({ key }) => key) as [
 export const FIT_RATINGS = [0, 25, 50, 75, 100] as const;
 export type FitRating = (typeof FIT_RATINGS)[number];
 
-/** Minimum share (percent) of applicable weight that must be rated for an overall score. */
-export const MIN_FIT_COVERAGE = 70;
+/**
+ * Percent of the overall score taken off for each applicable area that could not be graded
+ * (nothing found on the Program's side, the company's, or both). The area itself carries no
+ * weight, so a gap neither drags the score toward 0 nor hides it; it only lowers confidence.
+ */
+export const MISSING_AREA_DEDUCTION = 5;
 
 /** Most Programs one scoring run may cover; the user chooses which. */
 export const MAX_PROGRAMS_PER_RUN = 100;
@@ -144,33 +150,40 @@ export const FitAssessmentV1Schema = z
 export type FitAssessmentV1 = z.infer<typeof FitAssessmentV1Schema>;
 
 export interface FitOverall {
-    /** Weighted mean of rated dimensions, 0–100; null when coverage is below the cutoff. */
+    /**
+     * Weighted mean of the graded areas, 0–100, less MISSING_AREA_DEDUCTION percent per
+     * missing area; null only when no applicable area could be graded.
+     */
     score: number | null;
-    /** Whole-number percent of applicable weight that was rated. */
-    coverage: number;
+    /** Applicable areas that could not be graded. */
+    missing: number;
+    /** Whole-number percent taken off the score for those areas. */
+    deduction: number;
 }
 
 /**
- * Overall score and evidence coverage. Dimensions that do not apply leave the
- * total; unknown dimensions stay in the total but add no score, lowering coverage.
- * The cutoff compares the exact share, so 69.6% does not round up to pass.
+ * Overall score. Areas that do not apply leave the calculation without cost. Areas that
+ * apply but could not be graded carry no weight and each take MISSING_AREA_DEDUCTION
+ * percent off the result, so an unknown is never a 0 and never a neutral 50.
  */
 export function summarizeFit(dimensions: Pick<FitDimensions, FitDimensionKey>): FitOverall {
-    let applicableWeight = 0;
-    let ratedWeight = 0;
+    let gradedWeight = 0;
     let weightedSum = 0;
+    let missing = 0;
     for (const { key, weight } of FIT_DIMENSIONS) {
         const dimension = dimensions[key];
         if (!dimension.applicable) continue;
-        applicableWeight += weight;
-        if (dimension.score === null) continue;
-        ratedWeight += weight;
+        if (dimension.score === null) {
+            missing += 1;
+            continue;
+        }
+        gradedWeight += weight;
         weightedSum += dimension.score * weight;
     }
-    if (applicableWeight === 0) return { score: null, coverage: 0 };
-    const coverage = Math.round((ratedWeight / applicableWeight) * 100);
-    const enough = ratedWeight > 0 && ratedWeight * 100 >= MIN_FIT_COVERAGE * applicableWeight;
-    return { score: enough ? Math.round(weightedSum / ratedWeight) : null, coverage };
+    const deduction = missing * MISSING_AREA_DEDUCTION;
+    if (gradedWeight === 0) return { score: null, missing, deduction };
+    const mean = weightedSum / gradedWeight;
+    return { score: Math.round((mean * (100 - deduction)) / 100), missing, deduction };
 }
 
 /**

@@ -154,8 +154,9 @@
   "dimensions": {
     "overall": "匹配度 {score} / 100",
     "insufficient": "证据不足",
-    "coverage": "证据覆盖 {coverage}% 的权重。",
-    "insufficientHint": "证据覆盖了 {coverage}% 的适用权重；给出总分至少需要 {minimum}%。",
+    "complete": "所有适用的方面均已评分。",
+    "deduction": "有 {missing} 个方面缺少依据，因此总分扣除了 {deduction}%。缺少依据的方面不计入权重。",
+    "insufficientHint": "没有任何适用的方面能根据已公布的证据评分。",
     "weight": "权重 {weight}%。",
     "sources": "来源：",
     "notApplicable": "不适用",

@@ -64,11 +64,24 @@ jest.mock("~/lib/storage", () => ({
     uploadFile: jest.fn(async (input: { filename: string; data: Buffer }) => {
         const url = `mem://${++mockFileCounter}/${input.filename}`;
         mockStored.set(url, Buffer.from(input.data));
-        return { url, pathname: input.filename, provider: "s3" };
+        return {
+            url,
+            pathname: input.filename,
+            provider: "s3",
+            ref: { adapter: "s3", storageLocationId: "mem", key: url },
+        };
     }),
-    deleteFile: jest.fn(async (url: string) => {
-        mockStored.delete(url);
+}));
+jest.mock("~/server/storage/stored-url", () => ({
+    refFromStoredUrl: (url: string) => ({
+        ok: true,
+        ref: { adapter: "s3", storageLocationId: "mem", key: url },
     }),
+}));
+jest.mock("~/server/storage/delete-objects", () => ({
+    deleteStoredObjects: jest.fn(async (refs: { key: string }[]) =>
+        refs.map(ref => ({ ref, outcome: mockStored.delete(ref.key) ? "deleted" : "not_found" }))
+    ),
 }));
 
 /** Ingestion: the document row and its first version, nothing downstream. */

@@ -393,6 +393,19 @@ describeDb("resolveDocumentScope (integration)", () => {
         });
     });
 
+    it("is everything for someone granted every restricted file, and not for anyone else", async () => {
+        const { folderSettings } = await import("~/server/db/schema");
+        // Only the board deck stays restricted, and the viewer holds its grant.
+        await test.db.delete(folderSettings).where(eq(folderSettings.companyId, ids.companyId));
+
+        expect((await scopeFor(ids.viewer, "viewer")).kind).toBe("everything");
+        expect(await scopeFor(ids.member, "member")).toMatchObject({
+            kind: "except",
+            deniedDocumentIds: [ids.docBoardDeck],
+        });
+        expect(await visibleTitles(ids.member, "member")).not.toContain("Board deck");
+    });
+
     it("collapses to everything once the workspace has nothing restricted", async () => {
         const { folderSettings, documentSettings } = await import("~/server/db/schema");
         await test.db.delete(folderSettings).where(eq(folderSettings.companyId, ids.companyId));

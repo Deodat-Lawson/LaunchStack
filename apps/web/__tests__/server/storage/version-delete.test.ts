@@ -1,147 +1,154 @@
 /** @jest-environment node */
 
 const mockPermission = jest.fn();
-const mockDeleteStoredObjects = jest.fn();
+const mockCanEdit = jest.fn();
+const mockPlanVersionDeletion = jest.fn();
 const mockRowDelete = jest.fn();
+const mockLock = jest.fn();
+const mockTransaction = jest.fn();
+const mockDeleteTable = jest.fn();
 const mockSelectQueue: unknown[][] = [];
-const mockServer: Record<string, string | undefined> = {};
 
-jest.mock("~/env", () => ({
-    get env() {
-        return { server: mockServer };
-    },
-}));
 jest.mock("~/lib/require-workspace-context", () => ({
     requireWorkspacePermission: () => mockPermission(),
 }));
 jest.mock("~/lib/authz/scope", () => ({ scopedDocumentWhere: () => ({}) }));
-jest.mock("~/server/workspace/item-access", () => ({ canEditDocument: async () => true }));
+jest.mock("~/server/workspace/item-access", () => ({
+    canEditDocument: (...args: unknown[]) => mockCanEdit(...args),
+}));
 jest.mock("~/lib/rate-limit-middleware", () => ({
     withRateLimit: (_request: Request, _preset: unknown, handler: () => Promise<Response>) =>
         handler(),
 }));
 jest.mock("~/lib/rate-limiter", () => ({ RateLimitPresets: { strict: {} } }));
-jest.mock("~/server/storage/delete-objects", () => ({
-    deleteStoredObjects: (refs: unknown) => mockDeleteStoredObjects(refs),
+jest.mock("~/server/storage/deletion/plan", () => ({
+    planVersionDeletion: (...args: unknown[]) => mockPlanVersionDeletion(...args),
 }));
-
-function mockSelection() {
-    const result = {
-        limit: () => result,
-        then: (resolve: (rows: unknown[]) => unknown) =>
-            Promise.resolve(mockSelectQueue.shift() ?? []).then(resolve),
+function mockSelectBuilder() {
+    const builder: Record<string, unknown> = {
+        from: () => builder,
+        where: () => builder,
+        then: (resolve: (rows: unknown[]) => unknown) => resolve(mockSelectQueue.shift() ?? []),
+        for: (mode: string) => {
+            mockLock(mode);
+            return Promise.resolve(mockSelectQueue.shift() ?? []);
+        },
     };
-    return { from: () => ({ where: () => result }) };
+    return builder;
 }
+const mockTx = {
+    select: mockSelectBuilder,
+    delete: (table: unknown) => {
+        mockDeleteTable(table);
+        return { where: mockRowDelete };
+    },
+};
 jest.mock("~/server/db", () => ({
     db: {
-        select: mockSelection,
-        delete: () => ({ where: mockRowDelete }),
+        select: mockSelectBuilder,
+        transaction: (callback: (tx: typeof mockTx) => unknown) => mockTransaction(callback),
     },
 }));
 
 import { DELETE } from "~/app/api/documents/[id]/versions/[versionId]/route";
+import { documentVersions, ocrJobs } from "@launchstack/store/schema";
 
-function call(
-    url = "/api/files/42",
-    options: {
-        sharedBy?: "document" | "version";
-        owned?: boolean;
-        current?: boolean;
-        only?: boolean;
-    } = {}
-) {
-    mockSelectQueue.push(
-        [{ id: 7, category: "document", currentVersionId: options.current ? 9 : 10 }],
-        [{ id: 9, versionNumber: 1, url }],
-        options.only ? [{ id: 9 }] : [{ id: 9 }, { id: 10 }],
-        options.sharedBy === "document" ? [{ id: 12 }] : [],
-        options.sharedBy === "version" ? [{ id: 11 }] : [],
-        options.owned === false ? [] : [{ id: 42 }]
-    );
+function call() {
     return DELETE(new Request("http://app.test/api/documents/7/versions/9"), {
         params: Promise.resolve({ id: "7", versionId: "9" }),
     });
 }
-
-let warn: jest.SpyInstance;
+function seed(url = "/api/files/42", currentVersionId = 10, versions = [{ id: 9 }, { id: 10 }]) {
+    mockSelectQueue.push(
+        [{ id: 7, category: "document", currentVersionId }],
+        [{ id: 7, category: "document", currentVersionId }],
+        [{ id: 9, versionNumber: 1, url }],
+        versions
+    );
+}
 beforeEach(() => {
     jest.clearAllMocks();
     mockSelectQueue.length = 0;
-    mockServer.NEXT_PUBLIC_S3_ENDPOINT = "http://s3:8333";
-    mockServer.S3_BUCKET_NAME = "files";
-    delete mockServer.S3_PUBLIC_ENDPOINT;
     mockPermission.mockResolvedValue({
         success: true,
         data: { companyId: BigInt(1), authUserId: "user1", documentScope: async () => ({}) },
     });
+    mockCanEdit.mockResolvedValue(true);
+    mockPlanVersionDeletion.mockResolvedValue(5);
     mockRowDelete.mockResolvedValue(undefined);
-    warn = jest.spyOn(console, "warn").mockImplementation(() => undefined);
+    mockTransaction.mockImplementation(callback => callback(mockTx));
 });
-afterEach(() => warn.mockRestore());
 
-it.each(["deleted", "not_found"])(
-    "removes the version row when storage reports %s",
-    async outcome => {
-        mockDeleteStoredObjects.mockImplementation((refs: unknown[]) =>
-            Promise.resolve([{ ref: refs[0], outcome }])
-        );
-        expect((await call()).status).toBe(200);
-        expect(mockDeleteStoredObjects).toHaveBeenCalledWith([
-            { adapter: "database", storageLocationId: "database:file_uploads", key: "42" },
-        ]);
-        expect(mockRowDelete).toHaveBeenCalledTimes(1);
-    }
-);
-
-it.each(["blocked", "retryable"])(
-    "retains the version row and returns 502 for %s",
-    async outcome => {
-        mockDeleteStoredObjects.mockResolvedValue([{ outcome, errorCode: "provider_failure" }]);
+it.each(["/api/files/42", "https://foreign.example/file.pdf", "https://app1.ufs.sh/f/key"])(
+    "synchronously removes the version while planning deferred cleanup of %s",
+    async url => {
+        seed(url);
         const response = await call();
-        expect(response.status).toBe(502);
-        expect((await response.json()).details).toBe("provider_failure");
-        expect(mockRowDelete).not.toHaveBeenCalled();
+        expect(response.status).toBe(200);
+        expect(await response.json()).toEqual(
+            expect.objectContaining({
+                success: true,
+                documentId: 7,
+                versionId: 9,
+                versionNumber: 1,
+            })
+        );
+        expect(mockPlanVersionDeletion).toHaveBeenCalledWith(mockTx, {
+            documentId: 7,
+            versionId: 9,
+            requestedBy: "user1",
+            reason: "version_delete",
+            traceId: expect.any(String),
+        });
+        expect(mockLock.mock.calls).toEqual([["update"], ["update"], ["update"]]);
+        expect(mockRowDelete).toHaveBeenCalledTimes(2);
+        expect(mockDeleteTable.mock.calls).toEqual([[ocrJobs], [documentVersions]]);
+        expect(mockPlanVersionDeletion.mock.invocationCallOrder[0]).toBeLessThan(
+            mockRowDelete.mock.invocationCallOrder[0]!
+        );
     }
 );
 
-it("retains an unrecognized URL instead of pretending its bytes were deleted", async () => {
-    const response = await call("https://foreign.example/file.pdf");
-    expect(response.status).toBe(502);
-    expect((await response.json()).details).toContain("unrecognized");
-    expect(mockDeleteStoredObjects).not.toHaveBeenCalled();
+it("does not remove relational rows if planning fails", async () => {
+    seed();
+    mockPlanVersionDeletion.mockRejectedValueOnce(new Error("outbox unavailable"));
+    const quiet = jest.spyOn(console, "error").mockImplementation(() => undefined);
+    try {
+        expect((await call()).status).toBe(500);
+        expect(mockRowDelete).not.toHaveBeenCalled();
+    } finally {
+        quiet.mockRestore();
+    }
+});
+it.each([
+    { current: 9, versions: [{ id: 9 }, { id: 10 }], description: "current version" },
+    { current: 10, versions: [{ id: 9 }], description: "only version" },
+])("keeps the 409 guard for the $description", async ({ current, versions }) => {
+    seed(undefined, current, versions);
+    expect((await call()).status).toBe(409);
+    expect(mockPlanVersionDeletion).not.toHaveBeenCalled();
     expect(mockRowDelete).not.toHaveBeenCalled();
 });
-
-it("retains an ambiguous URL instead of choosing a provider", async () => {
-    mockServer.S3_PUBLIC_ENDPOINT = "https://app1.ufs.sh";
-    const response = await call("https://app1.ufs.sh/f/key");
-    expect(response.status).toBe(502);
-    expect((await response.json()).details).toContain("ambiguous");
-    expect(mockDeleteStoredObjects).not.toHaveBeenCalled();
-    expect(mockRowDelete).not.toHaveBeenCalled();
+it("keeps edit permission checks before opening the deletion transaction", async () => {
+    seed();
+    mockCanEdit.mockResolvedValue(false);
+    expect((await call()).status).toBe(403);
+    expect(mockPlanVersionDeletion).not.toHaveBeenCalled();
+    expect(mockTransaction).not.toHaveBeenCalled();
 });
-
-it("keeps re-embed-shared bytes while deleting the obsolete version row", async () => {
-    expect((await call("/api/files/42", { sharedBy: "version" })).status).toBe(200);
-    expect(mockDeleteStoredObjects).not.toHaveBeenCalled();
-    expect(mockRowDelete).toHaveBeenCalledTimes(1);
+it("does not plan a version from another document", async () => {
+    mockSelectQueue.push(
+        [{ id: 7, category: "document", currentVersionId: 10 }],
+        [{ id: 7, category: "document", currentVersionId: 10 }],
+        []
+    );
+    expect((await call()).status).toBe(404);
+    expect(mockPlanVersionDeletion).not.toHaveBeenCalled();
 });
-
-it("keeps bytes still referenced by a document after revert", async () => {
-    expect((await call("/api/files/42", { sharedBy: "document" })).status).toBe(200);
-    expect(mockDeleteStoredObjects).not.toHaveBeenCalled();
-    expect(mockRowDelete).toHaveBeenCalledTimes(1);
-});
-
-it("keeps a foreign-company database file while deleting the version row", async () => {
-    expect((await call("/api/files/42", { owned: false })).status).toBe(200);
-    expect(mockDeleteStoredObjects).not.toHaveBeenCalled();
-    expect(mockRowDelete).toHaveBeenCalledTimes(1);
-});
-
-it.each([{ current: true }, { only: true }])("preserves the 409 guard for %j", async options => {
-    expect((await call("/api/files/42", options)).status).toBe(409);
-    expect(mockDeleteStoredObjects).not.toHaveBeenCalled();
+it("rechecks the current-version guard against the locked document", async () => {
+    seed();
+    mockSelectQueue[1] = [{ id: 7, category: "document", currentVersionId: 9 }];
+    expect((await call()).status).toBe(409);
+    expect(mockPlanVersionDeletion).not.toHaveBeenCalled();
     expect(mockRowDelete).not.toHaveBeenCalled();
 });

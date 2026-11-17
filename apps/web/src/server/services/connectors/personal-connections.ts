@@ -33,6 +33,7 @@
  * existed, applies the departure rule itself (`closePersonalConnectionsNow`).
  */
 
+import { randomUUID } from "node:crypto";
 import { and, eq, inArray, like, or, sql } from "drizzle-orm";
 
 import { decryptSecret } from "@launchstack/store/crypto";
@@ -188,7 +189,8 @@ async function mailboxesStillConnected(
 async function deleteMailboxes(
     tx: Tx,
     companyId: bigint,
-    mailboxes: readonly string[]
+    mailboxes: readonly string[],
+    requestedBy: string
 ): Promise<{ documents: number; folders: number }> {
     if (mailboxes.length === 0) return { documents: 0, folders: 0 };
     const inMailbox = (path: string | null) =>
@@ -199,9 +201,14 @@ async function deleteMailboxes(
         .select({ id: document.id, category: document.category })
         .from(document)
         .where(and(eq(document.companyId, companyId), underAMailboxRoot(document.category)));
+    const traceId = randomUUID();
     for (const doc of mail) {
         if (!inMailbox(doc.category)) continue;
-        await deleteDocumentCore(tx, Number(doc.id));
+        await deleteDocumentCore(tx, Number(doc.id), {
+            requestedBy,
+            reason: "connector_disconnect",
+            traceId,
+        });
         documents++;
     }
 
@@ -296,7 +303,8 @@ export async function closePersonalConnections(
     const { documents, folders } = await deleteMailboxes(
         tx,
         companyId,
-        owned.filter(path => !others.has(path))
+        owned.filter(path => !others.has(path)),
+        "system:connector_disconnect"
     );
 
     if (connections.length > 0) {
@@ -370,7 +378,7 @@ export async function sweepMailboxOfClosedConnection(
         const path = normalizeFolderPath(mailbox);
         if (!isPersonalMailboxPath(path)) return null;
         if ((await mailboxesStillConnected(tx, companyId, null)).has(path)) return null;
-        return deleteMailboxes(tx, companyId, [path]);
+        return deleteMailboxes(tx, companyId, [path], "system:connector_disconnect");
     });
 }
 

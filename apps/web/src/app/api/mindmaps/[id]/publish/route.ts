@@ -181,7 +181,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
                 userId: ctx.data.authUserId,
                 title: map.title,
                 category: documentCategory,
-                url: stored.url,
+                url: internalFileId !== null ? `/api/files/${internalFileId}` : stored.url,
                 processingUrl,
                 // One version per map revision; a retry converges on it.
                 creationKey: `${creationKeyFor(id)}:r${map.revision}`,

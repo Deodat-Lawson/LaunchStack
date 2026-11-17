@@ -16,7 +16,7 @@ import path from "node:path";
 import { eq } from "drizzle-orm";
 
 import { getDb } from "@launchstack/store/client";
-import { document, ocrJobs } from "@launchstack/store/schema";
+import { document } from "@launchstack/store/schema";
 import { getStoragePort } from "@launchstack/runtime";
 
 import { createDocumentLifecycle } from "@launchstack/orchestration";
@@ -351,6 +351,13 @@ export interface ExpandArchiveInput {
     traceId: string;
     /** Fetches the archive bytes — injected so web/worker share storage access. */
     fetchArchive: (url: string) => Promise<Response>;
+    /** Removes the archive and job through the host's transactional deletion lifecycle. */
+    cleanupArchive: (input: {
+        sourceId: number;
+        ocrJobId: string;
+        userId: string;
+        traceId: string;
+    }) => Promise<void>;
 }
 
 export interface ExpandArchiveResult {
@@ -662,9 +669,12 @@ export async function expandArchive(input: ExpandArchiveInput): Promise<ExpandAr
         extracted += 1;
     }
 
-    const db = getDb();
-    await db.delete(ocrJobs).where(eq(ocrJobs.id, input.ocrJobId));
-    await db.delete(document).where(eq(document.id, input.sourceId));
+    await input.cleanupArchive({
+        sourceId: input.sourceId,
+        ocrJobId: input.ocrJobId,
+        userId: input.userId,
+        traceId: input.traceId,
+    });
     console.log(`[ArchiveExpansion] Deleted original ZIP document id=${input.sourceId}`);
 
     return {

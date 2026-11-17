@@ -41,7 +41,12 @@ import type {
 } from "@launchstack/orchestration";
 
 import { runExtractionStage, runIndexingStage } from "./doc-ingestion";
-import { expandArchive, isTextFastPathFile, isZipFile } from "@launchstack/conversion";
+import {
+    expandArchive,
+    isTextFastPathFile,
+    isZipFile,
+    type ExpandArchiveInput,
+} from "@launchstack/conversion";
 
 interface StoredDispatchOptions {
     archiveIdentity?: string;
@@ -61,12 +66,33 @@ async function loadJobRow(ocrJobId: string) {
 }
 
 export class DocIngestionPipeline implements ExtractionPipelinePort {
-    constructor(private readonly logger: LoggerPort) {}
+    constructor(
+        private readonly logger: LoggerPort,
+        private readonly cleanupArchive: ExpandArchiveInput["cleanupArchive"]
+    ) {}
 
     async extract(job: ExtractionJob): Promise<ExtractionOutcome> {
         const routingName = job.options.originalFilename ?? job.documentName;
 
         if (isZipFile(job.options.mimeType, routingName)) {
+            // Expansion deletes its original source and OCR job atomically.
+            // Replayed events must converge before trying to read the removed ZIP.
+            const [source] = await getDb()
+                .select({ id: document.id })
+                .from(document)
+                .where(eq(document.id, job.sourceId))
+                .limit(1);
+            if (!source) {
+                this.logger.info(
+                    { sourceId: job.sourceId, traceId: job.traceId },
+                    "archive source no longer exists; skipping replay"
+                );
+                return {
+                    provider: "INGESTION",
+                    usedFastTextPath: false,
+                    expandedArchive: true,
+                };
+            }
             const storage = getStoragePort();
             const result = await expandArchive({
                 companyId: job.companyId,
@@ -80,6 +106,7 @@ export class DocIngestionPipeline implements ExtractionPipelinePort {
                 embeddingIndexKey: job.options.embeddingIndexKey,
                 traceId: job.traceId,
                 fetchArchive: url => storage.download(url),
+                cleanupArchive: this.cleanupArchive,
             });
             this.logger.info(
                 {

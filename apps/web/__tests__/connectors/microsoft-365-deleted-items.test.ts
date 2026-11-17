@@ -10,6 +10,7 @@
 jest.mock("~/server/db", () => ({ db: {} }));
 jest.mock("~/server/engine", () => ({ getEngine: jest.fn() }));
 jest.mock("~/env", () => ({ env: { server: {}, client: {} } }));
+jest.mock("~/server/storage/deletion/plan", () => ({ planDocumentDeletion: jest.fn() }));
 
 import { isListableDriveRow, syncedSourceOf } from "~/server/services/connectors/deleted-items";
 import { deleteDocumentCore } from "~/server/services/document-delete";
@@ -20,6 +21,7 @@ import {
 import { connectorDeletedItem, microsoft365PickedItem } from "~/server/db/schema";
 
 const DRIVE = "b!clients-documents";
+const context = { requestedBy: "user1", reason: "user_delete", traceId: "trace-delete" };
 
 function metadata(overrides: Record<string, unknown> = {}) {
     return {
@@ -95,7 +97,7 @@ describe("deleting a synced document", () => {
             title: "PBC list.xlsx",
             metadata: metadata(),
         });
-        await deleteDocumentCore(tx, 42, { deletedByUserPk: 9 });
+        await deleteDocumentCore(tx, 42, { ...context, deletedByUserPk: 9 });
 
         expect(inserts).toEqual([
             {
@@ -117,7 +119,7 @@ describe("deleting a synced document", () => {
             title: "Deck.pdf",
             metadata: metadata({ pickedRootId: `${DRIVE}:01FILE` }),
         });
-        await deleteDocumentCore(tx, 42);
+        await deleteDocumentCore(tx, 42, context);
 
         expect(deletes).toContain(microsoft365PickedItem);
         // Still remembered, so a picked folder that also reaches it leaves it out.
@@ -129,7 +131,7 @@ describe("deleting a synced document", () => {
             title: "Notes",
             metadata: { connector: "upload" },
         });
-        await deleteDocumentCore(tx, 42);
+        await deleteDocumentCore(tx, 42, context);
         expect(deletes).not.toContain(microsoft365PickedItem);
         expect(inserts).toEqual([]);
     });

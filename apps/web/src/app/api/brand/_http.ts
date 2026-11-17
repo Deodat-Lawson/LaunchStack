@@ -22,6 +22,7 @@ import { requireBetaAppContext } from "~/server/beta-apps";
 import { isStatusCarryingError } from "~/server/api/responses";
 import { brandReason } from "~/server/brand/words";
 import { error, handleRouteError, json } from "~/server/distribution/http";
+import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 
 export { error, json };
 
@@ -91,6 +92,15 @@ export async function brandPublishContext(
  * are worded for the reader (same `{ error, code }` shape).
  */
 export function handleBrandError(scope: string, err: unknown, request?: Request): NextResponse {
+    if (err instanceof UploadAuthorizationError) {
+        return error(
+            translatorFor(
+                request ? localeOfRequest(request) : "en",
+                "upload.server.errors"
+            )("fileNotInWorkspace"),
+            err.status
+        );
+    }
     if (request && isStatusCarryingError(err) && !err.copy) {
         return error(brandReason(err.message, localeOfRequest(request)), err.status, {
             code: err.code,

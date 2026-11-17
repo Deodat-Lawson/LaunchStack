@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 import {
@@ -19,6 +19,7 @@ import programFixture from "../../../../fixtures/accelerators/programs/abovea-st
 import { FitPanel } from "~/app/employer/tools/accelerators/_components/FitPanel";
 import { FitStatus, Narrative } from "~/app/employer/tools/accelerators/_components/ProgramFacts";
 import { RunStatus } from "~/app/employer/tools/accelerators/_components/RunStatus";
+import { ScoreProgramButton } from "~/app/employer/tools/accelerators/_components/ScoreProgramButton";
 import { renderWithLocale } from "~/i18n/testing/render";
 import { runCopy } from "~/server/proposals/copy";
 
@@ -215,4 +216,43 @@ it("keeps unchecked facts distinct from unpublished facts", () => {
     renderWithLocale(<DealTab details={undefined} />, "zh-CN");
     expect(screen.getByText(/^尚未核查：/)).toBeInTheDocument();
     expect(screen.queryByText(/^未公布/)).not.toBeInTheDocument();
+});
+
+describe("scoring one Program from its page", () => {
+    const home = (overrides: object = {}) => ({
+        costs: { matchPerProgram: 167 },
+        canEdit: true,
+        profileReady: true,
+        ...overrides,
+    });
+
+    it("scores an unassessed Program without re-scoring, at the per-Program rate", () => {
+        const match = jest.fn().mockResolvedValue(undefined);
+        mockUseAccelerators.mockReturnValue({ home: home(), runBusy: false, match });
+        render(<ScoreProgramButton view={view(null, false)} />);
+        fireEvent.click(screen.getByRole("button", { name: /Score this Program · 167 credits/ }));
+        expect(match).toHaveBeenCalledWith([program.id], false);
+    });
+
+    it("asks to re-score when the saved result is still current", () => {
+        const match = jest.fn().mockResolvedValue(undefined);
+        mockUseAccelerators.mockReturnValue({ home: home(), runBusy: false, match });
+        render(<ScoreProgramButton view={view(64)} />);
+        fireEvent.click(screen.getByRole("button", { name: /Score again/ }));
+        expect(match).toHaveBeenCalledWith([program.id], true);
+    });
+
+    it.each([
+        ["a read-only role", { canEdit: false }, false],
+        ["a missing company profile", { profileReady: false }, false],
+        ["a run already in progress", {}, true],
+    ])("cannot start with %s", (_, overrides, runBusy) => {
+        const match = jest.fn();
+        mockUseAccelerators.mockReturnValue({ home: home(overrides), runBusy, match });
+        render(<ScoreProgramButton view={view(null, false)} />);
+        const button = screen.getByRole("button");
+        expect(button).toBeDisabled();
+        fireEvent.click(button);
+        expect(match).not.toHaveBeenCalled();
+    });
 });

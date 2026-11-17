@@ -1,5 +1,6 @@
 import type { ProgramView } from "@launchstack/pipelines/accelerators";
 import { hasRollingIntake, publishedValue, type ProgramDetailsMap } from "./details";
+import { isConfirmedIneligible } from "./vision-filters";
 
 export const FIT_FILTERS = ["all", "scored", "unmatched", "unscorable", "stale"] as const;
 export const MINIMUM_SCORES = [0, 25, 50, 75] as const;
@@ -48,6 +49,33 @@ export function updateDiscoveryParams(
 /** The overall score only while the result is current; an out-of-date score is not a fit. */
 export function currentScore(view: ProgramView): number | null {
     return view.freshness.status === "current" ? (view.fit?.overall.score ?? null) : null;
+}
+
+/** Scores at or above this read as a strong fit. */
+export const STRONG_FIT = 60;
+/** Scores at or above this, and below STRONG_FIT, read as a fair fit; below it, a weak one. */
+export const FAIR_FIT = 40;
+
+export type FitBand = "strong" | "fair" | "weak";
+
+export function fitBand(score: number): FitBand {
+    return score >= STRONG_FIT ? "strong" : score >= FAIR_FIT ? "fair" : "weak";
+}
+
+/**
+ * What to recommend from a list: the highest current scores that are at least a
+ * fair fit, never a Program the saved result found ineligible. Ties keep list order.
+ */
+export function recommendedPrograms(views: readonly ProgramView[], limit: number): ProgramView[] {
+    return views
+        .map(view => ({ view, score: currentScore(view) }))
+        .filter(
+            (item): item is { view: ProgramView; score: number } =>
+                item.score !== null && item.score >= FAIR_FIT && !isConfirmedIneligible(item.view)
+        )
+        .sort((left, right) => right.score - left.score)
+        .slice(0, limit)
+        .map(item => item.view);
 }
 
 /**

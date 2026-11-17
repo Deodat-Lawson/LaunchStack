@@ -18,6 +18,7 @@ import { cn } from "~/lib/utils";
 import type { ProgramView } from "../api";
 import { useAccelerators } from "../_lib/context";
 import { ScoreRing } from "./ProgramFacts";
+import { ScoreProgramButton } from "./ScoreProgramButton";
 
 const ELIGIBILITY = {
     eligible: { icon: CheckCircle2, tone: "text-success-ink" },
@@ -34,8 +35,9 @@ interface Citation {
 
 /**
  * The fit at a glance: overall score and eligibility, each area on demand, then when it
- * was assessed and whether it is still current. Coverage, the eligibility reasoning and
- * the not-a-probability caveat sit behind the info button.
+ * was assessed, whether it is still current, and a way to score this Program now.
+ * Coverage, the eligibility reasoning and the not-a-probability caveat sit behind the
+ * info button.
  */
 export function FitPanel({ view }: { view: ProgramView }) {
     const t = useTranslations("accelerators.fit");
@@ -64,7 +66,12 @@ export function FitPanel({ view }: { view: ProgramView }) {
         <section role="region" aria-labelledby={headingId} className="space-y-4">
             <div className="space-y-4">
                 <div className="flex items-center gap-4">
-                    <ScoreRing score={score} label={label} size="md" />
+                    <ScoreRing
+                        score={score}
+                        label={label}
+                        size="md"
+                        muted={freshness.status === "out_of_date"}
+                    />
                     <div className="min-w-0 flex-1 space-y-1.5">
                         <div className="flex items-center justify-between gap-2">
                             <h2 id={headingId} className="text-ink text-sm font-semibold">
@@ -104,6 +111,7 @@ export function FitPanel({ view }: { view: ProgramView }) {
                 </div>
                 {fit && <DimensionList fit={fit} citations={citations} />}
                 <Freshness view={view} />
+                <ScoreProgramButton view={view} />
             </div>
         </section>
     );

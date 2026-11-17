@@ -3,14 +3,13 @@
 import { useFormatter, useTranslations } from "next-intl";
 
 import { ToolLink } from "~/components/tool-app/ToolLink";
-import { cn } from "~/lib/utils";
 
 import type { ProgramView, TrackerOpportunity } from "../api";
 import { publishedValue, type ProgramDetails } from "../_lib/details";
 import { daysBetween, isConfirmedIneligible } from "../_lib/vision-filters";
-import { ProgramLogo } from "./ProgramFacts";
+import { ProgramLogo, ScoreRing } from "./ProgramFacts";
 
-/** One line per Program: who and for whom, then the saved fit as a number. */
+/** One line per Program: who and for whom, then the saved fit as a ring. */
 export function ProgramRow({
     view,
     details,
@@ -74,22 +73,17 @@ export function ProgramRow({
                     <p className="text-ink-3 truncate text-xs">{meta.join(" · ")}</p>
                 )}
             </div>
-            <span
-                role="img"
-                aria-label={fitLabel}
-                title={fitLabel}
-                className={cn(
-                    "w-8 shrink-0 text-right text-sm tabular-nums",
-                    score === null || stale ? "text-ink-3" : "text-ink font-semibold"
-                )}
-            >
-                {/* Unscored stays blank; "—" means scored without enough evidence. */}
-                {view.freshness.status === "not_assessed"
-                    ? null
-                    : score === null
-                      ? "—"
-                      : format.number(score)}
-            </span>
+            {/* Unscored stays blank; an empty ring with "—" means scored without enough evidence. */}
+            {view.freshness.status === "not_assessed" ? (
+                <span
+                    role="img"
+                    aria-label={fitLabel}
+                    title={fitLabel}
+                    className="size-9 shrink-0"
+                />
+            ) : (
+                <ScoreRing score={score} label={fitLabel} size="xs" muted={stale} />
+            )}
         </ToolLink>
     );
 }

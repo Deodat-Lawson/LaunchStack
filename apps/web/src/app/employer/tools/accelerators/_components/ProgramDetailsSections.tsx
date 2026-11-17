@@ -1,23 +1,37 @@
 "use client";
 
-import { ExternalLink } from "lucide-react";
+import { ChevronDown, ExternalLink } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { useState, type ReactNode } from "react";
 
+import type { TagFacet } from "@launchstack/pipelines/accelerators/intelligence";
+
 import MarkdownMessage from "~/app/_components/MarkdownMessage";
 import { Button } from "~/components/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
+import { cn } from "~/lib/utils";
 
 import type { ProgramView, TrackerOpportunity } from "../api";
+import { useAccelerators } from "../_lib/context";
 import {
+    facetValues,
     publishedValue,
     hasRollingIntake,
     type DetailSlot,
     type DetailSource,
     type ProgramDetails,
 } from "../_lib/details";
-import { daysBetween } from "../_lib/vision-filters";
+import {
+    DEFAULT_VISION_FILTERS,
+    applyVisionFilters,
+    daysBetween,
+    updateVisionParams,
+    type VisionFilters,
+} from "../_lib/vision-filters";
+import { FacetLink } from "./FacetLink";
 import { LinkList, linkItem, pageLabel, type LinkListItem } from "./LinkList";
 import { ProgramLogo } from "./ProgramFacts";
+import { RegionMap } from "./RegionMap";
 
 /** One entry per page; several excerpts from the same page are one source. */
 function uniqueSources(sources: readonly DetailSource[]): DetailSource[] {
@@ -36,41 +50,51 @@ function sourceTitle(source: DetailSource): string {
     return title.charAt(0).toUpperCase() + title.slice(1);
 }
 
-const SOURCES_SHOWN = 6;
-
-/** Every page the Program's facts come from, once each, newest check first. */
+/**
+ * Every page the Program's facts come from, once each, newest check first;
+ * folded under its count until asked for, so the facts above stay the page.
+ */
 function SourceList({ sources }: { sources: readonly DetailSource[] }) {
     const t = useTranslations("accelerators.details");
     const format = useFormatter();
-    const [expanded, setExpanded] = useState(false);
     const unique = uniqueSources(sources).sort((left, right) =>
         right.checkedAt.localeCompare(left.checkedAt)
     );
     if (unique.length === 0) return null;
-    const visible = expanded ? unique : unique.slice(0, SOURCES_SHOWN);
     return (
-        <section className="space-y-2">
-            <h3 className="text-ink text-sm font-semibold">
-                {t("sourcesCount", { count: unique.length })}
-            </h3>
-            <LinkList
-                items={visible.map(source => ({
-                    href: source.url,
-                    title: sourceTitle(source),
-                    detail: pageLabel(source.url),
-                    meta: t("checked", {
-                        date: format.dateTime(new Date(source.checkedAt), { dateStyle: "medium" }),
-                    }),
-                }))}
-            />
-            {unique.length > SOURCES_SHOWN && (
-                <Button variant="ghost" size="sm" onClick={() => setExpanded(open => !open)}>
-                    {expanded
-                        ? t("showFewerSources")
-                        : t("showAllSources", { count: unique.length })}
-                </Button>
-            )}
-        </section>
+        <Collapsible asChild>
+            <section className="border-line space-y-3 border-t pt-4">
+                <h3 className="text-sm">
+                    <CollapsibleTrigger className="focus-visible:ring-brand/50 group flex w-full items-center gap-2 rounded text-left outline-none focus-visible:ring-2">
+                        <span className="text-ink font-semibold">
+                            {t("sourcesCount", { count: unique.length })}
+                        </span>
+                        <span className="text-ink-3 text-xs">
+                            {t("checked", {
+                                date: format.dateTime(new Date(unique[0]!.checkedAt), {
+                                    dateStyle: "medium",
+                                }),
+                            })}
+                        </span>
+                        <ChevronDown className="text-ink-3 ml-auto size-4 transition-transform group-data-[state=open]:rotate-180" />
+                    </CollapsibleTrigger>
+                </h3>
+                <CollapsibleContent>
+                    <LinkList
+                        items={unique.map(source => ({
+                            href: source.url,
+                            title: sourceTitle(source),
+                            detail: pageLabel(source.url),
+                            meta: t("checked", {
+                                date: format.dateTime(new Date(source.checkedAt), {
+                                    dateStyle: "medium",
+                                }),
+                            }),
+                        }))}
+                    />
+                </CollapsibleContent>
+            </section>
+        </Collapsible>
     );
 }
 
@@ -325,6 +349,43 @@ export function ProgramHero({
     );
 }
 
+/** Long enough that the full narrative would push the facts below the fold. */
+const NARRATIVE_CLAMP = 320;
+
+/** Who the Program is for: the first lines, the rest on request. */
+function AudienceNarrative({ details }: { details: ProgramDetails | undefined }) {
+    const t = useTranslations("accelerators.overview");
+    const [expanded, setExpanded] = useState(false);
+    const text = publishedValue(details?.audience.narrative);
+    const long = (text?.length ?? 0) > NARRATIVE_CLAMP;
+    return (
+        <div className="space-y-1">
+            <div
+                className={cn(
+                    "text-ink-2 text-sm leading-relaxed",
+                    long && !expanded && "line-clamp-4"
+                )}
+            >
+                <Slot slot={details?.audience.narrative} render={readableNarrative} />
+            </div>
+            {long && (
+                <button
+                    type="button"
+                    aria-expanded={expanded}
+                    onClick={() => setExpanded(open => !open)}
+                    className="text-brand-ink focus-visible:ring-brand/50 rounded text-xs font-medium outline-none hover:underline focus-visible:ring-2"
+                >
+                    {expanded ? t("readLess") : t("readMore")}
+                </button>
+            )}
+        </div>
+    );
+}
+
+/**
+ * Who the Program is for, where it invests (on a map), and what it backs. Each
+ * published value links to the other Programs that share it, with how many.
+ */
 export function OverviewTab({
     details,
 }: {
@@ -332,23 +393,104 @@ export function OverviewTab({
     details: ProgramDetails | undefined;
 }) {
     const t = useTranslations("accelerators");
+    const { home } = useAccelerators();
+    const today = new Date().toISOString().slice(0, 10);
+    // What the Programs list would show with only this filter: the counts match the
+    // list each link opens, ineligible Programs left out as the list leaves them out.
+    const countFor = (patch: Partial<VisionFilters>) =>
+        home
+            ? applyVisionFilters(
+                  home.programs,
+                  { ...DEFAULT_VISION_FILTERS, ...patch },
+                  { details: home.details, tracker: [], today }
+              ).length
+            : 0;
+    const hrefFor = (patch: Partial<VisionFilters>) =>
+        `/programs?${updateVisionParams(new URLSearchParams(), patch).toString()}`;
+    const linked = (
+        label: string,
+        slot: DetailSlot<string[]> | undefined,
+        facet: TagFacet,
+        filter: (id: string) => Partial<VisionFilters>
+    ): FactItem => {
+        const item = fact(label, slot);
+        const values = publishedValue(slot);
+        if (item.state !== "known" || !values) return item;
+        return {
+            ...item,
+            node: (
+                <ul className="flex flex-wrap gap-1.5 pt-1">
+                    {facetValues(details, facet, values).map(value => (
+                        <li key={value.id} className="min-w-0">
+                            <FacetLink
+                                href={hrefFor(filter(value.id))}
+                                label={value.label}
+                                count={countFor(filter(value.id))}
+                            />
+                        </li>
+                    ))}
+                </ul>
+            ),
+        };
+    };
+    const regions = fact(t("details.regions"), details?.audience.geography);
+    const regionValues = publishedValue(details?.audience.geography);
     return (
-        <div className="space-y-6">
+        <div className="space-y-8">
             <section className="space-y-2">
                 <h3 className="text-ink text-sm font-semibold">{t("program.targetApplicants")}</h3>
-                <div className="text-ink-2 text-sm leading-relaxed">
-                    <Slot slot={details?.audience.narrative} render={readableNarrative} />
-                </div>
+                <AudienceNarrative details={details} />
             </section>
             <FactList
                 items={[
-                    fact(t("details.regions"), details?.audience.geography),
-                    fact(t("vision.stage"), details?.audience.stages),
-                    fact(t("vision.sectors"), details?.audience.sectors),
-                    fact(t("details.technologies"), details?.audience.technologies),
-                    fact(t("details.businessModels"), details?.audience.businessModels),
-                    fact(t("details.customerTypes"), details?.audience.customerTypes),
-                    fact(t("details.benefits"), details?.deal.benefits),
+                    regions.state === "known" && regionValues
+                        ? {
+                              ...regions,
+                              wide: true,
+                              node: (
+                                  <div className="pt-1">
+                                      <RegionMap
+                                          regions={facetValues(
+                                              details,
+                                              "geography",
+                                              regionValues
+                                          ).map(value => ({
+                                              ...value,
+                                              count: countFor({ region: value.id }),
+                                              href: hrefFor({ region: value.id }),
+                                          }))}
+                                      />
+                                  </div>
+                              ),
+                          }
+                        : regions,
+                    linked(t("vision.stage"), details?.audience.stages, "stage", id => ({
+                        stage: id,
+                    })),
+                    linked(t("vision.sectors"), details?.audience.sectors, "sector", id => ({
+                        sectors: [id],
+                    })),
+                    linked(
+                        t("details.technologies"),
+                        details?.audience.technologies,
+                        "technology",
+                        id => ({ technology: id })
+                    ),
+                    linked(
+                        t("details.businessModels"),
+                        details?.audience.businessModels,
+                        "business_model",
+                        id => ({ businessModel: id })
+                    ),
+                    linked(
+                        t("details.customerTypes"),
+                        details?.audience.customerTypes,
+                        "customer_type",
+                        id => ({ customerType: id })
+                    ),
+                    linked(t("details.benefits"), details?.deal.benefits, "benefit", id => ({
+                        benefit: id,
+                    })),
                     fact(t("details.constraints"), details?.audience.constraints),
                     fact(t("details.portfolio"), details?.portfolio, value =>
                         t("details.portfolioCount", { count: value })

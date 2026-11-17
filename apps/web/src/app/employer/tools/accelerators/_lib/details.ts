@@ -104,6 +104,24 @@ export function facetOptions(
         .sort((a, b) => a.label.localeCompare(b.label));
 }
 
+/**
+ * One Program's published values for a facet as filter values: a tag's id where a
+ * tag of the facet carries the label, otherwise the label (as `hasFacet` reads it).
+ */
+export function facetValues(
+    details: ProgramDetails | undefined,
+    facet: TagFacet,
+    labels: readonly string[]
+): { id: string; label: string }[] {
+    return labels.map(label => ({
+        label,
+        id:
+            details?.tags.find(
+                tag => tag.facet === facet && tag.label.toLowerCase() === label.toLowerCase()
+            )?.id ?? label,
+    }));
+}
+
 export function hasFacet(
     details: ProgramDetails | undefined,
     facets: readonly TagFacet[],

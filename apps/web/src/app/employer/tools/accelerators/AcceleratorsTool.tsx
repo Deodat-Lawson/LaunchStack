@@ -55,13 +55,23 @@ function AcceleratorsFrame() {
         },
     ];
     const screen = acceleratorsScreenFor(path);
+    // The Programs list keeps its header and filters in place while the list scrolls;
+    // a Program keeps its header, fit and application in place while its details
+    // scroll. Both lay themselves out to the tab's height (above 860px) and bring
+    // their padding.
+    const fill = screen.kind === "programs" || screen.kind === "program";
     return (
         <ToolFrame
             title={tName("name")}
             mark={<ToolMark icon={Rocket} />}
             groups={groups}
             about={t("tool.about")}
-            contentClassName="mx-auto w-full max-w-5xl"
+            fill={fill}
+            contentClassName={
+                fill
+                    ? "mx-auto flex max-w-5xl flex-col px-8 pt-6 @max-md:px-4 @max-md:pt-4 [@container(max-width:859px)]:h-auto [@container(max-width:859px)]:pb-12"
+                    : "mx-auto w-full max-w-5xl"
+            }
             status={
                 !denied && runIsLive(activeRun) ? (
                     <span
@@ -100,7 +110,7 @@ function AcceleratorsFrame() {
                     {t("common.loading")}
                 </p>
             ) : (
-                <div className="space-y-6">
+                <div className={fill ? "flex min-h-0 flex-1 flex-col gap-6" : "space-y-6"}>
                     {error != null && (
                         <Notice danger>
                             <div className="flex flex-wrap items-center justify-between gap-3">

@@ -22,7 +22,25 @@
     "description": "Compare accelerators with your company profile, learn from similar companies that got in, and track where you apply.",
     "profileMissing": "Build the company profile in Settings → Company before matching Programs.",
     "emptyTitle": "No Programs imported yet",
-    "emptyBody": "A trusted installation operator must import reviewed Program records. There are no sample or automatically generated results here."
+    "emptyBody": "A trusted installation operator must import reviewed Program records. There are no sample or automatically generated results here.",
+    "stats": {
+      "programs": "Programs",
+      "scored": "scored for you",
+      "best": "top fit score",
+      "closingSoon": "closing in {days, number} days"
+    }
+  },
+  "recommended": {
+    "title": "Recommended for you",
+    "hint": "Your strongest current fits in this list",
+    "closes": "Closes {date} · {days, plural, =0 {today} one {in # day} other {in # days}}",
+    "allPrograms": "All Programs"
+  },
+  "overview": {
+    "showPrograms": "{label}: show {count, plural, one {# Program} other {# Programs}}",
+    "mapLabel": "Map of the regions the Program covers: {regions}",
+    "readMore": "Read more",
+    "readLess": "Show less"
   },
   "discovery": {
     "search": "Search",
@@ -64,7 +82,7 @@
       "rubric_changed": "the scoring rules changed"
     },
     "checked": "Scored {date}",
-    "unmatchedHint": "No saved fit assessment. Scoring starts only when you choose Score Programs.",
+    "unmatchedHint": "No saved fit assessment. Nothing is scored, or charged, until you ask.",
     "short": "fit",
     "about": "About this score"
   },
@@ -109,7 +127,10 @@
     "summary": "Scored {scored, plural, one {# Program} other {# Programs}}.",
     "notAssessed": "{count, plural, one {# Program} other {# Programs}} could not be assessed; {count, plural, one {its} other {their}} previous results were kept.",
     "portfolioMatches": "Closest past companies",
-    "similarity": "{percent} similar"
+    "similarity": "{percent} similar",
+    "scoreOne": "Score this Program · {credits} credits",
+    "updateOne": "Update score · {credits} credits",
+    "rescoreOne": "Score again · {credits} credits"
   },
   "run": {
     "programs": "Scoring Programs",
@@ -210,8 +231,6 @@
     "rolling": "Rolling",
     "inDays": "{days, plural, =0 {Today} one {In # day} other {In # days}}",
     "sourcesCount": "{count, plural, one {# source} other {# sources}}",
-    "showAllSources": "Show all {count, number} sources",
-    "showFewerSources": "Show fewer sources",
     "closesOn": "Closes {date}",
     "notPublishedList": "Not published: {fields}",
     "notCheckedList": "Not checked yet: {fields}",

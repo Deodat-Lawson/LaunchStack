@@ -8,6 +8,7 @@ import { Badge } from "~/components/ui/badge";
 import { cn } from "~/lib/utils";
 
 import type { CatalogueProgram, ProgramView, SourcedNarrative } from "../api";
+import { fitBand, type FitBand } from "../_lib/discovery";
 
 /** The scraper's placeholder when no logo could be verified as the Program's own. */
 const NO_LOGO = "/accelerators/logos/none.png";
@@ -53,23 +54,44 @@ export function ProgramLogo({
     );
 }
 
-/** A 0–100 score as a ring; an unknown score is an empty ring, never zero. */
+const BAND_STROKE: Record<FitBand, string> = {
+    strong: "stroke-success",
+    fair: "stroke-warn",
+    weak: "stroke-danger",
+};
+
+/** A fit band as text colour, for a score written out. */
+export const FIT_BAND_TEXT: Record<FitBand, string> = {
+    strong: "text-success-ink",
+    fair: "text-warn-ink",
+    weak: "text-danger-ink",
+};
+
+/**
+ * A 0–100 score as a ring coloured by its fit band; an unknown score is an empty
+ * ring, never zero. A muted ring is a score that is no longer current.
+ */
 export function ScoreRing({
     score,
     label,
     size = "md",
+    muted = false,
 }: {
     score: number | null;
     label: string;
-    size?: "sm" | "md" | "lg";
+    size?: "xs" | "sm" | "md" | "lg";
+    muted?: boolean;
 }) {
     const format = useFormatter();
+    const band = score === null ? null : fitBand(score);
     return (
         <div
             role="img"
             aria-label={label}
+            title={label}
             className={cn(
                 "relative flex shrink-0 items-center justify-center",
+                size === "xs" && "size-9 text-[11px]",
                 size === "sm" && "size-10 text-xs",
                 size === "md" && "size-12 text-sm",
                 size === "lg" && "size-20 text-2xl"
@@ -80,10 +102,10 @@ export function ScoreRing({
                 viewBox="0 0 64 64"
                 className="absolute inset-0 size-full -rotate-90"
                 fill="none"
-                strokeWidth={size === "lg" ? 5 : 4}
+                strokeWidth={size === "xs" ? 6 : size === "lg" ? 5 : 4}
             >
                 <circle cx="32" cy="32" r="28" className="stroke-line" />
-                {score !== null && (
+                {score !== null && band !== null && (
                     <circle
                         cx="32"
                         cy="32"
@@ -91,11 +113,17 @@ export function ScoreRing({
                         pathLength="100"
                         strokeDasharray={`${score} 100`}
                         strokeLinecap="round"
-                        className="stroke-brand"
+                        className={muted ? "stroke-ink-4" : BAND_STROKE[band]}
                     />
                 )}
             </svg>
-            <span aria-hidden="true" className="text-ink font-semibold tabular-nums">
+            <span
+                aria-hidden="true"
+                className={cn(
+                    "font-semibold tabular-nums",
+                    band === null || muted ? "text-ink-3" : FIT_BAND_TEXT[band]
+                )}
+            >
                 {score === null ? "—" : format.number(score)}
             </span>
         </div>
@@ -118,7 +146,7 @@ export function FitStatus({ view, ring = false }: { view: ProgramView; ring?: bo
               : score === null
                 ? t("unknown")
                 : t("score", { score });
-    if (ring) return <ScoreRing score={score} label={label} />;
+    if (ring) return <ScoreRing score={score} label={label} muted={stale} />;
     return (
         <div className="flex flex-wrap items-center gap-2">
             <Badge

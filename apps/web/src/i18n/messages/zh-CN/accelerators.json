@@ -22,7 +22,25 @@
     "description": "将加速器与公司档案对比，借鉴已录取的相似公司，并追踪你的申请。",
     "profileMissing": "请先在“设置 → 公司”中建立公司档案，再匹配项目。",
     "emptyTitle": "尚未导入项目",
-    "emptyBody": "需要由受信任的安装实例操作人员导入经过审阅的项目记录。这里没有示例或自动生成的结果。"
+    "emptyBody": "需要由受信任的安装实例操作人员导入经过审阅的项目记录。这里没有示例或自动生成的结果。",
+    "stats": {
+      "programs": "个项目",
+      "scored": "个已为你评分",
+      "best": "最高匹配分",
+      "closingSoon": "个在 {days, number} 天内截止"
+    }
+  },
+  "recommended": {
+    "title": "为你推荐",
+    "hint": "此列表中当前匹配度最高的项目",
+    "closes": "{date} 截止 · {days, plural, =0 {今天} other {# 天后}}",
+    "allPrograms": "全部项目"
+  },
+  "overview": {
+    "showPrograms": "{label}：查看 {count, plural, other {# 个项目}}",
+    "mapLabel": "该项目覆盖地区的地图：{regions}",
+    "readMore": "展开全文",
+    "readLess": "收起"
   },
   "discovery": {
     "search": "搜索",
@@ -109,7 +127,10 @@
     "summary": "已为 {scored, number} 个项目评分。",
     "notAssessed": "{count, number} 个项目无法评估，已保留其之前的结果。",
     "portfolioMatches": "最相似的往期公司",
-    "similarity": "相似度 {percent}"
+    "similarity": "相似度 {percent}",
+    "scoreOne": "为此项目评分 · {credits} 积分",
+    "updateOne": "更新评分 · {credits} 积分",
+    "rescoreOne": "重新评分 · {credits} 积分"
   },
   "run": {
     "programs": "项目评分",
@@ -210,8 +231,6 @@
     "rolling": "滚动招生",
     "inDays": "{days, plural, =0 {今天} other {# 天后}}",
     "sourcesCount": "{count, plural, other {# 个来源}}",
-    "showAllSources": "显示全部 {count, number} 个来源",
-    "showFewerSources": "收起来源",
     "closesOn": "{date} 截止",
     "notPublishedList": "未公布：{fields}",
     "notCheckedList": "尚未核查：{fields}",

@@ -396,6 +396,8 @@ export type DiscoveredPage = z.infer<typeof DiscoveredPageSchema>;
 const SelectivityValueSchema = z
     .object({
         rate: z.number().min(0).max(1).nullable(),
+        /** How the page qualified the figure ("fewer than 2%", "about 7.5%"); absent when exact. */
+        qualifier: z.enum(["under", "about", "over"]).optional(),
         applicants: z.number().int().nonnegative().nullable(),
         admits: z.number().int().nonnegative().nullable(),
         population: z.string().trim().min(1).nullable(),

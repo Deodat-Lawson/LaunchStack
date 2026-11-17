@@ -216,7 +216,12 @@
     "notPublishedList": "Not published: {fields}",
     "notCheckedList": "Not checked yet: {fields}",
     "upTo": "Up to {amount}",
-    "inTheirWords": "In the program's words"
+    "inTheirWords": "In the program's words",
+    "rate": {
+      "under": "Under {rate}",
+      "about": "About {rate}",
+      "over": "Over {rate}"
+    }
   },
   "vision": {
     "sectors": "Sectors",

@@ -111,7 +111,11 @@ type ChecksFile = {
         applicationsOpen: Finding<boolean>[];
         operatingStatus: Finding<"closed" | "paused">[];
         deadlines: Finding<string>[];
-        selectivity: Finding<{ rate: number | null; bounded: boolean }>[];
+        selectivity: Finding<{
+            rate: number | null;
+            bounded: boolean;
+            qualifier?: "under" | "about" | "over";
+        }>[];
         dealText: Finding<string>[];
         dealComponents?: Finding<{
             kind: DealComponent["kind"];
@@ -1026,13 +1030,14 @@ function applyChecks(
 ): void {
     const { findings } = checks;
     const read = `${checks.pagesRead.length} official page${checks.pagesRead.length === 1 ? "" : "s"} read`;
-    const pageIds = [
-        ...new Set(
-            (checks.pageQuotes ?? [])
-                .map(item => item.id)
-                .filter(id => dossier.evidence.some(item => item.id === id))
-        ),
-    ];
+    // One citation per page read: a page can also carry tag sentences, cited separately.
+    const firstQuotePerPage = new Map<string, string>();
+    for (const item of checks.pageQuotes ?? []) {
+        if (!firstQuotePerPage.has(item.url)) firstQuotePerPage.set(item.url, item.id);
+    }
+    const pageIds = [...firstQuotePerPage.values()].filter(id =>
+        dossier.evidence.some(item => item.id === id)
+    );
     const notPublished = `Not published on ${checks.pagesRead.length} checked pages`;
     const open = (slot: { state: InformationState }) => slot.state === "not_checked";
     const conflict = <T>(
@@ -1215,24 +1220,29 @@ function applyChecks(
             : unavailable(notPublished, pageIds);
     }
     if (open(dossier.selectivity)) {
-        const exact = distinct(findings.selectivity.filter(item => !item.value.bounded));
+        // One figure, exact or qualified ("fewer than 2%"), is stored with its qualifier; a page
+        // that reports different figures is recorded as partial and no number is picked.
         const all = distinct(findings.selectivity);
+        const only = all.values.length === 1 ? all.values[0]! : null;
         dossier.selectivity =
-            exact.values.length === 1 && all.values.length === 1
+            only && only.rate !== null
                 ? available(
                       {
-                          rate: exact.values[0]!.rate,
+                          rate: only.rate,
+                          ...(only.qualifier ? { qualifier: only.qualifier } : {}),
                           applicants: null,
                           admits: null,
                           population: null,
-                          method: "Percentage reported on the official page. No applicant or admit counts were published with it.",
+                          method: only.qualifier
+                              ? "Approximate percentage reported on the official page. No applicant or admit counts were published with it."
+                              : "Percentage reported on the official page. No applicant or admit counts were published with it.",
                       },
-                      exact.evidenceIds,
+                      all.evidenceIds,
                       "fact"
                   )
                 : all.values.length
                   ? partialSlot(
-                        "The official page reports an approximate or more than one acceptance rate. No number was stored.",
+                        "The official pages report more than one acceptance rate. No number was picked.",
                         all.evidenceIds
                     )
                   : unavailable(notPublished, pageIds);

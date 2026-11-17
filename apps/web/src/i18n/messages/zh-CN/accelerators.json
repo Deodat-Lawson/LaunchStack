@@ -216,7 +216,12 @@
     "notPublishedList": "未公布：{fields}",
     "notCheckedList": "尚未核查：{fields}",
     "upTo": "最高 {amount}",
-    "inTheirWords": "项目原文"
+    "inTheirWords": "项目原文",
+    "rate": {
+      "under": "低于 {rate}",
+      "about": "约 {rate}",
+      "over": "超过 {rate}"
+    }
   },
   "vision": {
     "sectors": "行业",

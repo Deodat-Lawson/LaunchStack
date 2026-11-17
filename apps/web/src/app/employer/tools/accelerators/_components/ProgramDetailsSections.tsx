@@ -133,6 +133,19 @@ function useFormatCash(): (value: string) => string {
     };
 }
 
+/** "Under 2%" or "About 7.5%" when the page qualified the figure; the bare percentage otherwise. */
+function useFormatRate(): (value: {
+    rate: number;
+    qualifier?: "under" | "about" | "over";
+}) => string {
+    const t = useTranslations("accelerators.details");
+    const format = useFormatter();
+    return ({ rate, qualifier }) => {
+        const percent = format.number(rate, { style: "percent", maximumFractionDigits: 2 });
+        return qualifier ? t(`rate.${qualifier}`, { rate: percent }) : percent;
+    };
+}
+
 function Fact({ label, wide, children }: { label: string; wide?: boolean; children: ReactNode }) {
     return (
         <div className={wide ? "col-span-full min-w-0 space-y-1.5" : "min-w-0 space-y-0.5"}>
@@ -234,6 +247,7 @@ export function ProgramHero({
 }) {
     const t = useTranslations("accelerators");
     const format = useFormatter();
+    const formatRate = useFormatRate();
     const program = view.program;
     const applicationUrl = publishedValue(details?.contact.applicationUrl);
     const status = publishedValue(details?.identity.operatingStatus);
@@ -266,10 +280,7 @@ export function ProgramHero({
         selectivity?.rate != null
             ? {
                   label: t("details.selectivity"),
-                  value: format.number(selectivity.rate, {
-                      style: "percent",
-                      maximumFractionDigits: 2,
-                  }),
+                  value: formatRate({ rate: selectivity.rate, qualifier: selectivity.qualifier }),
               }
             : null,
     ].filter((item): item is NonNullable<typeof item> => item !== null);
@@ -402,6 +413,7 @@ export function ApplyingTab({
 }) {
     const t = useTranslations("accelerators");
     const format = useFormatter();
+    const formatRate = useFormatRate();
     return (
         <div className="space-y-5">
             {details?.batches.cycles.length ? (
@@ -462,10 +474,7 @@ export function ApplyingTab({
                         value =>
                             [
                                 value.rate !== null
-                                    ? format.number(value.rate, {
-                                          style: "percent",
-                                          maximumFractionDigits: 2,
-                                      })
+                                    ? formatRate({ rate: value.rate, qualifier: value.qualifier })
                                     : null,
                                 value.population,
                                 value.method,

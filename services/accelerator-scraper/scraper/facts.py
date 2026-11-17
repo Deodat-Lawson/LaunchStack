@@ -25,10 +25,11 @@ PAGE_RULES = (
 )
 # Posts, news, people and portfolio listings. Their URLs often say "apply" or "cohort"
 # ("/blog/applications-open-for-cohort-5"), yet they report on the Program rather than state
-# its terms, so they are read last and only a few of them.
+# its terms, so they are read last, only a few of them, and only for announcements.
 ARTICLE = re.compile(
-    r"/(?:blog|news|posts?|press|stories|story|insights|articles?|media|events?|webinars?|"
-    r"podcasts?|portfolio|companies|team|people|careers|jobs)(?:/|$)|/(?:tag|category|author)/|/20\d\d/",
+    r"/(?:blog|news|newsroom|posts?|press|press-releases?|announcements?|stories|story|insights|"
+    r"articles?|media|content-hub|case-stud(?:y|ies)|spotlights?|events?|webinars?|podcasts?|"
+    r"portfolio|companies|team|people|careers|jobs)(?:/|$)|/(?:tag|category|author)/|/20\d\d/",
     re.I,
 )
 
@@ -113,8 +114,9 @@ QUALIFIERS = {
     "about": "about", "around": "about", "approximately": "about", "roughly": "about", "~": "about",
     "over": "over", "more than": "over",
 }
-# The low end of a range ("a 1-2% acceptance rate") just before the matched number.
-RANGE_START = re.compile(r"\d(?:\.\d+)?\s?%?\s?[-–]\s?$")
+# The low end of a range ("a 1-2% acceptance rate") just before the matched number. It is a
+# percentage on its own, so the tail of a year ("2021 - 5% acceptance rate") is not one.
+RANGE_START = re.compile(r"(?<![\d.])\d{1,2}(?:\.\d+)?\s?%?\s?[-–]\s?$")
 SELECTIVITY = (
     re.compile(rf"\b(?:acceptance|admission|admit)\s+rate\s+(?:of|is|was|:)?\s*{BOUND}(\d+(?:\.\d+)?)\s?%", re.I),
     re.compile(rf"\b{BOUND}(\d+(?:\.\d+)?)\s?%\s+acceptance\s+rate\b", re.I),
@@ -298,11 +300,15 @@ class Findings:
         if at >= 0 and homepage:
             self.add("name", name, self.cite("name", url, kind, window(text, at, at + len(name), 60), title))
         self._links(url, kind, page, title)
-        self._structured(url, kind, page, title)
-        self._contacts(url, kind, text, title)
         self._status(url, kind, text, title)
         self._deadlines(url, kind, text, title)
         self._intake(url, kind, text, title)
+        # A post announces a cohort or a deadline; its amounts, places and formats describe a
+        # portfolio company, a partner or another program ("a partner based in Abu Dhabi").
+        if is_article(url):
+            return
+        self._structured(url, kind, page, title)
+        self._contacts(url, kind, text, title)
         self._program_shape(url, kind, text, title)
         self._selectivity(url, kind, text, title)
         self._deal(url, kind, text, title)

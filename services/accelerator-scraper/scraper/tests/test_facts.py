@@ -69,6 +69,8 @@ class Rules(unittest.TestCase):
         self.assertEqual([item["value"] for item in about.found["selectivity"]], [{"rate": 0.075, "bounded": True, "qualifier": "about"}])
         ranged = read("<p>We receive 700 applications and select around 10. That's a 1-2% acceptance rate.</p>")
         self.assertEqual([item["value"] for item in ranged.found["selectivity"]], [{"rate": 0.02, "bounded": True, "qualifier": "under"}])
+        year = read("<p>Founded 2021 - 5% acceptance rate across all cohorts.</p>")
+        self.assertEqual([item["value"] for item in year.found["selectivity"]], [{"rate": 0.05, "bounded": False}])
 
     def test_beating_other_applicants_is_not_an_acceptance_rate(self) -> None:
         # A Techstars workshop post was stored as an 80% acceptance rate.

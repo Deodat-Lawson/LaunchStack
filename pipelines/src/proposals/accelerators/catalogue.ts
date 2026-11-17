@@ -1242,7 +1242,9 @@ function applyChecks(
                   )
                 : all.values.length
                   ? partialSlot(
-                        "The official pages report more than one acceptance rate. No number was picked.",
+                        all.values.every(value => value.rate === null)
+                            ? "The official page states an acceptance rate, but no number was recorded from it."
+                            : "The official pages report more than one acceptance rate. No number was picked.",
                         all.evidenceIds
                     )
                   : unavailable(notPublished, pageIds);

@@ -1,6 +1,6 @@
 {
     "name": "@launchstack/runtime",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "What a LaunchStack host process wires in: the clock and logger ports, the actor/workspace context shape, the typed error taxonomy, the storage and job-dispatcher slots, and the HMR-safe singleton slot every configure*/get* pair is built on. Depends on nothing.",
     "license": "Apache-2.0",
     "type": "module",

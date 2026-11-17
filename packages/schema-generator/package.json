@@ -1,7 +1,7 @@
 {
     "name": "@launchstack/schema-generator",
-    "version": "0.1.0",
-    "description": "Walks every feature's wire contracts (conversion, orchestration, editing) and emits one versioned JSON Schema bundle under schemas/v1/ \u2014 the single directory the Python services' contract tests validate against. --check fails CI on drift.",
+    "version": "0.2.0",
+    "description": "Walks every feature's wire contracts (conversion, orchestration, editing) and emits one versioned JSON Schema bundle under schemas/v1/ — the single directory the Python services' contract tests validate against. --check fails CI on drift.",
     "license": "Apache-2.0",
     "type": "module",
     "sideEffects": false,

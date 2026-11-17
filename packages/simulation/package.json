@@ -1,6 +1,6 @@
 {
     "name": "@launchstack/simulation",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "A social-network simulation in rounds: model-driven agents read a ranked feed, post, comment, like, repost and follow, and can be interviewed afterwards. A TypeScript port of the OASIS design (CAMEL-AI, Apache-2.0). Zero dependencies; the host injects the model.",
     "license": "Apache-2.0",
     "type": "module",

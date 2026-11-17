@@ -1,6 +1,6 @@
 {
     "name": "@launchstack/collab",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Slack-shaped channels, multi-agent meetings that run inside them, human takeover, and a signed HTTP protocol that lets agents live on different machines from the meeting. Node built-ins only; the host wires storage and the model registry.",
     "license": "Apache-2.0",
     "type": "module",

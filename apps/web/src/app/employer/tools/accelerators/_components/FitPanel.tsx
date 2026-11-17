@@ -45,14 +45,15 @@ export function FitPanel({ view }: { view: ProgramView }) {
     const { home } = useAccelerators();
     const headingId = useId();
     const { fit, freshness } = view;
-    const evidence = home?.details[view.program.id]?.evidence;
+    const pages = home?.details[view.program.id]?.sources;
     const citations = useMemo(() => {
         const byId = new Map<string, Citation>();
-        for (const item of [...view.program.sources, ...(evidence ?? [])]) {
-            if (!byId.has(item.id)) byId.set(item.id, item);
-        }
+        for (const item of view.program.sources) byId.set(item.id, item);
+        for (const page of pages ?? [])
+            for (const id of page.evidenceIds)
+                if (!byId.has(id)) byId.set(id, { id, title: page.title, url: page.url });
         return [...byId.values()];
-    }, [view.program.sources, evidence]);
+    }, [view.program.sources, pages]);
     const score = fit?.overall.score ?? null;
     const label =
         freshness.status === "not_assessed"

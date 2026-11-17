@@ -11,24 +11,15 @@ export interface DetailSource {
     checkedAt: string;
 }
 
-/** Preserve the dossier's states and evidence instead of filling gaps with estimates. */
-export type DetailSlot<T> = InformationSlot<T> & { sources: DetailSource[] };
+/**
+ * Preserve the dossier's states and evidence instead of filling gaps with estimates.
+ * Slots keep their evidence IDs; the pages behind them are listed once, in `sources`.
+ */
+export type DetailSlot<T> = InformationSlot<T>;
 export type ProgramDetails = {
-    identity: {
-        [K in keyof ProgramIntelligence["identity"]]: ProgramIntelligence["identity"][K] & {
-            sources: DetailSource[];
-        };
-    };
-    audience: {
-        [K in keyof ProgramIntelligence["audience"]]: ProgramIntelligence["audience"][K] & {
-            sources: DetailSource[];
-        };
-    };
-    contact: {
-        [K in keyof ProgramIntelligence["contact"]]: ProgramIntelligence["contact"][K] & {
-            sources: DetailSource[];
-        };
-    };
+    identity: ProgramIntelligence["identity"];
+    audience: ProgramIntelligence["audience"];
+    contact: ProgramIntelligence["contact"];
     batches: {
         cycles: {
             id: string;
@@ -55,9 +46,10 @@ export type ProgramDetails = {
         comparable: DetailSlot<boolean>;
     };
     portfolio: DetailSlot<number>;
-    tags: (ProgramTag & { sources: DetailSource[] })[];
-    sources: DetailSource[];
-    evidence: (DetailSource & { id: string })[];
+    /** What the filters need; the sentences behind a tag are in `sources`. */
+    tags: Pick<ProgramTag, "id" | "facet" | "label">[];
+    /** Every page once, with the IDs of the excerpts taken from it (what a fit grade cites). */
+    sources: (DetailSource & { evidenceIds: string[] })[];
 };
 export type ProgramDetailsMap = Record<string, ProgramDetails>;
 

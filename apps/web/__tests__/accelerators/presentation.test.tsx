@@ -185,13 +185,6 @@ it("renders unpublished deal facts as Not published, without invented terms or p
         detail: null,
         claim: null,
         evidenceIds: ["checked"],
-        sources: [
-            {
-                title: "Official terms",
-                url: "https://example.com/terms",
-                checkedAt: "2026-11-01T00:00:00Z",
-            },
-        ],
     };
     const details = {
         deal: {

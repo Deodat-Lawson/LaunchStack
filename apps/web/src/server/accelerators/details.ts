@@ -1,7 +1,6 @@
 import { listProgramIntelligence } from "@launchstack/pipelines/accelerators/db";
 import type {
     DealComponent,
-    InformationSlot,
     ProgramIntelligence,
 } from "@launchstack/pipelines/accelerators/intelligence";
 
@@ -11,44 +10,45 @@ import type {
     ProgramDetailsMap,
 } from "~/app/employer/tools/accelerators/_lib/details";
 
+/**
+ * One entry per page, newest check first wins, carrying the IDs of every excerpt taken
+ * from it. A page can contribute dozens of tag sentences; sending each as its own
+ * title-and-URL row made the home payload tens of megabytes.
+ */
+function pagesOf(evidence: ProgramIntelligence["evidence"]): ProgramDetails["sources"] {
+    const byUrl = new Map<string, ProgramDetails["sources"][number]>();
+    for (const { id, title, url, checkedAt } of evidence) {
+        const page = byUrl.get(url);
+        if (!page) byUrl.set(url, { title, url, checkedAt, evidenceIds: [id] });
+        else {
+            page.evidenceIds.push(id);
+            if (checkedAt > page.checkedAt) Object.assign(page, { title, checkedAt });
+        }
+    }
+    return [...byUrl.values()];
+}
+
 export function programDetails(dossier: ProgramIntelligence): ProgramDetails {
-    const sources = dossier.evidence.map(({ title, url, checkedAt }) => ({
-        title,
-        url,
-        checkedAt,
-    }));
-    const sourceOf = (ids: string[]) =>
-        dossier.evidence
-            .filter(item => ids.includes(item.id))
-            .map(({ title, url, checkedAt }) => ({ title, url, checkedAt }));
-    const slot = <T>(value: InformationSlot<T>): DetailSlot<T> => ({
-        ...value,
-        sources: sourceOf(value.evidenceIds),
-    });
-    const group = <T extends Record<string, InformationSlot<unknown>>>(values: T) =>
-        Object.fromEntries(Object.entries(values).map(([key, value]) => [key, slot(value)])) as {
-            [K in keyof T]: T[K] & { sources: typeof sources };
-        };
-    const componentSlot = (components: DealComponent[], values: string[]): DetailSlot<string[]> => {
-        const evidenceIds = [
+    const componentSlot = (
+        components: DealComponent[],
+        values: string[]
+    ): DetailSlot<string[]> => ({
+        state: values.length
+            ? "available"
+            : dossier.deal.state === "not_checked"
+              ? "not_checked"
+              : "unavailable",
+        value: values.length ? values : null,
+        evidenceIds: [
             ...new Set([
                 ...components.flatMap(item => item.evidenceIds),
                 ...dossier.deal.summary.evidenceIds,
                 ...dossier.deal.formatted.evidenceIds,
             ]),
-        ];
-        return slot({
-            state: values.length
-                ? "available"
-                : dossier.deal.state === "not_checked"
-                  ? "not_checked"
-                  : "unavailable",
-            value: values.length ? values : null,
-            evidenceIds,
-            claim: values.length ? "fact" : null,
-            detail: null,
-        });
-    };
+        ],
+        claim: values.length ? "fact" : null,
+        detail: null,
+    });
     const cash = dossier.deal.components.filter(
         item =>
             ["cash", "grant", "safe", "unspecified_investment"].includes(item.kind) &&
@@ -67,23 +67,20 @@ export function programDetails(dossier: ProgramIntelligence): ProgramDetails {
         ]),
     ];
     return {
-        identity: group(dossier.identity),
-        audience: group(dossier.audience),
-        contact: group(dossier.contact),
+        identity: dossier.identity,
+        audience: dossier.audience,
+        contact: dossier.contact,
         batches: {
-            cycles: dossier.batches.cycles.map(cycle => ({
-                ...cycle,
-                announcedDeadline: slot(cycle.announcedDeadline),
-            })),
-            historicalCadence: slot(dossier.batches.historicalCadence),
-            announcedStarts: slot(dossier.batches.announcedStarts),
-            nextDeadline: slot(dossier.batches.nextDeadline),
-            residencyEnd: slot(dossier.batches.residencyEnd),
+            cycles: dossier.batches.cycles,
+            historicalCadence: dossier.batches.historicalCadence,
+            announcedStarts: dossier.batches.announcedStarts,
+            nextDeadline: dossier.batches.nextDeadline,
+            residencyEnd: dossier.batches.residencyEnd,
         },
-        selectivity: slot(dossier.selectivity),
+        selectivity: dossier.selectivity,
         deal: {
-            summary: slot(dossier.deal.summary),
-            formatted: slot(dossier.deal.formatted),
+            summary: dossier.deal.summary,
+            formatted: dossier.deal.formatted,
             cash: componentSlot(
                 cash,
                 cash.map(item =>
@@ -96,7 +93,7 @@ export function programDetails(dossier: ProgramIntelligence): ProgramDetails {
                 equity,
                 equity.flatMap(item => (item.equity ? [item.equity] : []))
             ),
-            instrument: slot({
+            instrument: {
                 state: instruments.length
                     ? "available"
                     : dossier.deal.state === "not_checked"
@@ -108,7 +105,7 @@ export function programDetails(dossier: ProgramIntelligence): ProgramDetails {
                     ? instruments.flatMap(item => item.evidenceIds)
                     : dealEvidence,
                 claim: instruments.length ? "fact" : null,
-            }),
+            },
             benefits: (() => {
                 const tags = dossier.tags.filter(tag => tag.facet === "benefit");
                 const result = componentSlot(benefits, [
@@ -118,9 +115,9 @@ export function programDetails(dossier: ProgramIntelligence): ProgramDetails {
                 const evidenceIds = [
                     ...new Set([...result.evidenceIds, ...tags.flatMap(tag => tag.evidenceIds)]),
                 ];
-                return { ...result, evidenceIds, sources: sourceOf(evidenceIds) };
+                return { ...result, evidenceIds };
             })(),
-            comparable: slot({
+            comparable: {
                 state: dossier.deal.state,
                 value: ["available", "partial", "stale"].includes(dossier.deal.state)
                     ? dossier.deal.comparableDilution
@@ -128,9 +125,9 @@ export function programDetails(dossier: ProgramIntelligence): ProgramDetails {
                 evidenceIds: dealEvidence,
                 claim: dealEvidence.length ? "fact" : null,
                 detail: dossier.deal.detail,
-            }),
+            },
         },
-        portfolio: slot({
+        portfolio: {
             state: dossier.portfolio.state,
             value: ["available", "partial", "stale"].includes(dossier.portfolio.state)
                 ? dossier.portfolio.companies.length
@@ -138,15 +135,9 @@ export function programDetails(dossier: ProgramIntelligence): ProgramDetails {
             detail: dossier.portfolio.detail,
             claim: null,
             evidenceIds: dossier.portfolio.companies.flatMap(item => item.evidenceIds),
-        }),
-        tags: dossier.tags.map(tag => ({ ...tag, sources: sourceOf(tag.evidenceIds) })),
-        sources,
-        evidence: dossier.evidence.map(({ id, title, url, checkedAt }) => ({
-            id,
-            title,
-            url,
-            checkedAt,
-        })),
+        },
+        tags: dossier.tags.map(({ id, facet, label }) => ({ id, facet, label })),
+        sources: pagesOf(dossier.evidence),
     };
 }
 

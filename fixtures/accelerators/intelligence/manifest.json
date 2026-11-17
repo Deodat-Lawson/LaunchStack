@@ -3,19 +3,6 @@
   "contract": "program-intelligence/v1",
   "programs": [
     {
-      "programId": "3-day-startup-3ds",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
-      "cycleIds": [
-        "public-page"
-      ],
-      "portfolioCompanyIds": [],
-      "tagIds": [
-        "benefit.mentorship"
-      ],
-      "openReviewIds": [],
-      "contentHash": "38ba08dd92e8a20fb690a2419ee59124cc0354af67b3572726b6c244c3690898"
-    },
-    {
       "programId": "500-global",
       "checkedAt": "2026-11-16T23:23:28.000Z",
       "cycleIds": [
@@ -281,24 +268,6 @@
       ],
       "openReviewIds": [],
       "contentHash": "d22d4e055af7000fa7f412b66b72d72c379ffa906f60035a04dbfff306bda41e"
-    },
-    {
-      "programId": "acorn-growth-companies",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
-      "cycleIds": [
-        "public-page"
-      ],
-      "portfolioCompanyIds": [],
-      "tagIds": [
-        "program_type.investor",
-        "sector.mobility",
-        "sector.aerospace",
-        "sector.defense",
-        "geography.united-kingdom",
-        "geography.london"
-      ],
-      "openReviewIds": [],
-      "contentHash": "0a93cf877799378b9940e8cc1336774c59f66a47af85bc8058ccdce582ec18e6"
     },
     {
       "programId": "activate",
@@ -1090,20 +1059,6 @@
       ],
       "openReviewIds": [],
       "contentHash": "21f547154e4877f66071ab6101e0c6cc9750e0abe585894a5ab3212c83e05155"
-    },
-    {
-      "programId": "biohouston",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
-      "cycleIds": [
-        "public-page"
-      ],
-      "portfolioCompanyIds": [],
-      "tagIds": [
-        "sector.health",
-        "sector.life-sciences"
-      ],
-      "openReviewIds": [],
-      "contentHash": "7936c3ad10e2b81e2f717bcff625c4676d5cd8aebb9aa8abc806ffa49bc6a2bc"
     },
     {
       "programId": "boost-vc",
@@ -2476,26 +2431,6 @@
       ],
       "openReviewIds": [],
       "contentHash": "03e174b00c526a987bd37de9efe91e10090ebfaac02d2998e8b8b231ea5639ec"
-    },
-    {
-      "programId": "duncan-center-for-business-development",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
-      "cycleIds": [
-        "public-page"
-      ],
-      "portfolioCompanyIds": [],
-      "tagIds": [
-        "program_type.incubator",
-        "program_type.competition",
-        "sector.health",
-        "sector.climate",
-        "sector.mobility",
-        "sector.insurance",
-        "sector.manufacturing",
-        "customer_type.smb"
-      ],
-      "openReviewIds": [],
-      "contentHash": "dafcd4d7f124ccfd5986745f415f3f51508f3a5daa5559f36e0a522b186d85aa"
     },
     {
       "programId": "economic-growth-business-incubator-egbi",
@@ -4564,43 +4499,6 @@
       "contentHash": "441d50a240ad03e111f379e36f016e8b451ddf15348bfe09fa6d23b77ad1c764"
     },
     {
-      "programId": "hub-of-human-innovation",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
-      "cycleIds": [
-        "public-page"
-      ],
-      "portfolioCompanyIds": [],
-      "tagIds": [
-        "program_type.accelerator",
-        "program_type.incubator",
-        "program_type.competition",
-        "sector.health",
-        "sector.life-sciences",
-        "sector.climate",
-        "sector.energy",
-        "sector.mobility",
-        "sector.aerospace",
-        "sector.defense",
-        "sector.manufacturing",
-        "sector.commerce",
-        "sector.media",
-        "sector.logistics",
-        "technology.robotics",
-        "technology.hardware",
-        "business_model.marketplace",
-        "customer_type.enterprise",
-        "customer_type.smb",
-        "stage.early",
-        "benefit.mentorship",
-        "geography.united-states",
-        "geography.united-kingdom",
-        "geography.france",
-        "geography.latin-america"
-      ],
-      "openReviewIds": [],
-      "contentHash": "f92411319fc34948a28fb9c017a0ed20c597a914eab55f7add5d0594083d2900"
-    },
-    {
       "programId": "hub71",
       "checkedAt": "2026-11-16T23:23:28.000Z",
       "cycleIds": [
@@ -4680,21 +4578,6 @@
       ],
       "openReviewIds": [],
       "contentHash": "6e4a5417ecb38318d3f8034e2795af5f06a6a6a82385d6ac36bdf8e8175be6f6"
-    },
-    {
-      "programId": "hudson-river-eats",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
-      "cycleIds": [
-        "public-page"
-      ],
-      "portfolioCompanyIds": [],
-      "tagIds": [
-        "program_type.grant",
-        "sector.property",
-        "technology.xr"
-      ],
-      "openReviewIds": [],
-      "contentHash": "eaebc037ddd013a68af5b56258fab722ad033151b09b09ce639c142a5247c9b5"
     },
     {
       "programId": "hustle-fund",
@@ -5033,29 +4916,6 @@
       ],
       "openReviewIds": [],
       "contentHash": "545b32a480efa989766ec35f5d6c002a2be2879e20a7da46ffb5aea6733808d7"
-    },
-    {
-      "programId": "incube-labs-san-antonio",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
-      "cycleIds": [
-        "public-page"
-      ],
-      "portfolioCompanyIds": [],
-      "tagIds": [
-        "program_type.incubator",
-        "program_type.investor",
-        "sector.health",
-        "sector.life-sciences",
-        "sector.manufacturing",
-        "technology.hardware",
-        "stage.early",
-        "benefit.lab-space",
-        "geography.canada",
-        "geography.london",
-        "geography.europe"
-      ],
-      "openReviewIds": [],
-      "contentHash": "04b55cc92ed7ab51fe5217d352d2cb374478b02fb4fd494332e35ef780f197f7"
     },
     {
       "programId": "index-ventures",
@@ -5748,21 +5608,6 @@
       "contentHash": "5b803a098e750814d33cdeddadfda637f6e6fe12691634203a27a904a8fa227a"
     },
     {
-      "programId": "link",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
-      "cycleIds": [
-        "public-page"
-      ],
-      "portfolioCompanyIds": [],
-      "tagIds": [
-        "program_type.competition",
-        "customer_type.smb",
-        "benefit.workspace"
-      ],
-      "openReviewIds": [],
-      "contentHash": "61e29d82c58c160592cf91d9f3d76ada79b009a60a08f0f5b74114cbf3c47408"
-    },
-    {
       "programId": "localglobe",
       "checkedAt": "2026-11-16T23:23:28.000Z",
       "cycleIds": [
@@ -6041,25 +5886,6 @@
       ],
       "openReviewIds": [],
       "contentHash": "a7c3b8e96269ff9b3041262f7f2f6a31817b8906aab7878ab1b6e5f89bce3ec6"
-    },
-    {
-      "programId": "midland-hispanic-chamber-of-commerce-mhcc-business-incubator",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
-      "cycleIds": [
-        "public-page"
-      ],
-      "portfolioCompanyIds": [],
-      "tagIds": [
-        "program_type.competition",
-        "program_type.grant",
-        "sector.health",
-        "sector.mobility",
-        "sector.property",
-        "customer_type.smb",
-        "geography.united-states"
-      ],
-      "openReviewIds": [],
-      "contentHash": "5eb0e51e371733bd4fe5d7200d858490067da27cd4908f5b20a960aa74ddb72f"
     },
     {
       "programId": "mit-delta-v",
@@ -7000,29 +6826,6 @@
       "contentHash": "ad7648439255b488393d9b3726ea6e4de23a040b9f2cf3b97ac87658a36fd284"
     },
     {
-      "programId": "occam-design",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
-      "cycleIds": [
-        "public-page"
-      ],
-      "portfolioCompanyIds": [],
-      "tagIds": [
-        "program_type.competition",
-        "program_type.grant",
-        "sector.health",
-        "sector.cybersecurity",
-        "sector.manufacturing",
-        "technology.ai",
-        "technology.hardware",
-        "stage.pre-seed",
-        "stage.idea",
-        "benefit.lab-space",
-        "geography.europe"
-      ],
-      "openReviewIds": [],
-      "contentHash": "133b6eb765eb08d8456e24117f6e3a5563ddea649932a5b731c2c39077a59823"
-    },
-    {
       "programId": "olean-business-development",
       "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
@@ -7741,22 +7544,6 @@
       "contentHash": "3f4a59a5af255c2b73952cae8176623ab4aabfb75aab7e0209ad3ab4fabae0b3"
     },
     {
-      "programId": "sailor-dock",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
-      "cycleIds": [
-        "public-page"
-      ],
-      "portfolioCompanyIds": [],
-      "tagIds": [
-        "program_type.incubator",
-        "program_type.competition",
-        "sector.commerce",
-        "sector.social-impact"
-      ],
-      "openReviewIds": [],
-      "contentHash": "24ed721f839cc6e913fefb4a02b4b73934d6d2af865c2ec84f414d6ad12642b7"
-    },
-    {
       "programId": "samsung-next",
       "checkedAt": "2026-11-16T23:23:28.000Z",
       "cycleIds": [
@@ -8053,21 +7840,6 @@
       ],
       "openReviewIds": [],
       "contentHash": "c78d2548cc574c5b2ea1c05d904f827634a6a842451ffc91787cc175bae876ec"
-    },
-    {
-      "programId": "shoppes-guthrie-ok",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
-      "cycleIds": [
-        "public-page"
-      ],
-      "portfolioCompanyIds": [],
-      "tagIds": [
-        "program_type.incubator",
-        "sector.commerce",
-        "customer_type.smb"
-      ],
-      "openReviewIds": [],
-      "contentHash": "149e7e39175ed546f82d4862c00dbc3e46b3497aa771152eef1abb84d31040c0"
     },
     {
       "programId": "sku-fka-incubation-station",
@@ -9113,33 +8885,6 @@
       "contentHash": "d1b9819335e251d49823ce3f8be12c4b21203718780e838487c1b4b4bf9d15e3"
     },
     {
-      "programId": "surge-accelerator",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
-      "cycleIds": [
-        "public-page"
-      ],
-      "portfolioCompanyIds": [],
-      "tagIds": [
-        "program_type.accelerator",
-        "program_type.incubator",
-        "sector.health",
-        "sector.climate",
-        "sector.energy",
-        "sector.mobility",
-        "sector.manufacturing",
-        "sector.commerce",
-        "sector.logistics",
-        "technology.ai",
-        "technology.hardware",
-        "benefit.mentorship",
-        "geography.united-states",
-        "geography.oceania",
-        "geography.latin-america"
-      ],
-      "openReviewIds": [],
-      "contentHash": "c88c7076d1c2b576a668de82bcdc26109bfc49233b2715f56eedf2ff7f49159e"
-    },
-    {
       "programId": "t-hub",
       "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
@@ -9669,21 +9414,6 @@
       "contentHash": "ab7f362aec96ac6197dc7ee6e43d59ed0d5e24cf2f623f6dd6208565fc7d2358"
     },
     {
-      "programId": "thinktiv",
-      "checkedAt": "2026-11-17T03:22:03.000Z",
-      "cycleIds": [
-        "public-page"
-      ],
-      "portfolioCompanyIds": [],
-      "tagIds": [
-        "technology.ai",
-        "business_model.saas",
-        "stage.early"
-      ],
-      "openReviewIds": [],
-      "contentHash": "3fe3c0e94be50d6c4c65f4d7c2efe51014dc44489a25ebb63b0a9a248535b1f6"
-    },
-    {
       "programId": "third-derivative",
       "checkedAt": "2026-11-17T03:22:03.000Z",
       "cycleIds": [
@@ -9865,21 +9595,6 @@
       ],
       "openReviewIds": [],
       "contentHash": "be90cc02b4a63dbb4202e67ae74a9fc0423971cf62a44b264c3109766711e885"
-    },
-    {
-      "programId": "unltd-usa",
-      "checkedAt": "2026-11-16T23:23:28.000Z",
-      "cycleIds": [
-        "public-page"
-      ],
-      "portfolioCompanyIds": [],
-      "tagIds": [
-        "sector.health",
-        "geography.united-states",
-        "geography.india"
-      ],
-      "openReviewIds": [],
-      "contentHash": "34b582af9ebdac8013aa17dd4511bbb0e0ecf3a367d0c25fb8a0d79efb04b311"
     },
     {
       "programId": "unternehmertum",

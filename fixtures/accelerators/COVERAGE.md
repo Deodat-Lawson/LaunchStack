@@ -1,34 +1,34 @@
 # Catalogue coverage by information group
 
-Program files: 328. A count is evidence already collected. It is not a claim that the other programs lack the fact in the world.
+Program files: 313. A count is evidence already collected. It is not a claim that the other programs lack the fact in the world.
 
 | Information group | Evidenced | Recorded unavailable, partial, or conflicting | Not checked |
 | --- | ---: | ---: | ---: |
-| Identity (sourced name) | 252 | 76 | 0 |
-| Official URL | 316 | 12 | 0 |
-| Operating status | 3 | 325 | 0 |
-| Applications open, kept apart from operating status | 72 | 256 | 0 |
-| Audience narrative | 294 | 34 | 0 |
-| Stage tags | 231 | 97 | 0 |
-| Sector tags | 284 | 44 | 0 |
-| Geography tags | 267 | 61 | 0 |
-| Business model tags | 125 | 203 | 0 |
-| Benefit tags | 226 | 102 | 0 |
-| Instrument tags | 71 | 257 | 0 |
-| Evidence-backed tag | 326 | 2 | 0 |
-| Public email | 117 | 211 | 0 |
-| Public phone | 64 | 264 | 0 |
-| Application route | 320 | 8 | 0 |
-| Cycle identity | 328 | 0 | 0 |
-| Announced cycle deadline | 58 | 262 | 8 |
-| Next deadline | 19 | 309 | 0 |
-| Selectivity | 3 | 325 | 0 |
-| Formatted deal | 118 | 210 | 0 |
-| Deal components | 118 | 210 | 0 |
-| Intake (deadline, rolling, or announced) | 116 | 212 | 0 |
-| Portfolio companies | 3 | 146 | 179 |
-| Investment returns | 0 | 149 | 179 |
-| Historical application example | 1 | 327 | 0 |
+| Identity (sourced name) | 244 | 69 | 0 |
+| Official URL | 301 | 12 | 0 |
+| Operating status | 3 | 310 | 0 |
+| Applications open, kept apart from operating status | 72 | 241 | 0 |
+| Audience narrative | 279 | 34 | 0 |
+| Stage tags | 227 | 86 | 0 |
+| Sector tags | 272 | 41 | 0 |
+| Geography tags | 260 | 53 | 0 |
+| Business model tags | 123 | 190 | 0 |
+| Benefit tags | 220 | 93 | 0 |
+| Instrument tags | 71 | 242 | 0 |
+| Evidence-backed tag | 311 | 2 | 0 |
+| Public email | 112 | 201 | 0 |
+| Public phone | 59 | 254 | 0 |
+| Application route | 305 | 8 | 0 |
+| Cycle identity | 313 | 0 | 0 |
+| Announced cycle deadline | 58 | 247 | 8 |
+| Next deadline | 19 | 294 | 0 |
+| Selectivity | 3 | 310 | 0 |
+| Formatted deal | 118 | 195 | 0 |
+| Deal components | 118 | 195 | 0 |
+| Intake (deadline, rolling, or announced) | 115 | 198 | 0 |
+| Portfolio companies | 3 | 132 | 178 |
+| Investment returns | 0 | 135 | 178 |
+| Historical application example | 1 | 312 | 0 |
 
 Portfolio company identities recorded: 441. Participation, a portfolio listing, and a companies-page listing stay separate from a confirmed investment. No return was recorded.
 

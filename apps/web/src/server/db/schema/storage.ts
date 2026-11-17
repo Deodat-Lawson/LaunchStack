@@ -105,6 +105,7 @@ export const storageDeletionItems = pgTable(
                 "blocked",
                 "quarantined",
                 "skipped",
+                "waived",
             ],
         })
             .notNull()
@@ -114,6 +115,14 @@ export const storageDeletionItems = pgTable(
         lastError: text("last_error"),
         createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+        // Added by a later migration; declared after the timestamps so a schema
+        // built from TypeScript has the same column order as the migrations.
+        resolvedBy: varchar("resolved_by", { length: 256 }),
+        resolutionNote: text("resolution_note"),
+        resolvedAt: timestamp("resolved_at", { withTimezone: true }),
+        requeuedBy: varchar("requeued_by", { length: 256 }),
+        requeueNote: text("requeue_note"),
+        requeuedAt: timestamp("requeued_at", { withTimezone: true }),
     },
     table => [
         uniqueIndex("storage_deletion_items_request_url_unique").on(
@@ -121,13 +130,20 @@ export const storageDeletionItems = pgTable(
             table.sourceUrl
         ),
         index("storage_deletion_items_state_idx").on(table.state),
+        index("storage_deletion_items_stored_object_idx").on(table.storedObjectId),
+        index("storage_deletion_items_ref_idx").on(
+            table.adapter,
+            table.storageLocationId,
+            table.objectKey
+        ),
+        index("storage_deletion_items_source_url_idx").using("hash", table.sourceUrl),
         check(
             "storage_deletion_items_ref_check",
-            sql`(${table.adapter} IS NOT NULL AND ${table.storageLocationId} IS NOT NULL AND ${table.objectKey} IS NOT NULL) OR (${table.state} IN ('quarantined', 'skipped') AND ${table.adapter} IS NULL AND ${table.storageLocationId} IS NULL AND ${table.objectKey} IS NULL)`
+            sql`(${table.adapter} IS NOT NULL AND ${table.storageLocationId} IS NOT NULL AND ${table.objectKey} IS NOT NULL) OR (${table.state} IN ('quarantined', 'skipped', 'waived') AND ${table.adapter} IS NULL AND ${table.storageLocationId} IS NULL AND ${table.objectKey} IS NULL)`
         ),
         check(
             "storage_deletion_items_state_check",
-            sql`${table.state} IN ('pending', 'deleted', 'not_found', 'retained', 'blocked', 'quarantined', 'skipped')`
+            sql`${table.state} IN ('pending', 'deleted', 'not_found', 'retained', 'blocked', 'quarantined', 'skipped', 'waived')`
         ),
     ]
 );

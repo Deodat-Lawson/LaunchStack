@@ -308,8 +308,10 @@ on the global live-reference check. ADR-015 records the residual race where a
 request body attaches a URL after the reference check but before deletion.
 
 Items are `pending`, `deleted`, `not_found`, `retained`, `blocked`, `quarantined`,
-or `skipped`. Unrecognized links are skipped; ambiguous identities are
-quarantined. Both carry null refs, never invented provider keys. Requests stay
+`skipped`, or `waived`. Unrecognized links are skipped; ambiguous identities are
+quarantined. Nullable refs stay null after a quarantine waiver; no provider key
+is invented. Waivers persist operator actor, note and timestamp, and are terminal
+for request status without asserting that bytes were removed. Requests stay
 pending while retryable items exist, become blocked for blocked/quarantined
 items, and otherwise complete. Outbox dead lettering blocks remaining pending
 items with `retry_budget_exhausted`. Event replay resets only those blocks to
@@ -326,3 +328,14 @@ its provider object with the upload row's provenance; live pointer usage protect
 the provider bytes. ADR-015 records owner-delete follow-ups for protected Brand,
 persona and chat objects, the reviewed JSON exclusions, and package-level URL
 replacement orphan-audit coverage.
+
+The [storage deletion runbook](runbooks/storage-deletion.md) describes the
+summary/list/show/requeue/waive operator CLI, dead-event repair, metrics, and the
+bounded read-only ledger/provider audit. Only explicit `--enqueue` creates
+population-A object plans through the normal planner/outbox; provider inventory
+is report-only.
+Requeue skips `foreign_object` items without clearing their state or error.
+Missing events can be recreated only for an existing company; orphan-audit
+enqueue reports absent company stamps/rows as not enqueueable. These operations
+use the lifecycle's shared operational-state and reference definitions rather
+than maintaining a second interpretation of delivery health or legacy URLs.

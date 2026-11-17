@@ -77,6 +77,8 @@ async function main(): Promise<void> {
         { createNoteEmbeddingPort, createNoteRehydrationPort },
         { createDeadEventHandler, createValidationDeadHandler },
         { createStorageDeletionPort },
+        { createMetricsHandler },
+        { env },
     ] = await Promise.all([
         import("./inngest"),
         import("./ports/ingestion"),
@@ -84,6 +86,8 @@ async function main(): Promise<void> {
         import("./ports/notes"),
         import("./ports/failure"),
         import("./ports/storage-deletion"),
+        import("./metrics-http"),
+        import("~/env"),
     ]);
 
     const clock = { now: () => new Date() };
@@ -108,6 +112,12 @@ async function main(): Promise<void> {
     let tickRunning = false;
 
     const inngestHandler = createInngestHandler();
+    const metricsHandler = createMetricsHandler({
+        scrapeToken: env.server.METRICS_SCRAPE_TOKEN,
+        isProduction:
+            process.env.VERCEL_ENV === "production" || process.env.NODE_ENV === "production",
+        logger,
+    });
 
     const server = createServer((req, res) => {
         const url = req.url ?? "/";
@@ -152,6 +162,10 @@ async function main(): Promise<void> {
                     );
                 }
             })();
+            return;
+        }
+        if (url === "/metrics") {
+            metricsHandler(req, res);
             return;
         }
         if (url.startsWith("/api/inngest")) {
@@ -210,7 +224,7 @@ async function main(): Promise<void> {
     server.listen(workerEnv.WORKER_PORT, () => {
         logger.info(
             { port: workerEnv.WORKER_PORT },
-            "worker http listening (healthz/readyz/api/inngest)"
+            "worker http listening (healthz/readyz/metrics/api/inngest)"
         );
     });
 

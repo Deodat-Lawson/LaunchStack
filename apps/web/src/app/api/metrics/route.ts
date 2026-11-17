@@ -1,20 +1,9 @@
 import { NextResponse } from "next/server";
-import { timingSafeEqual } from "node:crypto";
 import { getMetricsSnapshot, metricsRegistry } from "~/server/metrics/registry";
+import { bearerMatches } from "~/server/metrics/scrape-auth";
 import { env } from "~/env";
 
 export const runtime = "nodejs";
-
-function bearerMatches(header: string | null, token: string): boolean {
-    if (!header?.startsWith("Bearer ")) return false;
-    const provided = header.slice("Bearer ".length).trim();
-    if (!provided || provided.length !== token.length) return false;
-    try {
-        return timingSafeEqual(Buffer.from(provided), Buffer.from(token));
-    } catch {
-        return false;
-    }
-}
 
 /**
  * This endpoint used to be unauthenticated, so an upgrade that does not also

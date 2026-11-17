@@ -6,11 +6,10 @@ import {
     ocrJobs,
     uploadBatchFiles,
 } from "@launchstack/store/schema";
-import { enqueueOutboxEventsWithRevive } from "@launchstack/orchestration";
-import { eventIds, PROTOCOL_VERSION } from "@launchstack/orchestration/pipeline-events";
 
 import { storageDeletionItems, storageDeletionRequests } from "~/server/db/schema/storage";
 import type { Tx } from "~/server/workspace/db-types";
+import { enqueueStorageDeletionRequested } from "./event";
 import { findStoredObjectsByRefs, findStoredObjectsByUrls, storedObjectRef } from "../ledger";
 import { refIdentity, type ObjectRef } from "../object-ref";
 import { refFromStoredUrl } from "../stored-url";
@@ -181,17 +180,11 @@ async function insertPlan(
             };
         })
     );
-    await enqueueOutboxEventsWithRevive(tx, [
-        {
-            eventId: eventIds.storageDeletionRequested(request.id),
-            eventType: "storage.deletion.requested",
-            schemaVersion: PROTOCOL_VERSION,
-            occurredAt: new Date().toISOString(),
-            traceId: input.traceId,
-            companyId: Number(input.companyId),
-            payload: { requestId: request.id },
-        },
-    ]);
+    await enqueueStorageDeletionRequested(tx, {
+        id: request.id,
+        traceId: input.traceId,
+        companyId: input.companyId,
+    });
     return request.id;
 }
 

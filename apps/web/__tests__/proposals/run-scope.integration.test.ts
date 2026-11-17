@@ -821,6 +821,53 @@ describeDb("proposal runs keep the stored writer's document scope (integration)"
     );
 
     it.each(NON_RETRIEVING_RUNS)(
+        "%s %s reuses a draft that cites a value typed into the company profile",
+        async (executor, kind) => {
+            await inIsolatedWorkspace(async () => {
+                const publicId = await addDocument("Programme report", PUBLIC_CHUNK);
+                const pending = await schedule(executor, "bea", "bea", kind);
+                await updateSection(companyId, pending.sectionId, {
+                    draft: "Riverbend runs its programme from Portland.",
+                    status: "drafted",
+                    draftMeta: {
+                        cites: [1, 2],
+                        gaps: [],
+                        libraryItemIds: [],
+                        modelId: "profile-citing-draft",
+                        promptVersion: "test",
+                        draftedAt: NOW.toISOString(),
+                        sourceDocumentIds: [publicId],
+                        evidence: [
+                            {
+                                n: 1,
+                                documentId: publicId,
+                                title: "Programme report",
+                                page: 1,
+                                quote: PUBLIC_CHUNK,
+                                url: null,
+                            },
+                            {
+                                n: 2,
+                                documentId: null,
+                                title: "Headquarters",
+                                page: null,
+                                quote: "Portland, Oregon",
+                                url: null,
+                                origin: "profile",
+                            },
+                        ],
+                    },
+                });
+                const outcome = await pending.execute();
+                expect({ status: outcome.run.status, error: outcome.run.error }).toEqual({
+                    status: "completed",
+                    error: null,
+                });
+            });
+        }
+    );
+
+    it.each(NON_RETRIEVING_RUNS)(
         "%s %s refuses prior generated prose carrying a profile-only private fact despite public retrieval",
         async (executor, kind) => {
             await inIsolatedWorkspace(async () => {

@@ -98,6 +98,8 @@ export async function canExportApplication(input: ExportAudienceInput): Promise<
             // rendered; uncited evidence and unwritten sections are omitted.
             const evidence = section.draftMeta?.evidence.find(item => item.n === n);
             if (!evidence) continue;
+            // A typed profile value rests on no document and widens nobody's view.
+            if (evidence.origin === "profile") continue;
             if (!addSource(evidence.documentId)) return false;
         }
     }

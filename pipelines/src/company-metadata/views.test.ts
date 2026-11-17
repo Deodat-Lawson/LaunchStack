@@ -136,16 +136,25 @@ describe("profileView", () => {
         expect(profileView(m, { canSee: id => id !== 9 }).summary).toBeNull();
     });
 
-    it("shows manual edits as manual, hides removals", () => {
+    it("cites a typed value as its own excerpt, under its label, and hides removals", () => {
         const m = sample();
         applyFactEdit(m, { path: "company.headquarters", value: "Remote" }, NOW);
         applyFactEdit(m, { path: "profile.facts.mission", value: "" }, NOW);
         const view = profileView(m);
-        expect(view.facts.find(f => f.label === "Headquarters")).toMatchObject({
-            value: "Remote",
-            source: "manual",
-            cites: [],
+        const headquarters = view.facts.find(f => f.label === "Headquarters")!;
+        expect(headquarters).toMatchObject({ value: "Remote", source: "manual" });
+        expect(headquarters.cites).toHaveLength(1);
+        expect(view.evidence.find(e => e.n === headquarters.cites[0])).toEqual({
+            n: headquarters.cites[0],
+            documentId: null,
+            title: "Headquarters",
+            page: null,
+            quote: "Remote",
+            origin: "profile",
         });
+        // Numbers still follow reading order, and the typed value rests on no document.
+        expect(view.evidence.map(e => e.n)).toEqual(view.evidence.map((_, i) => i + 1));
+        expect(view.sourceDocumentIds).not.toContain(0);
         expect(view.facts.find(f => f.label === "Mission")).toBeUndefined();
     });
 

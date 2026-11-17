@@ -25,7 +25,7 @@ import {
     updateSection,
     upsertOpportunity,
 } from "./db";
-import { sectionSourceProvenance } from "./evidence";
+import { documentEvidence, sectionSourceProvenance } from "./evidence";
 import { PROPOSAL_CREDITS, type ProposalDebitExecutor, type ProposalPorts } from "./ports";
 import { requirementsFromExtracted } from "./requirements";
 import { computeReadiness, syncSectionRequirements } from "./review";
@@ -403,13 +403,17 @@ async function loadReadableLibrary(ctx: ProposalRunContext): Promise<LibraryItem
         ctx.companyId,
         ctx.scope,
         items.flatMap(item => [
-            ...item.evidence.flatMap(e => (e.documentId === null ? [] : [e.documentId])),
+            ...documentEvidence(item.evidence).flatMap(e =>
+                e.documentId === null ? [] : [e.documentId]
+            ),
             ...(item.provenance.kind === "sources" ? item.provenance.sourceDocumentIds : []),
         ])
     );
     return items.filter(
         item =>
-            item.evidence.every(e => e.documentId !== null && readable.has(e.documentId)) &&
+            documentEvidence(item.evidence).every(
+                e => e.documentId !== null && readable.has(e.documentId)
+            ) &&
             (item.provenance.kind !== "sources" ||
                 item.provenance.sourceDocumentIds.every(id => readable.has(id)))
     );
@@ -480,7 +484,10 @@ async function assertReadableDraftEvidence(
     ctx: ProposalRunContext,
     sections: SectionRecord[]
 ): Promise<void> {
-    const evidence = sections.flatMap(section => section.draftMeta?.evidence ?? []);
+    // Typed profile values rest on no document; every other excerpt must still be readable.
+    const evidence = documentEvidence(
+        sections.flatMap(section => section.draftMeta?.evidence ?? [])
+    );
     const sourceIds: number[] = [];
     const legacyLibraryIds: string[] = [];
     for (const section of sections) {
@@ -502,7 +509,7 @@ async function assertReadableDraftEvidence(
             ? await listLibraryItems(ctx.companyId, { ids: libraryIds, limit: libraryIds.length })
             : [];
     for (const item of library) {
-        evidence.push(...item.evidence);
+        evidence.push(...documentEvidence(item.evidence));
         if (item.provenance.kind === "sources")
             sourceIds.push(...item.provenance.sourceDocumentIds);
     }
